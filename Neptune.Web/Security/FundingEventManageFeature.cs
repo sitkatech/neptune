@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Neptune.Web.Models;
+﻿using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Security
 {
@@ -9,7 +8,7 @@ namespace Neptune.Web.Security
         private readonly NeptuneFeatureWithContextImpl<FundingEvent> _lakeTahoeInfoFeatureWithContextImpl;
 
         public FundingEventManageFeature()
-            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionManager, Role.JurisdictionEditor })
+            : base(new List<RoleEnum> { RoleEnum.SitkaAdmin, RoleEnum.Admin, RoleEnum.JurisdictionManager, RoleEnum.JurisdictionEditor })
         {
             _lakeTahoeInfoFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<FundingEvent>(this);
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;

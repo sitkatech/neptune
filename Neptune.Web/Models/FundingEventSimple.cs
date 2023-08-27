@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using LtInfo.Common.Models;
-using Neptune.Web.Common;
+using Neptune.Common;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Models
 {
@@ -14,14 +12,14 @@ namespace Neptune.Web.Models
         public int TreatmentBMPID { get; set; }
 
         [Required]
-        [Range(NeptuneDateUtilities.MinimumYear, 2050, ErrorMessage = "Please enter a valid year range")]
+        [Range(Constants.MinimumYear, 2050, ErrorMessage = "Please enter a valid year range")]
         public int Year { get; set; }
 
         [Required(ErrorMessage="Funding Event Type is required")]
         [DisplayName("Funding Event Type")]
         public int FundingEventTypeID { get; set; }
 
-        [StringLength(Models.FundingEvent.FieldLengths.Description)]
+        [StringLength(FundingEvent.FieldLengths.Description)]
         public string Description { get; set; }
 
         public int? FundingEventID { get; set; }
@@ -53,11 +51,12 @@ namespace Neptune.Web.Models
 
         public FundingEvent ToFundingEvent()
         {
-            return new FundingEvent(FundingEventID ?? ModelObjectHelpers.NotYetAssignedID, TreatmentBMPID,
-                FundingEventTypeID, Year, Description)
+            return new FundingEvent()
             {
-                FundingEventFundingSources =
-                    FundingEventFundingSources.Select(x => x.ToFundingEventFundingSource()).ToList()
+                FundingEventID = FundingEventID ?? ModelObjectHelpers.NotYetAssignedID,
+                TreatmentBMPID = TreatmentBMPID,
+                FundingEventTypeID = FundingEventTypeID, Year = Year, Description = Description,
+                FundingEventFundingSources = FundingEventFundingSources.Select(x => x.ToFundingEventFundingSource()).ToList()
             };
         }
     }

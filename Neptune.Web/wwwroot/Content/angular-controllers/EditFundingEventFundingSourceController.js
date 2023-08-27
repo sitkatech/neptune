@@ -43,7 +43,7 @@ angular.module("NeptuneApp").controller("EditFundingEventFundingSourceController
 
     $scope.getFundingSourceName = function (fundingEventFundingSource) {
         var fundingSourceToFind = $scope.getFundingSource(fundingEventFundingSource.FundingSourceID);
-        return fundingSourceToFind.DisplayName;
+        return fundingSourceToFind.FundingSourceName;
     };
 
     $scope.getFundingSource = function (fundingSourceID) {

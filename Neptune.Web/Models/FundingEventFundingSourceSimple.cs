@@ -1,4 +1,5 @@
-﻿using LtInfo.Common.Models;
+﻿using Neptune.EFModels.Entities;
+using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Models
 {
@@ -25,7 +26,12 @@ namespace Neptune.Web.Models
 
         public FundingEventFundingSource ToFundingEventFundingSource()
         {
-            return new FundingEventFundingSource(FundingSourceID, FundingEventID ?? ModelObjectHelpers.NotYetAssignedID) {Amount = Amount};
+            return new FundingEventFundingSource()
+            {
+                FundingSourceID = FundingSourceID,
+                FundingEventID = FundingEventID ?? ModelObjectHelpers.NotYetAssignedID, 
+                Amount = Amount
+            };
         }
     }
 }

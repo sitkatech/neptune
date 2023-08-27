@@ -19,36 +19,35 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
 using System.Globalization;
-using System.Web.Mvc;
 using LtInfo.Common.Mvc;
-using Neptune.Web.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.Web.Views.FundingEvent
 {
     public class EditViewData : NeptuneUserControlViewData
     {
-        public  List<FundingSourceSimple> AllFundingSources { get; }
+        public  List<FundingSourceSimpleDto> AllFundingSources { get; }
         public  IEnumerable<SelectListItem> AllFundingEventTypes { get; }
         public  int? TreatmentBMPID { get; }
 
-        public EditViewData(Models.FundingEvent fundingEvent,
-            List<FundingSourceSimple> allFundingSources, List<FundingEventType> allFundingEventTypes)
+        public EditViewData(EFModels.Entities.FundingEvent fundingEvent, List<FundingSourceSimpleDto> allFundingSources, IEnumerable<FundingEventType> allFundingEventTypes)
         {
-            AllFundingSources = allFundingSources;
             TreatmentBMPID = fundingEvent.TreatmentBMPID;
+            AllFundingSources = allFundingSources;
             AllFundingEventTypes = allFundingEventTypes.ToSelectListWithDisabledEmptyFirstRow(
                 x => x.FundingEventTypeID.ToString(CultureInfo.InvariantCulture),
                 x => x.FundingEventTypeDisplayName, "Select a Funding Event Type");
         }
 
-        public EditViewData(List<FundingSourceSimple> allFundingSources, List<FundingEventType> allFundingEventTypes, Models.TreatmentBMP treatmentBMP)
+        public EditViewData(List<FundingSourceSimpleDto> allFundingSources, IEnumerable<FundingEventType> allFundingEventTypes, EFModels.Entities.TreatmentBMP treatmentBMP)
         {
+            TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             AllFundingSources = allFundingSources;
             AllFundingEventTypes = allFundingEventTypes.ToSelectListWithEmptyFirstRow(x => x.FundingEventTypeID.ToString(CultureInfo.InvariantCulture),
                 x => x.FundingEventTypeDisplayName.ToString(CultureInfo.InvariantCulture), "Select a Funding Event Type");
-            TreatmentBMPID = TreatmentBMPID;
         }
     }
 }

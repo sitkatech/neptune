@@ -18,18 +18,21 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
-@using Neptune.Web.Models
-@using LtInfo.Common.HtmlHelperExtensions
-@using Newtonsoft.Json.Linq
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Neptune.EFModels.Entities
+@using Neptune.Web.Common
+@using Neptune.Web.Common.HtmlHelperExtensions
 @inherits Neptune.Web.Views.FundingEvent.Edit
+@model Neptune.Web.Views.FundingEvent.EditViewModel
+
 <script type="text/javascript">
     // <![CDATA[
     jQuery(document).ready(function() {
         angular.module("NeptuneApp").factory("angularModelAndViewData",
             function() {
                 return {
-                    AngularModel: @Html.Raw(JObject.FromObject(Model)),
-                    AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped))
+                    AngularModel: @Html.Raw(Model.ToHtmlString()),
+                    AngularViewData: @Html.Raw(ViewDataTyped.ToHtmlString())
                 };
             });
         angular.bootstrap(jQuery("#EditFundingEventFundingSourceApp"), ["NeptuneApp"]);
@@ -56,13 +59,13 @@ Source code is available upon request via <support@sitkatech.com>.
         {
             <div ng-app="NeptuneApp" id="EditFundingEventFundingSourceApp" ng-controller="EditFundingEventFundingSourceController" style="max-height: 600px;">
                 <div class="form-horizontal">
-                    @Html.HiddenFor(m=>m.FundingEvent.TreatmentBMPID)
+                    @Html.HiddenFor(m => m.FundingEvent.TreatmentBMPID)
                     <div class="form-group row">
                         <div class="col-sm-3 text-right">
-                            @Html.LabelWithSugarFor(m=>m.FundingEvent.FundingEventTypeID)
+                            @Html.LabelWithSugarFor(m => m.FundingEvent.FundingEventTypeID)
                         </div>
                         <div class="col-sm-9">
-                            @Html.SearchableDropDownListFor(m => m.FundingEvent.FundingEventTypeID, ViewDataTyped.AllFundingEventTypes, new {@class = "form-control"})
+                            @Html.SearchableDropDownListFor(m => m.FundingEvent.FundingEventTypeID, ViewDataTyped.AllFundingEventTypes, new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="form-group row">
@@ -70,7 +73,7 @@ Source code is available upon request via <support@sitkatech.com>.
                             @Html.LabelWithSugarFor(m => m.FundingEvent.Year)
                         </div>
                         <div class="col-sm-9">
-                            @Html.TextBoxFor(m => m.FundingEvent.Year, new Dictionary<string, object> {{"style", "width: auto"}, {"class", "form-control"}, {"type", "number"}})
+                            @Html.TextBoxFor(m => m.FundingEvent.Year, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" }, { "type", "number" } })
                         </div>
                     </div>
                     <div class="form-group row">
@@ -78,7 +81,7 @@ Source code is available upon request via <support@sitkatech.com>.
                             @Html.LabelWithSugarFor(m => m.FundingEvent.Description)
                         </div>
                         <div class="col-sm-9">
-                            @Html.TextAreaWithMaxLengthFor(m => m.FundingEvent.Description, new TextAreaForExtensions.TextAreaDimensions(null, 3), "", new List<string> {"form-control"})
+                            @Html.TextAreaWithMaxLengthFor(m => m.FundingEvent.Description, new TextAreaForExtensions.TextAreaDimensions(null, 3), "", new List<string> { "form-control" })
                         </div>
                     </div>
                     <div class="form-group">
@@ -93,7 +96,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                         data-container="body"
                                         data-width="100%" selectpicker
                                         title="Select a Funding Source to Add"
-                                        ng-options="fundingSource as fundingSource.DisplayName for fundingSource in filteredFundingSources(AngularModel.FundingEvent) track by fundingSource.FundingSourceID">
+                                        ng-options="fundingSource as fundingSource.FundingSourceName for fundingSource in filteredFundingSources(AngularModel.FundingEvent) track by fundingSource.FundingSourceID">
                                     <option value="" disabled selected>Select a Funding Source to Add</option>
                                 </select>
                                 <span class="input-group-btn">

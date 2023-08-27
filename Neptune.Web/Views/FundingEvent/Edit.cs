@@ -20,7 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 namespace Neptune.Web.Views.FundingEvent
 {
-    public abstract class Edit : LtInfo.Common.Mvc.TypedWebPartialViewPage<EditViewData, EditViewModel>
+    public abstract class Edit : Common.Mvc.TypedWebPartialViewPage<EditViewData, EditViewModel>
     {
     }
 }

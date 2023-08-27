@@ -167,7 +167,9 @@ namespace Neptune.Web.Views.TreatmentBMP
             */
 
             NewTreatmentBMPDocumentUrl = "";//todo SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(_linkGenerator, x => x.New(treatmentBMP));
-            NewFundingSourcesUrl = "";//todo SitkaRoute<FundingEventController>.BuildUrlFromExpression(_linkGenerator, x => x.NewFundingEvent(treatmentBMP));
+            FundingEventEditUrlTemplate = new UrlTemplate<int>( SitkaRoute<FundingEventController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(UrlTemplate.Parameter1Int)));
+            FundingEventDeleteUrlTemplate = new UrlTemplate<int>( SitkaRoute<FundingEventController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
+            NewFundingSourcesUrl = SitkaRoute<FundingEventController>.BuildUrlFromExpression(_linkGenerator, x => x.New(treatmentBMP));
 
             //This handles an extreme edge case, but a bmp came back without a regional subbasin
             OtherTreatmentBmpsExistInSubbasin = otherTreatmentBmpsExistInSubbasin;

@@ -28,4 +28,9 @@ public partial class FundingEvent
     [ForeignKey("TreatmentBMPID")]
     [InverseProperty("FundingEvents")]
     public virtual TreatmentBMP TreatmentBMP { get; set; } = null!;
+
+    public void DeleteFull(NeptuneDbContext dbContext)
+    {
+        throw new NotImplementedException();
+    }
 }

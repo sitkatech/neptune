@@ -19,11 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using LtInfo.Common.Models;
+using Microsoft.EntityFrameworkCore;
+using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
+using Neptune.Web.Common.Models;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FundingEvent
@@ -39,17 +39,17 @@ namespace Neptune.Web.Views.FundingEvent
         {
         }
 
-        public EditViewModel(Models.FundingEvent fundingEvent)
+        public EditViewModel(EFModels.Entities.FundingEvent fundingEvent)
         {
             FundingEvent = new FundingEventSimple(fundingEvent);
         }
 
-        public EditViewModel(Models.TreatmentBMP treatmentBMP)
+        public EditViewModel(EFModels.Entities.TreatmentBMP treatmentBMP)
         {
             FundingEvent = new FundingEventSimple(treatmentBMP);
         }
 
-        public void UpdateModel(Models.FundingEvent currentFundingEvent, IList<Models.FundingEventFundingSource> allFundingEventFundingSources)
+        public void UpdateModel(EFModels.Entities.FundingEvent currentFundingEvent, DbSet<FundingEventFundingSource> allFundingEventFundingSources)
         {
             currentFundingEvent.Description = FundingEvent.Description;
             currentFundingEvent.FundingEventTypeID = FundingEvent.FundingEventTypeID;

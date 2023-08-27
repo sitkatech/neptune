@@ -1,21 +1,25 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using System.Web.Mvc;
-using LtInfo.Common;
-using LtInfo.Common.MvcResults;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
+using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Security;
+using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.FundingEvent;
 using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Controllers
 {
-    public class FundingEventController : NeptuneBaseController
+    public class FundingEventController : NeptuneBaseController<FundingEventController>
     {
-        [HttpGet]
+        public FundingEventController(NeptuneDbContext dbContext, ILogger<FundingEventController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        {
+        }
+
+        [HttpGet("{fundingEventPrimaryKey}")]
         [FundingEventManageFeature]
-        public PartialViewResult EditFundingEvent(FundingEventPrimaryKey fundingEventPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fundingEventPrimaryKey")]
+        public PartialViewResult Edit([FromRoute] FundingEventPrimaryKey fundingEventPrimaryKey)
         {
             var fundingEvent = fundingEventPrimaryKey.EntityObject;
             
@@ -23,10 +27,10 @@ namespace Neptune.Web.Controllers
             return ViewEditFundingEventFundingSources(fundingEvent, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{fundingEventPrimaryKey}")]
         [FundingEventManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditFundingEvent(FundingEventPrimaryKey fundingEventPrimaryKey, EditViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fundingEventPrimaryKey")]
+        public async Task<IActionResult> Edit([FromRoute] FundingEventPrimaryKey fundingEventPrimaryKey, EditViewModel viewModel)
         {
             var fundingEvent = fundingEventPrimaryKey.EntityObject;
             
@@ -37,11 +41,12 @@ namespace Neptune.Web.Controllers
 
             SetMessageForDisplay($"{FieldDefinitionType.FundingEvent.GetFieldDefinitionLabel()} successfully updated.");
 
-            return UpdateFundingEventFundingSources(viewModel, fundingEvent);
+            return await UpdateFundingEventFundingSources(viewModel, fundingEvent);
         }
-        [HttpGet]
+        [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPManageFeature]
-        public PartialViewResult NewFundingEvent(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
+        public PartialViewResult New([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var viewModel = new EditViewModel(treatmentBMP);
@@ -50,15 +55,15 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewNewFundingEventFundingSources(EditViewModel viewModel, TreatmentBMP treatmentBMP)
         {
-            var allFundingSources = HttpRequestStorage.DatabaseEntities.FundingSources.ToList().Select(x => new FundingSourceSimple(x)).OrderBy(p => p.DisplayName).ToList();
-            var viewData = new EditViewData(allFundingSources, FundingEventType.All.OrderBy(x => x.SortOrder).ToList(), treatmentBMP);
+            var allFundingSources = FundingSources.List(_dbContext).Select(x => x.AsSimpleDto()).OrderBy(p => p.FundingSourceName).ToList();
+            var viewData = new EditViewData(allFundingSources, FundingEventType.All.OrderBy(x => x.FundingEventTypeName).ToList(), treatmentBMP);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult NewFundingEvent(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
+        public async Task<IActionResult> New([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -66,53 +71,56 @@ namespace Neptune.Web.Controllers
                 return ViewNewFundingEventFundingSources(viewModel, treatmentBMP);
             }
 
-            var fundingEvent = new FundingEvent(treatmentBMPPrimaryKey.EntityObject.TreatmentBMPID,
-                viewModel.FundingEvent.FundingEventTypeID, viewModel.FundingEvent.Year)
+            var fundingEvent = new FundingEvent()
             {
-                FundingEventFundingSources = viewModel.FundingEvent.FundingEventFundingSources?
-                    .Select(x => x.ToFundingEventFundingSource()).ToList(),
+                TreatmentBMPID = treatmentBMPPrimaryKey.EntityObject.TreatmentBMPID,
+                FundingEventTypeID = viewModel.FundingEvent.FundingEventTypeID,
+                Year = viewModel.FundingEvent.Year,
+                FundingEventFundingSources = viewModel.FundingEvent.FundingEventFundingSources.Select(x => x.ToFundingEventFundingSource()).ToList(),
                 Description = viewModel.FundingEvent.Description
             };
 
-            HttpRequestStorage.DatabaseEntities.FundingEvents.Add(fundingEvent);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            _dbContext.FundingEvents.Add(fundingEvent);
+            await _dbContext.SaveChangesAsync();
 
             SetMessageForDisplay($"{FieldDefinitionType.FundingEvent.GetFieldDefinitionLabel()} successfully added.");
 
             return new ModalDialogFormJsonResult();
         }
 
-        private static ActionResult UpdateFundingEventFundingSources(EditViewModel viewModel,
+        private async Task<IActionResult> UpdateFundingEventFundingSources(EditViewModel viewModel,
             FundingEvent currentFundingEvent)
         {
-            HttpRequestStorage.DatabaseEntities.FundingEventFundingSources.Load();
-            HttpRequestStorage.DatabaseEntities.FundingEvents.Load();
-            var allFundingEventFundingSources = HttpRequestStorage.DatabaseEntities.FundingEventFundingSources.Local;
+            await _dbContext.FundingEventFundingSources.LoadAsync();
+            await _dbContext.FundingEvents.LoadAsync();
+            var allFundingEventFundingSources = _dbContext.FundingEventFundingSources;
             
             viewModel.UpdateModel(currentFundingEvent, allFundingEventFundingSources);
+            await _dbContext.SaveChangesAsync();
             return new ModalDialogFormJsonResult();
         }
 
         private PartialViewResult ViewEditFundingEventFundingSources(FundingEvent fundingEvent, EditViewModel viewModel)
         {
-            var allFundingSources = HttpRequestStorage.DatabaseEntities.FundingSources.ToList().Select(x => new FundingSourceSimple(x)).OrderBy(p => p.DisplayName).ToList();
-            var viewData = new EditViewData(fundingEvent, allFundingSources, FundingEventType.All.OrderBy(x => x.SortOrder).ToList());
+            var allFundingSources = FundingSources.List(_dbContext).Select(x => x.AsSimpleDto()).OrderBy(p => p.FundingSourceName).ToList();
+            var viewData = new EditViewData(fundingEvent, allFundingSources, FundingEventType.All.OrderBy(x => x.FundingEventTypeName).ToList());
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("{fundingEventPrimaryKey}")]
         [FundingEventManageFeature]
-        public ActionResult DeleteFundingEvent(FundingEventPrimaryKey fundingEventPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fundingEventPrimaryKey")]
+        public ActionResult Delete([FromRoute] FundingEventPrimaryKey fundingEventPrimaryKey)
         {
             var fundingEvent = fundingEventPrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(fundingEventPrimaryKey.PrimaryKeyValue);
             return ViewDelete(viewModel, fundingEvent);
         }
 
-        [HttpPost]
+        [HttpPost("{fundingEventPrimaryKey}")]
         [FundingEventManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult DeleteFundingEvent(FundingEventPrimaryKey fundingEventPrimaryKey,
+        [ValidateEntityExistsAndPopulateParameterFilter("fundingEventPrimaryKey")]
+        public async Task<IActionResult> Delete([FromRoute] FundingEventPrimaryKey fundingEventPrimaryKey,
             ConfirmDialogFormViewModel viewModel)
         {
             var fundingEvent = fundingEventPrimaryKey.EntityObject;
@@ -121,8 +129,8 @@ namespace Neptune.Web.Controllers
                 return ViewDelete(viewModel, fundingEvent);
             }
 
-            fundingEvent.DeleteFull(HttpRequestStorage.DatabaseEntities);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            fundingEvent.DeleteFull(_dbContext);
+            await _dbContext.SaveChangesAsync();
 
             SetMessageForDisplay($"{FieldDefinitionType.FundingEvent.GetFieldDefinitionLabel()} successfully deleted");
             return new ModalDialogFormJsonResult();
