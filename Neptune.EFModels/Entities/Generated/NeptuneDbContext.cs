@@ -275,21 +275,11 @@ public partial class NeptuneDbContext : DbContext
 
             entity.HasOne(d => d.CustomAttributeType).WithMany(p => p.CustomAttributes).OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.TreatmentBMP).WithMany(p => p.CustomAttributeTreatmentBMPs).OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.TreatmentBMP).WithMany(p => p.CustomAttributes).OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.TreatmentBMPTypeCustomAttributeType).WithMany(p => p.CustomAttributeTreatmentBMPTypeCustomAttributeTypes).OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.TreatmentBMPTypeCustomAttributeType).WithMany(p => p.CustomAttributes).OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.TreatmentBMPType).WithMany(p => p.CustomAttributes).OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.TreatmentBMPNavigation).WithMany(p => p.CustomAttributeTreatmentBMPNavigations)
-                .HasPrincipalKey(p => new { p.TreatmentBMPID, p.TreatmentBMPTypeID })
-                .HasForeignKey(d => new { d.TreatmentBMPID, d.TreatmentBMPTypeID })
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.TreatmentBMPTypeCustomAttributeTypeNavigation).WithMany(p => p.CustomAttributeTreatmentBMPTypeCustomAttributeTypeNavigations)
-                .HasPrincipalKey(p => new { p.TreatmentBMPTypeID, p.CustomAttributeTypeID })
-                .HasForeignKey(d => new { d.TreatmentBMPTypeID, d.CustomAttributeTypeID })
-                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<CustomAttributeType>(entity =>
@@ -436,21 +426,11 @@ public partial class NeptuneDbContext : DbContext
         {
             entity.HasKey(e => e.MaintenanceRecordID).HasName("PK_MaintenanceRecord_MaintenanceRecordID");
 
-            entity.HasOne(d => d.FieldVisit).WithOne(p => p.MaintenanceRecordFieldVisit).OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.FieldVisit).WithOne(p => p.MaintenanceRecord).OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.TreatmentBMP).WithMany(p => p.MaintenanceRecordTreatmentBMPs).OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.TreatmentBMP).WithMany(p => p.MaintenanceRecords).OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.TreatmentBMPType).WithMany(p => p.MaintenanceRecords).OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.FieldVisitNavigation).WithMany(p => p.MaintenanceRecordFieldVisitNavigations)
-                .HasPrincipalKey(p => new { p.FieldVisitID, p.TreatmentBMPID })
-                .HasForeignKey(d => new { d.FieldVisitID, d.TreatmentBMPID })
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.TreatmentBMPNavigation).WithMany(p => p.MaintenanceRecordTreatmentBMPNavigations)
-                .HasPrincipalKey(p => new { p.TreatmentBMPID, p.TreatmentBMPTypeID })
-                .HasForeignKey(d => new { d.TreatmentBMPID, d.TreatmentBMPTypeID })
-                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<MaintenanceRecordObservation>(entity =>
@@ -459,21 +439,11 @@ public partial class NeptuneDbContext : DbContext
 
             entity.HasOne(d => d.CustomAttributeType).WithMany(p => p.MaintenanceRecordObservations).OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.MaintenanceRecord).WithMany(p => p.MaintenanceRecordObservationMaintenanceRecords).OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.MaintenanceRecord).WithMany(p => p.MaintenanceRecordObservations).OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.TreatmentBMPTypeCustomAttributeType).WithMany(p => p.MaintenanceRecordObservationTreatmentBMPTypeCustomAttributeTypes).OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.TreatmentBMPTypeCustomAttributeType).WithMany(p => p.MaintenanceRecordObservations).OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.TreatmentBMPType).WithMany(p => p.MaintenanceRecordObservations).OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.MaintenanceRecordNavigation).WithMany(p => p.MaintenanceRecordObservationMaintenanceRecordNavigations)
-                .HasPrincipalKey(p => new { p.MaintenanceRecordID, p.TreatmentBMPTypeID })
-                .HasForeignKey(d => new { d.MaintenanceRecordID, d.TreatmentBMPTypeID })
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.TreatmentBMPTypeCustomAttributeTypeNavigation).WithMany(p => p.MaintenanceRecordObservationTreatmentBMPTypeCustomAttributeTypeNavigations)
-                .HasPrincipalKey(p => new { p.TreatmentBMPTypeID, p.CustomAttributeTypeID })
-                .HasForeignKey(d => new { d.TreatmentBMPTypeID, d.CustomAttributeTypeID })
-                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<MaintenanceRecordObservationValue>(entity =>
@@ -549,10 +519,6 @@ public partial class NeptuneDbContext : DbContext
                 .HasConstraintName("FK_OnlandVisualTrashAssessment_Person_CreatedByPersonID_PersonID");
 
             entity.HasOne(d => d.StormwaterJurisdiction).WithMany(p => p.OnlandVisualTrashAssessments).OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.OnlandVisualTrashAssessmentAreaNavigation).WithMany(p => p.OnlandVisualTrashAssessmentOnlandVisualTrashAssessmentAreaNavigations)
-                .HasPrincipalKey(p => new { p.OnlandVisualTrashAssessmentAreaID, p.StormwaterJurisdictionID })
-                .HasForeignKey(d => new { d.OnlandVisualTrashAssessmentAreaID, d.StormwaterJurisdictionID });
         });
 
         modelBuilder.Entity<OnlandVisualTrashAssessmentArea>(entity =>
@@ -865,21 +831,11 @@ public partial class NeptuneDbContext : DbContext
         {
             entity.HasKey(e => e.TreatmentBMPAssessmentID).HasName("PK_TreatmentBMPAssessment_TreatmentBMPAssessmentID");
 
-            entity.HasOne(d => d.FieldVisit).WithMany(p => p.TreatmentBMPAssessmentFieldVisits).OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.FieldVisit).WithMany(p => p.TreatmentBMPAssessments).OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.TreatmentBMP).WithMany(p => p.TreatmentBMPAssessmentTreatmentBMPs).OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.TreatmentBMP).WithMany(p => p.TreatmentBMPAssessments).OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.TreatmentBMPType).WithMany(p => p.TreatmentBMPAssessments).OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.FieldVisitNavigation).WithMany(p => p.TreatmentBMPAssessmentFieldVisitNavigations)
-                .HasPrincipalKey(p => new { p.FieldVisitID, p.TreatmentBMPID })
-                .HasForeignKey(d => new { d.FieldVisitID, d.TreatmentBMPID })
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.TreatmentBMPNavigation).WithMany(p => p.TreatmentBMPAssessmentTreatmentBMPNavigations)
-                .HasPrincipalKey(p => new { p.TreatmentBMPID, p.TreatmentBMPTypeID })
-                .HasForeignKey(d => new { d.TreatmentBMPID, d.TreatmentBMPTypeID })
-                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<TreatmentBMPAssessmentObservationType>(entity =>
@@ -902,22 +858,11 @@ public partial class NeptuneDbContext : DbContext
 
             entity.HasOne(d => d.TreatmentBMPAssessmentObservationType).WithMany(p => p.TreatmentBMPBenchmarkAndThresholds).OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.TreatmentBMP).WithMany(p => p.TreatmentBMPBenchmarkAndThresholdTreatmentBMPs).OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.TreatmentBMP).WithMany(p => p.TreatmentBMPBenchmarkAndThresholds).OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.TreatmentBMPTypeAssessmentObservationType).WithMany(p => p.TreatmentBMPBenchmarkAndThresholdTreatmentBMPTypeAssessmentObservationTypes).OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.TreatmentBMPTypeAssessmentObservationType).WithMany(p => p.TreatmentBMPBenchmarkAndThresholds).OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.TreatmentBMPType).WithMany(p => p.TreatmentBMPBenchmarkAndThresholds).OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.TreatmentBMPNavigation).WithMany(p => p.TreatmentBMPBenchmarkAndThresholdTreatmentBMPNavigations)
-                .HasPrincipalKey(p => new { p.TreatmentBMPID, p.TreatmentBMPTypeID })
-                .HasForeignKey(d => new { d.TreatmentBMPID, d.TreatmentBMPTypeID })
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.TreatmentBMP1).WithMany(p => p.TreatmentBMPBenchmarkAndThresholdTreatmentBMP1s)
-                .HasPrincipalKey(p => new { p.TreatmentBMPTypeAssessmentObservationTypeID, p.TreatmentBMPTypeID, p.TreatmentBMPAssessmentObservationTypeID })
-                .HasForeignKey(d => new { d.TreatmentBMPTypeAssessmentObservationTypeID, d.TreatmentBMPTypeID, d.TreatmentBMPAssessmentObservationTypeID })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID_Treat");
         });
 
         modelBuilder.Entity<TreatmentBMPDocument>(entity =>
@@ -951,24 +896,13 @@ public partial class NeptuneDbContext : DbContext
         {
             entity.HasKey(e => e.TreatmentBMPObservationID).HasName("PK_TreatmentBMPObservation_TreatmentBMPObservationID");
 
-            entity.HasOne(d => d.TreatmentBMPAssessment).WithMany(p => p.TreatmentBMPObservationTreatmentBMPAssessments).OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.TreatmentBMPAssessment).WithMany(p => p.TreatmentBMPObservations).OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.TreatmentBMPAssessmentObservationType).WithMany(p => p.TreatmentBMPObservations).OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.TreatmentBMPTypeAssessmentObservationType).WithMany(p => p.TreatmentBMPObservationTreatmentBMPTypeAssessmentObservationTypes).OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.TreatmentBMPTypeAssessmentObservationType).WithMany(p => p.TreatmentBMPObservations).OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.TreatmentBMPType).WithMany(p => p.TreatmentBMPObservations).OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.TreatmentBMP).WithMany(p => p.TreatmentBMPObservationTreatmentBMPs)
-                .HasPrincipalKey(p => new { p.TreatmentBMPAssessmentID, p.TreatmentBMPTypeID })
-                .HasForeignKey(d => new { d.TreatmentBMPAssessmentID, d.TreatmentBMPTypeID })
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.TreatmentBMPNavigation).WithMany(p => p.TreatmentBMPObservationTreatmentBMPNavigations)
-                .HasPrincipalKey(p => new { p.TreatmentBMPTypeAssessmentObservationTypeID, p.TreatmentBMPTypeID, p.TreatmentBMPAssessmentObservationTypeID })
-                .HasForeignKey(d => new { d.TreatmentBMPTypeAssessmentObservationTypeID, d.TreatmentBMPTypeID, d.TreatmentBMPAssessmentObservationTypeID })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_TreatmentBMPObservation_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID_TreatmentBMPTyp");
         });
 
         modelBuilder.Entity<TreatmentBMPType>(entity =>

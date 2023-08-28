@@ -28,21 +28,15 @@ public partial class MaintenanceRecord
     public int? MaintenanceRecordTypeID { get; set; }
 
     [ForeignKey("FieldVisitID")]
-    [InverseProperty("MaintenanceRecordFieldVisit")]
+    [InverseProperty("MaintenanceRecord")]
     public virtual FieldVisit FieldVisit { get; set; } = null!;
 
-    public virtual FieldVisit FieldVisitNavigation { get; set; } = null!;
-
-    public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservationMaintenanceRecordNavigations { get; set; } = new List<MaintenanceRecordObservation>();
-
     [InverseProperty("MaintenanceRecord")]
-    public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservationMaintenanceRecords { get; set; } = new List<MaintenanceRecordObservation>();
+    public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; } = new List<MaintenanceRecordObservation>();
 
     [ForeignKey("TreatmentBMPID")]
-    [InverseProperty("MaintenanceRecordTreatmentBMPs")]
+    [InverseProperty("MaintenanceRecords")]
     public virtual TreatmentBMP TreatmentBMP { get; set; } = null!;
-
-    public virtual TreatmentBMP TreatmentBMPNavigation { get; set; } = null!;
 
     [ForeignKey("TreatmentBMPTypeID")]
     [InverseProperty("MaintenanceRecords")]

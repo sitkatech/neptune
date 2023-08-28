@@ -616,19 +616,19 @@ namespace Neptune.Web.Controllers
                 fieldVisit.DeleteFull(_dbContext);
             }
 
-            foreach (var treatmentBMPBenchmarkAndThreshold in treatmentBMP.TreatmentBMPBenchmarkAndThresholdTreatmentBMPs.ToList())
+            foreach (var treatmentBMPBenchmarkAndThreshold in treatmentBMP.TreatmentBMPBenchmarkAndThresholds.ToList())
             {
                 treatmentBMPBenchmarkAndThreshold.DeleteFull(_dbContext);
             }
 
-            treatmentBMP.TreatmentBMPBenchmarkAndThresholdTreatmentBMPs = null;
+            treatmentBMP.TreatmentBMPBenchmarkAndThresholds = null;
 
             var newTreatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, viewModel.TreatmentBMPTypeID);
             var validCustomAttributeTypes = newTreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.ToList();
 
             // we need to clone the attributes instead of simply changing the bmp type and treatmentbmptypecustomattributetype ids
             var customAttributesCloned = new List<CustomAttribute>();
-            foreach (var customAttribute in treatmentBMP.CustomAttributeTreatmentBMPs.Where(z => validCustomAttributeTypes.Select(y => y.CustomAttributeTypeID).Contains(z.CustomAttributeTypeID))
+            foreach (var customAttribute in treatmentBMP.CustomAttributes.Where(z => validCustomAttributeTypes.Select(y => y.CustomAttributeTypeID).Contains(z.CustomAttributeTypeID))
                 .ToList())
             {
                 var treatmentBMPTypeCustomAttributeType = newTreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Single(c => c.CustomAttributeTypeID == customAttribute.CustomAttributeTypeID);
@@ -654,7 +654,7 @@ namespace Neptune.Web.Controllers
             }
 
             // delete any custom attributes that are not valid for the new treatment bmp type
-            foreach (var customAttribute in treatmentBMP.CustomAttributeTreatmentBMPs.ToList())
+            foreach (var customAttribute in treatmentBMP.CustomAttributes.ToList())
             {
                 customAttribute.DeleteFull(_dbContext);
             }
@@ -897,13 +897,13 @@ namespace Neptune.Web.Controllers
                                                 customAttributeTypePurpose.CustomAttributeTypePurposeID &&
                                                 x.CustomAttributeType.IsRequired &&
                                                 !treatmentBMP
-                                                    .CustomAttributeTreatmentBMPs
+                                                    .CustomAttributes
                                                     .Select(
                                                         y =>
                                                             y.CustomAttributeTypeID)
                                                     .Contains(
                                                         x.CustomAttributeTypeID)) ||
-                                            treatmentBMP.CustomAttributeTreatmentBMPs.Any(x =>
+                                            treatmentBMP.CustomAttributes.Any(x =>
                                                 x.CustomAttributeType.CustomAttributeTypePurposeID ==
                                                 customAttributeTypePurpose.CustomAttributeTypePurposeID &&
                                                 x.CustomAttributeType.IsRequired &&

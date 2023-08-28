@@ -420,7 +420,7 @@ namespace Neptune.Web.Common
             {
                 var treatmentBMPTypeCustomAttributeType = customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Single(x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID);
                 var customAttribute =
-                    treatmentBMP.CustomAttributeTreatmentBMPs.SingleOrDefault(x =>
+                    treatmentBMP.CustomAttributes.SingleOrDefault(x =>
                         x.TreatmentBMPTypeCustomAttributeTypeID == treatmentBMPTypeCustomAttributeType
                             .TreatmentBMPTypeCustomAttributeTypeID) ?? new CustomAttribute()
                     {

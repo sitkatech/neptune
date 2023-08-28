@@ -34,7 +34,7 @@ namespace Neptune.EFModels.Entities
                 treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Select(x => x.CustomAttributeTypeID).Contains(CustomAttributeTypeID),
                 "The Custom Attribute Type is not valid for this Treatment BMP");
 
-            var customAttribute = treatmentBMP.CustomAttributeTreatmentBMPs.SingleOrDefault(x => x.CustomAttributeTypeID == CustomAttributeTypeID);
+            var customAttribute = treatmentBMP.CustomAttributes.SingleOrDefault(x => x.CustomAttributeTypeID == CustomAttributeTypeID);
             if (customAttribute == null)
             {
                 return false;

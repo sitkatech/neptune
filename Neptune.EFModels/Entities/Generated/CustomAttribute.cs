@@ -29,23 +29,14 @@ public partial class CustomAttribute
     public virtual ICollection<CustomAttributeValue> CustomAttributeValues { get; set; } = new List<CustomAttributeValue>();
 
     [ForeignKey("TreatmentBMPID")]
-    [InverseProperty("CustomAttributeTreatmentBMPs")]
+    [InverseProperty("CustomAttributes")]
     public virtual TreatmentBMP TreatmentBMP { get; set; } = null!;
-
-    public virtual TreatmentBMP TreatmentBMPNavigation { get; set; } = null!;
 
     [ForeignKey("TreatmentBMPTypeID")]
     [InverseProperty("CustomAttributes")]
     public virtual TreatmentBMPType TreatmentBMPType { get; set; } = null!;
 
     [ForeignKey("TreatmentBMPTypeCustomAttributeTypeID")]
-    [InverseProperty("CustomAttributeTreatmentBMPTypeCustomAttributeTypes")]
+    [InverseProperty("CustomAttributes")]
     public virtual TreatmentBMPTypeCustomAttributeType TreatmentBMPTypeCustomAttributeType { get; set; } = null!;
-
-    public virtual TreatmentBMPTypeCustomAttributeType TreatmentBMPTypeCustomAttributeTypeNavigation { get; set; } = null!;
-
-    public void DeleteFull(NeptuneDbContext dbContext)
-    {
-        throw new NotImplementedException();
-    }
 }

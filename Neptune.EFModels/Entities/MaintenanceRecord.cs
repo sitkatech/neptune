@@ -1,6 +1,8 @@
+using Neptune.Web.Models;
+
 namespace Neptune.EFModels.Entities
 {
-    public partial class MaintenanceRecord //: IAuditableEntity
+    public partial class MaintenanceRecord : IAuditableEntity
     {
         public DateTime GetMaintenanceRecordDate()
         {
@@ -19,15 +21,15 @@ namespace Neptune.EFModels.Entities
 
         public bool IsMissingRequiredAttributes()
         {
-            return MaintenanceRecordObservationMaintenanceRecords.Any(x => x.CustomAttributeType.IsRequired && !x.IsObservationComplete());
+            return MaintenanceRecordObservations.Any(x => x.CustomAttributeType.IsRequired && !x.IsObservationComplete());
         }
 
         public string MaintenanceRecordStatus()
         {
             var completedObservationCount =
-                MaintenanceRecordObservationMaintenanceRecords.Count(x => x.IsObservationComplete());
+                MaintenanceRecordObservations.Count(x => x.IsObservationComplete());
             var totalObservationCount =
-                MaintenanceRecordObservationMaintenanceRecords.Count;
+                MaintenanceRecordObservations.Count;
 
             return $"{completedObservationCount} of {totalObservationCount} observations provided";
         }
@@ -39,7 +41,7 @@ namespace Neptune.EFModels.Entities
                 return "n/a";
             }
 
-            var maintenanceRecordObservation = MaintenanceRecordObservationMaintenanceRecords.SingleOrDefault(y =>
+            var maintenanceRecordObservation = MaintenanceRecordObservations.SingleOrDefault(y =>
                 y.CustomAttributeTypeID == customAttributeType.CustomAttributeTypeID &&
                 y.MaintenanceRecordObservationValues.Any(z =>
                     !string.IsNullOrWhiteSpace(z.ObservationValue)));

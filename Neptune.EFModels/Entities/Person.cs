@@ -19,9 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.Web.Models;
+
 namespace Neptune.EFModels.Entities
 {
-    public partial class Person// : IAuditableEntity, IKeystoneUser
+    public partial class Person : IAuditableEntity//, IKeystoneUser
     {
         public const int AnonymousPersonID = -999;
 

@@ -257,7 +257,7 @@ namespace Neptune.EFModels.Entities
 
         public double? GetBenchmarkValue(TreatmentBMP treatmentBMP)
         {
-            var treatmentBMPBenchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholdTreatmentBMPs
+            var treatmentBMPBenchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds
                 .SingleOrDefault(x => x.TreatmentBMPAssessmentObservationType == this);
 
             return treatmentBMPBenchmarkAndThreshold?.BenchmarkValue;
@@ -265,7 +265,7 @@ namespace Neptune.EFModels.Entities
 
         public double? GetThresholdValue(TreatmentBMP treatmentBMP)
         {
-            var treatmentBMPBenchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholdTreatmentBMPs
+            var treatmentBMPBenchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds
                 .SingleOrDefault(x => x.TreatmentBMPAssessmentObservationType == this);
 
             return treatmentBMPBenchmarkAndThreshold?.ThresholdValue;

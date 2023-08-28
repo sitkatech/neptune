@@ -85,21 +85,21 @@ namespace Neptune.EFModels.Entities
 
         public TreatmentBMPAssessment GetMostRecentAssessment()
         {
-            var latestAssessment = TreatmentBMPAssessmentTreatmentBMPs.OrderByDescending(x => x.GetAssessmentDate()).FirstOrDefault(x => x.IsAssessmentComplete);
+            var latestAssessment = TreatmentBMPAssessments.OrderByDescending(x => x.GetAssessmentDate()).FirstOrDefault(x => x.IsAssessmentComplete);
             return latestAssessment;
         }
 
         public bool IsBenchmarkAndThresholdCompleteForObservationType(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return TreatmentBMPBenchmarkAndThresholdTreatmentBMPs.SingleOrDefault(x =>
+            return TreatmentBMPBenchmarkAndThresholds.SingleOrDefault(x =>
                        x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID) != null;
         }
 
         public string GetCustomAttributeValueWithUnits(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType)
         {
-            if (this.CustomAttributeTreatmentBMPs.Any())
+            if (this.CustomAttributes.Any())
             {
-                var customAttribute = CustomAttributeTreatmentBMPs.SingleOrDefault(x =>
+                var customAttribute = CustomAttributes.SingleOrDefault(x =>
                     x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
                 if (customAttribute != null)
                 {
@@ -119,9 +119,9 @@ namespace Neptune.EFModels.Entities
 
         public string GetCustomAttributeValue(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType)
         {
-            if (CustomAttributeTreatmentBMPs.Any())
+            if (CustomAttributes.Any())
             {
-                var customAttribute = CustomAttributeTreatmentBMPs.SingleOrDefault(x =>
+                var customAttribute = CustomAttributes.SingleOrDefault(x =>
                     x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
                 if (customAttribute != null)
                 {
@@ -133,12 +133,12 @@ namespace Neptune.EFModels.Entities
 
         public DateTime? LastMaintainedDateTime()
         {
-            if (!MaintenanceRecordTreatmentBMPs.Any())
+            if (!MaintenanceRecords.Any())
             {
                 return null;
             }
 
-            return MaintenanceRecordTreatmentBMPs.Max(x => x.GetMaintenanceRecordDate());
+            return MaintenanceRecords.Max(x => x.GetMaintenanceRecordDate());
         }
 
         public string CustomAttributeStatus()
@@ -185,6 +185,11 @@ namespace Neptune.EFModels.Entities
         public void RemoveUpstreamBMP()
         { 
             this.UpstreamBMPID = null;
+        }
+
+        public void DeleteFull(NeptuneDbContext dbContext)
+        {
+            throw new NotImplementedException();
         }
     }
 }

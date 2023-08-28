@@ -58,10 +58,8 @@ public partial class OnlandVisualTrashAssessment
     public virtual Person CreatedByPerson { get; set; } = null!;
 
     [ForeignKey("OnlandVisualTrashAssessmentAreaID")]
-    [InverseProperty("OnlandVisualTrashAssessmentOnlandVisualTrashAssessmentArea")]
+    [InverseProperty("OnlandVisualTrashAssessment")]
     public virtual OnlandVisualTrashAssessmentArea? OnlandVisualTrashAssessmentArea { get; set; }
-
-    public virtual OnlandVisualTrashAssessmentArea? OnlandVisualTrashAssessmentAreaNavigation { get; set; }
 
     [InverseProperty("OnlandVisualTrashAssessment")]
     public virtual ICollection<OnlandVisualTrashAssessmentObservationPhotoStaging> OnlandVisualTrashAssessmentObservationPhotoStagings { get; set; } = new List<OnlandVisualTrashAssessmentObservationPhotoStaging>();

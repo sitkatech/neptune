@@ -33,15 +33,11 @@ public partial class TreatmentBMPTypeAssessmentObservationType
     [InverseProperty("TreatmentBMPTypeAssessmentObservationTypes")]
     public virtual TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType { get; set; } = null!;
 
-    public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholdTreatmentBMP1s { get; set; } = new List<TreatmentBMPBenchmarkAndThreshold>();
+    [InverseProperty("TreatmentBMPTypeAssessmentObservationType")]
+    public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; } = new List<TreatmentBMPBenchmarkAndThreshold>();
 
     [InverseProperty("TreatmentBMPTypeAssessmentObservationType")]
-    public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholdTreatmentBMPTypeAssessmentObservationTypes { get; set; } = new List<TreatmentBMPBenchmarkAndThreshold>();
-
-    public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservationTreatmentBMPNavigations { get; set; } = new List<TreatmentBMPObservation>();
-
-    [InverseProperty("TreatmentBMPTypeAssessmentObservationType")]
-    public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservationTreatmentBMPTypeAssessmentObservationTypes { get; set; } = new List<TreatmentBMPObservation>();
+    public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; } = new List<TreatmentBMPObservation>();
 
     [ForeignKey("TreatmentBMPTypeID")]
     [InverseProperty("TreatmentBMPTypeAssessmentObservationTypes")]

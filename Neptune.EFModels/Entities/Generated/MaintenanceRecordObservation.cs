@@ -25,10 +25,8 @@ public partial class MaintenanceRecordObservation
     public virtual CustomAttributeType CustomAttributeType { get; set; } = null!;
 
     [ForeignKey("MaintenanceRecordID")]
-    [InverseProperty("MaintenanceRecordObservationMaintenanceRecords")]
+    [InverseProperty("MaintenanceRecordObservations")]
     public virtual MaintenanceRecord MaintenanceRecord { get; set; } = null!;
-
-    public virtual MaintenanceRecord MaintenanceRecordNavigation { get; set; } = null!;
 
     [InverseProperty("MaintenanceRecordObservation")]
     public virtual ICollection<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get; set; } = new List<MaintenanceRecordObservationValue>();
@@ -38,8 +36,6 @@ public partial class MaintenanceRecordObservation
     public virtual TreatmentBMPType TreatmentBMPType { get; set; } = null!;
 
     [ForeignKey("TreatmentBMPTypeCustomAttributeTypeID")]
-    [InverseProperty("MaintenanceRecordObservationTreatmentBMPTypeCustomAttributeTypes")]
+    [InverseProperty("MaintenanceRecordObservations")]
     public virtual TreatmentBMPTypeCustomAttributeType TreatmentBMPTypeCustomAttributeType { get; set; } = null!;
-
-    public virtual TreatmentBMPTypeCustomAttributeType TreatmentBMPTypeCustomAttributeTypeNavigation { get; set; } = null!;
 }

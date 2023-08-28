@@ -31,24 +31,18 @@ public partial class TreatmentBMPAssessment
     public bool IsAssessmentComplete { get; set; }
 
     [ForeignKey("FieldVisitID")]
-    [InverseProperty("TreatmentBMPAssessmentFieldVisits")]
+    [InverseProperty("TreatmentBMPAssessments")]
     public virtual FieldVisit FieldVisit { get; set; } = null!;
 
-    public virtual FieldVisit FieldVisitNavigation { get; set; } = null!;
-
     [ForeignKey("TreatmentBMPID")]
-    [InverseProperty("TreatmentBMPAssessmentTreatmentBMPs")]
+    [InverseProperty("TreatmentBMPAssessments")]
     public virtual TreatmentBMP TreatmentBMP { get; set; } = null!;
 
     [InverseProperty("TreatmentBMPAssessment")]
     public virtual ICollection<TreatmentBMPAssessmentPhoto> TreatmentBMPAssessmentPhotos { get; set; } = new List<TreatmentBMPAssessmentPhoto>();
 
-    public virtual TreatmentBMP TreatmentBMPNavigation { get; set; } = null!;
-
     [InverseProperty("TreatmentBMPAssessment")]
-    public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservationTreatmentBMPAssessments { get; set; } = new List<TreatmentBMPObservation>();
-
-    public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservationTreatmentBMPs { get; set; } = new List<TreatmentBMPObservation>();
+    public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; } = new List<TreatmentBMPObservation>();
 
     [ForeignKey("TreatmentBMPTypeID")]
     [InverseProperty("TreatmentBMPAssessments")]

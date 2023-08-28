@@ -9,6 +9,6 @@ CREATE TABLE [dbo].[TreatmentBMPAssessment](
 	[IsAssessmentComplete] [bit] NOT NULL,
 	CONSTRAINT [AK_TreatmentBMPAssessment_TreatmentBMPAssessmentID_TreatmentBMPID] UNIQUE ([TreatmentBMPAssessmentID], [TreatmentBMPID]),
 	CONSTRAINT [AK_TreatmentBMPAssessment_TreatmentBMPAssessmentID_TreatmentBMPTypeID] UNIQUE ([TreatmentBMPAssessmentID], [TreatmentBMPTypeID]),
-	CONSTRAINT [FK_TreatmentBMPAssessment_FieldVisit_FieldVisitID_TreatmentBMPID] FOREIGN KEY([FieldVisitID], [TreatmentBMPID]) REFERENCES [dbo].[FieldVisit] ([FieldVisitID], [TreatmentBMPID]),
-	CONSTRAINT [FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPID], [TreatmentBMPTypeID]) REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID], [TreatmentBMPTypeID])
+	--CONSTRAINT [FK_TreatmentBMPAssessment_FieldVisit_FieldVisitID_TreatmentBMPID] FOREIGN KEY([FieldVisitID], [TreatmentBMPID]) REFERENCES [dbo].[FieldVisit] ([FieldVisitID], [TreatmentBMPID]),
+	--CONSTRAINT [FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPID], [TreatmentBMPTypeID]) REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID], [TreatmentBMPTypeID])
 )

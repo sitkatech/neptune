@@ -7,7 +7,7 @@ CREATE TABLE [dbo].[FieldVisit](
 	[InventoryUpdated] [bit] NOT NULL,
 	[FieldVisitTypeID] [int] NOT NULL CONSTRAINT [FK_FieldVisit_FieldVisitType_FieldVisitTypeID] FOREIGN KEY REFERENCES [dbo].[FieldVisitType] ([FieldVisitTypeID]),
 	[IsFieldVisitVerified] [bit] NOT NULL,
-	CONSTRAINT [AK_FieldVisit_FieldVisitID_TreatmentBMPID] UNIQUE ([FieldVisitID], [TreatmentBMPID])
+	--CONSTRAINT [AK_FieldVisit_FieldVisitID_TreatmentBMPID] UNIQUE ([FieldVisitID], [TreatmentBMPID])
 )
 
 GO

@@ -123,7 +123,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                             BenchmarkValue = a.DefaultBenchmarkValue ?? 0,
                             ThresholdValue = a.DefaultThresholdValue ?? 0
                         };
-                    treatmentBMP.TreatmentBMPBenchmarkAndThresholdTreatmentBMPs.Add(treatmentBmpBenchmarkAndThreshold);
+                    treatmentBMP.TreatmentBMPBenchmarkAndThresholds.Add(treatmentBmpBenchmarkAndThreshold);
                 }
             }
 

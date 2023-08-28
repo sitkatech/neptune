@@ -43,7 +43,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
         public EditAttributesViewModel(EFModels.Entities.TreatmentBMP treatmentBMP,
             CustomAttributeTypePurpose customAttributeTypePurpose)
         {
-            CustomAttributes = treatmentBMP.CustomAttributeTreatmentBMPs.Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID == customAttributeTypePurpose.CustomAttributeTypePurposeID).Select(x => x.AsUpsertDto()).ToList();
+            CustomAttributes = treatmentBMP.CustomAttributes.Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID == customAttributeTypePurpose.CustomAttributeTypePurposeID).Select(x => x.AsUpsertDto()).ToList();
         }
 
         public void UpdateModel(EFModels.Entities.TreatmentBMP treatmentBMP, Person currentPerson,
@@ -78,7 +78,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
             var customAttributesInDatabase = dbContext.CustomAttributes;
             var customAttributeValuesInDatabase = dbContext.CustomAttributeValues;
 
-            var existingCustomAttributes = treatmentBMP.CustomAttributeTreatmentBMPs.Where(x =>
+            var existingCustomAttributes = treatmentBMP.CustomAttributes.Where(x =>
                 x.CustomAttributeType.CustomAttributeTypePurposeID ==
                 customAttributeTypePurpose.CustomAttributeTypePurposeID).ToList();
 

@@ -22,23 +22,19 @@ public partial class TreatmentBMPObservation
 
     public string? ObservationData { get; set; }
 
-    public virtual TreatmentBMPAssessment TreatmentBMP { get; set; } = null!;
-
     [ForeignKey("TreatmentBMPAssessmentID")]
-    [InverseProperty("TreatmentBMPObservationTreatmentBMPAssessments")]
+    [InverseProperty("TreatmentBMPObservations")]
     public virtual TreatmentBMPAssessment TreatmentBMPAssessment { get; set; } = null!;
 
     [ForeignKey("TreatmentBMPAssessmentObservationTypeID")]
     [InverseProperty("TreatmentBMPObservations")]
     public virtual TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType { get; set; } = null!;
 
-    public virtual TreatmentBMPTypeAssessmentObservationType TreatmentBMPNavigation { get; set; } = null!;
-
     [ForeignKey("TreatmentBMPTypeID")]
     [InverseProperty("TreatmentBMPObservations")]
     public virtual TreatmentBMPType TreatmentBMPType { get; set; } = null!;
 
     [ForeignKey("TreatmentBMPTypeAssessmentObservationTypeID")]
-    [InverseProperty("TreatmentBMPObservationTreatmentBMPTypeAssessmentObservationTypes")]
+    [InverseProperty("TreatmentBMPObservations")]
     public virtual TreatmentBMPTypeAssessmentObservationType TreatmentBMPTypeAssessmentObservationType { get; set; } = null!;
 }
