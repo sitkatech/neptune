@@ -7,7 +7,9 @@ public static class TreatmentBMPTypes
 {
     private static IQueryable<TreatmentBMPType> GetImpl(NeptuneDbContext dbContext)
     {
-        return dbContext.TreatmentBMPTypes;
+        return dbContext.TreatmentBMPTypes
+            .Include(x => x.TreatmentBMPTypeCustomAttributeTypes)
+            .ThenInclude(x => x.CustomAttributeType);
     }
 
     public static TreatmentBMPType GetByIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPTypeID)

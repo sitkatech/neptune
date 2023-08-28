@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using Microsoft.AspNetCore.Html;
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common;
+using Neptune.Common.DesignByContract;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
@@ -569,5 +570,20 @@ namespace Neptune.Web.Models
             }
         }
 
+        public static TreatmentBMPTypeAssessmentObservationType GetTreatmentBMPTypeObservationType(this TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
+        {
+            var treatmentBMPTypeAssessmentObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationTypeOrDefault(treatmentBMPAssessmentObservationType);
+            Check.Require(treatmentBMPTypeAssessmentObservationType != null,
+                $"The Observation Type '{treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName}' is not applicable to the Treatment BMP Type '{treatmentBMPType.TreatmentBMPTypeName}'.");
+            return treatmentBMPTypeAssessmentObservationType;
+        }
+
+        public static TreatmentBMPTypeAssessmentObservationType? GetTreatmentBMPTypeObservationTypeOrDefault(this TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
+        {
+            var treatmentBMPTypeAssessmentObservationType = treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(
+                x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID && x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
+
+            return treatmentBMPTypeAssessmentObservationType;
+        }
     }
 }

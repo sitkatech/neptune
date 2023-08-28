@@ -40,7 +40,8 @@ namespace Neptune.EFModels.Entities
         {
             return dbContext.TreatmentBMPs
                 .Include(x => x.TreatmentBMPType)
-                .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization);
+                .Include(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization);
         }
 
         public static TreatmentBMP GetByIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPID)

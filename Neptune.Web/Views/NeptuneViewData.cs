@@ -137,7 +137,7 @@ namespace Neptune.Web.Views
             var programInfoMenu = new LtInfoMenuItem("Program Info");
 
             //programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPAssessmentObservationTypeController>(c => c.Index()), currentPerson, "Observation Types", "Group1"));
-            //programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPTypeController>(c => c.Index()), currentPerson, "Treatment BMP Types", "Group1"));
+            programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPTypeController>(_linkGenerator ,c => c.Index()), currentPerson, "Treatment BMP Types", "Group1"));
             programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FundingSourceController>(_linkGenerator, c => c.Index()), currentPerson, "Funding Sources", "Group1"));
 
             //if (new JurisdictionEditFeature().HasPermissionByPerson(currentPerson))
