@@ -5,10 +5,7 @@ namespace Neptune.Web.Common;
 
 public class WebConfiguration
 {
-    public int MaximumAllowedUploadFileSize { get; set; }
     public string DatabaseConnectionString { get; set; }
-    public string DatabaseServerName { get; set; }
-    public string DatabaseName { get; set; }
     public string RecaptchaPublicKey { get; set; }
     public string RecaptchaPrivateKey { get; set; }
     public string RecaptchaValidatorUrl { get; set; }
@@ -16,15 +13,12 @@ public class WebConfiguration
     public string DoNotReplyEmail { get; set; }
     public string Ogr2OgrExecutable { get; set; }
     public string OgrInfoExecutable { get; set; }
-    public int ReportingPeriodStartMonth { get; set; }
-    public int ReportingPeriodStartDay { get; set; }
-    public int DefaultSupportPersonID { get; set; }
 
     public string KeystoneUrl { get; set; }
     public string KeystoneRegisterUrl { get; set; }
     public string KeystoneInviteUserUrl { get; set; }
     public string KeystoneUserProfileUrl { get; set; }
-    public string KeystoneOpenIDClientId { get; set; }
+    public string KeystoneOpenIDClientID { get; set; }
     public string KeystoneOpenIDUrl { get; set; }
     public string KeystoneOpenIDClientSecret { get; set; }
     public string ParcelMapServiceUrl { get; set; }
@@ -52,10 +46,7 @@ public class WebConfiguration
     public string LogFileFolder { get; set; }
     public string NereidLogFileFolder { get; set; }
 
-    public string NominatimApiKey { get; set; }
-    public string ApplicationDomain { get; set; }
     public string SitkaEmailRedirect { get; set; }
-    public bool IsEmailEnabled { get; set; }
     public string MailLogBcc { get; set; }
 
     //public static readonly string CanonicalHostName = CanonicalHostNames.FirstOrDefault();

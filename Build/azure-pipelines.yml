@@ -446,6 +446,7 @@ stages:
       SQL_GEOSERVER_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.SQL_GEOSERVER_PASSWORD'] ]
       GEOSERVER_ADMIN_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.GEOSERVER_ADMIN_PASSWORD'] ]
       HANGFIRE_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.HANGFIRE_PASSWORD'] ]
+      PYQGIS_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.PYQGIS_PASSWORD'] ]
     # creates an environment if it doesn't exist
     environment: $(Environment)
     strategy:
@@ -520,6 +521,8 @@ stages:
                 global.secrets.apiSqlPassword=$(SQL_API_PASSWORD)
                 global.secrets.sendGridApiKey="$(SendGridApiKey)"
                 global.secrets.hangfirePassword="$(HANGFIRE_PASSWORD)"
-                web.image.tag="$(Build.BuildNumber)-$(environment)"
+                global.secrets.pyqgisPassword="$(PYQGIS_PASSWORD)"
+                global.secrets.keystoneOpenIDClientSecret="$(keystoneOpenIDClientSecret)"
+                webmvc.image.tag="$(Build.BuildNumber)-$(environment)"
                 webmvc.image.repository="$(containerRegistry)/neptune/webmvc"
               force: false

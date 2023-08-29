@@ -62,12 +62,11 @@ public static class AuthenticationHelper
 
     public static void ProcessLoginFromKeystone(TokenValidatedContext tokenValidatedContext, NeptuneDbContext dbContext, WebConfiguration configuration)
     {
-        var applicationDomain = configuration.ApplicationDomain;
         var sendNewUserNotification = false;
         var sendNewOrganizationNotification = false;
         var claimsIdentity = (ClaimsIdentity)tokenValidatedContext.Principal.Identity;
         var keystoneGuid = new Guid(claimsIdentity.GetClaimValue("sub"));
-//        _logger.LogInformation($"{applicationDomain}: In {nameof(ProcessLoginFromKeystone)} - Processing Keystone login for user with Keystone guid {keystoneGuid}".ToString());
+        //_logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Processing Keystone login for user with Keystone guid {keystoneGuid}".ToString());
         var person = People.GetByGuid(dbContext, keystoneGuid);
         // var firstName = claimsIdentity.GetClaimValue("FirstName");
         //
@@ -80,7 +79,7 @@ public static class AuthenticationHelper
         var loginName = claimsIdentity.GetClaimValue("login_name");
         if (person == null)
         {
-//            _logger.LogInformation($"{applicationDomain}: In {nameof(ProcessLoginFromKeystone)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
+            //            _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
             // new user - provision with limited role
             var unknownOrganization = Organizations.GetUnknownOrganization(dbContext);
             person = new Person()
@@ -100,12 +99,12 @@ public static class AuthenticationHelper
         }
         else
         {
-//            _logger.LogInformation($"{applicationDomain}: In {nameof(ProcessLoginFromKeystone)} - Signing in user {firstName} {lastName} from Keystone login".ToString());
+            //            _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Signing in user {firstName} {lastName} from Keystone login".ToString());
             //var primaryPhone = claimsIdentity.GetClaimValue("PrimaryPhone");
             // if (person.FirstName != firstName || person.LastName != lastName || person.Email != email || person.Phone != primaryPhone || person.LoginName != loginName)
             if (person.FirstName != firstName || person.LastName != lastName || person.Email != email || person.LoginName != loginName)
             {
- //               _logger.LogInformation($"{applicationDomain}: In {nameof(ProcessLoginFromKeystone)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
+                //               _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
                 person.FirstName = firstName;
                 person.LastName = lastName;
                 person.Email = email;
@@ -130,7 +129,7 @@ public static class AuthenticationHelper
 
             if (organization == null)
             {
-//                _logger.LogInformation($"{applicationDomain}: In {nameof(ProcessLoginFromKeystone)} - Creating a new Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}".ToString());
+                //                _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}".ToString());
                 var defaultOrganizationType = OrganizationTypes.GetDefaultOrganizationType(dbContext);
                 organization = new Organization()
                 {
@@ -148,7 +147,7 @@ public static class AuthenticationHelper
 
             if (!organization.OrganizationGuid.HasValue)
             {
-//                _logger.LogInformation($"{applicationDomain}: In {nameof(ProcessLoginFromKeystone)} - Setting the KeystoneGuid field for existing Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}".ToString());
+                //                _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Setting the KeystoneGuid field for existing Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}".ToString());
                 organization.OrganizationGuid = keystoneOrganizationGuid;
             }
             person.Organization = organization;

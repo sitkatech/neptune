@@ -17,6 +17,8 @@ global:
     apiSqlPassword: "passwordhere"
     sendGridApiKey: "sendgridapikeyhere"
     hangfirePassword: "passwordhere"
+    pyqgisPassword: "passwordhere"
+    keystoneOpenIDClientSecret: "secrethere"
 
 webmvc:
   replicaCount: 1
