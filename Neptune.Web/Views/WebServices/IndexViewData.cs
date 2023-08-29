@@ -1,5 +1,4 @@
 ﻿using Neptune.Web.Models;
-using System.Collections.Generic;
 using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Views.WebServices
@@ -9,7 +8,7 @@ namespace Neptune.Web.Views.WebServices
         public readonly WebServiceToken WebServiceAccessToken;
         public readonly List<WebServiceDocumentation> ServiceDocumentationList;
 
-        public IndexViewData(Person currentPerson, WebServiceToken webServiceAccessToken, List<WebServiceDocumentation> serviceDocumentationList) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public IndexViewData(Person currentPerson, WebServiceToken webServiceAccessToken, List<WebServiceDocumentation> serviceDocumentationList, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             WebServiceAccessToken = webServiceAccessToken;
             ServiceDocumentationList = serviceDocumentationList;

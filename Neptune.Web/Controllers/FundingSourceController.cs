@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
-using LtInfo.Common.Mvc;
 using Microsoft.AspNetCore.Mvc;
+using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;

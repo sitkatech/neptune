@@ -1,6 +1,8 @@
-﻿namespace Neptune.Web.Views.WebServices
+﻿using Neptune.Web.Common.Mvc;
+
+namespace Neptune.Web.Views.WebServices
 {
-    public abstract class Index : LtInfo.Common.Mvc.TypedWebViewPage<IndexViewData>
+    public abstract class Index : TypedWebViewPage<IndexViewData>
     {
     }
 }

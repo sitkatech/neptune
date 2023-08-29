@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
-using ClosedXML.Excel;
-using LtInfo.Common.DesignByContract;
+using ApprovalUtilities.Utilities;
+using Neptune.Common.DesignByContract;
+using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -21,9 +19,9 @@ namespace Neptune.Web.Views.WebServices
 
         public string GetReplacedUrl(WebServiceToken userToken)
         {
-            if (String.IsNullOrEmpty(Url))
+            if (string.IsNullOrEmpty(Url))
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             return Url.Replace(WebServiceToken.WebServiceTokenGuidForParameterizedReplacement.ToString(),
@@ -34,13 +32,13 @@ namespace Neptune.Web.Views.WebServices
         {
             if (!Parameters.Any())
             {
-                return String.Empty;
+                return string.Empty;
             }
 
-            return String.Join(", ", Parameters);
+            return string.Join(", ", Parameters);
         }
 
-        public WebServiceDocumentation(MethodInfo methodInfo)
+        public WebServiceDocumentation(MethodInfo methodInfo, NeptuneDbContext dbContext, LinkGenerator linkGenerator)
         {
             var attribs = methodInfo.GetCustomAttributes(typeof(WebServiceNameAndDescriptionAttribute), false);
             Check.Require(attribs.Length == 1, "Expected 1 and only 1 WebServiceDocumentation attribute on found Web Methods.");
@@ -70,13 +68,10 @@ namespace Neptune.Web.Views.WebServices
                 });
             }
 
-            
-
-            var webServiceRouteMap = GetWebServiceRouteMap();
+            var webServiceRouteMap = GetWebServiceRouteMap(dbContext, linkGenerator);
 
             var routeMap = webServiceRouteMap.FirstOrDefault(x => x.MethodName == methodInfo.Name);
             Url = routeMap.Route;
-            
         }
 
         public class SampleRouteEntry
@@ -90,51 +85,52 @@ namespace Neptune.Web.Views.WebServices
             }
         }
 
-        public static List<SampleRouteEntry> GetWebServiceRouteMap()
+        public static List<SampleRouteEntry> GetWebServiceRouteMap(NeptuneDbContext dbContext, LinkGenerator linkGenerator)
         {
-            Check.EnsureNotNull(WebServiceToken.WebServiceTokenForParameterizedReplacements);
+            var webServiceToken = new WebServiceToken(dbContext);
+            Check.EnsureNotNull(webServiceToken.WebServiceTokenForParameterizedReplacements);
 
             var webServiceRouteMap = new List<SampleRouteEntry>
             {
-                new SampleRouteEntry(MethodNameFromExpression(c =>
-                        c.TreatmentBMPAttributeSummary(WebServiceToken.WebServiceTokenForParameterizedReplacements)),
+                new (MethodNameFromExpression(c =>
+                        c.TreatmentBMPAttributeSummary(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.TreatmentBMPAttributeSummary(WebServiceToken.WebServiceTokenForParameterizedReplacements)).BuildUrlFromExpression()
+                        c.TreatmentBMPAttributeSummary(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
                 ),
-                new SampleRouteEntry(MethodNameFromExpression(c =>
-                        c.WaterQualityManagementPlanAttributeSummary(WebServiceToken.WebServiceTokenForParameterizedReplacements)),
+                new (MethodNameFromExpression(c =>
+                        c.WaterQualityManagementPlanAttributeSummary(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.WaterQualityManagementPlanAttributeSummary(WebServiceToken.WebServiceTokenForParameterizedReplacements)).BuildUrlFromExpression()
+                        c.WaterQualityManagementPlanAttributeSummary(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
                 ),
-                new SampleRouteEntry(MethodNameFromExpression(c =>
-                        c.LandUseStatistics(WebServiceToken.WebServiceTokenForParameterizedReplacements)),
+                new (MethodNameFromExpression(c =>
+                        c.LandUseStatistics(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.LandUseStatistics(WebServiceToken.WebServiceTokenForParameterizedReplacements)).BuildUrlFromExpression()
+                        c.LandUseStatistics(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
                 ),
-                new SampleRouteEntry(MethodNameFromExpression(c =>
-                        c.TreatmentBMPParameterizationSummary(WebServiceToken.WebServiceTokenForParameterizedReplacements)),
+                new (MethodNameFromExpression(c =>
+                        c.TreatmentBMPParameterizationSummary(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.TreatmentBMPParameterizationSummary(WebServiceToken.WebServiceTokenForParameterizedReplacements)).BuildUrlFromExpression()
+                        c.TreatmentBMPParameterizationSummary(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
                 ),
-                new SampleRouteEntry(MethodNameFromExpression(c =>
-                        c.CentralizedBMPLoadGeneratingUnitMapping(WebServiceToken.WebServiceTokenForParameterizedReplacements)),
+                new (MethodNameFromExpression(c =>
+                        c.CentralizedBMPLoadGeneratingUnitMapping(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.CentralizedBMPLoadGeneratingUnitMapping(WebServiceToken.WebServiceTokenForParameterizedReplacements)).BuildUrlFromExpression()
+                        c.CentralizedBMPLoadGeneratingUnitMapping(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
                 ),
-                new SampleRouteEntry(MethodNameFromExpression(c =>
-                        c.ModelResults(WebServiceToken.WebServiceTokenForParameterizedReplacements)),
+                new (MethodNameFromExpression(c =>
+                        c.ModelResults(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.ModelResults(WebServiceToken.WebServiceTokenForParameterizedReplacements)).BuildUrlFromExpression()
+                        c.ModelResults(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
                 ),
-                new SampleRouteEntry(MethodNameFromExpression(c =>
-                        c.BaselineModelResults(WebServiceToken.WebServiceTokenForParameterizedReplacements)),
+                new (MethodNameFromExpression(c =>
+                        c.BaselineModelResults(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.BaselineModelResults(WebServiceToken.WebServiceTokenForParameterizedReplacements)).BuildUrlFromExpression()
+                        c.BaselineModelResults(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
                 ),
-                new SampleRouteEntry(MethodNameFromExpression(c =>
-                        c.WaterQualityManagementPlanOAndMVerifications(WebServiceToken.WebServiceTokenForParameterizedReplacements)),
+                new (MethodNameFromExpression(c =>
+                        c.WaterQualityManagementPlanOAndMVerifications(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.WaterQualityManagementPlanOAndMVerifications(WebServiceToken.WebServiceTokenForParameterizedReplacements)).BuildUrlFromExpression()
+                        c.WaterQualityManagementPlanOAndMVerifications(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
                 ),
             };
             return webServiceRouteMap;

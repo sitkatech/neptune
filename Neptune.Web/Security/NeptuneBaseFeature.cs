@@ -19,32 +19,36 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.Common.DesignByContract;
+using Neptune.EFModels;
+using Neptune.EFModels.Entities;
+
 namespace Neptune.Web.Security
 {
     //[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public abstract class NeptuneBaseFeature// : BaseAuthorizationAttribute
     {
-        //private readonly NeptuneArea _neptuneArea;
+        private readonly NeptuneArea _neptuneArea;
 
-        //public IList<IRole> GrantedRoles { get; }
+        public IList<IRole> GrantedRoles { get; }
 
-        //protected NeptuneBaseFeature(IList<IRole> grantedRoles, NeptuneArea neptuneArea) // params
-        //{
-        //    // Force user to pass us empty lists to make life simpler
-        //    Check.RequireNotNull(grantedRoles, "Can\'t pass null for Granted Roles.");
+        protected NeptuneBaseFeature(IList<IRole> grantedRoles, NeptuneArea neptuneArea) // params
+        {
+            // Force user to pass us empty lists to make life simpler
+            Check.RequireNotNull(grantedRoles, "Can\'t pass null for Granted Roles.");
 
-        //    if (grantedRoles.Any())
-        //    {
-        //        // roles passed in need to be for the corresponding area
-        //        Check.Require(grantedRoles.All(x => x.NeptuneAreaDisplayName == neptuneArea.NeptuneAreaDisplayName));
-        //    }
+            if (grantedRoles.Any())
+            {
+                // roles passed in need to be for the corresponding area
+                Check.Require(grantedRoles.All(x => x.NeptuneAreaDisplayName == neptuneArea.NeptuneAreaDisplayName));
+            }
 
-        //    // At least one of these must be set
-        //    //Check.Ensure(grantedRoles.Any(), "Must set at least one Role");
+            // At least one of these must be set
+            //Check.Ensure(grantedRoles.Any(), "Must set at least one Role");
 
-        //    GrantedRoles = grantedRoles;
-        //    _neptuneArea = neptuneArea;
-        //}
+            GrantedRoles = grantedRoles;
+            _neptuneArea = neptuneArea;
+        }
 
         //public override void OnAuthorization(AuthorizationContext filterContext)
         //{
@@ -64,15 +68,15 @@ namespace Neptune.Web.Security
 
         //public string FeatureName => GetType().Name;
 
-        //public virtual bool HasPermissionByPerson(Person person)
-        //{
-        //    if (!GrantedRoles.Any()) // AnonymousUnclassifiedFeature case
-        //    {
-        //        return true;
+        public virtual bool HasPermissionByPerson(Person person)
+        {
+            if (!GrantedRoles.Any()) // AnonymousUnclassifiedFeature case
+            {
+                return true;
 
-        //    }
-        //    return _neptuneArea.HasPermissionByPerson(person, GrantedRoles);
-        //}
+            }
+            return _neptuneArea.HasPermissionByPerson(person, GrantedRoles);
+        }
 
         //protected override bool AuthorizeCore(HttpContextBase httpContext)
         //{

@@ -154,5 +154,12 @@ namespace Neptune.EFModels.Entities
         {
             return ListActive(dbContext).Where(x => x.RoleID == roleID).ToList();
         }
+
+        public static Person GetByWebServiceAccessToken(NeptuneDbContext dbContext, Guid webServiceAccessToken)
+        {
+            var person = dbContext.People.AsNoTracking().SingleOrDefault(x => x.WebServiceAccessToken == webServiceAccessToken);
+            Check.RequireNotNull(person, $"Person with specified service access token not found!");
+            return person;
+        }
     }
 }
