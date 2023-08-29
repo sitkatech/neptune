@@ -508,7 +508,7 @@ stages:
               releaseName: 'neptune'
               overrideValues: |
                 global.env.appInsightsInstrumentationKey="$(INSTRUMENTATION_KEY)"
-                global.domains.web="$(domainWeb)"
+                global.domains.webMvc="$(domainWebMvc)"
                 global.domains.geoserver="$(domainGeoserver)"
                 global.env.name="$(Environment)"
                 global.secrets.geoserverSqlServerPassword="$(SQL_GEOSERVER_PASSWORD)"
