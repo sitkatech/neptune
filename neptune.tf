@@ -47,10 +47,6 @@ variable "environment" {
   type = string
 }
 
-variable "pyqgisPassword" {
-  type = string
-}
-
 variable "azureClusterResourceGroup" {
   type = string
 }
@@ -504,7 +500,7 @@ resource "azurerm_key_vault_secret" "appInsightsInstrumentationKey" {
  
 resource "azurerm_key_vault_secret" "pyqgisPassword" {
   name                         = "pyqgisPassword"
-  value                        = var.pyqgisPassword
+  value                        = random_password.pyqgisPassword.result
   key_vault_id                 = azurerm_key_vault.web.id
 
   tags                         = local.tags
