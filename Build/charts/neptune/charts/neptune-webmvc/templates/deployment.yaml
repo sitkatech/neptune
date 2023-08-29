@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "webmvc.fullname" . }}
+  labels:
+    {{- include "webmvc.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "webmvc.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }} # roll deployments on every upgrade: https://helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "webmvc.selectorLabels" . | nindent 8 }}
+    spec:
+      volumes:
+      - name: secrets
+        secret:
+          secretName: neptune-webmvc-secrets
+      # - name: certs
+      #   hostPath:
+      #     # directory location on host
+      #     path: /run/desktop/mnt/host/c/Users/stewart.gordon/.aspnet/https
+      #     # this field is optional
+      #     type: Directory
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "webmvc.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.global.env.name }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # this startup probe checks the app every 10 seconds to see if it's ready to receive traffic
+          # it gives a very generous 5 minutes for the container to startup. As soon as it is successful
+          # the liveness probe kicks into effect.
+          startupProbe: 
+            httpGet:
+              path: /
+              scheme: HTTP
+              port: 80
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              scheme: HTTP
+              port: 80
+            periodSeconds: 4
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              scheme: HTTP
+              port: 80
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep","120"]
+          terminationGracePeriodSeconds: 131
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          envFrom:
+          - configMapRef:
+              name: {{ include "webmvc.fullname" . }}-{{ .Values.global.env.name }}-configmap
+          volumeMounts:
+          - name: secrets
+            mountPath: /app/secrets
+            readOnly: true
+          # - name: certs
+          #   mountPath: /https
+          #   readOnly: true
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

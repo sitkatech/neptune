@@ -1,0 +1,14 @@
+{{ if eq .Values.global.env.name "prod" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "webmvc.fullname" . }}-prod-configmap
+data:
+  SECRET_PATH: "/app/secrets/neptuneWebMvcSecrets"
+  DOCKER_BUILD_SOURCE: "."
+  ASPNETCORE_ENVIRONMENT: "Production"
+  SITKA_EMAIL_REDIRECT: ""
+  WEB_URL: "https://{{ .Values.global.domains.webmvc }}"
+  PlatformLongName: "Groundwater Accounting Platform"
+  APPINSIGHTS_INSTRUMENTATIONKEY: "{{ .Values.global.env.appInsightsInstrumentationKey }}"
+{{ end }}  
