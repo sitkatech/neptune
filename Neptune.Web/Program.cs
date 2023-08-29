@@ -15,7 +15,25 @@ var builder = WebApplication.CreateBuilder(args);
     // Add services to the container.
     var services = builder.Services;
     services.AddRazorPages();
-    services.AddControllersWithViews().AddJsonOptions(options => {
+    services.AddControllersWithViews()
+        .AddRazorOptions(options =>
+        {
+            options.ViewLocationFormats.Add("~/Views/Shared/TextControls/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/ExpenditureAndBudgetControls/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/PerformanceMeasureControls/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/ProjectControls/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/JurisdictionControls/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/ProjectWatershedControls/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/ProjectUpdateDiffControls/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/EditAttributes/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/SortOrder/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/Location/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/UserJurisdictions/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/HRUCharacteristics/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/ModeledPerformance/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/FieldVisit/ObservationTypePreview/{0}.cshtml");
+        })
+        .AddJsonOptions(options => {
         var scale = Math.Pow(10, 3);
         var geometryFactory = new GeometryFactory(new PrecisionModel(scale), 4326);
         options.JsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));
