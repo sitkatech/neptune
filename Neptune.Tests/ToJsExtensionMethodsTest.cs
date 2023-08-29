@@ -19,19 +19,20 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Neptune.Web.Common;
 
-namespace Neptune.Web.Common
+namespace Neptune.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class ToJsExtensionMethodsTest
     {
-        [Test]
+        [TestMethod]
         public void ShouldEncodeStringsProperly()
         {
-            Assert.That("Text".ToJS(), Is.EqualTo("'Text'"), "Should add leading and trailing single quotes");
-            Assert.That("Text with ' apostrophe".ToJS(), Is.EqualTo(@"'Text with \u0027 apostrophe'"), "Should properly encode an apostrophe");
-            Assert.That("Text with \" double quote".ToJS(), Is.EqualTo(@"'Text with \"" double quote'"), "Should properly encode a double quote");
+            Assert.AreEqual("'Text'","Text".ToJS(), "Should add leading and trailing single quotes");
+            Assert.AreEqual(@"'Text with \u0027 apostrophe'", "Text with ' apostrophe".ToJS(), "Should properly encode an apostrophe");
+            Assert.AreEqual(@"'Text with \"" double quote'", "Text with \" double quote".ToJS(), "Should properly encode a double quote");
         }
     }
 }

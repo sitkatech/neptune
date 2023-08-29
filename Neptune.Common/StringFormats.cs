@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Globalization;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Html;
 using Neptune.Common;
 
 namespace Neptune.Web.Common
@@ -366,19 +365,6 @@ namespace Neptune.Web.Common
             return !string.IsNullOrEmpty(input) ? new Regex("[^0-9]").Replace(input, string.Empty) : string.Empty;
         }
 
-        public static HtmlString ToHTMLFormattedString(this string text)
-        {
-
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                return new HtmlString(string.Empty);
-            }
-
-            var result = text;
-            result = result.Replace("\r\n", "\n").Replace("\n", "<br/>");
-
-            return new HtmlString(result);
-        }
 
         /// <summary>
         /// This will only do the first letter of the whole string to upper case and lower case everything else

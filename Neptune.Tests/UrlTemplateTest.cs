@@ -19,20 +19,22 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Neptune.Common.DesignByContract;
+using Neptune.Web.Common;
 
-namespace Neptune.Web.Common
+namespace Neptune.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class UrlTemplateTest
     {
-        [Test, System.ComponentModel.Description("The number of parameters for each type is the same")]
+        [TestMethod, System.ComponentModel.Description("The number of parameters for each type is the same")]
         public void HasConsistentNumberOfParameters()
         {
-            Assert.That(UrlTemplate.IntParameters.Length, Is.EqualTo(UrlTemplate.StringParameters.Length), "Should be the same number of parameters across each type");
+            Assert.AreEqual(UrlTemplate.StringParameters.Length, UrlTemplate.IntParameters.Length, "Should be the same number of parameters across each type");
         }
 
-        [Test]
+        [TestMethod]
         public void CanReplaceParameter1()
         {
             var urlTemplate = $"/SampleController/SampleAction/{UrlTemplate.Parameter1Int}";
@@ -41,10 +43,10 @@ namespace Neptune.Web.Common
             const int realParameter1 = 123;
             var result = template.ParameterReplace(realParameter1);
 
-            Assert.That(result, Is.EqualTo(urlTemplate.Replace(UrlTemplate.Parameter1Int.ToString(), realParameter1.ToString())), "Should be able to replace with 1 parameter");
+            Assert.AreEqual(urlTemplate.Replace(UrlTemplate.Parameter1Int.ToString(), realParameter1.ToString()), result, "Should be able to replace with 1 parameter");
         }
 
-        [Test]
+        [TestMethod]
         public void CanReplaceParameter2()
         {
             var urlTemplate =
@@ -56,10 +58,10 @@ namespace Neptune.Web.Common
             var result = template.ParameterReplace(realParameter1, realParameter2);
 
             var expected = urlTemplate.Replace(UrlTemplate.Parameter1Int.ToString(), realParameter1.ToString()).Replace(UrlTemplate.Parameter2String, realParameter2);
-            Assert.That(result, Is.EqualTo(expected), "Should be able to replace with 2 parameters");
+            Assert.AreEqual(expected, result, "Should be able to replace with 2 parameters");
         }
 
-        [Test]
+        [TestMethod]
         public void CanReplaceParameter3()
         {
             var urlTemplate =
@@ -73,18 +75,17 @@ namespace Neptune.Web.Common
             var result = template.ParameterReplace(realParameter1, realParameter2, realParameter3);
 
             var expected = urlTemplate.Replace(UrlTemplate.Parameter1Int.ToString(), realParameter1.ToString()).Replace(UrlTemplate.Parameter2String, realParameter2).Replace(UrlTemplate.Parameter3Int.ToString(), realParameter3.ToString());
-            Assert.That(result, Is.EqualTo(expected), "Should be able to replace with 3 parameters");
+            Assert.AreEqual(expected, result, "Should be able to replace with 3 parameters");
         }
 
-        [Test]
+        [TestMethod]
         public void CanDetectBadUrlTemplate()
         {
-            Assert.That(() => new UrlTemplate<string>($"/SampleController/SampleAction/{UrlTemplate.Parameter1Int}"), Throws.Exception, "Types and parameter order must align");
-            Assert.That(() => new UrlTemplate<int>($"/SampleController/SampleAction/{UrlTemplate.Parameter1String}"), Throws.Exception, "Types and parameter order must align");
+            Assert.ThrowsException<PreconditionException>(() => new UrlTemplate<string>($"/SampleController/SampleAction/{UrlTemplate.Parameter1Int}"), "Types and parameter order must align");
+            Assert.ThrowsException<PreconditionException>(() => new UrlTemplate<int>($"/SampleController/SampleAction/{UrlTemplate.Parameter1String}"), "Types and parameter order must align");
 
-            Assert.That(() => new UrlTemplate<int>($"/SampleController/SampleAction/{UrlTemplate.Parameter2Int}"), Throws.Exception, "Must do them in order");
-            Assert.That(() => new UrlTemplate<int, string>(
-                $"/SampleController/SampleAction/{UrlTemplate.Parameter1Int}/{UrlTemplate.Parameter1String}"), Throws.Exception, "Should error if there's two of the same ordinals");
+            Assert.ThrowsException<PreconditionException>(() => new UrlTemplate<int>($"/SampleController/SampleAction/{UrlTemplate.Parameter2Int}"), "Must do them in order");
+            Assert.ThrowsException<PreconditionException>(() => new UrlTemplate<int, string>($"/SampleController/SampleAction/{UrlTemplate.Parameter1Int}/{UrlTemplate.Parameter1String}"), "Should error if there's two of the same ordinals");
         }
 
         //[Test]

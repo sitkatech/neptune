@@ -21,20 +21,21 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Neptune.Web.Common;
 using Neptune.Web.Common.DhtmlWrappers;
 using Neptune.Web.Common.ModalDialog;
-using NUnit.Framework;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace LtInfo.Common.DhtmlWrappers
+namespace Neptune.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class DhtmlxGridHtmlHelpersTest
     {
         protected const string TestControllerName = "TestController";
 
-        [Test]
-        [UseReporter(typeof(DiffReporter))]
+        [TestMethod]
+        [UseReporter(typeof(CustomDiffReporter))]
         public void BuildGridColumnsTest()
         {
             const string indent = "";
@@ -43,22 +44,22 @@ namespace LtInfo.Common.DhtmlWrappers
             Approvals.Verify(result);
         }
 
-        [Test]
+        [TestMethod]
         public void IsUsingSmartRenderingWithColumnsThatHaveTotalsTest()
         {
             var gridSpec = new TestGridSpec();
-            Assert.That(DhtmlxGridHtmlHelpers.IsUsingSmartRendering(gridSpec), Is.False, "Should not be using smart rendering because we have a grid spec that has a total column");
+            Assert.IsFalse(DhtmlxGridHtmlHelpers.IsUsingSmartRendering(gridSpec), "Should not be using smart rendering because we have a grid spec that has a total column");
         }
 
-        [Test]
+        [TestMethod]
         public void IsUsingSmartRenderingWithColumnsThatHaveNoTotalsTest()
         {
             var gridSpec = new TestGridSpecWithNoTotalColumns();
-            Assert.That(DhtmlxGridHtmlHelpers.IsUsingSmartRendering(gridSpec), Is.True, "Should be using smart rendering because we have a grid spec that has a total column");
+            Assert.IsTrue(DhtmlxGridHtmlHelpers.IsUsingSmartRendering(gridSpec), "Should be using smart rendering because we have a grid spec that has a total column");
         }
 
-        [Test]
-        [UseReporter(typeof(DiffReporter))]
+        [TestMethod]
+        [UseReporter(typeof(CustomDiffReporter))]
         public void VerifyJavascriptForDhtmlxGrid()
         {
             var gridSpec = new TestGridSpec();
@@ -75,7 +76,7 @@ namespace LtInfo.Common.DhtmlWrappers
 
             var result = DhtmlxGridHtmlHelpers.DhtmlxGrid(gridSpec,
                                                           gridName,
-                                                          string.Format("{0}/ListGridDataXml", TestControllerName),
+                                                          $"{TestControllerName}/ListGridDataXml",
                                                           "height:250px;");
             Approvals.Verify(result);
         }
@@ -110,8 +111,8 @@ namespace LtInfo.Common.DhtmlWrappers
                     {
                         // Edit button
                         // -----------
-                        var contentUrl = string.Format("{0}/EditAction/{1}", TestControllerName, m.PrimaryKey);
-                        var dialogTitle = string.Format("Edit this {0}", m.DisplayName);
+                        var contentUrl = $"{TestControllerName}/EditAction/{m.PrimaryKey}";
+                        var dialogTitle = $"Edit this {m.DisplayName}";
                         var dialogForm = new ModalDialogForm(contentUrl, 350, dialogTitle);
                         return DhtmlxGridHtmlHelpers.MakeEditIconAsModalDialogLinkBootstrap(dialogForm);
 
@@ -122,7 +123,7 @@ namespace LtInfo.Common.DhtmlWrappers
                 Add(string.Empty,
                     m =>
                     {
-                        var contentUrl = string.Format("{0}/DeleteAction/{1}", TestControllerName, m.PrimaryKey);
+                        var contentUrl = $"{TestControllerName}/DeleteAction/{m.PrimaryKey}";
                         var deleteLink = DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(contentUrl, true);
                         return deleteLink;
                     },
@@ -148,8 +149,8 @@ namespace LtInfo.Common.DhtmlWrappers
                     {
                         // Edit button
                         // -----------
-                        var contentUrl = string.Format("{0}/EditAction/{1}", TestControllerName, m.PrimaryKey);
-                        var dialogTitle = string.Format("Edit this {0}", m.DisplayName);
+                        var contentUrl = $"{TestControllerName}/EditAction/{m.PrimaryKey}";
+                        var dialogTitle = $"Edit this {m.DisplayName}";
                         var dialogForm = new ModalDialogForm(contentUrl, 350, dialogTitle);
                         return DhtmlxGridHtmlHelpers.MakeEditIconAsModalDialogLinkBootstrap(dialogForm);
 
@@ -160,7 +161,7 @@ namespace LtInfo.Common.DhtmlWrappers
                 Add(string.Empty,
                     m =>
                     {
-                        var contentUrl = string.Format("{0}/DeleteAction/{1}", TestControllerName, m.PrimaryKey);
+                        var contentUrl = $"{TestControllerName}/DeleteAction/{m.PrimaryKey}";
                         var deleteLink = DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(contentUrl, true);
                         return deleteLink;
                     },

@@ -15,4 +15,18 @@ public static class IHtmlContentExtensions
         content.WriteTo(writer, HtmlEncoder.Default);
         return writer.ToString();
     }
+
+    public static HtmlString ToHTMLFormattedString(this string text)
+    {
+
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return new HtmlString(string.Empty);
+        }
+
+        var result = text;
+        result = result.Replace("\r\n", "\n").Replace("\n", "<br/>");
+
+        return new HtmlString(result);
+    }
 }

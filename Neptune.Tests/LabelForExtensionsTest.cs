@@ -21,16 +21,17 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Neptune.EFModels.Entities;
-using NUnit.Framework;
+using Neptune.Web.Common.HtmlHelperExtensions;
 
-namespace Neptune.Web.Common.HtmlHelperExtensions
+namespace Neptune.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class LabelWithSugarForExtensionsTest
     {
-        [Test]
-        [UseReporter(typeof(DiffReporter))]
+        [TestMethod]
+        [UseReporter(typeof(CustomDiffReporter))]
         public void GenerateLabelWithSugarForNotYetDefinedFieldDefinitionTest()
         {
             var result = LabelWithSugarForExtensions.LabelWithFieldDefinitionForImpl("My Field",
@@ -38,11 +39,11 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
                 "/FieldDefinition/FieldDefinitionDetails/1",
                 300,
                 LabelWithSugarForExtensions.DisplayStyle.HelpIconWithLabel, false);
-            Approvals.Verify(result);
+            Approvals.Verify(result.ToString());
         }
 
-        [Test]
-        [UseReporter(typeof(DiffReporter))]
+        [TestMethod]
+        [UseReporter(typeof(CustomDiffReporter))]
         public void GenerateLabelWithSugarForDefinedFieldDefinitionTest()
         {
             var fieldDefinitionData = new FieldDefinition(-1, "My field's definition");
@@ -51,11 +52,11 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
                 "/FieldDefinition/FieldDefinitionDetails/1",
                 300,
                 LabelWithSugarForExtensions.DisplayStyle.HelpIconWithLabel, false);
-            Approvals.Verify(result);
+            Approvals.Verify(result.ToString());
         }
 
-        [Test]
-        [UseReporter(typeof(DiffReporter))]
+        [TestMethod]
+        [UseReporter(typeof(CustomDiffReporter))]
         public void GenerateLabelWithSugarForDefinedFieldDefinitionForGridHeaderTest()
         {
             var fieldDefinitionData = new FieldDefinition(-1, "My field's definition");
@@ -64,11 +65,11 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
                 "/FieldDefinition/FieldDefinitionDetails/1",
                 300,
                 LabelWithSugarForExtensions.DisplayStyle.AsGridHeader, false);
-            Approvals.Verify(result);
+            Approvals.Verify(result.ToString());
         }
 
-        [Test]
-        [UseReporter(typeof(DiffReporter))]
+        [TestMethod]
+        [UseReporter(typeof(CustomDiffReporter))]
         public void GenerateLabelWithSugarForDefinedFieldDefinitionForHelpIconOnlyTest()
         {
             var fieldDefinitionData = new FieldDefinition(-1, "My field's definition");
@@ -77,7 +78,7 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
                 "/FieldDefinition/FieldDefinitionDetails/1",
                 300,
                 LabelWithSugarForExtensions.DisplayStyle.HelpIconOnly, false);
-            Approvals.Verify(result);
+            Approvals.Verify(result.ToString());
         }
     }
 }

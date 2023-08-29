@@ -19,27 +19,30 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Collections.Generic;
+using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Neptune.Common.DesignByContract;
-using NUnit.Framework;
+using Neptune.Web.Views;
 
-namespace Neptune.Web.Views
+namespace Neptune.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class LtInfoMenuItemTest
     {
-        [Test]
-        [UseReporter(typeof(DiffReporter))]
+        [TestMethod]
+        [UseReporter(typeof(CustomDiffReporter))]
         public void CanRenderBlankMenuTest()
         {
             var menuItem1 = new LtInfoMenuItem("menu1");
             var result = menuItem1.RenderMenu().ToString();
-            Assert.That(result, Is.EqualTo(string.Empty), "No visible menu items, should return empty");
+            Assert.AreEqual(string.Empty, result, "No visible menu items, should return empty");
         }
 
-        [Test]
-        [UseReporter(typeof(DiffReporter))]
+        [TestMethod]
+        [UseReporter(typeof(CustomDiffReporter))]
         public void CanRenderSimpleMenuTest()
         {
             var menuItem1 = new LtInfoMenuItem("url1", "menu1", true, false, null);
@@ -47,33 +50,30 @@ namespace Neptune.Web.Views
             Approvals.Verify(result);
         }
 
-        [Test]
-        [UseReporter(typeof(DiffReporter))]
+        [TestMethod]
         public void TopLevelMenuItemWithNoChildrenShouldNotRenderTest()
         {
             var menuItem1 = new LtInfoMenuItem("menu1");
             var result = menuItem1.RenderMenu().ToString();
-            Assert.That(result, Is.EqualTo(string.Empty), "Is top level menu and has no children and has no url, should return empty");
+            Assert.AreEqual(string.Empty, result, "Is top level menu and has no children and has no url, should return empty");
         }
 
-        [Test]
-        [UseReporter(typeof(DiffReporter))]
+        [TestMethod]
         public void TopLevelMenuItemThatIsALinkCannotAddChildrenTest()
         {
             var menuItem1 = new LtInfoMenuItem("url1", "menu1", true, true, null);
-            Assert.Throws<PreconditionException>(() => menuItem1.AddMenuItem(new LtInfoMenuItem("Some menu item")));
+            Assert.ThrowsException<PreconditionException>(() => menuItem1.AddMenuItem(new LtInfoMenuItem("Some menu item")));
         }
 
-        [Test]
-        [UseReporter(typeof(DiffReporter))]
+        [TestMethod]
         public void TopLevelMenuItemThatIsNotALinkCanAddChildrenTest()
         {
             var menuItem1 = new LtInfoMenuItem("menu1");
-            Assert.DoesNotThrow(() => menuItem1.AddMenuItem(new LtInfoMenuItem("Some menu item")));
+            Assert.That.DoesNotThrow(() => menuItem1.AddMenuItem(new LtInfoMenuItem("Some menu item")));
         }
 
-        [Test]
-        [UseReporter(typeof(DiffReporter))]
+        [TestMethod]
+        [UseReporter(typeof(CustomDiffReporter))]
         public void CanRenderNestedMenuTest()
         {
             var menuItem1 = new LtInfoMenuItem("menu1");
@@ -92,8 +92,8 @@ namespace Neptune.Web.Views
             Approvals.Verify(result);
         }
 
-        [Test]
-        [UseReporter(typeof(DiffReporter))]
+        [TestMethod]
+        [UseReporter(typeof(CustomDiffReporter))]
         public void CanRenderMultipleNestedMenuTest()
         {
             var menuItem1 = new LtInfoMenuItem("menu1");
@@ -124,8 +124,8 @@ namespace Neptune.Web.Views
             Approvals.Verify(result);
         }
 
-        [Test]
-        [UseReporter(typeof(DiffReporter))]
+        [TestMethod]
+        [UseReporter(typeof(CustomDiffReporter))]
         public void CanRenderMenuWithGroupsTest()
         {
             var menuItem1 = new LtInfoMenuItem("menu1");

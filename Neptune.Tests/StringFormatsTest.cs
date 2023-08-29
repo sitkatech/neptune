@@ -19,36 +19,36 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Microsoft.AspNetCore.Html;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Neptune.Web.Common;
 
-namespace Neptune.Web.Common
+namespace Neptune.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class StringFormatsTest
     {
-        [Test]
+        [TestMethod]
         public void ParseNullableDecimalFromCurrencyString()
         {
-            Assert.That(StringFormats.ParseNullableDecimalFromCurrencyString("$100"), Is.EqualTo(100m));
-            Assert.That(StringFormats.ParseNullableDecimalFromCurrencyString("$200,000"), Is.EqualTo(200000m));
-            Assert.That(StringFormats.ParseNullableDecimalFromCurrencyString("$100.10"), Is.EqualTo(100.10m));
-            Assert.That(StringFormats.ParseNullableDecimalFromCurrencyString("-$100.10"), Is.EqualTo(-100.10m));
-            Assert.That(StringFormats.ParseNullableDecimalFromCurrencyString("($100.10)"), Is.EqualTo(-100.10m));
+            Assert.AreEqual(100m,StringFormats.ParseNullableDecimalFromCurrencyString("$100"));
+            Assert.AreEqual(200000m,StringFormats.ParseNullableDecimalFromCurrencyString("$200,000"));
+            Assert.AreEqual(100.10m,StringFormats.ParseNullableDecimalFromCurrencyString("$100.10"));
+            Assert.AreEqual(-100.10m, StringFormats.ParseNullableDecimalFromCurrencyString("-$100.10"));
+            Assert.AreEqual(-100.10m,StringFormats.ParseNullableDecimalFromCurrencyString("($100.10)"));
         }
 
-        [Test]
+        [TestMethod]
         public void FormatFileSizeHumanReadableTest()
         {
-            Assert.That(StringFormats.ToHumanReadableByteSize(0), Is.EqualTo("0 B"));
-            Assert.That(StringFormats.ToHumanReadableByteSize(1024), Is.EqualTo("1 KB"));
-            Assert.That(StringFormats.ToHumanReadableByteSize(1024 * 1024), Is.EqualTo("1 MB"));
-            Assert.That(StringFormats.ToHumanReadableByteSize(1024 * 1024 + 512 * 1024), Is.EqualTo("1.5 MB"));
-            Assert.That(StringFormats.ToHumanReadableByteSize(1024 * 1024 + 231 * 1024), Is.EqualTo("1.23 MB"));
-            Assert.That(StringFormats.ToHumanReadableByteSize(1024 * 1024 * 1024), Is.EqualTo("1 GB"));
-            Assert.That(StringFormats.ToHumanReadableByteSize(1024L * 1024L* 1024L * 1024L), Is.EqualTo("1 TB"));
-            Assert.That(StringFormats.ToHumanReadableByteSize(1024L * 1024L* 1024L * 1024L * 1024L), Is.EqualTo("1 PB"));
-            Assert.That(StringFormats.ToHumanReadableByteSize(1024L * 1024L* 1024L * 1024L * 1024L * 1024L), Is.EqualTo("1 EB"));
+            Assert.AreEqual("0 B", StringFormats.ToHumanReadableByteSize(0));
+            Assert.AreEqual("1 KB", StringFormats.ToHumanReadableByteSize(1024));
+            Assert.AreEqual("1 MB", StringFormats.ToHumanReadableByteSize(1024 * 1024));
+            Assert.AreEqual("1.5 MB", StringFormats.ToHumanReadableByteSize(1024 * 1024 + 512 * 1024));
+            Assert.AreEqual("1.23 MB", StringFormats.ToHumanReadableByteSize(1024 * 1024 + 231 * 1024));
+            Assert.AreEqual("1 GB", StringFormats.ToHumanReadableByteSize(1024 * 1024 * 1024));
+            Assert.AreEqual("1 TB", StringFormats.ToHumanReadableByteSize(1024L * 1024L * 1024L * 1024L));
+            Assert.AreEqual("1 PB", StringFormats.ToHumanReadableByteSize(1024L * 1024L * 1024L * 1024L * 1024L));
+            Assert.AreEqual("1 EB", StringFormats.ToHumanReadableByteSize(1024L * 1024L * 1024L * 1024L * 1024L * 1024L));
         }
 
         //[Test]

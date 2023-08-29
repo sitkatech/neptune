@@ -1,10 +1,5 @@
-﻿using Neptune.Web.Controllers;
-using NUnit.Framework;
-using System;
-
-namespace Neptune.Web.Common
+﻿namespace Neptune.Web.Common
 {
-    [TestFixture]
     public class NeptuneHelpersTest
     {
         //[Test]
