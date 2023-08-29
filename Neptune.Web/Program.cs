@@ -79,7 +79,7 @@ var builder = WebApplication.CreateBuilder(args);
             options.Scope.Add("keystone");
             options.Scope.Add("profile");
             options.Scope.Add("offline_access");
-            options.ClientId = configuration.KeystoneOpenIDClientId;
+            options.ClientId = configuration.KeystoneOpenIDClientID;
             options.ClientSecret = configuration.KeystoneOpenIDClientSecret;
             //options.ResponseType = "id_token token";
             options.ResponseType = "code";

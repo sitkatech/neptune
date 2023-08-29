@@ -23,7 +23,7 @@ services:
       - LogFileFolder=${LogFileFolder}
       - NereidLogFileFolder=${LogFileFolder}/NeriedLogs
       - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
-      - KeystoneOpenIDClientId=${KeystoneOpenIDClientId}
+      - KeystoneOpenIDClientID=${KeystoneOpenIDClientID}
       - ParcelMapServiceUrl=${ParcelMapServiceUrl}
       - MapServiceLayerNameParcel=${MapServiceLayerNameParcel}
       - MapServiceLayerNameLandUseBlock=${MapServiceLayerNameLandUseBlock}
