@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json;
+using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
@@ -29,7 +29,7 @@ namespace Neptune.EFModels.Entities
         {
             try
             {
-                var schema = JsonSerializer.Deserialize<DiscreteObservationTypeSchema>(json);
+                var schema = GeoJsonSerializer.Deserialize<DiscreteObservationTypeSchema>(json);
             }
             catch (Exception)
             {
@@ -42,7 +42,7 @@ namespace Neptune.EFModels.Entities
         public override List<ValidationResult> ValidateObservationType(string json)
         {
             var validationErrors = new List<ValidationResult>();
-            var schema = JsonSerializer.Deserialize<DiscreteObservationTypeSchema>(json);
+            var schema = GeoJsonSerializer.Deserialize<DiscreteObservationTypeSchema>(json);
 
             var propertiesToObserve = schema.PropertiesToObserve;
             TreatmentBMPAssessmentObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
@@ -62,7 +62,7 @@ namespace Neptune.EFModels.Entities
             var validationResults = new List<ValidationResult>();
             try
             {
-                var schema = JsonSerializer.Deserialize<DiscreteObservationSchema>(json);
+                var schema = GeoJsonSerializer.Deserialize<DiscreteObservationSchema>(json);
                 var treatmentBMPAssessmentObservationTypeName = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
                 if (!(schema.SingleValueObservations.Count > 0))
                 {
@@ -89,7 +89,7 @@ namespace Neptune.EFModels.Entities
 
         public override double? GetObservationValueFromObservationData(string observationData)
         {
-            var observation = JsonSerializer.Deserialize<DiscreteObservationSchema>(observationData);
+            var observation = GeoJsonSerializer.Deserialize<DiscreteObservationSchema>(observationData);
             return observation.SingleValueObservations.Average(x => Convert.ToDouble(x.ObservationValue));
         }
 
@@ -117,7 +117,7 @@ namespace Neptune.EFModels.Entities
         {
             try
             {
-                var schema = JsonSerializer.Deserialize<PassFailObservationTypeSchema>(json);
+                var schema = GeoJsonSerializer.Deserialize<PassFailObservationTypeSchema>(json);
             }
             catch (Exception)
             {
@@ -130,7 +130,7 @@ namespace Neptune.EFModels.Entities
         public override List<ValidationResult> ValidateObservationType(string json)
         {
             var validationErrors = new List<ValidationResult>();
-            var schema = JsonSerializer.Deserialize<PassFailObservationTypeSchema>(json);
+            var schema = GeoJsonSerializer.Deserialize<PassFailObservationTypeSchema>(json);
 
             var propertiesToObserve = schema.PropertiesToObserve;
             TreatmentBMPAssessmentObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
@@ -147,7 +147,7 @@ namespace Neptune.EFModels.Entities
             var validationResults = new List<ValidationResult>();
             try
             {
-                var schema = JsonSerializer.Deserialize<PassFailObservationSchema>(json);
+                var schema = GeoJsonSerializer.Deserialize<PassFailObservationSchema>(json);
                 var treatmentBMPAssessmentObservationTypeName = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
                 if (schema.SingleValueObservations.Any(x => x.ObservationValue == null))
                 {
@@ -169,7 +169,7 @@ namespace Neptune.EFModels.Entities
 
         public override double? GetObservationValueFromObservationData(string observationData)
         {
-            var observation = JsonSerializer.Deserialize<PassFailObservationSchema>(observationData);
+            var observation = GeoJsonSerializer.Deserialize<PassFailObservationSchema>(observationData);
             var conveyanceFails = observation.SingleValueObservations.Any(x => Convert.ToBoolean(x.ObservationValue) == false);
             return conveyanceFails ? 0 : 5;
         }
@@ -184,9 +184,9 @@ namespace Neptune.EFModels.Entities
             string observationTypeSchema,
             bool overrideAssessmentScoreIfFailing)
         {
-            var observation = JsonSerializer.Deserialize<PassFailObservationSchema>(observationData);
+            var observation = GeoJsonSerializer.Deserialize<PassFailObservationSchema>(observationData);
             var conveyanceFails = observation.SingleValueObservations.Any(x => Convert.ToBoolean(x.ObservationValue) == false);
-            var schema = JsonSerializer.Deserialize<PassFailObservationTypeSchema>(observationTypeSchema);
+            var schema = GeoJsonSerializer.Deserialize<PassFailObservationTypeSchema>(observationTypeSchema);
             return conveyanceFails ? schema.FailingScoreLabel : schema.PassingScoreLabel;
         }
     }
@@ -197,7 +197,7 @@ namespace Neptune.EFModels.Entities
         {
             try
             {
-                var schema = JsonSerializer.Deserialize<PercentageObservationTypeSchema>(json);
+                var schema = GeoJsonSerializer.Deserialize<PercentageObservationTypeSchema>(json);
             }
             catch (Exception)
             {
@@ -210,7 +210,7 @@ namespace Neptune.EFModels.Entities
         public override List<ValidationResult> ValidateObservationType(string json)
         {
             var validationErrors = new List<ValidationResult>();
-            var schema = JsonSerializer.Deserialize<PercentageObservationTypeSchema>(json);
+            var schema = GeoJsonSerializer.Deserialize<PercentageObservationTypeSchema>(json);
 
             var propertiesToObserve = schema.PropertiesToObserve;
             TreatmentBMPAssessmentObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
@@ -226,7 +226,7 @@ namespace Neptune.EFModels.Entities
             var validationResults = new List<ValidationResult>();
             try
             {
-                var schema = JsonSerializer.Deserialize<DiscreteObservationSchema>(json);
+                var schema = GeoJsonSerializer.Deserialize<DiscreteObservationSchema>(json);
                 var treatmentBMPAssessmentObservationTypeName = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
                 if (!(schema.SingleValueObservations.Count > 0))
                 {
@@ -253,7 +253,7 @@ namespace Neptune.EFModels.Entities
 
         public override double? GetObservationValueFromObservationData(string observationData)
         {
-            var observation = JsonSerializer.Deserialize<PercentageObservationSchema>(observationData);
+            var observation = GeoJsonSerializer.Deserialize<PercentageObservationSchema>(observationData);
             return observation.SingleValueObservations.Sum(x => Convert.ToDouble(x.ObservationValue));
         }
 

@@ -20,7 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Globalization;
-using System.Text.Json;
+using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Models;
 
@@ -30,12 +30,12 @@ namespace Neptune.EFModels.Entities
     {
         public DiscreteObservationSchema GetDiscreteObservationData()
         {
-            return JsonSerializer.Deserialize<DiscreteObservationSchema>(ObservationData);
+            return GeoJsonSerializer.Deserialize<DiscreteObservationSchema>(ObservationData);
         }
 
         public PassFailObservationSchema GetPassFailObservationData()
         {
-            return JsonSerializer.Deserialize<PassFailObservationSchema>(ObservationData);
+            return GeoJsonSerializer.Deserialize<PassFailObservationSchema>(ObservationData);
         }
 
         public bool IsComplete()

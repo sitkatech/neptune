@@ -182,12 +182,15 @@ namespace Neptune.Web.Controllers
                     .Include(x => x.WaterQualityManagementPlan)
                     .Include(x => x.CustomAttributes)
                     .ThenInclude(x => x.CustomAttributeValues)
+                    .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
+                    .Include(x => x.Watershed)
                     .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID) && x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID)
                     .ToList()
                     .Join(_dbContext.vTreatmentBMPDetaileds,
                         x => x.TreatmentBMPID,
                         y => y.TreatmentBMPID,
                         (x,y) => new vTreatmentBMPDetailedWithTreatmentBMPEntity(x, y))
+                    .OrderBy(x => x.TreatmentBMP.TreatmentBMPName)
                     .ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTreatmentBMPDetailedWithTreatmentBMPEntity>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;

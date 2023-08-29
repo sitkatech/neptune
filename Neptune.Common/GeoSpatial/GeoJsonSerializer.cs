@@ -12,6 +12,13 @@ namespace Neptune.Common.GeoSpatial;
 
 public static class GeoJsonSerializer
 {
+    public static JsonSerializerOptions DefaultSerializerOptions = CreateGeoJSONSerializerOptions();
+
+    public static T Deserialize<T>(string json)
+    {
+        return JsonSerializer.Deserialize<T>(json, GeoJsonSerializer.DefaultSerializerOptions);
+    }
+
     public static void RemoveAllProperties(IFeature feature)
     {
         // Just replace the AttributesTable with a new one instead of deleting all properties
@@ -95,6 +102,11 @@ public static class GeoJsonSerializer
         return jsonSerializerOptions;
     }
 
+    public static JsonSerializerOptions CreateDefaultJSONSerializerOptions()
+    {
+        return CreateDefaultJSONSerializerOptions(3);
+    }
+
     public static JsonSerializerOptions CreateDefaultJSONSerializerOptions(int numberOfSignificantDigits)
     {
         var jsonSerializerOptions = new JsonSerializerOptions
@@ -102,7 +114,7 @@ public static class GeoJsonSerializer
             ReadCommentHandling = JsonCommentHandling.Skip,
             DefaultIgnoreCondition = JsonIgnoreCondition.Never,
             WriteIndented = true,
-            NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString,
             PropertyNameCaseInsensitive = false,
             PropertyNamingPolicy = null
         };

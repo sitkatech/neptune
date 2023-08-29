@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Text.Json;
 using Neptune.Common;
+using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Models;
 
@@ -62,24 +63,24 @@ namespace Neptune.EFModels.Entities
 
         public DiscreteObservationTypeSchema GetDiscreteObservationTypeSchema()
         {
-            return JsonSerializer.Deserialize<DiscreteObservationTypeSchema>(TreatmentBMPAssessmentObservationTypeSchema);
+            return GeoJsonSerializer.Deserialize<DiscreteObservationTypeSchema>(TreatmentBMPAssessmentObservationTypeSchema);
         }
 
         public RateObservationTypeSchema GetRateObservationTypeSchema()
         {
-            return JsonSerializer.Deserialize<RateObservationTypeSchema>(
+            return GeoJsonSerializer.Deserialize<RateObservationTypeSchema>(
                 TreatmentBMPAssessmentObservationTypeSchema);
         }
 
         public PassFailObservationTypeSchema GetPassFailSchema()
         {
-            return JsonSerializer.Deserialize<PassFailObservationTypeSchema>(
+            return GeoJsonSerializer.Deserialize<PassFailObservationTypeSchema>(
                 TreatmentBMPAssessmentObservationTypeSchema);
         }
 
         public PercentageObservationTypeSchema GetPercentageSchema()
         {
-            return JsonSerializer.Deserialize<PercentageObservationTypeSchema>(
+            return GeoJsonSerializer.Deserialize<PercentageObservationTypeSchema>(
                 TreatmentBMPAssessmentObservationTypeSchema);
         }
 

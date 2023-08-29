@@ -27,7 +27,7 @@ var builder = WebApplication.CreateBuilder(args);
         options.JsonSerializerOptions.WriteIndented = false;
         options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
-        options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals;
+        options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
     });
 
     builder.Configuration.AddJsonFile(builder.Configuration["SECRET_PATH"], optional: false, reloadOnChange: true);

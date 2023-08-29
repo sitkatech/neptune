@@ -9,7 +9,9 @@ public static class TreatmentBMPTypes
     {
         return dbContext.TreatmentBMPTypes
             .Include(x => x.TreatmentBMPTypeCustomAttributeTypes)
-            .ThenInclude(x => x.CustomAttributeType);
+            .ThenInclude(x => x.CustomAttributeType)
+            .Include(x => x.TreatmentBMPTypeAssessmentObservationTypes)
+            .ThenInclude(x => x.TreatmentBMPAssessmentObservationType);
     }
 
     public static TreatmentBMPType GetByIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPTypeID)

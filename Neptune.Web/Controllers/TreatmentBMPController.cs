@@ -129,7 +129,7 @@ namespace Neptune.Web.Controllers
 
             var notes = treatmentBMPObservations.ToList().Select(x =>
             {
-                var notesForThisObservation = JsonSerializer.Deserialize<DiscreteObservationSchema>(x.ObservationData)
+                var notesForThisObservation = GeoJsonSerializer.Deserialize<DiscreteObservationSchema>(x.ObservationData)
                     .SingleValueObservations.Select(y => y.Notes);
 
                 var joinedNotes = string.Join(". ", notesForThisObservation);

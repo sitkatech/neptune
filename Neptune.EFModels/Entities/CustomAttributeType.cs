@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Neptune.Common;
 using Neptune.Common.DesignByContract;
+using Neptune.Common.GeoSpatial;
 using Neptune.Web.Models;
 
 namespace Neptune.EFModels.Entities
@@ -19,7 +20,7 @@ namespace Neptune.EFModels.Entities
 
         public List<string> GetOptionsSchemaAsListOfString()
         {
-            return CustomAttributeTypeOptionsSchema != null ? JsonSerializer.Deserialize<List<string>>(CustomAttributeTypeOptionsSchema) : new List<string>();
+            return CustomAttributeTypeOptionsSchema != null ? GeoJsonSerializer.Deserialize<List<string>>(CustomAttributeTypeOptionsSchema) : new List<string>();
         }
 
         public string DisplayNameWithUnits()
