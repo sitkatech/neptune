@@ -12,7 +12,6 @@ namespace Neptune.Models.DataTransferObjects
         public int ObservationTypeSpecificationID { get; set; }
         public string ObservationTypeSpecificationName { get; set; }
         public string ObservationTypeSpecificationDisplayName { get; set; }
-        public int SortOrder { get; set; }
         public ObservationTypeCollectionMethodDto ObservationTypeCollectionMethod { get; set; }
         public ObservationTargetTypeDto ObservationTargetType { get; set; }
         public ObservationThresholdTypeDto ObservationThresholdType { get; set; }
@@ -23,7 +22,6 @@ namespace Neptune.Models.DataTransferObjects
         public int ObservationTypeSpecificationID { get; set; }
         public string ObservationTypeSpecificationName { get; set; }
         public string ObservationTypeSpecificationDisplayName { get; set; }
-        public int SortOrder { get; set; }
         public System.Int32 ObservationTypeCollectionMethodID { get; set; }
         public System.Int32 ObservationTargetTypeID { get; set; }
         public System.Int32 ObservationThresholdTypeID { get; set; }

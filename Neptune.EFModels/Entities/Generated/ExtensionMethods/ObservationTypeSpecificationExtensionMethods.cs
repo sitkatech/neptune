@@ -16,7 +16,6 @@ namespace Neptune.EFModels.Entities
                 ObservationTypeSpecificationID = observationTypeSpecification.ObservationTypeSpecificationID,
                 ObservationTypeSpecificationName = observationTypeSpecification.ObservationTypeSpecificationName,
                 ObservationTypeSpecificationDisplayName = observationTypeSpecification.ObservationTypeSpecificationDisplayName,
-                SortOrder = observationTypeSpecification.SortOrder,
                 ObservationTypeCollectionMethod = observationTypeSpecification.ObservationTypeCollectionMethod.AsDto(),
                 ObservationTargetType = observationTypeSpecification.ObservationTargetType.AsDto(),
                 ObservationThresholdType = observationTypeSpecification.ObservationThresholdType.AsDto()
@@ -34,7 +33,6 @@ namespace Neptune.EFModels.Entities
                 ObservationTypeSpecificationID = observationTypeSpecification.ObservationTypeSpecificationID,
                 ObservationTypeSpecificationName = observationTypeSpecification.ObservationTypeSpecificationName,
                 ObservationTypeSpecificationDisplayName = observationTypeSpecification.ObservationTypeSpecificationDisplayName,
-                SortOrder = observationTypeSpecification.SortOrder,
                 ObservationTypeCollectionMethodID = observationTypeSpecification.ObservationTypeCollectionMethodID,
                 ObservationTargetTypeID = observationTypeSpecification.ObservationTargetTypeID,
                 ObservationThresholdTypeID = observationTypeSpecification.ObservationThresholdTypeID
