@@ -20,41 +20,42 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Linq;
+using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Models
 {
     public partial class FieldVisit : IAuditableEntity
     {
-        public TreatmentBMPAssessment GetAssessmentByType(TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
-        {
-            return TreatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentTypeID == (int) treatmentBMPAssessmentTypeEnum);
-        }
+        //public TreatmentBMPAssessment GetAssessmentByType(NeptuneDbContext dbContext, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
+        //{
+        //    return dbContext.TreatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentTypeID == (int) treatmentBMPAssessmentTypeEnum);
+        //}
 
         public string GetAuditDescriptionString() => "Field Visit deleted";
 
-        public void MarkFieldVisitAsProvisionalIfNonManager(Person person)
-        {
-            var isAssignedToStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdictionID);
-            if (!isAssignedToStormwaterJurisdiction)
-            {
-                IsFieldVisitVerified = false;
-            }
-        }
-        public void VerifyFieldVisit(Person person)
-        {
-            IsFieldVisitVerified = true;
-            FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
-        }
+        //public void MarkFieldVisitAsProvisionalIfNonManager(Person person)
+        //{
+        //    var isAssignedToStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdictionID);
+        //    if (!isAssignedToStormwaterJurisdiction)
+        //    {
+        //        IsFieldVisitVerified = false;
+        //    }
+        //}
+        //public void VerifyFieldVisit(Person person)
+        //{
+        //    IsFieldVisitVerified = true;
+        //    FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+        //}
 
-        public void MarkFieldVisitAsProvisional()
-        {
-            IsFieldVisitVerified = false;
-        }
+        //public void MarkFieldVisitAsProvisional()
+        //{
+        //    IsFieldVisitVerified = false;
+        //}
 
-        public void ReturnFieldVisitToEdit()
-        {
-            IsFieldVisitVerified = false;
-            FieldVisitStatusID = FieldVisitStatus.ReturnedToEdit.FieldVisitStatusID;
-        }
+        //public void ReturnFieldVisitToEdit()
+        //{
+        //    IsFieldVisitVerified = false;
+        //    FieldVisitStatusID = FieldVisitStatus.ReturnedToEdit.FieldVisitStatusID;
+        //}
     }
 }
