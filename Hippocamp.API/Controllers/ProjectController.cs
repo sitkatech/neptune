@@ -368,6 +368,48 @@ namespace Hippocamp.API.Controllers
             return Ok(newProject.ProjectID);
         }
 
+        [HttpGet("projects/download")]
+        [UserViewFeature]
+        [Produces(@"text/csv")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
+        public async Task<FileContentResult> DownloadProjectsWithModels()
+        {
+            var projectIDs = Projects.ListProjectIDs(_dbContext);
+            var records = Projects.ListByIDsAsModeledResultSummaryDtos(_dbContext, projectIDs);
+
+            await using var stream = new MemoryStream();
+            await using var writer = new StreamWriter(stream);
+            await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csv.Context.RegisterClassMap<ProjectModeledResultsSummaryMap>();
+
+            await csv.WriteRecordsAsync(records);
+            await csv.FlushAsync();
+            stream.Seek(0, SeekOrigin.Begin);
+
+            return File(stream.ToArray(), "text/csv");
+        }
+
+        [HttpGet("projects/treatmentBMPs/download")]
+        [UserViewFeature]
+        [Produces(@"text/csv")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
+        public async Task<FileContentResult> DownloadTreatmentBMPsForProjects()
+        {
+            var projectIDs = Projects.ListProjectIDs(_dbContext);
+            var records = ProjectLoadReducingResults.ListByProjectIDs(_dbContext, projectIDs);
+
+            await using var stream = new MemoryStream();
+            await using var writer = new StreamWriter(stream);
+            await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csv.Context.RegisterClassMap<ProjectLoadRemovingResultMap>();
+
+            await csv.WriteRecordsAsync(records);
+            await csv.FlushAsync();
+            stream.Seek(0, SeekOrigin.Begin);
+
+            return File(stream.ToArray(), "text/csv");
+        }
+
         private bool UserCanEditJurisdiction(PersonDto personDto, int stormwaterJurisdictionID)
         {
             if (personDto.Role.RoleID == (int) RoleEnum.Admin || personDto.Role.RoleID == (int) RoleEnum.SitkaAdmin )

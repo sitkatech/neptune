@@ -135,6 +135,16 @@ export class ProjectService {
     return this.apiService.getFromApi(route);
   }
 
+  downloadProjectModelResults(): Observable<Blob> {
+    let route = `${environment.mainAppApiUrl}/projects/download`;
+    return this.httpClient.get(route, { responseType: "blob"});
+  }
+
+  downloadBMPModelResults(): Observable<Blob> {
+    let route = `${environment.mainAppApiUrl}/projects/treatmentBMPs/download`;
+    return this.httpClient.get(route, { responseType: "blob"});
+  }
+
   downloadOCTAM2Tier2GrantProgramProjectModelResults(): Observable<Blob> {
     let route = `${environment.mainAppApiUrl}/projects/OCTAM2Tier2GrantProgram/download`;
     return this.httpClient.get(route, { responseType: "blob"});

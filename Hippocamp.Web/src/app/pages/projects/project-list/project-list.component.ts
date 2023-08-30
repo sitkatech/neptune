@@ -14,8 +14,6 @@ import { FontAwesomeIconLinkRendererComponent } from 'src/app/shared/components/
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
-import { HttpParams } from '@angular/common/http';
-import { dataSanitizeException } from '@microsoft/applicationinsights-common';
 import { CustomDropdownFilterComponent } from 'src/app/shared/components/custom-dropdown-filter/custom-dropdown-filter.component';
 
 
@@ -185,5 +183,37 @@ export class ProjectListComponent implements OnInit {
       window.scroll(0, 0);
       this.cdr.detectChanges();
     });
+  }
+
+  public downloadProjectModelResults() {
+    this.projectService.downloadProjectModelResults().subscribe(csv => {
+      //Create a fake object for us to click and download
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(csv);
+      a.download = `project-modeled-results.csv`;
+      document.body.appendChild(a);
+      a.click();
+      //Revoke the generated url so the blob doesn't hang in memory https://javascript.info/blob
+      URL.revokeObjectURL(a.href);
+      document.body.removeChild(a);
+    }, (() => {
+      this.alertService.pushAlert(new Alert(`There was an error while downloading the file. Please refresh the page and try again.`, AlertContext.Danger));
+    }))
+  }
+
+  public downloadTreatmentBMPModelResults() {
+    this.projectService.downloadBMPModelResults().subscribe(csv => {
+      //Create a fake object for us to click and download
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(csv);
+      a.download = `project-BMP-modeled-results.csv`;
+      document.body.appendChild(a);
+      a.click();
+      //Revoke the generated url so the blob doesn't hang in memory https://javascript.info/blob
+      URL.revokeObjectURL(a.href);
+      document.body.removeChild(a);
+    }, (() => {
+      this.alertService.pushAlert(new Alert(`There was an error while downloading the file. Please refresh the page and try again.`, AlertContext.Danger));
+    }))
   }
 }
