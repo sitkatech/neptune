@@ -8,5 +8,12 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => OCTAPrioritizationID;
 
+
+        public static class FieldLengths
+        {
+            public const int Watershed = 80;
+            public const int CatchIDN = 80;
+            public const int SEA_PCTL = 80;
+        }
     }
 }

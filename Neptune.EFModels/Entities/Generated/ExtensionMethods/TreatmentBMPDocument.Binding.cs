@@ -8,5 +8,11 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => TreatmentBMPDocumentID;
 
+
+        public static class FieldLengths
+        {
+            public const int DisplayName = 200;
+            public const int DocumentDescription = 500;
+        }
     }
 }

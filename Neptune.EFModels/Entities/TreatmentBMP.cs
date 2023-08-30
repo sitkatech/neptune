@@ -24,7 +24,7 @@ using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMP : IAuditableEntity//, IHaveHRUCharacteristics
+    public partial class TreatmentBMP : IAuditableEntity, IHaveHRUCharacteristics
     {
         public bool CanView(Person person)
         {
@@ -85,21 +85,21 @@ namespace Neptune.EFModels.Entities
 
         public TreatmentBMPAssessment GetMostRecentAssessment()
         {
-            var latestAssessment = TreatmentBMPAssessmentTreatmentBMPs.OrderByDescending(x => x.GetAssessmentDate()).FirstOrDefault(x => x.IsAssessmentComplete);
+            var latestAssessment = TreatmentBMPAssessments.OrderByDescending(x => x.GetAssessmentDate()).FirstOrDefault(x => x.IsAssessmentComplete);
             return latestAssessment;
         }
 
         public bool IsBenchmarkAndThresholdCompleteForObservationType(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return TreatmentBMPBenchmarkAndThresholdTreatmentBMPs.SingleOrDefault(x =>
+            return TreatmentBMPBenchmarkAndThresholds.SingleOrDefault(x =>
                        x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID) != null;
         }
 
         public string GetCustomAttributeValueWithUnits(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType)
         {
-            if (this.CustomAttributeTreatmentBMPs.Any())
+            if (this.CustomAttributes.Any())
             {
-                var customAttribute = CustomAttributeTreatmentBMPs.SingleOrDefault(x =>
+                var customAttribute = CustomAttributes.SingleOrDefault(x =>
                     x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
                 if (customAttribute != null)
                 {
@@ -119,9 +119,9 @@ namespace Neptune.EFModels.Entities
 
         public string GetCustomAttributeValue(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType)
         {
-            if (CustomAttributeTreatmentBMPs.Any())
+            if (CustomAttributes.Any())
             {
-                var customAttribute = CustomAttributeTreatmentBMPs.SingleOrDefault(x =>
+                var customAttribute = CustomAttributes.SingleOrDefault(x =>
                     x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
                 if (customAttribute != null)
                 {
@@ -133,12 +133,12 @@ namespace Neptune.EFModels.Entities
 
         public DateTime? LastMaintainedDateTime()
         {
-            if (!MaintenanceRecordTreatmentBMPs.Any())
+            if (!MaintenanceRecords.Any())
             {
                 return null;
             }
 
-            return MaintenanceRecordTreatmentBMPs.Max(x => x.GetMaintenanceRecordDate());
+            return MaintenanceRecords.Max(x => x.GetMaintenanceRecordDate());
         }
 
         public string CustomAttributeStatus()
@@ -170,17 +170,6 @@ namespace Neptune.EFModels.Entities
             //);
         }
 
-        public void MarkInventoryAsProvisionalIfNonManager(Person person)
-        {
-            // todo:
-            //var isAssignedToStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(StormwaterJurisdictionID);
-            //if (!isAssignedToStormwaterJurisdiction)
-            //{
-            //    InventoryIsVerified = false;
-            //}
-            //InventoryLastChangedDate = DateTime.Now;
-        }
-
         public void MarkAsVerified(Person currentPerson)
         {
             InventoryIsVerified = true;
@@ -198,30 +187,9 @@ namespace Neptune.EFModels.Entities
             this.UpstreamBMPID = null;
         }
 
-        public IEnumerable<HRUCharacteristic> GetHRUCharacteristics()
+        public void DeleteFull(NeptuneDbContext dbContext)
         {
-            return new List<HRUCharacteristic>();
-            //if (Delineation == null)
-            //{
-            //    return new List<HRUCharacteristic>();
-            //}
-
-            //if (Delineation.DelineationType == DelineationType.Centralized && TreatmentBMPType.TreatmentBMPModelingType != null)
-            //{
-            //    var catchmentRegionalSubbasins = this.GetRegionalSubbasin().TraceUpstreamCatchmentsReturnIDList(HttpRequestStorage.DatabaseEntities);
-
-            //    catchmentRegionalSubbasins.Add(RegionalSubbasinID.GetValueOrDefault());
-
-            //    return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
-            //        x.LoadGeneratingUnit.RegionalSubbasinID != null &&
-            //        catchmentRegionalSubbasins.Contains(x.LoadGeneratingUnit.RegionalSubbasinID.Value));
-            //}
-
-            //else
-            //{
-            //    return HttpRequestStorage.DatabaseEntities.HRUCharacteristics.Where(x =>
-            //        x.LoadGeneratingUnit.Delineation!= null && x.LoadGeneratingUnit.Delineation.TreatmentBMPID == TreatmentBMPID);
-            //}
+            throw new NotImplementedException();
         }
     }
 }

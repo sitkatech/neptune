@@ -68,10 +68,10 @@ namespace Neptune.Web.Views.Shared
             helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem("Request Support",
                 $@"<a href='{RequestSupportUrl}' target='_blank'>Request Support<span class='glyphicon glyphicon-new-window'></span></a>", "ToolHelp"));
 
-            helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Training(), _linkGenerator), currentPerson, "Training", "ToolHelp"));
+            helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(_linkGenerator, c => c.Training()), currentPerson, "Training", "ToolHelp"));
             if (!currentPerson.IsAnonymousUser())
             {
-                helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HelpController>(c => c.BulkUploadRequest(), _linkGenerator),
+                helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HelpController>(_linkGenerator, c => c.BulkUploadRequest()),
                     currentPerson, "Bulk Upload Request", "ToolHelp"));
             }
 

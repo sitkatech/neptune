@@ -15,7 +15,25 @@ var builder = WebApplication.CreateBuilder(args);
     // Add services to the container.
     var services = builder.Services;
     services.AddRazorPages();
-    services.AddControllersWithViews().AddJsonOptions(options => {
+    services.AddControllersWithViews()
+        .AddRazorOptions(options =>
+        {
+            options.ViewLocationFormats.Add("~/Views/Shared/TextControls/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/ExpenditureAndBudgetControls/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/PerformanceMeasureControls/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/ProjectControls/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/JurisdictionControls/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/ProjectWatershedControls/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/ProjectUpdateDiffControls/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/EditAttributes/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/SortOrder/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/Location/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/UserJurisdictions/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/HRUCharacteristics/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/Shared/ModeledPerformance/{0}.cshtml");
+            options.ViewLocationFormats.Add("~/Views/FieldVisit/ObservationTypePreview/{0}.cshtml");
+        })
+        .AddJsonOptions(options => {
         var scale = Math.Pow(10, 3);
         var geometryFactory = new GeometryFactory(new PrecisionModel(scale), 4326);
         options.JsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));
@@ -27,7 +45,7 @@ var builder = WebApplication.CreateBuilder(args);
         options.JsonSerializerOptions.WriteIndented = false;
         options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
-        options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals;
+        options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
     });
 
     builder.Configuration.AddJsonFile(builder.Configuration["SECRET_PATH"], optional: false, reloadOnChange: true);
@@ -61,7 +79,7 @@ var builder = WebApplication.CreateBuilder(args);
             options.Scope.Add("keystone");
             options.Scope.Add("profile");
             options.Scope.Add("offline_access");
-            options.ClientId = configuration.KeystoneOpenIDClientId;
+            options.ClientId = configuration.KeystoneOpenIDClientID;
             options.ClientSecret = configuration.KeystoneOpenIDClientSecret;
             //options.ResponseType = "id_token token";
             options.ResponseType = "code";
@@ -86,6 +104,7 @@ var builder = WebApplication.CreateBuilder(args);
         });
 
     services.AddHttpContextAccessor();
+    services.AddHealthChecks().AddDbContextCheck<NeptuneDbContext>();
 }
 
 
@@ -99,8 +118,7 @@ var app = builder.Build();
         app.UseHsts();
     }
 
-    app.MapGet("/debug/routes", (IEnumerable<EndpointDataSource> endpointSources) =>
-            string.Join("\n", endpointSources.SelectMany(source => source.Endpoints)));
+    // app.MapGet("/debug/routes", (IEnumerable<EndpointDataSource> endpointSources) => string.Join("\n", endpointSources.SelectMany(source => source.Endpoints)));
 
     app.UseHttpsRedirection();
     app.UseStaticFiles();
@@ -113,6 +131,8 @@ var app = builder.Build();
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    app.MapHealthChecks("/healthz");
 
     app.Run();
 }

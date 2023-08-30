@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.Home
         public string ManagerDashboardUrl { get; }
         public string ViewDelineationReconciliationReportUrl { get; }
 
-        public LaunchPadViewData(Person currentPerson, NeptunePage launchPadNeptunePage, int numberOfBmpTypes, string managerDashboardDescription)
+        public LaunchPadViewData(Person currentPerson, NeptunePage launchPadNeptunePage, int numberOfBmpTypes, string managerDashboardDescription, LinkGenerator linkGenerator)
         {
             CurrentPerson = currentPerson;
             IsLoggedIn = !CurrentPerson.IsAnonymousUser();
@@ -45,16 +45,16 @@ namespace Neptune.Web.Views.Home
             LaunchPadViewPageContentViewData =
                 new ViewPageContentViewData(launchPadNeptunePage, CurrentPerson);
             JurisdictionIndexUrl = ""; //todo SitkaRoute<JurisdictionController>.BuildUrlFromExpression(c => c.Index());
-            RequestSupportUrl = ""; //todo SitkaRoute<HelpController>.BuildUrlFromExpression(c => c.RequestToChangePrivileges());
-            FindABmpUrl = ""; //todo SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.FindABMP());
-            ExploreBmpTypesUrl = ""; //todo SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(c => c.Index());
-            AddABmpUrl = ""; //todo SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.New());
+            RequestSupportUrl = SitkaRoute<HelpController>.BuildUrlFromExpression(linkGenerator, c => c.RequestToChangePrivileges());
+            FindABmpUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, c => c.FindABMP());
+            ExploreBmpTypesUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
+            AddABmpUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, c => c.New());
             ViewAssessmentAndMaintenanceRecordsUrl = ""; //todo SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index());
             ViewWaterQualityManagementPlansUrl = ""; //todo SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c => c.Index());
             FieldFieldVisitsUrl = ""; //todo SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index());
             InviteANewUserUrl = ""; //todo SitkaRoute<UserController>.BuildUrlFromExpression(c => c.Invite());
             EditUserRolesUrl = ""; //todo SitkaRoute<UserController>.BuildUrlFromExpression(c => c.Index());
-            AddAFundingSourceUrl = ""; //todo SitkaRoute<FundingSourceController>.BuildUrlFromExpression(c => c.Index());
+            AddAFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
             ManagerDashboardUrl = ""; //todo SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index());
             ViewDelineationReconciliationReportUrl = ""; //todo SitkaRoute<DelineationController>.BuildUrlFromExpression(c => c.DelineationReconciliationReport());
         }

@@ -43,7 +43,7 @@ namespace Neptune.Web.Common
 
         public SitkaRouteSecurity RouteSecurity { get; set; }
 
-        public SitkaRoute(Expression<Action<T>> routeExpression, SitkaRouteSecurity routeSecurity, LinkGenerator linkGenerator) : this(routeExpression, linkGenerator)
+        public SitkaRoute(Expression<Action<T>> routeExpression, SitkaRouteSecurity routeSecurity, LinkGenerator linkGenerator) : this(linkGenerator, routeExpression)
         {
             RouteSecurity = routeSecurity;
         }
@@ -72,7 +72,7 @@ namespace Neptune.Web.Common
         //    ActionName = actionName;
         //}
 
-        public SitkaRoute(Expression<Action<T>> routeExpression, LinkGenerator linkGenerator)
+        public SitkaRoute(LinkGenerator linkGenerator, Expression<Action<T>> routeExpression)
         {
             _linkGenerator = linkGenerator;
 

@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => NotificationID;
         public NotificationType NotificationType => NotificationType.AllLookupDictionary[NotificationTypeID];
+
+        public static class FieldLengths
+        {
+
+        }
     }
 }

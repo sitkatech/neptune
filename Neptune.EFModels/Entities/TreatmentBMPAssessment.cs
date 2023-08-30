@@ -62,7 +62,7 @@ namespace Neptune.EFModels.Entities
 
         public bool IsObservationComplete(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            var treatmentBMPObservation = TreatmentBMPObservationTreatmentBMPAssessments.FirstOrDefault(x =>
+            var treatmentBMPObservation = TreatmentBMPObservations.FirstOrDefault(x =>
                 x.TreatmentBMPAssessmentObservationTypeID ==
                 treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
 
@@ -87,7 +87,7 @@ namespace Neptune.EFModels.Entities
                 return "n/a";
             }
 
-            return TreatmentBMPObservationTreatmentBMPAssessments?.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID)?.FormattedObservationValueWithoutUnits(treatmentBMPAssessmentObservationType) ?? "not provided";
+            return TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID)?.FormattedObservationValueWithoutUnits(treatmentBMPAssessmentObservationType) ?? "not provided";
         }
     }
 }

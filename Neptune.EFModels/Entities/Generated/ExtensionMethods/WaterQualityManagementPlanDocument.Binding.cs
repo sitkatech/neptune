@@ -8,5 +8,11 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => WaterQualityManagementPlanDocumentID;
         public WaterQualityManagementPlanDocumentType WaterQualityManagementPlanDocumentType => WaterQualityManagementPlanDocumentType.AllLookupDictionary[WaterQualityManagementPlanDocumentTypeID];
+
+        public static class FieldLengths
+        {
+            public const int DisplayName = 100;
+            public const int Description = 1000;
+        }
     }
 }

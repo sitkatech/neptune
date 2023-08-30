@@ -12,7 +12,6 @@ namespace Neptune.Models.DataTransferObjects
         public int ObservationTypeCollectionMethodID { get; set; }
         public string ObservationTypeCollectionMethodName { get; set; }
         public string ObservationTypeCollectionMethodDisplayName { get; set; }
-        public int SortOrder { get; set; }
         public string ObservationTypeCollectionMethodDescription { get; set; }
     }
 
@@ -21,7 +20,6 @@ namespace Neptune.Models.DataTransferObjects
         public int ObservationTypeCollectionMethodID { get; set; }
         public string ObservationTypeCollectionMethodName { get; set; }
         public string ObservationTypeCollectionMethodDisplayName { get; set; }
-        public int SortOrder { get; set; }
         public string ObservationTypeCollectionMethodDescription { get; set; }
     }
 

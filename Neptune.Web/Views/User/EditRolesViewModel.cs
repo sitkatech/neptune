@@ -73,7 +73,7 @@ namespace Neptune.Web.Views.User
             if (assignedRole == EFModels.Entities.Role.Admin || assignedRole == EFModels.Entities.Role.SitkaAdmin)
             {
                 //  todo:
-                //HttpRequestStorage.DatabaseEntities.StormwaterJurisdictionPeople.DeleteStormwaterJurisdictionPerson(
+                //_dbContext.StormwaterJurisdictionPeople.DeleteStormwaterJurisdictionPerson(
                 //person.StormwaterJurisdictionPeople);
             }
 

@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "geoserver.fullname" . }}
+  labels:
+    {{- include "geoserver.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "geoserver.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }} # roll deployments on every upgrade: https://helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "geoserver.selectorLabels" . | nindent 8 }}
+    spec:
+      volumes:
+      - name: geoserver-data
+        azureFile: 
+          secretName: neptune-geoserver-volume-secret
+          shareName: geoserver
+          readOnly: false
+      - name: config
+        projected:
+          sources:
+          - configMap:
+              name: {{ include "geoserver.fullname" . }}-environment-properties-{{ .Values.global.env.name }}-configmap
+      - name: secrets
+        secret:
+          secretName: neptune-geoserver-secrets
+          items:
+          - key: geoserverSqlServerPassword
+            path: geoserverSqlServerPassword
+          - key: geoserverAdminPassword
+            path: geoserverAdminPassword
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "geoserver.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ "/bin/bash" ]
+          args: ["/opt/geoserver/data_dir/sitka-geoserver-config/scripts/sitka-entry-point.sh"]
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          # this startup probe checks the app every 10 seconds to see if it's ready to receive traffic
+          # it gives a very generous 5 minutes for geoserver to startup. As soon as it is successful
+          # the liveness probe kicks into effect.
+          startupProbe: 
+            httpGet:
+              path: /
+              scheme: HTTP
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 10
+          # this livenessProbe gets called every 4 seconds, if it fails three times in a row it determines
+          # the pod as unreachable and attempts to kill it and start a new pod
+          livenessProbe:
+            httpGet:
+              path: /
+              scheme: HTTP
+              port: 8080
+            periodSeconds: 4
+            timeoutSeconds: 5
+            failureThreshold: 3
+          # this readinessProbe lets kubernetes know that it's fully deployed and can start directing traffic to it
+          readinessProbe:
+            httpGet:
+              path: /
+              scheme: HTTP
+              port: 8080
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep","120"]
+          volumeMounts:
+          - name: secrets
+            mountPath: /app/secrets
+            readOnly: true
+          - name: config
+            mountPath: /app/config
+            readOnly: true
+          - name: geoserver-data
+            mountPath: /opt/geoserver
+            readOnly: false            
+          envFrom:
+          - configMapRef:
+              name: {{ include "geoserver.fullname" . }}-{{ .Values.global.env.name }}-configmap
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      terminationGracePeriodSeconds: 131
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

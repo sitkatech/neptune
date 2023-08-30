@@ -9,5 +9,11 @@ namespace Neptune.EFModels.Entities
         public int PrimaryKey => OnlandVisualTrashAssessmentAreaID;
         public OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentBaselineScore => OnlandVisualTrashAssessmentBaselineScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentBaselineScoreID.Value] : null;
         public OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentProgressScore => OnlandVisualTrashAssessmentProgressScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentProgressScoreID.Value] : null;
+
+        public static class FieldLengths
+        {
+            public const int OnlandVisualTrashAssessmentAreaName = 100;
+            public const int AssessmentAreaDescription = 500;
+        }
     }
 }

@@ -19,16 +19,16 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Web.Mvc;
-using Neptune.Web.Common;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Neptune.Common;
 using Neptune.Common.DesignByContract;
 using Neptune.EFModels;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Security
 {
-    public class NeptuneFeatureWithContextImpl<T> : IActionFilter where T : IHavePrimaryKey
+    public class NeptuneFeatureWithContextImpl<T> : IActionFilter where T : class, IHavePrimaryKey
     {
         private readonly INeptuneBaseFeatureWithContext<T> _neptuneFeatureWithContext;
 
@@ -50,40 +50,47 @@ namespace Neptune.Web.Security
                 throw new SitkaRecordNotAuthorizedException(permissionCheckResult.PermissionDeniedMessage);
             }
         }
-        
+
         public void OnActionExecuted(ActionExecutedContext filterContext)
         {
         }
 
         public virtual void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            // todo
-            //var primaryKeyForObject = GetPrimaryKeyForObjectAndEnsureTenantMatch(filterContext);
-            //DemandPermission(HttpRequestStorage.Person, primaryKeyForObject.EntityObject);
+            var primaryKeyForObject = GetPrimaryKeyForObject(filterContext);
+            var dbContextService = filterContext.HttpContext.RequestServices.GetService(typeof(NeptuneDbContext));
+            if (dbContextService == null || !(dbContextService is NeptuneDbContext dbContext))
+            {
+                throw new ApplicationException(
+                    "Could not find injected DbRepository. Can't check rights appropriately!");
+            }
+
+            var person = UserContext.GetUserFromHttpContext(dbContext, filterContext.HttpContext);
+            DemandPermission(person, primaryKeyForObject.EntityObject);
         }
 
-        //protected LtInfoEntityPrimaryKey<T> GetPrimaryKeyForObjectAndEnsureTenantMatch(ActionExecutingContext filterContext)
-        //{
-        //    var ltInfoEntityPrimaryKeys = filterContext.ActionParameters.Values.OfType<LtInfoEntityPrimaryKey<T>>().ToList();
-
-        //    var genericMessage = string.Format(
-        //        "Problem evaluating feature \"{3}\" for controller action \"{0}.{1}()\" while looking for parameter of type \"{2}\".",
-        //        filterContext.Controller.GetType().Name,
-        //        filterContext.ActionDescriptor.ActionName,
-        //        typeof(LtInfoEntityPrimaryKey<T>),
-        //        _neptuneFeatureWithContext.FeatureName);
-
-        //    Check.Require(ltInfoEntityPrimaryKeys.Any(), genericMessage + " Change code to add that parameter.");
-        //    Check.Require(ltInfoEntityPrimaryKeys.Count == 1,
-        //        genericMessage + " Change code so that there's only one of those parameters.");
-
-        //    var primaryKeyForObject = ltInfoEntityPrimaryKeys.Single();
-        //    return primaryKeyForObject;
-        //}
-
-        protected static void SetInfoMessage(ActionExecutingContext filterContext, PermissionCheckResult permissionCheckResult)
+        protected EntityPrimaryKey<T> GetPrimaryKeyForObject(ActionExecutingContext filterContext)
         {
-            filterContext.Controller.TempData[SitkaController.InfoMessageIndex] = permissionCheckResult.PermissionDeniedMessage;
+            var ltInfoEntityPrimaryKeys = filterContext.ActionArguments.Values.OfType<EntityPrimaryKey<T>>().ToList();
+
+            var genericMessage = string.Format(
+                "Problem evaluating feature \"{3}\" for controller action \"{0}.{1}()\" while looking for parameter of type \"{2}\".",
+                filterContext.Controller.GetType().Name,
+                filterContext.ActionDescriptor.DisplayName,
+                typeof(EntityPrimaryKey<T>),
+                _neptuneFeatureWithContext.FeatureName);
+
+            Check.Require(ltInfoEntityPrimaryKeys.Any(), genericMessage + " Change code to add that parameter.");
+            Check.Require(ltInfoEntityPrimaryKeys.Count == 1,
+                genericMessage + " Change code so that there's only one of those parameters.");
+
+            var primaryKeyForObject = ltInfoEntityPrimaryKeys.Single();
+            return primaryKeyForObject;
         }
+
+        //protected static void SetInfoMessage(ActionExecutingContext filterContext, PermissionCheckResult permissionCheckResult)
+        //{
+        //    filterContext.Controller.TempData[SitkaController.InfoMessageIndex] = permissionCheckResult.PermissionDeniedMessage;
+        //}
     }
 }

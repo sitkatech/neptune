@@ -38,12 +38,11 @@ namespace Neptune.EFModels.Entities
         /// <summary>
         /// Protected constructor only for use in instantiating the set of static lookup values that match database
         /// </summary>
-        protected ObservationTypeCollectionMethod(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, int sortOrder, string observationTypeCollectionMethodDescription)
+        protected ObservationTypeCollectionMethod(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, string observationTypeCollectionMethodDescription)
         {
             ObservationTypeCollectionMethodID = observationTypeCollectionMethodID;
             ObservationTypeCollectionMethodName = observationTypeCollectionMethodName;
             ObservationTypeCollectionMethodDisplayName = observationTypeCollectionMethodDisplayName;
-            SortOrder = sortOrder;
             ObservationTypeCollectionMethodDescription = observationTypeCollectionMethodDescription;
         }
         public List<ObservationTypeSpecification> ObservationTypeSpecifications => ObservationTypeSpecification.All.Where(x => x.ObservationTypeCollectionMethodID == ObservationTypeCollectionMethodID).ToList();
@@ -51,7 +50,6 @@ namespace Neptune.EFModels.Entities
         public int ObservationTypeCollectionMethodID { get; private set; }
         public string ObservationTypeCollectionMethodName { get; private set; }
         public string ObservationTypeCollectionMethodDisplayName { get; private set; }
-        public int SortOrder { get; private set; }
         public string ObservationTypeCollectionMethodDescription { get; private set; }
         [NotMapped]
         public int PrimaryKey { get { return ObservationTypeCollectionMethodID; } }
@@ -126,19 +124,19 @@ namespace Neptune.EFModels.Entities
 
     public partial class ObservationTypeCollectionMethodDiscreteValue : ObservationTypeCollectionMethod
     {
-        private ObservationTypeCollectionMethodDiscreteValue(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, int sortOrder, string observationTypeCollectionMethodDescription) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, sortOrder, observationTypeCollectionMethodDescription) {}
-        public static readonly ObservationTypeCollectionMethodDiscreteValue Instance = new ObservationTypeCollectionMethodDiscreteValue(1, @"DiscreteValue", @"Discrete Value Observation", 10, @"Observation is measured as one or many discrete values (e.g. time, height).");
+        private ObservationTypeCollectionMethodDiscreteValue(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, string observationTypeCollectionMethodDescription) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, observationTypeCollectionMethodDescription) {}
+        public static readonly ObservationTypeCollectionMethodDiscreteValue Instance = new ObservationTypeCollectionMethodDiscreteValue(1, @"DiscreteValue", @"Discrete Value Observation", @"Observation is measured as one or many discrete values (e.g. time, height).");
     }
 
     public partial class ObservationTypeCollectionMethodPassFail : ObservationTypeCollectionMethod
     {
-        private ObservationTypeCollectionMethodPassFail(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, int sortOrder, string observationTypeCollectionMethodDescription) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, sortOrder, observationTypeCollectionMethodDescription) {}
-        public static readonly ObservationTypeCollectionMethodPassFail Instance = new ObservationTypeCollectionMethodPassFail(3, @"PassFail", @"Pass/Fail Observation", 30, @"Observation is recorded as Pass/Fail (e.g. presence of standing water).");
+        private ObservationTypeCollectionMethodPassFail(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, string observationTypeCollectionMethodDescription) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, observationTypeCollectionMethodDescription) {}
+        public static readonly ObservationTypeCollectionMethodPassFail Instance = new ObservationTypeCollectionMethodPassFail(3, @"PassFail", @"Pass/Fail Observation", @"Observation is recorded as Pass/Fail (e.g. presence of standing water).");
     }
 
     public partial class ObservationTypeCollectionMethodPercentage : ObservationTypeCollectionMethod
     {
-        private ObservationTypeCollectionMethodPercentage(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, int sortOrder, string observationTypeCollectionMethodDescription) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, sortOrder, observationTypeCollectionMethodDescription) {}
-        public static readonly ObservationTypeCollectionMethodPercentage Instance = new ObservationTypeCollectionMethodPercentage(4, @"Percentage", @"Percent-based Observation", 40, @"Observation is measured as one or more percent values that total to less than 100% (e.g. percent coverage of key species).");
+        private ObservationTypeCollectionMethodPercentage(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, string observationTypeCollectionMethodDescription) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, observationTypeCollectionMethodDescription) {}
+        public static readonly ObservationTypeCollectionMethodPercentage Instance = new ObservationTypeCollectionMethodPercentage(4, @"Percentage", @"Percent-based Observation", @"Observation is measured as one or more percent values that total to less than 100% (e.g. percent coverage of key species).");
     }
 }

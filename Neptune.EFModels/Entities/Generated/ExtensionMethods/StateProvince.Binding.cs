@@ -8,5 +8,11 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => StateProvinceID;
 
+
+        public static class FieldLengths
+        {
+            public const int StateProvinceName = 100;
+            public const int StateProvinceAbbreviation = 2;
+        }
     }
 }

@@ -7,6 +7,6 @@ CREATE TABLE [dbo].[MaintenanceRecord](
 	[MaintenanceRecordTypeID] [int] NULL CONSTRAINT [FK_MaintenanceRecord_MaintenanceRecordType_MaintenanceRecordTypeID] FOREIGN KEY REFERENCES [dbo].[MaintenanceRecordType] ([MaintenanceRecordTypeID]),
 	CONSTRAINT [AK_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPID] UNIQUE([MaintenanceRecordID], [TreatmentBMPID]),
 	CONSTRAINT [AK_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPTypeID] UNIQUE([MaintenanceRecordID], [TreatmentBMPTypeID]),
-	CONSTRAINT [FK_MaintenanceRecord_FieldVisit_FieldVisitID_TreatmentBMPID] FOREIGN KEY([FieldVisitID], [TreatmentBMPID]) REFERENCES [dbo].[FieldVisit] ([FieldVisitID], [TreatmentBMPID]),
-	CONSTRAINT [FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPID], [TreatmentBMPTypeID]) REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID], [TreatmentBMPTypeID])
+	--CONSTRAINT [FK_MaintenanceRecord_FieldVisit_FieldVisitID_TreatmentBMPID] FOREIGN KEY([FieldVisitID], [TreatmentBMPID]) REFERENCES [dbo].[FieldVisit] ([FieldVisitID], [TreatmentBMPID]),
+	--CONSTRAINT [FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPID], [TreatmentBMPTypeID]) REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID], [TreatmentBMPTypeID])
 )

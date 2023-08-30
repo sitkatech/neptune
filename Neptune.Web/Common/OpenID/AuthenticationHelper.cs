@@ -62,12 +62,11 @@ public static class AuthenticationHelper
 
     public static void ProcessLoginFromKeystone(TokenValidatedContext tokenValidatedContext, NeptuneDbContext dbContext, WebConfiguration configuration)
     {
-        var applicationDomain = configuration.ApplicationDomain;
         var sendNewUserNotification = false;
         var sendNewOrganizationNotification = false;
         var claimsIdentity = (ClaimsIdentity)tokenValidatedContext.Principal.Identity;
         var keystoneGuid = new Guid(claimsIdentity.GetClaimValue("sub"));
-//        _logger.LogInformation($"{applicationDomain}: In {nameof(ProcessLoginFromKeystone)} - Processing Keystone login for user with Keystone guid {keystoneGuid}".ToString());
+        //_logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Processing Keystone login for user with Keystone guid {keystoneGuid}".ToString());
         var person = People.GetByGuid(dbContext, keystoneGuid);
         // var firstName = claimsIdentity.GetClaimValue("FirstName");
         //
@@ -80,7 +79,7 @@ public static class AuthenticationHelper
         var loginName = claimsIdentity.GetClaimValue("login_name");
         if (person == null)
         {
-//            _logger.LogInformation($"{applicationDomain}: In {nameof(ProcessLoginFromKeystone)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
+            //            _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
             // new user - provision with limited role
             var unknownOrganization = Organizations.GetUnknownOrganization(dbContext);
             person = new Person()
@@ -100,12 +99,12 @@ public static class AuthenticationHelper
         }
         else
         {
-//            _logger.LogInformation($"{applicationDomain}: In {nameof(ProcessLoginFromKeystone)} - Signing in user {firstName} {lastName} from Keystone login".ToString());
+            //            _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Signing in user {firstName} {lastName} from Keystone login".ToString());
             //var primaryPhone = claimsIdentity.GetClaimValue("PrimaryPhone");
             // if (person.FirstName != firstName || person.LastName != lastName || person.Email != email || person.Phone != primaryPhone || person.LoginName != loginName)
             if (person.FirstName != firstName || person.LastName != lastName || person.Email != email || person.LoginName != loginName)
             {
- //               _logger.LogInformation($"{applicationDomain}: In {nameof(ProcessLoginFromKeystone)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
+                //               _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
                 person.FirstName = firstName;
                 person.LastName = lastName;
                 person.Email = email;
@@ -130,7 +129,7 @@ public static class AuthenticationHelper
 
             if (organization == null)
             {
-//                _logger.LogInformation($"{applicationDomain}: In {nameof(ProcessLoginFromKeystone)} - Creating a new Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}".ToString());
+                //                _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}".ToString());
                 var defaultOrganizationType = OrganizationTypes.GetDefaultOrganizationType(dbContext);
                 organization = new Organization()
                 {
@@ -148,7 +147,7 @@ public static class AuthenticationHelper
 
             if (!organization.OrganizationGuid.HasValue)
             {
-//                _logger.LogInformation($"{applicationDomain}: In {nameof(ProcessLoginFromKeystone)} - Setting the KeystoneGuid field for existing Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}".ToString());
+                //                _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Setting the KeystoneGuid field for existing Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}".ToString());
                 organization.OrganizationGuid = keystoneOrganizationGuid;
             }
             person.Organization = organization;
@@ -286,7 +285,7 @@ public static class AuthenticationHelper
     //
     //     var sendNewUserCreatedMessage = false;
     //
-    //     var person = HttpRequestStorage.DatabaseEntities.People.GetPersonByEmail(email, false);
+    //     var person = _dbContext.People.GetPersonByEmail(email, false);
     //     SitkaHttpApplication.Logger.Info($"{applicationDomain}: In {nameof(ProcessLogin)} - {(person != null ? "Found" : "Did NOT find")} by email address. [{userDetailsStringForLogging}]");
     //
     //     // If there's no Person already that corresponds to the Person who is logging in, we create Person
@@ -309,8 +308,8 @@ public static class AuthenticationHelper
     //             email,
     //             VitalSignRole.Unassigned.VitalSignRoleID,
     //             NepAtlasRole.Unassigned.NepAtlasRoleID);
-    //         HttpRequestStorage.DatabaseEntities.People.Add(person);
-    //         HttpRequestStorage.DatabaseEntities.People.Add(person);
+    //         _dbContext.People.Add(person);
+    //         _dbContext.People.Add(person);
     //         sendNewUserCreatedMessage = true;
     //     }
     //     else
@@ -328,7 +327,7 @@ public static class AuthenticationHelper
     //     // TODO: should this be update date or last activity date?
     //     person.UpdateDate = DateTime.Now;
     //
-    //     HttpRequestStorage.DatabaseEntities.SaveChanges(person);
+    //     _dbContext.SaveChanges(person);
     //
     //     if (sendNewUserCreatedMessage)
     //     {
@@ -343,9 +342,9 @@ public static class AuthenticationHelper
     // private static Organization GetOrganizationFromEmailDomain(string email)
     // {
     //     var emailDomain = email.Split('@')[1];
-    //     return HttpRequestStorage.DatabaseEntities.Organizations.SingleOrDefault(x =>
+    //     return _dbContext.Organizations.SingleOrDefault(x =>
     //             x.EmailDomains.Any(y => y.DomainName == emailDomain)) ??
-    //         HttpRequestStorage.DatabaseEntities.Organizations.GetUnknownOrganization();
+    //         _dbContext.Organizations.GetUnknownOrganization();
     // }
     //
     // public static void IdentitySignIn(IAuthenticationManager authenticationManager, Person person)
@@ -382,7 +381,7 @@ public static class AuthenticationHelper
     //         {
     //             // Get person from ID to return
     //             var personID = (int)HttpContext.Current.Session["PersonID"];
-    //             var person = HttpRequestStorage.DatabaseEntities.People.GetPerson(personID);
+    //             var person = _dbContext.People.GetPerson(personID);
     //             if (person != null)
     //             {
     //                 // Authenticate manually by assigning the retrieved identity to the current user 
@@ -417,14 +416,14 @@ public static class AuthenticationHelper
     //     if (claimsPrincipal.Identity.AuthenticationType == DefaultAuthenticationTypes.ApplicationCookie)
     //     {
     //         var personID = int.Parse(claimsPrincipal.Identity.Name);
-    //         person = HttpRequestStorage.DatabaseEntities.People.GetPerson(personID);
+    //         person = _dbContext.People.GetPerson(personID);
     //     }
     //     // Keystone path
     //     else
     //     {
     //         // In Keystone claims, the Person GUID is stored in a property called 'sub' 
     //         var personGuid = Guid.Parse(claimsPrincipal.FindAll(x => x.Type == "sub").First().Value);
-    //         person = HttpRequestStorage.DatabaseEntities.People.GetPersonByKeystoneGuid(personGuid);
+    //         person = _dbContext.People.GetPersonByKeystoneGuid(personGuid);
     //     }
     //     return person;
     // }

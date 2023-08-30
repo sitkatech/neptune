@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => TrashGeneratingUnit4326ID;
 
+
+        public static class FieldLengths
+        {
+
+        }
     }
 }

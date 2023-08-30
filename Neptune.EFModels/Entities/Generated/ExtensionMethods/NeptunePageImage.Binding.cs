@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => NeptunePageImageID;
 
+
+        public static class FieldLengths
+        {
+
+        }
     }
 }

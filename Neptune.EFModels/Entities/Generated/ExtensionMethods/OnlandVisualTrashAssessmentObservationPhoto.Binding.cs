@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => OnlandVisualTrashAssessmentObservationPhotoID;
 
+
+        public static class FieldLengths
+        {
+
+        }
     }
 }

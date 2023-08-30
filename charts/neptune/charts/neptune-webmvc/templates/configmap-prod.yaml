@@ -1,0 +1,33 @@
+{{ if eq .Values.global.env.name "prod" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "webmvc.fullname" . }}-prod-configmap
+data:
+  SECRET_PATH: "/app/secrets/neptuneWebMvcSecrets"
+  DOCKER_BUILD_SOURCE: "."
+  ASPNETCORE_ENVIRONMENT: "Production"
+  SitkaEmailRedirect: ""
+  WEB_URL: "https://{{ .Values.global.domains.webmvc }}"
+  PlatformLongName: "Groundwater Accounting Platform"
+  APPINSIGHTS_INSTRUMENTATIONKEY: "{{ .Values.global.env.appInsightsInstrumentationKey }}"
+  DoNotReplyEmail: "donotreply@ocstormwatertools.org"
+  ParcelMapServiceUrl: "https://{{ .Values.global.domains.webmvc }}/geoserver/OCStormwater/ows"
+  MapServiceLayerNameParcel: "OCStormwater:Parcels"
+  MapServiceLayerNameLandUseBlock: "OCStormwater:LandUseBlocks"
+  MapServiceLayerNameRegionalSubbasin: "OCStormwater:RegionalSubbasins"
+  AutoDelineateServiceUrl: "https://www.ocgis.com/arcpub/rest/services/Flood/GlobalStormwaterDelineation/GPServer/Global%20Stormwater%20Delineation/"
+  HRUServiceBaseUrl: "https://www.ocgis.com/arcpub/rest/services/Environmental_Resources/HRUSummary/GPServer/HRUSummary"
+  RegionalSubbasinServiceUrl: "https://www.ocgis.com/arcpub/rest/services/Environmental_Resources/RegionalSubbasins/MapServer/0/query"
+  ModelBasinServiceUrl: "https://www.ocgis.com/arcpub/rest/services/Environmental_Resources/Hydrologic_Response_Unit/MapServer/7/query"
+  PrecipitationZoneServiceUrl: "https://www.ocgis.com/arcpub/rest/services/Environmental_Resources/Hydrologic_Response_Unit/MapServer/3/query"
+  OCTAPrioritizationServiceUrl: "https://www.ocgis.com/arcpub/rest/services/Environmental_Resources/Hydrologic_Response_Unit/MapServer/8/query"
+  PathToPyqgisTestScript: "PyQgis/TestPyqgisMssql.py"
+  PyqgisWorkingDirectory: "PyQgis"
+  PathToPyqgisLauncher: "/bin/python-qgis-ltr.bat"
+  PathToPyqgisProjData: "/share/proj"
+  NereidUrl: "https://nereid.yachats.sitka.local:8443"
+  PathToFieldVisitUploadTemplate: "Content/Bulk_Upload_FieldVisists_for_Trash_Screens_Template.xlsx"
+  KeystoneOpenIDUrl: "https://identity.sitkatech.com"
+  KeystoneOpenIDClientID: "Neptune"
+{{ end }}  

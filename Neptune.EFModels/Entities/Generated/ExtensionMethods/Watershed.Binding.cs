@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => WatershedID;
 
+
+        public static class FieldLengths
+        {
+            public const int WatershedName = 50;
+        }
     }
 }

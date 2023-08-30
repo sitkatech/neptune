@@ -81,10 +81,8 @@ public partial class TreatmentBMP
 
     public int? ProjectID { get; set; }
 
-    public virtual ICollection<CustomAttribute> CustomAttributeTreatmentBMPNavigations { get; set; } = new List<CustomAttribute>();
-
     [InverseProperty("TreatmentBMP")]
-    public virtual ICollection<CustomAttribute> CustomAttributeTreatmentBMPs { get; set; } = new List<CustomAttribute>();
+    public virtual ICollection<CustomAttribute> CustomAttributes { get; set; } = new List<CustomAttribute>();
 
     [InverseProperty("TreatmentBMP")]
     public virtual Delineation? Delineation { get; set; }
@@ -105,10 +103,8 @@ public partial class TreatmentBMP
     [InverseProperty("UpstreamBMP")]
     public virtual ICollection<TreatmentBMP> InverseUpstreamBMP { get; set; } = new List<TreatmentBMP>();
 
-    public virtual ICollection<MaintenanceRecord> MaintenanceRecordTreatmentBMPNavigations { get; set; } = new List<MaintenanceRecord>();
-
     [InverseProperty("TreatmentBMP")]
-    public virtual ICollection<MaintenanceRecord> MaintenanceRecordTreatmentBMPs { get; set; } = new List<MaintenanceRecord>();
+    public virtual ICollection<MaintenanceRecord> MaintenanceRecords { get; set; } = new List<MaintenanceRecord>();
 
     [ForeignKey("ModelBasinID")]
     [InverseProperty("TreatmentBMPs")]
@@ -139,15 +135,11 @@ public partial class TreatmentBMP
     [InverseProperty("TreatmentBMPs")]
     public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; } = null!;
 
-    public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessmentTreatmentBMPNavigations { get; set; } = new List<TreatmentBMPAssessment>();
+    [InverseProperty("TreatmentBMP")]
+    public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; } = new List<TreatmentBMPAssessment>();
 
     [InverseProperty("TreatmentBMP")]
-    public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessmentTreatmentBMPs { get; set; } = new List<TreatmentBMPAssessment>();
-
-    public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholdTreatmentBMPNavigations { get; set; } = new List<TreatmentBMPBenchmarkAndThreshold>();
-
-    [InverseProperty("TreatmentBMP")]
-    public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholdTreatmentBMPs { get; set; } = new List<TreatmentBMPBenchmarkAndThreshold>();
+    public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; } = new List<TreatmentBMPBenchmarkAndThreshold>();
 
     [InverseProperty("TreatmentBMP")]
     public virtual ICollection<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; } = new List<TreatmentBMPDocument>();

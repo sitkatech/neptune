@@ -2,7 +2,7 @@
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class NeptuneHomePageImage : IFileResourcePhoto, IAuditableEntity
+    public partial class NeptuneHomePageImage : IAuditableEntity
     {
         public DateTime GetCreateDate()
         {

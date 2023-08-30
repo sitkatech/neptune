@@ -8,5 +8,11 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => AuditLogID;
         public AuditLogEventType AuditLogEventType => AuditLogEventType.AllLookupDictionary[AuditLogEventTypeID];
+
+        public static class FieldLengths
+        {
+            public const int TableName = 500;
+            public const int ColumnName = 500;
+        }
     }
 }

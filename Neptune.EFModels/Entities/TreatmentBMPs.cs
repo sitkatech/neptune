@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.EntityFrameworkCore;
+using Neptune.Common.DesignByContract;
 
 namespace Neptune.EFModels.Entities
 {
@@ -32,139 +33,47 @@ namespace Neptune.EFModels.Entities
 
         public static IQueryable<TreatmentBMP> GetNonPlanningModuleBMPs(NeptuneDbContext dbContext)
         {
-            return dbContext.TreatmentBMPs.AsNoTracking()
-                .Include(x => x.TreatmentBMPBenchmarkAndThresholdTreatmentBMPs)
-                .Include(x => x.StormwaterJurisdiction)
+            return GetImpl(dbContext).AsNoTracking().Where(x => x.ProjectID == null);
+        }
+
+        private static IQueryable<TreatmentBMP> GetImpl(NeptuneDbContext dbContext)
+        {
+            return dbContext.TreatmentBMPs
                 .Include(x => x.TreatmentBMPType)
-                .ThenInclude(x => x.TreatmentBMPTypeAssessmentObservationTypes)
-                .Include(x => x.TreatmentBMPImages)
-                .Where(x => x.ProjectID == null);
+                .Include(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization);
         }
 
-        public static bool HasVerifiedDelineationForModelingPurposes(this TreatmentBMP treatmentBMP, List<int> treatmentBmpiDsTraversed)
+        public static TreatmentBMP GetByIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPID)
         {
-            if (treatmentBMP.UpstreamBMP != null)
-            {
-                if (treatmentBmpiDsTraversed.Contains(treatmentBMP.TreatmentBMPID))
-                {
-                    throw new OverflowException($"Infinite loop detected!  TreatmentBMPID {treatmentBMP.TreatmentBMPID} already in list of traversed TreatmentBMPIDs ({string.Join(", ", treatmentBmpiDsTraversed)})");
-                }
-                treatmentBmpiDsTraversed.Add(treatmentBMP.TreatmentBMPID);
-                return treatmentBMP.UpstreamBMP.HasVerifiedDelineationForModelingPurposes(treatmentBmpiDsTraversed);
-            }
-
-            //Project BMPs don't need verified delineations
-            if (treatmentBMP.ProjectID != null)
-            {
-                return true;
-            }
-
-            return treatmentBMP.Delineation?.IsVerified ?? false;
+            var treatmentBMP = GetImpl(dbContext)
+                .SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
+            Check.RequireNotNull(treatmentBMP, $"TreatmentBMP with ID {treatmentBMPID} not found!");
+            return treatmentBMP;
         }
 
-        public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP)
+        public static TreatmentBMP GetByIDWithChangeTracking(NeptuneDbContext dbContext, TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            if (!treatmentBMP.HasVerifiedDelineationForModelingPurposes(new List<int>()))
-            {
-                return false;
-            }
-
-            if (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType == null)
-            {
-                return false;
-            }
-
-            var bmpModelingType = treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum;
-            var bmpModelingAttributes = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
-
-            if (bmpModelingAttributes == null)
-            {
-                return false;
-            }
-
-            switch (bmpModelingType)
-            {
-                case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain when (
-                    !bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                    (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                     !bmpModelingAttributes.DiversionRate.HasValue) ||
-                    !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                    !bmpModelingAttributes.StorageVolumeBelowLowestOutletElevation.HasValue ||
-                    !bmpModelingAttributes.MediaBedFootprint.HasValue ||
-                    !bmpModelingAttributes.DesignMediaFiltrationRate.HasValue):
-
-                case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain or TreatmentBMPModelingTypeEnum.InfiltrationBasin or TreatmentBMPModelingTypeEnum.InfiltrationTrench or 
-                    TreatmentBMPModelingTypeEnum.PermeablePavement or TreatmentBMPModelingTypeEnum.UndergroundInfiltration when (
-                    !bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                    (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                     !bmpModelingAttributes.DiversionRate.HasValue) ||
-                    !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                    !bmpModelingAttributes.InfiltrationSurfaceArea.HasValue ||
-                    !bmpModelingAttributes.UnderlyingInfiltrationRate.HasValue):
-
-                case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner or TreatmentBMPModelingTypeEnum.SandFilters when (
-                    !bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                    (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                     !bmpModelingAttributes.DiversionRate.HasValue) ||
-                    !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                    !bmpModelingAttributes.MediaBedFootprint.HasValue ||
-                    !bmpModelingAttributes.DesignMediaFiltrationRate.HasValue):
-
-                case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse when (
-                    !bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                    (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                     !bmpModelingAttributes.DiversionRate.HasValue) ||
-                    !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                    !bmpModelingAttributes.WinterHarvestedWaterDemand.HasValue ||
-                    !bmpModelingAttributes.SummerHarvestedWaterDemand.HasValue):
-
-                case TreatmentBMPModelingTypeEnum.ConstructedWetland or TreatmentBMPModelingTypeEnum.WetDetentionBasin when (
-                    !bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                    (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                     !bmpModelingAttributes.DiversionRate.HasValue) ||
-                    !bmpModelingAttributes.PermanentPoolorWetlandVolume.HasValue ||
-                    !bmpModelingAttributes.WaterQualityDetentionVolume.HasValue):
-
-                case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin or TreatmentBMPModelingTypeEnum.FlowDurationControlBasin or TreatmentBMPModelingTypeEnum.FlowDurationControlTank when (
-                    !bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                    (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                     !bmpModelingAttributes.DiversionRate.HasValue) ||
-                    !bmpModelingAttributes.DrawdownTimeforWQDetentionVolume.HasValue ||
-                    !bmpModelingAttributes.StorageVolumeBelowLowestOutletElevation.HasValue ||
-                    !bmpModelingAttributes.EffectiveFootprint.HasValue):
-
-                case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems when (
-                    !bmpModelingAttributes.DesignDryWeatherTreatmentCapacity.HasValue &&
-                    !bmpModelingAttributes.AverageTreatmentFlowrate.HasValue):
-
-                case TreatmentBMPModelingTypeEnum.Drywell when (
-                    !bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                    (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                     !bmpModelingAttributes.DiversionRate.HasValue) ||
-                    !bmpModelingAttributes.TotalEffectiveDrywellBMPVolume.HasValue ||
-                    !bmpModelingAttributes.InfiltrationDischargeRate.HasValue):
-
-                case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator or TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment or TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl when 
-                    !bmpModelingAttributes.TreatmentRate.HasValue:
-
-                case TreatmentBMPModelingTypeEnum.LowFlowDiversions when (
-                    !bmpModelingAttributes.DesignLowFlowDiversionCapacity.HasValue &&
-                    !bmpModelingAttributes.AverageDivertedFlowrate.HasValue):
-
-                case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip or TreatmentBMPModelingTypeEnum.VegetatedSwale when (
-                    !bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                    (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                     !bmpModelingAttributes.DiversionRate.HasValue) ||
-                    !bmpModelingAttributes.TreatmentRate.HasValue ||
-                    !bmpModelingAttributes.WettedFootprint.HasValue ||
-                    !bmpModelingAttributes.EffectiveRetentionDepth.HasValue):
-
-                    return false;
-
-                default: 
-                    return true;
-            }
+            return GetByIDWithChangeTracking(dbContext, treatmentBMPPrimaryKey.PrimaryKeyValue);
         }
+
+        public static TreatmentBMP GetByID(NeptuneDbContext dbContext, int treatmentBMPID)
+        {
+            var treatmentBMP = GetImpl(dbContext).AsNoTracking()
+                .SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
+            Check.RequireNotNull(treatmentBMP, $"TreatmentBMP with ID {treatmentBMPID} not found!");
+            return treatmentBMP;
+        }
+
+        public static TreatmentBMP GetByID(NeptuneDbContext dbContext, TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            return GetByID(dbContext, treatmentBMPPrimaryKey.PrimaryKeyValue);
+        }
+
+        public static List<TreatmentBMP> List(NeptuneDbContext dbContext)
+        {
+            return GetImpl(dbContext).AsNoTracking().OrderBy(x => x.TreatmentBMPName).ToList();
+        }
+
     }
-
 }

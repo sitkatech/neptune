@@ -135,7 +135,7 @@ namespace Neptune.Web.Controllers
         //    {
         //        return ViewDelete(person, viewModel);
         //    }
-        //    HttpRequestStorage.DatabaseEntities.People.DeletePerson(person);
+        //    _dbContext.People.DeletePerson(person);
         //    return new ModalDialogFormJsonResult();
         //}
 
@@ -240,15 +240,15 @@ namespace Neptune.Web.Controllers
         //        return ViewEditJurisdiction(viewModel);
         //    }
 
-        //    HttpRequestStorage.DatabaseEntities.StormwaterJurisdictionPeople.Load();
-        //    viewModel.UpdateModel(person, HttpRequestStorage.DatabaseEntities.StormwaterJurisdictionPeople.Local);
+        //    _dbContext.StormwaterJurisdictionPeople.Load();
+        //    viewModel.UpdateModel(person, _dbContext.StormwaterJurisdictionPeople.Local);
         //    SetMessageForDisplay($"Assigned {FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabelPluralized()} successfully changed for {person.GetFullNameFirstLastAndOrgAsUrl()}.");
         //    return new ModalDialogFormJsonResult();
         //}
 
         //private PartialViewResult ViewEditJurisdiction(EditUserJurisdictionsViewModel viewModel)
         //{
-        //    var allStormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
+        //    var allStormwaterJurisdictions = _dbContext.StormwaterJurisdictions.ToList();
         //    var stormwaterJurisdictionsCurrentPersonCanManage = CurrentPerson.GetStormwaterJurisdictionsPersonCanView();
         //    var viewData = new EditUserJurisdictionsViewData(CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage, true);
         //    return RazorPartialView<EditUserJurisdictions, EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>(viewData, viewModel);
@@ -265,7 +265,7 @@ namespace Neptune.Web.Controllers
         //private ActionResult ViewInvite(InviteViewModel viewModel)
         //{
         //    var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.InviteUser);
-        //    var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationName).ToList();
+        //    var organizations = _dbContext.Organizations.OrderBy(x => x.OrganizationName).ToList();
         //    var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
         //    var viewData = new InviteViewData(CurrentPerson, organizations, neptunePage, cancelUrl);
         //    return RazorView<Invite, InviteViewData, InviteViewModel>(viewData, viewModel);
@@ -318,7 +318,7 @@ namespace Neptune.Web.Controllers
         //    }
 
         //    var keystoneUser = response.Payload.Claims;
-        //    var existingUser = HttpRequestStorage.DatabaseEntities.People.GetPersonByPersonGuid(keystoneUser.UserGuid);
+        //    var existingUser = _dbContext.People.GetPersonByPersonGuid(keystoneUser.UserGuid);
         //    if (existingUser != null)
         //    {
         //        SetMessageForDisplay($"{existingUser.GetFullNameFirstLastAndOrgAsUrl()} already has an account.</a>.");
@@ -328,7 +328,7 @@ namespace Neptune.Web.Controllers
         //    var setJurisdictions = !CurrentPerson.IsAdministrator();
         //    var newUser = CreateNewFirmaPerson(keystoneUser, keystoneUser.OrganizationGuid);
 
-        //    HttpRequestStorage.DatabaseEntities.SaveChanges();
+        //    _dbContext.SaveChanges();
 
         //    if (setJurisdictions)
         //    {
@@ -340,7 +340,7 @@ namespace Neptune.Web.Controllers
 
         //    newUser.RoleID = Role.JurisdictionEditor.RoleID;
 
-        //    HttpRequestStorage.DatabaseEntities.SaveChanges();
+        //    _dbContext.SaveChanges();
 
         //    SetMessageForDisplay(
         //        $"{newUser.GetFullNameFirstLastAndOrgAsUrl()} successfully added. You may want to assign them a role</a>.");
@@ -354,7 +354,7 @@ namespace Neptune.Web.Controllers
         //    if (organizationGuid.HasValue)
         //    {
         //        organization =
-        //            HttpRequestStorage.DatabaseEntities.Organizations.GetOrganizationByOrganizationGuid(organizationGuid
+        //            _dbContext.Organizations.GetOrganizationByOrganizationGuid(organizationGuid
         //                .Value);
 
         //        if (organization == null)
@@ -366,7 +366,7 @@ namespace Neptune.Web.Controllers
 
 
         //            var defaultOrganizationType =
-        //                HttpRequestStorage.DatabaseEntities.OrganizationTypes.GetDefaultOrganizationType();
+        //                _dbContext.OrganizationTypes.GetDefaultOrganizationType();
         //            var neptuneOrganization =
         //                new Organization(keystoneOrganization.FullName, true, defaultOrganizationType)
         //                {
@@ -374,23 +374,23 @@ namespace Neptune.Web.Controllers
         //                    OrganizationShortName = keystoneOrganization.ShortName,
         //                    OrganizationUrl = keystoneOrganization.URL
         //                };
-        //            HttpRequestStorage.DatabaseEntities.Organizations.Add(neptuneOrganization);
+        //            _dbContext.Organizations.Add(neptuneOrganization);
 
-        //            HttpRequestStorage.DatabaseEntities.SaveChanges();
+        //            _dbContext.SaveChanges();
 
         //            organization = neptuneOrganization;
         //        }
         //    }
         //    else
         //    {
-        //        organization = HttpRequestStorage.DatabaseEntities.Organizations.GetUnknownOrganization();
+        //        organization = _dbContext.Organizations.GetUnknownOrganization();
         //    }
 
 
         //    var firmaPerson = new Person(keystoneUser.UserGuid, keystoneUser.FirstName, keystoneUser.LastName,
         //        keystoneUser.Email, Role.Unassigned, DateTime.Now, true, organization, false,
         //        keystoneUser.LoginName, false, Guid.NewGuid(), false);
-        //    HttpRequestStorage.DatabaseEntities.People.Add(firmaPerson);
+        //    _dbContext.People.Add(firmaPerson);
         //    return firmaPerson;
         //}
 

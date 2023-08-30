@@ -16,7 +16,6 @@ namespace Neptune.EFModels.Entities
                 ObservationTypeCollectionMethodID = observationTypeCollectionMethod.ObservationTypeCollectionMethodID,
                 ObservationTypeCollectionMethodName = observationTypeCollectionMethod.ObservationTypeCollectionMethodName,
                 ObservationTypeCollectionMethodDisplayName = observationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName,
-                SortOrder = observationTypeCollectionMethod.SortOrder,
                 ObservationTypeCollectionMethodDescription = observationTypeCollectionMethod.ObservationTypeCollectionMethodDescription
             };
             DoCustomMappings(observationTypeCollectionMethod, observationTypeCollectionMethodDto);
@@ -32,7 +31,6 @@ namespace Neptune.EFModels.Entities
                 ObservationTypeCollectionMethodID = observationTypeCollectionMethod.ObservationTypeCollectionMethodID,
                 ObservationTypeCollectionMethodName = observationTypeCollectionMethod.ObservationTypeCollectionMethodName,
                 ObservationTypeCollectionMethodDisplayName = observationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName,
-                SortOrder = observationTypeCollectionMethod.SortOrder,
                 ObservationTypeCollectionMethodDescription = observationTypeCollectionMethod.ObservationTypeCollectionMethodDescription
             };
             DoCustomSimpleDtoMappings(observationTypeCollectionMethod, observationTypeCollectionMethodSimpleDto);

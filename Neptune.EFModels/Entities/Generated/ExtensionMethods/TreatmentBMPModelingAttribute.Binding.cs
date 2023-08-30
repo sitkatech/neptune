@@ -12,5 +12,10 @@ namespace Neptune.EFModels.Entities
         public UnderlyingHydrologicSoilGroup UnderlyingHydrologicSoilGroup => UnderlyingHydrologicSoilGroupID.HasValue ? UnderlyingHydrologicSoilGroup.AllLookupDictionary[UnderlyingHydrologicSoilGroupID.Value] : null;
         public MonthsOfOperation MonthsOfOperation => MonthsOfOperationID.HasValue ? MonthsOfOperation.AllLookupDictionary[MonthsOfOperationID.Value] : null;
         public DryWeatherFlowOverride DryWeatherFlowOverride => DryWeatherFlowOverrideID.HasValue ? DryWeatherFlowOverride.AllLookupDictionary[DryWeatherFlowOverrideID.Value] : null;
+
+        public static class FieldLengths
+        {
+
+        }
     }
 }

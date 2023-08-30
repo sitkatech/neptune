@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 namespace Neptune.EFModels.Entities;
 
 [Table("FieldVisit")]
-[Index("FieldVisitID", "TreatmentBMPID", Name = "AK_FieldVisit_FieldVisitID_TreatmentBMPID", IsUnique = true)]
 public partial class FieldVisit
 {
     [Key]
@@ -29,9 +28,7 @@ public partial class FieldVisit
     public bool IsFieldVisitVerified { get; set; }
 
     [InverseProperty("FieldVisit")]
-    public virtual MaintenanceRecord? MaintenanceRecordFieldVisit { get; set; }
-
-    public virtual ICollection<MaintenanceRecord> MaintenanceRecordFieldVisitNavigations { get; set; } = new List<MaintenanceRecord>();
+    public virtual MaintenanceRecord? MaintenanceRecord { get; set; }
 
     [ForeignKey("PerformedByPersonID")]
     [InverseProperty("FieldVisits")]
@@ -41,8 +38,6 @@ public partial class FieldVisit
     [InverseProperty("FieldVisit")]
     public virtual TreatmentBMP TreatmentBMP { get; set; } = null!;
 
-    public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessmentFieldVisitNavigations { get; set; } = new List<TreatmentBMPAssessment>();
-
     [InverseProperty("FieldVisit")]
-    public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessmentFieldVisits { get; set; } = new List<TreatmentBMPAssessment>();
+    public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; } = new List<TreatmentBMPAssessment>();
 }

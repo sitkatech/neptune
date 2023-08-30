@@ -44,9 +44,7 @@ public partial class OnlandVisualTrashAssessmentArea
     public Geometry? TransectLine4326 { get; set; }
 
     [InverseProperty("OnlandVisualTrashAssessmentArea")]
-    public virtual OnlandVisualTrashAssessment? OnlandVisualTrashAssessmentOnlandVisualTrashAssessmentArea { get; set; }
-
-    public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessmentOnlandVisualTrashAssessmentAreaNavigations { get; set; } = new List<OnlandVisualTrashAssessment>();
+    public virtual OnlandVisualTrashAssessment? OnlandVisualTrashAssessment { get; set; }
 
     [ForeignKey("StormwaterJurisdictionID")]
     [InverseProperty("OnlandVisualTrashAssessmentAreas")]

@@ -18,21 +18,19 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using Neptune.EFModels;
+
+using Microsoft.AspNetCore.Mvc.Filters;
 using Neptune.EFModels.Entities;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
-    public abstract class NeptuneFeatureWithContext : NeptuneBaseFeature, IActionFilter
+    public abstract class NeptuneFeatureWithContext : BaseAuthorizationAttribute, IActionFilter
     {
+        public string FeatureName => GetType().Name;
+
         public IActionFilter ActionFilter;
 
-        // potential todo: does this need to be converted to use RoleEnum?
-        protected NeptuneFeatureWithContext(List<Role> grantedRoles) : base(grantedRoles.Select(x => (IRole)x).ToList(), NeptuneArea.OCStormwaterTools)
+        protected NeptuneFeatureWithContext(List<RoleEnum> grantedRoles) : base(grantedRoles/*, NeptuneArea.OCStormwaterTools*/)
         {
         }
 

@@ -26,22 +26,18 @@ public partial class TreatmentBMPBenchmarkAndThreshold
     public double ThresholdValue { get; set; }
 
     [ForeignKey("TreatmentBMPID")]
-    [InverseProperty("TreatmentBMPBenchmarkAndThresholdTreatmentBMPs")]
+    [InverseProperty("TreatmentBMPBenchmarkAndThresholds")]
     public virtual TreatmentBMP TreatmentBMP { get; set; } = null!;
-
-    public virtual TreatmentBMPTypeAssessmentObservationType TreatmentBMP1 { get; set; } = null!;
 
     [ForeignKey("TreatmentBMPAssessmentObservationTypeID")]
     [InverseProperty("TreatmentBMPBenchmarkAndThresholds")]
     public virtual TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType { get; set; } = null!;
-
-    public virtual TreatmentBMP TreatmentBMPNavigation { get; set; } = null!;
 
     [ForeignKey("TreatmentBMPTypeID")]
     [InverseProperty("TreatmentBMPBenchmarkAndThresholds")]
     public virtual TreatmentBMPType TreatmentBMPType { get; set; } = null!;
 
     [ForeignKey("TreatmentBMPTypeAssessmentObservationTypeID")]
-    [InverseProperty("TreatmentBMPBenchmarkAndThresholdTreatmentBMPTypeAssessmentObservationTypes")]
+    [InverseProperty("TreatmentBMPBenchmarkAndThresholds")]
     public virtual TreatmentBMPTypeAssessmentObservationType TreatmentBMPTypeAssessmentObservationType { get; set; } = null!;
 }

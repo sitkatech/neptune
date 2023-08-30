@@ -19,9 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.Web.Models;
+
 namespace Neptune.EFModels.Entities
 {
-    public partial class Person// : IAuditableEntity, IKeystoneUser
+    public partial class Person : IAuditableEntity//, IKeystoneUser
     {
         public const int AnonymousPersonID = -999;
 
@@ -105,7 +107,7 @@ namespace Neptune.EFModels.Entities
         //TODO:
         //public void SetKeystoneUserClaims(IKeystoneUserClaims keystoneUserClaims)
         //{
-        //    //Organization = HttpRequestStorage.DatabaseEntities.Organizations.Where(x => x.OrganizationGuid.HasValue).SingleOrDefault(x => x.OrganizationGuid == keystoneUserClaims.OrganizationGuid);
+        //    //Organization = _dbContext.Organizations.Where(x => x.OrganizationGuid.HasValue).SingleOrDefault(x => x.OrganizationGuid == keystoneUserClaims.OrganizationGuid);
         //    Phone = keystoneUserClaims.PrimaryPhone.ToPhoneNumberString();
         //    Email = keystoneUserClaims.Email;
         //}

@@ -19,19 +19,15 @@ public partial class TreatmentBMPTypeCustomAttributeType
 
     public int? SortOrder { get; set; }
 
-    public virtual ICollection<CustomAttribute> CustomAttributeTreatmentBMPTypeCustomAttributeTypeNavigations { get; set; } = new List<CustomAttribute>();
-
-    [InverseProperty("TreatmentBMPTypeCustomAttributeType")]
-    public virtual ICollection<CustomAttribute> CustomAttributeTreatmentBMPTypeCustomAttributeTypes { get; set; } = new List<CustomAttribute>();
-
     [ForeignKey("CustomAttributeTypeID")]
     [InverseProperty("TreatmentBMPTypeCustomAttributeTypes")]
     public virtual CustomAttributeType CustomAttributeType { get; set; } = null!;
 
-    public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservationTreatmentBMPTypeCustomAttributeTypeNavigations { get; set; } = new List<MaintenanceRecordObservation>();
+    [InverseProperty("TreatmentBMPTypeCustomAttributeType")]
+    public virtual ICollection<CustomAttribute> CustomAttributes { get; set; } = new List<CustomAttribute>();
 
     [InverseProperty("TreatmentBMPTypeCustomAttributeType")]
-    public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservationTreatmentBMPTypeCustomAttributeTypes { get; set; } = new List<MaintenanceRecordObservation>();
+    public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; } = new List<MaintenanceRecordObservation>();
 
     [ForeignKey("TreatmentBMPTypeID")]
     [InverseProperty("TreatmentBMPTypeCustomAttributeTypes")]

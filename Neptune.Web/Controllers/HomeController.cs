@@ -72,7 +72,7 @@ namespace Neptune.Web.Controllers
             var launchPadNeptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.LaunchPad);
             var numberOfBmpTypes = _dbContext.TreatmentBMPTypes.Count();
             var managerDashboardDescription = GetManagerDashboardDescription();
-            var launchPadViewData = new LaunchPadViewData(CurrentPerson, launchPadNeptunePage, numberOfBmpTypes, managerDashboardDescription);
+            var launchPadViewData = new LaunchPadViewData(CurrentPerson, launchPadNeptunePage, numberOfBmpTypes, managerDashboardDescription, _linkGenerator);
 
             var viewData = new IndexViewData(CurrentPerson, neptunePageByPageTypeHomePage,
                 neptunePageByPageTypeHomePageAdditionalInfo, neptunePageByPageTypeHomePageMapInfo,

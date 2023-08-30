@@ -15,14 +15,6 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    # - task: DockerCompose@0
-    #   displayName: 'Start SQL'
-    #   inputs:
-    #     containerregistrytype: 'Container Registry'
-    #     dockerComposeFile: 'docker-compose/docker-compose-test.yml'
-    #     action: 'Run a Docker Compose command'
-    #     dockerComposeCommand: 'up -d'
-
     - task: DotNetCoreCLI@2
       displayName: 'dotnet restore'
       inputs:
@@ -57,19 +49,19 @@ stages:
 
 
 - stage: BuildWeb
-  displayName: Build API/Web
+  displayName: Build Web
   dependsOn: Test
   condition: in(dependencies.Test.result, 'Succeeded', 'SucceededWithIssues', 'Skipped')
   jobs:
-  - job: BuildAPI
-    displayName: Build API
+  - job: BuildWebMVC
+    displayName: Build Web MVC
     condition: eq(variables['build'], 'true')
     pool:
       vmImage: ubuntu-latest
     steps:
     - checkout: self
     - task: DockerCompose@0
-      displayName: Build API services
+      displayName: Build Web MVC services
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
         azureContainerRegistry: '$(containerRegistry)'
@@ -83,7 +75,7 @@ stages:
         includeLatestTag: true
 
     - task: DockerCompose@0
-      displayName: Push API Image to Registry  
+      displayName: Push Web MVC Image to Registry  
       condition: eq(variables['pushImages'], 'true')
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
@@ -95,46 +87,7 @@ stages:
           $(Build.BuildNumber)-$(environment)
 
           $(environment)
-        includeLatestTag: true
-
-
-  - job: BuildWeb
-    displayName: Build Web
-    condition: eq(variables['build'], 'true')
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - checkout: self
-    - task: DockerCompose@0
-      displayName: Build Web services
-      inputs:
-        azureSubscriptionEndpoint: '$(azureSubscription)'
-        azureContainerRegistry: '$(containerRegistry)'
-        dockerComposeFile: Neptune.Web/docker-compose/docker-compose.yml
-        dockerComposeFileArgs: env=$(environment)
-        action: Build services
-        additionalImageTags: >-
-          $(Build.BuildNumber)-$(environment)
-
-          $(environment)
-        includeLatestTag: true
-
-
-    - task: DockerCompose@0
-      displayName: Push Web Image to Registry  
-      condition: eq(variables['pushImages'], 'true')
-      inputs:
-        azureSubscriptionEndpoint: '$(azureSubscription)'
-        azureContainerRegistry: '$(containerRegistry)'      
-        dockerComposeFile: Neptune.Web/docker-compose/docker-compose.yml
-        dockerComposeFileArgs: env=$(environment)
-        action: Push services
-        additionalImageTags: >-
-          $(Build.BuildNumber)-$(environment)
-
-          $(environment)
-        includeLatestTag: true
-    
+        includeLatestTag: true    
 
 - stage: BuildTerraform
   displayName: Terraform Plan
@@ -175,21 +128,11 @@ stages:
         #backendAzureRmKey: 'd'
         allowTelemetryCollection: true
 
-    # - task: TerraformCLI@0
-    #   inputs:
-    #     command: 'import'
-    #     environmentServiceName: '$(azureSubscription)'
-    #     allowTelemetryCollection: true
-    #     resourceAddress: 'azurerm_mssql_database.database'
-    #     resourceId: '/subscriptions/21fa2974-9388-4e50-a33d-bddc9d3469ca/resourceGroups/aks-spoke-prod/providers/Microsoft.Sql/servers/aks-spoke-prod-sqlserver/databases/NeptuneDB'
-    #     commandOptions: '-var "appInsightsName=$(appInsightsName)" -var "keyVaultName=$(keyVaultName)" -var "rabbitMqUser=$(rabbitMqUser)" -var "rabbitMqPass=$(rabbitMqPass)" -var "storageAccountName=$(storageAccountApplicationName)" -var "resourceGroupName=$(resourceGroupName)" -var "dbServerName=$(dbServerName)" -var "aspNetEnvironment=$(aspNetEnvironment)" -var "databaseName=$(databaseName)" -var "databaseEdition=$(databaseEdition)" -var "databaseTier=$(databaseTier)" -var "sqlPassword=$(sqlPassword)" -var "sqlUsername=$(sqlUsername)" -var "azureClusterResourceGroup=$(azureClusterResourceGroup)" -var "sqlApiUsername=$(sqlApiUsername)" -var "sqlGeoserverUsername=$(sqlGeoserverUsername)"'
-    #   continueOnError: true #after initial import this should not stop builds until it's removed.
-
     - task: TerraformCLI@0
       inputs:
         command: 'plan'
         environmentServiceName: '$(azureSubscription)'
-        commandOptions: '-var "appInsightsName=$(appInsightsName)" -var "keyVaultName=$(keyVaultName)" -var "rabbitMqUser=$(rabbitMqUser)" -var "rabbitMqPass=$(rabbitMqPass)" -var "storageAccountName=$(storageAccountApplicationName)" -var "resourceGroupName=$(resourceGroupName)" -var "dbServerName=$(dbServerName)" -var "aspNetEnvironment=$(aspNetEnvironment)" -var "databaseName=$(databaseName)" -var "databaseEdition=$(databaseEdition)" -var "databaseTier=$(databaseTier)" -var "sqlPassword=$(sqlPassword)" -var "sqlUsername=$(sqlUsername)" -var "azureClusterResourceGroup=$(azureClusterResourceGroup)" -var "sqlApiUsername=$(sqlApiUsername)" -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" -var "datadogApiKey=$(datadogApiKey)" -var "datadogAppKey=$(datadogAppKey)" -var "domainWeb=$(domainWeb)" -var "domainApi=$(domainApi)" -var "domainGeoserver=$(domainGeoserver)" -var "environment=$(environment)"'
+        commandOptions: '-var "appInsightsName=$(appInsightsName)" -var "keyVaultName=$(keyVaultName)" -var "storageAccountName=$(storageAccountApplicationName)" -var "resourceGroupName=$(resourceGroupName)" -var "dbServerName=$(dbServerName)" -var "aspNetEnvironment=$(aspNetEnvironment)" -var "databaseName=$(databaseName)" -var "databaseEdition=$(databaseEdition)" -var "databaseTier=$(databaseTier)" -var "sqlPassword=$(sqlPassword)" -var "sqlUsername=$(sqlUsername)" -var "azureClusterResourceGroup=$(azureClusterResourceGroup)" -var "sqlApiUsername=$(sqlApiUsername)" -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" -var "datadogApiKey=$(datadogApiKey)" -var "datadogAppKey=$(datadogAppKey)" -var "domainWebMvc=$(domainWebMvc)" -var "domainGeoserver=$(domainGeoserver)" -var "environment=$(environment)"'
         allowTelemetryCollection: true
         publishPlanResults: 'tfplan'
         
@@ -287,7 +230,7 @@ stages:
               command: 'apply'
               workingDirectory: '$(Pipeline.Workspace)/terraform'
               environmentServiceName: '$(azureSubscription)'
-              commandOptions: '-var "appInsightsName=$(appInsightsName)" -var "keyVaultName=$(keyVaultName)" -var "rabbitMqUser=$(rabbitMqUser)" -var "rabbitMqPass=$(rabbitMqPass)" -var "storageAccountName=$(storageAccountApplicationName)" -var "resourceGroupName=$(resourceGroupName)" -var "dbServerName=$(dbServerName)" -var "aspNetEnvironment=$(aspNetEnvironment)" -var "databaseName=$(databaseName)" -var "databaseEdition=$(databaseEdition)" -var "databaseTier=$(databaseTier)" -var "sqlPassword=$(sqlPassword)" -var "sqlUsername=$(sqlUsername)" -var "azureClusterResourceGroup=$(azureClusterResourceGroup)"  -var "sqlApiUsername=$(sqlApiUsername)" -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" -var "datadogApiKey=$(datadogApiKey)" -var "datadogAppKey=$(datadogAppKey)" -var "domainWeb=$(domainWeb)" -var "domainApi=$(domainApi)" -var "domainGeoserver=$(domainGeoserver)" -var "environment=$(environment)"'
+              commandOptions: '-var "appInsightsName=$(appInsightsName)" -var "keyVaultName=$(keyVaultName)" -var "storageAccountName=$(storageAccountApplicationName)" -var "resourceGroupName=$(resourceGroupName)" -var "dbServerName=$(dbServerName)" -var "aspNetEnvironment=$(aspNetEnvironment)" -var "databaseName=$(databaseName)" -var "databaseEdition=$(databaseEdition)" -var "databaseTier=$(databaseTier)" -var "sqlPassword=$(sqlPassword)" -var "sqlUsername=$(sqlUsername)" -var "azureClusterResourceGroup=$(azureClusterResourceGroup)"  -var "sqlApiUsername=$(sqlApiUsername)" -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" -var "datadogApiKey=$(datadogApiKey)" -var "datadogAppKey=$(datadogAppKey)" -var "domainWebMvc=$(domainWebMvc)" -var "domainGeoserver=$(domainGeoserver)" -var "environment=$(environment)"'
               allowTelemetryCollection: true
 
           - task: TerraformCLI@0
@@ -304,6 +247,7 @@ stages:
               echo "##vso[task.setvariable variable=SQL_GEOSERVER_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_SQL_GEOSERVER_PASSWORD)"
               echo "##vso[task.setvariable variable=GEOSERVER_ADMIN_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_GEOSERVER_ADMIN_PASSWORD)"
               echo "##vso[task.setvariable variable=HANGFIRE_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_HANGFIRE_PASSWORD)"
+              echo "##vso[task.setvariable variable=PYQGIS_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_PYQGIS_PASSWORD)"
           - bash: 'env | sort'
 
 - stage: DeployDB
@@ -503,6 +447,7 @@ stages:
       SQL_GEOSERVER_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.SQL_GEOSERVER_PASSWORD'] ]
       GEOSERVER_ADMIN_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.GEOSERVER_ADMIN_PASSWORD'] ]
       HANGFIRE_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.HANGFIRE_PASSWORD'] ]
+      PYQGIS_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.PYQGIS_PASSWORD'] ]
     # creates an environment if it doesn't exist
     environment: $(Environment)
     strategy:
@@ -529,16 +474,6 @@ stages:
               command: login
 
           - task: HelmDeploy@0
-            displayName: 'helm repo add rabbitmq'
-            inputs:
-              connectionType: Azure Resource Manager
-              azureSubscription: '$(azureSubscription)'
-              azureResourceGroup: '$(azureClusterResourceGroup)'
-              kubernetesCluster: '$(kubernetesCluster)'
-              command: 'repo'
-              arguments: 'azure-marketplace https://marketplace.azurecr.io/helm/v1/repo'
-
-          - task: HelmDeploy@0
             displayName: 'helm dependency update'
             inputs:
               connectionType: Azure Resource Manager
@@ -563,10 +498,8 @@ stages:
               releaseName: 'neptune'
               overrideValues: |
                 global.env.appInsightsInstrumentationKey="$(INSTRUMENTATION_KEY)"
-                global.domains.api="$(domainApi)"
-                global.domains.web="$(domainWeb)"
+                global.domains.webMvc="$(domainWebMvc)"
                 global.domains.geoserver="$(domainGeoserver)"
-                global.domains.swaggerApi="$(domainSwaggerApi)"
                 global.env.name="$(Environment)"
                 global.secrets.geoserverSqlServerPassword="$(SQL_GEOSERVER_PASSWORD)"
                 global.secrets.geoserverAdminPassword="$(GEOSERVER_ADMIN_PASSWORD)"
@@ -578,16 +511,9 @@ stages:
                 global.env.sqlGeoserverUsername=$(sqlGeoserverUsername)
                 global.secrets.apiSqlPassword=$(SQL_API_PASSWORD)
                 global.secrets.sendGridApiKey="$(SendGridApiKey)"
-                global.env.rabbitMqUser=$(rabbitMqUser)
-                global.secrets.rabbitMqPass="$(rabbitMqPass)"
-                global.env.getApiSubscriptionKey=$(getApiSubscriptionKey)
-                rabbitmq.auth.username="$(rabbitMqUser)"
-                rabbitmq.auth.password="$(rabbitMqPass)"
-                api.image.tag="$(Build.BuildNumber)-$(environment)"
-                web.image.tag="$(Build.BuildNumber)-$(environment)"
-                api.image.repository="$(containerRegistry)/neptune/api"
-                web.image.repository="$(containerRegistry)/neptune/web"
                 global.secrets.hangfirePassword="$(HANGFIRE_PASSWORD)"
-                global.secrets.openETApiKey="$(openETApiKey)"
-                global.secrets.neptuneApiKey="$(neptuneApiKey)"
+                global.secrets.pyqgisPassword="$(PYQGIS_PASSWORD)"
+                global.secrets.keystoneOpenIDClientSecret="$(keystoneOpenIDClientSecret)"
+                webmvc.image.tag="$(Build.BuildNumber)-$(environment)"
+                webmvc.image.repository="$(containerRegistry)/neptune/webmvc"
               force: false

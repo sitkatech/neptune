@@ -15,5 +15,19 @@ namespace Neptune.EFModels.Entities
         public HydromodificationAppliesType HydromodificationAppliesType => HydromodificationAppliesTypeID.HasValue ? HydromodificationAppliesType.AllLookupDictionary[HydromodificationAppliesTypeID.Value] : null;
         public TrashCaptureStatusType TrashCaptureStatusType => TrashCaptureStatusType.AllLookupDictionary[TrashCaptureStatusTypeID];
         public WaterQualityManagementPlanModelingApproach WaterQualityManagementPlanModelingApproach => WaterQualityManagementPlanModelingApproach.AllLookupDictionary[WaterQualityManagementPlanModelingApproachID];
+
+        public static class FieldLengths
+        {
+            public const int WaterQualityManagementPlanName = 100;
+            public const int MaintenanceContactName = 100;
+            public const int MaintenanceContactOrganization = 100;
+            public const int MaintenanceContactPhone = 100;
+            public const int MaintenanceContactAddress1 = 100;
+            public const int MaintenanceContactAddress2 = 100;
+            public const int MaintenanceContactCity = 100;
+            public const int MaintenanceContactState = 100;
+            public const int MaintenanceContactZip = 100;
+            public const int RecordNumber = 500;
+        }
     }
 }

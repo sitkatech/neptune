@@ -8,5 +8,11 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => TreatmentBMPTypeID;
         public TreatmentBMPModelingType TreatmentBMPModelingType => TreatmentBMPModelingTypeID.HasValue ? TreatmentBMPModelingType.AllLookupDictionary[TreatmentBMPModelingTypeID.Value] : null;
+
+        public static class FieldLengths
+        {
+            public const int TreatmentBMPTypeName = 100;
+            public const int TreatmentBMPTypeDescription = 1000;
+        }
     }
 }

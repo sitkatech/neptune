@@ -64,7 +64,7 @@
                                     'lines',
                                     'lines1',
                                     'lines2',
-                                    'bars', // TODO: Fix bug in nvd3, nv.models.historicalBar - chart.interactive (false -> _)
+                                    'bars', // TODO: Fix bug in nvd3, nv.EFModels.Entities.historicalBar - chart.interactive (false -> _)
                                     'bars1',
                                     'bars2',
                                     'stack1',

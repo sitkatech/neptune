@@ -8,5 +8,11 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => FundingSourceID;
 
+
+        public static class FieldLengths
+        {
+            public const int FundingSourceName = 200;
+            public const int FundingSourceDescription = 500;
+        }
     }
 }

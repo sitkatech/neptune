@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => CountyID;
 
+
+        public static class FieldLengths
+        {
+            public const int CountyName = 100;
+        }
     }
 }

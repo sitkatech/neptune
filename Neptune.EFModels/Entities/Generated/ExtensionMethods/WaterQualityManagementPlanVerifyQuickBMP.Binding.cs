@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => WaterQualityManagementPlanVerifyQuickBMPID;
 
+
+        public static class FieldLengths
+        {
+            public const int WaterQualityManagementPlanVerifyQuickBMPNote = 500;
+        }
     }
 }

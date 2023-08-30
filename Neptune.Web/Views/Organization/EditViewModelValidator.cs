@@ -24,13 +24,13 @@ namespace Neptune.Web.Views.Organization
     public class EditViewModelValidator// todo: : AbstractValidator<EditViewModel>
     {
         //// Validators are singletons, so this list must be initialized every time.
-        //public Func<IList<Models.Organization>> Organizations = () =>
+        //public Func<IList<EFModels.Entities.Organization>> Organizations = () =>
         //{
-        //    HttpRequestStorage.DatabaseEntities.Organizations.Load();
-        //    return HttpRequestStorage.DatabaseEntities.Organizations.Local;
+        //    _dbContext.Organizations.Load();
+        //    return _dbContext.Organizations.Local;
         //};
 
-        //public EditViewModelValidator(IList<Models.Organization> organizations) : this()
+        //public EditViewModelValidator(IList<EFModels.Entities.Organization> organizations) : this()
         //{
         //    Organizations = (() => organizations);
         //}

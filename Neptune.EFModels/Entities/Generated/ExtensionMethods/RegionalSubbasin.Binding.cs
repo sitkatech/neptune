@@ -8,5 +8,11 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => RegionalSubbasinID;
 
+
+        public static class FieldLengths
+        {
+            public const int DrainID = 10;
+            public const int Watershed = 100;
+        }
     }
 }

@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => StormwaterJurisdictionPersonID;
 
+
+        public static class FieldLengths
+        {
+
+        }
     }
 }

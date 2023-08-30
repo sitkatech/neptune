@@ -238,14 +238,14 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
             switch (displayStyle)
             {
                 case DisplayStyle.AsGridHeader:
-                    var divTag = new TagBuilder("div");
-                    divTag.Attributes.Add("style", "display:table; vertical-align: top");
                     labelTag.Attributes.Add("style", "display:table-cell");
-                    builder.AppendFormat("{0}{1}", helpIconImgTag, labelTag);
+                    builder.AppendFormat("<div style=\"display:table; vertical-align: top\">{0}{1}</div>", helpIconImgTag, labelTag);
                     builder.WriteTo(writer, HtmlEncoder.Default);
                     return new HtmlString(writer.ToString());
                 case DisplayStyle.HelpIconOnly:
-                    return helpIconImgTag;
+                    builder.AppendFormat("{0}", helpIconImgTag);
+                    builder.WriteTo(writer, HtmlEncoder.Default);
+                    return new HtmlString(writer.ToString());
                 case DisplayStyle.HelpIconWithLabel:
                 case DisplayStyle.SitsOnDarkBackground:
                     var requiredAsterisk = hasRequiredAttribute ? " <sup>" + BootstrapHtmlHelpers.RequiredIcon + "</sup>" : string.Empty;

@@ -37,7 +37,7 @@ namespace Neptune.EFModels.Entities
 
         public string GetFileResourceUrl()
         {
-            return "";//todo FileResourceByGuidUrlTemplate.ParameterReplace(GetFileResourceGUIDAsString());
+            return $"/FileResource/DisplayResource/{GetFileResourceGUIDAsString()}";
         }
 
         public string FileResourceUrlScaledThumbnail(int maxHeight)
@@ -88,8 +88,8 @@ namespace Neptune.EFModels.Entities
         //public static FileResource CreateNewFromHttpPostedFileAndSave(HttpPostedFileBase httpPostedFileBase, Person currentPerson)
         //{
         //    var fileResource = CreateNewFromHttpPostedFile(httpPostedFileBase, currentPerson);
-        //    HttpRequestStorage.DatabaseEntities.FileResources.Add(fileResource);
-        //    HttpRequestStorage.DatabaseEntities.SaveChanges();
+        //    _dbContext.FileResources.Add(fileResource);
+        //    _dbContext.SaveChanges();
         //    return fileResource;
         //}
 

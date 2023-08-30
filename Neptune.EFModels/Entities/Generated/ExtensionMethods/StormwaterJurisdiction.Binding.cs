@@ -9,5 +9,10 @@ namespace Neptune.EFModels.Entities
         public int PrimaryKey => StormwaterJurisdictionID;
         public StormwaterJurisdictionPublicBMPVisibilityType StormwaterJurisdictionPublicBMPVisibilityType => StormwaterJurisdictionPublicBMPVisibilityType.AllLookupDictionary[StormwaterJurisdictionPublicBMPVisibilityTypeID];
         public StormwaterJurisdictionPublicWQMPVisibilityType StormwaterJurisdictionPublicWQMPVisibilityType => StormwaterJurisdictionPublicWQMPVisibilityType.AllLookupDictionary[StormwaterJurisdictionPublicWQMPVisibilityTypeID];
+
+        public static class FieldLengths
+        {
+
+        }
     }
 }

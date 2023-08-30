@@ -27,13 +27,11 @@ namespace Neptune.EFModels
         DateTime GetCreateDate();
         int PrimaryKey { get; }
         FileResource FileResource { get; set; }
-        string GetDeleteUrl();
         string GetCaptionOnFullView();
         string GetCaptionOnGallery();
         string Caption { get; set; }
         string GetPhotoUrl();
         string PhotoUrlScaledThumbnail(int maxHeight);
-        string GetEditUrl();
         List<string> GetAdditionalCssClasses();
     }
 }

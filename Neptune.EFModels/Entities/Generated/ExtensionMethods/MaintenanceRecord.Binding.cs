@@ -8,5 +8,10 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => MaintenanceRecordID;
         public MaintenanceRecordType MaintenanceRecordType => MaintenanceRecordTypeID.HasValue ? MaintenanceRecordType.AllLookupDictionary[MaintenanceRecordTypeID.Value] : null;
+
+        public static class FieldLengths
+        {
+            public const int MaintenanceRecordDescription = 500;
+        }
     }
 }

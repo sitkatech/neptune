@@ -154,7 +154,30 @@ namespace Neptune.Common.GeoSpatial
                         AUTHORITY[""EPSG"",""9003""]],
                     AXIS[""X"",EAST],
                     AXIS[""Y"",NORTH],
-                    AUTHORITY[""EPSG"",""2230""]]"
+                    AUTHORITY[""EPSG"",""2230""]]",
+            [2771] = @"
+                PROJCS[""NAD83(HARN) / California zone 6"",
+                    GEOGCS[""NAD83(HARN)"",
+                        DATUM[""NAD83_High_Accuracy_Reference_Network"",
+                            SPHEROID[""GRS 1980"",6378137,298.257222101],
+                            TOWGS84[-0.991,1.9072,0.5129,-1.25033E-07,-4.6785E-08,-5.6529E-08,0]],
+                        PRIMEM[""Greenwich"",0,
+                            AUTHORITY[""EPSG"",""8901""]],
+                        UNIT[""degree"",0.0174532925199433,
+                            AUTHORITY[""EPSG"",""9122""]],
+                        AUTHORITY[""EPSG"",""4152""]],
+                    PROJECTION[""Lambert_Conformal_Conic_2SP""],
+                    PARAMETER[""latitude_of_origin"",32.1666666666667],
+                    PARAMETER[""central_meridian"",-116.25],
+                    PARAMETER[""standard_parallel_1"",33.8833333333333],
+                    PARAMETER[""standard_parallel_2"",32.7833333333333],
+                    PARAMETER[""false_easting"",2000000],
+                    PARAMETER[""false_northing"",500000],
+                    UNIT[""metre"",1,
+                        AUTHORITY[""EPSG"",""9001""]],
+                    AXIS[""Easting"",EAST],
+                    AXIS[""Northing"",NORTH],
+                    AUTHORITY[""EPSG"",""2771""]]"
         };
 
         private static Geometry Transform(Geometry geom, MathTransform transform, int targetSrid)
@@ -165,19 +188,34 @@ namespace Neptune.Common.GeoSpatial
             return geom;
         }
 
-        public static Geometry ProjectTo2227(this Geometry geometry)
+        public static Geometry ProjectTo2771(this Geometry geometry)
         {
-            if (geometry.SRID == 2227)
+            if (geometry.SRID == 2771)
             {
                 return geometry;
             }
 
-            var targetCoordinateSystem = new CoordinateSystemFactory().CreateFromWkt(CoordinateSystemsWkTs[2227]);
+            var targetCoordinateSystem = new CoordinateSystemFactory().CreateFromWkt(CoordinateSystemsWkTs[2771]);
             var fromCoordinateSystem = geometry.SRID == 4326 
                 ? GeographicCoordinateSystem.WGS84 
                 : new CoordinateSystemFactory().CreateFromWkt(CoordinateSystemsWkTs[geometry.SRID]);
             var transformation = new CoordinateTransformationFactory().CreateFromCoordinateSystems(fromCoordinateSystem, targetCoordinateSystem);
-            return Transform(geometry, transformation.MathTransform, 2227);
+            return Transform(geometry, transformation.MathTransform, 2771);
+        }
+
+        public static Geometry ProjectTo2230(this Geometry geometry)
+        {
+            if (geometry.SRID == 2230)
+            {
+                return geometry;
+            }
+
+            var targetCoordinateSystem = new CoordinateSystemFactory().CreateFromWkt(CoordinateSystemsWkTs[2230]);
+            var fromCoordinateSystem = geometry.SRID == 4326 
+                ? GeographicCoordinateSystem.WGS84 
+                : new CoordinateSystemFactory().CreateFromWkt(CoordinateSystemsWkTs[geometry.SRID]);
+            var transformation = new CoordinateTransformationFactory().CreateFromCoordinateSystems(fromCoordinateSystem, targetCoordinateSystem);
+            return Transform(geometry, transformation.MathTransform, 2230);
         }
 
         public static Geometry ProjectTo4326(this Geometry geometry)

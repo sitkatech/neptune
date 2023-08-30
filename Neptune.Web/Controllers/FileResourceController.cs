@@ -169,7 +169,7 @@ namespace Neptune.Web.Controllers
         //    var fileResource = FileResource.CreateNewFromHttpPostedFileAndSave(viewModel.upload, CurrentPerson);
         //    var neptunePage = neptunePagePrimaryKey.EntityObject;
         //    var ppImage = new NeptunePageImage(neptunePage, fileResource);
-        //    HttpRequestStorage.DatabaseEntities.NeptunePageImages.Add(ppImage);
+        //    _dbContext.NeptunePageImages.Add(ppImage);
         //    return Content(viewModel.GetCkEditorJavascriptContentToReturn(fileResource));
         //}
 
@@ -195,7 +195,7 @@ namespace Neptune.Web.Controllers
 //            var fileResource = FileResource.CreateNewFromHttpPostedFileAndSave(viewModel.upload, CurrentPerson);
 //            var neptunePage = neptunePagePrimaryKey.EntityObject;
 //            var ppImage = new NeptunePageImage(neptunePage, fileResource);
-//            HttpRequestStorage.DatabaseEntities.NeptunePageImages.Add(ppImage);
+//            _dbContext.NeptunePageImages.Add(ppImage);
 //            return Content(viewModel.GetCkEditorJavascriptContentToReturn(fileResource));
 //        }
 
