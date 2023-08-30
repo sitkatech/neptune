@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Neptune.EFModels.Entities;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
@@ -7,6 +8,7 @@ namespace Neptune.Web.Security
     public class DelineationDeleteFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<Delineation>
     {
         private readonly NeptuneFeatureWithContextImpl<Delineation> _lakeTahoeInfoFeatureWithContextImpl;
+        public string FeatureName { get; } // todo
 
         public DelineationDeleteFeature()
             : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionManager})

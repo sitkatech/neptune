@@ -19,19 +19,18 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Web;
-using LtInfo.Common;
-using LtInfo.Common.DhtmlWrappers;
-using LtInfo.Common.HtmlHelperExtensions;
-using LtInfo.Common.Views;
+using Microsoft.AspNetCore.Html;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
+using Neptune.Web.Common.DhtmlWrappers;
+using Neptune.Web.Common.HtmlHelperExtensions;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.ManagerDashboard
 {
-    public class ProvisionalFieldVisitGridSpec : GridSpec<Models.vFieldVisitDetailed>
+    public class ProvisionalFieldVisitGridSpec : GridSpec<vFieldVisitDetailed>
     {
-        public ProvisionalFieldVisitGridSpec(Person currentPerson, string gridName)
+        public ProvisionalFieldVisitGridSpec(Person currentPerson, string gridName, LinkGenerator linkGenerator)
         {
             ObjectNameSingular = "Field Visit";
             ObjectNamePlural = "Field Visits";
@@ -45,55 +44,56 @@ namespace Neptune.Web.Views.ManagerDashboard
             };
             AddCheckBoxColumn();
             Add("EntityID", x => x.FieldVisitID, 0);
-            Add(string.Empty,
-                x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(FieldVisitModelExtensions.DeleteUrlTemplate.ParameterReplace(x.FieldVisitID),
-                    currentPerson.IsManagerOrAdmin()), 30,
-                DhtmlxGridColumnFilterType.None);
+            //Add(string.Empty,
+            //    x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(FieldVisitModelExtensions.GetDeleteUrl(x.FieldVisitID, linkGenerator),
+            //        currentPerson.IsManagerOrAdmin()), 30,
+            //    DhtmlxGridColumnFilterType.None);
 
-            Add(string.Empty,
-                x =>
-                {
-                    // do this first because if the field visit is verified, fieldvisiteditfeature will fail
-                    if (x.IsFieldVisitVerified || x.FieldVisitStatusID == FieldVisitStatus.Complete.FieldVisitStatusID)
-                    {
-                        return UrlTemplate.MakeHrefString(FieldVisitModelExtensions.DetailUrlTemplate.ParameterReplace(x.FieldVisitID)
-                            , "View", new Dictionary<string, string> { { "class", "gridButton" } });
-                    }
+            //Add(string.Empty,
+            //    x =>
+            //    {
+            //        // do this first because if the field visit is verified, fieldvisiteditfeature will fail
+            //        if (x.IsFieldVisitVerified || x.FieldVisitStatusID == FieldVisitStatus.Complete.FieldVisitStatusID)
+            //        {
+            //            return UrlTemplate.MakeHrefString(FieldVisitModelExtensions.GetDetailUrl(x.FieldVisitID, linkGenerator)
+            //                , "View", new Dictionary<string, string> { { "class", "gridButton" } });
+            //        }
 
-                    return UrlTemplate.MakeHrefString(FieldVisitModelExtensions.WorkflowUrlTemplate.ParameterReplace(x.FieldVisitID)
-                        , "Continue", new Dictionary<string, string> { { "class", "gridButton" } });
-                }, 60,
-                DhtmlxGridColumnFilterType.None);
+            //        return UrlTemplate.MakeHrefString(FieldVisitModelExtensions.GetEditUrl(x.FieldVisitID, linkGenerator)
+            //            , "Continue", new Dictionary<string, string> { { "class", "gridButton" } });
+            //    }, 60,
+            //    DhtmlxGridColumnFilterType.None);
 
-            Add("BMP Name", x => UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPID), x.TreatmentBMPName), 120, DhtmlxGridColumnFilterType.Html);
+            //Add("BMP Name", x => UrlTemplate.MakeHrefString(TreatmentBMPModelExtensions.GetDetailUrl(x.TreatmentBMPID, linkGenerator), x.TreatmentBMPName), 120, DhtmlxGridColumnFilterType.Html);
             Add("Visit Date", x => x.VisitDate, 130, DhtmlxGridColumnFormatType.Date);
-            Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(StormwaterJurisdictionModelExtensions.DetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Performed By", x => UrlTemplate.MakeHrefString(PersonModelExtensions.DetailUrlTemplate.ParameterReplace(x.PerformedByPersonID), x.PerformedByPersonName), 105,
-                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            // todo
+            //Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(StormwaterJurisdictionModelExtensions.DetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            //Add("Performed By", x => UrlTemplate.MakeHrefString(PersonModelExtensions.DetailUrlTemplate.ParameterReplace(x.PerformedByPersonID), x.PerformedByPersonName), 105,
+            //    DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(FieldDefinitionType.FieldVisitStatus.ToGridHeaderString(),
                 x => x.FieldVisitStatusDisplayName, 85,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Field Visit Type", x => x.FieldVisitTypeDisplayName, 125,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
-
-            Add("Initial Assessment?",
-                x => x.TreatmentBMPAssessmentIDInitial.HasValue
-                    ? UrlTemplate.MakeHrefString(TreatmentBMPAssessmentModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPAssessmentIDInitial.Value),
-                        x.IsAssessmentCompleteInitial ? "Complete" : "In Progress")
-                    : new HtmlString("Not Performed"), 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
-            Add("Initial Assessment Score", x => x.AssessmentScoreInitial?.ToString("0.0") ?? "-", 95,
-                DhtmlxGridColumnFilterType.Numeric);
-            Add("Maintenance Occurred?",
-                x => x.MaintenanceRecordID.HasValue
-                    ? UrlTemplate.MakeHrefString(MaintenanceRecordModelExtensions.DetailUrlTemplate.ParameterReplace(x.MaintenanceRecordID.Value), "Performed",
-                        new Dictionary<string, string>())
-                    : new HtmlString("Not Performed"), 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
-            Add("Post-Maintenance Assessment?",
-                x =>
-                    x.TreatmentBMPAssessmentIDPM.HasValue
-                        ? UrlTemplate.MakeHrefString(TreatmentBMPAssessmentModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPAssessmentIDPM.Value),
-                            x.IsAssessmentCompletePM ? "Complete" : "In Progress")
-                        : new HtmlString("Not Performed"), 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+            // todo
+            //Add("Initial Assessment?",
+            //    x => x.TreatmentBMPAssessmentIDInitial.HasValue
+            //        ? UrlTemplate.MakeHrefString(TreatmentBMPAssessmentModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPAssessmentIDInitial.Value),
+            //            x.IsAssessmentCompleteInitial ? "Complete" : "In Progress")
+            //        : new HtmlString("Not Performed"), 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+            //Add("Initial Assessment Score", x => x.AssessmentScoreInitial?.ToString("0.0") ?? "-", 95,
+            //    DhtmlxGridColumnFilterType.Numeric);
+            //Add("Maintenance Occurred?",
+            //    x => x.MaintenanceRecordID.HasValue
+            //        ? UrlTemplate.MakeHrefString(MaintenanceRecordModelExtensions.DetailUrlTemplate.ParameterReplace(x.MaintenanceRecordID.Value), "Performed",
+            //            new Dictionary<string, string>())
+            //        : new HtmlString("Not Performed"), 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+            //Add("Post-Maintenance Assessment?",
+            //    x =>
+            //        x.TreatmentBMPAssessmentIDPM.HasValue
+            //            ? UrlTemplate.MakeHrefString(TreatmentBMPAssessmentModelExtensions.DetailUrlTemplate.ParameterReplace(x.TreatmentBMPAssessmentIDPM.Value),
+            //                x.IsAssessmentCompletePM ? "Complete" : "In Progress")
+            //            : new HtmlString("Not Performed"), 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
             Add("Post-Maintenance Assessment Score", x => x.AssessmentScorePM?.ToString("0.0") ?? "-", 95,
                 DhtmlxGridColumnFilterType.Numeric);
         }

@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Common\Mvc\" />
+    <Folder Include="Views\FieldVisit\" />
     <Folder Include="Views\Home\" />
   </ItemGroup>
 

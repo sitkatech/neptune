@@ -39,7 +39,7 @@ namespace Neptune.EFModels.Entities
 
         public string GetOrganizationDisplayName()
         {
-            return Organization.OrganizationName;
+            return (Organization != null ? Organization.OrganizationName : ViewUtilities.NotFoundString);
         }
     }
 }

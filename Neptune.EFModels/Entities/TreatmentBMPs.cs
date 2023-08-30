@@ -32,7 +32,12 @@ namespace Neptune.EFModels.Entities
 
         public static IQueryable<TreatmentBMP> GetNonPlanningModuleBMPs(NeptuneDbContext dbContext)
         {
-            return dbContext.TreatmentBMPs.AsNoTracking().Include(x => x.TreatmentBMPType)
+            return dbContext.TreatmentBMPs.AsNoTracking()
+                .Include(x => x.TreatmentBMPBenchmarkAndThresholdTreatmentBMPs)
+                .Include(x => x.StormwaterJurisdiction)
+                .Include(x => x.TreatmentBMPType)
+                .ThenInclude(x => x.TreatmentBMPTypeAssessmentObservationTypes)
+                .Include(x => x.TreatmentBMPImages)
                 .Where(x => x.ProjectID == null);
         }
 

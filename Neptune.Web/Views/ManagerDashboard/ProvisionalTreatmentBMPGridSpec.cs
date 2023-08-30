@@ -19,17 +19,15 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Linq;
-using LtInfo.Common;
-using LtInfo.Common.DhtmlWrappers;
-using LtInfo.Common.HtmlHelperExtensions;
-using LtInfo.Common.Views;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
+using Neptune.Web.Common.DhtmlWrappers;
+using Neptune.Web.Common.HtmlHelperExtensions;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.ManagerDashboard
 {
-    public class ProvisionalTreatmentBMPGridSpec : GridSpec<Models.TreatmentBMP>
+    public class ProvisionalTreatmentBMPGridSpec : GridSpec<TreatmentBMP>
     {
         public ProvisionalTreatmentBMPGridSpec(Person currentPerson, string gridName)
         {
@@ -37,9 +35,11 @@ namespace Neptune.Web.Views.ManagerDashboard
             ArbitraryHeaderHtml = new List<string> { DatabaseContextExtensions.GetCheckboxSelectingUrl($"Sitka.{gridName}.grid.checkAll()", "glyphicon-check", "Select All"), DatabaseContextExtensions.GetCheckboxSelectingUrl($"Sitka.{gridName}.grid.uncheckAll()", "glyphicon-unchecked", "Unselect All") };
             AddCheckBoxColumn();
             Add("EntityID", x => x.TreatmentBMPID, 0);
-            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), x.CanDelete(currentPerson), x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
-            Add(string.Empty, x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
-            Add("BMP Name", x => x.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
+            // todo
+            // Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), x.CanDelete(currentPerson), x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
+            //Add(string.Empty, x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
+            // todo
+            //Add("BMP Name", x => x.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
             Add(FieldDefinitionType.TreatmentBMPType.ToGridHeaderString(), x => x.TreatmentBMPType.TreatmentBMPTypeName, 180, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Date of Last BMP Record Verification", x => x.DateOfLastInventoryVerification, 125, DhtmlxGridColumnFormatType.Date);
             Add(FieldDefinitionType.DateOfLastInventoryChange.ToGridHeaderString(), x => x.InventoryLastChangedDate, 120, DhtmlxGridColumnFormatType.Date);

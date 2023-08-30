@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Neptune.Web.Models;
+﻿using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Security
 {
@@ -7,6 +6,8 @@ namespace Neptune.Web.Security
     public class FieldVisitDeleteFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<FieldVisit>
     {
         private readonly NeptuneFeatureWithContextImpl<FieldVisit> _lakeTahoeInfoFeatureWithContextImpl;
+
+        public string FeatureName { get; } // todo
 
         public FieldVisitDeleteFeature()
             : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionManager})

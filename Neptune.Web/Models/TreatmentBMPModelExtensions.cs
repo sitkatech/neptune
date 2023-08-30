@@ -28,16 +28,27 @@ namespace Neptune.Web.Models
 {
     public static class TreatmentBMPModelExtensions
     {
-        //public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildAbsoluteUrlHttpsFromExpression(t => t.Detail(UrlTemplate.Parameter1Int), NeptuneWebConfiguration.CanonicalHostNameRoot));
-        //public static string GetDetailUrl(this TreatmentBMP treatmentBMP)
+        //public static UrlTemplate<int> GetDetailUrlTemplate(LinkGenerator linkGenerator)
         //{
-        //    if (treatmentBMP == null) { return ""; }
-        //    return DetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
+        //    return new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildAbsoluteUrlHttpsFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int),
+        //        NeptuneWebConfiguration.CanonicalHostNameRoot));
         //}
-        //public static string GetDetailUrl(this vMostRecentTreatmentBMPAssessment vMostRecentTreatmentBMPAssessment)
+
+        //public static string GetDetailUrl(this TreatmentBMP treatmentBMP, LinkGenerator linkGenerator)
         //{
-        //    if (vMostRecentTreatmentBMPAssessment == null) { return ""; }
-        //    return DetailUrlTemplate.ParameterReplace(vMostRecentTreatmentBMPAssessment.TreatmentBMPID);
+        //    return treatmentBMP != null ? GetDetailUrl(treatmentBMP.TreatmentBMPID, linkGenerator) : "";
+        //}
+        
+        //public static string GetDetailUrl(this vMostRecentTreatmentBMPAssessment vMostRecentTreatmentBMPAssessment, LinkGenerator linkGenerator)
+        //{
+        //    return vMostRecentTreatmentBMPAssessment != null ? 
+        //        GetDetailUrl(vMostRecentTreatmentBMPAssessment.TreatmentBMPID, linkGenerator) : "";
+        //}
+
+        //public static string GetDetailUrl(int treatmentBMPID, LinkGenerator linkGenerator)
+        //{
+        //    var detailUrlTemplate = GetDetailUrlTemplate(linkGenerator);
+        //    return detailUrlTemplate.ParameterReplace(treatmentBMPID);
         //}
 
         //public static readonly UrlTemplate<int> DetailJurisdictionUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));

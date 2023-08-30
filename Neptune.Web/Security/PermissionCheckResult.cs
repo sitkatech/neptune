@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="INeptuneBaseFeatureWithContext.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="PermissionCheckResult.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,14 +18,26 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using Neptune.Web.Models;
+using Neptune.Common.DesignByContract;
 
 namespace Neptune.Web.Security
 {
-    public interface INeptuneBaseFeatureWithContext<in T>
+    public class PermissionCheckResult
     {
-        PermissionCheckResult HasPermission(Person person, T contextModelObject);
-        void DemandPermission(Person person, T contextModelObject);
-        string FeatureName { get; }
+        public readonly bool HasPermission;
+        public readonly string PermissionDeniedMessage;
+
+        public PermissionCheckResult(string permissionDeniedMessage)
+        {
+            Check.RequireNotNullNotEmptyNotWhitespace(permissionDeniedMessage, "Should have a message on why permission is denied!");
+            PermissionDeniedMessage = permissionDeniedMessage;
+            HasPermission = false;
+        }
+
+        public PermissionCheckResult()
+        {
+            HasPermission = true;
+            PermissionDeniedMessage = string.Empty;
+        }
     }
 }

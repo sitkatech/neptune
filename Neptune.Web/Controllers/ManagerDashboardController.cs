@@ -19,39 +19,43 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Data.Entity;
-using System.Linq;
-using System.Web.Mvc;
-using LtInfo.Common.MvcResults;
-using Neptune.Web.Common;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.ManagerDashboard;
-
+using Index = Neptune.Web.Views.ManagerDashboard.Index;
 
 namespace Neptune.Web.Controllers
 {
-    public class ManagerDashboardController : NeptuneBaseController
+    public class ManagerDashboardController : NeptuneBaseController<ManagerDashboardController>
     {
+        public ManagerDashboardController(NeptuneDbContext dbContext, ILogger<ManagerDashboardController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        {
+        }
+
         [HttpGet]
         [JurisdictionManageFeature]
         public ViewResult Index()
         {
-            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManagerDashboard);
-            var fieldVisitCount = HttpRequestStorage.DatabaseEntities.vFieldVisitDetaileds.GetProvisionalFieldVisits(CurrentPerson).Count;
-            var treatmentBMPsCount = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetProvisionalTreatmentBMPs(CurrentPerson).Count;
-            var bmpDelineationsCount = HttpRequestStorage.DatabaseEntities.Delineations
-                .GetProvisionalBMPDelineations(CurrentPerson).Count;
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, fieldVisitCount, treatmentBMPsCount, bmpDelineationsCount);
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(_dbContext, NeptunePageType.ManagerDashboard);
+            var stormwaterJurisdictionIDs = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(_dbContext);
+            var fieldVisitCount = vFieldVisitDetaileds.GetProvisionalFieldVisits(_dbContext, stormwaterJurisdictionIDs).Count;
+            var treatmentBMPsCount = TreatmentBMPs.GetProvisionalTreatmentBMPs(_dbContext, CurrentPerson).Count;
+            var bmpDelineationsCount = Delineations.GetProvisionalBMPDelineations(_dbContext, CurrentPerson).Count;
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, _linkGenerator, HttpContext, fieldVisitCount, treatmentBMPsCount, bmpDelineationsCount);
             return RazorView<Index, IndexViewData>(viewData);
+
         }
 
         [HttpGet]
         [JurisdictionManageFeature]
         public GridJsonNetJObjectResult<vFieldVisitDetailed> AllFieldVisitsGridJsonData(string gridName)
         {
-            var gridSpec = new ProvisionalFieldVisitGridSpec(CurrentPerson, gridName);
-            var fieldVisits = HttpRequestStorage.DatabaseEntities.vFieldVisitDetaileds.GetProvisionalFieldVisits(CurrentPerson).OrderBy(x => x.TreatmentBMPName).ThenBy(x => x.VisitDate).ToList();
+            var gridSpec = new ProvisionalFieldVisitGridSpec(CurrentPerson, gridName, _linkGenerator);
+            var fieldVisits = FieldVisits.GetProvisionalFieldVisits(_dbContext, CurrentPerson).OrderBy(x => x.TreatmentBMPName).ThenBy(x => x.VisitDate).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vFieldVisitDetailed>(fieldVisits, gridSpec);
             return gridJsonNetJObjectResult;
         }
@@ -60,14 +64,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<TreatmentBMP> ProvisionalTreatmentBMPGridJsonData(string gridName)
         {
             var gridSpec = new ProvisionalTreatmentBMPGridSpec(CurrentPerson, gridName);
-            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
-                .Include(x => x.TreatmentBMPBenchmarkAndThresholds)
-                .Include(x => x.StormwaterJurisdiction)
-                .Include(x => x.TreatmentBMPType)
-                .Include(x => x.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes)
-                .Include(x => x.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Select(y => y.TreatmentBMPAssessmentObservationType))
-                .Include(x => x.TreatmentBMPImages)
-                .GetProvisionalTreatmentBMPs(CurrentPerson);
+            var treatmentBMPs = TreatmentBMPs.GetProvisionalTreatmentBMPs(_dbContext, CurrentPerson);
             return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
         }
 
@@ -75,12 +72,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<Delineation> ProvisionalBMPDelineationsGridJson(string gridName)
         {
             var gridSpec = new ProvisionalBMPDelineationsGridSpec(CurrentPerson , gridName);
-            var bmpDelineations =
-                HttpRequestStorage.DatabaseEntities.Delineations
-                    .Include(x => x.TreatmentBMP)
-                    .Include(x => x.TreatmentBMP.TreatmentBMPType)
-                    .Include(x => x.TreatmentBMP.StormwaterJurisdiction)
-                    .GetProvisionalBMPDelineations(CurrentPerson);
+            var bmpDelineations = Delineations.GetProvisionalBMPDelineations(_dbContext, CurrentPerson);
                 return new GridJsonNetJObjectResult<Delineation>(bmpDelineations, gridSpec);
         }
     }

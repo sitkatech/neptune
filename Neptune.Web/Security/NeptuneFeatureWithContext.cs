@@ -21,6 +21,8 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Neptune.EFModels;
+using Neptune.EFModels.Entities;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
@@ -29,6 +31,7 @@ namespace Neptune.Web.Security
     {
         public IActionFilter ActionFilter;
 
+        // potential todo: does this need to be converted to use RoleEnum?
         protected NeptuneFeatureWithContext(List<Role> grantedRoles) : base(grantedRoles.Select(x => (IRole)x).ToList(), NeptuneArea.OCStormwaterTools)
         {
         }

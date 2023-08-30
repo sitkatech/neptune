@@ -18,9 +18,8 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
-@using LtInfo.Common.DhtmlWrappers
+@using Neptune.Web.Common.DhtmlWrappers
 @inherits Neptune.Web.Views.FieldVisit.Index
 @section JavascriptAndStylesContent
 {
@@ -56,9 +55,9 @@
             <div class="panel-heading panelTitle">
                 Assessment Records
             </div>
-            <div class="panel-body">
+           @* <div class="panel-body">
                 @Html.DhtmlxGrid(ViewDataTyped.TreatmentBMPAssessmentGridSpec, ViewDataTyped.TreatmentBMPAssessmentGridName, ViewDataTyped.TreatmentBMPAssessmentGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
-            </div>
+            </div>*@
         </div>
     </div>
 </div>
@@ -69,9 +68,9 @@
             <div class="panel-heading panelTitle">
                 Maintenance Records
             </div>
-            <div class="panel-body">
+            @*<div class="panel-body">
                 @Html.DhtmlxGrid(ViewDataTyped.MaintenanceRecordGridSpec, ViewDataTyped.MaintenanceRecordGridName, ViewDataTyped.MaintenanceRecordGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
-            </div>
+            </div>*@
         </div>
     </div>
 </div>

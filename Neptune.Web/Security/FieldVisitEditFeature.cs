@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using System.Collections.Generic;
+using Neptune.EFModels.Entities;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
@@ -26,6 +27,8 @@ namespace Neptune.Web.Security
     [SecurityFeatureDescription("Allows conducting and editing Field Visits for a BMP if you are assigned to edit that BMP's jurisdiction")]
     public class FieldVisitEditFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<FieldVisit>
     {
+        public string FeatureName { get; }
+
         private readonly NeptuneFeatureWithContextImpl<FieldVisit> _lakeTahoeInfoFeatureWithContextImpl;
 
         public FieldVisitEditFeature()
