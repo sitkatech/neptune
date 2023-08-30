@@ -22,9 +22,3 @@ version: 0.1.0
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: "1.16.0"
-
-dependencies:
-  - name: rabbitmq
-    version: 8.32.1
-    alias: rabbitmq
-    repository: https://marketplace.azurecr.io/helm/v1/repo
