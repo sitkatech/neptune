@@ -104,6 +104,7 @@ var builder = WebApplication.CreateBuilder(args);
         });
 
     services.AddHttpContextAccessor();
+    services.AddHealthChecks().AddDbContextCheck<NeptuneDbContext>();
 }
 
 
@@ -117,8 +118,7 @@ var app = builder.Build();
         app.UseHsts();
     }
 
-    app.MapGet("/debug/routes", (IEnumerable<EndpointDataSource> endpointSources) =>
-            string.Join("\n", endpointSources.SelectMany(source => source.Endpoints)));
+    // app.MapGet("/debug/routes", (IEnumerable<EndpointDataSource> endpointSources) => string.Join("\n", endpointSources.SelectMany(source => source.Endpoints)));
 
     app.UseHttpsRedirection();
     app.UseStaticFiles();
@@ -131,6 +131,8 @@ var app = builder.Build();
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    app.MapHealthChecks("/healthz");
 
     app.Run();
 }
