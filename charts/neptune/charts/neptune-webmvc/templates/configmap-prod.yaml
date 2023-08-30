@@ -22,7 +22,7 @@ data:
   ModelBasinServiceUrl: "https://www.ocgis.com/arcpub/rest/services/Environmental_Resources/Hydrologic_Response_Unit/MapServer/7/query"
   PrecipitationZoneServiceUrl: "https://www.ocgis.com/arcpub/rest/services/Environmental_Resources/Hydrologic_Response_Unit/MapServer/3/query"
   OCTAPrioritizationServiceUrl: "https://www.ocgis.com/arcpub/rest/services/Environmental_Resources/Hydrologic_Response_Unit/MapServer/8/query"
-  PathToPyqgisTestScript: "PyQgis\TestPyqgisMssql.py"
+  PathToPyqgisTestScript: "PyQgis/TestPyqgisMssql.py"
   PyqgisWorkingDirectory: "PyQgis"
   PathToPyqgisLauncher: "/bin/python-qgis-ltr.bat"
   PathToPyqgisProjData: "/share/proj"
