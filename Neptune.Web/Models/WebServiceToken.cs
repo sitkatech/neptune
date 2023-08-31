@@ -1,8 +1,10 @@
-﻿using System;
-using System.Web.Mvc;
-using LtInfo.Common.DesignByContract;
-using LtInfo.Common.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Neptune.Common.DesignByContract;
+using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
+using Neptune.Web.Common.Models;
+using Neptune.Web.Controllers;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Models
@@ -17,9 +19,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// The Unit Test GUID as a web service token
         /// </summary>
-        public static readonly WebServiceToken WebServiceTokenForUnitTests;
+        public readonly WebServiceToken WebServiceTokenForUnitTests;
 
-        public static readonly WebServiceToken WebServiceTokenForParameterizedReplacements;
+        public readonly WebServiceToken WebServiceTokenForParameterizedReplacements;
 
         /// <summary>
         /// The Unit Test GUID which can be used to make the web service token
@@ -27,12 +29,13 @@ namespace Neptune.Web.Models
         public static readonly Guid WebServiceTokenGuidForUnitTests = new Guid("535C44A1-A76C-40E0-BFF5-5A081BCC305A"); // corresponds to Ray Lee, PersonID = 1
 
         public static readonly Guid WebServiceTokenGuidForParameterizedReplacement = new Guid("535C44A1-A76C-40E0-BFF5-5A081BCC305A");
-        static WebServiceToken()
+
+        public WebServiceToken(NeptuneDbContext dbContext)
         {
             const bool isBeingCalledByStaticConstructor = true;
-            WebServiceTokenForUnitTests = new WebServiceToken(WebServiceTokenGuidForUnitTests.ToString(), isBeingCalledByStaticConstructor);
+            WebServiceTokenForUnitTests = new WebServiceToken(dbContext, WebServiceTokenGuidForUnitTests.ToString(), isBeingCalledByStaticConstructor);
             // this should always be available, but it's also not a real web service token, we only use it for replacements
-            WebServiceTokenForParameterizedReplacements = new WebServiceToken(WebServiceTokenGuidForParameterizedReplacement.ToString(), isBeingCalledByStaticConstructor);
+            WebServiceTokenForParameterizedReplacements = new WebServiceToken(dbContext, WebServiceTokenGuidForParameterizedReplacement.ToString(), isBeingCalledByStaticConstructor);
         }
 
         /// <summary>
@@ -40,13 +43,13 @@ namespace Neptune.Web.Models
         /// </summary>
         private static bool IsValidAsUnitTestToken(Guid tokenGuidToCheck, bool isBeingCalledByStaticConstructor)
         {
-            return (tokenGuidToCheck == WebServiceTokenGuidForUnitTests && (isBeingCalledByStaticConstructor || NeptuneWebConfiguration.NeptuneEnvironment.IsUnitTestWebServiceTokenOkInThisEnvironment));
+            return (tokenGuidToCheck == WebServiceTokenGuidForUnitTests && (isBeingCalledByStaticConstructor /* todo: || NeptuneWebConfiguration.NeptuneEnvironment.IsUnitTestWebServiceTokenOkInThisEnvironment*/));
         }
 
         /// <summary>
         ///Throws an exception if the string <param name="allegedWebServiceToken"/> is not valid as a <see cref="WebServiceToken"/>
         /// </summary>
-        private static Guid DemandValidWebServiceToken(string allegedWebServiceToken, bool isBeingCalledByStaticConstructor)
+        private static Guid DemandValidWebServiceToken(NeptuneDbContext dbContext, string allegedWebServiceToken, bool isBeingCalledByStaticConstructor)
         {
             Check.Require(TryParseGuid(allegedWebServiceToken, out var tokenGuid),
                 $"The provided token {WebServiceTokenModelBinder.WebServiceTokenParameterName} = \"{allegedWebServiceToken}\" is not a GUID.");
@@ -58,7 +61,7 @@ namespace Neptune.Web.Models
 
             Check.Require(tokenGuid != WebServiceTokenGuidForUnitTests, "Code appears to be trying to use the unit test web service token inappropriately, check environments and callers - that GUID is restricted use.");
 
-            Check.RequireNotNull(HttpRequestStorage.DatabaseEntities.People.GetPersonByWebServiceAccessToken(tokenGuid),
+            Check.RequireNotNull(People.GetByWebServiceAccessToken(dbContext, tokenGuid),
                 $"The provided token {WebServiceTokenModelBinder.WebServiceTokenParameterName} = \"{allegedWebServiceToken}\" is not associated with a person.");
             return tokenGuid;
         }
@@ -82,29 +85,28 @@ namespace Neptune.Web.Models
         private readonly Person _person;
         private readonly Guid _tokenGuid;
 
-        public WebServiceToken(string allegedWebServiceToken)
-            : this(allegedWebServiceToken, false)
+        public WebServiceToken(NeptuneDbContext dbContext, string allegedWebServiceToken) : this(dbContext, allegedWebServiceToken, false)
         {
         }
 
-        private WebServiceToken(string allegedWebServiceToken, bool isBeingCalledByStaticConstructor)
+        private WebServiceToken(NeptuneDbContext dbContext, string allegedWebServiceToken, bool isBeingCalledByStaticConstructor)
         {
-            var guidPassedIn = DemandValidWebServiceToken(allegedWebServiceToken, isBeingCalledByStaticConstructor);
+            var guidPassedIn = DemandValidWebServiceToken(dbContext, allegedWebServiceToken, isBeingCalledByStaticConstructor);
             _tokenGuid = guidPassedIn;
 
             if (IsValidAsUnitTestToken(_tokenGuid, isBeingCalledByStaticConstructor))
             {
-                _person = HttpRequestStorage.DatabaseEntities.People.GetPerson(3); // TODO: Laryea's ID; might want to make a system person?
+                _person = People.GetByID(dbContext, 3); // TODO: Laryea's ID; might want to make a system person?
             }
             else
             {
-                _person = HttpRequestStorage.DatabaseEntities.People.GetPersonByWebServiceAccessToken(_tokenGuid);
+                _person = People.GetByWebServiceAccessToken(dbContext, _tokenGuid);
             }
             Check.EnsureNotNull(_person, $"Could not find valid person for WebServiceToken {_tokenGuid}");
         }
 
         /// <summary>
-        /// Returns the <see cref="Neptune.Web.Models.Person.PersonID"/> associated with this <see cref="WebServiceToken"/>.
+        /// Returns the <see cref="EFModels.Entities.Person.PersonID"/> associated with this <see cref="WebServiceToken"/>.
         /// In unit test situation using <see cref="WebServiceTokenGuidForUnitTests"/> that would be Laryea's person ID for now
         /// Might want to introduce a system person at some point.
         /// </summary>
@@ -128,11 +130,13 @@ namespace Neptune.Web.Models
                 // We consider the Unit Test one good if it's in the right environment
                 return;
             }
-            Check.RequireNotNull(_person,
-                $"The provided token {WebServiceTokenModelBinder.WebServiceTokenParameterName} = \"{_tokenGuid}\" is not associated with a person. Cannot check for access to feature \"{feature.FeatureName}\"");
+
+            Check.RequireNotNull(_person, 
+                $"The provided token {WebServiceTokenModelBinder.WebServiceTokenParameterName} = \"{_tokenGuid}\" is not associated with a person. Cannot check for access to the requested feature.");
+            
             var hasPermission = feature.HasPermissionByPerson(_person);
             Check.Require(hasPermission,
-                $"Web service token \"{_tokenGuid}\" is for person \"{_person.GetFullNameFirstLast()}\" PersonID={_person.PersonID}, but that person does not have access to feature \"{feature.FeatureName}\"");
+                $"Web service token \"{_tokenGuid}\" is for person \"{_person.GetFullNameFirstLast()}\" PersonID={_person.PersonID}, but that person does not have access to the requested feature.");
         }
 
         public class WebServiceTokenModelBinder : SitkaModelBinder
@@ -141,7 +145,7 @@ namespace Neptune.Web.Models
             /// Name of the required parameters on the controller actions
             /// </summary>
             public const string WebServiceTokenParameterName = "webServiceToken";
-            public WebServiceTokenModelBinder() : base(s => new WebServiceToken(s)) { }
+            public WebServiceTokenModelBinder(NeptuneDbContext dbContext) : base(s => new WebServiceToken(dbContext, s)) { }
         }
     }
 }

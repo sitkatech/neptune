@@ -20,45 +20,64 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using IModelBinder = Microsoft.AspNetCore.Mvc.ModelBinding.IModelBinder;
+using ModelBindingContext = Microsoft.AspNetCore.Mvc.ModelBinding.ModelBindingContext;
+using ValueProviderResult = Microsoft.AspNetCore.Mvc.ModelBinding.ValueProviderResult;
 
 namespace Neptune.Web.Common.Models
 {
     /// <summary>
-    /// Provides easy way to make <see cref="IModelBinder"/>
+    /// Provides easy way to make <see cref="Microsoft.AspNetCore.Mvc.ModelBinding.IModelBinder"/>
     /// </summary>
-    public abstract class SitkaModelBinder// : IModelBinder
+    public abstract class SitkaModelBinder : IModelBinder
     {
-    //    private readonly Func<string, object> _stringConstructorFunc;
+        private readonly Func<string, object> _stringConstructorFunc;
 
-    //    protected SitkaModelBinder(Func<string, object> stringConstructorFunc)
-    //    {
-    //        _stringConstructorFunc = stringConstructorFunc;
-    //    }
+        protected SitkaModelBinder(Func<string, object> stringConstructorFunc)
+        { 
+            _stringConstructorFunc = stringConstructorFunc;
+        }
 
-    //    public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
-    //    {
-    //        var valueProviderResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
+        public Task BindModelAsync(ModelBindingContext bindingContext)
+        {
+            if (bindingContext == null)
+            {
+                throw new ArgumentNullException(nameof(bindingContext));
+            }
 
-    //        Check.RequireType<string>(valueProviderResult.AttemptedValue, string.Format("Parameter {0} {1} but wrong primitive type.", typeof(object).Name, bindingContext.ModelName));
-    //        var modelState = new ModelState() {Value = valueProviderResult};
-    //        object actualValue = null;
-    //        try
-    //        {
-    //            actualValue = ConstructFromString(valueProviderResult.AttemptedValue);
-    //        }
-    //        catch (FormatException e)
-    //        {
-    //            modelState.Errors.Add(e.Message);
+            // Try to fetch the value of the argument by name
+            var valueProviderResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
 
-    //        }
-    //        bindingContext.ModelState.Add(bindingContext.ModelName, modelState);
+            if (valueProviderResult == ValueProviderResult.None)
+            {
+                return Task.CompletedTask;
+            }
 
-    //        return actualValue;
-    //    }
+            bindingContext.ModelState.SetModelValue(bindingContext.ModelName, valueProviderResult);
+            var value = valueProviderResult.FirstValue;
 
-    //    public object ConstructFromString(string stringValue)
-    //    {
-    //        return ((Func<string, object>)(s => _stringConstructorFunc(s)))(stringValue);
-    //    }
+            // Check if the argument value is null or empty
+            if (string.IsNullOrEmpty(value))
+            {
+                return Task.CompletedTask;
+            }
+
+            try
+            {
+                var model = ConstructFromString(value);
+                bindingContext.Result = ModelBindingResult.Success(model);
+                return Task.CompletedTask;
+            }
+            catch (FormatException e)
+            {
+                bindingContext.ModelState.TryAddModelError(bindingContext.ModelName, e.Message);
+                return Task.CompletedTask;
+            }
+        }
+
+        private object ConstructFromString(string stringValue)
+        {
+            return ((Func<string, object>)(s => _stringConstructorFunc(s)))(stringValue);
+        }
     }
 }

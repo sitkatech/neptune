@@ -53,7 +53,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
                 .ToList().OrderBy(x => x.SortOrder).ThenBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
         }
 
-        public EditAttributesViewData(Person currentPerson, FieldVisit fieldVisit, bool isSubForm, bool missingRequiredAttributes, LinkGenerator linkGenerator, HttpContext httpContext) : base(
+        public EditAttributesViewData(Person currentPerson, EFModels.Entities.FieldVisit fieldVisit, bool isSubForm, bool missingRequiredAttributes, LinkGenerator linkGenerator, HttpContext httpContext) : base(
             currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             IsSubForm = isSubForm;

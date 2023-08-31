@@ -501,7 +501,7 @@ namespace Neptune.Common.DesignByContract
         }
 
 
-        public static void RequireType<T>(object objectRequiringType, string message)
+        public static void RequireType<T>(object? objectRequiringType, string message)
         {
             var fullMessage = $"Expected object of type {typeof(T).Name} but got type {objectRequiringType.GetType().Name}";
             if (!(string.IsNullOrWhiteSpace(message)))

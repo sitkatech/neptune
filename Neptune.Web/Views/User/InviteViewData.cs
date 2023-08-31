@@ -19,8 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using LtInfo.Common.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Views.User

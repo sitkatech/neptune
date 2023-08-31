@@ -18,11 +18,9 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
-@using LtInfo.Common.DhtmlWrappers
 @using Neptune.Web.Common
-@using Neptune.Web.Controllers
+@using Neptune.Web.Common.DhtmlWrappers
 
 @inherits Neptune.Web.Views.ManagerDashboard.Index
 @section JavascriptAndStylesContent
@@ -44,10 +42,10 @@
                 @if (ViewDataTyped.FieldVisitCount > 0)
                 {
                     <p>A list of all Field Visits that are in progress or are complete but not yet verified ("provisional") are shown here. Click the View button to see details of the Field Visit and verify the Field Visit Assessment and Maintenance records. You can also select multiple Field Visit records and verify them in bulk through grid.</p>
-                    <div>
+                    @*<div>
                         @Html.Raw(DhtmlxGridHtmlHelpers.CreateVerifySelectedModalUrlHtml(ViewDataTyped.GridName, new BulkTagModalDialogForm(SitkaRoute<BulkRowController>
                             .BuildUrlFromExpression(x => x.BulkRowFieldVisits(null)), "Verify all Selected Field Visits", "Verify all Selected Field Visits")))
-                    </div>
+                    </div>*@
                     @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
                 }
                 else
@@ -72,10 +70,10 @@
 
                     {
                         <p>A list of all BMPs with unverified inventory data is shown here. Click the View button to see details of an individual BMP and verify the BMP inventory data. You can also select multiple BMP records and verify them in bulk through grid.</p>
-                        <div>
+                        @*<div>
                             @Html.Raw(DhtmlxGridHtmlHelpers.CreateVerifySelectedModalUrlHtml(ViewDataTyped.ProvisionalTreatmentBMPGridName, new BulkTagModalDialogForm(SitkaRoute<BulkRowController>
-                                .BuildUrlFromExpression(x => x.BulkRowTreatmentBMPs(null)), "Verify all Selected BMPs", "Verify all Selected BMPs")))
-                        </div>
+                                .BuildUrlFromExpression(_linkGenerator, x => x.BulkRowTreatmentBMPs(null)), "Verify all Selected BMPs", "Verify all Selected BMPs")))
+                        </div>*@
                         @Html.DhtmlxGrid(ViewDataTyped.ProvisionalTreatmentBMPGridSpec, ViewDataTyped.ProvisionalTreatmentBMPGridName, ViewDataTyped.ProvisionalTreatmentBMPGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
                     }
                     else
@@ -103,10 +101,10 @@
 
                         {
                             <p>A list of all BMPs with unverified delineations are shown here. Click the View button to see delineation of an individual BMP and verify the record. You can also select multiple BMP records and verify them in bulk through grid.</p>
-                            <div>
+                            @*<div>
                                 @Html.Raw(DhtmlxGridHtmlHelpers.CreateVerifySelectedModalUrlHtml(ViewDataTyped.ProvisionalBMPDelineationGridName, new BulkTagModalDialogForm(SitkaRoute<BulkRowController>
                                     .BuildUrlFromExpression(x => x.BulkRowBMPDelineation(null)), "Verify all Selected Delineations", "Verify all Selected Delineations")))
-                            </div>
+                            </div>*@
                             @Html.DhtmlxGrid(ViewDataTyped.ProvisionalBMPDelineationsGridSpec, ViewDataTyped.ProvisionalBMPDelineationGridName, ViewDataTyped.ProvisionalBMPDelineationGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
                         }
                         else

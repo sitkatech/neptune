@@ -22,7 +22,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace LtInfo.Common
+namespace Neptune.Common
 {
     public struct AssemblyVersionInfo
     {

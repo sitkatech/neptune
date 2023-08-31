@@ -23,6 +23,7 @@ using Neptune.Web.Views.Shared;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Views
 {
@@ -140,11 +141,11 @@ namespace Neptune.Web.Views
             programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPTypeController>(_linkGenerator ,c => c.Index()), currentPerson, "Treatment BMP Types", "Group1"));
             programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FundingSourceController>(_linkGenerator, c => c.Index()), currentPerson, "Funding Sources", "Group1"));
 
-            //if (new JurisdictionEditFeature().HasPermissionByPerson(currentPerson))
-            //{
-            //    programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(
-            //        new SitkaRoute<WebServicesController>(c => c.Index()), currentPerson, "Web Services", "Group 2"));
-            //}
+            if (new JurisdictionEditFeature().HasPermissionByPerson(currentPerson))
+            {
+                programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(
+                new SitkaRoute<WebServicesController>(c => c.Index(), SitkaRouteSecurity.SSL, _linkGenerator), currentPerson, "Web Services", "Group 2"));
+            }
 
             return programInfoMenu;
         }
@@ -152,8 +153,7 @@ namespace Neptune.Web.Views
 
         private LtInfoMenuItem BuildDashboardMenu(Person currentPerson)
         {
-            return new LtInfoMenuItem("Dashboard");
-            //return new LtInfoMenuItem(SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()), "Dashboard", currentPerson.IsManagerOrAdmin(), true, null);
+            return new LtInfoMenuItem(SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(_linkGenerator, c => c.Index()), "Dashboard", currentPerson.IsManagerOrAdmin(), true, null);
         }
 
         private LtInfoMenuItem BuildManageMenu(Person currentPerson)

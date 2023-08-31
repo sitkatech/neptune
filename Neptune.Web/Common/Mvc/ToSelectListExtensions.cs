@@ -22,7 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace LtInfo.Common.Mvc
+namespace Neptune.Common.Mvc
 {
     public static class ToSelectListExtensions
     {

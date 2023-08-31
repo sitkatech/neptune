@@ -18,18 +18,24 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
 
 namespace Neptune.Web.Common
 {
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
-    public class ParameterDescriptionAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    public class WebServiceNameAndDescriptionAttribute : Attribute
     {
+        public string Name;
         public string Description;
 
-        public ParameterDescriptionAttribute(string s)
+        public WebServiceNameAndDescriptionAttribute(string name)
         {
-            Description = s;
+            Name = name;
+        }
+
+        public WebServiceNameAndDescriptionAttribute(string name, string description)
+        {
+            Name = name;
+            Description = description;
         }
     }
 }

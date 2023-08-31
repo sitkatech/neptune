@@ -18,18 +18,21 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Collections.Generic;
-using Neptune.Web.Models;
+
+
+using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Security
 {
     [SecurityFeatureDescription("Allows conducting and editing Field Visits for a BMP if you are assigned to edit that BMP's jurisdiction")]
     public class FieldVisitEditFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<FieldVisit>
     {
+        public string FeatureName { get; }
+
         private readonly NeptuneFeatureWithContextImpl<FieldVisit> _lakeTahoeInfoFeatureWithContextImpl;
 
         public FieldVisitEditFeature()
-            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionManager, Role.JurisdictionEditor })
+            : base(new List<RoleEnum> { RoleEnum.SitkaAdmin, RoleEnum.Admin, RoleEnum.JurisdictionManager, RoleEnum.JurisdictionEditor })
         {
             _lakeTahoeInfoFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<FieldVisit>(this);
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;

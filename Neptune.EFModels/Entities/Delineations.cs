@@ -26,7 +26,12 @@ namespace Neptune.EFModels.Entities
     {
         public static List<Delineation> GetProvisionalBMPDelineations(NeptuneDbContext dbContext, Person currentPerson)
         {
-            return dbContext.Delineations.AsNoTracking().Where(x => x.IsVerified == false).ToList().Where(x => x.TreatmentBMP.CanView(currentPerson)).OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+            return dbContext.Delineations.AsNoTracking()
+                .Include(x => x.TreatmentBMP).ThenInclude(x => x.TreatmentBMPType)
+                .Include(x => x.TreatmentBMP).ThenInclude(x => x.StormwaterJurisdiction)
+                .Where(x => x.IsVerified == false).AsEnumerable()
+                .Where(x => x.TreatmentBMP.CanView(currentPerson))
+                .OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
         }
 
         public static void MarkAsVerified(Delineation delineation, Person currentPerson)

@@ -19,16 +19,15 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using LtInfo.Common.DhtmlWrappers;
-using LtInfo.Common.HtmlHelperExtensions;
-using LtInfo.Common.Views;
 using Neptune.Web.Models;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common.DhtmlWrappers;
+using Neptune.Web.Common.HtmlHelperExtensions;
 using Neptune.Web.Security;
-using System.Collections.Generic;
 
 namespace Neptune.Web.Views.ManagerDashboard
 {
-    public class ProvisionalBMPDelineationsGridSpec : GridSpec<Models.Delineation>
+    public class ProvisionalBMPDelineationsGridSpec : GridSpec<Delineation>
     {
         public ProvisionalBMPDelineationsGridSpec(Person currentPerson, string gridName)
         {
@@ -45,11 +44,10 @@ namespace Neptune.Web.Views.ManagerDashboard
             AddCheckBoxColumn();
             Add("EntityID", x => x.DelineationID, 0);
             Add(string.Empty,
-                x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
-                    new DelineationDeleteFeature().HasPermission(currentPerson, x).HasPermission), 20,
+                x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), new DelineationDeleteFeature().HasPermission(currentPerson, x).HasPermission), 20,
                 DhtmlxGridColumnFilterType.None);
             Add(string.Empty,x => x.GetDetailUrlForGrid(), 45, DhtmlxGridColumnFilterType.None);
-            Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
+            //Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html); todo
             Add("BMP Type", x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Delineation Type", x => x.TreatmentBMP.Delineation.DelineationType.DelineationTypeDisplayName,80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Delineation Area (ac)", x => x.TreatmentBMP.Delineation?.GetDelineationArea(), 75);
