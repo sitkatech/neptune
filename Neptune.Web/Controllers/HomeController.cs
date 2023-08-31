@@ -42,6 +42,7 @@ namespace Neptune.Web.Controllers
         //    return ExportGridToExcelImpl(gridName, printFooter);
         //}
 
+        [Route("/")] // Default Route
         [HttpGet]
         public ViewResult Index()
         {
