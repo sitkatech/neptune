@@ -95,42 +95,42 @@ namespace Neptune.Web.Views.WebServices
                 new (MethodNameFromExpression(c =>
                         c.TreatmentBMPAttributeSummary(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.TreatmentBMPAttributeSummary(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
+                        c.TreatmentBMPAttributeSummary(webServiceToken.WebServiceTokenForParameterizedReplacements), SitkaRouteSecurity.SSL, linkGenerator).BuildUrlFromExpression()
                 ),
                 new (MethodNameFromExpression(c =>
                         c.WaterQualityManagementPlanAttributeSummary(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.WaterQualityManagementPlanAttributeSummary(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
+                        c.WaterQualityManagementPlanAttributeSummary(webServiceToken.WebServiceTokenForParameterizedReplacements), SitkaRouteSecurity.SSL, linkGenerator).BuildUrlFromExpression()
                 ),
                 new (MethodNameFromExpression(c =>
                         c.LandUseStatistics(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.LandUseStatistics(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
+                        c.LandUseStatistics(webServiceToken.WebServiceTokenForParameterizedReplacements), SitkaRouteSecurity.SSL, linkGenerator).BuildUrlFromExpression()
                 ),
                 new (MethodNameFromExpression(c =>
                         c.TreatmentBMPParameterizationSummary(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.TreatmentBMPParameterizationSummary(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
+                        c.TreatmentBMPParameterizationSummary(webServiceToken.WebServiceTokenForParameterizedReplacements), SitkaRouteSecurity.SSL, linkGenerator).BuildUrlFromExpression()
                 ),
                 new (MethodNameFromExpression(c =>
                         c.CentralizedBMPLoadGeneratingUnitMapping(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.CentralizedBMPLoadGeneratingUnitMapping(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
+                        c.CentralizedBMPLoadGeneratingUnitMapping(webServiceToken.WebServiceTokenForParameterizedReplacements), SitkaRouteSecurity.SSL, linkGenerator).BuildUrlFromExpression()
                 ),
                 new (MethodNameFromExpression(c =>
                         c.ModelResults(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.ModelResults(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
+                        c.ModelResults(webServiceToken.WebServiceTokenForParameterizedReplacements), SitkaRouteSecurity.SSL, linkGenerator).BuildUrlFromExpression()
                 ),
                 new (MethodNameFromExpression(c =>
                         c.BaselineModelResults(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.BaselineModelResults(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
+                        c.BaselineModelResults(webServiceToken.WebServiceTokenForParameterizedReplacements), SitkaRouteSecurity.SSL, linkGenerator).BuildUrlFromExpression()
                 ),
                 new (MethodNameFromExpression(c =>
                         c.WaterQualityManagementPlanOAndMVerifications(webServiceToken.WebServiceTokenForParameterizedReplacements)),
                     new SitkaRoute<PowerBIController>(c =>
-                        c.WaterQualityManagementPlanOAndMVerifications(webServiceToken.WebServiceTokenForParameterizedReplacements), linkGenerator).BuildUrlFromExpression()
+                        c.WaterQualityManagementPlanOAndMVerifications(webServiceToken.WebServiceTokenForParameterizedReplacements), SitkaRouteSecurity.SSL, linkGenerator).BuildUrlFromExpression()
                 ),
             };
             return webServiceRouteMap;

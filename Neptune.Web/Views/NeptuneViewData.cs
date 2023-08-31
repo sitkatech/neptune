@@ -144,7 +144,7 @@ namespace Neptune.Web.Views
             if (new JurisdictionEditFeature().HasPermissionByPerson(currentPerson))
             {
                 programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(
-                new SitkaRoute<WebServicesController>(c => c.Index(), _linkGenerator), currentPerson, "Web Services", "Group 2"));
+                new SitkaRoute<WebServicesController>(c => c.Index(), SitkaRouteSecurity.SSL, _linkGenerator), currentPerson, "Web Services", "Group 2"));
             }
 
             return programInfoMenu;

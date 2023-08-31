@@ -27,7 +27,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.ManagerDashboard
 {
-    public class ProvisionalTreatmentBMPGridSpec : GridSpec<TreatmentBMP>
+    public class ProvisionalTreatmentBMPGridSpec : GridSpec<EFModels.Entities.TreatmentBMP>
     {
         public ProvisionalTreatmentBMPGridSpec(Person currentPerson, string gridName)
         {
