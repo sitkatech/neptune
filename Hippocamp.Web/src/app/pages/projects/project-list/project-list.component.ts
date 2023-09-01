@@ -15,6 +15,7 @@ import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text
 import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
 import { CustomDropdownFilterComponent } from 'src/app/shared/components/custom-dropdown-filter/custom-dropdown-filter.component';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -215,5 +216,13 @@ export class ProjectListComponent implements OnInit {
     }, (() => {
       this.alertService.pushAlert(new Alert(`There was an error while downloading the file. Please refresh the page and try again.`, AlertContext.Danger));
     }))
+  }
+
+  public downloadTreatmentBMPDelineationShapefile(){
+    return environment.geoserverMapServiceUrl + "/ows?service=WFS&version=2.0&request=GetFeature&typeName=OCStormwater:TreatmentBMPDelineation&outputFormat=shape-zip&SrsName=EPSG:4326";
+  }
+
+  public downloadTreatmentBMPLocationPointShapefile(){
+    return environment.geoserverMapServiceUrl + "/ows?service=WFS&version=2.0&request=GetFeature&typeName=OCStormwater:TreatmentBMPPointLocation&outputFormat=shape-zip&SrsName=EPSG:4326";
   }
 }

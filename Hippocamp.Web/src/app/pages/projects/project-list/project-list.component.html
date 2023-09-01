@@ -30,7 +30,9 @@
                     <a class="dropdown-item" (click)="exportToCsv()">Project List</a>
                     <a class="dropdown-item" (click)="downloadProjectModelResults()">Project List with Model Results</a>
                     <a class="dropdown-item" (click)="downloadTreatmentBMPModelResults()">Treatment BMP List with Model Results</a>
-                  </div>
+                    <a class="dropdown-item" [href]="downloadTreatmentBMPDelineationShapefile()">Treatment BMP Delineation Shapefile</a>
+                    <a class="dropdown-item" [href]="downloadTreatmentBMPLocationPointShapefile()">Treatment BMP Location Points Shapefile</a>
+                </div>
             </div>
         </div>
     </div>
