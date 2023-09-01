@@ -184,6 +184,8 @@ namespace Hippocamp.EFModels.Entities
         public virtual DbSet<vGeoServerTransectLineExport> vGeoServerTransectLineExports { get; set; }
         public virtual DbSet<vGeoServerTrashGeneratingUnit> vGeoServerTrashGeneratingUnits { get; set; }
         public virtual DbSet<vGeoServerTrashGeneratingUnitLoad> vGeoServerTrashGeneratingUnitLoads { get; set; }
+        public virtual DbSet<vGeoServerTreatmentBMPDelineation> vGeoServerTreatmentBMPDelineations { get; set; }
+        public virtual DbSet<vGeoServerTreatmentBMPPointLocation> vGeoServerTreatmentBMPPointLocations { get; set; }
         public virtual DbSet<vGeoServerWaterQualityManagementPlan> vGeoServerWaterQualityManagementPlans { get; set; }
         public virtual DbSet<vGeoServerWatershed> vGeoServerWatersheds { get; set; }
         public virtual DbSet<vModelingResultUnitConversion> vModelingResultUnitConversions { get; set; }
@@ -1790,6 +1792,18 @@ namespace Hippocamp.EFModels.Entities
             modelBuilder.Entity<vGeoServerTrashGeneratingUnitLoad>(entity =>
             {
                 entity.ToView("vGeoServerTrashGeneratingUnitLoad");
+            });
+
+            modelBuilder.Entity<vGeoServerTreatmentBMPDelineation>(entity =>
+            {
+                entity.ToView("vGeoServerTreatmentBMPDelineation");
+            });
+
+            modelBuilder.Entity<vGeoServerTreatmentBMPPointLocation>(entity =>
+            {
+                entity.ToView("vGeoServerTreatmentBMPPointLocation");
+
+                entity.Property(e => e.PrimaryKey).ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<vGeoServerWaterQualityManagementPlan>(entity =>
