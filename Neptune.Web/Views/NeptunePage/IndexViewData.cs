@@ -18,35 +18,34 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using Neptune.Web.Controllers;
-using Neptune.Web.Models;
-using Neptune.Web.Security;
-using LtInfo.Common;
+
+using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
+using Neptune.Web.Controllers;
+using Neptune.Web.Security;
 
-namespace Neptune.Web.Views.NeptunePage
+namespace Neptune.Web.Views.NeptunePage;
+
+public class IndexViewData : NeptuneViewData
 {
-    public class IndexViewData : NeptuneViewData
+    public readonly NeptunePageGridSpec GridSpec;
+    public readonly string GridName;
+    public readonly string GridDataUrl;
+    public readonly string NeptunePageUrl;
+
+    public IndexViewData(Person currentPerson, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, null, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
     {
-        public readonly NeptunePageGridSpec GridSpec;
-        public readonly string GridName;
-        public readonly string GridDataUrl;
-        public readonly string NeptunePageUrl;
+        EntityName = "Page Content";
+        PageTitle = "Manage Page Content";
 
-        public IndexViewData(Person currentPerson) : base(currentPerson, null, NeptuneArea.OCStormwaterTools)
+        GridSpec = new NeptunePageGridSpec(new NeptunePageViewListFeature().HasPermissionByPerson(currentPerson), linkGenerator)
         {
-            EntityName = "Page Content";
-            PageTitle = "Manage Page Content";
-
-            GridSpec = new NeptunePageGridSpec(new NeptunePageViewListFeature().HasPermissionByPerson(currentPerson))
-            {
-                ObjectNameSingular = "Page",
-                ObjectNamePlural = "Pages",
-                SaveFiltersInCookie = true
-            };
-            GridName = "neptunePagesGrid";
-            GridDataUrl = SitkaRoute<NeptunePageController>.BuildUrlFromExpression(tc => tc.IndexGridJsonData());
-            NeptunePageUrl = SitkaRoute<NeptunePageController>.BuildUrlFromExpression(x => x.NeptunePageDetails(UrlTemplate.Parameter1Int));
-        }
+            ObjectNameSingular = "Page",
+            ObjectNamePlural = "Pages",
+            SaveFiltersInCookie = true
+        };
+        GridName = "neptunePagesGrid";
+        GridDataUrl = SitkaRoute<NeptunePageController>.BuildUrlFromExpression(linkGenerator, tc => tc.IndexGridJsonData());
+        NeptunePageUrl = SitkaRoute<NeptunePageController>.BuildUrlFromExpression(linkGenerator, x => x.NeptunePageDetails(UrlTemplate.Parameter1Int));
     }
 }

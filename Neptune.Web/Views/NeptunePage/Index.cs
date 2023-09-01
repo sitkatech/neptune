@@ -18,9 +18,11 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-namespace Neptune.Web.Views.NeptunePage
+
+using Neptune.Web.Common.Mvc;
+
+namespace Neptune.Web.Views.NeptunePage;
+
+public abstract class Index : TypedWebViewPage<IndexViewData>
 {
-    public abstract class Index : LtInfo.Common.Mvc.TypedWebViewPage<IndexViewData>
-    {
-    }
 }

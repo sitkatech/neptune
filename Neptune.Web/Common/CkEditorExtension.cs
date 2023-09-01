@@ -18,15 +18,15 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Mvc.Html;
+using System.Text;
+using System.Text.Encodings.Web;
 using Neptune.Web.Controllers;
-using LtInfo.Common;
-using LtInfo.Common.Models;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Common
 {
@@ -58,11 +58,12 @@ namespace Neptune.Web.Common
         public static HtmlString CkEditorFor<TModel, TValue>(this HtmlHelper<TModel> helper,
             Expression<Func<TModel, TValue>> expression,
             CkEditorToolbar ckEditorToolbarMode,
+            LinkGenerator linkGenerator,
             bool editable,
             int neptunePageID,
             int? height) where TModel : FormViewModel
         {
-            var filebrowserImageUploadUrl = SitkaRoute<FileResourceController>.BuildUrlFromExpression(c => c.CkEditorUploadFileResource(neptunePageID, null));
+            var filebrowserImageUploadUrl = SitkaRoute<FileResourceController>.BuildUrlFromExpression(linkGenerator, c => c.CkEditorUploadFileResource(neptunePageID));
             return CkEditorFor(helper, expression, ckEditorToolbarMode, editable, false, filebrowserImageUploadUrl, height);
         }
         
@@ -74,21 +75,22 @@ namespace Neptune.Web.Common
             string filebrowserImageUploadUrl,
             int? height) where TModel : FormViewModel
         {
-            var metadata = ModelMetadata.FromLambdaExpression(expression, helper.ViewData);
-            var modelValue = (HtmlString) metadata.Model;
-            if (!editable)
-            {
-                return modelValue;
-            }
+            //var metadata = FromLambdaExpression(expression, helper.ViewData);
+            //var modelValue = (HtmlString) metadata.Model;
+            //if (!editable)
+            //{
+            //    return modelValue;
+            //}
             var modelID = helper.IdFor(expression).ToString();
 
-            var textAreaID = string.Format("CkEditorFor{0}", modelID);
+            var textAreaID = $"CkEditorFor{modelID}";
 
             var htmlAttributes = new Dictionary<string, object>() {{"id", textAreaID}, {"contentEditable", "true"}, {"data-cke-editor-id", modelID}};
 
             var generateJavascript = GenerateJavascript(modelID, ckEditorToolbarMode, filebrowserImageUploadUrl, allowAllContent, height);
             var textAreaHtmlString = helper.TextAreaFor(expression, htmlAttributes);
-            return MvcHtmlString.Create(string.Format(@"{0}{1}", textAreaHtmlString, generateJavascript));
+            //return MvcHtmlString.Create(string.Format(@"{0}{1}", textAreaHtmlString, generateJavascript));
+            return new HtmlString($@"{textAreaHtmlString}{generateJavascript}");
         }
 
         public static string GenerateJavascript(string modelID, CkEditorToolbar ckEditorToolbarMode, string filebrowserImageUploadUrl, bool allowAllContent, int? height)
@@ -97,33 +99,40 @@ namespace Neptune.Web.Common
             tag.Attributes.Add("type", "text/javascript");
             tag.Attributes.Add("language", "javascript");
             var ckEditorToolbarJavascript = GenerateToolbarSettings(ckEditorToolbarMode);
-            var ckEditorID = String.Format("CkEditorFor{0}", modelID);
+            var ckEditorID = $"CkEditorFor{modelID}";
 
-            var wireUpJsForImageUploader = String.Empty;
+            var wireUpJsForImageUploader = string.Empty;
             if (ckEditorToolbarJavascript.HasImageToolbarButton && !string.IsNullOrWhiteSpace(filebrowserImageUploadUrl))
             {
-                wireUpJsForImageUploader = String.Format("\r\n           , filebrowserImageUploadUrl: {0}", filebrowserImageUploadUrl.ToJS());
+                wireUpJsForImageUploader = $"\r\n           , filebrowserImageUploadUrl: {filebrowserImageUploadUrl.ToJS()}";
             }
 
             var allowedContentString = allowAllContent ? "\r\n           , allowedContent: true" : string.Empty;
 
-            var heightString = height.HasValue ? string.Format("\r\n           , height: {0}", height.Value) : string.Empty;
+            var heightString = height.HasValue ? $"\r\n           , height: {height.Value}" : string.Empty;
 
-            tag.InnerHtml = String.Format(@"
+            tag.InnerHtml.Append( $@"
     // <![CDATA[
     jQuery(document).ready(function ()
     {{
-        CKEDITOR.replace(""{0}"", {{
+        CKEDITOR.replace(""{ckEditorID}"", {{
            toolbar:
            [
-{1}
-           ]{2}{3}{4}
+{ckEditorToolbarJavascript.JavascriptForToolbar}
+           ]{allowedContentString}{wireUpJsForImageUploader}{heightString}
         }});
     }});
     // ]]>
-", ckEditorID, ckEditorToolbarJavascript.JavascriptForToolbar, allowedContentString, wireUpJsForImageUploader, heightString);
+");
 
-            return tag.ToString(TagRenderMode.Normal);
+            StringBuilder result = new StringBuilder();
+            using (var writer = new StringWriter())
+            {
+                tag.WriteTo(writer, HtmlEncoder.Default);
+                result.Append(writer);
+            }
+
+            return result.ToString();
         }
 
         private class CkEditorToolbarJavascript

@@ -19,8 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Views.Shared;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Views.Shared;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Security;
@@ -36,7 +36,7 @@ namespace Neptune.Web.Views
         public string EntityUrl { get; set; }
         public string SubEntityName { get; set; }
         public string SubEntityUrl { get; set; }
-        public NeptunePage NeptunePage { get; }
+        public EFModels.Entities.NeptunePage NeptunePage { get; }
         public Person CurrentPerson { get; }
         public string? NeptuneHomeUrl { get; }
         public string? LogInUrl { get; }
@@ -59,7 +59,7 @@ namespace Neptune.Web.Views
         /// <summary>
         /// Call for page with associated NeptunePage
         /// </summary>
-        protected NeptuneViewData(Person currentPerson, NeptunePage neptunePage, bool isHomePage,
+        protected NeptuneViewData(Person currentPerson, EFModels.Entities.NeptunePage neptunePage, bool isHomePage,
             NeptuneArea neptuneArea, LinkGenerator linkGenerator, HttpContext httpContext)
         {
             NeptunePage = neptunePage;
@@ -82,7 +82,7 @@ namespace Neptune.Web.Views
             ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson) : null;
         }
 
-        protected NeptuneViewData(Person currentPerson, NeptunePage neptunePage, NeptuneArea neptuneArea, LinkGenerator linkGenerator, HttpContext httpContext) : this(currentPerson,
+        protected NeptuneViewData(Person currentPerson, EFModels.Entities.NeptunePage neptunePage, NeptuneArea neptuneArea, LinkGenerator linkGenerator, HttpContext httpContext) : this(currentPerson,
             neptunePage, false, neptuneArea, linkGenerator, httpContext)
         {
 

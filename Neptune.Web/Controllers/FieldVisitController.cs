@@ -37,7 +37,7 @@ namespace Neptune.Web.Controllers
         [FieldVisitViewFeature]
         public ViewResult Index()
         {
-            var neptunePage = NeptunePage.GetNeptunePageByPageType(_dbContext, NeptunePageType.FieldRecords);
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.FieldRecords);
             var maintenanceAttributeTypes =
                 _dbContext.CustomAttributeTypes.Where(x => x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList();
             var viewData = new IndexViewData(CurrentPerson, neptunePage, maintenanceAttributeTypes, _dbContext.TreatmentBMPAssessmentObservationTypes, _linkGenerator, HttpContext);

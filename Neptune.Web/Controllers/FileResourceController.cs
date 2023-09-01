@@ -148,17 +148,17 @@ namespace Neptune.Web.Controllers
             return new NotFoundResult();
         }
 
-        ///// <summary>
-        ///// Dummy fake HTTP "GET" for <see cref="CkEditorUploadFileResource(NeptunePagePrimaryKey, CkEditorImageUploadViewModel)"/>
-        ///// </summary>
-        ///// <returns></returns>
-        ////[CrossAreaRoute]
-        //[HttpGet]
-        //[NeptunePageManageFeature]
-        //public ContentResult CkEditorUploadFileResource(NeptunePagePrimaryKey neptunePagePrimaryKey)
-        //{
-        //    return Content(String.Empty);
-        //}
+        /// <summary>
+        /// Dummy fake HTTP "GET" for <see cref="CkEditorUploadFileResource(NeptunePagePrimaryKey, CkEditorImageUploadViewModel)"/>
+        /// </summary>
+        /// <returns></returns>
+        //[CrossAreaRoute]
+        [HttpGet]
+        [NeptunePageManageFeature]
+        public ContentResult CkEditorUploadFileResource(NeptunePagePrimaryKey neptunePagePrimaryKey)
+        {
+            return Content(String.Empty);
+        }
 
         ////[CrossAreaRoute]
         //[HttpPost]
@@ -173,71 +173,71 @@ namespace Neptune.Web.Controllers
         //    return Content(viewModel.GetCkEditorJavascriptContentToReturn(fileResource));
         //}
 
-//        /// <summary>
-//        /// Dummy fake HTTP "GET" for <see cref="CkEditorUploadFileResource(NeptunePagePrimaryKey, CkEditorImageUploadViewModel)"/>
-//        /// </summary>
-//        /// <returns></returns>
-//        //[CrossAreaRoute]
-//        [HttpGet]
-//        [NeptunePageManageFeature]
-//        public ContentResult CkEditorUploadFileResourceForNeptunePage(NeptunePagePrimaryKey neptunePagePrimaryKey)
-//        {
-//            return Content(String.Empty);
-//        }
+        //        /// <summary>
+        //        /// Dummy fake HTTP "GET" for <see cref="CkEditorUploadFileResource(NeptunePagePrimaryKey, CkEditorImageUploadViewModel)"/>
+        //        /// </summary>
+        //        /// <returns></returns>
+        //        //[CrossAreaRoute]
+        //        [HttpGet]
+        //        [NeptunePageManageFeature]
+        //        public ContentResult CkEditorUploadFileResourceForNeptunePage(NeptunePagePrimaryKey neptunePagePrimaryKey)
+        //        {
+        //            return Content(String.Empty);
+        //        }
 
 
-//        //[CrossAreaRoute]
-//        [HttpPost]
-//        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-//        [NeptunePageManageFeature]
-//        public ContentResult CkEditorUploadFileResourceForNeptunePage(NeptunePagePrimaryKey neptunePagePrimaryKey, CkEditorImageUploadViewModel viewModel)
-//        {
-//            var fileResource = FileResource.CreateNewFromHttpPostedFileAndSave(viewModel.upload, CurrentPerson);
-//            var neptunePage = neptunePagePrimaryKey.EntityObject;
-//            var ppImage = new NeptunePageImage(neptunePage, fileResource);
-//            _dbContext.NeptunePageImages.Add(ppImage);
-//            return Content(viewModel.GetCkEditorJavascriptContentToReturn(fileResource));
-//        }
+        //        //[CrossAreaRoute]
+        //        [HttpPost]
+        //        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        //        [NeptunePageManageFeature]
+        //        public ContentResult CkEditorUploadFileResourceForNeptunePage(NeptunePagePrimaryKey neptunePagePrimaryKey, CkEditorImageUploadViewModel viewModel)
+        //        {
+        //            var fileResource = FileResource.CreateNewFromHttpPostedFileAndSave(viewModel.upload, CurrentPerson);
+        //            var neptunePage = neptunePagePrimaryKey.EntityObject;
+        //            var ppImage = new NeptunePageImage(neptunePage, fileResource);
+        //            _dbContext.NeptunePageImages.Add(ppImage);
+        //            return Content(viewModel.GetCkEditorJavascriptContentToReturn(fileResource));
+        //        }
 
-//        /// <summary>
-//        /// Dummy fake HTTP "GET" for <see cref="CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionTypePrimaryKey, CkEditorImageUploadViewModel)"/>
-//        /// </summary>
-//        /// <returns></returns>
-//        //[CrossAreaRoute]
-//        [HttpGet]
-//        [FieldDefinitionManageFeature]
-//        public ContentResult CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey)
-//        {
-//            return Content(String.Empty);
-//        }
+        //        /// <summary>
+        //        /// Dummy fake HTTP "GET" for <see cref="CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionTypePrimaryKey, CkEditorImageUploadViewModel)"/>
+        //        /// </summary>
+        //        /// <returns></returns>
+        //        //[CrossAreaRoute]
+        //        [HttpGet]
+        //        [FieldDefinitionManageFeature]
+        //        public ContentResult CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey)
+        //        {
+        //            return Content(String.Empty);
+        //        }
 
-//        //[CrossAreaRoute]
-//        [HttpPost]
-//        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-//        [FieldDefinitionManageFeature]
-//        public ContentResult CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey, CkEditorImageUploadViewModel viewModel)
-//        {
-//            var fileResource = FileResource.CreateNewFromHttpPostedFileAndSave(viewModel.upload, CurrentPerson);
-//            return Content(viewModel.GetCkEditorJavascriptContentToReturn(fileResource));
-//        }
+        //        //[CrossAreaRoute]
+        //        [HttpPost]
+        //        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        //        [FieldDefinitionManageFeature]
+        //        public ContentResult CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey, CkEditorImageUploadViewModel viewModel)
+        //        {
+        //            var fileResource = FileResource.CreateNewFromHttpPostedFileAndSave(viewModel.upload, CurrentPerson);
+        //            return Content(viewModel.GetCkEditorJavascriptContentToReturn(fileResource));
+        //        }
 
-//        public class CkEditorImageUploadViewModel
-//        {
-//            // ReSharper disable InconsistentNaming
-//            public string CKEditorFuncNum { get; set; }
-//            public HttpPostedFileBase upload { get; set; }
-//            // ReSharper restore InconsistentNaming
+        //        public class CkEditorImageUploadViewModel
+        //        {
+        //            // ReSharper disable InconsistentNaming
+        //            public string CKEditorFuncNum { get; set; }
+        //            public HttpPostedFileBase upload { get; set; }
+        //            // ReSharper restore InconsistentNaming
 
-//            public string GetCkEditorJavascriptContentToReturn(FileResource fileResource)
-//            {
-//                var ckEditorJavascriptContentToReturn = $@"
-//<script language=""javascript"" type=""text/javascript"">
-//    // <![CDATA[
-//    window.parent.CKEDITOR.tools.callFunction({CKEditorFuncNum}, {fileResource.GetFileResourceUrl().ToJS()});
-//    // ]]>
-//</script>";
-//                return ckEditorJavascriptContentToReturn;
-//            }
-//        }
+        //            public string GetCkEditorJavascriptContentToReturn(FileResource fileResource)
+        //            {
+        //                var ckEditorJavascriptContentToReturn = $@"
+        //<script language=""javascript"" type=""text/javascript"">
+        //    // <![CDATA[
+        //    window.parent.CKEDITOR.tools.callFunction({CKEditorFuncNum}, {fileResource.GetFileResourceUrl().ToJS()});
+        //    // ]]>
+        //</script>";
+        //                return ckEditorJavascriptContentToReturn;
+        //            }
+        //        }
     }
 }

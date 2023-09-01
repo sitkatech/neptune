@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
         public EditViewData(Person currentPerson,
             IEnumerable<TreatmentBMPTypeAssessmentObservationType> observationTypes, string submitUrl,
-            NeptunePage instructionsNeptunePage, EFModels.Entities.TreatmentBMPType treatmentBMPType,
+            EFModels.Entities.NeptunePage instructionsNeptunePage, EFModels.Entities.TreatmentBMPType treatmentBMPType,
             IEnumerable<TreatmentBMPTypeCustomAttributeType> customAttributeTypes,
             IEnumerable<TreatmentBMPAssessmentObservationType> allObservationTypes,
             IEnumerable<CustomAttributeType> allCustomAttributeTypes, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)

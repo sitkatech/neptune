@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.ManagerDashboard
         public string DelineationIndexUrl { get; }
         public bool UserCanViewBMPDelineations { get; }
 
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage, LinkGenerator linkGenerator, HttpContext httpContext, int fieldVisitCount, int treatmentBMPsCount, int bmpDelineationsCount)
+        public IndexViewData(Person currentPerson, EFModels.Entities.NeptunePage neptunePage, LinkGenerator linkGenerator, HttpContext httpContext, int fieldVisitCount, int treatmentBMPsCount, int bmpDelineationsCount)
             : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             PageTitle = "Manager Dashboard";

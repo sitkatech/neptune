@@ -18,19 +18,19 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
 using Neptune.Web.Common;
 
-namespace Neptune.Web.Views.NeptunePage
-{
-    public class EditViewData : NeptuneUserControlViewData
-    {
-        public readonly CkEditorExtension.CkEditorToolbar CkEditorToolbar;
-        public readonly string FileBrowserImageUploadUrl;
+namespace Neptune.Web.Views.NeptunePage;
 
-        public EditViewData(CkEditorExtension.CkEditorToolbar ckEditorToolbar, string fileBrowserImageUploadUrl)
-        {
-            CkEditorToolbar = ckEditorToolbar;
-            FileBrowserImageUploadUrl = fileBrowserImageUploadUrl;
-        }
+public class EditViewData : NeptuneUserControlViewData
+{
+    public readonly CkEditorExtension.CkEditorToolbar CkEditorToolbar;
+    public readonly string FileBrowserImageUploadUrl;
+
+    public EditViewData(CkEditorExtension.CkEditorToolbar ckEditorToolbar, string fileBrowserImageUploadUrl)
+    {
+        CkEditorToolbar = ckEditorToolbar;
+        FileBrowserImageUploadUrl = fileBrowserImageUploadUrl;
     }
 }

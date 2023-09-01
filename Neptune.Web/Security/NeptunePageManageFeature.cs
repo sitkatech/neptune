@@ -18,8 +18,7 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Collections.Generic;
-using Neptune.Web.Models;
+using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Security
 {
@@ -29,7 +28,7 @@ namespace Neptune.Web.Security
         private readonly NeptuneFeatureWithContextImpl<NeptunePage> _neptuneFeatureWithContextImpl;
 
         public NeptunePageManageFeature()
-            : base(new List<Role>{Role.Admin, Role.SitkaAdmin})
+            : base(new List<RoleEnum>{RoleEnum.Admin, RoleEnum.SitkaAdmin})
         {
             _neptuneFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<NeptunePage>(this);
             ActionFilter = _neptuneFeatureWithContextImpl;

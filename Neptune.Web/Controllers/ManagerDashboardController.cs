@@ -40,7 +40,7 @@ namespace Neptune.Web.Controllers
         [JurisdictionManageFeature]
         public ViewResult Index()
         {
-            var neptunePage = NeptunePage.GetNeptunePageByPageType(_dbContext, NeptunePageType.ManagerDashboard);
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.ManagerDashboard);
             var stormwaterJurisdictionIDs = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(_dbContext);
             var fieldVisitCount = vFieldVisitDetaileds.GetProvisionalFieldVisits(_dbContext, stormwaterJurisdictionIDs).Count;
             var treatmentBMPsCount = TreatmentBMPs.GetProvisionalTreatmentBMPs(_dbContext, CurrentPerson).Count;

@@ -18,32 +18,32 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
 using System.ComponentModel;
-using System.Web;
-using LtInfo.Common.Models;
+using Microsoft.AspNetCore.Html;
+using Neptune.Web.Common.Models;
 
-namespace Neptune.Web.Views.NeptunePage
+namespace Neptune.Web.Views.NeptunePage;
+
+public class EditViewModel : FormViewModel
 {
-    public class EditViewModel : FormViewModel
+    [DisplayName("Page Content")]
+    public HtmlString NeptunePageContentHtmlString { get; set; }
+
+    /// <summary>
+    /// Needed by model binder
+    /// </summary>
+    public EditViewModel()
     {
-        [DisplayName("Page Content")]
-        public HtmlString NeptunePageContentHtmlString { get; set; }
-
-        /// <summary>
-        /// Needed by model binder
-        /// </summary>
-        public EditViewModel()
-        {
-        }
+    }
         
-        public EditViewModel(Models.NeptunePage neptunePage)
-        {
-            NeptunePageContentHtmlString = neptunePage != null ? neptunePage.NeptunePageContentHtmlString : null;
-        }
+    public EditViewModel(EFModels.Entities.NeptunePage neptunePage)
+    {
+        NeptunePageContentHtmlString = neptunePage != null ? neptunePage.NeptunePageContentHtmlString : null;
+    }
 
-        public void UpdateModel(Models.NeptunePage neptunePage)
-        {
-            neptunePage.NeptunePageContentHtmlString = NeptunePageContentHtmlString == null || string.IsNullOrWhiteSpace(NeptunePageContentHtmlString.ToString()) ? null : NeptunePageContentHtmlString;
-        }
+    public void UpdateModel(EFModels.Entities.NeptunePage neptunePage)
+    {
+        neptunePage.NeptunePageContentHtmlString = NeptunePageContentHtmlString == null || string.IsNullOrWhiteSpace(NeptunePageContentHtmlString.ToString()) ? null : NeptunePageContentHtmlString;
     }
 }

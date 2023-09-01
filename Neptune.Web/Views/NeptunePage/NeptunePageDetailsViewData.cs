@@ -18,17 +18,17 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Web;
 
-namespace Neptune.Web.Views.NeptunePage
+using Microsoft.AspNetCore.Html;
+
+namespace Neptune.Web.Views.NeptunePage;
+
+public class NeptunePageDetailsViewData : NeptuneUserControlViewData
 {
-    public class NeptunePageDetailsViewData : NeptuneUserControlViewData
-    {
-        public readonly HtmlString NeptunePageContent;
+    public readonly HtmlString NeptunePageContent;
 
-        public NeptunePageDetailsViewData(HtmlString neptunePageContent)
-        {
-            NeptunePageContent = neptunePageContent;
-        }
+    public NeptunePageDetailsViewData(HtmlString neptunePageContent)
+    {
+        NeptunePageContent = neptunePageContent;
     }
 }

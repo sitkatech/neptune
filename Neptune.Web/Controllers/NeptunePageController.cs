@@ -18,35 +18,38 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+
+using LtInfo.Common;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Security;
 using Neptune.Web.Views.NeptunePage;
-using LtInfo.Common;
-using LtInfo.Common.MvcResults;
+using Index = Neptune.Web.Views.NeptunePage.Index;
 
 namespace Neptune.Web.Controllers
 {
-    public class NeptunePageController : NeptuneBaseController
+    public class NeptunePageController : NeptuneBaseController<NeptunePageController>
     {
+        public NeptunePageController(NeptuneDbContext dbContext, ILogger<NeptunePageController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        {
+        }
+
         [NeptunePageViewListFeature]
         public ViewResult Index()
         {
-            var viewData = new IndexViewData(CurrentPerson);
+            var viewData = new IndexViewData(CurrentPerson, _linkGenerator, HttpContext);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
         [NeptunePageViewListFeature]
         public GridJsonNetJObjectResult<NeptunePage> IndexGridJsonData()
         {
-            var gridSpec = new NeptunePageGridSpec(new NeptunePageViewListFeature().HasPermissionByPerson(CurrentPerson));
-            var neptunePages = HttpRequestStorage.DatabaseEntities.NeptunePages.ToList()
-                .Where(x => new NeptunePageManageFeature().HasPermission(CurrentPerson, x).HasPermission)
-                .OrderBy(x => x.NeptunePageType.NeptunePageTypeDisplayName)
-                .ToList();
+            var gridSpec = new NeptunePageGridSpec(new NeptunePageViewListFeature().HasPermissionByPerson(CurrentPerson), _linkGenerator);
+            var neptunePages = NeptunePages.List(_dbContext)
+                .Where(x => new NeptunePageManageFeature().HasPermission(CurrentPerson, x).HasPermission).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<NeptunePage>(neptunePages, gridSpec);
             return gridJsonNetJObjectResult;
         }
@@ -63,7 +66,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost]
         [NeptunePageManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditInDialog(NeptunePagePrimaryKey neptunePagePrimaryKey, EditViewModel viewModel)
         {
             var neptunePage = neptunePagePrimaryKey.EntityObject;
@@ -79,7 +82,7 @@ namespace Neptune.Web.Controllers
         {
             var ckEditorToolbar = CkEditorExtension.CkEditorToolbar.AllOnOneRowNoMaximize;
             var viewData = new EditViewData(ckEditorToolbar,
-                SitkaRoute<FileResourceController>.BuildUrlFromExpression(x => x.CkEditorUploadFileResource(neptunePage)));
+                SitkaRoute<FileResourceController>.BuildUrlFromExpression(_linkGenerator, x => x.CkEditorUploadFileResource(neptunePage)));
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

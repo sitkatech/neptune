@@ -19,7 +19,7 @@ namespace Neptune.Web.Views.FieldVisit
         public bool HasManagePermissions { get; }
         public string BulkUploadTrashScreenVisitUrl { get; set; }
 
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage,
+        public IndexViewData(Person currentPerson, EFModels.Entities.NeptunePage neptunePage,
             IEnumerable<CustomAttributeType> maintenanceAttributeTypes, IQueryable<TreatmentBMPAssessmentObservationType> allObservationTypes,
             LinkGenerator linkGenerator, HttpContext httpContext)
             : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)

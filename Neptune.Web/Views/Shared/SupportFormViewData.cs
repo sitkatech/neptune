@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.Shared
         public readonly IEnumerable<SelectListItem> SupportRequestTypes;
         public string CancelUrl { get; }
 
-        public SupportFormViewData(Person currentPerson, NeptunePage neptunePage, string successMessage,
+        public SupportFormViewData(Person currentPerson, EFModels.Entities.NeptunePage neptunePage, string successMessage,
             bool isUserAnonymous, IEnumerable<SelectListItem> supportRequestTypes,
             List<SupportRequestTypeSimpleDto> supportRequestTypeSimples, string cancelUrl, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {

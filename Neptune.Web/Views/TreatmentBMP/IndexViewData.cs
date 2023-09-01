@@ -22,7 +22,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string RefreshPrecipitationZonesUrl { get; }
         public string RefreshOCTAPrioritizationLayerUrl { get; }
 
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage, int treatmentBmpsInExportCount, int featureClassesInExportCount, string bulkBMPUploadUrl, LinkGenerator linkGenerator, HttpContext httpContext)
+        public IndexViewData(Person currentPerson, EFModels.Entities.NeptunePage neptunePage, int treatmentBmpsInExportCount, int featureClassesInExportCount, string bulkBMPUploadUrl, LinkGenerator linkGenerator, HttpContext httpContext)
             : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             TreatmentBmpsInExportCount = treatmentBmpsInExportCount;

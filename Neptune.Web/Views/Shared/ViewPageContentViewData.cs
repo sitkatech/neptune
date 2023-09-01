@@ -5,14 +5,14 @@ namespace Neptune.Web.Views.Shared
 {
     public class ViewPageContentViewData
     {
-        public readonly NeptunePage NeptunePage;
+        public readonly EFModels.Entities.NeptunePage NeptunePage;
         public readonly bool ShowEditButton;
         public readonly string NeptunePageContentID;
         public readonly string NeptunePageEditHoverButtonID;
         public readonly string EditPageContentUrl;
         public readonly HtmlString HtmlContent;
 
-        public ViewPageContentViewData(NeptunePage neptunePage, Person currentPerson)
+        public ViewPageContentViewData(EFModels.Entities.NeptunePage neptunePage, Person currentPerson)
         {
             NeptunePage = neptunePage;
             ShowEditButton = true; //todo: new NeptunePageManageFeature().HasPermission(currentPerson, neptunePage).HasPermission;

@@ -11,7 +11,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string GridName { get; }
         public string GridDataUrl { get; }
 
-        public ViewTreatmentBMPModelingAttributesViewData(Person currentPerson, NeptunePage neptunePage, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public ViewTreatmentBMPModelingAttributesViewData(Person currentPerson, EFModels.Entities.NeptunePage neptunePage, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
         {
             PageTitle = "Modeling Attributes";
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
