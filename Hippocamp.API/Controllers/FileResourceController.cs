@@ -15,8 +15,15 @@ namespace Hippocamp.API.Controllers
     [ApiController]
     public class FileResourceController : SitkaController<FileResourceController>
     {
-        public FileResourceController(HippocampDbContext dbContext, ILogger<FileResourceController> logger, KeystoneService keystoneService, IOptions<HippocampConfiguration> hippocampConfiguration) : base(dbContext, logger, keystoneService, hippocampConfiguration)
+        private readonly AzureBlobStorageService _blobStorageService;
+
+        public FileResourceController(HippocampDbContext dbContext,
+            ILogger<FileResourceController> logger,
+            KeystoneService keystoneService,
+            IOptions<HippocampConfiguration> hippocampConfiguration,
+            AzureBlobStorageService blobStorageService) : base(dbContext, logger, keystoneService, hippocampConfiguration)
         {
+            _blobStorageService = blobStorageService;
         }
 
         [HttpPost("FileResource/CkEditorUpload")]
@@ -85,6 +92,10 @@ namespace Hippocamp.API.Controllers
                 return NotFound(message);
             }
 
+            var data = fileResource.InBlobStorage 
+                ? _blobStorageService.DownloadBlobBytesFromBlobStorage(fileResource.FileResourceGUID.ToString().ToLower()) 
+                : fileResource.FileResourceData;
+
             switch (fileResource.FileResourceMimeType.FileResourceMimeTypeName)
             {
                 case "X-PNG":
@@ -96,12 +107,12 @@ namespace Hippocamp.API.Controllers
                 case "PDF":
                 case "PJPEG":
                 case "ZIP":
-                    return File(fileResource.FileResourceData, fileResource.FileResourceMimeType.FileResourceMimeTypeContentTypeName);
+                    return File(data, fileResource.FileResourceMimeType.FileResourceMimeTypeContentTypeName);
                 case "Word (DOCX)":
                 case "Word (DOC)":
                 case "Excel (XLS)":
                 case "Excel (XLSX)":
-                    return File(fileResource.FileResourceData, fileResource.FileResourceMimeType.FileResourceMimeTypeContentTypeName, fileResource.OriginalBaseFilename);
+                    return File(data, fileResource.FileResourceMimeType.FileResourceMimeTypeContentTypeName, fileResource.OriginalBaseFilename);
                 default:
                     throw new NotSupportedException("Only image uploads are supported at this time.");
             }
