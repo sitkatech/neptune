@@ -80,9 +80,10 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewEditInDialog(EditViewModel viewModel, NeptunePage neptunePage)
         {
-            var ckEditorToolbar = CkEditorExtension.CkEditorToolbar.AllOnOneRowNoMaximize;
-            var viewData = new EditViewData(ckEditorToolbar,
-                SitkaRoute<FileResourceController>.BuildUrlFromExpression(_linkGenerator, x => x.CkEditorUploadFileResource(neptunePage)));
+            var tinyMCEToolbar = TinyMCEExtension.TinyMCEToolbarStyle.AllOnOneRowNoMaximize;
+            var viewData = new EditViewData(tinyMCEToolbar);
+            //var viewData = new EditViewData(tinyMCEToolbar,
+            //    SitkaRoute<FileResourceController>.BuildUrlFromExpression(_linkGenerator, x => x.CkEditorUploadFileResource(neptunePage)));
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

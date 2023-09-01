@@ -17,11 +17,12 @@
     <PackageReference Include="ApprovalTests" Version="5.8.0" />
     <PackageReference Include="IdentityServer4" Version="4.1.2" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.21" />
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.9" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
     <PackageReference Include="NetTopologySuite.IO.GeoJSON4STJ" Version="3.0.0" />
     <PackageReference Include="ProjNet" Version="2.0.0" />
     <PackageReference Include="System.Text.Json" Version="7.0.3" />
+    <PackageReference Include="TinyMCE" Version="6.5.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +38,27 @@
   <ItemGroup>
     <ProjectReference Include="..\Neptune.Common\Neptune.Common.csproj" />
     <ProjectReference Include="..\Neptune.EFModels\Neptune.EFModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Common\TinyMCEExtensionTest.GenerateJavascriptWithNoToolbarTest.approved.txt">
+      <DependentUpon>TinyMCEExtensionTest.cs</DependentUpon>
+    </None>
+    <None Update="Common\TinyMCEExtensionTest.GenerateJavascriptWithMinimalWithImagesToolbarTest.approved.txt">
+      <DependentUpon>TinyMCEExtensionTest.cs</DependentUpon>
+    </None>
+    <None Update="Common\TinyMCEExtensionTest.GenerateJavascriptWithMinimalToolbarTest.approved.txt">
+      <DependentUpon>TinyMCEExtensionTest.cs</DependentUpon>
+    </None>
+    <None Update="Common\TinyMCEExtensionTest.GenerateJavascriptWithAllToolbarsTest.approved.txt">
+      <DependentUpon>TinyMCEExtensionTest.cs</DependentUpon>
+    </None>
+    <None Update="Common\TinyMCEExtensionTest.GenerateJavascriptWithAllOnOneRowToolbarsTest.approved.txt">
+      <DependentUpon>TinyMCEExtensionTest.cs</DependentUpon>
+    </None>
+    <None Update="Common\TinyMCEExtensionTest.GenerateJavascriptWithAllOnOneRowNoMaximizeToolbarsTest.approved.txt">
+      <DependentUpon>TinyMCEExtensionTest.cs</DependentUpon>
+    </None>
   </ItemGroup>
 
 </Project>

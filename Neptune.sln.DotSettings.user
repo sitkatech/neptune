@@ -1,0 +1,8 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7ddb9e5f_002D6236_002D495d_002Dbe6c_002De29649b521c2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="LabelWithSugarForExtensionsTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::16074F6E-EEE4-40AC-932D-E557552E1DEC::net6.0::Neptune.Tests.LabelWithSugarForExtensionsTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::5CA350B9-C4E2-4F7A-AE29-62B975CC0F0A::net6.0::Neptune.Web.Common.TinyMCEEditorExtensionTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::16074F6E-EEE4-40AC-932D-E557552E1DEC::net6.0::Neptune.Tests.TinyMCEEditorExtensionTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

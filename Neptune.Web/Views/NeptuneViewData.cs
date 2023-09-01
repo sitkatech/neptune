@@ -24,6 +24,7 @@ using Neptune.Web.Views.Shared;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Security;
+using Neptune.Web.Views.NeptunePage;
 
 namespace Neptune.Web.Views
 {
@@ -79,7 +80,7 @@ namespace Neptune.Web.Views
             MakeNeptuneMenu(currentPerson);
             NeptuneNavBarViewData = new NeptuneNavBarViewData(currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl, neptuneArea, isHomePage, linkGenerator);
 
-            ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson) : null;
+            ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson, linkGenerator) : null;
         }
 
         protected NeptuneViewData(Person currentPerson, EFModels.Entities.NeptunePage neptunePage, NeptuneArea neptuneArea, LinkGenerator linkGenerator, HttpContext httpContext) : this(currentPerson,

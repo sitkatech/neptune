@@ -46,9 +46,9 @@ namespace Neptune.Web.Views.Home
         {
             PageTitle = "Orange County Stormwater Tools";
 
-            CustomHomePageTextViewData = new ViewPageContentViewData(neptunePageHomePage, currentPerson);
-            CustomHomePageAdditionalInfoTextViewData = new ViewPageContentViewData(neptunePageAdditionalInfo, currentPerson);
-            CustomHomePageMapTextViewData = new ViewPageContentViewData(neptunePageMapInfo, currentPerson);
+            CustomHomePageTextViewData = new ViewPageContentViewData(neptunePageHomePage, currentPerson, linkGenerator);
+            CustomHomePageAdditionalInfoTextViewData = new ViewPageContentViewData(neptunePageAdditionalInfo, currentPerson, linkGenerator);
+            CustomHomePageMapTextViewData = new ViewPageContentViewData(neptunePageMapInfo, currentPerson, linkGenerator);
             JurisdictionsMapViewData = jurisdictionsMapViewData;
             JurisdictionsMapInitJson = jurisdictionsMapInitJson;
             NeptuneHomePageCarouselImages = neptuneHomePageImages;

@@ -19,10 +19,17 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Neptune.Web.Common.HtmlHelperExtensions;
 using Neptune.Web.Common.Mvc;
+using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.NeptunePage;
 
 public abstract class Edit : TypedWebPartialViewPage<EditViewData, EditViewModel>
 {
+    public static void RenderPartialView(IHtmlHelper html, EditViewData viewData, EditViewModel editViewModel)
+    {
+        html.RenderRazorSitkaPartial<Edit, EditViewData, EditViewModel>(viewData, editViewModel);
+    }
 }

@@ -25,12 +25,10 @@ namespace Neptune.Web.Views.NeptunePage;
 
 public class EditViewData : NeptuneUserControlViewData
 {
-    public readonly CkEditorExtension.CkEditorToolbar CkEditorToolbar;
-    public readonly string FileBrowserImageUploadUrl;
+    public readonly TinyMCEExtension.TinyMCEToolbarStyle TinyMceToolbarStyle;
 
-    public EditViewData(CkEditorExtension.CkEditorToolbar ckEditorToolbar, string fileBrowserImageUploadUrl)
+    public EditViewData(TinyMCEExtension.TinyMCEToolbarStyle tinyMceToolbarStyle)
     {
-        CkEditorToolbar = ckEditorToolbar;
-        FileBrowserImageUploadUrl = fileBrowserImageUploadUrl;
+        TinyMceToolbarStyle = tinyMceToolbarStyle;
     }
 }

@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.Shared
         {
             EntityName = "Stormwater Tools";
             PageTitle = neptunePage.NeptunePageType.NeptunePageTypeDisplayName;
-            ViewWholePageContentViewData = new ViewPageContentViewData(neptunePage, currentPerson);
+            ViewWholePageContentViewData = new ViewPageContentViewData(neptunePage, currentPerson, linkGenerator);
         }
     }
 }

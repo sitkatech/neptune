@@ -54,7 +54,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
             ViewDataForAngular = new ViewDataForAngular(observationTypes, customAttributeTypes, allObservationTypes, allCustomAttributeTypes);
             TreatmentBMPTypeIndexUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Manage());
             SubmitUrl = submitUrl;
-            ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson);
+            ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson, linkGenerator);
         }
     }
 

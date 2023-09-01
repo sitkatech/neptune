@@ -19,13 +19,14 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
 @inherits Neptune.Web.Views.NeptunePage.Edit
+@model Neptune.Web.Views.NeptunePage.EditViewModel
+@using Neptune.Web.Common
 
+@Html.ValidationSummary()
 @using (Html.BeginForm())
 {
-    @Html.ValidationSummary()
-   @* <div style="max-height: 600px; overflow-y: auto">
-        @Html.CkEditorFor(x => x.NeptunePageContentHtmlString, ViewDataTyped.CkEditorToolbar, true, false, ViewDataTyped.FileBrowserImageUploadUrl, 600)
-    </div>*@
+    <div style="max-height: 600px; overflow-y: auto">
 
-    <script type="text/javascript" src="/ScriptsCustom/CkEditorReady.js"></script>
+        @Html.TinyMCEEditorFor(x => x.NeptunePageContentHtmlString, TinyMCEExtension.TinyMCEToolbarStyle.MinimalWithImages, true, false, 200)
+    </div>
 }
