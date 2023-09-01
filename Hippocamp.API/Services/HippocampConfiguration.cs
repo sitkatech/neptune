@@ -17,5 +17,6 @@
         public string OcStormwaterToolsModelingBaseUrl { get; set; }
         public string HangfireUsername { get; set; }
         public string HangfirePassword { get; set; }
+        public string BlobStorageConnectionString {get; set; }
     }
 }

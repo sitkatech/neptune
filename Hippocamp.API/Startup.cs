@@ -137,7 +137,9 @@ namespace Hippocamp.API
 
             services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext);
             services.AddScoped(s => UserContext.GetUserFromHttpContext(s.GetService<HippocampDbContext>(), s.GetService<IHttpContextAccessor>().HttpContext));
+            services.AddScoped<AzureBlobStorageService>();
             services.AddControllers();
+
             #region Hangfire
             services.AddHangfire(configuration => configuration
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)

@@ -13,7 +13,7 @@ namespace Hippocamp.API.Hangfire
         {
             var recurringJobIds = new List<string>();
 
-            AddRecurringJob<OpenETTriggerBucketRefreshJob>(OpenETTriggerBucketRefreshJob.JobName, x => x.RunJob(JobCancellationToken.Null), Cron.Monthly(8, 1, 00), recurringJobIds);
+            AddRecurringJob<BlobFileTransferJob>(BlobFileTransferJob.JobName, x => x.RunJob(JobCancellationToken.Null), "*/20 * * * *", recurringJobIds);
 
             // Remove any jobs we haven't explicitly scheduled
             RemoveExtraneousJobs(recurringJobIds);

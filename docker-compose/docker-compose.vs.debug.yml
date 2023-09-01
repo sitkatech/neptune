@@ -18,3 +18,13 @@ services:
       - Kestrel__Certificates__Default__Password=password#1
     volumes:
       - ~/.aspnet/https:/https:ro
+
+  # To use this locally, the connection string can just be "UseDevelopmentStorage=true" more info here: https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=docker-hub#well-known-storage-account-and-key
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    ports:
+      - "10000:10000" # blob service
+      # - "10001:10001" # queue service
+      # - "10002:10002" # table service
+    volumes:
+      - c:/sitka/Hippocamp/azurite:/data
