@@ -43,6 +43,7 @@ namespace Hippocamp.EFModels.Entities
         public int CreatePersonID { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreateDate { get; set; }
+        public bool InBlobStorage { get; set; }
 
         [ForeignKey("CreatePersonID")]
         [InverseProperty("FileResources")]

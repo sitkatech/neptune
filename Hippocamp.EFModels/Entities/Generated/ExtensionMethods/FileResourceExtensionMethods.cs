@@ -20,7 +20,8 @@ namespace Hippocamp.EFModels.Entities
                 FileResourceGUID = fileResource.FileResourceGUID,
                 FileResourceData = fileResource.FileResourceData,
                 CreatePerson = fileResource.CreatePerson.AsDto(),
-                CreateDate = fileResource.CreateDate
+                CreateDate = fileResource.CreateDate,
+                InBlobStorage = fileResource.InBlobStorage
             };
             DoCustomMappings(fileResource, fileResourceDto);
             return fileResourceDto;
@@ -39,7 +40,8 @@ namespace Hippocamp.EFModels.Entities
                 FileResourceGUID = fileResource.FileResourceGUID,
                 FileResourceData = fileResource.FileResourceData,
                 CreatePersonID = fileResource.CreatePersonID,
-                CreateDate = fileResource.CreateDate
+                CreateDate = fileResource.CreateDate,
+                InBlobStorage = fileResource.InBlobStorage
             };
             DoCustomSimpleDtoMappings(fileResource, fileResourceSimpleDto);
             return fileResourceSimpleDto;

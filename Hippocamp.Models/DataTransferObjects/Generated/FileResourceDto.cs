@@ -17,6 +17,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public byte[] FileResourceData { get; set; }
         public PersonDto CreatePerson { get; set; }
         public DateTime CreateDate { get; set; }
+        public bool InBlobStorage { get; set; }
     }
 
     public partial class FileResourceSimpleDto
@@ -29,6 +30,7 @@ namespace Hippocamp.Models.DataTransferObjects
         public byte[] FileResourceData { get; set; }
         public int CreatePersonID { get; set; }
         public DateTime CreateDate { get; set; }
+        public bool InBlobStorage { get; set; }
     }
 
 }

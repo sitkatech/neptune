@@ -2154,6 +2154,9 @@
           "CreateDate": {
             "type": "string",
             "format": "date-time"
+          },
+          "InBlobStorage": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -2223,6 +2226,9 @@
           "CreateDate": {
             "type": "string",
             "format": "date-time"
+          },
+          "InBlobStorage": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
