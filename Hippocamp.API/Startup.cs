@@ -24,6 +24,10 @@ using Microsoft.Extensions.Logging;
 using Serilog.Sinks.ApplicationInsights.Sinks.ApplicationInsights.TelemetryConverters;
 using ILogger = Serilog.ILogger;
 using System.Net;
+using Hangfire;
+using Hippocamp.API.Hangfire;
+using Hippocamp.API.Services.Filter;
+using Hangfire.SqlServer;
 
 namespace Hippocamp.API
 {
@@ -134,7 +138,26 @@ namespace Hippocamp.API
             services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext);
             services.AddScoped(s => UserContext.GetUserFromHttpContext(s.GetService<HippocampDbContext>(), s.GetService<IHttpContextAccessor>().HttpContext));
             services.AddControllers();
+            #region Hangfire
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(hippocampConfiguration.DB_CONNECTION_STRING, new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true,
+                    SchemaName = "HangFireHippocamp"
+                }));
 
+            services.AddHangfireServer(x =>
+            {
+                x.WorkerCount = 1;
+            });
+            #endregion
             #region Swagger
             // Base swagger services
             services.AddSwaggerGen(options =>
@@ -175,6 +198,17 @@ namespace Hippocamp.API
             app.UseAuthorization();
 
             app.Use(TelemetryHelper.PostBodyTelemetryMiddleware);
+
+            #region Hangfire
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions()
+            {
+                Authorization = new[] { new HangfireAuthorizationFilter(Configuration) }
+            });
+
+            GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 });
+
+            HangfireJobScheduler.ScheduleRecurringJobs();
+            #endregion
 
             #region Swagger
             // Register swagger middleware and enable the swagger UI which will be 

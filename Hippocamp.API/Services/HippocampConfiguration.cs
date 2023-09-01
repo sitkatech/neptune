@@ -15,5 +15,7 @@
         public string APPINSIGHTS_INSTRUMENTATIONKEY { get; set; }
         public string OcStormwaterToolsBaseUrl { get; set; }
         public string OcStormwaterToolsModelingBaseUrl { get; set; }
+        public string HangfireUsername { get; set; }
+        public string HangfirePassword { get; set; }
     }
 }

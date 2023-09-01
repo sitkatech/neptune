@@ -15,3 +15,5 @@ services:
       - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
       - OcStormwaterToolsBaseUrl=${OcStormwaterToolsBaseUrl}
       - OcStormwaterToolsModelingBaseUrl=${OcStormwaterToolsModelingBaseUrl}
+      - HangfireUsername=${HangfireUsername}
+      - HangfirePassword=${HangfirePassword}
