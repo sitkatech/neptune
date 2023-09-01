@@ -15,7 +15,6 @@ public class BlobFileTransferJob : ScheduledBackgroundJobBase<BlobFileTransferJo
     private readonly AzureBlobStorageService _blobStorageService;
     private const int FileResourcesPerJob = 200;
 
-    //private readonly OpenETService _openETService;
     public BlobFileTransferJob(
         ILogger<BlobFileTransferJob> logger,
         IWebHostEnvironment webHostEnvironment,
