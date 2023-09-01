@@ -41,7 +41,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public FileResource(int fileResourceID, int fileResourceMimeTypeID, string originalBaseFilename, string originalFileExtension, Guid fileResourceGUID, byte[] fileResourceData, int createPersonID, DateTime createDate) : this()
+        public FileResource(int fileResourceID, int fileResourceMimeTypeID, string originalBaseFilename, string originalFileExtension, Guid fileResourceGUID, byte[] fileResourceData, int createPersonID, DateTime createDate, bool inBlobStorage) : this()
         {
             this.FileResourceID = fileResourceID;
             this.FileResourceMimeTypeID = fileResourceMimeTypeID;
@@ -51,12 +51,13 @@ namespace Neptune.Web.Models
             this.FileResourceData = fileResourceData;
             this.CreatePersonID = createPersonID;
             this.CreateDate = createDate;
+            this.InBlobStorage = inBlobStorage;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public FileResource(int fileResourceMimeTypeID, string originalBaseFilename, string originalFileExtension, Guid fileResourceGUID, byte[] fileResourceData, int createPersonID, DateTime createDate) : this()
+        public FileResource(int fileResourceMimeTypeID, string originalBaseFilename, string originalFileExtension, Guid fileResourceGUID, byte[] fileResourceData, int createPersonID, DateTime createDate, bool inBlobStorage) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.FileResourceID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -68,12 +69,13 @@ namespace Neptune.Web.Models
             this.FileResourceData = fileResourceData;
             this.CreatePersonID = createPersonID;
             this.CreateDate = createDate;
+            this.InBlobStorage = inBlobStorage;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public FileResource(FileResourceMimeType fileResourceMimeType, string originalBaseFilename, string originalFileExtension, Guid fileResourceGUID, byte[] fileResourceData, Person createPerson, DateTime createDate) : this()
+        public FileResource(FileResourceMimeType fileResourceMimeType, string originalBaseFilename, string originalFileExtension, Guid fileResourceGUID, byte[] fileResourceData, Person createPerson, DateTime createDate, bool inBlobStorage) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.FileResourceID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -86,6 +88,7 @@ namespace Neptune.Web.Models
             this.CreatePerson = createPerson;
             createPerson.FileResourcesWhereYouAreTheCreatePerson.Add(this);
             this.CreateDate = createDate;
+            this.InBlobStorage = inBlobStorage;
         }
 
         /// <summary>
@@ -93,7 +96,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static FileResource CreateNewBlank(FileResourceMimeType fileResourceMimeType, Person createPerson)
         {
-            return new FileResource(fileResourceMimeType, default(string), default(string), default(Guid), default(byte[]), createPerson, default(DateTime));
+            return new FileResource(fileResourceMimeType, default(string), default(string), default(Guid), default(byte[]), createPerson, default(DateTime), default(bool));
         }
 
         /// <summary>
@@ -272,6 +275,7 @@ namespace Neptune.Web.Models
         public byte[] FileResourceData { get; set; }
         public int CreatePersonID { get; set; }
         public DateTime CreateDate { get; set; }
+        public bool InBlobStorage { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return FileResourceID; } set { FileResourceID = value; } }
 

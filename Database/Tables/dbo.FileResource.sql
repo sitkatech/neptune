@@ -11,6 +11,7 @@ CREATE TABLE [dbo].[FileResource](
 	[FileResourceData] [varbinary](max) NOT NULL,
 	[CreatePersonID] [int] NOT NULL,
 	[CreateDate] [datetime] NOT NULL,
+	[InBlobStorage] [bit] NOT NULL,
  CONSTRAINT [PK_FileResource_FileResourceID] PRIMARY KEY CLUSTERED 
 (
 	[FileResourceID] ASC
@@ -21,6 +22,8 @@ CREATE TABLE [dbo].[FileResource](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
+GO
+ALTER TABLE [dbo].[FileResource] ADD  DEFAULT ((0)) FOR [InBlobStorage]
 GO
 ALTER TABLE [dbo].[FileResource]  WITH CHECK ADD  CONSTRAINT [FK_FileResource_FileResourceMimeType_FileResourceMimeTypeID] FOREIGN KEY([FileResourceMimeTypeID])
 REFERENCES [dbo].[FileResourceMimeType] ([FileResourceMimeTypeID])

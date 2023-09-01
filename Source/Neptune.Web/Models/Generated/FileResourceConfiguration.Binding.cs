@@ -23,6 +23,7 @@ namespace Neptune.Web.Models
             Property(x => x.FileResourceData).HasColumnName(@"FileResourceData").HasColumnType("varbinary").IsRequired();
             Property(x => x.CreatePersonID).HasColumnName(@"CreatePersonID").HasColumnType("int").IsRequired();
             Property(x => x.CreateDate).HasColumnName(@"CreateDate").HasColumnType("datetime").IsRequired();
+            Property(x => x.InBlobStorage).HasColumnName(@"InBlobStorage").HasColumnType("bit").IsRequired();
 
             // Foreign keys
             HasRequired(a => a.CreatePerson).WithMany(b => b.FileResourcesWhereYouAreTheCreatePerson).HasForeignKey(c => c.CreatePersonID).WillCascadeOnDelete(false); // FK_FileResource_Person_CreatePersonID_PersonID
