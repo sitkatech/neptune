@@ -32,6 +32,8 @@ public partial class FileResource
     [Column(TypeName = "datetime")]
     public DateTime CreateDate { get; set; }
 
+    public bool InBlobStorage { get; set; }
+
     [ForeignKey("CreatePersonID")]
     [InverseProperty("FileResources")]
     public virtual Person CreatePerson { get; set; } = null!;
