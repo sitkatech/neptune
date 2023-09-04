@@ -32,7 +32,8 @@ namespace Neptune.Web.Views.Home
         public string ManagerDashboardUrl { get; }
         public string ViewDelineationReconciliationReportUrl { get; }
 
-        public LaunchPadViewData(Person currentPerson, NeptunePage launchPadNeptunePage, int numberOfBmpTypes, string managerDashboardDescription, LinkGenerator linkGenerator)
+        public LaunchPadViewData(LinkGenerator linkGenerator, Person currentPerson, NeptunePage launchPadNeptunePage,
+            int numberOfBmpTypes, string managerDashboardDescription)
         {
             CurrentPerson = currentPerson;
             IsLoggedIn = !CurrentPerson.IsAnonymousUser();

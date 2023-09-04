@@ -21,7 +21,7 @@ namespace Neptune.Web.Controllers
             var allMethods = FindAttributedMethods(typeof(PowerBIController), typeof(WebServiceNameAndDescriptionAttribute));
             var serviceDocumentationList = allMethods.Select(c => new WebServiceDocumentation(c, _dbContext, _linkGenerator)).OrderBy(c => c.Name).ToList();
             var webServiceAccessToken = new WebServiceToken(_dbContext, CurrentPerson.WebServiceAccessToken.ToString());
-            var viewData = new IndexViewData(CurrentPerson, webServiceAccessToken, serviceDocumentationList, _linkGenerator, HttpContext);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, webServiceAccessToken, serviceDocumentationList);
             return RazorView<Index, IndexViewData>(viewData);
         }
     }

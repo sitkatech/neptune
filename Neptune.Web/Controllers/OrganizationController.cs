@@ -46,7 +46,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.OrganizationsList);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, _linkGenerator, HttpContext);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
@@ -128,7 +128,7 @@ namespace Neptune.Web.Controllers
             var people = activePeople.OrderBy(x => x.GetFullNameLastFirst()).ToSelectListWithEmptyFirstRow(x => x.PersonID.ToString(CultureInfo.InvariantCulture),
                 x => x.GetFullNameFirstLastAndOrg());
             var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(CurrentPerson);
-            var requestOrganizationChangeUrl = "";//todo: SitkaRoute<HelpController>.BuildUrlFromExpression(x => x.RequestOrganizationNameChange());
+            var requestOrganizationChangeUrl = SitkaRoute<HelpController>.BuildUrlFromExpression(_linkGenerator, x => x.RequestOrganizationNameChange());
             var viewData = new EditViewData(organizationTypesAsSelectListItems, people, isInKeystone, requestOrganizationChangeUrl, isSitkaAdmin);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
@@ -139,7 +139,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail([FromRoute] OrganizationPrimaryKey organizationPrimaryKey)
         {
             var organization = Organizations.GetByID(_dbContext, organizationPrimaryKey);
-            var viewData = new DetailViewData(CurrentPerson, organization, _linkGenerator, HttpContext);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, organization);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

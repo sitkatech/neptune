@@ -35,12 +35,12 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public string SubmitUrl { get; }
         public ViewPageContentViewData ViewInstructionsNeptunePage { get; }
 
-        public EditViewData(Person currentPerson,
+        public EditViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             IEnumerable<TreatmentBMPTypeAssessmentObservationType> observationTypes, string submitUrl,
             NeptunePage instructionsNeptunePage, EFModels.Entities.TreatmentBMPType treatmentBMPType,
             IEnumerable<TreatmentBMPTypeCustomAttributeType> customAttributeTypes,
-            IEnumerable<TreatmentBMPAssessmentObservationType> allObservationTypes,
-            IEnumerable<CustomAttributeType> allCustomAttributeTypes, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+            IEnumerable<EFModels.Entities.TreatmentBMPAssessmentObservationType> allObservationTypes,
+            IEnumerable<CustomAttributeType> allCustomAttributeTypes) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, c => c.Manage());
@@ -65,7 +65,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
 
         public ViewDataForAngular(IEnumerable<TreatmentBMPTypeAssessmentObservationType> observationTypes,
-            IEnumerable<TreatmentBMPTypeCustomAttributeType> customAttributeTypes, IEnumerable<TreatmentBMPAssessmentObservationType> allObservationTypes, IEnumerable<EFModels.Entities.CustomAttributeType> allCustomAttributeTypes)
+            IEnumerable<TreatmentBMPTypeCustomAttributeType> customAttributeTypes, IEnumerable<EFModels.Entities.TreatmentBMPAssessmentObservationType> allObservationTypes, IEnumerable<EFModels.Entities.CustomAttributeType> allCustomAttributeTypes)
         {
             TreatmentBMPAssessmentObservationTypes = allObservationTypes.Select(x =>
             {

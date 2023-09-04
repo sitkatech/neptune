@@ -41,16 +41,18 @@ namespace Neptune.Web.Views.TreatmentBMP
         public IEnumerable<SelectListItem>  TrashCaptureStatusTypes { get; }
         public IEnumerable<SelectListItem> SizingBasisTypes { get; }
 
-        public EditViewData(Person currentPerson,
+        public EditViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.TreatmentBMP treatmentBMP,
             IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,
             IEnumerable<EFModels.Entities.TreatmentBMPType> treatmentBMPTypes,
             IEnumerable<EFModels.Entities.Organization> organizations,
-            IEnumerable<EFModels.Entities.WaterQualityManagementPlan> waterQualityManagementPlans, IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes, IEnumerable<TrashCaptureStatusType> trashCaptureStatusTypes, IEnumerable<SizingBasisType> sizingBasisTypes, LinkGenerator linkGenerator, HttpContext httpContext)
-            : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+            IEnumerable<WaterQualityManagementPlan> waterQualityManagementPlans,
+            IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes,
+            IEnumerable<TrashCaptureStatusType> trashCaptureStatusTypes, IEnumerable<SizingBasisType> sizingBasisTypes)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.FindABMP());
+            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.FindABMP());
             EntityUrl = treatmentBMPIndexUrl;
 
             SubEntityName = treatmentBMP.TreatmentBMPName;

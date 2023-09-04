@@ -32,8 +32,9 @@ namespace Neptune.Web.Views.ManagerDashboard
         public string DelineationIndexUrl { get; }
         public bool UserCanViewBMPDelineations { get; }
 
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage, LinkGenerator linkGenerator, HttpContext httpContext, int fieldVisitCount, int treatmentBMPsCount, int bmpDelineationsCount)
-            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            NeptunePage neptunePage, int fieldVisitCount, int treatmentBMPsCount, int bmpDelineationsCount)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "Manager Dashboard";
             EntityName = "Stormwater Tools";
@@ -81,7 +82,7 @@ namespace Neptune.Web.Views.ManagerDashboard
             ProvisionalBMPDelineationGridUncheckAllUrl = $"Sitka.{ProvisionalBMPDelineationGridName}.gird.uncheckAll()";
             BMPDelineationsCount = bmpDelineationsCount;
             UserCanViewBMPDelineations = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
-            //DelineationIndexUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(x => x.Index)
+            //DelineationIndexUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(_linkGenerator, x => x.Index)
         }
     }
 }

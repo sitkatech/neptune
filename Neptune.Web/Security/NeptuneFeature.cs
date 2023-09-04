@@ -19,7 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.AspNetCore.Mvc;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Security
 {
@@ -28,5 +30,16 @@ namespace Neptune.Web.Security
         protected NeptuneFeature(IEnumerable<RoleEnum> roles) : base(roles
             //, NeptuneArea.OCStormwaterTools
             ) { }
+
+        public static bool IsAllowed<T>(SitkaRoute<T> sitkaRoute, Person currentPerson) where T : Controller
+        {
+            var neptuneFeatureLookupAttribute = sitkaRoute.Body.Method.GetCustomAttributes(typeof(NeptuneFeature), true).Cast<NeptuneFeature>().SingleOrDefault();
+            if (neptuneFeatureLookupAttribute != null)
+            {
+                return neptuneFeatureLookupAttribute.HasPermissionByPerson(currentPerson);
+            }
+            // no feature attribute implies Anonymous access is ok
+            return true;
+        }
     }
 }

@@ -24,10 +24,11 @@ using System.ComponentModel.DataAnnotations;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Models;
+using Neptune.Web.Views.FieldVisit;
 
 namespace Neptune.Web.Views.Shared.Location
 {
-    public class EditLocationViewModel
+    public class EditLocationViewModel : FieldVisitViewModel
     {
         [Required(ErrorMessage =  "Must specify a BMP Longitude")]
         [DisplayName("Longitude")]

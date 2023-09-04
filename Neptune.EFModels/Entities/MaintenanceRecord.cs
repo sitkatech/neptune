@@ -52,5 +52,10 @@ namespace Neptune.EFModels.Entities
         {
             return $"Maintenance Record dated {GetMaintenanceRecordDate():MM/dd/yyyy}";
         }
+
+        public void DeleteFull(NeptuneDbContext dbContext)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

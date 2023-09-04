@@ -11,7 +11,7 @@ namespace Neptune.EFModels.Entities
 
         public string GetDeleteUrl()
         {
-            return "";//todo: SitkaRoute<NeptuneHomePageImageController>.BuildUrlFromExpression(x => x.DeleteNeptuneHomePageImage(NeptuneHomePageImageID));
+            return "";//todo: SitkaRoute<NeptuneHomePageImageController>.BuildUrlFromExpression(_linkGenerator, x => x.DeleteNeptuneHomePageImage(NeptuneHomePageImageID));
         }
 
         public bool IsKeyPhoto()
@@ -46,7 +46,7 @@ namespace Neptune.EFModels.Entities
 
         public string GetEditUrl()
         {
-            return "";//todo SitkaRoute<NeptuneHomePageImageController>.BuildUrlFromExpression(x => x.Edit(NeptuneHomePageImageID));
+            return "";//todo SitkaRoute<NeptuneHomePageImageController>.BuildUrlFromExpression(_linkGenerator, x => x.Edit(NeptuneHomePageImageID));
         }
 
         public List<string> GetAdditionalCssClasses() => new();

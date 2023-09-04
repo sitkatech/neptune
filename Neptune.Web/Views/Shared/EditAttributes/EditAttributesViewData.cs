@@ -33,8 +33,9 @@ namespace Neptune.Web.Views.Shared.EditAttributes
         public bool IsSubForm { get; }
         public bool MissingRequiredAttributes { get; }
 
-        public EditAttributesViewData(Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP,
-            CustomAttributeTypePurpose customAttributeTypePurpose, bool isSubForm, bool missingRequiredAttributes, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public EditAttributesViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.TreatmentBMP treatmentBMP,
+            CustomAttributeTypePurpose customAttributeTypePurpose, bool isSubForm, bool missingRequiredAttributes) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             IsSubForm = isSubForm;
             MissingRequiredAttributes = missingRequiredAttributes;
@@ -53,8 +54,8 @@ namespace Neptune.Web.Views.Shared.EditAttributes
                 .ToList().OrderBy(x => x.SortOrder).ThenBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
         }
 
-        public EditAttributesViewData(Person currentPerson, EFModels.Entities.FieldVisit fieldVisit, bool isSubForm, bool missingRequiredAttributes, LinkGenerator linkGenerator, HttpContext httpContext) : base(
-            currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public EditAttributesViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.FieldVisit fieldVisit, bool isSubForm, bool missingRequiredAttributes) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             IsSubForm = isSubForm;
             MissingRequiredAttributes = missingRequiredAttributes;

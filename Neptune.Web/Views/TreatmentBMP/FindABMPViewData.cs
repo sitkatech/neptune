@@ -42,17 +42,20 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool HasEditPermissions { get; set; }
 
 
-        public FindABMPViewData(Person currentPerson, SearchMapInitJson mapInitJson, EFModels.Entities.NeptunePage neptunePage,
-            List<TreatmentBMPDisplayDto> treatmentBMPDisplayDtos, List<TreatmentBMPTypeDisplayDto> treatmentBMPTypeDisplayDtos, List<StormwaterJurisdictionDisplayDto> jurisdictions, LinkGenerator linkGenerator, HttpContext httpContext)
-            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public FindABMPViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            SearchMapInitJson mapInitJson, NeptunePage neptunePage,
+            List<TreatmentBMPDisplayDto> treatmentBMPDisplayDtos,
+            List<TreatmentBMPTypeDisplayDto> treatmentBMPTypeDisplayDtos,
+            List<StormwaterJurisdictionDisplayDto> jurisdictions)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "Find a BMP";
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
+            EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
             MapInitJson = mapInitJson;
-            FindTreatmentBMPByNameUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.FindByName(null));
-            NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.New());
-            AllBMPsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
+            FindTreatmentBMPByNameUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.FindByName(null));
+            NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.New());
+            AllBMPsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
             HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             ViewDataForAngular = new ViewDataForAngular(mapInitJson, treatmentBMPDisplayDtos, FindTreatmentBMPByNameUrl, treatmentBMPTypeDisplayDtos, jurisdictions);
             HasEditPermissions = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);

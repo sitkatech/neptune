@@ -12,7 +12,8 @@ namespace Neptune.Web.Views.Shared.ModeledPerformance
         public WaterQualityManagementPlan WaterQualityManagementPlan { get; }
         public string InflowLabel { get; }
 
-        public ModeledPerformanceViewData(EFModels.Entities.TreatmentBMP treatmentBMP, Person person, LinkGenerator linkGenerator, HttpContext httpContext): base(person, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public ModeledPerformanceViewData(HttpContext httpContext, LinkGenerator linkGenerator,
+            EFModels.Entities.TreatmentBMP treatmentBMP, Person person): base(httpContext, linkGenerator, person, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
             InflowLabel = "To BMP";
@@ -20,14 +21,14 @@ namespace Neptune.Web.Views.Shared.ModeledPerformance
             ModelingResultsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.GetModelResults(treatmentBMP));
         }
 
-        public ModeledPerformanceViewData(WaterQualityManagementPlan waterQualityManagementPlan, Person currentPerson, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public ModeledPerformanceViewData(WaterQualityManagementPlan waterQualityManagementPlan, Person currentPerson, LinkGenerator linkGenerator, HttpContext httpContext) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
             InflowLabel = "Site Runoff";
             AboutModelingBMPPerformanceURL =
                 SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, x => x.AboutModelingBMPPerformance());
 
-            ModelingResultsUrl = "";// todo: SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.GetModelResults(waterQualityManagementPlan));
+            ModelingResultsUrl = "";// todo: SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.GetModelResults(waterQualityManagementPlan));
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using Neptune.EFModels.Entities;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.FieldVisit
@@ -19,10 +17,9 @@ namespace Neptune.Web.Views.FieldVisit
         public bool HasManagePermissions { get; }
         public string BulkUploadTrashScreenVisitUrl { get; set; }
 
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage,
-            IEnumerable<CustomAttributeType> maintenanceAttributeTypes, IQueryable<TreatmentBMPAssessmentObservationType> allObservationTypes,
-            LinkGenerator linkGenerator, HttpContext httpContext)
-            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, NeptunePage neptunePage,
+            IEnumerable<CustomAttributeType> maintenanceAttributeTypes, IQueryable<EFModels.Entities.TreatmentBMPAssessmentObservationType> allObservationTypes)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "All Field Records";
             EntityName = "Field Records";
@@ -33,7 +30,7 @@ namespace Neptune.Web.Views.FieldVisit
             //    SaveFiltersInCookie = true
             //};
             GridName = "fieldVisitsGrid";
-            //GridDataUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, j => j.AllFieldVisitsGridJsonData());
+            //GridDataUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, linkGenerator, j => j.AllFieldVisitsGridJsonData());
 
             //TreatmentBMPAssessmentGridSpec = new TreatmentBMPAssessmentGridSpec(currentPerson, allObservationTypes)
             //{
@@ -43,7 +40,7 @@ namespace Neptune.Web.Views.FieldVisit
             //};
             TreatmentBMPAssessmentGridName = "assessmentsGrid";
             //TreatmentBMPAssessmentGridDataUrl =
-            //    SitkaRoute<AssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.TreatmentBMPAssessmentsGridJsonData());
+            //    SitkaRoute<AssessmentController>.BuildUrlFromExpression(linkGenerator, linkGenerator, x => x.TreatmentBMPAssessmentsGridJsonData());
 
             //MaintenanceRecordGridSpec = new MaintenanceRecordGridSpec(currentPerson, maintenanceAttributeTypes)
             //{
@@ -53,11 +50,11 @@ namespace Neptune.Web.Views.FieldVisit
             //};
             MaintenanceRecordGridName = "maintenanceRecordsGrid";
             //MaintenanceRecordGridDataUrl =
-            //    SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, x => x.AllMaintenanceRecordsGridJsonData());
+            //    SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, linkGenerator, x => x.AllMaintenanceRecordsGridJsonData());
 
             HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             //BulkUploadTrashScreenVisitUrl =
-            //    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.BulkUploadTrashScreenVisit());
+            //    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, linkGenerator, x => x.BulkUploadTrashScreenVisit());
         }
     }
 }

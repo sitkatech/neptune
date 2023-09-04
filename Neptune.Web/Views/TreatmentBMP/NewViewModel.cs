@@ -114,7 +114,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 foreach (var a in treatmentBmpType.TreatmentBMPTypeAssessmentObservationTypes.Where(x => x.TreatmentBMPAssessmentObservationType.GetHasBenchmarkAndThreshold() && x.DefaultThresholdValue.HasValue && x.DefaultBenchmarkValue.HasValue))
                 {
                     var treatmentBmpBenchmarkAndThreshold =
-                        new TreatmentBMPBenchmarkAndThreshold()
+                        new EFModels.Entities.TreatmentBMPBenchmarkAndThreshold()
                         {
                             TreatmentBMP = treatmentBMP,
                             TreatmentBMPTypeAssessmentObservationType = a,

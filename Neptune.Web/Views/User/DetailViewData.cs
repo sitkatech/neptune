@@ -48,13 +48,13 @@ namespace Neptune.Web.Views.User
         public HtmlString EditRolesLink { get; }
         public HtmlString EditJurisdictionsLink { get; }
 
-        public DetailViewData(Person currentPerson,
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             Person personToView,
             UserNotificationGridSpec userNotificationGridSpec,
             string userNotificationGridName,
             string userNotificationGridDataUrl,
-            string activateInactivateUrl, LinkGenerator linkGenerator, HttpContext httpContext)
-            : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+            string activateInactivateUrl)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             Person = personToView;
             PageTitle = personToView.GetFullNameFirstLast() + (!personToView.IsActive ? " (inactive)" : string.Empty);
@@ -62,7 +62,7 @@ namespace Neptune.Web.Views.User
             //TODO: This gets pulled up to root
             EditPersonOrganizationPrimaryContactUrl = "";//todo:SitkaRoute<PersonOrganizationController>.BuildUrlFromExpression(c => c.EditPersonOrganizationPrimaryContacts(personToView));
             IndexUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
-            JurisdictionIndexUrl = "";//todo:SitkaRoute<JurisdictionController>.BuildUrlFromExpression(x => x.Index());
+            JurisdictionIndexUrl = "";//todo:SitkaRoute<JurisdictionController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
 
             UserHasPersonViewPermissions = false;//todo:new UserViewFeature().HasPermission(currentPerson, personToView).HasPermission;
             UserCanManageThisPersonPermissions = false;//todo:new UserEditRoleFeature().HasPermission(currentPerson, personToView).HasPermission;

@@ -23,7 +23,6 @@ using Neptune.Web.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
-using Neptune.Web.Common.MvcResults;
 using Microsoft.AspNetCore.StaticFiles;
 
 namespace Neptune.Web.Controllers

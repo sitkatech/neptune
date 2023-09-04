@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 

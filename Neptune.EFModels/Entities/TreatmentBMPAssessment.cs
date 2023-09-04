@@ -19,9 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.Web.Models;
+
 namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMPAssessment //: IAuditableEntity
+    public partial class TreatmentBMPAssessment : IAuditableEntity
     {
         public bool CanEdit(Person currentPerson)
         {
@@ -88,6 +90,11 @@ namespace Neptune.EFModels.Entities
             }
 
             return TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID)?.FormattedObservationValueWithoutUnits(treatmentBMPAssessmentObservationType) ?? "not provided";
+        }
+
+        public void DeleteFull(NeptuneDbContext dbContext)
+        {
+            throw new NotImplementedException();
         }
     }
 }

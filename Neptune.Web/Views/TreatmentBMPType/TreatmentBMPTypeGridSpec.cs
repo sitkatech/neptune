@@ -30,7 +30,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
 {
     public class TreatmentBMPTypeGridSpec : GridSpec<EFModels.Entities.TreatmentBMPType>
     {
-        public TreatmentBMPTypeGridSpec(Person currentPerson, LinkGenerator linkGenerator)
+        public TreatmentBMPTypeGridSpec(LinkGenerator linkGenerator, Person currentPerson)
         {
             var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));
             var editUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, t => t.Edit(UrlTemplate.Parameter1Int)));

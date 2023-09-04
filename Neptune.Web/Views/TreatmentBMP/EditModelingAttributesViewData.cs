@@ -31,11 +31,12 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class EditModelingAttributesViewData : NeptuneViewData
     {
-        public EditModelingAttributesViewData(Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP,
+        public EditModelingAttributesViewData(HttpContext httpContext, LinkGenerator linkGenerator,
+            Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP,
             IEnumerable<RoutingConfiguration> routingConfigurations,
             IEnumerable<TimeOfConcentration> timeOfConcentrations,
             IEnumerable<UnderlyingHydrologicSoilGroup> underlyingHydrologicSoilGroups,
-            List<MonthsOfOperation> monthsOfOperation, List<DryWeatherFlowOverride> dryWeatherFlowOverride, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+            List<MonthsOfOperation> monthsOfOperation, List<DryWeatherFlowOverride> dryWeatherFlowOverride) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.FindABMP());

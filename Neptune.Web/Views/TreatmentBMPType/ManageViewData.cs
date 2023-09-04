@@ -33,14 +33,15 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public readonly string GridDataUrl;
         public readonly string NewTreatmentBMPTypeUrl;
 
-        public ManageViewData(Person currentPerson, NeptunePage neptunePage, LinkGenerator linkGenerator, HttpContext httpContext)
-            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public ManageViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            NeptunePage neptunePage)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
             PageTitle = $"Manage {FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
 
             NewTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, t => t.New());
-            GridSpec = new TreatmentBMPTypeGridSpec(currentPerson, _linkGenerator)
+            GridSpec = new TreatmentBMPTypeGridSpec(LinkGenerator, currentPerson)
             {
                 ObjectNameSingular = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel()}",
                 ObjectNamePlural = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}",

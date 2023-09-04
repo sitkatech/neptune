@@ -25,7 +25,7 @@ namespace Neptune.Web.Views.Shared
 {
     public class NotFoundViewData : NeptuneViewData
     {
-        public NotFoundViewData(Person currentPerson, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public NotFoundViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             UrlReferer = httpContext.Request.GetReferrer();
             HtmlPageTitle = "Page Not Found";

@@ -32,7 +32,8 @@ namespace Neptune.Web.Views.FundingSource
         public readonly bool UserHasFundingSourceManagePermissions;
         public readonly string EditFundingSourceUrl;
 
-        public DetailViewData(Person currentPerson, EFModels.Entities.FundingSource fundingSource, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.FundingSource fundingSource) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             FundingSource = fundingSource;
             PageTitle = fundingSource.GetDisplayName();

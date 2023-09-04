@@ -19,9 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.AspNetCore.Mvc;
 using Neptune.Common.DesignByContract;
 using Neptune.EFModels;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Security
 {
@@ -68,16 +70,6 @@ namespace Neptune.Web.Security
 
         //public string FeatureName => GetType().Name;
 
-        public virtual bool HasPermissionByPerson(Person person)
-        {
-            if (!GrantedRoles.Any()) // AnonymousUnclassifiedFeature case
-            {
-                return true;
-
-            }
-            return _neptuneArea.HasPermissionByPerson(person, GrantedRoles);
-        }
-
         //protected override bool AuthorizeCore(HttpContextBase httpContext)
         //{
         //    return HasPermissionByPerson(HttpRequestStorage.Person);
@@ -92,15 +84,6 @@ namespace Neptune.Web.Security
         //        return;
         //    }
         //    throw new SitkaRecordNotAuthorizedException($"You are not authorized for feature \"{FeatureName}\". Log out and log in as a different user or request additional permissions.");
-        //}
-
-        //public static bool IsAllowed<T>(SitkaRoute<T> sitkaRoute, Person currentPerson) where T : Controller
-        //{
-        //    var neptuneFeatureLookupAttribute = sitkaRoute.Body.Method.GetCustomAttributes(typeof(NeptuneBaseFeature), true).Cast<NeptuneBaseFeature>().SingleOrDefault();
-        //    Check.RequireNotNull(neptuneFeatureLookupAttribute, $"Could not find feature for {sitkaRoute.BuildUrlFromExpression()}");
-        //    // ReSharper disable PossibleNullReferenceException
-        //    return neptuneFeatureLookupAttribute.HasPermissionByPerson(currentPerson);
-        //    // ReSharper restore PossibleNullReferenceException
         //}
 
         //public static NeptuneBaseFeature InstantiateFeature(Type featureType)

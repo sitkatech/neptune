@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Models;
@@ -40,12 +39,12 @@ namespace Neptune.Web.Controllers
         [JurisdictionManageFeature]
         public ViewResult Index()
         {
-            var neptunePage = NeptunePage.GetNeptunePageByPageType(_dbContext, NeptunePageType.ManagerDashboard);
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.ManagerDashboard);
             var stormwaterJurisdictionIDs = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(_dbContext);
             var fieldVisitCount = vFieldVisitDetaileds.GetProvisionalFieldVisits(_dbContext, stormwaterJurisdictionIDs).Count;
             var treatmentBMPsCount = TreatmentBMPs.GetProvisionalTreatmentBMPs(_dbContext, CurrentPerson).Count;
             var bmpDelineationsCount = Delineations.GetProvisionalBMPDelineations(_dbContext, CurrentPerson).Count;
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, _linkGenerator, HttpContext, fieldVisitCount, treatmentBMPsCount, bmpDelineationsCount);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, fieldVisitCount, treatmentBMPsCount, bmpDelineationsCount);
             return RazorView<Index, IndexViewData>(viewData);
 
         }

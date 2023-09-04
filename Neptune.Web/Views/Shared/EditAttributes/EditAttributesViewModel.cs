@@ -25,10 +25,11 @@ using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using Neptune.Web.Views.FieldVisit;
 
 namespace Neptune.Web.Views.Shared.EditAttributes
 {
-    public class EditAttributesViewModel : IValidatableObject
+    public class EditAttributesViewModel : FieldVisitViewModel, IValidatableObject
     {
         [DisplayName("Metadata")]
         public List<CustomAttributeUpsertDto> CustomAttributes { get; set; }

@@ -25,7 +25,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.OpenID;
-using Neptune.Web.Security;
 
 namespace Neptune.Web.Controllers
 {

@@ -8,7 +8,8 @@ namespace Neptune.Web.Views.WebServices
         public readonly WebServiceToken WebServiceAccessToken;
         public readonly List<WebServiceDocumentation> ServiceDocumentationList;
 
-        public IndexViewData(Person currentPerson, WebServiceToken webServiceAccessToken, List<WebServiceDocumentation> serviceDocumentationList, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            WebServiceToken webServiceAccessToken, List<WebServiceDocumentation> serviceDocumentationList) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WebServiceAccessToken = webServiceAccessToken;
             ServiceDocumentationList = serviceDocumentationList;
