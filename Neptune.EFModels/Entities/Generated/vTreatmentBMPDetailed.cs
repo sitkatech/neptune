@@ -38,7 +38,7 @@ public partial class vTreatmentBMPDetailed
 
     public int? YearBuilt { get; set; }
 
-    [StringLength(1000)]
+    [StringLength(2000)]
     [Unicode(false)]
     public string? Notes { get; set; }
 

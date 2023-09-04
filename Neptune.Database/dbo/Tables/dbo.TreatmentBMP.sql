@@ -4,7 +4,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[TreatmentBMPTypeID] [int] NOT NULL CONSTRAINT [FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID] FOREIGN KEY REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID]),
 	[LocationPoint] [geometry] NULL,
 	[StormwaterJurisdictionID] [int] NOT NULL CONSTRAINT [FK_TreatmentBMP_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID]),
-	[Notes] [varchar](1000) NULL,
+	[Notes] [varchar](2000) NULL,
 	[SystemOfRecordID] [varchar](100) NULL,
 	[YearBuilt] [int] NULL,
 	[OwnerOrganizationID] [int] NOT NULL CONSTRAINT [FK_TreatmentBMP_Organization_OwnerOrganizationID_OrganizationID] FOREIGN KEY REFERENCES [dbo].[Organization] ([OrganizationID]),
