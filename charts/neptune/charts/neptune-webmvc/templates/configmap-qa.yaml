@@ -28,6 +28,6 @@ data:
   PathToPyqgisProjData: "/share/proj"
   NereidUrl: "https://nereid.sycan.sitka.local:8443"
   PathToFieldVisitUploadTemplate: "Content/Bulk_Upload_FieldVisists_for_Trash_Screens_Template.xlsx"
-  KeystoneOpenIDUrl: "https://identity-qa.sitkatech.com"
+  KeystoneOpenIDUrl: "https://identity-qa.sitkatech.com/"
   KeystoneOpenIDClientID: "Neptune"
 {{ end }}
