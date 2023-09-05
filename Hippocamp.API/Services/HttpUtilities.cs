@@ -9,7 +9,7 @@ namespace Hippocamp.API.Services
 {
     public static class HttpUtilities
     {
-        public static async Task<FileResource> MakeFileResourceFromFormFile(IFormFile inputFile, HippocampDbContext hippocampDbContext, HttpContext httpContext)
+        public static async Task<FileResource> MakeFileResourceFromFormFile(IFormFile inputFile, HippocampDbContext hippocampDbContext, HttpContext httpContext, AzureBlobStorageService blobStorageService)
         {
             byte[] bytes;
             await using(var ms = new MemoryStream())
@@ -27,7 +27,7 @@ namespace Hippocamp.API.Services
             var extension = clientFilename.Split('.').Last();
             var fileResourceGuid = Guid.NewGuid();
 
-            return new FileResource
+            var fileResource = new FileResource
             {
                 CreateDate = DateTime.Now,
                 CreatePersonID = personDto.PersonID,
@@ -37,6 +37,13 @@ namespace Hippocamp.API.Services
                 OriginalBaseFilename = clientFilename,
                 OriginalFileExtension = extension,
             };
+
+            if (blobStorageService.UploadFileResource(fileResource))
+            {
+                fileResource.InBlobStorage = true;
+            }
+
+            return fileResource;
         }
 
         public static async Task<byte[]> GetData(this HttpRequest httpRequest)

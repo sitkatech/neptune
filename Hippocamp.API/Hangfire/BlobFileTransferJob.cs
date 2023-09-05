@@ -51,7 +51,7 @@ public class BlobFileTransferJob : ScheduledBackgroundJobBase<BlobFileTransferJo
         DbContext.SaveChanges();
         stopwatch.Stop();
 
-        Logger.LogInformation($"Finished transferring {FileResourcesPerJob} FileResources. Job took {stopwatch.Elapsed.TotalMinutes} minutes.");
+        Logger.LogInformation($"Finished transferring {FileResourcesPerJob} FileResources. Job took {stopwatch.Elapsed.TotalSeconds} seconds.");
     }
     
 

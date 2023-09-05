@@ -28,11 +28,19 @@ namespace Hippocamp.API.Controllers
     {
         private readonly HttpClient _neptuneClient;
         private readonly IWebHostEnvironment _environment;
+        private readonly AzureBlobStorageService _blobStorageService;
 
-        public ProjectController(HippocampDbContext dbContext, ILogger<ProjectController> logger, KeystoneService keystoneService, IOptions<HippocampConfiguration> hippocampConfiguration, IHttpClientFactory httpClientFactory, IWebHostEnvironment environment ) : base(dbContext, logger, keystoneService, hippocampConfiguration)
+        public ProjectController(HippocampDbContext dbContext,
+            ILogger<ProjectController> logger,
+            KeystoneService keystoneService,
+            IOptions<HippocampConfiguration> hippocampConfiguration,
+            IHttpClientFactory httpClientFactory, 
+            IWebHostEnvironment environment,
+            AzureBlobStorageService blobStorageService) : base(dbContext, logger, keystoneService, hippocampConfiguration)
         {
             _neptuneClient = httpClientFactory.CreateClient("NeptuneClient");
             _environment = environment;
+            _blobStorageService = blobStorageService;
         }
 
         [HttpGet("projects/{projectID}")]
@@ -143,7 +151,7 @@ namespace Hippocamp.API.Controllers
 
             var fileResource =
                 await HttpUtilities.MakeFileResourceFromFormFile(projectDocumentUpsertDto.FileResource, _dbContext,
-                    HttpContext);
+                    HttpContext, _blobStorageService);
             
             _dbContext.FileResources.Add(fileResource);
 
