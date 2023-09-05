@@ -54,7 +54,8 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData()
         {
-            var gridSpec = new TreatmentBMPTypeGridSpec(_linkGenerator, CurrentPerson);
+            var countByTreatmentBMPType = TreatmentBMPs.ListCountByTreatmentBMPType(_dbContext);
+            var gridSpec = new TreatmentBMPTypeGridSpec(_linkGenerator, CurrentPerson, countByTreatmentBMPType);
             var treatmentBMPTypes = TreatmentBMPTypes.List(_dbContext);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPType>(treatmentBMPTypes, gridSpec);
             return gridJsonNetJObjectResult;
@@ -153,7 +154,8 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMPTypes = TreatmentBMPTypes.List(_dbContext);
             var neptunePage = NeptunePages.GetNeptunePageByPageType( _dbContext, NeptunePageType.TreatmentBMPType);
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, treatmentBMPTypes);
+            var countByTreatmentBMPType = TreatmentBMPs.ListCountByTreatmentBMPType(_dbContext);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, treatmentBMPTypes, countByTreatmentBMPType);
             return RazorView<Views.TreatmentBMPType.Index, IndexViewData>(viewData);
         }
 
@@ -208,8 +210,9 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteTreatmentBMPType(TreatmentBMPType treatmentBMPType, ConfirmDialogFormViewModel viewModel)
         {
-            var treatmentBMPLabel = treatmentBMPType.TreatmentBMPs.Count == 1 ? FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel() : FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized();
-            var confirmMessage = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel()} '{treatmentBMPType.TreatmentBMPTypeName}' has {treatmentBMPType.TreatmentBMPs.Count} {treatmentBMPLabel}.<br /><br />Are you sure you want to delete this {FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel()}?";
+            var countByTreatmentBMPType = TreatmentBMPs.ListCountByTreatmentBMPType(_dbContext);
+            var treatmentBMPCount = countByTreatmentBMPType.TryGetValue(treatmentBMPType.TreatmentBMPTypeID, out var value) ? value : 0;
+            var confirmMessage = $"Treatment BMP Type '{treatmentBMPType.TreatmentBMPTypeName}' has {treatmentBMPCount} Treatment BMPs.<br /><br />Are you sure you want to delete this Treatment BMP Type?";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }

@@ -55,7 +55,7 @@
                         }
                         @Html.Label("Description:") <br /> @treatmentBMPType.TreatmentBMPTypeDescription
                         <br />
-                        @Html.Label("Number of BMPs:") @treatmentBMPType.TreatmentBMPs.Count
+                        @Html.Label("Number of BMPs:") @(ViewDataTyped.CountByTreatmentBMPType.TryGetValue(treatmentBMPType.TreatmentBMPTypeID, out var value) ? value : 0)
                         <br />
 
                         @{

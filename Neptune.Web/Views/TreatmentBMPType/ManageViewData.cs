@@ -41,7 +41,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
             PageTitle = $"Manage {FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
 
             NewTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, t => t.New());
-            GridSpec = new TreatmentBMPTypeGridSpec(LinkGenerator, currentPerson)
+            GridSpec = new TreatmentBMPTypeGridSpec(LinkGenerator, currentPerson, new Dictionary<int, int>())
             {
                 ObjectNameSingular = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel()}",
                 ObjectNamePlural = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}",

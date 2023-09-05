@@ -55,7 +55,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 
             ViewSchemaDetailUrl = TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType);
 
-            TreatmentBMPTypeGridSpec = new TreatmentBMPTypeGridSpec(linkGenerator, currentPerson)
+            TreatmentBMPTypeGridSpec = new TreatmentBMPTypeGridSpec(linkGenerator, currentPerson, new Dictionary<int, int>())
             {
                 ObjectNameSingular = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel()}",
                 ObjectNamePlural = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}",
