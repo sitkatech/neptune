@@ -16,9 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
     // Add services to the container.
     var services = builder.Services;
     services.AddRazorPages();
-
-    services.AddCertificateForwarding(options => options.CertificateHeader = "X-ARR-ClientCert");
-
     services.AddControllersWithViews()
         .AddRazorOptions(options =>
         {
@@ -114,8 +111,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 {
-    app.UseCertificateForwarding();
-
     // Configure the HTTP request pipeline.
     if (!app.Environment.IsDevelopment())
     {
