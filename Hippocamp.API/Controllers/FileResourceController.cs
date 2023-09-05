@@ -48,6 +48,7 @@ namespace Hippocamp.API.Controllers
             var clientFilename = queryCollection["clientFilename"].ToString();
             var extension = clientFilename.Split('.').Last();
             var fileResourceGuid = Guid.NewGuid();
+            
             var fileResource = new FileResource
             {
                 CreateDate = DateTime.Now,
@@ -58,6 +59,11 @@ namespace Hippocamp.API.Controllers
                 OriginalBaseFilename = clientFilename,
                 OriginalFileExtension = extension,
             };
+
+            if (_blobStorageService.UploadFileResource(fileResource))
+            {
+                fileResource.InBlobStorage = true;
+            }
 
             _dbContext.FileResources.Add(fileResource);
             _dbContext.SaveChanges();
