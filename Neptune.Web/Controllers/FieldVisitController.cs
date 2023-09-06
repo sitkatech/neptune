@@ -573,7 +573,7 @@ namespace Neptune.Web.Controllers
             fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
             await _dbContext.SaveChangesAsync();
 
-            SetMessageForDisplay($"Successfully completed the Field Visit for {UrlTemplate.MakeHrefString(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, c => c.Detail(fieldVisit.TreatmentBMPID)), fieldVisit.TreatmentBMP.TreatmentBMPName)}.");
+            SetMessageForDisplay($"Successfully completed the Field Visit for {UrlTemplate.MakeHrefString(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(fieldVisit.TreatmentBMPID)), fieldVisit.TreatmentBMP.TreatmentBMPName)}.");
 
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.FindABMP()));
         }

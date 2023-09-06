@@ -51,11 +51,11 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
             EntityName = FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized();
             EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.FindABMP());
             SubEntityName = treatmentBMP.TreatmentBMPName;
-            SubEntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(treatmentBMP));
+            SubEntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP));
             PageTitle = "Benchmark & Threshold";
             BenchmarkAndThresholdUrlTemplate = new UrlTemplate<int, int>(
                 SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(LinkGenerator,
-                    c => c.EditBenchmarkAndThreshold(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int)));
+                    x => x.EditBenchmarkAndThreshold(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int)));
         }
 
         protected BenchmarkAndThresholdViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)

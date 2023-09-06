@@ -44,12 +44,16 @@ namespace Neptune.Models.DataTransferObjects
         {
         }
 
-        public static List<Point> GetPointsFromDbGeometry(Geometry geometry)
+        public static List<Point> GetPointsFromDbGeometry(Geometry? geometry)
         {
             var pointList = new List<Point>();
-            var envelope = geometry.EnvelopeInternal;
-            pointList.Add(new Point(envelope.MinX, envelope.MinY));
-            pointList.Add(new Point(envelope.MaxX, envelope.MaxY));
+            if (geometry != null)
+            {
+                var envelope = geometry.EnvelopeInternal;
+                pointList.Add(new Point(envelope.MinX, envelope.MinY));
+                pointList.Add(new Point(envelope.MaxX, envelope.MaxY));
+            }
+
             return pointList;
         }
     }

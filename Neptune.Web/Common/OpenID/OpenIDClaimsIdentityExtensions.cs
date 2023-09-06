@@ -25,7 +25,7 @@ public static class OpenIDClaimsIdentityExtensions
     /// </returns>
     public static IEnumerable<Claim> FindClaims(this ClaimsIdentity identity, string Type)
     {
-        return FindClaims(identity, c => c.Type.Equals(Type, StringComparison.OrdinalIgnoreCase));
+        return FindClaims(identity, x => x.Type.Equals(Type, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
@@ -37,7 +37,7 @@ public static class OpenIDClaimsIdentityExtensions
     /// </returns>
     public static IEnumerable<Claim> FindClaims(this ClaimsIdentity identity, string Type, string issuer)
     {
-        return FindClaims(identity, c => c.Type.Equals(Type, StringComparison.OrdinalIgnoreCase) && c.Issuer.Equals(issuer, StringComparison.OrdinalIgnoreCase));
+        return FindClaims(identity, x => x.Type.Equals(Type, StringComparison.OrdinalIgnoreCase) && x.Issuer.Equals(issuer, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public static class OpenIDClaimsIdentityExtensions
     /// </returns>
     public static IEnumerable<Claim> FindClaims(this ClaimsIdentity identity, string Type, string issuer, string value)
     {
-        return FindClaims(identity, c => c.Type.Equals(Type, StringComparison.OrdinalIgnoreCase) && c.Value.Equals(value, StringComparison.OrdinalIgnoreCase) && c.Issuer.Equals(issuer, StringComparison.OrdinalIgnoreCase));
+        return FindClaims(identity, x => x.Type.Equals(Type, StringComparison.OrdinalIgnoreCase) && x.Value.Equals(value, StringComparison.OrdinalIgnoreCase) && x.Issuer.Equals(issuer, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
@@ -61,7 +61,7 @@ public static class OpenIDClaimsIdentityExtensions
     /// </returns>
     public static IEnumerable<Claim> FindClaims(this ClaimsIdentity identity, Claim claim)
     {
-        return FindClaims(identity, c => c.Type.Equals(claim.Type, StringComparison.OrdinalIgnoreCase) && c.Value.Equals(claim.Value, StringComparison.OrdinalIgnoreCase) && c.Issuer.Equals(claim.Issuer, StringComparison.OrdinalIgnoreCase));
+        return FindClaims(identity, x => x.Type.Equals(claim.Type, StringComparison.OrdinalIgnoreCase) && x.Value.Equals(claim.Value, StringComparison.OrdinalIgnoreCase) && x.Issuer.Equals(claim.Issuer, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
@@ -108,7 +108,7 @@ public static class OpenIDClaimsIdentityExtensions
     /// </returns>
     public static bool ClaimExists(this ClaimsIdentity identity, string Type)
     {
-        return ClaimExists(identity, c => c.Type.Equals(Type, StringComparison.OrdinalIgnoreCase));
+        return ClaimExists(identity, x => x.Type.Equals(Type, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
@@ -120,7 +120,7 @@ public static class OpenIDClaimsIdentityExtensions
     /// </returns>
     public static bool ClaimExists(this ClaimsIdentity identity, string Type, string value)
     {
-        return ClaimExists(identity, c => c.Type.Equals(Type, StringComparison.OrdinalIgnoreCase) && c.Value.Equals(value, StringComparison.OrdinalIgnoreCase));
+        return ClaimExists(identity, x => x.Type.Equals(Type, StringComparison.OrdinalIgnoreCase) && x.Value.Equals(value, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
@@ -132,7 +132,7 @@ public static class OpenIDClaimsIdentityExtensions
     /// </returns>
     public static bool ClaimExists(this ClaimsIdentity identity, string Type, string value, string issuer)
     {
-        return ClaimExists(identity, c => c.Type.Equals(Type, StringComparison.OrdinalIgnoreCase) && c.Value.Equals(value, StringComparison.OrdinalIgnoreCase) && c.Issuer.Equals(issuer, StringComparison.OrdinalIgnoreCase));
+        return ClaimExists(identity, x => x.Type.Equals(Type, StringComparison.OrdinalIgnoreCase) && x.Value.Equals(value, StringComparison.OrdinalIgnoreCase) && x.Issuer.Equals(issuer, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>

@@ -22,7 +22,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.FindABMP());
             EntityUrl = treatmentBMPIndexUrl;
             SubEntityName = maintenanceRecord.TreatmentBMP.TreatmentBMPName;
-            SubEntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(maintenanceRecord.TreatmentBMPID));
+            SubEntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(maintenanceRecord.TreatmentBMPID));
             PageTitle = maintenanceRecord.GetMaintenanceRecordDate().ToStringDate();
             EditUrl = maintenanceRecord.FieldVisit != null ? SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.EditMaintenanceRecord(maintenanceRecord.FieldVisit)) : null;
             MaintenanceRecord = maintenanceRecord;
@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
             UserHasCustomAttributeTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
             CustomAttributeDetailUrlTemplate = new UrlTemplate<int>(
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator,
-                    c => c.Detail(UrlTemplate.Parameter1Int))); //todo: change to CustomAttributeController
+                    x => x.Detail(UrlTemplate.Parameter1Int))); //todo: change to CustomAttributeController
 
             SortedMaintenanceRecordObservations = MaintenanceRecord.MaintenanceRecordObservations.ToList()
                 .OrderBy(x => x.TreatmentBMPTypeCustomAttributeType.SortOrder)

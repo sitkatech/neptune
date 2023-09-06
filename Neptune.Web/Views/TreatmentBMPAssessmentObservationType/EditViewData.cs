@@ -54,10 +54,10 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
             if (treatmentBMPAssessmentObservationType != null)
             {
                 SubEntityName = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
-                SubEntityUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(LinkGenerator, c => c.Detail(treatmentBMPAssessmentObservationType));
+                SubEntityUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(treatmentBMPAssessmentObservationType));
             }
 
-            var previewUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(linkGenerator, c => c.PreviewObservationType());
+            var previewUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(linkGenerator, x => x.PreviewObservationType());
             ViewDataForAngular = new ViewDataForAngular(observationTypeSpecifications, observationTypeCollectionMethods, observationThresholdTypes, observationTargetTypes, measurementUnitTypes, previewUrl);
             ObservationTypeCancelUrl = treatmentBMPAssessmentObservationType == null
                 ? SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Index())

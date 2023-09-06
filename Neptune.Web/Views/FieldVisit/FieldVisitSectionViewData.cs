@@ -34,7 +34,7 @@ namespace Neptune.Web.Views.FieldVisit
             FieldVisit = fieldVisit;
             SectionName = fieldVisitSection.FieldVisitSectionName;
 
-            var treatmentBMPDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(fieldVisit.TreatmentBMPID));
+            var treatmentBMPDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(fieldVisit.TreatmentBMPID));
 
             EntityName = "Treatment BMP Field Visits";
             EntityUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
@@ -57,9 +57,9 @@ namespace Neptune.Web.Views.FieldVisit
             MaintenanceRecord = fieldVisit.MaintenanceRecord;
             InitialAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial);
             PostMaintenanceAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance);
-            MaintenanceRecordDeleteUrl = SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, c => c.Delete(fieldVisit.MaintenanceRecord));
-            InitialAssessmentDeleteUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, c => c.Delete(InitialAssessment));
-            PostMaintenanceAssessmentDeleteUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, c => c.Delete(PostMaintenanceAssessment));
+            MaintenanceRecordDeleteUrl = SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(fieldVisit.MaintenanceRecord));
+            InitialAssessmentDeleteUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(InitialAssessment));
+            PostMaintenanceAssessmentDeleteUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(PostMaintenanceAssessment));
 
 
             UserCanDeleteMaintenanceRecord = MaintenanceRecord != null &&

@@ -38,13 +38,13 @@ namespace Neptune.Web.Controllers
         {
             get
             {
-                return SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(_linkGenerator, "", c => c.Login());
+                return SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(_linkGenerator, "", x => x.Login());
             }
         }
 
         protected string HomeUrl
         {
-            get { return SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, c => c.Index()); }
+            get { return SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()); }
         }
 
 

@@ -372,7 +372,7 @@ namespace Neptune.Web.Controllers
 
             SetMessageForDisplay("Treatment BMP successfully created.");
 
-            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, c => c.Detail(treatmentBMP.PrimaryKey)));
+            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.Detail(treatmentBMP.PrimaryKey)));
         }
 
         private ViewResult ViewNew(NewViewModel viewModel)
@@ -441,7 +441,7 @@ namespace Neptune.Web.Controllers
 
             SetMessageForDisplay("Treatment BMP successfully saved.");
 
-            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, c => c.Detail(treatmentBMP.PrimaryKey)));
+            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.Detail(treatmentBMP.PrimaryKey)));
         }
 
         private ViewResult ViewEdit(EditViewModel viewModel)
@@ -517,7 +517,7 @@ namespace Neptune.Web.Controllers
             // need to re-execute the Nereid model here since source of run-off was removed.
             NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, _dbContext);
 
-            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, c => c.Detail(treatmentBMP.PrimaryKey)));
+            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.Detail(treatmentBMP.PrimaryKey)));
         }
 
 
@@ -623,7 +623,7 @@ namespace Neptune.Web.Controllers
             foreach (var customAttribute in treatmentBMP.CustomAttributes.Where(z => validCustomAttributeTypes.Select(y => y.CustomAttributeTypeID).Contains(z.CustomAttributeTypeID))
                 .ToList())
             {
-                var treatmentBMPTypeCustomAttributeType = newTreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Single(c => c.CustomAttributeTypeID == customAttribute.CustomAttributeTypeID);
+                var treatmentBMPTypeCustomAttributeType = newTreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Single(x => x.CustomAttributeTypeID == customAttribute.CustomAttributeTypeID);
                 var customAttributeCloned = new CustomAttribute()
                 {
                     TreatmentBMPID = treatmentBMP.TreatmentBMPID,
@@ -879,7 +879,7 @@ namespace Neptune.Web.Controllers
             treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay("Custom Attributes successfully saved.");
-            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, c => c.Detail(treatmentBMP.PrimaryKey)));
+            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.Detail(treatmentBMP.PrimaryKey)));
         }
 
         private ViewResult ViewEditAttributes(EditAttributesViewModel viewModel, TreatmentBMP treatmentBMP,
@@ -978,7 +978,7 @@ namespace Neptune.Web.Controllers
             NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, _dbContext);
 
             await _dbContext.SaveChangesAsync();
-            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, c => c.Detail(treatmentBMP.PrimaryKey)));
+            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.Detail(treatmentBMP.PrimaryKey)));
         }
 
         private ViewResult ViewEditModelingAttributes(EditModelingAttributesViewModel viewModel, TreatmentBMP treatmentBMP)

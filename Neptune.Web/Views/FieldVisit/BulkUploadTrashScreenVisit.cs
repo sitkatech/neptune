@@ -12,7 +12,7 @@ namespace Neptune.Web.Views.FieldVisit
     public class BulkUploadTrashScreenVisitViewModel : FormViewModel
     {
         [Required]
-        //todo: [SitkaFileExtensions("xlsx")]
+        [SitkaFileExtensions("xlsx")]
         [DisplayName("XLSX File to Import")]
         public IFormFile UploadXLSX { get; set; }
 

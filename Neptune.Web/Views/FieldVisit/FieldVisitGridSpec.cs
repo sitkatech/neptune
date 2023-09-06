@@ -32,14 +32,14 @@ namespace Neptune.Web.Views.FieldVisit
     {
         public FieldVisitGridSpec(Person currentPerson, bool detailPage, LinkGenerator linkGenerator)
         {
-            var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(UrlTemplate.Parameter1Int))); // todo: switch to stormwater jurisdiction
-            var treatmentBMPDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(UrlTemplate.Parameter1Int)));
-            var personDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(UrlTemplate.Parameter1Int)));
-            var treatmentBMPAssessmentDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(UrlTemplate.Parameter1Int)));
-            var maintenanceRecordDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(UrlTemplate.Parameter1Int)));
-            var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(UrlTemplate.Parameter1Int)));
-            var editUrlTemplate = new UrlTemplate<int>(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, c => c.Inventory(UrlTemplate.Parameter1Int)));
-            var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, c => c.Delete(UrlTemplate.Parameter1Int)));
+            var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int))); // todo: switch to stormwater jurisdiction
+            var treatmentBMPDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            var personDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            var treatmentBMPAssessmentDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            var maintenanceRecordDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            var editUrlTemplate = new UrlTemplate<int>(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Inventory(UrlTemplate.Parameter1Int)));
+            var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
 
             var isAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
             ObjectNameSingular = "Field Visit";

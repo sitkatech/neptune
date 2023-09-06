@@ -46,10 +46,10 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
         {
             TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationType;
             EntityName = "Observation Type";
-            EntityUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
+            EntityUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             PageTitle = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
 
-            EditUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(linkGenerator, c => c.Edit(treatmentBMPAssessmentObservationType));
+            EditUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(treatmentBMPAssessmentObservationType));
 
             UserHasObservationTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 

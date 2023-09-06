@@ -69,17 +69,17 @@ namespace Neptune.Web.Views
             _httpContext = httpContext;
 
             CurrentPerson = currentPerson;
-            NeptuneHomeUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
+            NeptuneHomeUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
 
             LogInUrl = NeptuneHelpers.GenerateLogInUrlWithReturnUrl(httpContext, linkGenerator, "");
             LogOutUrl = NeptuneHelpers.GenerateLogOutUrl();
 
-            RequestSupportUrl = SitkaRoute<HelpController>.BuildUrlFromExpression(linkGenerator, c => c.Support());
+            RequestSupportUrl = SitkaRoute<HelpController>.BuildUrlFromExpression(linkGenerator, x => x.Support());
 
-            LegalUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, c => c.Legal());
+            LegalUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, x => x.Legal());
 
             MakeNeptuneMenu(currentPerson);
-            NeptuneNavBarViewData = new NeptuneNavBarViewData(currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl, neptuneArea, isHomePage, linkGenerator);
+            NeptuneNavBarViewData = new NeptuneNavBarViewData(linkGenerator, currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl, neptuneArea, isHomePage);
 
             ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson) : null;
         }
@@ -110,8 +110,8 @@ namespace Neptune.Web.Views
         {
             var delineationMenu = new LtInfoMenuItem("Delineation");
 
-            //delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(c => c.DelineationMap(null)), currentPerson, "Delineation Map", "Group1"));
-            //delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(c => c.DelineationReconciliationReport()), currentPerson, "Delineation Reconciliation Report", "Group1"));
+            //delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(x => x.DelineationMap(null)), currentPerson, "Delineation Map", "Group1"));
+            //delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(x => x.DelineationReconciliationReport()), currentPerson, "Delineation Reconciliation Report", "Group1"));
 
             return delineationMenu;
         }
@@ -120,17 +120,17 @@ namespace Neptune.Web.Views
         {
             var bmpMenu = new LtInfoMenuItem("BMP Inventory");
 
-            ////bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<JurisdictionController>(c => c.Index()), currentPerson, "Jurisdictions", "Group1"));
+            ////bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<JurisdictionController>(x => x.Index()), currentPerson, "Jurisdictions", "Group1"));
 
-            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(LinkGenerator, c => c.FindABMP()), currentPerson, "Find a BMP", "Group1"));
-            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(LinkGenerator, c => c.ViewTreatmentBMPModelingAttributes()), currentPerson, "Modeling Parameters", "Group1"));
-            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(LinkGenerator, c => c.Index()), currentPerson, "View All BMPs", "Group1"));
-            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(LinkGenerator, c => c.TreatmentBMPAssessmentSummary()), currentPerson, "View Latest BMP Assessments", "Group2"));
+            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(LinkGenerator, x => x.FindABMP()), currentPerson, "Find a BMP", "Group1"));
+            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(LinkGenerator, x => x.ViewTreatmentBMPModelingAttributes()), currentPerson, "Modeling Parameters", "Group1"));
+            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(LinkGenerator, x => x.Index()), currentPerson, "View All BMPs", "Group1"));
+            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(LinkGenerator, x => x.TreatmentBMPAssessmentSummary()), currentPerson, "View Latest BMP Assessments", "Group2"));
 
-            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldVisitController>(LinkGenerator, c => c.Index()), currentPerson, "View All Field Records", "Group2"));
+            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldVisitController>(LinkGenerator, x => x.Index()), currentPerson, "View All Field Records", "Group2"));
 
-            //bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Index()), currentPerson, FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized(), "Group3"));
-            //bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<ParcelController>(c => c.Index()), currentPerson, "Parcels", "Group3"));
+            //bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<WaterQualityManagementPlanController>(x => x.Index()), currentPerson, FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized(), "Group3"));
+            //bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<ParcelController>(x => x.Index()), currentPerson, "Parcels", "Group3"));
 
             return bmpMenu;
         }
@@ -139,14 +139,14 @@ namespace Neptune.Web.Views
         {
             var programInfoMenu = new LtInfoMenuItem("Program Info");
 
-            //programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPAssessmentObservationTypeController>(c => c.Index()), currentPerson, "Observation Types", "Group1"));
-            programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPTypeController>(LinkGenerator ,c => c.Index()), currentPerson, "Treatment BMP Types", "Group1"));
-            programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FundingSourceController>(LinkGenerator, c => c.Index()), currentPerson, "Funding Sources", "Group1"));
+            //programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPAssessmentObservationTypeController>(x => x.Index()), currentPerson, "Observation Types", "Group1"));
+            programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPTypeController>(LinkGenerator ,x => x.Index()), currentPerson, "Treatment BMP Types", "Group1"));
+            programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FundingSourceController>(LinkGenerator, x => x.Index()), currentPerson, "Funding Sources", "Group1"));
 
             if (new JurisdictionEditFeature().HasPermissionByPerson(currentPerson))
             {
                 programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(
-                new SitkaRoute<WebServicesController>(c => c.Index(), SitkaRouteSecurity.SSL, LinkGenerator), currentPerson, "Web Services", "Group 2"));
+                new SitkaRoute<WebServicesController>(x => x.Index(), SitkaRouteSecurity.SSL, LinkGenerator), currentPerson, "Web Services", "Group 2"));
             }
 
             return programInfoMenu;
@@ -155,42 +155,42 @@ namespace Neptune.Web.Views
 
         private LtInfoMenuItem BuildDashboardMenu(Person currentPerson)
         {
-            return new LtInfoMenuItem(SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(LinkGenerator, c => c.Index()), "Dashboard", currentPerson.IsManagerOrAdmin(), true, null);
+            return new LtInfoMenuItem(SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(LinkGenerator, x => x.Index()), "Dashboard", currentPerson.IsManagerOrAdmin(), true, null);
         }
 
         private LtInfoMenuItem BuildManageMenu(Person currentPerson)
         {
             var manageMenu = new LtInfoMenuItem("Manage");
 
-            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(LinkGenerator, c => c.ManageHomePageImages()), currentPerson, "Homepage Configuration", "Group1"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NeptunePageController>(c => c.Index()), currentPerson, "Page Content", "Group1"));
-            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldDefinitionController>(LinkGenerator, c => c.Index()), currentPerson, "Custom Labels & Definitions", "Group1"));
-            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<UserController>(LinkGenerator, c => c.Index()), currentPerson, "Users", "Group1"));
-            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<OrganizationController>(LinkGenerator, c => c.Index()), currentPerson, $"Organizations", "Group1"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(LinkGenerator, x => x.ManageHomePageImages()), currentPerson, "Homepage Configuration", "Group1"));
+            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NeptunePageController>(x => x.Index()), currentPerson, "Page Content", "Group1"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldDefinitionController>(LinkGenerator, x => x.Index()), currentPerson, "Custom Labels & Definitions", "Group1"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<UserController>(LinkGenerator, x => x.Index()), currentPerson, "Users", "Group1"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<OrganizationController>(LinkGenerator, x => x.Index()), currentPerson, $"Organizations", "Group1"));
 
             //if (currentPerson.IsAdministrator())
             //{
-            //    manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<JurisdictionController>(c => c.Index()), currentPerson, "Jurisdictions", "Group1"));
+            //    manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<JurisdictionController>(x => x.Index()), currentPerson, "Jurisdictions", "Group1"));
             //}
 
-            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPAssessmentObservationTypeController>(LinkGenerator,c => c.Manage()), currentPerson, "Observation Types", "Group2"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPAssessmentObservationTypeController>(LinkGenerator,x => x.Manage()), currentPerson, "Observation Types", "Group2"));
             if (!currentPerson.IsAnonymousOrUnassigned())
             {
                 manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(
-                    new SitkaRoute<TreatmentBMPTypeController>(LinkGenerator, c => c.Manage()), currentPerson, "Treatment BMP Types",
+                    new SitkaRoute<TreatmentBMPTypeController>(LinkGenerator, x => x.Manage()), currentPerson, "Treatment BMP Types",
                     "Group2"));
             }
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<CustomAttributeTypeController>(c => c.Manage()), currentPerson, "Custom Attributes", "Group2"));
+            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<CustomAttributeTypeController>(x => x.Manage()), currentPerson, "Custom Attributes", "Group2"));
 
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TrashGeneratingUnitController>(c => c.Index()), currentPerson, "Trash Generating Units", "Group3"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LandUseBlockController>(c => c.Index()), currentPerson, "Land Use Blocks", "Group3"));
+            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TrashGeneratingUnitController>(x => x.Index()), currentPerson, "Trash Generating Units", "Group3"));
+            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LandUseBlockController>(x => x.Index()), currentPerson, "Land Use Blocks", "Group3"));
 
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HRUCharacteristicController>(c => c.Index()), currentPerson, "HRU Characteristics", "Group4"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinController>(c => c.Index()), currentPerson, "Regional Subbasins", "Group4"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinController>(c => c.Grid()), currentPerson, "Regional Subbasin Grid", "Group4"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinRevisionRequestController>(c => c.Index()), currentPerson, "Regional Subbasin Revision Requests", "Group4"));
+            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HRUCharacteristicController>(x => x.Index()), currentPerson, "HRU Characteristics", "Group4"));
+            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinController>(x => x.Index()), currentPerson, "Regional Subbasins", "Group4"));
+            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinController>(x => x.Grid()), currentPerson, "Regional Subbasin Grid", "Group4"));
+            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinRevisionRequestController>(x => x.Index()), currentPerson, "Regional Subbasin Revision Requests", "Group4"));
 
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<WaterQualityManagementPlanController>(c => c.LGUAudit()), currentPerson, "Water Quality Management Plan LGU Audit", "Group5"));
+            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<WaterQualityManagementPlanController>(x => x.LGUAudit()), currentPerson, "Water Quality Management Plan LGU Audit", "Group5"));
 
             return manageMenu;
         }

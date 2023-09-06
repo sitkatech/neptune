@@ -43,11 +43,11 @@ namespace Neptune.Web.Views.TreatmentBMPType
             IEnumerable<CustomAttributeType> allCustomAttributeTypes) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
-            EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, c => c.Manage());
+            EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Manage());
             if (treatmentBMPType != null)
             {
                 SubEntityName = treatmentBMPType.TreatmentBMPTypeName;
-                SubEntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(treatmentBMPType));
+                SubEntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMPType));
             }
             PageTitle = $"{(treatmentBMPType != null ? "Edit" : "New")} {FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel()}";
 

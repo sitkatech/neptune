@@ -46,7 +46,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,
             IEnumerable<EFModels.Entities.TreatmentBMPType> treatmentBMPTypes,
             IEnumerable<EFModels.Entities.Organization> organizations,
-            IEnumerable<WaterQualityManagementPlan> waterQualityManagementPlans,
+            IEnumerable<EFModels.Entities.WaterQualityManagementPlan> waterQualityManagementPlans,
             IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes,
             IEnumerable<TrashCaptureStatusType> trashCaptureStatusTypes, IEnumerable<SizingBasisType> sizingBasisTypes)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)

@@ -74,7 +74,7 @@ namespace Neptune.Web.Controllers
 
             return viewModel.AutoAdvance
                 ? GetNextObservationTypeViewResult(treatmentBMP, treatmentBMPAssessmentObservationType)
-                : RedirectToAction(new SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>(_linkGenerator, c => c.EditBenchmarkAndThreshold(treatmentBMPPrimaryKey, treatmentBMPAssessmentObservationTypePrimaryKey)));
+                : RedirectToAction(new SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>(_linkGenerator, x => x.EditBenchmarkAndThreshold(treatmentBMPPrimaryKey, treatmentBMPAssessmentObservationTypePrimaryKey)));
         }
 
         private static TreatmentBMPBenchmarkAndThreshold GetExistingTreatmentBMPObservationOrCreateNew(
@@ -120,7 +120,7 @@ namespace Neptune.Web.Controllers
 
             var nextObservationTypeViewResult = nextObservationType == null
                 ? RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.Detail(treatmentBMP.TreatmentBMPID)))
-                : Redirect(SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(_linkGenerator, c => c.EditBenchmarkAndThreshold(treatmentBMP, nextObservationType)));
+                : Redirect(SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(_linkGenerator, x => x.EditBenchmarkAndThreshold(treatmentBMP, nextObservationType)));
             return nextObservationTypeViewResult;
         }
 

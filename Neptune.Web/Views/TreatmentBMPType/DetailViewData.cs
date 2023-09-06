@@ -49,12 +49,12 @@ namespace Neptune.Web.Views.TreatmentBMPType
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             GridSpec = new TreatmentBMPsInTreatmentBMPTypeGridSpec(currentPerson, showDelete, showEdit, treatmentBMPType, linkGenerator) { ObjectNameSingular = "Treatment BMP", ObjectNamePlural = "Treatment BMPs", SaveFiltersInCookie = true };
             GridName = "treatmentBMPsGrid";
-            GridDataUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, j => j.TreatmentBMPsInTreatmentBMPTypeGridJsonData(treatmentBMPType));
-            EditUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, j => j.Edit(treatmentBMPType));
+            GridDataUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.TreatmentBMPsInTreatmentBMPTypeGridJsonData(treatmentBMPType));
+            EditUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(treatmentBMPType));
 
             UserHasTreatmentBMPTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
-            EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
+            EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
 
             ObservationTypeSortOrderUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.EditObservationTypesSortOrder(TreatmentBMPType));
 

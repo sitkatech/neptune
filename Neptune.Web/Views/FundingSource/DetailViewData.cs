@@ -38,10 +38,10 @@ namespace Neptune.Web.Views.FundingSource
             FundingSource = fundingSource;
             PageTitle = fundingSource.GetDisplayName();
             EntityName = $"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()}";
-            EntityUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
+            EntityUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
 
             UserHasFundingSourceManagePermissions = new FundingSourceEditFeature().HasPermissionByPerson(CurrentPerson);
-            EditFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, c => c.Edit(fundingSource));                       
+            EditFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(fundingSource));                       
         }
     }
 }

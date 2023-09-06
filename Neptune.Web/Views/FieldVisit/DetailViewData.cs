@@ -38,7 +38,7 @@ namespace Neptune.Web.Views.FieldVisit
             EntityName = "Treatment BMP Field Visits";
             EntityUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             SubEntityName = fieldVisit.TreatmentBMP.TreatmentBMPName ?? "Preview Treatment BMP Field Visit";
-            SubEntityUrl = fieldVisit.TreatmentBMP.TreatmentBMPName != null ? SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(fieldVisit.TreatmentBMPID)) : "#";
+            SubEntityUrl = fieldVisit.TreatmentBMP.TreatmentBMPName != null ? SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(fieldVisit.TreatmentBMPID)) : "#";
             PageTitle = fieldVisit.VisitDate.ToStringDate();
             InitialAssessment = FieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial);
             UserCanDeleteInitialAssessment = InitialAssessment != null &&
@@ -72,10 +72,10 @@ namespace Neptune.Web.Views.FieldVisit
                 SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x =>
                     x.ReturnFieldVisitToEdit(fieldVisit.PrimaryKey));
             TreatmentBMPDetailUrl =
-                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(fieldVisit.TreatmentBMPID));
+                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(fieldVisit.TreatmentBMPID));
             CustomAttributeDetailUrlTemplate = new UrlTemplate<int>(
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator,
-                    c => c.Detail(UrlTemplate.Parameter1Int))); //todo: change to CustomAttributeController
+                    x => x.Detail(UrlTemplate.Parameter1Int))); //todo: change to CustomAttributeController
         }
     }
 }

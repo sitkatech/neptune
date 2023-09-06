@@ -99,7 +99,7 @@ namespace Neptune.Web.Controllers
            
             SetMessageForDisplay($"Treatment BMP Type {treatmentBMPType.TreatmentBMPTypeName} successfully created.");
 
-            return RedirectToAction(new SitkaRoute<TreatmentBMPTypeController>(_linkGenerator, c => c.Detail(treatmentBMPType.PrimaryKey)));
+            return RedirectToAction(new SitkaRoute<TreatmentBMPTypeController>(_linkGenerator, x => x.Detail(treatmentBMPType.PrimaryKey)));
         }
 
         [HttpGet("{treatmentBMPTypePrimaryKey}")]
@@ -135,7 +135,7 @@ namespace Neptune.Web.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            return RedirectToAction(new SitkaRoute<TreatmentBMPTypeController>(_linkGenerator, c => c.Detail(treatmentBMPType.PrimaryKey)));
+            return RedirectToAction(new SitkaRoute<TreatmentBMPTypeController>(_linkGenerator, x => x.Detail(treatmentBMPType.PrimaryKey)));
         }
 
         private ViewResult ViewEdit(EditViewModel viewModel, TreatmentBMPType treatmentBMPType)

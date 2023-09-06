@@ -60,7 +60,7 @@ namespace Neptune.Web.Views.User
             PageTitle = personToView.GetFullNameFirstLast() + (!personToView.IsActive ? " (inactive)" : string.Empty);
             EntityName = "Users";
             //TODO: This gets pulled up to root
-            EditPersonOrganizationPrimaryContactUrl = "";//todo:SitkaRoute<PersonOrganizationController>.BuildUrlFromExpression(c => c.EditPersonOrganizationPrimaryContacts(personToView));
+            EditPersonOrganizationPrimaryContactUrl = "";//todo:SitkaRoute<PersonOrganizationController>.BuildUrlFromExpression(LinkGenerator, x => x.EditPersonOrganizationPrimaryContacts(personToView));
             IndexUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             JurisdictionIndexUrl = "";//todo:SitkaRoute<JurisdictionController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
 
@@ -77,13 +77,13 @@ namespace Neptune.Web.Views.User
 
             IsViewingSelf = currentPerson != null && currentPerson.PersonID == personToView.PersonID;
             EditRolesLink = /*TODO: UserCanManageThisPersonPermissions
-                ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(c => c.EditRoles(personToView)),
+                ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(LinkGenerator, x => x.EditRoles(personToView)),
                     $"Edit Roles for User - {personToView.GetFullNameFirstLast()}",
                     true)
                 : */new HtmlString(string.Empty);
 
             EditJurisdictionsLink = /*TODO: UserCanManageThisPersonPermissions
-                ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(c => c.EditJurisdiction(personToView)),
+                ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(LinkGenerator, x => x.EditJurisdiction(personToView)),
                     $"Edit Assigned Jurisdictions for User - {personToView.GetFullNameFirstLast()}",
                     true)
                 : */new HtmlString(string.Empty);

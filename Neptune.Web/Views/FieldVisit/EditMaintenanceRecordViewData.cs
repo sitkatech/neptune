@@ -52,8 +52,8 @@ namespace Neptune.Web.Views.FieldVisit
                 x => x.MaintenanceRecordTypeID.ToString(CultureInfo.InvariantCulture),
                 x => x.MaintenanceRecordTypeDisplayName, "Choose a type");
             
-            TreatmentBMPUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(treatmentBMP));
-            MaintenanceRecordUrl = SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(MaintenanceRecord));
+            TreatmentBMPUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP));
+            MaintenanceRecordUrl = SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(MaintenanceRecord));
         }
     }
 }

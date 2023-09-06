@@ -45,11 +45,11 @@ namespace Neptune.Web.Views.ManagerDashboard
                 ObjectNamePlural = "Field Visits",
                 SaveFiltersInCookie = true
             };
-            GridDataUrl = SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(linkGenerator, j => j.AllFieldVisitsGridJsonData(GridName));
+            GridDataUrl = SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(linkGenerator, x => x.AllFieldVisitsGridJsonData(GridName));
             ProvisionalFieldVisitGridCheckAllUrl = $"Sitka.{GridName}.grid.checkAll()";
             ProvisionalFieldVisitGridUncheckAllUrl = $"Sitka.{GridName}.grid.uncheckAll()";
             FieldVisitCount = fieldVisitCount;
-            FieldVisitsIndexUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
+            FieldVisitsIndexUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
 
 
             ProvisionalTreatmentBMPGridName = "assessmentsGrid";
@@ -64,7 +64,7 @@ namespace Neptune.Web.Views.ManagerDashboard
             ProvisionalTreatmentBMPGridCheckAllUrl = $"Sitka.{ProvisionalTreatmentBMPGridName}.grid.checkAll()";
             ProvisionalTreatmentBMPGridUncheckAllUrl = $"Sitka.{ProvisionalTreatmentBMPGridName}.grid.uncheckAll()";
             TreatmentBMPsCount = treatmentBMPsCount;
-            //TreatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
+            //TreatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
 
 
             ProvisionalBMPDelineationGridName = "ProvisionalBMPDelineationsGrid";

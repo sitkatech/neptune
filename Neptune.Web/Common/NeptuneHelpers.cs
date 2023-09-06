@@ -55,7 +55,7 @@ namespace Neptune.Web.Common
             var returnUrl = httpContext.Request.GetDisplayUrl();
             //var link = new Uri(linkGenerator.GetUriByAction(context, "Login", "Account", new { returnUrl }));
             //return link.ToString();
-            var logInUrl = SitkaRoute<AccountController>.BuildUrlFromExpression(linkGenerator, c => c.Login());
+            var logInUrl = SitkaRoute<AccountController>.BuildUrlFromExpression(linkGenerator, x => x.Login());
             return OnErrorOrNotFoundPage(httpContext, linkGenerator, canonicalHostName, returnUrl) ? logInUrl : $"{logInUrl}?returnUrl={HttpUtility.UrlEncode(returnUrl)}";
         }
 

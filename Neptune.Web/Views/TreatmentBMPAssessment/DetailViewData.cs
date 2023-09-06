@@ -50,11 +50,11 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             EntityName = "Treatment BMP Assessments";
             EntityUrl = SitkaRoute<AssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             SubEntityName = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPName;
-            SubEntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(treatmentBMPAssessment.TreatmentBMP));
+            SubEntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMPAssessment.TreatmentBMP));
             PageTitle = treatmentBMPAssessment.GetAssessmentDate().ToStringDate();
             EditUrl = (treatmentBMPAssessment.TreatmentBMPAssessmentType == TreatmentBMPAssessmentType.Initial) ?
-                SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, c => c.Assessment(treatmentBMPAssessment.FieldVisitID)) :
-                SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, c => c.PostMaintenanceAssessment(treatmentBMPAssessment.FieldVisitID));
+                SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Assessment(treatmentBMPAssessment.FieldVisitID)) :
+                SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.PostMaintenanceAssessment(treatmentBMPAssessment.FieldVisitID));
 
             var carouselImages = TreatmentBMPAssessment.TreatmentBMPAssessmentPhotos;
             ImageCarouselViewData = new ImageCarouselViewData(carouselImages, 400, linkGenerator);

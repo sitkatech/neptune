@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Neptune.Models.DataTransferObjects;
+using Neptune.Web.Common.Mvc;
 using Neptune.Web.Views.FieldVisit;
 
 namespace Neptune.Web.Views.Shared.ManagePhotosWithPreview
@@ -9,7 +10,7 @@ namespace Neptune.Web.Views.Shared.ManagePhotosWithPreview
         public virtual IList<ManagePhotoWithPreviewPhotoDto> PhotoSimples { get; set; }
 
         [DisplayName("Upload a photo")]
-        //todo: [SitkaFileExtensions("jpg|jpeg|gif|png")]
+        [SitkaFileExtensions("jpg|jpeg|gif|png")]
         public virtual IFormFile Photo { get; set; }
 
         [DisplayName("Caption")]

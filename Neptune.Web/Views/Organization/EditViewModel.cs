@@ -23,6 +23,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.Models;
+using Neptune.Web.Common.Mvc;
 
 namespace Neptune.Web.Views.Organization
 {
@@ -55,7 +56,7 @@ namespace Neptune.Web.Views.Organization
         public bool IsActive { get; set; }
 
         [DisplayName("Logo")]
-        //[SitkaFileExtensions("jpg|jpeg|gif|png")]
+        [SitkaFileExtensions("jpg|jpeg|gif|png")]
         public IFormFile LogoFileResourceData { get; set; }
 
         [DisplayName("Keystone Organization Guid")]

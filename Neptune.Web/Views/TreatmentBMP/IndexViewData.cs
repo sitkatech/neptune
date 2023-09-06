@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             GridSpec = new TreatmentBMPGridSpec(currentPerson, showDelete, showEdit, linkGenerator) {ObjectNameSingular = "Treatment BMP", ObjectNamePlural = "Treatment BMPs", SaveFiltersInCookie = true};
             GridName = "treatmentBMPsGrid";
-            GridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, j => j.TreatmentBMPGridJsonData());
+            GridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.TreatmentBMPGridJsonData());
             NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.New());
             BulkBMPUploadUrl = bulkBMPUploadUrl;
             HasEditPermissions = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);

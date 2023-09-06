@@ -10,7 +10,7 @@ namespace Neptune.Web.Views.FieldVisit
         public EditMaintenanceRecordObservationsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, CustomAttributeTypePurpose customAttributeTypePurpose, EFModels.Entities.MaintenanceRecord maintenanceRecord, bool isSubForm, bool missingRequiredAttributes) : base(httpContext, linkGenerator, currentPerson, treatmentBMP, customAttributeTypePurpose, isSubForm, missingRequiredAttributes)
         {
             PageTitle = "Edit Maintenance Record Observations";
-            ParentDetailUrl = SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, c => c.Detail(maintenanceRecord));
+            ParentDetailUrl = SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(maintenanceRecord));
         }
     }
 }

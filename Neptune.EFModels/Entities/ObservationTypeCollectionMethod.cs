@@ -84,7 +84,7 @@ namespace Neptune.EFModels.Entities
 
         public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return "";//todo: SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.DiscreteDetailSchema(treatmentBMPAssessmentObservationType));
+            return "";//todo: SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.DiscreteDetailSchema(treatmentBMPAssessmentObservationType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
@@ -164,7 +164,7 @@ namespace Neptune.EFModels.Entities
 
         public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return ""; //todo: SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.PassFailDetailSchema(treatmentBMPAssessmentObservationType));
+            return ""; //todo: SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.PassFailDetailSchema(treatmentBMPAssessmentObservationType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
@@ -248,7 +248,7 @@ namespace Neptune.EFModels.Entities
 
         public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return "";//todo: SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.PercentageDetailSchema(treatmentBMPAssessmentObservationType));
+            return "";//todo: SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.PercentageDetailSchema(treatmentBMPAssessmentObservationType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)

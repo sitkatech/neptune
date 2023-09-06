@@ -30,7 +30,7 @@ namespace Neptune.Web.Views.FieldVisit
             //    SaveFiltersInCookie = true
             //};
             GridName = "fieldVisitsGrid";
-            //GridDataUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, linkGenerator, j => j.AllFieldVisitsGridJsonData());
+            //GridDataUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, linkGenerator, x => x.AllFieldVisitsGridJsonData());
 
             //TreatmentBMPAssessmentGridSpec = new TreatmentBMPAssessmentGridSpec(currentPerson, allObservationTypes)
             //{
