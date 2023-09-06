@@ -168,7 +168,7 @@ namespace Neptune.Web.Controllers
         [HttpPost("{organizationPrimaryKey}")]
         [OrganizationManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("organizationPrimaryKey")]
-        public async Task<IActionResult> Delete([FromRoute] OrganizationPrimaryKey organizationPrimaryKey, [FromForm] ConfirmDialogFormViewModel viewModel)
+        public async Task<IActionResult> Delete([FromRoute] OrganizationPrimaryKey organizationPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var organization = organizationPrimaryKey.EntityObject;
             if (!ModelState.IsValid)

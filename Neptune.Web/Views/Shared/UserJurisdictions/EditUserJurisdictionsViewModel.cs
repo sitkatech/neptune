@@ -19,12 +19,12 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using LtInfo.Common.Models;
+using Microsoft.EntityFrameworkCore;
+using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
+using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.Shared.UserJurisdictions
 {
@@ -34,7 +34,7 @@ namespace Neptune.Web.Views.Shared.UserJurisdictions
         [Required]
         public int PersonID { get; set; }
 
-        public List<StormwaterJurisdictionPersonSimple> StormwaterJurisdictionPersonSimples { get; set; }
+        public List<StormwaterJurisdictionPersonUpsertDto> StormwaterJurisdictionPersonSimples { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -46,21 +46,24 @@ namespace Neptune.Web.Views.Shared.UserJurisdictions
         public EditUserJurisdictionsViewModel(Person person, Person currentPerson)
         {
             PersonID = person.PersonID;
-            StormwaterJurisdictionPersonSimples = person.StormwaterJurisdictionPeople.OrderBy(x => x.StormwaterJurisdiction.GetOrganizationDisplayName()).Select(x => new StormwaterJurisdictionPersonSimple(x, currentPerson)).ToList();
+            StormwaterJurisdictionPersonSimples = person.StormwaterJurisdictionPeople.OrderBy(x => x.StormwaterJurisdiction.GetOrganizationDisplayName()).Select(x => x.AsUpsertDto(currentPerson)).ToList();
         }
 
-        public void UpdateModel(Person person, IList<StormwaterJurisdictionPerson> allStormwaterJurisdictionPeople)
+        public void UpdateModel(Person person, DbSet<StormwaterJurisdictionPerson> allStormwaterJurisdictionPeople)
         {
             if (StormwaterJurisdictionPersonSimples == null)
             {
-                StormwaterJurisdictionPersonSimples = new List<StormwaterJurisdictionPersonSimple>();
+                StormwaterJurisdictionPersonSimples = new List<StormwaterJurisdictionPersonUpsertDto>();
             }
 
             var stormwaterJurisdictionPersonUpdated = StormwaterJurisdictionPersonSimples.Select(x =>
             {
-                var stormwaterJurisdictionPerson = new StormwaterJurisdictionPerson(x.StormwaterJurisdictionPersonID ?? ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue(),
-                    x.StormwaterJurisdictionID,
-                    x.PersonID);
+                var stormwaterJurisdictionPerson = new StormwaterJurisdictionPerson
+                {
+                    StormwaterJurisdictionPersonID = x.StormwaterJurisdictionPersonID ?? ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue(),
+                    StormwaterJurisdictionID = x.StormwaterJurisdictionID,
+                    PersonID = x.PersonID
+                };
                 return stormwaterJurisdictionPerson;
             }).ToList();
 

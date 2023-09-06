@@ -19,9 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Models;
-using System.Collections.Generic;
-using System.Linq;
+using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.Web.Views.Shared.UserJurisdictions
 {
@@ -32,8 +31,8 @@ namespace Neptune.Web.Views.Shared.UserJurisdictions
 
         public bool Standalone { get; }
 
-        public EditUserJurisdictionsViewData(Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage, bool standalone)
-            : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditUserJurisdictionsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage, bool standalone)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             ViewDataForAngular = new EditViewDataForAngular(allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage);
             Standalone = standalone;
@@ -41,13 +40,13 @@ namespace Neptune.Web.Views.Shared.UserJurisdictions
 
         public class EditViewDataForAngular
         {
-            public List<StormwaterJurisdictionSimple> AllStormwaterJurisdictions { get; }
-            public List<StormwaterJurisdictionSimple> StormwaterJurisdictionsCurrentPersonCanManage { get; }
+            public List<StormwaterJurisdictionDisplayDto> AllStormwaterJurisdictions { get; }
+            public List<StormwaterJurisdictionDisplayDto> StormwaterJurisdictionsCurrentPersonCanManage { get; }
 
             public EditViewDataForAngular(List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictions)
             {
-                AllStormwaterJurisdictions = allStormwaterJurisdictions.OrderBy(x => x.Organization.GetDisplayName()).Select(x => new StormwaterJurisdictionSimple(x)).ToList();
-                StormwaterJurisdictionsCurrentPersonCanManage = stormwaterJurisdictions.OrderBy(x => x.Organization.GetDisplayName()).Select(x => new StormwaterJurisdictionSimple(x)).ToList();
+                AllStormwaterJurisdictions = allStormwaterJurisdictions.OrderBy(x => x.Organization.GetDisplayName()).Select(x => x.AsDisplayDto()).ToList();
+                StormwaterJurisdictionsCurrentPersonCanManage = stormwaterJurisdictions.OrderBy(x => x.Organization.GetDisplayName()).Select(x => x.AsDisplayDto()).ToList();
             }
         }
     }

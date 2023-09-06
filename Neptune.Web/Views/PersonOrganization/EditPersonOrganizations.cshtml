@@ -18,10 +18,12 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
-@using LtInfo.Common.HtmlHelperExtensions
-@using Neptune.Web.Models
+@using Neptune.EFModels.Entities
+@using Neptune.Web.Common.HtmlHelperExtensions
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.PersonOrganization.EditPersonOrganizations
+@model Neptune.Web.Views.PersonOrganization.EditPersonOrganizationsViewModel
+
 <script type="text/javascript">
     // <![CDATA[
     angular.module("NeptuneApp").factory("angularModelAndViewData", function()

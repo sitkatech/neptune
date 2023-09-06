@@ -49,9 +49,9 @@ namespace Neptune.Web.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet("{gridName}")]
         [JurisdictionManageFeature]
-        public GridJsonNetJObjectResult<vFieldVisitDetailed> AllFieldVisitsGridJsonData(string gridName)
+        public GridJsonNetJObjectResult<vFieldVisitDetailed> AllFieldVisitsGridJsonData([FromRoute] string gridName)
         {
             var gridSpec = new ProvisionalFieldVisitGridSpec(CurrentPerson, gridName, _linkGenerator);
             var fieldVisits = FieldVisits.GetProvisionalFieldVisits(_dbContext, CurrentPerson).OrderBy(x => x.TreatmentBMPName).ThenBy(x => x.VisitDate).ToList();
@@ -59,18 +59,18 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        [HttpGet]
+        [HttpGet("{gridName}")]
         [JurisdictionManageFeature]
-        public GridJsonNetJObjectResult<TreatmentBMP> ProvisionalTreatmentBMPGridJsonData(string gridName)
+        public GridJsonNetJObjectResult<TreatmentBMP> ProvisionalTreatmentBMPGridJsonData([FromRoute] string gridName)
         {
             var gridSpec = new ProvisionalTreatmentBMPGridSpec(CurrentPerson, gridName);
             var treatmentBMPs = TreatmentBMPs.GetProvisionalTreatmentBMPs(_dbContext, CurrentPerson);
             return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
         }
 
-        [HttpGet]
+        [HttpGet("{gridName}")]
         [JurisdictionManageFeature]
-        public GridJsonNetJObjectResult<Delineation> ProvisionalBMPDelineationsGridJson(string gridName)
+        public GridJsonNetJObjectResult<Delineation> ProvisionalBMPDelineationsGridJson([FromRoute] string gridName)
         {
             var gridSpec = new ProvisionalBMPDelineationsGridSpec(CurrentPerson , gridName);
             var bmpDelineations = Delineations.GetProvisionalBMPDelineations(_dbContext, CurrentPerson);

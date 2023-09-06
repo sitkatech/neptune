@@ -1,6 +1,6 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="EditPersonOrganizationsViewData.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
-Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+<copyright file="Edit.cs" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
 
@@ -18,18 +18,18 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Collections.Generic;
-using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.PersonOrganization
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Neptune.Web.Common.HtmlHelperExtensions;
+
+namespace Neptune.Web.Views.Shared.UserJurisdictions
 {
-    public class EditPersonOrganizationsViewData : NeptuneUserControlViewData
+    public abstract class EditUserJurisdictions : Common.Mvc.TypedWebPartialViewPage<EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>
     {
-        public readonly List<OrganizationSimple> AllOrganizations;
-
-        public EditPersonOrganizationsViewData(List<OrganizationSimple> allOrganizations)
+        public static void RenderPartialView(IHtmlHelper html, EditUserJurisdictionsViewData viewData,
+            EditUserJurisdictionsViewModel viewModel)
         {
-            AllOrganizations = allOrganizations;
+            html.RenderRazorSitkaPartial<EditUserJurisdictions,EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>(viewData, viewModel);
         }
     }
 }

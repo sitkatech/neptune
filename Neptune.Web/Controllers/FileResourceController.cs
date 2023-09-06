@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 using Microsoft.AspNetCore.StaticFiles;
+using Neptune.Web.Services.Filters;
 
 namespace Neptune.Web.Controllers
 {
@@ -35,7 +36,7 @@ namespace Neptune.Web.Controllers
 
         //[CrossAreaRoute]
         [HttpGet("{fileResourceGuidAsString}")]
-        public IActionResult DisplayResource(string fileResourceGuidAsString)
+        public IActionResult DisplayResource([FromRoute] string fileResourceGuidAsString)
         {
             var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out var fileResourceGuid);
             if (isStringAGuid)
@@ -89,16 +90,19 @@ namespace Neptune.Web.Controllers
             return File(fileStream, contentType);
         }
 
+        [HttpGet("{fileResourcePrimaryKey}")]
         [LoggedInUnclassifiedFeature]
         //[CrossAreaRoute]
-        public IActionResult DisplayResourceByID(FileResourcePrimaryKey fileResourcePrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fileResourcePrimaryKey")]
+        public IActionResult DisplayResourceByID([FromRoute] FileResourcePrimaryKey fileResourcePrimaryKey)
         {
             var fileResource = fileResourcePrimaryKey.EntityObject;
             return DisplayFile(fileResource.OriginalBaseFilename, fileResource.FileResourceData);
         }
 
+        [HttpGet("{fileResourceGuidAsString}/{maxWidth}/{maxHeight}")]
         //[CrossAreaRoute]
-        public ActionResult GetFileResourceResized(string fileResourceGuidAsString, int maxWidth, int maxHeight)
+        public ActionResult GetFileResourceResized([FromRoute] string fileResourceGuidAsString, [FromRoute] int maxWidth, [FromRoute] int maxHeight)
         {
             var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out var fileResourceGuid);
             if (isStringAGuid)

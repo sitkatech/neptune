@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="EditPersonOrganizations.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="EditPersonOrganizationsViewData.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,9 +18,18 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using Neptune.Models.DataTransferObjects;
+
 namespace Neptune.Web.Views.PersonOrganization
 {
-    public abstract class EditPersonOrganizations : LtInfo.Common.Mvc.TypedWebPartialViewPage<EditPersonOrganizationsViewData, EditPersonOrganizationsViewModel>
+    public class EditPersonOrganizationsViewData : NeptuneUserControlViewData
     {
+        public readonly List<OrganizationSimpleDto> AllOrganizations;
+
+        public EditPersonOrganizationsViewData(List<OrganizationSimpleDto> allOrganizations)
+        {
+            AllOrganizations = allOrganizations;
+        }
     }
 }

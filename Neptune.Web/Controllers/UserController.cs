@@ -31,7 +31,9 @@ using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Models;
+using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.Shared;
+using Neptune.Web.Views.Shared.UserJurisdictions;
 
 namespace Neptune.Web.Controllers
 {
@@ -41,6 +43,7 @@ namespace Neptune.Web.Controllers
         {
         }
 
+        [HttpGet]
         [UserEditFeature]
         public ViewResult Index()
         {
@@ -48,6 +51,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Views.User.Index, IndexViewData>(viewData);
         }
 
+        [HttpGet]
         [UserEditFeature]
         public GridJsonNetJObjectResult<Person> IndexGridJsonData()
         {
@@ -60,18 +64,20 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        [HttpGet]
+        [HttpGet("{personPrimaryKey}")]
         [UserEditRoleFeature]
-        public PartialViewResult EditRoles(PersonPrimaryKey personPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
+        public PartialViewResult EditRoles([FromRoute] PersonPrimaryKey personPrimaryKey)
         {
             var person = personPrimaryKey.EntityObject;
             var viewModel = new EditRolesViewModel(person);
             return ViewEditRoles(viewModel, person);
         }
 
-        [HttpPost]
+        [HttpPost("{personPrimaryKey}")]
         [UserEditRoleFeature]
-        public async Task<IActionResult> EditRoles(PersonPrimaryKey personPrimaryKey, EditRolesViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
+        public async Task<IActionResult> EditRoles([FromRoute] PersonPrimaryKey personPrimaryKey, EditRolesViewModel viewModel)
         {
             var person = personPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -109,9 +115,10 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<EditRoles, EditRolesViewData, EditRolesViewModel>(viewData, viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("{personPrimaryKey}")]
         [UserDeleteFeature]
-        public PartialViewResult Delete(PersonPrimaryKey personPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
+        public PartialViewResult Delete([FromRoute] PersonPrimaryKey personPrimaryKey)
         {
             var person = personPrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(person.PersonID);
@@ -133,9 +140,10 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{personPrimaryKey}")]
         [UserDeleteFeature]
-        public async Task<IActionResult> Delete(PersonPrimaryKey personPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
+        public async Task<IActionResult> Delete([FromRoute] PersonPrimaryKey personPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var person = personPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -147,8 +155,10 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult();
         }
 
+        [HttpGet("{personPrimaryKey}")]
         [UserViewFeature]
-        public ViewResult Detail(PersonPrimaryKey personPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
+        public ViewResult Detail([FromRoute] PersonPrimaryKey personPrimaryKey)
         {
             var person = personPrimaryKey.EntityObject;
             var userNotificationGridSpec = new UserNotificationGridSpec();
@@ -158,8 +168,10 @@ namespace Neptune.Web.Controllers
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
+        [HttpGet("{personPrimaryKey}")]
         [UserViewFeature]
-        public GridJsonNetJObjectResult<Notification> UserNotificationsGridJsonData(PersonPrimaryKey personPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
+        public GridJsonNetJObjectResult<Notification> UserNotificationsGridJsonData([FromRoute] PersonPrimaryKey personPrimaryKey)
         {
             var person = personPrimaryKey.EntityObject;
             var gridSpec = new UserNotificationGridSpec();
@@ -168,9 +180,10 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        [HttpGet]
+        [HttpGet("{personPrimaryKey}")]
         [UserEditFeature]
-        public PartialViewResult ActivateInactivatePerson(PersonPrimaryKey personPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
+        public PartialViewResult ActivateInactivatePerson([FromRoute] PersonPrimaryKey personPrimaryKey)
         {
             var viewModel = new ConfirmDialogFormViewModel(personPrimaryKey.PrimaryKeyValue);
             return ViewActivateInactivatePerson(personPrimaryKey.EntityObject, viewModel);
@@ -197,9 +210,10 @@ namespace Neptune.Web.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("{personPrimaryKey}")]
         [UserEditFeature]
-        public async Task<IActionResult> ActivateInactivatePerson(PersonPrimaryKey personPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
+        public async Task<IActionResult> ActivateInactivatePerson([FromRoute] PersonPrimaryKey personPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var person = personPrimaryKey.EntityObject;
             if (person.IsActive)
@@ -221,40 +235,40 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult();
         }
 
-        //todo:
-//[HttpGet]
-        //[UserEditFeature]
-        //public PartialViewResult EditJurisdiction(PersonPrimaryKey personPrimaryKey)
-        //{
-        //    var person = personPrimaryKey.EntityObject;
-        //    var viewModel = new EditUserJurisdictionsViewModel(person, CurrentPerson);
-        //    return ViewEditJurisdiction(viewModel);
-        //}
+        [HttpGet("{personPrimaryKey}")]
+        [UserEditFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
+        public PartialViewResult EditJurisdiction([FromRoute] PersonPrimaryKey personPrimaryKey)
+        {
+            var person = personPrimaryKey.EntityObject;
+            var viewModel = new EditUserJurisdictionsViewModel(person, CurrentPerson);
+            return ViewEditJurisdiction(viewModel);
+        }
 
-        //[HttpPost]
-        //[UserEditFeature]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        //public ActionResult EditJurisdiction(PersonPrimaryKey personPrimaryKey, EditUserJurisdictionsViewModel viewModel)
-        //{
-        //    var person = personPrimaryKey.EntityObject;
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return ViewEditJurisdiction(viewModel);
-        //    }
+        [HttpPost("{personPrimaryKey}")]
+        [UserEditFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
+        public async Task<IActionResult> EditJurisdiction([FromRoute] PersonPrimaryKey personPrimaryKey, EditUserJurisdictionsViewModel viewModel)
+        {
+            var person = personPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditJurisdiction(viewModel);
+            }
 
-        //    _dbContext.StormwaterJurisdictionPeople.Load();
-        //    viewModel.UpdateModel(person, _dbContext.StormwaterJurisdictionPeople.Local);
-        //    SetMessageForDisplay($"Assigned {FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabelPluralized()} successfully changed for {person.GetFullNameFirstLastAndOrgAsUrl()}.");
-        //    return new ModalDialogFormJsonResult();
-        //}
+            viewModel.UpdateModel(person, _dbContext.StormwaterJurisdictionPeople);
+            await _dbContext.SaveChangesAsync();
+            SetMessageForDisplay($"Assigned {FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabelPluralized()} successfully changed for {person.GetFullNameFirstLastAndOrgAsUrl()}.");
+            return new ModalDialogFormJsonResult();
+        }
 
-        //private PartialViewResult ViewEditJurisdiction(EditUserJurisdictionsViewModel viewModel)
-        //{
-        //    var allStormwaterJurisdictions = _dbContext.StormwaterJurisdictions.ToList();
-        //    var stormwaterJurisdictionsCurrentPersonCanManage = CurrentPerson.GetStormwaterJurisdictionsPersonCanView();
-        //    var viewData = new EditUserJurisdictionsViewData(HttpContext, _linkGenerator, CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage, true);
-        //    return RazorPartialView<EditUserJurisdictions, EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>(viewData, viewModel);
-        //}
+        private PartialViewResult ViewEditJurisdiction(EditUserJurisdictionsViewModel viewModel)
+        {
+            var allStormwaterJurisdictions = _dbContext.StormwaterJurisdictions.ToList();
+            var stormwaterJurisdictionsCurrentPersonCanManage = CurrentPerson.GetStormwaterJurisdictionsPersonCanViewWithContext(_dbContext);
+            var viewData = new EditUserJurisdictionsViewData(HttpContext, _linkGenerator, CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage, true);
+            return RazorPartialView<EditUserJurisdictions, EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>(viewData, viewModel);
+        }
 
         //[JurisdictionManageFeature]
         //[HttpGet]

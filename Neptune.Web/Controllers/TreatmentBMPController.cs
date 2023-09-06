@@ -55,6 +55,7 @@ namespace Neptune.Web.Controllers
         {
         }
 
+        [HttpGet]
         public ViewResult FindABMP()
         {
             var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanViewWithContext(_dbContext);
@@ -73,6 +74,7 @@ namespace Neptune.Web.Controllers
             return RazorView<FindABMP, FindABMPViewData>(viewData);
         }
 
+        [HttpGet]
         [NeptuneViewFeature]
         public ViewResult Index()
         {
@@ -87,6 +89,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Views.TreatmentBMP.Index, IndexViewData>(viewData);
         }
 
+        [HttpGet]
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<vTreatmentBMPDetailed> TreatmentBMPGridJsonData()
         {
@@ -99,6 +102,7 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
+        [HttpGet]
         [NeptuneViewFeature]
         public ViewResult TreatmentBMPAssessmentSummary()
         {
@@ -108,6 +112,7 @@ namespace Neptune.Web.Controllers
                 viewData);
         }
 
+        [HttpGet]
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMPAssessmentSummary> TreatmentBMPAssessmentSummaryGridJsonData()
         {
@@ -848,11 +853,12 @@ namespace Neptune.Web.Controllers
             return Json(listItems);
         }
 
-        [HttpGet("{treatmentBMPPrimaryKey}")]
+        [HttpGet("{treatmentBMPPrimaryKey}/{customAttributeTypePurposePrimaryKey}")]
         [TreatmentBMPEditFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("customAttributeTypePurposePrimaryKey")]
         public ViewResult EditAttributes([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
-            CustomAttributeTypePurposePrimaryKey customAttributeTypePurposePrimaryKey)
+            [FromRoute] CustomAttributeTypePurposePrimaryKey customAttributeTypePurposePrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var customAttributeTypePurpose = customAttributeTypePurposePrimaryKey.EntityObject;
@@ -860,11 +866,12 @@ namespace Neptune.Web.Controllers
             return ViewEditAttributes(viewModel, treatmentBMP, customAttributeTypePurpose);
         }
 
-        [HttpPost("{treatmentBMPPrimaryKey}")]
+        [HttpPost("{treatmentBMPPrimaryKey}/{customAttributeTypePurposePrimaryKey}")]
         [TreatmentBMPEditFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("customAttributeTypePurposePrimaryKey")]
         public async Task<IActionResult> EditAttributes([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
-            CustomAttributeTypePurposePrimaryKey customAttributeTypePurposePrimaryKey,
+            [FromRoute] CustomAttributeTypePurposePrimaryKey customAttributeTypePurposePrimaryKey,
             EditAttributesViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -917,6 +924,7 @@ namespace Neptune.Web.Controllers
             return RazorView<ViewTreatmentBMPModelingAttributes, ViewTreatmentBMPModelingAttributesViewData>(viewData);
         }
 
+        [HttpGet]
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<vViewTreatmentBMPModelingAttribute> ViewTreatmentBMPModelingAttributesGridJsonData()
         {

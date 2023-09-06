@@ -18,28 +18,13 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-namespace Neptune.Web.Models
+namespace Neptune.Models.DataTransferObjects
 {
-    public class StormwaterJurisdictionPersonSimple
+    public class StormwaterJurisdictionPersonUpsertDto
     {
         public int? StormwaterJurisdictionPersonID { get; set; }
         public int PersonID { get; set; }
         public int StormwaterJurisdictionID { get; set; }
         public bool CurrentPersonCanRemove { get; set; }
-
-           /// <summary>
-        /// Needed by ModelBinder
-        /// </summary>
-        public StormwaterJurisdictionPersonSimple()
-        {
-        }
-
-        public StormwaterJurisdictionPersonSimple(StormwaterJurisdictionPerson stormwaterJurisdictionPerson, Person currentPerson)
-        {
-            StormwaterJurisdictionPersonID = stormwaterJurisdictionPerson.StormwaterJurisdictionPersonID;
-            PersonID = stormwaterJurisdictionPerson.PersonID;
-            StormwaterJurisdictionID = stormwaterJurisdictionPerson.StormwaterJurisdictionID;
-            CurrentPersonCanRemove = currentPerson.IsAssignedToStormwaterJurisdiction(stormwaterJurisdictionPerson.StormwaterJurisdictionID);
-        }
     }
 }

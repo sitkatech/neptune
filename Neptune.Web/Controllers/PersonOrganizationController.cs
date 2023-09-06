@@ -18,45 +18,51 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Linq;
-using System.Web.Mvc;
-using Neptune.Web.Common;
-using Neptune.Web.Models;
+
 using Neptune.Web.Security;
 using Neptune.Web.Views.PersonOrganization;
-using LtInfo.Common.MvcResults;
+using Microsoft.AspNetCore.Mvc;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common.MvcResults;
+using Neptune.Web.Services.Filters;
 
 namespace Neptune.Web.Controllers
 {
-    public class PersonOrganizationController : NeptuneBaseController
+    public class PersonOrganizationController : NeptuneBaseController<PersonOrganizationController>
     {
-        [HttpGet]
+        public PersonOrganizationController(NeptuneDbContext dbContext, ILogger<PersonOrganizationController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        {
+        }
+
+        [HttpGet("{personPrimaryKey}")]
         [NeptuneAdminFeature]
-        public PartialViewResult EditPersonOrganizationPrimaryContacts(PersonPrimaryKey personPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
+        public PartialViewResult EditPersonOrganizationPrimaryContacts([FromRoute] PersonPrimaryKey personPrimaryKey)
         {
             var person = personPrimaryKey.EntityObject;
-            var organizationIDs = person.OrganizationsWhereYouAreThePrimaryContactPerson.Select(org => org.OrganizationID).ToList();
+            var organizationIDs = person.Organizations.Select(org => org.OrganizationID).ToList();
             var viewModel = new EditPersonOrganizationsViewModel(organizationIDs);
             return ViewEditPersonOrganizations(viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{personPrimaryKey}")]
         [NeptuneAdminFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditPersonOrganizationPrimaryContacts(PersonPrimaryKey personPrimaryKey, EditPersonOrganizationsViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
+        public async Task<IActionResult> EditPersonOrganizationPrimaryContacts([FromRoute] PersonPrimaryKey personPrimaryKey, EditPersonOrganizationsViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return ViewEditPersonOrganizations(viewModel);
             }
             var person = personPrimaryKey.EntityObject;
-            viewModel.UpdateModel(person, HttpRequestStorage.DatabaseEntities.Organizations.ToList());
+            viewModel.UpdateModel(person, _dbContext.Organizations.ToList());
+            await _dbContext.SaveChangesAsync();
             return new ModalDialogFormJsonResult();
         }
 
         private PartialViewResult ViewEditPersonOrganizations(EditPersonOrganizationsViewModel viewModel)
         {
-            var allOrganizations = HttpRequestStorage.DatabaseEntities.Organizations.GetActiveOrganizations().Select(x => new OrganizationSimple(x)).ToList();
+            var allOrganizations = Organizations.ListActive(_dbContext).Select(x => x.AsSimpleDto()).ToList();
             var viewData = new EditPersonOrganizationsViewData(allOrganizations);
             return RazorPartialView<EditPersonOrganizations, EditPersonOrganizationsViewData, EditPersonOrganizationsViewModel>(viewData, viewModel);
         }

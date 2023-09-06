@@ -109,8 +109,8 @@ namespace Neptune.Web.Controllers
             return Redirect(viewModel.ReturnUrl);
         }
 
-        [LoggedInUnclassifiedFeature]
         [HttpGet]
+        [LoggedInUnclassifiedFeature]
         public ViewResult RequestOrganizationNameChange()
         {
             var currentPageUrl = string.Empty;
@@ -170,8 +170,8 @@ namespace Neptune.Web.Controllers
             return Redirect(SitkaRoute<OrganizationController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
         }
 
-        [LoggedInUnclassifiedFeature]
         [HttpGet]
+        [LoggedInUnclassifiedFeature]
         public ViewResult RequestToChangePrivileges()
         {
             return ViewSupport(SupportRequestTypeEnum.RequestToChangeUserAccountPrivileges, string.Empty);

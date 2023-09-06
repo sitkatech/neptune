@@ -18,10 +18,8 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Collections.Generic;
-using System.Linq;
-using Neptune.Web.Models;
-using LtInfo.Common.Models;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.PersonOrganization
 {
@@ -41,7 +39,7 @@ namespace Neptune.Web.Views.PersonOrganization
             OrganizationIDs = organizationIDs;
         }
 
-        public void UpdateModel(Person person, List<Models.Organization> allOrganizations)
+        public void UpdateModel(Person person, List<EFModels.Entities.Organization> allOrganizations)
         {
             // Remove all existing associations
             var currentOrgsForWhichIAmPrimaryContact = allOrganizations.Where(o => o.PrimaryContactPersonID == person.PersonID).ToList();

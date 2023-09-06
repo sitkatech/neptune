@@ -150,6 +150,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
+        [HttpGet]
         public ViewResult Index()
         {
             var treatmentBMPTypes = TreatmentBMPTypes.List(_dbContext);
@@ -240,7 +241,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult EditObservationTypesSortOrder([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey)
         {
             var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
-            EditSortOrderViewModel viewModel = new EditSortOrderViewModel();
+            var viewModel = new EditSortOrderViewModel();
             return ViewEditObservationTypesSortOrder(treatmentBMPType, viewModel);
         }
 
@@ -274,7 +275,7 @@ namespace Neptune.Web.Controllers
             int attributeTypePurposeID)
         {
             var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
-            EditSortOrderViewModel viewModel = new EditSortOrderViewModel();
+            var viewModel = new EditSortOrderViewModel();
             return ViewEditAttributeTypesSortOrder(treatmentBMPType, viewModel, attributeTypePurposeID);
         }
 
