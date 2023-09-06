@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common.MvcResults;
+using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.WaterQualityManagementPlan.BoundaryMapInitJson;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
@@ -23,7 +24,6 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [AnonymousUnclassifiedFeature]
         public ViewResult Index()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WaterQualityMaintenancePlan);
@@ -35,7 +35,6 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [AnonymousUnclassifiedFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlan> WaterQualityManagementPlanIndexGridData()
         {
             var waterQualityManagementPlans = CurrentPerson.GetWQMPsPersonCanView(_dbContext);
@@ -44,7 +43,6 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [AnonymousUnclassifiedFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerificationGridData()
         {
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(_dbContext);
@@ -69,19 +67,19 @@ namespace Neptune.Web.Controllers
             return RazorView<LGUAudit, LGUAuditViewData>(viewData);
         }
 
+        [HttpGet]
         [SitkaAdminFeature]
-        public GridJsonNetJObjectResult<vWaterQualityManagementPlanLGUAudit>
-            WaterQualityManagementPlanLGUAuditGridData()
+        public GridJsonNetJObjectResult<vWaterQualityManagementPlanLGUAudit> WaterQualityManagementPlanLGUAuditGridData()
         {
             var gridSpec = new WaterQualityManagementPlanLGUAuditGridSpec(_linkGenerator);
             return new GridJsonNetJObjectResult<vWaterQualityManagementPlanLGUAudit>(
                 _dbContext.vWaterQualityManagementPlanLGUAudits.ToList(), gridSpec);
         }
 
-        [HttpGet]
-        [AnonymousUnclassifiedFeature]
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanViewFeature]
-        public ViewResult Detail(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public ViewResult Detail([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
 
@@ -164,10 +162,10 @@ namespace Neptune.Web.Controllers
         }
 
 
-        [HttpGet]
-        [AnonymousUnclassifiedFeature]
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanViewFeature]
-        public GridJsonNetJObjectResult<Parcel> ParcelsForWaterQualityManagementPlanGridData(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPlanPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public GridJsonNetJObjectResult<Parcel> ParcelsForWaterQualityManagementPlanGridData([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPlanPrimaryKey.EntityObject;
             var parcels = waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x => x.Parcel).OrderBy(x => x.ParcelNumber).ToList();
@@ -219,18 +217,20 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<New, NewViewData, NewViewModel>(viewData, viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanManageFeature]
-        public PartialViewResult Edit(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public PartialViewResult Edit([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var viewModel = new EditViewModel(waterQualityManagementPlan);
             return ViewEdit(viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanManageFeature]
-        public async Task<IActionResult> Edit(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public async Task<IActionResult> Edit([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -254,18 +254,20 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanDeleteFeature]
-        public PartialViewResult Delete(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public PartialViewResult Delete([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(waterQualityManagementPlan.WaterQualityManagementPlanID);
             return ViewDelete(waterQualityManagementPlan, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanDeleteFeature]
-        public async Task<IActionResult> Delete(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public async Task<IActionResult> Delete([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -294,19 +296,20 @@ namespace Neptune.Web.Controllers
         #endregion
 
         #region WQMP Treatment BMPs
-        [HttpGet]
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanViewFeature]
-        public ViewResult EditWqmpBmps(
-            WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public ViewResult EditWqmpBmps([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var viewModel = new EditWqmpBmpsViewModel(waterQualityManagementPlan);
             return ViewEditWqmpBmps(waterQualityManagementPlan, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanViewFeature]
-        public async Task<IActionResult> EditWqmpBmps(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpBmpsViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public async Task<IActionResult> EditWqmpBmps([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpBmpsViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -330,21 +333,20 @@ namespace Neptune.Web.Controllers
             return RazorView<EditWqmpBmps, EditWqmpBmpsViewData, EditWqmpBmpsViewModel>(viewData, viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanViewFeature]
-        public ViewResult EditSimplifiedStructuralBMPs(
-            WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public ViewResult EditSimplifiedStructuralBMPs([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var viewModel = new EditSimplifiedStructuralBMPsViewModel(waterQualityManagementPlan);
             return ViewEditSimplifiedStructuralBMPs(waterQualityManagementPlan, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanViewFeature]
-        public async Task<IActionResult> EditSimplifiedStructuralBMPs(
-            WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey,
-            EditSimplifiedStructuralBMPsViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public async Task<IActionResult> EditSimplifiedStructuralBMPs([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditSimplifiedStructuralBMPsViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -373,9 +375,10 @@ namespace Neptune.Web.Controllers
             return RazorView<EditSimplifiedStructuralBMPs, EditSimplifiedStructuralBMPsViewData, EditSimplifiedStructuralBMPsViewModel>(viewData, viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanViewFeature]
-        public ViewResult EditSourceControlBMPs(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public ViewResult EditSourceControlBMPs([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var sourceControlBMPAttributes = _dbContext.SourceControlBMPAttributes.ToList();
@@ -383,11 +386,10 @@ namespace Neptune.Web.Controllers
             return ViewEditSourceControlBMPs(waterQualityManagementPlan, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanViewFeature]
-        public async Task<IActionResult> EditSourceControlBMPs(
-            WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey,
-            EditSourceControlBMPsViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public async Task<IActionResult> EditSourceControlBMPs([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditSourceControlBMPsViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -417,18 +419,20 @@ namespace Neptune.Web.Controllers
 
         #region WQMP Parcels
 
-        [HttpGet]
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanManageFeature]
-        public ViewResult EditWqmpParcels(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public ViewResult EditWqmpParcels([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var viewModel = new EditWqmpParcelsViewModel(waterQualityManagementPlan);
             return ViewEditWqmpParcels(waterQualityManagementPlan, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanManageFeature]
-        public async Task<IActionResult> EditWqmpParcels(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpParcelsViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public async Task<IActionResult> EditWqmpParcels([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpParcelsViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -479,18 +483,20 @@ namespace Neptune.Web.Controllers
             return RazorView<EditWqmpBoundary, EditWqmpBoundaryViewData, EditWqmpBoundaryViewModel>(viewData, viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanManageFeature]
-        public ViewResult EditWqmpBoundary(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public ViewResult EditWqmpBoundary([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var viewModel = new EditWqmpBoundaryViewModel();
             return ViewEditWqmpBoundary(waterQualityManagementPlan, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanManageFeature]
-        public async Task<IActionResult> EditWqmpBoundary(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpBoundaryViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public async Task<IActionResult> EditWqmpBoundary([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpBoundaryViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -522,13 +528,12 @@ namespace Neptune.Web.Controllers
 
 
 
-        [HttpGet]
+        [HttpGet("{waterQualityManagementPlanVerifyPrimaryKey}")]
         [WaterQualityManagementPlanVerifyViewFeature]
-        public ViewResult WqmpVerify(WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanVerifyPrimaryKey")]
+        public ViewResult WqmpVerify([FromRoute] WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey)
         {
             var waterQualityManagementPlanVerify = waterQualityManagementPlanVerifyPrimaryKey.EntityObject;
-
-
             var waterQualityManagementPlanVerifyQuickBMP =
                 _dbContext.WaterQualityManagementPlanVerifyQuickBMPs.Where(x =>
                     x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID ==
@@ -543,9 +548,10 @@ namespace Neptune.Web.Controllers
             return RazorView<WqmpVerify, WqmpVerifyViewData>(viewData);
         }
 
-        [HttpGet]
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanManageFeature]
-        public ViewResult NewWqmpVerify(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public ViewResult NewWqmpVerify([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var quickBMPs = waterQualityManagementPlan.QuickBMPs.ToList();
@@ -562,9 +568,10 @@ namespace Neptune.Web.Controllers
             return ViewNewWqmpVerify(waterQualityManagementPlan, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanManageFeature]
-        public ActionResult NewWqmpVerify( WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, NewWqmpVerifyViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public ActionResult NewWqmpVerify([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, NewWqmpVerifyViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -602,9 +609,10 @@ namespace Neptune.Web.Controllers
             return RazorView<NewWqmpVerify, NewWqmpVerifyViewData, NewWqmpVerifyViewModel>(viewData, viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("{waterQualityManagementPlanVerifyPrimaryKey}")]
         [WaterQualityManagementPlanVerifyManageFeature]
-        public ViewResult EditWqmpVerify(WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanVerifyPrimaryKey")]
+        public ViewResult EditWqmpVerify([FromRoute] WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlanVerify = waterQualityManagementPlanPrimaryKey.EntityObject;
 
@@ -618,9 +626,10 @@ namespace Neptune.Web.Controllers
             return ViewEditWqmpVerify(waterQualityManagementPlanVerify.WaterQualityManagementPlan, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{waterQualityManagementPlanVerifyPrimaryKey}")]
         [WaterQualityManagementPlanVerifyManageFeature]
-        public async Task<IActionResult> EditWqmpVerify(WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpVerifyViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanVerifyPrimaryKey")]
+        public async Task<IActionResult> EditWqmpVerify([FromRoute] WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpVerifyViewModel viewModel)
         {
             var waterQualityManagementPlanVerify = waterQualityManagementPlanPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -648,18 +657,20 @@ namespace Neptune.Web.Controllers
             return RazorView<EditWqmpVerify, EditWqmpVerifyViewData, EditWqmpVerifyViewModel>(viewData, viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("{waterQualityManagementPlanVerifyPrimaryKey}")]
         [WaterQualityManagementPlanVerifyDeleteFeature]
-        public PartialViewResult DeleteVerify(WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanVerifyPrimaryKey")]
+        public PartialViewResult DeleteVerify([FromRoute] WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey)
         {
             var waterQualityManagementPlanVerify = waterQualityManagementPlanVerifyPrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
             return ViewDeleteVerify(waterQualityManagementPlanVerify, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{waterQualityManagementPlanVerifyPrimaryKey}")]
         [WaterQualityManagementPlanVerifyDeleteFeature]
-        public async Task<IActionResult> DeleteVerify(WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanVerifyPrimaryKey")]
+        public async Task<IActionResult> DeleteVerify([FromRoute] WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var waterQualityManagementPlanVerify = waterQualityManagementPlanVerifyPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -685,18 +696,20 @@ namespace Neptune.Web.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("{waterQualityManagementPlanVerifyPrimaryKey}")]
         [WaterQualityManagementPlanVerifyManageFeature]
-        public PartialViewResult EditWqmpVerifyModal(WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanVerifyPrimaryKey")]
+        public PartialViewResult EditWqmpVerifyModal([FromRoute] WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey)
         {
             var waterQualityManagementPlanVerify = waterQualityManagementPlanVerifyPrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
             return ViewEditWqmpVerifyModal(viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{waterQualityManagementPlanVerifyPrimaryKey}")]
         [WaterQualityManagementPlanVerifyDeleteFeature]
-        public ActionResult EditWqmpVerifyModal(WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanVerifyPrimaryKey")]
+        public ActionResult EditWqmpVerifyModal([FromRoute] WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -715,18 +728,20 @@ namespace Neptune.Web.Controllers
         }
         #endregion
 
-        [HttpGet]
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanViewFeature]
-        public PartialViewResult EditModelingApproach(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public PartialViewResult EditModelingApproach([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var viewModel = new EditModelingApproachViewModel(waterQualityManagementPlan);
             return ViewEditModelingApproach(viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanViewFeature]
-        public async Task<IActionResult> EditModelingApproach(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditModelingApproachViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public async Task<IActionResult> EditModelingApproach([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditModelingApproachViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             
@@ -753,9 +768,10 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<EditModelingApproach, EditModelingApproachViewData, EditModelingApproachViewModel>(viewData, viewModel);
         }
 
-        [AnonymousUnclassifiedFeature]
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanViewFeature]
-        public JsonResult GetModelResults(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public JsonResult GetModelResults([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var modeledPerformanceResultSimple = new ModeledPerformanceResultDto(_dbContext, waterQualityManagementPlan);

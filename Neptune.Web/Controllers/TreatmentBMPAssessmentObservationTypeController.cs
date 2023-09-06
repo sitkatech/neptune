@@ -27,6 +27,7 @@ using Neptune.Web.Common.Models;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMPType;
@@ -74,8 +75,9 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        [HttpGet]
-        public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
+        [HttpGet("{treatmentBMPAssessmentObservationTypePrimaryKey}")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
+        public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var countByTreatmentBMPType = TreatmentBMPs.ListCountByTreatmentBMPType(_dbContext);
             var gridSpec = new TreatmentBMPTypeGridSpec(_linkGenerator, CurrentPerson, countByTreatmentBMPType);
@@ -116,18 +118,20 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentObservationTypeController>(_linkGenerator, x => x.Detail(treatmentBMPAssessmentObservationType.PrimaryKey)));
         }
 
-        [HttpGet]
+        [HttpGet("{treatmentBMPAssessmentObservationTypePrimaryKey}")]
         [NeptuneAdminFeature]
-        public ViewResult Edit(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
+        public ViewResult Edit([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             var viewModel = new EditViewModel(treatmentBMPAssessmentObservationType);
             return ViewEdit(viewModel, treatmentBMPAssessmentObservationType);
         }
 
-        [HttpPost]
+        [HttpPost("{treatmentBMPAssessmentObservationTypePrimaryKey}")]
         [NeptuneAdminFeature]
-        public async Task<IActionResult> Edit(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, EditViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
+        public async Task<IActionResult> Edit([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, EditViewModel viewModel)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -151,8 +155,9 @@ namespace Neptune.Web.Controllers
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
-        [AnonymousUnclassifiedFeature]
-        public ViewResult Detail(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
+        [HttpGet("{treatmentBMPAssessmentObservationTypePrimaryKey}")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
+        public ViewResult Detail([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
 
@@ -160,9 +165,10 @@ namespace Neptune.Web.Controllers
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
-        [HttpGet]
+        [HttpGet("{treatmentBMPAssessmentObservationTypePrimaryKey}")]
         [NeptuneAdminFeature]
-        public PartialViewResult Delete(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
+        public PartialViewResult Delete([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
@@ -178,9 +184,10 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{treatmentBMPAssessmentObservationTypePrimaryKey}")]
         [NeptuneAdminFeature]
-        public async Task<IActionResult> Delete(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, ConfirmDialogFormViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
+        public async Task<IActionResult> Delete([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -195,9 +202,9 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult();
         }
 
-        [HttpGet]
-        [AnonymousUnclassifiedFeature]
-        public PartialViewResult DiscreteDetailSchema(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
+        [HttpGet("{treatmentBMPAssessmentObservationTypePrimaryKey}")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
+        public PartialViewResult DiscreteDetailSchema([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             var schema = JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema);
@@ -205,9 +212,9 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ViewDiscreteValueSchemaDetail, ViewDiscreteValueSchemaDetailViewData>(viewData);
         }
 
-        [HttpGet]
-        [AnonymousUnclassifiedFeature]
-        public PartialViewResult RateDetailSchema(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
+        [HttpGet("{treatmentBMPAssessmentObservationTypePrimaryKey}")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
+        public PartialViewResult RateDetailSchema([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             var schema = JsonConvert.DeserializeObject<RateObservationTypeSchema>(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema);
@@ -215,9 +222,9 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ViewRateSchemaDetail, ViewRateSchemaDetailViewData>(viewData);
         }
 
-        [HttpGet]
-        [AnonymousUnclassifiedFeature]
-        public PartialViewResult PassFailDetailSchema(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
+        [HttpGet("{treatmentBMPAssessmentObservationTypePrimaryKey}")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
+        public PartialViewResult PassFailDetailSchema([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             var schema = JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema);
@@ -225,9 +232,9 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ViewPassFailSchemaDetail, ViewPassFailSchemaDetailViewData>(viewData);
         }
 
-        [HttpGet]
-        [AnonymousUnclassifiedFeature]
-        public PartialViewResult PercentageDetailSchema(TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
+        [HttpGet("{treatmentBMPAssessmentObservationTypePrimaryKey}")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
+        public PartialViewResult PercentageDetailSchema([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             var schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema);

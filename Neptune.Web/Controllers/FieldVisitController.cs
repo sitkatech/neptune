@@ -40,6 +40,7 @@ using Newtonsoft.Json;
 using FieldVisit = Neptune.EFModels.Entities.FieldVisit;
 using FieldVisitSection = Neptune.EFModels.Entities.FieldVisitSection;
 using Index = Neptune.Web.Views.FieldVisit.Index;
+using Neptune.Web.Services.Filters;
 
 namespace Neptune.Web.Controllers
 {
@@ -60,10 +61,9 @@ namespace Neptune.Web.Controllers
             return RazorView<Index, IndexViewData>(viewData);
         }
 
-        [HttpGet]
-        [AnonymousUnclassifiedFeature]
-        public GridJsonNetJObjectResult<vFieldVisitDetailed> FieldVisitGridJsonData(
-            TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        [HttpGet("{treatmentBMPPrimaryKey}")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
+        public GridJsonNetJObjectResult<vFieldVisitDetailed> FieldVisitGridJsonData([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
 
@@ -114,9 +114,10 @@ namespace Neptune.Web.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitViewFeature]
-        public ViewResult Detail(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public ViewResult Detail([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var initialAssessmentViewData = new AssessmentDetailViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial), TreatmentBMPAssessmentTypeEnum.Initial);
@@ -125,9 +126,10 @@ namespace Neptune.Web.Controllers
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
-        [HttpGet]
+        [HttpGet("{treatmentBMPPrimaryKey}")]
         [FieldVisitCreateFeature]
-        public PartialViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
+        public PartialViewResult New([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var viewModel = new NewFieldVisitViewModel(treatmentBMP.GetInProgressFieldVisit());
@@ -140,9 +142,10 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<NewFieldVisit, NewFieldVisitViewData, NewFieldVisitViewModel>(viewData, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{treatmentBMPPrimaryKey}")]
         [FieldVisitCreateFeature]
-        public async Task<IActionResult> New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, NewFieldVisitViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
+        public async Task<IActionResult> New([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, NewFieldVisitViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -192,9 +195,10 @@ namespace Neptune.Web.Controllers
                 SitkaRoute<FieldVisitController>.BuildUrlFromExpression(_linkGenerator, x => x.Inventory(fieldVisit)));
         }
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public PartialViewResult EditDateAndType(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public PartialViewResult EditDateAndType([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewModel = new EditDateAndTypeViewModel(fieldVisit);
@@ -207,9 +211,10 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<EditDateAndType, EditDateAndTypeViewData, EditDateAndTypeViewModel>(viewData, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public async Task<IActionResult> EditDateAndType(FieldVisitPrimaryKey fieldVisitPrimaryKey, EditDateAndTypeViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> EditDateAndType([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, EditDateAndTypeViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             fieldVisit.FieldVisitTypeID = viewModel.FieldVisitTypeID;
@@ -222,18 +227,20 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult(HttpContext.Request.GetReferrer());
         }
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public ViewResult Inventory(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public ViewResult Inventory([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewData = new InventoryViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit);
             return RazorView<Inventory, InventoryViewData>(viewData);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public async Task<IActionResult> Inventory(FieldVisitPrimaryKey fieldVisitPrimaryKey, InventoryViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> Inventory([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, InventoryViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             if (await FinalizeVisitIfNecessary(viewModel, fieldVisit))
@@ -255,9 +262,10 @@ namespace Neptune.Web.Controllers
             return false;
         }
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public ViewResult Location(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public ViewResult Location([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewModel = new LocationViewModel(fieldVisit);
@@ -283,9 +291,10 @@ namespace Neptune.Web.Controllers
             return RazorView<Location, LocationViewData, LocationViewModel>(viewData, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public async Task<IActionResult> Location(FieldVisitPrimaryKey fieldVisitPrimaryKey, LocationViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> Location([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, LocationViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
 
@@ -309,18 +318,20 @@ namespace Neptune.Web.Controllers
                 c.Photos(fieldVisit)), fieldVisit);
         }
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public ViewResult Photos(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public ViewResult Photos([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewModel = new PhotosViewModel(fieldVisit.TreatmentBMP);
             return ViewPhotos(fieldVisit, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public async Task<IActionResult> Photos(FieldVisitPrimaryKey fieldVisitPrimaryKey, PhotosViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> Photos([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, PhotosViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -345,9 +356,10 @@ namespace Neptune.Web.Controllers
             return RazorView<Photos, PhotosViewData, PhotosViewModel>(viewData, viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public ViewResult Attributes(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public ViewResult Attributes([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewModel = new AttributesViewModel(fieldVisit);
@@ -362,9 +374,10 @@ namespace Neptune.Web.Controllers
             return RazorView<Attributes, AttributesViewData, AttributesViewModel>(viewData, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public async Task<IActionResult> Attributes(FieldVisitPrimaryKey fieldVisitPrimaryKey, AttributesViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> Attributes([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, AttributesViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
 
@@ -383,18 +396,20 @@ namespace Neptune.Web.Controllers
                 c.Assessment(fieldVisit)), fieldVisit);
         }
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public ViewResult Assessment(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public ViewResult Assessment([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewData = new AssessmentViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit);
             return RazorView<Assessment, AssessmentViewData>(viewData);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public async Task<IActionResult> Assessment(FieldVisitPrimaryKey fieldVisitPrimaryKey, FieldVisitViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> Assessment([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, FieldVisitViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             const TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum = TreatmentBMPAssessmentTypeEnum.Initial;
@@ -415,18 +430,20 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Observations(fieldVisit, treatmentBMPAssessmentTypeEnum)));
         }
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public ViewResult PostMaintenanceAssessment(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public ViewResult PostMaintenanceAssessment([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewData = new PostMaintenanceAssessmentViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit);
             return RazorView<PostMaintenanceAssessment, PostMaintenanceAssessmentViewData>(viewData);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public async Task<IActionResult> PostMaintenanceAssessment(FieldVisitPrimaryKey fieldVisitPrimaryKey, FieldVisitViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> PostMaintenanceAssessment([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, FieldVisitViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             const TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum = TreatmentBMPAssessmentTypeEnum.PostMaintenance;
@@ -447,9 +464,10 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Observations(fieldVisit, treatmentBMPAssessmentTypeEnum)));
         }
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public ViewResult Maintain(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public ViewResult Maintain([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewModel = new MaintainViewModel();
@@ -465,9 +483,10 @@ namespace Neptune.Web.Controllers
             return RazorView<Maintain, MaintainViewData, MaintainViewModel>(viewData, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public async Task<IActionResult> Maintain(FieldVisitPrimaryKey fieldVisitPrimaryKey, MaintainViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> Maintain([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, MaintainViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -497,9 +516,10 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.EditMaintenanceRecord(fieldVisitPrimaryKey)));
         }
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public ActionResult EditMaintenanceRecord(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public ActionResult EditMaintenanceRecord([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var maintenanceRecord = fieldVisit.MaintenanceRecord;
@@ -526,9 +546,10 @@ namespace Neptune.Web.Controllers
                 EditMaintenanceRecordViewModel>(viewData, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public async Task<IActionResult> EditMaintenanceRecord(FieldVisitPrimaryKey fieldVisitPrimaryKey, EditMaintenanceRecordViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> EditMaintenanceRecord([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, EditMaintenanceRecordViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -550,18 +571,20 @@ namespace Neptune.Web.Controllers
                 c.PostMaintenanceAssessment(fieldVisit)), fieldVisit);
         }
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public ViewResult VisitSummary(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public ViewResult VisitSummary([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewData = new VisitSummaryViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit);
             return RazorView<VisitSummary, VisitSummaryViewData, VisitSummaryViewModel>(viewData, new VisitSummaryViewModel());
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
-        public async Task<IActionResult> VisitSummary(FieldVisitPrimaryKey fieldVisitPrimaryKey, VisitSummaryViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> VisitSummary([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, VisitSummaryViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewData = new VisitSummaryViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit);
@@ -578,18 +601,20 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.FindABMP()));
         }
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitVerifyFeature]
-        public PartialViewResult VerifyFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public PartialViewResult VerifyFieldVisit([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(fieldVisit.FieldVisitID);
             return ViewVerifyFieldVisit(fieldVisit, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitVerifyFeature]
-        public async Task<IActionResult> VerifyFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> VerifyFieldVisit([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -609,18 +634,20 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitVerifyFeature]
-        public PartialViewResult MarkProvisionalFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public PartialViewResult MarkProvisionalFieldVisit([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(fieldVisit.FieldVisitID);
             return ViewMarkProvisionalFieldVisit(fieldVisit, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitVerifyFeature]
-        public async Task<IActionResult> MarkProvisionalFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> MarkProvisionalFieldVisit([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -645,18 +672,20 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitReturnToEditFeature]
-        public PartialViewResult ReturnFieldVisitToEdit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public PartialViewResult ReturnFieldVisitToEdit([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(fieldVisit.FieldVisitID);
             return ViewReturnFieldVisitToEdit(fieldVisit, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitReturnToEditFeature]
-        public async Task<IActionResult> ReturnFieldVisitToEdit(FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> ReturnFieldVisitToEdit([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -682,9 +711,10 @@ namespace Neptune.Web.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}/{treatmentBMPAssessmentTypeEnum}")]
         [FieldVisitEditFeature]
-        public ActionResult Observations(FieldVisitPrimaryKey fieldVisitPrimaryKey, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public ActionResult Observations([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum);
@@ -704,9 +734,10 @@ namespace Neptune.Web.Controllers
             return RazorView<Observations, ObservationsViewData, ObservationsViewModel>(viewData, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}/{treatmentBMPAssessmentTypeEnum}")]
         [FieldVisitEditFeature]
-        public async Task<IActionResult> Observations(FieldVisitPrimaryKey fieldVisitPrimaryKey, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum, ObservationsViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> Observations([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum, ObservationsViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum);
@@ -815,9 +846,10 @@ namespace Neptune.Web.Controllers
 
         #region Assessment Photos
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}/{treatmentBMPAssessmentTypeEnum}")]
         [FieldVisitEditFeature]
-        public ViewResult AssessmentPhotos(FieldVisitPrimaryKey fieldVisitPrimaryKey, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public ViewResult AssessmentPhotos([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, [FromRoute] TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum);
@@ -825,9 +857,10 @@ namespace Neptune.Web.Controllers
             return ViewAssessmentPhotos(treatmentBMPAssessment, treatmentBMPAssessmentTypeEnum, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}/{treatmentBMPAssessmentTypeEnum}")]
         [FieldVisitEditFeature]
-        public async Task<IActionResult> AssessmentPhotos(FieldVisitPrimaryKey fieldVisitPrimaryKey, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum, AssessmentPhotosViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> AssessmentPhotos([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, [FromRoute] TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum, AssessmentPhotosViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum);
@@ -865,18 +898,20 @@ namespace Neptune.Web.Controllers
 
         #endregion
 
-        [HttpGet]
+        [HttpGet("{fieldVisitPrimaryKey}")]
         [FieldVisitDeleteFeature]
-        public PartialViewResult Delete(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public PartialViewResult Delete([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(fieldVisit.FieldVisitID);
             return ViewDeleteFieldVisit(fieldVisit, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitDeleteFeature]
-        public async Task<IActionResult> Delete(FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
+        public async Task<IActionResult> Delete([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             if (!ModelState.IsValid)

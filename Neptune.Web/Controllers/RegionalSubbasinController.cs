@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common.MvcResults;
+using Neptune.Web.Services.Filters;
 using NetTopologySuite.Features;
 using Index = Neptune.Web.Views.RegionalSubbasin.Index;
 using IndexViewData = Neptune.Web.Views.RegionalSubbasin.IndexViewData;
@@ -31,17 +32,19 @@ namespace Neptune.Web.Controllers
             return RazorView<Index, IndexViewData>(viewData);
         }
 
-        [HttpGet]
+        [HttpGet("{regionalSubbasinPrimaryKey}")]
         [NeptuneViewFeature]
-        public JsonResult UpstreamCatchments(RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("regionalSubbasinPrimaryKey")]
+        public JsonResult UpstreamCatchments([FromRoute] RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
         {
             var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
             return Json(new {regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList(_dbContext) });
         }
 
-        [HttpGet]
+        [HttpGet("{regionalSubbasinPrimaryKey}")]
         [NeptuneViewFeature]
-        public JsonResult UpstreamDelineation(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("regionalSubbasinPrimaryKey")]
+        public JsonResult UpstreamDelineation([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var dbGeometry = treatmentBMPPrimaryKey.EntityObject.GetCentralizedDelineationGeometry4326(_dbContext);
             var feature = new Feature(dbGeometry, new AttributesTable());
@@ -49,9 +52,10 @@ namespace Neptune.Web.Controllers
         }
 
         
-        [HttpGet]
+        [HttpGet("{regionalSubbasinPrimaryKey}")]
         [NeptuneAdminFeature]
-        public ViewResult Detail(RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("regionalSubbasinPrimaryKey")]
+        public ViewResult Detail([FromRoute] RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
         {
             var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
             var regionalSubbasinCatchmentGeometry4326 = regionalSubbasin.CatchmentGeometry4326;

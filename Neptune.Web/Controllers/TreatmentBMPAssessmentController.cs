@@ -24,6 +24,7 @@ using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Security;
+using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMPAssessment;
 
@@ -35,26 +36,30 @@ namespace Neptune.Web.Controllers
         {
         }
 
+        [HttpGet("{treatmentBMPAssessmentPrimaryKey}")]
         [TreatmentBMPAssessmentManageFeature]
-        public ViewResult Detail(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentPrimaryKey")]
+        public ViewResult Detail([FromRoute] TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
             var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessment);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
-        [HttpGet]
+        [HttpGet("{treatmentBMPAssessmentPrimaryKey}")]
         [TreatmentBMPAssessmentManageFeature]
-        public PartialViewResult Delete(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentPrimaryKey")]
+        public PartialViewResult Delete([FromRoute] TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(treatmentBMPAssessment.TreatmentBMPAssessmentID);
             return ViewDeleteTreatmentBMPAssessment(treatmentBMPAssessment, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{treatmentBMPAssessmentPrimaryKey}")]
         [TreatmentBMPAssessmentManageFeature]
-        public async Task<IActionResult> Delete(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentPrimaryKey")]
+        public async Task<IActionResult> Delete([FromRoute] TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -78,18 +83,20 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("{treatmentBMPAssessmentPrimaryKey}")]
         [TreatmentBMPAssessmentManageFeature]
-        public ViewResult Score(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentPrimaryKey")]
+        public ViewResult Score([FromRoute] TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
             var viewModel = new ScoreViewModel(treatmentBMPAssessment);
             return ViewScore(treatmentBMPAssessment, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{treatmentBMPAssessmentPrimaryKey}")]
         [TreatmentBMPAssessmentManageFeature]
-        public async Task<IActionResult> Score(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ScoreViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentPrimaryKey")]
+        public async Task<IActionResult> Score([FromRoute] TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ScoreViewModel viewModel)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -113,18 +120,20 @@ namespace Neptune.Web.Controllers
             return RazorView<Score, ScoreViewData, ScoreViewModel>(viewData, viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("{treatmentBMPAssessmentPhotoPrimaryKey}")]
         [TreatmentBMPAssessmentPhotoManageFeature]
-        public PartialViewResult DeletePhoto(TreatmentBMPAssessmentPhotoPrimaryKey treatmentBMPAssessmentPhotoPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentPhotoPrimaryKey")]
+        public PartialViewResult DeletePhoto([FromRoute] TreatmentBMPAssessmentPhotoPrimaryKey treatmentBMPAssessmentPhotoPrimaryKey)
         {
             var treatmentBMPAssessmentPhoto = treatmentBMPAssessmentPhotoPrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(treatmentBMPAssessmentPhoto.TreatmentBMPAssessmentPhotoID);
             return ViewDeletePhoto(viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{treatmentBMPAssessmentPhotoPrimaryKey}")]
         [TreatmentBMPAssessmentPhotoManageFeature]
-        public async Task<IActionResult> DeletePhoto(TreatmentBMPAssessmentPhotoPrimaryKey treatmentBMPAssessmentPhotoPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentPhotoPrimaryKey")]
+        public async Task<IActionResult> DeletePhoto([FromRoute] TreatmentBMPAssessmentPhotoPrimaryKey treatmentBMPAssessmentPhotoPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {

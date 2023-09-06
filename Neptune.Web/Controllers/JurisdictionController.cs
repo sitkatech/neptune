@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Mvc;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.MvcResults;
+using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.TreatmentBMP;
 using Detail = Neptune.Web.Views.Jurisdiction.Detail;
 using DetailViewData = Neptune.Web.Views.Jurisdiction.DetailViewData;
@@ -65,20 +66,22 @@ namespace Neptune.Web.Controllers
             return StormwaterJurisdictions.List(_dbContext);
         }
 
-        [HttpGet]
+        [HttpGet("{stormwaterJurisdictionPrimaryKey}")]
         [NeptuneAdminFeature]
-        public PartialViewResult Edit(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("stormwaterJurisdictionPrimaryKey")]
+        public PartialViewResult Edit([FromRoute] StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey)
         {
-            var jurisdiction = jurisdictionPrimaryKey.EntityObject;
+            var jurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;
             var viewModel = new EditViewModel(jurisdiction);
             return ViewEdit(viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{stormwaterJurisdictionPrimaryKey}")]
         [NeptuneAdminFeature]
-        public async Task<IActionResult> Edit(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey, EditViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("stormwaterJurisdictionPrimaryKey")]
+        public async Task<IActionResult> Edit([FromRoute] StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey, EditViewModel viewModel)
         {
-            var jurisdiction = jurisdictionPrimaryKey.EntityObject;
+            var jurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
                 return ViewEdit(viewModel);
@@ -102,8 +105,10 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
+        [HttpGet("{stormwaterJurisdictionPrimaryKey}")]
         [NeptuneViewFeature]
-        public ViewResult Detail(StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("stormwaterJurisdictionPrimaryKey")]
+        public ViewResult Detail([FromRoute] StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey)
         {
             var stormwaterJurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;
            
@@ -111,8 +116,10 @@ namespace Neptune.Web.Controllers
             return RazorView<Detail, DetailViewData>(viewData);        
         }
 
+        [HttpGet("{stormwaterJurisdictionPrimaryKey}")]
         [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<vTreatmentBMPDetailed> JurisdictionTreatmentBMPGridJsonData(StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("stormwaterJurisdictionPrimaryKey")]
+        public GridJsonNetJObjectResult<vTreatmentBMPDetailed> JurisdictionTreatmentBMPGridJsonData([FromRoute] StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey)
         {
             var stormwaterJurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;
             var treatmentBMPs = GetJurisdictionTreatmentBMPsAndGridSpec(out var gridSpec, CurrentPerson, stormwaterJurisdiction);

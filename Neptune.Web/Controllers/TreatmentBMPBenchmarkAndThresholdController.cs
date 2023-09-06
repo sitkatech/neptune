@@ -24,6 +24,7 @@ using Neptune.Common.DesignByContract;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Security;
+using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold;
 
 namespace Neptune.Web.Controllers
@@ -34,17 +35,21 @@ namespace Neptune.Web.Controllers
         {
         }
 
+        [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPManageFeature]
-        public ViewResult Instructions(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
+        public ViewResult Instructions([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var viewData = new InstructionsViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP);
             return RazorView<Instructions, InstructionsViewData>(viewData);
         }
 
-        [HttpGet]
+        [HttpGet("{treatmentBMPPrimaryKey}/{treatmentBMPAssessmentObservationTypePrimaryKey}")]
         [TreatmentBMPManageFeature]
-        public ViewResult EditBenchmarkAndThreshold(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
+        public ViewResult EditBenchmarkAndThreshold([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, [FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
@@ -53,9 +58,11 @@ namespace Neptune.Web.Controllers
             return ViewEditBenchmarkAndThreshold(treatmentBMP, treatmentBMPAssessmentObservationType, viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{treatmentBMPPrimaryKey}/{treatmentBMPAssessmentObservationTypePrimaryKey}")]
         [TreatmentBMPManageFeature]
-        public async Task<IActionResult> EditBenchmarkAndThreshold(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, EditBenchmarkAndThresholdViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
+        public async Task<IActionResult> EditBenchmarkAndThreshold([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, [FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, EditBenchmarkAndThresholdViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
