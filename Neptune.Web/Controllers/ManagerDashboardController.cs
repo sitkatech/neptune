@@ -59,6 +59,7 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
+        [HttpGet]
         [JurisdictionManageFeature]
         public GridJsonNetJObjectResult<TreatmentBMP> ProvisionalTreatmentBMPGridJsonData(string gridName)
         {
@@ -67,6 +68,7 @@ namespace Neptune.Web.Controllers
             return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
         }
 
+        [HttpGet]
         [JurisdictionManageFeature]
         public GridJsonNetJObjectResult<Delineation> ProvisionalBMPDelineationsGridJson(string gridName)
         {

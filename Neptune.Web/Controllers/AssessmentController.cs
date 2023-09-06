@@ -16,6 +16,7 @@ namespace Neptune.Web.Controllers
         {
         }
 
+        [HttpGet]
         [NeptuneViewFeature]
         public ViewResult Index()
         {
@@ -25,6 +26,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Index, IndexViewData>(viewData);
         }
 
+        [HttpGet]
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMPAssessment> TreatmentBMPAssessmentsGridJsonData()
         {

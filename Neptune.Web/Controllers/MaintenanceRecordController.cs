@@ -4,6 +4,7 @@ using Neptune.EFModels.Entities;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.MaintenanceRecord;
 using Neptune.Web.Views.Shared;
 
@@ -35,26 +36,29 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        [HttpGet]
+        [HttpGet("{maintenanceRecordPrimaryKey}")]
         [MaintenanceRecordManageFeature]
-        public ViewResult Detail(MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("maintenanceRecordPrimaryKey")]
+        public ViewResult Detail([FromRoute] MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey)
         {
             var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;
             var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, maintenanceRecord);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
-        [HttpGet]
+        [HttpGet("{maintenanceRecordPrimaryKey}")]
         [MaintenanceRecordManageFeature]
-        public ActionResult Delete(MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("maintenanceRecordPrimaryKey")]
+        public ActionResult Delete([FromRoute] MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey)
         {
             var viewModel = new ConfirmDialogFormViewModel(maintenanceRecordPrimaryKey.PrimaryKeyValue);
             return ViewDelete(viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("{maintenanceRecordPrimaryKey}")]
         [MaintenanceRecordManageFeature]
-        public async Task<IActionResult> Delete(MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey,
+        [ValidateEntityExistsAndPopulateParameterFilter("maintenanceRecordPrimaryKey")]
+        public async Task<IActionResult> Delete([FromRoute] MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey,
             ConfirmDialogFormViewModel viewModel)
         {
             var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;

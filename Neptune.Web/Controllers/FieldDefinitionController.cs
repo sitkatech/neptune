@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Security;
+using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.FieldDefinition;
 using Neptune.Web.Views.Shared;
 using Edit = Neptune.Web.Views.FieldDefinition.Edit;
@@ -39,6 +40,7 @@ namespace Neptune.Web.Controllers
         {
         }
 
+        [HttpGet]
         [FieldDefinitionViewListFeature]
         public ViewResult Index()
         {
@@ -46,6 +48,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Views.FieldDefinition.Index, IndexViewData>(viewData);
         }
 
+        [HttpPost]
         [FieldDefinitionViewListFeature]
         public GridJsonNetJObjectResult<FieldDefinitionType> IndexGridJsonData()
         {
@@ -57,6 +60,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet("{fieldDefinitionTypePrimaryKey}")]
         [FieldDefinitionManageFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldDefinitionTypePrimaryKey")]
         public ViewResult Edit([FromRoute] FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey)
         {
             var fieldDefinitionData = FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(_dbContext, fieldDefinitionTypePrimaryKey.PrimaryKeyValue);
@@ -66,6 +70,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost("{fieldDefinitionTypePrimaryKey}")]
         [FieldDefinitionManageFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("fieldDefinitionTypePrimaryKey")]
         public async Task<IActionResult> Edit([FromRoute] FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey, EditViewModel viewModel)
         {
             if (!ModelState.IsValid)
