@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.AspNetCore.Html;
 using Neptune.Web.Common;
 using Microsoft.AspNetCore.Mvc;
 using Neptune.EFModels.Entities;
@@ -70,14 +71,19 @@ namespace Neptune.Web.Controllers
 
         [HttpPost("{fieldDefinitionTypeID}")]
         [FieldDefinitionManageFeature]
-        public async Task<IActionResult> Edit([FromRoute] int fieldDefinitionTypeID, EditViewModel viewModel)
+        public async Task<IActionResult> Edit([FromRoute] int fieldDefinitionTypeID, string fieldDefinitionValue)
         {
+            var viewModel = new EditViewModel()
+            {
+                FieldDefinitionValue = new HtmlString(fieldDefinitionValue)
+            };
+
             var fieldDefinitionType = FieldDefinitionType.AllLookupDictionary[fieldDefinitionTypeID];
             if (!ModelState.IsValid)
             {
                 return ViewEdit(fieldDefinitionType, viewModel);
             }
-            var fieldDefinition = FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(_dbContext, fieldDefinitionTypeID);
+            var fieldDefinition = _dbContext.FieldDefinitions.SingleOrDefault(x => x.FieldDefinitionTypeID == fieldDefinitionTypeID);
             if (fieldDefinition == null)
             {
                 fieldDefinition = new FieldDefinition() { FieldDefinitionTypeID = fieldDefinitionTypeID };
@@ -86,6 +92,7 @@ namespace Neptune.Web.Controllers
 
             viewModel.UpdateModel(fieldDefinition);
             await _dbContext.SaveChangesAsync();
+
             SetMessageForDisplay("Field Definition successfully saved.");
             return RedirectToAction(new SitkaRoute<FieldDefinitionController>(_linkGenerator, x => x.Edit(fieldDefinition.FieldDefinitionTypeID)));
         }

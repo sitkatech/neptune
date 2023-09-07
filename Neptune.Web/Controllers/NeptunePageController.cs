@@ -100,7 +100,6 @@ namespace Neptune.Web.Controllers
         [HttpPost("{neptunePagePrimaryKey}")]
         [NeptunePageManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("neptunePagePrimaryKey")]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public async Task<ActionResult> Edit([FromRoute] NeptunePagePrimaryKey neptunePagePrimaryKey, string neptunePageContentHtmlString)
         {
             var viewModel = new EditViewModel()
