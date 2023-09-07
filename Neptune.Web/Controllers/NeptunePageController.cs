@@ -83,8 +83,6 @@ namespace Neptune.Web.Controllers
         {
             var tinyMCEToolbar = TinyMCEExtension.TinyMCEToolbarStyle.AllOnOneRowNoMaximize;
             var viewData = new EditViewData(tinyMCEToolbar);
-            //var viewData = new EditViewData(tinyMCEToolbar,
-            //    SitkaRoute<FileResourceController>.BuildUrlFromExpression(_linkGenerator, x => x.CkEditorUploadFileResource(neptunePage)));
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

@@ -27,7 +27,6 @@ namespace Neptune.Web.Views.FieldDefinition
 {
     public class EditViewData : NeptuneViewData
     {
-        public readonly string FileBrowserImageUploadUrl;
         public readonly FieldDefinitionType FieldDefinitionType;
         public readonly string CancelUrl;
 
@@ -39,7 +38,6 @@ namespace Neptune.Web.Views.FieldDefinition
             PageTitle = "Manage";
 
             FieldDefinitionType = fieldDefinitionType;
-            FileBrowserImageUploadUrl = ""; //todo: SitkaRoute<FileResourceController>.BuildUrlFromExpression(linkGenerator, x => x.CkEditorUploadFileResourceForFieldDefinition(FieldDefinitionType, null));
             CancelUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
         }
     }
