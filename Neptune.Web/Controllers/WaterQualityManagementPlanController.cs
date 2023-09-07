@@ -6,7 +6,6 @@ using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Neptune.Web.Views.Shared.ModeledPerformance;
 using Neptune.Web.Views.WaterQualityManagementPlan;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common.MvcResults;
@@ -27,10 +26,10 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WaterQualityMaintenancePlan);
-            var wqmpGridSpec = new WaterQualityManagementPlanIndexGridSpec(_linkGenerator, CurrentPerson);
+            var gridSpec = new WaterQualityManagementPlanIndexGridSpec(_linkGenerator, CurrentPerson);
             var verificationNeptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WaterQualityMaintenancePlanOandMVerifications);
             var verificationGridSpec = new WaterQualityManagementPlanVerificationGridSpec(_linkGenerator, CurrentPerson);
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, wqmpGridSpec, verificationNeptunePage, verificationGridSpec);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, gridSpec, verificationNeptunePage, verificationGridSpec);
             return RazorView< Views.WaterQualityManagementPlan.Index, IndexViewData>(viewData);
         }
 
@@ -46,14 +45,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerificationGridData()
         {
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(_dbContext);
-            var waterQualityManagementPlanVerifications = _dbContext
-                .WaterQualityManagementPlanVerifies
-                .Include(x => x.WaterQualityManagementPlan.StormwaterJurisdiction.Organization)
-                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.WaterQualityManagementPlan.StormwaterJurisdictionID))
-                .OrderBy(x => x.WaterQualityManagementPlan.StormwaterJurisdiction.Organization.OrganizationName)
-                .ThenBy(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanName)
-                .ThenByDescending(x => x.LastEditedDate).ToList();
-
+            var waterQualityManagementPlanVerifications = WaterQualityManagementPlanVerifies.ListViewable(_dbContext, stormwaterJurisdictionIDsPersonCanView);
             var gridSpec = new WaterQualityManagementPlanVerificationGridSpec(_linkGenerator, CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlanVerify>(waterQualityManagementPlanVerifications, gridSpec);
         }
@@ -81,7 +73,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
         public ViewResult Detail([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
-            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var waterQualityManagementPlan = WaterQualityManagementPlans.GetByID(_dbContext, waterQualityManagementPlanPrimaryKey);
 
             var treatmentBMPs = CurrentPerson.GetInventoriedBMPsForWQMP(waterQualityManagementPlan);
             var treatmentBmpGeoJsonFeatureCollection = treatmentBMPs.ToGeoJsonFeatureCollection();
@@ -165,10 +157,9 @@ namespace Neptune.Web.Controllers
         [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanViewFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
-        public GridJsonNetJObjectResult<Parcel> ParcelsForWaterQualityManagementPlanGridData([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPlanPrimaryKey)
+        public GridJsonNetJObjectResult<Parcel> ParcelsForWaterQualityManagementPlanGridData([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
-            var waterQualityManagementPlan = waterQualityManagementPlanPlanPrimaryKey.EntityObject;
-            var parcels = waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x => x.Parcel).OrderBy(x => x.ParcelNumber).ToList();
+            var parcels = WaterQualityManagementPlanParcels.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlanPrimaryKey.PrimaryKeyValue).Select(x => x.Parcel).OrderBy(x => x.ParcelNumber).ToList();
             var gridSpec = new ParcelGridSpec();
             return new GridJsonNetJObjectResult<Parcel>(parcels, gridSpec);
         }

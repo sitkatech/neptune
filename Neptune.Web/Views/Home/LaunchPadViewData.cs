@@ -25,12 +25,12 @@ namespace Neptune.Web.Views.Home
         public string AddABmpUrl { get; set; }
         public string InviteANewUserUrl { get; set; }
         public string AddAFundingSourceUrl { get; set; }
-        public string FieldFieldVisitsUrl { get; set; }
+        public string FieldVisitsUrl { get; set; }
         public string EditUserRolesUrl { get; set; }
-        public string ViewAssessmentAndMaintenanceRecordsUrl { get; }
         public string ViewWaterQualityManagementPlansUrl { get; }
         public string ManagerDashboardUrl { get; }
         public string ViewDelineationReconciliationReportUrl { get; }
+        public UrlTemplate<int> StormwaterJurisdictionUrlTemplate { get; }
 
         public LaunchPadViewData(LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage launchPadNeptunePage,
             int numberOfBmpTypes, string managerDashboardDescription)
@@ -43,20 +43,24 @@ namespace Neptune.Web.Views.Home
             Jurisdictions = CurrentPerson.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList();
             NumberOfBmpTypes = numberOfBmpTypes;
             ManagerDashboardDescription = managerDashboardDescription;
-            LaunchPadViewPageContentViewData = new ViewPageContentViewData(launchPadNeptunePage, CurrentPerson, linkGenerator);
-            JurisdictionIndexUrl = ""; //todo SitkaRoute<JurisdictionController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
+            LaunchPadViewPageContentViewData =
+                new ViewPageContentViewData(launchPadNeptunePage, CurrentPerson);
+            JurisdictionIndexUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             RequestSupportUrl = SitkaRoute<HelpController>.BuildUrlFromExpression(linkGenerator, x => x.RequestToChangePrivileges());
             FindABmpUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.FindABMP());
             ExploreBmpTypesUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             AddABmpUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.New());
-            ViewAssessmentAndMaintenanceRecordsUrl = ""; //todo SitkaRoute<FieldVisitController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
-            ViewWaterQualityManagementPlansUrl = ""; //todo SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
-            FieldFieldVisitsUrl = ""; //todo SitkaRoute<FieldVisitController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
-            InviteANewUserUrl = ""; //todo SitkaRoute<UserController>.BuildUrlFromExpression(LinkGenerator, x => x.Invite());
-            EditUserRolesUrl = ""; //todo SitkaRoute<UserController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
+            var fieldVisitsUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            ViewWaterQualityManagementPlansUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            FieldVisitsUrl = fieldVisitsUrl;
+            InviteANewUserUrl = ""; //todo SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Invite());
+            EditUserRolesUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             AddAFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
-            ManagerDashboardUrl = ""; //todo SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
-            ViewDelineationReconciliationReportUrl = ""; //todo SitkaRoute<DelineationController>.BuildUrlFromExpression(LinkGenerator, x => x.DelineationReconciliationReport());
+            ManagerDashboardUrl = SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            ViewDelineationReconciliationReportUrl = ""; //todo SitkaRoute<DelineationController>.BuildUrlFromExpression(linkGenerator, x => x.DelineationReconciliationReport());
+            StormwaterJurisdictionUrlTemplate = new UrlTemplate<int>(
+                SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator,
+                    x => x.Detail(UrlTemplate.Parameter1Int)));
         }
     }
 }

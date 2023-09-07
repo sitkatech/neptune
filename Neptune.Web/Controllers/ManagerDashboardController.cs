@@ -63,7 +63,7 @@ namespace Neptune.Web.Controllers
         [JurisdictionManageFeature]
         public GridJsonNetJObjectResult<TreatmentBMP> ProvisionalTreatmentBMPGridJsonData([FromRoute] string gridName)
         {
-            var gridSpec = new ProvisionalTreatmentBMPGridSpec(CurrentPerson, gridName);
+            var gridSpec = new ProvisionalTreatmentBMPGridSpec(_linkGenerator, CurrentPerson, gridName);
             var treatmentBMPs = TreatmentBMPs.GetProvisionalTreatmentBMPs(_dbContext, CurrentPerson);
             return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
         }
@@ -72,7 +72,7 @@ namespace Neptune.Web.Controllers
         [JurisdictionManageFeature]
         public GridJsonNetJObjectResult<Delineation> ProvisionalBMPDelineationsGridJson([FromRoute] string gridName)
         {
-            var gridSpec = new ProvisionalBMPDelineationsGridSpec(CurrentPerson , gridName);
+            var gridSpec = new ProvisionalBMPDelineationsGridSpec(_linkGenerator, CurrentPerson, gridName);
             var bmpDelineations = Delineations.GetProvisionalBMPDelineations(_dbContext, CurrentPerson);
                 return new GridJsonNetJObjectResult<Delineation>(bmpDelineations, gridSpec);
         }

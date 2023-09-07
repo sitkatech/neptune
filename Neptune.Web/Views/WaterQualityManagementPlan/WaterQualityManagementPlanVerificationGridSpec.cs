@@ -1,5 +1,4 @@
-﻿using Neptune.Web.Models;
-using Neptune.Web.Security;
+﻿using Neptune.Web.Security;
 using Microsoft.AspNetCore.Html;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
@@ -26,6 +25,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             var wqmpDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.WqmpVerify(UrlTemplate.Parameter1Int)));
             var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.DeleteVerify(UrlTemplate.Parameter1Int)));
+            var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
 
             if (currentUserCanManage)
             {
@@ -47,7 +47,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     DhtmlxGridColumnFilterType.None);
             }
             Add("WQMP Name", x => UrlTemplate.MakeHrefString(wqmpDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID), x.WaterQualityManagementPlan.WaterQualityManagementPlanName), 300, DhtmlxGridColumnFilterType.Text);
-            Add("Jurisdiction", x => isAnonymousOrUnassigned ? new HtmlString(x.WaterQualityManagementPlan.StormwaterJurisdiction.GetOrganizationDisplayName()) : x.WaterQualityManagementPlan.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 150);
+            Add("Jurisdiction", x => isAnonymousOrUnassigned ? new HtmlString(x.WaterQualityManagementPlan.StormwaterJurisdiction.GetOrganizationDisplayName()) :
+                UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlan.StormwaterJurisdictionID), x.WaterQualityManagementPlan.StormwaterJurisdiction.GetOrganizationDisplayName()), 150);
             Add("Verification Date", x => x.VerificationDate, 150);
             Add("Last Edited Date", x => x.LastEditedDate, 150);
             Add("Last Edited By", x => x.LastEditedByPerson.GetFullNameFirstLast(), 150, DhtmlxGridColumnFilterType.SelectFilterStrict);
@@ -56,7 +57,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             Add("Visit Status", x => x.WaterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName,
                 150, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Verification Status",
-                x => x.WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName, 200, DhtmlxGridColumnFilterType.SelectFilterStrict);
+                x => x.WaterQualityManagementPlanVerifyStatus?.WaterQualityManagementPlanVerifyStatusName, 200, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Source Control Condition", x => x.SourceControlCondition, 150);
             Add("Enforcement of Follow-up Actions", x => x.EnforcementOrFollowupActions, 150);
             Add("Draft or Finalized",

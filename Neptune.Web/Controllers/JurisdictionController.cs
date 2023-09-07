@@ -62,7 +62,7 @@ namespace Neptune.Web.Controllers
 
         private List<StormwaterJurisdiction> GetJurisdictionsAndGridSpec(out IndexGridSpec gridSpec)
         {
-            gridSpec = new IndexGridSpec();
+            gridSpec = new IndexGridSpec(_linkGenerator);
             return StormwaterJurisdictions.List(_dbContext);
         }
 

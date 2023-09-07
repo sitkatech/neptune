@@ -24,13 +24,17 @@ using Neptune.EFModels.Entities;
 using Neptune.Web.Common.DhtmlWrappers;
 using Neptune.Web.Common.HtmlHelperExtensions;
 using Neptune.Web.Security;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views.ManagerDashboard
 {
     public class ProvisionalBMPDelineationsGridSpec : GridSpec<Delineation>
     {
-        public ProvisionalBMPDelineationsGridSpec(Person currentPerson, string gridName)
+        public ProvisionalBMPDelineationsGridSpec(LinkGenerator linkGenerator, Person currentPerson, string gridName)
         {
+            var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+
             ObjectNameSingular = "Delineation";
             ObjectNamePlural = "Delineations";
 
@@ -56,8 +60,7 @@ namespace Neptune.Web.Views.ManagerDashboard
             Add("Date of Last Delineation Verification", x => x.TreatmentBMP.Delineation?.DateLastVerified, 120,
                 DhtmlxGridColumnFormatType.Date);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(),
-                x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140,
-                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+                x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.TreatmentBMP.StormwaterJurisdictionID), x.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
         }
     }
 }

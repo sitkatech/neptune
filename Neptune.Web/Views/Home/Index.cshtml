@@ -21,8 +21,6 @@
 @using Neptune.Web.Views.Home
 @using Neptune.Web.Views.Shared
 @using Neptune.Web.Views.Shared.JurisdictionControls
-@using SitkaController = Neptune.Web.Common.SitkaController
-@using System.Text.Json
 @using Neptune.Web.Common
 @inherits Neptune.Web.Views.Home.Index
 
@@ -86,8 +84,7 @@
                         }
 
                     </div>
-                    @* ReSharper disable once UnknownCssClass *@
-                    <div class="main-text">
+\                    <div class="main-text">
                         <div class="container">
                             <div class="col-md-12">
                                 <h1>@ViewDataTyped.PageTitle</h1>

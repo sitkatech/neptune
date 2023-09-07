@@ -4,8 +4,6 @@ namespace Neptune.EFModels.Entities
 {
     public partial class WaterQualityManagementPlanVerify : IAuditableEntity
     {
-
-
         public string GetAuditDescriptionString()
         {
             return LastEditedDate.ToLongDateString();

@@ -1184,7 +1184,7 @@ namespace Neptune.Web.Controllers
                 {"Name", UrlTemplate.MakeHrefString(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMP)), treatmentBMP.TreatmentBMPName)},
                 {
                     $"{FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabel()}",
-                    treatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()
+                    UrlTemplate.MakeHrefString(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMP.StormwaterJurisdiction)), treatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName())
                 },
                 {"Type", new HtmlString(treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName)},
             };
