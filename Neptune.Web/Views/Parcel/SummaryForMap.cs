@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="SummaryForMapViewData.cs" company="Tahoe Regional Planning Agency">
+<copyright file="SummaryForMap.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,16 +18,11 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+using Neptune.Web.Common.Mvc;
 
 namespace Neptune.Web.Views.Parcel
 {
-    public class SummaryForMapViewData : NeptuneUserControlViewData
+    public abstract class SummaryForMap : TypedWebPartialViewPage<SummaryForMapViewData>
     {
-        public readonly Models.Parcel Parcel;
-
-        public SummaryForMapViewData(Models.Person currentPerson, Models.Parcel parcel)
-        {
-            Parcel = parcel;
-        }
     }
 }

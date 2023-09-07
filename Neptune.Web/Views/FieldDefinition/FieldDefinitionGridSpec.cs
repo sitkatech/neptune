@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.FieldDefinition
             {
                 Add(string.Empty,
                     a =>
-                        UrlTemplate.MakeHrefString(SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(linkGenerator, t => t.Edit(a)),
+                        UrlTemplate.MakeHrefString(SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(a.FieldDefinitionTypeID)),
                             DhtmlxGridHtmlHelpers.EditIconBootstrap.ToString(),
                             new Dictionary<string, string> {{"target", "_blank"}}),
                     30);

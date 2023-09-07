@@ -19,8 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Web;
-using Neptune.Web.Models;
+using Microsoft.AspNetCore.Html;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.Parcel
 {
@@ -34,17 +35,17 @@ namespace Neptune.Web.Views.Parcel
         public readonly string GeoserverUrl;
         public readonly string ParcelLayerUploadUrl;
 
-        public IndexViewData(Person currentPerson,
-            Models.NeptunePage neptunePage,
-            HtmlString introNarrativeContent,
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            NeptunePage neptunePage,
+            string introNarrativeContent,
             MapInitJson mapInitJson,
             string findParcelByAddressUrl,
             string findParcelByApnUrl,
             string geoserverUrl,
             string parcelSummaryForMapUrl,
-            string parcelLayerUploadUrl) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            string parcelLayerUploadUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
-            IntroNarrativeContent = introNarrativeContent;
+            IntroNarrativeContent = new HtmlString(introNarrativeContent);
             EntityName = "Parcels";
             PageTitle = "All Parcels";
 

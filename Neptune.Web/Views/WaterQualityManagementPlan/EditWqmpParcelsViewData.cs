@@ -23,8 +23,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             SubEntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(waterQualityManagementPlan));
             PageTitle = "Edit Associated Parcels";
             RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres;
-            var findParcelByNameUrl = "";// todo: SitkaRoute<ParcelController>.BuildUrlFromExpression(LinkGenerator, x => x.FindSimpleByAPN(null));
-            var findParcelByAddressUrl = ""; // todo: SitkaRoute<ParcelController>.BuildUrlFromExpression(LinkGenerator, x => x.FindSimpleByAddress(null));
+            var findParcelByNameUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(LinkGenerator, x => x.FindSimpleByAPN(null));
+            var findParcelByAddressUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(LinkGenerator, x => x.FindSimpleByAddress(null));
             ViewDataForAngular = new EditWqmpParcelsViewDataForAngular(mapInitJson,
                 waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x => x.Parcel).ToList(), findParcelByNameUrl, findParcelByAddressUrl);
         }
@@ -41,7 +41,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             public string MapServiceUrl { get; }
             public string ParcelFieldDefinitionLabel { get; }
 
-            public EditWqmpParcelsViewDataForAngular(MapInitJson mapInitJson, List<Parcel> parcelsInViewModel, string findParcelByNameUrl, string findParcelByAddressUrl)
+            public EditWqmpParcelsViewDataForAngular(MapInitJson mapInitJson, List<EFModels.Entities.Parcel> parcelsInViewModel, string findParcelByNameUrl, string findParcelByAddressUrl)
             {
                 MapInitJson = mapInitJson;
                 FindParcelByNameUrl = findParcelByNameUrl;

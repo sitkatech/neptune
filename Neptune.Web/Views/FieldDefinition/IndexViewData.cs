@@ -44,7 +44,7 @@ namespace Neptune.Web.Views.FieldDefinition
                 SaveFiltersInCookie = true
             };
             GridName = "fieldDefinitionsGrid";
-            GridDataUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(linkGenerator, tc => tc.IndexGridJsonData());
+            GridDataUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(linkGenerator, x => x.IndexGridJsonData());
         }
     }
 }

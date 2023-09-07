@@ -48,7 +48,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Views.FieldDefinition.Index, IndexViewData>(viewData);
         }
 
-        [HttpPost]
+        [HttpGet]
         [FieldDefinitionViewListFeature]
         public GridJsonNetJObjectResult<FieldDefinitionType> IndexGridJsonData()
         {
@@ -58,29 +58,29 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        [HttpGet("{fieldDefinitionTypePrimaryKey}")]
+        [HttpGet("{fieldDefinitionTypeID}")]
         [FieldDefinitionManageFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("fieldDefinitionTypePrimaryKey")]
-        public ViewResult Edit([FromRoute] FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey)
+        public ViewResult Edit([FromRoute] int fieldDefinitionTypeID)
         {
-            var fieldDefinitionData = FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(_dbContext, fieldDefinitionTypePrimaryKey.PrimaryKeyValue);
+            var fieldDefinitionType = FieldDefinitionType.AllLookupDictionary[fieldDefinitionTypeID];
+            var fieldDefinitionData = FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(_dbContext, fieldDefinitionTypeID);
             var viewModel = new EditViewModel(fieldDefinitionData);
-            return ViewEdit(fieldDefinitionTypePrimaryKey, viewModel);
+            return ViewEdit(fieldDefinitionType, viewModel);
         }
 
-        [HttpPost("{fieldDefinitionTypePrimaryKey}")]
+        [HttpPost("{fieldDefinitionTypeID}")]
         [FieldDefinitionManageFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("fieldDefinitionTypePrimaryKey")]
-        public async Task<IActionResult> Edit([FromRoute] FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey, EditViewModel viewModel)
+        public async Task<IActionResult> Edit([FromRoute] int fieldDefinitionTypeID, EditViewModel viewModel)
         {
+            var fieldDefinitionType = FieldDefinitionType.AllLookupDictionary[fieldDefinitionTypeID];
             if (!ModelState.IsValid)
             {
-                return ViewEdit(fieldDefinitionTypePrimaryKey, viewModel);
+                return ViewEdit(fieldDefinitionType, viewModel);
             }
-            var fieldDefinition = FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(_dbContext, fieldDefinitionTypePrimaryKey.PrimaryKeyValue);
+            var fieldDefinition = FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(_dbContext, fieldDefinitionTypeID);
             if (fieldDefinition == null)
             {
-                fieldDefinition = new FieldDefinition() { FieldDefinitionID = fieldDefinitionTypePrimaryKey.PrimaryKeyValue };
+                fieldDefinition = new FieldDefinition() { FieldDefinitionTypeID = fieldDefinitionTypeID };
                 _dbContext.FieldDefinitions.Add(fieldDefinition);
             }
 
@@ -90,9 +90,9 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<FieldDefinitionController>(_linkGenerator, x => x.Edit(fieldDefinition.FieldDefinitionTypeID)));
         }
 
-        private ViewResult ViewEdit(FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey, EditViewModel viewModel)
+        private ViewResult ViewEdit(FieldDefinitionType fieldDefinitionType, EditViewModel viewModel)
         {
-            var viewData = new EditViewData(HttpContext, _linkGenerator, CurrentPerson, fieldDefinitionTypePrimaryKey.EntityObject);
+            var viewData = new EditViewData(HttpContext, _linkGenerator, CurrentPerson, fieldDefinitionType);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

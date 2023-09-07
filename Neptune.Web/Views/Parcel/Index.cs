@@ -21,7 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 namespace Neptune.Web.Views.Parcel
 {
-    public abstract class Index : LtInfo.Common.Mvc.TypedWebViewPage<IndexViewData>
+    public abstract class Index : Common.Mvc.TypedWebViewPage<IndexViewData>
     {
     }
 }

@@ -1,6 +1,6 @@
 ﻿@using Neptune.Web.Views.Shared
-@using LtInfo.Common.Mvc
 @inherits Neptune.Web.Views.ParcelLayerUpload.UploadParcelLayer
+@model Neptune.Web.Views.ParcelLayerUpload.UploadParcelLayerViewModel
 @section JavascriptAndStylesContent
 {
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
@@ -37,7 +37,7 @@
                     @Html.EditorFor(x => x.FileResourceData)
                     @Html.ValidationMessageFor(x => x.FileResourceData)
                     <span class="smallExplanationText">
-                        Allowed Extensions: @Model.GetFileExtensions(x => x.FileResourceData)
+                        @*todo: Allowed Extensions: @Model.GetFileExtensions(x => x.FileResourceData)*@
                     </span>
                 </div>
             </div>

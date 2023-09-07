@@ -1,9 +1,8 @@
-﻿using Neptune.EFModels.Entities;
-using Neptune.Web.Common.DhtmlWrappers;
+﻿using Neptune.Web.Common.DhtmlWrappers;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class ParcelGridSpec : GridSpec<Parcel>
+    public class ParcelGridSpec : GridSpec<EFModels.Entities.Parcel>
     {
         public ParcelGridSpec()
         {
