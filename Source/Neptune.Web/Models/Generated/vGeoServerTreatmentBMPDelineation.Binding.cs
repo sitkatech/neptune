@@ -25,11 +25,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public vGeoServerTreatmentBMPDelineation(int primaryKey, int treatmentBMPID, string treatmentBMPName) : this()
+        public vGeoServerTreatmentBMPDelineation(int primaryKey, int treatmentBMPID, string treatmentBMPName, string projectName) : this()
         {
             this.PrimaryKey = primaryKey;
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
+            this.ProjectName = projectName;
         }
 
         /// <summary>
@@ -40,6 +41,7 @@ namespace Neptune.Web.Models
             this.PrimaryKey = vGeoServerTreatmentBMPDelineation.PrimaryKey;
             this.TreatmentBMPID = vGeoServerTreatmentBMPDelineation.TreatmentBMPID;
             this.TreatmentBMPName = vGeoServerTreatmentBMPDelineation.TreatmentBMPName;
+            this.ProjectName = vGeoServerTreatmentBMPDelineation.ProjectName;
             CallAfterConstructor(vGeoServerTreatmentBMPDelineation);
         }
 
@@ -48,5 +50,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get; set; }
         public int TreatmentBMPID { get; set; }
         public string TreatmentBMPName { get; set; }
+        public string ProjectName { get; set; }
     }
 }

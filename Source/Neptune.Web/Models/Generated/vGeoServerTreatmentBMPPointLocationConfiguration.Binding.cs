@@ -17,6 +17,7 @@ namespace Neptune.Web.Models
             HasKey(x => x.PrimaryKey);
             
             
+            
         }
     }
 }
