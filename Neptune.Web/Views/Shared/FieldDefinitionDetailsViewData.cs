@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.Shared
             FieldDefinitionType = fieldDefinitionType;
             _fieldDefinition = fieldDefinition;
             ShowEditLink = showEditLink;
-            EditUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(linkGenerator, t => t.Edit(fieldDefinitionType));
+            EditUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(fieldDefinitionType.FieldDefinitionTypeID));
         }
 
         public string? EditUrl { get; }

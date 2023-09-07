@@ -39,7 +39,7 @@ namespace Neptune.Web.Views.User
         public string InviteUserUrl { get; }
         public bool UserIsAdmin { get; }
 
-        public IndexViewData(Person currentPerson, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "All Users";
             EntityName = "Users";
@@ -47,9 +47,9 @@ namespace Neptune.Web.Views.User
             GridName = "UserGrid";
             GridDataUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.IndexGridJsonData());
             KeystoneUrl = "";//todo: NeptuneWebConfiguration.KeystoneUrl;
-            KeystoneRegisterUserUrl = "";//todo: $"{NeptuneWebConfiguration.KeystoneRegisterUrl}?ClientID={NeptuneWebConfiguration.KeystoneOpenIDClientID}&RedirectUrl={HttpUtility.UrlEncode(SitkaRoute<AccountController>.BuildUrlFromExpression(x => x.LogOn()))}";
+            KeystoneRegisterUserUrl = "";//todo: $"{NeptuneWebConfiguration.KeystoneRegisterUrl}?ClientID={NeptuneWebConfiguration.KeystoneOpenIDClientID}&RedirectUrl={HttpUtility.UrlEncode(SitkaRoute<AccountController>.BuildUrlFromExpression(_linkGenerator, x => x.LogOn()))}";
 
-            InviteUserUrl = "";//todo: SitkaRoute<UserController>.BuildUrlFromExpression(x => x.Invite());
+            InviteUserUrl = "";//todo: SitkaRoute<UserController>.BuildUrlFromExpression(_linkGenerator, x => x.Invite());
             UserIsAdmin = false;//todo: new UserEditFeature().HasPermissionByPerson(currentPerson);
         }
     }

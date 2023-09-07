@@ -30,17 +30,20 @@ namespace Neptune.Web.Views.TreatmentBMPType
     {
 
         public List<EFModels.Entities.TreatmentBMPType> TreatmentBMPTypes { get; }
+        public Dictionary<int, int> CountByTreatmentBMPType { get; }
         public UrlTemplate<int> DetailUrlTemplate { get; }
         public UrlTemplate<int> TreatmentBMPAssessmentObservationTypeDetailUrlTemplate { get; }
 
-        public IndexViewData(Person currentPerson, EFModels.Entities.NeptunePage neptunePage,
-            List<EFModels.Entities.TreatmentBMPType> treatmentBMPTypes, LinkGenerator linkGenerator, HttpContext httpContext)
-            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            NeptunePage neptunePage,
+            List<EFModels.Entities.TreatmentBMPType> treatmentBMPTypes, Dictionary<int, int> countByTreatmentBMPType)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
             PageTitle = "All BMP Types";
 
             TreatmentBMPTypes = treatmentBMPTypes;
+            CountByTreatmentBMPType = countByTreatmentBMPType;
             DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             TreatmentBMPAssessmentObservationTypeDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int))); // todo: need to fix to right controller
         }

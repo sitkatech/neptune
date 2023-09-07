@@ -328,6 +328,11 @@ namespace Neptune.EFModels.Entities
         {
             return $"Observation Type {TreatmentBMPAssessmentObservationTypeName}";
         }
+
+        public void DeleteFull(NeptuneDbContext dbContext)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

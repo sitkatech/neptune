@@ -42,7 +42,8 @@ public static class FundingSources
         return dbContext.FundingSources
             .Include(x => x.FundingEventFundingSources)
             .Include(x => x.Organization)
-            .ThenInclude(x => x.OrganizationType);
+            .ThenInclude(x => x.OrganizationType).Include(x => x.FundingEventFundingSources)
+            .ThenInclude(x => x.FundingEvent).ThenInclude(x => x.TreatmentBMP);
     }
 
     public static bool IsFundingSourceNameUnique(IEnumerable<FundingSource> fundingSources, string fundingSourceName, int currentFundingSourceID)

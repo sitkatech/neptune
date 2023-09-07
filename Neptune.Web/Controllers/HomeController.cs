@@ -42,6 +42,7 @@ namespace Neptune.Web.Controllers
         //    return ExportGridToExcelImpl(gridName, printFooter);
         //}
 
+        [Route("/")] // Default Route
         [HttpGet]
         public ViewResult Index()
         {
@@ -72,25 +73,22 @@ namespace Neptune.Web.Controllers
             var launchPadNeptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.LaunchPad);
             var numberOfBmpTypes = _dbContext.TreatmentBMPTypes.Count();
             var managerDashboardDescription = GetManagerDashboardDescription();
-            var launchPadViewData = new LaunchPadViewData(CurrentPerson, launchPadNeptunePage, numberOfBmpTypes, managerDashboardDescription, _linkGenerator);
+            var launchPadViewData = new LaunchPadViewData(_linkGenerator, CurrentPerson, launchPadNeptunePage, numberOfBmpTypes, managerDashboardDescription);
 
-            var viewData = new IndexViewData(CurrentPerson, neptunePageByPageTypeHomePage,
-                neptunePageByPageTypeHomePageAdditionalInfo, neptunePageByPageTypeHomePageMapInfo,
-                neptuneHomePageImages, projectLocationsMapViewData, projectLocationsMapInitJson,
-                launchPadViewData, _linkGenerator, HttpContext);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePageByPageTypeHomePage, neptunePageByPageTypeHomePageAdditionalInfo, neptunePageByPageTypeHomePageMapInfo, neptuneHomePageImages, projectLocationsMapViewData, projectLocationsMapInitJson, launchPadViewData);
 
             return RazorView<Views.Home.Index, IndexViewData>(viewData);
         }
 
         public ViewResult Error()
         {
-            var viewData = new ErrorViewData(CurrentPerson, _linkGenerator, HttpContext);
+            var viewData = new ErrorViewData(HttpContext, _linkGenerator, CurrentPerson);
             return RazorView<Error, ErrorViewData>(viewData);
         }
 
         public ViewResult NotFound()
         {
-            var viewData = new NotFoundViewData(CurrentPerson, _linkGenerator, HttpContext);
+            var viewData = new NotFoundViewData(HttpContext, _linkGenerator, CurrentPerson);
             return RazorView<NotFound, NotFoundViewData>(viewData);
         }
 
@@ -99,7 +97,7 @@ namespace Neptune.Web.Controllers
         {
             var neptunePageType = NeptunePageType.ToType(neptunePageTypeEnum);
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, neptunePageType);
-            var viewData = new DisplayPageContentViewData(CurrentPerson, neptunePage, _linkGenerator, HttpContext);
+            var viewData = new DisplayPageContentViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage);
             return RazorView<DisplayPageContent, DisplayPageContentViewData>(viewData);
         }
 
@@ -128,15 +126,15 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public ViewResult ManageHomePageImages()
         {
-            var imageGalleryViewData = BuildImageGalleryViewData(CurrentPerson, _dbContext);
-            var viewData = new ManageHomePageImagesViewData(CurrentPerson, imageGalleryViewData, _linkGenerator, HttpContext);
+            var imageGalleryViewData = BuildImageGalleryViewData(HttpContext, _linkGenerator, CurrentPerson, _dbContext);
+            var viewData = new ManageHomePageImagesViewData(HttpContext, _linkGenerator, CurrentPerson, imageGalleryViewData);
             return RazorView<ManageHomePageImages, ManageHomePageImagesViewData>(viewData);
         }
 
-        private static ImageGalleryViewData BuildImageGalleryViewData(Person currentPerson, NeptuneDbContext dbContext)
+        private static ImageGalleryViewData BuildImageGalleryViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, NeptuneDbContext dbContext)
         {
             var userCanAddPhotosToHomePage = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
-            var newPhotoForProjectUrl = "";//todo: SitkaRoute<NeptuneHomePageImageController>.BuildUrlFromExpression(x => x.New());
+            var newPhotoForProjectUrl = "";//todo: SitkaRoute<NeptuneHomePageImageController>.BuildUrlFromExpression(_linkGenerator, x => x.New());
             var galleryName = "HomePageImagesGallery";
             var neptuneHomePageImages = NeptuneHomePageImages.List(dbContext); 
             var imageGalleryViewData = new ImageGalleryViewData(currentPerson,
@@ -157,7 +155,7 @@ namespace Neptune.Web.Controllers
             var neptunePageByPageTypeHomePage = NeptunePages.GetNeptunePageByPageType(_dbContext, neptunePageTypeTraining);
             var trainingVideos = _dbContext.TrainingVideos.ToList();
 
-            var viewData = new TrainingViewData(CurrentPerson, neptunePageByPageTypeHomePage, trainingVideos, _linkGenerator, HttpContext);
+            var viewData = new TrainingViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePageByPageTypeHomePage, trainingVideos);
             return RazorView<Training, TrainingViewData>(viewData);
         }
 

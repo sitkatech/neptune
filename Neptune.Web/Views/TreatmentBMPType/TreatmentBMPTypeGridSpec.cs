@@ -30,7 +30,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
 {
     public class TreatmentBMPTypeGridSpec : GridSpec<EFModels.Entities.TreatmentBMPType>
     {
-        public TreatmentBMPTypeGridSpec(Person currentPerson, LinkGenerator linkGenerator)
+        public TreatmentBMPTypeGridSpec(LinkGenerator linkGenerator, Person currentPerson, Dictionary<int, int> countByTreatmentBMPType)
         {
             var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));
             var editUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, t => t.Edit(UrlTemplate.Parameter1Int)));
@@ -39,7 +39,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(editUrlTemplate.ParameterReplace(x.TreatmentBMPTypeID), new NeptuneAdminFeature().HasPermissionByPerson(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
             Add(FieldDefinitionType.TreatmentBMPType.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(a.TreatmentBMPTypeID), a.TreatmentBMPTypeName), 400, DhtmlxGridColumnFilterType.Html);
             Add($"Number of {FieldDefinitionType.TreatmentBMPAssessmentObservationType.ToGridHeaderStringPlural("Observation Types")}", a => a.TreatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPAssessmentObservationType).Count(), 100);
-            Add($"Number of {FieldDefinitionType.TreatmentBMP.ToGridHeaderStringPlural("Treatment BMPs")}", a => a.TreatmentBMPs.Count, 100, DhtmlxGridColumnAggregationType.Total);
+            Add($"Number of {FieldDefinitionType.TreatmentBMP.ToGridHeaderStringPlural("Treatment BMPs")}", a => countByTreatmentBMPType.TryGetValue(a.TreatmentBMPTypeID, out var value) ? value : 0, 100, DhtmlxGridColumnAggregationType.Total);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Neptune.EFModels.Entities
         public static class FieldLengths
         {
             public const int TreatmentBMPName = 200;
-            public const int Notes = 1000;
+            public const int Notes = 2000;
             public const int SystemOfRecordID = 100;
         }
     }

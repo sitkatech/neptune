@@ -26,7 +26,8 @@ namespace Neptune.Web.Views.Home
 {
     public class ManageHomePageImagesViewData : NeptuneViewData
     {
-        public ManageHomePageImagesViewData(Person currentPerson, ImageGalleryViewData imageGalleryViewData, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public ManageHomePageImagesViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            ImageGalleryViewData imageGalleryViewData) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Home Page Configuration";
             PageTitle = "Manage Home Page Images";

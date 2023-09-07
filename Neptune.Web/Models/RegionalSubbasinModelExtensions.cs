@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Models
@@ -39,5 +40,12 @@ namespace Neptune.Web.Models
             return TreatmentBMPs.GetNonPlanningModuleBMPs(dbContext)
                 .Where(x => regionalSubbasin.CatchmentGeometry.Contains(x.LocationPoint));
         }
+
+        public static IEnumerable<HRUCharacteristic> GetHRUCharacteristics(this RegionalSubbasin regionalSubbasin, NeptuneDbContext dbContext)
+        {
+            return dbContext.HRUCharacteristics.Where(x =>
+                x.LoadGeneratingUnit.RegionalSubbasinID == regionalSubbasin.RegionalSubbasinID);
+        }
+
     }
 }

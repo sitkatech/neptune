@@ -32,13 +32,13 @@ namespace Neptune.Web.Views.Shared.Location
         public string MapFormID { get; }
         public EFModels.Entities.TreatmentBMP TreatmentBMP { get; }
 
-        public EditLocationViewData(Person currentPerson,
+        public EditLocationViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.TreatmentBMP treatmentBMP,
             MapInitJson mapInitJson,
-            string mapFormID, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+            string mapFormID) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.FindABMP());
+            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.FindABMP());
             EntityUrl = treatmentBMPIndexUrl;
             if (treatmentBMP != null)
             {

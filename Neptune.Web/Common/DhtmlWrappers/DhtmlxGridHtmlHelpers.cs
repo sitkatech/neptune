@@ -53,8 +53,8 @@ namespace Neptune.Web.Common.DhtmlWrappers
         public static readonly IHtmlContent FactSheetIcon = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-search gi-1x blue");
         public static readonly string ExcelDownloadWithFooterUrl = $"/Home/ExportGridToExcel/{0}/true";
         public static readonly string ExcelDownloadWithoutFooterUrl = $"/Home/ExportGridToExcel/{0}/false";
-        //public static readonly UrlTemplate<string> ExcelDownloadWithFooterUrl = new UrlTemplate<string>("");//todo: new UrlTemplate<string>(SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.ExportGridToExcel(UrlTemplate.Parameter1String, true)));
-        //public static readonly UrlTemplate<string> ExcelDownloadWithoutFooterUrl = new UrlTemplate<string>("");//todo: new UrlTemplate<string>(SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.ExportGridToExcel(UrlTemplate.Parameter1String, false)));
+        //public static readonly UrlTemplate<string> ExcelDownloadWithFooterUrl = new UrlTemplate<string>("");//todo: new UrlTemplate<string>(SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.ExportGridToExcel(UrlTemplate.Parameter1String, true)));
+        //public static readonly UrlTemplate<string> ExcelDownloadWithoutFooterUrl = new UrlTemplate<string>("");//todo: new UrlTemplate<string>(SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.ExportGridToExcel(UrlTemplate.Parameter1String, false)));
 
         /// <summary>
         /// All grids use this

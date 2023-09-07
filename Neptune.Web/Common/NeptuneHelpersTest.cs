@@ -5,11 +5,11 @@
         //[Test]
         //public void PostLogonDestinationTest()
         //{
-        //    var homeUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
+        //    var homeUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
 
-        //    var logInUrl = new Uri(SitkaRoute<AccountController>.BuildUrlFromExpression(x => x.LogOn()));
-        //    var unprotectedUrl = new Uri(SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.About()));
-        //    var protectedUrl = new Uri(SitkaRoute<Areas.Trash.Controllers.HomeController>.BuildUrlFromExpression(x => x.Index()));
+        //    var logInUrl = new Uri(SitkaRoute<AccountController>.BuildUrlFromExpression(_linkGenerator, x => x.LogOn()));
+        //    var unprotectedUrl = new Uri(SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.About()));
+        //    var protectedUrl = new Uri(SitkaRoute<Areas.Trash.Controllers.HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
 
         //    // Act 1 - log-in url redirects (post log-in) to referrer 
         //    var redirectFromLoginToReferrer = NeptuneHelpers.PostLogonDestinationImpl(logInUrl, unprotectedUrl);

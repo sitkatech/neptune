@@ -25,7 +25,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.OpenID;
-using Neptune.Web.Security;
 
 namespace Neptune.Web.Controllers
 {
@@ -39,13 +38,13 @@ namespace Neptune.Web.Controllers
         {
             get
             {
-                return SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(_linkGenerator, "", c => c.Login());
+                return SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(_linkGenerator, "", x => x.Login());
             }
         }
 
         protected string HomeUrl
         {
-            get { return SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, c => c.Index()); }
+            get { return SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()); }
         }
 
 

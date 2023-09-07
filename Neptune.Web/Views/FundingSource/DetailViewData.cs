@@ -32,15 +32,16 @@ namespace Neptune.Web.Views.FundingSource
         public readonly bool UserHasFundingSourceManagePermissions;
         public readonly string EditFundingSourceUrl;
 
-        public DetailViewData(Person currentPerson, EFModels.Entities.FundingSource fundingSource, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.FundingSource fundingSource) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             FundingSource = fundingSource;
             PageTitle = fundingSource.GetDisplayName();
             EntityName = $"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()}";
-            EntityUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
+            EntityUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
 
             UserHasFundingSourceManagePermissions = new FundingSourceEditFeature().HasPermissionByPerson(CurrentPerson);
-            EditFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, c => c.Edit(fundingSource));                       
+            EditFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(fundingSource));                       
         }
     }
 }

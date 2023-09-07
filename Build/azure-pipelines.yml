@@ -188,8 +188,8 @@ stages:
   condition: |
     and
     (
-      in(dependencies.BuildWeb.result, 'Succeeded', 'SucceededWithIssues'),
-      in(dependencies.BuildDB.result, 'Succeeded', 'SucceededWithIssues'),
+      in(dependencies.BuildWeb.result, 'Succeeded', 'SucceededWithIssues', 'Skipped'),
+      in(dependencies.BuildDB.result, 'Succeeded', 'SucceededWithIssues', 'Skipped'),
       in(dependencies.BuildTerraform.result, 'Succeeded', 'SucceededWithIssues'),
       eq(variables['deploy'], 'true')
     )

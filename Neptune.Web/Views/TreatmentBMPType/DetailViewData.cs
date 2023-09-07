@@ -38,8 +38,8 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public string GridDataUrl { get; }
         public string EditUrl { get; set; }
 
-        public DetailViewData(Person currentPerson,
-            EFModels.Entities.TreatmentBMPType treatmentBMPType, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.TreatmentBMPType treatmentBMPType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             CurrentPersonIsAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
             TreatmentBMPType = treatmentBMPType;
@@ -49,12 +49,12 @@ namespace Neptune.Web.Views.TreatmentBMPType
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             GridSpec = new TreatmentBMPsInTreatmentBMPTypeGridSpec(currentPerson, showDelete, showEdit, treatmentBMPType, linkGenerator) { ObjectNameSingular = "Treatment BMP", ObjectNamePlural = "Treatment BMPs", SaveFiltersInCookie = true };
             GridName = "treatmentBMPsGrid";
-            GridDataUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, j => j.TreatmentBMPsInTreatmentBMPTypeGridJsonData(treatmentBMPType));
-            EditUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, j => j.Edit(treatmentBMPType));
+            GridDataUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.TreatmentBMPsInTreatmentBMPTypeGridJsonData(treatmentBMPType));
+            EditUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(treatmentBMPType));
 
             UserHasTreatmentBMPTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
-            EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
+            EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
 
             ObservationTypeSortOrderUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.EditObservationTypesSortOrder(TreatmentBMPType));
 
@@ -62,7 +62,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
         public string AttributeTypeSortOrderUrl(int attributeTypePurposeID)
         {
-            return SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(_linkGenerator, x => x.EditAttributeTypesSortOrder(TreatmentBMPType, attributeTypePurposeID));
+            return SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.EditAttributeTypesSortOrder(TreatmentBMPType, attributeTypePurposeID));
         }
     }
 }

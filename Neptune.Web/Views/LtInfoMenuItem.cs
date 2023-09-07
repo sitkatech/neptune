@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Mvc;
 using Neptune.Common.DesignByContract;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
+using Neptune.Web.Security;
 
 
 namespace Neptune.Web.Views
@@ -52,7 +53,7 @@ namespace Neptune.Web.Views
         public static LtInfoMenuItem MakeItem<T>(SitkaRoute<T> route, Person currentPerson, string menuItemName, string menuGroupName) where T : Controller
         {
             var urlString = route.BuildUrlFromExpression();
-            var shouldShow = true; // todo: NeptuneBaseFeature.IsAllowed(route, currentPerson);
+            var shouldShow = NeptuneFeature.IsAllowed(route, currentPerson);
             return new LtInfoMenuItem(urlString, menuItemName, shouldShow, false, menuGroupName);
         }
 

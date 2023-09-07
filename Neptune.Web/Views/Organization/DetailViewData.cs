@@ -38,7 +38,8 @@ namespace Neptune.Web.Views.Organization
         public string? OrganizationLogoUrl { get; }
         public UrlTemplate<int> FundingSourceUrlTemplate { get; }
 
-        public DetailViewData(Person currentPerson, EFModels.Entities.Organization organization, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.Organization organization) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             Organization = organization;
             EntityName = FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized();
@@ -47,11 +48,11 @@ namespace Neptune.Web.Views.Organization
             UserHasCreateFundingSourcePermissions = false;//todo: new FundingSourceCreateFeature().HasPermissionByPerson(CurrentPerson);
             if (UserHasOrganizationManagePermissions)
             {
-                EntityUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
+                EntityUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             }
-            EditOrganizationUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, c => c.Edit(organization));
-            NewFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, c => c.New());
-            ManageFundingSourcesUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, c => c.Index());
+            EditOrganizationUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(organization));
+            NewFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, x => x.New());
+            ManageFundingSourcesUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             OrganizationLogoUrl = organization.LogoFileResource == null ? string.Empty : SitkaRoute<FileResourceController>.BuildUrlFromExpression(linkGenerator, x => x.DisplayResource(organization.LogoFileResource.FileResourceGUID.ToString()));
             FundingSourceUrlTemplate = new UrlTemplate<int>(SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
         }

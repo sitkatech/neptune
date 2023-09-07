@@ -27,7 +27,7 @@ public partial class TreatmentBMP
 
     public int StormwaterJurisdictionID { get; set; }
 
-    [StringLength(1000)]
+    [StringLength(2000)]
     [Unicode(false)]
     public string? Notes { get; set; }
 

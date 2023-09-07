@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Security;
+using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.FieldDefinition;
 using Neptune.Web.Views.Shared;
 using Edit = Neptune.Web.Views.FieldDefinition.Edit;
@@ -39,13 +40,15 @@ namespace Neptune.Web.Controllers
         {
         }
 
+        [HttpGet]
         [FieldDefinitionViewListFeature]
         public ViewResult Index()
         {
-            var viewData = new IndexViewData(CurrentPerson, _linkGenerator, HttpContext);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson);
             return RazorView<Views.FieldDefinition.Index, IndexViewData>(viewData);
         }
 
+        [HttpGet]
         [FieldDefinitionViewListFeature]
         public GridJsonNetJObjectResult<FieldDefinitionType> IndexGridJsonData()
         {
@@ -55,27 +58,29 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        [HttpGet("{fieldDefinitionTypePrimaryKey}")]
+        [HttpGet("{fieldDefinitionTypeID}")]
         [FieldDefinitionManageFeature]
-        public ViewResult Edit([FromRoute] FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey)
+        public ViewResult Edit([FromRoute] int fieldDefinitionTypeID)
         {
-            var fieldDefinitionData = FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(_dbContext, fieldDefinitionTypePrimaryKey.PrimaryKeyValue);
+            var fieldDefinitionType = FieldDefinitionType.AllLookupDictionary[fieldDefinitionTypeID];
+            var fieldDefinitionData = FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(_dbContext, fieldDefinitionTypeID);
             var viewModel = new EditViewModel(fieldDefinitionData);
-            return ViewEdit(fieldDefinitionTypePrimaryKey, viewModel);
+            return ViewEdit(fieldDefinitionType, viewModel);
         }
 
-        [HttpPost("{fieldDefinitionTypePrimaryKey}")]
+        [HttpPost("{fieldDefinitionTypeID}")]
         [FieldDefinitionManageFeature]
-        public async Task<IActionResult> Edit([FromRoute] FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey, EditViewModel viewModel)
+        public async Task<IActionResult> Edit([FromRoute] int fieldDefinitionTypeID, EditViewModel viewModel)
         {
+            var fieldDefinitionType = FieldDefinitionType.AllLookupDictionary[fieldDefinitionTypeID];
             if (!ModelState.IsValid)
             {
-                return ViewEdit(fieldDefinitionTypePrimaryKey, viewModel);
+                return ViewEdit(fieldDefinitionType, viewModel);
             }
-            var fieldDefinition = FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(_dbContext, fieldDefinitionTypePrimaryKey.PrimaryKeyValue);
+            var fieldDefinition = FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(_dbContext, fieldDefinitionTypeID);
             if (fieldDefinition == null)
             {
-                fieldDefinition = new FieldDefinition() { FieldDefinitionID = fieldDefinitionTypePrimaryKey.PrimaryKeyValue };
+                fieldDefinition = new FieldDefinition() { FieldDefinitionTypeID = fieldDefinitionTypeID };
                 _dbContext.FieldDefinitions.Add(fieldDefinition);
             }
 
@@ -85,9 +90,9 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<FieldDefinitionController>(_linkGenerator, x => x.Edit(fieldDefinition.FieldDefinitionTypeID)));
         }
 
-        private ViewResult ViewEdit(FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey, EditViewModel viewModel)
+        private ViewResult ViewEdit(FieldDefinitionType fieldDefinitionType, EditViewModel viewModel)
         {
-            var viewData = new EditViewData(CurrentPerson, fieldDefinitionTypePrimaryKey.EntityObject, _linkGenerator, HttpContext);
+            var viewData = new EditViewData(HttpContext, _linkGenerator, CurrentPerson, fieldDefinitionType);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

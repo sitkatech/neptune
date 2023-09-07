@@ -22,8 +22,10 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string RefreshPrecipitationZonesUrl { get; }
         public string RefreshOCTAPrioritizationLayerUrl { get; }
 
-        public IndexViewData(Person currentPerson, EFModels.Entities.NeptunePage neptunePage, int treatmentBmpsInExportCount, int featureClassesInExportCount, string bulkBMPUploadUrl, LinkGenerator linkGenerator, HttpContext httpContext)
-            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            NeptunePage neptunePage, int treatmentBmpsInExportCount, int featureClassesInExportCount,
+            string bulkBMPUploadUrl)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBmpsInExportCount = treatmentBmpsInExportCount;
             FeatureClassesInExportCount = featureClassesInExportCount;
@@ -33,15 +35,15 @@ namespace Neptune.Web.Views.TreatmentBMP
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             GridSpec = new TreatmentBMPGridSpec(currentPerson, showDelete, showEdit, linkGenerator) {ObjectNameSingular = "Treatment BMP", ObjectNamePlural = "Treatment BMPs", SaveFiltersInCookie = true};
             GridName = "treatmentBMPsGrid";
-            GridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, j => j.TreatmentBMPGridJsonData());
-            NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.New());
+            GridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.TreatmentBMPGridJsonData());
+            NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.New());
             BulkBMPUploadUrl = bulkBMPUploadUrl;
             HasEditPermissions = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             HasAdminPermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
             DownloadBMPInventoryUrl = "";//todo:SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.BMPInventoryExport());
-            RefreshModelBasinsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.RefreshModelBasinsFromOCSurvey());
-            RefreshPrecipitationZonesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.RefreshPrecipitationZonesFromOCSurvey());
-            RefreshOCTAPrioritizationLayerUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.RefreshOCTAPrioritizationLayerFromOCSurvey());
+            RefreshModelBasinsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshModelBasinsFromOCSurvey());
+            RefreshPrecipitationZonesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshPrecipitationZonesFromOCSurvey());
+            RefreshOCTAPrioritizationLayerUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshOCTAPrioritizationLayerFromOCSurvey());
         }
     }
 }

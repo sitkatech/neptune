@@ -6,6 +6,9 @@ namespace Neptune.Common.GeoSpatial
 {
     public static class Proj4NetHelper
     {
+        public const int NAD_83_HARN_CA_ZONE_VI_SRID = 2771;
+        public const int WEB_MERCATOR = 4326;
+
         private static readonly Dictionary<int, string> CoordinateSystemsWkTs = new()
         {
             [2225] = @"

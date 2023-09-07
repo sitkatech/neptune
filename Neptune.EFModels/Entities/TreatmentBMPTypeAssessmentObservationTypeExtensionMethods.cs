@@ -1,5 +1,4 @@
 ﻿using Neptune.Models.DataTransferObjects;
-using Neptune.Web.Models;
 
 namespace Neptune.EFModels.Entities;
 
@@ -18,5 +17,4 @@ public static partial class TreatmentBMPTypeAssessmentObservationTypeExtensionMe
         };
         return treatmentBMPTypeObservationTypeDto;
     }
-
 }

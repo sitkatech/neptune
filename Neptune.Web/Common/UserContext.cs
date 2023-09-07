@@ -12,7 +12,7 @@ public static class UserContext
         var claimsPrincipal = httpContext.User;
         if (claimsPrincipal.Claims.Any())
         {
-            var userGuid = Guid.Parse(claimsPrincipal.Claims.Single(c => c.Type == "sub").Value);
+            var userGuid = Guid.Parse(claimsPrincipal.Claims.Single(x => x.Type == "sub").Value);
             person = People.GetByGuid(dbContext, userGuid);
         }
 
@@ -27,7 +27,7 @@ public static class UserContext
             return null;
         }
 
-        var userGuid = Guid.Parse(claimsPrincipal.Claims.Single(c => c.Type == "sub").Value);
+        var userGuid = Guid.Parse(claimsPrincipal.Claims.Single(x => x.Type == "sub").Value);
         var keystoneUser = People.GetByGuidAsDto(dbContext, userGuid);
 
         return keystoneUser;

@@ -29,11 +29,11 @@ namespace Neptune.Web.Views.Role
         public readonly string GridName;
         public readonly string? GridDataUrl;
 
-        public IndexViewData(Person currentPerson, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             GridSpec = new IndexGridSpec(linkGenerator) { ObjectNameSingular = "Role", ObjectNamePlural = "Roles", SaveFiltersInCookie = true };
             GridName = "RoleGrid";
-            GridDataUrl = _linkGenerator.GetPathByAction("IndexGridJsonData", "Role");
+            GridDataUrl = LinkGenerator.GetPathByAction("IndexGridJsonData", "Role");
             PageTitle = "Roles Index";
         }
     }

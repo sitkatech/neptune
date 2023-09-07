@@ -1,4 +1,7 @@
-﻿using NetTopologySuite.Geometries;
+﻿using NetTopologySuite;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
+using System.Diagnostics;
 
 namespace Neptune.Common.GeoSpatial;
 
@@ -48,4 +51,12 @@ public static class GeometryHelper
         }
     }
 
+    public static Geometry? FromWKT(string? wkt, int srid)
+    {
+        if (string.IsNullOrWhiteSpace(wkt))
+            return null;
+
+        var geoReader = new WKTReader(new GeometryFactory(new PrecisionModel(Math.Pow(10, 3)), srid));
+        return geoReader.Read(wkt);
+    }
 }

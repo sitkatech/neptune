@@ -46,7 +46,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Manage()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.ManageObservationTypesList);
-            var viewData = new ManageViewData(CurrentPerson, neptunePage, _linkGenerator, HttpContext);
+            var viewData = new ManageViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage);
             return RazorView<Manage, ManageViewData>(viewData);
         }
 
@@ -54,7 +54,8 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData()
         {
-            var gridSpec = new TreatmentBMPTypeGridSpec(CurrentPerson, _linkGenerator);
+            var countByTreatmentBMPType = TreatmentBMPs.ListCountByTreatmentBMPType(_dbContext);
+            var gridSpec = new TreatmentBMPTypeGridSpec(_linkGenerator, CurrentPerson, countByTreatmentBMPType);
             var treatmentBMPTypes = TreatmentBMPTypes.List(_dbContext);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPType>(treatmentBMPTypes, gridSpec);
             return gridJsonNetJObjectResult;
@@ -98,7 +99,7 @@ namespace Neptune.Web.Controllers
            
             SetMessageForDisplay($"Treatment BMP Type {treatmentBMPType.TreatmentBMPTypeName} successfully created.");
 
-            return RedirectToAction(new SitkaRoute<TreatmentBMPTypeController>(_linkGenerator, c => c.Detail(treatmentBMPType.PrimaryKey)));
+            return RedirectToAction(new SitkaRoute<TreatmentBMPTypeController>(_linkGenerator, x => x.Detail(treatmentBMPType.PrimaryKey)));
         }
 
         [HttpGet("{treatmentBMPTypePrimaryKey}")]
@@ -134,7 +135,7 @@ namespace Neptune.Web.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            return RedirectToAction(new SitkaRoute<TreatmentBMPTypeController>(_linkGenerator, c => c.Detail(treatmentBMPType.PrimaryKey)));
+            return RedirectToAction(new SitkaRoute<TreatmentBMPTypeController>(_linkGenerator, x => x.Detail(treatmentBMPType.PrimaryKey)));
         }
 
         private ViewResult ViewEdit(EditViewModel viewModel, TreatmentBMPType treatmentBMPType)
@@ -145,15 +146,17 @@ namespace Neptune.Web.Controllers
             var customAttributeTypes = treatmentBMPType?.TreatmentBMPTypeCustomAttributeTypes.ToList() ?? new List<TreatmentBMPTypeCustomAttributeType>();
             var allTreatmentBMPAssessmentObservationTypes = _dbContext.TreatmentBMPAssessmentObservationTypes.ToList();
             var allCustomAttributeTypes = _dbContext.CustomAttributeTypes.ToList();
-            var viewData = new EditViewData(CurrentPerson, observationTypes, submitUrl, instructionsNeptunePage, treatmentBMPType, customAttributeTypes, allTreatmentBMPAssessmentObservationTypes, allCustomAttributeTypes, _linkGenerator, HttpContext);
+            var viewData = new EditViewData(HttpContext, _linkGenerator, CurrentPerson, observationTypes, submitUrl, instructionsNeptunePage, treatmentBMPType, customAttributeTypes, allTreatmentBMPAssessmentObservationTypes, allCustomAttributeTypes);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
+        [HttpGet]
         public ViewResult Index()
         {
             var treatmentBMPTypes = TreatmentBMPTypes.List(_dbContext);
             var neptunePage = NeptunePages.GetNeptunePageByPageType( _dbContext, NeptunePageType.TreatmentBMPType);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, treatmentBMPTypes, _linkGenerator, HttpContext);
+            var countByTreatmentBMPType = TreatmentBMPs.ListCountByTreatmentBMPType(_dbContext);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, treatmentBMPTypes, countByTreatmentBMPType);
             return RazorView<Views.TreatmentBMPType.Index, IndexViewData>(viewData);
         }
 
@@ -163,7 +166,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey)
         {
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMPTypePrimaryKey);
-            var viewData = new DetailViewData(CurrentPerson, treatmentBMPType, _linkGenerator, HttpContext);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPType);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -208,8 +211,9 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteTreatmentBMPType(TreatmentBMPType treatmentBMPType, ConfirmDialogFormViewModel viewModel)
         {
-            var treatmentBMPLabel = treatmentBMPType.TreatmentBMPs.Count == 1 ? FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel() : FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized();
-            var confirmMessage = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel()} '{treatmentBMPType.TreatmentBMPTypeName}' has {treatmentBMPType.TreatmentBMPs.Count} {treatmentBMPLabel}.<br /><br />Are you sure you want to delete this {FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel()}?";
+            var countByTreatmentBMPType = TreatmentBMPs.ListCountByTreatmentBMPType(_dbContext);
+            var treatmentBMPCount = countByTreatmentBMPType.TryGetValue(treatmentBMPType.TreatmentBMPTypeID, out var value) ? value : 0;
+            var confirmMessage = $"Treatment BMP Type '{treatmentBMPType.TreatmentBMPTypeName}' has {treatmentBMPCount} Treatment BMPs.<br /><br />Are you sure you want to delete this Treatment BMP Type?";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
@@ -237,7 +241,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult EditObservationTypesSortOrder([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey)
         {
             var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
-            EditSortOrderViewModel viewModel = new EditSortOrderViewModel();
+            var viewModel = new EditSortOrderViewModel();
             return ViewEditObservationTypesSortOrder(treatmentBMPType, viewModel);
         }
 
@@ -271,7 +275,7 @@ namespace Neptune.Web.Controllers
             int attributeTypePurposeID)
         {
             var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
-            EditSortOrderViewModel viewModel = new EditSortOrderViewModel();
+            var viewModel = new EditSortOrderViewModel();
             return ViewEditAttributeTypesSortOrder(treatmentBMPType, viewModel, attributeTypePurposeID);
         }
 

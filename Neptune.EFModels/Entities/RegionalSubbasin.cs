@@ -13,19 +13,6 @@ namespace Neptune.EFModels.Entities
         public string GetAuditDescriptionString()
         {
             return $"{Watershed} {DrainID}: {RegionalSubbasinID}";
-            
         }
-
-        //public RegionalSubbasin GetOCSurveyDownstreamCatchment()
-        //{
-        //    return _dbContext.RegionalSubbasins.Single(x =>
-        //        x.OCSurveyCatchmentID == OCSurveyDownstreamCatchmentID);
-        //}
-
-        //public IEnumerable<HRUCharacteristic> GetHRUCharacteristics()
-        //{
-        //    return _dbContext.HRUCharacteristics.Where(x =>
-        //        x.LoadGeneratingUnit.RegionalSubbasinID == RegionalSubbasinID);
-        //}
     }
 }

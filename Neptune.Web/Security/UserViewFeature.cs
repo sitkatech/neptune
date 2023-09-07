@@ -18,65 +18,65 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using Neptune.Web.Models;
+
+using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Security
 {
     [SecurityFeatureDescription("View User")]
-    public class UserViewFeature //TODO : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<Person>
+    public class UserViewFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<Person>
     {
-        //private readonly NeptuneFeatureWithContextImpl<Person> _neptuneFeatureWithContextImpl;
+        private readonly NeptuneFeatureWithContextImpl<Person> _neptuneFeatureWithContextImpl;
 
-        //public UserViewFeature()
-        //    : base(Role.All)
-        //{
-        //    _neptuneFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<Person>(this);
-        //    ActionFilter = _neptuneFeatureWithContextImpl;
-        //}
+        public UserViewFeature()
+            : base(new List<RoleEnum>{RoleEnum.Admin, RoleEnum.SitkaAdmin, RoleEnum.JurisdictionEditor, RoleEnum.JurisdictionManager, RoleEnum.Unassigned})
+        {
+            _neptuneFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<Person>(this);
+            ActionFilter = _neptuneFeatureWithContextImpl;
+        }
 
-        //public void DemandPermission(Person person, Person contextModelObject)
-        //{
-        //    _neptuneFeatureWithContextImpl.DemandPermission(person, contextModelObject);
-        //}
+        public void DemandPermission(Person person, Person contextModelObject)
+        {
+            _neptuneFeatureWithContextImpl.DemandPermission(person, contextModelObject);
+        }
 
 
-        //public PermissionCheckResult HasPermission(Person person, Person contextModelObject)
-        //{
-        //    if (contextModelObject == null)
-        //    {
-        //        return new PermissionCheckResult("The Person whose details you are requesting to see doesn't exist.");
-        //    }
-        //    var userHasEditPermission = new UserEditFeature().HasPermissionByPerson(person);
-        //    var userViewingOwnPage = person.PersonID == contextModelObject.PersonID;
+        public PermissionCheckResult HasPermission(Person person, Person contextModelObject)
+        {
+            if (contextModelObject == null)
+            {
+                return new PermissionCheckResult("The Person whose details you are requesting to see doesn't exist.");
+            }
+            var userHasEditPermission = new UserEditFeature().HasPermissionByPerson(person);
+            var userViewingOwnPage = person.PersonID == contextModelObject.PersonID;
 
-        //    #pragma warning disable 612
-        //    var userHasAppropriateRole = HasPermissionByPerson(person);
-        //    #pragma warning restore 612
-        //    if (!userHasAppropriateRole)
-        //    {
-        //        return new PermissionCheckResult("You don't permissions to view user details. If you aren't logged in, do that and try again.");
-        //    }
+#pragma warning disable 612
+            var userHasAppropriateRole = HasPermissionByPerson(person);
+#pragma warning restore 612
+            if (!userHasAppropriateRole)
+            {
+                return new PermissionCheckResult("You don't permissions to view user details. If you aren't logged in, do that and try again.");
+            }
 
-        //    //Only Admin users should be able to see Sitka Admin users
-        //    if (contextModelObject.Role == Role.SitkaAdmin && !(person.Role == Role.SitkaAdmin || person.Role == Role.Admin ))
-        //    {
-        //        return new PermissionCheckResult("You don\'t have permission to view this user.");
-        //    }
+            //Only Admin users should be able to see Sitka Admin users
+            if (contextModelObject.Role == Role.SitkaAdmin && !(person.Role == Role.SitkaAdmin || person.Role == Role.Admin))
+            {
+                return new PermissionCheckResult("You don\'t have permission to view this user.");
+            }
 
-        //    if (userViewingOwnPage || userHasEditPermission)
-        //    {
-        //        return new PermissionCheckResult();
-        //    }
+            if (userViewingOwnPage || userHasEditPermission)
+            {
+                return new PermissionCheckResult();
+            }
 
-        //    return new PermissionCheckResult("You don\'t have permission to view this user.");
-        //}
+            return new PermissionCheckResult("You don\'t have permission to view this user.");
+        }
 
-        ////This should only ever be called by HasPermission
-        //[Obsolete]
-        //public new bool HasPermissionByPerson(Person person)
-        //{
-        //    return base.HasPermissionByPerson(person);
-        //}
+        //This should only ever be called by HasPermission
+        [Obsolete]
+        public new bool HasPermissionByPerson(Person person)
+        {
+            return base.HasPermissionByPerson(person);
+        }
     }
 }

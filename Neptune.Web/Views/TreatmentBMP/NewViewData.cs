@@ -21,15 +21,16 @@ namespace Neptune.Web.Views.TreatmentBMP
         public IEnumerable<SelectListItem> TrashCaptureStatusTypes { get; }
         public IEnumerable<SelectListItem> SizingBasisTypes { get; }
 
-        public NewViewData(Person currentPerson,
+        public NewViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.TreatmentBMP treatmentBMP,
             IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,
             IEnumerable<EFModels.Entities.TreatmentBMPType> treatmentBMPTypes,
             List<EFModels.Entities.Organization> organizations,
             Shared.Location.EditLocationViewData editLocationViewData,
             IEnumerable<EFModels.Entities.WaterQualityManagementPlan> waterQualityManagementPlans,
-            IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes, IEnumerable<TrashCaptureStatusType> trashCaptureStatusTypes, IEnumerable<SizingBasisType> sizingBasisTypes, LinkGenerator linkGenerator, HttpContext httpContext)
-            : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+            IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes,
+            IEnumerable<TrashCaptureStatusType> trashCaptureStatusTypes, IEnumerable<SizingBasisType> sizingBasisTypes)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EditLocationViewData = editLocationViewData;
             SizingBasisTypes = sizingBasisTypes.ToSelectListWithDisabledEmptyFirstRow(

@@ -27,8 +27,8 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class EditLocationViewData : Shared.Location.EditLocationViewData
     {
-        public EditLocationViewData(Person currentPerson,
-            EFModels.Entities.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, string mapFormID, LinkGenerator linkGenerator, HttpContext httpContext) : base(currentPerson, treatmentBMP, mapInitJson, mapFormID, linkGenerator, httpContext)
+        public EditLocationViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, string mapFormID) : base(httpContext, linkGenerator, currentPerson, treatmentBMP, mapInitJson, mapFormID)
         {
             TreatmentBMPDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP));
         }

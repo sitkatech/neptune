@@ -123,7 +123,7 @@ namespace Neptune.Web.Models
         /// Might want to introduce a system person at some point.
         /// </summary>
         /// <param name="feature"></param>
-        public void DemandHasPermission(NeptuneBaseFeature feature)
+        public void DemandHasPermission(NeptuneFeature feature)
         {
             if (IsValidAsUnitTestToken(_tokenGuid, false))
             {

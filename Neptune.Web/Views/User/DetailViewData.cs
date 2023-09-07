@@ -45,27 +45,27 @@ namespace Neptune.Web.Views.User
         public string UserNotificationGridName { get; }
         public string UserNotificationGridDataUrl { get; }
         public string ActivateInactivateUrl { get; }
-        public HtmlString EditRolesLink { get; }
-        public HtmlString EditJurisdictionsLink { get; }
+        public IHtmlContent EditRolesLink { get; }
+        public IHtmlContent EditJurisdictionsLink { get; }
 
-        public DetailViewData(Person currentPerson,
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             Person personToView,
             UserNotificationGridSpec userNotificationGridSpec,
             string userNotificationGridName,
             string userNotificationGridDataUrl,
-            string activateInactivateUrl, LinkGenerator linkGenerator, HttpContext httpContext)
-            : base(currentPerson, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext)
+            string activateInactivateUrl)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             Person = personToView;
             PageTitle = personToView.GetFullNameFirstLast() + (!personToView.IsActive ? " (inactive)" : string.Empty);
             EntityName = "Users";
             //TODO: This gets pulled up to root
-            EditPersonOrganizationPrimaryContactUrl = "";//todo:SitkaRoute<PersonOrganizationController>.BuildUrlFromExpression(c => c.EditPersonOrganizationPrimaryContacts(personToView));
+            EditPersonOrganizationPrimaryContactUrl = "";//todo:SitkaRoute<PersonOrganizationController>.BuildUrlFromExpression(LinkGenerator, x => x.EditPersonOrganizationPrimaryContacts(personToView));
             IndexUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
-            JurisdictionIndexUrl = "";//todo:SitkaRoute<JurisdictionController>.BuildUrlFromExpression(x => x.Index());
+            JurisdictionIndexUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
 
-            UserHasPersonViewPermissions = false;//todo:new UserViewFeature().HasPermission(currentPerson, personToView).HasPermission;
-            UserCanManageThisPersonPermissions = false;//todo:new UserEditRoleFeature().HasPermission(currentPerson, personToView).HasPermission;
+            UserHasPersonViewPermissions = new UserViewFeature().HasPermission(currentPerson, personToView).HasPermission;
+            UserCanManageThisPersonPermissions = new UserEditRoleFeature().HasPermission(currentPerson, personToView).HasPermission;
             UserCanManagePeople = new UserEditFeature().HasPermissionByPerson(currentPerson);
             UserIsAdmin = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
             UserHasViewEverythingPermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
@@ -76,17 +76,17 @@ namespace Neptune.Web.Views.User
             }
 
             IsViewingSelf = currentPerson != null && currentPerson.PersonID == personToView.PersonID;
-            EditRolesLink = /*TODO: UserCanManageThisPersonPermissions
-                ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(c => c.EditRoles(personToView)),
+            EditRolesLink = UserCanManageThisPersonPermissions
+                ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(LinkGenerator, x => x.EditRoles(personToView)),
                     $"Edit Roles for User - {personToView.GetFullNameFirstLast()}",
                     true)
-                : */new HtmlString(string.Empty);
+                : new HtmlString(string.Empty);
 
-            EditJurisdictionsLink = /*TODO: UserCanManageThisPersonPermissions
-                ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(c => c.EditJurisdiction(personToView)),
+            EditJurisdictionsLink = UserCanManageThisPersonPermissions
+                ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(LinkGenerator, x => x.EditJurisdiction(personToView)),
                     $"Edit Assigned Jurisdictions for User - {personToView.GetFullNameFirstLast()}",
                     true)
-                : */new HtmlString(string.Empty);
+                : new HtmlString(string.Empty);
 
             UserNotificationGridSpec = userNotificationGridSpec;
             UserNotificationGridName = userNotificationGridName;

@@ -7,6 +7,7 @@ data:
   SECRET_PATH: "/app/secrets/neptuneWebMvcSecrets"
   DOCKER_BUILD_SOURCE: "."
   ASPNETCORE_ENVIRONMENT: "Staging"
+  ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
   SITKA_EMAIL_REDIRECT: "notifications-qa@sitkatech.com"
   WEB_URL: "https://{{ .Values.global.domains.webmvc }}"
   PlatformLongName: "Groundwater Accounting Platform"

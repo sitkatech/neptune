@@ -38,8 +38,9 @@ namespace Neptune.Web.Views.Organization
         public readonly bool UserIsSitkaAdmin;
         public readonly bool UserCanAddOrganization;
 
-        public IndexViewData(Person currentPerson, EFModels.Entities.NeptunePage neptunePage, LinkGenerator linkGenerator, HttpContext httpContext)
-            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, linkGenerator, httpContext) {
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            NeptunePage neptunePage)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools) {
             EntityName = FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized();
             PageTitle = "All Organizations";
 
@@ -52,9 +53,9 @@ namespace Neptune.Web.Views.Organization
             };
 
             GridName = "organizationsGrid";
-            GridDataUrl = _linkGenerator.GetPathByAction("IndexGridJsonData", "Organization");
+            GridDataUrl = LinkGenerator.GetPathByAction("IndexGridJsonData", "Organization");
 
-            PullOrganizationFromKeystoneUrl = ""; //todo: SitkaRoute<OrganizationController>.BuildUrlFromExpression(x => x.PullOrganizationFromKeystone());
+            PullOrganizationFromKeystoneUrl = ""; //todo: SitkaRoute<OrganizationController>.BuildUrlFromExpression(_linkGenerator, x => x.PullOrganizationFromKeystone());
             UserIsSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(currentPerson);
             UserCanAddOrganization = new OrganizationManageFeature().HasPermissionByPerson(currentPerson);
 
