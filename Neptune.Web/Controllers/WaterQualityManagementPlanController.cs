@@ -813,7 +813,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewUploadWqmps(UploadWqmpsViewModel viewModel, List<string> errorList)
         {
-            var neptunePage = NeptunePage.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadWQMPs);
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadWQMPs);
             var viewData = new UploadWqmpsViewData(HttpContext, _linkGenerator, CurrentPerson, errorList, neptunePage,
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.UploadWqmps()));
             return RazorView<UploadWqmps, UploadWqmpsViewData, UploadWqmpsViewModel>(viewData,

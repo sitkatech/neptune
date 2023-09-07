@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.FundingSource
         public readonly bool UserCanAddFundingSource;
 
         public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            NeptunePage neptunePage) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            EFModels.Entities.NeptunePage neptunePage) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = $"All {FieldDefinitionType.FundingSource.GetFieldDefinitionLabelPluralized()}";
             EntityName = $"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabelPluralized()}";

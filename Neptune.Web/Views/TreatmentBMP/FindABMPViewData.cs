@@ -43,7 +43,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
 
         public FindABMPViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            SearchMapInitJson mapInitJson, NeptunePage neptunePage,
+            SearchMapInitJson mapInitJson, EFModels.Entities.NeptunePage neptunePage,
             List<TreatmentBMPDisplayDto> treatmentBMPDisplayDtos,
             List<TreatmentBMPTypeDisplayDto> treatmentBMPTypeDisplayDtos,
             List<StormwaterJurisdictionDisplayDto> jurisdictions)

@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
         public readonly string GridDataUrl;
         public readonly string NewObservationTypeUrl;
 
-        public ManageViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, NeptunePage neptunePage)
+        public ManageViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage)
             : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Observation Type";

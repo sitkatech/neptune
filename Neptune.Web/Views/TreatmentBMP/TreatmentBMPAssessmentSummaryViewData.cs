@@ -12,7 +12,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public TreatmentBMPAssessmentSummaryGridSpec GridSpec { get; }
 
         public TreatmentBMPAssessmentSummaryViewData(HttpContext httpContext, LinkGenerator linkGenerator,
-            Person currentPerson, NeptunePage neptunePage) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            Person currentPerson, EFModels.Entities.NeptunePage neptunePage) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             
             PageTitle = "Recent Treatment BMP Assessments";

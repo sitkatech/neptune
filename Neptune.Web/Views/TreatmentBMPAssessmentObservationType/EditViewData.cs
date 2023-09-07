@@ -68,9 +68,9 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
             PassFailObservationThresholdTypeID = ObservationThresholdType.None.ObservationThresholdTypeID;
             PassFailObservationTargetTypeID = ObservationTargetType.PassFail.ObservationTargetTypeID;
 
-            ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson);
-            ViewObservationInstructionsNeptunePage = new ViewPageContentViewData(observationInstructionsNeptunePage, currentPerson);
-            ViewLabelsAndUnitsInstructionsNeptunePage = new ViewPageContentViewData(labelAndUnitsInstructionsNeptunePage, currentPerson);
+            ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson, linkGenerator);
+            ViewObservationInstructionsNeptunePage = new ViewPageContentViewData(observationInstructionsNeptunePage, currentPerson, linkGenerator);
+            ViewLabelsAndUnitsInstructionsNeptunePage = new ViewPageContentViewData(labelAndUnitsInstructionsNeptunePage, currentPerson, linkGenerator);
         }
     }
 

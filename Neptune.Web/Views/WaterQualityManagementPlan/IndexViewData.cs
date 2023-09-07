@@ -20,8 +20,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public ViewPageContentViewData VerificationNeptunePage { get; }
         public string BulkUploadWQMPUrl { get; }
 
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, NeptunePage neptunePage,
-            WaterQualityManagementPlanIndexGridSpec indexGridSpec, NeptunePage secondaryNeptunePage, WaterQualityManagementPlanVerificationGridSpec verificationGridSpec) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage,
+            WaterQualityManagementPlanIndexGridSpec indexGridSpec, EFModels.Entities.NeptunePage secondaryNeptunePage, WaterQualityManagementPlanVerificationGridSpec verificationGridSpec) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             var waterQualityManagementPlanPluralized = FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized();
             PageTitle = $"All {waterQualityManagementPlanPluralized}";
@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
                     x.WaterQualityManagementPlanIndexGridData());
 
-            VerificationNeptunePage = new ViewPageContentViewData(secondaryNeptunePage, currentPerson);
+            VerificationNeptunePage = new ViewPageContentViewData(secondaryNeptunePage, currentPerson, linkGenerator);
             VerificationGridSpec = verificationGridSpec;
             VerificationGridName = "waterQualityManagementPlanVerificationIndexGrid";
             VerificationGridDataUrl =

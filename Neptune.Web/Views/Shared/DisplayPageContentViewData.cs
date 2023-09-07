@@ -28,7 +28,7 @@ namespace Neptune.Web.Views.Shared
         public readonly ViewPageContentViewData ViewWholePageContentViewData;
 
         public DisplayPageContentViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            NeptunePage neptunePage) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            EFModels.Entities.NeptunePage neptunePage) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Stormwater Tools";
             PageTitle = neptunePage.NeptunePageType.NeptunePageTypeDisplayName;

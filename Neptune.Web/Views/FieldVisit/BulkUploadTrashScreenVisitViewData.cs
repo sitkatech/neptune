@@ -8,7 +8,7 @@ namespace Neptune.Web.Views.FieldVisit
     {
         public string TemplateDownloadUrl { get; set; }
      
-        public BulkUploadTrashScreenVisitViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, NeptunePage neptunePage) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public BulkUploadTrashScreenVisitViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             EntityName = FieldDefinitionType.FieldVisit.GetFieldDefinitionLabel();
             EntityUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Index());

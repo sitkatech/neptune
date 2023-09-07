@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.Parcel
         public readonly string ParcelLayerUploadUrl;
 
         public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            NeptunePage neptunePage,
+            EFModels.Entities.NeptunePage neptunePage,
             string introNarrativeContent,
             MapInitJson mapInitJson,
             string findParcelByAddressUrl,

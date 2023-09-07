@@ -63,7 +63,7 @@ namespace Neptune.Web.Views
         /// Call for page with associated NeptunePage
         /// </summary>
         protected NeptuneViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            NeptunePage neptunePage, bool isHomePage,
+            EFModels.Entities.NeptunePage neptunePage, bool isHomePage,
             NeptuneArea neptuneArea)
         {
             NeptunePage = neptunePage;
@@ -87,7 +87,7 @@ namespace Neptune.Web.Views
         }
 
         protected NeptuneViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            NeptunePage neptunePage, NeptuneArea neptuneArea) : this(httpContext, linkGenerator, currentPerson, neptunePage, false, neptuneArea)
+            EFModels.Entities.NeptunePage neptunePage, NeptuneArea neptuneArea) : this(httpContext, linkGenerator, currentPerson, neptunePage, false, neptuneArea)
         {
 
         }
