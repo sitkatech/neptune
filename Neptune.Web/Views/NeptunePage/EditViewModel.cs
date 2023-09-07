@@ -27,8 +27,12 @@ namespace Neptune.Web.Views.NeptunePage;
 
 public class EditViewModel : FormViewModel
 {
+    public int NeptunePageID { get; set; }
+
     [DisplayName("Page Content")]
-    public HtmlString NeptunePageContentHtmlString { get; set; }
+    public HtmlString? NeptunePageContentHtmlString { get; set; }
+
+    public readonly HtmlString? NeptunePageContentOnLoad;
 
     /// <summary>
     /// Needed by model binder
@@ -39,7 +43,9 @@ public class EditViewModel : FormViewModel
         
     public EditViewModel(EFModels.Entities.NeptunePage neptunePage)
     {
-        NeptunePageContentHtmlString = neptunePage != null ? neptunePage.NeptunePageContentHtmlString : null;
+        NeptunePageID = neptunePage.NeptunePageID;
+        NeptunePageContentHtmlString = neptunePage.NeptunePageContentHtmlString;
+        NeptunePageContentOnLoad = NeptunePageContentHtmlString;
     }
 
     public void UpdateModel(EFModels.Entities.NeptunePage neptunePage)

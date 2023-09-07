@@ -30,5 +30,5 @@ public class EditViewData : NeptuneUserControlViewData
     public EditViewData(TinyMCEExtension.TinyMCEToolbarStyle tinyMceToolbarStyle)
     {
         TinyMceToolbarStyle = tinyMceToolbarStyle;
-    }
+    }  
 }
