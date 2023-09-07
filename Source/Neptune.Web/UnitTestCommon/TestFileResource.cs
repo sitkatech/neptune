@@ -35,7 +35,7 @@ namespace Neptune.Web.UnitTestCommon
                     Guid.NewGuid(),
                     new byte[2000],
                     LoginConstants.PersonID,
-                    DateTime.Now);
+                    DateTime.Now, false);
                 return fileResource;
             }
 
@@ -47,7 +47,7 @@ namespace Neptune.Web.UnitTestCommon
                     Guid.NewGuid(),
                     new byte[2000],
                     LoginConstants.PersonID,
-                    DateTime.Now);
+                    DateTime.Now, false);
                 dbContext.FileResources.Add(fileResource);
                 return fileResource;
             }
