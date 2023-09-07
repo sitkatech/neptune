@@ -30,6 +30,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
             var editUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(UrlTemplate.Parameter1Int)));
             var verifyDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.WqmpVerify(UrlTemplate.Parameter1Int)));
+            var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
 
 
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID),
@@ -42,7 +43,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     qualityManagementPlanManageFeature.HasPermission(currentPerson, x).HasPermission),
                 26, DhtmlxGridColumnFilterType.None);
             Add("Name", x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID), x.WaterQualityManagementPlanName), 300, DhtmlxGridColumnFilterType.Text);
-            Add("Jurisdiction", x => isAnonymousOrUnassigned ? new HtmlString(x.StormwaterJurisdiction.GetOrganizationDisplayName()) : x.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 150);
+            Add("Jurisdiction", x => isAnonymousOrUnassigned ? new HtmlString(x.StormwaterJurisdiction.GetOrganizationDisplayName()) :
+                UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.StormwaterJurisdiction.GetOrganizationDisplayName()), 150);
             Add("Priority", x => x.WaterQualityManagementPlanPriority?.WaterQualityManagementPlanPriorityDisplayName,
                 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Status", x => x.WaterQualityManagementPlanStatus?.WaterQualityManagementPlanStatusDisplayName, 100,

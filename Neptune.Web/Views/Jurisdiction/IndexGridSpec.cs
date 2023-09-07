@@ -23,15 +23,18 @@ using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.DhtmlWrappers;
 using Neptune.Web.Common.HtmlHelperExtensions;
-using Neptune.Web.Models;
+using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views.Jurisdiction
 {
     public class IndexGridSpec : GridSpec<StormwaterJurisdiction>
     {
-        public IndexGridSpec()
+        public IndexGridSpec(LinkGenerator linkGenerator)
         {
-            Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.Organization.GetDisplayName()), 400, DhtmlxGridColumnFilterType.Html);
+            var stormwaterJurisdictionUrlTemplate = new UrlTemplate<int>(
+                SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator,
+                    x => x.Detail(UrlTemplate.Parameter1Int)));
+            Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.Organization.GetDisplayName()), 400, DhtmlxGridColumnFilterType.Html);
             Add("Number of Users", x => x.StormwaterJurisdictionPeople.Count, 80);
             Add("Number of BMPs", x => x.TreatmentBMPs.Count, 80, DhtmlxGridColumnAggregationType.Total);
             Add("Public BMP Visibility",

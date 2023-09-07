@@ -53,7 +53,7 @@ namespace Neptune.Web.Views.ManagerDashboard
 
 
             ProvisionalTreatmentBMPGridName = "assessmentsGrid";
-            ProvisionalTreatmentBMPGridSpec = new ProvisionalTreatmentBMPGridSpec(currentPerson, ProvisionalTreatmentBMPGridName)
+            ProvisionalTreatmentBMPGridSpec = new ProvisionalTreatmentBMPGridSpec(linkGenerator, currentPerson, ProvisionalTreatmentBMPGridName)
             {
                 ObjectNameSingular = "Provisional BMP Record",
                 ObjectNamePlural = "Provisional BMP Records",
@@ -64,11 +64,11 @@ namespace Neptune.Web.Views.ManagerDashboard
             ProvisionalTreatmentBMPGridCheckAllUrl = $"Sitka.{ProvisionalTreatmentBMPGridName}.grid.checkAll()";
             ProvisionalTreatmentBMPGridUncheckAllUrl = $"Sitka.{ProvisionalTreatmentBMPGridName}.grid.uncheckAll()";
             TreatmentBMPsCount = treatmentBMPsCount;
-            //TreatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            TreatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
 
 
             ProvisionalBMPDelineationGridName = "ProvisionalBMPDelineationsGrid";
-            ProvisionalBMPDelineationsGridSpec = new ProvisionalBMPDelineationsGridSpec(currentPerson, ProvisionalBMPDelineationGridName)
+            ProvisionalBMPDelineationsGridSpec = new ProvisionalBMPDelineationsGridSpec(LinkGenerator, currentPerson, ProvisionalBMPDelineationGridName)
             {
                 ObjectNameSingular = "Provisional BMP Delineation Record",
                 ObjectNamePlural = "Provisional BMP Delineation Records",

@@ -195,7 +195,7 @@ namespace Neptune.Web.Models
                                 (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.None)
                     .Select(x => x.StormwaterJurisdictionID);
 
-                var publicWaterQualityManagementPlans = WaterQualityManagementPlans.GetImpl(dbContext)
+                var publicWaterQualityManagementPlans = WaterQualityManagementPlans.GetImpl(dbContext).AsNoTracking()
                     .Where(x => stormwaterJurisdictionIDsAnonymousPersonCanView.Contains(x.StormwaterJurisdictionID) &&
                                 (x.WaterQualityManagementPlanStatusID ==
                                  (int)WaterQualityManagementPlanStatusEnum.Active ||
@@ -207,7 +207,7 @@ namespace Neptune.Web.Models
             }
 
             var stormwaterJurisdictionIDsPersonCanView = person.GetStormwaterJurisdictionIDsPersonCanViewWithContext(dbContext);
-            var waterQualityManagementPlans = WaterQualityManagementPlans.GetImpl(dbContext)
+            var waterQualityManagementPlans = WaterQualityManagementPlans.GetImpl(dbContext).AsNoTracking()
                 .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             return waterQualityManagementPlans;
         }

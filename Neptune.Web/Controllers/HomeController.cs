@@ -59,14 +59,12 @@ namespace Neptune.Web.Controllers
 
             // map stuff
 
-            var layerGeoJsons = StormwaterJurisdictionModelExtensions.GetBoundaryLayerGeoJson(_dbContext, true)
-                .Where(x => x.LayerInitialVisibility == LayerInitialVisibility.Show)
-                .ToList();
+            var layerGeoJson = StormwaterJurisdictionModelExtensions.GetBoundaryLayerGeoJson(_dbContext, true, _linkGenerator);
 
             var projectLocationsMapInitJson = new JurisdictionsMapInitJson("JurisdictionsMap")
             {
                 AllowFullScreen = false,
-                Layers = layerGeoJsons
+                Layers = new List<LayerGeoJson> { layerGeoJson }
             };
             var projectLocationsMapViewData = new JurisdictionsMapViewData(projectLocationsMapInitJson.MapDivID);
 

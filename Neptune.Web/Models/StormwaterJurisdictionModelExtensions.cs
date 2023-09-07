@@ -20,28 +20,15 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.Web.Common;
-using Microsoft.AspNetCore.Html;
 using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Controllers;
 using NetTopologySuite.Features;
 
 namespace Neptune.Web.Models
 {
     public static class StormwaterJurisdictionModelExtensions
     {
-        public static string GetDetailUrl(this StormwaterJurisdiction stormwaterJurisdiction)
-        {
-            if (stormwaterJurisdiction == null) { return ""; }
-
-            return ""; //todo: DetailUrlTemplate.ParameterReplace(stormwaterJurisdiction.StormwaterJurisdictionID);
-        }
-
-        public static HtmlString GetDisplayNameAsDetailUrl(this StormwaterJurisdiction stormwaterJurisdiction)
-        {
-            return new HtmlString(
-                $"<a href=\"{stormwaterJurisdiction.GetDetailUrl()}\" alt=\"{stormwaterJurisdiction.GetOrganizationDisplayName()}\" title=\"{stormwaterJurisdiction.GetOrganizationDisplayName()}\" >{stormwaterJurisdiction.GetOrganizationDisplayName()}</a>");
-        }
-
         public static List<Person> PeopleWhoCanManageStormwaterJurisdiction(this StormwaterJurisdiction stormwaterJurisdiction)
         {
             return stormwaterJurisdiction.StormwaterJurisdictionPeople.Select(x => x.Person).ToList();
@@ -52,37 +39,33 @@ namespace Neptune.Web.Models
             return stormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdiction().ToList();
         }
         
-        public static List<LayerGeoJson> GetBoundaryLayerGeoJson(NeptuneDbContext dbContext, bool clickThrough)
+        public static LayerGeoJson GetBoundaryLayerGeoJson(NeptuneDbContext dbContext, bool clickThrough, LinkGenerator linkGenerator)
         {
-            var jurisdictionsToShow = dbContext.StormwaterJurisdictionGeometries.AsNoTracking()
+            // all jurisdictions are Organization Type "Local"
+            var stormwaterJurisdictionGeometries = dbContext.StormwaterJurisdictionGeometries.AsNoTracking()
                 .Include(x => x.StormwaterJurisdiction)
                 .ThenInclude(x => x.Organization).ThenInclude(x => x.OrganizationType).ToList();
 
-            return jurisdictionsToShow.GroupBy(x => x.StormwaterJurisdiction.Organization.OrganizationType.OrganizationTypeID, (_, stormwaterJurisdictionGeometries) =>
+            var featureCollection = new FeatureCollection();
+            foreach (var stormwaterJurisdictionGeometry in stormwaterJurisdictionGeometries)
             {
-                var featureCollection = new FeatureCollection();
-                foreach (var stormwaterJurisdictionGeometry in stormwaterJurisdictionGeometries)
+                var stormwaterJurisdiction = stormwaterJurisdictionGeometry.StormwaterJurisdiction;
+                var attributesTable = new AttributesTable
                 {
-                    var stormwaterJurisdiction = stormwaterJurisdictionGeometry.StormwaterJurisdiction;
-                    var organizationAnchorTag = UrlTemplate.MakeHrefString(stormwaterJurisdiction.GetDetailUrl(), stormwaterJurisdiction.Organization.OrganizationName);
-                    var attributesTable = new AttributesTable
-                    {
-                        { "Organization Name", organizationAnchorTag },
-                        { "Short Name", organizationAnchorTag },
-                        { "Target URL", stormwaterJurisdiction.GetDetailUrl() }
-                    };
-                    var feature = new Feature(stormwaterJurisdictionGeometry.Geometry4326, attributesTable);
-                    featureCollection.Add(feature);
-                }
+                    { "Short Name", stormwaterJurisdiction.Organization.OrganizationName },
+                    { "Target URL", SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(stormwaterJurisdiction)) }
+                };
+                var feature = new Feature(stormwaterJurisdictionGeometry.Geometry4326, attributesTable);
+                featureCollection.Add(feature);
+            }
 
-                var organizationType = stormwaterJurisdictionGeometries.First().StormwaterJurisdiction.Organization.OrganizationType;
-                return new LayerGeoJson(
-                    $"{organizationType.OrganizationTypeName} {FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabelPluralized()}",
-                    featureCollection,
-                    organizationType.LegendColor, 1,
-                    LayerInitialVisibility.Show,
-                    clickThrough);
-            }).ToList();
+            var organizationType = stormwaterJurisdictionGeometries.First().StormwaterJurisdiction.Organization.OrganizationType;
+            return new LayerGeoJson(
+                $"{organizationType.OrganizationTypeName} {FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabelPluralized()}",
+                featureCollection,
+                organizationType.LegendColor, 1,
+                LayerInitialVisibility.Show,
+                clickThrough);
         }
 
         public static FeatureCollection ToGeoJsonFeatureCollection(List<StormwaterJurisdiction> stormwaterJurisdictions)

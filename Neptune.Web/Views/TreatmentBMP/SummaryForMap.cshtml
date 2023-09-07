@@ -77,7 +77,7 @@ Source code is available upon request via <support@sitkatech.com>.
                     <div class="col-xs-12">@Html.LabelWithSugarFor(FieldDefinitionType.TreatmentBMPType, "Type"): @ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12">@Html.LabelWithSugarFor(FieldDefinitionType.Jurisdiction, "Jurisdiction"): @ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
+                    <div class="col-xs-12">@Html.LabelWithSugarFor(FieldDefinitionType.Jurisdiction, "Jurisdiction"): <a href="@ViewDataTyped.StormwaterJurisdictionDetailUrl">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()</a></div>
                 </div>
                 <div class="row">
                     <div class="col-xs-12"><strong>Notes:</strong> @ViewDataTyped.TreatmentBMP.Notes</div>
@@ -97,14 +97,6 @@ Source code is available upon request via <support@sitkatech.com>.
                         }
                     </div>
                 </div>
-                @*TODO: killed this to cut scope. may ressurrect later?
-                    <br/>
-                <div class="row">
-                    <div class="col-xs-12 text-right">
-                        <div class="help-block">If you can't locate the BMP in the field, flag for removal from the inventory</div>
-                        <a href="#" class="btn btn-sm btn-warning">Flag for Deletion</a>        
-                    </div>
-                </div>*@
             </div>
         </div>
     </div>
