@@ -28,7 +28,7 @@ namespace Neptune.Web.Views.Home
         public List<TrainingVideo> TrainingVideos { get; }
 
         public TrainingViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            NeptunePage neptunePage,
+            EFModels.Entities.NeptunePage neptunePage,
             List<TrainingVideo> trainingVideos) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "Training";

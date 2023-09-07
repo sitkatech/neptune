@@ -19,12 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Views.Shared;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Views.Shared;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Views.NeptunePage;
 
 namespace Neptune.Web.Views
 {
@@ -37,7 +38,7 @@ namespace Neptune.Web.Views
         public string EntityUrl { get; set; }
         public string SubEntityName { get; set; }
         public string SubEntityUrl { get; set; }
-        public NeptunePage NeptunePage { get; }
+        public EFModels.Entities.NeptunePage NeptunePage { get; }
         public Person CurrentPerson { get; }
         public string? NeptuneHomeUrl { get; }
         public string? LogInUrl { get; }
@@ -62,7 +63,7 @@ namespace Neptune.Web.Views
         /// Call for page with associated NeptunePage
         /// </summary>
         protected NeptuneViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            NeptunePage neptunePage, bool isHomePage,
+            EFModels.Entities.NeptunePage neptunePage, bool isHomePage,
             NeptuneArea neptuneArea)
         {
             NeptunePage = neptunePage;
@@ -82,11 +83,11 @@ namespace Neptune.Web.Views
             MakeNeptuneMenu(currentPerson);
             NeptuneNavBarViewData = new NeptuneNavBarViewData(linkGenerator, currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl, neptuneArea, isHomePage);
 
-            ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson) : null;
+            ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson, linkGenerator) : null;
         }
 
         protected NeptuneViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            NeptunePage neptunePage, NeptuneArea neptuneArea) : this(httpContext, linkGenerator, currentPerson, neptunePage, false, neptuneArea)
+            EFModels.Entities.NeptunePage neptunePage, NeptuneArea neptuneArea) : this(httpContext, linkGenerator, currentPerson, neptunePage, false, neptuneArea)
         {
 
         }

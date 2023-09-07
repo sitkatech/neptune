@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.User
         public string CancelUrl { get; }
 
         public InviteViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            List<EFModels.Entities.Organization> organizations, NeptunePage neptunePage, string cancelUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            List<EFModels.Entities.Organization> organizations, EFModels.Entities.NeptunePage neptunePage, string cancelUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             CancelUrl = cancelUrl;
             PageTitle = "Invite User";

@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.Home
         public string ViewDelineationReconciliationReportUrl { get; }
         public UrlTemplate<int> StormwaterJurisdictionUrlTemplate { get; }
 
-        public LaunchPadViewData(LinkGenerator linkGenerator, Person currentPerson, NeptunePage launchPadNeptunePage,
+        public LaunchPadViewData(LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage launchPadNeptunePage,
             int numberOfBmpTypes, string managerDashboardDescription)
         {
             CurrentPerson = currentPerson;

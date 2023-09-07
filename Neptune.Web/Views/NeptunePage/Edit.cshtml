@@ -1,0 +1,61 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="Edit.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@inherits Neptune.Web.Views.NeptunePage.Edit
+@model Neptune.Web.Views.NeptunePage.EditViewModel
+@using Neptune.Web.Common
+
+<script>
+    function toggleIsEditing(isEditing) {
+        document.getElementById('viewNeptunePageContent').style.display = isEditing ? 'none' : 'block';
+        document.getElementById('editNeptunePageContent').style.display = isEditing ? 'block' : 'none';
+    }
+</script>
+
+<div id="viewNeptunePageContent" class="neptunePageContent" style="position: relative; min-height: 30px;">
+    <div class="hoverEditButton">
+        <button style="margin: 10px" onclick="toggleIsEditing(true)">Edit</button>
+    </div>
+    @if (Model.NeptunePageContentOnLoad != null)
+    {
+        @Html.Raw(Model.NeptunePageContentOnLoad)
+    }
+    else
+    {
+        <div class="hoverEmptySpace"></div>
+    }
+</div>
+
+<div id="editNeptunePageContent" style="display: none; margin-bottom: 16px;">
+    @Html.ValidationSummary()
+    @using (Html.BeginForm("Edit", "NeptunePage", new { id = Model.NeptunePageID }))
+    {
+        <div style="max-height: 600px; overflow-y: auto">
+            @Html.TinyMCEEditorFor(x => x.NeptunePageContentHtmlString, TinyMCEExtension.TinyMCEToolbarStyle.MinimalWithImages, true, false, 200)
+        </div>
+        <div class="row" style="margin-top: 6px">
+            <div class="col-xs-12" style="text-align: right">
+                <button action="p" type="submit" class="btn btn-neptune">Save</button>
+                <button type="button" onclick="toggleIsEditing(false)" class="btn btn-secondary" style="margin-left: 6px">Cancel</button>
+                @Html.HiddenFor(x => x.NeptunePageID)
+            </div>
+        </div>
+    }
+</div>

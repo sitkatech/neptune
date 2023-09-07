@@ -1,24 +1,11 @@
 ﻿@using Neptune.Web.Common.ModalDialog
+@using Neptune.Web.Views.NeptunePage
 @using Neptune.Web.Views.Shared
 @inherits ViewPageContent
 
 @if (ViewDataTyped.ShowEditButton)
 {
-    <div class="neptunePageContent" style="position: relative; min-height: 30px;">
-        <div class="hoverEditButton">
-            <div style="margin-top: 10px">
-                @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditPageContentUrl, $"Edit Content for {ViewDataTyped.NeptunePage.NeptunePageType.NeptunePageTypeDisplayName}", 900, "Save", "Cancel", new List<string> { "btn-neptune btn-xs" }, null, null)
-            </div>
-        </div>
-        @if (ViewDataTyped.NeptunePage.HasNeptunePageContent())
-        {
-            @Html.Raw(ViewDataTyped.HtmlContent)
-        }
-        else
-        {
-            <div class="hoverEmptySpace"></div>
-        }        
-    </div>
+    Edit.RenderPartialView(Html, ViewDataTyped.EditViewData, ViewDataTyped.EditViewModel);
 }
 else
 {

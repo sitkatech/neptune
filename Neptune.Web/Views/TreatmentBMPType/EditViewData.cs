@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
         public EditViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             IEnumerable<TreatmentBMPTypeAssessmentObservationType> observationTypes, string submitUrl,
-            NeptunePage instructionsNeptunePage, EFModels.Entities.TreatmentBMPType treatmentBMPType,
+            EFModels.Entities.NeptunePage instructionsNeptunePage, EFModels.Entities.TreatmentBMPType treatmentBMPType,
             IEnumerable<TreatmentBMPTypeCustomAttributeType> customAttributeTypes,
             IEnumerable<EFModels.Entities.TreatmentBMPAssessmentObservationType> allObservationTypes,
             IEnumerable<CustomAttributeType> allCustomAttributeTypes) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
@@ -54,7 +54,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
             ViewDataForAngular = new ViewDataForAngular(observationTypes, customAttributeTypes, allObservationTypes, allCustomAttributeTypes);
             TreatmentBMPTypeIndexUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Manage());
             SubmitUrl = submitUrl;
-            ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson);
+            ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson, linkGenerator);
         }
     }
 

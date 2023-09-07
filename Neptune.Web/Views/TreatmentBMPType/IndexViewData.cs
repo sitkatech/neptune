@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public UrlTemplate<int> TreatmentBMPAssessmentObservationTypeDetailUrlTemplate { get; }
 
         public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            NeptunePage neptunePage,
+            EFModels.Entities.NeptunePage neptunePage,
             List<EFModels.Entities.TreatmentBMPType> treatmentBMPTypes, Dictionary<int, int> countByTreatmentBMPType)
             : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {

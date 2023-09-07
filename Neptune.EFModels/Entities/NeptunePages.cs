@@ -19,12 +19,20 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
 
 namespace Neptune.EFModels.Entities
 {
     public static class NeptunePages
     {
+        public static List<NeptunePage> List(NeptuneDbContext dbContext)
+        {
+            return dbContext.NeptunePages.AsNoTracking()
+                .OrderBy(x => x.NeptunePageType.NeptunePageTypeDisplayName)
+                .ToList();
+        }
+
         public static NeptunePage GetNeptunePageByPageType(NeptuneDbContext dbContext, NeptunePageType neptunePageType)
         {
             var neptunePage = dbContext.NeptunePages.SingleOrDefault(x => x.NeptunePageTypeID == neptunePageType.NeptunePageTypeID);

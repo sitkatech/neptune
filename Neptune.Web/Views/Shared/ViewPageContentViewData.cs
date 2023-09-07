@@ -1,25 +1,28 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
+using Neptune.Web.Security;
+using Neptune.Web.Views.NeptunePage;
 
 namespace Neptune.Web.Views.Shared
 {
     public class ViewPageContentViewData
     {
-        public readonly NeptunePage NeptunePage;
+        public readonly EFModels.Entities.NeptunePage NeptunePage;
         public readonly bool ShowEditButton;
-        public readonly string NeptunePageContentID;
-        public readonly string NeptunePageEditHoverButtonID;
-        public readonly string EditPageContentUrl;
         public readonly HtmlString HtmlContent;
+        public EditViewData EditViewData { get; set; }
+        public EditViewModel EditViewModel { get; set; }
 
-        public ViewPageContentViewData(NeptunePage neptunePage, Person currentPerson)
+
+        public ViewPageContentViewData(EFModels.Entities.NeptunePage neptunePage, Person currentPerson, LinkGenerator linkGenerator)
         {
             NeptunePage = neptunePage;
-            ShowEditButton = true; //todo: new NeptunePageManageFeature().HasPermission(currentPerson, neptunePage).HasPermission;
-            NeptunePageContentID = $"neptunePageContent{neptunePage.NeptunePageID}";
-            NeptunePageEditHoverButtonID = $"editHoverButton{neptunePage.NeptunePageID}";
-            EditPageContentUrl = "";// todo: SitkaRoute<NeptunePageController>.BuildUrlFromExpression(t => t.EditInDialog(NeptunePage));
+            ShowEditButton = true; // todo: new NeptunePageManageFeature().HasPermission(currentPerson, neptunePage).HasPermission;
             HtmlContent = new HtmlString(neptunePage.NeptunePageContent);
-        }        
+            EditViewData = new EditViewData(TinyMCEExtension.TinyMCEToolbarStyle.MinimalWithImages);
+            EditViewModel = new EditViewModel(neptunePage);
+        }
     }
 }

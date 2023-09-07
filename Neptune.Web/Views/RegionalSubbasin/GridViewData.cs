@@ -13,7 +13,7 @@ namespace Neptune.Web.Views.RegionalSubbasin
         public bool HasAdminPermissions{ get; }
         public string RefreshUrl { get; }
 
-        public GridViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, NeptunePage neptunePage) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public GridViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
 
         {
             EntityName = "Regional Subbasins";
