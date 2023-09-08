@@ -168,7 +168,7 @@
                 return layer;
             };
 
-            var jurisdictionsMapJson = @ViewDataTyped.JurisdictionsMapInitJson.ToHtmlString();
+            var jurisdictionsMapJson = @ViewDataTyped.JurisdictionsMapInitJson.ToJsonHtmlString();
             var map = window.Sitka.map = new NeptuneMaps.Map(jurisdictionsMapJson);
 
             map.initializeJurisdictions(jurisdictionsMapJson);

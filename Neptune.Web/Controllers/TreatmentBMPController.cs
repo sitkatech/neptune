@@ -25,7 +25,6 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMP;
 using System.Globalization;
-using System.Text.Json;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -64,7 +63,7 @@ namespace Neptune.Web.Controllers
             var jurisdictions = stormwaterJurisdictionsPersonCanView.Select(x => x.AsDisplayDto()).ToList();
             var jurisdictionMapLayers = MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext);
             var mapInitJson = new SearchMapInitJson("StormwaterIndexMap", jurisdictionMapLayers,
-                StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(treatmentBMPs, false, false))
+                StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(treatmentBMPs, false, false, _linkGenerator))
             {
                 JurisdictionLayerGeoJson = jurisdictionMapLayers.Single(x => x.LayerName == MapInitJsonHelpers.CountyCityLayerName)
             };
@@ -172,7 +171,7 @@ namespace Neptune.Web.Controllers
             var mapServiceUrl = "";//todo: NeptuneWebConfiguration.ParcelMapServiceUrl;
             var mapInitJson = new TreatmentBMPDetailMapInitJson("StormwaterDetailMap", treatmentBMP.LocationPoint4326, _dbContext);
             mapInitJson.Layers.Add(
-                StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] {treatmentBMP}, false, true));
+                StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] {treatmentBMP}, false, true, _linkGenerator));
             if (treatmentBMP.Delineation?.DelineationGeometry != null || treatmentBMP.UpstreamBMP?.Delineation?.DelineationGeometry != null)
             {
                 mapInitJson.DelineationLayer =
@@ -814,7 +813,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public PartialViewResult SummaryForMap([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMP = TreatmentBMPs.GetByID(_dbContext, treatmentBMPPrimaryKey);
             var viewData = new SummaryForMapViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP);
             return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
         }
@@ -832,22 +831,24 @@ namespace Neptune.Web.Controllers
             var treatmentBMPTypeIDs = viewModel.TreatmentBMPTypeIDs;
             var stormwaterJurisdictionIDs = viewModel.StormwaterJurisdictionIDs;
             // ReSharper disable once InconsistentNaming
-            var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanViewWithContext(_dbContext);
-            var allTreatmentBMPsMatchingSearchString = CurrentPerson.GetTreatmentBmpsPersonCanView(stormwaterJurisdictionsPersonCanView, _dbContext)
+            var stormwaterJurisdictionsPersonCanView =
+                CurrentPerson.GetStormwaterJurisdictionsPersonCanViewWithContext(_dbContext);
+            var allTreatmentBMPsMatchingSearchString = CurrentPerson
+                .GetTreatmentBmpsPersonCanView(stormwaterJurisdictionsPersonCanView, _dbContext)
                 .Where(x => treatmentBMPTypeIDs.Contains(x.TreatmentBMPTypeID) &&
                             stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdictionID) &&
                             x.TreatmentBMPName.ToLower().Contains(searchString)).ToList();
 
-            var geoJSONSerializerOptions = GeoJsonSerializer.CreateGeoJSONSerializerOptions();
-            var listItems = allTreatmentBMPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
+            var mapSummaryUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, t => t.SummaryForMap(UrlTemplate.Parameter1Int)));
+            var listItems = allTreatmentBMPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(x =>
             {
-                var locationPoint4326 = bmp.LocationPoint4326;
-                var treatmentBMPMapSummaryData = new SearchMapSummaryData(bmp.GetMapSummaryUrl(), locationPoint4326,
+                var locationPoint4326 = x.LocationPoint4326;
+                var treatmentBMPMapSummaryData = new SearchMapSummaryData(
+                    mapSummaryUrlTemplate.ParameterReplace(x.TreatmentBMPID), locationPoint4326,
                     locationPoint4326.Coordinate.Y,
                     locationPoint4326.Coordinate.X,
-                    bmp.TreatmentBMPID); // X/YCoordinate will never be null
-                var listItem = new SelectListItem(bmp.TreatmentBMPName,
-                    JsonSerializer.Serialize(treatmentBMPMapSummaryData, geoJSONSerializerOptions));
+                    x.TreatmentBMPID);
+                var listItem = new SelectListItem(x.TreatmentBMPName, GeoJsonSerializer.Serialize(treatmentBMPMapSummaryData));
                 return listItem;
             }).ToList();
 

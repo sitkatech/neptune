@@ -16,7 +16,12 @@ public static class GeoJsonSerializer
 
     public static T Deserialize<T>(string json)
     {
-        return JsonSerializer.Deserialize<T>(json, GeoJsonSerializer.DefaultSerializerOptions);
+        return JsonSerializer.Deserialize<T>(json, DefaultSerializerOptions);
+    }
+
+    public static string Serialize(object value)
+    {
+        return JsonSerializer.Serialize(value, DefaultSerializerOptions);
     }
 
     public static void RemoveAllProperties(IFeature feature)

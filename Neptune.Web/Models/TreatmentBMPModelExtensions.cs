@@ -20,12 +20,14 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common;
 using Neptune.Common.DesignByContract;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 
@@ -97,8 +99,11 @@ namespace Neptune.Web.Models
         //    return treatmentBMP == null ? new HtmlString(String.Empty) : UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID), treatmentBMP.TreatmentBMPName);
         //}
 
-        public static FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<TreatmentBMP> treatmentBMPs)
+        public static FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<TreatmentBMP> treatmentBMPs,
+            LinkGenerator linkGenerator)
         {
+            var mapSummaryUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, t => t.SummaryForMap(UrlTemplate.Parameter1Int)));
+
             var featureCollection = new FeatureCollection();
             foreach (var treatmentBMP in treatmentBMPs)
             {
@@ -108,7 +113,7 @@ namespace Neptune.Web.Models
                     { "FeatureColor", "#935F59" },
                     { "FeatureGlyph", "water" }, // TODO: Need to be able to customize this per Treatment BMP Type
                     { "Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
-                    // todo: { "MapSummaryUrl", treatmentBMP.GetMapSummaryUrl() },
+                    { "MapSummaryUrl", mapSummaryUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID) },
                     { "TreatmentBMPID", treatmentBMP.TreatmentBMPID },
                     { "TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID },
                     { "TrashCaptureStatusTypeID", treatmentBMP.TrashCaptureStatusTypeID },

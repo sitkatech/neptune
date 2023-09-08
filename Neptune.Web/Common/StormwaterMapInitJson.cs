@@ -54,9 +54,9 @@ namespace Neptune.Web.Common
         {
         }
 
-        public static LayerGeoJson MakeTreatmentBMPLayerGeoJson(IEnumerable<TreatmentBMP> treatmentBMPs, bool isGeneric, bool enablePopups)
+        public static LayerGeoJson MakeTreatmentBMPLayerGeoJson(IEnumerable<TreatmentBMP> treatmentBMPs, bool isGeneric, bool enablePopups, LinkGenerator linkGenerator)
         {
-            var featureCollection = isGeneric ? treatmentBMPs.ToGeoJsonFeatureCollectionGeneric() : treatmentBMPs.ToGeoJsonFeatureCollection();
+            var featureCollection = isGeneric ? treatmentBMPs.ToGeoJsonFeatureCollectionGeneric() : treatmentBMPs.ToGeoJsonFeatureCollection(linkGenerator);
             var treatmentBMPLayerGeoJson = new LayerGeoJson("Treatment BMPs", featureCollection, "blue", 1, LayerInitialVisibility.Show) {EnablePopups = enablePopups};
             return treatmentBMPLayerGeoJson;
         }

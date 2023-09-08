@@ -31,8 +31,8 @@ Source code is available upon request via <support@sitkatech.com>.
         angular.module("NeptuneApp").factory("angularModelAndViewData",
             function() {
                 return {
-                    AngularModel: @Html.Raw(Model.ToHtmlString()),
-                    AngularViewData: @Html.Raw(ViewDataTyped.ToHtmlString())
+                    AngularModel: @Html.Raw(Model.ToJsonHtmlString()),
+                    AngularViewData: @Html.Raw(ViewDataTyped.ToJsonHtmlString())
                 };
             });
         angular.bootstrap(jQuery("#EditFundingEventFundingSourceApp"), ["NeptuneApp"]);

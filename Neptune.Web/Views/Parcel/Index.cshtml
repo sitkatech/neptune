@@ -79,7 +79,7 @@
         <script type="text/javascript">
             jQuery(document).ready(function()
             {
-                var mapInitJson = @Html.Raw(ViewDataTyped.MapInitJson.ToHtmlString());
+                var mapInitJson = @Html.Raw(ViewDataTyped.MapInitJson.ToJsonHtmlString());
                 var geoserverUrl = @Html.Raw(ViewDataTyped.GeoserverUrl.ToJS());
                 var parcelSummaryForMapUrl = @Html.Raw(ViewDataTyped.ParcelSummaryForMapUrl.ToJS());
                 var map = new NeptuneMaps.ParcelSearch(mapInitJson, "Hybrid", geoserverUrl, parcelSummaryForMapUrl);
