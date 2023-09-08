@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vGeoServerTreatmentBMPPointLocation
-GO
-
 Create View dbo.vGeoServerTreatmentBMPPointLocation as
 Select
 	TreatmentBMPID as PrimaryKey,

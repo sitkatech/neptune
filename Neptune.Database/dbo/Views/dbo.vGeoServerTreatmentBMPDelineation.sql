@@ -1,6 +1,3 @@
-Drop View If Exists dbo.vGeoServerTreatmentBMPDelineation
-GO
-
 Create View dbo.vGeoServerTreatmentBMPDelineation as
 Select
 	d.DelineationID as PrimaryKey,

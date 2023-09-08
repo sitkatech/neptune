@@ -387,6 +387,8 @@
     <Build Include="HangFire\Tables\HangFire.Server.sql" />
     <Build Include="HangFire\Tables\HangFire.Set.sql" />
     <Build Include="HangFire\Tables\HangFire.State.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerTreatmentBMPDelineation.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerTreatmentBMPPointLocation.sql" />
   </ItemGroup>
   <UsingTask TaskName="ScriptDeploymentGenerator" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
