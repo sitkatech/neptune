@@ -90,7 +90,7 @@ namespace Neptune.EFModels.Entities
         public override double? GetObservationValueFromObservationData(string observationData)
         {
             var observation = GeoJsonSerializer.Deserialize<DiscreteObservationSchema>(observationData);
-            return observation.SingleValueObservations.Average(x => Convert.ToDouble(x.ObservationValue));
+            return observation.SingleValueObservations.Average(x => double.Parse(x.ObservationValue.ToString()));
         }
 
         public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
@@ -170,7 +170,7 @@ namespace Neptune.EFModels.Entities
         public override double? GetObservationValueFromObservationData(string observationData)
         {
             var observation = GeoJsonSerializer.Deserialize<PassFailObservationSchema>(observationData);
-            var conveyanceFails = observation.SingleValueObservations.Any(x => Convert.ToBoolean(x.ObservationValue) == false);
+            var conveyanceFails = observation.SingleValueObservations.Any(x => bool.Parse(x.ObservationValue.ToString()) == false);
             return conveyanceFails ? 0 : 5;
         }
 
@@ -185,7 +185,7 @@ namespace Neptune.EFModels.Entities
             bool overrideAssessmentScoreIfFailing)
         {
             var observation = GeoJsonSerializer.Deserialize<PassFailObservationSchema>(observationData);
-            var conveyanceFails = observation.SingleValueObservations.Any(x => Convert.ToBoolean(x.ObservationValue) == false);
+            var conveyanceFails = observation.SingleValueObservations.Any(x => bool.Parse(x.ObservationValue.ToString()) == false);
             var schema = GeoJsonSerializer.Deserialize<PassFailObservationTypeSchema>(observationTypeSchema);
             return conveyanceFails ? schema.FailingScoreLabel : schema.PassingScoreLabel;
         }

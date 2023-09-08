@@ -63,7 +63,7 @@ namespace Neptune.EFModels.Entities
         public string FormattedObservationValueWithoutUnits(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
             var observationTypeCollectionMethod = treatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod;
-            var observationValue = observationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData).GetValueOrDefault();
+            var observationValue = observationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData) ?? 0;
 
             if (observationTypeCollectionMethod == ObservationTypeCollectionMethod.PassFail)
             {
@@ -90,8 +90,7 @@ namespace Neptune.EFModels.Entities
 
         public string CalculateOverrideScoreText(bool overrideAssessmentScoreIfFailing)
         {
-            return string.Empty;
-            //todo: return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.CalculateOverrideScoreText(ObservationData, TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema, overrideAssessmentScoreIfFailing);
+            return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.CalculateOverrideScoreText(ObservationData, TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema, overrideAssessmentScoreIfFailing);
         }
     }
 }
