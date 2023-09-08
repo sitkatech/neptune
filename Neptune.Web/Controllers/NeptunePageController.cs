@@ -77,7 +77,7 @@ namespace Neptune.Web.Controllers
                 return ViewEdit(viewModel, neptunePage);
             }
             viewModel.UpdateModel(neptunePage);
-            await _dbContext.SaveChangesAsync()
+            await _dbContext.SaveChangesAsync();
             return new ModalDialogFormJsonResult();
         }
 
