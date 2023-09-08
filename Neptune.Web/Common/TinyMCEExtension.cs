@@ -117,14 +117,13 @@ namespace Neptune.Web.Common
                             },";
             }
 
-            var heightString = height.HasValue ? $"\r\n           height: {height.Value}," : string.Empty;
-
             tag.InnerHtml.AppendHtml(string.Format(@"
                 // <![CDATA[
                 jQuery(document).ready(function ()
                 {{
                    tinymce.init({{
                             selector: '#{0}',
+                            height: {5},
                             menubar: false,
                             toolbar: '{1}',
                             entity_encoding: 'named+numeric',
@@ -134,7 +133,7 @@ namespace Neptune.Web.Common
                             file_picker_types: 'image',
                             images_file_types: 'jpg,svg,webp,gif',
                             image_title: true,
-                            {3}{5}
+                            {3}
                             setup: function (editor) {{
                                 editor.on('FullscreenStateChanged', function (e) {{
                                     if (e.state) {{
@@ -147,7 +146,7 @@ namespace Neptune.Web.Common
                     }});
                 }});
                 // ]]>
-            ", editorId, tinyMCEEditorToolbarJavascript.JavascriptForToolbar, tinyMCEEditorToolbarJavascript.Plugins, wireUpJsForImageUploader, tinyMCEEditorToolbarJavascript.ToolbarMode, heightString));
+            ", editorId, tinyMCEEditorToolbarJavascript.JavascriptForToolbar, tinyMCEEditorToolbarJavascript.Plugins, wireUpJsForImageUploader, tinyMCEEditorToolbarJavascript.ToolbarMode, height ?? 200));
 
             var writer = new StringWriter();
             var builder = new HtmlContentBuilder();

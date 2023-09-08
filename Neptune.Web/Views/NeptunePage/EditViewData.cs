@@ -33,8 +33,14 @@ public class EditViewData : NeptuneUserControlViewData
     public string EditPageContentDivID { get; }
     public string TogglePageContentFunctionName { get; }
     public string PostUrl { get; }
+    public int? EditorHeight { get; }
 
-    public EditViewData(LinkGenerator linkGenerator, TinyMCEExtension.TinyMCEToolbarStyle tinyMceToolbarStyle, EFModels.Entities.NeptunePage neptunePage)
+    public EditViewData(LinkGenerator linkGenerator, TinyMCEExtension.TinyMCEToolbarStyle tinyMceToolbarStyle,
+        EFModels.Entities.NeptunePage neptunePage) : this(linkGenerator, tinyMceToolbarStyle, neptunePage, 200)
+    {
+    }
+
+    public EditViewData(LinkGenerator linkGenerator, TinyMCEExtension.TinyMCEToolbarStyle tinyMceToolbarStyle, EFModels.Entities.NeptunePage neptunePage, int? editorHeight)
     {
         TinyMceToolbarStyle = tinyMceToolbarStyle;
         NeptunePageContentOnLoad = new HtmlString(neptunePage.NeptunePageContent);
@@ -42,5 +48,6 @@ public class EditViewData : NeptuneUserControlViewData
         ViewPageContentDivID = $"viewNeptunePageContentFor{neptunePage.NeptunePageID}";
         TogglePageContentFunctionName = $"toggleIsEditingFor{neptunePage.NeptunePageID}";
         PostUrl = SitkaRoute<NeptunePageController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(neptunePage));
+        EditorHeight = editorHeight;
     }
 }

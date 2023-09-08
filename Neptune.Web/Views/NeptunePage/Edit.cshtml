@@ -46,7 +46,7 @@ Source code is available upon request via <support@sitkatech.com>.
 <div id="@ViewDataTyped.EditPageContentDivID" style="display: none; margin-bottom: 16px;">
     <form method="post" action="@ViewDataTyped.PostUrl">
         <div style="max-height: 600px; overflow-y: auto">
-            @Html.TinyMCEEditorFor(x => x.NeptunePageContent, TinyMCEExtension.TinyMCEToolbarStyle.MinimalWithImages, true, false, 200)
+            @Html.TinyMCEEditorFor(x => x.NeptunePageContent, TinyMCEExtension.TinyMCEToolbarStyle.MinimalWithImages, true, false, ViewDataTyped.EditorHeight)
         </div>
         <div class="row" style="margin-top: 6px">
             <div class="col-xs-12" style="text-align: right">

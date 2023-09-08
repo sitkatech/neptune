@@ -15,13 +15,17 @@ namespace Neptune.Web.Views.Shared
         public EditViewModel EditViewModel { get; set; }
 
 
-        public ViewPageContentViewData(LinkGenerator linkGenerator, EFModels.Entities.NeptunePage neptunePage, Person currentPerson)
+        public ViewPageContentViewData(LinkGenerator linkGenerator, EFModels.Entities.NeptunePage neptunePage, Person currentPerson) : this(linkGenerator, neptunePage, currentPerson, 200)
+        {
+        }
+
+        public ViewPageContentViewData(LinkGenerator linkGenerator, EFModels.Entities.NeptunePage neptunePage, Person currentPerson, int? editorHeight)
         {
             NeptunePage = neptunePage;
             ShowEditButton = new NeptunePageManageFeature().HasPermission(currentPerson, neptunePage).HasPermission;
             var htmlContent = new HtmlString(neptunePage.NeptunePageContent);
             HtmlContent = htmlContent;
-            EditViewData = new EditViewData(linkGenerator, TinyMCEExtension.TinyMCEToolbarStyle.MinimalWithImages, neptunePage);
+            EditViewData = new EditViewData(linkGenerator, TinyMCEExtension.TinyMCEToolbarStyle.MinimalWithImages, neptunePage, editorHeight);
             EditViewModel = new EditViewModel(neptunePage);
         }
     }
