@@ -590,7 +590,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public PartialViewResult ConvertTreatmentBMPType([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMP = TreatmentBMPs.GetByID(_dbContext, treatmentBMPPrimaryKey);
             var viewModel = new ConvertTreatmentBMPTypeViewModel();
             return ViewConvertTreatmentBMPTypeTreatmentBMP(treatmentBMP, viewModel);
         }
@@ -601,7 +601,7 @@ namespace Neptune.Web.Controllers
         public async Task<IActionResult> ConvertTreatmentBMPType([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
             ConvertTreatmentBMPTypeViewModel viewModel)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMP = TreatmentBMPs.GetByIDWithChangeTracking(_dbContext, treatmentBMPPrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewConvertTreatmentBMPTypeTreatmentBMP(treatmentBMP, viewModel);
@@ -668,7 +668,7 @@ namespace Neptune.Web.Controllers
         private PartialViewResult ViewConvertTreatmentBMPTypeTreatmentBMP(TreatmentBMP treatmentBMP,
             ConvertTreatmentBMPTypeViewModel viewModel)
         {
-            var treatmentBMPTypes = _dbContext.TreatmentBMPTypes.Where(x => x.TreatmentBMPTypeID != treatmentBMP.TreatmentBMPTypeID).ToList();
+            var treatmentBMPTypes = TreatmentBMPTypes.List(_dbContext).Where(x => x.TreatmentBMPTypeID != treatmentBMP.TreatmentBMPTypeID);
             var viewData = new ConvertTreatmentBMPTypeViewData(treatmentBMP, treatmentBMPTypes);
             return RazorPartialView<ConvertTreatmentBMPType, ConvertTreatmentBMPTypeViewData, ConvertTreatmentBMPTypeViewModel>(viewData, viewModel);
         }
