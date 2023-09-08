@@ -5,6 +5,10 @@ Create View dbo.vGeoServerTreatmentBMPPointLocation as
 Select
 	TreatmentBMPID as PrimaryKey,
 	LocationPoint4326 as LocationPoint,
-	TreatmentBMPName
+	TreatmentBMPName,
+	p.ProjectName
 from
-	dbo.TreatmentBMP
+	dbo.TreatmentBMP t
+	join dbo.Project p on t.ProjectID = p.ProjectID
+where 
+	t.ProjectID is not null
