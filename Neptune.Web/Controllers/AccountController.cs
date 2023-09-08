@@ -23,6 +23,7 @@ using Neptune.Web.Common;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.OpenID;
 
@@ -30,7 +31,7 @@ namespace Neptune.Web.Controllers
 {
     public class AccountController : NeptuneBaseController<AccountController>
     {
-        public AccountController(NeptuneDbContext dbContext, ILogger<AccountController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public AccountController(NeptuneDbContext dbContext, ILogger<AccountController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

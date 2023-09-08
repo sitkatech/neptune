@@ -1,6 +1,7 @@
 ﻿using Neptune.Web.Common;
 using Neptune.Web.Security;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Views.ParcelLayerUpload;
 
@@ -8,7 +9,7 @@ namespace Neptune.Web.Controllers
 {
     public class ParcelLayerUploadController : NeptuneBaseController<ParcelLayerUploadController>
     {
-        public ParcelLayerUploadController(NeptuneDbContext dbContext, ILogger<ParcelLayerUploadController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public ParcelLayerUploadController(NeptuneDbContext dbContext, ILogger<ParcelLayerUploadController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

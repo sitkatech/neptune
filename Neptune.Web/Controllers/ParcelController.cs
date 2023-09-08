@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
@@ -11,7 +12,7 @@ namespace Neptune.Web.Controllers
 {
     public class ParcelController : NeptuneBaseController<ParcelController>
     {
-        public ParcelController(NeptuneDbContext dbContext, ILogger<ParcelController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public ParcelController(NeptuneDbContext dbContext, ILogger<ParcelController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 
@@ -22,7 +23,7 @@ namespace Neptune.Web.Controllers
             var neptunePageHome = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.ParcelList);
             var findParcelByAddressUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(_linkGenerator, x => x.FindByAddress(null));
             var findParcelByAPNUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(_linkGenerator, x => x.FindByAPN(null));
-            var parcelMapServiceUrl = "";//todo: NeptuneWebConfiguration.ParcelMapServiceUrl;
+            var parcelMapServiceUrl = _webConfiguration.ParcelMapServiceUrl;
             var parcelSummaryForMapUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(_linkGenerator, x => x.SummaryForMap(null));
             var parcelLayerUploadUrl =
                 SitkaRoute<ParcelLayerUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateParcelLayerGeometry(null));

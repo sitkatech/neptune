@@ -20,11 +20,11 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Globalization;
-using System.Net;
 using Neptune.Web.Security;
 using Neptune.Web.Views.User;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Neptune.Common.DesignByContract;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
@@ -39,7 +39,7 @@ namespace Neptune.Web.Controllers
 {
     public class UserController : NeptuneBaseController<UserController>
     {
-        public UserController(NeptuneDbContext dbContext, ILogger<UserController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public UserController(NeptuneDbContext dbContext, ILogger<UserController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

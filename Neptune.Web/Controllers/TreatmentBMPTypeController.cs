@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
@@ -37,7 +38,7 @@ namespace Neptune.Web.Controllers
 {
     public class TreatmentBMPTypeController : NeptuneBaseController<TreatmentBMPTypeController>
     {
-        public TreatmentBMPTypeController(NeptuneDbContext dbContext, ILogger<TreatmentBMPTypeController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public TreatmentBMPTypeController(NeptuneDbContext dbContext, ILogger<TreatmentBMPTypeController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

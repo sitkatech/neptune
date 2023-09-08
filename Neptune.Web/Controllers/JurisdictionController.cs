@@ -23,8 +23,10 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Jurisdiction;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.TreatmentBMP;
@@ -40,7 +42,7 @@ namespace Neptune.Web.Controllers
 {
     public class JurisdictionController : NeptuneBaseController<JurisdictionController>
     {
-        public JurisdictionController(NeptuneDbContext dbContext, ILogger<JurisdictionController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public JurisdictionController(NeptuneDbContext dbContext, ILogger<JurisdictionController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

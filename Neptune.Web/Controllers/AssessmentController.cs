@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
@@ -11,7 +13,7 @@ namespace Neptune.Web.Controllers
 {
     public class AssessmentController : NeptuneBaseController<AssessmentController>
     {
-        public AssessmentController(NeptuneDbContext dbContext, ILogger<AssessmentController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public AssessmentController(NeptuneDbContext dbContext, ILogger<AssessmentController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

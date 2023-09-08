@@ -22,7 +22,9 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.Web.Security;
 using Neptune.Web.Views.PersonOrganization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Services.Filters;
 
@@ -30,7 +32,7 @@ namespace Neptune.Web.Controllers
 {
     public class PersonOrganizationController : NeptuneBaseController<PersonOrganizationController>
     {
-        public PersonOrganizationController(NeptuneDbContext dbContext, ILogger<PersonOrganizationController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public PersonOrganizationController(NeptuneDbContext dbContext, ILogger<PersonOrganizationController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

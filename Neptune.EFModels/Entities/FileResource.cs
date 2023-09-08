@@ -30,11 +30,6 @@ namespace Neptune.EFModels.Entities
     {
         //public static int MaxUploadFileSizeInBytes = NeptuneWebConfiguration.MaximumAllowedUploadFileSize;
 
-        //public static readonly UrlTemplate<int> FileResourceByIDUrlTemplate =
-        //    new UrlTemplate<int>(SitkaRoute<FileResourceController>.BuildUrlFromExpression(t => t.DisplayResourceByID(UrlTemplate.Parameter1Int)));
-        //public static readonly UrlTemplate<string> FileResourceByGuidUrlTemplate =
-        //    new UrlTemplate<string>(SitkaRoute<FileResourceController>.BuildUrlFromExpression(t => t.DisplayResource(UrlTemplate.Parameter1String)));
-
         public string GetFileResourceUrl()
         {
             return $"/FileResource/DisplayResource/{GetFileResourceGUIDAsString()}";

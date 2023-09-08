@@ -20,7 +20,9 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
@@ -31,7 +33,7 @@ namespace Neptune.Web.Controllers
 {
     public class ManagerDashboardController : NeptuneBaseController<ManagerDashboardController>
     {
-        public ManagerDashboardController(NeptuneDbContext dbContext, ILogger<ManagerDashboardController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public ManagerDashboardController(NeptuneDbContext dbContext, ILogger<ManagerDashboardController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

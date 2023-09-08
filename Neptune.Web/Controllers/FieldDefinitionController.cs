@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using Microsoft.AspNetCore.Html;
 using Neptune.Web.Common;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Security;
@@ -36,7 +37,7 @@ namespace Neptune.Web.Controllers
 {
     public class FieldDefinitionController : NeptuneBaseController<FieldDefinitionController>
     {
-        public FieldDefinitionController(NeptuneDbContext dbContext, ILogger<FieldDefinitionController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public FieldDefinitionController(NeptuneDbContext dbContext, ILogger<FieldDefinitionController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

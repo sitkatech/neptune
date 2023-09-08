@@ -5,6 +5,7 @@ using Neptune.Web.Views.RegionalSubbasin;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common.MvcResults;
@@ -17,7 +18,7 @@ namespace Neptune.Web.Controllers
 {
     public class RegionalSubbasinController : NeptuneBaseController<RegionalSubbasinController>
     {
-        public RegionalSubbasinController(NeptuneDbContext dbContext, ILogger<RegionalSubbasinController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public RegionalSubbasinController(NeptuneDbContext dbContext, ILogger<RegionalSubbasinController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 
@@ -25,8 +26,8 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public ViewResult Index()
         {
-            var geoServerUrl = "";//todo: NeptuneWebConfiguration.ParcelMapServiceUrl;
-            var regionalSubbasinLayerName = ""; //todo: NeptuneWebConfiguration.RegionalSubbasinLayerName;
+            var geoServerUrl = _webConfiguration.ParcelMapServiceUrl;
+            var regionalSubbasinLayerName = _webConfiguration.MapServiceLayerNameRegionalSubbasin;
 
             var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, new RegionalSubbasinMapInitJson("regionalSubbasinMap"), geoServerUrl, regionalSubbasinLayerName);
             return RazorView<Index, IndexViewData>(viewData);

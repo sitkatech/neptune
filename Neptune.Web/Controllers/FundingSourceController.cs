@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
@@ -20,7 +21,7 @@ namespace Neptune.Web.Controllers
 {
     public class FundingSourceController : NeptuneBaseController<FundingSourceController>
     {
-        public FundingSourceController(NeptuneDbContext dbContext, ILogger<FundingSourceController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public FundingSourceController(NeptuneDbContext dbContext, ILogger<FundingSourceController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

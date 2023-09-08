@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
@@ -12,7 +13,7 @@ namespace Neptune.Web.Controllers
 {
     public class FundingEventController : NeptuneBaseController<FundingEventController>
     {
-        public FundingEventController(NeptuneDbContext dbContext, ILogger<FundingEventController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public FundingEventController(NeptuneDbContext dbContext, ILogger<FundingEventController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 
@@ -55,7 +56,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewNewFundingEventFundingSources(EditViewModel viewModel, TreatmentBMP treatmentBMP)
         {
-            var allFundingSources = FundingSources.List(_dbContext).Select(x => x.AsSimpleDto()).OrderBy(p => p.FundingSourceName).ToList();
+            var allFundingSources = FundingSources.List(_dbContext).Select(x => x.AsSimpleDto()).OrderBy(x => x.FundingSourceName).ToList();
             var viewData = new EditViewData(allFundingSources, FundingEventType.All.OrderBy(x => x.FundingEventTypeName).ToList(), treatmentBMP);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }

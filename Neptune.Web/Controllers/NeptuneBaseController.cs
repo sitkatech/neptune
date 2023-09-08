@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 
@@ -29,22 +30,23 @@ namespace Neptune.Web.Controllers
     [Route("[controller]/[action]", Name = "[controller]_[action]")]
     public abstract class NeptuneBaseController<T> : SitkaController
     {
+        protected IOptions<WebConfiguration> _webConfigurationOptions { get; }
         protected Person CurrentPerson => UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
         protected readonly NeptuneDbContext _dbContext;
         protected readonly ILogger<T> _logger;
 
         protected readonly LinkGenerator _linkGenerator;
 
-        //        protected readonly WebConfiguration _qanatConfiguration;
+        protected readonly WebConfiguration _webConfiguration;
 
-        protected NeptuneBaseController(NeptuneDbContext dbContext, ILogger<T> logger, LinkGenerator linkGenerator
-        //, IOptions<WebConfiguration> configuration
-        )
+        protected NeptuneBaseController(NeptuneDbContext dbContext, ILogger<T> logger, LinkGenerator linkGenerator,
+            IOptions<WebConfiguration> webConfiguration)
         {
             _dbContext = dbContext;
             _logger = logger;
             _linkGenerator = linkGenerator;
-            //_qanatConfiguration = qanatConfiguration.Value;
+            _webConfigurationOptions = webConfiguration;
+            _webConfiguration = webConfiguration.Value;
         }
     }
 }

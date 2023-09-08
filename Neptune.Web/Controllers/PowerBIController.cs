@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
-using Neptune.Web.Security;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Neptune.EFModels.Entities;
@@ -11,7 +11,7 @@ namespace Neptune.Web.Controllers
 {
     public class PowerBIController : NeptuneBaseController<PowerBIController>
     {
-        public PowerBIController(NeptuneDbContext dbContext, ILogger<PowerBIController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public PowerBIController(NeptuneDbContext dbContext, ILogger<PowerBIController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

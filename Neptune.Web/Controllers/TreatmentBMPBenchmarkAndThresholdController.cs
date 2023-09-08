@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.Common.DesignByContract;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
@@ -31,7 +32,7 @@ namespace Neptune.Web.Controllers
 {
     public class TreatmentBMPBenchmarkAndThresholdController : NeptuneBaseController<TreatmentBMPBenchmarkAndThresholdController>
     {
-        public TreatmentBMPBenchmarkAndThresholdController(NeptuneDbContext dbContext, ILogger<TreatmentBMPBenchmarkAndThresholdController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public TreatmentBMPBenchmarkAndThresholdController(NeptuneDbContext dbContext, ILogger<TreatmentBMPBenchmarkAndThresholdController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

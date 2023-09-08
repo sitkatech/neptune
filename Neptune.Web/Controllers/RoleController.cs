@@ -22,9 +22,11 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.Web.Security;
 using Neptune.Web.Views.Role;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Services.Filters;
 
@@ -32,7 +34,7 @@ namespace Neptune.Web.Controllers
 {
     public class RoleController : NeptuneBaseController<RoleController>
     {
-        public RoleController(NeptuneDbContext dbContext, ILogger<RoleController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public RoleController(NeptuneDbContext dbContext, ILogger<RoleController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

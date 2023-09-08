@@ -24,6 +24,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Views.Shared;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Models;
@@ -34,7 +35,7 @@ namespace Neptune.Web.Controllers
 {
     public class HelpController : NeptuneBaseController<HelpController>
     {
-        public HelpController(NeptuneDbContext dbContext, ILogger<HelpController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public HelpController(NeptuneDbContext dbContext, ILogger<HelpController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

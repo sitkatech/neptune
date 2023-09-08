@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
@@ -32,7 +33,7 @@ namespace Neptune.Web.Controllers
 {
     public class TreatmentBMPAssessmentController : NeptuneBaseController<TreatmentBMPAssessmentController>
     {
-        public TreatmentBMPAssessmentController(NeptuneDbContext dbContext, ILogger<TreatmentBMPAssessmentController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public TreatmentBMPAssessmentController(NeptuneDbContext dbContext, ILogger<TreatmentBMPAssessmentController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

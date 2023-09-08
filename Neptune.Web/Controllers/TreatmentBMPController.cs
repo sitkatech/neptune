@@ -29,6 +29,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
 using Neptune.Common.Mvc;
@@ -51,7 +52,7 @@ namespace Neptune.Web.Controllers
 {
     public class TreatmentBMPController : NeptuneBaseController<TreatmentBMPController>
     {
-        public TreatmentBMPController(NeptuneDbContext dbContext, ILogger<TreatmentBMPController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public TreatmentBMPController(NeptuneDbContext dbContext, ILogger<TreatmentBMPController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

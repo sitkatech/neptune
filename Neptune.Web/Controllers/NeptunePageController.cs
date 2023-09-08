@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Neptune.Web.Common;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Security;
@@ -32,7 +33,7 @@ namespace Neptune.Web.Controllers
 {
     public class NeptunePageController : NeptuneBaseController<NeptunePageController>
     {
-        public NeptunePageController(NeptuneDbContext dbContext, ILogger<NeptunePageController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public NeptunePageController(NeptuneDbContext dbContext, ILogger<NeptunePageController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

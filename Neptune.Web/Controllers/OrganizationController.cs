@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
@@ -37,7 +38,7 @@ namespace Neptune.Web.Controllers
 {
     public class OrganizationController : NeptuneBaseController<OrganizationController>
     {
-        public OrganizationController(NeptuneDbContext dbContext, ILogger<OrganizationController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public OrganizationController(NeptuneDbContext dbContext, ILogger<OrganizationController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

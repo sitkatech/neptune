@@ -41,12 +41,13 @@ using FieldVisit = Neptune.EFModels.Entities.FieldVisit;
 using FieldVisitSection = Neptune.EFModels.Entities.FieldVisitSection;
 using Index = Neptune.Web.Views.FieldVisit.Index;
 using Neptune.Web.Services.Filters;
+using Microsoft.Extensions.Options;
 
 namespace Neptune.Web.Controllers
 {
     public class FieldVisitController : NeptuneBaseController<FieldVisitController>
     {
-        public FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisitController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisitController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

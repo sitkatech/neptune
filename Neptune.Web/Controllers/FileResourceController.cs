@@ -24,13 +24,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.Options;
+using Neptune.Web.Common;
 using Neptune.Web.Services.Filters;
 
 namespace Neptune.Web.Controllers
 {
     public class FileResourceController : NeptuneBaseController<FileResourceController>
     {
-        public FileResourceController(NeptuneDbContext dbContext, ILogger<FileResourceController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public FileResourceController(NeptuneDbContext dbContext, ILogger<FileResourceController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

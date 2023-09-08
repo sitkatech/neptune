@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -10,7 +11,7 @@ namespace Neptune.Web.Controllers
 {
     public class WebServicesController : NeptuneBaseController<WebServicesController>
     {
-        public WebServicesController(NeptuneDbContext dbContext, ILogger<WebServicesController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public WebServicesController(NeptuneDbContext dbContext, ILogger<WebServicesController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 

@@ -24,6 +24,7 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Home;
 using Neptune.Web.Views.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Models;
 using Neptune.Web.Views.Shared.JurisdictionControls;
@@ -32,7 +33,7 @@ namespace Neptune.Web.Controllers
 {
     public class HomeController : NeptuneBaseController<HomeController>
     {
-        public HomeController(NeptuneDbContext dbContext, ILogger<HomeController> logger, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator)
+        public HomeController(NeptuneDbContext dbContext, ILogger<HomeController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
         }
 
@@ -102,21 +103,21 @@ namespace Neptune.Web.Controllers
         [HttpGet]
         public ViewResult AboutModelingBMPPerformance()
         {
-            var con = new HomeController(_dbContext, _logger, _linkGenerator) {ControllerContext = ControllerContext};
+            var con = new HomeController(_dbContext, _logger, _webConfigurationOptions, _linkGenerator) {ControllerContext = ControllerContext};
             return con.ViewPageContent(NeptunePageTypeEnum.AboutModelingBMPPerformance);
         }
 
         [HttpGet]
         public ViewResult About()
         {
-            var con = new HomeController(_dbContext, _logger, _linkGenerator) { ControllerContext = ControllerContext };
+            var con = new HomeController(_dbContext, _logger, _webConfigurationOptions, _linkGenerator) { ControllerContext = ControllerContext };
             return con.ViewPageContent(NeptunePageTypeEnum.About);
         }
 
         [HttpGet]
         public ViewResult Legal()
         {
-            var con = new HomeController(_dbContext, _logger, _linkGenerator) { ControllerContext = ControllerContext };
+            var con = new HomeController(_dbContext, _logger, _webConfigurationOptions, _linkGenerator) { ControllerContext = ControllerContext };
             return con.ViewPageContent(NeptunePageTypeEnum.Legal);
         }
 
