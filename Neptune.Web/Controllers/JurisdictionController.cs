@@ -112,8 +112,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("stormwaterJurisdictionPrimaryKey")]
         public ViewResult Detail([FromRoute] StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey)
         {
-            var stormwaterJurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;
-           
+            var stormwaterJurisdiction = StormwaterJurisdictions.GetByID(_dbContext, stormwaterJurisdictionPrimaryKey);
             var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, stormwaterJurisdiction);
             return RazorView<Detail, DetailViewData>(viewData);        
         }
