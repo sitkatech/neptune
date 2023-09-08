@@ -4,7 +4,7 @@ using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class EditWqmpBmpsViewModel : FormViewModel, IValidatableObject
+    public class EditWqmpBmpsViewModel : FormViewModel
     {
         public IEnumerable<int> TreatmentBmpIDs { get; set; }
 
@@ -29,11 +29,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             dbContext.TreatmentBMPs.Where(x => TreatmentBmpIDs.Contains(x.TreatmentBMPID))
                 .ToList()
                 .ForEach(x => { x.WaterQualityManagementPlan = waterQualityManagementPlan; });
-        }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            return new List<ValidationResult>();
         }
     }
 }

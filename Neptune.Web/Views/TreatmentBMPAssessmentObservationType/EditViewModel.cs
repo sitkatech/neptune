@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
@@ -89,33 +90,33 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            var dbContext = validationContext.GetService<NeptuneDbContext>();
             var validationResults = new List<ValidationResult>();
 
-            //todo:
-            //var observationTypesWithSameName = _dbContext.TreatmentBMPAssessmentObservationTypes.Where(x => x.TreatmentBMPAssessmentObservationTypeName == TreatmentBMPAssessmentObservationTypeName);
+            var observationTypesWithSameName = dbContext.TreatmentBMPAssessmentObservationTypes.AsNoTracking().Where(x => x.TreatmentBMPAssessmentObservationTypeName == TreatmentBMPAssessmentObservationTypeName);
 
-            //if (observationTypesWithSameName.Any(x => x.TreatmentBMPAssessmentObservationTypeID != TreatmentBMPAssessmentObservationTypeID))
-            //{
-            //    validationResults.Add(new ValidationResult("An Observation Type with this name already exists"));
-            //}
+            if (observationTypesWithSameName.Any(x => x.TreatmentBMPAssessmentObservationTypeID != TreatmentBMPAssessmentObservationTypeID))
+            {
+                validationResults.Add(new ValidationResult("An Observation Type with this name already exists"));
+            }
 
-            //var observationTypeSpecification = ObservationTypeSpecification.All.FirstOrDefault(x =>
-            //    x.ObservationTargetTypeID == ObservationTargetTypeID &&
-            //    x.ObservationThresholdTypeID == ObservationThresholdTypeID &&
-            //    x.ObservationTypeCollectionMethodID == ObservationTypeCollectionMethodID);
-            //if (observationTypeSpecification == null)
-            //{
-            //    validationResults.Add(new ValidationResult("Enter a valid combination of Target Type, Threshold Type and Collection Method"));
-            //}
-           
-            //var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[ObservationTypeCollectionMethodID.Value];
-            //if (!observationTypeCollectionMethod.ValidateObservationTypeJson(TreatmentBMPAssessmentObservationTypeSchema))
-            //{
-            //    validationResults.Add(new ValidationResult("Incomplete information about the observation type. Complete each required field and try again."));
-            //    return validationResults;
-            //}            
+            var observationTypeSpecification = ObservationTypeSpecification.All.FirstOrDefault(x =>
+                x.ObservationTargetTypeID == ObservationTargetTypeID &&
+                x.ObservationThresholdTypeID == ObservationThresholdTypeID &&
+                x.ObservationTypeCollectionMethodID == ObservationTypeCollectionMethodID);
+            if (observationTypeSpecification == null)
+            {
+                validationResults.Add(new ValidationResult("Enter a valid combination of Target Type, Threshold Type and Collection Method"));
+            }
 
-            //validationResults.AddRange(observationTypeCollectionMethod.ValidateObservationType(TreatmentBMPAssessmentObservationTypeSchema));
+            var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[ObservationTypeCollectionMethodID.Value];
+            if (!observationTypeCollectionMethod.ValidateObservationTypeJson(TreatmentBMPAssessmentObservationTypeSchema))
+            {
+                validationResults.Add(new ValidationResult("Incomplete information about the observation type. Complete each required field and try again."));
+                return validationResults;
+            }
+
+            validationResults.AddRange(observationTypeCollectionMethod.ValidateObservationType(TreatmentBMPAssessmentObservationTypeSchema));
 
             return validationResults;
         }

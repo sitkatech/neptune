@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using Neptune.Common;
 using Neptune.Web.Common.Models;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
@@ -162,14 +164,13 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            return new List<ValidationResult>();
-            //todo:
-            //if (_dbContext.WaterQualityManagementPlans.Any(x =>
-            //    x.WaterQualityManagementPlanName == WaterQualityManagementPlanName &&
-            //    x.WaterQualityManagementPlanID != WaterQualityManagementPlanID))
-            //{
-            //    yield return new SitkaValidationResult<EditViewModel, string>("Name is already in use.", m => m.WaterQualityManagementPlanName);
-            //}
+            var dbContext = validationContext.GetService<NeptuneDbContext>();
+            if (dbContext.WaterQualityManagementPlans.AsNoTracking().Any(x =>
+                    x.WaterQualityManagementPlanName == WaterQualityManagementPlanName &&
+                    x.WaterQualityManagementPlanID != WaterQualityManagementPlanID))
+            {
+                yield return new SitkaValidationResult<EditViewModel, string>("Name is already in use.", m => m.WaterQualityManagementPlanName);
+            }
         }
     }
 }

@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using Neptune.Common;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
@@ -121,39 +122,40 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            var dbContext = validationContext.GetService<NeptuneDbContext>();
             var validationResults = new List<ValidationResult>();
 
-            //todo:
-            //var treatmentBMPTypesWithSameName = _dbContext.TreatmentBMPTypes.Where(x => x.TreatmentBMPTypeName == TreatmentBMPTypeName);
+            var treatmentBMPTypesWithSameName = dbContext.TreatmentBMPTypes.AsNoTracking().Where(x => x.TreatmentBMPTypeName == TreatmentBMPTypeName);
 
-            //if (treatmentBMPTypesWithSameName.Any(x => x.TreatmentBMPTypeID != TreatmentBMPTypeID))
-            //{
-            //    validationResults.Add(new SitkaValidationResult<EditViewModel, string>("A Treatment BMP Type with this name already exists.", x => x.TreatmentBMPTypeName));
-            //}
+            if (treatmentBMPTypesWithSameName.Any(x => x.TreatmentBMPTypeID != TreatmentBMPTypeID))
+            {
+                validationResults.Add(new SitkaValidationResult<EditViewModel, string>("A Treatment BMP Type with this name already exists.", x => x.TreatmentBMPTypeName));
+            }
 
-            //if (TreatmentBMPTypeObservationTypeSimples == null || !TreatmentBMPTypeObservationTypeSimples.Any())
-            //{
-            //    validationResults.Add(new ValidationResult("A Treatment BMP Type must have at least one Observation Type."));
-            //    return validationResults;
-            //}
+            if (TreatmentBMPTypeObservationTypes == null || !TreatmentBMPTypeObservationTypes.Any())
+            {
+                validationResults.Add(new ValidationResult("A Treatment BMP Type must have at least one Observation Type."));
+                return validationResults;
+            }
 
-            //var hasBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypeSimples.Where(y => _dbContext.TreatmentBMPAssessmentObservationTypes.ToList().Where(x => x.GetHasBenchmarkAndThreshold()).ToList().Select(x => x.TreatmentBMPAssessmentObservationTypeID).Contains(y.TreatmentBMPAssessmentObservationTypeID)).ToList();
+            var treatmentBMPAssessmentObservationTypes = dbContext.TreatmentBMPAssessmentObservationTypes.AsNoTracking().ToList();
+            var hasBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypes.Where(y => treatmentBMPAssessmentObservationTypes.Where(x => x.GetHasBenchmarkAndThreshold()).ToList().Select(x => x.TreatmentBMPAssessmentObservationTypeID).Contains(y.TreatmentBMPAssessmentObservationTypeID)).ToList();
 
-            //var noBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypeSimples.Where(y => _dbContext.TreatmentBMPAssessmentObservationTypes.ToList().Where(x => !x.GetHasBenchmarkAndThreshold()).Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList().Contains(y.TreatmentBMPAssessmentObservationTypeID)).ToList();
+            var noBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypes.Where(y => treatmentBMPAssessmentObservationTypes.Where(x => !x.GetHasBenchmarkAndThreshold()).Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList().Contains(y.TreatmentBMPAssessmentObservationTypeID)).ToList();
 
-            //var requiresAssessmentWeightSimples = new List<TreatmentBMPTypeObservationTypeSimple>();
-            //requiresAssessmentWeightSimples.AddRange(hasBenchmarkAndThresholdsSimples);
-            //requiresAssessmentWeightSimples.AddRange(noBenchmarkAndThresholdsSimples.Where(x => !x.OverrideAssessmentScoreIfFailing.HasValue || !x.OverrideAssessmentScoreIfFailing.Value));           
+            var requiresAssessmentWeightSimples = new List<TreatmentBMPTypeObservationTypeDto>();
+            requiresAssessmentWeightSimples.AddRange(hasBenchmarkAndThresholdsSimples);
+            requiresAssessmentWeightSimples.AddRange(noBenchmarkAndThresholdsSimples.Where(x => !x.OverrideAssessmentScoreIfFailing.HasValue || !x.OverrideAssessmentScoreIfFailing.Value));
 
-            //if (requiresAssessmentWeightSimples.Any(x => x.AssessmentScoreWeight == null))
-            //{
-            //    validationResults.Add(new ValidationResult("Each Observation Type that does not override the Assessment Score if failing must have an Assessment Score Weight."));
-            //}
+            if (requiresAssessmentWeightSimples.Any(x => x.AssessmentScoreWeight == null))
+            {
+                validationResults.Add(new ValidationResult("Each Observation Type that does not override the Assessment Score if failing must have an Assessment Score Weight."));
+            }
 
-            //if (requiresAssessmentWeightSimples.Any() && TreatmentBMPTypeObservationTypeSimples.Sum(x => x.AssessmentScoreWeight) != 100)
-            //{
-            //    validationResults.Add(new ValidationResult("The total Assessment Score Weight for all Observation Types must equal 100%."));
-            //}
+            if (requiresAssessmentWeightSimples.Any() && TreatmentBMPTypeObservationTypes.Sum(x => x.AssessmentScoreWeight) != 100)
+            {
+                validationResults.Add(new ValidationResult("The total Assessment Score Weight for all Observation Types must equal 100%."));
+            }
 
             return validationResults;
         }

@@ -3,7 +3,6 @@ using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common.Models;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {

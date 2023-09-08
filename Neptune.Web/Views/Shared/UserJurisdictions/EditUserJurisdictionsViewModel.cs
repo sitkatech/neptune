@@ -28,7 +28,7 @@ using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.Shared.UserJurisdictions
 {
-    public class EditUserJurisdictionsViewModel : FormViewModel, IValidatableObject
+    public class EditUserJurisdictionsViewModel : FormViewModel
     {
 
         [Required]
@@ -77,12 +77,5 @@ namespace Neptune.Web.Views.Shared.UserJurisdictions
                 });
 
         }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            return new List<ValidationResult>();
-        }
-
     }
-
 }

@@ -19,17 +19,17 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Neptune.Models.DataTransferObjects;
 
-namespace Neptune.Web.Models
+namespace Neptune.EFModels.Entities
 {
-    public static partial class DatabaseContextExtensions
+    public static class CustomAttributeTypes
     {
-        public static List<CustomAttributeType> GetCustomAttributeTypes(this IQueryable<CustomAttributeType> customAttributeTypes, List<CustomAttributeSimple> customAttributes)
+        public static List<CustomAttributeType> GetCustomAttributeTypes(NeptuneDbContext dbContext, List<CustomAttributeUpsertDto> customAttributes)
         {
             var customAttributeTypeIDs = customAttributes.Select(x => x.CustomAttributeTypeID).ToList();
-            return customAttributeTypes.Where(x => customAttributeTypeIDs.Contains(x.CustomAttributeTypeID)).ToList();
+            return dbContext.CustomAttributeTypes.AsNoTracking().Where(x => customAttributeTypeIDs.Contains(x.CustomAttributeTypeID)).ToList();
         }
     }
 }

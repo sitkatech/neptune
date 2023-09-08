@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.FieldVisit
 {
     public class CollectionMethodSectionViewModel : FormViewModel, IValidatableObject
     {
+        [Required]
         public int? TreatmentBMPAssessmentObservationTypeID { get; set; }
         public string ObservationData { get; set; }
 
@@ -26,17 +28,15 @@ namespace Neptune.Web.Views.FieldVisit
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            var dbContext = validationContext.GetService<NeptuneDbContext>();
+
             var validationResults = new List<ValidationResult>();
 
-            // todo:
-            //var treatmentBMPAssessmentObservationType =
-            //    _dbContext.TreatmentBMPAssessmentObservationTypes.SingleOrDefault(x =>
-            //        x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID);
+            var treatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationTypes.GetByID(dbContext, TreatmentBMPAssessmentObservationTypeID);
 
-            //// TODO: There should probably be a null check here, or a required attribute on the TBMPAOTID field
-            //var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[treatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID];
+            var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[treatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID];
 
-            //validationResults.AddRange(observationTypeCollectionMethod.ValidateObservationDataJson(treatmentBMPAssessmentObservationType, ObservationData));
+            validationResults.AddRange(observationTypeCollectionMethod.ValidateObservationDataJson(treatmentBMPAssessmentObservationType, ObservationData));
 
             return validationResults;
         }

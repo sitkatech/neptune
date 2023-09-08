@@ -17,12 +17,13 @@ namespace Neptune.Web.Views.ParcelLayerUpload
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            var dbContext = validationContext.GetService<NeptuneDbContext>();
             var errors = new List<ValidationResult>();
 
-            //todo:
-            //var currentPerson = HttpRequestStorage.DatabaseEntities.People.Find(PersonID);
+            var currentPerson = People.GetByID(dbContext, PersonID);
 
-            //HttpRequestStorage.DatabaseEntities.pParcelStagingDeleteByPersonID(currentPerson.PersonID);
+            //todo:
+            //dbContext.pParcelStagingDeleteByPersonID(currentPerson.PersonID);
             //FileResource.ValidateFileSize(FileResourceData, errors, GeneralUtility.NameOf(() => FileResourceData));
 
             //using (var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".gdb.zip"))

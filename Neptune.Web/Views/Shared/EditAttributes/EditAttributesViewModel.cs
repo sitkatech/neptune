@@ -99,8 +99,8 @@ namespace Neptune.Web.Views.Shared.EditAttributes
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            return new List<ValidationResult>();
-            // todo: return CustomAttributeTypeModelExtensions.CheckCustomAttributeTypeExpectations(CustomAttributes);
+            var dbContext = validationContext.GetService<NeptuneDbContext>();
+            return CustomAttributeTypeModelExtensions.CheckCustomAttributeTypeExpectations(CustomAttributes, dbContext);
         }
     }
 }

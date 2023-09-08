@@ -21,6 +21,8 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using Neptune.Common;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.Models;
@@ -68,11 +70,11 @@ namespace Neptune.Web.Views.TreatmentBMP
         public DateTime? TreatmentBMPLifespanEndDate { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.RequiredFieldVisitsPerYear)]
-        [Range(0, Int32.MaxValue, ErrorMessage = "Required Field Visits Per Year cannot be negative")]
+        [Range(0, int.MaxValue, ErrorMessage = "Required Field Visits Per Year cannot be negative")]
         public int? RequiredFieldVisitsPerYear { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.RequiredPostStormFieldVisitsPerYear)]
-        [Range(0, Int32.MaxValue, ErrorMessage = "Required Post Storm Field Visits Per Year cannot be negative")]
+        [Range(0, int.MaxValue, ErrorMessage = "Required Post Storm Field Visits Per Year cannot be negative")]
         public int? RequiredPostStormFieldVisitsPerYear { get; set; }
 
         [Required]
@@ -170,22 +172,21 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            return new List<ValidationResult>();
-            //todo:
-            //var treatmentBmPsWithSameName = _dbContext.TreatmentBMPs.Where(x => x.TreatmentBMPName == TreatmentBMPName);
-            //if (treatmentBmPsWithSameName.Any(x => x.TreatmentBMPID != TreatmentBMPID))
-            //{
-            //    yield return new SitkaValidationResult<EditViewModel, string>("A BMP with this name already exists.",
-            //        x => x.TreatmentBMPName);
-            //}
+            var dbContext = validationContext.GetService<NeptuneDbContext>();
+            var treatmentBmPsWithSameName = dbContext.TreatmentBMPs.AsNoTracking().Where(x => x.TreatmentBMPName == TreatmentBMPName);
+            if (treatmentBmPsWithSameName.Any(x => x.TreatmentBMPID != TreatmentBMPID))
+            {
+                yield return new SitkaValidationResult<EditViewModel, string>("A BMP with this name already exists.",
+                    x => x.TreatmentBMPName);
+            }
 
-            //if (TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID &&
-            //    !TreatmentBMPLifespanEndDate.HasValue)
-            //{
-            //    yield return new SitkaValidationResult<EditViewModel, DateTime?>(
-            //        "The Lifespan End Date must be set if the Lifespan Type is Fixed End Date.",
-            //        x => x.TreatmentBMPLifespanEndDate);
-            //}
+            if (TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID &&
+                !TreatmentBMPLifespanEndDate.HasValue)
+            {
+                yield return new SitkaValidationResult<EditViewModel, DateTime?>(
+                    "The Lifespan End Date must be set if the Lifespan Type is Fixed End Date.",
+                    x => x.TreatmentBMPLifespanEndDate);
+            }
         }
     }
 }

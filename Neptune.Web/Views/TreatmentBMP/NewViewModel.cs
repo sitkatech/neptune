@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using Neptune.Common;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.Models;
@@ -148,21 +150,20 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            return new List<ValidationResult>();
-            //todo
-            //var treatmentBmPsWithSameName = _dbContext.TreatmentBMPs.Where(x => x.TreatmentBMPName == TreatmentBMPName);
-            //if (treatmentBmPsWithSameName.Any(x => x.TreatmentBMPID != TreatmentBMPID))
-            //{
-            //    yield return new SitkaValidationResult<NewViewModel, string>("A BMP with this name already exists.", x => x.TreatmentBMPName);
-            //}
+            var dbContext = validationContext.GetService<NeptuneDbContext>();
+            var treatmentBmPsWithSameName = dbContext.TreatmentBMPs.AsNoTracking().Where(x => x.TreatmentBMPName == TreatmentBMPName);
+            if (treatmentBmPsWithSameName.Any(x => x.TreatmentBMPID != TreatmentBMPID))
+            {
+                yield return new SitkaValidationResult<NewViewModel, string>("A BMP with this name already exists.", x => x.TreatmentBMPName);
+            }
 
-            //if (TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID &&
-            //    !TreatmentBMPLifespanEndDate.HasValue)
-            //{
-            //    yield return new SitkaValidationResult<EditViewModel, DateTime?>(
-            //        "The Lifespan End Date must be set if the Lifespan Type is Fixed End Date.",
-            //        x => x.TreatmentBMPLifespanEndDate);
-            //}
+            if (TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID &&
+                !TreatmentBMPLifespanEndDate.HasValue)
+            {
+                yield return new SitkaValidationResult<EditViewModel, DateTime?>(
+                    "The Lifespan End Date must be set if the Lifespan Type is Fixed End Date.",
+                    x => x.TreatmentBMPLifespanEndDate);
+            }
         }
     }
 }
