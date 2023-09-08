@@ -83,7 +83,7 @@ namespace Neptune.Web.Views
             MakeNeptuneMenu(currentPerson);
             NeptuneNavBarViewData = new NeptuneNavBarViewData(linkGenerator, currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl, neptuneArea, isHomePage);
 
-            ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson, linkGenerator) : null;
+            ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(linkGenerator, neptunePage, currentPerson) : null;
         }
 
         protected NeptuneViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,

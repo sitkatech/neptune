@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.ComponentModel;
-using Microsoft.AspNetCore.Html;
 using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.NeptunePage;
@@ -30,9 +29,7 @@ public class EditViewModel : FormViewModel
     public int NeptunePageID { get; set; }
 
     [DisplayName("Page Content")]
-    public HtmlString? NeptunePageContentHtmlString { get; set; }
-
-    public readonly HtmlString? NeptunePageContentOnLoad;
+    public string NeptunePageContent { get; set; }
 
     /// <summary>
     /// Needed by model binder
@@ -44,12 +41,11 @@ public class EditViewModel : FormViewModel
     public EditViewModel(EFModels.Entities.NeptunePage neptunePage)
     {
         NeptunePageID = neptunePage.NeptunePageID;
-        NeptunePageContentHtmlString = neptunePage.NeptunePageContentHtmlString;
-        NeptunePageContentOnLoad = NeptunePageContentHtmlString;
+        NeptunePageContent = neptunePage.NeptunePageContent;
     }
 
     public void UpdateModel(EFModels.Entities.NeptunePage neptunePage)
     {
-        neptunePage.NeptunePageContentHtmlString = NeptunePageContentHtmlString == null || string.IsNullOrWhiteSpace(NeptunePageContentHtmlString.ToString()) ? null : NeptunePageContentHtmlString;
+        neptunePage.NeptunePageContent = NeptunePageContent;
     }
 }

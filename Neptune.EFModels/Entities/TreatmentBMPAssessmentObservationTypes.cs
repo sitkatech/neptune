@@ -1,14 +1,13 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
 
 namespace Neptune.EFModels.Entities;
 
 public static class TreatmentBMPAssessmentObservationTypes
 {
-    public static List<TreatmentBMPAssessmentObservationType> List(NeptuneDbContext dbContext)
+    private static IQueryable<TreatmentBMPAssessmentObservationType> GetImpl(NeptuneDbContext dbContext)
     {
-        return GetImpl(dbContext).AsNoTracking().OrderBy(x => x.TreatmentBMPAssessmentObservationTypeName).ToList();
+        return dbContext.TreatmentBMPAssessmentObservationTypes.Include(x => x.TreatmentBMPTypeAssessmentObservationTypes);
     }
 
     public static TreatmentBMPAssessmentObservationType GetByIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPAssessmentObservationTypeID)
@@ -37,9 +36,8 @@ public static class TreatmentBMPAssessmentObservationTypes
         return GetByID(dbContext, treatmentBMPAssessmentObservationTypePrimaryKey.PrimaryKeyValue);
     }
 
-
-    private static IQueryable<TreatmentBMPAssessmentObservationType> GetImpl(NeptuneDbContext dbContext)
+    public static List<TreatmentBMPAssessmentObservationType> List(NeptuneDbContext dbContext)
     {
-        return dbContext.TreatmentBMPAssessmentObservationTypes;
+        return GetImpl(dbContext).AsNoTracking().ToList();
     }
 }

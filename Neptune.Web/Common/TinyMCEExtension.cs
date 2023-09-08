@@ -18,7 +18,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Linq.Expressions;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Neptune.Web.Common.Models;
@@ -60,11 +59,11 @@ namespace Neptune.Web.Common
         {
             var expressionProvider = new ModelExpressionProvider(helper.MetadataProvider);
             var metadata = expressionProvider.CreateModelExpression(helper.ViewData, expression);
-            var modelValue = (HtmlString)metadata.Model;
+            var modelValue = (string)metadata.Model;
 
             if (!editable)
             {
-                return modelValue;
+                return new HtmlString(modelValue);
             }
 
             var modelID = helper.IdFor(expression);
@@ -118,7 +117,7 @@ namespace Neptune.Web.Common
                             },";
             }
 
-            var heightString = height.HasValue ? string.Format("\r\n           height: {0},", height.Value) : string.Empty;
+            var heightString = height.HasValue ? $"\r\n           height: {height.Value}," : string.Empty;
 
             tag.InnerHtml.AppendHtml(string.Format(@"
                 // <![CDATA[

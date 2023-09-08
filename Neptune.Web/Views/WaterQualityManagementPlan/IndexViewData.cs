@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
                     x.WaterQualityManagementPlanIndexGridData());
 
-            VerificationNeptunePage = new ViewPageContentViewData(secondaryNeptunePage, currentPerson, linkGenerator);
+            VerificationNeptunePage = new ViewPageContentViewData(linkGenerator, secondaryNeptunePage, currentPerson);
             VerificationGridSpec = verificationGridSpec;
             VerificationGridName = "waterQualityManagementPlanVerificationIndexGrid";
             VerificationGridDataUrl =

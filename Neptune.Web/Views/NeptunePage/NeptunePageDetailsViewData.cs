@@ -25,10 +25,10 @@ namespace Neptune.Web.Views.NeptunePage;
 
 public class NeptunePageDetailsViewData : NeptuneUserControlViewData
 {
-    public readonly HtmlString NeptunePageContent;
+    public readonly IHtmlContent NeptunePageContent;
 
-    public NeptunePageDetailsViewData(HtmlString neptunePageContent)
+    public NeptunePageDetailsViewData(string neptunePageContent)
     {
-        NeptunePageContent = neptunePageContent;
+        NeptunePageContent = new HtmlString(neptunePageContent);
     }
 }

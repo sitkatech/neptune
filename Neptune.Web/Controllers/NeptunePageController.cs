@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using LtInfo.Common;
 using Neptune.Web.Common;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.MvcResults;
@@ -82,14 +81,14 @@ namespace Neptune.Web.Controllers
         private PartialViewResult ViewEdit(EditViewModel viewModel, NeptunePage neptunePage)
         {
             var tinyMCEToolbar = TinyMCEExtension.TinyMCEToolbarStyle.AllOnOneRowNoMaximize;
-            var viewData = new EditViewData(tinyMCEToolbar);
+            var viewData = new EditViewData(_linkGenerator, tinyMCEToolbar, neptunePage);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
         [HttpGet("{neptunePagePrimaryKey}")]
         [NeptunePageManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("neptunePagePrimaryKey")]
-        [CrossAreaRoute]
+//        [CrossAreaRoute]
         public PartialViewResult Edit([FromRoute] NeptunePagePrimaryKey neptunePagePrimaryKey)
         {
             var neptunePage = neptunePagePrimaryKey.EntityObject;
@@ -100,14 +99,8 @@ namespace Neptune.Web.Controllers
         [HttpPost("{neptunePagePrimaryKey}")]
         [NeptunePageManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("neptunePagePrimaryKey")]
-        public async Task<ActionResult> Edit([FromRoute] NeptunePagePrimaryKey neptunePagePrimaryKey, string neptunePageContentHtmlString)
+        public async Task<ActionResult> Edit([FromRoute] NeptunePagePrimaryKey neptunePagePrimaryKey, EditViewModel viewModel)
         {
-            var viewModel = new EditViewModel()
-            {
-                NeptunePageID = neptunePagePrimaryKey.PrimaryKeyValue,
-                NeptunePageContentHtmlString = new HtmlString(neptunePageContentHtmlString)
-            };
-
             var neptunePage = neptunePagePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
@@ -126,10 +119,10 @@ namespace Neptune.Web.Controllers
         public PartialViewResult NeptunePageDetails(NeptunePagePrimaryKey neptunePagePrimaryKey)
         {
             var neptunePage = neptunePagePrimaryKey.EntityObject;
-            var neptunePageContentHtmlString = neptunePage.NeptunePageContentHtmlString;
+            var neptunePageContentHtmlString = neptunePage.NeptunePageContent;
             if (!neptunePage.HasNeptunePageContent())
             {
-                neptunePageContentHtmlString = new HtmlString(string.Format("No page content for Page \"{0}\".", neptunePage.NeptunePageType.NeptunePageTypeDisplayName));
+                neptunePageContentHtmlString = $"No page content for Page \"{neptunePage.NeptunePageType.NeptunePageTypeDisplayName}\".";
             }
             var viewData = new NeptunePageDetailsViewData(neptunePageContentHtmlString);
             return RazorPartialView<NeptunePageDetails, NeptunePageDetailsViewData>(viewData);

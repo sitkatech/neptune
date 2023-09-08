@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Models;
@@ -31,17 +30,9 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<TreatmentBMPAssessment> TreatmentBMPAssessmentsGridJsonData()
         {
             var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(_dbContext);
-            var treatmentBMPAssessmentObservationTypes = _dbContext.TreatmentBMPAssessmentObservationTypes.Include(x => x.TreatmentBMPTypeAssessmentObservationTypes).ToList();
+            var treatmentBMPAssessmentObservationTypes = TreatmentBMPAssessmentObservationTypes.List(_dbContext);
             var gridSpec = new TreatmentBMPAssessmentGridSpec(CurrentPerson, treatmentBMPAssessmentObservationTypes, _linkGenerator);
-            var bmpAssessments = _dbContext.TreatmentBMPAssessments
-                .Include(x => x.FieldVisit)
-                .Include(x => x.FieldVisit.PerformedByPerson)
-                .Include(x => x.TreatmentBMP)
-                .Include(x => x.TreatmentBMP.StormwaterJurisdiction)
-                .Include(x => x.TreatmentBMP.StormwaterJurisdiction.Organization)
-                .Include(x => x.TreatmentBMPType)
-                .Include(x => x.TreatmentBMPObservations)
-                .Include(x => x.TreatmentBMPObservations.Select(y => y.TreatmentBMPAssessmentObservationType))
+            var bmpAssessments = TreatmentBMPAssessments.List(_dbContext)
                 .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.TreatmentBMP.StormwaterJurisdictionID)).ToList()
                 .OrderByDescending(x => x.GetAssessmentDate()).ToList();
             var gridJsonNetJObjectResult =

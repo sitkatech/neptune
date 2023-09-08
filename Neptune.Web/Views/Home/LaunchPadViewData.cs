@@ -43,8 +43,7 @@ namespace Neptune.Web.Views.Home
             Jurisdictions = CurrentPerson.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList();
             NumberOfBmpTypes = numberOfBmpTypes;
             ManagerDashboardDescription = managerDashboardDescription;
-            LaunchPadViewPageContentViewData =
-                new ViewPageContentViewData(launchPadNeptunePage, CurrentPerson);
+            LaunchPadViewPageContentViewData = new ViewPageContentViewData(linkGenerator, launchPadNeptunePage, CurrentPerson);
             JurisdictionIndexUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             RequestSupportUrl = SitkaRoute<HelpController>.BuildUrlFromExpression(linkGenerator, x => x.RequestToChangePrivileges());
             FindABmpUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.FindABMP());

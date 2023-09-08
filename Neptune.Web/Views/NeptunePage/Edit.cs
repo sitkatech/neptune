@@ -22,7 +22,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Neptune.Web.Common.HtmlHelperExtensions;
 using Neptune.Web.Common.Mvc;
-using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.NeptunePage;
 

@@ -43,13 +43,13 @@ namespace Neptune.Web.Views.Home
             EFModels.Entities.NeptunePage neptunePageHomePage,
             EFModels.Entities.NeptunePage neptunePageAdditionalInfo, EFModels.Entities.NeptunePage neptunePageMapInfo,
             List<NeptuneHomePageImage> neptuneHomePageImages, JurisdictionsMapViewData jurisdictionsMapViewData,
-            JurisdictionsMapInitJson jurisdictionsMapInitJson, LaunchPadViewData launchPadViewData) : base(httpContext, linkGenerator, currentPerson, neptunePageHomePage, true, NeptuneArea.OCStormwaterTools)
+            JurisdictionsMapInitJson jurisdictionsMapInitJson, LaunchPadViewData launchPadViewData) : base(httpContext, linkGenerator, currentPerson, null, true, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "Orange County Stormwater Tools";
 
-            CustomHomePageTextViewData = new ViewPageContentViewData(neptunePageHomePage, currentPerson, linkGenerator);
-            CustomHomePageAdditionalInfoTextViewData = new ViewPageContentViewData(neptunePageAdditionalInfo, currentPerson, linkGenerator);
-            CustomHomePageMapTextViewData = new ViewPageContentViewData(neptunePageMapInfo, currentPerson, linkGenerator);
+            CustomHomePageTextViewData = new ViewPageContentViewData(linkGenerator, neptunePageHomePage, currentPerson);
+            CustomHomePageAdditionalInfoTextViewData = new ViewPageContentViewData(linkGenerator, neptunePageAdditionalInfo, currentPerson);
+            CustomHomePageMapTextViewData = new ViewPageContentViewData(linkGenerator, neptunePageMapInfo, currentPerson);
             JurisdictionsMapViewData = jurisdictionsMapViewData;
             JurisdictionsMapInitJson = jurisdictionsMapInitJson;
             NeptuneHomePageCarouselImages = neptuneHomePageImages;

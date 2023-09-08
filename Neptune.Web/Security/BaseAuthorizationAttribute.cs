@@ -66,7 +66,7 @@ namespace Neptune.Web.Security
 
         public virtual bool HasPermissionByPerson(Person person)
         {
-            return person != null && (_grantedRoles.Any(x => (int)x == person.Role.RoleID)
+            return person != null && (_grantedRoles.Any(x => (int)x == person.RoleID)
                     //|| !_grantedRoles.Any()); // allowing an empty list lets us implement LoggedInUnclassifiedFeature easily
                 );
         }

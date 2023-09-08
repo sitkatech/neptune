@@ -19,16 +19,28 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.AspNetCore.Html;
 using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views.NeptunePage;
 
 public class EditViewData : NeptuneUserControlViewData
 {
-    public readonly TinyMCEExtension.TinyMCEToolbarStyle TinyMceToolbarStyle;
+    public TinyMCEExtension.TinyMCEToolbarStyle TinyMceToolbarStyle { get; }
+    public HtmlString? NeptunePageContentOnLoad { get; }
+    public string ViewPageContentDivID { get; }
+    public string EditPageContentDivID { get; }
+    public string TogglePageContentFunctionName { get; }
+    public string PostUrl { get; }
 
-    public EditViewData(TinyMCEExtension.TinyMCEToolbarStyle tinyMceToolbarStyle)
+    public EditViewData(LinkGenerator linkGenerator, TinyMCEExtension.TinyMCEToolbarStyle tinyMceToolbarStyle, EFModels.Entities.NeptunePage neptunePage)
     {
         TinyMceToolbarStyle = tinyMceToolbarStyle;
-    }  
+        NeptunePageContentOnLoad = new HtmlString(neptunePage.NeptunePageContent);
+        EditPageContentDivID = $"editNeptunePageContentFor{neptunePage.NeptunePageID}";
+        ViewPageContentDivID = $"viewNeptunePageContentFor{neptunePage.NeptunePageID}";
+        TogglePageContentFunctionName = $"toggleIsEditingFor{neptunePage.NeptunePageID}";
+        PostUrl = SitkaRoute<NeptunePageController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(neptunePage));
+    }
 }

@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.EFModels.Entities;
 using Neptune.Web.Controllers;
 using Neptune.Web.Common;
 using Neptune.Web.Common.DhtmlWrappers;
