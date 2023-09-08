@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -471,6 +471,10 @@
     <Compile Include="Models\Generated\UnderlyingHydrologicSoilGroupPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\vFieldVisitDetailed.Binding.cs" />
     <Compile Include="Models\Generated\vFieldVisitDetailedConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\vGeoServerTreatmentBMPDelineation.Binding.cs" />
+    <Compile Include="Models\Generated\vGeoServerTreatmentBMPDelineationConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\vGeoServerTreatmentBMPPointLocation.Binding.cs" />
+    <Compile Include="Models\Generated\vGeoServerTreatmentBMPPointLocationConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vGeoServerWaterQualityManagementPlan.Binding.cs" />
     <Compile Include="Models\Generated\vGeoServerWaterQualityManagementPlanConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\vModelingResultUnitConversion.Binding.cs" />
@@ -634,6 +638,7 @@
     <Compile Include="Models\vNereidPlannedProjectRegionalSubbasinCentralizedBMPExtensionMethods.cs" />
     <Compile Include="Models\vNereidPlannedProjectLoadingInputExtensionMethods.cs" />
     <Compile Include="Models\vTreatmentBMPDetailedWithTreatmentBMPEntity.cs" />
+    <Compile Include="Models\WaterQualityManagementPlanBoundary.cs" />
     <Compile Include="Models\WaterQualityManagementPlanModelExtensions.cs" />
     <Compile Include="ScheduledJobs\LoadGeneratingUnitResult.cs" />
     <Compile Include="ScheduledJobs\ParcelLayerUploadBackgroundJob.cs" />

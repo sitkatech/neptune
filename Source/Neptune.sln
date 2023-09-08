@@ -1,19 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neptune.Web", "Neptune.Web\Neptune.Web.csproj", "{8EB2FDE5-7FBA-4257-919F-11921D2C9615}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LtInfo.Common", "LtInfo.Common\LtInfo.Common.csproj", "{C6586AD8-9357-4FA3-92AE-A2ED5EACDACC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{540BA74C-3EE4-49E3-8E28-4FAACBFF1558}"
-	ProjectSection(SolutionItems) = preProject
-		..\Build\common.build = ..\Build\common.build
-		..\Build\database.build = ..\Build\database.build
-		..\Build\local.build = ..\Build\local.build
-		..\Build\web.build = ..\Build\web.build
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{62CA46C3-DB6D-4449-BBCC-D0A92F3AC4F9}"
 	ProjectSection(SolutionItems) = preProject
