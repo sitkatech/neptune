@@ -28,10 +28,10 @@ namespace Neptune.Web.Views.NeptunePage;
 
 public class IndexViewData : NeptuneViewData
 {
-    public readonly NeptunePageGridSpec GridSpec;
-    public readonly string GridName;
-    public readonly string GridDataUrl;
-    public readonly string NeptunePageUrl;
+    public NeptunePageGridSpec GridSpec { get; }
+    public string GridName { get; }
+    public string GridDataUrl { get; }
+    public string NeptunePageUrl { get; }
 
     public IndexViewData(Person currentPerson, LinkGenerator linkGenerator, HttpContext httpContext) : base(httpContext, linkGenerator, currentPerson, null, NeptuneArea.OCStormwaterTools)
     {

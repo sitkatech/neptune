@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using LtInfo.Common;
 using Neptune.Web.Common;
 using Microsoft.AspNetCore.Mvc;
 using Neptune.EFModels.Entities;
@@ -37,6 +36,7 @@ namespace Neptune.Web.Controllers
         {
         }
 
+        [HttpGet]
         [NeptunePageViewListFeature]
         public ViewResult Index()
         {
@@ -44,6 +44,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Index, IndexViewData>(viewData);
         }
 
+        [HttpGet]
         [NeptunePageViewListFeature]
         public GridJsonNetJObjectResult<NeptunePage> IndexGridJsonData()
         {
@@ -54,20 +55,21 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        [HttpGet]
+        [HttpGet("{neptunePagePrimaryKey}")]
         [NeptunePageManageFeature]
-        [CrossAreaRoute]
-        public PartialViewResult EditInDialog(NeptunePagePrimaryKey neptunePagePrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("neptunePagePrimaryKey")]
+        //        [CrossAreaRoute]
+        public PartialViewResult EditInDialog([FromRoute] NeptunePagePrimaryKey neptunePagePrimaryKey)
         {
             var neptunePage = neptunePagePrimaryKey.EntityObject;
             var viewModel = new EditViewModel(neptunePage);
             return ViewEdit(viewModel, neptunePage);
         }
 
-        [HttpPost]
+        [HttpPost("{neptunePagePrimaryKey}")]
         [NeptunePageManageFeature]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditInDialog(NeptunePagePrimaryKey neptunePagePrimaryKey, EditViewModel viewModel)
+        [ValidateEntityExistsAndPopulateParameterFilter("neptunePagePrimaryKey")]
+        public async Task<IActionResult> EditInDialog([FromRoute] NeptunePagePrimaryKey neptunePagePrimaryKey, EditViewModel viewModel)
         {
             var neptunePage = neptunePagePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -75,6 +77,7 @@ namespace Neptune.Web.Controllers
                 return ViewEdit(viewModel, neptunePage);
             }
             viewModel.UpdateModel(neptunePage);
+            await _dbContext.SaveChangesAsync()
             return new ModalDialogFormJsonResult();
         }
 
@@ -114,9 +117,10 @@ namespace Neptune.Web.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
-        [HttpGet]
+        [HttpGet("{neptunePagePrimaryKey}")]
         [NeptunePageManageFeature]
-        public PartialViewResult NeptunePageDetails(NeptunePagePrimaryKey neptunePagePrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("neptunePagePrimaryKey")]
+        public PartialViewResult NeptunePageDetails([FromRoute] NeptunePagePrimaryKey neptunePagePrimaryKey)
         {
             var neptunePage = neptunePagePrimaryKey.EntityObject;
             var neptunePageContentHtmlString = neptunePage.NeptunePageContent;
