@@ -37,12 +37,7 @@ namespace Neptune.EFModels.Entities
 
         public string FileResourceUrlScaledThumbnail(int maxHeight)
         {
-            return "";//todo SitkaRoute<FileResourceController>.BuildUrlFromExpression(_linkGenerator, x => x.GetFileResourceResized(GetFileResourceGUIDAsString(), maxHeight, maxHeight));
-        }
-
-        public string GetFileResourceUrlScaledForPrint()
-        {
-            return "";//todo SitkaRoute<FileResourceController>.BuildUrlFromExpression(_linkGenerator, x => x.GetFileResourceResized(GetFileResourceGUIDAsString(), 500, 500));
+            return $"/FileResource/GetFileResourceResized/{GetFileResourceGUIDAsString()}/{maxHeight}/{maxHeight}";
         }
 
         public string GetFileResourceDataLengthString()

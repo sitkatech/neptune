@@ -14,11 +14,6 @@ namespace Neptune.EFModels.Entities
             return "";//todo: SitkaRoute<NeptuneHomePageImageController>.BuildUrlFromExpression(_linkGenerator, x => x.DeleteNeptuneHomePageImage(NeptuneHomePageImageID));
         }
 
-        public bool IsKeyPhoto()
-        {
-            return false;
-        }
-
         public string GetCaptionOnFullView()
         {
             return $"{GetCaptionOnGallery()}";
@@ -34,11 +29,6 @@ namespace Neptune.EFModels.Entities
             return FileResource.GetFileResourceUrl();
         }
 
-        public string GetPhotoUrlScaledForPrint()
-        {
-            return FileResource.GetFileResourceUrlScaledForPrint();
-        }
-
         public string PhotoUrlScaledThumbnail(int maxHeight)
         {
             return FileResource.FileResourceUrlScaledThumbnail(maxHeight);
@@ -51,19 +41,9 @@ namespace Neptune.EFModels.Entities
 
         public List<string> GetAdditionalCssClasses() => new();
 
-        public bool IsPersonTheCreator(Person person)
-        {
-            return FileResource.CreatePerson != null && person != null && person.PersonID == FileResource.CreatePersonID;
-        }
-
         public string GetAuditDescriptionString()
         {
             return $"Image: {Caption}";
-        }
-
-        public int? GetEntityImageIDAsNullable()
-        {
-            return NeptuneHomePageImageID;
         }
     }
 }

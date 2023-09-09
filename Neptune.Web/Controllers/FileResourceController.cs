@@ -25,6 +25,7 @@ using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Options;
+using Neptune.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Services.Filters;
 
@@ -131,15 +132,15 @@ namespace Neptune.Web.Controllers
                         case FileResourceMimeTypeEnum.BMP:
                         case FileResourceMimeTypeEnum.GIF:
                         case FileResourceMimeTypeEnum.JPEG:
-                        //case FileResourceMimeTypeEnum.PJPEG:
-                        //    using (var scaledImage = ImageHelper.ScaleImage(fileResource.FileResourceData, maxWidth, maxHeight))
-                        //    {
-                        //        using (var ms = new MemoryStream())
-                        //        {
-                        //            scaledImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                        //            return File(ms.ToArray(), FileResourceMimeType.PNG.FileResourceMimeTypeName);
-                        //        }
-                        //    }
+                        case FileResourceMimeTypeEnum.PJPEG:
+                            using (var scaledImage = ImageHelper.ScaleImage(fileResource.FileResourceData, maxWidth, maxHeight))
+                            {
+                                using (var ms = new MemoryStream())
+                                {
+                                    scaledImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                                    return File(ms.ToArray(), FileResourceMimeType.PNG.FileResourceMimeTypeName);
+                                }
+                            }
                         default:
                             throw new ArgumentOutOfRangeException();
                     }

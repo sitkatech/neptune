@@ -24,6 +24,7 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Home;
 using Neptune.Web.Views.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Models;
@@ -136,8 +137,7 @@ namespace Neptune.Web.Controllers
             var newPhotoForProjectUrl = "";//todo: SitkaRoute<NeptuneHomePageImageController>.BuildUrlFromExpression(_linkGenerator, x => x.New());
             var galleryName = "HomePageImagesGallery";
             var neptuneHomePageImages = NeptuneHomePageImages.List(dbContext); 
-            var imageGalleryViewData = new ImageGalleryViewData(currentPerson,
-                galleryName,
+            var imageGalleryViewData = new ImageGalleryViewData(currentPerson, galleryName,
                 neptuneHomePageImages,
                 userCanAddPhotosToHomePage,
                 newPhotoForProjectUrl,
@@ -152,7 +152,7 @@ namespace Neptune.Web.Controllers
         {
             var neptunePageTypeTraining = NeptunePageType.Training;
             var neptunePageByPageTypeHomePage = NeptunePages.GetNeptunePageByPageType(_dbContext, neptunePageTypeTraining);
-            var trainingVideos = _dbContext.TrainingVideos.ToList();
+            var trainingVideos = _dbContext.TrainingVideos.AsNoTracking().ToList();
 
             var viewData = new TrainingViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePageByPageTypeHomePage, trainingVideos);
             return RazorView<Training, TrainingViewData>(viewData);
