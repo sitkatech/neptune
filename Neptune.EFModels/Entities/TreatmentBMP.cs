@@ -56,21 +56,17 @@ namespace Neptune.EFModels.Entities
 
         public bool IsBenchmarkAndThresholdsComplete()
         {
-            return true;
-            // TODO:
-            //var observationTypesIDs = TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
-            //    .Where(x => x.TreatmentBMPAssessmentObservationType.GetHasBenchmarkAndThreshold())
-            //    .Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
-            //var benchmarkAndThresholdObservationTypeIDs = TreatmentBMPBenchmarkAndThresholdTreatmentBMPs.Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
+            var observationTypesIDs = TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
+                .Where(x => x.TreatmentBMPAssessmentObservationType.GetHasBenchmarkAndThreshold())
+                .Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
+            var benchmarkAndThresholdObservationTypeIDs = TreatmentBMPBenchmarkAndThresholds.Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
 
-            //return !observationTypesIDs.Except(benchmarkAndThresholdObservationTypeIDs).Any();
+            return !observationTypesIDs.Except(benchmarkAndThresholdObservationTypeIDs).Any();
         }
 
         public bool HasSettableBenchmarkAndThresholdValues()
         {
-            return true;
-            // TODO:
-            //return TreatmentBMPType.GetObservationTypes().Any(x => x.GetHasBenchmarkAndThreshold());
+            return TreatmentBMPType.GetObservationTypes().Any(x => x.GetHasBenchmarkAndThreshold());
         }
 
         public string GetMostRecentScoreAsString()
@@ -143,31 +139,28 @@ namespace Neptune.EFModels.Entities
 
         public string CustomAttributeStatus()
         {
-            return string.Empty;
-            //todo:
-            //var nonMaintenanceTreatmentBMPTypeCustomAttributeTypes =
-            //    TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x =>
-            //        x.CustomAttributeType.CustomAttributeTypePurpose != CustomAttributeTypePurpose.Maintenance).ToList();
+            var nonMaintenanceTreatmentBMPTypeCustomAttributeTypes =
+                TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x =>
+                    x.CustomAttributeType.CustomAttributeTypePurpose != CustomAttributeTypePurpose.Maintenance).ToList();
 
-            //var completedObservationCount = nonMaintenanceTreatmentBMPTypeCustomAttributeTypes.Count(x =>
-            //    x.CustomAttributeType.IsRequired && x.CustomAttributeType.IsCompleteForTreatmentBMP(this));
+            var completedObservationCount = nonMaintenanceTreatmentBMPTypeCustomAttributeTypes.Count(x =>
+                x.CustomAttributeType.IsRequired && x.CustomAttributeType.IsCompleteForTreatmentBMP(this));
 
-            //var totalObservationCount = nonMaintenanceTreatmentBMPTypeCustomAttributeTypes.Count(x =>
-            //    x.CustomAttributeType.IsRequired);
+            var totalObservationCount = nonMaintenanceTreatmentBMPTypeCustomAttributeTypes.Count(x =>
+                x.CustomAttributeType.IsRequired);
 
-            //return completedObservationCount == totalObservationCount
-            //    ? "All Required Data Provided"
-            //    : $"In Progress ({completedObservationCount} of {totalObservationCount} required attributes entered)";
+            return completedObservationCount == totalObservationCount
+                ? "All Required Data Provided"
+                : $"In Progress ({completedObservationCount} of {totalObservationCount} required attributes entered)";
         }
 
         public bool RequiredAttributeDoesNotHaveValue()
         {
-            return false;
-            //return TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x =>
-            //x.CustomAttributeType.IsRequired && x.CustomAttributeType.CustomAttributeTypePurpose !=
-            //    CustomAttributeTypePurpose.Maintenance &&
-            //    !x.CustomAttributeType.IsCompleteForTreatmentBMP(this)
-            //);
+            return TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x =>
+            x.CustomAttributeType.IsRequired && x.CustomAttributeType.CustomAttributeTypePurpose !=
+                CustomAttributeTypePurpose.Maintenance &&
+                !x.CustomAttributeType.IsCompleteForTreatmentBMP(this)
+            );
         }
 
         public void MarkAsVerified(Person currentPerson)
@@ -189,6 +182,7 @@ namespace Neptune.EFModels.Entities
 
         public void DeleteFull(NeptuneDbContext dbContext)
         {
+            //todo:
             throw new NotImplementedException();
         }
     }

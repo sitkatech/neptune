@@ -42,10 +42,10 @@ namespace Neptune.EFModels.Entities
         {
             return true; //todo
         }
+
         public double? CalculateObservationScore()
         {
-            return null;
-            //todo: return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.CalculateScore(this);
+            return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.CalculateScore(this);
         }
 
         public string FormattedObservationScore()
@@ -56,8 +56,7 @@ namespace Neptune.EFModels.Entities
 
         public double? CalculateObservationValue()
         {
-            return null;
-            //todo: return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData);
+            return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData);
         }
 
         public string FormattedObservationValueWithoutUnits(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
