@@ -11,8 +11,6 @@ namespace Neptune.EFModels.Entities
         public abstract List<ValidationResult> ValidateObservationDataJson(
             TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, string json);
 
-        public abstract string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType);
-
         public abstract double? GetObservationValueFromObservationData(string observationData);
 
         public abstract double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation);
@@ -80,11 +78,6 @@ namespace Neptune.EFModels.Entities
             }
 
             return validationResults;
-        }
-
-        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
-        {
-            return "";//todo: SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.DiscreteDetailSchema(treatmentBMPAssessmentObservationType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
@@ -160,11 +153,6 @@ namespace Neptune.EFModels.Entities
             }
 
             return validationResults;
-        }
-
-        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
-        {
-            return ""; //todo: SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.PassFailDetailSchema(treatmentBMPAssessmentObservationType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
@@ -244,11 +232,6 @@ namespace Neptune.EFModels.Entities
             }
 
             return validationResults;
-        }
-
-        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
-        {
-            return "";//todo: SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.PercentageDetailSchema(treatmentBMPAssessmentObservationType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)

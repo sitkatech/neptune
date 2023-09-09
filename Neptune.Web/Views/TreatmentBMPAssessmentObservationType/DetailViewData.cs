@@ -53,7 +53,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 
             UserHasObservationTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
-            ViewSchemaDetailUrl = TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType);
+            ViewSchemaDetailUrl = TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType, linkGenerator);
 
             TreatmentBMPTypeGridSpec = new TreatmentBMPTypeGridSpec(linkGenerator, currentPerson, new Dictionary<int, int>())
             {

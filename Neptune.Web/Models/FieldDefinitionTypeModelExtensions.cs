@@ -14,7 +14,7 @@ public static class FieldDefinitionTypeModelExtensions
 
     public static string GetContentUrl(this FieldDefinitionType fieldDefinitionType)
     {
-        return $"/FieldDefinition/FieldDefinitionDetails/{fieldDefinitionType.FieldDefinitionTypeID}"; // todo: SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(_linkGenerator, x => x.FieldDefinitionDetails(FieldDefinitionTypeID));
+        return $"/FieldDefinition/FieldDefinitionDetails/{fieldDefinitionType.FieldDefinitionTypeID}";
     }
 
 
