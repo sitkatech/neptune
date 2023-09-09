@@ -59,8 +59,8 @@ namespace Neptune.Web.Views.User
             Person = personToView;
             PageTitle = personToView.GetFullNameFirstLast() + (!personToView.IsActive ? " (inactive)" : string.Empty);
             EntityName = "Users";
-            //TODO: This gets pulled up to root
-            EditPersonOrganizationPrimaryContactUrl = "";//todo:SitkaRoute<PersonOrganizationController>.BuildUrlFromExpression(LinkGenerator, x => x.EditPersonOrganizationPrimaryContacts(personToView));
+
+            EditPersonOrganizationPrimaryContactUrl = SitkaRoute<PersonOrganizationController>.BuildUrlFromExpression(LinkGenerator, x => x.EditPersonOrganizationPrimaryContacts(personToView));
             IndexUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             JurisdictionIndexUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
 

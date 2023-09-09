@@ -52,7 +52,7 @@ namespace Neptune.Web.Views.Role
             {
                 GridSpec = new PersonWithRoleGridSpec() { ObjectNameSingular = "Person", ObjectNamePlural = "People", SaveFiltersInCookie = true };
                 GridName = "PersonWithRoleGrid";
-                GridDataUrl = "";//todo:SitkaRoute<RoleController>().BuildUrlFromExpression(tc => tc.PersonWithRoleGridJsonData(role.NeptuneAreaEnum.Value, role.RoleID));
+                GridDataUrl = SitkaRoute<RoleController>.BuildUrlFromExpression(LinkGenerator, tc => tc.PersonWithRoleGridJsonData(role.RoleID));
             }
 
             PageTitle = $"Role Summary for {RoleName}";

@@ -84,7 +84,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEditRoles(viewModel, person);
             }
-            viewModel.UpdateModel(person, CurrentPerson);
+            viewModel.UpdateModel(person, CurrentPerson, _dbContext);
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay($"Role successfully changed for {person.GetFullNameFirstLastAndOrgAsUrl()}.");
             return new ModalDialogFormJsonResult();

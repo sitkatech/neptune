@@ -23,6 +23,7 @@ using Neptune.Web.Models;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.DhtmlWrappers;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.User
 {
@@ -30,14 +31,13 @@ namespace Neptune.Web.Views.User
     {
         public IndexGridSpec(Person currentPerson)
         {
-            //TODO:
-            //var hasDeletePermission = new UserDeleteFeature().HasPermissionByPerson(currentPerson);
-            //if (hasDeletePermission)
-            //{
-            //    Add(string.Empty,
-            //        x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), hasDeletePermission, true),
-            //        30, DhtmlxGridColumnFilterType.None);
-            //}
+            var hasDeletePermission = new UserDeleteFeature().HasPermissionByPerson(currentPerson);
+            if (hasDeletePermission)
+            {
+                Add(string.Empty,
+                    x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), hasDeletePermission, true),
+                    30, DhtmlxGridColumnFilterType.None);
+            }
             Add("Last Name", a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.LastName), 100, DhtmlxGridColumnFilterType.Html);
             Add("First Name", a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.FirstName), 100, DhtmlxGridColumnFilterType.Html);
             Add("Email", a => a.Email, 200);

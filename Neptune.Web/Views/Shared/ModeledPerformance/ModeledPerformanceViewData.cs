@@ -27,9 +27,9 @@ namespace Neptune.Web.Views.Shared.ModeledPerformance
             WaterQualityManagementPlan = waterQualityManagementPlan;
             InflowLabel = "Site Runoff";
             AboutModelingBMPPerformanceURL =
-                SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, x => x.AboutModelingBMPPerformance());
+                SitkaRoute<HomeController>.BuildUrlFromExpression(LinkGenerator, x => x.AboutModelingBMPPerformance());
 
-            ModelingResultsUrl = "";// todo: SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.GetModelResults(waterQualityManagementPlan));
+            ModelingResultsUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.GetModelResults(waterQualityManagementPlan));
         }
     }
 }

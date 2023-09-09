@@ -64,12 +64,6 @@ namespace Neptune.Web.Models
         //        .OwnerOrganizationID);
         //}
 
-        //public static readonly UrlTemplate<int> MapSummaryUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(t => t.SummaryForMap(UrlTemplate.Parameter1Int)));
-        public static string GetMapSummaryUrl(this TreatmentBMP treatmentBMP)
-        {
-            return "";//todo: MapSummaryUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
-        }
-
         //public static readonly UrlTemplate<int> TrashMapSummaryUrlTemplate = new UrlTemplate<int>(SitkaRoute<Areas.Trash.Controllers.TreatmentBMPController>.BuildUrlFromExpression(t => t.TrashMapAssetPanel(UrlTemplate.Parameter1Int)));
         //public static string GetTrashMapAssetUrl(this TreatmentBMP treatmentBMP)
         //{

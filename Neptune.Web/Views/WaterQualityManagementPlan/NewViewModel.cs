@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Neptune.Common;
+using Neptune.EFModels.Entities;
 using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class NewViewModel : EditViewModel
+    public class NewViewModel : EditViewModel, IValidatableObject
     {
         [Required]
         [DisplayName("Jurisdiction")]
@@ -31,13 +33,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public new IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            return new List<ValidationResult>();
-            //todo:
-            //if (_dbContext.WaterQualityManagementPlans.Any(x =>
-            //    x.WaterQualityManagementPlanName == WaterQualityManagementPlanName))
-            //{
-            //    yield return new SitkaValidationResult<NewViewModel, string>("Name is already in use.", m => m.WaterQualityManagementPlanName);
-            //}
+            var dbContext = validationContext.GetService<NeptuneDbContext>();
+            if (dbContext.WaterQualityManagementPlans.Any(x =>
+                    x.WaterQualityManagementPlanName == WaterQualityManagementPlanName))
+            {
+                yield return new SitkaValidationResult<NewViewModel, string>("Name is already in use.", m => m.WaterQualityManagementPlanName);
+            }
         }
     }
 }

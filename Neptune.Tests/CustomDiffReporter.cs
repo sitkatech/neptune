@@ -8,7 +8,6 @@ public class CustomDiffReporter :
 {
     public CustomDiffReporter()
         : base(
-            //TODO: re-order or remove as required
             TortoiseDiffReporter.INSTANCE,
             VisualStudioReporter.INSTANCE,
             BeyondCompareReporter.INSTANCE,

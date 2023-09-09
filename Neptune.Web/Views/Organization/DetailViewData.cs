@@ -45,7 +45,7 @@ namespace Neptune.Web.Views.Organization
             EntityName = FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized();
             PageTitle = organization.GetDisplayName();
             UserHasOrganizationManagePermissions = new OrganizationManageFeature().HasPermissionByPerson(CurrentPerson);
-            UserHasCreateFundingSourcePermissions = false;//todo: new FundingSourceCreateFeature().HasPermissionByPerson(CurrentPerson);
+            UserHasCreateFundingSourcePermissions = new FundingSourceCreateFeature().HasPermissionByPerson(CurrentPerson);
             if (UserHasOrganizationManagePermissions)
             {
                 EntityUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, x => x.Index());

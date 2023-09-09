@@ -49,8 +49,8 @@ namespace Neptune.Web.Views.User
             KeystoneUrl = "";//todo: NeptuneWebConfiguration.KeystoneUrl;
             KeystoneRegisterUserUrl = "";//todo: $"{NeptuneWebConfiguration.KeystoneRegisterUrl}?ClientID={NeptuneWebConfiguration.KeystoneOpenIDClientID}&RedirectUrl={HttpUtility.UrlEncode(SitkaRoute<AccountController>.BuildUrlFromExpression(_linkGenerator, x => x.LogOn()))}";
 
-            InviteUserUrl = "";//todo: SitkaRoute<UserController>.BuildUrlFromExpression(_linkGenerator, x => x.Invite());
-            UserIsAdmin = false;//todo: new UserEditFeature().HasPermissionByPerson(currentPerson);
+            InviteUserUrl = "";//todo: SitkaRoute<UserController>.BuildUrlFromExpression(LinkGenerator, x => x.Invite());
+            UserIsAdmin = new UserEditFeature().HasPermissionByPerson(currentPerson);
         }
     }
 }

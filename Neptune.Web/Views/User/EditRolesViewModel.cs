@@ -62,7 +62,7 @@ namespace Neptune.Web.Views.User
             IsOCTAGrantReviewer = person.IsOCTAGrantReviewer;
         }
 
-        public void UpdateModel(Person person, Person currentPerson)
+        public void UpdateModel(Person person, Person currentPerson, NeptuneDbContext dbContext)
         {
             person.RoleID = RoleID.GetValueOrDefault();  // will never default due to RequiredAttribute
             person.ReceiveSupportEmails = ShouldReceiveSystemCommunications;
@@ -72,9 +72,7 @@ namespace Neptune.Web.Views.User
             var assignedRole = EFModels.Entities.Role.AllLookupDictionary[RoleID.GetValueOrDefault()];
             if (assignedRole == EFModels.Entities.Role.Admin || assignedRole == EFModels.Entities.Role.SitkaAdmin)
             {
-                //  todo:
-                //_dbContext.StormwaterJurisdictionPeople.DeleteStormwaterJurisdictionPerson(
-                //person.StormwaterJurisdictionPeople);
+                dbContext.StormwaterJurisdictionPeople.RemoveRange(person.StormwaterJurisdictionPeople);
             }
 
             if (ModelObjectHelpers.IsRealPrimaryKeyValue(person.PersonID))

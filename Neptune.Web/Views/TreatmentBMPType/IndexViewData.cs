@@ -28,7 +28,6 @@ namespace Neptune.Web.Views.TreatmentBMPType
 {
     public class IndexViewData : NeptuneViewData
     {
-
         public List<EFModels.Entities.TreatmentBMPType> TreatmentBMPTypes { get; }
         public Dictionary<int, int> CountByTreatmentBMPType { get; }
         public UrlTemplate<int> DetailUrlTemplate { get; }
@@ -45,7 +44,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
             TreatmentBMPTypes = treatmentBMPTypes;
             CountByTreatmentBMPType = countByTreatmentBMPType;
             DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
-            TreatmentBMPAssessmentObservationTypeDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int))); // todo: need to fix to right controller
+            TreatmentBMPAssessmentObservationTypeDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
         }
     }
 }
