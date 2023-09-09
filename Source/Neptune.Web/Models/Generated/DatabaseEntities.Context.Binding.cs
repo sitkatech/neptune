@@ -131,6 +131,8 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanVisitStatusConfiguration());
             modelBuilder.Configurations.Add(new WatershedConfiguration());
             modelBuilder.Configurations.Add(new vFieldVisitDetailedConfiguration());
+            modelBuilder.Configurations.Add(new vGeoServerTreatmentBMPDelineationConfiguration());
+            modelBuilder.Configurations.Add(new vGeoServerTreatmentBMPPointLocationConfiguration());
             modelBuilder.Configurations.Add(new vGeoServerWaterQualityManagementPlanConfiguration());
             modelBuilder.Configurations.Add(new vModelingResultUnitConversionConfiguration());
             modelBuilder.Configurations.Add(new vMostRecentTreatmentBMPAssessmentConfiguration());
@@ -256,6 +258,8 @@ namespace Neptune.Web.Models
         public virtual DbSet<WaterQualityManagementPlanVisitStatus> WaterQualityManagementPlanVisitStatuses { get; set; }
         public virtual DbSet<Watershed> Watersheds { get; set; }
         public virtual DbSet<vFieldVisitDetailed> vFieldVisitDetaileds { get; set; }
+        public virtual DbSet<vGeoServerTreatmentBMPDelineation> vGeoServerTreatmentBMPDelineations { get; set; }
+        public virtual DbSet<vGeoServerTreatmentBMPPointLocation> vGeoServerTreatmentBMPPointLocations { get; set; }
         public virtual DbSet<vGeoServerWaterQualityManagementPlan> vGeoServerWaterQualityManagementPlans { get; set; }
         public virtual DbSet<vModelingResultUnitConversion> vModelingResultUnitConversions { get; set; }
         public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
