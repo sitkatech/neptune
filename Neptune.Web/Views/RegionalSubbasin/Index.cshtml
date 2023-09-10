@@ -2,8 +2,6 @@
 @using Neptune.Web.Common.BootstrapWrappers
 @using Neptune.Web.Common.ModalDialog
 @using Neptune.Web.Views.Shared
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.RegionalSubbasin.Index
 
 @section JavascriptAndStylesContent
@@ -13,7 +11,7 @@
         var regionalSubbasinMap;
         var selectedFeature;
         jQuery(function() {
-            var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
+            var mapInitJson = @Html.Raw(ViewDataTyped.MapInitJson.ToJsonHtmlString());
             var geoserverUrl = @Html.Raw(ViewDataTyped.GeoServerUrl.ToJS());
             var regionalSubbasinLayerName = @Html.Raw(ViewDataTyped.RegionalSubbasinLayerName.ToJS());
 

@@ -20,8 +20,7 @@
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Common.ModalDialog
 @using Neptune.Web.Views.Shared
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
+@using Neptune.Web.Common
 @inherits Neptune.Web.Views.WaterQualityManagementPlan.EditWqmpBoundary
 @model Neptune.Web.Views.WaterQualityManagementPlan.EditWqmpBoundaryViewModel
 
@@ -30,8 +29,8 @@
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
 
     <script src=@("https://npmcdn.com/@turf/turf/turf.min.js")></script>
-    <script src="@Url.Content("~/Views/WaterQualityManagementPlan/EditWqmpBoundaryMap/NeptuneMaps.WqmpBoundaryMap.js")"></script>
-    <script src="@Url.Content("~/Views/WaterQualityManagementPlan/EditWqmpBoundaryMap/EditWqmpBoundary.js")"></script>
+    <script src="@Url.Content("~/Content/angular-controllers/NeptuneMaps.WqmpBoundaryMap.js")"></script>
+    <script src="@Url.Content("~/Content/angular-controllers/EditWqmpBoundary.js")"></script>
 
 }
 
@@ -57,9 +56,8 @@
 </div>
 
 <script type="text/javascript">
-    var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
-    var editableFeatureJsonObject =
-        @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson.BoundaryLayerGeoJson).ToString(Formatting.None));
+    var mapInitJson = @Html.Raw(ViewDataTyped.MapInitJson.ToJsonHtmlString());
+    var editableFeatureJsonObject = @Html.Raw(ViewDataTyped.MapInitJson.BoundaryLayerGeoJson.ToJsonHtmlString());
     var saveButtonID = "@ModalDialogFormHelper.SaveButtonID";
 
     var geoServerUrl = "@ViewDataTyped.GeoServerUrl";

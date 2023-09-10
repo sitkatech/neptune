@@ -19,8 +19,7 @@
     </license>
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Common.HtmlHelperExtensions
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
+@using Neptune.Web.Common
 @inherits Neptune.Web.Views.Shared.Location.EditLocation
 @model Neptune.Web.Views.Shared.Location.EditLocationViewModel
         <div class="row">
@@ -143,7 +142,7 @@
     };
 
     jQuery(function() {
-        var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
+        var mapInitJson = @Html.Raw(ViewDataTyped.MapInitJson.ToJsonHtmlString());
         var neptuneMap = new NeptuneMaps.Stormwater(mapInitJson);
 
         neptuneMap.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",

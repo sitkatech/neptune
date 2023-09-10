@@ -12,7 +12,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string WaterQualityManagementPlanDetailUrl { get; }
         public string NewTreatmentBMPUrl { get; }
 
-        public EditWqmpBmpsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditWqmpBmpsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, List<TreatmentBMPDisplayDto> treatmentBMPDisplayDtos) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
@@ -20,14 +20,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             SubEntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanID));
             PageTitle = "Edit Inventoried BMPs";
 
-            var treatmentBMPSimples = waterQualityManagementPlan.StormwaterJurisdiction.TreatmentBMPs
-                .Where(x => x.WaterQualityManagementPlanID == null ||
-                            x.WaterQualityManagementPlanID == waterQualityManagementPlan.WaterQualityManagementPlanID)
-                .Select(x => x.AsDisplayDto())
-                .OrderBy(x => x.DisplayName)
-                .ToList();
-
-            ViewDataForAngular = new EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(treatmentBMPSimples);
+            ViewDataForAngular = new EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(treatmentBMPDisplayDtos);
 
             WaterQualityManagementPlanDetailUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanID));
             NewTreatmentBMPUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.New());

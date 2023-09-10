@@ -1,14 +1,13 @@
 ﻿@using Neptune.Web.Views.Shared
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
 @using Neptune.Web.Common.HtmlHelperExtensions
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Neptune.EFModels.Entities
+@using Neptune.Web.Common
 @using Neptune.Web.Common.BootstrapWrappers
 @inherits Neptune.Web.Views.TreatmentBMPAssessmentObservationType.Edit
 @model Neptune.Web.Views.TreatmentBMPAssessmentObservationType.EditViewModel
 
-<script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMPAssessmentObservationType/EditTreatmentBMPAssessmentObservationTypeController.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Content/angular-controllers/EditTreatmentBMPAssessmentObservationTypeController.js")"></script>
 <script type="text/javascript">
     // <![CDATA[
     angular.module("NeptuneApp")
@@ -16,8 +15,8 @@
             function()
             {
                 return {
-                    AngularModel: @Html.Raw(JObject.FromObject(Model).ToString(Formatting.None)),
-                    AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
+                    AngularViewData: @Html.Raw(ViewDataTyped.ViewDataForAngular.ToJsonHtmlString()),
+                    AngularModel: @Html.Raw(Model.ToJsonHtmlString())
                 };
             });
     // ]]>

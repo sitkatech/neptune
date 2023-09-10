@@ -19,6 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using LtInfo.Common;
+using Neptune.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.EFModels.Entities
@@ -44,7 +46,7 @@ namespace Neptune.EFModels.Entities
 
         public int GetWaterYear()
         {
-            return GetAssessmentDate().Year; //TODO: .GetFiscalYear();
+            return GetAssessmentDate().GetFiscalYear();
         }
 
         public string GetAssessmentStatus()

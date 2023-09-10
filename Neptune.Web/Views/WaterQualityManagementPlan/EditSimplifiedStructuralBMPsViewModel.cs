@@ -11,8 +11,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     {
         public List<QuickBMPSimpleDto> QuickBmpSimples { get; set; }
 
-        public List<SourceControlBMPSimpleDto> SourceControlBMPSimples { get; set; }
-
         /// <summary>
         /// Needed by model binder
         /// </summary>

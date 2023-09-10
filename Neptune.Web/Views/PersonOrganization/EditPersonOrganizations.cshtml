@@ -19,8 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
 @using Neptune.EFModels.Entities
+@using Neptune.Web.Common
 @using Neptune.Web.Common.HtmlHelperExtensions
-@using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.PersonOrganization.EditPersonOrganizations
 @model Neptune.Web.Views.PersonOrganization.EditPersonOrganizationsViewModel
 
@@ -29,8 +29,8 @@ Source code is available upon request via <support@sitkatech.com>.
     angular.module("NeptuneApp").factory("angularModelAndViewData", function()
     {
         return {
-            AngularModel: @Html.Raw(JObject.FromObject(Model)),
-            AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped))
+            AngularViewData: @Html.Raw(ViewDataTyped.ToJsonHtmlString()),
+            AngularModel: @Html.Raw(Model.ToJsonHtmlString())
         };
     });
     angular.bootstrap(jQuery("#EditPersonOrganizationsApp"), ["NeptuneApp"]);

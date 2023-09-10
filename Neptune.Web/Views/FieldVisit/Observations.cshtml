@@ -19,24 +19,23 @@
     </license>
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Views.FieldVisit
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Neptune.EFModels.Entities
+@using Neptune.Web.Common
 @using Neptune.Web.Common.BootstrapWrappers
 @inherits Observations
 @model ObservationsViewModel
 
 @SetLayout("SiteLayout.cshtml", ViewDataTyped)
 
-<script type="text/javascript" src="@Url.Content("~/Views/FieldVisit/ObservationsController.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Content/angular-controllers/ObservationsController.js")"></script>
 <script type="text/javascript">
     // <![CDATA[
     angular.module("NeptuneApp").factory("angularModelAndViewData",
         function() {
             return {
-                AngularModel: @Html.Raw(JObject.FromObject(Model).ToString(Formatting.None)),
-                AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
+                AngularViewData: @Html.Raw(ViewDataTyped.ViewDataForAngular.ToJsonHtmlString()),
+                AngularModel: @Html.Raw(Model.ToJsonHtmlString()),
             };
         });
     angular.bootstrap(jQuery("[ng-controller=\"ObservationsController\"]"), ["NeptuneApp"]);

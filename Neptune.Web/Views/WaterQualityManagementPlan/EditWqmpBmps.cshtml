@@ -1,8 +1,7 @@
 ﻿@using Neptune.Web.Views.WaterQualityManagementPlan
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Neptune.EFModels.Entities
+@using Neptune.Web.Common
 
 @inherits EditWqmpBmps
 @model EditWqmpBmpsViewModel
@@ -16,8 +15,8 @@
                 function() {
                     return {
                         AngularViewData:
-                            @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None)),
-                        AngularModel: @Html.Raw(JObject.FromObject(Model).ToString(Formatting.None))
+                            @Html.Raw(ViewDataTyped.ViewDataForAngular.ToJsonHtmlString()),
+                        AngularModel: @Html.Raw(Model.ToJsonHtmlString())
                     };
                 });
             angular.bootstrap(jQuery('[ng-controller="EditWqmpTreatmentBmpsController"]'), ["NeptuneApp"]);

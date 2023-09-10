@@ -1,23 +1,21 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Neptune.Web.Common
 @using Neptune.Web.Common.HtmlHelperExtensions
 @using Neptune.Web.Views.WaterQualityManagementPlan
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
 
 @inherits EditSimplifiedStructuralBMPs
 @model EditSimplifiedStructuralBMPsViewModel
 
 @section JavascriptAndStylesContent
 {
-    <script type="text/javascript" src="@Url.Content("~/Views/WaterQualityManagementPlan/EditSimplifiedStructuralBMPsController.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/angular-controllers/EditSimplifiedStructuralBMPsController.js")"></script>
     <script type="text/javascript">
         jQuery(function () {
             angular.module("NeptuneApp").factory("angularModelAndViewData",
                 function() {
                     return {
-                        AngularViewData:
-                            @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None)),
-                        AngularModel: @Html.Raw(JObject.FromObject(Model).ToString(Formatting.None))
+                        AngularViewData: @Html.Raw(ViewDataTyped.ViewDataForAngular.ToJsonHtmlString()),
+                        AngularModel: @Html.Raw(Model.ToJsonHtmlString())
                     };
                 });
             angular.bootstrap(jQuery('[ng-controller="EditSimplifiedStructuralBMPsController"]'), ["NeptuneApp"]);

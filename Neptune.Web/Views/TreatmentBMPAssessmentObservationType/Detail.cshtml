@@ -20,12 +20,11 @@
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Security
 @using Neptune.Web.Views.Shared
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
 @using Neptune.Web.Common.BootstrapWrappers
 @using Neptune.Web.Common.DhtmlWrappers
-@using Neptune.Web.Common.HtmlHelperExtensions
 @using Neptune.EFModels.Entities
+@using Neptune.Web.Common
+@using Neptune.Web.Common.HtmlHelperExtensions
 @inherits Neptune.Web.Views.TreatmentBMPAssessmentObservationType.Detail
 @section JavascriptAndStylesContent
 {
@@ -44,7 +43,7 @@
     <script>
         function previewObservationType() {
 
-            var postData = @Html.Raw(JObject.FromObject(ViewDataTyped.ViewModelForPreview).ToString(Formatting.None));
+            var postData = @Html.Raw(ViewDataTyped.ViewModelForPreview.ToJsonHtmlString());
 
 
             jQuery("[ng-controller]:not([ng-controller=\"EditTreatmentBMPAssessmentObservationTypeController\"])").empty();

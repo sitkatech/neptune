@@ -1,19 +1,18 @@
 ﻿@using Neptune.Web.Views.WaterQualityManagementPlan
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
+@using Neptune.Web.Common
 @model EditSourceControlBMPsViewModel
 @inherits EditSourceControlBMPs
 
 
 @section JavascriptAndStylesContent
 {
-    <script type="text/javascript" src="@Url.Content("~/Views/WaterQualityManagementPlan/EditSourceControlBMPsController.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/angular-controllers/EditSourceControlBMPsController.js")"></script>
     <script type="text/javascript">
         jQuery(function () {
             angular.module("NeptuneApp").factory("angularModelAndViewData",
                 function() {
                     return {
-                        AngularModel: @Html.Raw(JObject.FromObject(Model).ToString(Formatting.None))
+                        AngularModel: @Html.Raw(Model.ToJsonHtmlString())
                     };
                 });
             angular.bootstrap(jQuery('[ng-controller="EditSourceControlBMPsController"]'), ["NeptuneApp"]);

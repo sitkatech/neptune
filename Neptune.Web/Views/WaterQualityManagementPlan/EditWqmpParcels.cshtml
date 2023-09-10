@@ -1,8 +1,7 @@
 ﻿@using Neptune.Web.Views.Shared
 @using Neptune.Web.Views.WaterQualityManagementPlan
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
 @using Neptune.EFModels.Entities
+@using Neptune.Web.Common
 @model EditWqmpParcelsViewModel
 @inherits EditWqmpParcels
 
@@ -14,8 +13,8 @@
         // <![CDATA[
         angular.module("NeptuneApp").factory("angularModelAndViewData", function() {
             return {
-                AngularModel: @Html.Raw(JObject.FromObject(Model).ToString(Formatting.None)),
-                AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
+                AngularViewData: @Html.Raw(ViewDataTyped.ViewDataForAngular.ToJsonHtmlString()),
+                AngularModel: @Html.Raw(Model.ToJsonHtmlString()),
             };
         });
         // ]]>

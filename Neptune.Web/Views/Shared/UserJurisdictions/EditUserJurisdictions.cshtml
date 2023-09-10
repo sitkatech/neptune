@@ -18,9 +18,9 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
-@using Newtonsoft.Json.Linq
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Neptune.EFModels.Entities
+@using Neptune.Web.Common
 @using Neptune.Web.Common.HtmlHelperExtensions
 @inherits Neptune.Web.Views.Shared.UserJurisdictions.EditUserJurisdictions
 @model Neptune.Web.Views.Shared.UserJurisdictions.EditUserJurisdictionsViewModel
@@ -32,9 +32,9 @@ Source code is available upon request via <support@sitkatech.com>.
             function()
             {
                 return {
-                    AngularModel: @Html.Raw(JObject.FromObject(Model)),
-                    AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular))
-                    };
+                    AngularViewData: @Html.Raw(ViewDataTyped.ViewDataForAngular.ToJsonHtmlString()),
+                    AngularModel: @Html.Raw(Model.ToJsonHtmlString())
+                };
             });
 
     angular.bootstrap(jQuery("#EditUserJurisdictionsApp"), ["NeptuneApp"]);

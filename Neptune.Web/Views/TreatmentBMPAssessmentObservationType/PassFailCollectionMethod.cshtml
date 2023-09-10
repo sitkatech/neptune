@@ -18,17 +18,16 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
+@using Neptune.Web.Common
 @inherits Neptune.Web.Views.TreatmentBMPAssessmentObservationType.PassFailCollectionMethod
 
-<script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMPAssessmentObservationType/PassFailCollectionMethodController.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Content/angular-controllers/PassFailCollectionMethodController.js")"></script>
 <script type="text/javascript">
     // <![CDATA[
     angular.module("NeptuneApp").factory("angularModelAndViewData",
         function() {
             return {
-                AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
+                AngularViewData: @Html.Raw(ViewDataTyped.ViewDataForAngular.ToJsonHtmlString())
             };
         });
     angular.bootstrap(jQuery("[ng-controller=\"PassFailCollectionMethodController\"]"), ["NeptuneApp"]);

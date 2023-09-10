@@ -80,5 +80,11 @@ namespace Neptune.EFModels.Entities
             return dbContext.TreatmentBMPs.AsNoTracking().GroupBy(x => x.TreatmentBMPTypeID).Select(x => new { x.Key, Count = x.Count()})
                 .ToDictionary(x => x.Key, x => x.Count);
         }
+
+        public static List<TreatmentBMP> ListByStormwaterJurisdictionID(NeptuneDbContext dbContext, int stormwaterJurisdictionID)
+        {
+            return GetImpl(dbContext).AsNoTracking()
+                .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID).ToList();
+        }
     }
 }
