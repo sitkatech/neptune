@@ -1,15 +1,15 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common.JsonConverters;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.OpenID;
+using Neptune.Web.Services;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Converters;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -105,6 +105,7 @@ var builder = WebApplication.CreateBuilder(args);
         });
 
     services.AddHttpContextAccessor();
+    services.AddScoped<AzureBlobStorageService>();
     services.AddHealthChecks().AddDbContextCheck<NeptuneDbContext>();
 }
 

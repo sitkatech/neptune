@@ -39,4 +39,5 @@ services:
       - PathToPyqgisLauncher=${PathToPyqgisLauncher}
       - PathToPyqgisProjData=${PathToPyqgisProjData}
       - NereidUrl=${NereidUrl}
-      - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}      
+      - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
+      - BlobStorageConnectionString=${BlobStorageConnectionString}
