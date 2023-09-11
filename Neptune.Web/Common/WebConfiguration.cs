@@ -48,7 +48,7 @@ public class WebConfiguration
 
     public string SitkaEmailRedirect { get; set; }
     public string MailLogBcc { get; set; }
-    public string BlobStorageConnectionString { get; set; }
+    public string AzureBlobStorageConnectionString { get; set; }
 
     //public static readonly string CanonicalHostName = CanonicalHostNames.FirstOrDefault();
 

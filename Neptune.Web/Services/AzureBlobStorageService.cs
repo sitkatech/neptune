@@ -700,7 +700,7 @@ public class AzureBlobStorageService
     public AzureBlobStorageService(IOptions<WebConfiguration> hippocampConfiguration)
     {
         _webConfiguration = hippocampConfiguration.Value;
-        _fileResourceContainerClient = new BlobServiceClient(_webConfiguration.BlobStorageConnectionString).GetBlobContainerClient("file-resource");
+        _fileResourceContainerClient = new BlobServiceClient(_webConfiguration.AzureBlobStorageConnectionString).GetBlobContainerClient("file-resource");
     }
 
     public bool UploadFileResource(FileResource fileResource)

@@ -40,4 +40,4 @@ services:
       - PathToPyqgisProjData=${PathToPyqgisProjData}
       - NereidUrl=${NereidUrl}
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
-      - BlobStorageConnectionString=${BlobStorageConnectionString}
+      - AzureBlobStorageConnectionString=${AzureBlobStorageConnectionString}
