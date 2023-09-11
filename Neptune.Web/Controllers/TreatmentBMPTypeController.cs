@@ -177,7 +177,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<vTreatmentBMPDetailedWithTreatmentBMPEntity> TreatmentBMPsInTreatmentBMPTypeGridJsonData([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey)
         {
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMPTypePrimaryKey);
-            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(_dbContext);
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictions.ListViewableIDsByPerson(_dbContext, CurrentPerson);
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(CurrentPerson);
             var gridSpec = new TreatmentBMPsInTreatmentBMPTypeGridSpec(CurrentPerson, showDelete, showEdit, treatmentBMPType, _linkGenerator);

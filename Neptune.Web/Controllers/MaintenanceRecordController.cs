@@ -21,7 +21,7 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<MaintenanceRecord> AllMaintenanceRecordsGridJsonData()
         {
-            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(_dbContext);
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictions.ListViewableIDsByPerson(_dbContext, CurrentPerson);
             var customAttributeTypes = _dbContext.CustomAttributeTypes.Include(x => x.TreatmentBMPTypeCustomAttributeTypes).Where(x => x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList();
             var maintenanceRecords = MaintenanceRecords.List(_dbContext)
                 .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.TreatmentBMP.StormwaterJurisdictionID)).ToList();

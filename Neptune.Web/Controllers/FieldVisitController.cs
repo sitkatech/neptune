@@ -109,7 +109,7 @@ namespace Neptune.Web.Controllers
             }
             else
             {
-                var stormwaterJurisdictionIDsPersonCanView = currentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(_dbContext);
+                var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictions.ListViewableIDsByPerson(_dbContext, CurrentPerson);
                 return _dbContext.vFieldVisitDetaileds
                     .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             }
@@ -1011,7 +1011,7 @@ namespace Neptune.Web.Controllers
 
             //var numRows = dataTableFromExcel.Rows.Count;
 
-            //var stormwaterJurisdictionsPersonCanView = CurrentPerson.GetStormwaterJurisdictionsPersonCanViewWithContext(_dbContext);
+            //var stormwaterJurisdictionsPersonCanView = StormwaterJurisdictions.ListViewableByPerson(_dbContext, CurrentPerson);
 
             //if (!CurrentPerson.IsAdministrator())
             //{
@@ -1478,7 +1478,7 @@ namespace Neptune.Web.Controllers
         //[JurisdictionManageFeature]
         //public FileResult TrashScreenBulkUploadTemplate()
         //{
-        //    var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(_dbContext).ToList();
+        //    var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictions.ListViewableIDsByPerson(_dbContext, CurrentPerson).ToList();
 
         //    var currentPersonTrashScreens = TreatmentBMPs.GetNonPlanningModuleBMPs(_dbContext)
         //        .Where(x => x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID &&

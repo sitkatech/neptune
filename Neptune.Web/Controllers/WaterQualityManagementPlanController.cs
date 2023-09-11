@@ -37,7 +37,7 @@ namespace Neptune.Web.Controllers
         [HttpGet]
         public GridJsonNetJObjectResult<WaterQualityManagementPlan> WaterQualityManagementPlanIndexGridData()
         {
-            var waterQualityManagementPlans = CurrentPerson.GetWQMPsPersonCanView(_dbContext);
+            var waterQualityManagementPlans = WaterQualityManagementPlans.ListViewableByPerson(_dbContext, CurrentPerson);
             var gridSpec = new WaterQualityManagementPlanIndexGridSpec(_linkGenerator, CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlan>(waterQualityManagementPlans, gridSpec);
         }
@@ -45,7 +45,7 @@ namespace Neptune.Web.Controllers
         [HttpGet]
         public GridJsonNetJObjectResult<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerificationGridData()
         {
-            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(_dbContext);
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictions.ListViewableIDsByPerson(_dbContext, CurrentPerson);
             var waterQualityManagementPlanVerifications = WaterQualityManagementPlanVerifies.ListViewable(_dbContext, stormwaterJurisdictionIDsPersonCanView);
             var gridSpec = new WaterQualityManagementPlanVerificationGridSpec(_linkGenerator, CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlanVerify>(waterQualityManagementPlanVerifications, gridSpec);
@@ -126,18 +126,13 @@ namespace Neptune.Web.Controllers
                     treatmentBMPs.Where(x => x.Delineation != null).Select(x => x.Delineation)));
             }
 
-            var waterQualityManagementPlanVerifies = _dbContext.WaterQualityManagementPlanVerifies.Where(x =>
-                x.WaterQualityManagementPlanID == waterQualityManagementPlan.PrimaryKey).OrderByDescending(x => x.VerificationDate).ToList();
+            var waterQualityManagementPlanVerifies = WaterQualityManagementPlanVerifies.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.PrimaryKey);
             var waterQualityManagementPlanVerifyDraft = waterQualityManagementPlanVerifies.SingleOrDefault(x => x.IsDraft);
 
             var waterQualityManagementPlanVerifyQuickBMP =
-                _dbContext.WaterQualityManagementPlanVerifyQuickBMPs.Where(x =>
-                    x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID ==
-                    waterQualityManagementPlan.WaterQualityManagementPlanID).ToList();
+                WaterQualityManagementPlanVerifyQuickBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
             var waterQualityManagementPlanVerifyTreatmentBMP =
-                _dbContext.WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x =>
-            x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID ==
-                waterQualityManagementPlan.WaterQualityManagementPlanID).ToList();
+                WaterQualityManagementPlanVerifyTreatmentBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
 
             var dryWeatherFlowOverrides = DryWeatherFlowOverride.All;
             var waterQualityManagementPlanModelingApproaches = WaterQualityManagementPlanModelingApproach.All;
@@ -149,12 +144,14 @@ namespace Neptune.Web.Controllers
                 .OrderBy(x => x.SourceControlBMPAttributeID)
                 .GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
             var quickBmps = QuickBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var modeledPerformanceViewData = new ModeledPerformanceViewData(HttpContext, _linkGenerator, waterQualityManagementPlan, CurrentPerson);
+            var parcelGridSpec = new ParcelGridSpec();
             var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlan,
-                waterQualityManagementPlanVerifyDraft, mapInitJson, treatmentBMPs, new ParcelGridSpec(),
+                waterQualityManagementPlanVerifyDraft, mapInitJson, treatmentBMPs, parcelGridSpec,
                 waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
                 waterQualityManagementPlanVerifyTreatmentBMP,
                 hruCharacteristicsViewData,
-                dryWeatherFlowOverrides, waterQualityManagementPlanModelingApproaches, new ModeledPerformanceViewData(HttpContext, _linkGenerator, waterQualityManagementPlan, CurrentPerson), sourceControlBMPs, quickBmps.ToList());
+                dryWeatherFlowOverrides, waterQualityManagementPlanModelingApproaches, modeledPerformanceViewData, sourceControlBMPs, quickBmps.ToList());
 
             return RazorView<Detail, DetailViewData>(viewData);
         }

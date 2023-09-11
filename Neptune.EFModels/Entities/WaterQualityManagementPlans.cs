@@ -9,10 +9,6 @@ public static class WaterQualityManagementPlans
     public static IQueryable<WaterQualityManagementPlan> GetImpl(NeptuneDbContext dbContext)
     {
         return dbContext.WaterQualityManagementPlans
-            .Include(x => x.TreatmentBMPs)
-            .Include(x => x.WaterQualityManagementPlanVerifies)
-            .Include(x => x.WaterQualityManagementPlanParcels)
-            .ThenInclude(x => x.Parcel)
             .Include(x => x.StormwaterJurisdiction)
             .ThenInclude(x => x.Organization);
     }
@@ -51,4 +47,38 @@ public static class WaterQualityManagementPlans
     {
         return GetByID(dbContext, waterQualityManagementPlanPrimaryKey.PrimaryKeyValue);
     }
+
+    public static List<WaterQualityManagementPlan> ListViewableByPerson(NeptuneDbContext dbContext, Person person)
+    {
+        var stormwaterJurisdictionsPersonCanViewWithContext = StormwaterJurisdictions.ListViewableByPerson(dbContext, person);
+
+        var stormwaterJurisdictionIDsPersonCanView = person.IsAnonymousOrUnassigned()
+            ? stormwaterJurisdictionsPersonCanViewWithContext
+                .Where(x => x.StormwaterJurisdictionPublicWQMPVisibilityTypeID !=
+                            (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.None)
+                .Select(x => x.StormwaterJurisdictionID)
+            : stormwaterJurisdictionsPersonCanViewWithContext.Select(x => x.StormwaterJurisdictionID);
+
+        //These users can technically see all Jurisdictions, just potentially not the WQMPs inside them
+        var waterQualityManagementPlans = WaterQualityManagementPlans.GetImpl(dbContext).Include(x => x.WaterQualityManagementPlanParcels)
+            .Include(x => x.SourceControlBMPs)
+            .Include(x => x.QuickBMPs)
+            .AsNoTracking()
+            .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID));
+        if (person.IsAnonymousOrUnassigned())
+        {
+            var publicWaterQualityManagementPlans = waterQualityManagementPlans.Where(x =>
+                x.WaterQualityManagementPlanStatusID ==
+                (int)WaterQualityManagementPlanStatusEnum.Active ||
+                x.WaterQualityManagementPlanStatusID ==
+                (int)WaterQualityManagementPlanStatusEnum.Inactive &&
+                x.StormwaterJurisdiction.StormwaterJurisdictionPublicWQMPVisibilityTypeID ==
+                (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.ActiveAndInactive).ToList();
+            return publicWaterQualityManagementPlans;
+        }
+
+        return waterQualityManagementPlans.ToList();
+    }
+
+
 }

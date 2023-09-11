@@ -128,30 +128,6 @@ namespace Neptune.Web.Models
             return person.IsAssignedToStormwaterJurisdiction(stormwaterJurisdictionID);
         }
 
-        public static List<StormwaterJurisdiction> GetStormwaterJurisdictionsPersonCanViewWithContext(
-            this Person person, NeptuneDbContext dbContext)
-        {
-            if (person.IsAdministrator() || person.IsAnonymousOrUnassigned())
-            {
-                return StormwaterJurisdictions.List(dbContext);
-            }
-            //todo: anonymous user can see more jurisdictions?
-            var stormwaterJurisdictionIDsForPerson = person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdictionID).ToList();
-            return StormwaterJurisdictions.List(dbContext).Where(x =>
-                stormwaterJurisdictionIDsForPerson.Contains(x.StormwaterJurisdictionID)).ToList();
-        }
-
-        public static IEnumerable<int> GetStormwaterJurisdictionIDsPersonCanViewWithContext(this Person person,
-            NeptuneDbContext dbContext)
-        {
-            if (person.IsAdministrator() || person.IsAnonymousOrUnassigned())
-            {
-                return dbContext.StormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID);
-            }
-
-            return person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdictionID);
-        }
-
         /// <summary>
         /// List of Organizations for which this Person is the primary contact
         /// </summary>
@@ -185,37 +161,10 @@ namespace Neptune.Web.Models
             return treatmentBmps;
         }
 
-        public static List<WaterQualityManagementPlan> GetWQMPsPersonCanView(this Person person, NeptuneDbContext dbContext)
-        {
-            //These users can technically see all Jurisdictions, just potentially not the WQMPs inside them
-            if (person.IsAnonymousOrUnassigned())
-            {
-                var stormwaterJurisdictionIDsAnonymousPersonCanView = person.GetStormwaterJurisdictionsPersonCanViewWithContext(dbContext)
-                    .Where(x => x.StormwaterJurisdictionPublicWQMPVisibilityTypeID !=
-                                (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.None)
-                    .Select(x => x.StormwaterJurisdictionID);
-
-                var publicWaterQualityManagementPlans = WaterQualityManagementPlans.GetImpl(dbContext).AsNoTracking()
-                    .Where(x => stormwaterJurisdictionIDsAnonymousPersonCanView.Contains(x.StormwaterJurisdictionID) &&
-                                (x.WaterQualityManagementPlanStatusID ==
-                                 (int)WaterQualityManagementPlanStatusEnum.Active ||
-                                 x.WaterQualityManagementPlanStatusID ==
-                                 (int)WaterQualityManagementPlanStatusEnum.Inactive &&
-                                 x.StormwaterJurisdiction.StormwaterJurisdictionPublicWQMPVisibilityTypeID ==
-                                 (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.ActiveAndInactive)).ToList();
-                return publicWaterQualityManagementPlans;
-            }
-
-            var stormwaterJurisdictionIDsPersonCanView = person.GetStormwaterJurisdictionIDsPersonCanViewWithContext(dbContext);
-            var waterQualityManagementPlans = WaterQualityManagementPlans.GetImpl(dbContext).AsNoTracking()
-                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
-            return waterQualityManagementPlans;
-        }
-
         public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson, NeptuneDbContext dbContext)
         {
             return GetStormwaterJurisdictionCqlFilter(currentPerson,
-                currentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(dbContext));
+                StormwaterJurisdictions.ListViewableIDsByPerson(dbContext, currentPerson));
         }
 
         public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson,
@@ -229,7 +178,7 @@ namespace Neptune.Web.Models
         public static string GetNegativeStormwaterJurisdictionCqlFilter(this Person currentPerson, NeptuneDbContext dbContext)
         {
             return GetNegativeStormwaterJurisdictionCqlFilter(currentPerson,
-                currentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(dbContext));
+                StormwaterJurisdictions.ListViewableIDsByPerson(dbContext, currentPerson));
         }
 
         public static string GetNegativeStormwaterJurisdictionCqlFilter(this Person currentPerson,

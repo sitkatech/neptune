@@ -48,4 +48,10 @@ public static class WaterQualityManagementPlanVerifies
             .ThenBy(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanName)
             .ThenByDescending(x => x.LastEditedDate).ToList();
     }
+
+    public static List<WaterQualityManagementPlanVerify> ListByWaterQualityManagementPlanID(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
+    {
+        return GetImpl(dbContext).AsNoTracking()
+            .Where(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID).OrderByDescending(x => x.VerificationDate).ToList();
+    }
 }

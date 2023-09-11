@@ -3,7 +3,6 @@ using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
-using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Index = Neptune.Web.Views.Assessment.Index;
 using IndexViewData = Neptune.Web.Views.Assessment.IndexViewData;
@@ -31,7 +30,7 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMPAssessment> TreatmentBMPAssessmentsGridJsonData()
         {
-            var stormwaterJurisdictionIDsPersonCanView = CurrentPerson.GetStormwaterJurisdictionIDsPersonCanViewWithContext(_dbContext);
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictions.ListViewableIDsByPerson(_dbContext, CurrentPerson);
             var treatmentBMPAssessmentObservationTypes = TreatmentBMPAssessmentObservationTypes.List(_dbContext);
             var gridSpec = new TreatmentBMPAssessmentGridSpec(CurrentPerson, treatmentBMPAssessmentObservationTypes, _linkGenerator);
             var bmpAssessments = TreatmentBMPAssessments.List(_dbContext)
