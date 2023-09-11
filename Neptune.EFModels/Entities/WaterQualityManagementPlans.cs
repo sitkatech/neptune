@@ -60,9 +60,8 @@ public static class WaterQualityManagementPlans
             : stormwaterJurisdictionsPersonCanViewWithContext.Select(x => x.StormwaterJurisdictionID);
 
         //These users can technically see all Jurisdictions, just potentially not the WQMPs inside them
-        var waterQualityManagementPlans = WaterQualityManagementPlans.GetImpl(dbContext).Include(x => x.WaterQualityManagementPlanParcels)
-            .Include(x => x.SourceControlBMPs)
-            .Include(x => x.QuickBMPs)
+        var waterQualityManagementPlans = GetImpl(dbContext).Include(x => x.WaterQualityManagementPlanParcels)
+            .Include(x => x.TreatmentBMPs)
             .AsNoTracking()
             .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID));
         if (person.IsAnonymousOrUnassigned())

@@ -37,8 +37,7 @@ namespace Neptune.EFModels.Entities
                 RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres,
                 TrashCaptureStatusType = waterQualityManagementPlan.TrashCaptureStatusType.AsDto(),
                 TrashCaptureEffectiveness = waterQualityManagementPlan.TrashCaptureEffectiveness,
-                WaterQualityManagementPlanModelingApproach = waterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.AsDto(),
-                WaterQualityManagementPlanAreaInAcres = waterQualityManagementPlan.WaterQualityManagementPlanAreaInAcres
+                WaterQualityManagementPlanModelingApproach = waterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.AsDto()
             };
             DoCustomMappings(waterQualityManagementPlan, waterQualityManagementPlanDto);
             return waterQualityManagementPlanDto;
@@ -74,8 +73,7 @@ namespace Neptune.EFModels.Entities
                 RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres,
                 TrashCaptureStatusTypeID = waterQualityManagementPlan.TrashCaptureStatusTypeID,
                 TrashCaptureEffectiveness = waterQualityManagementPlan.TrashCaptureEffectiveness,
-                WaterQualityManagementPlanModelingApproachID = waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID,
-                WaterQualityManagementPlanAreaInAcres = waterQualityManagementPlan.WaterQualityManagementPlanAreaInAcres
+                WaterQualityManagementPlanModelingApproachID = waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID
             };
             DoCustomSimpleDtoMappings(waterQualityManagementPlan, waterQualityManagementPlanSimpleDto);
             return waterQualityManagementPlanSimpleDto;

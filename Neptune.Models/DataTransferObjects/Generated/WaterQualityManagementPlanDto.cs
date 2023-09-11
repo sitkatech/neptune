@@ -34,7 +34,6 @@ namespace Neptune.Models.DataTransferObjects
         public TrashCaptureStatusTypeDto TrashCaptureStatusType { get; set; }
         public int? TrashCaptureEffectiveness { get; set; }
         public WaterQualityManagementPlanModelingApproachDto WaterQualityManagementPlanModelingApproach { get; set; }
-        public double? WaterQualityManagementPlanAreaInAcres { get; set; }
     }
 
     public partial class WaterQualityManagementPlanSimpleDto
@@ -64,7 +63,6 @@ namespace Neptune.Models.DataTransferObjects
         public System.Int32 TrashCaptureStatusTypeID { get; set; }
         public int? TrashCaptureEffectiveness { get; set; }
         public System.Int32 WaterQualityManagementPlanModelingApproachID { get; set; }
-        public double? WaterQualityManagementPlanAreaInAcres { get; set; }
     }
 
 }

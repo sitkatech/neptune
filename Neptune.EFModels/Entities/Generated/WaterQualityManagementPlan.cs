@@ -84,8 +84,6 @@ public partial class WaterQualityManagementPlan
 
     public int WaterQualityManagementPlanModelingApproachID { get; set; }
 
-    public double? WaterQualityManagementPlanAreaInAcres { get; set; }
-
     [InverseProperty("WaterQualityManagementPlan")]
     public virtual ICollection<DirtyModelNode> DirtyModelNodes { get; set; } = new List<DirtyModelNode>();
 

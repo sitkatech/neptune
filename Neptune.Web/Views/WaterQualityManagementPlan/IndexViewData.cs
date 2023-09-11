@@ -9,7 +9,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
     public class IndexViewData : NeptuneViewData
     {
-        public WaterQualityManagementPlanIndexGridSpec IndexGridSpec { get; }
+        public IndexGridSpec IndexGridSpec { get; }
         public string IndexGridName { get; }
         public string IndexGridDataUrl { get; }
         public WaterQualityManagementPlanVerificationGridSpec VerificationGridSpec { get; }
@@ -21,7 +21,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string BulkUploadWQMPUrl { get; }
 
         public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage,
-            WaterQualityManagementPlanIndexGridSpec indexGridSpec, EFModels.Entities.NeptunePage secondaryNeptunePage, WaterQualityManagementPlanVerificationGridSpec verificationGridSpec) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            IndexGridSpec indexGridSpec, EFModels.Entities.NeptunePage secondaryNeptunePage, WaterQualityManagementPlanVerificationGridSpec verificationGridSpec) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             var waterQualityManagementPlanPluralized = FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized();
             PageTitle = $"All {waterQualityManagementPlanPluralized}";

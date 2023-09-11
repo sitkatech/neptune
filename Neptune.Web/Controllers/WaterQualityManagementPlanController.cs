@@ -27,7 +27,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WaterQualityMaintenancePlan);
-            var gridSpec = new WaterQualityManagementPlanIndexGridSpec(_linkGenerator, CurrentPerson);
+            var gridSpec = new IndexGridSpec(_linkGenerator, CurrentPerson);
             var verificationNeptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WaterQualityMaintenancePlanOandMVerifications);
             var verificationGridSpec = new WaterQualityManagementPlanVerificationGridSpec(_linkGenerator, CurrentPerson);
             var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, gridSpec, verificationNeptunePage, verificationGridSpec);
@@ -35,11 +35,19 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        public GridJsonNetJObjectResult<WaterQualityManagementPlan> WaterQualityManagementPlanIndexGridData()
+        public GridJsonNetJObjectResult<vWaterQualityManagementPlanDetailedWithWQMPEntity> WaterQualityManagementPlanIndexGridData()
         {
-            var waterQualityManagementPlans = WaterQualityManagementPlans.ListViewableByPerson(_dbContext, CurrentPerson);
-            var gridSpec = new WaterQualityManagementPlanIndexGridSpec(_linkGenerator, CurrentPerson);
-            return new GridJsonNetJObjectResult<WaterQualityManagementPlan>(waterQualityManagementPlans, gridSpec);
+            var gridSpec = new IndexGridSpec(_linkGenerator, CurrentPerson);
+            var treatmentBMPs =
+                WaterQualityManagementPlans.ListViewableByPerson(_dbContext, CurrentPerson)
+                    .Join(vWaterQualityManagementPlanDetaileds.ListViewableByPerson(_dbContext, CurrentPerson),
+                        x => x.WaterQualityManagementPlanID,
+                        y => y.WaterQualityManagementPlanID,
+                        (x, y) => new vWaterQualityManagementPlanDetailedWithWQMPEntity(x, y))
+                    .OrderBy(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanName)
+                    .ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vWaterQualityManagementPlanDetailedWithWQMPEntity>(treatmentBMPs, gridSpec);
+            return gridJsonNetJObjectResult;
         }
 
         [HttpGet]
