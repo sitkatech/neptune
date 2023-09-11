@@ -250,6 +250,42 @@ stages:
               echo "##vso[task.setvariable variable=PYQGIS_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_PYQGIS_PASSWORD)"
           - bash: 'env | sort'
 
+- stage: RestoreFiles
+  displayName: Restore Files
+  dependsOn: DeployTerraform
+  condition: |
+    and
+    (
+      in(dependencies.DeployTerraform.result, 'Succeeded', 'SucceededWithIssues'),
+      eq(variables['restoreFiles'], 'true')
+    )
+  jobs:  
+    - job: BuildFileRestoreProject
+      displayName: Build File Restore Project 
+      pool:
+        vmImage: ubuntu-latest
+      steps:
+      - checkout: self
+
+      - task: UseDotNet@2
+        inputs:
+          version: '6.0.x'
+
+      - task: DotNetCoreCLI@2
+        displayName: Building File Restore Project 
+        inputs:
+          command: 'build'
+          projects: 'Build/Tools/AzureFileRestore/*.csproj'
+          arguments: '--configuration debug'
+
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: |
+            cd "Build/Tools/AzureFileRestore/bin/debug/net6.0"
+            echo "-m `"ServiceSideAsyncCopy`" -s `"$(ProdBlobCS)`" -d `"$(QABlobCS)`" -c `"file-resource`""
+            ./AzureFileRestore -m "ServiceSideAsyncCopy" -s "$(ProdBlobCS)" -d "$(QABlobCS)" -c "file-resource"
+
 - stage: DeployDB
   displayName: Deploy Database 
   dependsOn: DeployTerraform
