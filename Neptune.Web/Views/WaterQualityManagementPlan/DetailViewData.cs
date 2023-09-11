@@ -69,7 +69,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs,
             HRUCharacteristicsViewData hruCharacteristicsViewData,
             List<DryWeatherFlowOverride> dryWeatherFlowOverrides,
-            List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches, ModeledPerformanceViewData modeledPerformanceViewData)
+            List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches, ModeledPerformanceViewData modeledPerformanceViewData, IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -137,21 +137,14 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 : SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, c =>
                     c.NewWqmpVerify(waterQualityManagementPlan));
 
-            SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs
-                .Where(x => x.IsPresent == true || x.SourceControlBMPNote != null)
-                .OrderBy(x => x.SourceControlBMPAttributeID)
-                .GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
             WaterQualityManagementPlanVerifies = waterQualityManagementPlanVerifies;
             WaterQualityManagementPlanVerifyQuickBMPs = waterQualityManagementPlanVerifyQuickBmPs;
             WaterQualityManagementPlanVerifyTreatmentBMPs = waterQualityManagementPlanVerifyTreatmentBmPs;
             HRUCharacteristicsViewData = hruCharacteristicsViewData;
 
             TreatmentBMPs = treatmentBMPs;
-            QuickBMPs = waterQualityManagementPlan.QuickBMPs.OrderBy(x => x.QuickBMPName).ToList();
-            SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs
-                .Where(x => x.SourceControlBMPNote != null || (x.IsPresent != null && x.IsPresent == true))
-                .OrderBy(x => x.SourceControlBMPAttributeID)
-                .GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
+            QuickBMPs = quickBMPs;
+            SourceControlBMPs = sourceControlBMPs;
 
             var calculatedWQMPAcreage = WaterQualityManagementPlan.CalculateTotalAcreage();
 

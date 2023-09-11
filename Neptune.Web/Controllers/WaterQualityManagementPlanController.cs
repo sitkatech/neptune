@@ -143,13 +143,18 @@ namespace Neptune.Web.Controllers
             var waterQualityManagementPlanModelingApproaches = WaterQualityManagementPlanModelingApproach.All;
 
             var hruCharacteristics = waterQualityManagementPlan.GetHRUCharacteristics(_dbContext).ToList();
+            var hruCharacteristicsViewData = new HRUCharacteristicsViewData(waterQualityManagementPlan, hruCharacteristics);
+            var sourceControlBMPs = SourceControlBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID)
+                .Where(x => x.SourceControlBMPNote != null || (x.IsPresent != null && x.IsPresent == true))
+                .OrderBy(x => x.SourceControlBMPAttributeID)
+                .GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
+            var quickBmps = QuickBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
             var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlan,
                 waterQualityManagementPlanVerifyDraft, mapInitJson, treatmentBMPs, new ParcelGridSpec(),
                 waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
                 waterQualityManagementPlanVerifyTreatmentBMP,
-                new HRUCharacteristicsViewData(waterQualityManagementPlan,
-                    hruCharacteristics),
-                dryWeatherFlowOverrides, waterQualityManagementPlanModelingApproaches, new ModeledPerformanceViewData(HttpContext, _linkGenerator, waterQualityManagementPlan, CurrentPerson));
+                hruCharacteristicsViewData,
+                dryWeatherFlowOverrides, waterQualityManagementPlanModelingApproaches, new ModeledPerformanceViewData(HttpContext, _linkGenerator, waterQualityManagementPlan, CurrentPerson), sourceControlBMPs, quickBmps.ToList());
 
             return RazorView<Detail, DetailViewData>(viewData);
         }
