@@ -14,13 +14,13 @@ public static class FieldVisits
             .ThenInclude(x => x.CustomAttributeType)
             .Include(x => x.MaintenanceRecord)
             .Include(x => x.TreatmentBMPAssessments)
+                .ThenInclude(x => x.TreatmentBMPAssessmentPhotos).ThenInclude(x => x.FileResource)
             .Include(x => x.TreatmentBMP)
-            .ThenInclude(x => x.CustomAttributes)
-            .ThenInclude(x => x.CustomAttributeValues)
+                .ThenInclude(x => x.CustomAttributes)
+                    .ThenInclude(x => x.CustomAttributeValues)
             .Include(x => x.TreatmentBMP)
-            .ThenInclude(x => x.CustomAttributes)
-            .ThenInclude(x => x.CustomAttributeType)
-            ;
+                .ThenInclude(x => x.CustomAttributes)
+                    .ThenInclude(x => x.CustomAttributeType);
     }
 
     public static FieldVisit GetByIDWithChangeTracking(NeptuneDbContext dbContext,

@@ -43,13 +43,17 @@ using Index = Neptune.Web.Views.FieldVisit.Index;
 using Neptune.Web.Services.Filters;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
+using Neptune.Web.Services;
 
 namespace Neptune.Web.Controllers
 {
     public class FieldVisitController : NeptuneBaseController<FieldVisitController>
     {
-        public FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisitController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
+        private readonly FileResourceService _fileResourceService;
+
+        public FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisitController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
+            _fileResourceService = fileResourceService;
         }
 
         [HttpGet]
@@ -852,7 +856,7 @@ namespace Neptune.Web.Controllers
                 treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(fieldVisit, treatmentBMPAssessmentTypeEnum);
             }
 
-            viewModel.UpdateModel(CurrentPerson, treatmentBMPAssessment, _dbContext);
+            await viewModel.UpdateModel(CurrentPerson, treatmentBMPAssessment, _dbContext, _fileResourceService);
             if (await FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Detail(fieldVisit))); }
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");

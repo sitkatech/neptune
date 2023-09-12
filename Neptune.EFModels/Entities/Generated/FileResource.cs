@@ -25,7 +25,7 @@ public partial class FileResource
 
     public Guid FileResourceGUID { get; set; }
 
-    public byte[] FileResourceData { get; set; } = null!;
+    public byte[]? FileResourceData { get; set; }
 
     public int CreatePersonID { get; set; }
 

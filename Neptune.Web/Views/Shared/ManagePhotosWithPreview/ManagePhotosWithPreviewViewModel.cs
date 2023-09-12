@@ -7,7 +7,7 @@ namespace Neptune.Web.Views.Shared.ManagePhotosWithPreview
 {
     public abstract class ManagePhotosWithPreviewViewModel : FieldVisitViewModel
     {
-        public virtual IList<ManagePhotoWithPreviewPhotoDto> PhotoSimples { get; set; }
+        public virtual IList<ManagePhotoWithPreviewPhotoDto>? PhotoSimples { get; set; }
 
         [DisplayName("Upload a photo")]
         [SitkaFileExtensions("jpg|jpeg|gif|png")]

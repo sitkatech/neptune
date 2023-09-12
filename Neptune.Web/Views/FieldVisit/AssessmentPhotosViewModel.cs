@@ -2,6 +2,7 @@
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
+using Neptune.Web.Services;
 using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
 
 namespace Neptune.Web.Views.FieldVisit
@@ -29,7 +30,8 @@ namespace Neptune.Web.Views.FieldVisit
             }
         }
 
-        public void UpdateModel(Person currentPerson, EFModels.Entities.TreatmentBMPAssessment treatmentBMPAssessment, NeptuneDbContext dbContext)
+        public async Task UpdateModel(Person currentPerson, EFModels.Entities.TreatmentBMPAssessment treatmentBMPAssessment,
+            NeptuneDbContext dbContext, FileResourceService fileResourceService)
         {
             // Merge existing photos
             var photoSimples = PhotoSimples ??
@@ -60,9 +62,10 @@ namespace Neptune.Web.Views.FieldVisit
 
                 //var resizedImageBytes = ImageHelper.ImageToByteArrayAndCompress(resizedImage);
 
-                //var fileResource = FileResource.CreateNewResizedImageFileResource(Photo, resizedImageBytes, currentPerson);
+                var fileResource = await fileResourceService.CreateNewResizedImageFileResource(Photo, FileResource.ConvertHttpPostedFileToByteArray(Photo), currentPerson);
+                var newPhoto = new TreatmentBMPAssessmentPhoto { FileResource = fileResource, TreatmentBMPAssessment = treatmentBMPAssessment, Caption = Caption };
+                await dbContext.TreatmentBMPAssessmentPhotos.AddAsync(newPhoto);
 
-                //new TreatmentBMPAssessmentPhoto{FileResource = fileResource, TreatmentBMPAssessment = treatmentBMPAssessment, Caption = Caption};
             }
         }
     }

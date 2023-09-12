@@ -697,23 +697,25 @@ public class AzureBlobStorageService
             {".zaz", "application/vnd.zzazz.deck+xml"}
         };
 
-    public AzureBlobStorageService(IOptions<WebConfiguration> hippocampConfiguration)
+    public AzureBlobStorageService(IOptions<WebConfiguration> configuration)
     {
-        _webConfiguration = hippocampConfiguration.Value;
+        _webConfiguration = configuration.Value;
         _fileResourceContainerClient = new BlobServiceClient(_webConfiguration.AzureBlobStorageConnectionString).GetBlobContainerClient("file-resource");
     }
 
-    public bool UploadFileResource(FileResource fileResource)
+    public async Task<bool> UploadFileResource(FileResource fileResource, byte[] fileBytes)
     {
-        using MemoryStream ms =  new MemoryStream(fileResource.FileResourceData);
+        using MemoryStream ms =  new MemoryStream(fileBytes);
 
         var blobClient = _fileResourceContainerClient.GetBlobClient(fileResource.FileResourceGUID.ToString());
-        if (!blobClient.Exists())
+        var exists =  await blobClient.ExistsAsync();
+
+        if (!exists.Value)
         {
-            blobClient.Upload(ms, new BlobHttpHeaders { ContentType = GetFileResourceContentType(fileResource) });
+            await blobClient.UploadAsync(ms, new BlobHttpHeaders { ContentType = GetFileResourceContentType(fileResource) });
         }
 
-        return blobClient.Exists();
+        return await blobClient.ExistsAsync();
     }
 
     public async Task<BlobDownloadResult> DownloadFileResourceFromBlobStorage(FileResource fileResource)

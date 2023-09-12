@@ -21,7 +21,9 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http;
 using Neptune.Common.DesignByContract;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.EFModels.Entities
@@ -42,6 +44,7 @@ namespace Neptune.EFModels.Entities
 
         public string GetFileResourceDataLengthString()
         {
+            // todo: get the data length from blob storage
             return $"(~{(FileResourceData.Length / 1000):##,###} KB)";
         }
 
@@ -52,28 +55,20 @@ namespace Neptune.EFModels.Entities
 
         //public static string MaxFileSizeHumanReadable => $"{MaxUploadFileSizeInBytes / (1024 ^ 2):0.0} KB";
 
-        ///// <summary>
-        ///// Prepare the file bytes for going into the database
-        ///// </summary>
-        ///// <param name="httpPostedFileBase"></param>
-        ///// <returns></returns>
-        //public static byte[] ConvertHttpPostedFileToByteArray(HttpPostedFileBase httpPostedFileBase)
-        //{
-        //    byte[] fileResourceData;
-        //    using (var binaryReader = new BinaryReader(httpPostedFileBase.InputStream))
-        //    {
-        //        fileResourceData = binaryReader.ReadBytes(httpPostedFileBase.ContentLength);
-        //        binaryReader.Close();
-        //    }
-        //    return fileResourceData;
-        //}
+        /// <summary>
+        /// Prepare the file bytes for going into blob storage
+        /// </summary>
+        /// <param name="formFile"></param>
+        /// <returns></returns>
+        public static byte[] ConvertHttpPostedFileToByteArray(IFormFile formFile)
+        {
+            using var binaryReader = new BinaryReader(formFile.OpenReadStream());
+            var fileResourceData = binaryReader.ReadBytes((int) formFile.Length);
+            binaryReader.Close();
+            return fileResourceData;
+        }
 
-        //public static FileResourceMimeType GetFileResourceMimeTypeForFile(HttpPostedFileBase file)
-        //{
-        //    var fileResourceMimeTypeForFile = FileResourceMimeType.All.SingleOrDefault(mt => mt.FileResourceMimeTypeContentTypeName == file.ContentType);
-        //    Check.RequireNotNull(fileResourceMimeTypeForFile, $"Unhandled MIME type: {file.ContentType}");
-        //    return fileResourceMimeTypeForFile;
-        //}
+        
 
         //public static FileResource CreateNewFromHttpPostedFileAndSave(HttpPostedFileBase httpPostedFileBase, Person currentPerson)
         //{
@@ -100,9 +95,11 @@ namespace Neptune.EFModels.Entities
         //    return fileResource;
         //}
 
-        //public static FileResource CreateNewResizedImageFileResource(HttpPostedFileBase httpPostedFileBase, byte[] resizedImageBytes, Person currentPerson)
+        // todo: remove after new FileResourceService is working
+        //public async Task<FileResource> CreateNewResizedImageFileResource(IFormFile formFile, byte[] resizedImageBytes,
+        //    Person currentPerson, NeptuneDbContext neptuneDbContext)
         //{
-        //    var fileName = httpPostedFileBase.FileName;
+        //    var fileName = formFile.FileName;
         //    if (string.IsNullOrWhiteSpace(fileName))
         //    {
         //        fileName = Guid.NewGuid().ToString() + ".jpg";
@@ -111,8 +108,11 @@ namespace Neptune.EFModels.Entities
         //    var originalFilenameInfo = new FileInfo(fileName);
         //    var baseFilenameWithoutExtension = originalFilenameInfo.Name.Remove(originalFilenameInfo.Name.Length - originalFilenameInfo.Extension.Length, originalFilenameInfo.Extension.Length);
         //    var fileResourceData = resizedImageBytes;
-        //    var fileResourceMimeTypeID = GetFileResourceMimeTypeForFile(httpPostedFileBase).FileResourceMimeTypeID;
-        //    var fileResource = new FileResource(fileResourceMimeTypeID, baseFilenameWithoutExtension, originalFilenameInfo.Extension, Guid.NewGuid(), fileResourceData, currentPerson.PersonID, DateTime.Now);
+        //    var fileResourceMimeTypeID = GetFileResourceMimeTypeForFile(formFile).FileResourceMimeTypeID;
+
+        //    var fileResource = FileResources.CreateNew(neptuneDbContext, fileResourceMimeTypeID,
+        //        baseFilenameWithoutExtension, originalFilenameInfo.Extension, fileResourceData, currentPerson);
+            
         //    return fileResource;
         //}
 
