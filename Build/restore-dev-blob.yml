@@ -1,0 +1,27 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+jobs:  
+  - job: RestoreDevBlobStorage
+    displayName: Restore Dev Blob Storage
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: '$(azureSubscription)'
+        addSpnToEnvironment: true
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $env:AZCOPY_SPA_CLIENT_SECRET=$env:servicePrincipalKey
+          azcopy login --service-principal --application-id $env:servicePrincipalId --tenant-id $env:tenantId
+          azcopy sync "https://$(storageAccountProdApplicationName).file.core.windows.net/file-resource/" "https://$(storageAccountDevApplicationName).file.core.windows.net/file-resource/" --recursive --from-to BlobBlob
+          $env:AZCOPY_SPA_CLIENT_SECRET=''
+          $env:servicePrincipalKey=''
+
