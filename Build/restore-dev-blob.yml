@@ -20,8 +20,8 @@ jobs:
         inlineScript: |
           $startDate = [DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")
           $expireDate = [DateTime]::UtcNow.AddHours(2).ToString("yyyy-MM-ddTHH:mm:ssZ")
-          $prodSasKey = az storage account generate-sas --account-name $(storageAccountProdApplicationName) --account-key $(storageAccountProdAccountKey) --expiry $expireDate --start $startDate --permissions rclw --resource-types sco --services b
-          $devSasKey = az storage account generate-sas --account-name $(storageAccountDevApplicationName) --account-key $(storageAccountDevAccountKey) --expiry $expireDate --start $startDate --permissions rclw --resource-types sco --services b
+          $prodSasKey = az storage account generate-sas --account-name $(storageAccountProdApplicationName) --account-key $(storageAccountProdAccountKey) --expiry $expireDate --start $startDate --permissions acdfilprtuwxy --resource-types sco --services bfqt
+          $devSasKey = az storage account generate-sas --account-name $(storageAccountDevApplicationName) --account-key $(storageAccountDevAccountKey) --expiry $expireDate --start $startDate --permissions acdfilprtuwxy --resource-types sco --services bfqt
           azcopy sync ("https://$(storageAccountProdApplicationName).file.core.windows.net/file-resource/?" + $prodSasKey) ("https://$(storageAccountDevApplicationName).file.core.windows.net/file-resource/?" + $devSasKey) --recursive --from-to BlobBlob
           
 
