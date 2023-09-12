@@ -132,7 +132,7 @@ stages:
       inputs:
         command: 'plan'
         environmentServiceName: '$(azureSubscription)'
-        commandOptions: '-var "appInsightsName=$(appInsightsName)" -var "keyVaultName=$(keyVaultName)" -var "storageAccountName=$(storageAccountApplicationName)" -var "resourceGroupName=$(resourceGroupName)" -var "dbServerName=$(dbServerName)" -var "aspNetEnvironment=$(aspNetEnvironment)" -var "databaseName=$(databaseName)" -var "databaseEdition=$(databaseEdition)" -var "databaseTier=$(databaseTier)" -var "sqlPassword=$(sqlPassword)" -var "sqlUsername=$(sqlUsername)" -var "azureClusterResourceGroup=$(azureClusterResourceGroup)" -var "sqlApiUsername=$(sqlApiUsername)" -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" -var "datadogApiKey=$(datadogApiKey)" -var "datadogAppKey=$(datadogAppKey)" -var "domainWebMvc=$(domainWebMvc)" -var "domainGeoserver=$(domainGeoserver)" -var "environment=$(environment)" -var "devStorageAccountName=$(devStorageAccountName)"'
+        commandOptions: '-var "appInsightsName=$(appInsightsName)" -var "keyVaultName=$(keyVaultName)" -var "storageAccountName=$(storageAccountApplicationName)" -var "resourceGroupName=$(resourceGroupName)" -var "dbServerName=$(dbServerName)" -var "aspNetEnvironment=$(aspNetEnvironment)" -var "databaseName=$(databaseName)" -var "databaseEdition=$(databaseEdition)" -var "databaseTier=$(databaseTier)" -var "sqlPassword=$(sqlPassword)" -var "sqlUsername=$(sqlUsername)" -var "azureClusterResourceGroup=$(azureClusterResourceGroup)" -var "sqlApiUsername=$(sqlApiUsername)" -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" -var "datadogApiKey=$(datadogApiKey)" -var "datadogAppKey=$(datadogAppKey)" -var "domainWebMvc=$(domainWebMvc)" -var "domainGeoserver=$(domainGeoserver)" -var "environment=$(environment)" -var "storageAccountDevApplicationName=$(storageAccountDevApplicationName)"'
         allowTelemetryCollection: true
         publishPlanResults: 'tfplan'
         
@@ -230,7 +230,7 @@ stages:
               command: 'apply'
               workingDirectory: '$(Pipeline.Workspace)/terraform'
               environmentServiceName: '$(azureSubscription)'
-              commandOptions: '-var "appInsightsName=$(appInsightsName)" -var "keyVaultName=$(keyVaultName)" -var "storageAccountName=$(storageAccountApplicationName)" -var "resourceGroupName=$(resourceGroupName)" -var "dbServerName=$(dbServerName)" -var "aspNetEnvironment=$(aspNetEnvironment)" -var "databaseName=$(databaseName)" -var "databaseEdition=$(databaseEdition)" -var "databaseTier=$(databaseTier)" -var "sqlPassword=$(sqlPassword)" -var "sqlUsername=$(sqlUsername)" -var "azureClusterResourceGroup=$(azureClusterResourceGroup)"  -var "sqlApiUsername=$(sqlApiUsername)" -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" -var "datadogApiKey=$(datadogApiKey)" -var "datadogAppKey=$(datadogAppKey)" -var "domainWebMvc=$(domainWebMvc)" -var "domainGeoserver=$(domainGeoserver)" -var "environment=$(environment)" -var "devStorageAccountName=$(devStorageAccountName)"'
+              commandOptions: '-var "appInsightsName=$(appInsightsName)" -var "keyVaultName=$(keyVaultName)" -var "storageAccountName=$(storageAccountApplicationName)" -var "resourceGroupName=$(resourceGroupName)" -var "dbServerName=$(dbServerName)" -var "aspNetEnvironment=$(aspNetEnvironment)" -var "databaseName=$(databaseName)" -var "databaseEdition=$(databaseEdition)" -var "databaseTier=$(databaseTier)" -var "sqlPassword=$(sqlPassword)" -var "sqlUsername=$(sqlUsername)" -var "azureClusterResourceGroup=$(azureClusterResourceGroup)"  -var "sqlApiUsername=$(sqlApiUsername)" -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" -var "datadogApiKey=$(datadogApiKey)" -var "datadogAppKey=$(datadogAppKey)" -var "domainWebMvc=$(domainWebMvc)" -var "domainGeoserver=$(domainGeoserver)" -var "environment=$(environment)" -var "storageAccountDevApplicationName=$(storageAccountDevApplicationName)"'
               allowTelemetryCollection: true
 
           - task: TerraformCLI@0
@@ -269,15 +269,15 @@ stages:
       - task: AzureCLI@2
         inputs:
           azureSubscription: '$(azureSubscription)'
-          addSpnToEnvironment: true
           scriptType: 'ps'
           scriptLocation: 'inlineScript'
           inlineScript: |
-            $env:AZCOPY_SPA_CLIENT_SECRET=$env:servicePrincipalKey
-            azcopy login --service-principal --application-id $env:servicePrincipalId --tenant-id $env:tenantId
-            azcopy sync "https://$(storageAccountProdApplicationName).file.core.windows.net/file-resource/" "https://$(storageAccountApplicationName).file.core.windows.net/file-resource/" --recursive --from-to BlobBlob
-            $env:AZCOPY_SPA_CLIENT_SECRET=''
-            $env:servicePrincipalKey=''
+            $startDate = [DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")
+            $expireDate = [DateTime]::UtcNow.AddHours(2).ToString("yyyy-MM-ddTHH:mm:ssZ")
+            $prodSasKey = az storage account generate-sas --account-name $(storageAccountProdApplicationName) --account-key $(storageAccountProdAccountKey) --expiry $expireDate --start $startDate --permissions acdfilprtuwxy --resource-types sco --services bfqt
+            $devSasKey = az storage account generate-sas --account-name $(storageAccountDevApplicationName) --account-key $(storageAccountDevAccountKey) --expiry $expireDate --start $startDate --permissions acdfilprtuwxy --resource-types sco --services bfqt
+            azcopy sync ("https://$(storageAccountProdApplicationName).blob.core.windows.net/file-resource/?" + $prodSasKey) ("https://$(storageAccountDevApplicationName).blob.core.windows.net/file-resource/?" + $devSasKey) --recursive --from-to BlobBlob
+            
 
 - stage: DeployDB
   displayName: Deploy Database 

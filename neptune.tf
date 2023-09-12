@@ -11,7 +11,7 @@ variable "storageAccountName" {
   type = string
 }
 
-variable "devStorageAccountName" {
+variable "storageAccountDevApplicationName" {
   description = "The name for a dev storage account. If this variable isn't set it won't create this resource."
   type        = string
   default     = ""
@@ -149,8 +149,8 @@ resource "azurerm_resource_group" "web" {
 
 #dev blob storage
 resource "azurerm_storage_account" "dev" {
-  count                        = var.devStorageAccountName != "" ? 1 : 0
-	name                         = var.devStorageAccountName
+  count                        = var.storageAccountDevApplicationName != "" ? 1 : 0
+	name                         = var.storageAccountDevApplicationName
 	resource_group_name          = azurerm_resource_group.web.name
 	location                     = azurerm_resource_group.web.location
   account_replication_type	 	 = "LRS"
