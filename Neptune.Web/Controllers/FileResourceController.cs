@@ -124,15 +124,10 @@ namespace Neptune.Web.Controllers
                         case FileResourceMimeTypeEnum.PJPEG:
 
                             var fileResourceBlobDownloadResult = await _azureBlobStorageService.DownloadFileResourceFromBlobStorage(fileResource);
-
-                            using (var scaledImage = ImageHelper.ScaleImage(fileResourceBlobDownloadResult.Content.ToArray(), maxWidth, maxHeight))
-                            {
-                                using (var ms = new MemoryStream())
-                                {
-                                    scaledImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                                    return File(ms.ToArray(), FileResourceMimeType.PNG.FileResourceMimeTypeName);
-                                }
-                            }
+                            var scaledImage =
+                                await ImageHelper.ScaleImage(fileResourceBlobDownloadResult.Content.ToArray(), maxWidth,
+                                    maxHeight);
+                            return File(scaledImage.ToArray(), "image/png");
                         default:
                             throw new ArgumentOutOfRangeException();
                     }

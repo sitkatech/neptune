@@ -11,9 +11,9 @@ namespace Neptune.Web.Views.Shared.ManagePhotosWithPreview
 
         [DisplayName("Upload a photo")]
         [SitkaFileExtensions("jpg|jpeg|gif|png")]
-        public virtual IFormFile Photo { get; set; }
+        public virtual IFormFile? Photo { get; set; }
 
         [DisplayName("Caption")]
-        public virtual string Caption { get; set; }
+        public virtual string? Caption { get; set; }
     }
 }
