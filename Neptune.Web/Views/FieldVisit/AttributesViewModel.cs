@@ -19,13 +19,15 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.ComponentModel.DataAnnotations;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
 using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class AttributesViewModel : EditAttributesViewModel
+    public class AttributesViewModel : EditAttributesViewModel, IValidatableObject
     {
         /// <summary>
         /// Needed by ModelBinder
@@ -82,6 +84,12 @@ namespace Neptune.Web.Views.FieldVisit
                 (x, y) => x.CustomAttributeValueID == y.CustomAttributeValueID
                           && x.CustomAttributeID == y.CustomAttributeID,
                 (x, y) => { x.AttributeValue = y.AttributeValue; });
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var dbContext = validationContext.GetService<NeptuneDbContext>();
+            return CustomAttributeTypeModelExtensions.CheckCustomAttributeTypeExpectations(CustomAttributes, dbContext);
         }
     }
 }

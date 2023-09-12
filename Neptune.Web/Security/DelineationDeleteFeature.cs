@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Neptune.EFModels.Entities;
-using Neptune.Web.Models;
+﻿using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Security
 {
@@ -17,22 +15,27 @@ namespace Neptune.Web.Security
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
         }
 
-        public void DemandPermission(Person person, Delineation contextModelObject)
+        public PermissionCheckResult HasPermission(Person person, Delineation contextModelObject, NeptuneDbContext dbContext)
         {
-            _lakeTahoeInfoFeatureWithContextImpl.DemandPermission(person, contextModelObject);
+            var treatmentBMP = TreatmentBMPs.GetByIDForFeatureContextCheck(dbContext, contextModelObject.TreatmentBMPID);
+            return HasPermission(person, treatmentBMP);
         }
 
-        public PermissionCheckResult HasPermission(Person person, Delineation contextModelObject)
+        public PermissionCheckResult HasPermission(Person person, TreatmentBMP treatmentBMP)
         {
-            var canManageStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(contextModelObject.TreatmentBMP.StormwaterJurisdictionID);
+            var organizationDisplayName = treatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName();
+            var canManageStormwaterJurisdiction =
+                person.IsAssignedToStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
             if (!canManageStormwaterJurisdiction)
             {
-                return new PermissionCheckResult($"You aren't assigned to manage Treatment BMPs for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult(
+                    $"You aren't assigned to manage Treatment BMPs for Jurisdiction {organizationDisplayName}");
             }
 
             if (!(person.IsAdministrator() || person.Role == Role.JurisdictionManager))
             {
-                return new PermissionCheckResult($"You do not have permission to delete Treatment BMP delineation for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult(
+                    $"You do not have permission to delete Treatment BMP delineation for Jurisdiction {organizationDisplayName}");
             }
 
             return new PermissionCheckResult();

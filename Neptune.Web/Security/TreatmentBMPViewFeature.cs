@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Neptune.EFModels.Entities;
-using Neptune.Web.Models;
+﻿using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Security
 {
@@ -16,30 +14,35 @@ namespace Neptune.Web.Security
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
         }
 
-        public void DemandPermission(Person person, TreatmentBMP contextModelObject)
+        public PermissionCheckResult HasPermission(Person person, TreatmentBMP contextModelObject,
+            NeptuneDbContext dbContext)
         {
-            _lakeTahoeInfoFeatureWithContextImpl.DemandPermission(person, contextModelObject);
+            var treatmentBMP = TreatmentBMPs.GetByIDForFeatureContextCheck(dbContext, contextModelObject.TreatmentBMPID);
+            return HasPermission(person, treatmentBMP);
         }
 
-        public PermissionCheckResult HasPermission(Person person, TreatmentBMP contextModelObject)
+        public PermissionCheckResult HasPermission(Person person, TreatmentBMP treatmentBMP)
         {
+            var organizationDisplayName = treatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName();
             if (person.IsAnonymousOrUnassigned() &&
-                contextModelObject.StormwaterJurisdiction.StormwaterJurisdictionPublicBMPVisibilityTypeID ==
-                (int) StormwaterJurisdictionPublicBMPVisibilityTypeEnum.None)
+                treatmentBMP.StormwaterJurisdiction.StormwaterJurisdictionPublicBMPVisibilityTypeID ==
+                (int)StormwaterJurisdictionPublicBMPVisibilityTypeEnum.None)
             {
-                return new PermissionCheckResult($"You don't have permission to view BMPs for Jurisdiction {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult(
+                    $"You don't have permission to view BMPs for Jurisdiction {organizationDisplayName}");
             }
 
             // verified BMPs are available for unassigned/anonymous users and therefore all users
-            if (contextModelObject.InventoryIsVerified)
+            if (treatmentBMP.InventoryIsVerified)
             {
                 return new PermissionCheckResult();
             }
 
-            var isAssignedToTreatmentBMP = person.IsAssignedToStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID);
+            var isAssignedToTreatmentBMP = person.IsAssignedToStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
             if (!isAssignedToTreatmentBMP)
             {
-                return new PermissionCheckResult($"You don't have permission to view BMPs for Jurisdiction {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult(
+                    $"You don't have permission to view BMPs for Jurisdiction {organizationDisplayName}");
             }
 
             return new PermissionCheckResult();

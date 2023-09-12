@@ -34,13 +34,13 @@ namespace Neptune.Web.Views.FieldVisit
         public IEnumerable<SelectListItem> AllFieldVisitTypes { get; }
         public DateTime? InProgressVisitDate { get; }
 
-        public NewFieldVisitViewData(EFModels.Entities.TreatmentBMP treatmentBMP)
+        public NewFieldVisitViewData(EFModels.Entities.FieldVisit fieldVisit)
         {
-            FieldVisit = treatmentBMP.GetInProgressFieldVisit();
+            FieldVisit = fieldVisit;
 
-            InProgressFieldVisitExists = FieldVisit != null;
+            InProgressFieldVisitExists = fieldVisit != null;
 
-            InProgressVisitDate = FieldVisit?.VisitDate;
+            InProgressVisitDate = fieldVisit?.VisitDate;
 
             AllFieldVisitTypes = FieldVisitType.All.ToSelectListWithDisabledEmptyFirstRow(
                 x => x.FieldVisitTypeID.ToString(CultureInfo.InvariantCulture), x => x.FieldVisitTypeDisplayName,

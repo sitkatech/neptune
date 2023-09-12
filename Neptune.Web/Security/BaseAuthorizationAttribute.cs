@@ -70,20 +70,5 @@ namespace Neptune.Web.Security
                     //|| !_grantedRoles.Any()); // allowing an empty list lets us implement LoggedInUnclassifiedFeature easily
                 );
         }
-
-
-
-        //public override void OnAuthorization(AuthorizationFilterContext context)
-        //{
-        //    var allowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<AnonymousUnclassifiedFeature>().Any();
-        //    if (allowAnonymous)
-        //        return;
-
-        //    var neptuneBaseFeatureAttribute = context.ActionDescriptor.EndpointMetadata.OfType<NeptuneBaseFeature>().SingleOrDefault();
-        //    if (neptuneBaseFeatureAttribute != null && neptuneBaseFeatureAttribute.GrantedRoles.Any())
-        //    {
-        //        base.OnAuthorization(context);
-        //    }
-        //}
     }
 }

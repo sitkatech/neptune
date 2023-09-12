@@ -53,25 +53,24 @@ namespace Neptune.Web.Views.FieldVisit
 
             WrapupUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.VisitSummary(fieldVisit));
 
-
             MaintenanceRecord = fieldVisit.MaintenanceRecord;
-            InitialAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial);
-            PostMaintenanceAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance);
-            MaintenanceRecordDeleteUrl = SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(fieldVisit.MaintenanceRecord));
-            InitialAssessmentDeleteUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(InitialAssessment));
-            PostMaintenanceAssessmentDeleteUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(PostMaintenanceAssessment));
-
-
+            MaintenanceRecordDeleteUrl = fieldVisit.MaintenanceRecord == null ? string.Empty : SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(fieldVisit.MaintenanceRecord));
             UserCanDeleteMaintenanceRecord = MaintenanceRecord != null &&
                                              new MaintenanceRecordManageFeature()
-                                                 .HasPermission(CurrentPerson, MaintenanceRecord)
+                                                 .HasPermission(CurrentPerson, MaintenanceRecord.TreatmentBMP)
                                                  .HasPermission;
+
+            InitialAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial);
+            InitialAssessmentDeleteUrl = InitialAssessment == null ? string.Empty : SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(InitialAssessment));
+
+            PostMaintenanceAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance);
+            PostMaintenanceAssessmentDeleteUrl = PostMaintenanceAssessment == null ? string.Empty : SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(PostMaintenanceAssessment));
         }
 
         public bool UserCanDeleteAssessment(EFModels.Entities.TreatmentBMPAssessment assessment)
         {
             return assessment != null &&
-                   new TreatmentBMPAssessmentManageFeature().HasPermission(CurrentPerson, assessment).HasPermission;
+                   new TreatmentBMPAssessmentManageFeature().HasPermission(CurrentPerson, assessment.TreatmentBMP).HasPermission;
         }
     }
 }

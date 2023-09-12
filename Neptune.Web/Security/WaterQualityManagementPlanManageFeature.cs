@@ -14,6 +14,14 @@ namespace Neptune.Web.Security
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
         }
 
+        public PermissionCheckResult HasPermission(Person person, WaterQualityManagementPlan contextModelObject,
+            NeptuneDbContext dbContext)
+        {
+            var waterQualityManagementPlan = WaterQualityManagementPlans.GetByIDForFeatureContextCheck(dbContext, contextModelObject.WaterQualityManagementPlanID);
+
+            return HasPermission(person, waterQualityManagementPlan);
+        }
+
         public PermissionCheckResult HasPermission(Person person, WaterQualityManagementPlan waterQualityManagementPlan)
         {
             if (!HasPermissionByPerson(person))
@@ -26,12 +34,8 @@ namespace Neptune.Web.Security
                 return new PermissionCheckResult();
             }
 
-            return new PermissionCheckResult($"Person does not belong to the {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()}'s Jurisdiction.");
-        }
-
-        public void DemandPermission(Person person, WaterQualityManagementPlan contextModelObject)
-        {
-            _lakeTahoeInfoFeatureWithContextImpl.DemandPermission(person, contextModelObject);
+            return new PermissionCheckResult(
+                $"Person does not belong to the {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()}'s Jurisdiction.");
         }
     }
 }

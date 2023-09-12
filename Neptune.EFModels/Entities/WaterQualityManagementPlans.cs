@@ -48,6 +48,16 @@ public static class WaterQualityManagementPlans
         return GetByID(dbContext, waterQualityManagementPlanPrimaryKey.PrimaryKeyValue);
     }
 
+    public static WaterQualityManagementPlan GetByIDForFeatureContextCheck(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
+    {
+        var waterQualityManagementPlan = dbContext.WaterQualityManagementPlans
+            .Include(x => x.StormwaterJurisdiction)
+            .ThenInclude(x => x.Organization).AsNoTracking()
+            .SingleOrDefault(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID);
+        Check.RequireNotNull(waterQualityManagementPlan, $"WaterQualityManagementPlan with ID {waterQualityManagementPlanID} not found!");
+        return waterQualityManagementPlan;
+    }
+
     public static List<WaterQualityManagementPlan> ListViewableByPerson(NeptuneDbContext dbContext, Person person)
     {
         var stormwaterJurisdictionsPersonCanViewWithContext = StormwaterJurisdictions.ListViewableByPerson(dbContext, person);

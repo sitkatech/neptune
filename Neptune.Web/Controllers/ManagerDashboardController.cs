@@ -56,7 +56,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<vFieldVisitDetailed> AllFieldVisitsGridJsonData([FromRoute] string gridName)
         {
             var gridSpec = new ProvisionalFieldVisitGridSpec(CurrentPerson, gridName, _linkGenerator);
-            var fieldVisits = FieldVisits.GetProvisionalFieldVisits(_dbContext, CurrentPerson).OrderBy(x => x.TreatmentBMPName).ThenBy(x => x.VisitDate).ToList();
+            var fieldVisits = vFieldVisitDetaileds.GetProvisionalFieldVisits(_dbContext, CurrentPerson).OrderBy(x => x.TreatmentBMPName).ThenBy(x => x.VisitDate).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vFieldVisitDetailed>(fieldVisits, gridSpec);
             return gridJsonNetJObjectResult;
         }

@@ -44,6 +44,7 @@ namespace Neptune.Web.Views.FieldVisit
             var isAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
             ObjectNameSingular = "Field Visit";
             ObjectNamePlural = "Field Visits";
+            
             if (!isAnonymousOrUnassigned)
             {
                 Add(string.Empty,

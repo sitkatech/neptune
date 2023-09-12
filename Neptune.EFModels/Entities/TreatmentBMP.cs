@@ -46,14 +46,6 @@ namespace Neptune.EFModels.Entities
             return TreatmentBMPName;
         }
 
-        public FieldVisit GetInProgressFieldVisit()
-        {
-            return new FieldVisit();
-            // todo:
-            //return FieldVisits.SingleOrDefault(x =>
-            //    x.FieldVisitStatusID == FieldVisitStatus.InProgress.FieldVisitStatusID);
-        }
-
         public bool IsBenchmarkAndThresholdsComplete()
         {
             var observationTypesIDs = TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes

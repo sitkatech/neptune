@@ -22,7 +22,7 @@ namespace Neptune.Web.Views.Shared
         public ViewPageContentViewData(LinkGenerator linkGenerator, EFModels.Entities.NeptunePage neptunePage, Person currentPerson, int? editorHeight)
         {
             NeptunePage = neptunePage;
-            ShowEditButton = new NeptunePageManageFeature().HasPermission(currentPerson, neptunePage).HasPermission;
+            ShowEditButton = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
             var htmlContent = new HtmlString(neptunePage.NeptunePageContent);
             HtmlContent = htmlContent;
             EditViewData = new EditViewData(linkGenerator, TinyMCEExtension.TinyMCEToolbarStyle.MinimalWithImages, neptunePage, editorHeight);

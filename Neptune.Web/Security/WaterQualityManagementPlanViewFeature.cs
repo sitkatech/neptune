@@ -13,12 +13,8 @@ namespace Neptune.Web.Security
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
         }
 
-        public void DemandPermission(Person person, WaterQualityManagementPlan contextModelObject)
-        {
-            _lakeTahoeInfoFeatureWithContextImpl.DemandPermission(person, contextModelObject);
-        }
-
-        public PermissionCheckResult HasPermission(Person person, WaterQualityManagementPlan contextModelObject)
+        public PermissionCheckResult HasPermission(Person person, WaterQualityManagementPlan contextModelObject,
+            NeptuneDbContext dbContext)
         {
             if (person.IsAnonymousOrUnassigned() &&
                 contextModelObject.StormwaterJurisdiction.StormwaterJurisdictionPublicWQMPVisibilityTypeID ==

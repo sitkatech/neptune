@@ -43,16 +43,16 @@ namespace Neptune.Web.Views.FieldVisit
             InitialAssessment = FieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial);
             UserCanDeleteInitialAssessment = InitialAssessment != null &&
                                              new TreatmentBMPAssessmentManageFeature()
-                                                 .HasPermission(currentPerson, InitialAssessment)
+                                                 .HasPermission(currentPerson, InitialAssessment.TreatmentBMP)
                                                  .HasPermission;
             PostMaintenanceAssessment = FieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance);
             UserCanDeletePostMaintenanceAssessment = PostMaintenanceAssessment != null &&
                                                      new TreatmentBMPAssessmentManageFeature()
-                                                         .HasPermission(currentPerson, PostMaintenanceAssessment)
+                                                         .HasPermission(currentPerson, PostMaintenanceAssessment.TreatmentBMP)
                                                          .HasPermission;
             UserCanDeleteMaintenanceRecord = MaintenanceRecord != null &&
                                              new MaintenanceRecordManageFeature()
-                                                 .HasPermission(currentPerson, MaintenanceRecord)
+                                                 .HasPermission(currentPerson, MaintenanceRecord.TreatmentBMP)
                                                  .HasPermission;
             SortedMaintenanceRecordObservations = MaintenanceRecord?.MaintenanceRecordObservations.ToList()
                 .OrderBy(x => x.TreatmentBMPTypeCustomAttributeType.SortOrder)

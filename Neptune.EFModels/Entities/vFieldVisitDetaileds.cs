@@ -27,7 +27,28 @@ namespace Neptune.EFModels.Entities
     {
         public static List<vFieldVisitDetailed> GetProvisionalFieldVisits(NeptuneDbContext dbContext, IEnumerable<int> stormwaterJurisdictionIDsPersonCanView)
         {
-            return dbContext.vFieldVisitDetaileds.AsNoTracking().Where(x => x.IsFieldVisitVerified == false).ToList().Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            return dbContext.vFieldVisitDetaileds.AsNoTracking()
+                .Where(x => x.IsFieldVisitVerified == false && stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).OrderByDescending(x => x.VisitDate).ToList();
+        }
+
+        public static List<vFieldVisitDetailed> GetProvisionalFieldVisits(NeptuneDbContext dbContext, Person currentPerson)
+        {
+            var stormwaterJurisdictionIDsPersonCanView = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, currentPerson.PersonID);
+            return GetProvisionalFieldVisits(dbContext, stormwaterJurisdictionIDsPersonCanView);
+        }
+
+        public static List<vFieldVisitDetailed> ListForStormwaterJurisdictionIDs(NeptuneDbContext dbContext, IEnumerable<int> stormwaterJurisdictionIDsPersonCanView)
+        {
+            return dbContext.vFieldVisitDetaileds.AsNoTracking()
+                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).OrderByDescending(x => x.VisitDate).ToList();
+        }
+
+
+        public static List<vFieldVisitDetailed> ListByTreatmentBMPID(NeptuneDbContext dbContext, int treatmentBMPID)
+        {
+            return dbContext.vFieldVisitDetaileds.AsNoTracking().Where(x => x.TreatmentBMPID == treatmentBMPID)
+                .OrderByDescending(x => x.VisitDate)
+                .ToList();
         }
     }
 }

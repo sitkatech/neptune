@@ -51,13 +51,13 @@ namespace Neptune.Web.Controllers
         {
             var gridSpec = new NeptunePageGridSpec(new NeptunePageViewListFeature().HasPermissionByPerson(CurrentPerson), _linkGenerator);
             var neptunePages = NeptunePages.List(_dbContext)
-                .Where(x => new NeptunePageManageFeature().HasPermission(CurrentPerson, x).HasPermission).ToList();
+                .Where(x => new NeptuneAdminFeature().HasPermissionByPerson(CurrentPerson)).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<NeptunePage>(neptunePages, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
         [HttpGet("{neptunePagePrimaryKey}")]
-        [NeptunePageManageFeature]
+        [NeptuneAdminFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("neptunePagePrimaryKey")]
         //        [CrossAreaRoute]
         public PartialViewResult EditInDialog([FromRoute] NeptunePagePrimaryKey neptunePagePrimaryKey)
@@ -68,7 +68,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost("{neptunePagePrimaryKey}")]
-        [NeptunePageManageFeature]
+        [NeptuneAdminFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("neptunePagePrimaryKey")]
         public async Task<IActionResult> EditInDialog([FromRoute] NeptunePagePrimaryKey neptunePagePrimaryKey, EditViewModel viewModel)
         {
@@ -90,7 +90,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet("{neptunePagePrimaryKey}")]
-        [NeptunePageManageFeature]
+        [NeptuneAdminFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("neptunePagePrimaryKey")]
 //        [CrossAreaRoute]
         public PartialViewResult Edit([FromRoute] NeptunePagePrimaryKey neptunePagePrimaryKey)
@@ -101,7 +101,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost("{neptunePagePrimaryKey}")]
-        [NeptunePageManageFeature]
+        [NeptuneAdminFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("neptunePagePrimaryKey")]
         public async Task<ActionResult> Edit([FromRoute] NeptunePagePrimaryKey neptunePagePrimaryKey, EditViewModel viewModel)
         {
@@ -119,7 +119,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet("{neptunePagePrimaryKey}")]
-        [NeptunePageManageFeature]
+        [NeptuneAdminFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("neptunePagePrimaryKey")]
         public PartialViewResult NeptunePageDetails([FromRoute] NeptunePagePrimaryKey neptunePagePrimaryKey)
         {

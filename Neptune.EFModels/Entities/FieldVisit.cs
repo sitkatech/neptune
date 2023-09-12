@@ -16,7 +16,7 @@ public partial class FieldVisit : IAuditableEntity
         return TreatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentType == TreatmentBMPAssessmentType.PostMaintenance);
     }
 
-    public void DeleteFull(NeptuneDbContext neptuneDbContext)
+    public void DeleteFull(NeptuneDbContext dbContext)
     {
         // todo:
         throw new NotImplementedException();

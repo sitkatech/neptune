@@ -16,12 +16,8 @@ namespace Neptune.Web.Security
             ActionFilter = _neptuneFeatureWithContextImpl;
         }
 
-        public void DemandPermission(Person person, TreatmentBMP contextModelObject)
-        {
-            _neptuneFeatureWithContextImpl.DemandPermission(person, contextModelObject);
-        }
-
-        public PermissionCheckResult HasPermission(Person person, TreatmentBMP contextModelObject)
+        public PermissionCheckResult HasPermission(Person person, TreatmentBMP contextModelObject,
+            NeptuneDbContext dbContext)
         {
             var isAssignedToTreatmentBMP = person.IsAssignedToStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID);
             if (!isAssignedToTreatmentBMP)

@@ -48,7 +48,7 @@ namespace Neptune.Web.Views.ManagerDashboard
             AddCheckBoxColumn();
             Add("EntityID", x => x.DelineationID, 0);
             Add(string.Empty,
-                x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), new DelineationDeleteFeature().HasPermission(currentPerson, x).HasPermission), 20,
+                x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), new DelineationDeleteFeature().HasPermission(currentPerson, x.TreatmentBMP).HasPermission), 20,
                 DhtmlxGridColumnFilterType.None);
             Add(string.Empty,x => x.GetDetailUrlForGrid(), 45, DhtmlxGridColumnFilterType.None);
             //Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html); todo

@@ -14,14 +14,10 @@ namespace Neptune.Web.Security
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
         }
 
-        public PermissionCheckResult HasPermission(Person person, WaterQualityManagementPlanDocument waterQualityManagementPlanDocument)
+        public PermissionCheckResult HasPermission(Person person,
+            WaterQualityManagementPlanDocument waterQualityManagementPlanDocument, NeptuneDbContext dbContext)
         {
             return new WaterQualityManagementPlanManageFeature().HasPermission(person, waterQualityManagementPlanDocument.WaterQualityManagementPlan);
-        }
-
-        public void DemandPermission(Person person, WaterQualityManagementPlanDocument contextModelObject)
-        {
-            _lakeTahoeInfoFeatureWithContextImpl.DemandPermission(person, contextModelObject);
         }
     }
 }

@@ -38,26 +38,29 @@ namespace Neptune.Web.Security
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
         }
 
-        public void DemandPermission(Person person, FieldVisit contextModelObject)
+        public PermissionCheckResult HasPermission(Person person, FieldVisit contextModelObject, NeptuneDbContext dbContext)
         {
-            _lakeTahoeInfoFeatureWithContextImpl.DemandPermission(person, contextModelObject);
+            var treatmentBMP = TreatmentBMPs.GetByIDForFeatureContextCheck(dbContext, contextModelObject.TreatmentBMPID);
+            return HasPermission(person, contextModelObject, treatmentBMP);
         }
 
-        public PermissionCheckResult HasPermission(Person person, FieldVisit contextModelObject)
+        public PermissionCheckResult HasPermission(Person person, FieldVisit contextModelObject, TreatmentBMP treatmentBMP)
         {
-            var isAssignedToStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(contextModelObject.TreatmentBMP.StormwaterJurisdictionID);
-
+            var isAssignedToStormwaterJurisdiction =
+                person.IsAssignedToStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
             if (!isAssignedToStormwaterJurisdiction)
             {
-                return new PermissionCheckResult($"You aren't assigned to edit Field Visit data for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult(
+                    $"You aren't assigned to edit Field Visit data for Jurisdiction {treatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
             if (contextModelObject.IsFieldVisitVerified)
             {
-                return new PermissionCheckResult("The Field Visit cannot be edited because it has already been verified by a Jurisdiction Manager.");
+                return new PermissionCheckResult(
+                    "The Field Visit cannot be edited because it has already been verified by a Jurisdiction Manager.");
             }
 
-            if( contextModelObject.FieldVisitStatus == FieldVisitStatus.Complete)
+            if (contextModelObject.FieldVisitStatus == FieldVisitStatus.Complete)
             {
                 return new PermissionCheckResult("The Field Visit cannot be edited because it has already been wrapped up.");
             }

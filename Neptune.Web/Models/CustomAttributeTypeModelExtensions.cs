@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Neptune.Common;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
-using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Models
 {
@@ -47,9 +45,8 @@ namespace Neptune.Web.Models
                 {
                     if (!string.IsNullOrWhiteSpace(value) && !customAttributeDataType.ValueIsCorrectDataType(value))
                     {
-                        errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<CustomAttributeUpsertDto>>(
-                            $"Entered value for {customAttributeType.CustomAttributeTypeName} does not match expected type ({customAttributeDataType.CustomAttributeDataTypeDisplayName}).",
-                            m => m.CustomAttributes));
+                        errors.Add(new ValidationResult(
+                            $"Entered value for {customAttributeType.CustomAttributeTypeName} does not match expected type ({customAttributeDataType.CustomAttributeDataTypeDisplayName})."));
                     }
                 }
             }

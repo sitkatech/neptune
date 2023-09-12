@@ -22,11 +22,12 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.ComponentModel.DataAnnotations;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
 using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class EditMaintenanceRecordViewModel : EditAttributesViewModel
+    public class EditMaintenanceRecordViewModel : EditAttributesViewModel, IValidatableObject
     {
         [StringLength(EFModels.Entities.MaintenanceRecord.FieldLengths.MaintenanceRecordDescription)]
         [Display(Name = "Description")]
@@ -43,8 +44,11 @@ namespace Neptune.Web.Views.FieldVisit
         {
         }
 
-        public EditMaintenanceRecordViewModel(EFModels.Entities.MaintenanceRecord maintenanceRecord) : base(maintenanceRecord.TreatmentBMP, CustomAttributeTypePurpose.Maintenance)
+        public EditMaintenanceRecordViewModel(EFModels.Entities.MaintenanceRecord maintenanceRecord)
         {
+            var treatmentBMP = maintenanceRecord.TreatmentBMP;
+            CustomAttributes = treatmentBMP.CustomAttributes.Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).Select(x => x.AsUpsertDto()).ToList();
+
             MaintenanceRecordTypeID = maintenanceRecord.MaintenanceRecordTypeID;
             MaintenanceRecordDescription = maintenanceRecord.MaintenanceRecordDescription;
             CustomAttributes = maintenanceRecord.MaintenanceRecordObservations.Select(x => x.AsUpsertDto()).ToList();
@@ -107,6 +111,12 @@ namespace Neptune.Web.Views.FieldVisit
                 (x, y) => x.MaintenanceRecordObservationValueID == y.MaintenanceRecordObservationValueID
                           && x.MaintenanceRecordObservationID == y.MaintenanceRecordObservationID,
                 (x, y) => { x.ObservationValue = y.ObservationValue; });
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var dbContext = validationContext.GetService<NeptuneDbContext>();
+            return CustomAttributeTypeModelExtensions.CheckCustomAttributeTypeExpectations(CustomAttributes, dbContext);
         }
     }
 }

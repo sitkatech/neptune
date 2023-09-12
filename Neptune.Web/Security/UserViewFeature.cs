@@ -35,11 +35,12 @@ namespace Neptune.Web.Security
             ActionFilter = _neptuneFeatureWithContextImpl;
         }
 
-        public void DemandPermission(Person person, Person contextModelObject)
-        {
-            _neptuneFeatureWithContextImpl.DemandPermission(person, contextModelObject);
-        }
 
+        public PermissionCheckResult HasPermission(Person person, Person contextModelObject,
+            NeptuneDbContext dbContext)
+        {
+            return HasPermission(person, contextModelObject);
+        }
 
         public PermissionCheckResult HasPermission(Person person, Person contextModelObject)
         {
@@ -47,15 +48,15 @@ namespace Neptune.Web.Security
             {
                 return new PermissionCheckResult("The Person whose details you are requesting to see doesn't exist.");
             }
+
             var userHasEditPermission = new UserEditFeature().HasPermissionByPerson(person);
             var userViewingOwnPage = person.PersonID == contextModelObject.PersonID;
 
-#pragma warning disable 612
             var userHasAppropriateRole = HasPermissionByPerson(person);
-#pragma warning restore 612
             if (!userHasAppropriateRole)
             {
-                return new PermissionCheckResult("You don't permissions to view user details. If you aren't logged in, do that and try again.");
+                return new PermissionCheckResult(
+                    "You don't permissions to view user details. If you aren't logged in, do that and try again.");
             }
 
             //Only Admin users should be able to see Sitka Admin users
@@ -70,13 +71,6 @@ namespace Neptune.Web.Security
             }
 
             return new PermissionCheckResult("You don\'t have permission to view this user.");
-        }
-
-        //This should only ever be called by HasPermission
-        [Obsolete]
-        public new bool HasPermissionByPerson(Person person)
-        {
-            return base.HasPermissionByPerson(person);
         }
     }
 }

@@ -14,11 +14,12 @@ namespace Neptune.Web.Security
             ActionFilter = _neptuneFeatureWithContextImpl;
         }
 
-        public void DemandPermission(Person person, Person contextModelObject)
-        {
-            _neptuneFeatureWithContextImpl.DemandPermission(person, contextModelObject);
-        }
 
+        public PermissionCheckResult HasPermission(Person person, Person contextModelObject,
+            NeptuneDbContext dbContext)
+        {
+            return HasPermission(person, contextModelObject);
+        }
 
         public PermissionCheckResult HasPermission(Person person, Person contextModelObject)
         {
@@ -43,6 +44,5 @@ namespace Neptune.Web.Security
 
             return new PermissionCheckResult();
         }
-
     }
 }

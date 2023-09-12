@@ -35,14 +35,16 @@ namespace Neptune.Web.Security
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
         }
 
-        public void DemandPermission(Person person, MaintenanceRecord contextModelObject)
+        public PermissionCheckResult HasPermission(Person person, MaintenanceRecord contextModelObject,
+            NeptuneDbContext dbContext)
         {
-            _lakeTahoeInfoFeatureWithContextImpl.DemandPermission(person, contextModelObject);
+            var treatmentBMP = TreatmentBMPs.GetByIDForFeatureContextCheck(dbContext, contextModelObject.TreatmentBMPID);
+            return HasPermission(person, treatmentBMP);
         }
 
-        public PermissionCheckResult HasPermission(Person person, MaintenanceRecord contextModelObject)
+        public PermissionCheckResult HasPermission(Person person, TreatmentBMP treatmentBMP)
         {
-            return new TreatmentBMPManageFeature().HasPermission(person, contextModelObject.TreatmentBMP);
+            return new TreatmentBMPManageFeature().HasPermission(person, treatmentBMP);
         }
     }
 }

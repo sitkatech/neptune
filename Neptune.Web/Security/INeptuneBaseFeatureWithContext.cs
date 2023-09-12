@@ -25,8 +25,7 @@ namespace Neptune.Web.Security
 {
     public interface INeptuneBaseFeatureWithContext<in T>
     {
-        PermissionCheckResult HasPermission(Person person, T contextModelObject);
-        void DemandPermission(Person person, T contextModelObject);
+        PermissionCheckResult HasPermission(Person person, T contextModelObject, NeptuneDbContext dbContext);
         string FeatureName { get; }
     }
 }

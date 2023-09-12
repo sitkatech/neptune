@@ -17,6 +17,7 @@ namespace Neptune.Web.Models
                 fieldVisit.IsFieldVisitVerified = false;
             }
         }
+
         public static void VerifyFieldVisit(this EFModels.Entities.FieldVisit fieldVisit, Person person)
         {
             fieldVisit.IsFieldVisitVerified = true;

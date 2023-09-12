@@ -2,7 +2,7 @@
 
 public partial class TreatmentBMPBenchmarkAndThreshold
 {
-    public void DeleteFull(NeptuneDbContext neptuneDbContext)
+    public void DeleteFull(NeptuneDbContext dbContext)
     {
         // todo:
         throw new NotImplementedException();

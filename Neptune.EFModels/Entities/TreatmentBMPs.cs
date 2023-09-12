@@ -41,7 +41,9 @@ namespace Neptune.EFModels.Entities
             return dbContext.TreatmentBMPs
                 .Include(x => x.TreatmentBMPType)
                 .Include(x => x.StormwaterJurisdiction)
-                .ThenInclude(x => x.Organization);
+                .ThenInclude(x => x.Organization)
+                .Include(x => x.OwnerOrganization)
+                ;
         }
 
         public static TreatmentBMP GetByIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPID)
@@ -79,6 +81,16 @@ namespace Neptune.EFModels.Entities
         {
             return dbContext.TreatmentBMPs.AsNoTracking().GroupBy(x => x.TreatmentBMPTypeID).Select(x => new { x.Key, Count = x.Count()})
                 .ToDictionary(x => x.Key, x => x.Count);
+        }
+
+        public static TreatmentBMP GetByIDForFeatureContextCheck(NeptuneDbContext dbContext, int treatmentBMPID)
+        {
+            var treatmentBMP = dbContext.TreatmentBMPs
+                .Include(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization).AsNoTracking()
+                .SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
+            Check.RequireNotNull(treatmentBMP, $"TreatmentBMP with ID {treatmentBMPID} not found!");
+            return treatmentBMP;
         }
 
         public static List<TreatmentBMP> ListByStormwaterJurisdictionID(NeptuneDbContext dbContext, int stormwaterJurisdictionID)

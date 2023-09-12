@@ -37,14 +37,14 @@ namespace Neptune.Web.Security
             _neptuneFeatureWithContext = neptuneFeatureWithContext;
         }
 
-        public PermissionCheckResult HasPermission(Person person, T contextModelObject)
+        public PermissionCheckResult HasPermission(Person person, T contextModelObject, NeptuneDbContext dbContext)
         {
-            return _neptuneFeatureWithContext.HasPermission(person, contextModelObject);
+            return _neptuneFeatureWithContext.HasPermission(person, contextModelObject, dbContext);
         }
 
-        public void DemandPermission(Person person, T contextModelObject)
+        public void DemandPermission(Person person, T contextModelObject, NeptuneDbContext dbContext)
         {
-            var permissionCheckResult = HasPermission(person, contextModelObject);
+            var permissionCheckResult = HasPermission(person, contextModelObject, dbContext);
             if (!permissionCheckResult.HasPermission)
             {
                 throw new SitkaRecordNotAuthorizedException(permissionCheckResult.PermissionDeniedMessage);
@@ -66,7 +66,7 @@ namespace Neptune.Web.Security
             }
 
             var person = UserContext.GetUserFromHttpContext(dbContext, filterContext.HttpContext);
-            DemandPermission(person, primaryKeyForObject.EntityObject);
+            DemandPermission(person, primaryKeyForObject.EntityObject, dbContext);
         }
 
         protected EntityPrimaryKey<T> GetPrimaryKeyForObject(ActionExecutingContext filterContext)
