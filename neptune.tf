@@ -11,6 +11,12 @@ variable "storageAccountName" {
   type = string
 }
 
+variable "devStorageAccountName" {
+  description = "The name for a dev storage account. If this variable isn't set it won't create this resource."
+  type        = string
+  default     = ""
+}
+
 variable "resourceGroupName" {
   type = string
 }
@@ -129,6 +135,8 @@ locals {
   tags = {
     "managed"     = "terraformed"
     "environment" = var.aspNetEnvironment
+    "application" = "Neptune"
+    "client"      = "OCPW"
   }
 }
 
@@ -139,6 +147,16 @@ resource "azurerm_resource_group" "web" {
   tags                         = local.tags
 }
 
+#dev blob storage
+resource "azurerm_storage_account" "dev" {
+  count                        = var.devStorageAccountName != "" ? 1 : 0
+	name                         = var.devStorageAccountName
+	resource_group_name          = azurerm_resource_group.web.name
+	location                     = azurerm_resource_group.web.location
+  account_replication_type	 	 = "LRS"
+	account_tier								 = "Standard"
+	tags                         = local.tags
+}
 
 #blob storage
 resource "azurerm_storage_account" "web" {
