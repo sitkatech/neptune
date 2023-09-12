@@ -19,8 +19,10 @@ jobs:
         scriptType: 'ps'
         scriptLocation: 'inlineScript'
         inlineScript: |
+          $env:AZCOPY_AUTO_LOGIN_TYPE=SPN
           $env:AZCOPY_SPA_CLIENT_SECRET=$env:servicePrincipalKey
-          azcopy login --service-principal --application-id $env:servicePrincipalId --tenant-id $env:tenantId
+          $env:AZCOPY_SPA_APPLICATION_ID=$env:servicePrincipalId
+          $env:AZCOPY_TENANT_ID=$env:tenantId
           azcopy sync "https://$(storageAccountProdApplicationName).file.core.windows.net/file-resource/" "https://$(storageAccountDevApplicationName).file.core.windows.net/file-resource/" --recursive --from-to BlobBlob
           $env:AZCOPY_SPA_CLIENT_SECRET=''
           $env:servicePrincipalKey=''
