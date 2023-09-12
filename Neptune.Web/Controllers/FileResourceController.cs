@@ -27,19 +27,27 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Options;
 using Neptune.Common;
 using Neptune.Web.Common;
+using Neptune.Web.Services;
 using Neptune.Web.Services.Filters;
 
 namespace Neptune.Web.Controllers
 {
     public class FileResourceController : NeptuneBaseController<FileResourceController>
     {
-        public FileResourceController(NeptuneDbContext dbContext, ILogger<FileResourceController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
+        private readonly AzureBlobStorageService _azureBlobStorageService;
+
+        public FileResourceController(NeptuneDbContext dbContext,
+            ILogger<FileResourceController> logger,
+            IOptions<WebConfiguration> webConfiguration,
+            LinkGenerator linkGenerator,
+            AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
+            _azureBlobStorageService = azureBlobStorageService;
         }
 
         //[CrossAreaRoute]
         [HttpGet("{fileResourceGuidAsString}")]
-        public IActionResult DisplayResource([FromRoute] string fileResourceGuidAsString)
+        public async Task<IActionResult> DisplayResource([FromRoute] string fileResourceGuidAsString)
         {
             var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out var fileResourceGuid);
             if (isStringAGuid)
@@ -47,7 +55,7 @@ namespace Neptune.Web.Controllers
                 var fileResource = _dbContext.FileResources.AsNoTracking().SingleOrDefault(x => x.FileResourceGUID == fileResourceGuid);
                 if (fileResource != null)
                 {
-                    return DisplayFile(fileResource.OriginalBaseFilename, fileResource.FileResourceData);
+                    return await DisplayFileResource(fileResource);
                 }
             }
             // Unhappy path - return an HTTP 404
@@ -57,50 +65,30 @@ namespace Neptune.Web.Controllers
             return new NotFoundResult();
         }
 
-        private IActionResult DisplayFile(string fileName, byte[] fileStream)
+        private async Task<IActionResult> DisplayFileResource(FileResource fileResource)
         {
             var contentDisposition = new System.Net.Mime.ContentDisposition
             {
-                FileName = fileName,
+                FileName = fileResource.OriginalBaseFilename,
                 Inline = false
             };
             Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
 
-            var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(fileName, out var contentType))
-            {
-                contentType = "application/octet-stream";
-            }
+            var blobDownloadResult =
+                await _azureBlobStorageService.DownloadBlobFromBlobStorage(fileResource.GetFileResourceGUIDAsString()
+                    .ToLower());
 
-            return File(fileStream, contentType);
-        }
-
-        private IActionResult DisplayFile(string fileName, Stream fileStream)
-        {
-            var contentDisposition = new System.Net.Mime.ContentDisposition
-            {
-                FileName = fileName,
-                Inline = false
-            };
-            Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
-
-            var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(fileName, out var contentType))
-            {
-                contentType = "application/octet-stream";
-            }
-
-            return File(fileStream, contentType);
+            return File(blobDownloadResult.Content.ToArray(), blobDownloadResult.Details.ContentType);
         }
 
         [HttpGet("{fileResourcePrimaryKey}")]
         [LoggedInUnclassifiedFeature]
         //[CrossAreaRoute]
         [ValidateEntityExistsAndPopulateParameterFilter("fileResourcePrimaryKey")]
-        public IActionResult DisplayResourceByID([FromRoute] FileResourcePrimaryKey fileResourcePrimaryKey)
+        public async Task<IActionResult> DisplayResourceByID([FromRoute] FileResourcePrimaryKey fileResourcePrimaryKey)
         {
             var fileResource = fileResourcePrimaryKey.EntityObject;
-            return DisplayFile(fileResource.OriginalBaseFilename, fileResource.FileResourceData);
+            return await DisplayFileResource(fileResource);
         }
 
         [HttpGet("{fileResourceGuidAsString}/{maxWidth}/{maxHeight}")]
