@@ -19,7 +19,8 @@ jobs:
         scriptType: 'ps'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          $env:AZCOPY_AUTO_LOGIN_TYPE=SPN
+          Write-Host "Current Directory: $env:servicePrincipalId"
+          $env:AZCOPY_AUTO_LOGIN_TYPE='SPN'
           $env:AZCOPY_SPA_CLIENT_SECRET=$env:servicePrincipalKey
           $env:AZCOPY_SPA_APPLICATION_ID=$env:servicePrincipalId
           $env:AZCOPY_TENANT_ID=$env:tenantId
