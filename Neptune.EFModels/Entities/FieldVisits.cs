@@ -14,6 +14,12 @@ public static class FieldVisits
             .ThenInclude(x => x.CustomAttributeType)
             .Include(x => x.MaintenanceRecord)
             .Include(x => x.TreatmentBMPAssessments)
+            .Include(x => x.TreatmentBMP)
+            .ThenInclude(x => x.CustomAttributes)
+            .ThenInclude(x => x.CustomAttributeValues)
+            .Include(x => x.TreatmentBMP)
+            .ThenInclude(x => x.CustomAttributes)
+            .ThenInclude(x => x.CustomAttributeType)
             ;
     }
 

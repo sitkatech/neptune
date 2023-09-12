@@ -19,11 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.ComponentModel.DataAnnotations;
 using Neptune.EFModels.Entities;
-using Neptune.Web.Common;
-using Neptune.Web.Common.Models;
-using Neptune.Web.Models;
 using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Views.FieldVisit
@@ -43,50 +39,48 @@ namespace Neptune.Web.Views.FieldVisit
             CustomAttributes = treatmentBMP.CustomAttributes.Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID != CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).Select(x => x.AsUpsertDto()).ToList();
         }
 
-        public void UpdateModel(EFModels.Entities.FieldVisit fieldVisit, Person currentPerson, NeptuneDbContext dbContext)
+        public async Task UpdateModel(EFModels.Entities.FieldVisit fieldVisit, Person currentPerson, NeptuneDbContext dbContext)
         {
             var treatmentBMP = fieldVisit.TreatmentBMP;
+            var existingCustomAttributes = treatmentBMP.CustomAttributes.ToList();
+            dbContext.RemoveRange(existingCustomAttributes.SelectMany(x => x.CustomAttributeValues));
+            await dbContext.SaveChangesAsync();
+
             var customAttributeUpsertDtos = CustomAttributes.Where(x =>
-                x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0);
-            var customAttributesToUpdate = new List<CustomAttribute>();
+                x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0).ToList();
             var customAttributeValuesToUpdate = new List<CustomAttributeValue>();
-            var newID = 0;
-            foreach (var x in customAttributeUpsertDtos)
+            foreach (var customAttributeUpsertDto in customAttributeUpsertDtos)
             {
-                var customAttribute = new CustomAttribute()
+                var customAttribute = treatmentBMP.CustomAttributes.SingleOrDefault(x =>
+                    x.TreatmentBMPID == treatmentBMP.TreatmentBMPID
+                    && x.TreatmentBMPTypeID == treatmentBMP.TreatmentBMPTypeID
+                    && x.CustomAttributeTypeID == customAttributeUpsertDto.CustomAttributeTypeID);
+                if (customAttribute == null)
                 {
-                    CustomAttributeID = newID--,
-                    TreatmentBMPID = treatmentBMP.TreatmentBMPID,
-                    TreatmentBMPTypeCustomAttributeTypeID = x.TreatmentBMPTypeCustomAttributeTypeID,
-                    TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
-                    CustomAttributeTypeID = x.CustomAttributeTypeID
-                };
-                customAttributesToUpdate.Add(customAttribute);
-                foreach (var value in x.CustomAttributeValues)
-                {
-                    var customAttributeValue = new CustomAttributeValue(){CustomAttributeValueID = newID--, CustomAttribute = customAttribute, AttributeValue = value};
-                    customAttributeValuesToUpdate.Add(customAttributeValue);
+                    customAttribute = new CustomAttribute()
+                    {
+                        TreatmentBMPID = treatmentBMP.TreatmentBMPID,
+                        TreatmentBMPTypeCustomAttributeTypeID =
+                            customAttributeUpsertDto.TreatmentBMPTypeCustomAttributeTypeID,
+                        TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
+                        CustomAttributeTypeID = customAttributeUpsertDto.CustomAttributeTypeID
+                    };
+                    dbContext.CustomAttributes.Add(customAttribute);
                 }
+
+                customAttributeValuesToUpdate.AddRange(customAttributeUpsertDto.CustomAttributeValues.Where(y => !string.IsNullOrWhiteSpace(y)).Select(value => new CustomAttributeValue { CustomAttribute = customAttribute, AttributeValue = value }));
             }
 
-            var customAttributesInDatabase = dbContext.CustomAttributes;
-            var customAttributeValuesInDatabase = dbContext.CustomAttributeValues;
-
-            var existingCustomAttributes = treatmentBMP.CustomAttributes.ToList();
-
-            var existingCustomAttributeValues =
-                existingCustomAttributes.SelectMany(x => x.CustomAttributeValues).ToList();
-
-            existingCustomAttributes.Merge(customAttributesToUpdate, customAttributesInDatabase,
-                (x, y) => x.TreatmentBMPID == y.TreatmentBMPID
-                          && x.TreatmentBMPTypeID == y.TreatmentBMPTypeID
-                          && x.CustomAttributeTypeID == y.CustomAttributeTypeID
-                          && x.CustomAttributeID == y.CustomAttributeID);
-
-            existingCustomAttributeValues.Merge(customAttributeValuesToUpdate, customAttributeValuesInDatabase,
-                (x, y) => x.CustomAttributeValueID == y.CustomAttributeValueID
-                          && x.CustomAttributeID == y.CustomAttributeID,
-                (x, y) => { x.AttributeValue = y.AttributeValue; });
+            foreach (var customAttribute in treatmentBMP.CustomAttributes)
+            {
+                var customAttributeUpsertDto = customAttributeUpsertDtos.SingleOrDefault(y =>
+                    customAttribute.TreatmentBMPTypeCustomAttributeTypeID == y.TreatmentBMPTypeCustomAttributeTypeID);
+                if (customAttributeUpsertDto == null)
+                {
+                    dbContext.Remove(customAttribute);
+                }
+            }
+            dbContext.AddRange(customAttributeValuesToUpdate);
         }
     }
 }
