@@ -22,12 +22,13 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.ComponentModel.DataAnnotations;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
+using Neptune.Web.Common.Models;
 using Neptune.Web.Models;
 using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class AttributesViewModel : EditAttributesViewModel, IValidatableObject
+    public class AttributesViewModel : EditAttributesViewModel
     {
         /// <summary>
         /// Needed by ModelBinder
@@ -49,10 +50,12 @@ namespace Neptune.Web.Views.FieldVisit
                 x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0);
             var customAttributesToUpdate = new List<CustomAttribute>();
             var customAttributeValuesToUpdate = new List<CustomAttributeValue>();
+            var newID = 0;
             foreach (var x in customAttributeUpsertDtos)
             {
                 var customAttribute = new CustomAttribute()
                 {
+                    CustomAttributeID = newID--,
                     TreatmentBMPID = treatmentBMP.TreatmentBMPID,
                     TreatmentBMPTypeCustomAttributeTypeID = x.TreatmentBMPTypeCustomAttributeTypeID,
                     TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
@@ -61,7 +64,7 @@ namespace Neptune.Web.Views.FieldVisit
                 customAttributesToUpdate.Add(customAttribute);
                 foreach (var value in x.CustomAttributeValues)
                 {
-                    var customAttributeValue = new CustomAttributeValue(){CustomAttribute = customAttribute, AttributeValue = value};
+                    var customAttributeValue = new CustomAttributeValue(){CustomAttributeValueID = newID--, CustomAttribute = customAttribute, AttributeValue = value};
                     customAttributeValuesToUpdate.Add(customAttributeValue);
                 }
             }
@@ -84,12 +87,6 @@ namespace Neptune.Web.Views.FieldVisit
                 (x, y) => x.CustomAttributeValueID == y.CustomAttributeValueID
                           && x.CustomAttributeID == y.CustomAttributeID,
                 (x, y) => { x.AttributeValue = y.AttributeValue; });
-        }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var dbContext = validationContext.GetService<NeptuneDbContext>();
-            return CustomAttributeTypeModelExtensions.CheckCustomAttributeTypeExpectations(CustomAttributes, dbContext);
         }
     }
 }

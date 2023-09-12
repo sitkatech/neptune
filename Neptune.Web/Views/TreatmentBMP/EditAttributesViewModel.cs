@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels.Entities;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {

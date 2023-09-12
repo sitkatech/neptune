@@ -20,14 +20,16 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
 using Neptune.Web.Views.FieldVisit;
 
 namespace Neptune.Web.Views.Shared.EditAttributes
 {
-    public class EditAttributesViewModel : FieldVisitViewModel
+    public class EditAttributesViewModel : FieldVisitViewModel, IValidatableObject
     {
         [DisplayName("Metadata")]
         public List<CustomAttributeUpsertDto> CustomAttributes { get; set; }
@@ -93,6 +95,12 @@ namespace Neptune.Web.Views.Shared.EditAttributes
                 (x, y) => x.CustomAttributeValueID == y.CustomAttributeValueID
                           && x.CustomAttributeID == y.CustomAttributeID,
                 (x, y) => { x.AttributeValue = y.AttributeValue; });
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var dbContext = validationContext.GetService<NeptuneDbContext>();
+            return CustomAttributeTypeModelExtensions.CheckCustomAttributeTypeExpectations(CustomAttributes, dbContext);
         }
     }
 }

@@ -22,12 +22,11 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.ComponentModel.DataAnnotations;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
 using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class EditMaintenanceRecordViewModel : EditAttributesViewModel, IValidatableObject
+    public class EditMaintenanceRecordViewModel : EditAttributesViewModel
     {
         [StringLength(EFModels.Entities.MaintenanceRecord.FieldLengths.MaintenanceRecordDescription)]
         [Display(Name = "Description")]
@@ -111,12 +110,6 @@ namespace Neptune.Web.Views.FieldVisit
                 (x, y) => x.MaintenanceRecordObservationValueID == y.MaintenanceRecordObservationValueID
                           && x.MaintenanceRecordObservationID == y.MaintenanceRecordObservationID,
                 (x, y) => { x.ObservationValue = y.ObservationValue; });
-        }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var dbContext = validationContext.GetService<NeptuneDbContext>();
-            return CustomAttributeTypeModelExtensions.CheckCustomAttributeTypeExpectations(CustomAttributes, dbContext);
         }
     }
 }

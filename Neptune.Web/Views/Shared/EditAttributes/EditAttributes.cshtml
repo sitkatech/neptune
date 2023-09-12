@@ -114,11 +114,11 @@
                                                             var option = treatmentBMPTypeCustomAttributeType.CustomAttributeType.GetOptionsSchemaAsListOfString()[j];
 
                                                             <input type="checkbox"
-                                                                   id="@string.Format("multiselect_{0}{1}", option, i)"
+                                                                   id="@($"multiselect_{option}{i}")"
                                                                    value="@option"
                                                                    name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues"
                                                                    checked="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null && currentMetadata.CustomAttributeValues.Any(value => value == option))">
-                                                            <label for="@string.Format("multiselect_{0}{1}", option, i)">@option</label>
+                                                            <label for="@($"multiselect_{option}{i}")">@option</label>
                                                             <br />
                                                         }
                                                     </div>
