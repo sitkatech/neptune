@@ -62,3 +62,6 @@ Source/Neptune.GeoServer/data_dir/logs/
 /Neptune.Tests/bin/Debug/net6.0
 /Neptune.Tests/obj/Debug/net6.0
 /Neptune.Tests/obj
+/Build/Tools/AzureFileRestore/bin/Debug/net6.0
+/Build/Tools/AzureFileRestore/obj/Debug/net6.0
+/Build/Tools/AzureFileRestore/obj

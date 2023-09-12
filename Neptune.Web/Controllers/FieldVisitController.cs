@@ -359,7 +359,14 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModel(fieldVisit, CurrentPerson, _dbContext);
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             fieldVisit.InventoryUpdated = true;
-            if (await FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Detail(fieldVisit))); }
+            if (await FinalizeVisitIfNecessary(viewModel, fieldVisit))
+            {
+                return RedirectToAction(
+                    new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Detail(fieldVisit)));
+            }
+
+            await _dbContext.SaveChangesAsync();
+
             SetMessageForDisplay("Successfully updated Treatment BMP Attributes.");
             return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(_linkGenerator, c =>
                 c.Attributes(fieldVisit)), new SitkaRoute<FieldVisitController>(_linkGenerator, c =>
