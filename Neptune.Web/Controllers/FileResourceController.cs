@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Azure.Storage.Blobs.Models;
 using Neptune.Web.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -74,9 +75,8 @@ namespace Neptune.Web.Controllers
             };
             Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
 
-            var blobDownloadResult =
-                await _azureBlobStorageService.DownloadBlobFromBlobStorage(fileResource.GetFileResourceGUIDAsString()
-                    .ToLower());
+            BlobDownloadResult blobDownloadResult =
+                await _azureBlobStorageService.DownloadFileResourceFromBlobStorage(fileResource);
 
             return File(blobDownloadResult.Content.ToArray(), blobDownloadResult.Details.ContentType);
         }
@@ -93,12 +93,13 @@ namespace Neptune.Web.Controllers
 
         [HttpGet("{fileResourceGuidAsString}/{maxWidth}/{maxHeight}")]
         //[CrossAreaRoute]
-        public ActionResult GetFileResourceResized([FromRoute] string fileResourceGuidAsString, [FromRoute] int maxWidth, [FromRoute] int maxHeight)
+        public async Task<IActionResult> GetFileResourceResized([FromRoute] string fileResourceGuidAsString, [FromRoute] int maxWidth, [FromRoute] int maxHeight)
         {
             var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out var fileResourceGuid);
             if (isStringAGuid)
             {
                 var fileResource = _dbContext.FileResources.AsNoTracking().SingleOrDefault(x => x.FileResourceGUID == fileResourceGuid);
+                
                 if (fileResource != null)
                 {
                     // Happy path - return the resource
@@ -121,7 +122,10 @@ namespace Neptune.Web.Controllers
                         case FileResourceMimeTypeEnum.GIF:
                         case FileResourceMimeTypeEnum.JPEG:
                         case FileResourceMimeTypeEnum.PJPEG:
-                            using (var scaledImage = ImageHelper.ScaleImage(fileResource.FileResourceData, maxWidth, maxHeight))
+
+                            var fileResourceBlobDownloadResult = await _azureBlobStorageService.DownloadFileResourceFromBlobStorage(fileResource);
+
+                            using (var scaledImage = ImageHelper.ScaleImage(fileResourceBlobDownloadResult.Content.ToArray(), maxWidth, maxHeight))
                             {
                                 using (var ms = new MemoryStream())
                                 {

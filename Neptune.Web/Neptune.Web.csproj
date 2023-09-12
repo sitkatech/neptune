@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
+    <Content Remove="runtimeconfig.template.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="runtimeconfig.template.json" />
     <None Include="bundleconfig.json" />
   </ItemGroup>
 
