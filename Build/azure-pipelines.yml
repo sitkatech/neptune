@@ -263,7 +263,7 @@ stages:
     - job: RestoreQABlobStorage
       displayName: Restore QA Blob Storage
       pool:
-        vmImage: ubuntu-latest
+        vmImage: 'windows-latest'
       steps:
 
       - task: AzureCLI@2
