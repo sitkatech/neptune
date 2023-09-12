@@ -54,15 +54,7 @@ namespace Neptune.Web.Views.FieldVisit
             // Create new photo if it exists
             if (Photo != null)
             {
-                //todo:
-                // for now, setting arbitrary-ish (800) max height and width that roughly corresponds with the largest rendered size on the detail page
-                //var resizedImage =
-                //    ImageHelper.ScaleImage(
-                //        FileResource.ConvertHttpPostedFileToByteArray(Photo), 800, 800);
-
-                //var resizedImageBytes = ImageHelper.ImageToByteArrayAndCompress(resizedImage);
-
-                var fileResource = await fileResourceService.CreateNewResizedImageFileResource(Photo, FileResource.ConvertHttpPostedFileToByteArray(Photo), currentPerson);
+                var fileResource = await fileResourceService.CreateNewFromIFormFile(Photo, FileResource.ConvertHttpPostedFileToByteArray(Photo), currentPerson);
                 var newPhoto = new TreatmentBMPAssessmentPhoto { FileResource = fileResource, TreatmentBMPAssessment = treatmentBMPAssessment, Caption = Caption };
                 await dbContext.TreatmentBMPAssessmentPhotos.AddAsync(newPhoto);
 

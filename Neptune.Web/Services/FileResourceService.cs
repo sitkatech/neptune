@@ -43,18 +43,17 @@ public class FileResourceService
         throw new Exception($"New file resource was not uploaded to blob storage successfully.");
     }
 
-    public async Task<FileResource> CreateNewResizedImageFileResource(IFormFile formFile, byte[] resizedImageBytes,
-        Person currentPerson)
+    public async Task<FileResource> CreateNewFromIFormFile(IFormFile formFile, byte[] fileBytes, Person currentPerson)
     {
         var fileName = formFile.FileName;
         if (string.IsNullOrWhiteSpace(fileName))
         {
-            fileName = Guid.NewGuid().ToString() + ".jpg";
+            fileName = Guid.NewGuid().ToString();
         }
 
         var originalFilenameInfo = new FileInfo(fileName);
         var baseFilenameWithoutExtension = originalFilenameInfo.Name.Remove(originalFilenameInfo.Name.Length - originalFilenameInfo.Extension.Length, originalFilenameInfo.Extension.Length);
-        var fileResourceData = resizedImageBytes;
+        var fileResourceData = FileResource.ConvertHttpPostedFileToByteArray(formFile);
         var fileResourceMimeTypeID = GetFileResourceMimeTypeForFile(formFile).FileResourceMimeTypeID;
 
         var fileResource = await CreateNew(fileResourceMimeTypeID,
