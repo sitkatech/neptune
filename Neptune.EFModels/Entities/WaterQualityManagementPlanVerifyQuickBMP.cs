@@ -1,13 +1,7 @@
-﻿using Neptune.Web.Models;
-
-namespace Neptune.EFModels.Entities
+﻿namespace Neptune.EFModels.Entities
 {
-    public partial class WaterQualityManagementPlanVerifyQuickBMP : IAuditableEntity
+    public partial class WaterQualityManagementPlanVerifyQuickBMP
     {
-        public string GetAuditDescriptionString()
-        {
-            return WaterQualityManagementPlanVerifyQuickBMPID.ToString();
-        }
     }
 
 }

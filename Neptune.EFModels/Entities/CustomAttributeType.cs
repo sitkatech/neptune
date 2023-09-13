@@ -2,17 +2,11 @@
 using Neptune.Common;
 using Neptune.Common.DesignByContract;
 using Neptune.Common.GeoSpatial;
-using Neptune.Web.Models;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class CustomAttributeType : IAuditableEntity
+    public partial class CustomAttributeType
     {
-        public string GetAuditDescriptionString()
-        {
-            return $"BMP Attribute: {CustomAttributeTypeName}";
-        }
-
         public string GetMeasurementUnitDisplayName()
         {
             return MeasurementUnitType == null ? ViewUtilities.NoneString : MeasurementUnitType.LegendDisplayName;

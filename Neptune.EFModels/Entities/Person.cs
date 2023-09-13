@@ -19,11 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Models;
-
 namespace Neptune.EFModels.Entities
 {
-    public partial class Person : IAuditableEntity//, IKeystoneUser
+    public partial class Person //, IKeystoneUser
     {
         public const int AnonymousPersonID = -999;
 
@@ -50,11 +48,6 @@ namespace Neptune.EFModels.Entities
         public string GetFullNameLastFirst()
         {
             return $"{LastName}, {FirstName}";
-        }
-
-        public string GetAuditDescriptionString()
-        {
-            return GetFullNameFirstLast();
         }
 
         public bool IsSitkaAdministrator()

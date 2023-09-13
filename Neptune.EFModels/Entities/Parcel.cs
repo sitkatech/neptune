@@ -1,8 +1,6 @@
-﻿using Neptune.Web.Models;
-
-namespace Neptune.EFModels.Entities
+﻿namespace Neptune.EFModels.Entities
 {
-    public partial class Parcel : IAuditableEntity
+    public partial class Parcel
     {
         public bool HasValidAddress()
         {
@@ -12,11 +10,6 @@ namespace Neptune.EFModels.Entities
         public string GetParcelAddress()
         {
             return $"{ParcelAddress}{(!string.IsNullOrWhiteSpace(ParcelZipCode) ? $", {ParcelZipCode}" : "")}";
-        }
-
-        public string GetAuditDescriptionString()
-        {
-            return ParcelNumber;
         }
 
         public TrashCaptureStatusType GetTrashCaptureStatusType()

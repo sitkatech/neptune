@@ -20,23 +20,11 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.Common;
-using Neptune.Web.Models;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class StormwaterJurisdiction : IAuditableEntity
+    public partial class StormwaterJurisdiction
     {
-        public string GetAuditDescriptionString()
-        {
-            var organizationName = ViewUtilities.NotFoundString;
-            if (Organization != null)
-            {
-                organizationName = Organization.OrganizationName;
-            }
-
-            return $"Organization: {organizationName}";
-        }
-
         public string GetOrganizationDisplayName()
         {
             return (Organization != null ? Organization.OrganizationName : ViewUtilities.NotFoundString);

@@ -19,12 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Models;
 using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMP : IAuditableEntity, IHaveHRUCharacteristics
+    public partial class TreatmentBMP : IHaveHRUCharacteristics
     {
         public bool CanView(Person person)
         {
@@ -39,11 +38,6 @@ namespace Neptune.EFModels.Entities
         public bool CanDelete(Person person)
         {
             return ProjectID == null && person.IsManagerOrAdmin() && person.IsAssignedToStormwaterJurisdiction(StormwaterJurisdictionID);
-        }
-
-        public string GetAuditDescriptionString()
-        {
-            return TreatmentBMPName;
         }
 
         public bool IsBenchmarkAndThresholdsComplete()

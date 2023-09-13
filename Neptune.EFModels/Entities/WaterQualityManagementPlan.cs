@@ -1,16 +1,10 @@
 ﻿using Neptune.Common;
-using Neptune.Web.Models;
 using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class WaterQualityManagementPlan : IAuditableEntity, IHaveHRUCharacteristics
+    public partial class WaterQualityManagementPlan : IHaveHRUCharacteristics
     {
-        public string GetAuditDescriptionString()
-        {
-            return $"Water Quality Management Plan \"{WaterQualityManagementPlanName}\"";
-        }
-
         //private static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(
         //    SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
         //        c.Detail(UrlTemplate.Parameter1Int)));

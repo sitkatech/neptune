@@ -1,8 +1,6 @@
-using Neptune.Web.Models;
-
 namespace Neptune.EFModels.Entities
 {
-    public partial class MaintenanceRecord : IAuditableEntity
+    public partial class MaintenanceRecord
     {
         public DateTime GetMaintenanceRecordDate()
         {
@@ -46,11 +44,6 @@ namespace Neptune.EFModels.Entities
                 y.MaintenanceRecordObservationValues.Any(z =>
                     !string.IsNullOrWhiteSpace(z.ObservationValue)));
             return maintenanceRecordObservation?.GetObservationValueWithoutUnits() ?? "not provided";
-        }
-
-        public string GetAuditDescriptionString()
-        {
-            return $"Maintenance Record dated {GetMaintenanceRecordDate():MM/dd/yyyy}";
         }
 
         public void DeleteFull(NeptuneDbContext dbContext)

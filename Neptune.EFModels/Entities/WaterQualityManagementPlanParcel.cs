@@ -1,14 +1,6 @@
-﻿using Neptune.Web.Models;
-
-namespace Neptune.EFModels.Entities
+﻿namespace Neptune.EFModels.Entities
 {
-    public partial class WaterQualityManagementPlanParcel : IAuditableEntity
+    public partial class WaterQualityManagementPlanParcel
     {
-        public string GetAuditDescriptionString()
-        {
-            return "WQMP-Parcel (" +
-                   $"WQMP: \"{WaterQualityManagementPlanID}\", " +
-                   $"Parcel: \"{ParcelID}\")";
-        }
     }
 }

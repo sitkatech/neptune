@@ -1,18 +1,11 @@
-﻿using Neptune.Web.Models;
-
-namespace Neptune.EFModels.Entities
+﻿namespace Neptune.EFModels.Entities
 {
-    public partial class FundingSource : IAuditableEntity
+    public partial class FundingSource
     {
         public string GetDisplayName()
         {
             return
                 $"{FundingSourceName} ({Organization.GetOrganizationShortNameIfAvailable()}){(!IsActive ? " (Inactive)" : string.Empty)}";
-        }
-
-        public string GetAuditDescriptionString()
-        {
-            return FundingSourceName;
         }
 
         public List<TreatmentBMP> GetAssociatedTreatmentBMPs()

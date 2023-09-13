@@ -21,11 +21,10 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using LtInfo.Common;
 using Neptune.Common;
-using Neptune.Web.Models;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMPAssessment : IAuditableEntity
+    public partial class TreatmentBMPAssessment
     {
         public bool CanEdit(Person currentPerson)
         {
@@ -37,11 +36,6 @@ namespace Neptune.EFModels.Entities
         {
             var canManageStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdictionID);
             return canManageStormwaterJurisdiction;
-        }
-
-        public string GetAuditDescriptionString()
-        {
-            return $"Assessment deleted.";
         }
 
         public int GetWaterYear()

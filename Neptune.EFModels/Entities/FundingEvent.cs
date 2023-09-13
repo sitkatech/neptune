@@ -1,5 +1,3 @@
-using Neptune.Web.Models;
-
 namespace Neptune.EFModels.Entities
 {
     public partial class FundingEvent
@@ -11,16 +9,11 @@ namespace Neptune.EFModels.Entities
         }
     }
 
-    public partial class FundingEvent : IAuditableEntity
+    public partial class FundingEvent
     {
         public string GetDisplayName()
         {
             return $"{Year} {FundingEventType.FundingEventTypeDisplayName}";
-        }
-
-        public string GetAuditDescriptionString()
-        {
-            return GetDisplayName();
         }
     }
 }

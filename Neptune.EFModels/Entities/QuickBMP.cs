@@ -1,13 +1,6 @@
-﻿using Neptune.Web.Models;
-
-namespace Neptune.EFModels.Entities
+﻿namespace Neptune.EFModels.Entities
 {
-    public partial class QuickBMP : IAuditableEntity
+    public partial class QuickBMP
     {
-
-        public string GetAuditDescriptionString()
-        {
-            return QuickBMPName;
-        }
     }
 }

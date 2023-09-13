@@ -24,11 +24,10 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 using Neptune.Common.DesignByContract;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class FileResource : IAuditableEntity
+    public partial class FileResource
     {
         //public static int MaxUploadFileSizeInBytes = NeptuneWebConfiguration.MaximumAllowedUploadFileSize;
 
@@ -123,11 +122,6 @@ namespace Neptune.EFModels.Entities
             var guidCaptures = FileResourceUrlRegEx.Matches(textWithReferences).Cast<Match>().Select(x => x.Groups["fileResourceGuidCapture"].Value).ToList();
             var theseGuids = guidCaptures.Select(x => new Guid(x)).Distinct().ToList();
             return theseGuids;
-        }
-
-        public string GetAuditDescriptionString()
-        {
-            return $"{GetOriginalCompleteFileName()}";
         }
 
         public string GetFileResourceGUIDAsString()

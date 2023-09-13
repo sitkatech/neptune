@@ -81,8 +81,6 @@
     <None Include="Scripts\ReleaseScripts\Script.PostDeployment.ReleaseScripts.sql" />
     <None Include="Scripts\Utility\Script.PostDeployment.Utility.sql" />
     <Build Include="HangFire\HangFire.sql" />
-    <Build Include="dbo\Tables\dbo.AuditLog.sql" />
-    <Build Include="dbo\Tables\dbo.AuditLogEventType.sql" />
     <Build Include="dbo\Tables\dbo.County.sql" />
     <Build Include="dbo\Tables\dbo.CustomAttribute.sql" />
     <Build Include="dbo\Tables\dbo.CustomAttributeDataType.sql" />
@@ -242,7 +240,6 @@
     <PreDeploy Include="Scripts\Script.PreDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\LookupTables\dbo.AuditLogEventType.sql" />
     <None Include="Scripts\LookupTables\dbo.CustomAttributeDataType.sql" />
     <None Include="Scripts\LookupTables\dbo.CustomAttributeTypePurpose.sql" />
     <None Include="Scripts\LookupTables\dbo.DelineationType.sql" />

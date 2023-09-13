@@ -8,8 +8,6 @@ This file is generated on every build, DO NOT modify.
 PRINT N'Neptune.Database - Script.PostDeployment.LookupTables.sql';
 GO
 
-:r ".\dbo.AuditLogEventType.sql"
-GO
 :r ".\dbo.CustomAttributeDataType.sql"
 GO
 :r ".\dbo.CustomAttributeTypePurpose.sql"

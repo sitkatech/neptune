@@ -22,11 +22,10 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Globalization;
 using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
-using Neptune.Web.Models;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMPObservation : IAuditableEntity
+    public partial class TreatmentBMPObservation
     {
         public DiscreteObservationSchema GetDiscreteObservationData()
         {
@@ -80,11 +79,6 @@ namespace Neptune.EFModels.Entities
                 return true;
             }
             return Math.Abs(score.Value - 2) < 0.01;
-        }
-
-        public string GetAuditDescriptionString()
-        {
-            return $"Observation Deleted";
         }
 
         public string CalculateOverrideScoreText(bool overrideAssessmentScoreIfFailing)

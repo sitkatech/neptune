@@ -1,11 +1,7 @@
-﻿using Neptune.Web.Models;
+﻿namespace Neptune.EFModels.Entities;
 
-namespace Neptune.EFModels.Entities;
-
-public partial class FieldVisit : IAuditableEntity
+public partial class FieldVisit
 {
-    public string GetAuditDescriptionString() => "Field Visit deleted";
-
     public TreatmentBMPAssessment GetInitialAssessment()
     {
         return TreatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentType == TreatmentBMPAssessmentType.Initial);

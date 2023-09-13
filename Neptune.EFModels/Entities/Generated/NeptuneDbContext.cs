@@ -11,8 +11,6 @@ public partial class NeptuneDbContext : DbContext
     {
     }
 
-    public virtual DbSet<AuditLog> AuditLogs { get; set; }
-
     public virtual DbSet<County> Counties { get; set; }
 
     public virtual DbSet<CustomAttribute> CustomAttributes { get; set; }
@@ -255,13 +253,6 @@ public partial class NeptuneDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AuditLog>(entity =>
-        {
-            entity.HasKey(e => e.AuditLogID).HasName("PK_AuditLog_AuditLogID");
-
-            entity.HasOne(d => d.Person).WithMany(p => p.AuditLogs).OnDelete(DeleteBehavior.ClientSetNull);
-        });
-
         modelBuilder.Entity<County>(entity =>
         {
             entity.HasKey(e => e.CountyID).HasName("PK_County_CountyID");

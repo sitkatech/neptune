@@ -1,15 +1,7 @@
-﻿using Neptune.Web.Models;
-
-namespace Neptune.EFModels.Entities
+﻿namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMPTypeCustomAttributeType : IAuditableEntity, IHaveASortOrder
+    public partial class TreatmentBMPTypeCustomAttributeType : IHaveASortOrder
     {
-        public string GetAuditDescriptionString()
-        {
-            return
-                $"Treatment BMP Type: {TreatmentBMPType?.TreatmentBMPTypeName ?? "Unknown"}; AttributeType: {CustomAttributeType?.CustomAttributeTypeName ?? "Unknown"}";
-        }
-
         public string GetDisplayName()
         {
             return CustomAttributeType.CustomAttributeTypeName;

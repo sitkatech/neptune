@@ -23,11 +23,10 @@ using System.Text.Json;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
-using Neptune.Web.Models;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMPAssessmentObservationType : IAuditableEntity
+    public partial class TreatmentBMPAssessmentObservationType
     {
         //public string BenchmarkAndThresholdUrl(TreatmentBMP treatmentBMP)
         //{
@@ -322,11 +321,6 @@ namespace Neptune.EFModels.Entities
             var thresholdValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease);
 
             return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits}{benchmarkOptionalSpace}{BenchmarkMeasurementUnitType().LegendDisplayName})";
-        }
-
-        public string GetAuditDescriptionString()
-        {
-            return $"Observation Type {TreatmentBMPAssessmentObservationTypeName}";
         }
 
         public void DeleteFull(NeptuneDbContext dbContext)

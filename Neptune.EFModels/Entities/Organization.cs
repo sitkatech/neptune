@@ -21,7 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class Organization// : IAuditableEntity
+    public partial class Organization
     {
         public const string OrganizationUnknown = "Unknown or Unspecified Organization";
 
@@ -55,11 +55,6 @@ namespace Neptune.EFModels.Entities
                 organizations.SingleOrDefault(
                     x => x.OrganizationID != currentOrganizationID && String.Equals(x.OrganizationShortName, organizationShortName, StringComparison.InvariantCultureIgnoreCase));
             return existingOrganization == null;
-        }
-
-        public string GetAuditDescriptionString()
-        {
-            return OrganizationName;
         }
 
         public bool IsInKeystone()

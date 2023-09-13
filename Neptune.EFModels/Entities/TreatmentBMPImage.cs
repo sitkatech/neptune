@@ -1,14 +1,7 @@
-﻿using Neptune.Web.Models;
-
-namespace Neptune.EFModels.Entities
+﻿namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMPImage : IFileResourcePhoto, IAuditableEntity
+    public partial class TreatmentBMPImage : IFileResourcePhoto
     {
-        public string GetAuditDescriptionString()
-        {
-            return $"Site {TreatmentBMPID} {FileResource?.GetOriginalCompleteFileName() ?? "File Resource Not Found"}";
-        }
-
         public int? GetEntityImageIDAsNullable()
         {
             return TreatmentBMPID;

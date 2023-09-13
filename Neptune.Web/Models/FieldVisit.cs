@@ -24,14 +24,12 @@ using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Models
 {
-    public partial class FieldVisit : IAuditableEntity
+    public partial class FieldVisit
     {
         //public TreatmentBMPAssessment GetAssessmentByType(NeptuneDbContext dbContext, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
         //{
         //    return dbContext.TreatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentTypeID == (int) treatmentBMPAssessmentTypeEnum);
         //}
-
-        public string GetAuditDescriptionString() => "Field Visit deleted";
 
         //public void MarkFieldVisitAsProvisionalIfNonManager(Person person)
         //{

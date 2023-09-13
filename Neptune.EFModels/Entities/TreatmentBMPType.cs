@@ -19,11 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Models;
-
 namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMPType : IAuditableEntity
+    public partial class TreatmentBMPType
     {
 
         public List<TreatmentBMPAssessmentObservationType> GetObservationTypes()
@@ -35,11 +33,6 @@ namespace Neptune.EFModels.Entities
         {
             return TreatmentBMPTypeAssessmentObservationTypes.OrderBy(x => x.SortOrder).ThenBy(x =>
                 x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName).ToList();
-        }
-
-        public string GetAuditDescriptionString()
-        {
-            return $"Treatment BMP Type: {TreatmentBMPTypeName}";
         }
 
         public void DeleteFull(NeptuneDbContext dbContext)

@@ -57,9 +57,6 @@ public partial class Person
 
     public bool IsOCTAGrantReviewer { get; set; }
 
-    [InverseProperty("Person")]
-    public virtual ICollection<AuditLog> AuditLogs { get; set; } = new List<AuditLog>();
-
     [InverseProperty("UploadedByPerson")]
     public virtual ICollection<DelineationStaging> DelineationStagings { get; set; } = new List<DelineationStaging>();
 

@@ -1,8 +1,6 @@
-﻿using Neptune.Web.Models;
-
-namespace Neptune.EFModels.Entities
+﻿namespace Neptune.EFModels.Entities
 {
-    public partial class NeptuneHomePageImage : IAuditableEntity
+    public partial class NeptuneHomePageImage
     {
         public DateTime GetCreateDate()
         {
@@ -40,10 +38,5 @@ namespace Neptune.EFModels.Entities
         }
 
         public List<string> GetAdditionalCssClasses() => new();
-
-        public string GetAuditDescriptionString()
-        {
-            return $"Image: {Caption}";
-        }
     }
 }

@@ -1,15 +1,7 @@
-﻿using Neptune.Web.Models;
-
-namespace Neptune.EFModels.Entities
+﻿namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMPAssessmentPhoto : IAuditableEntity, IFileResourcePhoto
+    public partial class TreatmentBMPAssessmentPhoto : IFileResourcePhoto
     {
-        public string GetAuditDescriptionString()
-        {
-            return
-                $"Treatment BMP Assessment Photo {FileResource?.GetOriginalCompleteFileName() ?? "File Resource Not Found"}";
-        }
-
         public DateTime GetCreateDate()
         {
             return FileResource.CreateDate;
