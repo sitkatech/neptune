@@ -308,18 +308,19 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
         public async Task<IActionResult> Photos([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, PhotosViewModel viewModel)
         {
-            var fieldVisit = FieldVisits.GetByID(_dbContext, fieldVisitPrimaryKey);
+            var fieldVisit = FieldVisits.GetByIDWithChangeTracking(_dbContext, fieldVisitPrimaryKey);
             if (!ModelState.IsValid)
             {
                 ViewPhotos(fieldVisit, viewModel);
             }
-            viewModel.UpdateModel(CurrentPerson, fieldVisit.TreatmentBMP, _dbContext);
+            await viewModel.UpdateModel(CurrentPerson, fieldVisit.TreatmentBMP, _dbContext, _fileResourceService);
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             fieldVisit.InventoryUpdated = true;
             if (await FinalizeVisitIfNecessary(viewModel, fieldVisit))
             {
                 return RedirectToAction(new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Detail(fieldVisit)));
             }
+            await _dbContext.SaveChangesAsync();
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
             return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Photos(fieldVisit)), new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Attributes(fieldVisit)), fieldVisit);
         }

@@ -18,7 +18,9 @@ public class FileResourceService
         _webConfiguration = webConfiguration.Value;
     }
 
-    public async Task<FileResource> CreateNew(int fileResourceMimeTypeID,
+    // 9/13/23 SMG: I'm hoping that this can essentially be the ONLY place that actually
+    // we new up FileResources so that we can keep the pinch point accurate for the future.
+    public async Task<FileResource> CreateNewAndSaveChanges(int fileResourceMimeTypeID,
         string baseFilenameWithoutExtension, string extension, byte[] fileResourceData, Person currentPerson)
     {
         var fileResource = new FileResource()
@@ -29,7 +31,8 @@ public class FileResourceService
             FileResourceGUID = Guid.NewGuid(),
             CreatePersonID = currentPerson.PersonID,
             CreateDate = DateTime.Now,
-            InBlobStorage = true
+            InBlobStorage = true,
+            ContentLength = fileResourceData.LongLength
         };
         await _dbContext.FileResources.AddAsync(fileResource);
         
@@ -48,6 +51,13 @@ public class FileResourceService
         return await _azureBlobStorageService.DeleteFileResourceBlob(fileResource);
     }
 
+    public async Task<bool> DeleteFileResource(FileResource fileResource)
+    {
+        _dbContext.FileResources.Remove(fileResource);
+        // there is a potential that we delete the blob, then a transaction fails, and the blob is no longer there.
+        return await _azureBlobStorageService.DeleteFileResourceBlob(fileResource);
+    }
+
     public async Task<FileResource> CreateNewFromIFormFile(IFormFile formFile, Person currentPerson)
     {
         var fileName = formFile.FileName;
@@ -61,7 +71,7 @@ public class FileResourceService
         var fileResourceData = FileResource.ConvertHttpPostedFileToByteArray(formFile);
         var fileResourceMimeTypeID = GetFileResourceMimeTypeForFile(formFile).FileResourceMimeTypeID;
 
-        var fileResource = await CreateNew(fileResourceMimeTypeID,
+        var fileResource = await CreateNewAndSaveChanges(fileResourceMimeTypeID,
             baseFilenameWithoutExtension, originalFilenameInfo.Extension, fileResourceData, currentPerson);
 
         return fileResource;

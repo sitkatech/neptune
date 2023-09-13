@@ -68,8 +68,8 @@ namespace Neptune.EFModels.Entities
             return fileResourceData;
         }
 
-        
 
+        // todo: not needed anymore?
         //public static FileResource CreateNewFromHttpPostedFileAndSave(HttpPostedFileBase httpPostedFileBase, Person currentPerson)
         //{
         //    var fileResource = CreateNewFromHttpPostedFile(httpPostedFileBase, currentPerson);
@@ -95,26 +95,6 @@ namespace Neptune.EFModels.Entities
         //    return fileResource;
         //}
 
-        // todo: remove after new FileResourceService is working
-        //public async Task<FileResource> CreateNewResizedImageFileResource(IFormFile formFile, byte[] resizedImageBytes,
-        //    Person currentPerson, NeptuneDbContext neptuneDbContext)
-        //{
-        //    var fileName = formFile.FileName;
-        //    if (string.IsNullOrWhiteSpace(fileName))
-        //    {
-        //        fileName = Guid.NewGuid().ToString() + ".jpg";
-        //    }
-
-        //    var originalFilenameInfo = new FileInfo(fileName);
-        //    var baseFilenameWithoutExtension = originalFilenameInfo.Name.Remove(originalFilenameInfo.Name.Length - originalFilenameInfo.Extension.Length, originalFilenameInfo.Extension.Length);
-        //    var fileResourceData = resizedImageBytes;
-        //    var fileResourceMimeTypeID = GetFileResourceMimeTypeForFile(formFile).FileResourceMimeTypeID;
-
-        //    var fileResource = FileResources.CreateNew(neptuneDbContext, fileResourceMimeTypeID,
-        //        baseFilenameWithoutExtension, originalFilenameInfo.Extension, fileResourceData, currentPerson);
-            
-        //    return fileResource;
-        //}
 
         //public static void ValidateFileSize(HttpPostedFileBase httpPostedFileBase, List<ValidationResult> errors, string propertyName)
         //{

@@ -27,6 +27,7 @@ using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Security;
+using Neptune.Web.Services;
 using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.Organization;
 using Neptune.Web.Views.Shared;
@@ -38,8 +39,15 @@ namespace Neptune.Web.Controllers
 {
     public class OrganizationController : NeptuneBaseController<OrganizationController>
     {
-        public OrganizationController(NeptuneDbContext dbContext, ILogger<OrganizationController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
+        private readonly FileResourceService _fileResourceService;
+
+        public OrganizationController(NeptuneDbContext dbContext,
+            ILogger<OrganizationController> logger,
+            IOptions<WebConfiguration> webConfiguration,
+            LinkGenerator linkGenerator,
+            FileResourceService fileResourceService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
+            _fileResourceService = fileResourceService;
         }
 
         [HttpGet]
@@ -83,7 +91,7 @@ namespace Neptune.Web.Controllers
             {
                 IsActive = true
             };
-            viewModel.UpdateModel(organization, CurrentPerson);
+            await viewModel.UpdateModel(organization, CurrentPerson, _fileResourceService);
             _dbContext.Organizations.Add(organization);
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay($"Organization {organization.GetDisplayName()} successfully created.");
@@ -111,7 +119,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEdit(viewModel, organization.IsInKeystone(), organization.PrimaryContactPerson);
             }
-            viewModel.UpdateModel(organization, CurrentPerson);
+            await viewModel.UpdateModel(organization, CurrentPerson, _fileResourceService);
             await _dbContext.SaveChangesAsync();
             return new ModalDialogFormJsonResult();
         }

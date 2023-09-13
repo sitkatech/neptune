@@ -34,6 +34,8 @@ public partial class FileResource
 
     public bool InBlobStorage { get; set; }
 
+    public long? ContentLength { get; set; }
+
     [ForeignKey("CreatePersonID")]
     [InverseProperty("FileResources")]
     public virtual Person CreatePerson { get; set; } = null!;

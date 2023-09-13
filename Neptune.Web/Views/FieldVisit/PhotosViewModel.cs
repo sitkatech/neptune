@@ -1,6 +1,8 @@
-﻿using Neptune.EFModels.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
+using Neptune.Web.Services;
 using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
 
 namespace Neptune.Web.Views.FieldVisit
@@ -25,12 +27,24 @@ namespace Neptune.Web.Views.FieldVisit
                 }).ToList();
         }
 
-        public void UpdateModel(Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, NeptuneDbContext dbContext)
+        public async Task UpdateModel(Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, NeptuneDbContext dbContext, FileResourceService fileResourceService)
         {
             // Merge existing photos
             var photoSimples = PhotoSimples ??
                                new List<ManagePhotoWithPreviewPhotoDto>();
-            var treatmentBMPAssessmentPhotosToUpdate = photoSimples.Select(x =>
+
+            // take care of blob deletion first
+            var treatmentBMPImageIDsToDelete = PhotoSimples?.Where(x => x.FlagForDeletion).Select(x => x.PrimaryKey).ToList()
+                                                         ?? new List<int>();
+            var fileResourcesToDelete = dbContext.TreatmentBMPImages
+                .Include(x => x.FileResource)
+                .Where(x => treatmentBMPImageIDsToDelete.Contains(x.TreatmentBMPImageID)).Select(x => x.FileResource).ToList();
+            foreach (var fileResource in fileResourcesToDelete)
+            {
+                await fileResourceService.DeleteBlobForFileResource(fileResource);
+            }
+
+            var treatmentBMPImagesToUpdate = photoSimples.Select(x =>
                     x.FlagForDeletion // Exclude from list to update if flagged for deletion
                         ? null
                         : new TreatmentBMPImage{
@@ -40,7 +54,7 @@ namespace Neptune.Web.Views.FieldVisit
                         })
                 .Where(x => x != null)
                 .ToList();
-            treatmentBMP.TreatmentBMPImages.Merge(treatmentBMPAssessmentPhotosToUpdate,
+            treatmentBMP.TreatmentBMPImages.Merge(treatmentBMPImagesToUpdate,
                 dbContext.TreatmentBMPImages,
                 (x, y) => x.TreatmentBMPImageID == y.TreatmentBMPImageID,
                 (x, y) => { x.Caption = y.Caption; });
@@ -48,14 +62,15 @@ namespace Neptune.Web.Views.FieldVisit
             // Create new photo if it exists
             if (Photo != null)
             {
-                //todo:
-                //var fileResource = FileResource.CreateNewFromHttpPostedFile(Photo, currentPerson);
-                //dbContext.TreatmentBMPImages.Add(
-                //    new EFModels.Entities.TreatmentBMPImage
-                //    {
-                //        FileResource = fileResource, TreatmentBMP = treatmentBMP, UploadDate = DateTime.Now,
-                //        Caption = Caption
-                //    });
+                var fileResource = await fileResourceService.CreateNewFromIFormFile(Photo, currentPerson);
+                dbContext.TreatmentBMPImages.Add(
+                    new EFModels.Entities.TreatmentBMPImage
+                    {
+                        FileResource = fileResource,
+                        TreatmentBMP = treatmentBMP,
+                        UploadDate = DateTime.Now,
+                        Caption = Caption
+                    });
             }
         }
     }

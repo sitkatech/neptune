@@ -24,6 +24,8 @@ using System.ComponentModel.DataAnnotations;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.Models;
 using Neptune.Web.Common.Mvc;
+using Neptune.Web.Security;
+using Neptune.Web.Services;
 
 namespace Neptune.Web.Views.Organization
 {
@@ -57,7 +59,7 @@ namespace Neptune.Web.Views.Organization
 
         [DisplayName("Logo")]
         [SitkaFileExtensions("jpg|jpeg|gif|png")]
-        public IFormFile LogoFileResourceData { get; set; }
+        public IFormFile? LogoFileResourceData { get; set; }
 
         [DisplayName("Keystone Organization Guid")]
         public Guid? OrganizationGuid { get; set; }
@@ -82,7 +84,7 @@ namespace Neptune.Web.Views.Organization
             OrganizationGuid = organization.OrganizationGuid;
         }
 
-        public void UpdateModel(EFModels.Entities.Organization organization, Person currentPerson)
+        public async Task UpdateModel(EFModels.Entities.Organization organization, Person currentPerson, FileResourceService fileResourceService)
         {
             organization.OrganizationName = OrganizationName;
             organization.OrganizationShortName = OrganizationShortName;
@@ -90,17 +92,23 @@ namespace Neptune.Web.Views.Organization
             organization.IsActive = IsActive;
             organization.PrimaryContactPersonID = PrimaryContactPersonID;
             organization.OrganizationUrl = OrganizationUrl;
-            //todo:
-            //if (LogoFileResourceData != null)
-            //{
-            //    organization.LogoFileResource = FileResource.CreateNewFromHttpPostedFileAndSave(LogoFileResourceData, currentPerson);    
-            //}
+            if (LogoFileResourceData != null)
+            {
+                // if it already had a logo, we can delete it safely
+                if (organization.LogoFileResource != null)
+                {
+                    await fileResourceService.DeleteFileResource(organization.LogoFileResource);
+                }
 
-            //var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(currentPerson);
-            //if (isSitkaAdmin)
-            //{
-            //    organization.OrganizationGuid = OrganizationGuid;
-            //}
+                organization.LogoFileResource =
+                    await fileResourceService.CreateNewFromIFormFile(LogoFileResourceData, currentPerson);
+            }
+
+            var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(currentPerson);
+            if (isSitkaAdmin)
+            {
+                organization.OrganizationGuid = OrganizationGuid;
+            }
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
