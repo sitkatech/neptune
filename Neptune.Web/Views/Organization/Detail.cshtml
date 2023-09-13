@@ -76,7 +76,17 @@
                         <div class="row">
                             <div class="col-xs-6 fieldLabel text-right">@Html.LabelWithSugarFor(FieldDefinitionType.PrimaryContact)</div>
                             @*todo: <div class="col-xs-6">@(new UserViewFeature().HasPermission(ViewDataTyped.CurrentPerson, ViewDataTyped.Organization.PrimaryContactPerson).HasPermission ? ViewDataTyped.Organization.GetPrimaryContactPersonWithOrgAsUrl() : ViewDataTyped.Organization.GetPrimaryContactPersonAsStringAndOrgAsUrl())</div>*@
-                            <div class="col-xs-6">@ViewDataTyped.Organization.GetPrimaryContactPersonAsStringAndOrgAsUrl()</div>
+                            <div class="col-xs-6">
+                                @if (ViewDataTyped.Organization.PrimaryContactPerson != null)
+                                {
+                                    @ViewDataTyped.Organization.PrimaryContactPerson.GetFullNameFirstLast()
+                                    <a href="@ViewDataTyped.OrganizationDetailUrlTemplate.ParameterReplace(ViewDataTyped.Organization.PrimaryContactPerson.OrganizationID)">@ViewDataTyped.Organization.PrimaryContactPerson.Organization.GetOrganizationShortNameIfAvailable()</a>
+                                }
+                                else
+                                {
+                                    @Neptune.Common.ViewUtilities.NoneString
+                                }
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-6 fieldLabel text-right">@Html.Label("Home Page")</div>

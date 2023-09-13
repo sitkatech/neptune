@@ -34,6 +34,7 @@ namespace Neptune.Web.Views.Shared
         public string LogOutUrl { get; }
         public List<LtInfoMenuItem> TopLevelNeptuneMenus { get; }
         public IEnumerable<NeptuneArea> NeptuneAreas { get; }
+        public string CurrentPersonDetailUrl { get; }
 
         public readonly string HomeUrl;
 
@@ -48,6 +49,7 @@ namespace Neptune.Web.Views.Shared
             CurrentPerson = currentPerson;
             _linkGenerator = linkGenerator;
 
+            CurrentPersonDetailUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(currentPerson.PersonID));
             HomeUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, hc => hc.Index());
 
             LogInUrl = logInUrl;

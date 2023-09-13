@@ -50,7 +50,7 @@ namespace Neptune.Web.Views.Role
             //Grid
             if (role.NeptuneAreaEnum.HasValue)
             {
-                GridSpec = new PersonWithRoleGridSpec() { ObjectNameSingular = "Person", ObjectNamePlural = "People", SaveFiltersInCookie = true };
+                GridSpec = new PersonWithRoleGridSpec(linkGenerator) { ObjectNameSingular = "Person", ObjectNamePlural = "People", SaveFiltersInCookie = true };
                 GridName = "PersonWithRoleGrid";
                 GridDataUrl = SitkaRoute<RoleController>.BuildUrlFromExpression(LinkGenerator, tc => tc.PersonWithRoleGridJsonData(role.RoleID));
             }

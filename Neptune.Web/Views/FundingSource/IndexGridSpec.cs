@@ -38,6 +38,8 @@ namespace Neptune.Web.Views.FundingSource
                 x => x.Delete(UrlTemplate.Parameter1Int)));
             var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator,
                 x => x.Detail(UrlTemplate.Parameter1Int)));
+            var organizationDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator,
+                x => x.Detail(UrlTemplate.Parameter1Int)));
             var isAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
             var hasAdminPermissions = new FundingSourceEditFeature().HasPermissionByPerson(currentPerson);
             if (hasAdminPermissions)
@@ -46,7 +48,7 @@ namespace Neptune.Web.Views.FundingSource
             }
 
             Add(FieldDefinitionType.FundingSource.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(a.FundingSourceID), a.GetDisplayName()), 320, DhtmlxGridColumnFilterType.Html);
-            Add(FieldDefinitionType.Organization.ToGridHeaderString(), a => isAnonymousOrUnassigned ? new HtmlString(a.Organization.GetDisplayName()) : UrlTemplate.MakeHrefString(a.Organization.GetDetailUrl(), a.Organization.GetDisplayName()), 300);
+            Add(FieldDefinitionType.Organization.ToGridHeaderString(), a => isAnonymousOrUnassigned ? new HtmlString(a.Organization.GetDisplayName()) : UrlTemplate.MakeHrefString(organizationDetailUrlTemplate.ParameterReplace(a.OrganizationID), a.Organization.GetDisplayName()), 300);
             Add(FieldDefinitionType.OrganizationType.ToGridHeaderString(), a => a.Organization.OrganizationType.OrganizationTypeName, 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Description", a => a.FundingSourceDescription, 300);
             Add("Is Active", a => a.IsActive.ToYesNo(), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);

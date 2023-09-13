@@ -86,7 +86,7 @@ namespace Neptune.Web.Controllers
             }
             viewModel.UpdateModel(person, CurrentPerson, _dbContext);
             await _dbContext.SaveChangesAsync();
-            SetMessageForDisplay($"Role successfully changed for {person.GetFullNameFirstLastAndOrgAsUrl()}.");
+            SetMessageForDisplay($"Role successfully changed for {person.GetFullNameFirstLast()}.");
             return new ModalDialogFormJsonResult();
         }
 
@@ -258,7 +258,7 @@ namespace Neptune.Web.Controllers
 
             viewModel.UpdateModel(person, _dbContext.StormwaterJurisdictionPeople);
             await _dbContext.SaveChangesAsync();
-            SetMessageForDisplay($"Assigned {FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabelPluralized()} successfully changed for {person.GetFullNameFirstLastAndOrgAsUrl()}.");
+            SetMessageForDisplay($"Assigned {FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabelPluralized()} successfully changed for {person.GetFullNameFirstLast()}.");
             return new ModalDialogFormJsonResult();
         }
 

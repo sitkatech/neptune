@@ -33,10 +33,10 @@ namespace Neptune.Web.Models
             return organization != null ? UrlTemplate.MakeHrefString(organization.GetDetailUrl(), organization.GetDisplayName()) : new HtmlString(null);
         }
 
-        public static HtmlString GetShortNameAsUrl(this Organization organization)
-        {          
-            return organization != null ? UrlTemplate.MakeHrefString(organization.GetDetailUrl(), organization.OrganizationShortName ?? organization.OrganizationName) : new HtmlString(null);
-        }
+        //public static HtmlString GetShortNameAsUrl(this Organization organization)
+        //{          
+        //    return organization != null ? UrlTemplate.MakeHrefString(organization.GetDetailUrl(), organization.GetOrganizationShortNameIfAvailable()) : new HtmlString(null);
+        //}
 
         //public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
         public static string GetDetailUrl(this Organization organization)
@@ -44,9 +44,9 @@ namespace Neptune.Web.Models
             return organization == null ? "" : "";//todo:DetailUrlTemplate.ParameterReplace(organization.OrganizationID);
         }
 
-        public static HtmlString GetPrimaryContactPersonAsUrl(this Organization organization) => organization.PrimaryContactPerson != null
-            ? organization.PrimaryContactPerson.GetFullNameFirstLastAsUrl()
-            : new HtmlString(ViewUtilities.NoneString);
+        //public static HtmlString GetPrimaryContactPersonAsUrl(this Organization organization) => organization.PrimaryContactPerson != null
+        //    ? organization.PrimaryContactPerson.GetFullNameFirstLastAsUrl()
+        //    : new HtmlString(ViewUtilities.NoneString);
 
         public static string GetOrganizationNamePossessive(this Organization organization)
         {
@@ -59,17 +59,9 @@ namespace Neptune.Web.Models
             return $"{organization.OrganizationName}{postFix}";
         }
 
-        public static HtmlString GetPrimaryContactPersonWithOrgAsUrl(this Organization organization) => organization.PrimaryContactPerson != null
-            ? organization.PrimaryContactPerson.GetFullNameFirstLastAndOrgAsUrl()
-            : new HtmlString(ViewUtilities.NoneString);
-
-        /// <summary>
-        /// Use for security situations where the user summary is not displayable, but the Organization is.
-        /// </summary>
-        /// <param name="organization"></param>
-        public static HtmlString GetPrimaryContactPersonAsStringAndOrgAsUrl(this Organization organization) => organization.PrimaryContactPerson != null
-            ? organization.PrimaryContactPerson.GetFullNameFirstLastAsStringAndOrgAsUrl()
-            : new HtmlString(ViewUtilities.NoneString);
+        //public static HtmlString GetPrimaryContactPersonWithOrgAsUrl(this Organization organization) => organization.PrimaryContactPerson != null
+        //    ? organization.PrimaryContactPerson.GetFullNameFirstLastAndOrgAsUrl()
+        //    : new HtmlString(ViewUtilities.NoneString);
 
         public static string GetPrimaryContactPersonAsString(this Organization organization) => organization.PrimaryContactPerson != null
             ? organization.PrimaryContactPerson.GetFullNameFirstLast()

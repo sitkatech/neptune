@@ -27,15 +27,7 @@ namespace Neptune.EFModels.Entities
 
         public string GetDisplayName() => IsUnknown() ? "Unknown or unspecified" : $"{OrganizationName}{(!IsActive ? " (Inactive)" : string.Empty)}";
 
-        public string GetOrganizationShortNameIfAvailable()
-        {
-            if (IsUnknown())
-            {
-                return "Unknown or Unassigned";
-            }
-
-            return OrganizationShortName ?? OrganizationName;
-        }
+        public string GetOrganizationShortNameIfAvailable() => IsUnknown() ? "Unknown or unspecified" : $"{OrganizationShortName ?? OrganizationName}{(!IsActive ? " (Inactive)" : string.Empty)}";
 
         public static bool IsOrganizationNameUnique(IEnumerable<Organization> organizations, string organizationName, int currentOrganizationID)
         {

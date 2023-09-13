@@ -22,16 +22,17 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.DhtmlWrappers;
-using Neptune.Web.Models;
+using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views.Role
 {
     public class PersonWithRoleGridSpec : GridSpec<Person>
     {
-        public PersonWithRoleGridSpec()
+        public PersonWithRoleGridSpec(LinkGenerator linkGenerator)
         {
-            Add("Last Name", a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.LastName), 200, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("First Name", a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.FirstName), 200, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            Add("Last Name", a => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(a.PersonID), a.LastName), 200, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("First Name", a => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(a.PersonID), a.FirstName), 200, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add($"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()}", a => a.Organization.GetDisplayName(), 200, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Last Activity", a => a.LastActivityDate, 200);
         }

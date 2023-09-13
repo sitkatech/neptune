@@ -19,11 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Common;
-using Microsoft.AspNetCore.Html;
-using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
-using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Models
 {
@@ -32,17 +28,17 @@ namespace Neptune.Web.Models
     /// </summary>
     public static class PersonModelExtensions
     {
-        public static HtmlString GetFullNameFirstLastAsUrl(this Person person)
-        {
-            return UrlTemplate.MakeHrefString(person.GetDetailUrl(), person.GetFullNameFirstLast());
-        }
+        //public static HtmlString GetFullNameFirstLastAsUrl(this Person person)
+        //{
+        //    return UrlTemplate.MakeHrefString(person.GetDetailUrl(), person.GetFullNameFirstLast());
+        //}
 
-        public static HtmlString GetFullNameFirstLastAndOrgAsUrl(this Person person)
-        {
-            var userUrl = person.GetFullNameFirstLastAsUrl();
-            var orgUrl = person.Organization.GetDisplayNameAsUrl();
-            return new HtmlString($"{userUrl} - {orgUrl}");
-        }
+        //public static HtmlString GetFullNameFirstLastAndOrgAsUrl(this Person person)
+        //{
+        //    var userUrl = person.GetFullNameFirstLastAsUrl();
+        //    var orgUrl = person.Organization.GetDisplayNameAsUrl();
+        //    return new HtmlString($"{userUrl} - {orgUrl}");
+        //}
 
         //public static HtmlString GetFullNameFirstLastAndOrgShortNameAsUrl(this Person person)
         //{
@@ -51,12 +47,12 @@ namespace Neptune.Web.Models
         //    return new HtmlString($"{userUrl} ({orgUrl})");
         //}
 
-        public static HtmlString GetFullNameFirstLastAsStringAndOrgAsUrl(this Person person)
-        {
-            var userString = person.GetFullNameFirstLast();
-            var orgUrl = person.Organization.GetShortNameAsUrl();
-            return new HtmlString($"{userString} - {orgUrl}");
-        }
+        //public static HtmlString GetFullNameFirstLastAsStringAndOrgAsUrl(this Person person)
+        //{
+        //    var userString = person.GetFullNameFirstLast();
+        //    var orgUrl = person.Organization.GetShortNameAsUrl();
+        //    return new HtmlString($"{userString} - {orgUrl}");
+        //}
 
         public static string GetEditUrl(this Person person)
         {
@@ -76,10 +72,6 @@ namespace Neptune.Web.Models
         //    SitkaRoute<UserController>.BuildAbsoluteUrlHttpsFromExpression(t => t.Detail(UrlTemplate.Parameter1Int),
         //        NeptuneWebConfiguration.CanonicalHostNameRoot));
 
-        public static string GetDetailUrl(this Person person)
-        {
-            return "";//todo:DetailUrlTemplate.ParameterReplace(person.PersonID);
-        }
 
         public static bool ShouldReceiveNotifications(this Person person)
         {

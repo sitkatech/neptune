@@ -37,6 +37,7 @@ namespace Neptune.Web.Views.Organization
         public string ManageFundingSourcesUrl { get; }
         public string? OrganizationLogoUrl { get; }
         public UrlTemplate<int> FundingSourceUrlTemplate { get; }
+        public UrlTemplate<int> OrganizationDetailUrlTemplate { get; }
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.Organization organization) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
@@ -55,6 +56,7 @@ namespace Neptune.Web.Views.Organization
             ManageFundingSourcesUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             OrganizationLogoUrl = organization.LogoFileResource == null ? string.Empty : SitkaRoute<FileResourceController>.BuildUrlFromExpression(linkGenerator, x => x.DisplayResource(organization.LogoFileResource.FileResourceGUID.ToString()));
             FundingSourceUrlTemplate = new UrlTemplate<int>(SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            OrganizationDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
         }
     }
 }

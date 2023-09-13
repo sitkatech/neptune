@@ -32,15 +32,17 @@ namespace Neptune.Web.Views.Jurisdiction
 {
     public class DetailViewData : NeptuneViewData
     {
-        public readonly StormwaterJurisdiction StormwaterJurisdiction;
+        public StormwaterJurisdiction StormwaterJurisdiction { get; }
 
-        public readonly TreatmentBMPGridSpec TreatmentBMPGridSpec;
-        public readonly string TreatmentBMPGridName;
-        public readonly string TreatmentBMPGridDataUrl;
-        public readonly IHtmlContent EditStormwaterJurisdictionLink;
-        public readonly bool UserHasJurisdictionEditPermissions;
+        public TreatmentBMPGridSpec TreatmentBMPGridSpec { get; }
+        public string TreatmentBMPGridName { get; }
+        public string TreatmentBMPGridDataUrl { get; }
+        public IHtmlContent EditStormwaterJurisdictionLink { get; }
+        public bool UserHasJurisdictionEditPermissions { get; }
 
-        public readonly List<Person> UsersAssignedToJurisdiction;
+        public List<Person> UsersAssignedToJurisdiction { get; }
+        public UrlTemplate<int> UserDetailUrlTemplate { get; }
+        public UrlTemplate<int> OrganizationDetailUrlTemplate { get; }
 
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, StormwaterJurisdiction stormwaterJurisdiction) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools) 
@@ -69,8 +71,8 @@ namespace Neptune.Web.Views.Jurisdiction
                     $"Edit Jurisdiction - {StormwaterJurisdiction.GetOrganizationDisplayName()}",
                     true)
                 : new HtmlString(string.Empty);
+            UserDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<UserController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            OrganizationDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
         }
-
-        
     }
 }
