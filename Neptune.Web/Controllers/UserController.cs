@@ -55,7 +55,7 @@ namespace Neptune.Web.Controllers
         [UserEditFeature]
         public GridJsonNetJObjectResult<Person> IndexGridJsonData()
         {
-            var gridSpec = new IndexGridSpec(CurrentPerson);
+            var gridSpec = new IndexGridSpec(_linkGenerator, CurrentPerson);
             var persons = _dbContext.People.AsNoTracking().Include(x => x.Organization).Include(x => x.Organizations)
                 .Include(x => x.StormwaterJurisdictionPeople).ThenInclude(x => x.StormwaterJurisdiction)
                 .ToList().Where(x => new UserViewFeature().HasPermission(CurrentPerson, x).HasPermission)

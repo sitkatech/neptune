@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
 @using Neptune.EFModels.Entities
+@using Neptune.Web.Common
 @using Neptune.Web.Common.HtmlHelperExtensions
 @inherits Neptune.Web.Views.Organization.Edit
 @model Neptune.Web.Views.Organization.EditViewModel
@@ -90,7 +91,7 @@ Source code is available upon request via <support@sitkatech.com>.
             <div class="col-sm-9">
                 @Html.EditorFor(x => x.LogoFileResourceData)
                 <span class="smallExplanationText">
-                    Allowed Extensions: @*todo:@Model.GetFileExtensions(x => x.LogoFileResourceData)*@
+                    Allowed Extensions: @Model.GetFileExtensions(x => x.LogoFileResourceData)
                 </span>
                 @Html.ValidationMessageFor(x => x.LogoFileResourceData)
             </div>

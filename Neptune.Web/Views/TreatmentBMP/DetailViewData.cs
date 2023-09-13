@@ -168,7 +168,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             FieldVisitGridDataUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(LinkGenerator, x => x.FieldVisitGridJsonData(treatmentBMP));
             NewFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(LinkGenerator, x => x.New(treatmentBMP));
 
-            NewTreatmentBMPDocumentUrl = "";//todo SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(_linkGenerator, x => x.New(treatmentBMP));
+            NewTreatmentBMPDocumentUrl = SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(LinkGenerator, x => x.New(treatmentBMP));
             FundingEventEditUrlTemplate = new UrlTemplate<int>( SitkaRoute<FundingEventController>.BuildUrlFromExpression(LinkGenerator, x => x.Edit(UrlTemplate.Parameter1Int)));
             FundingEventDeleteUrlTemplate = new UrlTemplate<int>( SitkaRoute<FundingEventController>.BuildUrlFromExpression(LinkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
             NewFundingSourcesUrl = SitkaRoute<FundingEventController>.BuildUrlFromExpression(LinkGenerator, x => x.New(treatmentBMP));
@@ -180,7 +180,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             EditTreatmentBMPOtherDesignAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.EditOtherDesignAttributes(treatmentBMP));
 
             LocationEditUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.EditLocation(treatmentBMP));
-            ManageTreatmentBMPImagesUrl = "";//todo SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(LinkGenerator, x => x.ManageTreatmentBMPImages(TreatmentBMP));
+            ManageTreatmentBMPImagesUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(LinkGenerator, x => x.ManageTreatmentBMPImages(TreatmentBMP));
 
             VerifiedUnverifiedUrl = verifiedUnverifiedUrl;
             HRUCharacteristicsViewData = hruCharacteristicsViewData;

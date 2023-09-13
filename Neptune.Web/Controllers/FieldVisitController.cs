@@ -22,7 +22,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Data;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
-using Neptune.Common;
 using Neptune.Common.DesignByContract;
 using Neptune.Common.Mvc;
 using Neptune.Web.Security;
@@ -42,7 +41,6 @@ using FieldVisitSection = Neptune.EFModels.Entities.FieldVisitSection;
 using Index = Neptune.Web.Views.FieldVisit.Index;
 using Neptune.Web.Services.Filters;
 using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore;
 using Neptune.Web.Services;
 
 namespace Neptune.Web.Controllers

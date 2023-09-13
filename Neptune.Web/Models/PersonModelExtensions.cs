@@ -44,12 +44,12 @@ namespace Neptune.Web.Models
             return new HtmlString($"{userUrl} - {orgUrl}");
         }
 
-        public static HtmlString GetFullNameFirstLastAndOrgShortNameAsUrl(this Person person)
-        {
-            var userUrl = person.GetFullNameFirstLastAsUrl();
-            var orgUrl = person.Organization.GetShortNameAsUrl();
-            return new HtmlString($"{userUrl} ({orgUrl})");
-        }
+        //public static HtmlString GetFullNameFirstLastAndOrgShortNameAsUrl(this Person person)
+        //{
+        //    var userUrl = person.GetFullNameFirstLastAsUrl();
+        //    var orgUrl = person.Organization.GetShortNameAsUrl();
+        //    return new HtmlString($"{userUrl} ({orgUrl})");
+        //}
 
         public static HtmlString GetFullNameFirstLastAsStringAndOrgAsUrl(this Person person)
         {

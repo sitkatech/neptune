@@ -30,7 +30,7 @@ namespace Neptune.Web.Views.TreatmentBMP
     {
 
         public EFModels.Entities.TreatmentBMP TreatmentBMP{ get; }
-        public TreatmentBMPImage KeyPhoto { get; }
+        public EFModels.Entities.TreatmentBMPImage KeyPhoto { get; }
         public string FieldVisitUrl { get; }
         public bool UserHasFieldVisitPermissions { get; }
         public string TreatmentBMPDetailUrl { get; }

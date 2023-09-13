@@ -57,12 +57,11 @@ namespace Neptune.Web.Controllers
         }
 
         [UserEditFeature]
-        [HttpGet("{rolePrimaryKey}")]
-        [ValidateEntityExistsAndPopulateParameterFilter("rolePrimaryKey")]
-        public GridJsonNetJObjectResult<Person> PersonWithRoleGridJsonData([FromRoute] RolePrimaryKey rolePrimaryKey)
+        [HttpGet("{roleID}")]
+        public GridJsonNetJObjectResult<Person> PersonWithRoleGridJsonData([FromRoute] int roleID)
         {
             var gridSpec = new PersonWithRoleGridSpec();
-            var peopleWithRole = People.ListWithRole(_dbContext, rolePrimaryKey.PrimaryKeyValue);
+            var peopleWithRole = People.ListWithRole(_dbContext, roleID);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Person>(peopleWithRole, gridSpec);
             return gridJsonNetJObjectResult;
         }

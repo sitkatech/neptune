@@ -24,7 +24,7 @@ namespace Neptune.Web.Views.ParcelLayerUpload
 
             //todo:
             //dbContext.pParcelStagingDeleteByPersonID(currentPerson.PersonID);
-            //FileResource.ValidateFileSize(FileResourceData, errors, GeneralUtility.NameOf(() => FileResourceData));
+            //FileResourceService.ValidateFileSize(FileResourceData, errors, "FileResourceData"));
 
             //using (var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".gdb.zip"))
             //{

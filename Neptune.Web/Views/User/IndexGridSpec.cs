@@ -23,14 +23,18 @@ using Neptune.Web.Models;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.DhtmlWrappers;
+using Neptune.Web.Controllers;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.User
 {
     public class IndexGridSpec : GridSpec<Person>
     {
-        public IndexGridSpec(Person currentPerson)
+        public IndexGridSpec(LinkGenerator linkGenerator, Person currentPerson)
         {
+            var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            var roleDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<RoleController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            var organizationDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var hasDeletePermission = new UserDeleteFeature().HasPermissionByPerson(currentPerson);
             if (hasDeletePermission)
             {
@@ -38,14 +42,15 @@ namespace Neptune.Web.Views.User
                     x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), hasDeletePermission, true),
                     30, DhtmlxGridColumnFilterType.None);
             }
-            Add("Last Name", a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.LastName), 100, DhtmlxGridColumnFilterType.Html);
-            Add("First Name", a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.FirstName), 100, DhtmlxGridColumnFilterType.Html);
+            Add("Last Name", a => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(a.PersonID), a.LastName), 100, DhtmlxGridColumnFilterType.Html);
+            Add("First Name", a => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(a.PersonID), a.FirstName), 100, DhtmlxGridColumnFilterType.Html);
             Add("Email", a => a.Email, 200);
-            Add($"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()}", a => a.Organization.GetShortNameAsUrl(), 200);
+            Add($"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()}", a =>
+                UrlTemplate.MakeHrefString(organizationDetailUrlTemplate.ParameterReplace(a.OrganizationID), a.Organization.GetOrganizationShortNameIfAvailable()), 200);
             Add("Phone", a => a.Phone.ToPhoneNumberString(), 100);
             Add("Username", a => a.LoginName.ToString(), 200);
             Add("Last Activity", a => a.LastActivityDate, 120);
-            Add("Role", a => a.Role.GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Role", a => UrlTemplate.MakeHrefString(roleDetailUrlTemplate.ParameterReplace(a.RoleID), a.Role.RoleDisplayName), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Active?", a => a.IsActive.ToYesNo(), 75, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Receives Support Emails?", a => a.ReceiveSupportEmails.ToYesNo(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add($"{FieldDefinitionType.PrimaryContact.GetFieldDefinitionLabel()} for Organizations", a => a.GetPrimaryContactOrganizations().Count, 120);

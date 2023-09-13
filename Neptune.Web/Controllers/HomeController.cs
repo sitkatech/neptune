@@ -126,18 +126,18 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public ViewResult ManageHomePageImages()
         {
-            var imageGalleryViewData = BuildImageGalleryViewData(HttpContext, _linkGenerator, CurrentPerson, _dbContext);
+            var imageGalleryViewData = BuildImageGalleryViewData(_linkGenerator, CurrentPerson, _dbContext);
             var viewData = new ManageHomePageImagesViewData(HttpContext, _linkGenerator, CurrentPerson, imageGalleryViewData);
             return RazorView<ManageHomePageImages, ManageHomePageImagesViewData>(viewData);
         }
 
-        private static ImageGalleryViewData BuildImageGalleryViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, NeptuneDbContext dbContext)
+        private static ImageGalleryViewData BuildImageGalleryViewData(LinkGenerator linkGenerator, Person currentPerson, NeptuneDbContext dbContext)
         {
             var userCanAddPhotosToHomePage = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
-            var newPhotoForProjectUrl = "";//todo: SitkaRoute<NeptuneHomePageImageController>.BuildUrlFromExpression(_linkGenerator, x => x.New());
+            var newPhotoForProjectUrl = SitkaRoute<NeptuneHomePageImageController>.BuildUrlFromExpression(linkGenerator, x => x.New());
             var galleryName = "HomePageImagesGallery";
             var neptuneHomePageImages = NeptuneHomePageImages.List(dbContext); 
-            var imageGalleryViewData = new ImageGalleryViewData(currentPerson, galleryName,
+            var imageGalleryViewData = new ImageGalleryViewData(linkGenerator, currentPerson, galleryName,
                 neptuneHomePageImages,
                 userCanAddPhotosToHomePage,
                 newPhotoForProjectUrl,

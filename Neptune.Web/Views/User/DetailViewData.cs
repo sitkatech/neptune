@@ -47,6 +47,7 @@ namespace Neptune.Web.Views.User
         public string ActivateInactivateUrl { get; }
         public IHtmlContent EditRolesLink { get; }
         public IHtmlContent EditJurisdictionsLink { get; }
+        public string RoleDetailUrl { get; }
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             Person personToView,
@@ -62,6 +63,7 @@ namespace Neptune.Web.Views.User
 
             EditPersonOrganizationPrimaryContactUrl = SitkaRoute<PersonOrganizationController>.BuildUrlFromExpression(LinkGenerator, x => x.EditPersonOrganizationPrimaryContacts(personToView));
             IndexUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            RoleDetailUrl = SitkaRoute<RoleController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(personToView.RoleID));
             JurisdictionIndexUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
 
             UserHasPersonViewPermissions = new UserViewFeature().HasPermission(currentPerson, personToView).HasPermission;

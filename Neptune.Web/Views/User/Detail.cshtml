@@ -116,7 +116,7 @@
                     <div class="col-xs-6">
                         @if (ViewDataTyped.UserCanManagePeople)
                         {
-                            @ViewDataTyped.Person.Role.GetDisplayNameAsUrl()
+                            <a href="@ViewDataTyped.RoleDetailUrl">@ViewDataTyped.Person.Role.RoleDisplayName</a>
                         }
                         else
                         {

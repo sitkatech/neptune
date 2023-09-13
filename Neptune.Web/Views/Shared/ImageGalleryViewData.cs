@@ -20,6 +20,8 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views.Shared
 {
@@ -27,14 +29,16 @@ namespace Neptune.Web.Views.Shared
     {
         public Person CurrentPerson { get; }
         public string GalleryName { get; }
-        public IEnumerable<NeptuneHomePageImage> GalleryImages { get; }
+        public IEnumerable<EFModels.Entities.NeptuneHomePageImage> GalleryImages { get; }
         public string AddNewPhotoUrl { get; }
         public bool UserCanAddPhotos { get; }
         public bool IsGalleryMode { get; }
-        public Func<NeptuneHomePageImage, object> SortFunction { get; }
+        public Func<EFModels.Entities.NeptuneHomePageImage, object> SortFunction { get; }
         public string ImageEntityName { get; }
+        public UrlTemplate<int> DeleteUrlTemplate { get; }
+        public UrlTemplate<int> EditUrlTemplate { get; }
 
-        public ImageGalleryViewData(Person currentPerson, string galleryName, IEnumerable<NeptuneHomePageImage> galleryImages, bool canAddPhotos, string addNewPhotoUrl, bool isGalleryMode, Func<NeptuneHomePageImage, object> sortFunction, string imageEntityName)
+        public ImageGalleryViewData(LinkGenerator linkGenerator, Person currentPerson, string galleryName, IEnumerable<EFModels.Entities.NeptuneHomePageImage> galleryImages, bool canAddPhotos, string addNewPhotoUrl, bool isGalleryMode, Func<EFModels.Entities.NeptuneHomePageImage, object> sortFunction, string imageEntityName)
         {
             CurrentPerson = currentPerson;
             GalleryImages = galleryImages.ToList();
@@ -44,6 +48,8 @@ namespace Neptune.Web.Views.Shared
             IsGalleryMode = isGalleryMode;
             SortFunction = sortFunction;
             ImageEntityName = imageEntityName;
+            EditUrlTemplate = new UrlTemplate<int>(SitkaRoute<NeptuneHomePageImageController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(UrlTemplate.Parameter1Int)));
+            DeleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<NeptuneHomePageImageController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
         }
     }
 }

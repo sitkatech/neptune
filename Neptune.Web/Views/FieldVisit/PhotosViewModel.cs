@@ -47,7 +47,7 @@ namespace Neptune.Web.Views.FieldVisit
             var treatmentBMPImagesToUpdate = photoSimples.Select(x =>
                     x.FlagForDeletion // Exclude from list to update if flagged for deletion
                         ? null
-                        : new TreatmentBMPImage{
+                        : new EFModels.Entities.TreatmentBMPImage{
                             UploadDate = DateTime.Now,
                             Caption = x.Caption,
                             TreatmentBMPImageID = x.PrimaryKey

@@ -50,4 +50,16 @@ public static class TreatmentBMPAssessments
     {
         return GetImpl(dbContext).AsNoTracking().ToList();
     }
+
+    public static TreatmentBMPAssessment GetByIDForFeatureContextCheck(NeptuneDbContext dbContext, int treatmentBMPAssessmentID)
+    {
+        var treatmentBMPAssessment = dbContext.TreatmentBMPAssessments
+            .Include(x => x.TreatmentBMP)
+            .ThenInclude(x => x.StormwaterJurisdiction)
+            .ThenInclude(x => x.Organization)
+            .AsNoTracking()
+            .SingleOrDefault(x => x.TreatmentBMPAssessmentID == treatmentBMPAssessmentID);
+        Check.RequireNotNull(treatmentBMPAssessment, $"TreatmentBMPAssessment with ID {treatmentBMPAssessmentID} not found!");
+        return treatmentBMPAssessment;
+    }
 }

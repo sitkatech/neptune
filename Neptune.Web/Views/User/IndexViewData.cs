@@ -19,11 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Web;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Models;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.User
@@ -43,7 +41,7 @@ namespace Neptune.Web.Views.User
         {
             PageTitle = "All Users";
             EntityName = "Users";
-            GridSpec = new IndexGridSpec(currentPerson) {ObjectNameSingular = "User", ObjectNamePlural = "Users", SaveFiltersInCookie = true};
+            GridSpec = new IndexGridSpec(linkGenerator, currentPerson) {ObjectNameSingular = "User", ObjectNamePlural = "Users", SaveFiltersInCookie = true};
             GridName = "UserGrid";
             GridDataUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.IndexGridJsonData());
             KeystoneUrl = "";//todo: NeptuneWebConfiguration.KeystoneUrl;

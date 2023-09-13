@@ -118,6 +118,21 @@ namespace Neptune.Web.Common
             return string.Empty;
         }
 
+        public static string ToGroupedNumeric(this long value)
+        {
+            return value.ToString("#,###,###,##0");
+        }
+
+        public static string ToGroupedNumeric(this long? value)
+        {
+            if (value.HasValue)
+            {
+                return ToGroupedNumeric(value.Value);
+            }
+
+            return string.Empty;
+        }
+
         public static string ToGroupedNumeric(this decimal? value)
         {
             if (value.HasValue)

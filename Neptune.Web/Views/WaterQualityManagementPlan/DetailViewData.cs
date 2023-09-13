@@ -102,7 +102,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             EditWqmpBoundaryUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
                     x.EditWqmpBoundary(WaterQualityManagementPlan));
-            NewDocumentUrl = ""; //todo: SitkaRoute<WaterQualityManagementPlanDocumentController>.BuildUrlFromExpression(LinkGenerator, x => x.New(waterQualityManagementPlan));
+            NewDocumentUrl = SitkaRoute<WaterQualityManagementPlanDocumentController>.BuildUrlFromExpression(LinkGenerator, x => x.New(waterQualityManagementPlan));
             TreatmentBMPDetailUrlTemplate = new UrlTemplate<int>(
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator,
                     x => x.Detail(UrlTemplate.Parameter1Int)));

@@ -35,14 +35,14 @@ namespace Neptune.Web.Views.Home
         
         public JurisdictionsMapViewData JurisdictionsMapViewData { get; }
         public JurisdictionsMapInitJson JurisdictionsMapInitJson { get; }
-        public List<NeptuneHomePageImage> NeptuneHomePageCarouselImages { get; }
+        public List<EFModels.Entities.NeptuneHomePageImage> NeptuneHomePageCarouselImages { get; }
         public LaunchPadViewData LaunchPadViewData { get; }
         public UrlTemplate<string> DisplayFileResourceUrl { get; }
 
         public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.NeptunePage neptunePageHomePage,
             EFModels.Entities.NeptunePage neptunePageAdditionalInfo, EFModels.Entities.NeptunePage neptunePageMapInfo,
-            List<NeptuneHomePageImage> neptuneHomePageImages, JurisdictionsMapViewData jurisdictionsMapViewData,
+            List<EFModels.Entities.NeptuneHomePageImage> neptuneHomePageImages, JurisdictionsMapViewData jurisdictionsMapViewData,
             JurisdictionsMapInitJson jurisdictionsMapInitJson, LaunchPadViewData launchPadViewData) : base(httpContext, linkGenerator, currentPerson, null, true, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "Orange County Stormwater Tools";

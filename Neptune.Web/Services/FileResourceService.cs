@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Options;
 using Neptune.Common.DesignByContract;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
@@ -7,6 +8,7 @@ namespace Neptune.Web.Services;
 
 public class FileResourceService
 {
+    private const long MaxUploadFileSizeInBytes = 200000000;
     private readonly NeptuneDbContext _dbContext;
     private readonly AzureBlobStorageService _azureBlobStorageService;
     private readonly WebConfiguration _webConfiguration;
@@ -82,5 +84,15 @@ public class FileResourceService
         var fileResourceMimeTypeForFile = FileResourceMimeType.All.SingleOrDefault(mt => mt.FileResourceMimeTypeContentTypeName == file.ContentType);
         Check.RequireNotNull(fileResourceMimeTypeForFile, $"Unhandled MIME type: {file.ContentType}");
         return fileResourceMimeTypeForFile;
+    }
+
+    public static void ValidateFileSize(IFormFile httpPostedFileBase, List<ValidationResult> errors, string propertyName)
+    {
+        if (httpPostedFileBase.Length > MaxUploadFileSizeInBytes)
+        {
+            var formattedUploadSize = $"~{(httpPostedFileBase.Length / 1000).ToGroupedNumeric()} KB";
+            errors.Add(new ValidationResult(
+                $"File is too large - must be less than {MaxUploadFileSizeInBytes / (1024 ^ 2):0.0} KB [Provided file was {formattedUploadSize}]", new[] { propertyName }));
+        }
     }
 }

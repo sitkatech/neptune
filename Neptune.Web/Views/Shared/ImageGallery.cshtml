@@ -109,10 +109,10 @@ Source code is available upon request via <support@sitkatech.com>.
                         <div class="@Html.Raw(string.Join(" ", galleryImage.GetAdditionalCssClasses()).HtmlEncodeWithBreaks())">
                             <div class="icons">
                                 <span class="EditPhotoButtonClass">
-                                    @ModalDialogFormHelper.MakeEditIconLink(galleryImage.GetEditUrl(), $"Edit {ViewDataTyped.ImageEntityName}", ViewDataTyped.UserCanAddPhotos)
+                                    @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditUrlTemplate.ParameterReplace(galleryImage.NeptuneHomePageImageID), $"Edit {ViewDataTyped.ImageEntityName}", ViewDataTyped.UserCanAddPhotos)
                                 </span>
                                 <span class="DeletePhotoButtonClass">
-                                    @ModalDialogFormHelper.MakeDeleteLink(DhtmlxGridHtmlHelpers.DeleteIconBootstrap.ToString(), galleryImage.GetDeleteUrl(), new List<string>(), ViewDataTyped.UserCanAddPhotos)
+                                    @ModalDialogFormHelper.MakeDeleteLink(DhtmlxGridHtmlHelpers.DeleteIconBootstrap.ToString(), ViewDataTyped.DeleteUrlTemplate.ParameterReplace(galleryImage.NeptuneHomePageImageID), new List<string>(), ViewDataTyped.UserCanAddPhotos)
                                 </span>
                                 &nbsp;
                             </div>

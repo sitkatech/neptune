@@ -19,18 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
-using Neptune.Common.DesignByContract;
-using Neptune.Web.Common;
 
 namespace Neptune.EFModels.Entities
 {
     public partial class FileResource
     {
-        //public static int MaxUploadFileSizeInBytes = NeptuneWebConfiguration.MaximumAllowedUploadFileSize;
-
         public string GetFileResourceUrl()
         {
             return $"/FileResource/DisplayResource/{GetFileResourceGUIDAsString()}";
@@ -52,8 +47,6 @@ namespace Neptune.EFModels.Entities
             return $"{OriginalBaseFilename}{OriginalFileExtension}";
         }
 
-        //public static string MaxFileSizeHumanReadable => $"{MaxUploadFileSizeInBytes / (1024 ^ 2):0.0} KB";
-
         /// <summary>
         /// Prepare the file bytes for going into blob storage
         /// </summary>
@@ -66,44 +59,6 @@ namespace Neptune.EFModels.Entities
             binaryReader.Close();
             return fileResourceData;
         }
-
-
-        // todo: not needed anymore?
-        //public static FileResource CreateNewFromHttpPostedFileAndSave(HttpPostedFileBase httpPostedFileBase, Person currentPerson)
-        //{
-        //    var fileResource = CreateNewFromHttpPostedFile(httpPostedFileBase, currentPerson);
-        //    _dbContext.FileResources.Add(fileResource);
-        //    _dbContext.SaveChanges();
-        //    return fileResource;
-        //}
-
-        ////Only public for unit testing
-        //public static FileResource CreateNewFromHttpPostedFile(HttpPostedFileBase httpPostedFileBase, Person currentPerson)
-        //{
-        //    var fileName = httpPostedFileBase.FileName;
-        //    if (string.IsNullOrWhiteSpace(fileName))
-        //    {
-        //        fileName = Guid.NewGuid().ToString() + ".jpg";
-        //    }
-
-        //    var originalFilenameInfo = new FileInfo(fileName);
-        //    var baseFilenameWithoutExtension = originalFilenameInfo.Name.Remove(originalFilenameInfo.Name.Length - originalFilenameInfo.Extension.Length, originalFilenameInfo.Extension.Length);
-        //    var fileResourceData = ConvertHttpPostedFileToByteArray(httpPostedFileBase);
-        //    var fileResourceMimeTypeID = GetFileResourceMimeTypeForFile(httpPostedFileBase).FileResourceMimeTypeID;
-        //    var fileResource = new FileResource(fileResourceMimeTypeID, baseFilenameWithoutExtension, originalFilenameInfo.Extension, Guid.NewGuid(), fileResourceData, currentPerson.PersonID, DateTime.Now);
-        //    return fileResource;
-        //}
-
-
-        //public static void ValidateFileSize(HttpPostedFileBase httpPostedFileBase, List<ValidationResult> errors, string propertyName)
-        //{
-        //    if (httpPostedFileBase.ContentLength > MaxUploadFileSizeInBytes)
-        //    {
-        //        var formattedUploadSize = $"~{(httpPostedFileBase.ContentLength / 1000).ToGroupedNumeric()} KB";
-        //        errors.Add(new ValidationResult(
-        //            $"File is too large - must be less than {MaxFileSizeHumanReadable} [Provided file was {formattedUploadSize}]", new[] { propertyName }));
-        //    }
-        //}
 
         public static readonly Regex FileResourceUrlRegEx =
             new Regex(@"FileResource\/DisplayResource\/(?<fileResourceGuidCapture>[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})",
