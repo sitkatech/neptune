@@ -20,16 +20,18 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels.Entities;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public class EditAttributesViewData : Shared.EditAttributes.EditAttributesViewData
+    public class EditOtherDesignAttributesViewData : NeptuneViewData
     {
-        public EditAttributesViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            EFModels.Entities.TreatmentBMP treatmentBMP,
-            CustomAttributeTypePurpose customAttributeTypePurpose, bool missingRequiredAttributes) : base(httpContext, linkGenerator, currentPerson, treatmentBMP, customAttributeTypePurpose, false, missingRequiredAttributes)
+        public string ParentDetailUrl { get; set; }
+        public Shared.EditAttributes.EditAttributesViewData EditAttributesViewData { get; }
+
+        public EditOtherDesignAttributesViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, string parentDetailUrl, Views.Shared.EditAttributes.EditAttributesViewData editAttributesViewData) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
+            EditAttributesViewData = editAttributesViewData;
+            ParentDetailUrl = parentDetailUrl;
         }
     }
 }

@@ -20,51 +20,22 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels.Entities;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.Shared.EditAttributes
 {
-    public class EditAttributesViewData : NeptuneViewData
+    public class EditAttributesViewData : NeptuneUserControlViewData
     {
         public List<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; }
-        public string ParentDetailUrl { get; set; }
-        public bool IsSubForm { get; }
         public bool MissingRequiredAttributes { get; }
 
-        public EditAttributesViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            EFModels.Entities.TreatmentBMP treatmentBMP,
-            CustomAttributeTypePurpose customAttributeTypePurpose, bool isSubForm, bool missingRequiredAttributes) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditAttributesViewData(EFModels.Entities.TreatmentBMP treatmentBMP, CustomAttributeTypePurposeEnum customAttributeTypePurposeEnum, bool missingRequiredAttributes)
         {
-            IsSubForm = isSubForm;
             MissingRequiredAttributes = missingRequiredAttributes;
-            EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.FindABMP());
-            EntityUrl = treatmentBMPIndexUrl;
-            SubEntityName = treatmentBMP.TreatmentBMPName;
-            SubEntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP));
-            PageTitle = $"Edit {FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel()} Attributes";
-
-            ParentDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP));
-
             TreatmentBMPTypeCustomAttributeTypes = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes
-                .Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID ==
-                            customAttributeTypePurpose.CustomAttributeTypePurposeID)
-                .ToList().OrderBy(x => x.SortOrder).ThenBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
-        }
-
-        public EditAttributesViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            EFModels.Entities.FieldVisit fieldVisit, bool isSubForm, bool missingRequiredAttributes) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
-        {
-            IsSubForm = isSubForm;
-            MissingRequiredAttributes = missingRequiredAttributes;
-            TreatmentBMPTypeCustomAttributeTypes = fieldVisit.TreatmentBMP.TreatmentBMPType
-                .TreatmentBMPTypeCustomAttributeTypes.Where(x =>
-                    x.CustomAttributeType.CustomAttributeTypePurposeID !=
-                    CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList().OrderBy(x =>
-                    x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeDisplayName)
-                .ThenBy(x => x.SortOrder).ThenBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
+                .Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID == (int) customAttributeTypePurposeEnum).ToList()
+                .OrderBy(x => x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeDisplayName)
+                .ThenBy(x => x.SortOrder)
+                .ThenBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
         }
     }
 }

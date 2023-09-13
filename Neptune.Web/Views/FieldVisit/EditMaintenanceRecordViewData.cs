@@ -36,14 +36,14 @@ namespace Neptune.Web.Views.FieldVisit
         public IEnumerable<SelectListItem> AllOrganizations { get; }
         public string TreatmentBMPUrl { get; }
         public string MaintenanceRecordUrl { get; }
-        public EditAttributesViewData EditMaintenanceRecordObservationsViewData { get; }
+        public EditAttributesViewData EditAttributesViewData { get; }
 
         public EditMaintenanceRecordViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, List<EFModels.Entities.Organization> organizations,
-            EFModels.Entities.TreatmentBMP treatmentBMP, bool isNew, EFModels.Entities.FieldVisit fieldVisit, EditAttributesViewData editMaintenanceRecordObservationsViewData) : base(httpContext, linkGenerator, currentPerson, fieldVisit, EFModels.Entities.FieldVisitSection.Maintenance)
+            EFModels.Entities.TreatmentBMP treatmentBMP, bool isNew, EFModels.Entities.FieldVisit fieldVisit, EditAttributesViewData editAttributesViewData) : base(httpContext, linkGenerator, currentPerson, fieldVisit, EFModels.Entities.FieldVisitSection.Maintenance)
         {
             SubsectionName = "Edit Maintenance Record";
             IsNew = isNew;
-            EditMaintenanceRecordObservationsViewData = editMaintenanceRecordObservationsViewData;
+            EditAttributesViewData = editAttributesViewData;
 
             AllOrganizations = organizations.OrderBy(x => x.OrganizationName).ToSelectListWithDisabledEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture),
                 x => x.OrganizationName, "Choose an Organization");

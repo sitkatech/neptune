@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="EditViewModel.cs" company="Tahoe Regional Planning Agency">
+<copyright file="Edit.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,18 +19,12 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.EFModels.Entities;
+using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public class EditAttributesViewModel : Shared.EditAttributes.EditAttributesViewModel
+    public abstract class EditOtherDesignAttributes : Common.Mvc.TypedWebViewPage<EditOtherDesignAttributesViewData, EditAttributesViewModel>
     {
-        public EditAttributesViewModel()
-        {
-        }
 
-        public EditAttributesViewModel(EFModels.Entities.TreatmentBMP treatmentBMP, CustomAttributeTypePurpose customAttributeTypePurpose) : base(treatmentBMP, customAttributeTypePurpose)
-        {
-        }
     }
 }

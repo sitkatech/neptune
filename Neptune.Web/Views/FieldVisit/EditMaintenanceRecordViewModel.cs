@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.ComponentModel.DataAnnotations;
 using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
 using Neptune.Web.Views.Shared.EditAttributes;
 
@@ -43,73 +44,63 @@ namespace Neptune.Web.Views.FieldVisit
         {
         }
 
-        public EditMaintenanceRecordViewModel(EFModels.Entities.MaintenanceRecord maintenanceRecord)
+        public EditMaintenanceRecordViewModel(EFModels.Entities.MaintenanceRecord maintenanceRecord, List<CustomAttributeUpsertDto> customAttributeUpsertDtos)
         {
-            var treatmentBMP = maintenanceRecord.TreatmentBMP;
-            CustomAttributes = treatmentBMP.CustomAttributes.Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).Select(x => x.AsUpsertDto()).ToList();
-
             MaintenanceRecordTypeID = maintenanceRecord.MaintenanceRecordTypeID;
             MaintenanceRecordDescription = maintenanceRecord.MaintenanceRecordDescription;
-            CustomAttributes = maintenanceRecord.MaintenanceRecordObservations.Select(x => x.AsUpsertDto()).ToList();
+            CustomAttributes = customAttributeUpsertDtos;
         }
 
-        public void UpdateModel(EFModels.Entities.FieldVisit fieldVisit, List<CustomAttributeType> allCustomAttributeTypes, NeptuneDbContext dbContext)
+        public async Task UpdateModel(NeptuneDbContext dbContext, EFModels.Entities.MaintenanceRecord? maintenanceRecord, List<MaintenanceRecordObservation> existingMaintenanceRecordObservations, List<CustomAttributeType> allCustomAttributeTypes)
         {
-            var maintenanceRecord = fieldVisit.MaintenanceRecord;
             maintenanceRecord.MaintenanceRecordTypeID = MaintenanceRecordTypeID.Value;
             maintenanceRecord.MaintenanceRecordDescription = MaintenanceRecordDescription;
 
-            var treatmentBMPTypeCustomAttributeTypes = maintenanceRecord.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.ToList();
-            var customAttributeSimplesWithValues = CustomAttributes.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0);
-            var maintenanceRecordObservationsToUpdate = new List<MaintenanceRecordObservation>();
+            dbContext.RemoveRange(existingMaintenanceRecordObservations.SelectMany(x => x.MaintenanceRecordObservationValues));
+            await dbContext.SaveChangesAsync();
+
+            var customAttributeUpsertDtos = CustomAttributes.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0).ToList();
             var maintenanceRecordObservationValuesToUpdate = new List<MaintenanceRecordObservationValue>();
-            foreach (var x in customAttributeSimplesWithValues)
+            foreach (var customAttributeUpsertDto in customAttributeUpsertDtos)
             {
-
-                var maintenanceRecordObservation = new MaintenanceRecordObservation()
+                var maintenanceRecordObservation = existingMaintenanceRecordObservations.SingleOrDefault(x =>
+                    x.MaintenanceRecordID == maintenanceRecord.MaintenanceRecordID
+                    && x.TreatmentBMPTypeID == maintenanceRecord.TreatmentBMPTypeID
+                    && x.CustomAttributeTypeID == customAttributeUpsertDto.CustomAttributeTypeID);
+                if (maintenanceRecordObservation == null)
                 {
-                    MaintenanceRecordID = maintenanceRecord.MaintenanceRecordID,
-                    TreatmentBMPTypeCustomAttributeTypeID = treatmentBMPTypeCustomAttributeTypes.Single(y => y.CustomAttributeTypeID == x.CustomAttributeTypeID)
-                        .TreatmentBMPTypeCustomAttributeTypeID,
-                    TreatmentBMPTypeID = maintenanceRecord.TreatmentBMP.TreatmentBMPTypeID,
-                    CustomAttributeTypeID = x.CustomAttributeTypeID
-                };
-                maintenanceRecordObservationsToUpdate.Add(maintenanceRecordObservation);
+                    maintenanceRecordObservation = new MaintenanceRecordObservation
+                    {
+                        MaintenanceRecordID = maintenanceRecord.MaintenanceRecordID,
+                        TreatmentBMPTypeCustomAttributeTypeID = customAttributeUpsertDto.TreatmentBMPTypeCustomAttributeTypeID,
+                        TreatmentBMPTypeID = maintenanceRecord.TreatmentBMP.TreatmentBMPTypeID,
+                        CustomAttributeTypeID = customAttributeUpsertDto.CustomAttributeTypeID
+                    };
+                    dbContext.MaintenanceRecordObservations.Add(maintenanceRecordObservation);
+                }
 
-                foreach (var value in x.CustomAttributeValues)
+                foreach (var value in customAttributeUpsertDto.CustomAttributeValues)
                 {
-                    var valueParsedForDataType = allCustomAttributeTypes.Single(y => y.CustomAttributeTypeID == x.CustomAttributeTypeID).CustomAttributeDataType.ValueParsedForDataType(value);
-                    var maintenanceRecordObservationValue =
-                        new MaintenanceRecordObservationValue
-                        {
-                            MaintenanceRecordObservation = maintenanceRecordObservation,
-                            ObservationValue = valueParsedForDataType
-                        };
-
+                    var valueParsedForDataType = allCustomAttributeTypes.Single(y => y.CustomAttributeTypeID == customAttributeUpsertDto.CustomAttributeTypeID).CustomAttributeDataType.ValueParsedForDataType(value);
+                    var maintenanceRecordObservationValue = new MaintenanceRecordObservationValue
+                    {
+                        MaintenanceRecordObservation = maintenanceRecordObservation,
+                        ObservationValue = valueParsedForDataType
+                    };
                     maintenanceRecordObservationValuesToUpdate.Add(maintenanceRecordObservationValue);
                 }
             }
 
-            var maintenanceRecordObservationsInDatabase = dbContext.MaintenanceRecordObservations;
-            var maintenanceRecordObservationValuesInDatabase = dbContext.MaintenanceRecordObservationValues;
-
-            var existingMaintenanceRecordObservations = maintenanceRecord.MaintenanceRecordObservations.Where(x =>
-                x.CustomAttributeType.CustomAttributeTypePurposeID ==
-                CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList();
-
-            var existingMaintenanceRecordObservationValues = existingMaintenanceRecordObservations.SelectMany(x => x.MaintenanceRecordObservationValues).ToList();
-
-            existingMaintenanceRecordObservations.Merge(maintenanceRecordObservationsToUpdate, maintenanceRecordObservationsInDatabase,
-                (x, y) => x.MaintenanceRecordID == y.MaintenanceRecordID
-                          && x.TreatmentBMPTypeID == y.TreatmentBMPTypeID
-                          && x.CustomAttributeTypeID == y.CustomAttributeTypeID
-                          && x.MaintenanceRecordObservationID == y.MaintenanceRecordObservationID,
-                (x, y) => { });
-
-            existingMaintenanceRecordObservationValues.Merge(maintenanceRecordObservationValuesToUpdate, maintenanceRecordObservationValuesInDatabase,
-                (x, y) => x.MaintenanceRecordObservationValueID == y.MaintenanceRecordObservationValueID
-                          && x.MaintenanceRecordObservationID == y.MaintenanceRecordObservationID,
-                (x, y) => { x.ObservationValue = y.ObservationValue; });
+            foreach (var customAttribute in existingMaintenanceRecordObservations)
+            {
+                var customAttributeUpsertDto = customAttributeUpsertDtos.SingleOrDefault(y =>
+                    customAttribute.TreatmentBMPTypeCustomAttributeTypeID == y.TreatmentBMPTypeCustomAttributeTypeID);
+                if (customAttributeUpsertDto == null)
+                {
+                    dbContext.Remove(customAttribute);
+                }
+            }
+            dbContext.AddRange(maintenanceRecordObservationValuesToUpdate);
         }
     }
 }

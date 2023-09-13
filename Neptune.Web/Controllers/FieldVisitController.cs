@@ -338,22 +338,23 @@ namespace Neptune.Web.Controllers
         public ViewResult Attributes([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = FieldVisits.GetByID(_dbContext, fieldVisitPrimaryKey);
-            var viewModel = new AttributesViewModel(fieldVisit);
+            var customAttributeUpsertDtos = CustomAttributes.ListByTreatmentBMPIDAndPurposes(_dbContext, fieldVisit.TreatmentBMPID, CustomAttributeTypePurposeEnum.OtherDesignAttributes).Select(x => x.AsUpsertDto()).ToList();
+            var viewModel = new EditAttributesViewModel(customAttributeUpsertDtos);
             return ViewAttributes(fieldVisit, viewModel);
         }
 
-        private ViewResult ViewAttributes(FieldVisit fieldVisit, AttributesViewModel viewModel)
+        private ViewResult ViewAttributes(FieldVisit fieldVisit, EditAttributesViewModel viewModel)
         {
             var missingRequiredAttributes = fieldVisit.TreatmentBMP.RequiredAttributeDoesNotHaveValue();
-            var editAttributesViewData = new EditAttributesViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, true, missingRequiredAttributes);
+            var editAttributesViewData = new EditAttributesViewData(fieldVisit.TreatmentBMP, CustomAttributeTypePurposeEnum.OtherDesignAttributes, missingRequiredAttributes);
             var viewData = new AttributesViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, editAttributesViewData);
-            return RazorView<Attributes, AttributesViewData, AttributesViewModel>(viewData, viewModel);
+            return RazorView<Attributes, AttributesViewData, EditAttributesViewModel>(viewData, viewModel);
         }
 
         [HttpPost("{fieldVisitPrimaryKey}")]
         [FieldVisitEditFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("fieldVisitPrimaryKey")]
-        public async Task<IActionResult> Attributes([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, AttributesViewModel viewModel)
+        public async Task<IActionResult> Attributes([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, EditAttributesViewModel viewModel)
         {
             var fieldVisit = FieldVisits.GetByIDWithChangeTracking(_dbContext, fieldVisitPrimaryKey);
             if (!ModelState.IsValid)
@@ -361,7 +362,9 @@ namespace Neptune.Web.Controllers
                 return ViewAttributes(fieldVisit, viewModel);
             }
 
-            await viewModel.UpdateModel(fieldVisit, CurrentPerson, _dbContext);
+            var allCustomAttributeTypes = CustomAttributeTypes.List(_dbContext);
+            var existingCustomAttributes = CustomAttributes.ListByTreatmentBMPIDAndPurposesWithChangeTracking(_dbContext, fieldVisit.TreatmentBMPID, CustomAttributeTypePurposeEnum.OtherDesignAttributes);
+            await viewModel.UpdateModel(_dbContext, fieldVisit.TreatmentBMP, existingCustomAttributes, allCustomAttributeTypes);
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             fieldVisit.InventoryUpdated = true;
             if (await FinalizeVisitIfNecessary(viewModel, fieldVisit))
@@ -507,21 +510,21 @@ namespace Neptune.Web.Controllers
             // need this check to support deleting maintenance records from the edit page
             if (maintenanceRecord == null)
             {
-                return Redirect(
-                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(_linkGenerator, x => x.Maintain(fieldVisitPrimaryKey)));
+                return Redirect(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(_linkGenerator, x => x.Maintain(fieldVisitPrimaryKey)));
             }
-            var viewModel = new EditMaintenanceRecordViewModel(maintenanceRecord);
-            return ViewEditMaintenanceRecord(viewModel, maintenanceRecord.TreatmentBMP, false, fieldVisit, maintenanceRecord);
+
+            var maintenanceRecordObservations = MaintenanceRecordObservations.ListByMaintenanceRecordID(_dbContext, maintenanceRecord.MaintenanceRecordID);
+            var customAttributeUpsertDtos = maintenanceRecordObservations.Select(x => x.AsUpsertDto()).ToList();
+            var viewModel = new EditMaintenanceRecordViewModel(maintenanceRecord, customAttributeUpsertDtos);
+            return ViewEditMaintenanceRecord(viewModel, fieldVisit.TreatmentBMP, false, fieldVisit, maintenanceRecord);
         }
 
-        private ViewResult ViewEditMaintenanceRecord(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP, bool isNew, FieldVisit fieldVisit, MaintenanceRecord maintenanceRecord)
+        private ViewResult ViewEditMaintenanceRecord(EditMaintenanceRecordViewModel viewModel,
+            TreatmentBMP treatmentBMP, bool isNew, FieldVisit fieldVisit, MaintenanceRecord maintenanceRecord)
         {
-            var organizations = _dbContext.Organizations.OrderBy(x => x.OrganizationShortName)
-                .ToList();
+            var organizations = Organizations.ListActive(_dbContext);
             var missingRequiredAttributes = maintenanceRecord.IsMissingRequiredAttributes();
-            var editMaintenanceRecordObservationsViewData = new EditMaintenanceRecordObservationsViewData(HttpContext, _linkGenerator, CurrentPerson,
-                fieldVisit.TreatmentBMP, CustomAttributeTypePurpose.Maintenance, fieldVisit.MaintenanceRecord, true,
-                missingRequiredAttributes);
+            var editMaintenanceRecordObservationsViewData = new EditAttributesViewData(fieldVisit.TreatmentBMP, CustomAttributeTypePurposeEnum.Maintenance, missingRequiredAttributes);
             var viewData = new EditMaintenanceRecordViewData(HttpContext, _linkGenerator, CurrentPerson, organizations, treatmentBMP, isNew, fieldVisit, editMaintenanceRecordObservationsViewData);
             return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
                 EditMaintenanceRecordViewModel>(viewData, viewModel);
@@ -539,8 +542,11 @@ namespace Neptune.Web.Controllers
             }
 
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
-            var allCustomAttributeTypes = _dbContext.CustomAttributeTypes.ToList();
-            viewModel.UpdateModel(fieldVisit, allCustomAttributeTypes, _dbContext);
+            var allCustomAttributeTypes = CustomAttributeTypes.List(_dbContext);
+            var maintenanceRecord = fieldVisit.MaintenanceRecord;
+            var existingMaintenanceRecordObservations = MaintenanceRecordObservations.ListByMaintenanceRecordIDWithChangeTracking(_dbContext, maintenanceRecord.MaintenanceRecordID).Where(x =>
+                x.CustomAttributeType.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList();
+            await viewModel.UpdateModel(_dbContext, maintenanceRecord, existingMaintenanceRecordObservations, allCustomAttributeTypes);
             if (await FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Detail(fieldVisit))); }
 
             await _dbContext.SaveChangesAsync();

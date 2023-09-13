@@ -19,9 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.Web.Views.Shared.EditAttributes;
+
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class Attributes : Common.Mvc.TypedWebViewPage<AttributesViewData, AttributesViewModel>
+    public abstract class Attributes : Common.Mvc.TypedWebViewPage<AttributesViewData, EditAttributesViewModel>
     {
     }
 }

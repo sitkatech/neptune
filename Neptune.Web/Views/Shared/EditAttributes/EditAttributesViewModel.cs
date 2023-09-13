@@ -41,32 +41,39 @@ namespace Neptune.Web.Views.Shared.EditAttributes
         {
         }
 
-        public EditAttributesViewModel(EFModels.Entities.TreatmentBMP treatmentBMP,
-            CustomAttributeTypePurpose customAttributeTypePurpose)
+        public EditAttributesViewModel(List<CustomAttributeUpsertDto> customAttributeUpsertDtos)
         {
-            CustomAttributes = treatmentBMP.CustomAttributes.Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID == customAttributeTypePurpose.CustomAttributeTypePurposeID).Select(x => x.AsUpsertDto()).ToList();
+            CustomAttributes = customAttributeUpsertDtos;
         }
 
-        public void UpdateModel(EFModels.Entities.TreatmentBMP treatmentBMP, Person currentPerson,
-            CustomAttributeTypePurpose customAttributeTypePurpose, List<CustomAttributeType> allCustomAttributeTypes, NeptuneDbContext dbContext)
+        public async Task UpdateModel(NeptuneDbContext dbContext, EFModels.Entities.TreatmentBMP treatmentBMP, List<CustomAttribute> existingCustomAttributes, List<CustomAttributeType> allCustomAttributeTypes)
         {
-            var customAttributeSimplesWithValues = CustomAttributes.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0);
-            var customAttributesToUpdate = new List<CustomAttribute>();
-            var customAttributeValuesToUpdate = new List<CustomAttributeValue>();
-            foreach (var x in customAttributeSimplesWithValues)
-            {
-                var customAttribute = new CustomAttribute()
-                {
-                    TreatmentBMPID = treatmentBMP.TreatmentBMPID,
-                    TreatmentBMPTypeCustomAttributeTypeID = x.TreatmentBMPTypeCustomAttributeTypeID,
-                    TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
-                    CustomAttributeTypeID = x.CustomAttributeTypeID
-                };
+            dbContext.RemoveRange(existingCustomAttributes.SelectMany(x => x.CustomAttributeValues));
+            await dbContext.SaveChangesAsync();
 
-                customAttributesToUpdate.Add(customAttribute);
-                foreach (var value in x.CustomAttributeValues)
+            var customAttributeUpsertDtos = CustomAttributes.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0).ToList();
+            var customAttributeValuesToUpdate = new List<CustomAttributeValue>();
+            foreach (var customAttributeUpsertDto in customAttributeUpsertDtos)
+            {
+                var customAttribute = existingCustomAttributes.SingleOrDefault(x =>
+                    x.TreatmentBMPID == treatmentBMP.TreatmentBMPID
+                    && x.TreatmentBMPTypeID == treatmentBMP.TreatmentBMPTypeID
+                    && x.CustomAttributeTypeID == customAttributeUpsertDto.CustomAttributeTypeID);
+                if (customAttribute == null)
                 {
-                    var valueParsedForDataType = allCustomAttributeTypes.Single(y=>y.CustomAttributeTypeID == x.CustomAttributeTypeID).CustomAttributeDataType.ValueParsedForDataType(value);
+                    customAttribute = new CustomAttribute()
+                    {
+                        TreatmentBMPID = treatmentBMP.TreatmentBMPID,
+                        TreatmentBMPTypeCustomAttributeTypeID = customAttributeUpsertDto.TreatmentBMPTypeCustomAttributeTypeID,
+                        TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
+                        CustomAttributeTypeID = customAttributeUpsertDto.CustomAttributeTypeID
+                    };
+                    dbContext.CustomAttributes.Add(customAttribute);
+                }
+
+                foreach (var value in customAttributeUpsertDto.CustomAttributeValues)
+                {
+                    var valueParsedForDataType = allCustomAttributeTypes.Single(y => y.CustomAttributeTypeID == customAttributeUpsertDto.CustomAttributeTypeID).CustomAttributeDataType.ValueParsedForDataType(value);
                     var customAttributeValue = new CustomAttributeValue
                     {
                         CustomAttribute = customAttribute,
@@ -76,25 +83,16 @@ namespace Neptune.Web.Views.Shared.EditAttributes
                 }
             }
 
-            var customAttributesInDatabase = dbContext.CustomAttributes;
-            var customAttributeValuesInDatabase = dbContext.CustomAttributeValues;
-
-            var existingCustomAttributes = treatmentBMP.CustomAttributes.Where(x =>
-                x.CustomAttributeType.CustomAttributeTypePurposeID ==
-                customAttributeTypePurpose.CustomAttributeTypePurposeID).ToList();
-
-            var existingCustomAttributeValues = existingCustomAttributes.SelectMany(x => x.CustomAttributeValues).ToList();
-
-            existingCustomAttributes.Merge(customAttributesToUpdate, customAttributesInDatabase,
-                (x, y) => x.TreatmentBMPID == y.TreatmentBMPID 
-                          && x.TreatmentBMPTypeID == y.TreatmentBMPTypeID 
-                          && x.CustomAttributeTypeID == y.CustomAttributeTypeID
-                          && x.CustomAttributeID == y.CustomAttributeID);
-
-            existingCustomAttributeValues.Merge(customAttributeValuesToUpdate, customAttributeValuesInDatabase,
-                (x, y) => x.CustomAttributeValueID == y.CustomAttributeValueID
-                          && x.CustomAttributeID == y.CustomAttributeID,
-                (x, y) => { x.AttributeValue = y.AttributeValue; });
+            foreach (var customAttribute in existingCustomAttributes)
+            {
+                var customAttributeUpsertDto = customAttributeUpsertDtos.SingleOrDefault(y =>
+                    customAttribute.TreatmentBMPTypeCustomAttributeTypeID == y.TreatmentBMPTypeCustomAttributeTypeID);
+                if (customAttributeUpsertDto == null)
+                {
+                    dbContext.Remove(customAttribute);
+                }
+            }
+            dbContext.AddRange(customAttributeValuesToUpdate);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

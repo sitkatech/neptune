@@ -57,7 +57,7 @@ namespace Neptune.Web.Views.FieldVisit
             MaintenanceRecordDeleteUrl = fieldVisit.MaintenanceRecord == null ? string.Empty : SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(fieldVisit.MaintenanceRecord));
             UserCanDeleteMaintenanceRecord = MaintenanceRecord != null &&
                                              new MaintenanceRecordManageFeature()
-                                                 .HasPermission(CurrentPerson, MaintenanceRecord.TreatmentBMP)
+                                                 .HasPermission(CurrentPerson, fieldVisit.TreatmentBMP)
                                                  .HasPermission;
 
             InitialAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial);

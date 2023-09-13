@@ -15,7 +15,6 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class CustomAttributeTypePurpose : IHavePrimaryKey
     {
-        public static readonly CustomAttributeTypePurposePerformanceAndModelingAttributes PerformanceAndModelingAttributes = Neptune.EFModels.Entities.CustomAttributeTypePurposePerformanceAndModelingAttributes.Instance;
         public static readonly CustomAttributeTypePurposeOtherDesignAttributes OtherDesignAttributes = Neptune.EFModels.Entities.CustomAttributeTypePurposeOtherDesignAttributes.Instance;
         public static readonly CustomAttributeTypePurposeMaintenance Maintenance = Neptune.EFModels.Entities.CustomAttributeTypePurposeMaintenance.Instance;
 
@@ -29,8 +28,8 @@ namespace Neptune.EFModels.Entities
         /// </summary>
         static CustomAttributeTypePurpose()
         {
-            All = new List<CustomAttributeTypePurpose> { PerformanceAndModelingAttributes, OtherDesignAttributes, Maintenance };
-            AllAsDto = new List<CustomAttributeTypePurposeDto> { PerformanceAndModelingAttributes.AsDto(), OtherDesignAttributes.AsDto(), Maintenance.AsDto() };
+            All = new List<CustomAttributeTypePurpose> { OtherDesignAttributes, Maintenance };
+            AllAsDto = new List<CustomAttributeTypePurposeDto> { OtherDesignAttributes.AsDto(), Maintenance.AsDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, CustomAttributeTypePurpose>(All.ToDictionary(x => x.CustomAttributeTypePurposeID));
             AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, CustomAttributeTypePurposeDto>(AllAsDto.ToDictionary(x => x.CustomAttributeTypePurposeID));
         }
@@ -105,8 +104,6 @@ namespace Neptune.EFModels.Entities
                     return Maintenance;
                 case CustomAttributeTypePurposeEnum.OtherDesignAttributes:
                     return OtherDesignAttributes;
-                case CustomAttributeTypePurposeEnum.PerformanceAndModelingAttributes:
-                    return PerformanceAndModelingAttributes;
                 default:
                     throw new ArgumentException("Unable to map Enum: {enumValue}");
             }
@@ -115,15 +112,8 @@ namespace Neptune.EFModels.Entities
 
     public enum CustomAttributeTypePurposeEnum
     {
-        PerformanceAndModelingAttributes = 1,
         OtherDesignAttributes = 2,
         Maintenance = 3
-    }
-
-    public partial class CustomAttributeTypePurposePerformanceAndModelingAttributes : CustomAttributeTypePurpose
-    {
-        private CustomAttributeTypePurposePerformanceAndModelingAttributes(int customAttributeTypePurposeID, string customAttributeTypePurposeName, string customAttributeTypePurposeDisplayName) : base(customAttributeTypePurposeID, customAttributeTypePurposeName, customAttributeTypePurposeDisplayName) {}
-        public static readonly CustomAttributeTypePurposePerformanceAndModelingAttributes Instance = new CustomAttributeTypePurposePerformanceAndModelingAttributes(1, @"PerformanceAndModelingAttributes", @"Performance / Modeling Attributes");
     }
 
     public partial class CustomAttributeTypePurposeOtherDesignAttributes : CustomAttributeTypePurpose
