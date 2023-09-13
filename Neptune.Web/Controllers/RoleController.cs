@@ -28,7 +28,6 @@ using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
-using Neptune.Web.Services.Filters;
 
 namespace Neptune.Web.Controllers
 {

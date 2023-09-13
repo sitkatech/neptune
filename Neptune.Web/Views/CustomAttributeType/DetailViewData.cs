@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -29,14 +30,14 @@ namespace Neptune.Web.Views.CustomAttributeType
 {
     public class DetailViewData : NeptuneViewData
     {
-        public Models.CustomAttributeType CustomAttributeType { get; }
+        public EFModels.Entities.CustomAttributeType CustomAttributeType { get; }
         public bool UserHasCustomAttributeTypeManagePermissions { get; }
         public TreatmentBMPTypeGridSpec TreatmentBMPTypeGridSpec { get; }
         public string TreatmentBMPTypeGridName { get; }
         public string TreatmentBMPTypeGridDataUrl { get; }
+        public string EditUrl { get; }
 
-        public DetailViewData(Person currentPerson,
-            Models.CustomAttributeType customAttributeType) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.CustomAttributeType customAttributeType, Dictionary<int, int> countByTreatmentBMPType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             CustomAttributeType = customAttributeType;
             EntityName = FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabelPluralized();
@@ -46,10 +47,10 @@ namespace Neptune.Web.Views.CustomAttributeType
 
             if (UserHasCustomAttributeTypeManagePermissions)
             {
-                EntityUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(c => c.Manage());
+                EntityUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Manage());
             }
 
-            TreatmentBMPTypeGridSpec = new TreatmentBMPTypeGridSpec(currentPerson)
+            TreatmentBMPTypeGridSpec = new TreatmentBMPTypeGridSpec(linkGenerator, currentPerson, countByTreatmentBMPType)
             {
                 ObjectNameSingular = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel()}",
                 ObjectNamePlural = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}",
@@ -57,7 +58,8 @@ namespace Neptune.Web.Views.CustomAttributeType
             };
 
             TreatmentBMPTypeGridName = "treatmentBMPTypeGridForAttribute";
-            TreatmentBMPTypeGridDataUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(tc => tc.TreatmentBMPTypeGridJsonData(customAttributeType));
+            TreatmentBMPTypeGridDataUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.TreatmentBMPTypeGridJsonData(customAttributeType));
+            EditUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(customAttributeType));
         }
     }
 }

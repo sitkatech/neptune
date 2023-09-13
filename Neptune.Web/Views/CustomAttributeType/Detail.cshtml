@@ -18,13 +18,12 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@using LtInfo.Common
-@using Neptune.Web.Models
-@using LtInfo.Common.BootstrapWrappers
-@using LtInfo.Common.DhtmlWrappers
-@using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.EFModels.Entities
+@using Neptune.Web.Common
+@using Neptune.Web.Common.BootstrapWrappers
+@using Neptune.Web.Common.DhtmlWrappers
+@using Neptune.Web.Common.HtmlHelperExtensions
 @using Neptune.Web.Security
-@using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
 @inherits Neptune.Web.Views.CustomAttributeType.Detail
 @section JavascriptAndStylesContent
@@ -36,7 +35,7 @@
 {
     @if (new NeptuneAdminFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
     {
-        <a class="btn btn-neptune headerButtonText customAttributeTypeButton" href="@ViewDataTyped.CustomAttributeType.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Edit Attribute</a>
+        <a class="btn btn-neptune headerButtonText customAttributeTypeButton" href="@ViewDataTyped.EditUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Edit Attribute</a>
     }
 }
 

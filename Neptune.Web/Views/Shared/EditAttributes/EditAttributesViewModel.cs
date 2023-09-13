@@ -46,7 +46,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
             CustomAttributes = customAttributeUpsertDtos;
         }
 
-        public async Task UpdateModel(NeptuneDbContext dbContext, EFModels.Entities.TreatmentBMP treatmentBMP, List<CustomAttribute> existingCustomAttributes, List<CustomAttributeType> allCustomAttributeTypes)
+        public async Task UpdateModel(NeptuneDbContext dbContext, EFModels.Entities.TreatmentBMP treatmentBMP, List<CustomAttribute> existingCustomAttributes, List<EFModels.Entities.CustomAttributeType> allCustomAttributeTypes)
         {
             dbContext.RemoveRange(existingCustomAttributes.SelectMany(x => x.CustomAttributeValues));
             await dbContext.SaveChangesAsync();

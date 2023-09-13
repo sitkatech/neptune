@@ -20,7 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 namespace Neptune.Web.Views.CustomAttributeType
 {
-    public abstract class Manage : LtInfo.Common.Mvc.TypedWebViewPage<ManageViewData>
+    public abstract class Manage : Common.Mvc.TypedWebViewPage<ManageViewData>
     {
     }
 }

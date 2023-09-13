@@ -19,9 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.CustomAttributeType
 {
@@ -32,22 +32,22 @@ namespace Neptune.Web.Views.CustomAttributeType
         public readonly string GridDataUrl;
         public readonly string NewCustomAttributeTypeUrl;
 
-        public ManageViewData(Person currentPerson, Models.NeptunePage neptunePage)
-            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public ManageViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Attribute Type";
             PageTitle = "All Attribute Types";
 
-            NewCustomAttributeTypeUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(t => t.New());
-            GridSpec = new CustomAttributeTypeGridSpec()
+            NewCustomAttributeTypeUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.New());
+            GridSpec = new CustomAttributeTypeGridSpec(linkGenerator)
             {
                 ObjectNameSingular = "Attribute Type",
-            ObjectNamePlural = "Attribute Types",
-            SaveFiltersInCookie = true                
+                ObjectNamePlural = "Attribute Types",
+                SaveFiltersInCookie = true
             };
 
             GridName = "customAttributeTypeGrid";
-            GridDataUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(tc => tc.CustomAttributeTypeGridJsonData());
+            GridDataUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.CustomAttributeTypeGridJsonData());
         }
     }
 }

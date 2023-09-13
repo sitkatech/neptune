@@ -165,7 +165,7 @@ namespace Neptune.Web.Views
             var manageMenu = new LtInfoMenuItem("Manage");
 
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(LinkGenerator, x => x.ManageHomePageImages()), currentPerson, "Homepage Configuration", "Group1"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NeptunePageController>(x => x.Index()), currentPerson, "Page Content", "Group1"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NeptunePageController>(LinkGenerator, x => x.Index()), currentPerson, "Page Content", "Group1"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldDefinitionController>(LinkGenerator, x => x.Index()), currentPerson, "Custom Labels & Definitions", "Group1"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<UserController>(LinkGenerator, x => x.Index()), currentPerson, "Users", "Group1"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<OrganizationController>(LinkGenerator, x => x.Index()), currentPerson, $"Organizations", "Group1"));
@@ -182,7 +182,7 @@ namespace Neptune.Web.Views
                     new SitkaRoute<TreatmentBMPTypeController>(LinkGenerator, x => x.Manage()), currentPerson, "Treatment BMP Types",
                     "Group2"));
             }
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<CustomAttributeTypeController>(x => x.Manage()), currentPerson, "Custom Attributes", "Group2"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<CustomAttributeTypeController>(LinkGenerator, x => x.Manage()), currentPerson, "Custom Attributes", "Group2"));
 
             //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TrashGeneratingUnitController>(x => x.Index()), currentPerson, "Trash Generating Units", "Group3"));
             //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LandUseBlockController>(x => x.Index()), currentPerson, "Land Use Blocks", "Group3"));

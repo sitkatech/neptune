@@ -19,21 +19,25 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using LtInfo.Common;
-using LtInfo.Common.DhtmlWrappers;
-using LtInfo.Common.HtmlHelperExtensions;
-using LtInfo.Common.Views;
-using Neptune.Web.Models;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
+using Neptune.Web.Common.DhtmlWrappers;
+using Neptune.Web.Common.HtmlHelperExtensions;
+using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views.CustomAttributeType
 {
-    public class CustomAttributeTypeGridSpec : GridSpec<Models.CustomAttributeType>
+    public class CustomAttributeTypeGridSpec : GridSpec<EFModels.Entities.CustomAttributeType>
     {
-        public CustomAttributeTypeGridSpec()
+        public CustomAttributeTypeGridSpec(LinkGenerator linkGenerator)
         {
-            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true), 30, DhtmlxGridColumnFilterType.None);
-            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), true), 30, DhtmlxGridColumnFilterType.None);
-            Add(FieldDefinitionType.CustomAttributeType.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.CustomAttributeTypeName), 200, DhtmlxGridColumnFilterType.Html);
+            var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            var editUrlTemplate = new UrlTemplate<int>(SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(UrlTemplate.Parameter1Int)));
+            var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.DeleteCustomAttributeType(UrlTemplate.Parameter1Int)));
+
+            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.CustomAttributeTypeID), true), 30, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(editUrlTemplate.ParameterReplace(x.CustomAttributeTypeID), true), 30, DhtmlxGridColumnFilterType.None);
+            Add(FieldDefinitionType.CustomAttributeType.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.CustomAttributeTypeID), x.CustomAttributeTypeName), 200, DhtmlxGridColumnFilterType.Html);
             Add(FieldDefinitionType.CustomAttributeDataType.ToGridHeaderString(), a => a.CustomAttributeDataType.CustomAttributeDataTypeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(FieldDefinitionType.MeasurementUnit.ToGridHeaderString(), a => a.GetMeasurementUnitDisplayName(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(FieldDefinitionType.AttributeTypePurpose.ToGridHeaderString(),

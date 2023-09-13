@@ -36,5 +36,11 @@ namespace Neptune.EFModels.Entities
             }
             return customAttribute.CustomAttributeValues.Any(x => !string.IsNullOrWhiteSpace(x.AttributeValue));
         }
+
+        public void DeleteFull(NeptuneDbContext dbContext)
+        {
+            //todo:
+            throw new NotImplementedException();
+        }
     }
 }

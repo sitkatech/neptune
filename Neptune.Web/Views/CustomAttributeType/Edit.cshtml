@@ -1,10 +1,11 @@
-﻿@using LtInfo.Common.BootstrapWrappers
-@using LtInfo.Common.HtmlHelperExtensions
-@using Neptune.Web.Models
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Neptune.EFModels.Entities
+@using Neptune.Web.Common
+@using Neptune.Web.Common.BootstrapWrappers
+@using Neptune.Web.Common.HtmlHelperExtensions
 @using Neptune.Web.Views.Shared
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.CustomAttributeType.Edit
+@model Neptune.Web.Views.CustomAttributeType.EditViewModel
 
 <script type="text/javascript" src="@Url.Content("~/Views/CustomAttributeType/EditCustomAttributeTypeController.js")"></script>
 <script type="text/javascript">
@@ -14,8 +15,8 @@
             function()
             {
                 return {
-                    AngularModel: @Html.Raw(JObject.FromObject(Model).ToString(Formatting.None)),
-                    AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
+                    AngularViewData: @Html.Raw(ViewDataTyped.ViewDataForAngular.ToJsonHtmlString()),
+                    AngularModel: @Html.Raw(Model.ToJsonHtmlString())
                 };
             });
     // ]]>

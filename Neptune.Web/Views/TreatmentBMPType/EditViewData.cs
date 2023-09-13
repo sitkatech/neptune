@@ -40,7 +40,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
             EFModels.Entities.NeptunePage instructionsNeptunePage, EFModels.Entities.TreatmentBMPType treatmentBMPType,
             IEnumerable<TreatmentBMPTypeCustomAttributeType> customAttributeTypes,
             IEnumerable<EFModels.Entities.TreatmentBMPAssessmentObservationType> allObservationTypes,
-            IEnumerable<CustomAttributeType> allCustomAttributeTypes) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+            IEnumerable<EFModels.Entities.CustomAttributeType> allCustomAttributeTypes) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Manage());

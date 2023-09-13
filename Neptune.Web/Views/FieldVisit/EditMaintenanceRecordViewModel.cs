@@ -51,7 +51,7 @@ namespace Neptune.Web.Views.FieldVisit
             CustomAttributes = customAttributeUpsertDtos;
         }
 
-        public async Task UpdateModel(NeptuneDbContext dbContext, EFModels.Entities.MaintenanceRecord? maintenanceRecord, List<MaintenanceRecordObservation> existingMaintenanceRecordObservations, List<CustomAttributeType> allCustomAttributeTypes)
+        public async Task UpdateModel(NeptuneDbContext dbContext, EFModels.Entities.MaintenanceRecord? maintenanceRecord, List<MaintenanceRecordObservation> existingMaintenanceRecordObservations, List<EFModels.Entities.CustomAttributeType> allCustomAttributeTypes)
         {
             maintenanceRecord.MaintenanceRecordTypeID = MaintenanceRecordTypeID.Value;
             maintenanceRecord.MaintenanceRecordDescription = MaintenanceRecordDescription;

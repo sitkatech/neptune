@@ -19,16 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using LtInfo.Common;
-using LtInfo.Common.Mvc;
-using LtInfo.Common.Views;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Neptune.Common;
+using Neptune.Common.Mvc;
+using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Models;
 using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.CustomAttributeType
@@ -47,20 +44,20 @@ namespace Neptune.Web.Views.CustomAttributeType
         public IEnumerable<SelectListItem> YesNos { get; }
         public ViewDataForAngular ViewDataForAngular { get; }
 
-        public EditViewData(Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
+        public EditViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
             List<CustomAttributeDataType> customAttributeDataTypes, string submitUrl,
-            Models.NeptunePage instructionsNeptunePage, Models.NeptunePage customAttributeInstructionsNeptunePage,
-            Models.CustomAttributeType customAttributeType) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+            EFModels.Entities.NeptunePage instructionsNeptunePage, EFModels.Entities.NeptunePage customAttributeInstructionsNeptunePage,
+            EFModels.Entities.CustomAttributeType customAttributeType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Attribute Type";
-            EntityUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(x => x.Manage());
-            PageTitle =
-                $"{(customAttributeType != null ? "Edit" : "New")} Attribute Type";
+            var manageUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Manage());
+            EntityUrl = manageUrl;
+            PageTitle = $"{(customAttributeType != null ? "Edit" : "New")} Attribute Type";
 
             if (customAttributeType != null)
             {
                 SubEntityName = customAttributeType.CustomAttributeTypeName;
-                SubEntityUrl = customAttributeType.GetDetailUrl();
+                SubEntityUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(customAttributeType));
             }
 
             YesNos = BooleanFormats.GetYesNoSelectList();
@@ -74,12 +71,11 @@ namespace Neptune.Web.Views.CustomAttributeType
                     x => x.CustomAttributeTypePurposeDisplayName);
 
             CustomAttributeTypeIndexUrl =
-                SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(x => x.Manage());
+                manageUrl;
             SubmitUrl = submitUrl;
 
-            ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson);
-            ViewCustomAttributeInstructionsNeptunePage =
-                new ViewPageContentViewData(customAttributeInstructionsNeptunePage, currentPerson);
+            ViewInstructionsNeptunePage = new ViewPageContentViewData(linkGenerator, instructionsNeptunePage, currentPerson);
+            ViewCustomAttributeInstructionsNeptunePage = new ViewPageContentViewData(linkGenerator, customAttributeInstructionsNeptunePage, currentPerson);
 
             ViewDataForAngular = new ViewDataForAngular(customAttributeDataTypes);
         }

@@ -40,5 +40,12 @@ namespace Neptune.Common
             var enumerator = source.GetEnumerator();
             return enumerator.MoveNext() && enumerator.MoveNext();
         }
+
+        public static bool HasDuplicates<T>(this IEnumerable<T> items)
+        {
+            var fullCount = items.Count();
+            var distinctCount = items.Distinct().Count();
+            return fullCount > distinctCount;
+        }
     }
 }

@@ -19,14 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using LtInfo.Common;
-using LtInfo.Common.Models;
+using Neptune.Common;
+using Neptune.Common.GeoSpatial;
+using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
+using Neptune.Web.Common.Models;
 using Newtonsoft.Json;
 
 namespace Neptune.Web.Views.CustomAttributeType
@@ -36,7 +35,7 @@ namespace Neptune.Web.Views.CustomAttributeType
         public int CustomAttributeTypeID { get; set; }
 
         [Required]
-        [StringLength(Models.CustomAttributeType.FieldLengths.CustomAttributeTypeName)]
+        [StringLength(EFModels.Entities.CustomAttributeType.FieldLengths.CustomAttributeTypeName)]
         [DisplayName("Name of Attribute")]
         public string CustomAttributeTypeName { get; set; }      
 
@@ -56,11 +55,11 @@ namespace Neptune.Web.Views.CustomAttributeType
         public bool? IsRequired { get; set; }
 
         [Required]
-        [FieldDefinitionDisplay(Models.FieldDefinitionTypeEnum.AttributeTypePurpose)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.AttributeTypePurpose)]
         public int? CustomAttributeTypePurposeID { get; set; }
 
         [DisplayName("Description")]
-        [StringLength(Models.CustomAttributeType.FieldLengths.CustomAttributeTypeDescription)]
+        [StringLength(EFModels.Entities.CustomAttributeType.FieldLengths.CustomAttributeTypeDescription)]
         public string CustomAttributeTypeDesription { get; set; }
 
         /// <summary>
@@ -70,7 +69,7 @@ namespace Neptune.Web.Views.CustomAttributeType
         {
         }
 
-        public EditViewModel(Models.CustomAttributeType customAttributeType)
+        public EditViewModel(EFModels.Entities.CustomAttributeType customAttributeType)
         {
             CustomAttributeTypeID = customAttributeType.CustomAttributeTypeID;
             CustomAttributeTypeName = customAttributeType.CustomAttributeTypeName;
@@ -83,7 +82,7 @@ namespace Neptune.Web.Views.CustomAttributeType
         }
 
 
-        public void UpdateModel(Models.CustomAttributeType customAttributeType, Person currentPerson)
+        public void UpdateModel(EFModels.Entities.CustomAttributeType customAttributeType, Person currentPerson)
         {
             customAttributeType.CustomAttributeTypeName = CustomAttributeTypeName;
             customAttributeType.CustomAttributeDataTypeID = CustomAttributeDataTypeID.Value;
@@ -105,9 +104,11 @@ namespace Neptune.Web.Views.CustomAttributeType
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            var dbContext = validationContext.GetService<NeptuneDbContext>();
+
             var validationResults = new List<ValidationResult>();
 
-            var customAttributeTypesWithSameName = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x => x.CustomAttributeTypeName == CustomAttributeTypeName);
+            var customAttributeTypesWithSameName = dbContext.CustomAttributeTypes.Where(x => x.CustomAttributeTypeName == CustomAttributeTypeName);
             if (customAttributeTypesWithSameName.Any(x => x.CustomAttributeTypeID != CustomAttributeTypeID))
             {
                 validationResults.Add(new ValidationResult("A Custom Attribute Type with this name already exists"));
@@ -116,9 +117,9 @@ namespace Neptune.Web.Views.CustomAttributeType
 
             if (ModelObjectHelpers.IsRealPrimaryKeyValue(CustomAttributeTypeID))
             {
-                var type = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.GetCustomAttributeType(CustomAttributeTypeID);
-                var isStringType = type.CustomAttributeDataType == CustomAttributeDataType.String;
-                if (!isStringType && type.CustomAttributeDataTypeID != CustomAttributeDataTypeID)
+                var customAttributeType = CustomAttributeTypes.GetByID(dbContext, CustomAttributeTypeID);
+                var isStringType = customAttributeType.CustomAttributeDataType == CustomAttributeDataType.String;
+                if (!isStringType && customAttributeType.CustomAttributeDataTypeID != CustomAttributeDataTypeID)
                 {
                     validationResults.Add(new ValidationResult("You cannot change the type of attribute"));
                 }
@@ -137,7 +138,7 @@ namespace Neptune.Web.Views.CustomAttributeType
             {
                 try
                 {
-                    var test = JsonConvert.DeserializeObject<List<string>>(CustomAttributeTypeOptionsSchema);
+                    var test = GeoJsonSerializer.Deserialize<List<string>>(CustomAttributeTypeOptionsSchema);
                 }
                 catch
                 {
