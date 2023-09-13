@@ -336,7 +336,6 @@
                     canvas.width = width;
                     canvas.height = height;
                     ctx.drawImage(image, 0, 0, width, height);
-
                     canvas.toBlob(function (blob) {
                         var resizedImage = new File([blob], file.name, {
                             type: file.type,
@@ -359,13 +358,12 @@
             var file = fileInput.files[0];
 
             if (file) {
-                $scope.resizePhoto(file, (resizedBlob) => {
+                $scope.resizePhoto(file,800,600, function (resizedBlob)  {
                     //if (!file.name.trim()) {
                     //    var blob = file.slice(0, file.size, file.type);
                     //    var newFile = new File([blob], 'image.jpg', { type: file.type });
                     //    file = newFile;
                     //}
-
                     var blob = resizedBlob;
 
                     var filename;
