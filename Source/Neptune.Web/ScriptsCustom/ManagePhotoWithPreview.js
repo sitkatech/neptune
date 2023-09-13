@@ -1,23 +1,29 @@
-﻿function onLoadFileReader(event) {
-    const reader = new FileReader();
+﻿function onLoadFileReader(resizedEvent, inputChangeEvent) {
+    var reader = new FileReader();
+    reader.onload = function (onloadEvent) {
+        // change the file input files to have the resized image
+        let container = new DataTransfer();
+        container.items.add(resizedEvent);
+        inputChangeEvent.target.files = container.files;
 
-    reader.onload = function (event) {
+        // update the preview image src with the blob url
         var fileResourcePhotoPreview = jQuery("#fileResourcePhotoPreview");
-        fileResourcePhotoPreview.find("img").attr("src", event.target.result);
+        fileResourcePhotoPreview.find("img").attr("src", onloadEvent.target.result);
         fileResourcePhotoPreview.show();
 
+        // show the caption box
         var newPhotoCaptionFormGroup = jQuery("#newPhotoCaptionFormGroup");
         newPhotoCaptionFormGroup.show();
     };
 
     // Read the file as a Data URL
-    reader.readAsDataURL(event);
+    reader.readAsDataURL(resizedEvent);
 }
 
 function onChangeFileInput(event) {
     var file = event.target.files ? event.target.files[0] : null;
     if (file) {
-        resizeImage(file, 800, 600, onLoadFileReader);
+        resizeImage(file, 800, 600, onLoadFileReader, event);
     } else {
         var fileResourcePhotoPreview = jQuery("#fileResourcePhotoPreview");
         fileResourcePhotoPreview.find("img").attr("src", "#");
@@ -30,7 +36,7 @@ function onChangeFileInput(event) {
 }
 
 
-function resizeImage(file, maxWidth, maxHeight, callback) {
+function resizeImage(file, maxWidth, maxHeight, callback, originalEvent) {
     const reader = new FileReader();
 
     reader.onload = function (event) {
@@ -63,7 +69,7 @@ function resizeImage(file, maxWidth, maxHeight, callback) {
                     lastModified: file.lastModified,
                 });
 
-                callback(resizedImage);
+                callback(resizedImage, originalEvent);
             }, file.type);
         };
     };
