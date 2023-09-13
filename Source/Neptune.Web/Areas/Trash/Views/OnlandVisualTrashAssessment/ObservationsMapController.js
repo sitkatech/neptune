@@ -351,7 +351,6 @@
         }
 
         $scope.stagePhoto = function () {
-            // todo: validate that front-end resizing works here as well
 
             var fileInput = jQuery("#photoUpload")[0];
 
