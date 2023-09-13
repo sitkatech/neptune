@@ -310,62 +310,114 @@
         // photo handling
         $scope.photoFileTypeError = false;
 
-        $scope.stagePhoto = function () {
-            var file = jQuery("#photoUpload")[0].files[0];
-            //if (!file.name.trim()) {
-            //    var blob = file.slice(0, file.size, file.type);
-            //    var newFile = new File([blob], 'image.jpg', { type: file.type });
-            //    file = newFile;
-            //}
+        $scope.resizePhoto = function (file, maxWidth, maxHeight, callback) {
+            var reader = new FileReader();
 
-            var blob = file.slice(0, file.size, file.type);
+            reader.onload = function (event) {
+                var image = new Image();
+                image.src = event.target.result;
 
-            var filename;
-            if (file.name.trim()) {
-                filename = file.name.trim();
+                image.onload = function () {
+                    var width = image.width;
+                    var height = image.height;
 
-            } else {
-                filename = "image.jpg";
-            }
-
-            var formData = new FormData();
-            formData.append("Photo", blob, filename);
-            //formData.boundary = "----------opu" + new Date().getTime();
-
-            //if (file.type.split('/')[0] !== "image") {
-            //    $scope.photoFileTypeError = true;
-            //    $scope.$apply();
-            //    jQuery("#photoUpload").fileinput('reset');
-            //    return;
-            //}
-
-            $.ajax({
-                url: "/OnlandVisualTrashAssessmentPhoto/StageObservationPhoto/" + $scope.AngularViewData.ovtaID,
-                data: formData,
-                processData: false,
-                contentType: false,
-                type: 'POST',
-                beforeSend: function (request) {
-                    request.setRequestHeader("Connection", "keep-alive");
-                },
-                success: function (data) {
-                    $scope.photoFileTypeError = false;
-
-                    if (data.Error) {
-                        window.alert(data.Error);
-                        return;
+                    if (width > maxWidth || height > maxHeight) {
+                        if (width / maxWidth > height / maxHeight) {
+                            width = maxWidth;
+                            height = (maxWidth * image.height) / image.width;
+                        } else {
+                            height = maxHeight;
+                            width = (maxHeight * image.width) / image.height;
+                        }
                     }
 
-                    $scope.currentSelectedMarkerModel.PhotoUrl = data.PhotoStagingUrl;
-                    $scope.currentSelectedMarkerModel.PhotoStagingID = data.PhotoStagingID;
-                    $scope.$apply();
-                    jQuery("#photoUpload").fileinput('reset');
-                },
-                error: function (jq, ts, et) {
-                    window.alert(
-                        "There was an error uploading the image. Please try again. If you are using Safari, please switch to Google Chrome as Safari does not support key features of this page.");
-                }
-            });
+                    var canvas = document.createElement('canvas');
+                    var ctx = canvas.getContext('2d');
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(image, 0, 0, width, height);
+
+                    canvas.toBlob(function (blob) {
+                        var resizedImage = new File([blob], file.name, {
+                            type: file.type,
+                            lastModified: file.lastModified,
+                        });
+
+                        callback(resizedImage);
+                    }, file.type);
+                };
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        $scope.stagePhoto = function () {
+            // todo: validate that front-end resizing works here as well
+
+            var fileInput = jQuery("#photoUpload")[0];
+
+            var file = fileInput.files[0];
+
+            if (file) {
+                $scope.resizePhoto(file, (resizedBlob) => {
+                    //if (!file.name.trim()) {
+                    //    var blob = file.slice(0, file.size, file.type);
+                    //    var newFile = new File([blob], 'image.jpg', { type: file.type });
+                    //    file = newFile;
+                    //}
+
+                    var blob = resizedBlob;
+
+                    var filename;
+                    if (file.name.trim()) {
+                        filename = file.name.trim();
+
+                    } else {
+                        filename = "image.jpg";
+                    }
+
+                    var formData = new FormData();
+                    formData.append("Photo", blob, filename);
+                    //formData.boundary = "----------opu" + new Date().getTime();
+
+                    //if (file.type.split('/')[0] !== "image") {
+                    //    $scope.photoFileTypeError = true;
+                    //    $scope.$apply();
+                    //    jQuery("#photoUpload").fileinput('reset');
+                    //    return;
+                    //}
+
+                    $.ajax({
+                        url: "/OnlandVisualTrashAssessmentPhoto/StageObservationPhoto/" + $scope.AngularViewData.ovtaID,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        beforeSend: function (request) {
+                            request.setRequestHeader("Connection", "keep-alive");
+                        },
+                        success: function (data) {
+                            $scope.photoFileTypeError = false;
+
+                            if (data.Error) {
+                                window.alert(data.Error);
+                                return;
+                            }
+
+                            $scope.currentSelectedMarkerModel.PhotoUrl = data.PhotoStagingUrl;
+                            $scope.currentSelectedMarkerModel.PhotoStagingID = data.PhotoStagingID;
+                            $scope.$apply();
+                            jQuery("#photoUpload").fileinput('reset');
+                        },
+                        error: function (jq, ts, et) {
+                            window.alert(
+                                "There was an error uploading the image. Please try again. If you are using Safari, please switch to Google Chrome as Safari does not support key features of this page.");
+                        }
+                    });
+                });
+            }
+
+            
         };
 
         jQuery("#photoUpload").on("change", $scope.stagePhoto);
