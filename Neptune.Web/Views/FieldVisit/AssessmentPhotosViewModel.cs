@@ -1,4 +1,4 @@
-﻿using Neptune.Common;
+﻿using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
@@ -36,6 +36,17 @@ namespace Neptune.Web.Views.FieldVisit
             // Merge existing photos
             var photoSimples = PhotoSimples ??
                                new List<ManagePhotoWithPreviewPhotoDto>();
+
+            var treatmentBMPAssessmentPhotoIDsToDelete = PhotoSimples?.Where(x => x.FlagForDeletion).Select(x => x.PrimaryKey).ToList() 
+                                                         ?? new List<int>();
+            var fileResourcesToDelete = dbContext.TreatmentBMPAssessmentPhotos
+                .Include(x => x.FileResource)
+                .Where(x => treatmentBMPAssessmentPhotoIDsToDelete.Contains(x.TreatmentBMPAssessmentPhotoID)).Select(x => x.FileResource).ToList();
+            foreach (var fileResource in fileResourcesToDelete)
+            {
+                await fileResourceService.DeleteBlobForFileResource(fileResource);
+            }
+
             var treatmentBMPAssessmentPhotosToUpdate = photoSimples.Select(x =>
                     x.FlagForDeletion // Exclude from list to update if flagged for deletion
                         ? null
@@ -54,7 +65,7 @@ namespace Neptune.Web.Views.FieldVisit
             // Create new photo if it exists
             if (Photo != null)
             {
-                var fileResource = await fileResourceService.CreateNewFromIFormFile(Photo, FileResource.ConvertHttpPostedFileToByteArray(Photo), currentPerson);
+                var fileResource = await fileResourceService.CreateNewFromIFormFile(Photo, currentPerson);
                 var newPhoto = new TreatmentBMPAssessmentPhoto { FileResource = fileResource, TreatmentBMPAssessment = treatmentBMPAssessment, Caption = Caption };
                 await dbContext.TreatmentBMPAssessmentPhotos.AddAsync(newPhoto);
 

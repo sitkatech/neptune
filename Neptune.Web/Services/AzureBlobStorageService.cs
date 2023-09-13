@@ -718,6 +718,13 @@ public class AzureBlobStorageService
         return await blobClient.ExistsAsync();
     }
 
+    public async Task<bool> DeleteFileResourceBlob(FileResource fileResource)
+    {
+        var blobClient = _fileResourceContainerClient.GetBlobClient(fileResource.FileResourceGUID.ToString());
+        var deleted = await blobClient.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots);
+        return deleted.Value;
+    }
+
     public async Task<BlobDownloadResult> DownloadFileResourceFromBlobStorage(FileResource fileResource)
     {
         return await DownloadBlobFromBlobStorage(fileResource.GetFileResourceGUIDAsString().ToLower());

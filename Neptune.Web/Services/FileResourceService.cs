@@ -43,7 +43,12 @@ public class FileResourceService
         throw new Exception($"New file resource was not uploaded to blob storage successfully.");
     }
 
-    public async Task<FileResource> CreateNewFromIFormFile(IFormFile formFile, byte[] fileBytes, Person currentPerson)
+    public async Task<bool> DeleteBlobForFileResource(FileResource fileResource)
+    {
+        return await _azureBlobStorageService.DeleteFileResourceBlob(fileResource);
+    }
+
+    public async Task<FileResource> CreateNewFromIFormFile(IFormFile formFile, Person currentPerson)
     {
         var fileName = formFile.FileName;
         if (string.IsNullOrWhiteSpace(fileName))
