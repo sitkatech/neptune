@@ -7,7 +7,10 @@ public static class TreatmentBMPAssessmentObservationTypes
 {
     private static IQueryable<TreatmentBMPAssessmentObservationType> GetImpl(NeptuneDbContext dbContext)
     {
-        return dbContext.TreatmentBMPAssessmentObservationTypes.Include(x => x.TreatmentBMPTypeAssessmentObservationTypes);
+        return dbContext.TreatmentBMPAssessmentObservationTypes
+            .Include(x => x.TreatmentBMPTypeAssessmentObservationTypes)
+            .ThenInclude(x => x.TreatmentBMPType)
+            ;
     }
 
     public static TreatmentBMPAssessmentObservationType GetByIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPAssessmentObservationTypeID)

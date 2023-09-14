@@ -1287,7 +1287,7 @@ namespace Neptune.Web.Controllers
             // can safely ignore the new BMPs since they won't have delineations yet
             NereidUtilities.MarkTreatmentBMPDirty(treatmentBmpsUpdated, _dbContext);
 
-            var message = $"Upload Successful: {treatmentBmpsAdded.Count} records added, {treatmentBmpsUpdated.Count} records updated!";
+            var message = $"Upload Successful: {treatmentBmpsAdded.Count.ToGroupedNumeric()} records added, {treatmentBmpsUpdated.Count.ToGroupedNumeric()} records updated!";
             SetMessageForDisplay(message);
             return new RedirectResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
         }

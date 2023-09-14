@@ -215,7 +215,7 @@ namespace Neptune.Web.Controllers
         {
             var countByTreatmentBMPType = TreatmentBMPs.ListCountByTreatmentBMPType(_dbContext);
             var treatmentBMPCount = countByTreatmentBMPType.TryGetValue(treatmentBMPType.TreatmentBMPTypeID, out var value) ? value : 0;
-            var confirmMessage = $"Treatment BMP Type '{treatmentBMPType.TreatmentBMPTypeName}' has {treatmentBMPCount} Treatment BMPs.<br /><br />Are you sure you want to delete this Treatment BMP Type?";
+            var confirmMessage = $"Treatment BMP Type '{treatmentBMPType.TreatmentBMPTypeName}' has {treatmentBMPCount.ToGroupedNumeric()} Treatment BMPs.<br /><br />Are you sure you want to delete this Treatment BMP Type?";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }

@@ -151,7 +151,7 @@ namespace Neptune.Web.Controllers
                 var customAttributes = CustomAttributes.ListByCustomAttributeTypeID(_dbContext, customAttributeType.CustomAttributeTypeID);
                 var treatmentBMPLabel = customAttributes.Count == 1 ? FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel() : FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized();
                 confirmMessage =
-                    $"Attribute Type '{customAttributeType.CustomAttributeTypeName}' is associated with {treatmentBMPTypeCustomAttributeTypes.Count} {treatmentBMPTypeLabel} and {customAttributes.Count} {treatmentBMPLabel}.<br /><br />Are you sure you want to delete this {FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabel()}?";
+                    $"Attribute Type '{customAttributeType.CustomAttributeTypeName}' is associated with {treatmentBMPTypeCustomAttributeTypes.Count.ToGroupedNumeric()} {treatmentBMPTypeLabel} and {customAttributes.Count.ToGroupedNumeric()} {treatmentBMPLabel}.<br /><br />Are you sure you want to delete this {FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabel()}?";
             }
             else
             {
@@ -161,7 +161,7 @@ namespace Neptune.Web.Controllers
                     ? FieldDefinitionType.MaintenanceRecord.GetFieldDefinitionLabel()
                     : FieldDefinitionType.MaintenanceRecord.GetFieldDefinitionLabelPluralized();
                 confirmMessage =
-                    $"Attribute Type '{customAttributeType.CustomAttributeTypeName}' is associated with {treatmentBMPTypeCustomAttributeTypes.Count} {treatmentBMPTypeLabel} and {maintenanceRecordCount} {maintenanceRecordLabel}.<br /><br />Are you sure you want to delete this {FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabel()}?";
+                    $"Attribute Type '{customAttributeType.CustomAttributeTypeName}' is associated with {treatmentBMPTypeCustomAttributeTypes.Count.ToGroupedNumeric()} {treatmentBMPTypeLabel} and {maintenanceRecordCount.ToGroupedNumeric()} {maintenanceRecordLabel}.<br /><br />Are you sure you want to delete this {FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabel()}?";
             }
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);

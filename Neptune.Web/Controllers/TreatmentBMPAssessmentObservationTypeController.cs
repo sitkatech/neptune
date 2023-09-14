@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
@@ -32,8 +33,6 @@ using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMPType;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Detail = Neptune.Web.Views.TreatmentBMPAssessmentObservationType.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMPAssessmentObservationType.DetailViewData;
 using Edit = Neptune.Web.Views.TreatmentBMPAssessmentObservationType.Edit;
@@ -80,9 +79,9 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
         public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
+            var treatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationTypes.GetByID(_dbContext, treatmentBMPAssessmentObservationTypePrimaryKey);
             var countByTreatmentBMPType = TreatmentBMPs.ListCountByTreatmentBMPType(_dbContext);
             var gridSpec = new TreatmentBMPTypeGridSpec(_linkGenerator, CurrentPerson, countByTreatmentBMPType);
-            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             var treatmentBMPTypes = treatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPType).OrderBy(x => x.TreatmentBMPTypeName).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPType>(treatmentBMPTypes, gridSpec);
             return gridJsonNetJObjectResult;
@@ -124,7 +123,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
         public ViewResult Edit([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
-            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
+            var treatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationTypes.GetByID(_dbContext, treatmentBMPAssessmentObservationTypePrimaryKey);
             var viewModel = new EditViewModel(treatmentBMPAssessmentObservationType);
             return ViewEdit(viewModel, treatmentBMPAssessmentObservationType);
         }
@@ -134,7 +133,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
         public async Task<IActionResult> Edit([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, EditViewModel viewModel)
         {
-            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
+            var treatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationTypes.GetByIDWithChangeTracking(_dbContext, treatmentBMPAssessmentObservationTypePrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewEdit(viewModel, treatmentBMPAssessmentObservationType);
@@ -160,8 +159,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
         public ViewResult Detail([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
-            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
-
+            var treatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationTypes.GetByID(_dbContext, treatmentBMPAssessmentObservationTypePrimaryKey);
             var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessmentObservationType);
             return RazorView<Detail, DetailViewData>(viewData);
         }
@@ -171,7 +169,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
         public PartialViewResult Delete([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
-            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
+            var treatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationTypes.GetByID(_dbContext, treatmentBMPAssessmentObservationTypePrimaryKey);
             var viewModel = new ConfirmDialogFormViewModel(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             return ViewDeleteObservationType(treatmentBMPAssessmentObservationType, viewModel);
         }
@@ -179,8 +177,9 @@ namespace Neptune.Web.Controllers
         private PartialViewResult ViewDeleteObservationType(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, ConfirmDialogFormViewModel viewModel)
         {
             var treatmentBMPTypeLabel = treatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.Count == 1 ? FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel() : FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
-            var treatmentBMPObservationLabel = treatmentBMPAssessmentObservationType.TreatmentBMPObservations.Count == 1 ? "Observation" : "Observations";
-            var confirmMessage = $"{FieldDefinitionType.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()} '{treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName}' is related to {treatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.Count} {treatmentBMPTypeLabel} and has {treatmentBMPAssessmentObservationType.TreatmentBMPObservations.Count} {treatmentBMPObservationLabel}.<br /><br />Are you sure you want to delete this {FieldDefinitionType.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()}?";
+            var treatmentBMPObservations = TreatmentBMPObservations.ListByTreatmentBMPAssessmentObservationTypeID(_dbContext, treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
+            var treatmentBMPObservationLabel = treatmentBMPObservations.Count == 1 ? "Observation" : "Observations";
+            var confirmMessage = $"{FieldDefinitionType.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()} '{treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName}' is related to {treatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.Count.ToGroupedNumeric()} {treatmentBMPTypeLabel} and has {treatmentBMPObservations.Count.ToGroupedNumeric()} {treatmentBMPObservationLabel}.<br /><br />Are you sure you want to delete this {FieldDefinitionType.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()}?";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
@@ -190,7 +189,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
         public async Task<IActionResult> Delete([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
-            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
+            var treatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationTypes.GetByIDWithChangeTracking(_dbContext, treatmentBMPAssessmentObservationTypePrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewDeleteObservationType(treatmentBMPAssessmentObservationType, viewModel);
@@ -208,7 +207,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult DiscreteDetailSchema([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
-            var schema = JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema);
+            var schema = GeoJsonSerializer.Deserialize<DiscreteObservationTypeSchema>(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema);
             var viewData = new ViewDiscreteValueSchemaDetailViewData(schema);
             return RazorPartialView<ViewDiscreteValueSchemaDetail, ViewDiscreteValueSchemaDetailViewData>(viewData);
         }
@@ -218,7 +217,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult RateDetailSchema([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
-            var schema = JsonConvert.DeserializeObject<RateObservationTypeSchema>(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema);
+            var schema = GeoJsonSerializer.Deserialize<RateObservationTypeSchema>(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema);
             var viewData = new ViewRateSchemaDetailViewData(schema);
             return RazorPartialView<ViewRateSchemaDetail, ViewRateSchemaDetailViewData>(viewData);
         }
@@ -228,7 +227,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult PassFailDetailSchema([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
-            var schema = JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema);
+            var schema = GeoJsonSerializer.Deserialize<PassFailObservationTypeSchema>(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema);
             var viewData = new ViewPassFailSchemaDetailViewData(schema);
             return RazorPartialView<ViewPassFailSchemaDetail, ViewPassFailSchemaDetailViewData>(viewData);
         }
@@ -238,7 +237,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult PercentageDetailSchema([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
-            var schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema);
+            var schema = GeoJsonSerializer.Deserialize<PercentageObservationTypeSchema>(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema);
             var viewData = new ViewPercentageSchemaDetailViewData(schema);
             return RazorPartialView<ViewPercentageSchemaDetail, ViewPercentageSchemaDetailViewData>(viewData);
         }
@@ -258,9 +257,8 @@ namespace Neptune.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var modelStateSerialized = JObject
-                    .FromObject(ModelState.ToDictionary(x => x.Key,
-                        x => x.Value.Errors.Select(y => y.ErrorMessage).ToList())).ToString(Formatting.None);
+                var modelStateSerialized = GeoJsonSerializer.Serialize(ModelState.ToDictionary(x => x.Key,
+                        x => x.Value.Errors.Select(y => y.ErrorMessage).ToList()));
                 Response.StatusCode = 400;
                 Response.ContentType = "application/json";
                 return Content(modelStateSerialized);
