@@ -4,5 +4,6 @@
     &lt;TestId&gt;MSTest::16074F6E-EEE4-40AC-932D-E557552E1DEC::net6.0::Neptune.Tests.LabelWithSugarForExtensionsTest&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::5CA350B9-C4E2-4F7A-AE29-62B975CC0F0A::net6.0::Neptune.Web.Common.TinyMCEEditorExtensionTest&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;MSTest::16074F6E-EEE4-40AC-932D-E557552E1DEC::net6.0::Neptune.Tests.TinyMCEEditorExtensionTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::16074F6E-EEE4-40AC-932D-E557552E1DEC::net6.0::Neptune.Tests.DhtmlxGridHtmlHelpersTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

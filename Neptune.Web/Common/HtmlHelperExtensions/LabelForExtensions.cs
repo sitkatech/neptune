@@ -248,7 +248,7 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
                     return new HtmlString(writer.ToString());
                 case DisplayStyle.HelpIconWithLabel:
                 case DisplayStyle.SitsOnDarkBackground:
-                    var requiredAsterisk = hasRequiredAttribute ? " <sup>" + BootstrapHtmlHelpers.RequiredIcon + "</sup>" : string.Empty;
+                    var requiredAsterisk = hasRequiredAttribute ? new HtmlString($" <sup>{BootstrapHtmlHelpers.RequiredIcon}</sup>") : new HtmlString(string.Empty);
                     builder.AppendFormat("{0}{1}{2}", helpIconImgTag, labelText, requiredAsterisk);
                     builder.WriteTo(writer, HtmlEncoder.Default);
                     return new HtmlString(writer.ToString());

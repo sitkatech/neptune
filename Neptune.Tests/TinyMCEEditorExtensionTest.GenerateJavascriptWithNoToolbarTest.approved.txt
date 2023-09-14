@@ -4,6 +4,7 @@
                 {
                    tinymce.init({
                             selector: '#TinyMCEEditorForProgramPageContent',
+                            height: 200,
                             menubar: false,
                             toolbar: '',
                             entity_encoding: 'named+numeric',
