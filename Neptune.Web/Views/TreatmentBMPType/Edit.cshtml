@@ -95,7 +95,7 @@
             </div>
         </div>
         <div style="overflow-x: auto" class="form-inline">
-            <table class="table observationTypeTable" style="margin-top: 20px; overflow: scroll" ng-show="AngularModel.TreatmentBMPTypeObservationTypeSimples.length > 0">
+            <table class="table observationTypeTable" style="margin-top: 20px; overflow: scroll" ng-show="AngularModel.TreatmentBMPTypeObservationTypes.length > 0">
                 <tr>
                     <th></th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinitionType.TreatmentBMPAssessmentObservationType)</th>
@@ -106,7 +106,7 @@
                     <th style="width: 32px"></th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinitionType.AssessmentFailsIfObservationFails) </th>
                 </tr>
-                <tr ng-repeat="treatmentBMPTypeObservationTypeSimple in AngularModel.TreatmentBMPTypeObservationTypeSimples | orderBy:[getObservationTypeSortOrder, getObservationTypeName]">
+                <tr ng-repeat="treatmentBMPTypeObservationTypeSimple in AngularModel.TreatmentBMPTypeObservationTypes | orderBy:[getObservationTypeSortOrder, getObservationTypeName]">
                     <td>
                         <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteObservationTypeRow(treatmentBMPTypeObservationTypeSimple)" style="cursor: pointer"></span>
                     </td>
@@ -162,7 +162,7 @@
             </table>
         </div>
 
-        <div ng-repeat="treatmentBMPTypeObservationTypeSimple in AngularModel.TreatmentBMPTypeObservationTypeSimples | orderBy:[getObservationTypeName]">
+        <div ng-repeat="treatmentBMPTypeObservationTypeSimple in AngularModel.TreatmentBMPTypeObservationTypes | orderBy:[getObservationTypeName]">
             <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeObservationTypes[0].TreatmentBMPAssessmentObservationTypeID).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeObservationTypeSimple.TreatmentBMPAssessmentObservationTypeID}}" />
             <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeObservationTypes[0].DefaultBenchmarkValue).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeObservationTypeSimple.DefaultBenchmarkValue}}" />
             <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeObservationTypes[0].DefaultThresholdValue).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeObservationTypeSimple.DefaultThresholdValue}}" />
@@ -200,7 +200,7 @@
             </div>
         </div>
         <div style="overflow-x: auto" class="form-inline">
-            <table class="table observationTypeTable" style="margin-top: 20px; overflow: scroll" ng-show="AngularModel.TreatmentBMPTypeAttributeTypeSimples.length > 0">
+            <table class="table observationTypeTable" style="margin-top: 20px; overflow: scroll" ng-show="AngularModel.TreatmentBMPTypeAttributeTypes.length > 0">
                 <tr>
                     <th></th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinitionType.CustomAttributeType)</th>
@@ -210,7 +210,7 @@
                     <th class="text-center">@Html.Label("Required?")</th>
                     <th class="text-left">@Html.Label("Description")</th>
                 </tr>
-                <tr ng-repeat="treatmentBMPTypeAttributeTypeSimple in AngularModel.TreatmentBMPTypeAttributeTypeSimples | orderBy:[getCustomAttributeTypePurpose, getCustomAttributeTypeSortOrder, getCustomAttributeTypeName]">
+                <tr ng-repeat="treatmentBMPTypeAttributeTypeSimple in AngularModel.TreatmentBMPTypeAttributeTypes | orderBy:[getCustomAttributeTypePurpose, getCustomAttributeTypeSortOrder, getCustomAttributeTypeName]">
                     <td>
                         <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteCustomAttributeTypeRow(treatmentBMPTypeAttributeTypeSimple)" style="cursor: pointer"></span>
                     </td>
@@ -224,7 +224,7 @@
             </table>
         </div>
 
-        <div ng-repeat="treatmentBMPTypeAttributeTypeSimple in AngularModel.TreatmentBMPTypeAttributeTypeSimples | orderBy:[getCustomAttributeTypeName]">
+        <div ng-repeat="treatmentBMPTypeAttributeTypeSimple in AngularModel.TreatmentBMPTypeAttributeTypes | orderBy:[getCustomAttributeTypeName]">
             <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeAttributeTypes[0].CustomAttributeTypeID).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeAttributeTypeSimple.CustomAttributeTypeID}}" />
         </div>
 

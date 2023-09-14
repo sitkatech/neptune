@@ -108,7 +108,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPTypePrimaryKey")]
         public ViewResult Edit([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey)
         {
-            var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
+            var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMPTypePrimaryKey);
             var viewModel = new EditViewModel(treatmentBMPType);
             return ViewEdit(viewModel, treatmentBMPType);
         }
@@ -118,7 +118,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPTypePrimaryKey")]
         public async Task<IActionResult> Edit([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey, EditViewModel viewModel)
         {
-            var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
+            var treatmentBMPType = TreatmentBMPTypes.GetByIDWithChangeTracking(_dbContext, treatmentBMPTypePrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewEdit(viewModel, treatmentBMPType);
