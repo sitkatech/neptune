@@ -29,7 +29,8 @@ namespace Neptune.EFModels.Entities
     {
         public static IQueryable<CustomAttributeType> GetImpl(NeptuneDbContext dbContext)
         {
-            return dbContext.CustomAttributeTypes;
+            return dbContext.CustomAttributeTypes.Include(x => x.TreatmentBMPTypeCustomAttributeTypes)
+                .ThenInclude(x => x.TreatmentBMPType);
         }
 
         public static CustomAttributeType GetByIDWithChangeTracking(NeptuneDbContext dbContext,

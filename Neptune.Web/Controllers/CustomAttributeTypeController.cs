@@ -26,6 +26,7 @@ namespace Neptune.Web.Controllers
         {
         }
 
+        [HttpGet]
         [NeptuneAdminFeature]
         public ViewResult Manage()
         {
@@ -34,6 +35,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Manage, ManageViewData>(viewData);
         }
 
+        [HttpGet]
         [NeptuneAdminFeature]
         public GridJsonNetJObjectResult<CustomAttributeType> CustomAttributeTypeGridJsonData()
         {
@@ -43,12 +45,14 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
+        [HttpGet("{customAttributeTypePrimaryKey}")]
         [NeptuneAdminFeature]
-        public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData(CustomAttributeTypePrimaryKey customAttributeTypePrimaryKey)
+        [ValidateEntityExistsAndPopulateParameterFilter("customAttributeTypePrimaryKey")]
+        public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData([FromRoute] CustomAttributeTypePrimaryKey customAttributeTypePrimaryKey)
         {
             var countByTreatmentBMPType = TreatmentBMPs.ListCountByTreatmentBMPType(_dbContext);
             var gridSpec = new TreatmentBMPTypeGridSpec(_linkGenerator, CurrentPerson, countByTreatmentBMPType);
-            var customAttributeType = customAttributeTypePrimaryKey.EntityObject;
+            var customAttributeType = CustomAttributeTypes.GetByID(_dbContext, customAttributeTypePrimaryKey);
             var treatmentBMPTypes = customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Select(x => x.TreatmentBMPType).OrderBy(x => x.TreatmentBMPTypeName).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPType>(treatmentBMPTypes, gridSpec);
             return gridJsonNetJObjectResult;
