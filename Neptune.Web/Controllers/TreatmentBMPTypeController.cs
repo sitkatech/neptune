@@ -97,7 +97,8 @@ namespace Neptune.Web.Controllers
             var allTreatmentBMPTypeCustomAttributeTypes = _dbContext.TreatmentBMPTypeCustomAttributeTypes;
 
             viewModel.UpdateModel(treatmentBMPType, treatmentBMPTypeAssessmentObservationTypes, allTreatmentBMPTypeAssessmentObservationTypes, treatmentBMPTypeAttributeTypes, allTreatmentBMPTypeCustomAttributeTypes);
-           
+            await _dbContext.SaveChangesAsync();
+
             SetMessageForDisplay($"Treatment BMP Type {treatmentBMPType.TreatmentBMPTypeName} successfully created.");
 
             return RedirectToAction(new SitkaRoute<TreatmentBMPTypeController>(_linkGenerator, x => x.Detail(treatmentBMPType.PrimaryKey)));
