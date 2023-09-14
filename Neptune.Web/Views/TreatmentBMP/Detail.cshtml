@@ -168,11 +168,15 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinitionType.Jurisdiction, "Jurisdiction")</label>
-                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.Organization.GetDisplayNameAsUrl()</div>
+                    <div class="col-sm-7">
+                        <a href="@ViewDataTyped.OrganizationDetailUrlTemplate.ParameterReplace(ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.OrganizationID)">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.Organization.GetDisplayName()</a>
+                    </div>
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Owner</label>
-                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.OwnerOrganization.GetDisplayNameAsUrl()</div>
+                    <div class="col-sm-7">
+                        <a href="@ViewDataTyped.OrganizationDetailUrlTemplate.ParameterReplace(ViewDataTyped.TreatmentBMP.OwnerOrganizationID)">@ViewDataTyped.TreatmentBMP.OwnerOrganization.GetDisplayName()</a>
+                    </div>
                 </div>
                 <hr />
                 <div class="row">

@@ -54,25 +54,6 @@ namespace Neptune.Web.Models
         //    return new HtmlString($"{userString} - {orgUrl}");
         //}
 
-        public static string GetEditUrl(this Person person)
-        {
-            return "";//todo:SitkaRoute<UserController>.BuildUrlFromExpression(t => t.EditRoles(person));
-        }
-
-        //public static readonly UrlTemplate<int> DeleteUrlTemplate =
-        //    new UrlTemplate<int>(
-        //        SitkaRoute<UserController>.BuildUrlFromExpression(t => t.Delete(UrlTemplate.Parameter1Int)));
-
-        public static string GetDeleteUrl(this Person person)
-        {
-            return "";//todo:DeleteUrlTemplate.ParameterReplace(person.PersonID);
-        }
-
-        //public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(
-        //    SitkaRoute<UserController>.BuildAbsoluteUrlHttpsFromExpression(t => t.Detail(UrlTemplate.Parameter1Int),
-        //        NeptuneWebConfiguration.CanonicalHostNameRoot));
-
-
         public static bool ShouldReceiveNotifications(this Person person)
         {
             return person.ReceiveSupportEmails;

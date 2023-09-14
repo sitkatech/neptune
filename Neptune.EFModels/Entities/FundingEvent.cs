@@ -7,10 +7,7 @@ namespace Neptune.EFModels.Entities
             // todo:
             throw new NotImplementedException();
         }
-    }
 
-    public partial class FundingEvent
-    {
         public string GetDisplayName()
         {
             return $"{Year} {FundingEventType.FundingEventTypeDisplayName}";

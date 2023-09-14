@@ -33,13 +33,14 @@ namespace Neptune.Web.Views.User
         public IndexGridSpec(LinkGenerator linkGenerator, Person currentPerson)
         {
             var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
             var roleDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<RoleController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var organizationDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var hasDeletePermission = new UserDeleteFeature().HasPermissionByPerson(currentPerson);
             if (hasDeletePermission)
             {
                 Add(string.Empty,
-                    x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), hasDeletePermission, true),
+                    x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.PersonID), hasDeletePermission, true),
                     30, DhtmlxGridColumnFilterType.None);
             }
             Add("Last Name", a => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(a.PersonID), a.LastName), 100, DhtmlxGridColumnFilterType.Html);

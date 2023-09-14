@@ -14,7 +14,8 @@ namespace Neptune.Web.Views.MaintenanceRecord
         public bool CurrentPersonCanManage { get; }
         public bool BMPTypeHasObservationTypes { get; }
         public bool UserHasCustomAttributeTypeManagePermissions { get; }
-        public UrlTemplate<int> CustomAttributeDetailUrlTemplate { get; }
+        public UrlTemplate<int> CustomAttributeTypeDetailUrlTemplate { get; }
+        public string OrganizationUrl { get; }
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.MaintenanceRecord maintenanceRecord) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
@@ -29,13 +30,12 @@ namespace Neptune.Web.Views.MaintenanceRecord
             CurrentPersonCanManage = new MaintenanceRecordManageFeature().HasPermissionByPerson(currentPerson);
             BMPTypeHasObservationTypes = maintenanceRecord.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID);
             UserHasCustomAttributeTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
-            CustomAttributeDetailUrlTemplate = new UrlTemplate<int>(
-                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator,
-                    x => x.Detail(UrlTemplate.Parameter1Int))); //todo: change to CustomAttributeController
+            CustomAttributeTypeDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
 
             SortedMaintenanceRecordObservations = MaintenanceRecord.MaintenanceRecordObservations.ToList()
                 .OrderBy(x => x.TreatmentBMPTypeCustomAttributeType.SortOrder)
                 .ThenBy(x => x.TreatmentBMPTypeCustomAttributeType.GetDisplayName());
+            OrganizationUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(maintenanceRecord.GetMaintenanceRecordOrganization().OrganizationID));
         }
     }
 }

@@ -18,13 +18,10 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+
 using System.Text.RegularExpressions;
 
-namespace LtInfo.Common
+namespace Neptune.Common
 {
     public class FileUtility
     {
@@ -64,7 +61,7 @@ namespace LtInfo.Common
         /// <exception cref="DirectoryNotFoundException">Throws this if it can't find the directory</exception>
         public static DirectoryInfo FirstMatchingDirectoryUpDirectoryTree(DirectoryInfo startingDir, string directoryFullNameRelativePath)
         {
-            var regex = string.Format("^{0}", Regex.Escape(Path.DirectorySeparatorChar.ToString()));
+            var regex = $"^{Regex.Escape(Path.DirectorySeparatorChar.ToString())}";
             var directoryFullNameRelativePathNoStartingBackslash = Regex.Replace(directoryFullNameRelativePath, regex, "");
             var currentDirectory = startingDir;
 
@@ -78,7 +75,8 @@ namespace LtInfo.Common
                 currentDirectory = currentDirectory.Parent;
                 if (currentDirectory == null)
                 {
-                    throw new DirectoryNotFoundException(string.Format("Searched directory \"{0}\" and upwards and could not find directory \"{1}\".", startingDir.FullName, directoryFullNameRelativePath));
+                    throw new DirectoryNotFoundException(
+                        $"Searched directory \"{startingDir.FullName}\" and upwards and could not find directory \"{directoryFullNameRelativePath}\".");
                 }
             }
         }
@@ -116,7 +114,8 @@ namespace LtInfo.Common
                 currentDirectory = currentDirectory.Parent;
                 if (currentDirectory == null)
                 {
-                    throw new FileNotFoundException(string.Format("Searched directory \"{0}\" and upwards and could not find file \"{1}\".", startingDir.FullName, fileFullNameRelativePath));
+                    throw new FileNotFoundException(
+                        $"Searched directory \"{startingDir.FullName}\" and upwards and could not find file \"{fileFullNameRelativePath}\".");
                 }
             }
         }
@@ -131,10 +130,10 @@ namespace LtInfo.Common
             const long scale = 1024;
 
             var max = (long)Math.Pow(scale, (Orders.Length - 1));
-            foreach (string order in Orders)
+            foreach (var order in Orders)
             {
                 if (bytes > max)
-                    return string.Format("{0:##.#} {1}", Decimal.Divide(bytes, max), order);
+                    return $"{Decimal.Divide(bytes, max):##.#} {order}";
                 max /= scale;
             }
             return "0 Bytes";
@@ -163,7 +162,7 @@ namespace LtInfo.Common
                 return path;
             }
 
-            throw new Exception(String.Format("unable to create temporary directory \"{0}\"", path));
+            throw new Exception($"unable to create temporary directory \"{path}\"");
         }
 
         public static List<string> CopyDirectory(string sourceDirectory, string targetDirectory)
@@ -182,13 +181,13 @@ namespace LtInfo.Common
             }
 
             // Copy each file into its new directory.
-            foreach (FileInfo fi in source.GetFiles())
+            foreach (var fi in source.GetFiles())
             {
                 result.Add(fi.FullName);
                 fi.CopyTo(Path.Combine(target.ToString(), fi.Name), true);
             }
 
-            // Copy each subdirectory using recursion.
+            // Copy each sub directory using recursion.
             foreach (var diSourceSubDir in source.GetDirectories())
             {
                 var nextTargetSubDir = target.CreateSubdirectory(diSourceSubDir.Name);
@@ -196,19 +195,6 @@ namespace LtInfo.Common
             }
 
             return result;
-        }
-
-        public static string GetMimeType(string fileName)
-        {
-            var mime = "application/octetstream";
-
-            var ext = ExtensionFor(fileName).ToLower();
-            var rk = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext);
-            if (rk != null && rk.GetValue("Content Type") != null)
-            {
-                mime = rk.GetValue("Content Type").ToString();
-            }
-            return mime;
         }
 
         public static string ExtensionFor(string file)
@@ -231,32 +217,6 @@ namespace LtInfo.Common
         public static string GetCleanFolderName(string folderName, string replacementString = "")
         {
             return Path.GetInvalidPathChars().Select(x => x.ToString()).Aggregate(folderName, (current, c) => current.Replace(c, replacementString));
-        }
-
-        public static string RoboCopyDirectory(DirectoryInfo sourceDir, DirectoryInfo targetDir)
-        {
-            // Mirror NoProgress Wait 0 Retry 0
-            var arguments = new List<string>
-            {
-                "/MIR",
-                "/NP",
-                "/W:0",
-                "/R:0",
-                ProcessUtility.EncodeArgumentForCommandLine(sourceDir.FullName),
-                ProcessUtility.EncodeArgumentForCommandLine(targetDir.FullName)
-            };
-            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(sourceDir.Parent.FullName, "robocopy.exe", arguments, true, null, null);
-
-            var robocopySucceeded = (processUtilityResult.ReturnCode < 4);
-            var exitCodeEvaluation = robocopySucceeded ? "Robocopy OK" : "Robocopy ERROR";
-            var outputAndExitCode = String.Format("{2}\r\n{0}\r\nExit Code: {1} {2}", processUtilityResult.StdOutAndStdErr, processUtilityResult, exitCodeEvaluation);
-
-            if (!robocopySucceeded)
-            {
-                throw new Exception(outputAndExitCode);
-            }
-
-            return outputAndExitCode;
         }
     }
 }

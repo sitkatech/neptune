@@ -18,7 +18,6 @@
         Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@using Microsoft.AspNetCore.Html
 @using Neptune.Web.Common.BootstrapWrappers
 @inherits Neptune.Web.Views.MaintenanceRecord.Detail
 
@@ -56,7 +55,9 @@
                 <div class="row">
                     <div class="col-xs-6 control-label text-right">@Html.Label("Performed By")</div>
                     <div class="col-xs-6">
-                        <span>@ViewDataTyped.MaintenanceRecord.GetMaintenanceRecordOrganization().GetDisplayNameAsUrl()</span>
+                        <span>
+                            <a href="@ViewDataTyped.OrganizationUrl">@ViewDataTyped.MaintenanceRecord.GetMaintenanceRecordOrganization().GetDisplayName()</a>
+                        </span>
                     </div>
                 </div>
                 <div class="row">
@@ -90,7 +91,7 @@
                                 <td>
                                     @if (ViewDataTyped.UserHasCustomAttributeTypeManagePermissions)
                                     {
-                                        <a href="@ViewDataTyped.CustomAttributeDetailUrlTemplate.ParameterReplace(maintenanceRecordObservation.CustomAttributeTypeID)">maintenanceRecordObservation.CustomAttributeType.CustomAttributeTypeName</a>
+                                        <a href="@ViewDataTyped.CustomAttributeTypeDetailUrlTemplate.ParameterReplace(maintenanceRecordObservation.CustomAttributeTypeID)">maintenanceRecordObservation.CustomAttributeType.CustomAttributeTypeName</a>
                                     }
                                     else
                                     {

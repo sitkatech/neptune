@@ -34,10 +34,8 @@ namespace Neptune.Web.Services.Filters
                 
                 var baseType = primaryKeyType.BaseType;
                 var entityType = baseType.GenericTypeArguments.First();
-                // TODO: Error handling!
                 if (!parameterIsInt)
                 {
-                    // context.Result = new SitkaRecordNotFoundException(entityType.Name, idParameter);
                     context.Result = new NotFoundObjectResult($"Could not find a {entityType.Name} with the ID {idParameter}.");
                     return;
                 }

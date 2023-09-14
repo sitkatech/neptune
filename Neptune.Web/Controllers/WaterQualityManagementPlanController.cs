@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common.MvcResults;
+using Neptune.Web.Services;
 using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.WaterQualityManagementPlan.BoundaryMapInitJson;
 using NetTopologySuite.Features;
@@ -19,8 +20,11 @@ namespace Neptune.Web.Controllers
 {
     public class WaterQualityManagementPlanController : NeptuneBaseController<WaterQualityManagementPlanController>
     {
-        public WaterQualityManagementPlanController(NeptuneDbContext dbContext, ILogger<WaterQualityManagementPlanController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
+        private readonly FileResourceService _fileResourceService;
+
+        public WaterQualityManagementPlanController(NeptuneDbContext dbContext, ILogger<WaterQualityManagementPlanController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
+            _fileResourceService = fileResourceService;
         }
 
         [HttpGet]
@@ -597,7 +601,7 @@ namespace Neptune.Web.Controllers
                 VerificationDate = viewModel.VerificationDate
             };
 
-            viewModel.UpdateModel(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson, _dbContext);
+            viewModel.UpdateModel(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson, _dbContext, _fileResourceService);
 
             _dbContext.WaterQualityManagementPlanVerifies.Add(waterQualityManagementPlanVerify);
             _dbContext.SaveChanges();
@@ -646,7 +650,7 @@ namespace Neptune.Web.Controllers
             }
             var waterQualityManagementPlan = waterQualityManagementPlanVerify.WaterQualityManagementPlan;
             waterQualityManagementPlanVerify.IsDraft = !viewModel.HiddenIsFinalizeVerificationInput;
-            viewModel.UpdateModel(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.DeleteStructuralDocumentFile, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson, _dbContext);
+            viewModel.UpdateModel(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.DeleteStructuralDocumentFile, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson, _dbContext, _fileResourceService);
 
             await _dbContext.SaveChangesAsync();
 

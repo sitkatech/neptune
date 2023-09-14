@@ -21,6 +21,8 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using LtInfo.Common;
+using Neptune.Common;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.Models;
 using Neptune.Web.Common.Mvc;
@@ -100,8 +102,7 @@ namespace Neptune.Web.Views.Organization
                     await fileResourceService.DeleteFileResource(organization.LogoFileResource);
                 }
 
-                organization.LogoFileResource =
-                    await fileResourceService.CreateNewFromIFormFile(LogoFileResourceData, currentPerson);
+                organization.LogoFileResource = await fileResourceService.CreateNewFromIFormFile(LogoFileResourceData, currentPerson);
             }
 
             var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(currentPerson);
@@ -115,13 +116,13 @@ namespace Neptune.Web.Views.Organization
         {
             var validationResults = new List<ValidationResult>();
 
-            // todo:
-            //if (LogoFileResourceData != null && LogoFileResourceData.ContentLength > MaxLogoSizeInBytes)
-            //{
-            //    var errorMessage = $"Logo is too large - must be less than {FileUtility.FormatBytes(MaxLogoSizeInBytes)}. Your logo was {FileUtility.FormatBytes(LogoFileResourceData.ContentLength)}.";
-            //    validationResults.Add(new SitkaValidationResult<EditViewModel, HttpPostedFileBase>(errorMessage, x => x.LogoFileResourceData));
-            //}
+            if (LogoFileResourceData != null && LogoFileResourceData.Length > MaxLogoSizeInBytes)
+            {
+                var errorMessage = $"Logo is too large - must be less than {FileUtility.FormatBytes(MaxLogoSizeInBytes)}. Your logo was {FileUtility.FormatBytes(LogoFileResourceData.Length)}.";
+                validationResults.Add(new SitkaValidationResult<EditViewModel, IFormFile>(errorMessage, x => x.LogoFileResourceData));
+            }
 
+            //todo:
             //var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(HttpRequestStorage.Person);
             //if (OrganizationGuid.HasValue && isSitkaAdmin)
             //{
@@ -141,7 +142,7 @@ namespace Neptune.Web.Views.Organization
             //        {
             //            validationResults.Add(new SitkaValidationResult<EditViewModel, Guid?>("Organization Guid not found in Keystone", x => x.OrganizationGuid));
             //        }
-                    
+
             //    }
             //}
 

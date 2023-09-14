@@ -76,7 +76,9 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-4 fieldLabel text-right">@FieldDefinitionType.Organization.GetFieldDefinitionLabel()</div>
-                    <div class="col-xs-8">@ViewDataTyped.Person.Organization.GetDisplayNameAsUrl()</div>
+                    <div class="col-xs-8">
+                        <a href="@ViewDataTyped.OrganizationDetailUrlTemplate.ParameterReplace(ViewDataTyped.Person.OrganizationID)">@ViewDataTyped.Person.Organization.GetDisplayName()</a>
+                    </div>
                 </div>
                 @if (ViewDataTyped.UserCanManageThisPersonPermissions)
                 {
@@ -204,7 +206,9 @@
                     <ul style="margin: 5px 0">
                         @foreach (var organization in ViewDataTyped.Person.GetPrimaryContactOrganizations())
                         {
-                            <li>@organization.GetDisplayNameAsUrl()</li>
+                            <li>
+                                <a href="@ViewDataTyped.OrganizationDetailUrlTemplate.ParameterReplace(organization.OrganizationID)">@organization.GetDisplayName()</a>
+                            </li>
                         }
                     </ul>
                 }

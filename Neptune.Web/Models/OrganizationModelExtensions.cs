@@ -19,30 +19,22 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Microsoft.AspNetCore.Html;
 using Neptune.Common;
 using Neptune.EFModels.Entities;
-using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
     public static class OrganizationModelExtensions
     {
-        public static HtmlString GetDisplayNameAsUrl(this Organization organization)
-        {          
-            return organization != null ? UrlTemplate.MakeHrefString(organization.GetDetailUrl(), organization.GetDisplayName()) : new HtmlString(null);
-        }
+        //public static HtmlString GetDisplayNameAsUrl(this Organization organization)
+        //{          
+        //    return organization != null ? UrlTemplate.MakeHrefString(organization.GetDetailUrl(), organization.GetDisplayName()) : new HtmlString(null);
+        //}
 
         //public static HtmlString GetShortNameAsUrl(this Organization organization)
         //{          
         //    return organization != null ? UrlTemplate.MakeHrefString(organization.GetDetailUrl(), organization.GetOrganizationShortNameIfAvailable()) : new HtmlString(null);
         //}
-
-        //public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
-        public static string GetDetailUrl(this Organization organization)
-        {
-            return organization == null ? "" : "";//todo:DetailUrlTemplate.ParameterReplace(organization.OrganizationID);
-        }
 
         //public static HtmlString GetPrimaryContactPersonAsUrl(this Organization organization) => organization.PrimaryContactPerson != null
         //    ? organization.PrimaryContactPerson.GetFullNameFirstLastAsUrl()

@@ -28,9 +28,9 @@ namespace Neptune.Web.Security
     {
         public string FeatureName => GetType().Name;
 
-        public IActionFilter ActionFilter;
+        public IActionFilter ActionFilter { get; set; }
 
-        protected NeptuneFeatureWithContext(List<RoleEnum> grantedRoles) : base(grantedRoles/*, NeptuneArea.OCStormwaterTools*/)
+        protected NeptuneFeatureWithContext(IEnumerable<RoleEnum> grantedRoles) : base(grantedRoles/*, NeptuneArea.OCStormwaterTools*/)
         {
         }
 

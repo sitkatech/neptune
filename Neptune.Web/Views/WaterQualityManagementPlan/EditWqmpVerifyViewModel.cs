@@ -1,5 +1,6 @@
 ﻿using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using Neptune.Web.Services;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
@@ -29,10 +30,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             
         }
 
-        public void UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, bool deleteStructuralDocumentFile, List<WaterQualityManagementPlanVerifyQuickBMPSimpleDto> waterQualityManagementPlanVerifyQuickBMPSimples, List<WaterQualityManagementPlanVerifyTreatmentBMPSimpleDto> waterQualityManagementPlanVerifyTreatmentBMPSimples, Person currentPerson, NeptuneDbContext dbContext)
+        public void UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, bool deleteStructuralDocumentFile, List<WaterQualityManagementPlanVerifyQuickBMPSimpleDto> waterQualityManagementPlanVerifyQuickBMPSimples, List<WaterQualityManagementPlanVerifyTreatmentBMPSimpleDto> waterQualityManagementPlanVerifyTreatmentBMPSimples, Person currentPerson, NeptuneDbContext dbContext, FileResourceService fileResourceService)
         {
             base.UpdateModel(waterQualityManagementPlan,
-                 waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMPSimples, waterQualityManagementPlanVerifyTreatmentBMPSimples, currentPerson, dbContext);
+                 waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMPSimples, waterQualityManagementPlanVerifyTreatmentBMPSimples, currentPerson, dbContext, fileResourceService);
         }
     }
 }

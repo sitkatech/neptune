@@ -7,8 +7,6 @@ namespace Neptune.Web.Security
     {
         private readonly NeptuneFeatureWithContextImpl<FieldVisit> _lakeTahoeInfoFeatureWithContextImpl;
 
-        public string FeatureName { get; } // todo
-
         public FieldVisitDeleteFeature()
             : base(new List<RoleEnum> { RoleEnum.SitkaAdmin, RoleEnum.Admin, RoleEnum.JurisdictionManager})
         {

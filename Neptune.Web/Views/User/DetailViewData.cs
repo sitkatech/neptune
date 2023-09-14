@@ -47,6 +47,7 @@ namespace Neptune.Web.Views.User
         public string ActivateInactivateUrl { get; }
         public IHtmlContent EditRolesLink { get; }
         public IHtmlContent EditJurisdictionsLink { get; }
+        public UrlTemplate<int> OrganizationDetailUrlTemplate { get; }
         public string RoleDetailUrl { get; }
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
@@ -89,6 +90,9 @@ namespace Neptune.Web.Views.User
                     $"Edit Assigned Jurisdictions for User - {personToView.GetFullNameFirstLast()}",
                     true)
                 : new HtmlString(string.Empty);
+
+            OrganizationDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+
 
             UserNotificationGridSpec = userNotificationGridSpec;
             UserNotificationGridName = userNotificationGridName;

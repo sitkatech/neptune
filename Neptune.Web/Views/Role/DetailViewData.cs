@@ -35,10 +35,8 @@ namespace Neptune.Web.Views.Role
         public string RoleName { get; }
         public string RoleDescription { get; }
 
-        // ReSharper disable once InconsistentNaming
-        public readonly NeptuneAreaEnum? NeptuneAreaEnum;
-        // ReSharper disable once InconsistentNaming
-        public readonly string NeptuneAreaName;
+        public NeptuneAreaEnum? NeptuneAreaEnum { get; }
+        public string NeptuneAreaName { get; }
 
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, IRole role)

@@ -5,6 +5,7 @@ using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
 using Neptune.Web.Common.Models;
 using Neptune.Web.Common.Mvc;
+using Neptune.Web.Services;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
@@ -62,24 +63,23 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             WaterQualityManagementPlanVerifyTreatmentBMPSimples = treatmentBMPs.Select(x => x.AsWaterQualityManagementPlanVerifyTreatmentBMPSimpleDto()).OrderBy(x => x.TreatmentBMPName).ToList();
         }
 
-        public void UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
-            WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<WaterQualityManagementPlanVerifyQuickBMPSimpleDto> waterQualityManagementPlanVerifyQuickBMPSimples, List<WaterQualityManagementPlanVerifyTreatmentBMPSimpleDto> waterQualityManagementPlanVerifyTreatmentBMPSimples, Person currentPerson, NeptuneDbContext dbContext)
+        public async Task UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
+            WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<WaterQualityManagementPlanVerifyQuickBMPSimpleDto> waterQualityManagementPlanVerifyQuickBMPSimples, List<WaterQualityManagementPlanVerifyTreatmentBMPSimpleDto> waterQualityManagementPlanVerifyTreatmentBMPSimples, Person currentPerson, NeptuneDbContext dbContext, FileResourceService fileResourceService)
         {
-            //todo:
-            //if (waterQualityManagementPlanVerify.FileResource == null && StructuralDocumentFile != null)
-            //{
-            //    var fileResource = FileResource.CreateNewFromHttpPostedFile(StructuralDocumentFile, currentPerson);
-            //    waterQualityManagementPlanVerify.FileResource = fileResource;
-            //    dbContext.FileResources.Add(fileResource);
-            //}
-            //else if (StructuralDocumentFile != null)
-            //{
-            //    dbContext.FileResources.DeleteFileResource(waterQualityManagementPlanVerify.FileResource);
-            //    var fileResource = FileResource.CreateNewFromHttpPostedFile(StructuralDocumentFile, currentPerson);
-            //    waterQualityManagementPlanVerify.FileResource = fileResource;
-            //    dbContext.FileResources.Add(fileResource);
-            //}
-            
+            if (StructuralDocumentFile != null)
+            {
+                var fileResource = await fileResourceService.CreateNewFromIFormFile(StructuralDocumentFile, currentPerson);
+                if (waterQualityManagementPlanVerify.FileResource == null)
+                {
+                    waterQualityManagementPlanVerify.FileResource = fileResource;
+                }
+                else
+                {
+                    await fileResourceService.DeleteBlobForFileResource(waterQualityManagementPlanVerify.FileResource);
+                    dbContext.FileResources.Remove(waterQualityManagementPlanVerify.FileResource);
+                    waterQualityManagementPlanVerify.FileResource = fileResource;
+                }
+            }
 
             waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID = WaterQualityManagementPlanVerifyID ?? ModelObjectHelpers.NotYetAssignedID;
             waterQualityManagementPlanVerify.EnforcementOrFollowupActions = EnforcementOrFollowupActions;

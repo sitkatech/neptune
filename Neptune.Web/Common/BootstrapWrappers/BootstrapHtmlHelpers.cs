@@ -40,16 +40,6 @@ namespace Neptune.Web.Common.BootstrapWrappers
             return new HtmlString($"<span title=\"{title}\" class=\"glyphicon {glyphIconName}\"></span>");
         }
 
-        //TODO: This is fragile when quotes or apostrophes are passed in to any of the string parameters.
-        public static IHtmlContent MakeModalDialogAlertButton(string alertText, string alertTitle, string closeButtonText, string linkText, List<string> cssClasses)
-        {
-            if (cssClasses == null)
-                cssClasses = new List<string>();
-
-            cssClasses.Add("btn");
-            return MakeModalDialogAlertLink(alertText, alertTitle, closeButtonText, linkText, cssClasses);
-        }
-
         public static IHtmlContent MakeModalDialogAlertLink(string alertText, string alertTitle, string closeButtonText, string linkText, List<string> cssClasses)
         {
             return

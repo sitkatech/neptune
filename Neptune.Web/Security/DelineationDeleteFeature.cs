@@ -6,7 +6,6 @@ namespace Neptune.Web.Security
     public class DelineationDeleteFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<Delineation>
     {
         private readonly NeptuneFeatureWithContextImpl<Delineation> _lakeTahoeInfoFeatureWithContextImpl;
-        public string FeatureName { get; } // todo
 
         public DelineationDeleteFeature()
             : base(new List<RoleEnum> { RoleEnum.SitkaAdmin, RoleEnum.Admin, RoleEnum.JurisdictionManager})

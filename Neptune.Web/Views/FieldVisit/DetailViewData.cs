@@ -25,7 +25,7 @@ namespace Neptune.Web.Views.FieldVisit
         public string ReturnToEditUrl { get; }
         public bool CanEditStormwaterJurisdiction { get; }
         public string TreatmentBMPDetailUrl { get; }
-        public UrlTemplate<int> CustomAttributeDetailUrlTemplate { get; }
+        public UrlTemplate<int> CustomAttributeTypeDetailUrlTemplate { get; }
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.FieldVisit fieldVisit,
             AssessmentDetailViewData initialAssessmentViewData,
@@ -73,9 +73,7 @@ namespace Neptune.Web.Views.FieldVisit
                     x.ReturnFieldVisitToEdit(fieldVisit.PrimaryKey));
             TreatmentBMPDetailUrl =
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(fieldVisit.TreatmentBMPID));
-            CustomAttributeDetailUrlTemplate = new UrlTemplate<int>(
-                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator,
-                    x => x.Detail(UrlTemplate.Parameter1Int))); //todo: change to CustomAttributeController
+            CustomAttributeTypeDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
         }
     }
 }

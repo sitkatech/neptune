@@ -113,11 +113,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator,
                     x => x.DeleteVerify(UrlTemplate.Parameter1Int)));
             DocumentEditUrlTemplate = new UrlTemplate<int>(
-                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator,
-                    x => x.Edit(UrlTemplate.Parameter1Int))); // todo:
+                SitkaRoute<WaterQualityManagementPlanDocumentController>.BuildUrlFromExpression(LinkGenerator,
+                    x => x.Edit(UrlTemplate.Parameter1Int)));
             DocumentDeleteUrlTemplate = new UrlTemplate<int>(
-                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator,
-                    x => x.Delete(UrlTemplate.Parameter1Int))); //todo:
+                SitkaRoute<WaterQualityManagementPlanDocumentController>.BuildUrlFromExpression(LinkGenerator,
+                    x => x.Delete(UrlTemplate.Parameter1Int)));
+            OrganizationDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
 
 
             MapInitJson = mapInitJson;
@@ -193,6 +194,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public bool AnySimpleBMPsNotFullyParameterized { get; set; }
         public string EditUrl { get; }
+        public UrlTemplate<int> OrganizationDetailUrlTemplate { get; }
 
 
         //There are more errors to come I believe, that's why this is producing a list

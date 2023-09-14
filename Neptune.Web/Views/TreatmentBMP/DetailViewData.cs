@@ -125,6 +125,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public UrlTemplate<int> FundingSourceDetailUrlTemplate { get; }
         public UrlTemplate<int> TreatmentBMPDocumentEditUrlTemplate { get; }
         public UrlTemplate<int> TreatmentBMPDocumentDeleteUrlTemplate { get; }
+        public UrlTemplate<int> OrganizationDetailUrlTemplate { get; }
         public string TreatmentBMPTypeDetailUrl { get; }
         public string UpstreamBMPDetailUrl { get; }
         public string WaterQualityManagementPlanDetailUrl { get; }
@@ -158,6 +159,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             CanEditBenchmarkAndThresholds = CurrentPersonCanManage && HasSettableBenchmarkAndThresholdValues;
 
+            OrganizationDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             DetailUrl = DetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
             WaterQualityManagementPlanDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
