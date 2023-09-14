@@ -248,7 +248,8 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewEditObservationTypesSortOrder(TreatmentBMPType treatmentBMPType, EditSortOrderViewModel viewModel)
         {
-            var viewData = new EditSortOrderViewData(new List<IHaveASortOrder>(treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes), "Observation Types");
+            var treatmentBMPTypeAssessmentObservationTypes = TreatmentBMPTypeAssessmentObservationTypes.ListByTreatmentBMPTypeID(_dbContext, treatmentBMPType.TreatmentBMPTypeID);
+            var viewData = new EditSortOrderViewData(new List<IHaveASortOrder>(treatmentBMPTypeAssessmentObservationTypes), "Observation Types");
             return RazorPartialView<EditSortOrder, EditSortOrderViewData, EditSortOrderViewModel>(viewData, viewModel);
         }
 
@@ -263,19 +264,19 @@ namespace Neptune.Web.Controllers
                 return ViewEditObservationTypesSortOrder(treatmentBMPType, viewModel);
             }
 
-            viewModel.UpdateModel(new List<IHaveASortOrder>(treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes));
+            var treatmentBMPTypeAssessmentObservationTypes = TreatmentBMPTypeAssessmentObservationTypes.ListByTreatmentBMPTypeIDWithChangeTracking(_dbContext, treatmentBMPType.TreatmentBMPTypeID);
+            viewModel.UpdateModel(new List<IHaveASortOrder>(treatmentBMPTypeAssessmentObservationTypes));
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay("Successfully Updated Observation Type Sort Order");
             return new ModalDialogFormJsonResult();
         }
 
-        [HttpGet("{treatmentBMPTypePrimaryKey}")]
+        [HttpGet("{treatmentBMPTypePrimaryKey}/{attributeTypePurposeID}")]
         [NeptuneAdminFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPTypePrimaryKey")]
-        public PartialViewResult EditAttributeTypesSortOrder([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey,
-            int attributeTypePurposeID)
+        public PartialViewResult EditAttributeTypesSortOrder([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey, [FromRoute] int attributeTypePurposeID)
         {
-            var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
+            var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMPTypePrimaryKey);
             var viewModel = new EditSortOrderViewModel();
             return ViewEditAttributeTypesSortOrder(treatmentBMPType, viewModel, attributeTypePurposeID);
         }
@@ -287,12 +288,12 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<EditSortOrder, EditSortOrderViewData, EditSortOrderViewModel>(viewData, viewModel);
         }
 
-        [HttpPost("{treatmentBMPTypePrimaryKey}")]
+        [HttpPost("{treatmentBMPTypePrimaryKey}/{attributeTypePurposeID}")]
         [NeptuneAdminFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPTypePrimaryKey")]
-        public async Task<IActionResult> EditAttributeTypesSortOrder([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey, int attributeTypePurposeID, EditSortOrderViewModel viewModel)
+        public async Task<IActionResult> EditAttributeTypesSortOrder([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey, [FromRoute] int attributeTypePurposeID, EditSortOrderViewModel viewModel)
         {
-            var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
+            var treatmentBMPType = TreatmentBMPTypes.GetByIDWithChangeTracking(_dbContext, treatmentBMPTypePrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewEditAttributeTypesSortOrder(treatmentBMPType, viewModel, attributeTypePurposeID);
