@@ -134,32 +134,34 @@ namespace Neptune.Web.Controllers
         [HttpGet("{customAttributeTypePrimaryKey}")]
         [NeptuneAdminFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("customAttributeTypePrimaryKey")]
-        public PartialViewResult DeleteCustomAttributeType([FromRoute] CustomAttributeTypePrimaryKey customAttributeTypePrimaryKey)
+        public PartialViewResult Delete([FromRoute] CustomAttributeTypePrimaryKey customAttributeTypePrimaryKey)
         {
-            var customAttributeType = customAttributeTypePrimaryKey.EntityObject;
+            var customAttributeType = CustomAttributeTypes.GetByID(_dbContext, customAttributeTypePrimaryKey);
             var viewModel = new ConfirmDialogFormViewModel(customAttributeType.CustomAttributeTypeID);
             return ViewDeleteCustomAttributeType(customAttributeType, viewModel);
         }
 
         private PartialViewResult ViewDeleteCustomAttributeType(CustomAttributeType customAttributeType, ConfirmDialogFormViewModel viewModel)
         {
-            var treatmentBMPTypeLabel = customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Count == 1 ? FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel() : FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
-            var treatmentBMPLabel = customAttributeType.CustomAttributes.Count == 1 ? FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel() : FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized();
+            var treatmentBMPTypeCustomAttributeTypes = customAttributeType.TreatmentBMPTypeCustomAttributeTypes;
+            var treatmentBMPTypeLabel = treatmentBMPTypeCustomAttributeTypes.Count == 1 ? FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel() : FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             string confirmMessage;
             if (customAttributeType.CustomAttributeTypePurpose != CustomAttributeTypePurpose.Maintenance)
             {
+                var customAttributes = CustomAttributes.ListByCustomAttributeTypeID(_dbContext, customAttributeType.CustomAttributeTypeID);
+                var treatmentBMPLabel = customAttributes.Count == 1 ? FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel() : FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized();
                 confirmMessage =
-                    $"Attribute Type '{customAttributeType.CustomAttributeTypeName}' is associated with {customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Count} {treatmentBMPTypeLabel} and {customAttributeType.CustomAttributes.Count} {treatmentBMPLabel}.<br /><br />Are you sure you want to delete this {FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabel()}?";
+                    $"Attribute Type '{customAttributeType.CustomAttributeTypeName}' is associated with {treatmentBMPTypeCustomAttributeTypes.Count} {treatmentBMPTypeLabel} and {customAttributes.Count} {treatmentBMPLabel}.<br /><br />Are you sure you want to delete this {FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabel()}?";
             }
             else
             {
                 
-                var maintenanceRecordCount = customAttributeType.MaintenanceRecordObservations.Select(x=>x.MaintenanceRecord).Count();
+                var maintenanceRecordCount = MaintenanceRecordObservations.ListByCustomAttributeTypeID(_dbContext, customAttributeType.CustomAttributeTypeID).Count;
                 var maintenanceRecordLabel = maintenanceRecordCount == 1
                     ? FieldDefinitionType.MaintenanceRecord.GetFieldDefinitionLabel()
                     : FieldDefinitionType.MaintenanceRecord.GetFieldDefinitionLabelPluralized();
                 confirmMessage =
-                    $"Attribute Type '{customAttributeType.CustomAttributeTypeName}' is associated with {customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Count} {treatmentBMPTypeLabel} and {maintenanceRecordCount} {maintenanceRecordLabel}.<br /><br />Are you sure you want to delete this {FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabel()}?";
+                    $"Attribute Type '{customAttributeType.CustomAttributeTypeName}' is associated with {treatmentBMPTypeCustomAttributeTypes.Count} {treatmentBMPTypeLabel} and {maintenanceRecordCount} {maintenanceRecordLabel}.<br /><br />Are you sure you want to delete this {FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabel()}?";
             }
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
@@ -168,7 +170,7 @@ namespace Neptune.Web.Controllers
         [HttpPost("{customAttributeTypePrimaryKey}")]
         [NeptuneAdminFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("customAttributeTypePrimaryKey")]
-        public async Task<IActionResult> DeleteCustomAttributeType([FromRoute] CustomAttributeTypePrimaryKey customAttributeTypePrimaryKey, ConfirmDialogFormViewModel viewModel)
+        public async Task<IActionResult> Delete([FromRoute] CustomAttributeTypePrimaryKey customAttributeTypePrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var customAttributeType = customAttributeTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)

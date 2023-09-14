@@ -49,6 +49,11 @@ public static class CustomAttributes
         return GetImpl(dbContext).AsNoTracking().OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
     }
 
+    public static List<CustomAttribute> ListByCustomAttributeTypeID(NeptuneDbContext dbContext, int customAttributeTypeID)
+    {
+        return GetImpl(dbContext).AsNoTracking().Where(x => x.CustomAttributeTypeID == customAttributeTypeID).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
+    }
+
     public static List<CustomAttribute> ListByTreatmentBMPID(NeptuneDbContext dbContext, int treatmentBMPID)
     {
         return GetImpl(dbContext).AsNoTracking().Where(x => x.TreatmentBMPID == treatmentBMPID).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();

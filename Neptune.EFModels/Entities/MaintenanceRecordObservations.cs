@@ -53,4 +53,9 @@ public static class MaintenanceRecordObservations
     {
         return GetImpl(dbContext).Where(x => x.MaintenanceRecordID == maintenanceRecordID).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
     }
+
+    public static List<MaintenanceRecordObservation> ListByCustomAttributeTypeID(NeptuneDbContext dbContext, int customAttributeTypeID)
+    {
+        return GetImpl(dbContext).AsNoTracking().Where(x => x.CustomAttributeTypeID == customAttributeTypeID).OrderBy(x => x.MaintenanceRecordObservationID).ToList();
+    }
 }
