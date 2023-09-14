@@ -38,8 +38,7 @@ namespace Neptune.EFModels.Entities
 
         public string GetFileResourceDataLengthString()
         {
-            // todo: get the data length from blob storage
-            return $"(~{(FileResourceData.Length / 1000):##,###} KB)";
+            return $"(~{(ContentLength / 1000):##,###} KB)";
         }
 
         public string GetOriginalCompleteFileName()
