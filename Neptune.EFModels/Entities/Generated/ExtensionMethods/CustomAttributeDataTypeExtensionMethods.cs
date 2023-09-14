@@ -15,7 +15,9 @@ namespace Neptune.EFModels.Entities
             {
                 CustomAttributeDataTypeID = customAttributeDataType.CustomAttributeDataTypeID,
                 CustomAttributeDataTypeName = customAttributeDataType.CustomAttributeDataTypeName,
-                CustomAttributeDataTypeDisplayName = customAttributeDataType.CustomAttributeDataTypeDisplayName
+                CustomAttributeDataTypeDisplayName = customAttributeDataType.CustomAttributeDataTypeDisplayName,
+                HasOptions = customAttributeDataType.HasOptions,
+                HasMeasurementUnit = customAttributeDataType.HasMeasurementUnit
             };
             DoCustomMappings(customAttributeDataType, customAttributeDataTypeDto);
             return customAttributeDataTypeDto;
@@ -29,7 +31,9 @@ namespace Neptune.EFModels.Entities
             {
                 CustomAttributeDataTypeID = customAttributeDataType.CustomAttributeDataTypeID,
                 CustomAttributeDataTypeName = customAttributeDataType.CustomAttributeDataTypeName,
-                CustomAttributeDataTypeDisplayName = customAttributeDataType.CustomAttributeDataTypeDisplayName
+                CustomAttributeDataTypeDisplayName = customAttributeDataType.CustomAttributeDataTypeDisplayName,
+                HasOptions = customAttributeDataType.HasOptions,
+                HasMeasurementUnit = customAttributeDataType.HasMeasurementUnit
             };
             DoCustomSimpleDtoMappings(customAttributeDataType, customAttributeDataTypeSimpleDto);
             return customAttributeDataTypeSimpleDto;

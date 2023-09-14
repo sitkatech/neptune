@@ -6,8 +6,6 @@ namespace Neptune.EFModels.Entities
     {
         public abstract bool ValueIsCorrectDataType(string customAttributeValue);
         public abstract string ValueParsedForDataType(string customAttributeValue);
-        public abstract bool HasOptions();
-        public abstract bool HasMeasurementUnit();
     }
 
     public partial class CustomAttributeDataTypeString
@@ -20,16 +18,6 @@ namespace Neptune.EFModels.Entities
         public override string ValueParsedForDataType(string customAttributeValue)
         {
             return customAttributeValue;
-        }
-
-        public override bool HasOptions()
-        {
-            return false;
-        }
-
-        public override bool HasMeasurementUnit()
-        {
-            return false;
         }
     }
 
@@ -53,17 +41,6 @@ namespace Neptune.EFModels.Entities
             }
 
             throw new ArgumentOutOfRangeException("Attribute value is of an incorrect data type");
-
-        }
-
-        public override bool HasOptions()
-        {
-            return false;
-        }
-
-        public override bool HasMeasurementUnit()
-        {
-            return true;
         }
     }
 
@@ -88,16 +65,6 @@ namespace Neptune.EFModels.Entities
 
             throw new ArgumentOutOfRangeException("Attribute value is of an incorrect data type");
         }
-
-        public override bool HasOptions()
-        {
-            return false;
-        }
-
-        public override bool HasMeasurementUnit()
-        {
-            return true;
-        }
     }
 
     public partial class CustomAttributeDataTypeDateTime
@@ -121,16 +88,6 @@ namespace Neptune.EFModels.Entities
 
             throw new ArgumentOutOfRangeException("Attribute value is of an incorrect data type");
         }
-
-        public override bool HasOptions()
-        {
-            return false;
-        }
-
-        public override bool HasMeasurementUnit()
-        {
-            return false;
-        }
     }
 
     public partial class CustomAttributeDataTypePickFromList
@@ -144,16 +101,6 @@ namespace Neptune.EFModels.Entities
         {
             return customAttributeValue;
         }
-
-        public override bool HasOptions()
-        {
-            return true;
-        }
-
-        public override bool HasMeasurementUnit()
-        {
-            return false;
-        }
     }
 
     public partial class CustomAttributeDataTypeMultiSelect
@@ -166,16 +113,6 @@ namespace Neptune.EFModels.Entities
         public override string ValueParsedForDataType(string customAttributeValue)
         {
             return customAttributeValue;
-        }
-
-        public override bool HasOptions()
-        {
-            return true;
-        }
-
-        public override bool HasMeasurementUnit()
-        {
-            return false;
         }
     }
 }

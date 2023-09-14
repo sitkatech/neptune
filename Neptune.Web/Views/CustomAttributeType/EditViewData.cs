@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Neptune.Common;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Views.Shared;
@@ -83,27 +84,11 @@ namespace Neptune.Web.Views.CustomAttributeType
 
     public class ViewDataForAngular
     {
-        public List<CustomAttributeDataTypeSimple> CustomAttributeDataTypes { get; }
+        public List<CustomAttributeDataTypeSimpleDto> CustomAttributeDataTypes { get; }
        
-        public ViewDataForAngular(List<CustomAttributeDataType> customAttributeDataTypes)           
+        public ViewDataForAngular(IEnumerable<CustomAttributeDataType> customAttributeDataTypes)           
         {
-            CustomAttributeDataTypes = customAttributeDataTypes.Select(x => new CustomAttributeDataTypeSimple(x)).ToList();
-        }
-    }
-
-    public class CustomAttributeDataTypeSimple
-    {
-        public int ID { get; }
-        public string DisplayName { get; }
-        public bool HasOptions { get; }
-        public bool HasMeasurementUnit { get; }
-
-        public CustomAttributeDataTypeSimple(CustomAttributeDataType customAttributeDataType)
-        {
-            ID = customAttributeDataType.CustomAttributeDataTypeID;
-            DisplayName = customAttributeDataType.CustomAttributeDataTypeDisplayName;
-            HasOptions = customAttributeDataType.HasOptions();
-            HasMeasurementUnit = customAttributeDataType.HasMeasurementUnit();
+            CustomAttributeDataTypes = customAttributeDataTypes.Select(x => x.AsSimpleDto()).ToList();
         }
     }
 }

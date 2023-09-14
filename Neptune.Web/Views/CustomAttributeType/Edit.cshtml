@@ -89,15 +89,11 @@
                             <select class="form-control"
                                     style="width: auto"
                                     name="CustomAttributeDataTypeID"
-                                    ng-model="CustomAttributeDataTypeID"
+                                    ng-model="CustomAttributeDataTypeSelected"
                                     ng-change="updateCustomAttributeDataType()"
-                                    ng-required="true">
+                                    ng-required="true"
+                                    ng-options="item as item.CustomAttributeDataTypeDisplayName for item in AngularViewData.CustomAttributeDataTypes track by item.CustomAttributeDataTypeID">
                                 <option value="">&lt;Choose one&gt;</option>
-                                <option ng-repeat="customAttributeDataType in AngularViewData.CustomAttributeDataTypes"
-                                        ng-selected="AngularModel.CustomAttributeDataTypeID == customAttributeDataType.ID"
-                                        ng-value="customAttributeDataType.ID">
-                                    {{customAttributeDataType.DisplayName}}
-                                </option>
                             </select>
                             @Html.ValidationMessageFor(m => m.CustomAttributeDataTypeID)
                         </div>

@@ -41,17 +41,21 @@ namespace Neptune.EFModels.Entities
         /// <summary>
         /// Protected constructor only for use in instantiating the set of static lookup values that match database
         /// </summary>
-        protected CustomAttributeDataType(int customAttributeDataTypeID, string customAttributeDataTypeName, string customAttributeDataTypeDisplayName)
+        protected CustomAttributeDataType(int customAttributeDataTypeID, string customAttributeDataTypeName, string customAttributeDataTypeDisplayName, bool hasOptions, bool hasMeasurementUnit)
         {
             CustomAttributeDataTypeID = customAttributeDataTypeID;
             CustomAttributeDataTypeName = customAttributeDataTypeName;
             CustomAttributeDataTypeDisplayName = customAttributeDataTypeDisplayName;
+            HasOptions = hasOptions;
+            HasMeasurementUnit = hasMeasurementUnit;
         }
 
         [Key]
         public int CustomAttributeDataTypeID { get; private set; }
         public string CustomAttributeDataTypeName { get; private set; }
         public string CustomAttributeDataTypeDisplayName { get; private set; }
+        public bool HasOptions { get; private set; }
+        public bool HasMeasurementUnit { get; private set; }
         [NotMapped]
         public int PrimaryKey { get { return CustomAttributeDataTypeID; } }
 
@@ -134,37 +138,37 @@ namespace Neptune.EFModels.Entities
 
     public partial class CustomAttributeDataTypeString : CustomAttributeDataType
     {
-        private CustomAttributeDataTypeString(int customAttributeDataTypeID, string customAttributeDataTypeName, string customAttributeDataTypeDisplayName) : base(customAttributeDataTypeID, customAttributeDataTypeName, customAttributeDataTypeDisplayName) {}
-        public static readonly CustomAttributeDataTypeString Instance = new CustomAttributeDataTypeString(1, @"String", @"String");
+        private CustomAttributeDataTypeString(int customAttributeDataTypeID, string customAttributeDataTypeName, string customAttributeDataTypeDisplayName, bool hasOptions, bool hasMeasurementUnit) : base(customAttributeDataTypeID, customAttributeDataTypeName, customAttributeDataTypeDisplayName, hasOptions, hasMeasurementUnit) {}
+        public static readonly CustomAttributeDataTypeString Instance = new CustomAttributeDataTypeString(1, @"String", @"String", false, false);
     }
 
     public partial class CustomAttributeDataTypeInteger : CustomAttributeDataType
     {
-        private CustomAttributeDataTypeInteger(int customAttributeDataTypeID, string customAttributeDataTypeName, string customAttributeDataTypeDisplayName) : base(customAttributeDataTypeID, customAttributeDataTypeName, customAttributeDataTypeDisplayName) {}
-        public static readonly CustomAttributeDataTypeInteger Instance = new CustomAttributeDataTypeInteger(2, @"Integer", @"Integer");
+        private CustomAttributeDataTypeInteger(int customAttributeDataTypeID, string customAttributeDataTypeName, string customAttributeDataTypeDisplayName, bool hasOptions, bool hasMeasurementUnit) : base(customAttributeDataTypeID, customAttributeDataTypeName, customAttributeDataTypeDisplayName, hasOptions, hasMeasurementUnit) {}
+        public static readonly CustomAttributeDataTypeInteger Instance = new CustomAttributeDataTypeInteger(2, @"Integer", @"Integer", false, true);
     }
 
     public partial class CustomAttributeDataTypeDecimal : CustomAttributeDataType
     {
-        private CustomAttributeDataTypeDecimal(int customAttributeDataTypeID, string customAttributeDataTypeName, string customAttributeDataTypeDisplayName) : base(customAttributeDataTypeID, customAttributeDataTypeName, customAttributeDataTypeDisplayName) {}
-        public static readonly CustomAttributeDataTypeDecimal Instance = new CustomAttributeDataTypeDecimal(3, @"Decimal", @"Decimal");
+        private CustomAttributeDataTypeDecimal(int customAttributeDataTypeID, string customAttributeDataTypeName, string customAttributeDataTypeDisplayName, bool hasOptions, bool hasMeasurementUnit) : base(customAttributeDataTypeID, customAttributeDataTypeName, customAttributeDataTypeDisplayName, hasOptions, hasMeasurementUnit) {}
+        public static readonly CustomAttributeDataTypeDecimal Instance = new CustomAttributeDataTypeDecimal(3, @"Decimal", @"Decimal", false, true);
     }
 
     public partial class CustomAttributeDataTypeDateTime : CustomAttributeDataType
     {
-        private CustomAttributeDataTypeDateTime(int customAttributeDataTypeID, string customAttributeDataTypeName, string customAttributeDataTypeDisplayName) : base(customAttributeDataTypeID, customAttributeDataTypeName, customAttributeDataTypeDisplayName) {}
-        public static readonly CustomAttributeDataTypeDateTime Instance = new CustomAttributeDataTypeDateTime(4, @"DateTime", @"Date/Time");
+        private CustomAttributeDataTypeDateTime(int customAttributeDataTypeID, string customAttributeDataTypeName, string customAttributeDataTypeDisplayName, bool hasOptions, bool hasMeasurementUnit) : base(customAttributeDataTypeID, customAttributeDataTypeName, customAttributeDataTypeDisplayName, hasOptions, hasMeasurementUnit) {}
+        public static readonly CustomAttributeDataTypeDateTime Instance = new CustomAttributeDataTypeDateTime(4, @"DateTime", @"Date/Time", false, false);
     }
 
     public partial class CustomAttributeDataTypePickFromList : CustomAttributeDataType
     {
-        private CustomAttributeDataTypePickFromList(int customAttributeDataTypeID, string customAttributeDataTypeName, string customAttributeDataTypeDisplayName) : base(customAttributeDataTypeID, customAttributeDataTypeName, customAttributeDataTypeDisplayName) {}
-        public static readonly CustomAttributeDataTypePickFromList Instance = new CustomAttributeDataTypePickFromList(5, @"PickFromList", @"Pick One from List");
+        private CustomAttributeDataTypePickFromList(int customAttributeDataTypeID, string customAttributeDataTypeName, string customAttributeDataTypeDisplayName, bool hasOptions, bool hasMeasurementUnit) : base(customAttributeDataTypeID, customAttributeDataTypeName, customAttributeDataTypeDisplayName, hasOptions, hasMeasurementUnit) {}
+        public static readonly CustomAttributeDataTypePickFromList Instance = new CustomAttributeDataTypePickFromList(5, @"PickFromList", @"Pick One from List", true, false);
     }
 
     public partial class CustomAttributeDataTypeMultiSelect : CustomAttributeDataType
     {
-        private CustomAttributeDataTypeMultiSelect(int customAttributeDataTypeID, string customAttributeDataTypeName, string customAttributeDataTypeDisplayName) : base(customAttributeDataTypeID, customAttributeDataTypeName, customAttributeDataTypeDisplayName) {}
-        public static readonly CustomAttributeDataTypeMultiSelect Instance = new CustomAttributeDataTypeMultiSelect(6, @"MultiSelect", @"Select Many from List");
+        private CustomAttributeDataTypeMultiSelect(int customAttributeDataTypeID, string customAttributeDataTypeName, string customAttributeDataTypeDisplayName, bool hasOptions, bool hasMeasurementUnit) : base(customAttributeDataTypeID, customAttributeDataTypeName, customAttributeDataTypeDisplayName, hasOptions, hasMeasurementUnit) {}
+        public static readonly CustomAttributeDataTypeMultiSelect Instance = new CustomAttributeDataTypeMultiSelect(6, @"MultiSelect", @"Select Many from List", true, false);
     }
 }

@@ -3,13 +3,10 @@
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
     $scope.getCustomAttributeDataType = function (idToFind) {
-        return Sitka.Methods.findElementInJsonArray($scope.AngularViewData.CustomAttributeDataTypes, "ID", idToFind);
+        return Sitka.Methods.findElementInJsonArray($scope.AngularViewData.CustomAttributeDataTypes, "CustomAttributeDataTypeID", idToFind);
     }
 
     $scope.updateCustomAttributeDataType = function () {
-        var customAttributeDataType = $scope.getCustomAttributeDataType($scope.CustomAttributeDataTypeID);
-        $scope.CustomAttributeDataTypeSelected = customAttributeDataType;
-
         if ($scope.OptionsSchema.length == 0) {
             $scope.addInput();
         }
@@ -39,8 +36,6 @@
 
     $scope.OptionsSchema = JSON.parse($scope.AngularModel.CustomAttributeTypeOptionsSchema) == undefined ? [] : JSON.parse($scope.AngularModel.CustomAttributeTypeOptionsSchema);   
     $scope.CustomAttributeDataTypeSelected = $scope.AngularModel.CustomAttributeDataTypeID != null
-        ? Sitka.Methods.findElementInJsonArray($scope.AngularViewData.CustomAttributeDataTypes,
-            "ID",
-            $scope.AngularModel.CustomAttributeDataTypeID)
+        ? Sitka.Methods.findElementInJsonArray($scope.AngularViewData.CustomAttributeDataTypes, "CustomAttributeDataTypeID", $scope.AngularModel.CustomAttributeDataTypeID)
         : null;
 });

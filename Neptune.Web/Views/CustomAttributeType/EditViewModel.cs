@@ -92,7 +92,7 @@ namespace Neptune.Web.Views.CustomAttributeType
             customAttributeType.CustomAttributeTypeDescription = CustomAttributeTypeDesription;
 
             var customAttributeDataType = CustomAttributeDataType.AllLookupDictionary[CustomAttributeDataTypeID.Value];
-            if (customAttributeDataType.HasOptions())
+            if (customAttributeDataType.HasOptions)
             {
                 customAttributeType.CustomAttributeTypeOptionsSchema = CustomAttributeTypeOptionsSchema;
             }
@@ -134,7 +134,7 @@ namespace Neptune.Web.Views.CustomAttributeType
             }
 
             var customAttributeDataType = CustomAttributeDataType.AllLookupDictionary[CustomAttributeDataTypeID.Value];
-            if (customAttributeDataType.HasOptions())
+            if (customAttributeDataType.HasOptions)
             {
                 try
                 {
