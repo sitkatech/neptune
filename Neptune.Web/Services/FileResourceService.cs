@@ -11,13 +11,11 @@ public class FileResourceService
     private const long MaxUploadFileSizeInBytes = 200000000;
     private readonly NeptuneDbContext _dbContext;
     private readonly AzureBlobStorageService _azureBlobStorageService;
-    private readonly WebConfiguration _webConfiguration;
 
-    public FileResourceService(NeptuneDbContext dbContext, IOptions<WebConfiguration> webConfiguration, AzureBlobStorageService azureBlobStorageService)
+    public FileResourceService(NeptuneDbContext dbContext, AzureBlobStorageService azureBlobStorageService)
     {
         _dbContext = dbContext;
         _azureBlobStorageService = azureBlobStorageService;
-        _webConfiguration = webConfiguration.Value;
     }
 
     // 9/13/23 SMG: I'm hoping that this can essentially be the ONLY place that actually

@@ -65,7 +65,7 @@ namespace Neptune.Web.Controllers
             }
 
             var neptuneHomePageImage = new NeptuneHomePageImage();
-            viewModel.UpdateModel(neptuneHomePageImage, CurrentPerson, _fileResourceService);
+            await viewModel.UpdateModel(neptuneHomePageImage, CurrentPerson, _fileResourceService);
             await _dbContext.NeptuneHomePageImages.AddAsync(neptuneHomePageImage);
             await _dbContext.SaveChangesAsync();
             return new ModalDialogFormJsonResult();
