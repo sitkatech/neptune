@@ -57,15 +57,12 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public GridJsonNetJObjectResult<StormwaterJurisdiction> IndexGridJsonData()
         {
-            var jurisdictions = GetJurisdictionsAndGridSpec(out var gridSpec);
+            var jurisdictions = StormwaterJurisdictions.List(_dbContext);
+            var countByStormwaterJurisdiction = TreatmentBMPs.ListCountByStormwaterJurisdiction(_dbContext);
+            var peopleCountByStormwaterJurisdiction = StormwaterJurisdictionPeople.ListCountByStormwaterJurisdiction(_dbContext);
+            var gridSpec = new IndexGridSpec(_linkGenerator, countByStormwaterJurisdiction, peopleCountByStormwaterJurisdiction);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<StormwaterJurisdiction>(jurisdictions, gridSpec);
             return gridJsonNetJObjectResult;
-        }
-
-        private List<StormwaterJurisdiction> GetJurisdictionsAndGridSpec(out IndexGridSpec gridSpec)
-        {
-            gridSpec = new IndexGridSpec(_linkGenerator);
-            return StormwaterJurisdictions.List(_dbContext);
         }
 
         [HttpGet("{stormwaterJurisdictionPrimaryKey}")]

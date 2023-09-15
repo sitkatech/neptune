@@ -29,14 +29,15 @@ namespace Neptune.Web.Views.Jurisdiction
 {
     public class IndexGridSpec : GridSpec<StormwaterJurisdiction>
     {
-        public IndexGridSpec(LinkGenerator linkGenerator)
+        public IndexGridSpec(LinkGenerator linkGenerator, Dictionary<int, int> countByStormwaterJurisdiction,
+            Dictionary<int, int> peopleCountByStormwaterJurisdiction)
         {
             var stormwaterJurisdictionUrlTemplate = new UrlTemplate<int>(
                 SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator,
                     x => x.Detail(UrlTemplate.Parameter1Int)));
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.Organization.GetDisplayName()), 400, DhtmlxGridColumnFilterType.Html);
-            Add("Number of Users", x => x.StormwaterJurisdictionPeople.Count, 80);
-            Add("Number of BMPs", x => x.TreatmentBMPs.Count, 80, DhtmlxGridColumnAggregationType.Total);
+            Add($"Number of Users", a => peopleCountByStormwaterJurisdiction.TryGetValue(a.StormwaterJurisdictionID, out var value) ? value : 0, 80, DhtmlxGridColumnAggregationType.Total);
+            Add($"Number of {FieldDefinitionType.TreatmentBMP.ToGridHeaderStringPlural("BMPs")}", a => countByStormwaterJurisdiction.TryGetValue(a.StormwaterJurisdictionID, out var value) ? value : 0, 80, DhtmlxGridColumnAggregationType.Total);
             Add("Public BMP Visibility",
                 x => x.StormwaterJurisdictionPublicBMPVisibilityType
                     .StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);

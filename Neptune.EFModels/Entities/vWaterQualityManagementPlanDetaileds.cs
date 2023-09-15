@@ -6,14 +6,7 @@ public static class vWaterQualityManagementPlanDetaileds
 {
     public static List<vWaterQualityManagementPlanDetailed> ListViewableByPerson(NeptuneDbContext dbContext, Person person)
     {
-        var stormwaterJurisdictionsPersonCanViewWithContext = StormwaterJurisdictions.ListViewableByPerson(dbContext, person);
-
-        var stormwaterJurisdictionIDsPersonCanView = person.IsAnonymousOrUnassigned()
-            ? stormwaterJurisdictionsPersonCanViewWithContext
-                .Where(x => x.StormwaterJurisdictionPublicWQMPVisibilityTypeID !=
-                            (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.None)
-                .Select(x => x.StormwaterJurisdictionID)
-            : stormwaterJurisdictionsPersonCanViewWithContext.Select(x => x.StormwaterJurisdictionID);
+        var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(dbContext, person);
 
         //These users can technically see all Jurisdictions, just potentially not the WQMPs inside them
         var waterQualityManagementPlans = dbContext.vWaterQualityManagementPlanDetaileds.AsNoTracking()

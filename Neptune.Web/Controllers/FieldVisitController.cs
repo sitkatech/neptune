@@ -81,7 +81,7 @@ namespace Neptune.Web.Controllers
         [FieldVisitViewFeature]
         public GridJsonNetJObjectResult<vFieldVisitDetailed> AllFieldVisitsGridJsonData()
         {
-            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictions.ListViewableIDsByPerson(_dbContext, CurrentPerson);
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(_dbContext, CurrentPerson);
             var fieldVisits = vFieldVisitDetaileds.ListForStormwaterJurisdictionIDs(_dbContext, stormwaterJurisdictionIDsPersonCanView);
             var gridSpec = new FieldVisitGridSpec(CurrentPerson, false, _linkGenerator);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vFieldVisitDetailed>(fieldVisits, gridSpec);

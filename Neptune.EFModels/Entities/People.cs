@@ -6,6 +6,7 @@ namespace Neptune.EFModels.Entities
 {
     public static class People
     {
+        //todo: invite user
         //public static PersonDto CreateUnassignedPerson(NeptuneDbContext dbContext, PersonCreateDto userCreateDto)
         //{
         //    var userUpsertDto = new PersonUpsertDto()
@@ -123,31 +124,11 @@ namespace Neptune.EFModels.Entities
             return person?.AsDto();
         }
 
-        public static List<int> ListStormwaterJurisdictionIDsByPersonID(NeptuneDbContext dbContext, int personID)
-        {
-            var person = GetByID(dbContext, personID);
-            return ListStormwaterJurisdictionIDsByPersonDto(dbContext, person);
-        }
-
-        public static List<int> ListStormwaterJurisdictionIDsByPersonDto(NeptuneDbContext dbContext, Person person)
-        {
-            if (person.Role.RoleID == (int)RoleEnum.Admin || person.Role.RoleID == (int)RoleEnum.SitkaAdmin)
-            {
-                return dbContext.StormwaterJurisdictions.AsNoTracking().Select(x => x.StormwaterJurisdictionID).ToList();
-            }
-
-            return dbContext.StormwaterJurisdictionPeople.AsNoTracking()
-                .Where(x => x.PersonID == person.PersonID)
-                .Select(x => x.StormwaterJurisdictionID)
-                .ToList();
-        }
-
         private static IQueryable<Person> GetImpl(NeptuneDbContext dbContext)
         {
             return dbContext.People
                 .Include(x => x.Organization)
                 .ThenInclude(x => x.OrganizationType);
-//                .Include(x => x.StormwaterJurisdictionPeople);
         }
 
         public static List<Person> ListWithRole(NeptuneDbContext dbContext, int roleID)
@@ -157,7 +138,7 @@ namespace Neptune.EFModels.Entities
 
         public static Person GetByWebServiceAccessToken(NeptuneDbContext dbContext, Guid webServiceAccessToken)
         {
-            var person = dbContext.People.AsNoTracking().SingleOrDefault(x => x.WebServiceAccessToken == webServiceAccessToken);
+            var person = GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.WebServiceAccessToken == webServiceAccessToken);
             Check.RequireNotNull(person, $"Person with specified service access token not found!");
             return person;
         }

@@ -33,7 +33,7 @@ namespace Neptune.EFModels.Entities
 
         public static List<vFieldVisitDetailed> GetProvisionalFieldVisits(NeptuneDbContext dbContext, Person currentPerson)
         {
-            var stormwaterJurisdictionIDsPersonCanView = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, currentPerson.PersonID);
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(dbContext, currentPerson);
             return GetProvisionalFieldVisits(dbContext, stormwaterJurisdictionIDsPersonCanView);
         }
 

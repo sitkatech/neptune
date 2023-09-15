@@ -36,7 +36,6 @@ public static class StormwaterJurisdictions
         return GetByID(dbContext, stormwaterJurisdictionPrimaryKey.PrimaryKeyValue);
     }
 
-
     private static IQueryable<StormwaterJurisdiction> GetImpl(NeptuneDbContext dbContext)
     {
         return dbContext.StormwaterJurisdictions
@@ -46,23 +45,7 @@ public static class StormwaterJurisdictions
 
     public static List<StormwaterJurisdiction> ListViewableByPerson(NeptuneDbContext dbContext, Person person)
     {
-        if (person.IsAdministrator() || person.IsAnonymousOrUnassigned())
-        {
-            return GetImpl(dbContext).AsNoTracking().ToList();
-        }
-
-        var stormwaterJurisdictionIDsViewable  = dbContext.StormwaterJurisdictionPeople.AsNoTracking().Where(x => x.PersonID == person.PersonID).Select(x => x.StormwaterJurisdictionID).ToList();
+        var stormwaterJurisdictionIDsViewable  = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(dbContext, person);
         return GetImpl(dbContext).AsNoTracking().Where(x => stormwaterJurisdictionIDsViewable.Contains(x.StormwaterJurisdictionID)).ToList();
     }
-
-    public static IEnumerable<int> ListViewableIDsByPerson(NeptuneDbContext dbContext, Person person)
-    {
-        if (person.IsAdministrator() || person.IsAnonymousOrUnassigned())
-        {
-            return dbContext.StormwaterJurisdictions.AsNoTracking().Select(x => x.StormwaterJurisdictionID).ToList();
-        }
-
-        return dbContext.StormwaterJurisdictionPeople.AsNoTracking().Where(x => x.PersonID == person.PersonID).Select(x => x.StormwaterJurisdictionID).ToList();
-    }
-
 }

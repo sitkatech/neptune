@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
-using System;
 
 namespace Neptune.EFModels.Entities;
 
@@ -60,14 +59,7 @@ public static class WaterQualityManagementPlans
 
     public static List<WaterQualityManagementPlan> ListViewableByPerson(NeptuneDbContext dbContext, Person person)
     {
-        var stormwaterJurisdictionsPersonCanViewWithContext = StormwaterJurisdictions.ListViewableByPerson(dbContext, person);
-
-        var stormwaterJurisdictionIDsPersonCanView = person.IsAnonymousOrUnassigned()
-            ? stormwaterJurisdictionsPersonCanViewWithContext
-                .Where(x => x.StormwaterJurisdictionPublicWQMPVisibilityTypeID !=
-                            (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.None)
-                .Select(x => x.StormwaterJurisdictionID)
-            : stormwaterJurisdictionsPersonCanViewWithContext.Select(x => x.StormwaterJurisdictionID);
+        var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(dbContext, person);
 
         //These users can technically see all Jurisdictions, just potentially not the WQMPs inside them
         var waterQualityManagementPlans = GetImpl(dbContext).Include(x => x.WaterQualityManagementPlanParcels)

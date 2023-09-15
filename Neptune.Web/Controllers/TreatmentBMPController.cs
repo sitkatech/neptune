@@ -60,9 +60,10 @@ namespace Neptune.Web.Controllers
         [HttpGet]
         public ViewResult FindABMP()
         {
-            var stormwaterJurisdictionsPersonCanView = StormwaterJurisdictions.ListViewableByPerson(_dbContext, CurrentPerson);
-            var treatmentBMPs = CurrentPerson.GetTreatmentBmpsPersonCanView(stormwaterJurisdictionsPersonCanView, _dbContext);
-            var jurisdictions = stormwaterJurisdictionsPersonCanView.Select(x => x.AsDisplayDto()).ToList();
+            var stormwaterJurisdictions = StormwaterJurisdictions.ListViewableByPerson(_dbContext, CurrentPerson);
+            var stormwaterJurisdictionIDsPersonCanView = stormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID);
+            var treatmentBMPs = CurrentPerson.GetTreatmentBmpsPersonCanView(_dbContext, stormwaterJurisdictionIDsPersonCanView);
+            var jurisdictions = stormwaterJurisdictions.Select(x => x.AsDisplayDto()).ToList();
             var jurisdictionMapLayers = MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext);
             var mapInitJson = new SearchMapInitJson("StormwaterIndexMap", jurisdictionMapLayers,
                 StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(treatmentBMPs, false, false, _linkGenerator))
@@ -81,8 +82,8 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.TreatmentBMP);
-            var stormwaterJurisdictionsPersonCanView = StormwaterJurisdictions.ListViewableByPerson(_dbContext, CurrentPerson);
-            var treatmentBmpsCurrentUserCanSee = CurrentPerson.GetTreatmentBmpsPersonCanView(stormwaterJurisdictionsPersonCanView, _dbContext);
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(_dbContext, CurrentPerson);
+            var treatmentBmpsCurrentUserCanSee = CurrentPerson.GetTreatmentBmpsPersonCanView(_dbContext, stormwaterJurisdictionIDsPersonCanView);
             var treatmentBmpsInExportCount = treatmentBmpsCurrentUserCanSee.Count;
             var featureClassesInExportCount =
                 treatmentBmpsCurrentUserCanSee.Select(x => x.TreatmentBMPTypeID).Distinct().Count() + 1;
@@ -95,7 +96,7 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<vTreatmentBMPDetailed> TreatmentBMPGridJsonData()
         {
-            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictions.ListViewableIDsByPerson(_dbContext, CurrentPerson);
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(_dbContext, CurrentPerson);
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(CurrentPerson);
             var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, showDelete, showEdit, _linkGenerator);
@@ -119,7 +120,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<TreatmentBMPAssessmentSummary> TreatmentBMPAssessmentSummaryGridJsonData()
         {
             var gridSpec = new TreatmentBMPAssessmentSummaryGridSpec(_linkGenerator);
-            var stormwaterJurisdictionIDsCurrentUserCanEdit = StormwaterJurisdictions.ListViewableIDsByPerson(_dbContext, CurrentPerson);
+            var stormwaterJurisdictionIDsCurrentUserCanEdit = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(_dbContext, CurrentPerson);
 
             var vMostRecentTreatmentBMPAssessments1 =
                 _dbContext.vMostRecentTreatmentBMPAssessments.Where(x =>
@@ -833,10 +834,9 @@ namespace Neptune.Web.Controllers
             var treatmentBMPTypeIDs = viewModel.TreatmentBMPTypeIDs;
             var stormwaterJurisdictionIDs = viewModel.StormwaterJurisdictionIDs;
             // ReSharper disable once InconsistentNaming
-            var stormwaterJurisdictionsPersonCanView =
-                StormwaterJurisdictions.ListViewableByPerson(_dbContext, CurrentPerson);
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(_dbContext, CurrentPerson);
             var allTreatmentBMPsMatchingSearchString = CurrentPerson
-                .GetTreatmentBmpsPersonCanView(stormwaterJurisdictionsPersonCanView, _dbContext)
+                .GetTreatmentBmpsPersonCanView(_dbContext, stormwaterJurisdictionIDsPersonCanView)
                 .Where(x => treatmentBMPTypeIDs.Contains(x.TreatmentBMPTypeID) &&
                             stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdictionID) &&
                             x.TreatmentBMPName.ToLower().Contains(searchString)).ToList();
@@ -932,7 +932,7 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<vViewTreatmentBMPModelingAttribute> ViewTreatmentBMPModelingAttributesGridJsonData()
         {
-            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictions.ListViewableIDsByPerson(_dbContext, CurrentPerson);
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(_dbContext, CurrentPerson);
             var gridSpec = new ViewTreatmentBMPModelingAttributesGridSpec(_linkGenerator);
             var treatmentBMPs = _dbContext.vViewTreatmentBMPModelingAttributes.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vViewTreatmentBMPModelingAttribute>(treatmentBMPs, gridSpec);

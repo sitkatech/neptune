@@ -110,34 +110,17 @@ namespace Neptune.Web.Models
             return person.Organizations.OrderBy(x => x.OrganizationName).ToList();
         }
 
-        public static List<TreatmentBMP> GetTreatmentBmpsPersonCanView(this Person person,
-            IEnumerable<StormwaterJurisdiction> stormwaterJurisdictionsPersonCanView, NeptuneDbContext dbContext)
+        public static List<TreatmentBMP> GetTreatmentBmpsPersonCanView(this Person person, NeptuneDbContext dbContext, IEnumerable<int> stormwaterJurisdictionIDsPersonCanView)
         {
-            //These users can technically see all Jurisdictions, just potentially not the BMPs inside them
-            if (person.IsAnonymousOrUnassigned())
-            {
-                var stormwaterJurisdictionIDsAnonymousPersonCanView = stormwaterJurisdictionsPersonCanView
-                    .Where(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeID !=
-                                (int)StormwaterJurisdictionPublicBMPVisibilityTypeEnum.None)
-                    .Select(x => x.StormwaterJurisdictionID);
-
-                var treatmentBMPs = TreatmentBMPs.GetNonPlanningModuleBMPs(dbContext)
-                    .Where(x => stormwaterJurisdictionIDsAnonymousPersonCanView.Contains(x.StormwaterJurisdictionID) &&
-                                x.InventoryIsVerified).ToList();
-                return treatmentBMPs;
-            }
-
-            var stormwaterJurisdictionIDsPersonCanView =
-                stormwaterJurisdictionsPersonCanView.Select(x => x.StormwaterJurisdictionID);
             var treatmentBmps = TreatmentBMPs.GetNonPlanningModuleBMPs(dbContext)
                 .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
-            return treatmentBmps;
+            return person.IsAnonymousOrUnassigned() ? treatmentBmps.Where(x => x.InventoryIsVerified).ToList() : treatmentBmps;
         }
 
         public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson, NeptuneDbContext dbContext)
         {
             return GetStormwaterJurisdictionCqlFilter(currentPerson,
-                StormwaterJurisdictions.ListViewableIDsByPerson(dbContext, currentPerson));
+                StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(dbContext, currentPerson));
         }
 
         public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson,
@@ -151,7 +134,7 @@ namespace Neptune.Web.Models
         public static string GetNegativeStormwaterJurisdictionCqlFilter(this Person currentPerson, NeptuneDbContext dbContext)
         {
             return GetNegativeStormwaterJurisdictionCqlFilter(currentPerson,
-                StormwaterJurisdictions.ListViewableIDsByPerson(dbContext, currentPerson));
+                StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(dbContext, currentPerson));
         }
 
         public static string GetNegativeStormwaterJurisdictionCqlFilter(this Person currentPerson,

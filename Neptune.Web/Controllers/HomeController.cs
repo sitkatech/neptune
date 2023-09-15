@@ -162,7 +162,7 @@ namespace Neptune.Web.Controllers
         private string GetManagerDashboardDescription()
         {
             var provisionalBMPRecordCount = TreatmentBMPs.GetProvisionalTreatmentBMPs(_dbContext, CurrentPerson).Count;
-            var stormwaterJurisdictionIDs = StormwaterJurisdictions.ListViewableIDsByPerson(_dbContext, CurrentPerson);
+            var stormwaterJurisdictionIDs = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(_dbContext, CurrentPerson);
             var provisionalFieldVisitCount = vFieldVisitDetaileds.GetProvisionalFieldVisits(_dbContext, stormwaterJurisdictionIDs).Count;
             string managerDashboardDescription = null;
             if (provisionalBMPRecordCount > 0)
