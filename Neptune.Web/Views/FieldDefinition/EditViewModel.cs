@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using System.ComponentModel;
-using Microsoft.AspNetCore.Html;
 using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.FieldDefinition
@@ -27,7 +26,7 @@ namespace Neptune.Web.Views.FieldDefinition
     public class EditViewModel : FormViewModel
     {
         [DisplayName("Custom Definition")]
-        public HtmlString FieldDefinitionValue { get; set; }
+        public string FieldDefinitionValue { get; set; }
 
         /// <summary>
         /// Needed by model binder
@@ -38,12 +37,12 @@ namespace Neptune.Web.Views.FieldDefinition
 
         public EditViewModel(EFModels.Entities.FieldDefinition fieldDefinition)
         {
-            FieldDefinitionValue = new HtmlString(fieldDefinition?.FieldDefinitionValue);
+            FieldDefinitionValue = fieldDefinition?.FieldDefinitionValue;
         }
 
         public void UpdateModel(EFModels.Entities.FieldDefinition fieldDefinition)
         {
-            fieldDefinition.FieldDefinitionValue = FieldDefinitionValue.ToString();
+            fieldDefinition.FieldDefinitionValue = FieldDefinitionValue;
         }
     }
 }

@@ -75,7 +75,7 @@ namespace Neptune.Web.Controllers
         {
             var viewModel = new EditViewModel()
             {
-                FieldDefinitionValue = new HtmlString(fieldDefinitionValue)
+                FieldDefinitionValue = fieldDefinitionValue
             };
 
             var fieldDefinitionType = FieldDefinitionType.AllLookupDictionary[fieldDefinitionTypeID];
