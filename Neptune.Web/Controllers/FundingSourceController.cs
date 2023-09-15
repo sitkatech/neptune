@@ -58,7 +58,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost]
         [FundingSourceCreateFeature]
-        public ActionResult New(EditViewModel viewModel)
+        public async Task<IActionResult> New(EditViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -67,8 +67,8 @@ namespace Neptune.Web.Controllers
 
             var fundingSource = new FundingSource { IsActive = true };
             viewModel.UpdateModel(fundingSource, CurrentPerson);
-            _dbContext.FundingSources.Add(fundingSource);
-            _dbContext.SaveChangesAsync();
+            await _dbContext.FundingSources.AddAsync(fundingSource);
+            await _dbContext.SaveChangesAsync();
             SetMessageForDisplay($"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()} {UrlTemplate.MakeHrefString(SitkaRoute<FundingSourceController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(fundingSource)), fundingSource.FundingSourceName)} successfully created.");
 
             return new ModalDialogFormJsonResult();
@@ -87,7 +87,7 @@ namespace Neptune.Web.Controllers
         [HttpPost("{fundingSourcePrimaryKey}")]
         [FundingSourceEditFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("fundingSourcePrimaryKey")]
-        public ActionResult Edit([FromRoute] FundingSourcePrimaryKey fundingSourcePrimaryKey, EditViewModel viewModel)
+        public async Task<IActionResult> Edit([FromRoute] FundingSourcePrimaryKey fundingSourcePrimaryKey, EditViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -95,6 +95,7 @@ namespace Neptune.Web.Controllers
             }
             var fundingSource = fundingSourcePrimaryKey.EntityObject;
             viewModel.UpdateModel(fundingSource, CurrentPerson);
+            await _dbContext.SaveChangesAsync();
             return new ModalDialogFormJsonResult();
         }
 

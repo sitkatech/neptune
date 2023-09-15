@@ -85,8 +85,8 @@ namespace Neptune.Web.Views.FundingSource
                 errors.Add(new SitkaValidationResult<EditViewModel, string>("Funding Source name already exists.", x => x.FundingSourceName));
             }
 
-            var httpContext = validationContext.GetService<HttpContext>();
-            var currentPerson = UserContext.GetUserFromHttpContext(dbContext, httpContext);
+            var httpContextAccessor = validationContext.GetService<IHttpContextAccessor>();
+            var currentPerson = UserContext.GetUserFromHttpContext(dbContext, httpContextAccessor.HttpContext);
             if (new List<EFModels.Entities.Role> { EFModels.Entities.Role.Admin, EFModels.Entities.Role.SitkaAdmin }.All(x => x.RoleID != currentPerson.RoleID) && currentPerson.OrganizationID != OrganizationID)
             {
                 var errorMessage = $"You cannot create a {FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()} for an {FieldDefinitionType.Organization.GetFieldDefinitionLabel()} other than your own.";

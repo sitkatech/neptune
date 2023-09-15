@@ -26,16 +26,22 @@ namespace Neptune.EFModels.Entities
 {
     public static class NeptunePages
     {
+        public static IQueryable<NeptunePage> GetImpl(NeptuneDbContext dbContext)
+        {
+            return dbContext.NeptunePages;
+        }
+
         public static List<NeptunePage> List(NeptuneDbContext dbContext)
         {
-            return dbContext.NeptunePages.AsNoTracking()
+            return GetImpl(dbContext).AsNoTracking().ToList()
                 .OrderBy(x => x.NeptunePageType.NeptunePageTypeDisplayName)
                 .ToList();
         }
 
         public static NeptunePage GetNeptunePageByPageType(NeptuneDbContext dbContext, NeptunePageType neptunePageType)
         {
-            var neptunePage = dbContext.NeptunePages.SingleOrDefault(x => x.NeptunePageTypeID == neptunePageType.NeptunePageTypeID);
+            var neptunePage = GetImpl(dbContext).AsNoTracking()
+                .SingleOrDefault(x => x.NeptunePageTypeID == neptunePageType.NeptunePageTypeID);
             Check.RequireNotNull(neptunePage);
             return neptunePage;
         }
