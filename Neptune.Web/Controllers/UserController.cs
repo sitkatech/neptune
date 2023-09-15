@@ -160,7 +160,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
         public ViewResult Detail([FromRoute] PersonPrimaryKey personPrimaryKey)
         {
-            var person = personPrimaryKey.EntityObject;
+            var person = People.GetByID(_dbContext, personPrimaryKey.PrimaryKeyValue);
             var userNotificationGridSpec = new UserNotificationGridSpec();
             var userNotificationGridDataUrl = SitkaRoute<UserController>.BuildUrlFromExpression(_linkGenerator, x => x.UserNotificationsGridJsonData(personPrimaryKey));
             var activateInactivateUrl = SitkaRoute<UserController>.BuildUrlFromExpression(_linkGenerator, x => x.ActivateInactivatePerson(person));
