@@ -92,16 +92,8 @@
                         @Html.LabelWithSugarFor(m => m.TreatmentBMPTypeID)
                     </div>
                     <div class="col-xs-12 col-sm-4">
-                        @if (!ModelObjectHelpers.IsRealPrimaryKeyValue(Model.TreatmentBMPID))
-                        {
-                            @Html.SearchableDropDownListFor(m => m.TreatmentBMPTypeID, ViewDataTyped.TreatmentBMPTypeSelectListItems)
-                            @Html.ValidationMessageFor(m => m.TreatmentBMPTypeID)
-                        }
-                        else
-                        {
-                            <p class="form-control-static">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</p>
-                            @Html.HiddenFor(m => m.TreatmentBMPTypeID)
-                        }
+                        @Html.SearchableDropDownListFor(m => m.TreatmentBMPTypeID, ViewDataTyped.TreatmentBMPTypeSelectListItems)
+                        @Html.ValidationMessageFor(m => m.TreatmentBMPTypeID)
                     </div>
                 </div>
                 <div class="form-group">
@@ -109,16 +101,8 @@
                         @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID, "Jurisdiction")
                     </div>
                     <div class="col-xs-12 col-sm-4">
-                        @if (!ModelObjectHelpers.IsRealPrimaryKeyValue(Model.TreatmentBMPID))
-                        {
-                            @Html.SearchableDropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictionSelectListItems)
-                            @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
-                        }
-                        else
-                        {
-                            <p class="form-control-static">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()</p>
-                            @Html.HiddenFor(x => x.StormwaterJurisdictionID)
-                        }
+                        @Html.SearchableDropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictionSelectListItems)
+                        @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
                     </div>
                     <div class="col-xs-12 col-sm-2 control-label">
                         @Html.LabelWithSugarFor(m => m.OwnerOrganizationID)

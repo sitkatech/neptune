@@ -47,21 +47,25 @@ namespace Neptune.Web.Views.Shared.Location
         {
         }
 
-        public virtual void UpdateModel(EFModels.Entities.TreatmentBMP treatmentBMP, Person currentPerson, NeptuneDbContext dbContext)
+        public virtual void UpdateModel(NeptuneDbContext dbContext, EFModels.Entities.TreatmentBMP treatmentBMP,
+            Person currentPerson)
         {
-            // note that these nullables will never be null due to the Required attribute
-            // this is coming FROM the browser, so it has to be reprojected to CA State Plane
-            var locationPoint4326 = GeometryHelper.CreateLocationPoint4326FromLatLong(TreatmentBMPPointY.Value, TreatmentBMPPointX.GetValueOrDefault());
+            SetTreatmentBMPLocationAndPointInPolygonData(dbContext, treatmentBMP);
+
+            treatmentBMP.UpdateUpstreamBMPReferencesIfNecessary(dbContext);
+            treatmentBMP.UpdatedCentralizedBMPDelineationIfPresent(dbContext);
+        }
+
+        protected void SetTreatmentBMPLocationAndPointInPolygonData(NeptuneDbContext dbContext, EFModels.Entities.TreatmentBMP treatmentBMP)
+        {
+            var locationPoint4326 =
+                GeometryHelper.CreateLocationPoint4326FromLatLong(TreatmentBMPPointY.Value,
+                    TreatmentBMPPointX.GetValueOrDefault());
             var locationPoint = locationPoint4326.ProjectTo2771();
             treatmentBMP.LocationPoint = locationPoint;
             treatmentBMP.LocationPoint4326 = locationPoint4326;
-
-            treatmentBMP.UpdateUpstreamBMPReferencesIfNecessary(dbContext);
-
             // associate watershed, model basin, precipitation zone
             treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(locationPoint, dbContext);
-
-            treatmentBMP.UpdatedCentralizedBMPDelineationIfPresent(dbContext);
         }
     }
 }

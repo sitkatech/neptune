@@ -82,4 +82,10 @@ public static class WaterQualityManagementPlans
     }
 
 
+    public static IEnumerable<WaterQualityManagementPlan> ListByStormwaterJurisdictionID(NeptuneDbContext dbContext, int stormwaterJurisdictionID)
+    {
+        return GetImpl(dbContext)
+            .AsNoTracking()
+            .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID).ToList();
+    }
 }

@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities
@@ -161,9 +162,14 @@ namespace Neptune.EFModels.Entities
             return Delineation?.DelineationGeometry;
         }
 
-        public void RemoveUpstreamBMP()
+        public async Task RemoveUpstreamBMP(NeptuneDbContext dbContext)
         { 
-            this.UpstreamBMPID = null;
+            UpstreamBMPID = null;
+            await dbContext.SaveChangesAsync();
+
+            //todo:
+            // need to re-execute the Nereid model here since source of run-off was removed.
+            //NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, _dbContext);
         }
 
         public void DeleteFull(NeptuneDbContext dbContext)

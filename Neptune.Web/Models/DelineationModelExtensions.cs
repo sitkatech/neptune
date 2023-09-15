@@ -72,7 +72,7 @@ namespace Neptune.Web.Models
         /// </summary>
         /// <param name="treatmentBMPDelineation"></param>
         /// <param name="dbContext"></param>
-        public static void DeleteDelineation(this Delineation treatmentBMPDelineation, NeptuneDbContext dbContext)
+        public static async Task DeleteDelineation(this Delineation treatmentBMPDelineation, NeptuneDbContext dbContext)
         {
             var treatmentBMP = treatmentBMPDelineation.TreatmentBMP;
 
@@ -81,11 +81,11 @@ namespace Neptune.Web.Models
                 delineationLoadGeneratingUnit.DelineationID = null;
             }
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
             dbContext.DelineationOverlaps.RemoveRange(treatmentBMPDelineation.DelineationOverlapDelineations);
             dbContext.DelineationOverlaps.RemoveRange(treatmentBMPDelineation.DelineationOverlapOverlappingDelineations);
             dbContext.Delineations.Remove(treatmentBMPDelineation);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             // todo:
             //NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, dbContext);

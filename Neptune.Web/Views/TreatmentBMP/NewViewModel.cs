@@ -95,9 +95,10 @@ namespace Neptune.Web.Views.TreatmentBMP
             TrashCaptureEffectiveness = treatmentBMP.TrashCaptureEffectiveness;
         }
 
-        public override void UpdateModel(EFModels.Entities.TreatmentBMP treatmentBMP, Person currentPerson, NeptuneDbContext dbContext)
+        public override void UpdateModel(NeptuneDbContext dbContext, EFModels.Entities.TreatmentBMP treatmentBMP,
+            Person currentPerson)
         {
-            base.UpdateModel(treatmentBMP, currentPerson, dbContext);
+            SetTreatmentBMPLocationAndPointInPolygonData(dbContext, treatmentBMP);
 
             treatmentBMP.TreatmentBMPName = TreatmentBMPName;
             treatmentBMP.Notes = Notes;
@@ -106,27 +107,26 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMP.TrashCaptureStatusTypeID = TrashCaptureStatusTypeID.GetValueOrDefault(); // will never be null due to RequiredAttribute
             treatmentBMP.SizingBasisTypeID = SizingBasisTypeID.GetValueOrDefault(); // will never be null due to RequiredAttribute
 
-            if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMP.TreatmentBMPID))
-            {
-                treatmentBMP.StormwaterJurisdictionID = StormwaterJurisdictionID;
-                treatmentBMP.TreatmentBMPTypeID = TreatmentBMPTypeID;
+            treatmentBMP.StormwaterJurisdictionID = StormwaterJurisdictionID;
+            treatmentBMP.TreatmentBMPTypeID = TreatmentBMPTypeID;
 
-                var treatmentBmpType = dbContext.TreatmentBMPTypes.Single(x =>
-                    x.TreatmentBMPTypeID == TreatmentBMPTypeID);
-                foreach (var a in treatmentBmpType.TreatmentBMPTypeAssessmentObservationTypes.Where(x => x.TreatmentBMPAssessmentObservationType.GetHasBenchmarkAndThreshold() && x.DefaultThresholdValue.HasValue && x.DefaultBenchmarkValue.HasValue))
-                {
-                    var treatmentBmpBenchmarkAndThreshold =
-                        new EFModels.Entities.TreatmentBMPBenchmarkAndThreshold()
-                        {
-                            TreatmentBMP = treatmentBMP,
-                            TreatmentBMPTypeAssessmentObservationType = a,
-                            TreatmentBMPType = treatmentBmpType,
-                            TreatmentBMPAssessmentObservationType = a.TreatmentBMPAssessmentObservationType,
-                            BenchmarkValue = a.DefaultBenchmarkValue ?? 0,
-                            ThresholdValue = a.DefaultThresholdValue ?? 0
-                        };
-                    treatmentBMP.TreatmentBMPBenchmarkAndThresholds.Add(treatmentBmpBenchmarkAndThreshold);
-                }
+            var treatmentBmpType = dbContext.TreatmentBMPTypes.Single(x =>
+                x.TreatmentBMPTypeID == TreatmentBMPTypeID);
+            foreach (var a in treatmentBmpType.TreatmentBMPTypeAssessmentObservationTypes.Where(x =>
+                         x.TreatmentBMPAssessmentObservationType.GetHasBenchmarkAndThreshold() &&
+                         x.DefaultThresholdValue.HasValue && x.DefaultBenchmarkValue.HasValue))
+            {
+                var treatmentBmpBenchmarkAndThreshold =
+                    new EFModels.Entities.TreatmentBMPBenchmarkAndThreshold()
+                    {
+                        TreatmentBMP = treatmentBMP,
+                        TreatmentBMPTypeAssessmentObservationType = a,
+                        TreatmentBMPType = treatmentBmpType,
+                        TreatmentBMPAssessmentObservationType = a.TreatmentBMPAssessmentObservationType,
+                        BenchmarkValue = a.DefaultBenchmarkValue ?? 0,
+                        ThresholdValue = a.DefaultThresholdValue ?? 0
+                    };
+                treatmentBMP.TreatmentBMPBenchmarkAndThresholds.Add(treatmentBmpBenchmarkAndThreshold);
             }
 
             treatmentBMP.SystemOfRecordID = SystemOfRecordID;

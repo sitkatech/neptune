@@ -31,10 +31,10 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class EditViewData : NeptuneViewData
     {
-        public IEnumerable<SelectListItem> StormwaterJurisdictionSelectListItems { get; }
-        public IEnumerable<SelectListItem> TreatmentBMPTypeSelectListItems { get; }
         public EFModels.Entities.TreatmentBMP TreatmentBMP { get; }
         public string TreatmentBMPIndexUrl { get; }
+        public IEnumerable<SelectListItem> StormwaterJurisdictionSelectListItems { get; }
+        public IEnumerable<SelectListItem> TreatmentBMPTypeSelectListItems { get; }
         public IEnumerable<SelectListItem> OwnerOrganizationSelectListItems { get; }
         public IEnumerable<SelectListItem> WaterQualityManagementPlanSelectListItems { get; }
         public IEnumerable<SelectListItem> TreatmentBMPLifespanTypes { get; }
@@ -83,7 +83,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 x => x.TreatmentBMPLifespanTypeID.ToString(CultureInfo.InvariantCulture), x => x.TreatmentBMPLifespanTypeDisplayName.ToString(CultureInfo.InvariantCulture), "Unknown");
         }
 
-        private IEnumerable<SelectListItem> BuildWaterQualityPlanSelectList(
+        private static IEnumerable<SelectListItem> BuildWaterQualityPlanSelectList(
             IEnumerable<EFModels.Entities.WaterQualityManagementPlan> waterQualityManagementPlans)
         {
             var selectListItems = waterQualityManagementPlans

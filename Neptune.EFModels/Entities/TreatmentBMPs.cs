@@ -43,6 +43,7 @@ namespace Neptune.EFModels.Entities
                 .Include(x => x.StormwaterJurisdiction)
                 .ThenInclude(x => x.Organization)
                 .Include(x => x.OwnerOrganization)
+                .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
                 ;
         }
 

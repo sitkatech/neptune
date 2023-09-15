@@ -276,7 +276,7 @@ namespace Neptune.Web.Controllers
                 return ViewLocation(fieldVisit, viewModel);
             }
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
-            viewModel.UpdateModel(fieldVisit.TreatmentBMP, CurrentPerson, _dbContext);
+            viewModel.UpdateModel(_dbContext, fieldVisit.TreatmentBMP, CurrentPerson);
             fieldVisit.TreatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(fieldVisit.TreatmentBMP.LocationPoint, _dbContext);
             fieldVisit.InventoryUpdated = true;
             if (await FinalizeVisitIfNecessary(viewModel, fieldVisit))

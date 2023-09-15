@@ -116,7 +116,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             TrashCaptureEffectiveness = treatmentBMP.TrashCaptureEffectiveness;
         }
 
-        public void UpdateModel(EFModels.Entities.TreatmentBMP treatmentBMP, Person currentPerson, NeptuneDbContext dbContext)
+        public void UpdateModel(NeptuneDbContext dbContext, EFModels.Entities.TreatmentBMP treatmentBMP)
         {
             treatmentBMP.TreatmentBMPName = TreatmentBMPName;
             treatmentBMP.Notes = Notes;
@@ -124,33 +124,6 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMP.RequiredPostStormFieldVisitsPerYear = RequiredPostStormFieldVisitsPerYear;
             treatmentBMP.TrashCaptureStatusTypeID = TrashCaptureStatusTypeID.GetValueOrDefault(); // will never be null due to RequiredAttribute
             treatmentBMP.SizingBasisTypeID = SizingBasisTypeID.GetValueOrDefault(); // will never be null due to RequiredAttribute
-
-            if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMP.TreatmentBMPID))
-            {
-                treatmentBMP.StormwaterJurisdictionID = StormwaterJurisdictionID ?? ModelObjectHelpers.NotYetAssignedID;
-                treatmentBMP.TreatmentBMPTypeID = TreatmentBMPTypeID ?? ModelObjectHelpers.NotYetAssignedID;
-
-                var treatmentBMPTypeAssessmentObservationTypes =
-                    dbContext.TreatmentBMPTypes.Single(x =>
-                        x.TreatmentBMPTypeID == TreatmentBMPTypeID).TreatmentBMPTypeAssessmentObservationTypes.Where(x =>
-                        x.TreatmentBMPAssessmentObservationType.GetHasBenchmarkAndThreshold() &&
-                        x.DefaultThresholdValue.HasValue && x.DefaultBenchmarkValue.HasValue);
-                foreach (var treatmentBMPTypeAssessmentObservationType in treatmentBMPTypeAssessmentObservationTypes)
-                {
-                    treatmentBMP.TreatmentBMPBenchmarkAndThresholds.Add(
-                        new EFModels.Entities.TreatmentBMPBenchmarkAndThreshold()
-                        {
-                            TreatmentBMP = treatmentBMP,
-                            TreatmentBMPTypeAssessmentObservationType = treatmentBMPTypeAssessmentObservationType,
-                            TreatmentBMPType = TreatmentBMPTypes.GetByID(dbContext, TreatmentBMPTypeID),
-                            TreatmentBMPAssessmentObservationType = treatmentBMPTypeAssessmentObservationType
-                                .TreatmentBMPAssessmentObservationType,
-                            BenchmarkValue = treatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue ?? 0,
-                            ThresholdValue = treatmentBMPTypeAssessmentObservationType.DefaultThresholdValue ?? 0
-                        });
-                }
-            }
-
             treatmentBMP.SystemOfRecordID = SystemOfRecordID;
             if (OwnerOrganizationID.HasValue)
             {
