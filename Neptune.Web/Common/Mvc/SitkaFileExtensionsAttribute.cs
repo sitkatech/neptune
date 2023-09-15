@@ -56,6 +56,7 @@ namespace Neptune.Web.Common.Mvc
         {
             MergeAttribute(context.Attributes, "data-val", "true");
             MergeAttribute(context.Attributes, "data-val-fileextensions", GetErrorMessage());
+            MergeAttribute(context.Attributes, "data-val-fileextensions-fileextensions", string.Join(",", ValidExtensions));
         }
 
         private bool MergeAttribute(IDictionary<string, string> attributes, string key, string value)

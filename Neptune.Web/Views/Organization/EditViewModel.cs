@@ -21,9 +21,9 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using LtInfo.Common;
 using Neptune.Common;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 using Neptune.Web.Common.Models;
 using Neptune.Web.Common.Mvc;
 using Neptune.Web.Security;
@@ -45,11 +45,11 @@ namespace Neptune.Web.Views.Organization
         [DisplayName("Short Name")]
         public string OrganizationShortName { get; set; }
 
-        //[FieldDefinitionDisplay(FieldDefinitionTypeEnum.OrganizationType)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.OrganizationType)]
         [Required]
         public int? OrganizationTypeID { get; set; }
 
-        //[FieldDefinitionDisplay(FieldDefinitionTypeEnum.PrimaryContact)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.PrimaryContact)]
         public int? PrimaryContactPersonID { get; set; }
 
         [Url]

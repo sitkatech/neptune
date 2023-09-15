@@ -10,5 +10,11 @@
     "inputFiles": [
       "wwwroot/ScriptsCustom/ModalDialogForm.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/ScriptsCustom/SitkaFileExtensionsValidation.min.js",
+    "inputFiles": [
+      "wwwroot/ScriptsCustom/SitkaFileExtensionsValidation.js"
+    ]
   }
 ]
