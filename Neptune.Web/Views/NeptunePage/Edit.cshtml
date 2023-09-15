@@ -22,38 +22,30 @@ Source code is available upon request via <support@sitkatech.com>.
 @model Neptune.Web.Views.NeptunePage.EditViewModel
 @using Neptune.Web.Common
 
-<script>
-    function @(ViewDataTyped.TogglePageContentFunctionName)(isEditing) {
-        document.getElementById('@ViewDataTyped.ViewPageContentDivID').style.display = isEditing ? 'none' : 'block';
-        document.getElementById('@ViewDataTyped.EditPageContentDivID').style.display = isEditing ? 'block' : 'none';
-    }
-</script>
-
-<div id="@ViewDataTyped.ViewPageContentDivID" class="neptunePageContent" style="position: relative; min-height: 30px;">
-    <div class="hoverEditButton">
-        <button style="margin: 10px" onclick="@(ViewDataTyped.TogglePageContentFunctionName)(true)">Edit</button>
+<div id="@($"tinyMCEForNeptunePage{ViewDataTyped.NeptunePageID}")">
+    <div class="neptunePageContent" style="position: relative; min-height: 30px;">
+        <div class="hoverEditButton">
+            <button type="button" style="margin: 10px" onclick="tinyMCEEditorToggle(true, @ViewDataTyped.NeptunePageID)">Edit</button>
+        </div>
+        @if (ViewDataTyped.NeptunePageContentOnLoad != null)
+        {
+            @Html.Raw(ViewDataTyped.NeptunePageContentOnLoad)
+        }
+        else
+        {
+            <div class="hoverEmptySpace"></div>
+        }
     </div>
-    @if (ViewDataTyped.NeptunePageContentOnLoad != null)
-    {
-        @Html.Raw(ViewDataTyped.NeptunePageContentOnLoad)
-    }
-    else
-    {
-        <div class="hoverEmptySpace"></div>
-    }
-</div>
 
-<div id="@ViewDataTyped.EditPageContentDivID" style="display: none; margin-bottom: 16px;">
-    <form method="post" action="@ViewDataTyped.PostUrl">
+    <div class="neptunePageTinyMCEEditor" style="display: none; margin-bottom: 16px;">
         <div style="max-height: 600px; overflow-y: auto">
-            @Html.TinyMCEEditorFor(x => x.NeptunePageContent, TinyMCEExtension.TinyMCEToolbarStyle.MinimalWithImages, true, false, ViewDataTyped.EditorHeight)
+            @Html.TinyMCEEditorFor(x => x.NeptunePageContent, TinyMCEExtension.TinyMCEToolbarStyle.MinimalWithImages, true, ViewDataTyped.NeptunePageID)
         </div>
         <div class="row" style="margin-top: 6px">
             <div class="col-xs-12" style="text-align: right">
-                <button type="submit" class="btn btn-neptune">Save</button>
-                <button type="button" onclick="@(ViewDataTyped.TogglePageContentFunctionName)(false)" class="btn btn-secondary" style="margin-left: 6px">Cancel</button>
-                @Html.HiddenFor(x => x.NeptunePageID)
+                <button type="button" onclick="@($"tinyMCEEditorPost({ViewDataTyped.NeptunePageID}, {ViewDataTyped.PostUrl.ToJS()})")" class="btn btn-neptune">Save</button>
+                <button type="button" onclick="tinyMCEEditorToggle(false, @ViewDataTyped.NeptunePageID)" class="btn btn-secondary" style="margin-left: 6px">Cancel</button>
             </div>
         </div>
-    </form>
+    </div>
 </div>

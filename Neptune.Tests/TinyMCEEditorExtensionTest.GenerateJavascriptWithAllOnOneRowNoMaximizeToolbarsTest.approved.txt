@@ -3,7 +3,7 @@
                 jQuery(document).ready(function ()
                 {
                    tinymce.init({
-                            selector: '#TinyMCEEditorForProgramPageContent',
+                            selector: '#ProgramPageContent',
                             height: 200,
                             menubar: false,
                             toolbar: 'styleselect | bold italic removeformat | bullist numlist outdent indent | image table hr charmap | link unlink anchor | styles | fontfamily ',

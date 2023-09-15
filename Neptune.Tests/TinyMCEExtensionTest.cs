@@ -35,8 +35,7 @@ namespace Neptune.Tests
         {
             const string modelID = "ProgramPageContent";
             var result = TinyMCEExtension.GenerateJavascript(modelID,
-                TinyMCEExtension.TinyMCEToolbarStyle.Minimal,
-                 false, null);
+                TinyMCEExtension.TinyMCEToolbarStyle.Minimal, null);
             Approvals.Verify(result.ToString());
         }
 
@@ -46,8 +45,7 @@ namespace Neptune.Tests
         {
             const string modelID = "ProgramPageContent";
             var result = TinyMCEExtension.GenerateJavascript(modelID,
-                TinyMCEExtension.TinyMCEToolbarStyle.MinimalWithImages,
-                 false, null);
+                TinyMCEExtension.TinyMCEToolbarStyle.MinimalWithImages, null);
             Approvals.Verify(result.ToString());
         }
 
@@ -57,8 +55,7 @@ namespace Neptune.Tests
         {
             const string modelID = "ProgramPageContent";
             var result = TinyMCEExtension.GenerateJavascript(modelID,
-                TinyMCEExtension.TinyMCEToolbarStyle.None,
-                 false, null);
+                TinyMCEExtension.TinyMCEToolbarStyle.None, null);
             Approvals.Verify(result.ToString());
         }
 
@@ -68,8 +65,7 @@ namespace Neptune.Tests
         {
             const string modelID = "ProgramPageContent";
             var result = TinyMCEExtension.GenerateJavascript(modelID,
-                TinyMCEExtension.TinyMCEToolbarStyle.All,
-                 false, null);
+                TinyMCEExtension.TinyMCEToolbarStyle.All, null);
             Approvals.Verify(result.ToString());
         }
 
@@ -79,8 +75,7 @@ namespace Neptune.Tests
         {
             const string modelID = "ProgramPageContent";
             var result = TinyMCEExtension.GenerateJavascript(modelID,
-                TinyMCEExtension.TinyMCEToolbarStyle.AllOnOneRow,
-                 false, null);
+                TinyMCEExtension.TinyMCEToolbarStyle.AllOnOneRow, null);
             Approvals.Verify(result.ToString());
         }
 
@@ -90,8 +85,7 @@ namespace Neptune.Tests
         {
             const string modelID = "ProgramPageContent";
             var result = TinyMCEExtension.GenerateJavascript(modelID,
-                TinyMCEExtension.TinyMCEToolbarStyle.AllOnOneRowNoMaximize,
-                 false, null);
+                TinyMCEExtension.TinyMCEToolbarStyle.AllOnOneRowNoMaximize, null);
             Approvals.Verify(result.ToString());
         }
 

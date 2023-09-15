@@ -37,24 +37,20 @@ namespace Neptune.Web.Common
             None
         }
 
-        /// <summary>
-        /// This is used by tinyMCEeditors for a NeptunePage
-        /// </summary>
         public static IHtmlContent TinyMCEEditorFor<TModel, TValue>(this IHtmlHelper<TModel> helper,
             Expression<Func<TModel, TValue>> expression,
             TinyMCEToolbarStyle tinyMceToolbarStyleMode,
             bool editable,
-            int neptunePageID,
-            int? height) where TModel : FormViewModel
+            int uniqueID) where TModel : FormViewModel
         {
-            return TinyMCEEditorFor(helper, expression, tinyMceToolbarStyleMode, editable, false, height);
+            return TinyMCEEditorFor(helper, expression, tinyMceToolbarStyleMode, editable, uniqueID, 200);
         }
 
         public static IHtmlContent TinyMCEEditorFor<TModel, TValue>(this IHtmlHelper<TModel> helper,
             Expression<Func<TModel, TValue>> expression,
             TinyMCEToolbarStyle tinyMceToolbarStyleMode,
             bool editable,
-            bool allowAllContent,
+            int? uniqueID,
             int? height) where TModel : FormViewModel
         {
             var expressionProvider = new ModelExpressionProvider(helper.MetadataProvider);
@@ -68,11 +64,11 @@ namespace Neptune.Web.Common
 
             var modelID = helper.IdFor(expression);
 
-            var textAreaID = $"TinyMCEEditorFor{modelID}";
+            var textAreaID = $"TinyMCEEditorFor{modelID}{(uniqueID.HasValue ? $"ID{uniqueID.Value}" : string.Empty)}";
 
-            var htmlAttributes = new Dictionary<string, object>() { { "id", textAreaID }, { "contentEditable", "true" }, { "data-editor-id", modelID } };
+            var htmlAttributes = new Dictionary<string, object>() { { "id", textAreaID }, { "contentEditable", "true" }, { "data-editor-id", textAreaID } };
 
-            var generateJavascript = GenerateJavascript(modelID, tinyMceToolbarStyleMode, allowAllContent, height);
+            var generateJavascript = GenerateJavascript(textAreaID, tinyMceToolbarStyleMode, height);
             var textAreaHtmlString = helper.TextAreaFor(expression, htmlAttributes);
 
             var writer = new StringWriter();
@@ -83,14 +79,13 @@ namespace Neptune.Web.Common
             return new HtmlString(writer.ToString());
         }
 
-        public static IHtmlContent GenerateJavascript(string modelID, TinyMCEToolbarStyle tinyMceToolbarStyleMode, bool allowAllContent, int? height)
+        public static IHtmlContent GenerateJavascript(string textAreaID, TinyMCEToolbarStyle tinyMceToolbarStyleMode, int? height)
         {
             var tag = new TagBuilder("script");
             tag.Attributes.Add("type", "text/javascript");
             tag.Attributes.Add("language", "javascript");
 
             var tinyMCEEditorToolbarJavascript = GenerateToolbarSettings(tinyMceToolbarStyleMode);
-            var editorId = $"TinyMCEEditorFor{modelID}";
 
             var wireUpJsForImageUploader = string.Empty;
             if (tinyMCEEditorToolbarJavascript.HasImageToolbarButton)
@@ -146,7 +141,7 @@ namespace Neptune.Web.Common
                     }});
                 }});
                 // ]]>
-            ", editorId, tinyMCEEditorToolbarJavascript.JavascriptForToolbar, tinyMCEEditorToolbarJavascript.Plugins, wireUpJsForImageUploader, tinyMCEEditorToolbarJavascript.ToolbarMode, height ?? 200));
+            ", textAreaID, tinyMCEEditorToolbarJavascript.JavascriptForToolbar, tinyMCEEditorToolbarJavascript.Plugins, wireUpJsForImageUploader, tinyMCEEditorToolbarJavascript.ToolbarMode, height ?? 200));
 
             var writer = new StringWriter();
             var builder = new HtmlContentBuilder();

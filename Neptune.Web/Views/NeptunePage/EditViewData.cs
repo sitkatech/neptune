@@ -29,9 +29,7 @@ public class EditViewData : NeptuneUserControlViewData
 {
     public TinyMCEExtension.TinyMCEToolbarStyle TinyMceToolbarStyle { get; }
     public HtmlString? NeptunePageContentOnLoad { get; }
-    public string ViewPageContentDivID { get; }
-    public string EditPageContentDivID { get; }
-    public string TogglePageContentFunctionName { get; }
+    public int NeptunePageID { get; }
     public string PostUrl { get; }
     public int? EditorHeight { get; }
 
@@ -44,9 +42,7 @@ public class EditViewData : NeptuneUserControlViewData
     {
         TinyMceToolbarStyle = tinyMceToolbarStyle;
         NeptunePageContentOnLoad = new HtmlString(neptunePage.NeptunePageContent);
-        EditPageContentDivID = $"editNeptunePageContentFor{neptunePage.NeptunePageID}";
-        ViewPageContentDivID = $"viewNeptunePageContentFor{neptunePage.NeptunePageID}";
-        TogglePageContentFunctionName = $"toggleIsEditingFor{neptunePage.NeptunePageID}";
+        NeptunePageID = neptunePage.NeptunePageID;
         PostUrl = SitkaRoute<NeptunePageController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(neptunePage));
         EditorHeight = editorHeight;
     }

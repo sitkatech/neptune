@@ -26,8 +26,6 @@ namespace Neptune.Web.Views.NeptunePage;
 
 public class EditViewModel : FormViewModel
 {
-    public int NeptunePageID { get; set; }
-
     [DisplayName("Page Content")]
     public string NeptunePageContent { get; set; }
 
@@ -40,7 +38,6 @@ public class EditViewModel : FormViewModel
         
     public EditViewModel(EFModels.Entities.NeptunePage neptunePage)
     {
-        NeptunePageID = neptunePage.NeptunePageID;
         NeptunePageContent = neptunePage.NeptunePageContent;
     }
 
