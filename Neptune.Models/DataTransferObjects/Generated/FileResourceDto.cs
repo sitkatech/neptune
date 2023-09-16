@@ -14,7 +14,6 @@ namespace Neptune.Models.DataTransferObjects
         public string OriginalBaseFilename { get; set; }
         public string OriginalFileExtension { get; set; }
         public Guid FileResourceGUID { get; set; }
-        public byte[] FileResourceData { get; set; }
         public PersonDto CreatePerson { get; set; }
         public DateTime CreateDate { get; set; }
         public bool InBlobStorage { get; set; }
@@ -28,7 +27,6 @@ namespace Neptune.Models.DataTransferObjects
         public string OriginalBaseFilename { get; set; }
         public string OriginalFileExtension { get; set; }
         public Guid FileResourceGUID { get; set; }
-        public byte[] FileResourceData { get; set; }
         public System.Int32 CreatePersonID { get; set; }
         public DateTime CreateDate { get; set; }
         public bool InBlobStorage { get; set; }

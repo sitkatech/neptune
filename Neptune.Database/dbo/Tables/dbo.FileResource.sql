@@ -4,9 +4,8 @@ CREATE TABLE [dbo].[FileResource](
 	[OriginalBaseFilename] [varchar](255),
 	[OriginalFileExtension] [varchar](255),
 	[FileResourceGUID] [uniqueidentifier] NOT NULL CONSTRAINT [AK_FileResource_FileResourceGUID] UNIQUE,
-	[FileResourceData] [varbinary](max) NULL,
 	[CreatePersonID] [int] NOT NULL CONSTRAINT [FK_FileResource_Person_CreatePersonID_PersonID] FOREIGN KEY REFERENCES [dbo].[Person] ([PersonID]),
 	[CreateDate] [datetime] NOT NULL,
 	[InBlobStorage] [bit] NOT NULL default(0),
-	[ContentLength] [bigint] null,
+	[ContentLength] [bigint] null
 )

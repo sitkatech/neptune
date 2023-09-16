@@ -25,8 +25,6 @@ public partial class FileResource
 
     public Guid FileResourceGUID { get; set; }
 
-    public byte[]? FileResourceData { get; set; }
-
     public int CreatePersonID { get; set; }
 
     [Column(TypeName = "datetime")]
