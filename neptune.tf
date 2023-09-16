@@ -236,7 +236,7 @@ resource "azurerm_mssql_database" "database" {
   server_id      = data.azurerm_mssql_server.spoke.id
   collation      = "SQL_Latin1_General_CP1_CI_AS"
   license_type   = "LicenseIncluded"
-  max_size_gb    = 2
+  max_size_gb    = 250
   read_scale     = false
   sku_name       = var.databaseTier
   zone_redundant = false
