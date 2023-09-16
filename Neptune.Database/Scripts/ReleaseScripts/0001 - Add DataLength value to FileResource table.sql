@@ -6,7 +6,7 @@ BEGIN
 	
 	PRINT @MigrationName;
 
-    update dbo.FileResource set ContentLength = DATALENGTH(FileResourceData)
+    --update dbo.FileResource set ContentLength = DATALENGTH(FileResourceData)
 
 	
     INSERT INTO dbo.DatabaseMigration(MigrationAuthorName, ReleaseScriptFileName, MigrationReason)
