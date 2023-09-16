@@ -78,11 +78,11 @@ namespace Neptune.EFModels.Entities
                        x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID) != null;
         }
 
-        public string GetCustomAttributeValueWithUnits(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType)
+        public string GetCustomAttributeValueWithUnits(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType, ICollection<CustomAttribute> customAttributes)
         {
-            if (this.CustomAttributes.Any())
+            if (customAttributes.Any())
             {
-                var customAttribute = CustomAttributes.SingleOrDefault(x =>
+                var customAttribute = customAttributes.SingleOrDefault(x =>
                     x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
                 if (customAttribute != null)
                 {
@@ -96,20 +96,6 @@ namespace Neptune.EFModels.Entities
 
                     return $"{value}{measurementUnit}";
                 }           
-            }
-            return string.Empty;
-        }
-
-        public string GetCustomAttributeValue(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType)
-        {
-            if (CustomAttributes.Any())
-            {
-                var customAttribute = CustomAttributes.SingleOrDefault(x =>
-                    x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
-                if (customAttribute != null)
-                {
-                    return string.Join(", ", customAttribute.CustomAttributeValues.OrderBy(x => x.AttributeValue).Select(x => x.AttributeValue));
-                }
             }
             return string.Empty;
         }

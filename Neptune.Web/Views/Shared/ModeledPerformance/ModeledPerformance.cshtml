@@ -94,38 +94,38 @@
             <tbody>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalSuspendedSolids, labelText: "Total Suspended Solids")</td>
-   <td><span ng-bind="modelResults.WetWeatherTSSRemoved | sigFig:2 | number"></span> kg</td>
-                    <td><span ng-bind="100 * modelResults.WetWeatherTSSRemoved/modelResults.WetWeatherTSSInflow || 0 | number: 0"></span>%</td>
+   <td><span ng-bind="modelResults.WetWeatherTSSReduced | sigFig:2 | number"></span> kg</td>
+                    <td><span ng-bind="100 * modelResults.WetWeatherTSSReduced/modelResults.WetWeatherTSSInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalNitrogen, labelText: "Total Nitrogen")</td>
-                    <td><span ng-bind="modelResults.WetWeatherTNRemoved | sigFig:2 | number"></span> kg</td>
-                    <td><span ng-bind="100 * modelResults.WetWeatherTNRemoved/modelResults.WetWeatherTNInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.WetWeatherTNReduced | sigFig:2 | number"></span> kg</td>
+                    <td><span ng-bind="100 * modelResults.WetWeatherTNReduced/modelResults.WetWeatherTNInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalPhosphorous, labelText: "Total Phosphorous")</td>
-                    <td><span ng-bind="modelResults.WetWeatherTPRemoved | sigFig:2 | number"></span> kg</td>
-                    <td><span ng-bind="100 * modelResults.WetWeatherTPRemoved/modelResults.WetWeatherTPInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.WetWeatherTPReduced | sigFig:2 | number"></span> kg</td>
+                    <td><span ng-bind="100 * modelResults.WetWeatherTPReduced/modelResults.WetWeatherTPInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.FecalColiform, labelText: "Fecal Coliform")</td>
-                    <td><span ng-bind="modelResults.WetWeatherFCRemoved | sigFig:2 | number"></span> billion CFUs</td>
-                    <td><span ng-bind="100 * modelResults.WetWeatherFCRemoved/modelResults.WetWeatherFCInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.WetWeatherFCReduced | sigFig:2 | number"></span> billion CFUs</td>
+                    <td><span ng-bind="100 * modelResults.WetWeatherFCReduced/modelResults.WetWeatherFCInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalCopper, labelText: "Total Copper")</td>
-                    <td><span ng-bind="modelResults.WetWeatherTCuRemoved | sigFig:2 | number"></span> g</td>
-                    <td><span ng-bind="100 * modelResults.WetWeatherTCuRemoved/modelResults.WetWeatherTCuInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.WetWeatherTCuReduced | sigFig:2 | number"></span> g</td>
+                    <td><span ng-bind="100 * modelResults.WetWeatherTCuReduced/modelResults.WetWeatherTCuInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalLead, labelText: "Total Lead")</td>
-                    <td><span ng-bind="modelResults.WetWeatherTPbRemoved | sigFig:2 | number"></span> g</td>
-                    <td><span ng-bind="100 * modelResults.WetWeatherTPbRemoved/modelResults.WetWeatherTPbInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.WetWeatherTPbReduced | sigFig:2 | number"></span> g</td>
+                    <td><span ng-bind="100 * modelResults.WetWeatherTPbReduced/modelResults.WetWeatherTPbInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalZinc, labelText: "Total Zinc")</td>
-                    <td><span ng-bind="modelResults.WetWeatherTZnRemoved | sigFig:2 | number"></span> g</td>
-                    <td><span ng-bind="100 * modelResults.WetWeatherTZnRemoved/modelResults.WetWeatherTZnInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.WetWeatherTZnReduced | sigFig:2 | number"></span> g</td>
+                    <td><span ng-bind="100 * modelResults.WetWeatherTZnReduced/modelResults.WetWeatherTZnInflow || 0 | number: 0"></span>%</td>
                 </tr>
             </tbody>
         </table>
@@ -169,38 +169,38 @@
             <tbody>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalSuspendedSolids, labelText: "Total Suspended Solids")</td>
-                    <td><span ng-bind="modelResults.DryWeatherTSSRemoved | sigFig:2 | number"></span> kg</td>
-                    <td><span ng-bind="100 * modelResults.DryWeatherTSSRemoved/modelResults.DryWeatherTSSInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.DryWeatherTSSReduced | sigFig:2 | number"></span> kg</td>
+                    <td><span ng-bind="100 * modelResults.DryWeatherTSSReduced/modelResults.DryWeatherTSSInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalNitrogen, labelText: "Total Nitrogen")</td>
-                    <td><span ng-bind="modelResults.DryWeatherTNRemoved | sigFig:2 | number"></span> kg</td>
-                    <td><span ng-bind="100 * modelResults.DryWeatherTNRemoved/modelResults.DryWeatherTNInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.DryWeatherTNReduced | sigFig:2 | number"></span> kg</td>
+                    <td><span ng-bind="100 * modelResults.DryWeatherTNReduced/modelResults.DryWeatherTNInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalPhosphorous, labelText: "Total Phosphorous")</td>
-                    <td><span ng-bind="modelResults.DryWeatherTPRemoved | sigFig:2 | number"></span> kg</td>
-                    <td><span ng-bind="100 * modelResults.DryWeatherTPRemoved/modelResults.DryWeatherTPInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.DryWeatherTPReduced | sigFig:2 | number"></span> kg</td>
+                    <td><span ng-bind="100 * modelResults.DryWeatherTPReduced/modelResults.DryWeatherTPInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.FecalColiform, labelText: "Fecal Coliform")</td>
-                    <td><span ng-bind="modelResults.DryWeatherFCRemoved | sigFig:2 | number"></span> billion CFUs</td>
-                    <td><span ng-bind="100 * modelResults.DryWeatherFCRemoved/modelResults.DryWeatherFCInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.DryWeatherFCReduced | sigFig:2 | number"></span> billion CFUs</td>
+                    <td><span ng-bind="100 * modelResults.DryWeatherFCReduced/modelResults.DryWeatherFCInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalCopper, labelText: "Total Copper")</td>
-                    <td><span ng-bind="modelResults.DryWeatherTCuRemoved | sigFig:2 | number"></span> g</td>
-                    <td><span ng-bind="100 * modelResults.DryWeatherTCuRemoved/modelResults.DryWeatherTCuInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.DryWeatherTCuReduced | sigFig:2 | number"></span> g</td>
+                    <td><span ng-bind="100 * modelResults.DryWeatherTCuReduced/modelResults.DryWeatherTCuInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalLead, labelText: "Total Lead")</td>
-                    <td><span ng-bind="modelResults.DryWeatherTPbRemoved | sigFig:2 | number"></span> g</td>
-                    <td><span ng-bind="100 * modelResults.DryWeatherTPbRemoved/modelResults.DryWeatherTPbInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.DryWeatherTPbReduced | sigFig:2 | number"></span> g</td>
+                    <td><span ng-bind="100 * modelResults.DryWeatherTPbReduced/modelResults.DryWeatherTPbInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalZinc, labelText: "Total Zinc")</td>
-                    <td><span ng-bind="modelResults.DryWeatherTZnRemoved | sigFig:2 | number"></span> g</td>
-                    <td><span ng-bind="100 * modelResults.DryWeatherTZnRemoved/modelResults.DryWeatherTZnInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.DryWeatherTZnReduced | sigFig:2 | number"></span> g</td>
+                    <td><span ng-bind="100 * modelResults.DryWeatherTZnReduced/modelResults.DryWeatherTZnInflow || 0 | number: 0"></span>%</td>
                 </tr>
             </tbody>
         </table>
@@ -244,38 +244,38 @@
             <tbody>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalSuspendedSolids, labelText: "Total Suspended Solids")</td>
-                    <td><span ng-bind="modelResults.TotalTSSRemoved | sigFig:2 | number"></span> kg</td>
-                    <td><span ng-bind="100 * modelResults.TotalTSSRemoved/modelResults.TotalTSSInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.TotalTSSReduced | sigFig:2 | number"></span> kg</td>
+                    <td><span ng-bind="100 * modelResults.TotalTSSReduced/modelResults.TotalTSSInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalNitrogen, labelText: "Total Nitrogen")</td>
-                    <td><span ng-bind="modelResults.TotalTNRemoved | sigFig:2 | number"></span> kg</td>
-                    <td><span ng-bind="100 * modelResults.TotalTNRemoved/modelResults.TotalTNInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.TotalTNReduced | sigFig:2 | number"></span> kg</td>
+                    <td><span ng-bind="100 * modelResults.TotalTNReduced/modelResults.TotalTNInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalPhosphorous, labelText: "Total Phosphorous")</td>
-                    <td><span ng-bind="modelResults.TotalTPRemoved | sigFig:2 | number"></span> kg</td>
-                    <td><span ng-bind="100 * modelResults.TotalTPRemoved/modelResults.TotalTPInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.TotalTPReduced | sigFig:2 | number"></span> kg</td>
+                    <td><span ng-bind="100 * modelResults.TotalTPReduced/modelResults.TotalTPInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.FecalColiform, labelText: "Fecal Coliform")</td>
-                    <td><span ng-bind="modelResults.TotalFCRemoved | sigFig:2 | number"></span> billion CFUs</td>
-                    <td><span ng-bind="100 * modelResults.TotalFCRemoved/modelResults.TotalFCInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.TotalFCReduced | sigFig:2 | number"></span> billion CFUs</td>
+                    <td><span ng-bind="100 * modelResults.TotalFCReduced/modelResults.TotalFCInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalCopper, labelText: "Total Copper")</td>
-                    <td><span ng-bind="modelResults.TotalTCuRemoved | sigFig:2 | number"></span> g</td>
-                    <td><span ng-bind="100 * modelResults.TotalTCuRemoved/modelResults.TotalTCuInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.TotalTCuReduced | sigFig:2 | number"></span> g</td>
+                    <td><span ng-bind="100 * modelResults.TotalTCuReduced/modelResults.TotalTCuInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalLead, labelText: "Total Lead")</td>
-                    <td><span ng-bind="modelResults.TotalTPbRemoved | sigFig:2 | number"></span> g</td>
-                    <td><span ng-bind="100 * modelResults.TotalTPbRemoved/modelResults.TotalTPbInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.TotalTPbReduced | sigFig:2 | number"></span> g</td>
+                    <td><span ng-bind="100 * modelResults.TotalTPbReduced/modelResults.TotalTPbInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalZinc, labelText: "Total Zinc")</td>
-                    <td><span ng-bind="modelResults.TotalTZnRemoved | sigFig:2 | number"></span> g</td>
-                    <td><span ng-bind="100 * modelResults.TotalTZnRemoved/modelResults.TotalTZnInflow || 0 | number: 0"></span>%</td>
+                    <td><span ng-bind="modelResults.TotalTZnReduced | sigFig:2 | number"></span> g</td>
+                    <td><span ng-bind="100 * modelResults.TotalTZnReduced/modelResults.TotalTZnInflow || 0 | number: 0"></span>%</td>
                 </tr>
             </tbody>
         </table>

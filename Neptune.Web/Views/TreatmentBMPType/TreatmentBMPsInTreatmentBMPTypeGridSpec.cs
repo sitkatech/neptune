@@ -126,30 +126,30 @@ public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<vTreatmentBMPDet
                 {
                     case (int)CustomAttributeDataTypeEnum.Decimal:
                         Add(customAttributeType.GetDisplayNameWithUnits(),
-                            x => Decimal.TryParse(x.TreatmentBMP.GetCustomAttributeValue(customAttributeType),  out var decimalResult) ? decimalResult : (Decimal?)null , 130,
+                            x => decimal.TryParse(GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, customAttributeType),  out var decimalResult) ? decimalResult : null , 130,
                             DhtmlxGridColumnFormatType.Decimal);
                         break;
                     case (int)CustomAttributeDataTypeEnum.Integer:
                         Add(customAttributeType.GetDisplayNameWithUnits(),
-                            x => Int32.TryParse(x.TreatmentBMP.GetCustomAttributeValue(customAttributeType), out var intResult) ? intResult : (Int32?)null, 130);
+                            x => int.TryParse(GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, customAttributeType), out var intResult) ? intResult : (int?)null, 130);
                         break;
                     case (int)CustomAttributeDataTypeEnum.DateTime:
                         Add(customAttributeType.GetDisplayNameWithUnits(),
-                            x => DateTime.TryParse(x.TreatmentBMP.GetCustomAttributeValue(customAttributeType), out var dateResult) ? dateResult : (DateTime?)null, 130);
+                            x => DateTime.TryParse(GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, customAttributeType), out var dateResult) ? dateResult : null, 130);
                         break;
                     case (int)CustomAttributeDataTypeEnum.MultiSelect:
                         Add(customAttributeType.GetDisplayNameWithUnits(),
-                            x => x.TreatmentBMP.GetCustomAttributeValue(customAttributeType), 130,
+                            x => GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, customAttributeType), 130,
                             DhtmlxGridColumnFilterType.SelectFilterStrict);
                         break;
                     case (int)CustomAttributeDataTypeEnum.PickFromList:
                         Add(customAttributeType.GetDisplayNameWithUnits(),
-                            x => x.TreatmentBMP.GetCustomAttributeValue(customAttributeType), 130,
+                            x => GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, customAttributeType), 130,
                             DhtmlxGridColumnFilterType.SelectFilterStrict);
                         break;
                     case (int)CustomAttributeDataTypeEnum.String:
                         Add(customAttributeType.GetDisplayNameWithUnits(),
-                            x => x.TreatmentBMP.GetCustomAttributeValue(customAttributeType), 130,
+                            x => GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, customAttributeType), 130,
                             DhtmlxGridColumnFilterType.Text);
                         break;
                 }
@@ -283,4 +283,20 @@ public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<vTreatmentBMPDet
         Add(FieldDefinitionType.DryWeatherFlowOverride.ToGridHeaderString("Dry Weather Flow Override"),
             x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName, 100);
     }
+
+    private string GetCustomAttributeValue(ICollection<CustomAttribute> customAttributes, TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType)
+    {
+        if (customAttributes.Any())
+        {
+            var customAttribute = customAttributes.SingleOrDefault(x =>
+                x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
+            if (customAttribute != null)
+            {
+                return string.Join(", ", customAttribute.CustomAttributeValues.OrderBy(x => x.AttributeValue).Select(x => x.AttributeValue));
+            }
+        }
+        return string.Empty;
+    }
+
+
 }

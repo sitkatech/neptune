@@ -197,6 +197,10 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<vGeoServerWaterQualityManagementPlan> vGeoServerWaterQualityManagementPlans { get; set; }
 
+    public virtual DbSet<vLoadGeneratingResult> vLoadGeneratingResults { get; set; }
+
+    public virtual DbSet<vLoadReducingResult> vLoadReducingResults { get; set; }
+
     public virtual DbSet<vModelingResultUnitConversion> vModelingResultUnitConversions { get; set; }
 
     public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
@@ -1022,6 +1026,16 @@ public partial class NeptuneDbContext : DbContext
         modelBuilder.Entity<vGeoServerWaterQualityManagementPlan>(entity =>
         {
             entity.ToView("vGeoServerWaterQualityManagementPlan");
+        });
+
+        modelBuilder.Entity<vLoadGeneratingResult>(entity =>
+        {
+            entity.ToView("vLoadGeneratingResult");
+        });
+
+        modelBuilder.Entity<vLoadReducingResult>(entity =>
+        {
+            entity.ToView("vLoadReducingResult");
         });
 
         modelBuilder.Entity<vModelingResultUnitConversion>(entity =>

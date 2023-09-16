@@ -209,15 +209,15 @@ namespace Neptune.Web.Common
         }
         public static string ToStringCurrency(this double value)
         {
-            return value.ToString("c0");
+            return value.ToString("$#,##0");
         }
         public static string ToStringCurrency(this decimal value)
         {
-            return value.ToString("c0");
+            return value.ToString("$#,##0");
         }
         public static string ToStringCurrency(this int value)
         {
-            return value.ToString("c0");
+            return value.ToString("$#,##0");
         }
         public static decimal? ParseNullableDecimalFromCurrencyString(string currencyString)
         {

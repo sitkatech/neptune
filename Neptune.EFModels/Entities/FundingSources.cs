@@ -5,6 +5,15 @@ namespace Neptune.EFModels.Entities;
 
 public static class FundingSources
 {
+    private static IQueryable<FundingSource> GetImpl(NeptuneDbContext dbContext)
+    {
+        return dbContext.FundingSources
+            .Include(x => x.FundingEventFundingSources)
+            .Include(x => x.Organization)
+            .ThenInclude(x => x.OrganizationType).Include(x => x.FundingEventFundingSources)
+            .ThenInclude(x => x.FundingEvent).ThenInclude(x => x.TreatmentBMP);
+    }
+
     public static List<FundingSource> List(NeptuneDbContext dbContext)
     {
         return GetImpl(dbContext).AsNoTracking().OrderBy(ht => ht.FundingSourceName).ToList();
@@ -34,16 +43,6 @@ public static class FundingSources
     public static FundingSource GetByID(NeptuneDbContext dbContext, FundingSourcePrimaryKey fundingSourcePrimaryKey)
     {
         return GetByID(dbContext, fundingSourcePrimaryKey.PrimaryKeyValue);
-    }
-
-
-    private static IQueryable<FundingSource> GetImpl(NeptuneDbContext dbContext)
-    {
-        return dbContext.FundingSources
-            .Include(x => x.FundingEventFundingSources)
-            .Include(x => x.Organization)
-            .ThenInclude(x => x.OrganizationType).Include(x => x.FundingEventFundingSources)
-            .ThenInclude(x => x.FundingEvent).ThenInclude(x => x.TreatmentBMP);
     }
 
     public static bool IsFundingSourceNameUnique(IEnumerable<FundingSource> fundingSources, string fundingSourceName, int currentFundingSourceID)

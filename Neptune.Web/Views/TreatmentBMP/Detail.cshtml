@@ -163,7 +163,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                         @Html.LabelWithSugarFor(FieldDefinitionType.TreatmentBMPType, "Type")
                     </label>
                     <div class="col-sm-7">
-                        <a href="@ViewDataTyped.TreatmentBMPTypeDetailUrl">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</a>
+                        <a href="@ViewDataTyped.TreatmentBMPTypeDetailUrl">@ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeName</a>
                     </div>
                 </div>
                 <div class="row">
@@ -295,7 +295,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                     </td>
                                     <td class="text-right">@(ViewDataTyped.TreatmentBMP.Watershed != null ? ViewDataTyped.TreatmentBMP.Watershed.WatershedName : string.Empty)</td>
                                 </tr>
-                                @switch (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
+                                @switch (ViewDataTyped.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
                                 {
                                     case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
                                         <tr>
@@ -597,7 +597,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                 <div class="panel-heading panelTitle">
                     @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
                     <span class="pull-right">
-                        @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
+                        @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
                         {
                             <a href="@ViewDataTyped.EditTreatmentBMPOtherDesignAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                         }
@@ -605,7 +605,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                     </span>
                 </div>
                 <div class="panel-body">
-                    @if (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.All(x => x.CustomAttributeType.CustomAttributeTypePurpose != CustomAttributeTypePurpose.OtherDesignAttributes))
+                    @if (ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.All(x => x.CustomAttributeType.CustomAttributeTypePurpose != CustomAttributeTypePurpose.OtherDesignAttributes))
                     {
                         <p class="systemText">
                             This type of treatment BMP does not have any @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
@@ -621,7 +621,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes).ToList().OrderBy(x => x.SortOrder).ThenBy(x => x.CustomAttributeType.CustomAttributeTypeName))
+                                @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes).ToList().OrderBy(x => x.SortOrder).ThenBy(x => x.CustomAttributeType.CustomAttributeTypeName))
                                 {
                                     <tr>
                                         <td>
@@ -635,7 +635,9 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                             }
                                             <span class="help-block extra-small">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
                                         </td>
-                                        <td class="text-right" style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
+                                        <td class="text-right" style="min-width: 150px">
+                                            @ViewDataTyped.TreatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeAttributeType, ViewDataTyped.CustomAttributes)
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -792,7 +794,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
             </div>
 
         </div>
-        @if (ViewDataTyped.TreatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule)
+        @if (ViewDataTyped.TreatmentBMPType.IsAnalyzedInModelingModule)
         {
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
@@ -871,9 +873,12 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                         }
                     </div>
                     <div class="panel-body" style="max-height: 800px; overflow: auto;">
-                        @if (ViewDataTyped.TreatmentBMP.FundingEvents.Any())
+
+                        
+    
+                        @if (ViewDataTyped.FundingEvents.Any())
                         {
-                            foreach (var fundingEvent in ViewDataTyped.TreatmentBMP.FundingEvents.OrderBy(x => x.FundingEventType.FundingEventTypeID))
+                            foreach (var fundingEvent in ViewDataTyped.FundingEvents.OrderBy(x => x.FundingEventType.FundingEventTypeID))
                             {
                                 <div class="row">
                                     <div class="col-sm-9">
@@ -957,7 +962,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var treatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x => x.TreatmentBMPAssessmentObservationType).Where(x => x.GetHasBenchmarkAndThreshold()))
+                                    @foreach (var treatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMPType.GetObservationTypesForAssessment().Select(x => x.TreatmentBMPAssessmentObservationType).Where(x => x.GetHasBenchmarkAndThreshold()))
                                     {
                                         <tr>
                                             <td>

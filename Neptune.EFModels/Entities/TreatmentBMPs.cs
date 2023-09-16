@@ -44,6 +44,8 @@ namespace Neptune.EFModels.Entities
                 .ThenInclude(x => x.Organization)
                 .Include(x => x.OwnerOrganization)
                 .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
+                .Include(x => x.Delineation)
+                .Include(x => x.UpstreamBMP)
                 ;
         }
 

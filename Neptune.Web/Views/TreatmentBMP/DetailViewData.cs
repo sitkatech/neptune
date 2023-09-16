@@ -133,14 +133,18 @@ namespace Neptune.Web.Views.TreatmentBMP
         public UrlTemplate<int> CustomAttributeTypeDetailUrlTemplate { get; }
         public UrlTemplate<int> TreatmentBMPAssessmentObservationTypeDetailUrlTemplate { get; }
         public string OpenRevisionRequestDetailUrl { get; }
+        public EFModels.Entities.TreatmentBMPType TreatmentBMPType { get; }
+        public List<CustomAttribute> CustomAttributes { get; }
+        public List<EFModels.Entities.FundingEvent> FundingEvents { get; }
 
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.TreatmentBMP treatmentBMP,
+            EFModels.Entities.TreatmentBMPType treatmentBMPType,
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
             string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl,
             ModeledPerformanceViewData modeledPerformanceViewData, bool otherTreatmentBmpsExistInSubbasin,
-            bool hasMissingModelingAttributes)
+            bool hasMissingModelingAttributes, List<CustomAttribute> customAttributes, List<EFModels.Entities.FundingEvent> fundingEvents)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
@@ -183,6 +187,9 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             //This handles an extreme edge case, but a bmp came back without a regional subbasin
             OtherTreatmentBmpsExistInSubbasin = otherTreatmentBmpsExistInSubbasin;
+            CustomAttributes = customAttributes;
+            FundingEvents = fundingEvents;
+            TreatmentBMPType = treatmentBMPType;
 
             EditTreatmentBMPPerformanceAndModelingAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.EditModelingAttributes(treatmentBMP));
             EditTreatmentBMPOtherDesignAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.EditOtherDesignAttributes(treatmentBMP));
@@ -216,7 +223,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             ChangeTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.ConvertTreatmentBMPType(treatmentBMP));
             
-            HasModelingAttributes = TreatmentBMP.TreatmentBMPType.TreatmentBMPModelingType != null;
+            HasModelingAttributes = TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP != null;
 
             FieldDefinitionForAverageDivertedFlowrate = FieldDefinitionType.AverageDivertedFlowrate;
             FieldDefinitionForAverageTreatmentFlowrate = FieldDefinitionType.AverageTreatmentFlowrate;

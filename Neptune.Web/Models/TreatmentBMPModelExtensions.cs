@@ -211,7 +211,7 @@ namespace Neptune.Web.Models
                 var attributesTable = AddAllCommonPropertiesToTreatmentBMPFeature(treatmentBMP);
                 foreach (var ca in treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.OrderBy(x => x.SortOrder))
                 {
-                    attributesTable.Add(ca.CustomAttributeType.CustomAttributeTypeName.SanitizeStringForGdb(), treatmentBMP.GetCustomAttributeValueWithUnits(ca));
+                    attributesTable.Add(ca.CustomAttributeType.CustomAttributeTypeName.SanitizeStringForGdb(), treatmentBMP.GetCustomAttributeValueWithUnits(ca, treatmentBMP.CustomAttributes));
                 }
                 var feature = new Feature(treatmentBMP.LocationPoint4326, attributesTable);
                 featureCollection.Add(feature);
