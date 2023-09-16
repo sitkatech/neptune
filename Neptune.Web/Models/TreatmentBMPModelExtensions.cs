@@ -234,7 +234,7 @@ namespace Neptune.Web.Models
                 { "Last_Assessment_Date", x.GetMostRecentAssessment()?.GetAssessmentDate() },
                 { "Last_Assessed_Score", x.GetMostRecentScoreAsString() },
                 // todo: { "Number_of_Assessments", x.TreatmentBMPAssessments.Count },
-                { "Benchmark_and_Threshold_Set", x.IsBenchmarkAndThresholdsComplete().ToYesNo() },
+                { "Benchmark_and_Threshold_Set", x.IsBenchmarkAndThresholdsComplete(x.TreatmentBMPType).ToYesNo() },
                 { "Required_Lifespan_of_Installation", x.TreatmentBMPLifespanType?.TreatmentBMPLifespanTypeDisplayName ?? "Unknown" },
                 { "Lifespan_End_Date", x.TreatmentBMPLifespanEndDate },
                 { "Required_Field_Visits_Per_Year", x.RequiredFieldVisitsPerYear },

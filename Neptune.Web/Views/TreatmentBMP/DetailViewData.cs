@@ -136,6 +136,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public EFModels.Entities.TreatmentBMPType TreatmentBMPType { get; }
         public List<CustomAttribute> CustomAttributes { get; }
         public List<EFModels.Entities.FundingEvent> FundingEvents { get; }
+        public List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; }
 
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
@@ -144,17 +145,18 @@ namespace Neptune.Web.Views.TreatmentBMP
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
             string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl,
             ModeledPerformanceViewData modeledPerformanceViewData, bool otherTreatmentBmpsExistInSubbasin,
-            bool hasMissingModelingAttributes, List<CustomAttribute> customAttributes, List<EFModels.Entities.FundingEvent> fundingEvents)
+            bool hasMissingModelingAttributes, List<CustomAttribute> customAttributes, List<EFModels.Entities.FundingEvent> fundingEvents, List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
+            TreatmentBMPType = treatmentBMPType;
             PageTitle = treatmentBMP.TreatmentBMPName;
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.FindABMP());
             MapInitJson = mapInitJson;
             ImageCarouselViewData = imageCarouselViewData;
             AddBenchmarkAndThresholdUrl = SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(LinkGenerator, x => x.Instructions(treatmentBMP.TreatmentBMPID));
-            HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
+            HasSettableBenchmarkAndThresholdValues = treatmentBMPType.HasSettableBenchmarkAndThresholdValues();
             CurrentPersonCanManage = new TreatmentBMPManageFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
             CurrentPersonIsAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
             CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
@@ -189,7 +191,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             OtherTreatmentBmpsExistInSubbasin = otherTreatmentBmpsExistInSubbasin;
             CustomAttributes = customAttributes;
             FundingEvents = fundingEvents;
-            TreatmentBMPType = treatmentBMPType;
+            TreatmentBMPBenchmarkAndThresholds = treatmentBMPBenchmarkAndThresholds;
 
             EditTreatmentBMPPerformanceAndModelingAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.EditModelingAttributes(treatmentBMP));
             EditTreatmentBMPOtherDesignAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.EditOtherDesignAttributes(treatmentBMP));

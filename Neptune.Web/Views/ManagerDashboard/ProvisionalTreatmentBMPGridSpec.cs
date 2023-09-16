@@ -46,7 +46,7 @@ namespace Neptune.Web.Views.ManagerDashboard
             Add("Date of Last BMP Record Verification", x => x.DateOfLastInventoryVerification, 125, DhtmlxGridColumnFormatType.Date);
             Add(FieldDefinitionType.DateOfLastInventoryChange.ToGridHeaderString(), x => x.InventoryLastChangedDate, 120, DhtmlxGridColumnFormatType.Date);
             Add("Has Photos?", x => x.TreatmentBMPImages.Any().ToYesNo(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Benchmark and Thresholds Set?", x => x.IsBenchmarkAndThresholdsComplete().ToYesNo(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Benchmark and Thresholds Set?", x => x.IsBenchmarkAndThresholdsComplete(x.TreatmentBMPType).ToYesNo(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.StormwaterJurisdiction.GetOrganizationDisplayName()), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
         }
     }

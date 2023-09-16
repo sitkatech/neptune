@@ -975,8 +975,12 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                                     @treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName
                                                 }
                                             </td>
-                                            <td>@treatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(treatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
-                                            <td>@treatmentBMPAssessmentObservationType.GetFormattedThresholdValue(treatmentBMPAssessmentObservationType.GetThresholdValue(ViewDataTyped.TreatmentBMP), treatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
+                                            <td>
+                                                @treatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(treatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMPBenchmarkAndThresholds))
+                                            </td>
+                                            <td>
+                                                @treatmentBMPAssessmentObservationType.GetFormattedThresholdValue(treatmentBMPAssessmentObservationType.GetThresholdValue(ViewDataTyped.TreatmentBMPBenchmarkAndThresholds), treatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMPBenchmarkAndThresholds))
+                                            </td>
                                         </tr>
                                     }
 

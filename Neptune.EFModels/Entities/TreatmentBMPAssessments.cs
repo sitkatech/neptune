@@ -16,6 +16,7 @@ public static class TreatmentBMPAssessments
             .ThenInclude(x => x.StormwaterJurisdiction)
             .ThenInclude(x => x.Organization)
             .Include(x => x.TreatmentBMPType)
+            .ThenInclude(x => x.TreatmentBMPTypeAssessmentObservationTypes)
             .Include(x => x.TreatmentBMPObservations)
             .ThenInclude(x => x.TreatmentBMPAssessmentObservationType);
     }

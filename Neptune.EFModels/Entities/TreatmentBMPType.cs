@@ -23,6 +23,10 @@ namespace Neptune.EFModels.Entities
 {
     public partial class TreatmentBMPType
     {
+        public bool HasSettableBenchmarkAndThresholdValues()
+        {
+            return GetObservationTypes().Any(x => x.GetHasBenchmarkAndThreshold());
+        }
 
         public List<TreatmentBMPAssessmentObservationType> GetObservationTypes()
         {

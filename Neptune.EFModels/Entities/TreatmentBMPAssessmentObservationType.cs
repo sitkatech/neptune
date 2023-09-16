@@ -255,18 +255,18 @@ namespace Neptune.EFModels.Entities
         }
 
 
-        public double? GetBenchmarkValue(TreatmentBMP treatmentBMP)
+        public double? GetBenchmarkValue(ICollection<TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds)
         {
-            var treatmentBMPBenchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds
-                .SingleOrDefault(x => x.TreatmentBMPAssessmentObservationType == this);
+            var treatmentBMPBenchmarkAndThreshold = treatmentBMPBenchmarkAndThresholds
+                .SingleOrDefault(x => x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID);
 
             return treatmentBMPBenchmarkAndThreshold?.BenchmarkValue;
         }
 
-        public double? GetThresholdValue(TreatmentBMP treatmentBMP)
+        public double? GetThresholdValue(ICollection<TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds)
         {
-            var treatmentBMPBenchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds
-                .SingleOrDefault(x => x.TreatmentBMPAssessmentObservationType == this);
+            var treatmentBMPBenchmarkAndThreshold = treatmentBMPBenchmarkAndThresholds
+                .SingleOrDefault(x => x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID);
 
             return treatmentBMPBenchmarkAndThreshold?.ThresholdValue;
         }

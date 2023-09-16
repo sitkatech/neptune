@@ -20,8 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels.Entities;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Models
 {
@@ -40,7 +38,7 @@ namespace Neptune.Web.Models
 
         public static void CalculateAssessmentScore(this TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            if (!treatmentBMPAssessment.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
+            if (!treatmentBMPAssessment.TreatmentBMP.IsBenchmarkAndThresholdsComplete(treatmentBMPAssessment.TreatmentBMPType))
             {
                 return;
             }

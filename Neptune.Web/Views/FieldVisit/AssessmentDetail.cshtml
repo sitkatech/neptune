@@ -59,7 +59,7 @@ else
                     Score Details
                 </div>
                 <div class="panel-body">
-                    @if (ViewDataTyped.TreatmentBMPAssessment.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
+                    @if (ViewDataTyped.TreatmentBMPAssessment.TreatmentBMP.IsBenchmarkAndThresholdsComplete(ViewDataTyped.TreatmentBMPAssessment.TreatmentBMPType))
                     {
                         {
                             Html.RenderRazorSitkaPartial<ScoreDetail, ScoreDetailViewData>(ViewDataTyped.ScoreDetailViewData);

@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities
@@ -41,19 +40,14 @@ namespace Neptune.EFModels.Entities
             return ProjectID == null && person.IsManagerOrAdmin() && person.IsAssignedToStormwaterJurisdiction(StormwaterJurisdictionID);
         }
 
-        public bool IsBenchmarkAndThresholdsComplete()
+        public bool IsBenchmarkAndThresholdsComplete(TreatmentBMPType treatmentBMPType)
         {
-            var observationTypesIDs = TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
+            var observationTypesIDs = treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .Where(x => x.TreatmentBMPAssessmentObservationType.GetHasBenchmarkAndThreshold())
                 .Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
             var benchmarkAndThresholdObservationTypeIDs = TreatmentBMPBenchmarkAndThresholds.Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
 
             return !observationTypesIDs.Except(benchmarkAndThresholdObservationTypeIDs).Any();
-        }
-
-        public bool HasSettableBenchmarkAndThresholdValues()
-        {
-            return TreatmentBMPType.GetObservationTypes().Any(x => x.GetHasBenchmarkAndThreshold());
         }
 
         public string GetMostRecentScoreAsString()

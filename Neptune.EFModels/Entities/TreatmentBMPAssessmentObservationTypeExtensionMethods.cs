@@ -23,9 +23,9 @@ public static partial class TreatmentBMPAssessmentObservationTypeExtensionMethod
     public static TreatmentBMPAssessmentObservationTypeForScoringDto AsForScoringDto(
         this TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, TreatmentBMPAssessment treatmentBMPAssessment, bool overrideAssessmentScoreIfFailing)
     {
-
-        var benchmarkValue = treatmentBMPAssessmentObservationType.GetBenchmarkValue(treatmentBMPAssessment.TreatmentBMP);
-        var thresholdValue = treatmentBMPAssessmentObservationType.GetThresholdValue(treatmentBMPAssessment.TreatmentBMP);
+        var treatmentBMPBenchmarkAndThresholds = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPBenchmarkAndThresholds;
+        var benchmarkValue = treatmentBMPAssessmentObservationType.GetBenchmarkValue(treatmentBMPBenchmarkAndThresholds);
+        var thresholdValue = treatmentBMPAssessmentObservationType.GetThresholdValue(treatmentBMPBenchmarkAndThresholds);
         var assessmentScoreWeight = treatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(x => x.TreatmentBMPTypeID == treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeID)?.AssessmentScoreWeight;
         var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
         var observationScoreDto = treatmentBMPObservation.AsObservationScoreDto(overrideAssessmentScoreIfFailing);
