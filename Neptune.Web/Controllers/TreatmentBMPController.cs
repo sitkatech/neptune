@@ -28,6 +28,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
@@ -647,13 +648,13 @@ namespace Neptune.Web.Controllers
 
         [HttpPost]
         [JurisdictionManageFeature]
-        public PartialViewResult BulkDeleteTreatmentBMPs(BulkDeleteTreatmentBMPsViewModel viewModel)
+        public PartialViewResult BulkDeleteTreatmentBMPs([FromBody] BulkDeleteTreatmentBMPsViewModel viewModel)
         {
             var treatmentBMPs = new List<TreatmentBMP>();
 
             if (viewModel.TreatmentBMPIDList != null)
             {
-                treatmentBMPs = _dbContext.TreatmentBMPs.Where(x => viewModel.TreatmentBMPIDList.Contains(x.TreatmentBMPID)).ToList();
+                treatmentBMPs = TreatmentBMPs.ListByTreatmentBMPIDList(_dbContext, viewModel.TreatmentBMPIDList).ToList();
             }
             var viewData = new BulkDeleteTreatmentBMPsViewData(treatmentBMPs);
             return RazorPartialView<BulkDeleteTreatmentBMPs, BulkDeleteTreatmentBMPsViewData, BulkDeleteTreatmentBMPsViewModel>(viewData, viewModel);
@@ -678,7 +679,7 @@ namespace Neptune.Web.Controllers
 
             if (viewModel.TreatmentBMPIDList != null)
             {
-                var treatmentBMPs = _dbContext.TreatmentBMPs.Where(x => viewModel.TreatmentBMPIDList.Contains(x.TreatmentBMPID)).ToList();
+                var treatmentBMPs = TreatmentBMPs.ListByTreatmentBMPIDListWithChangeTracking(_dbContext, viewModel.TreatmentBMPIDList);
                 treatmentBMPDisplayNames = treatmentBMPs.Select(x => x.TreatmentBMPName).ToList();
 
                 foreach (var treatmentBMP in treatmentBMPs)

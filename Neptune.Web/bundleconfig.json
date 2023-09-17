@@ -22,5 +22,11 @@
     "inputFiles": [
       "wwwroot/ScriptsCustom/sitka.grid.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/Scripts/tinymce/skins/ui/oxide/skin.min.css",
+    "inputFiles": [
+      "wwwroot/Scripts/tinymce/skins/ui/oxide/skin.css"
+    ]
   }
 ]
