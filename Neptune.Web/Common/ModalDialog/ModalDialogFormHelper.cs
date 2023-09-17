@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Neptune.Web.Common.BootstrapWrappers;
+using System.Text.Encodings.Web;
 
 namespace Neptune.Web.Common.ModalDialog
 {
@@ -173,52 +174,56 @@ namespace Neptune.Web.Common.ModalDialog
             string optionalDialogFormID,
             string hoverText)
         {
-            var builder = new TagBuilder("a");
-            builder.InnerHtml.AppendHtml(linkText);
+            var anchorTag = new TagBuilder("a");
+            anchorTag.InnerHtml.AppendHtml(linkText);
             if (!string.IsNullOrWhiteSpace(linkID))
             {
-                builder.Attributes.Add("id", linkID);
+                anchorTag.Attributes.Add("id", linkID);
             }
-            builder.Attributes.Add("href", dialogContentUrl);
-            builder.Attributes.Add("data-dismiss", "modal");
-            builder.Attributes.Add("data-dialog-title", dialogTitle);
-            builder.Attributes.Add("data-dialog-width", dialogWidth.ToString());
+            anchorTag.Attributes.Add("href", dialogContentUrl);
+            anchorTag.Attributes.Add("data-dismiss", "modal");
+            anchorTag.Attributes.Add("data-dialog-title", dialogTitle);
+            anchorTag.Attributes.Add("data-dialog-width", dialogWidth.ToString());
 
             if (!string.IsNullOrWhiteSpace(saveButtonID))
             {
-                builder.Attributes.Add("data-save-button-id", saveButtonID);
+                anchorTag.Attributes.Add("data-save-button-id", saveButtonID);
             }
             if (!string.IsNullOrWhiteSpace(saveButtonText))
             {
-                builder.Attributes.Add("data-save-button-text", saveButtonText);
+                anchorTag.Attributes.Add("data-save-button-text", saveButtonText);
             }
-            builder.Attributes.Add("data-cancel-button-text", cancelButtonText);
+            anchorTag.Attributes.Add("data-cancel-button-text", cancelButtonText);
 
             
             if (!string.IsNullOrWhiteSpace(optionalDialogFormID))
             {
-                builder.Attributes.Add("data-optional-dialog-form-id", optionalDialogFormID);
+                anchorTag.Attributes.Add("data-optional-dialog-form-id", optionalDialogFormID);
             }
 
             var javascripReadyFunctionAsParameter = !string.IsNullOrWhiteSpace(onJavascriptReadyFunction) ? $"function() {{{onJavascriptReadyFunction}();}}" : "null";
             var postDataAsParameter = !string.IsNullOrWhiteSpace(postData) ? postData : "null";
             var onclickFunction = $"return modalDialogLink(this, {javascripReadyFunctionAsParameter}, {postDataAsParameter});";
-            builder.Attributes.Add("onclick", onclickFunction);
+            anchorTag.Attributes.Add("onclick", onclickFunction);
 
             if (extraCssClasses != null)
             {
                 foreach (var extraCssClass in extraCssClasses)
                 {
-                    builder.AddCssClass(extraCssClass);
+                    anchorTag.AddCssClass(extraCssClass);
                 }
             }
 
             if (!string.IsNullOrWhiteSpace(hoverText))
             {
-                builder.Attributes.Add("title", hoverText);
+                anchorTag.Attributes.Add("title", hoverText);
             }
 
-            return builder;
+            var writer = new StringWriter();
+            var builder = new HtmlContentBuilder();
+            builder.AppendFormat("{0}", anchorTag);
+            builder.WriteTo(writer, HtmlEncoder.Default);
+            return new HtmlString(writer.ToString());
         }
 
         public static IHtmlContent ModalDialogFormLink(string linkText, string dialogUrl, string dialogTitle, List<string> extraCssClasses, bool hasPermission)

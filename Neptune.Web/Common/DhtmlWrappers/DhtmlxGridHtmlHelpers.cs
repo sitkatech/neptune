@@ -274,7 +274,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
             var customExcelDownloadIconHtml = CreateFullDatabaseExcelDownloadIconHtml(gridName, gridSpec.CustomExcelDownloadUrl, gridSpec.CustomExcelDownloadLinkText ?? "Download Full Database");
             var createIconHtml = CreateCreateUrlHtml(gridSpec.CreateEntityUrl, gridSpec.CreateEntityUrlClass, gridSpec.CreateEntityModalDialogForm, gridSpec.CreateEntityActionPhrase, gridSpec.ObjectNameSingular);
             var tagIconHtml = CreateVerifySelectedModalUrlHtml(gridName, gridSpec.BulkTagModalDialogForm);
-            var deleteIconHtml = CreateDeleteSelectedModalUrlHtml(gridName, gridSpec.BulkDeleteModalDialogForm);
+            var deleteSelectedModalUrlHtml = CreateDeleteSelectedModalUrlHtml(gridName, gridSpec.BulkDeleteModalDialogForm);
             var arbitraryHtml = CreateArbitraryHtml(gridSpec.ArbitraryHtml, "    ");
             return $@"
             {
@@ -288,7 +288,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
                         : string.Empty)
                 }
             {(!string.IsNullOrWhiteSpace(tagIconHtml) ? $"<span>{tagIconHtml}</span>" : string.Empty)}
-            {(!string.IsNullOrWhiteSpace(deleteIconHtml) ? $"<span>{deleteIconHtml}</span>" : string.Empty)}
+            {(!string.IsNullOrWhiteSpace(deleteSelectedModalUrlHtml) ? $"{deleteSelectedModalUrlHtml}" : string.Empty)}
             {
                     (!string.IsNullOrWhiteSpace(clearCookiesIconHtml)
                         ? $"<span>{clearCookiesIconHtml}</span>"
@@ -318,15 +318,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
                 $"function() {{ return Sitka.{gridName}.getValuesFromCheckedGridRows({bulkTagModalDialogForm.CheckboxColumnIndex}, '{bulkTagModalDialogForm.ValueColumnName}', '{bulkTagModalDialogForm.ReturnListName}'); }}";
 
             return
-                ModalDialogFormHelper.ModalDialogFormLink(new HtmlString($"{tagIconHtml}{bulkTagModalDialogForm.DialogLinkText}"),
-                    bulkTagModalDialogForm.DialogUrl,
-                    bulkTagModalDialogForm.DialogTitle,
-                    ModalDialogFormHelper.DefaultDialogWidth,
-                    "Verify",
-                    "Cancel",
-                    new List<string>{ "btn", "btn-neptune"},
-                    null,
-                    getProjectIDFunctionString).ToString();
+                $"<span>{ModalDialogFormHelper.ModalDialogFormLink(new HtmlString($"{tagIconHtml}{bulkTagModalDialogForm.DialogLinkText}"), bulkTagModalDialogForm.DialogUrl, bulkTagModalDialogForm.DialogTitle, ModalDialogFormHelper.DefaultDialogWidth, "Verify", "Cancel", new List<string> { "btn", "btn-neptune" }, null, getProjectIDFunctionString)}</span>";
         }
 
         public static string CreateDeleteSelectedModalUrlHtml(string gridName, BulkDeleteModalDialogForm bulkDeleteModalDialogForm)
@@ -341,15 +333,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
                 $"function() {{ return Sitka.{gridName}.getValuesFromCheckedGridRows({bulkDeleteModalDialogForm.CheckboxColumnIndex}, '{bulkDeleteModalDialogForm.ValueColumnName}', '{bulkDeleteModalDialogForm.ReturnListName}'); }}";
 
             return
-                ModalDialogFormHelper.ModalDialogFormLink(new HtmlString($"{deleteIconHtml}{bulkDeleteModalDialogForm.DialogLinkText}"),
-                    bulkDeleteModalDialogForm.DialogUrl,
-                    bulkDeleteModalDialogForm.DialogTitle,
-                    ModalDialogFormHelper.DefaultDialogWidth,
-                    "Delete",
-                    "Cancel",
-                    new List<string>(),
-                    null,
-                    getProjectIDFunctionString).ToString();
+                $"<span>{ModalDialogFormHelper.ModalDialogFormLink(new HtmlString($"{deleteIconHtml}{bulkDeleteModalDialogForm.DialogLinkText}"), bulkDeleteModalDialogForm.DialogUrl, bulkDeleteModalDialogForm.DialogTitle, ModalDialogFormHelper.DefaultDialogWidth, "Delete", "Cancel", new List<string>(), null, getProjectIDFunctionString)}</span>";
         }
 
         /// <summary>

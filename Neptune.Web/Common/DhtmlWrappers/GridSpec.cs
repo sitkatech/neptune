@@ -49,8 +49,8 @@ namespace Neptune.Web.Common.DhtmlWrappers
         public string CustomExcelDownloadUrl { get; set; }
         public string CustomExcelDownloadLinkText { get; set; }
 
-        public List<String> ArbitraryHtml { get; set; }
-        public List<String> ArbitraryHeaderHtml { get; set; }
+        public List<string> ArbitraryHtml { get; set; }
+        public List<string> ArbitraryHeaderHtml { get; set; }
         public bool? SaveFiltersInCookie { get; set; }
         public string GridInstructionsWhenEmpty { get; set; }
         public ModalDialogForm CreateEntityModalDialogForm { get; set; }
