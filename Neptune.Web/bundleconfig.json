@@ -16,5 +16,11 @@
     "inputFiles": [
       "wwwroot/ScriptsCustom/SitkaFileExtensionsValidation.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/ScriptsCustom/sitka.grid.min.js",
+    "inputFiles": [
+      "wwwroot/ScriptsCustom/sitka.grid.js"
+    ]
   }
 ]

@@ -338,7 +338,7 @@ Sitka.Grid.Class = {
         this.grid = null;
         this.grid = new dhtmlXGridObject(this.gridElement);
 
-        this.grid.setImagePath("/content/dhtmlx/dhtmlxGrid/codebase/imgs/");
+        this.grid.setImagePath("/Content/dhtmlx/dhtmlxGrid/codebase/imgs/");
 
         this.htmlFilter.prototype = dhtmlXGridObject.prototype._in_header_text_filter.prototype;
         this.grid._in_header_html_filter = this.htmlFilter; // defines #html_filter shortcut in the header
