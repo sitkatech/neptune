@@ -16,7 +16,10 @@ var builder = WebApplication.CreateBuilder(args);
     // Add services to the container.
     var services = builder.Services;
     services.AddRazorPages();
-    services.AddControllersWithViews()
+    services.AddControllersWithViews(options =>
+        {
+            options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+        })
         .AddRazorOptions(options =>
         {
             options.ViewLocationFormats.Add("~/Views/Shared/TextControls/{0}.cshtml");
@@ -34,20 +37,21 @@ var builder = WebApplication.CreateBuilder(args);
             options.ViewLocationFormats.Add("~/Views/Shared/ModeledPerformance/{0}.cshtml");
             options.ViewLocationFormats.Add("~/Views/FieldVisit/ObservationTypePreview/{0}.cshtml");
         })
-        .AddJsonOptions(options => {
-        var scale = Math.Pow(10, 3);
-        var geometryFactory = new GeometryFactory(new PrecisionModel(scale), 4326);
-        options.JsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));
-        options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
-        options.JsonSerializerOptions.Converters.Add(new DoubleConverter(2));
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-        options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
-        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
-        options.JsonSerializerOptions.WriteIndented = false;
-        options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
-        options.JsonSerializerOptions.PropertyNamingPolicy = null;
-        options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-    });
+        .AddJsonOptions(options =>
+        {
+            var scale = Math.Pow(10, 3);
+            var geometryFactory = new GeometryFactory(new PrecisionModel(scale), 4326);
+            options.JsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));
+            options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+            options.JsonSerializerOptions.Converters.Add(new DoubleConverter(2));
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
+            options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+            options.JsonSerializerOptions.WriteIndented = false;
+            options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
+            options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+        });
 
     builder.Configuration.AddJsonFile(builder.Configuration["SECRET_PATH"], optional: false, reloadOnChange: true);
 
