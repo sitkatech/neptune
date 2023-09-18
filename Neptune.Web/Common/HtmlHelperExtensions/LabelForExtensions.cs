@@ -231,7 +231,6 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
             var helpIconImgTag = GenerateHelpIconImgTag(labelText, urlToContent, popupWidth, displayStyle);
             var labelTag = new TagBuilder("label");
             labelTag.Attributes.Add("for", fullHtmlFieldID);
-            labelTag.InnerHtml.Append(labelText);
 
             var writer = new StringWriter();
             var builder = new HtmlContentBuilder();
@@ -239,6 +238,7 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
             {
                 case DisplayStyle.AsGridHeader:
                     labelTag.Attributes.Add("style", "display:table-cell");
+                    labelTag.InnerHtml.Append(labelText);
                     builder.AppendFormat("<div style=\"display:table; vertical-align: top\">{0}{1}</div>", helpIconImgTag, labelTag);
                     builder.WriteTo(writer, HtmlEncoder.Default);
                     return new HtmlString(writer.ToString());
@@ -249,7 +249,10 @@ namespace Neptune.Web.Common.HtmlHelperExtensions
                 case DisplayStyle.HelpIconWithLabel:
                 case DisplayStyle.SitsOnDarkBackground:
                     var requiredAsterisk = hasRequiredAttribute ? new HtmlString($" <sup>{BootstrapHtmlHelpers.RequiredIcon}</sup>") : new HtmlString(string.Empty);
-                    builder.AppendFormat("{0}{1}{2}", helpIconImgTag, labelText, requiredAsterisk);
+                    labelTag.InnerHtml.AppendHtml(helpIconImgTag);
+                    labelTag.InnerHtml.AppendHtml(labelText);
+                    labelTag.InnerHtml.AppendHtml(requiredAsterisk);
+                    builder.AppendFormat("{0}", labelTag);
                     builder.WriteTo(writer, HtmlEncoder.Default);
                     return new HtmlString(writer.ToString());
                 default:

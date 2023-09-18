@@ -1,1 +1,1 @@
-﻿<span class="helpicon glyphicon glyphicon-question-sign" onmouseover="Neptune.Views.Methods.addHelpTooltipPopup(this, &#x27;My Field&#x27;, &#x27;\/FieldDefinition\/FieldDefinitionDetails\/1&#x27;, 300)" title="Click to get help on My Field"></span>My Field
+﻿<label for="myField"><span class="helpicon glyphicon glyphicon-question-sign" onmouseover="Neptune.Views.Methods.addHelpTooltipPopup(this, &#x27;My Field&#x27;, &#x27;\/FieldDefinition\/FieldDefinitionDetails\/1&#x27;, 300)" title="Click to get help on My Field"></span>My Field</label>
