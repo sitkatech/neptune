@@ -41,7 +41,7 @@ namespace Neptune.Web.Views.User
         {
             PageTitle = "All Users";
             EntityName = "Users";
-            GridSpec = new IndexGridSpec(linkGenerator, currentPerson) {ObjectNameSingular = "User", ObjectNamePlural = "Users", SaveFiltersInCookie = true};
+            GridSpec = new IndexGridSpec(linkGenerator, currentPerson, new Dictionary<int, int>()) {ObjectNameSingular = "User", ObjectNamePlural = "Users", SaveFiltersInCookie = true};
             GridName = "UserGrid";
             GridDataUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.IndexGridJsonData());
             KeystoneUrl = "";//todo: NeptuneWebConfiguration.KeystoneUrl;

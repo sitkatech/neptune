@@ -30,7 +30,7 @@ namespace Neptune.Web.Views.User
 {
     public class IndexGridSpec : GridSpec<Person>
     {
-        public IndexGridSpec(LinkGenerator linkGenerator, Person currentPerson)
+        public IndexGridSpec(LinkGenerator linkGenerator, Person currentPerson, Dictionary<int, int> countByPrimaryContactPerson)
         {
             var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
@@ -54,7 +54,8 @@ namespace Neptune.Web.Views.User
             Add("Role", a => UrlTemplate.MakeHrefString(roleDetailUrlTemplate.ParameterReplace(a.RoleID), a.Role.RoleDisplayName), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Active?", a => a.IsActive.ToYesNo(), 75, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Receives Support Emails?", a => a.ReceiveSupportEmails.ToYesNo(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add($"{FieldDefinitionType.PrimaryContact.GetFieldDefinitionLabel()} for Organizations", a => a.GetPrimaryContactOrganizations().Count, 120);
+            Add($"{FieldDefinitionType.PrimaryContact.GetFieldDefinitionLabel()} for Organizations", a =>
+                countByPrimaryContactPerson.TryGetValue(a.PersonID, out var value) ? value : 0, 120);
             Add($"Assigned {FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabelPluralized()}", a => a.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList().Count, 120);
         }
     }

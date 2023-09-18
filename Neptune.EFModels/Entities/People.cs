@@ -94,11 +94,30 @@ namespace Neptune.EFModels.Entities
                 .OrderBy(x => x.LastName).ThenBy(x => x.FirstName);
         }
 
-        public static Person GetByID(NeptuneDbContext dbContext, int personID)
+        public static Person GetByIDWithChangeTracking(NeptuneDbContext dbContext, int personID)
         {
-            var person = GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.PersonID == personID);
+            var person = GetImpl(dbContext)
+                .SingleOrDefault(x => x.PersonID == personID);
             Check.RequireNotNull(person, $"Person with ID {personID} not found!");
             return person;
+        }
+
+        public static Person GetByIDWithChangeTracking(NeptuneDbContext dbContext, PersonPrimaryKey personPrimaryKey)
+        {
+            return GetByIDWithChangeTracking(dbContext, personPrimaryKey.PrimaryKeyValue);
+        }
+
+        public static Person GetByID(NeptuneDbContext dbContext, int personID)
+        {
+            var person = GetImpl(dbContext).AsNoTracking()
+                .SingleOrDefault(x => x.PersonID == personID);
+            Check.RequireNotNull(person, $"Person with ID {personID} not found!");
+            return person;
+        }
+
+        public static Person GetByID(NeptuneDbContext dbContext, PersonPrimaryKey personPrimaryKey)
+        {
+            return GetByID(dbContext, personPrimaryKey.PrimaryKeyValue);
         }
 
         public static PersonDto GetByIDAsDto(NeptuneDbContext dbContext, int personID)
@@ -128,12 +147,23 @@ namespace Neptune.EFModels.Entities
         {
             return dbContext.People
                 .Include(x => x.Organization)
-                .ThenInclude(x => x.OrganizationType);
+                .ThenInclude(x => x.OrganizationType)
+                .Include(x => x.StormwaterJurisdictionPeople)
+                .ThenInclude(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
+                .ThenInclude(x => x.OrganizationType)
+                ;
         }
 
-        public static List<Person> ListWithRole(NeptuneDbContext dbContext, int roleID)
+        public static List<Person> ListByRoleID(NeptuneDbContext dbContext, int roleID)
         {
             return ListActive(dbContext).Where(x => x.RoleID == roleID).ToList();
+        }
+
+        public static List<Person> List(NeptuneDbContext dbContext)
+        {
+            return GetImpl(dbContext).AsNoTracking()
+                .OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
         }
 
         public static Person GetByWebServiceAccessToken(NeptuneDbContext dbContext, Guid webServiceAccessToken)

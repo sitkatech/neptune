@@ -18,6 +18,8 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common.Models;
 
@@ -39,11 +41,10 @@ namespace Neptune.Web.Views.PersonOrganization
             OrganizationIDs = organizationIDs;
         }
 
-        public void UpdateModel(Person person, List<EFModels.Entities.Organization> allOrganizations)
+        public void UpdateModel(Person person, DbSet<EFModels.Entities.Organization> allOrganizations)
         {
-            // Remove all existing associations
-            var currentOrgsForWhichIAmPrimaryContact = allOrganizations.Where(o => o.PrimaryContactPersonID == person.PersonID).ToList();
-            currentOrgsForWhichIAmPrimaryContact.ForEach(org => org.PrimaryContactPersonID = null);
+            var existingOrganizations = allOrganizations.Where(x => x.PrimaryContactPersonID == person.PersonID).ToList();
+            existingOrganizations.ForEach(org => org.PrimaryContactPersonID = null);
 
             // Create all-new associations
             if (OrganizationIDs != null && OrganizationIDs.Any())

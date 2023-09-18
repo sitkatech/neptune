@@ -59,5 +59,4 @@ public static class StormwaterJurisdictionPeople
         return dbContext.StormwaterJurisdictionPeople.AsNoTracking().GroupBy(x => x.StormwaterJurisdictionID).Select(x => new { x.Key, Count = x.Count() })
             .ToDictionary(x => x.Key, x => x.Count);
     }
-
 }

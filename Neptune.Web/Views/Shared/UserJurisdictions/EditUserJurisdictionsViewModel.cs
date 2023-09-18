@@ -60,22 +60,16 @@ namespace Neptune.Web.Views.Shared.UserJurisdictions
             {
                 var stormwaterJurisdictionPerson = new StormwaterJurisdictionPerson
                 {
-                    StormwaterJurisdictionPersonID = x.StormwaterJurisdictionPersonID ?? ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue(),
                     StormwaterJurisdictionID = x.StormwaterJurisdictionID,
                     PersonID = x.PersonID
                 };
                 return stormwaterJurisdictionPerson;
             }).ToList();
 
-            person.StormwaterJurisdictionPeople.Merge(stormwaterJurisdictionPersonUpdated, 
-                allStormwaterJurisdictionPeople, 
-                (x, y) => x.StormwaterJurisdictionPersonID == y.StormwaterJurisdictionPersonID,
-                (x, y) =>
-                {
-                    x.PersonID = y.PersonID;
-                    x.StormwaterJurisdictionID = y.StormwaterJurisdictionID;
-                });
-
+            person.StormwaterJurisdictionPeople.Merge(stormwaterJurisdictionPersonUpdated,
+                allStormwaterJurisdictionPeople,
+                (x, y) => x.PersonID == y.PersonID &&
+                          x.StormwaterJurisdictionID == y.StormwaterJurisdictionID);
         }
     }
 }

@@ -24,7 +24,7 @@ angular.module("NeptuneApp").controller("PersonOrganizationController", function
     {
         var usedOrganizationIDs = $scope.AngularModel.OrganizationIDs;
         var filter = _($scope.AngularViewData.AllOrganizations).filter(function (f) { return !_.contains(usedOrganizationIDs, f.OrganizationID); });
-        var orgsFilteredAndSorted = filter.sortBy(["DisplayName"]).value();
+        var orgsFilteredAndSorted = filter.sortBy(["OrganizationName"]).value();
         return orgsFilteredAndSorted;
     };
 
@@ -39,7 +39,7 @@ angular.module("NeptuneApp").controller("PersonOrganizationController", function
     $scope.getOrganizationDisplayName = function (organizationId)
     {
         var organization = _.find($scope.AngularViewData.AllOrganizations, function(x) { return x.OrganizationID == organizationId; });
-        return organization.DisplayName;
+        return organization.OrganizationName;
     };
 
     $scope.deleteRow = function (organizationId) {

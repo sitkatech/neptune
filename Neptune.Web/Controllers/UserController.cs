@@ -23,7 +23,6 @@ using System.Globalization;
 using Neptune.Web.Security;
 using Neptune.Web.Views.User;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.Common.DesignByContract;
 using Neptune.Common.Mvc;
@@ -55,10 +54,9 @@ namespace Neptune.Web.Controllers
         [UserEditFeature]
         public GridJsonNetJObjectResult<Person> IndexGridJsonData()
         {
-            var gridSpec = new IndexGridSpec(_linkGenerator, CurrentPerson);
-            var persons = _dbContext.People.AsNoTracking().Include(x => x.Organization).Include(x => x.Organizations)
-                .Include(x => x.StormwaterJurisdictionPeople).ThenInclude(x => x.StormwaterJurisdiction)
-                .ToList().Where(x => new UserViewFeature().HasPermission(CurrentPerson, x).HasPermission)
+            var countByPrimaryContactPerson = Organizations.ListCountByPrimaryContactPerson(_dbContext);
+            var gridSpec = new IndexGridSpec(_linkGenerator, CurrentPerson, countByPrimaryContactPerson);
+            var persons = People.List(_dbContext).Where(x => new UserViewFeature().HasPermission(CurrentPerson, x).HasPermission)
                 .OrderBy(x => x.GetFullNameLastFirst()).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Person>(persons, gridSpec);
             return gridJsonNetJObjectResult;
@@ -164,7 +162,8 @@ namespace Neptune.Web.Controllers
             var userNotificationGridSpec = new UserNotificationGridSpec();
             var userNotificationGridDataUrl = SitkaRoute<UserController>.BuildUrlFromExpression(_linkGenerator, x => x.UserNotificationsGridJsonData(personPrimaryKey));
             var activateInactivateUrl = SitkaRoute<UserController>.BuildUrlFromExpression(_linkGenerator, x => x.ActivateInactivatePerson(person));
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, person, userNotificationGridSpec, "userNotifications", userNotificationGridDataUrl, activateInactivateUrl);
+            var organizations = Organizations.ListByPrimaryContactPersonID(_dbContext, person.PersonID);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, person, userNotificationGridSpec, "userNotifications", userNotificationGridDataUrl, activateInactivateUrl, organizations);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -194,10 +193,11 @@ namespace Neptune.Web.Controllers
             string confirmMessage;
             if (person.IsActive)
             {
-                var isPrimaryContactForAnyOrganization = person.GetPrimaryContactOrganizations().Any();
+                var organizations = Organizations.ListByPrimaryContactPersonID(_dbContext, person.PersonID);
+                var isPrimaryContactForAnyOrganization = organizations.Any();
                 confirmMessage =
                     isPrimaryContactForAnyOrganization
-                        ? $@"You cannot inactive user '{person.GetFullNameFirstLast()}' because {person.FirstName} is the {FieldDefinitionType.PrimaryContact.GetFieldDefinitionLabel()} for the following organizations: <ul> {string.Join("\r\n", person.GetPrimaryContactOrganizations().Select(x => $"<li>{x.OrganizationName}</li>"))}</ul>"
+                        ? $@"You cannot inactive user '{person.GetFullNameFirstLast()}' because {person.FirstName} is the {FieldDefinitionType.PrimaryContact.GetFieldDefinitionLabel()} for the following organizations: <ul> {string.Join("\r\n", organizations.Select(x => $"<li>{x.OrganizationName}</li>"))}</ul>"
                         : $"Are you sure you want to inactivate user '{person.GetFullNameFirstLast()}'?";
                 var viewData = new ConfirmDialogFormViewData(confirmMessage, !isPrimaryContactForAnyOrganization);
                 return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
@@ -215,10 +215,11 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
         public async Task<IActionResult> ActivateInactivatePerson([FromRoute] PersonPrimaryKey personPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
-            var person = personPrimaryKey.EntityObject;
+            var person = People.GetByIDWithChangeTracking(_dbContext, personPrimaryKey);
             if (person.IsActive)
             {
-                Check.Require(!person.GetPrimaryContactOrganizations().Any(),
+                var organizations = Organizations.ListByPrimaryContactPersonID(_dbContext, person.PersonID);
+                Check.Require(!organizations.Any(),
                     $@"You cannot inactive user '{person.GetFullNameFirstLast()}' because {person.FirstName} is the {FieldDefinitionType.PrimaryContact.GetFieldDefinitionLabel()} for one or more {FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized()}!");
             }
             if (!ModelState.IsValid)
@@ -240,7 +241,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
         public PartialViewResult EditJurisdiction([FromRoute] PersonPrimaryKey personPrimaryKey)
         {
-            var person = personPrimaryKey.EntityObject;
+            var person = People.GetByID(_dbContext, personPrimaryKey);
             var viewModel = new EditUserJurisdictionsViewModel(person, CurrentPerson);
             return ViewEditJurisdiction(viewModel);
         }
@@ -250,7 +251,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
         public async Task<IActionResult> EditJurisdiction([FromRoute] PersonPrimaryKey personPrimaryKey, EditUserJurisdictionsViewModel viewModel)
         {
-            var person = personPrimaryKey.EntityObject;
+            var person = People.GetByIDWithChangeTracking(_dbContext, personPrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewEditJurisdiction(viewModel);
@@ -264,7 +265,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewEditJurisdiction(EditUserJurisdictionsViewModel viewModel)
         {
-            var allStormwaterJurisdictions = _dbContext.StormwaterJurisdictions.ToList();
+            var allStormwaterJurisdictions = StormwaterJurisdictions.List(_dbContext);
             var stormwaterJurisdictionsCurrentPersonCanManage = StormwaterJurisdictions.ListViewableByPerson(_dbContext, CurrentPerson);
             var viewData = new EditUserJurisdictionsViewData(HttpContext, _linkGenerator, CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage, true);
             return RazorPartialView<EditUserJurisdictions, EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>(viewData, viewModel);

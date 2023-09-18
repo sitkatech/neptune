@@ -67,6 +67,22 @@ public static class Organizations
         return GetByName(dbContext, Organization.OrganizationUnknown);
     }
 
+    public static List<Organization> ListByPrimaryContactPersonID(NeptuneDbContext dbContext, int primaryContactPersonID)
+    {
+        return GetImpl(dbContext).AsNoTracking().Where(x => x.PrimaryContactPersonID == primaryContactPersonID).ToList().OrderBy(x => x.GetDisplayName()).ToList();
+    }
+
+    public static List<Organization> ListByPrimaryContactPersonIDWithChangeTracking(NeptuneDbContext dbContext, int primaryContactPersonID)
+    {
+        return GetImpl(dbContext).Where(x => x.PrimaryContactPersonID == primaryContactPersonID).ToList().OrderBy(x => x.GetDisplayName()).ToList();
+    }
+
+    public static Dictionary<int, int> ListCountByPrimaryContactPerson(NeptuneDbContext dbContext)
+    {
+        return dbContext.Organizations.AsNoTracking().Where(x => x.PrimaryContactPersonID.HasValue).GroupBy(x => x.PrimaryContactPersonID.Value).Select(x => new { x.Key, Count = x.Count() })
+            .ToDictionary(x => x.Key, x => x.Count);
+    }
+
     public static async Task Delete(NeptuneDbContext dbContext, Organization organization)
     {
         await dbContext.Projects.Where(x => x.OrganizationID == organization.OrganizationID).ExecuteDeleteAsync();

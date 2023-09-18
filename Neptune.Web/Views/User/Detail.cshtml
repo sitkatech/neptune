@@ -164,7 +164,9 @@
                     <ul style="margin: 5px 0">
                         @foreach (var jurisdiction in ViewDataTyped.Person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction))
                         {
-                            <li>@jurisdiction.Organization.OrganizationName/*.GetDisplayNameAsDetailUrl()*/</li>
+                            <li>
+                                <a href="@ViewDataTyped.OrganizationDetailUrlTemplate.ParameterReplace(jurisdiction.OrganizationID)">@jurisdiction.Organization.GetDisplayName()</a>
+                            </li>
                         }
                     </ul>
                 }
@@ -201,10 +203,10 @@
                 }
             </div>
             <div class="panel-body">
-                @if (ViewDataTyped.Person.GetPrimaryContactOrganizations().Any())
+                @if (ViewDataTyped.PrimaryContactOrganizations.Any())
                 {
                     <ul style="margin: 5px 0">
-                        @foreach (var organization in ViewDataTyped.Person.GetPrimaryContactOrganizations())
+                        @foreach (var organization in ViewDataTyped.PrimaryContactOrganizations)
                         {
                             <li>
                                 <a href="@ViewDataTyped.OrganizationDetailUrlTemplate.ParameterReplace(organization.OrganizationID)">@organization.GetDisplayName()</a>

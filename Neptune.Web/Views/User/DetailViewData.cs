@@ -49,13 +49,14 @@ namespace Neptune.Web.Views.User
         public IHtmlContent EditJurisdictionsLink { get; }
         public UrlTemplate<int> OrganizationDetailUrlTemplate { get; }
         public string RoleDetailUrl { get; }
+        public List<EFModels.Entities.Organization> PrimaryContactOrganizations { get; }
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             Person personToView,
             UserNotificationGridSpec userNotificationGridSpec,
             string userNotificationGridName,
             string userNotificationGridDataUrl,
-            string activateInactivateUrl)
+            string activateInactivateUrl, List<EFModels.Entities.Organization> primaryContactOrganizations)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             Person = personToView;
@@ -98,6 +99,7 @@ namespace Neptune.Web.Views.User
             UserNotificationGridName = userNotificationGridName;
             UserNotificationGridDataUrl = userNotificationGridDataUrl;
             ActivateInactivateUrl = activateInactivateUrl;
+            PrimaryContactOrganizations = primaryContactOrganizations;
         }
 
 

@@ -25,7 +25,7 @@ namespace Neptune.Web.Views.PersonOrganization
 {
     public class EditPersonOrganizationsViewData : NeptuneUserControlViewData
     {
-        public readonly List<OrganizationSimpleDto> AllOrganizations;
+        public List<OrganizationSimpleDto> AllOrganizations { get; }
 
         public EditPersonOrganizationsViewData(List<OrganizationSimpleDto> allOrganizations)
         {

@@ -41,8 +41,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
         public PartialViewResult EditPersonOrganizationPrimaryContacts([FromRoute] PersonPrimaryKey personPrimaryKey)
         {
-            var person = personPrimaryKey.EntityObject;
-            var organizationIDs = person.Organizations.Select(org => org.OrganizationID).ToList();
+            var organizationIDs = Organizations.ListByPrimaryContactPersonID(_dbContext, personPrimaryKey.PrimaryKeyValue).Select(org => org.OrganizationID).ToList();
             var viewModel = new EditPersonOrganizationsViewModel(organizationIDs);
             return ViewEditPersonOrganizations(viewModel);
         }
@@ -57,7 +56,8 @@ namespace Neptune.Web.Controllers
                 return ViewEditPersonOrganizations(viewModel);
             }
             var person = personPrimaryKey.EntityObject;
-            viewModel.UpdateModel(person, _dbContext.Organizations.ToList());
+            var organizations = _dbContext.Organizations;
+            viewModel.UpdateModel(person, organizations);
             await _dbContext.SaveChangesAsync();
             return new ModalDialogFormJsonResult();
         }

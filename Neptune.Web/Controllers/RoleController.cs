@@ -60,7 +60,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<Person> PersonWithRoleGridJsonData([FromRoute] int roleID)
         {
             var gridSpec = new PersonWithRoleGridSpec(_linkGenerator);
-            var peopleWithRole = People.ListWithRole(_dbContext, roleID);
+            var peopleWithRole = People.ListByRoleID(_dbContext, roleID);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Person>(peopleWithRole, gridSpec);
             return gridJsonNetJObjectResult;
         }
