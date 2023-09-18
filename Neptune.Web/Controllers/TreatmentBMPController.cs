@@ -330,12 +330,14 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewNew(NewViewModel viewModel)
         {
             var stormwaterJurisdictions = StormwaterJurisdictions.ListViewableByPerson(_dbContext, CurrentPerson);
+            var geometries = StormwaterJurisdictionGeometries
+                .ListByStormwaterJurisdictionIDList(_dbContext,
+                    stormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID)).Select(x => x.Geometry4326);
             var treatmentBMPTypes = TreatmentBMPTypes.List(_dbContext);
             var organizations = Organizations.List(_dbContext);
             var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext).ToList();
             var boundingBox = stormwaterJurisdictions.Any()
-                ? new BoundingBoxDto(stormwaterJurisdictions
-                    .Select(x => x.StormwaterJurisdictionGeometry.Geometry4326))
+                ? new BoundingBoxDto(geometries)
                 : new BoundingBoxDto();
             var zoomLevel = CurrentPerson.IsAdministrator() ? MapInitJson.DefaultZoomLevel : MapInitJson.DefaultZoomLevel + 2;
 
@@ -356,7 +358,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public ViewResult Edit([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMP = TreatmentBMPs.GetByID(_dbContext, treatmentBMPPrimaryKey);
             var viewModel = new EditViewModel(treatmentBMP);
             return ViewEdit(treatmentBMP, viewModel);
         }
@@ -366,7 +368,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> Edit([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditViewModel viewModel)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMP = TreatmentBMPs.GetByIDWithChangeTracking(_dbContext, treatmentBMPPrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewEdit(treatmentBMP, viewModel);
@@ -396,7 +398,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public PartialViewResult EditUpstreamBMP([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMP = TreatmentBMPs.GetByID(_dbContext, treatmentBMPPrimaryKey);
             var viewModel = new EditUpstreamBMPViewModel(treatmentBMP);
             return ViewEditUpstreamBMP(treatmentBMP, viewModel);
         }
@@ -406,7 +408,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> EditUpstreamBMP([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditUpstreamBMPViewModel viewModel)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMP = TreatmentBMPs.GetByIDWithChangeTracking(_dbContext, treatmentBMPPrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewEditUpstreamBMP(treatmentBMP, viewModel);
@@ -425,7 +427,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> RemoveUpstreamBMP([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMP = TreatmentBMPs.GetByIDWithChangeTracking(_dbContext, treatmentBMPPrimaryKey);
             await treatmentBMP.RemoveUpstreamBMP(_dbContext);
             SetMessageForDisplay("Upstream BMP successfully removed");
 
