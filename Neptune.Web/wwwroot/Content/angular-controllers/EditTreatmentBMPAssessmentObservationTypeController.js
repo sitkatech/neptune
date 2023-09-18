@@ -2,7 +2,7 @@
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     //Using this in a few places to help determine the Observation Type Schema
     //Cast to string to appease Angular's select component 
-    $scope.ObservationTypeCollectionMethodID = $scope.AngularModel.ObservationTypeCollectionMethodID.toString();
+    $scope.ObservationTypeCollectionMethodID = $scope.AngularModel.ObservationTypeCollectionMethodID == null ? "" : $scope.AngularModel.ObservationTypeCollectionMethodID.toString();
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;   
 
     var newDiscreteObservationTypeSchema = {
