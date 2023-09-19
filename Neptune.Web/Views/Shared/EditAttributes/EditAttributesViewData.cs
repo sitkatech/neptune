@@ -28,10 +28,11 @@ namespace Neptune.Web.Views.Shared.EditAttributes
         public List<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; }
         public bool MissingRequiredAttributes { get; }
 
-        public EditAttributesViewData(EFModels.Entities.TreatmentBMP treatmentBMP, CustomAttributeTypePurposeEnum customAttributeTypePurposeEnum, bool missingRequiredAttributes)
+        public EditAttributesViewData(EFModels.Entities.TreatmentBMPType treatmentBMPType,
+            CustomAttributeTypePurposeEnum customAttributeTypePurposeEnum, bool missingRequiredAttributes)
         {
             MissingRequiredAttributes = missingRequiredAttributes;
-            TreatmentBMPTypeCustomAttributeTypes = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes
+            TreatmentBMPTypeCustomAttributeTypes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes
                 .Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID == (int) customAttributeTypePurposeEnum).ToList()
                 .OrderBy(x => x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeDisplayName)
                 .ThenBy(x => x.SortOrder)

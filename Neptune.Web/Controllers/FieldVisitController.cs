@@ -344,7 +344,7 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewAttributes(FieldVisit fieldVisit, EditAttributesViewModel viewModel)
         {
             var missingRequiredAttributes = fieldVisit.TreatmentBMP.RequiredAttributeDoesNotHaveValue();
-            var editAttributesViewData = new EditAttributesViewData(fieldVisit.TreatmentBMP, CustomAttributeTypePurposeEnum.OtherDesignAttributes, missingRequiredAttributes);
+            var editAttributesViewData = new EditAttributesViewData(fieldVisit.TreatmentBMP.TreatmentBMPType, CustomAttributeTypePurposeEnum.OtherDesignAttributes, missingRequiredAttributes);
             var viewData = new AttributesViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, editAttributesViewData);
             return RazorView<Attributes, AttributesViewData, EditAttributesViewModel>(viewData, viewModel);
         }
@@ -522,7 +522,7 @@ namespace Neptune.Web.Controllers
         {
             var organizations = Organizations.ListActive(_dbContext);
             var missingRequiredAttributes = maintenanceRecord.IsMissingRequiredAttributes();
-            var editMaintenanceRecordObservationsViewData = new EditAttributesViewData(fieldVisit.TreatmentBMP, CustomAttributeTypePurposeEnum.Maintenance, missingRequiredAttributes);
+            var editMaintenanceRecordObservationsViewData = new EditAttributesViewData(fieldVisit.TreatmentBMP.TreatmentBMPType, CustomAttributeTypePurposeEnum.Maintenance, missingRequiredAttributes);
             var viewData = new EditMaintenanceRecordViewData(HttpContext, _linkGenerator, CurrentPerson, organizations, treatmentBMP, isNew, fieldVisit, editMaintenanceRecordObservationsViewData);
             return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
                 EditMaintenanceRecordViewModel>(viewData, viewModel);

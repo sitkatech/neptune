@@ -768,13 +768,15 @@ namespace Neptune.Web.Controllers
         public ViewResult EditOtherDesignAttributes([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = TreatmentBMPs.GetByID(_dbContext, treatmentBMPPrimaryKey);
+            var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMP.TreatmentBMPTypeID);
+            var customAttributes = CustomAttributes.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var customAttributeTypePurposeEnum = CustomAttributeTypePurposeEnum.OtherDesignAttributes;
             var customAttributeUpsertDtos = CustomAttributes
                 .ListByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMPPrimaryKey.PrimaryKeyValue).Where(x =>
                     x.CustomAttributeType.CustomAttributeTypePurposeID ==
                     (int)customAttributeTypePurposeEnum).Select(x => x.AsUpsertDto()).ToList();
             var viewModel = new EditAttributesViewModel(customAttributeUpsertDtos);
-            return ViewEditOtherDesignAttributes(viewModel, treatmentBMP, customAttributeTypePurposeEnum);
+            return ViewEditOtherDesignAttributes(viewModel, treatmentBMP, customAttributeTypePurposeEnum, treatmentBMPType, customAttributes);
         }
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
@@ -783,10 +785,12 @@ namespace Neptune.Web.Controllers
         public async Task<IActionResult> EditOtherDesignAttributes([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditAttributesViewModel viewModel)
         {
             var treatmentBMP = TreatmentBMPs.GetByIDWithChangeTracking(_dbContext, treatmentBMPPrimaryKey);
+            var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMP.TreatmentBMPTypeID);
+            var customAttributes = CustomAttributes.ListByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPID);
             var customAttributeTypePurposeEnum = CustomAttributeTypePurposeEnum.OtherDesignAttributes;
             if (!ModelState.IsValid)
             {
-                return ViewEditOtherDesignAttributes(viewModel, treatmentBMP, customAttributeTypePurposeEnum);
+                return ViewEditOtherDesignAttributes(viewModel, treatmentBMP, customAttributeTypePurposeEnum, treatmentBMPType, customAttributes);
             }
 
             var allCustomAttributeTypes = CustomAttributeTypes.List(_dbContext);
@@ -800,25 +804,24 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.Detail(treatmentBMP.PrimaryKey)));
         }
 
-        private ViewResult ViewEditOtherDesignAttributes(EditAttributesViewModel viewModel, TreatmentBMP treatmentBMP, CustomAttributeTypePurposeEnum customAttributeTypePurposeEnum)
+        private ViewResult ViewEditOtherDesignAttributes(EditAttributesViewModel viewModel, TreatmentBMP treatmentBMP, CustomAttributeTypePurposeEnum customAttributeTypePurposeEnum, TreatmentBMPType treatmentBMPType, ICollection<CustomAttribute> customAttributes)
         {
-            var missingRequiredAttributes = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes
+            var missingRequiredAttributes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes
                                                 .Any(x =>
                                                     x.CustomAttributeType.CustomAttributeTypePurposeID ==
                                                     (int) customAttributeTypePurposeEnum &&
                                                     x.CustomAttributeType.IsRequired &&
-                                                    !treatmentBMP
-                                                        .CustomAttributes
+                                                    !customAttributes
                                                         .Select(y => y.CustomAttributeTypeID)
                                                         .Contains(x.CustomAttributeTypeID)) ||
-                                            treatmentBMP.CustomAttributes.Any(x =>
+                                            customAttributes.Any(x =>
                                                 x.CustomAttributeType.CustomAttributeTypePurposeID ==
                                                 (int) customAttributeTypePurposeEnum &&
                                                 x.CustomAttributeType.IsRequired &&
                                                 (x.CustomAttributeValues == null ||
                                                  x.CustomAttributeValues.All(y => string.IsNullOrEmpty(y.AttributeValue)))
                                             );
-            var editAttributesViewData = new EditAttributesViewData(treatmentBMP, customAttributeTypePurposeEnum, missingRequiredAttributes);
+            var editAttributesViewData = new EditAttributesViewData(treatmentBMPType, customAttributeTypePurposeEnum, missingRequiredAttributes);
             var parentDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMP));
             var viewData = new EditOtherDesignAttributesViewData(HttpContext, _linkGenerator, CurrentPerson, parentDetailUrl, editAttributesViewData);
             return RazorView<EditOtherDesignAttributes, EditOtherDesignAttributesViewData, EditAttributesViewModel>(viewData, viewModel);
