@@ -19,10 +19,12 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
+using Neptune.Web.Common.DhtmlWrappers.DhtmlxExport;
 
 namespace Neptune.Web.Controllers
 {
@@ -47,6 +49,16 @@ namespace Neptune.Web.Controllers
             _linkGenerator = linkGenerator;
             _webConfigurationOptions = webConfiguration;
             _webConfiguration = webConfiguration.Value;
+        }
+
+        protected FileResult ExportGridToExcelImpl(string gridName, bool printFooter)
+        {
+            var generator = new ExcelWriter { PrintFooter = false };
+            var xml = Request.Form["grid_xml"].ToString();
+            xml = WebUtility.UrlDecode(xml);
+            xml = xml.Replace("<![CDATA[$", "<![CDATA["); // RL 7/11/2015 Poor man's hack to remove currency and allow for total rows
+            var stream = generator.Generate(xml);
+            return File(stream.ToArray(), generator.ContentType, $"{gridName}.xlsx");
         }
     }
 }

@@ -13,7 +13,7 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Neptune.Database", "Neptune
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose\docker-compose.dcproj", "{FD1871DB-6453-466E-A171-0C83CD29D48F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neptune.Common", "Neptune.Common\Neptune.Common.csproj", "{E14A5B40-2DD3-4287-A0A9-23B490155C19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptune.Common", "Neptune.Common\Neptune.Common.csproj", "{E14A5B40-2DD3-4287-A0A9-23B490155C19}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptune.Tests", "Neptune.Tests\Neptune.Tests.csproj", "{16074F6E-EEE4-40AC-932D-E557552E1DEC}"
 EndProject

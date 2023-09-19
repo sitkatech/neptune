@@ -51,10 +51,6 @@ namespace Neptune.Web.Common.DhtmlWrappers
 
         public static readonly IHtmlContent PlusIcon = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus-sign gi-1x blue");
         public static readonly IHtmlContent FactSheetIcon = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-search gi-1x blue");
-        public static readonly string ExcelDownloadWithFooterUrl = $"/Home/ExportGridToExcel/{0}/true";
-        public static readonly string ExcelDownloadWithoutFooterUrl = $"/Home/ExportGridToExcel/{0}/false";
-        //public static readonly UrlTemplate<string> ExcelDownloadWithFooterUrl = new UrlTemplate<string>("");//todo: new UrlTemplate<string>(SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.ExportGridToExcel(UrlTemplate.Parameter1String, true)));
-        //public static readonly UrlTemplate<string> ExcelDownloadWithoutFooterUrl = new UrlTemplate<string>("");//todo: new UrlTemplate<string>(SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.ExportGridToExcel(UrlTemplate.Parameter1String, false)));
 
         /// <summary>
         /// All grids use this
@@ -69,7 +65,7 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// <returns></returns>
         public static IHtmlContent DhtmlxGrid<T>(this IHtmlHelper htmlHelper, GridSpec<T> gridSpec, string gridName, string optionalGridDataUrl, string styleString, DhtmlxGridResizeType dhtmlxGridResizeType)
         {
-            var dhtmlxGridHeader = BuildDhtmlxGridHeader(gridSpec, gridName, ExcelDownloadWithFooterUrl, ExcelDownloadWithoutFooterUrl);
+            var dhtmlxGridHeader = BuildDhtmlxGridHeader(gridSpec, gridName);
 
             var dhtmlxGrid = DhtmlxGridImpl(gridSpec,
                 gridName,
@@ -250,10 +246,10 @@ namespace Neptune.Web.Common.DhtmlWrappers
             return string.Format(template, gridName);
         }
 
-        public static string BuildDhtmlxGridHeader<T>(GridSpec<T> gridSpec, string gridName, string excelDownloadWithFooterUrl, string excelDownloadWithoutFooterUrl)
+        public static string BuildDhtmlxGridHeader<T>(GridSpec<T> gridSpec, string gridName)
         {
             var filteredStateHtml = CreateFilteredStateHtml(gridName, gridSpec.ShowFilterBar);
-            var gridHeaderIconsHtml = CreateGridHeaderIconsHtml(gridSpec, gridName, excelDownloadWithFooterUrl, excelDownloadWithoutFooterUrl);
+            var gridHeaderIconsHtml = CreateGridHeaderIconsHtml(gridSpec, gridName);
             var arbitraryHeaderHtml = CreateArbitraryHeaderHtml(gridSpec.ArbitraryHeaderHtml, "    ");
 
             return $@"
@@ -267,10 +263,10 @@ namespace Neptune.Web.Common.DhtmlWrappers
     </span>";
         }
 
-        private static string CreateGridHeaderIconsHtml<T>(GridSpec<T> gridSpec, string gridName, string excelDownloadWithFooterUrl, string excelDownloadWithoutFooterUrl)
+        private static string CreateGridHeaderIconsHtml<T>(GridSpec<T> gridSpec, string gridName)
         {
             var clearCookiesIconHtml = CreateClearAllCookiesIconHtml(gridName);
-            var filteredExcelDownloadIconHtml = CreateFilteredExcelDownloadIconHtml(gridName, gridSpec.HasColumnTotals, excelDownloadWithFooterUrl, excelDownloadWithoutFooterUrl);
+            var filteredExcelDownloadIconHtml = CreateFilteredExcelDownloadIconHtml(gridName, gridSpec.HasColumnTotals);
             var customExcelDownloadIconHtml = CreateFullDatabaseExcelDownloadIconHtml(gridName, gridSpec.CustomExcelDownloadUrl, gridSpec.CustomExcelDownloadLinkText ?? "Download Full Database");
             var createIconHtml = CreateCreateUrlHtml(gridSpec.CreateEntityUrl, gridSpec.CreateEntityUrlClass, gridSpec.CreateEntityModalDialogForm, gridSpec.CreateEntityActionPhrase, gridSpec.ObjectNameSingular);
             var tagIconHtml = CreateVerifySelectedModalUrlHtml(gridName, gridSpec.BulkTagModalDialogForm);
@@ -450,18 +446,14 @@ namespace Neptune.Web.Common.DhtmlWrappers
         /// </summary>
         /// <param name="gridName"></param>
         /// <param name="printFooter"></param>
-        /// <param name="excelDownloadWithFooterUrl"></param>
-        /// <param name="excelDownloadWithoutFooterUrl"></param>
         /// <returns></returns>
-        public static string CreateFilteredExcelDownloadIconHtml(string gridName, bool printFooter, string? excelDownloadWithFooterUrl, string? excelDownloadWithoutFooterUrl)
+        public static string CreateFilteredExcelDownloadIconHtml(string gridName, bool printFooter)
         {
-            if (excelDownloadWithFooterUrl == null || excelDownloadWithoutFooterUrl == null) return string.Empty;
-
             return
                 String.Format(
                     @"<a class=""excelbutton"" id=""{0}DownloadLink"" href=""javascript:void(0)"" onclick=""Sitka.{0}.grid.toExcel({1})"" title=""Download this table as an Excel file"">Download Table</a>",
                     gridName,
-                    printFooter ? string.Format(excelDownloadWithFooterUrl, gridName).ToJS() : string.Format(excelDownloadWithoutFooterUrl, gridName).ToJS());
+                    $"/Home/ExportGridToExcel/{gridName}/{(printFooter ? "true" : "false")}".ToJS());
         }
 
         /// <summary>

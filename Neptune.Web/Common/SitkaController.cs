@@ -289,16 +289,6 @@ namespace Neptune.Web.Common
             return new RedirectResult(route.BuildUrlFromExpression());
         }
 
-        //protected FileResult ExportGridToExcelImpl(string gridName, bool printFooter)
-        //{
-        //    var generator = new ExcelWriter { PrintFooter = false };
-        //    var xml = Request.Form["grid_xml"];
-        //    xml = Server.UrlDecode(xml);
-        //    xml = xml.Replace("<![CDATA[$", "<![CDATA["); // RL 7/11/2015 Poor man's hack to remove currency and allow for total rows
-        //    var stream = generator.Generate(xml);
-        //    return File(stream.ToArray(), generator.ContentType, string.Format("{0}.xlsx", gridName));
-        //}
-
         /// <summary>
         /// Preferred signature for creating view results
         /// </summary>

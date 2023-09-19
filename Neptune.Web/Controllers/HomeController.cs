@@ -38,11 +38,11 @@ namespace Neptune.Web.Controllers
         {
         }
 
-        //[AnonymousUnclassifiedFeature]
-        //public FileResult ExportGridToExcel(string gridName, bool printFooter)
-        //{
-        //    return ExportGridToExcelImpl(gridName, printFooter);
-        //}
+        [HttpPost("{gridName}/{printFooter}")]
+        public FileResult ExportGridToExcel([FromRoute] string gridName, [FromRoute] bool printFooter)
+        {
+            return ExportGridToExcelImpl(gridName, printFooter);
+        }
 
         [Route("/")] // Default Route
         [HttpGet]
