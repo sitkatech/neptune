@@ -47,27 +47,25 @@ namespace Neptune.Web.Controllers
             return RazorView<Instructions, InstructionsViewData>(viewData);
         }
 
-        [HttpGet("{treatmentBMPPrimaryKey}/{treatmentBMPAssessmentObservationTypePrimaryKey}")]
+        [HttpGet("{treatmentBMPPrimaryKey}/{treatmentBMPAssessmentObservationTypeID}")]
         [TreatmentBMPManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
-        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
-        public ViewResult EditBenchmarkAndThreshold([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, [FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
+        public ViewResult EditBenchmarkAndThreshold([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, [FromRoute] int treatmentBMPAssessmentObservationTypeID)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
+            var treatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationTypes.GetByID(_dbContext, treatmentBMPAssessmentObservationTypeID);
 
             var viewModel = new EditBenchmarkAndThresholdViewModel(treatmentBMP, treatmentBMPAssessmentObservationType);
             return ViewEditBenchmarkAndThreshold(treatmentBMP, treatmentBMPAssessmentObservationType, viewModel);
         }
 
-        [HttpPost("{treatmentBMPPrimaryKey}/{treatmentBMPAssessmentObservationTypePrimaryKey}")]
+        [HttpPost("{treatmentBMPPrimaryKey}/{treatmentBMPAssessmentObservationTypeID}")]
         [TreatmentBMPManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
-        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentObservationTypePrimaryKey")]
-        public async Task<IActionResult> EditBenchmarkAndThreshold([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, [FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, EditBenchmarkAndThresholdViewModel viewModel)
+        public async Task<IActionResult> EditBenchmarkAndThreshold([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, [FromRoute] int treatmentBMPAssessmentObservationTypeID, EditBenchmarkAndThresholdViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
+            var treatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationTypes.GetByIDWithChangeTracking(_dbContext, treatmentBMPAssessmentObservationTypeID);
             if (!ModelState.IsValid)
             {
                 SetErrorForDisplay("Could not save benchmark and threshold values: Please fix validation errors to proceed.");
@@ -83,7 +81,7 @@ namespace Neptune.Web.Controllers
 
             return viewModel.AutoAdvance
                 ? GetNextObservationTypeViewResult(treatmentBMP, treatmentBMPAssessmentObservationType)
-                : RedirectToAction(new SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>(_linkGenerator, x => x.EditBenchmarkAndThreshold(treatmentBMPPrimaryKey, treatmentBMPAssessmentObservationTypePrimaryKey)));
+                : RedirectToAction(new SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>(_linkGenerator, x => x.EditBenchmarkAndThreshold(treatmentBMPPrimaryKey, treatmentBMPAssessmentObservationTypeID)));
         }
 
         private static TreatmentBMPBenchmarkAndThreshold GetExistingTreatmentBMPObservationOrCreateNew(
@@ -113,7 +111,8 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEditBenchmarkAndThreshold(TreatmentBMP treatmentBMP, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, EditBenchmarkAndThresholdViewModel viewModel)
         {
-            var viewData = new EditBenchmarkAndThresholdViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPAssessmentObservationType);
+            var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMP.TreatmentBMPTypeID);
+            var viewData = new EditBenchmarkAndThresholdViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPAssessmentObservationType, treatmentBMPType);
             return RazorView<EditBenchmarkAndThreshold, EditBenchmarkAndThresholdViewData, EditBenchmarkAndThresholdViewModel>(viewData, viewModel);
         }
 
@@ -129,7 +128,7 @@ namespace Neptune.Web.Controllers
 
             var nextObservationTypeViewResult = nextObservationType == null
                 ? RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.Detail(treatmentBMP.TreatmentBMPID)))
-                : Redirect(SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(_linkGenerator, x => x.EditBenchmarkAndThreshold(treatmentBMP, nextObservationType)));
+                : Redirect(SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(_linkGenerator, x => x.EditBenchmarkAndThreshold(treatmentBMP, nextObservationType.TreatmentBMPAssessmentObservationTypeID)));
             return nextObservationTypeViewResult;
         }
 

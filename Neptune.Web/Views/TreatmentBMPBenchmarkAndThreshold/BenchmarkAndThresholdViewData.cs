@@ -32,19 +32,21 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         public string InstructionsUrl { get; }
         public string SectionName { get; }
         public UrlTemplate<int, int> BenchmarkAndThresholdUrlTemplate { get; }
+        public EFModels.Entities.TreatmentBMPType TreatmentBMPType { get; }
 
         protected BenchmarkAndThresholdViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            EFModels.Entities.TreatmentBMP treatmentBMP)
-            : this(httpContext, linkGenerator, currentPerson, treatmentBMP, InstructionsViewData.InstructionsSectionName)
+            EFModels.Entities.TreatmentBMP treatmentBMP, EFModels.Entities.TreatmentBMPType treatmentBMPType)
+            : this(httpContext, linkGenerator, currentPerson, treatmentBMP, InstructionsViewData.InstructionsSectionName, treatmentBMPType)
         {
         }
 
         private BenchmarkAndThresholdViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.TreatmentBMP treatmentBMP, 
-            string sectionName)
+            string sectionName, EFModels.Entities.TreatmentBMPType treatmentBMPType)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
+            TreatmentBMPType = treatmentBMPType;
             InstructionsUrl = SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(linkGenerator, x => x.Instructions(treatmentBMP.TreatmentBMPID));
             SectionName = sectionName;
 
@@ -58,8 +60,8 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
                     x => x.EditBenchmarkAndThreshold(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int)));
         }
 
-        protected BenchmarkAndThresholdViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
-            : this(httpContext, linkGenerator, currentPerson, treatmentBMP, treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName)
+        protected BenchmarkAndThresholdViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, EFModels.Entities.TreatmentBMPType treatmentBMPType)
+            : this(httpContext, linkGenerator, currentPerson, treatmentBMP, treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName, treatmentBMPType)
         {            
         }
     }

@@ -22,7 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 @inherits SiteLayout
 
 @{
-    SetLayout("~/Views/Shared/SiteLayout.cshtml", ViewDataTyped);
+    SetLayout("~/Views/Shared/_Layout.cshtml", ViewDataTyped);
 }
 
 <div>
@@ -33,7 +33,7 @@ Source code is available upon request via <support@sitkatech.com>.
                     <li class="@(ViewDataTyped.SectionName == InstructionsViewData.InstructionsSectionName ? "active" : string.Empty)">
                         <a href="@ViewDataTyped.InstructionsUrl"><span style="margin-left: 22px">Instructions</span></a>
                     </li>
-                    @foreach (var treatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x=>x.TreatmentBMPAssessmentObservationType).Where(x => x.GetHasBenchmarkAndThreshold()))
+                    @foreach (var treatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMPType.GetObservationTypesForAssessment().Select(x=>x.TreatmentBMPAssessmentObservationType).Where(x => x.GetHasBenchmarkAndThreshold()))
                     {
                         <li class="@(ViewDataTyped.SectionName == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName ? "active" : string.Empty)">
                             <a href="@ViewDataTyped.BenchmarkAndThresholdUrlTemplate.ParameterReplace(ViewDataTyped.TreatmentBMP.TreatmentBMPID, treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID)">

@@ -27,16 +27,14 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
 {
     public class InstructionsViewData : BenchmarkAndThresholdViewData
     {
-        public EFModels.Entities.TreatmentBMPType TreatmentBMPType { get; }
         public const string InstructionsSectionName = "Instructions";
         public readonly string NextSectionUrl;
 
         public InstructionsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, EFModels.Entities.TreatmentBMPType treatmentBMPType)
-            : base(httpContext, linkGenerator, currentPerson, treatmentBMP)
+            : base(httpContext, linkGenerator, currentPerson, treatmentBMP, treatmentBMPType)
         {
-            TreatmentBMPType = treatmentBMPType;
             NextSectionUrl = treatmentBMPType.HasSettableBenchmarkAndThresholdValues()
-                ? SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(LinkGenerator, x => x.EditBenchmarkAndThreshold(treatmentBMP, treatmentBMPType.GetObservationTypes().First(y => y.GetHasBenchmarkAndThreshold())))
+                ? SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(LinkGenerator, x => x.EditBenchmarkAndThreshold(treatmentBMP, treatmentBMPType.GetObservationTypes().First(y => y.GetHasBenchmarkAndThreshold()).TreatmentBMPAssessmentObservationTypeID))
                 : SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMPType.TreatmentBMPTypeID));
         }
     }

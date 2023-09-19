@@ -40,8 +40,8 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         public bool TargetIsSweetSpot { get; }
 
         public EditBenchmarkAndThresholdViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP,
-            EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
-            : base(httpContext, linkGenerator, currentPerson, treatmentBMP, treatmentBMPAssessmentObservationType)
+            EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, EFModels.Entities.TreatmentBMPType treatmentBMPType)
+            : base(httpContext, linkGenerator, currentPerson, treatmentBMP, treatmentBMPAssessmentObservationType, treatmentBMPType)
         {
             BenchmarkMeasurementUnitTypeDisplayName = treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().MeasurementUnitTypeDisplayName;
             ThresholdMeasurementUnitTypeDisplayName = treatmentBMPAssessmentObservationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName;
@@ -52,7 +52,7 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
             BenchmarkDescription = treatmentBMPAssessmentObservationType.BenchmarkDescription();
             ThresholdDescription = treatmentBMPAssessmentObservationType.ThresholdDescription();
 
-            var treatmentBMPTypeAssessmentObservationType = treatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(treatmentBMPAssessmentObservationType);
+            var treatmentBMPTypeAssessmentObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationType(treatmentBMPAssessmentObservationType);
 
             DefaultBenchmarkPlaceholder = treatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue.HasValue ? "default is " + treatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue.Value : string.Empty;
             DefaultBenchmarkText = treatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue.HasValue ? $"The default value is {treatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue} {treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
