@@ -48,6 +48,7 @@ namespace Neptune.Web.Views.User
         public IHtmlContent EditRolesLink { get; }
         public IHtmlContent EditJurisdictionsLink { get; }
         public UrlTemplate<int> OrganizationDetailUrlTemplate { get; }
+        public UrlTemplate<int> JurisdictionDetailUrlTemplate { get; }
         public string RoleDetailUrl { get; }
         public List<EFModels.Entities.Organization> PrimaryContactOrganizations { get; }
 
@@ -93,6 +94,7 @@ namespace Neptune.Web.Views.User
                 : new HtmlString(string.Empty);
 
             OrganizationDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            JurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
 
 
             UserNotificationGridSpec = userNotificationGridSpec;

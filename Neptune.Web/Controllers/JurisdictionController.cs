@@ -28,6 +28,7 @@ using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.MvcResults;
+using Neptune.Web.Models;
 using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.TreatmentBMP;
 using Detail = Neptune.Web.Views.Jurisdiction.Detail;
@@ -110,7 +111,8 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail([FromRoute] StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey)
         {
             var stormwaterJurisdiction = StormwaterJurisdictions.GetByID(_dbContext, stormwaterJurisdictionPrimaryKey);
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, stormwaterJurisdiction);
+            var usersAssignedToJurisdiction = StormwaterJurisdictionPeople.ListByStormwaterJurisdictionID(_dbContext, stormwaterJurisdiction.StormwaterJurisdictionID).Select(x => x.Person).ToList();
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, stormwaterJurisdiction, usersAssignedToJurisdiction);
             return RazorView<Detail, DetailViewData>(viewData);        
         }
 

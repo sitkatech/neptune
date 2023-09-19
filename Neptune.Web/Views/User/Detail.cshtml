@@ -165,7 +165,7 @@
                         @foreach (var jurisdiction in ViewDataTyped.Person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction))
                         {
                             <li>
-                                <a href="@ViewDataTyped.OrganizationDetailUrlTemplate.ParameterReplace(jurisdiction.OrganizationID)">@jurisdiction.Organization.GetDisplayName()</a>
+                                <a href="@ViewDataTyped.JurisdictionDetailUrlTemplate.ParameterReplace(jurisdiction.StormwaterJurisdictionID)">@jurisdiction.Organization.GetDisplayName()</a>
                             </li>
                         }
                     </ul>

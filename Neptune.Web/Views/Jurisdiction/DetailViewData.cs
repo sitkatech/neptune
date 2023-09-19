@@ -45,7 +45,7 @@ namespace Neptune.Web.Views.Jurisdiction
         public UrlTemplate<int> OrganizationDetailUrlTemplate { get; }
 
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, StormwaterJurisdiction stormwaterJurisdiction) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools) 
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, StormwaterJurisdiction stormwaterJurisdiction, List<Person> usersAssignedToJurisdiction) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools) 
         {
             StormwaterJurisdiction = stormwaterJurisdiction;
             PageTitle = stormwaterJurisdiction.GetOrganizationDisplayName();
@@ -63,7 +63,7 @@ namespace Neptune.Web.Views.Jurisdiction
             TreatmentBMPGridName = "jurisdictionTreatmentBMPGrid";
             TreatmentBMPGridDataUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(LinkGenerator, x => x.JurisdictionTreatmentBMPGridJsonData(stormwaterJurisdiction));
 
-            UsersAssignedToJurisdiction = StormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdictionExceptSitka().ToList();   
+            UsersAssignedToJurisdiction = usersAssignedToJurisdiction;
             UserHasJurisdictionEditPermissions = new NeptuneAdminFeature().HasPermissionByPerson(CurrentPerson);
 
             EditStormwaterJurisdictionLink = UserHasJurisdictionEditPermissions

@@ -29,16 +29,6 @@ namespace Neptune.Web.Models
 {
     public static class StormwaterJurisdictionModelExtensions
     {
-        public static List<Person> PeopleWhoCanManageStormwaterJurisdiction(this StormwaterJurisdiction stormwaterJurisdiction)
-        {
-            return stormwaterJurisdiction.StormwaterJurisdictionPeople.Select(x => x.Person).ToList();
-        }
-
-        public static List<Person> PeopleWhoCanManageStormwaterJurisdictionExceptSitka(this StormwaterJurisdiction stormwaterJurisdiction)
-        {
-            return stormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdiction().ToList();
-        }
-        
         public static LayerGeoJson GetBoundaryLayerGeoJson(NeptuneDbContext dbContext, bool clickThrough, LinkGenerator linkGenerator)
         {
             // all jurisdictions are Organization Type "Local"

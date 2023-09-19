@@ -59,4 +59,12 @@ public static class StormwaterJurisdictionPeople
         return dbContext.StormwaterJurisdictionPeople.AsNoTracking().GroupBy(x => x.StormwaterJurisdictionID).Select(x => new { x.Key, Count = x.Count() })
             .ToDictionary(x => x.Key, x => x.Count);
     }
+
+    public static List<StormwaterJurisdictionPerson> ListByStormwaterJurisdictionID(NeptuneDbContext dbContext, int stormwaterJurisdictionID)
+    {
+        return dbContext.StormwaterJurisdictionPeople
+            .Include(x => x.Person)
+            .ThenInclude(x => x.Organization)
+            .AsNoTracking().Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID).ToList();
+    }
 }

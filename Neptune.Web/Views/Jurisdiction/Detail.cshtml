@@ -70,6 +70,7 @@
                                         @if (new UserViewFeature().HasPermission(ViewDataTyped.CurrentPerson, person).HasPermission)
                                         {
                                             <a href="@ViewDataTyped.UserDetailUrlTemplate.ParameterReplace(person.PersonID)">@person.GetFullNameFirstLast()</a>
+                                            @:-
                                             <a href="@ViewDataTyped.OrganizationDetailUrlTemplate.ParameterReplace(person.OrganizationID)">@person.Organization.GetDisplayName()</a>
                                         }
                                         else
