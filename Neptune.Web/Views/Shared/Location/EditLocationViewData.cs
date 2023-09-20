@@ -19,36 +19,17 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
-using Neptune.Web.Controllers;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.Shared.Location
 {
-    public class EditLocationViewData : NeptuneViewData
+    public class EditLocationViewData : NeptuneUserControlViewData
     {
         public MapInitJson MapInitJson { get; }
         public string MapFormID { get; }
-        public EFModels.Entities.TreatmentBMP TreatmentBMP { get; }
 
-        public EditLocationViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            EFModels.Entities.TreatmentBMP treatmentBMP,
-            MapInitJson mapInitJson,
-            string mapFormID) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditLocationViewData(MapInitJson mapInitJson, string mapFormID)
         {
-            EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.FindABMP());
-            EntityUrl = treatmentBMPIndexUrl;
-            if (treatmentBMP != null)
-            {
-                SubEntityName = treatmentBMP.TreatmentBMPName;
-                SubEntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP));
-                TreatmentBMP = treatmentBMP;
-            }
-
-            PageTitle = "Edit Location";
-
             MapInitJson = mapInitJson;
             MapFormID = mapFormID;
             TreatmentBMPInformationContainer = $"{mapInitJson.MapDivID}LocationInformationContainer";

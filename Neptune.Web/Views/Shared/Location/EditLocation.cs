@@ -24,8 +24,7 @@ using Neptune.Web.Common.HtmlHelperExtensions;
 
 namespace Neptune.Web.Views.Shared.Location
 {
-    public abstract class
-        EditLocation : Common.Mvc.TypedWebPartialViewPage<EditLocationViewData, EditLocationViewModel>
+    public abstract class EditLocation : Common.Mvc.TypedWebPartialViewPage<EditLocationViewData, EditLocationViewModel>
     {
         public static void RenderPartialView(IHtmlHelper html, EditLocationViewData viewData,
             EditLocationViewModel viewModel)

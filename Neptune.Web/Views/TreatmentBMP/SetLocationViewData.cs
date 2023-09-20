@@ -22,17 +22,34 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using Neptune.Web.Models;
+using Neptune.Web.Views.Shared.Location;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public class EditLocationViewData : Shared.Location.EditLocationViewData
+    public class SetLocationViewData : NeptuneViewData
     {
-        public EditLocationViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            EFModels.Entities.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, string mapFormID) : base(httpContext, linkGenerator, currentPerson, treatmentBMP, mapInitJson, mapFormID)
+        public SetLocationViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.TreatmentBMP treatmentBMP, EditLocationViewData editLocationViewData) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
+            EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
+            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.FindABMP());
+            EntityUrl = treatmentBMPIndexUrl;
+            if (treatmentBMP != null)
+            {
+                SubEntityName = treatmentBMP.TreatmentBMPName;
+                SubEntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP));
+                TreatmentBMP = treatmentBMP;
+            }
+
+            PageTitle = "Edit Location";
             TreatmentBMPDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP));
+
+            EditLocationViewData = editLocationViewData;
         }
 
+        public EFModels.Entities.TreatmentBMP TreatmentBMP { get; }
         public string TreatmentBMPDetailUrl { get; }
+        public EditLocationViewData EditLocationViewData { get; }
     }
 }

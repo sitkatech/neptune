@@ -8,7 +8,7 @@ using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public class NewViewModel : EditLocationViewModel, IValidatableObject
+    public class NewViewModel : SetLocationViewModel, IValidatableObject
     {
         public int TreatmentBMPID { get; set; }
 

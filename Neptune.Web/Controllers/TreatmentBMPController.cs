@@ -41,6 +41,7 @@ using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Services.Filters;
 using Neptune.Web.Views.Shared.EditAttributes;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
+using Neptune.Web.Views.Shared.Location;
 using Neptune.Web.Views.Shared.ModeledPerformance;
 using Detail = Neptune.Web.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMP.DetailViewData;
@@ -346,7 +347,7 @@ namespace Neptune.Web.Controllers
                 {
                     AllowFullScreen = false
                 };
-            var editLocationViewData = new Views.Shared.Location.EditLocationViewData(HttpContext, _linkGenerator, CurrentPerson, null, mapInitJson, "treatmentBMPLocation");
+            var editLocationViewData = new EditLocationViewData(mapInitJson, "treatmentBMPLocation");
             var waterQualityManagementPlans = WaterQualityManagementPlans.ListViewableByPerson(_dbContext, CurrentPerson);
 
             var viewData = new NewViewData(HttpContext, _linkGenerator, CurrentPerson, stormwaterJurisdictions, treatmentBMPTypes, organizations, editLocationViewData, waterQualityManagementPlans, TreatmentBMPLifespanType.All, TrashCaptureStatusType.All, SizingBasisType.All);
@@ -823,7 +824,7 @@ namespace Neptune.Web.Controllers
                                             );
             var editAttributesViewData = new EditAttributesViewData(treatmentBMPType, customAttributeTypePurposeEnum, missingRequiredAttributes);
             var parentDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMP));
-            var viewData = new EditOtherDesignAttributesViewData(HttpContext, _linkGenerator, CurrentPerson, parentDetailUrl, editAttributesViewData);
+            var viewData = new EditOtherDesignAttributesViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, parentDetailUrl, editAttributesViewData);
             return RazorView<EditOtherDesignAttributes, EditOtherDesignAttributesViewData, EditAttributesViewModel>(viewData, viewModel);
         }
 
@@ -918,11 +919,11 @@ namespace Neptune.Web.Controllers
         public ViewResult EditLocation([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var viewModel = new EditLocationViewModel(treatmentBMP);
+            var viewModel = new SetLocationViewModel(treatmentBMP);
             return ViewEditLocation(treatmentBMP, viewModel);
         }
 
-        private ViewResult ViewEditLocation(TreatmentBMP treatmentBMP, EditLocationViewModel viewModel)
+        private ViewResult ViewEditLocation(TreatmentBMP treatmentBMP, SetLocationViewModel viewModel)
         {
             var mapFormID = "treatmentBMPEditLocation";
             var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext).ToList();
@@ -941,15 +942,16 @@ namespace Neptune.Web.Controllers
                     AllowFullScreen = false
                 };
 
-            var viewData = new EditLocationViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, mapInitJson, mapFormID);
+            var editLocationViewData = new EditLocationViewData(mapInitJson, mapFormID);
+            var viewData = new SetLocationViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, editLocationViewData);
 
-            return RazorView<EditLocation, EditLocationViewData, EditLocationViewModel>(viewData, viewModel);
+            return RazorView<SetLocation, SetLocationViewData, SetLocationViewModel>(viewData, viewModel);
         }
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
-        public async Task<IActionResult> EditLocation([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditLocationViewModel viewModel)
+        public async Task<IActionResult> EditLocation([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, SetLocationViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
 
@@ -980,7 +982,7 @@ namespace Neptune.Web.Controllers
         [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
-        public async Task<JsonResult> EditLocationFromDelineationMap([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditLocationViewModel viewModel)
+        public async Task<JsonResult> EditLocationFromDelineationMap([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, SetLocationViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
 

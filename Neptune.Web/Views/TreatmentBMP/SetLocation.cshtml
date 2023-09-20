@@ -21,7 +21,7 @@
 @using Neptune.Web.Common.BootstrapWrappers
 @using Neptune.Web.Views.Shared
 
-@inherits Neptune.Web.Views.TreatmentBMP.EditLocation
+@inherits Neptune.Web.Views.TreatmentBMP.SetLocation
 
 @section JavascriptAndStylesContent
 {
@@ -35,7 +35,7 @@
     <div class="formPage">
         @using (Html.BeginForm())
         {
-            Neptune.Web.Views.Shared.Location.EditLocation.RenderPartialView(Html, ViewDataTyped, Model);
+            Neptune.Web.Views.Shared.Location.EditLocation.RenderPartialView(Html, ViewDataTyped.EditLocationViewData, Model);
             <hr />
             <div class="row">
                 <div class="col-xs-12 col-sm-2">

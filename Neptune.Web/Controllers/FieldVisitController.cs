@@ -259,7 +259,7 @@ namespace Neptune.Web.Controllers
                 {
                     AllowFullScreen = false
                 };
-            var editLocationViewData = new EditLocationViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, mapInitJson, "treatmentBMPLocation");
+            var editLocationViewData = new EditLocationViewData(mapInitJson, "treatmentBMPLocation");
             var viewData = new LocationViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, editLocationViewData);
 
             return RazorView<Location, LocationViewData, LocationViewModel>(viewData, viewModel);

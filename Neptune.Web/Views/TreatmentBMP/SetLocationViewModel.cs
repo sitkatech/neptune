@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="EditLocation.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="EditLocationViewModel.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -21,7 +21,20 @@ Source code is available upon request via <support@sitkatech.com>.
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public abstract class EditLocation : Common.Mvc.TypedWebViewPage<EditLocationViewData, EditLocationViewModel>
+    public class SetLocationViewModel : Shared.Location.EditLocationViewModel
     {
+        /// <summary>
+        /// Needed by ModelBinder
+        /// </summary>
+        public SetLocationViewModel()
+        {
+
+        }
+
+        public SetLocationViewModel(EFModels.Entities.TreatmentBMP treatmentBMP)
+        {
+            TreatmentBMPPointY = treatmentBMP.LocationPoint4326.Coordinate.Y;
+            TreatmentBMPPointX = treatmentBMP.LocationPoint4326.Coordinate.X;
+        }
     }
 }
