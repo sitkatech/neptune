@@ -132,10 +132,11 @@ namespace Neptune.Web.Controllers
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
                 boundingBoxDto);
 
-            if (treatmentBMPs.Any(x => x.Delineation != null))
+            var treatmentBMPDelineations =
+                Delineations.ListByTreatmentBMPIDList(_dbContext, treatmentBMPs.Select(x => x.TreatmentBMPID));
+            if (treatmentBMPDelineations.Any())
             {
-                mapInitJson.Layers.Add(StormwaterMapInitJson.MakeDelineationLayerGeoJson(
-                    treatmentBMPs.Where(x => x.Delineation != null).Select(x => x.Delineation)));
+                mapInitJson.Layers.Add(StormwaterMapInitJson.MakeDelineationLayerGeoJson(treatmentBMPDelineations));
             }
 
             var waterQualityManagementPlanVerifies = WaterQualityManagementPlanVerifies.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.PrimaryKey);
@@ -150,7 +151,7 @@ namespace Neptune.Web.Controllers
             var waterQualityManagementPlanModelingApproaches = WaterQualityManagementPlanModelingApproach.All;
 
             var hruCharacteristics = waterQualityManagementPlan.GetHRUCharacteristics(_dbContext).ToList();
-            var hruCharacteristicsViewData = new HRUCharacteristicsViewData(waterQualityManagementPlan, hruCharacteristics);
+            var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
             var sourceControlBMPs = SourceControlBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID)
                 .Where(x => x.SourceControlBMPNote != null || (x.IsPresent != null && x.IsPresent == true))
                 .OrderBy(x => x.SourceControlBMPAttributeID)
@@ -164,7 +165,7 @@ namespace Neptune.Web.Controllers
                 waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
                 waterQualityManagementPlanVerifyTreatmentBMP,
                 hruCharacteristicsViewData,
-                dryWeatherFlowOverrides, waterQualityManagementPlanModelingApproaches, modeledPerformanceViewData, sourceControlBMPs, quickBmps);
+                dryWeatherFlowOverrides, waterQualityManagementPlanModelingApproaches, modeledPerformanceViewData, sourceControlBMPs, quickBmps, treatmentBMPDelineations);
 
             return RazorView<Detail, DetailViewData>(viewData);
         }

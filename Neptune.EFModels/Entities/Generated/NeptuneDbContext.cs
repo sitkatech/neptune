@@ -249,6 +249,8 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<vTreatmentBMPDetailed> vTreatmentBMPDetaileds { get; set; }
 
+    public virtual DbSet<vTreatmentBMPUpstream> vTreatmentBMPUpstreams { get; set; }
+
     public virtual DbSet<vViewTreatmentBMPModelingAttribute> vViewTreatmentBMPModelingAttributes { get; set; }
 
     public virtual DbSet<vWaterQualityManagementPlanDetailed> vWaterQualityManagementPlanDetaileds { get; set; }
@@ -1156,6 +1158,11 @@ public partial class NeptuneDbContext : DbContext
         modelBuilder.Entity<vTreatmentBMPDetailed>(entity =>
         {
             entity.ToView("vTreatmentBMPDetailed");
+        });
+
+        modelBuilder.Entity<vTreatmentBMPUpstream>(entity =>
+        {
+            entity.ToView("vTreatmentBMPUpstream");
         });
 
         modelBuilder.Entity<vViewTreatmentBMPModelingAttribute>(entity =>

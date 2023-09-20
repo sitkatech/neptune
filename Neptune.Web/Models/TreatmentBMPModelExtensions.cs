@@ -243,15 +243,10 @@ namespace Neptune.Web.Models
             return attributesTable;
         }
 
-        public static string GetDelineationAreaString(this TreatmentBMP treatmentBMP)
-        {
-            return (treatmentBMP.Delineation?.DelineationGeometry.Area * Constants.SquareMetersToAcres)?.ToString("0.00") ?? "-";
-        }
-
-        public static string GetDelineationStatus(this TreatmentBMP treatmentBMP)
-        {
-            return treatmentBMP.Delineation != null ? treatmentBMP.Delineation.IsVerified ? "Verified" : "Provisional" : "None";
-        }
+        //public static string GetDelineationAreaString(this TreatmentBMP treatmentBMP)
+        //{
+        //    return (treatmentBMP.Delineation?.DelineationGeometry.Area * Constants.SquareMetersToAcres)?.ToString("0.00") ?? "-";
+        //}
 
         /// <summary>
         /// Performs the RSB trace for a given Treatment BMP using the EPSG 4326 representation of the regional subbasin geometries
@@ -329,9 +324,9 @@ namespace Neptune.Web.Models
             }
         }
 
-        public static void UpdatedCentralizedBMPDelineationIfPresent(this TreatmentBMP treatmentBMP, NeptuneDbContext dbContext)
+        public static void UpdatedCentralizedBMPDelineationIfPresent(this TreatmentBMP treatmentBMP, NeptuneDbContext dbContext, Delineation? delineation)
         {
-            if (treatmentBMP.Delineation == null || treatmentBMP.Delineation.DelineationTypeID != (int)DelineationTypeEnum.Centralized)
+            if (delineation is not { DelineationTypeID: (int)DelineationTypeEnum.Centralized })
             {
                 return;
             }
@@ -339,178 +334,55 @@ namespace Neptune.Web.Models
             var updated4326Geometry =
                 treatmentBMP.GetCentralizedDelineationGeometry4326(dbContext);
 
-            if (updated4326Geometry == null || !updated4326Geometry.EqualsExact(treatmentBMP.Delineation.DelineationGeometry4326))
+            if (updated4326Geometry == null || !updated4326Geometry.EqualsExact(delineation.DelineationGeometry4326))
             {
-                var oldShape = treatmentBMP.Delineation.DelineationGeometry;
+                var oldShape = delineation.DelineationGeometry;
                 var newShape = treatmentBMP.GetCentralizedDelineationGeometry2771(dbContext);
                 if (updated4326Geometry != null)
                 {
-                    treatmentBMP.Delineation.DelineationGeometry = newShape;
-                    treatmentBMP.Delineation.DelineationGeometry4326 = updated4326Geometry;
-                    treatmentBMP.Delineation.IsVerified = false;
-                    treatmentBMP.Delineation.DateLastModified = DateTime.Now;
+                    delineation.DelineationGeometry = newShape;
+                    delineation.DelineationGeometry4326 = updated4326Geometry;
+                    delineation.IsVerified = false;
+                    delineation.DateLastModified = DateTime.Now;
                 }
                 else
                 {
-                    treatmentBMP.Delineation.DeleteDelineation(dbContext);
+                    delineation.DeleteDelineation(dbContext);
                 }
             }
         }
 
-        public static bool HasVerifiedDelineationForModelingPurposes(this TreatmentBMP treatmentBMP, List<int> treatmentBmpiDsTraversed)
+        public static bool HasVerifiedDelineationForModelingPurposes(this TreatmentBMP treatmentBMP, List<int> treatmentBmpIDsTraversed, Delineation? delineation)
         {
-            if (treatmentBMP.UpstreamBMP != null)
-            {
-                if (treatmentBmpiDsTraversed.Contains(treatmentBMP.TreatmentBMPID))
-                {
-                    throw new OverflowException($"Infinite loop detected!  TreatmentBMPID {treatmentBMP.TreatmentBMPID} already in list of traversed TreatmentBMPIDs ({string.Join(", ", treatmentBmpiDsTraversed)})");
-                }
-                treatmentBmpiDsTraversed.Add(treatmentBMP.TreatmentBMPID);
-                return treatmentBMP.UpstreamBMP.HasVerifiedDelineationForModelingPurposes(treatmentBmpiDsTraversed);
-            }
-
             //Project BMPs don't need verified delineations
             if (treatmentBMP.ProjectID != null)
             {
                 return true;
             }
 
-            return treatmentBMP.Delineation?.IsVerified ?? false;
+            if (treatmentBMP.UpstreamBMP != null)
+            {
+                if (treatmentBmpIDsTraversed.Contains(treatmentBMP.TreatmentBMPID))
+                {
+                    throw new OverflowException($"Infinite loop detected!  TreatmentBMPID {treatmentBMP.TreatmentBMPID} already in list of traversed TreatmentBMPIDs ({string.Join(", ", treatmentBmpIDsTraversed)})");
+                }
+                treatmentBmpIDsTraversed.Add(treatmentBMP.TreatmentBMPID);
+                return treatmentBMP.UpstreamBMP.HasVerifiedDelineationForModelingPurposes(treatmentBmpIDsTraversed, treatmentBMP.UpstreamBMP.Delineation);
+            }
+
+            return delineation?.IsVerified ?? false;
         }
 
         public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP)
         {
-            if (!treatmentBMP.HasVerifiedDelineationForModelingPurposes(new List<int>()))
+            if (!treatmentBMP.HasVerifiedDelineationForModelingPurposes(new List<int>(), treatmentBMP.Delineation))
             {
                 return false;
             }
 
-            if (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType == null)
-            {
-                return false;
-            }
-
-            var bmpModelingType = treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.ToEnum;
-            var bmpModelingAttributes = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
-
-            if (bmpModelingAttributes != null)
-            {
-                if (bmpModelingType ==
-                    TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain && (
-                        !bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                        (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                         !bmpModelingAttributes.DiversionRate.HasValue) ||
-                        !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                        !bmpModelingAttributes.StorageVolumeBelowLowestOutletElevation.HasValue ||
-                        !bmpModelingAttributes.MediaBedFootprint.HasValue ||
-                        !bmpModelingAttributes.DesignMediaFiltrationRate.HasValue))
-                {
-                    return false;
-                }
-                else if ((bmpModelingType == TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.InfiltrationBasin ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.InfiltrationTrench ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.PermeablePavement ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.UndergroundInfiltration) &&
-                         (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                          (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                           !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                          !bmpModelingAttributes.InfiltrationSurfaceArea.HasValue ||
-                          !bmpModelingAttributes.UnderlyingInfiltrationRate.HasValue))
-                {
-                    return false;
-                }
-                else if ((bmpModelingType ==
-                          TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.SandFilters) &&
-                         (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                          (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                           !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                          !bmpModelingAttributes.MediaBedFootprint.HasValue ||
-                          !bmpModelingAttributes.DesignMediaFiltrationRate.HasValue))
-                {
-                    return false;
-                }
-                else if (bmpModelingType == TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse &&
-                         (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                          (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                           !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.TotalEffectiveBMPVolume.HasValue ||
-                          !bmpModelingAttributes.WinterHarvestedWaterDemand.HasValue ||
-                          !bmpModelingAttributes.SummerHarvestedWaterDemand.HasValue))
-                {
-                    return false;
-                }
-                else if ((bmpModelingType == TreatmentBMPModelingTypeEnum.ConstructedWetland ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.WetDetentionBasin) &&
-                         (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                          (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                           !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.PermanentPoolorWetlandVolume.HasValue ||
-                          !bmpModelingAttributes.WaterQualityDetentionVolume.HasValue))
-                {
-                    return false;
-                }
-                else if ((bmpModelingType == TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.FlowDurationControlBasin ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.FlowDurationControlTank) &&
-                         (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                          (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                           !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.DrawdownTimeforWQDetentionVolume.HasValue ||
-                          !bmpModelingAttributes.StorageVolumeBelowLowestOutletElevation.HasValue ||
-                          !bmpModelingAttributes.EffectiveFootprint.HasValue))
-                {
-                    return false;
-                }
-                else if (bmpModelingType == TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems &&
-                         (!bmpModelingAttributes.DesignDryWeatherTreatmentCapacity.HasValue &&
-                          !bmpModelingAttributes.AverageTreatmentFlowrate.HasValue))
-                {
-                    return false;
-                }
-                else if (bmpModelingType == TreatmentBMPModelingTypeEnum.Drywell &&
-                         (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                          (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                           !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.TotalEffectiveDrywellBMPVolume.HasValue ||
-                          !bmpModelingAttributes.InfiltrationDischargeRate.HasValue))
-                {
-                    return false;
-                }
-                else if ((bmpModelingType == TreatmentBMPModelingTypeEnum.HydrodynamicSeparator ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl) &&
-                         !bmpModelingAttributes.TreatmentRate.HasValue)
-                {
-                    return false;
-                }
-                else if (bmpModelingType == TreatmentBMPModelingTypeEnum.LowFlowDiversions &&
-                         (!bmpModelingAttributes.DesignLowFlowDiversionCapacity.HasValue &&
-                          !bmpModelingAttributes.AverageDivertedFlowrate.HasValue))
-                {
-                    return false;
-                }
-                else if ((bmpModelingType == TreatmentBMPModelingTypeEnum.VegetatedFilterStrip ||
-                          bmpModelingType == TreatmentBMPModelingTypeEnum.VegetatedSwale) &&
-                         (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
-                          (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
-                           !bmpModelingAttributes.DiversionRate.HasValue) ||
-                          !bmpModelingAttributes.TreatmentRate.HasValue ||
-                          !bmpModelingAttributes.WettedFootprint.HasValue ||
-                          !bmpModelingAttributes.EffectiveRetentionDepth.HasValue))
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-
-            return true;
+            var treatmentBMPType = treatmentBMP.TreatmentBMPType;
+            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
+            return !treatmentBMPType.HasMissingModelingAttributes(treatmentBMPModelingAttribute);
         }
 
         public static void SetTreatmentBMPPointInPolygonDataByLocationPoint(this TreatmentBMP treatmentBMP,
@@ -526,14 +398,6 @@ namespace Neptune.Web.Models
                 .FirstOrDefault(x => locationPoint.Intersects(x.CatchmentGeometry))?.RegionalSubbasinID;
         }
 
-        public static HtmlString GetDelineationTypeDisplay(this TreatmentBMP treatmentBMP)
-        {
-            var delineationType = treatmentBMP.Delineation?.DelineationType;
-            return delineationType != null
-                ? new HtmlString(delineationType?.DelineationTypeDisplayName)
-                : new HtmlString("<p class='systemText'>No Delineation Provided</p>");
-        }
-
         public static void MarkInventoryAsProvisionalIfNonManager(this TreatmentBMP treatmentBMP, Person person)
         {
             var isAssignedToStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
@@ -544,14 +408,14 @@ namespace Neptune.Web.Models
             treatmentBMP.InventoryLastChangedDate = DateTime.Now;
         }
 
-        public static IEnumerable<HRUCharacteristic> GetHRUCharacteristics(this TreatmentBMP treatmentBMP, NeptuneDbContext dbContext)
+        public static IEnumerable<HRUCharacteristic> GetHRUCharacteristics(this TreatmentBMP treatmentBMP, NeptuneDbContext dbContext, Delineation? delineation)
         {
-            if (treatmentBMP.Delineation == null)
+            if (delineation == null)
             {
                 return new List<HRUCharacteristic>();
             }
 
-            if (treatmentBMP.Delineation.DelineationType == DelineationType.Centralized && treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType != null)
+            if (delineation.DelineationType == DelineationType.Centralized && !treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID.HasValue)
             {
                 var catchmentRegionalSubbasins = treatmentBMP.GetRegionalSubbasin(dbContext).TraceUpstreamCatchmentsReturnIDList(dbContext);
 

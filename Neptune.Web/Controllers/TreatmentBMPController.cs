@@ -178,118 +178,33 @@ namespace Neptune.Web.Controllers
             var mapInitJson = new TreatmentBMPDetailMapInitJson("StormwaterDetailMap", treatmentBMP.LocationPoint4326, _dbContext);
             mapInitJson.Layers.Add(
                 StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] {treatmentBMP}, false, true, _linkGenerator));
-            if (treatmentBMP.Delineation?.DelineationGeometry != null || treatmentBMP.UpstreamBMP?.Delineation?.DelineationGeometry != null)
+            var treatmentBMPTree = _dbContext.vTreatmentBMPUpstreams.AsNoTracking()
+                .Single(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID);
+
+            var upstreamestBMP = treatmentBMPTree.UpstreamBMPID.HasValue ? TreatmentBMPs.GetByID(_dbContext, treatmentBMPTree.UpstreamBMPID) : null;
+            var delineation = Delineations.GetByTreatmentBMPID(_dbContext, upstreamestBMP?.TreatmentBMPID ?? treatmentBMP.TreatmentBMPID);
+            if (delineation?.DelineationGeometry != null)
             {
-                mapInitJson.DelineationLayer =
-                    StormwaterMapInitJson.MakeTreatmentBMPDelineationLayerGeoJson(treatmentBMP.UpstreamBMP ?? treatmentBMP);
+                mapInitJson.DelineationLayer = StormwaterMapInitJson.MakeTreatmentBMPDelineationLayerGeoJson(delineation);
             }
+            var delineationOverlapDelineations = delineation?.DelineationOverlapDelineations;
 
             var carouselImages = TreatmentBMPImages.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var imageCarouselViewData = new ImageCarouselViewData(carouselImages, 400, _linkGenerator);
-            var verifiedUnverifiedUrl =
-                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.VerifyInventory(treatmentBMPPrimaryKey));
-
-            var entityWithHRUCharacteristics = treatmentBMP.UpstreamBMP ?? treatmentBMP;
+            var verifiedUnverifiedUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.VerifyInventory(treatmentBMPPrimaryKey));
 
             var modelingResultsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.GetModelResults(treatmentBMP));
             var modeledBMPPerformanceViewData = new ModeledPerformanceViewData(_linkGenerator, modelingResultsUrl, "To BMP");
-            var hruCharacteristics = entityWithHRUCharacteristics.GetHRUCharacteristics(_dbContext).ToList();
-            var hruCharacteristicsViewData = new HRUCharacteristicsViewData(entityWithHRUCharacteristics, hruCharacteristics);
+            var hruCharacteristics = (upstreamestBMP ?? treatmentBMP).GetHRUCharacteristics(_dbContext, delineation).ToList();
+            var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
             var otherTreatmentBmpsExistInSubbasin = treatmentBMP.GetRegionalSubbasin(_dbContext)?.GetTreatmentBMPs(_dbContext).Any(x => x.TreatmentBMPID != treatmentBMP.TreatmentBMPID) ?? false;
             var customAttributes = CustomAttributes.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var fundingEvents = FundingEvents.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var treatmentBMPBenchmarkAndThresholds = TreatmentBMPBenchmarkAndThresholds.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var treatmentBMPDocuments = TreatmentBMPDocuments.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPType, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl, hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, otherTreatmentBmpsExistInSubbasin, HasMissingModelingAttributes(treatmentBMP), customAttributes, fundingEvents, treatmentBMPBenchmarkAndThresholds, treatmentBMPDocuments);
+            var hasMissingModelingAttributes = treatmentBMPType.HasMissingModelingAttributes(treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPType, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl, hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, otherTreatmentBmpsExistInSubbasin, hasMissingModelingAttributes, customAttributes, fundingEvents, treatmentBMPBenchmarkAndThresholds, treatmentBMPDocuments, delineation, delineationOverlapDelineations, upstreamestBMP);
             return RazorView<Detail, DetailViewData>(viewData);
-        }
-
-        private static bool HasMissingModelingAttributes(TreatmentBMP treatmentBMP)
-        {
-            var treatmentBMPType = treatmentBMP.TreatmentBMPType;
-            if (!treatmentBMPType.IsAnalyzedInModelingModule)
-            {
-                return false;
-            }
-
-            var treatmentBMPModelingTypeEnum = treatmentBMPType.TreatmentBMPModelingType.ToEnum;
-            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
-            if (treatmentBMPModelingAttribute != null)
-            {
-                var hasNoRoutingConfigurationAndOffline = !treatmentBMPModelingAttribute.RoutingConfigurationID.HasValue ||
-                        treatmentBMPModelingAttribute is { RoutingConfigurationID: (int)RoutingConfigurationEnum.Offline, DiversionRate: null };
-                switch (treatmentBMPModelingTypeEnum)
-                {
-                    case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
-                        return hasNoRoutingConfigurationAndOffline ||
-                               !treatmentBMPModelingAttribute.TotalEffectiveBMPVolume.HasValue ||
-                               !treatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation.HasValue ||
-                               !treatmentBMPModelingAttribute.MediaBedFootprint.HasValue ||
-                               !treatmentBMPModelingAttribute.DesignMediaFiltrationRate.HasValue;
-                    case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
-                    case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
-                    case TreatmentBMPModelingTypeEnum.InfiltrationTrench:
-                    case TreatmentBMPModelingTypeEnum.PermeablePavement:
-                    case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
-                        return hasNoRoutingConfigurationAndOffline ||
-                               !treatmentBMPModelingAttribute.TotalEffectiveBMPVolume.HasValue ||
-                               !treatmentBMPModelingAttribute.InfiltrationSurfaceArea.HasValue ||
-                               !treatmentBMPModelingAttribute.UnderlyingInfiltrationRate.HasValue;
-                        break;
-                    case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
-                    case TreatmentBMPModelingTypeEnum.SandFilters:
-                        return hasNoRoutingConfigurationAndOffline ||
-                               !treatmentBMPModelingAttribute.TotalEffectiveBMPVolume.HasValue ||
-                               !treatmentBMPModelingAttribute.MediaBedFootprint.HasValue ||
-                               !treatmentBMPModelingAttribute.DesignMediaFiltrationRate.HasValue;
-                    case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
-                        return hasNoRoutingConfigurationAndOffline ||
-                               !treatmentBMPModelingAttribute.TotalEffectiveBMPVolume.HasValue ||
-                               !treatmentBMPModelingAttribute.WinterHarvestedWaterDemand.HasValue ||
-                               !treatmentBMPModelingAttribute.SummerHarvestedWaterDemand.HasValue;
-                    case TreatmentBMPModelingTypeEnum.ConstructedWetland:
-                    case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
-                        return hasNoRoutingConfigurationAndOffline ||
-                               !treatmentBMPModelingAttribute.PermanentPoolorWetlandVolume.HasValue ||
-                               !treatmentBMPModelingAttribute.WaterQualityDetentionVolume.HasValue;
-
-                        break;
-                    case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
-                    case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
-                    case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
-                        return hasNoRoutingConfigurationAndOffline ||
-                               !treatmentBMPModelingAttribute.TotalEffectiveBMPVolume.HasValue ||
-                               !treatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation.HasValue ||
-                               !treatmentBMPModelingAttribute.EffectiveFootprint.HasValue ||
-                               !treatmentBMPModelingAttribute.DrawdownTimeforWQDetentionVolume.HasValue;
-                    case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
-                        return !treatmentBMPModelingAttribute.DesignDryWeatherTreatmentCapacity.HasValue &&
-                               !treatmentBMPModelingAttribute.AverageTreatmentFlowrate.HasValue;
-                    case TreatmentBMPModelingTypeEnum.Drywell:
-                        return hasNoRoutingConfigurationAndOffline ||
-                               !treatmentBMPModelingAttribute.TotalEffectiveDrywellBMPVolume.HasValue ||
-                               !treatmentBMPModelingAttribute.InfiltrationDischargeRate.HasValue;
-
-                    case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
-                    case TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:
-                    case TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl:
-                        return !treatmentBMPModelingAttribute.TreatmentRate.HasValue;
-                    case TreatmentBMPModelingTypeEnum.LowFlowDiversions:
-                        return !treatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity.HasValue &&
-                               !treatmentBMPModelingAttribute.AverageDivertedFlowrate.HasValue;
-                    case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
-                    case TreatmentBMPModelingTypeEnum.VegetatedSwale:
-                        return hasNoRoutingConfigurationAndOffline ||
-                               !treatmentBMPModelingAttribute.TreatmentRate.HasValue ||
-                               !treatmentBMPModelingAttribute.WettedFootprint.HasValue ||
-                               !treatmentBMPModelingAttribute.EffectiveRetentionDepth.HasValue;
-                    default:
-                        throw new ArgumentOutOfRangeException(
-                            $"Unknown TreatmentBMPModelingTypeEnum + {treatmentBMPModelingTypeEnum}");
-                }
-            }
-
-            return true;
         }
 
 
@@ -319,7 +234,7 @@ namespace Neptune.Web.Controllers
                 TrashCaptureStatusTypeID = viewModel.TrashCaptureStatusTypeID.GetValueOrDefault(),
                 SizingBasisTypeID = viewModel.SizingBasisTypeID.GetValueOrDefault()
             };
-            viewModel.UpdateModel(_dbContext, treatmentBMP, CurrentPerson);
+            viewModel.UpdateModel(_dbContext, treatmentBMP, CurrentPerson, null);
             treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(treatmentBMP.LocationPoint, _dbContext);
             await _dbContext.TreatmentBMPs.AddAsync(treatmentBMP);
             await _dbContext.SaveChangesAsync();
@@ -417,9 +332,14 @@ namespace Neptune.Web.Controllers
             }
 
             viewModel.UpdateModel(treatmentBMP);
-            await treatmentBMP.Delineation?.DeleteDelineation(_dbContext);
-
             await _dbContext.SaveChangesAsync();
+
+            var delineation = Delineations.GetByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPID);
+            if (delineation != null)
+            {
+                await delineation.DeleteDelineation(_dbContext);
+            }
+
             SetMessageForDisplay("Upstream BMP successfully updated");
             return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMP)));
         }
@@ -599,8 +519,9 @@ namespace Neptune.Web.Controllers
         public async Task<IActionResult> Delete([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var delineationGeometry = treatmentBMP.Delineation?.DelineationGeometry;
-            var isDelineationDistributed = treatmentBMP.Delineation?.DelineationType == DelineationType.Distributed;
+            var delineation = Delineations.GetByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPID);
+            var delineationGeometry = delineation?.DelineationGeometry;
+            var isDelineationDistributed = delineation != null && delineation.DelineationType == DelineationType.Distributed;
 
             NereidUtilities.MarkDownstreamNodeDirty(treatmentBMP, _dbContext);
 
@@ -685,11 +606,12 @@ namespace Neptune.Web.Controllers
             {
                 var treatmentBMPs = TreatmentBMPs.ListByTreatmentBMPIDListWithChangeTracking(_dbContext, viewModel.TreatmentBMPIDList);
                 treatmentBMPDisplayNames = treatmentBMPs.Select(x => x.TreatmentBMPName).ToList();
-
+                var delineations = Delineations.ListByTreatmentBMPIDList(_dbContext, viewModel.TreatmentBMPIDList).ToDictionary(x => x.TreatmentBMPID);
                 foreach (var treatmentBMP in treatmentBMPs)
                 {
-                    var delineationGeometry = treatmentBMP.Delineation?.DelineationGeometry;
-                    var isDelineationDistributed = treatmentBMP.Delineation?.DelineationType == DelineationType.Distributed;
+                    // todo: revisit this during delineations
+                    var delineation = delineations.ContainsKey(treatmentBMP.TreatmentBMPID) ? delineations[treatmentBMP.TreatmentBMPID] : null;
+                    var isDelineationDistributed = delineation != null && delineation.DelineationType == DelineationType.Distributed;
 
                     NereidUtilities.MarkDownstreamNodeDirty(treatmentBMP, _dbContext);
 
@@ -706,9 +628,9 @@ namespace Neptune.Web.Controllers
                     await _dbContext.SaveChangesAsync();
 
                     // queue an LGU refresh for the area no longer governed by this BMP
-                    if (isDelineationDistributed && delineationGeometry != null)
+                    if (isDelineationDistributed && delineation?.DelineationGeometry != null)
                     {
-                        ModelingEngineUtilities.QueueLGURefreshForArea(delineationGeometry, null, _dbContext);
+                        ModelingEngineUtilities.QueueLGURefreshForArea(delineation?.DelineationGeometry, null, _dbContext);
                     }
                 }
 
@@ -962,7 +884,8 @@ namespace Neptune.Web.Controllers
             }
 
             treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
-            viewModel.UpdateModel(_dbContext, treatmentBMP, CurrentPerson);
+            var delineation = Delineations.GetByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPID);
+            viewModel.UpdateModel(_dbContext, treatmentBMP, CurrentPerson, delineation);
             await _dbContext.SaveChangesAsync();
 
             SetMessageForDisplay("Successfully updated Treatment BMP Location.");
@@ -993,7 +916,8 @@ namespace Neptune.Web.Controllers
             }
 
             treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
-            viewModel.UpdateModel(_dbContext, treatmentBMP, CurrentPerson);
+            var delineation = Delineations.GetByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPID);
+            viewModel.UpdateModel(_dbContext, treatmentBMP, CurrentPerson, delineation);
             await _dbContext.SaveChangesAsync();
 
             return Json(new {success = true});

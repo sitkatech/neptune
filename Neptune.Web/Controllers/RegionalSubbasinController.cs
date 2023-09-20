@@ -68,7 +68,7 @@ namespace Neptune.Web.Controllers
 
 
             var hruCharacteristics = regionalSubbasin.GetHRUCharacteristics(_dbContext).ToList();
-            var hruCharacteristicsViewData = new HRUCharacteristicsViewData(regionalSubbasin, hruCharacteristics);
+            var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
             var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, regionalSubbasin, hruCharacteristicsViewData, stormwaterMapInitJson, hruCharacteristics.Any());
             return RazorView<Detail, DetailViewData>(viewData);
         }

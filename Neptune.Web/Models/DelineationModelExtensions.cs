@@ -9,18 +9,28 @@ namespace Neptune.Web.Models
 {
     public static class DelineationModelExtensions
     {
-        public static double? GetDelineationArea(this Delineation delineation)
+        public static double? GetDelineationArea(this Delineation? delineation)
         {
             return delineation?.DelineationGeometry.Area != null
                 ? Math.Round(delineation.DelineationGeometry.Area * Constants.SquareMetersToAcres, 2)
                 : null;
         }
 
-        public static string GetDelineationAreaString(this Delineation delineation)
+        public static string GetDelineationAreaString(this Delineation? delineation)
         {
-            var delineationAcresAsString = (delineation?.DelineationGeometry.Area * Constants.SquareMetersToAcres)?.ToString("0.00");
-            return delineationAcresAsString != null ? $"{delineationAcresAsString} ac" : "-";
+            if (delineation == null)
+            {
+                return "-";
+            }
+            var delineationAcresAsString = (delineation.DelineationGeometry.Area * Constants.SquareMetersToAcres).ToString("0.00");
+            return $"{delineationAcresAsString} ac";
         }
+
+        public static string GetDelineationStatus(this Delineation? delineation)
+        {
+            return delineation != null ? delineation.IsVerified ? "Verified" : "Provisional" : "None";
+        }
+
 
         //public static readonly UrlTemplate<int> DeleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(t => t.Delete(UrlTemplate.Parameter1Int)));
 

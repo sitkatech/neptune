@@ -24,13 +24,17 @@ namespace Neptune.Web.Controllers
         public JsonResult TreatmentBMPParameterizationSummary([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var data = TreatmentBMPs.GetNonPlanningModuleBMPs(_dbContext)
-                .Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList().Select(x => new
+                .Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList().Select(x =>
                 {
-                    x.TreatmentBMPID,
-                    x.TreatmentBMPName,
-                    x.TreatmentBMPType.TreatmentBMPTypeName,
-                    FullyParameterized = x.IsFullyParameterized() ? "Yes" : "No",
-                    IsReadyForModeling = x.IsFullyParameterized() && x.HasVerifiedDelineationForModelingPurposes(new List<int>()) ? "Yes" : "No"
+                    var isFullyParameterized = x.IsFullyParameterized() ? "Yes" : "No";
+                    return new
+                    {
+                        x.TreatmentBMPID,
+                        x.TreatmentBMPName,
+                        x.TreatmentBMPType.TreatmentBMPTypeName,
+                        FullyParameterized = isFullyParameterized,
+                        IsReadyForModeling = isFullyParameterized
+                    };
                 });
 
             return new JsonResult(new {

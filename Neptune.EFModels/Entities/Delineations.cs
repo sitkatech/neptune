@@ -19,17 +19,76 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using Microsoft.EntityFrameworkCore;
+using Neptune.Common.DesignByContract;
 
 namespace Neptune.EFModels.Entities
 {
     public static class Delineations
     {
+        public static IQueryable<Delineation> GetImpl(NeptuneDbContext dbContext)
+        {
+            return dbContext.Delineations
+                    .Include(x => x.TreatmentBMP)
+                ;
+        }
+
+        public static Delineation GetByIDWithChangeTracking(NeptuneDbContext dbContext,
+            int delineationID)
+        {
+            var delineation = GetImpl(dbContext)
+                .SingleOrDefault(x => x.DelineationID == delineationID);
+            Check.RequireNotNull(delineation,
+                $"Delineation with ID {delineationID} not found!");
+            return delineation;
+        }
+
+        public static Delineation GetByIDWithChangeTracking(NeptuneDbContext dbContext,
+            DelineationPrimaryKey delineationPrimaryKey)
+        {
+            return GetByIDWithChangeTracking(dbContext, delineationPrimaryKey.PrimaryKeyValue);
+        }
+
+        public static Delineation GetByID(NeptuneDbContext dbContext, int delineationID)
+        {
+            var delineation = GetImpl(dbContext).AsNoTracking()
+                .SingleOrDefault(x => x.DelineationID == delineationID);
+            Check.RequireNotNull(delineation,
+                $"Delineation with ID {delineationID} not found!");
+            return delineation;
+        }
+
+        public static Delineation GetByID(NeptuneDbContext dbContext,
+            DelineationPrimaryKey delineationPrimaryKey)
+        {
+            return GetByID(dbContext, delineationPrimaryKey.PrimaryKeyValue);
+        }
+
+        public static Delineation? GetByTreatmentBMPID(NeptuneDbContext dbContext, int treatmentBMPID)
+        {
+            var delineation = GetImpl(dbContext).AsNoTracking()
+                .SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
+            return delineation;
+        }
+
+        public static Delineation? GetByTreatmentBMPIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPID)
+        {
+            var delineation = GetImpl(dbContext)
+                .SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
+            return delineation;
+        }
+
+        public static List<Delineation> ListByTreatmentBMPIDList(NeptuneDbContext dbContext, IEnumerable<int> treatmentBMPIDList)
+        {
+            return GetImpl(dbContext).AsNoTracking()
+                .Where(x => treatmentBMPIDList.Contains(x.TreatmentBMPID)).OrderBy(x => x.DelineationID).ToList();
+        }
+
         public static List<Delineation> GetProvisionalBMPDelineations(NeptuneDbContext dbContext, Person currentPerson)
         {
-            return dbContext.Delineations.AsNoTracking()
+            return GetImpl(dbContext).AsNoTracking()
                 .Include(x => x.TreatmentBMP).ThenInclude(x => x.TreatmentBMPType)
                 .Include(x => x.TreatmentBMP).ThenInclude(x => x.StormwaterJurisdiction)
-                .Where(x => x.IsVerified == false).AsEnumerable()
+                .Where(x => x.IsVerified == false).ToList()
                 .Where(x => x.TreatmentBMP.CanView(currentPerson))
                 .OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
         }

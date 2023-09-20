@@ -12,14 +12,10 @@ namespace Neptune.Web.Models
             if (waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
                 WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
             {
-                return waterQualityManagementPlan.TreatmentBMPs.Any() &&
-                       waterQualityManagementPlan.TreatmentBMPs.Any(x => x.IsFullyParameterized());
+                return waterQualityManagementPlan.TreatmentBMPs.Any(x => x.IsFullyParameterized());
             }
-            else
-            {
-                return waterQualityManagementPlan.QuickBMPs.Any() &&
-                       waterQualityManagementPlan.QuickBMPs.Any(x => x.IsFullyParameterized());
-            }
+
+            return waterQualityManagementPlan.QuickBMPs.Any(x => x.IsFullyParameterized());
         }
 
         public static LayerGeoJson GetBoundaryLayerGeoJson(this WaterQualityManagementPlan waterQualityManagementPlan)

@@ -84,11 +84,11 @@ namespace Neptune.Web.Common
             return catchmentLayerGeoJson;
         }
 
-        public static LayerGeoJson MakeTreatmentBMPDelineationLayerGeoJson(TreatmentBMP treatmentBMP)
+        public static LayerGeoJson MakeTreatmentBMPDelineationLayerGeoJson(Delineation? delineation)
         {
-            Check.Require(treatmentBMP.Delineation?.DelineationGeometry != null, "Tried to build delineation layer when delineation was null");
+            Check.Require(delineation?.DelineationGeometry != null, "Tried to build delineation layer when delineation was null");
             var featureCollection = new FeatureCollection();
-            var feature = new Feature(treatmentBMP.Delineation.DelineationGeometry4326, new AttributesTable());
+            var feature = new Feature(delineation.DelineationGeometry4326, new AttributesTable());
             featureCollection.Add(feature);
 
             var treatmentBMPLayerGeoJson = new LayerGeoJson("Delineation", featureCollection, "blue", 1, LayerInitialVisibility.Show) { EnablePopups = false };

@@ -30,8 +30,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public List<EFModels.Entities.TreatmentBMP> TreatmentBMPs { get; }
         public List<QuickBMP> QuickBMPs { get; }
-
         public IEnumerable<IGrouping<int, SourceControlBMP>> SourceControlBMPs { get; }
+        public Dictionary<int, Delineation> TreatmentBMPDelineationsDict { get; }
+
         public List<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; }
         public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; }
         public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; }
@@ -54,14 +55,19 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public bool AnyDetailedBMPsNotFullyParameterized { get; }
         public bool AllDetailedBMPsNotFullyParameterized { get; }
         public bool UsesDetailedModelingApproach { get; }
+        public bool AllSimpleBMPsNotFullyParameterized { get; set; }
+        public bool AnySimpleBMPsNotFullyParameterized { get; set; }
 
+        public string EditUrl { get; }
+        public UrlTemplate<int> OrganizationDetailUrlTemplate { get; }
         public UrlTemplate<int> TreatmentBMPDetailUrlTemplate { get; }
         public UrlTemplate<int> VerifyDetailUrlTemplate { get; }
         public UrlTemplate<int> VerifyDeleteUrlTemplate { get; }
         public UrlTemplate<int> DocumentEditUrlTemplate { get; }
         public UrlTemplate<int> DocumentDeleteUrlTemplate { get; }
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
             WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson,
             List<EFModels.Entities.TreatmentBMP> treatmentBMPs,
             ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies,
@@ -69,7 +75,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs,
             HRUCharacteristicsViewData hruCharacteristicsViewData,
             List<DryWeatherFlowOverride> dryWeatherFlowOverrides,
-            List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches, ModeledPerformanceViewData modeledPerformanceViewData, IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs)
+            List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches,
+            ModeledPerformanceViewData modeledPerformanceViewData,
+            IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs,
+            List<Delineation> treatmentBMPDelineations)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -146,6 +155,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             TreatmentBMPs = treatmentBMPs;
             QuickBMPs = quickBMPs;
             SourceControlBMPs = sourceControlBMPs;
+            TreatmentBMPDelineationsDict = treatmentBMPDelineations.ToDictionary(x => x.TreatmentBMPID);
 
             var calculatedWQMPAcreage = WaterQualityManagementPlan.CalculateTotalAcreage();
 
@@ -174,8 +184,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             if (UsesDetailedModelingApproach)
             {
-                AnyDetailedBMPsNotFullyParameterized = TreatmentBMPs.Any(x => !(x.IsFullyParameterized() && (x.Delineation?.IsVerified ?? false)));
-                AllDetailedBMPsNotFullyParameterized = TreatmentBMPs.All(x => !(x.IsFullyParameterized() && (x.Delineation?.IsVerified ?? false)));
+                AnyDetailedBMPsNotFullyParameterized = TreatmentBMPs.Any(x => !x.IsFullyParameterized());
+                AllDetailedBMPsNotFullyParameterized = TreatmentBMPs.All(x => !x.IsFullyParameterized());
                 // this is redundant but I just want to make this perfectly clear.
                 AnySimpleBMPsNotFullyParameterized = false;
                 AllSimpleBMPsNotFullyParameterized = false;
@@ -186,16 +196,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 AllSimpleBMPsNotFullyParameterized = QuickBMPs.All(x => !x.IsFullyParameterized());
                 // this is redundant but I just want to make this perfectly clear.
                 AnyDetailedBMPsNotFullyParameterized = false;
-                    AllDetailedBMPsNotFullyParameterized = false;
+                AllDetailedBMPsNotFullyParameterized = false;
             }
         }
-
-        public bool AllSimpleBMPsNotFullyParameterized { get; set; }
-
-        public bool AnySimpleBMPsNotFullyParameterized { get; set; }
-        public string EditUrl { get; }
-        public UrlTemplate<int> OrganizationDetailUrlTemplate { get; }
-
 
         //There are more errors to come I believe, that's why this is producing a list
         public List<HtmlString> CheckForParameterizationErrors(EFModels.Entities.WaterQualityManagementPlan waterQualityManagement)

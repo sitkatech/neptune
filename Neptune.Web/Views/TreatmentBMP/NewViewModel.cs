@@ -96,7 +96,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         }
 
         public override void UpdateModel(NeptuneDbContext dbContext, EFModels.Entities.TreatmentBMP treatmentBMP,
-            Person currentPerson)
+            Person currentPerson, Delineation? delineation)
         {
             SetTreatmentBMPLocationAndPointInPolygonData(dbContext, treatmentBMP);
 

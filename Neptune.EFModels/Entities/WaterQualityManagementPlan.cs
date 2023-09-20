@@ -1,40 +1,11 @@
-﻿using Neptune.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using Neptune.Common;
 using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class WaterQualityManagementPlan : IHaveHRUCharacteristics
+    public partial class WaterQualityManagementPlan
     {
-        //private static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(
-        //    SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-        //        c.Detail(UrlTemplate.Parameter1Int)));
-
-        //public string GetDetailUrl()
-        //{
-        //    return DetailUrlTemplate.ParameterReplace(WaterQualityManagementPlanID);
-        //}
-
-        //private static readonly UrlTemplate<int> EditUrlTemplate = new UrlTemplate<int>(
-        //    SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-        //        c.Edit(UrlTemplate.Parameter1Int)));
-        //public string GetEditUrl()
-        //{
-        //    return EditUrlTemplate.ParameterReplace(WaterQualityManagementPlanID);
-        //}
-
-        //private static readonly UrlTemplate<int> DeleteUrlTemplate = new UrlTemplate<int>(
-        //    SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-        //        c.Delete(UrlTemplate.Parameter1Int)));
-        //public string GetDeleteUrl()
-        //{
-        //    return DeleteUrlTemplate.ParameterReplace(WaterQualityManagementPlanID);
-        //}
-
-        //public HtmlString GetDisplayNameAsUrl()
-        //{
-        //    return UrlTemplate.MakeHrefString(GetDetailUrl(), WaterQualityManagementPlanName);
-        //}
-
         public string MaintenanceContactAddressToString()
         {
             return string.Join(" ",
@@ -85,18 +56,19 @@ namespace Neptune.EFModels.Entities
         public IEnumerable<HRUCharacteristic> GetHRUCharacteristics(NeptuneDbContext dbContext)
         {
             if (WaterQualityManagementPlanModelingApproachID == WaterQualityManagementPlanModelingApproach.Simplified
-                .WaterQualityManagementPlanModelingApproachID)
+                    .WaterQualityManagementPlanModelingApproachID)
             {
-                return dbContext.HRUCharacteristics.Where(x =>
+                return dbContext.HRUCharacteristics.Include(x => x.LoadGeneratingUnit).AsNoTracking().Where(x =>
                     x.LoadGeneratingUnit.WaterQualityManagementPlanID == WaterQualityManagementPlanID);
             }
-            else
-            {
-                var treatmentBMPIDs = TreatmentBMPs.Where(x => x.Delineation != null).Select(x => (int?)x.Delineation.DelineationID).ToList();
 
-                return dbContext.HRUCharacteristics.Where(x =>
-                    treatmentBMPIDs.Contains(x.LoadGeneratingUnit.DelineationID));
-            }
+            var delineationIDs = Delineations
+                .ListByTreatmentBMPIDList(dbContext, TreatmentBMPs.Select(x => x.TreatmentBMPID))
+                .Select(x => x.DelineationID).ToList();
+
+            return dbContext.HRUCharacteristics.Include(x => x.LoadGeneratingUnit).AsNoTracking().Where(x =>
+                x.LoadGeneratingUnit.DelineationID.HasValue &&
+                delineationIDs.Contains(x.LoadGeneratingUnit.DelineationID.Value));
         }
 
         public void DeleteFull(NeptuneDbContext dbContext)

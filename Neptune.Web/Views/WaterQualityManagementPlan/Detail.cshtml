@@ -353,7 +353,7 @@
                     Land Use Statistics
                 </div>
                 <div class="panel-body">
-                    @if (ViewDataTyped.HRUCharacteristicsViewData.HRUCharacteristicsSummaries.Any() && ViewDataTyped.WaterQualityManagementPlan.GetCatchmentGeometry() != null)
+                    @if (ViewDataTyped.HRUCharacteristicsViewData.HRUCharacteristicsSummaries.Any() && ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary != null)
                     {
                         HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
                         if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID == WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
@@ -361,7 +361,7 @@
                             <p class="systemText">Land Use Statistics are derived from the inventoried structural BMPs and may not exactly match the Calculated Parcel Area shown above.</p>
                         }
                     }
-                    else if (ViewDataTyped.WaterQualityManagementPlan.GetCatchmentGeometry() == null)
+                    else if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary == null)
                     {
                         <p class="systemText">No treatment area is provided for this @FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a <a href="@ViewDataTyped.EditParcelsUrl">treatment area is provided</a>.</p>
                     }
@@ -467,8 +467,8 @@
                                     <td class="notes collapsed">@treatmentBMP.Notes</td>
                                     <td>@treatmentBMP.IsFullyParameterized().ToYesNo()</td>
                                     <td>@ViewDataTyped.DisplayDryWeatherFlowOverride(treatmentBMP)</td>
-                                    <td>@treatmentBMP.GetDelineationStatus()</td>
-                                    <td style="text-align: right">@treatmentBMP.Delineation.GetDelineationAreaString()</td>
+                                    <td>@((ViewDataTyped.TreatmentBMPDelineationsDict.ContainsKey(treatmentBMP.TreatmentBMPID) ? ViewDataTyped.TreatmentBMPDelineationsDict[treatmentBMP.TreatmentBMPID] : null).GetDelineationStatus())</td>
+                                    <td style="text-align: right">@((ViewDataTyped.TreatmentBMPDelineationsDict.ContainsKey(treatmentBMP.TreatmentBMPID) ? ViewDataTyped.TreatmentBMPDelineationsDict[treatmentBMP.TreatmentBMPID] : null).GetDelineationAreaString())</td>
                                 </tr>
                             }
                             </tbody>

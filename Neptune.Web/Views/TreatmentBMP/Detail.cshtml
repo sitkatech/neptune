@@ -259,7 +259,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                 </div>
             </div>
         </div>
-        @if (ViewDataTyped.IsAnalyzedInModelingModule)
+    @if (ViewDataTyped.IsAnalyzedInModelingModule)
         {
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
@@ -573,16 +573,8 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                         }
                         else
                         {
-                            <p class="systemText">This Treatment BMP record is missing fields required to calculate model results. Please provide a delineation and required Modeling Parameters above.</p>
+                            <p class="systemText">This Treatment BMP record is missing fields required to calculate model results. Please provide a verified delineation and required Modeling Parameters above.</p>
                         }
-                    }
-                    else if ((ViewDataTyped.TreatmentBMP.Delineation != null && !ViewDataTyped.TreatmentBMP.Delineation.IsVerified))
-                    {
-                        <p class="systemText">This Treatment BMP's Delineation is marked as Provisional. Model results will not be calculated until the Delineation is verified.</p>
-                    }
-                    else if ((ViewDataTyped.TreatmentBMP.UpstreamBMP != null && ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation != null && !ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation.IsVerified))
-                    {
-                        <p class="systemText">The Upstream BMP's Delineation is marked as Provisional. Model results will not be calculated until the Upstream BMP's Delineation is verified.</p>
                     }
                     else
                     {
@@ -691,77 +683,75 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                     </div>
                 </div>
                 @{
-                    var collapseClassIfUpstreamBMPDoesntExist = "";
-                    if (ViewDataTyped.TreatmentBMP.UpstreamBMP == null)
-                    {
-                        collapseClassIfUpstreamBMPDoesntExist = "collapse";
-                        <div class="row" style="margin-top: 10px;">
-                            <div class="col-xs-4 control-label">
-                                <p style="margin-top: 8px;">@Html.LabelWithSugarFor(FieldDefinitionType.DelineationType)</p>
-                            </div>
-                            <div class="col-xs-4">
-                                <p style="margin-top: 8px;">@ViewDataTyped.TreatmentBMP.GetDelineationTypeDisplay()</p>
-                            </div>
-                            <div class="col-xs-3">
-                                @if (ViewDataTyped.CanEditStormwaterJurisdiction)
-                                {
-                                    <a href="@ViewDataTyped.DelineationMapUrl" class="btn btn-sm btn-neptune">Edit</a>
-                                }
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-4 control-label">
-                                <p style="margin-top: 8px;"><label>Delineation Area (ac)</label></p>
-                            </div>
-                            <div class="col-xs-4">
-                                <p style="margin-top: 8px;">@ViewDataTyped.DelineationArea</p>
-                            </div>
-                        </div>
-                        if (ViewDataTyped.TreatmentBMP.Delineation != null)
-                        {
-                            <div class="row">
-                                <div class="col-xs-4 control-label">
-                                    <p style="margin-top: 8px;"><label>Delineation Status</label></p>
-                                </div>
-                                <div class="col-xs-4">
-                                    <p style="margin-top: 8px;">@ViewDataTyped.DelineationStatus</p>
-                                </div>
-                            </div>
-                        }
-                        if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
-                        {
-                            <div class="row" style="margin-top: 10px">
-                                <div class="col-xs-12">
-                                    @{
-                                        var textForUpstreamBMPDropdown = ViewDataTyped.TreatmentBMP.UpstreamBMP == null ? "What if this BMP shares a delineation with an upstream BMP?" : "This BMP shares a delineation with Upstream BMP: " + ViewDataTyped.TreatmentBMP.UpstreamBMP.TreatmentBMPName;
-                                    }
-                                    <a style="cursor: pointer" id="upstreamBMPDropdown"><span class="upstreamBMPDropdownIcon glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;@textForUpstreamBMPDropdown</a>
-                                </div>
-                            </div>
-                        }
-                    }
-                    else
+                    if (ViewDataTyped.UpstreamestBMP != null)
                     {
                         <div class="row" style="margin-top: 10px;">
                             <div class="col-xs-12">
-                                No delineation may be added or edited because this BMP is associated with an Upstream BMP in the network. If you would like to add a delineation, please remove the connection to the Upstream BMP.
-                                @if(ViewDataTyped.MapInitJson.DelineationLayer != null)
-                                {
-                                    <p>
-                                        The Delineation displayed above is associated with Upstream BMP
-                                        <a href="@ViewDataTyped.UpstreamBMPDetailUrl">@ViewDataTyped.TreatmentBMP.UpstreamBMP.TreatmentBMPName</a>
-                                    </p>
-                                }
+                                <p>No delineation may be added or edited because this BMP is associated with an Upstream BMP in the network. If you would like to add a delineation, please remove the connection to the Upstream BMP.</p>
+                                <p>
+                                    The Delineation displayed above is associated with Upstream BMP:<br/>
+                                    <a href="@ViewDataTyped.UpstreamBMPDetailUrl">@ViewDataTyped.UpstreamestBMP.TreatmentBMPName</a>
+                                </p>
                             </div>
                         </div>
                     }
                     <div class="row" style="margin-top: 10px;">
-                        <div id="upstreamBMPInfo" class="col @collapseClassIfUpstreamBMPDoesntExist">
+                        <div class="col-xs-4 control-label">
+                            @Html.LabelWithSugarFor(FieldDefinitionType.DelineationType)
+                        </div>
+                        <div class="col-xs-4">
+                            @if (ViewDataTyped.Delineation != null)
+                            {
+                                @ViewDataTyped.Delineation.DelineationType.DelineationTypeDisplayName
+                            }
+                            else
+                            {
+                            <span class="systemText">No Delineation Provided</span>
+                            }
+                        </div>
+                        <div class="col-xs-3">
+                            @if (ViewDataTyped.UpstreamestBMP == null && ViewDataTyped.CanEditStormwaterJurisdiction)
+                            {
+                                <a href="@ViewDataTyped.DelineationMapUrl" class="btn btn-xs btn-neptune">Edit</a>
+                            }
+                        </div>
+                    </div>
+                    if (ViewDataTyped.Delineation != null)
+                    {
+                        <div class="row">
+                            <div class="col-xs-4 control-label">
+                                <label>Delineation Area (ac)</label>
+                            </div>
+                            <div class="col-xs-4">
+                                @ViewDataTyped.DelineationArea
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 control-label">
+                                <label>Delineation Status</label>
+                            </div>
+                            <div class="col-xs-4">
+                                @ViewDataTyped.DelineationStatus
+                            </div>
+                        </div>
+                    }
+
+                    if (ViewDataTyped.UpstreamestBMP == null && !ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
+                    {
+                        <div class="row" style="margin-top: 10px">
+                            <div class="col-xs-12">
+                                <a style="cursor: pointer" id="upstreamBMPDropdown"><span class="upstreamBMPDropdownIcon glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;What if this BMP shares a delineation with an upstream BMP?</a>
+                            </div>
+                        </div>
+                    }
+                    <div class="row" style="margin-top: 10px;">
+                        <div id="upstreamBMPInfo" class="col @(ViewDataTyped.UpstreamestBMP != null ? "" : "collapse")">
                             <label class="col-xs-4 control-label" style="margin-top: 8px">
                                 @Html.LabelWithSugarFor(FieldDefinitionType.UpstreamBMP)
                             </label>
                             @if (ViewDataTyped.OtherTreatmentBmpsExistInSubbasin)
                             {
+                                //For this panel we are intentionally showing the immediate upstream bmp, not the "upstreamest" bmp
                                 <div class="col-xs-4" style="margin-top: 8px">
                                     @if (ViewDataTyped.TreatmentBMP.UpstreamBMP == null)
                                     {
@@ -781,7 +771,8 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                                 <button class="btn btn-sm btn-neptune" id="deleteUpstreamBMPButton" type="submit"><span class="glyphicon glyphicon-trash"></span></button>
                                             </form>
                                         }
-                                        @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditUpstreamBMPUrl, "Choose Upstream BMP", new List<string> { "btn btn-sm btn-neptune" }, ViewDataTyped.CanEditStormwaterJurisdiction)}
+                                        @ModalDialogFormHelper.ModalDialogFormLink("Edit", ViewDataTyped.EditUpstreamBMPUrl, "Choose Upstream BMP", new List<string> { "btn btn-sm btn-neptune" }, ViewDataTyped.CanEditStormwaterJurisdiction)
+                                    }
                                 </div>
                             }
                             else
@@ -801,38 +792,23 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                     Drainage Area Land Uses
                 </div>
                 <div class="panel-body">
-                    @if (ViewDataTyped.HRUCharacteristicsViewData.HRUCharacteristicsSummaries.Any() && (
-                        ViewDataTyped.TreatmentBMP.Delineation is {IsVerified: true } || ViewDataTyped.TreatmentBMP.UpstreamBMP is {Delineation.IsVerified: true }))
+                    @if (ViewDataTyped.HRUCharacteristicsViewData.HRUCharacteristicsSummaries.Any() && ViewDataTyped.Delineation?.IsVerified == true)
                     {
                         HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
                     }
-                    else if (ViewDataTyped.TreatmentBMP.Delineation == null && (ViewDataTyped.TreatmentBMP.UpstreamBMP == null || ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation == null))
+                    else if (ViewDataTyped.Delineation == null)
                     {
                         <p class="systemText">
-                            No delineation is provided for this @FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a
-                            @{
-                                if (ViewDataTyped.TreatmentBMP.UpstreamBMP == null)
-                                {
-                                    @:<a href="@ViewDataTyped.DelineationMapUrl">delineation is provided</a>.
-                                }
-                                else
-                                {
-                                    @:delineation is provided to the Upstream BMP or the Upstream BMP is removed.
-                                }
-                            }
+                            No delineation is provided for this Treatment BMP. Land Use Statistics cannot be determined until a verified delineation is provided.
                         </p>
                     }
-                    else if (ViewDataTyped.TreatmentBMP.Delineation != null && !ViewDataTyped.TreatmentBMP.Delineation.IsVerified)
+                    else if (ViewDataTyped.Delineation.IsVerified == false)
                     {
-                        <p class="systemText">This Treatment BMP's Delineation is marked as Provisional. Land Use Statistics will not be calculated until the Delineation is verified.</p>
-                    }
-                    else if (ViewDataTyped.TreatmentBMP.UpstreamBMP != null && !ViewDataTyped.TreatmentBMP.UpstreamBMP.Delineation.IsVerified)
-                    {
-                        <p class="systemText">The Upstream BMP's Delineation is marked as Provisional. Land Use Statistics will not be calculated until the Upstream BMP's Delineation is verified.</p>
+                        <p class="systemText">The Delineation for this Treatment BMP is marked as provisional. Land Use Statistics will not be calculated until the Delineation is verified.</p>
                     }
                     else
                     {
-                        <p class="systemText">Land Use Statistics have not been calculated for this @FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel()</p>
+                        <p class="systemText">Land Use Statistics have not been calculated for this Treatment BMP</p>
                     }
                 </div>
 
@@ -1078,7 +1054,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
         jQuery("#legend").css("display", "");
 
         @{
-            if (ViewDataTyped.TreatmentBMP.UpstreamBMP == null)
+            if (ViewDataTyped.UpstreamestBMP == null)
             {
                 @:jQuery('#upstreamBMPInfo').collapse({
                 @:    toggle:false

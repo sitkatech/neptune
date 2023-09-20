@@ -1,17 +1,13 @@
-﻿using Neptune.EFModels;
-using Neptune.EFModels.Entities;
+﻿using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Views.Shared.HRUCharacteristics
 {
     public class HRUCharacteristicsViewData : NeptuneUserControlViewData
     {
-        public IHaveHRUCharacteristics EntityWithHRUCharacteristics { get; }
         public List<HRUCharacteristicsSummaryDto> HRUCharacteristicsSummaries { get; }
 
-        public HRUCharacteristicsViewData(IHaveHRUCharacteristics entityWithHRUCharacteristics, List<HRUCharacteristic> hruCharacteristics)
+        public HRUCharacteristicsViewData(List<HRUCharacteristic> hruCharacteristics)
         {
-            EntityWithHRUCharacteristics = entityWithHRUCharacteristics;
-
             HRUCharacteristicsSummaries = hruCharacteristics
                 .GroupBy(x => x.HRUCharacteristicLandUseCode).Select(x => new HRUCharacteristicsSummaryDto()
                     { Area = x.Sum(y => y.Area).ToString("N2"), ImperviousCover = x.Sum(y => y.ImperviousAcres).ToString("N2"), LandUse = x.Key.HRUCharacteristicLandUseCodeDisplayName })

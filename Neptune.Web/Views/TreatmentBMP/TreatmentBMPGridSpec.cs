@@ -105,7 +105,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         }
     }
 
-    public class ViewTreatmentBMPModelingAttributesGridSpec : GridSpec<EFModels.Entities.vViewTreatmentBMPModelingAttribute>
+    public class ViewTreatmentBMPModelingAttributesGridSpec : GridSpec<vViewTreatmentBMPModelingAttribute>
     {
         public ViewTreatmentBMPModelingAttributesGridSpec(LinkGenerator linkGenerator)
         {
@@ -114,8 +114,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));
             Add(FieldDefinitionType.TreatmentBMP.ToGridHeaderString("BMP Name"), x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.PrimaryKey), x.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
             Add(FieldDefinitionType.FullyParameterized.ToGridHeaderString("Fully Parameterized?"), x => (new TreatmentBMPPrimaryKey(x.PrimaryKey)).EntityObject.IsFullyParameterized() ? new HtmlString("Yes") : new HtmlString("No"), 120);
-            Add(FieldDefinitionType.DelineationType.ToGridHeaderString("Delineation Type"), x=>x.DelineationType, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("DelineationStatus", x=>x.DelineationStatus, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(FieldDefinitionType.DelineationType.ToGridHeaderString("Delineation Type"), x=> x.DelineationType, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("DelineationStatus", x=> x.DelineationStatus, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(FieldDefinitionType.TreatmentBMPType.ToGridHeaderString("Type"), x => UrlTemplate.MakeHrefString(treatmentBMPTypeDetailUrlTemplate.ParameterReplace(x.TreatmentBMPTypeID), x.TreatmentBMPTypeName), 100, DhtmlxGridColumnFilterType.Text);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 170);
             Add(FieldDefinitionType.Watershed.ToGridHeaderString("Watershed"), x => x.WatershedName, 170);

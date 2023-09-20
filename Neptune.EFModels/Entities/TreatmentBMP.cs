@@ -23,7 +23,7 @@ using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class TreatmentBMP : IHaveHRUCharacteristics
+    public partial class TreatmentBMP
     {
         public bool CanView(Person person)
         {
@@ -135,11 +135,6 @@ namespace Neptune.EFModels.Entities
             InventoryIsVerified = true;
             DateOfLastInventoryVerification = DateTime.Now;
             InventoryVerifiedByPersonID = currentPerson.PersonID;
-        }
-
-        public Geometry GetCatchmentGeometry()
-        {
-            return Delineation?.DelineationGeometry;
         }
 
         public async Task RemoveUpstreamBMP(NeptuneDbContext dbContext)

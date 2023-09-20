@@ -27,6 +27,7 @@ using Neptune.Web.Views.Shared;
 using Microsoft.AspNetCore.Html;
 using Neptune.Common;
 using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Views.FieldVisit;
 using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Neptune.Web.Views.Shared.ModeledPerformance;
@@ -139,6 +140,8 @@ namespace Neptune.Web.Views.TreatmentBMP
         public List<EFModels.Entities.FundingEvent> FundingEvents { get; }
         public List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; }
         public List<EFModels.Entities.TreatmentBMPDocument> TreatmentBMPDocuments { get; }
+        public Delineation? Delineation { get; }
+        public EFModels.Entities.TreatmentBMP? UpstreamestBMP { get; }
 
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
@@ -147,11 +150,18 @@ namespace Neptune.Web.Views.TreatmentBMP
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
             string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl,
             ModeledPerformanceViewData modeledPerformanceViewData, bool otherTreatmentBmpsExistInSubbasin,
-            bool hasMissingModelingAttributes, List<CustomAttribute> customAttributes, List<EFModels.Entities.FundingEvent> fundingEvents, List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, List<EFModels.Entities.TreatmentBMPDocument> treatmentBMPDocuments)
+            bool hasMissingModelingAttributes, List<CustomAttribute> customAttributes, List<EFModels.Entities.FundingEvent> fundingEvents, List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, List<EFModels.Entities.TreatmentBMPDocument> treatmentBMPDocuments, Delineation? delineation, ICollection<DelineationOverlap> delineationOverlapDelineations, EFModels.Entities.TreatmentBMP? upstreamestBMP)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
             TreatmentBMPType = treatmentBMPType;
+            Delineation = delineation;
+            UpstreamestBMP = upstreamestBMP;
+            DelineationArea = (delineation?.DelineationGeometry.Area * Constants.SquareMetersToAcres)?.ToString("0.00") ?? "-";
+            DelineationStatus = delineation.GetDelineationStatus();
+            DelineationErrors = CheckForDelineationErrors(delineation, delineationOverlapDelineations);
+            ParameterizationErrors = CheckForParameterizationErrors(treatmentBMP, hasMissingModelingAttributes, delineation);
+
             PageTitle = treatmentBMP.TreatmentBMPName;
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.FindABMP());
@@ -178,7 +188,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             WaterQualityManagementPlanDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             WaterQualityManagementPlanDetailUrl = WaterQualityManagementPlanDetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
             TreatmentBMPTypeDetailUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(treatmentBMP.TreatmentBMPTypeID));
-            UpstreamBMPDetailUrl = treatmentBMP.UpstreamBMPID == null ? string.Empty : DetailUrlTemplate.ParameterReplace(treatmentBMP.UpstreamBMPID.Value);
+            UpstreamBMPDetailUrl = upstreamestBMP == null ? string.Empty : DetailUrlTemplate.ParameterReplace(upstreamestBMP.TreatmentBMPID);
 
             FieldVisitGridSpec = new FieldVisitGridSpec(CurrentPerson, true, LinkGenerator);
             FieldVisitGridName = "FieldVisit";
@@ -213,19 +223,12 @@ namespace Neptune.Web.Views.TreatmentBMP
             MapServiceUrl = mapServiceUrl;
             ModeledPerformanceViewData = modeledPerformanceViewData;
 
-            DelineationArea = (TreatmentBMP.Delineation?.DelineationGeometry.Area * Constants.SquareMetersToAcres)?.ToString("0.00") ?? "-";
-            DelineationStatus = TreatmentBMP.GetDelineationStatus();
-
-            DelineationErrors = CheckForDelineationErrors(treatmentBMP);
-
             DisplayTrashCaptureEffectiveness = TreatmentBMP.TrashCaptureStatusTypeID ==
                                                TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID;
 
             TrashCaptureEffectiveness = TreatmentBMP.TrashCaptureEffectiveness == null ? "Not Provided" : TreatmentBMP.TrashCaptureEffectiveness + "%";
 
             DelineationMapUrl = "";//todo: treatmentBMP.GetDelineationMapUrl();
-
-            ParameterizationErrors = CheckForParameterizationErrors(treatmentBMP, hasMissingModelingAttributes);
 
             ChangeTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.ConvertTreatmentBMPType(treatmentBMP));
             
@@ -271,43 +274,42 @@ namespace Neptune.Web.Views.TreatmentBMP
             RemoveUpstreamBMPUrl =
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RemoveUpstreamBMP(treatmentBMP));
 
-            IsAnalyzedInModelingModule = treatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule;
+            IsAnalyzedInModelingModule = treatmentBMPType.IsAnalyzedInModelingModule;
             IsFullyParameterized = treatmentBMP.IsFullyParameterized();
 
         }
 
-        private List<HtmlString> CheckForDelineationErrors(EFModels.Entities.TreatmentBMP treatmentBMP)
+        private List<HtmlString> CheckForDelineationErrors(Delineation? delineation, ICollection<DelineationOverlap> delineationOverlapDelineations)
         {
             var delineationErrors = new List<HtmlString>();
-            var delineationHasDiscrepancies = TreatmentBMP.Delineation?.HasDiscrepancies ?? false;
+            var delineationHasDiscrepancies = delineation?.HasDiscrepancies ?? false;
             if (delineationHasDiscrepancies)
             {
                 delineationErrors.Add(new HtmlString("It is not consistent with the most recent Regional Subbasin Layer."));
             }
 
-            if (treatmentBMP.Delineation != null && treatmentBMP.Delineation.DelineationOverlapDelineations.Any())
+            var a = new List<TreatmentBMPDisplayDto>();
+            if (delineation != null && delineationOverlapDelineations.Any())
             {
                 delineationErrors.Add(new HtmlString("It is overlapping with the following Treatment BMP(s): " +
                                                      string.Join(", ",
-                                                         treatmentBMP.Delineation.DelineationOverlapDelineations.Select(x => UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(x.OverlappingDelineation.TreatmentBMPID),x.OverlappingDelineation.TreatmentBMP.TreatmentBMPName)))));
+                                                         delineationOverlapDelineations.Select(x => UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(x.OverlappingDelineation.TreatmentBMPID),x.OverlappingDelineation.TreatmentBMP.TreatmentBMPName)))));
             }
 
             return delineationErrors;
         }
 
-        private List<HtmlString> CheckForParameterizationErrors(EFModels.Entities.TreatmentBMP treatmentBmp, bool hasMissingModelingAttributes)
+        private List<HtmlString> CheckForParameterizationErrors(EFModels.Entities.TreatmentBMP treatmentBmp, bool hasMissingModelingAttributes, Delineation? delineation)
         {
             var parameterizationErrors = new List<HtmlString>();
 
-            if (treatmentBmp.Delineation == null && treatmentBmp.UpstreamBMP?.Delineation == null)
+            if (delineation == null)
             {
                 var linkToDelineationMapOrNot = treatmentBmp.UpstreamBMPID != null
                     ? "Please add a BMP delineation to the Upstream BMP on the Delineation Map or remove the Upstream BMP and add a BMP delineation for this Treatment BMP."
-                    : "<a href='" + DelineationMapUrl +
-                      "'> Please add a BMP delineation on the Delineation Map</a>.";
+                    : $"<a href='{DelineationMapUrl}'> Please add a BMP delineation on the Delineation Map</a>.";
                 parameterizationErrors.Add(new HtmlString(
-                    "A delineation is required for each Treatment BMP to be included in Modeling or Trash result calculations. " +
-                    linkToDelineationMapOrNot));
+                    $"A delineation is required for each Treatment BMP to be included in Modeling or Trash result calculations. {linkToDelineationMapOrNot}"));
             }
 
             if (treatmentBmp.WaterQualityManagementPlan != null && treatmentBmp.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Simplified)
