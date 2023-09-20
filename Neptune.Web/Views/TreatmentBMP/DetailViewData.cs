@@ -137,6 +137,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public List<CustomAttribute> CustomAttributes { get; }
         public List<EFModels.Entities.FundingEvent> FundingEvents { get; }
         public List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; }
+        public List<EFModels.Entities.TreatmentBMPDocument> TreatmentBMPDocuments { get; }
 
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
@@ -145,7 +146,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
             string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl,
             ModeledPerformanceViewData modeledPerformanceViewData, bool otherTreatmentBmpsExistInSubbasin,
-            bool hasMissingModelingAttributes, List<CustomAttribute> customAttributes, List<EFModels.Entities.FundingEvent> fundingEvents, List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds)
+            bool hasMissingModelingAttributes, List<CustomAttribute> customAttributes, List<EFModels.Entities.FundingEvent> fundingEvents, List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, List<EFModels.Entities.TreatmentBMPDocument> treatmentBMPDocuments)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
@@ -192,6 +193,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             CustomAttributes = customAttributes;
             FundingEvents = fundingEvents;
             TreatmentBMPBenchmarkAndThresholds = treatmentBMPBenchmarkAndThresholds;
+            TreatmentBMPDocuments = treatmentBMPDocuments;
 
             EditTreatmentBMPPerformanceAndModelingAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.EditModelingAttributes(treatmentBMP));
             EditTreatmentBMPOtherDesignAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.EditOtherDesignAttributes(treatmentBMP));

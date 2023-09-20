@@ -43,7 +43,7 @@ namespace Neptune.Web.Controllers
             {
                 TreatmentBMP = treatmentBMP
             };
-            viewModel.UpdateModel(treatmentBMPDocument, CurrentPerson, _fileResourceService);
+            await viewModel.UpdateModel(treatmentBMPDocument, CurrentPerson, _fileResourceService);
             await _dbContext.TreatmentBMPDocuments.AddAsync(treatmentBMPDocument);
             await _dbContext.SaveChangesAsync();
             return new ModalDialogFormJsonResult();

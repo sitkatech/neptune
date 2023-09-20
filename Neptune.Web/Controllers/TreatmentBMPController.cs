@@ -199,7 +199,8 @@ namespace Neptune.Web.Controllers
             var customAttributes = CustomAttributes.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var fundingEvents = FundingEvents.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var treatmentBMPBenchmarkAndThresholds = TreatmentBMPBenchmarkAndThresholds.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPType, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl, hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, otherTreatmentBmpsExistInSubbasin, HasMissingModelingAttributes(treatmentBMP), customAttributes, fundingEvents, treatmentBMPBenchmarkAndThresholds);
+            var treatmentBMPDocuments = TreatmentBMPDocuments.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPType, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl, hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, otherTreatmentBmpsExistInSubbasin, HasMissingModelingAttributes(treatmentBMP), customAttributes, fundingEvents, treatmentBMPBenchmarkAndThresholds, treatmentBMPDocuments);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

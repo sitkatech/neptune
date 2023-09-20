@@ -52,19 +52,19 @@ namespace Neptune.Web.Views.TreatmentBMPDocument
         {
         }
 
-        public NewViewModel(EFModels.Entities.TreatmentBMPDocument monitoringProgramDocument)
+        public NewViewModel(EFModels.Entities.TreatmentBMPDocument treatmentBMPDocument)
         {
-            DisplayName = monitoringProgramDocument.DisplayName;
-            DocumentDescription = monitoringProgramDocument.DocumentDescription;
+            DisplayName = treatmentBMPDocument.DisplayName;
+            DocumentDescription = treatmentBMPDocument.DocumentDescription;
         }
 
-        public async Task UpdateModel(EFModels.Entities.TreatmentBMPDocument monitoringProgramDocument, Person currentPerson, FileResourceService fileResourceService)
+        public async Task UpdateModel(EFModels.Entities.TreatmentBMPDocument treatmentBMPDocument, Person currentPerson, FileResourceService fileResourceService)
         {
-            monitoringProgramDocument.DisplayName = DisplayName;
-            monitoringProgramDocument.DocumentDescription = DocumentDescription;
-            monitoringProgramDocument.UploadDate = DateTime.Now;
+            treatmentBMPDocument.DisplayName = DisplayName;
+            treatmentBMPDocument.DocumentDescription = DocumentDescription;
+            treatmentBMPDocument.UploadDate = DateTime.Now;
             var fileResource = await fileResourceService.CreateNewFromIFormFile(FileResourceData, currentPerson);
-            monitoringProgramDocument.FileResource = fileResource;
+            treatmentBMPDocument.FileResource = fileResource;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

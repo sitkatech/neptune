@@ -1004,9 +1004,9 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                             </span>
                         </div>
                         <div class="panel-body">
-                            @if (ViewDataTyped.TreatmentBMP.TreatmentBMPDocuments.Any())
+                            @if (ViewDataTyped.TreatmentBMPDocuments.Any())
                             {
-                                foreach (var treatmentBMPDocument in ViewDataTyped.TreatmentBMP.TreatmentBMPDocuments.OrderBy(x => x.DisplayName))
+                                foreach (var treatmentBMPDocument in ViewDataTyped.TreatmentBMPDocuments.OrderBy(x => x.DisplayName))
                                 {
                                     if (ViewDataTyped.CurrentPersonCanManage)
                                     {
