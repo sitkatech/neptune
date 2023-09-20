@@ -119,6 +119,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool CurrentPersonIsAnonymousOrUnassigned { get; }
         public string EditUrl { get; }
         public string DetailUrl { get; }
+        public string StormwaterJurisdictionDetailUrl { get; }
         public UrlTemplate<int> DetailUrlTemplate { get; }
         public UrlTemplate<int> FundingEventEditUrlTemplate { get; }
         public UrlTemplate<int> FundingEventDeleteUrlTemplate { get; }
@@ -170,6 +171,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             DetailUrl = DetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
             EditUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.Edit(treatmentBMP));
+            StormwaterJurisdictionDetailUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(treatmentBMP.StormwaterJurisdictionID));
             FundingSourceDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<FundingSourceController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             TreatmentBMPDocumentEditUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(LinkGenerator, x => x.Edit(UrlTemplate.Parameter1Int)));
             TreatmentBMPDocumentDeleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(LinkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
