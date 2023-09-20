@@ -24,12 +24,12 @@ using Neptune.Web.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Options;
 using Neptune.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Services;
 using Neptune.Web.Services.Filters;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace Neptune.Web.Controllers
 {
@@ -70,12 +70,12 @@ namespace Neptune.Web.Controllers
         {
             var contentDisposition = new System.Net.Mime.ContentDisposition
             {
-                FileName = fileResource.OriginalBaseFilename,
+                FileName = fileResource.GetOriginalCompleteFileName(),
                 Inline = false
             };
             Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
 
-            BlobDownloadResult blobDownloadResult =
+            var blobDownloadResult =
                 await _azureBlobStorageService.DownloadFileResourceFromBlobStorage(fileResource);
 
             return File(blobDownloadResult.Content.ToArray(), blobDownloadResult.Details.ContentType);
