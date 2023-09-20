@@ -45,4 +45,9 @@ public static class TreatmentBMPBenchmarkAndThresholds
     {
         return GetImpl(dbContext).AsNoTracking().Where(x => x.TreatmentBMPID == treatmentBMPID).ToList();
     }
+
+    public static List<TreatmentBMPBenchmarkAndThreshold> ListByTreatmentBMPIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPID)
+    {
+        return GetImpl(dbContext).Where(x => x.TreatmentBMPID == treatmentBMPID).ToList();
+    }
 }

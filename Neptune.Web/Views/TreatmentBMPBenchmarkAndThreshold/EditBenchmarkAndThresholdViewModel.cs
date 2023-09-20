@@ -43,11 +43,11 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         {
         }
 
-        public EditBenchmarkAndThresholdViewModel(EFModels.Entities.TreatmentBMP treatmentBMP, EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
+        public EditBenchmarkAndThresholdViewModel(EFModels.Entities.TreatmentBMP treatmentBMP, EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds)
         {
             TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             TreatmentBMPAssessmentObservationTypeID = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID;
-            var benchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds.FirstOrDefault(x => x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
+            var benchmarkAndThreshold = treatmentBMPBenchmarkAndThresholds.FirstOrDefault(x => x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
 
             BenchmarkValue = benchmarkAndThreshold?.BenchmarkValue;
             ThresholdValue = benchmarkAndThreshold?.ThresholdValue;             

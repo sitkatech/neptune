@@ -53,10 +53,12 @@ namespace Neptune.Web.Controllers
         public ViewResult EditBenchmarkAndThreshold([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, [FromRoute] int treatmentBMPAssessmentObservationTypeID)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMP.TreatmentBMPTypeID);
             var treatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationTypes.GetByID(_dbContext, treatmentBMPAssessmentObservationTypeID);
-
-            var viewModel = new EditBenchmarkAndThresholdViewModel(treatmentBMP, treatmentBMPAssessmentObservationType);
-            return ViewEditBenchmarkAndThreshold(treatmentBMP, treatmentBMPAssessmentObservationType, viewModel);
+            var treatmentBMPBenchmarkAndThresholds = TreatmentBMPBenchmarkAndThresholds.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
+            var viewModel = new EditBenchmarkAndThresholdViewModel(treatmentBMP, treatmentBMPAssessmentObservationType,
+                treatmentBMPBenchmarkAndThresholds);
+            return ViewEditBenchmarkAndThreshold(treatmentBMP, treatmentBMPAssessmentObservationType, viewModel, treatmentBMPType);
         }
 
         [HttpPost("{treatmentBMPPrimaryKey}/{treatmentBMPAssessmentObservationTypeID}")]
@@ -65,33 +67,35 @@ namespace Neptune.Web.Controllers
         public async Task<IActionResult> EditBenchmarkAndThreshold([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, [FromRoute] int treatmentBMPAssessmentObservationTypeID, EditBenchmarkAndThresholdViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMP.TreatmentBMPTypeID);
             var treatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationTypes.GetByIDWithChangeTracking(_dbContext, treatmentBMPAssessmentObservationTypeID);
             if (!ModelState.IsValid)
             {
                 SetErrorForDisplay("Could not save benchmark and threshold values: Please fix validation errors to proceed.");
-                return ViewEditBenchmarkAndThreshold(treatmentBMP, treatmentBMPAssessmentObservationType, viewModel);
+                return ViewEditBenchmarkAndThreshold(treatmentBMP, treatmentBMPAssessmentObservationType, viewModel, treatmentBMPType);
             }
 
-            var benchmarkAndThreshold = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMP, treatmentBMPAssessmentObservationType);
+            var treatmentBMPBenchmarkAndThresholds = TreatmentBMPBenchmarkAndThresholds.ListByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPID);
+            var treatmentBMPBenchmarkAndThreshold = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMP, treatmentBMPAssessmentObservationType, treatmentBMPBenchmarkAndThresholds, treatmentBMPType);
 
-            viewModel.UpdateModel(benchmarkAndThreshold, CurrentPerson);
+            viewModel.UpdateModel(treatmentBMPBenchmarkAndThreshold, CurrentPerson);
             await _dbContext.SaveChangesAsync();
 
             SetMessageForDisplay("Benchmark and threshold values successfully saved.");
 
             return viewModel.AutoAdvance
-                ? GetNextObservationTypeViewResult(treatmentBMP, treatmentBMPAssessmentObservationType)
+                ? GetNextObservationTypeViewResult(treatmentBMP, treatmentBMPAssessmentObservationType, treatmentBMPType)
                 : RedirectToAction(new SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>(_linkGenerator, x => x.EditBenchmarkAndThreshold(treatmentBMPPrimaryKey, treatmentBMPAssessmentObservationTypeID)));
         }
 
         private static TreatmentBMPBenchmarkAndThreshold GetExistingTreatmentBMPObservationOrCreateNew(
-            TreatmentBMP treatmentBMP, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
+            TreatmentBMP treatmentBMP, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, IEnumerable<TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, TreatmentBMPType treatmentBMPType)
         {
-            var treatmentBMPObservation = treatmentBMP.TreatmentBMPBenchmarkAndThresholds.SingleOrDefault(x => x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
+            var treatmentBMPObservation = treatmentBMPBenchmarkAndThresholds.SingleOrDefault(x => x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             if (treatmentBMPObservation == null)
             {
                 var treatmentBMPTypeAssessmentObservationType =
-                    treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(x =>
+                    treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(x =>
                         x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
                 Check.RequireNotNull(treatmentBMPTypeAssessmentObservationType,
                     $"Not a valid Observation Type ID {treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID} for Treatment BMP Type ID {treatmentBMP.TreatmentBMPTypeID}");
@@ -99,7 +103,7 @@ namespace Neptune.Web.Controllers
                 {
                     TreatmentBMP = treatmentBMP,
                     TreatmentBMPTypeAssessmentObservationType = treatmentBMPTypeAssessmentObservationType,
-                    TreatmentBMPType = treatmentBMP.TreatmentBMPType,
+                    TreatmentBMPType = treatmentBMPType,
                     TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationType, BenchmarkValue = 0,
                     ThresholdValue = 0
                 };
@@ -109,22 +113,20 @@ namespace Neptune.Web.Controllers
         }
 
 
-        private ViewResult ViewEditBenchmarkAndThreshold(TreatmentBMP treatmentBMP, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, EditBenchmarkAndThresholdViewModel viewModel)
+        private ViewResult ViewEditBenchmarkAndThreshold(TreatmentBMP treatmentBMP, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, EditBenchmarkAndThresholdViewModel viewModel, TreatmentBMPType treatmentBMPType)
         {
-            var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMP.TreatmentBMPTypeID);
             var viewData = new EditBenchmarkAndThresholdViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPAssessmentObservationType, treatmentBMPType);
             return RazorView<EditBenchmarkAndThreshold, EditBenchmarkAndThresholdViewData, EditBenchmarkAndThresholdViewModel>(viewData, viewModel);
         }
 
-        private RedirectResult GetNextObservationTypeViewResult(TreatmentBMP treatmentBMP, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
+        private RedirectResult GetNextObservationTypeViewResult(TreatmentBMP treatmentBMP, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, TreatmentBMPType treatmentBMPType)
         {
-            var orderedObservationTypes = treatmentBMP.TreatmentBMPType.GetObservationTypes()
-                .Where(x => x.GetHasBenchmarkAndThreshold()).ToList();
+            var orderedObservationTypes = treatmentBMPType.GetObservationTypesForAssessment()
+                    .Select(x => x.TreatmentBMPAssessmentObservationType).Where(x => x.GetHasBenchmarkAndThreshold()).ToList();
 
             var nextObservationType = treatmentBMPAssessmentObservationType == null
                 ? orderedObservationTypes.First()
-                : orderedObservationTypes.ElementAtOrDefault(
-                    orderedObservationTypes.IndexOf(treatmentBMPAssessmentObservationType) + 1);
+                : orderedObservationTypes.SkipWhile(x => x.TreatmentBMPAssessmentObservationTypeID != treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID).Skip(1).FirstOrDefault();
 
             var nextObservationTypeViewResult = nextObservationType == null
                 ? RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.Detail(treatmentBMP.TreatmentBMPID)))
