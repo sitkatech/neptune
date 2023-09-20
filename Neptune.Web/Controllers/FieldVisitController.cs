@@ -297,8 +297,9 @@ namespace Neptune.Web.Controllers
         public ViewResult Photos([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = FieldVisits.GetByID(_dbContext, fieldVisitPrimaryKey);
-            var viewModel = new PhotosViewModel(fieldVisit.TreatmentBMP);
-            return ViewPhotos(fieldVisit, viewModel);
+            var treatmentBMPImages = TreatmentBMPImages.ListByTreatmentBMPID(_dbContext, fieldVisit.TreatmentBMPID);
+            var viewModel = new PhotosViewModel(treatmentBMPImages);
+            return ViewPhotos(fieldVisit, viewModel, treatmentBMPImages);
         }
 
         [HttpPost("{fieldVisitPrimaryKey}")]
@@ -307,11 +308,13 @@ namespace Neptune.Web.Controllers
         public async Task<IActionResult> Photos([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, PhotosViewModel viewModel)
         {
             var fieldVisit = FieldVisits.GetByIDWithChangeTracking(_dbContext, fieldVisitPrimaryKey);
+            var treatmentBMPImages = TreatmentBMPImages.ListByTreatmentBMPIDWithChangeTracking(_dbContext, fieldVisit.TreatmentBMPID);
             if (!ModelState.IsValid)
             {
-                ViewPhotos(fieldVisit, viewModel);
+                ViewPhotos(fieldVisit, viewModel, treatmentBMPImages);
             }
-            await viewModel.UpdateModel(CurrentPerson, fieldVisit.TreatmentBMP, _dbContext, _fileResourceService);
+
+            await viewModel.UpdateModel(CurrentPerson, fieldVisit.TreatmentBMP, _dbContext, _fileResourceService, treatmentBMPImages);
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             fieldVisit.InventoryUpdated = true;
             if (await FinalizeVisitIfNecessary(viewModel, fieldVisit))
@@ -323,9 +326,9 @@ namespace Neptune.Web.Controllers
             return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Photos(fieldVisit)), new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Attributes(fieldVisit)), fieldVisit);
         }
 
-        private ViewResult ViewPhotos(FieldVisit fieldVisit, PhotosViewModel viewModel)
+        private ViewResult ViewPhotos(FieldVisit fieldVisit, PhotosViewModel viewModel, List<TreatmentBMPImage> treatmentBMPImages)
         {
-            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit.TreatmentBMP);
+            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPImages);
             var viewData = new PhotosViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, managePhotosWithPreviewViewData);
             return RazorView<Photos, PhotosViewData, PhotosViewModel>(viewData, viewModel);
         }
@@ -838,8 +841,9 @@ namespace Neptune.Web.Controllers
         {
             var fieldVisit = FieldVisits.GetByID(_dbContext, fieldVisitPrimaryKey);
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum);
-            var viewModel = new AssessmentPhotosViewModel(treatmentBMPAssessment);
-            return ViewAssessmentPhotos(treatmentBMPAssessment, treatmentBMPAssessmentTypeEnum, viewModel);
+            var treatmentBMPAssessmentPhotos = TreatmentBMPAssessmentPhotos.ListByTreatmentBMPAssessmentID(_dbContext, treatmentBMPAssessment.TreatmentBMPAssessmentID);
+            var viewModel = new AssessmentPhotosViewModel(treatmentBMPAssessmentPhotos);
+            return ViewAssessmentPhotos(treatmentBMPAssessment, treatmentBMPAssessmentTypeEnum, viewModel, treatmentBMPAssessmentPhotos);
         }
 
         [HttpPost("{fieldVisitPrimaryKey}/{treatmentBMPAssessmentTypeEnum}")]
@@ -849,9 +853,10 @@ namespace Neptune.Web.Controllers
         {
             var fieldVisit = FieldVisits.GetByIDWithChangeTracking(_dbContext, fieldVisitPrimaryKey);
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum);
+            var treatmentBMPAssessmentPhotos = TreatmentBMPAssessmentPhotos.ListByTreatmentBMPAssessmentIDWithChangeTracking(_dbContext, treatmentBMPAssessment.TreatmentBMPAssessmentID);
             if (!ModelState.IsValid)
             {
-                return ViewAssessmentPhotos(treatmentBMPAssessment, treatmentBMPAssessmentTypeEnum, viewModel);
+                return ViewAssessmentPhotos(treatmentBMPAssessment, treatmentBMPAssessmentTypeEnum, viewModel, treatmentBMPAssessmentPhotos);
             }
 
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
@@ -861,7 +866,7 @@ namespace Neptune.Web.Controllers
                 treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(fieldVisit, treatmentBMPAssessmentTypeEnum);
             }
 
-            await viewModel.UpdateModel(CurrentPerson, treatmentBMPAssessment, _dbContext, _fileResourceService);
+            await viewModel.UpdateModel(CurrentPerson, treatmentBMPAssessment, _dbContext, _fileResourceService, treatmentBMPAssessmentPhotos);
             if (await FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Detail(fieldVisit))); }
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
@@ -871,11 +876,11 @@ namespace Neptune.Web.Controllers
                     : RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.AssessmentPhotos(fieldVisit, treatmentBMPAssessmentTypeEnum)), new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.VisitSummary(fieldVisit)), fieldVisit);
         }
 
-        private ViewResult ViewAssessmentPhotos(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum, AssessmentPhotosViewModel viewModel)
+        private ViewResult ViewAssessmentPhotos(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum, AssessmentPhotosViewModel viewModel, IEnumerable<TreatmentBMPAssessmentPhoto> treatmentBMPAssessmentPhotos)
         {
             var fieldVisitSection = treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial ? (FieldVisitSection)FieldVisitSection.Assessment : FieldVisitSection.PostMaintenanceAssessment;
 
-            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessment);
+            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessmentPhotos);
 
             var viewData = new AssessmentPhotosViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessment, fieldVisitSection, managePhotosWithPreviewViewData);
             return RazorView<AssessmentPhotos, AssessmentPhotosViewData, AssessmentPhotosViewModel>(viewData, viewModel);

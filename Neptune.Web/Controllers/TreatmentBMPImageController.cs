@@ -26,8 +26,9 @@ namespace Neptune.Web.Controllers
         public ViewResult ManageTreatmentBMPImages([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var viewModel = new ManageTreatmentBMPImagesViewModel(treatmentBMP);
-            return ViewManageTreatmentBMPImages(viewModel, treatmentBMP);
+            var treatmentBMPImages = TreatmentBMPImages.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
+            var viewModel = new ManageTreatmentBMPImagesViewModel(treatmentBMPImages);
+            return ViewManageTreatmentBMPImages(viewModel, treatmentBMP, treatmentBMPImages);
         }
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
@@ -35,14 +36,15 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> ManageTreatmentBMPImages([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ManageTreatmentBMPImagesViewModel viewModel)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMP = TreatmentBMPs.GetByIDWithChangeTracking(_dbContext, treatmentBMPPrimaryKey);
+            var treatmentBMPImages = TreatmentBMPImages.ListByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPID);
             if (!ModelState.IsValid)
             {
-                return ViewManageTreatmentBMPImages(viewModel, treatmentBMP);
+                return ViewManageTreatmentBMPImages(viewModel, treatmentBMP, treatmentBMPImages);
             }
 
             treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
-            viewModel.UpdateModel(CurrentPerson, treatmentBMP, _dbContext, _fileResourceService);
+            await viewModel.UpdateModel(CurrentPerson, treatmentBMP, _dbContext, _fileResourceService, treatmentBMPImages);
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
 
@@ -50,9 +52,9 @@ namespace Neptune.Web.Controllers
         }
 
         private ViewResult ViewManageTreatmentBMPImages(ManageTreatmentBMPImagesViewModel viewModel,
-            TreatmentBMP treatmentBMP)
+            TreatmentBMP treatmentBMP, IEnumerable<TreatmentBMPImage> treatmentBMPImages)
         {
-            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP);
+            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPImages);
             var viewData = new ManageTreatmentBMPImagesViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, managePhotosWithPreviewViewData);
             return RazorView<ManageTreatmentBMPImages, ManageTreatmentBMPImagesViewData, ManageTreatmentBMPImagesViewModel>(viewData, viewModel);
         }

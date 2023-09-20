@@ -16,9 +16,9 @@ namespace Neptune.Web.Views.FieldVisit
         {
         }
 
-        public PhotosViewModel(EFModels.Entities.TreatmentBMP treatmentBMP)
+        public PhotosViewModel(IEnumerable<EFModels.Entities.TreatmentBMPImage> treatmentBMPImages)
         {
-            PhotoSimples = treatmentBMP.TreatmentBMPImages.Select(x =>
+            PhotoSimples = treatmentBMPImages.Select(x =>
                 new ManagePhotoWithPreviewPhotoDto
                 {
                     PrimaryKey = x.TreatmentBMPImageID,
@@ -27,7 +27,7 @@ namespace Neptune.Web.Views.FieldVisit
                 }).ToList();
         }
 
-        public async Task UpdateModel(Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, NeptuneDbContext dbContext, FileResourceService fileResourceService)
+        public async Task UpdateModel(Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, NeptuneDbContext dbContext, FileResourceService fileResourceService, ICollection<EFModels.Entities.TreatmentBMPImage> existingTreatmentBMPImages)
         {
             // Merge existing photos
             var photoSimples = PhotoSimples ??
@@ -54,7 +54,7 @@ namespace Neptune.Web.Views.FieldVisit
                         })
                 .Where(x => x != null)
                 .ToList();
-            treatmentBMP.TreatmentBMPImages.Merge(treatmentBMPImagesToUpdate,
+            existingTreatmentBMPImages.Merge(treatmentBMPImagesToUpdate,
                 dbContext.TreatmentBMPImages,
                 (x, y) => x.TreatmentBMPImageID == y.TreatmentBMPImageID,
                 (x, y) => { x.Caption = y.Caption; });

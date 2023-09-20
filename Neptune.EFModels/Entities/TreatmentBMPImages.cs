@@ -10,6 +10,11 @@ public static class TreatmentBMPImages
         return GetImpl(dbContext).AsNoTracking().Where(x => x.TreatmentBMPID == treatmentBMPID).OrderBy(ht => ht.Caption).ToList();
     }
 
+    public static List<TreatmentBMPImage> ListByTreatmentBMPIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPID)
+    {
+        return GetImpl(dbContext).Where(x => x.TreatmentBMPID == treatmentBMPID).OrderBy(ht => ht.Caption).ToList();
+    }
+
     public static TreatmentBMPImage GetByIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPImageID)
     {
         var treatmentBMPImage = GetImpl(dbContext)

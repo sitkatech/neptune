@@ -123,7 +123,7 @@
             </p>
         </div>
     }
-    @for (var i = 0; i < (Model.PhotoSimples != null ? Model.PhotoSimples.Count : 0); i++)
+    @for (var i = 0; i < (Model.PhotoSimples?.Count ?? 0); i++)
     {
         var photoSimple = Model.PhotoSimples[i];
         var fileResourcePhoto = ViewDataTyped.PhotosByID.ContainsKey(photoSimple.PrimaryKey) ? ViewDataTyped.PhotosByID[photoSimple.PrimaryKey] : null;
@@ -132,16 +132,16 @@
             <div class="media">
                 <div class="media-left media-middle">
                     <div style="display: block; width: 200px; max-height: 200px;">
-                        <a href="@(fileResourcePhoto != null ? fileResourcePhoto.FileResource.GetFileResourceUrl() : null)" class="gallery" rel="group1"
-                           data-caption="@(fileResourcePhoto != null ? fileResourcePhoto.Caption : null)" title="@(fileResourcePhoto != null ? fileResourcePhoto.Caption : null)">
+                        <a href="@fileResourcePhoto?.FileResource.GetFileResourceUrl()" class="gallery" rel="group1"
+                           data-caption="@fileResourcePhoto?.Caption" title="@fileResourcePhoto?.Caption">
                             <img class="media-object" style="margin: auto;"
-                                 src="@(fileResourcePhoto != null ? fileResourcePhoto.FileResource.FileResourceUrlScaledThumbnail(200) : null)"
-                                 alt="@(fileResourcePhoto != null ? fileResourcePhoto.Caption : null)" />
+                                 src="@fileResourcePhoto?.FileResource.FileResourceUrlScaledThumbnail(200)"
+                                 alt="@fileResourcePhoto?.Caption" />
                         </a>
                     </div>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading text-right">@(fileResourcePhoto != null ? fileResourcePhoto.FileResource.GetOriginalCompleteFileName() : null)</h4>
+                    <h4 class="media-heading text-right">@fileResourcePhoto?.FileResource.GetOriginalCompleteFileName()</h4>
                     <div class="form-horizontal">
                         <div class="form-group">
                             <div class="col-xs-12 col-sm-4 col-md-2 control-label">

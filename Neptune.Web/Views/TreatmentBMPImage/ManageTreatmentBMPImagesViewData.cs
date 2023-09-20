@@ -8,13 +8,11 @@ namespace Neptune.Web.Views.TreatmentBMPImage
 {
     public class ManageTreatmentBMPImagesViewData : NeptuneViewData
     {
-        public EFModels.Entities.TreatmentBMP TreatmentBMP { get; }
         public ManagePhotosWithPreviewViewData ManagePhotosWithPreviewViewData { get; }
 
         public ManageTreatmentBMPImagesViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, ManagePhotosWithPreviewViewData managePhotosWithPreviewViewData)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
-            TreatmentBMP = treatmentBMP;
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.FindABMP());
             SubEntityName = treatmentBMP.TreatmentBMPName;

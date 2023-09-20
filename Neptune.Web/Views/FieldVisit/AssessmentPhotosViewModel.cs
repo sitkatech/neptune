@@ -16,22 +16,19 @@ namespace Neptune.Web.Views.FieldVisit
         {
         }
 
-        public AssessmentPhotosViewModel(EFModels.Entities.TreatmentBMPAssessment treatmentBMPAssessment)
+        public AssessmentPhotosViewModel(IEnumerable<TreatmentBMPAssessmentPhoto> treatmentBMPAssessmentPhotos)
         {
-            if (treatmentBMPAssessment != null)
-            {
-                PhotoSimples = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Select(x =>
-                    new ManagePhotoWithPreviewPhotoDto
-                    {
-                        PrimaryKey = x.TreatmentBMPAssessmentPhotoID,
-                        Caption = x.Caption,
-                        FlagForDeletion = false
-                    }).ToList();
-            }
+            PhotoSimples = treatmentBMPAssessmentPhotos.Select(x =>
+                new ManagePhotoWithPreviewPhotoDto
+                {
+                    PrimaryKey = x.TreatmentBMPAssessmentPhotoID,
+                    Caption = x.Caption,
+                    FlagForDeletion = false
+                }).ToList();
         }
 
         public async Task UpdateModel(Person currentPerson, EFModels.Entities.TreatmentBMPAssessment treatmentBMPAssessment,
-            NeptuneDbContext dbContext, FileResourceService fileResourceService)
+            NeptuneDbContext dbContext, FileResourceService fileResourceService, ICollection<TreatmentBMPAssessmentPhoto> treatmentBMPAssessmentPhotos)
         {
             // Merge existing photos
             var photoSimples = PhotoSimples ??
@@ -57,7 +54,7 @@ namespace Neptune.Web.Views.FieldVisit
                         })
                 .Where(x => x != null)
                 .ToList();
-            treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Merge(treatmentBMPAssessmentPhotosToUpdate,
+            treatmentBMPAssessmentPhotos.Merge(treatmentBMPAssessmentPhotosToUpdate,
                 dbContext.TreatmentBMPAssessmentPhotos,
                 (x, y) => x.TreatmentBMPAssessmentPhotoID == y.TreatmentBMPAssessmentPhotoID,
                 (x, y) => { x.Caption = y.Caption; });
