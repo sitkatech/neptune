@@ -87,11 +87,13 @@
                                 {
                                     <tr>
                                         <td>
-                                            @*todo: @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned() || fundingEventFundingSource.FundingEvent.TreatmentBMP.InventoryIsVerified)
+                                            @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned() || fundingEventFundingSource.FundingEvent.TreatmentBMP.InventoryIsVerified)
                                             {
-                                                @Html.Raw(fundingEventFundingSource.FundingEvent.TreatmentBMP.GetDisplayNameAsUrl())
+                                                <a href="@ViewDataTyped.TreatmentBMPDetailUrlTemplate.ParameterReplace(fundingEventFundingSource.FundingEvent.TreatmentBMPID)">
+                                                    @fundingEventFundingSource.FundingEvent.TreatmentBMP.TreatmentBMPName
+                                                </a>
                                             }
-                                            else*@
+                                            else
                                             {
                                                 @fundingEventFundingSource.FundingEvent.TreatmentBMP.TreatmentBMPName
                                             }

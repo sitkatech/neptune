@@ -22,8 +22,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("fundingEventPrimaryKey")]
         public PartialViewResult Edit([FromRoute] FundingEventPrimaryKey fundingEventPrimaryKey)
         {
-            var fundingEvent = fundingEventPrimaryKey.EntityObject;
-            
+            var fundingEvent = FundingEvents.GetByID(_dbContext, fundingEventPrimaryKey);
             var viewModel = new EditViewModel(fundingEvent);
             return ViewEditFundingEventFundingSources(fundingEvent, viewModel);
         }
@@ -33,8 +32,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("fundingEventPrimaryKey")]
         public async Task<IActionResult> Edit([FromRoute] FundingEventPrimaryKey fundingEventPrimaryKey, EditViewModel viewModel)
         {
-            var fundingEvent = fundingEventPrimaryKey.EntityObject;
-            
+            var fundingEvent = FundingEvents.GetByIDWithChangeTracking(_dbContext, fundingEventPrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewEditFundingEventFundingSources(fundingEvent, viewModel);
@@ -81,7 +79,7 @@ namespace Neptune.Web.Controllers
                 Description = viewModel.FundingEvent.Description
             };
 
-            _dbContext.FundingEvents.Add(fundingEvent);
+            await _dbContext.FundingEvents.AddAsync(fundingEvent);
             await _dbContext.SaveChangesAsync();
 
             SetMessageForDisplay($"{FieldDefinitionType.FundingEvent.GetFieldDefinitionLabel()} successfully added.");

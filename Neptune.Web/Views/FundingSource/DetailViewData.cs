@@ -32,6 +32,7 @@ namespace Neptune.Web.Views.FundingSource
         public bool UserHasFundingSourceManagePermissions {get; }
         public string EditFundingSourceUrl { get; }
         public string OrganizationUrl { get; }
+        public UrlTemplate<int> TreatmentBMPDetailUrlTemplate { get; }
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.FundingSource fundingSource) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
@@ -44,6 +45,7 @@ namespace Neptune.Web.Views.FundingSource
             UserHasFundingSourceManagePermissions = new FundingSourceEditFeature().HasPermissionByPerson(CurrentPerson);
             EditFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(fundingSource));
             OrganizationUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(fundingSource.OrganizationID));
+            TreatmentBMPDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
         }
     }
 }
