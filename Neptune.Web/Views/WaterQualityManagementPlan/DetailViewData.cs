@@ -184,8 +184,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             if (UsesDetailedModelingApproach)
             {
-                AnyDetailedBMPsNotFullyParameterized = TreatmentBMPs.Any(x => !x.IsFullyParameterized());
-                AllDetailedBMPsNotFullyParameterized = TreatmentBMPs.All(x => !x.IsFullyParameterized());
+                AnyDetailedBMPsNotFullyParameterized = TreatmentBMPs.Any(x => !x.IsFullyParameterized(x.Delineation));
+                AllDetailedBMPsNotFullyParameterized = TreatmentBMPs.All(x => !x.IsFullyParameterized(x.Delineation));
                 // this is redundant but I just want to make this perfectly clear.
                 AnySimpleBMPsNotFullyParameterized = false;
                 AllSimpleBMPsNotFullyParameterized = false;

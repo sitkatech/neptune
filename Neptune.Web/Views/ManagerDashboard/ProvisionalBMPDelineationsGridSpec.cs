@@ -34,6 +34,7 @@ namespace Neptune.Web.Views.ManagerDashboard
         public ProvisionalBMPDelineationsGridSpec(LinkGenerator linkGenerator, Person currentPerson, string gridName)
         {
             var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            var treatmentBMPDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
 
             ObjectNameSingular = "Delineation";
             ObjectNamePlural = "Delineations";
@@ -51,13 +52,13 @@ namespace Neptune.Web.Views.ManagerDashboard
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), new DelineationDeleteFeature().HasPermission(currentPerson, x.TreatmentBMP).HasPermission), 20,
                 DhtmlxGridColumnFilterType.None);
             Add(string.Empty,x => x.GetDetailUrlForGrid(), 45, DhtmlxGridColumnFilterType.None);
-            //Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html); todo
+            Add("BMP Name", x => UrlTemplate.MakeHrefString(treatmentBMPDetailUrlTemplate.ParameterReplace(x.TreatmentBMPID), x.TreatmentBMP.TreatmentBMPName), 120, DhtmlxGridColumnFilterType.Html);
             Add("BMP Type", x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Delineation Type", x => x.TreatmentBMP.Delineation.DelineationType.DelineationTypeDisplayName,80, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Delineation Area (ac)", x => x.TreatmentBMP.Delineation?.GetDelineationArea(), 75);
-            Add("Date of Last Delineation Modification", x => x.TreatmentBMP.Delineation?.DateLastModified, 120,
+            Add("Delineation Type", x => x.DelineationType.DelineationTypeDisplayName,80, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Delineation Area (ac)", x => x.GetDelineationArea(), 75);
+            Add("Date of Last Delineation Modification", x => x.DateLastModified, 120,
                 DhtmlxGridColumnFormatType.Date);
-            Add("Date of Last Delineation Verification", x => x.TreatmentBMP.Delineation?.DateLastVerified, 120,
+            Add("Date of Last Delineation Verification", x => x.DateLastVerified, 120,
                 DhtmlxGridColumnFormatType.Date);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(),
                 x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.TreatmentBMP.StormwaterJurisdictionID), x.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);

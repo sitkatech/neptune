@@ -12,7 +12,7 @@ namespace Neptune.Web.Models
             if (waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
                 WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
             {
-                return waterQualityManagementPlan.TreatmentBMPs.Any(x => x.IsFullyParameterized());
+                return waterQualityManagementPlan.TreatmentBMPs.Any(x => x.IsFullyParameterized(x.Delineation));
             }
 
             return waterQualityManagementPlan.QuickBMPs.Any(x => x.IsFullyParameterized());

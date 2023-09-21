@@ -23,10 +23,11 @@ namespace Neptune.Web.Controllers
                                             "which attributes are missing for a specific facility.")]
         public JsonResult TreatmentBMPParameterizationSummary([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
+            var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext);
             var data = TreatmentBMPs.GetNonPlanningModuleBMPs(_dbContext)
                 .Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList().Select(x =>
                 {
-                    var isFullyParameterized = x.IsFullyParameterized() ? "Yes" : "No";
+                    var isFullyParameterized = x.IsFullyParameterized(delineations[x.TreatmentBMPID]) ? "Yes" : "No";
                     return new
                     {
                         x.TreatmentBMPID,

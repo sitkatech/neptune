@@ -311,6 +311,7 @@ namespace Neptune.Web.Models
                 treatmentBMP.UpstreamBMPID = null;
             }
 
+            //todo: need to load inverse upstream bmps
             //If this BMP is an Upstream BMP for any other BMPs, after the location change, can this BMP still fulfill its duty?
             if (treatmentBMP.InverseUpstreamBMP.Any())
             {
@@ -352,30 +353,11 @@ namespace Neptune.Web.Models
             }
         }
 
-        public static bool HasVerifiedDelineationForModelingPurposes(this TreatmentBMP treatmentBMP, List<int> treatmentBmpIDsTraversed, Delineation? delineation)
+        public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP, Delineation? delineation)
         {
-            //Project BMPs don't need verified delineations
-            if (treatmentBMP.ProjectID != null)
-            {
-                return true;
-            }
-
-            if (treatmentBMP.UpstreamBMP != null)
-            {
-                if (treatmentBmpIDsTraversed.Contains(treatmentBMP.TreatmentBMPID))
-                {
-                    throw new OverflowException($"Infinite loop detected!  TreatmentBMPID {treatmentBMP.TreatmentBMPID} already in list of traversed TreatmentBMPIDs ({string.Join(", ", treatmentBmpIDsTraversed)})");
-                }
-                treatmentBmpIDsTraversed.Add(treatmentBMP.TreatmentBMPID);
-                return treatmentBMP.UpstreamBMP.HasVerifiedDelineationForModelingPurposes(treatmentBmpIDsTraversed, treatmentBMP.UpstreamBMP.Delineation);
-            }
-
-            return delineation?.IsVerified ?? false;
-        }
-
-        public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP)
-        {
-            if (!treatmentBMP.HasVerifiedDelineationForModelingPurposes(new List<int>(), treatmentBMP.Delineation))
+            // Planning BMPs don't need verified delineations
+            // assumes the delineation passed in is the from the "upstreamest" BMP
+            if (treatmentBMP.ProjectID == null && !(delineation?.IsVerified ?? false))
             {
                 return false;
             }

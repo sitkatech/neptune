@@ -41,6 +41,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         private bool IsClosedLoop(NeptuneDbContext dbContext)
         {
+            //todo: need to fix this reference to upstream bmp
             var upstreamBMPChoice = dbContext.TreatmentBMPs.Find(UpstreamBMPID);
 
             var nextUpstream = upstreamBMPChoice.UpstreamBMP;

@@ -9,7 +9,7 @@ public static class TreatmentFacilityExtensions
     {
         var treatmentBMPNodeID = NereidUtilities.TreatmentBMPNodeID(treatmentBMP.TreatmentBMPID);
         var modelBasinKey = treatmentBMP.ModelBasin?.ModelBasinKey.ToString();
-        var isFullyParameterized = treatmentBMP.IsFullyParameterized();
+        var isFullyParameterized = treatmentBMP.IsFullyParameterized(treatmentBMP.Delineation);
         double? treatmentRate = null;
         var modelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
 

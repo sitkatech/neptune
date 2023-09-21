@@ -79,6 +79,17 @@ namespace Neptune.EFModels.Entities
             return GetImpl(dbContext).AsNoTracking().OrderBy(x => x.TreatmentBMPName).ToList();
         }
 
+        public static List<TreatmentBMP> ListWithModelingAttributes(NeptuneDbContext dbContext)
+        {
+            return dbContext.TreatmentBMPs
+                .Include(x => x.TreatmentBMPType)
+                .Include(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
+                .Include(x => x.OwnerOrganization)
+                .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
+                .AsNoTracking().OrderBy(x => x.TreatmentBMPName).ToList();
+        }
+
         public static Dictionary<int, int> ListCountByTreatmentBMPType(NeptuneDbContext dbContext)
         {
             return dbContext.TreatmentBMPs.AsNoTracking().GroupBy(x => x.TreatmentBMPTypeID).Select(x => new { x.Key, Count = x.Count()})

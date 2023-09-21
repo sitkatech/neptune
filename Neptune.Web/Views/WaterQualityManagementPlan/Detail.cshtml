@@ -465,7 +465,7 @@
                                     </td>
                                     <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
                                     <td class="notes collapsed">@treatmentBMP.Notes</td>
-                                    <td>@treatmentBMP.IsFullyParameterized().ToYesNo()</td>
+                                    <td>@treatmentBMP.IsFullyParameterized(treatmentBMP.Delineation).ToYesNo()</td>
                                     <td>@ViewDataTyped.DisplayDryWeatherFlowOverride(treatmentBMP)</td>
                                     <td>@((ViewDataTyped.TreatmentBMPDelineationsDict.ContainsKey(treatmentBMP.TreatmentBMPID) ? ViewDataTyped.TreatmentBMPDelineationsDict[treatmentBMP.TreatmentBMPID] : null).GetDelineationStatus())</td>
                                     <td style="text-align: right">@((ViewDataTyped.TreatmentBMPDelineationsDict.ContainsKey(treatmentBMP.TreatmentBMPID) ? ViewDataTyped.TreatmentBMPDelineationsDict[treatmentBMP.TreatmentBMPID] : null).GetDelineationAreaString())</td>

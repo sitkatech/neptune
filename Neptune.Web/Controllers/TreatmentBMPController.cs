@@ -762,12 +762,17 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<vViewTreatmentBMPModelingAttribute> ViewTreatmentBMPModelingAttributesGridJsonData()
+        public GridJsonNetJObjectResult<TreatmentBMP> ViewTreatmentBMPModelingAttributesGridJsonData()
         {
             var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(_dbContext, CurrentPerson);
-            var gridSpec = new ViewTreatmentBMPModelingAttributesGridSpec(_linkGenerator);
-            var treatmentBMPs = _dbContext.vViewTreatmentBMPModelingAttributes.Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vViewTreatmentBMPModelingAttribute>(treatmentBMPs, gridSpec);
+            var delineationsDict = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext);
+            var watershedsDict = _dbContext.Watersheds.AsNoTracking().Select(x => new {x.WatershedID, x.WatershedName}).ToDictionary(x => x.WatershedID, x => x.WatershedName);
+            var precipitationZonesDict = _dbContext.PrecipitationZones.AsNoTracking()
+                .Select(x => new { x.PrecipitationZoneID, x.DesignStormwaterDepthInInches })
+                .ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
+            var gridSpec = new ViewTreatmentBMPModelingAttributesGridSpec(_linkGenerator, delineationsDict, watershedsDict, precipitationZonesDict);
+            var treatmentBMPs = TreatmentBMPs.ListWithModelingAttributes(_dbContext).Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
         }
 

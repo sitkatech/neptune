@@ -86,8 +86,11 @@ namespace Neptune.EFModels.Entities
         public static List<Delineation> GetProvisionalBMPDelineations(NeptuneDbContext dbContext, Person currentPerson)
         {
             return GetImpl(dbContext).AsNoTracking()
-                .Include(x => x.TreatmentBMP).ThenInclude(x => x.TreatmentBMPType)
-                .Include(x => x.TreatmentBMP).ThenInclude(x => x.StormwaterJurisdiction)
+                .Include(x => x.TreatmentBMP)
+                .ThenInclude(x => x.TreatmentBMPType)
+                .Include(x => x.TreatmentBMP)
+                .ThenInclude(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
                 .Where(x => x.IsVerified == false).ToList()
                 .Where(x => x.TreatmentBMP.CanView(currentPerson))
                 .OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();

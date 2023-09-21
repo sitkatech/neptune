@@ -275,7 +275,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RemoveUpstreamBMP(treatmentBMP));
 
             IsAnalyzedInModelingModule = treatmentBMPType.IsAnalyzedInModelingModule;
-            IsFullyParameterized = treatmentBMP.IsFullyParameterized();
+            IsFullyParameterized = treatmentBMP.IsFullyParameterized(delineation);
 
         }
 
