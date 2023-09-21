@@ -344,7 +344,6 @@
     <Build Include="dbo\Views\dbo.vStormwaterJurisdictionOrganizationMapping.sql" />
     <Build Include="dbo\Views\dbo.vTrashGeneratingUnitLoadStatistic.sql" />
     <Build Include="dbo\Views\dbo.vTreatmentBMPDetailed.sql" />
-    <Build Include="dbo\Views\dbo.vViewTreatmentBMPModelingAttributes.sql" />
     <Build Include="dbo\Views\dbo.vWaterQualityManagementPlanLGUAudit.sql" />
     <Build Include="dbo\Functions\dbo.fGetTGUInputGeometry.sql" />
     <Build Include="dbo\Functions\dbo.fProjectGrantScore.sql" />
