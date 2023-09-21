@@ -30,18 +30,17 @@ namespace Neptune.Web.Views.TreatmentBMP
     {
 
         public EFModels.Entities.TreatmentBMP TreatmentBMP{ get; }
-        public EFModels.Entities.TreatmentBMPImage KeyPhoto { get; }
+        public EFModels.Entities.TreatmentBMPImage? KeyPhoto { get; }
         public string FieldVisitUrl { get; }
         public bool UserHasFieldVisitPermissions { get; }
         public string TreatmentBMPDetailUrl { get; }
         public string StormwaterJurisdictionDetailUrl { get; }
 
         public SummaryForMapViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            EFModels.Entities.TreatmentBMP treatmentBMP) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+            EFModels.Entities.TreatmentBMP treatmentBMP, EFModels.Entities.TreatmentBMPImage? keyPhoto) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
-            // we don't have the concept of a keyphoto; just arbitrarily pick the first photo
-            KeyPhoto = treatmentBMP.TreatmentBMPImages.FirstOrDefault();
+            KeyPhoto = keyPhoto;
             TreatmentBMPDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP));
             StormwaterJurisdictionDetailUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP.StormwaterJurisdictionID));
             FieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(LinkGenerator, x => x.New(TreatmentBMP));

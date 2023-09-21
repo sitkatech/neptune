@@ -646,7 +646,9 @@ namespace Neptune.Web.Controllers
         public PartialViewResult SummaryForMap([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = TreatmentBMPs.GetByID(_dbContext, treatmentBMPPrimaryKey);
-            var viewData = new SummaryForMapViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP);
+            // we don't have the concept of a keyphoto; just arbitrarily pick the first photo
+            var keyPhoto = TreatmentBMPImages.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID).FirstOrDefault();
+            var viewData = new SummaryForMapViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, keyPhoto);
             return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
         }
 
