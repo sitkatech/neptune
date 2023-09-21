@@ -1,0 +1,35 @@
+// import variables
+@import "../../../../scss/_variables.scss";
+
+.panel-header {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: space-between;
+
+    .group {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+    }
+}
+
+// Place holder shows where item will drop into
+.cdk-drag-placeholder {
+    opacity: 0.4;
+}
+
+// Ensure empty list has large enough size to drop item into
+.cdk-drop-list-receiving {
+    border: solid 1px #ccc;
+    min-height: 3rem;
+    background: $light;
+    border-radius: 4px;
+    overflow: hidden;
+    display: block;
+}
+
+.drag-handle {
+    cursor: move;
+}

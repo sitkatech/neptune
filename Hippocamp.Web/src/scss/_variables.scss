@@ -1,0 +1,69 @@
+// Fonts
+@import url(https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i,900);
+@import url(https://fonts.googleapis.com/css?family=Montserrat:700);
+
+$footer-height: 60px;
+
+$theme-colors: (
+        "primary": #0099ab,     // systemBlue
+        "secondary": #969491,   // lightGray
+        "info": #228be6,        // brightBlue
+        "light": #f5f5f5,       // offWhite
+        "muted": #dee2e6,       // footerGray
+        "danger": #a94442,
+        "success": #5cb85c,
+        "warning": #f0ad4e,
+        "footer": #999999,
+        "header-background": #0099ab,
+        "header-nav-link" : #77cfdc,
+        "grid-header-background": #0099ab,
+        "grid-accent-color": #00c1d5,
+        "grid-hover-color": cornsilk,
+        "account-dropdown-text": #fff,
+        "header-gradient-start": transparent,
+        "header-gradient-end": transparent,
+);
+
+// this looks redundant, but we need to override the bootstrap variables in both ways.
+//Custom variables only need the one override
+$primary: #0099ab;
+$secondary: #969491;
+$info: #228be6;
+$light: #f5f5f5;
+$muted: #dee2e6;
+$danger: #a94442;
+$success: #5cb85c;
+$warning: #f0ad4e;
+
+$account-dropdown-text: #fff;
+$button-border-and-background: #0099ab;
+$button-hover-text-color: #ffffff;
+$button-text-color: #ffffff;
+$button-hover-background: #00c1d5;
+$button-toggle-hover: #00c1d5;
+$footer: #999999;  
+$header-background: #0099ab;
+$header-gradient-start: transparent;
+$header-gradient-end: transparent;
+$header-nav-after-height: 0px;
+$header-nav-link: #fff;                
+$header-nav-link-font-weight: inherit;
+$select: #fff;
+$select-and-nav-dropdown-hover: #00c1d5;
+$select-and-nav-hover:#00c1d5;
+$text-muted: darken(#d3d3d3, 15%);
+$text-warning: darken($warning, 20%);
+
+$neptune-orange: #E49937;
+$hippocamp-orange: $neptune-orange;
+
+$font-family-sans-serif: 'Lato', sans-serif, 'Open Sans', sans-serif;
+$font-size: 15px;
+$base-text: #333;
+
+$card-cap-bg: #969491;
+$card-header: #fff;
+$card-body: #f9f9f9;
+
+$modal-header-background: #0099ab;
+$link-color: #205c90;

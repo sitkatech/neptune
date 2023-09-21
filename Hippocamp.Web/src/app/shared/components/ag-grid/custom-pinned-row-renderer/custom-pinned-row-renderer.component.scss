@@ -1,0 +1,9 @@
+@import "~src/scss/_variables.scss";
+
+$hippocamp-primary: $primary;
+
+div {
+    background-color: $hippocamp-primary;
+    color: #fff;
+    padding-left: 10px;
+}

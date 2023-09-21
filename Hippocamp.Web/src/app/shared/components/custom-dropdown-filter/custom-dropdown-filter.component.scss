@@ -1,0 +1,50 @@
+@import "~src/scss/_variables.scss";
+
+$hippocamp-primary: $primary;
+$border-gray: $secondary;
+$background-gray: $muted;
+$hippocamp-orange: $neptune-orange;
+
+#filter-select-buttons input {
+    display: none;
+}
+
+#filter-select-buttons {
+    background-color: $hippocamp-primary;
+    color: #fff;
+    border: 1px solid $border-gray;
+    border-radius: 5px;
+    overflow: hidden;
+    font-weight: bold;
+}
+
+#filter-select-buttons label {
+    float: left;
+    padding: 5px 0;
+    margin: 0;
+    min-height: 27px;
+    height: 27px;
+    width: 80px;
+    text-align: center;
+}
+
+#filter-select-buttons label[for=select] {
+    border-right: 1px solid $border-gray;
+}
+
+#filter-select-buttons label:hover {
+    color: $hippocamp-orange;
+}
+
+#filter-select-buttons input:checked+label {
+    background-color: $background-gray; 
+    color: #000;
+    font-weight: bold;
+}
+
+#filter-options {
+    background-color: #fff;
+    border: 1px solid $border-gray;
+    max-height: 125px;
+    overflow: auto;
+}

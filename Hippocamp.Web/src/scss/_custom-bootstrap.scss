@@ -1,0 +1,224 @@
+// Navbar link contrast increase
+.navbar-dark .navbar-nav .nav-link {
+  color: #e1e1e1;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: #ffffff
+}
+
+.nav-link {
+  font-weight: $header-nav-link-font-weight;
+}
+
+// Add Abbr color
+abbr[title],
+abbr[data-original-title] {
+  text-decoration-color: $info;
+}
+
+.breadcrumb
+{
+  border-width: 1px 0px 1px 0px;
+  border-style: solid;
+  border-color: #e9eeef;
+  background-color: #fff;
+}
+// Breadcrumb active text contrast increase
+.breadcrumb-item.active {
+  color: #474D52;
+}
+
+// Maintain link color on hover
+a:hover {
+  color: $link-color;
+}
+
+// Spinner for loading
+.loading-spinner {
+  -webkit-animation-name: loading-spinner;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  animation-name: loading-spinner;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes loading-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.intro-text {
+  margin-bottom: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.fa-info-circle {
+  cursor: pointer;
+}
+
+.nav-item, .navbar-text {
+  white-space: nowrap;
+}
+
+.leaflet-draw-section a {
+  &:hover {
+    color: white;
+    text-decoration: none;
+  }
+}
+
+.table-max-height {
+  max-height: 500px;
+}
+
+.systemText
+{
+  font-style: italic;
+}
+
+.footer {
+  background-color: $footer;
+  font-size: 12px; 
+  color: white;
+}
+
+.footer a {
+  color: white;
+}
+
+.card-header
+{
+  font-weight: bold;
+  color: $card-header;
+}
+
+.card-header.hippocamp {
+  background-color: $primary;
+}
+
+.card-body
+{
+  background-color: $card-body;
+}
+
+.btn-hippocamp
+{
+  background-color: $button-border-and-background;
+  border-color: $button-border-and-background;
+  color: $button-text-color;
+}
+
+.btn-hippocamp:hover {
+  color: $button-hover-text-color;
+  background: $button-hover-background;
+}
+
+.btn-toggle {
+  color: #212529;
+  background-color: #ababab;
+  border-color: #a4a4a4;
+}
+
+.btn-toggle:not(:disabled):not(.disabled):active,
+.btn-toggle:not(:disabled):not(.disabled).active,
+.show > .btn-toggle.dropdown-toggle {
+  background-color: $button-border-and-background;
+  border-color: $button-border-and-background;
+  color: #fff;
+}
+
+.btn-toggle:hover {
+  cursor: pointer;
+  color: #fff;
+  background-color: $button-toggle-hover;
+  border-color: $button-toggle-hover;
+}
+
+.modal-header
+{
+  background-color: $modal-header-background;
+  padding: .5rem 1rem;
+}
+
+.modal-header .close
+{
+  line-height: inherit;
+}
+
+.modal-content
+{
+  top:150px;
+}
+
+.accordion > .card {
+  overflow:visible
+  &:last-child {
+    margin-bottom:0;
+  }
+}
+
+
+.sidebar-card {
+  background: $card-body;
+  border: none;
+  margin-bottom: 0;
+  
+  border-top: 3px solid $primary;
+  border-bottom: 3px solid $primary;
+
+  .card-body {
+    margin-top: 0;
+    padding: 0.65rem;
+  }
+
+  .card-header {
+      padding: 0;
+      background: $card-body;
+      margin-bottom: 0 !important;
+      button {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding-top:0.5rem;
+        padding-bottom:0.5rem;
+        padding-right:1.5rem;
+        &.opened {
+          font-weight:700;
+          background:#fff;
+        }
+      }
+  }
+
+  a.active {
+    font-weight: 700;
+  }
+
+  a.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    color: $base-text;
+  }
+
+  .icon-padding {
+    position: relative;
+    padding-left: 30px;
+
+    hippocamp-progress-icon {
+      position: absolute;
+      left: 0;
+    }
+  }
+
+}
+
+
+
+

@@ -1,0 +1,150 @@
+<div class="mt-md-0 mt-4">
+    <h2 class="d-inline-block">Review and Share</h2>
+</div>
+<div class="row m-1">
+    <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+</div>
+
+<ngb-alert *ngIf="project?.ShareOCTAM2Tier2Scores" [type]="'warning'" [dismissible]="false">
+    This project has been shared with the OCTA M2 Tier 2 Grant Program. 
+    If you would like to edit this project, you must first revoke sharing for all grant programs.
+</ngb-alert>
+
+<ng-container *ngIf="project">
+    <div class="row mt-3 mb-3">
+        <div class="col-xl-7">
+            <div class="card">
+                <div class="card-header">
+                    Project Basics
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="text-sm-right col-sm-4">Name</dt>
+                        <dd class="col-sm-7">
+                            {{project?.ProjectName}}
+                        </dd>
+
+                        <dt class="text-sm-right col-sm-4 mt-2">Description</dt>
+                        <dd class="col-sm-7 mt-2">
+                            {{project?.ProjectDescription}}
+                            <em *ngIf="!project?.ProjectDescription" class="text-muted">None Provided</em>
+                        </dd>
+
+                        <dt class="text-sm-right col-sm-4 mt-2">Status</dt>
+                        <dd class="col-sm-7 mt-2">
+                            {{project?.ProjectStatus.ProjectStatusDisplayName}}
+                        </dd>
+
+                        <dt class="text-sm-right col-sm-4 mt-2">Date Created</dt>
+                        <dd class="col-sm-7 mt-2">
+                            {{project?.DateCreated | date: 'MM/dd/yyyy'}}
+                        </dd>
+
+
+                        <dt class="text-sm-right col-sm-4 mt-2">Project Owner</dt>
+                        <dd class="col-sm-7 mt-2">
+                            {{project?.Organization.OrganizationName}}
+                        </dd>
+
+                        <dt class="text-sm-right col-sm-4 mt-2">Jurisdiction</dt>
+                        <dd class="col-sm-7 mt-2">
+                            {{project?.StormwaterJurisdiction.Organization.OrganizationName}}
+                        </dd>
+
+                        <dt class="text-sm-right col-sm-4 mt-2">Primary Contact</dt>
+                        <dd class="col-sm-7 mt-2">
+                            {{project?.PrimaryContactPerson.FullName}}
+                        </dd>
+
+                        <dt class="text-sm-right col-sm-4 mt-2">Additional Contact Information</dt>
+                        <dd class="col-sm-7 mt-2">
+                            {{project?.AdditionalContactInformation}}
+                            <em *ngIf="!project?.AdditionalContactInformation" class="text-muted">None Provided</em>
+                        </dd>
+
+                        <dt class="text-sm-right col-sm-4 mt-2">Includes Stormwater Treatment BMPs
+                        </dt>
+                        <dd class="col-sm-7 mt-2">
+                            {{project?.DoesNotIncludeTreatmentBMPs ? "No" : "Yes"}}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-5 mt-xl-0 mt-3">
+            <div class="card">
+                <div class="card-header">
+                    Share Project
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <i [ngClass]="project.ShareOCTAM2Tier2Scores ? 'fas fa-check text-success' : 'fas fa-times text-danger'"></i>
+                        </div>
+                        <div class="col">
+                            OCTA M2 Tier 2 Grant Program
+                        </div>
+                        <div class="col-4">
+                            <button (click)="shareOrRevokeOCTAScores()" class="btn btn-hippocamp" [disabled]="isLoadingSubmit">
+                                <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
+                                {{ project.ShareOCTAM2Tier2Scores ? 'Revoke' : 'Share'}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 mb-3" *ngIf="!project?.DoesNotIncludeTreatmentBMPs">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Treatment BMPs
+                </div>
+                <div class="card-body">
+                    <hippocamp-treatment-bmp-map-editor-and-modeling-attributes #treatmentBMPMapAndModelingAttributes
+                        [readOnly]="true" [includeDelineations]="true" [projectID]="projectID" [zoomToProjectExtentOnLoad]="true" [zoomOnSelection]="true">
+                    </hippocamp-treatment-bmp-map-editor-and-modeling-attributes>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 mb-3" *ngIf="showModelResultsPanel()">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Model Results
+                </div>
+                <div class="card-body">
+                    <hippocamp-model-results [projectID]="project.ProjectID" [treatmentBMPs]="treatmentBMPs"
+                        [delineations]="delineations" [projectNetworkSolveHistories]="projectNetworkSolveHistories">
+                    </hippocamp-model-results>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 mb-3" *ngIf="attachments && attachments.length > 0">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Attachments
+                </div>
+                <div class="card-body">
+                    <hippocamp-attachments-display [attachments]="attachments"></hippocamp-attachments-display>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 mb-3" *ngIf="project.CalculateOCTAM2Tier2Scores">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Grant Metrics
+                </div>
+                <div class="card-body">
+                    <hippocamp-grant-scores [project]="project"></hippocamp-grant-scores>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

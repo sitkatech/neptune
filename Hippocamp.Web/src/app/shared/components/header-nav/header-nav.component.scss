@@ -1,0 +1,175 @@
+@import "~src/scss/_variables.scss";
+a.signOut {
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  z-index: 1021;
+}
+
+nav .dropdown-item:hover {
+  background-color: $select-and-nav-dropdown-hover;
+}
+
+.navbar-logo {
+  img {
+    height: 100px;
+  }
+  padding: 0px;
+  float: left;
+  position: static;
+  z-index: 1025;
+  left: 0;
+  top: 0
+}
+
+nav {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.nav-link.navbar-brand{
+  padding: 0.5rem;
+}
+
+// primary nav
+.navbar.navbar-hippocamp{
+  background-color: $header-background;
+
+  #navbar2 {
+    height: 100%;
+    ul {
+      height: 100%;
+    }
+    li {
+      height: 100%;
+      vertical-align: center;
+      padding-top: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+
+  .dropdown-item{
+    padding: 0.25rem 0.75rem;
+  }
+      
+  a.nav-link
+  {
+    color: $header-nav-link;
+  }
+
+  .nav-item img{
+    height: 50px;
+  }
+
+  li {
+    position: relative;
+  }
+
+  li.currentPage, li:hover{
+    background-color: $button-hover-background;
+  }
+}
+
+// secondary nav
+.navbar.navbar-hippocamp-secondary{
+  background-color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  
+  .dropdown-menu{
+    font-size: 16px;
+  }
+
+  .dropdown-item{
+    padding: 0.25rem 0.75rem;
+  }
+
+  a.nav-link:hover {
+    color: $select-and-nav-hover;
+  }
+  
+  a.nav-link
+  {
+    color: $primary;
+  }
+
+  a:not(.dropdown-item) {
+    padding-left: 0;
+    padding-right: 16px;
+  }
+}
+
+// title bar and current page header
+.navbar-responsive-current-page {
+  color: white;
+  background-color: $button-hover-background;
+  div {
+    padding-left: 16px;
+    padding-top: 0;
+  }
+}
+
+.navbar-responsive-header, .navbar-responsive-current-page {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left:0;
+}
+
+// positional adjustments for the dashboard, map, and search items of the primary nav
+.dashboardItem {
+  a {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+  img {
+    padding-right: 5px;
+  }
+  padding-top: 10px;
+}
+
+//responsive adjustments
+
+@media screen and (min-width: 1201px) {
+  .navbar-hippocamp-secondary {
+    height: 100px;
+  }
+  .navbar-hippocamp {
+    height: 50px;
+  }
+  .navbar-responsive-header, .navbar-responsive-current-page {
+    display:none;
+  }
+  .dashboardItem {
+    text-align: left;
+  }
+  li.currentPage::after {
+    content: '';
+    position: absolute;
+    left: 42%;
+    top: 100%;
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 20px solid $button-hover-background;
+    clear: both;
+  }
+}
+
+@media screen and (max-width: 1200px){
+  .navbar-logo, .navbar-brand-primary {
+    display:none;
+  }
+  .navbar-hippocamp:not(.navbar-responsive-header), #navbar2{
+    padding: 0 !important;
+  }
+
+  .navbar-hippocamp {
+    .nav-item {
+      padding-left: 10px;
+      padding-bottom: 5px;
+    }
+  }
+}
