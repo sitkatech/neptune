@@ -36,7 +36,25 @@ public static class StormwaterJurisdictionPeople
         return GetByID(dbContext, stormwaterJurisdictionPersonPrimaryKey.PrimaryKeyValue);
     }
 
-    public static IEnumerable<int> ListViewableStormwaterJurisdictionIDsByPerson(NeptuneDbContext dbContext, Person person)
+    public static IEnumerable<int> ListViewableStormwaterJurisdictionIDsByPersonForBMPs(NeptuneDbContext dbContext, Person person)
+    {
+        if (person.IsAdministrator())
+        {
+            return GetImpl(dbContext).AsNoTracking().Select(x => x.StormwaterJurisdictionID).ToList();
+        }
+
+        if (person.IsAnonymousOrUnassigned())
+        {
+            return StormwaterJurisdictions.List(dbContext)
+                .Where(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeID ==
+                            (int)StormwaterJurisdictionPublicBMPVisibilityTypeEnum.VerifiedOnly)
+                .Select(x => x.StormwaterJurisdictionID);
+        }
+
+        return GetImpl(dbContext).AsNoTracking().Where(x => x.PersonID == person.PersonID).Select(x => x.StormwaterJurisdictionID).ToList();
+    }
+
+    public static IEnumerable<int> ListViewableStormwaterJurisdictionIDsByPersonForWQMPs(NeptuneDbContext dbContext, Person person)
     {
         if (person.IsAdministrator())
         {
@@ -66,5 +84,13 @@ public static class StormwaterJurisdictionPeople
             .Include(x => x.Person)
             .ThenInclude(x => x.Organization)
             .AsNoTracking().Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID).ToList();
+    }
+
+    public static List<StormwaterJurisdictionPerson> ListByPersonID(NeptuneDbContext dbContext, int personID)
+    {
+        return dbContext.StormwaterJurisdictionPeople
+            .Include(x => x.StormwaterJurisdiction)
+            .ThenInclude(x => x.Organization)
+            .AsNoTracking().Where(x => x.PersonID == personID).ToList();
     }
 }

@@ -120,7 +120,7 @@ namespace Neptune.Web.Models
         public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson, NeptuneDbContext dbContext)
         {
             return GetStormwaterJurisdictionCqlFilter(currentPerson,
-                StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(dbContext, currentPerson));
+                StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(dbContext, currentPerson));
         }
 
         public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson,
@@ -134,7 +134,7 @@ namespace Neptune.Web.Models
         public static string GetNegativeStormwaterJurisdictionCqlFilter(this Person currentPerson, NeptuneDbContext dbContext)
         {
             return GetNegativeStormwaterJurisdictionCqlFilter(currentPerson,
-                StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(dbContext, currentPerson));
+                StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(dbContext, currentPerson));
         }
 
         public static string GetNegativeStormwaterJurisdictionCqlFilter(this Person currentPerson,

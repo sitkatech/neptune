@@ -9,7 +9,8 @@ public static class WaterQualityManagementPlans
     {
         return dbContext.WaterQualityManagementPlans
             .Include(x => x.StormwaterJurisdiction)
-            .ThenInclude(x => x.Organization);
+            .ThenInclude(x => x.Organization)
+            ;
     }
 
     public static WaterQualityManagementPlan GetByIDWithChangeTracking(NeptuneDbContext dbContext,
@@ -59,7 +60,7 @@ public static class WaterQualityManagementPlans
 
     public static List<WaterQualityManagementPlan> ListViewableByPerson(NeptuneDbContext dbContext, Person person)
     {
-        var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(dbContext, person);
+        var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForWQMPs(dbContext, person);
 
         //These users can technically see all Jurisdictions, just potentially not the WQMPs inside them
         var waterQualityManagementPlans = GetImpl(dbContext).Include(x => x.WaterQualityManagementPlanParcels)

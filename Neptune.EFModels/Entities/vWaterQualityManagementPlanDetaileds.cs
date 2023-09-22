@@ -6,7 +6,7 @@ public static class vWaterQualityManagementPlanDetaileds
 {
     public static List<vWaterQualityManagementPlanDetailed> ListViewableByPerson(NeptuneDbContext dbContext, Person person)
     {
-        var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(dbContext, person);
+        var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForWQMPs(dbContext, person);
 
         //These users can technically see all Jurisdictions, just potentially not the WQMPs inside them
         var waterQualityManagementPlans = dbContext.vWaterQualityManagementPlanDetaileds.AsNoTracking()
