@@ -42,7 +42,7 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentPrimaryKey")]
         public ViewResult Detail([FromRoute] TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
         {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
+            var treatmentBMPAssessment = TreatmentBMPAssessments.GetByID(_dbContext, treatmentBMPAssessmentPrimaryKey);
             var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessment);
             return RazorView<Detail, DetailViewData>(viewData);
         }

@@ -91,7 +91,7 @@
                                 <td>
                                     @if (ViewDataTyped.UserHasCustomAttributeTypeManagePermissions)
                                     {
-                                        <a href="@ViewDataTyped.CustomAttributeTypeDetailUrlTemplate.ParameterReplace(maintenanceRecordObservation.CustomAttributeTypeID)">maintenanceRecordObservation.CustomAttributeType.CustomAttributeTypeName</a>
+                                        <a href="@ViewDataTyped.CustomAttributeTypeDetailUrlTemplate.ParameterReplace(maintenanceRecordObservation.CustomAttributeTypeID)">@maintenanceRecordObservation.CustomAttributeType.CustomAttributeTypeName</a>
                                     }
                                     else
                                     {
