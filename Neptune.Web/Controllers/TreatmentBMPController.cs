@@ -168,6 +168,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
+        [AnonymousUnclassifiedFeature] // intentionally put here to bypass having to login
         [TreatmentBMPViewFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public ViewResult Detail([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)

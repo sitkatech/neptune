@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
@@ -40,13 +41,6 @@ namespace Neptune.Web.Security
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if (!context.HttpContext.User.Identity?.IsAuthenticated ?? false)
-            {
-                var redirectToLogin = new RedirectResult(NeptuneHelpers.GenerateLogInUrlWithReturnUrl(context.HttpContext));
-                context.Result = redirectToLogin;
-                return;
-            }
-
             var dbContextService = context.HttpContext.RequestServices.GetService(typeof(NeptuneDbContext));
             if (dbContextService == null || !(dbContextService is NeptuneDbContext dbContext))
             {
@@ -60,11 +54,26 @@ namespace Neptune.Web.Security
 
             if (!isAuthorized)
             {
-                context.Result = new StatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
+                // one last check; if they explicitly decorated it with AllowAnonymousAttribute, we let them in
+                var attributeType = typeof(AnonymousUnclassifiedFeature);
+                var anonymousUnclassifiedFeatureAttribute = (context.ActionDescriptor as ControllerActionDescriptor).MethodInfo.GetCustomAttributes(attributeType, true).FirstOrDefault();
+                if (anonymousUnclassifiedFeatureAttribute == null)
+                {
+                    if (person.PersonID == Person.AnonymousPersonID)
+                    {
+                        var redirectToLogin =
+                            new RedirectResult(NeptuneHelpers.GenerateLogInUrlWithReturnUrl(context.HttpContext));
+                        context.Result = redirectToLogin;
+                    }
+                    else
+                    {
+                        context.Result = new StatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
+                    }
+                }
             }
         }
 
-        public virtual bool HasPermissionByPerson(Person person)
+        public virtual bool HasPermissionByPerson(Person? person)
         {
             return person != null && (_grantedRoles.Any(x => (int)x == person.RoleID)
                     //|| !_grantedRoles.Any()); // allowing an empty list lets us implement LoggedInUnclassifiedFeature easily
