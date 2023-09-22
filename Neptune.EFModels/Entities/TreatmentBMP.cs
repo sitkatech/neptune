@@ -19,8 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using NetTopologySuite.Geometries;
-
 namespace Neptune.EFModels.Entities
 {
     public partial class TreatmentBMP
@@ -94,24 +92,15 @@ namespace Neptune.EFModels.Entities
             return string.Empty;
         }
 
-        public DateTime? LastMaintainedDateTime()
-        {
-            if (!MaintenanceRecords.Any())
-            {
-                return null;
-            }
-
-            return MaintenanceRecords.Max(x => x.GetMaintenanceRecordDate());
-        }
-
-        public string CustomAttributeStatus()
+        public static string GetCustomAttributeStatus(TreatmentBMPType treatmentBMPType,
+            List<CustomAttribute> customAttributes)
         {
             var nonMaintenanceTreatmentBMPTypeCustomAttributeTypes =
-                TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x =>
+                treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x =>
                     x.CustomAttributeType.CustomAttributeTypePurpose != CustomAttributeTypePurpose.Maintenance).ToList();
 
             var completedObservationCount = nonMaintenanceTreatmentBMPTypeCustomAttributeTypes.Count(x =>
-                x.CustomAttributeType.IsRequired && x.CustomAttributeType.IsCompleteForTreatmentBMP(this));
+                x.CustomAttributeType.IsRequired && x.CustomAttributeType.IsCompleteForTreatmentBMP(customAttributes));
 
             var totalObservationCount = nonMaintenanceTreatmentBMPTypeCustomAttributeTypes.Count(x =>
                 x.CustomAttributeType.IsRequired);
@@ -121,13 +110,14 @@ namespace Neptune.EFModels.Entities
                 : $"In Progress ({completedObservationCount} of {totalObservationCount} required attributes entered)";
         }
 
-        public bool RequiredAttributeDoesNotHaveValue()
+        public DateTime? LastMaintainedDateTime()
         {
-            return TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x =>
-            x.CustomAttributeType.IsRequired && x.CustomAttributeType.CustomAttributeTypePurpose !=
-                CustomAttributeTypePurpose.Maintenance &&
-                !x.CustomAttributeType.IsCompleteForTreatmentBMP(this)
-            );
+            if (!MaintenanceRecords.Any())
+            {
+                return null;
+            }
+
+            return MaintenanceRecords.Max(x => x.GetMaintenanceRecordDate());
         }
 
         public void MarkAsVerified(Person currentPerson)

@@ -5,14 +5,17 @@ namespace Neptune.Web.Views.FieldVisit
 {
     public class LocationViewData : FieldVisitSectionViewData
     {
-        public LocationViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.FieldVisit fieldVisit, EditLocationViewData editLocationViewData) : base(httpContext, linkGenerator, currentPerson, fieldVisit,
-            EFModels.Entities.FieldVisitSection.Inventory)
+        public EditLocationViewData EditLocationViewData { get; }
+
+        public LocationViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.FieldVisit fieldVisit,
+            List<EFModels.Entities.TreatmentBMPAssessment> treatmentBMPAssessments,
+            EditLocationViewData editLocationViewData, EFModels.Entities.MaintenanceRecord? maintenanceRecord) : base(httpContext, linkGenerator, currentPerson, fieldVisit,
+            EFModels.Entities.FieldVisitSection.Inventory, fieldVisit.TreatmentBMP.TreatmentBMPType, maintenanceRecord, treatmentBMPAssessments)
         {
             EditLocationViewData = editLocationViewData;
             SubsectionName = "Location";
             SectionHeader = "Location";
         }
-
-        public EditLocationViewData EditLocationViewData { get; }
     }
 }

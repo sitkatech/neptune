@@ -9,6 +9,8 @@ public static class FieldVisits
     {
         return dbContext.FieldVisits
             .Include(x => x.TreatmentBMP)
+            .ThenInclude(x => x.InventoryVerifiedByPerson)
+            .Include(x => x.TreatmentBMP)
             .ThenInclude(x => x.TreatmentBMPType)
             .ThenInclude(x => x.TreatmentBMPTypeCustomAttributeTypes)
             .ThenInclude(x => x.CustomAttributeType)
@@ -18,7 +20,15 @@ public static class FieldVisits
             .ThenInclude(x => x.FileResource)
             .Include(x => x.TreatmentBMPAssessments)
             .ThenInclude(x => x.TreatmentBMPAssessmentPhotos)
-            .ThenInclude(x => x.FileResource);
+            .ThenInclude(x => x.FileResource)
+            .Include(x => x.TreatmentBMPAssessments)
+            .ThenInclude(x => x.TreatmentBMP)
+            .ThenInclude(x => x.StormwaterJurisdiction)
+            .Include(x => x.TreatmentBMPAssessments)
+            .ThenInclude(x => x.TreatmentBMPObservations)
+            .ThenInclude(x => x.TreatmentBMPAssessmentObservationType)
+            .Include(x => x.PerformedByPerson)
+            ;
     }
 
     public static FieldVisit GetByIDWithChangeTracking(NeptuneDbContext dbContext,

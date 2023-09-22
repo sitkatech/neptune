@@ -43,7 +43,8 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail([FromRoute] TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
         {
             var treatmentBMPAssessment = TreatmentBMPAssessments.GetByID(_dbContext, treatmentBMPAssessmentPrimaryKey);
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessment);
+            var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMPAssessment.TreatmentBMPTypeID);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessment, treatmentBMPType);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -117,7 +118,8 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewScore(TreatmentBMPAssessment treatmentBMPAssessment, ScoreViewModel viewModel)
         {
-            var viewData = new ScoreViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessment);
+            var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMPAssessment.TreatmentBMPTypeID);
+            var viewData = new ScoreViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessment, treatmentBMPType);
             return RazorView<Score, ScoreViewData, ScoreViewModel>(viewData, viewModel);
         }
 

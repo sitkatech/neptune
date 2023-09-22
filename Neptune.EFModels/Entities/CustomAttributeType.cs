@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-using Neptune.Common;
-using Neptune.Common.DesignByContract;
+﻿using Neptune.Common;
 using Neptune.Common.GeoSpatial;
 
 namespace Neptune.EFModels.Entities
@@ -23,13 +21,9 @@ namespace Neptune.EFModels.Entities
                 $"{CustomAttributeTypeName} {(MeasurementUnitType != null ? $"({MeasurementUnitType.MeasurementUnitTypeDisplayName})" : string.Empty)}";
         }
 
-        public bool IsCompleteForTreatmentBMP(TreatmentBMP treatmentBMP)
+        public bool IsCompleteForTreatmentBMP(List<CustomAttribute> customAttributes)
         {
-            Check.Assert(
-                treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Select(x => x.CustomAttributeTypeID).Contains(CustomAttributeTypeID),
-                "The Custom Attribute Type is not valid for this Treatment BMP");
-
-            var customAttribute = treatmentBMP.CustomAttributes.SingleOrDefault(x => x.CustomAttributeTypeID == CustomAttributeTypeID);
+            var customAttribute = customAttributes.SingleOrDefault(x => x.CustomAttributeTypeID == CustomAttributeTypeID);
             if (customAttribute == null)
             {
                 return false;

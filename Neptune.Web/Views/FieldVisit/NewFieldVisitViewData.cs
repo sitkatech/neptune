@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 
-using System.Globalization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
@@ -29,21 +28,16 @@ namespace Neptune.Web.Views.FieldVisit
 {
     public class NewFieldVisitViewData : NeptuneUserControlViewData
     {
-        public EFModels.Entities.FieldVisit FieldVisit { get; }
         public bool InProgressFieldVisitExists { get; }
         public IEnumerable<SelectListItem> AllFieldVisitTypes { get; }
         public DateTime? InProgressVisitDate { get; }
 
-        public NewFieldVisitViewData(EFModels.Entities.FieldVisit fieldVisit)
+        public NewFieldVisitViewData(EFModels.Entities.FieldVisit? fieldVisit)
         {
-            FieldVisit = fieldVisit;
-
             InProgressFieldVisitExists = fieldVisit != null;
-
             InProgressVisitDate = fieldVisit?.VisitDate;
-
             AllFieldVisitTypes = FieldVisitType.All.ToSelectListWithDisabledEmptyFirstRow(
-                x => x.FieldVisitTypeID.ToString(CultureInfo.InvariantCulture), x => x.FieldVisitTypeDisplayName,
+                x => x.FieldVisitTypeID.ToString(), x => x.FieldVisitTypeDisplayName,
                 "Choose a type");
         }
 

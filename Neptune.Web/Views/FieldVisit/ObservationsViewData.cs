@@ -22,7 +22,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Models;
 using Neptune.Web.Views.Shared.SortOrder;
 using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 
@@ -34,15 +33,20 @@ namespace Neptune.Web.Views.FieldVisit
         public string SubmitUrl { get; }    
         public TreatmentBMPAssessmentTypeEnum TreatmentBMPAssessmentTypeEnum { get; set; }
 
-        public ObservationsViewData(HttpContext httpContext, LinkGenerator linkGenerator,  EFModels.Entities.FieldVisit fieldVisit, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum, Person currentPerson)
-            : base(httpContext, linkGenerator, currentPerson, fieldVisit, treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial ? (EFModels.Entities.FieldVisitSection) EFModels.Entities.FieldVisitSection.Assessment : EFModels.Entities.FieldVisitSection.PostMaintenanceAssessment)
+        public ObservationsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.FieldVisit fieldVisit,
+            List<EFModels.Entities.TreatmentBMPAssessment> treatmentBMPAssessments,
+            EFModels.Entities.MaintenanceRecord? maintenanceRecord,
+            EFModels.Entities.TreatmentBMPType treatmentBMPType,
+            TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
+            : base(httpContext, linkGenerator, currentPerson, fieldVisit, treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial ? EFModels.Entities.FieldVisitSection.Assessment : EFModels.Entities.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPType, maintenanceRecord, treatmentBMPAssessments)
         {
-            var initialAssessmentObservations = fieldVisit.GetInitialAssessment()?.TreatmentBMPObservations.Select(x =>
+            var initialAssessmentObservations = InitialAssessment?.TreatmentBMPObservations.Select(x =>
                 new CollectionMethodSectionViewModel(x, x.TreatmentBMPAssessmentObservationType)).ToList();
             SubsectionName = "Observations";
             SectionHeader = "Observations";
             TreatmentBMPAssessmentTypeEnum = treatmentBMPAssessmentTypeEnum;
-            ViewDataForAngular = new ObservationsViewDataForAngular(fieldVisit.TreatmentBMP.TreatmentBMPType, initialAssessmentObservations);
+            ViewDataForAngular = new ObservationsViewDataForAngular(treatmentBMPType, initialAssessmentObservations);
             SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Observations(fieldVisit, treatmentBMPAssessmentTypeEnum));
         }
 
@@ -52,7 +56,7 @@ namespace Neptune.Web.Views.FieldVisit
             {
             }
 
-            public ObservationsViewDataForAngular(EFModels.Entities.TreatmentBMPType treatmentBMPType, List<CollectionMethodSectionViewModel> initialAssessmentObservations)
+            public ObservationsViewDataForAngular(EFModels.Entities.TreatmentBMPType treatmentBMPType, List<CollectionMethodSectionViewModel>? initialAssessmentObservations)
             {
                 ObservationTypeSchemas = treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName()
                     .Select(x => new ObservationTypeSchema(x.TreatmentBMPAssessmentObservationType, initialAssessmentObservations)).ToList();
@@ -77,9 +81,9 @@ namespace Neptune.Web.Views.FieldVisit
             public double MinimumValueOfObservations { get; }
             public double MaximumValueOfObservations { get; }
 
-            public List<CollectionMethodSectionViewModel> InitialAssessmentObservations { get; set; }
+            public List<CollectionMethodSectionViewModel>? InitialAssessmentObservations { get; set; }
 
-            public ObservationTypeSchema(EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, List<CollectionMethodSectionViewModel> initialAssessmentObservations)
+            public ObservationTypeSchema(EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, List<CollectionMethodSectionViewModel>? initialAssessmentObservations)
             {
                 InitialAssessmentObservations = initialAssessmentObservations;
                 TreatmentBMPAssessmentObservationTypeID = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID;

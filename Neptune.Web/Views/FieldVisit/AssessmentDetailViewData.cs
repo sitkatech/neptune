@@ -6,24 +6,26 @@ using Neptune.Web.Views.TreatmentBMPAssessment;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class AssessmentDetailViewData
+    public class AssessmentDetailViewData : NeptuneUserControlViewData
     {
-        public TreatmentBMPAssessmentTypeEnum FieldVisitAssessmentType { get; }
-        public EFModels.Entities.TreatmentBMPAssessment TreatmentBMPAssessment { get; }
+        public TreatmentBMPAssessmentTypeEnum TreatmentBMPAssessmentTypeEnum { get; }
+        public EFModels.Entities.TreatmentBMPType TreatmentBMPType { get; }
+        public EFModels.Entities.TreatmentBMPAssessment? TreatmentBMPAssessment { get; }
         public bool CurrentPersonCanManage { get; }
         public bool CanEdit { get; }
         public ScoreDetailViewData ScoreDetailViewData { get; }
         public string EditBenchmarkAndThresholdUrl { get; }
         public ImageCarouselViewData ImageCarouselViewData { get; }
 
-        public AssessmentDetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentTypeEnum fieldVisitAssessmentType)
+        public AssessmentDetailViewData(LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMPAssessment? treatmentBMPAssessment, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum, EFModels.Entities.TreatmentBMPType treatmentBMPType)
         {
-            FieldVisitAssessmentType = fieldVisitAssessmentType;
+            TreatmentBMPAssessmentTypeEnum = treatmentBMPAssessmentTypeEnum;
+            TreatmentBMPType = treatmentBMPType;
             if (treatmentBMPAssessment != null)
             {
                 TreatmentBMPAssessment = treatmentBMPAssessment;
                 CurrentPersonCanManage = currentPerson.IsAssignedToStormwaterJurisdiction(treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdictionID);
-                ScoreDetailViewData = new ScoreDetailViewData(treatmentBMPAssessment);
+                ScoreDetailViewData = new ScoreDetailViewData(treatmentBMPAssessment, treatmentBMPType);
                 EditBenchmarkAndThresholdUrl =
                     SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(linkGenerator, x =>
                         x.Instructions(treatmentBMPAssessment.TreatmentBMP));
@@ -31,7 +33,7 @@ namespace Neptune.Web.Views.FieldVisit
                 CanEdit = CurrentPersonCanManage && treatmentBMPAssessment.CanEdit(currentPerson) &&
                           !treatmentBMPAssessment.IsAssessmentComplete;
 
-                var carouselImages = TreatmentBMPAssessment.TreatmentBMPAssessmentPhotos;
+                var carouselImages = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos;
                 ImageCarouselViewData = new ImageCarouselViewData(carouselImages, 400, linkGenerator);
             }
         }

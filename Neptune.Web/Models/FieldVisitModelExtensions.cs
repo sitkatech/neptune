@@ -4,11 +4,6 @@ namespace Neptune.Web.Models
 {
     public static class FieldVisitModelExtensions
     {
-        public static TreatmentBMPAssessment GetAssessmentByType(this EFModels.Entities.FieldVisit fieldVisit, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
-        {
-            return fieldVisit.TreatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentTypeID == (int)treatmentBMPAssessmentTypeEnum);
-        }
-
         public static void MarkFieldVisitAsProvisionalIfNonManager(this EFModels.Entities.FieldVisit fieldVisit, Person person)
         {
             var isAssignedToStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdictionID);

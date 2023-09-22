@@ -43,11 +43,11 @@ namespace Neptune.EFModels.Entities
             return GetAssessmentDate().GetFiscalYear();
         }
 
-        public string GetAssessmentStatus()
+        public string GetAssessmentStatus(TreatmentBMPType treatmentBMPType)
         {
             var completedObservationCount =
-                TreatmentBMP.TreatmentBMPType.GetObservationTypes().Count(IsObservationComplete);
-            var totalObservationCount = TreatmentBMP.TreatmentBMPType.GetObservationTypes().Count;
+                treatmentBMPType.GetObservationTypes().Count(IsObservationComplete);
+            var totalObservationCount = treatmentBMPType.GetObservationTypes().Count;
             return IsAssessmentComplete
                 ? "Complete"
                 : $"Incomplete ({completedObservationCount} of {totalObservationCount} observations complete)";

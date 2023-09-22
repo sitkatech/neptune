@@ -53,6 +53,11 @@ public static class TreatmentBMPAssessments
         return GetImpl(dbContext).AsNoTracking().ToList();
     }
 
+    public static List<TreatmentBMPAssessment> ListByFieldVisitID(NeptuneDbContext dbContext, int fieldVisitID)
+    {
+        return GetImpl(dbContext).AsNoTracking().Where(x => x.FieldVisitID == fieldVisitID).ToList();
+    }
+
     public static TreatmentBMPAssessment GetByIDForFeatureContextCheck(NeptuneDbContext dbContext, int treatmentBMPAssessmentID)
     {
         var treatmentBMPAssessment = dbContext.TreatmentBMPAssessments

@@ -23,37 +23,27 @@ using System.Globalization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Views.FieldVisit
 {
     public class EditMaintenanceRecordViewData : FieldVisitSectionViewData
     {
-        public bool IsNew { get; }
         public IEnumerable<SelectListItem> AllMaintenanceRecordTypes { get; }
-        public IEnumerable<SelectListItem> AllOrganizations { get; }
-        public string TreatmentBMPUrl { get; }
-        public string MaintenanceRecordUrl { get; }
         public EditAttributesViewData EditAttributesViewData { get; }
 
-        public EditMaintenanceRecordViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, List<EFModels.Entities.Organization> organizations,
-            EFModels.Entities.TreatmentBMP treatmentBMP, bool isNew, EFModels.Entities.FieldVisit fieldVisit, EditAttributesViewData editAttributesViewData) : base(httpContext, linkGenerator, currentPerson, fieldVisit, EFModels.Entities.FieldVisitSection.Maintenance)
+        public EditMaintenanceRecordViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.FieldVisit fieldVisit,
+            List<EFModels.Entities.TreatmentBMPAssessment> treatmentBMPAssessments,
+            EFModels.Entities.MaintenanceRecord? maintenanceRecord,
+            EditAttributesViewData editAttributesViewData) : base(httpContext, linkGenerator, currentPerson, fieldVisit, EFModels.Entities.FieldVisitSection.Maintenance, fieldVisit.TreatmentBMP.TreatmentBMPType, maintenanceRecord, treatmentBMPAssessments)
         {
             SubsectionName = "Edit Maintenance Record";
-            IsNew = isNew;
             EditAttributesViewData = editAttributesViewData;
-
-            AllOrganizations = organizations.OrderBy(x => x.OrganizationName).ToSelectListWithDisabledEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture),
-                x => x.OrganizationName, "Choose an Organization");
 
             AllMaintenanceRecordTypes = MaintenanceRecordType.All.ToSelectListWithDisabledEmptyFirstRow(
                 x => x.MaintenanceRecordTypeID.ToString(CultureInfo.InvariantCulture),
                 x => x.MaintenanceRecordTypeDisplayName, "Choose a type");
-            
-            TreatmentBMPUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP));
-            MaintenanceRecordUrl = SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(MaintenanceRecord));
         }
     }
 }
