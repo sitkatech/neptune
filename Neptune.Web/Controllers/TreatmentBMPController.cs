@@ -124,15 +124,17 @@ namespace Neptune.Web.Controllers
             var gridSpec = new TreatmentBMPAssessmentSummaryGridSpec(_linkGenerator);
             var stormwaterJurisdictionIDsCurrentUserCanEdit = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(_dbContext, CurrentPerson);
 
-            var vMostRecentTreatmentBMPAssessments1 =
-                _dbContext.vMostRecentTreatmentBMPAssessments.Where(x =>
+            var vMostRecentTreatmentBMPAssessments =
+                _dbContext.vMostRecentTreatmentBMPAssessments.AsNoTracking().Where(x =>
                     stormwaterJurisdictionIDsCurrentUserCanEdit.Contains(x.StormwaterJurisdictionID)).ToList();
-            var vMostRecentTreatmentBMPAssessmentIDs =
-                vMostRecentTreatmentBMPAssessments1.Select(y => y.LastAssessmentID).ToList();
+            var vMostRecentTreatmentBMPAssessmentIDs = vMostRecentTreatmentBMPAssessments.Select(y => y.LastAssessmentID).ToList();
 
-            var treatmentBMPObservations = _dbContext.TreatmentBMPObservations.OrderBy(x=>x.TreatmentBMPAssessment.TreatmentBMPID).ThenBy(x=>x.TreatmentBMPTypeAssessmentObservationType.SortOrder).Where(x =>
+            var treatmentBMPObservations = _dbContext.TreatmentBMPObservations
+                .Include(x => x.TreatmentBMPAssessmentObservationType)
+                .AsNoTracking()
+                .Where(x =>
                 vMostRecentTreatmentBMPAssessmentIDs
-                    .Contains(x.TreatmentBMPAssessmentID)).ToList().Where(x=> x.TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID == ObservationTypeCollectionMethod.PassFail.ObservationTypeCollectionMethodID && x.GetPassFailObservationData().SingleValueObservations.Any(y=> Convert.ToBoolean(y.ObservationValue) == false));
+                    .Contains(x.TreatmentBMPAssessmentID)).ToList().Where(x=> x.TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID == (int) ObservationTypeCollectionMethodEnum.PassFail && x.GetPassFailObservationData().SingleValueObservations.Any(y=> bool.Parse(y.ObservationValue.ToString()) == false));
 
 
             var notes = treatmentBMPObservations.ToList().Select(x =>
@@ -155,14 +157,12 @@ namespace Neptune.Web.Controllers
                 };
             });
 
-            var treatmentBMPAssessmentSummaries = vMostRecentTreatmentBMPAssessments1.OrderBy(x=>x.TreatmentBMPID).GroupJoin(notes, 
+            var treatmentBMPAssessmentSummaries = vMostRecentTreatmentBMPAssessments.OrderBy(x=>x.TreatmentBMPID).GroupJoin(notes, 
                 x => x.LastAssessmentID,
                 y => y.TreatmentBMPAssessmentID,
                 (x,y) => new TreatmentBMPAssessmentSummary {AssessmentSummary = x, Notes = string.Join("; ", y.Select(z=>z.Notes).OrderBy(z=>z))});
-            var vMostRecentTreatmentBMPAssessments =
-                treatmentBMPAssessmentSummaries.OrderByDescending(x=>x.AssessmentSummary.LastAssessmentDate).ToList();
             var gridJsonNetJObjectResult =
-                new GridJsonNetJObjectResult<TreatmentBMPAssessmentSummary>(vMostRecentTreatmentBMPAssessments,
+                new GridJsonNetJObjectResult<TreatmentBMPAssessmentSummary>(treatmentBMPAssessmentSummaries.OrderByDescending(x=>x.AssessmentSummary.LastAssessmentDate).ToList(),
                     gridSpec);
             return gridJsonNetJObjectResult;
         }
