@@ -2,7 +2,6 @@
     .controller("TreatmentBMPMapController", function($scope, angularModelAndViewData) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
-        console.log(angularModelAndViewData.AngularViewData);
         $scope.selectedTreatmentBMPTypeIDs = _.map($scope.AngularViewData.TreatmentBMPTypes, function (m) {
             return m.TreatmentBMPTypeID;
         });
@@ -272,7 +271,6 @@
         };
 
         $scope.loadSummaryPanel = function (mapSummaryUrl) {
-            console.log(mapSummaryUrl);
             if (!Sitka.Methods.isUndefinedNullOrEmpty(mapSummaryUrl)) {
                 jQuery.get(mapSummaryUrl)
                     .done(function(data) {
