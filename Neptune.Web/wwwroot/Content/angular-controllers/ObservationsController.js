@@ -33,7 +33,7 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
         };
 
         // depends on the type of observation
-        if (currentObservationTypeSchema.ObservationTypeCollectionMethod === 1) {
+        if (currentObservationTypeSchema.ObservationTypeCollectionMethod === 'DiscreteValue') {
             var defaultPropertyObserved = currentObservationTypeSchema.PropertiesToObserve.length === 1
                 ? currentObservationTypeSchema.PropertiesToObserve[0].DisplayName
                 : null;

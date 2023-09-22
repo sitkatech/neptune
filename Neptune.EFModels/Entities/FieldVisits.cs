@@ -21,12 +21,6 @@ public static class FieldVisits
             .Include(x => x.TreatmentBMPAssessments)
             .ThenInclude(x => x.TreatmentBMPAssessmentPhotos)
             .ThenInclude(x => x.FileResource)
-            .Include(x => x.TreatmentBMPAssessments)
-            .ThenInclude(x => x.TreatmentBMP)
-            .ThenInclude(x => x.StormwaterJurisdiction)
-            .Include(x => x.TreatmentBMPAssessments)
-            .ThenInclude(x => x.TreatmentBMPObservations)
-            .ThenInclude(x => x.TreatmentBMPAssessmentObservationType)
             .Include(x => x.PerformedByPerson)
             ;
     }

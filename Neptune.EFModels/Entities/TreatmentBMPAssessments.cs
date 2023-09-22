@@ -58,6 +58,16 @@ public static class TreatmentBMPAssessments
         return GetImpl(dbContext).AsNoTracking().Where(x => x.FieldVisitID == fieldVisitID).ToList();
     }
 
+    public static TreatmentBMPAssessment? GetByFieldVisitIDAndTreatmentBMPAssessmentType(NeptuneDbContext dbContext, int fieldVisitID, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
+    {
+        return GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.FieldVisitID == fieldVisitID && x.TreatmentBMPAssessmentTypeID == (int) treatmentBMPAssessmentTypeEnum);
+    }
+
+    public static TreatmentBMPAssessment? GetByFieldVisitIDAndTreatmentBMPAssessmentTypeWithChangeTracking(NeptuneDbContext dbContext, int fieldVisitID, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
+    {
+        return GetImpl(dbContext).SingleOrDefault(x => x.FieldVisitID == fieldVisitID && x.TreatmentBMPAssessmentTypeID == (int) treatmentBMPAssessmentTypeEnum);
+    }
+
     public static TreatmentBMPAssessment GetByIDForFeatureContextCheck(NeptuneDbContext dbContext, int treatmentBMPAssessmentID)
     {
         var treatmentBMPAssessment = dbContext.TreatmentBMPAssessments

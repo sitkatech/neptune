@@ -39,6 +39,7 @@ using FieldVisitSection = Neptune.EFModels.Entities.FieldVisitSection;
 using Index = Neptune.Web.Views.FieldVisit.Index;
 using Neptune.Web.Services.Filters;
 using Microsoft.Extensions.Options;
+using Neptune.Common.GeoSpatial;
 using Neptune.Web.Services;
 
 namespace Neptune.Web.Controllers
@@ -730,7 +731,7 @@ namespace Neptune.Web.Controllers
         public ActionResult Observations([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
         {
             var fieldVisit = FieldVisits.GetByID(_dbContext, fieldVisitPrimaryKey);
-            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum);
+            var treatmentBMPAssessment = TreatmentBMPAssessments.GetByFieldVisitIDAndTreatmentBMPAssessmentType(_dbContext, fieldVisit.FieldVisitID, treatmentBMPAssessmentTypeEnum);
 
             // need this check to support deleting assessments from the edit page
             if (treatmentBMPAssessment == null)
@@ -752,7 +753,7 @@ namespace Neptune.Web.Controllers
         public async Task<IActionResult> Observations([FromRoute] FieldVisitPrimaryKey fieldVisitPrimaryKey, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum, ObservationsViewModel viewModel)
         {
             var fieldVisit = FieldVisits.GetByIDWithChangeTracking(_dbContext, fieldVisitPrimaryKey);
-            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum);
+            var treatmentBMPAssessment = TreatmentBMPAssessments.GetByFieldVisitIDAndTreatmentBMPAssessmentTypeWithChangeTracking(_dbContext, fieldVisit.FieldVisitID, treatmentBMPAssessmentTypeEnum);
 
             if (!ModelState.IsValid)
             {
@@ -768,13 +769,14 @@ namespace Neptune.Web.Controllers
                 await _dbContext.TreatmentBMPAssessments.AddAsync(treatmentBMPAssessment);
             }
 
+            var treatmentBMPType = TreatmentBMPTypes.GetByIDWithChangeTracking(_dbContext, fieldVisit.TreatmentBMP.TreatmentBMPTypeID);
             foreach (var collectionMethodSectionViewModel in viewModel.Observations)
             {
                 // TODO: there should probably be a null-check here
                 var treatmentBMPAssessmentObservationType =
-                    TreatmentBMPAssessmentObservationTypes.GetByID(_dbContext, collectionMethodSectionViewModel
+                    TreatmentBMPAssessmentObservationTypes.GetByIDWithChangeTracking(_dbContext, collectionMethodSectionViewModel
                             .TreatmentBMPAssessmentObservationTypeID.Value);
-                var treatmentBMPObservation = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment, treatmentBMPAssessmentObservationType);
+                var treatmentBMPObservation = await GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment, treatmentBMPAssessmentObservationType, treatmentBMPType, _dbContext);
                 collectionMethodSectionViewModel.UpdateModel(treatmentBMPObservation);
             }
 
@@ -826,9 +828,9 @@ namespace Neptune.Web.Controllers
         }
 
 
-        private static TreatmentBMPObservation GetExistingTreatmentBMPObservationOrCreateNew(
+        private static async Task<TreatmentBMPObservation> GetExistingTreatmentBMPObservationOrCreateNew(
             TreatmentBMPAssessment treatmentBMPAssessment,
-            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
+            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, TreatmentBMPType treatmentBMPType, NeptuneDbContext dbContext)
         {
             var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList()
                 .Find(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID ==
@@ -836,7 +838,7 @@ namespace Neptune.Web.Controllers
             if (treatmentBMPObservation == null)
             {
                 var treatmentBMPTypeAssessmentObservationType =
-                    treatmentBMPAssessment.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(
+                    treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(
                         x =>
                             x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType
                                 .TreatmentBMPAssessmentObservationTypeID);
@@ -846,9 +848,10 @@ namespace Neptune.Web.Controllers
                 {
                     TreatmentBMPAssessment = treatmentBMPAssessment,
                     TreatmentBMPTypeAssessmentObservationType = treatmentBMPTypeAssessmentObservationType,
-                    TreatmentBMPType = treatmentBMPAssessment.TreatmentBMPType,
+                    TreatmentBMPType = treatmentBMPType,
                     TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationType
                 };
+                await dbContext.TreatmentBMPObservations.AddAsync(treatmentBMPObservation);
             }
 
             return treatmentBMPObservation;
@@ -1202,17 +1205,17 @@ namespace Neptune.Web.Controllers
 
             //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
             //                    treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, INLET, true,
-            //                    false);
+            //                    false, _dbContext);
             //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-            //                    treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OUTLET, true, false);
+            //                    treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OUTLET, true, false, _dbContext);
             //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
             //                    treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OPERABILITY,
-            //                    true, false);
+            //                    true, false, _dbContext);
             //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-            //                    treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, NUISANCE, true, false);
+            //                    treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, NUISANCE, true, false, _dbContext);
             //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
             //                    treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, ACCUMULATION,
-            //                    false, false);
+            //                    false, false, _dbContext);
 
             //                initialAssessment.CalculateAssessmentScore();
             //            }
@@ -1264,21 +1267,21 @@ namespace Neptune.Web.Controllers
 
             //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
             //                    treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, INLET,
-            //                    true, true);
+            //                    true, true, _dbContext);
             //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
             //                    treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, OUTLET,
-            //                    true, true);
+            //                    true, true, _dbContext);
             //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
             //                    treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment,
             //                    OPERABILITY,
-            //                    true, true);
+            //                    true, true, _dbContext);
             //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
             //                    treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, NUISANCE,
-            //                    true, true);
+            //                    true, true, _dbContext);
             //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
             //                    treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment,
             //                    ACCUMULATION,
-            //                    false, true);
+            //                    false, true, _dbContext);
 
             //                postMaintenanceAssessment.CalculateAssessmentScore();
             //            }
@@ -1450,8 +1453,8 @@ namespace Neptune.Web.Controllers
 
 
         // todo: I don't think this is handling the post-maintenance assessment at allllllllll
-        private static void UpdateOrCreateSingleValueObservationFromDataTableRow(DataRow row,
-            Dictionary<string, TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypeDictionary, int rowNumber, TreatmentBMPAssessment assessment, string observationTypeName, bool isPassFail, bool isPostMaintenance)
+        private static async Task UpdateOrCreateSingleValueObservationFromDataTableRow(DataRow row,
+            Dictionary<string, TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypeDictionary, int rowNumber, TreatmentBMPAssessment assessment, string observationTypeName, bool isPassFail, bool isPostMaintenance, NeptuneDbContext dbContext)
         {
             var suffix = isPostMaintenance ? " (Post-Maintenance)" : "";
             var rawInletCondition = row[$"{observationTypeName}{suffix}"].ToString().ToUpperInvariant();
@@ -1485,7 +1488,7 @@ namespace Neptune.Web.Controllers
                 }
             };
 
-            var inletConditionJson = JsonConvert.SerializeObject(inletConditionBoxed);
+            var inletConditionJson = GeoJsonSerializer.Serialize(inletConditionBoxed);
 
             var validateObservationDataJson = treatmentBMPAssessmentObservationTypeDictionary[observationTypeName]
                 .ObservationTypeSpecification.ObservationTypeCollectionMethod
@@ -1497,8 +1500,8 @@ namespace Neptune.Web.Controllers
                 throw new InvalidOperationException($"Invalid {observationTypeName} at row {rowNumber + 2}");
             }
 
-            var initialInletConditionObservation = GetExistingTreatmentBMPObservationOrCreateNew(assessment,
-                treatmentBMPAssessmentObservationTypeDictionary[observationTypeName]);
+            var initialInletConditionObservation = await GetExistingTreatmentBMPObservationOrCreateNew(assessment,
+                treatmentBMPAssessmentObservationTypeDictionary[observationTypeName], assessment.TreatmentBMPType, dbContext);
             initialInletConditionObservation.ObservationData = inletConditionJson;
         }
 
