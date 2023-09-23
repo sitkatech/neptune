@@ -88,7 +88,8 @@ namespace Neptune.Web.Controllers
         {
             var waterQualityManagementPlan = WaterQualityManagementPlans.GetByID(_dbContext, waterQualityManagementPlanPrimaryKey);
 
-            var treatmentBMPs = CurrentPerson.GetInventoriedBMPsForWQMP(waterQualityManagementPlan);
+            var wqmpBMPs = TreatmentBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var treatmentBMPs = CurrentPerson.GetInventoriedBMPsForWQMP(waterQualityManagementPlan, wqmpBMPs);
             var treatmentBmpGeoJsonFeatureCollection = treatmentBMPs.ToGeoJsonFeatureCollection(_linkGenerator);
             var boundingBoxGeometries = new List<Geometry>();
 
@@ -106,8 +107,9 @@ namespace Neptune.Web.Controllers
 
             var boundaryAreaFeatureCollection = new FeatureCollection();
 
-            var wqmpGeometry = waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.Geometry4326;
-            if (wqmpGeometry != null)
+            var wqmpGeometry = WaterQualityManagementPlanBoundaries.GetByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID)?.Geometry4326;
+            var hasWaterQualityManagementPlanBoundary = wqmpGeometry != null;
+            if (hasWaterQualityManagementPlanBoundary)
             {
                 var feature = new Feature(wqmpGeometry, new AttributesTable());
                 boundaryAreaFeatureCollection.Add(feature);
@@ -116,10 +118,10 @@ namespace Neptune.Web.Controllers
 
             var layerGeoJsons = new List<LayerGeoJson>
             {
-                new LayerGeoJson("wqmpBoundary", boundaryAreaFeatureCollection, "#fb00be",
+                new("wqmpBoundary", boundaryAreaFeatureCollection, "#fb00be",
                     1,
                     LayerInitialVisibility.Show),
-                new LayerGeoJson(FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized(),
+                new(FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized(),
                     treatmentBmpGeoJsonFeatureCollection,
                     "#935f59",
                     1,
@@ -128,12 +130,14 @@ namespace Neptune.Web.Controllers
             };
 
             var wqmpJurisdiction = waterQualityManagementPlan.StormwaterJurisdiction;
-            var boundingBoxDto = wqmpGeometry != null ? new BoundingBoxDto(boundingBoxGeometries) : new BoundingBoxDto(wqmpJurisdiction.StormwaterJurisdictionGeometry?.Geometry4326);
+            var boundingBoxDto = hasWaterQualityManagementPlanBoundary ? new BoundingBoxDto(boundingBoxGeometries) : new BoundingBoxDto(wqmpJurisdiction.StormwaterJurisdictionGeometry?.Geometry4326);
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
                 boundingBoxDto);
 
-            var treatmentBMPDelineations =
-                Delineations.ListByTreatmentBMPIDList(_dbContext, treatmentBMPs.Select(x => x.TreatmentBMPID));
+            var treatmentBMPIDList = treatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
+            var delineationsDict = vTreatmentBMPUpstreams.ListWithDelineationAsDictionaryForTreatmentBMPIDList(_dbContext, treatmentBMPIDList);
+
+            var treatmentBMPDelineations = delineationsDict.Where(x => x.Value != null).Select(x => x.Value).ToList();
             if (treatmentBMPDelineations.Any())
             {
                 mapInitJson.Layers.Add(StormwaterMapInitJson.MakeDelineationLayerGeoJson(treatmentBMPDelineations));
@@ -147,25 +151,24 @@ namespace Neptune.Web.Controllers
             var waterQualityManagementPlanVerifyTreatmentBMP =
                 WaterQualityManagementPlanVerifyTreatmentBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
 
-            var dryWeatherFlowOverrides = DryWeatherFlowOverride.All;
             var waterQualityManagementPlanModelingApproaches = WaterQualityManagementPlanModelingApproach.All;
 
             var hruCharacteristics = waterQualityManagementPlan.GetHRUCharacteristics(_dbContext).ToList();
             var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
             var sourceControlBMPs = SourceControlBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID)
-                .Where(x => x.SourceControlBMPNote != null || (x.IsPresent != null && x.IsPresent == true))
+                .Where(x => x.SourceControlBMPNote != null || (x.IsPresent == true))
                 .OrderBy(x => x.SourceControlBMPAttributeID)
                 .GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
             var quickBmps = QuickBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
             var modelingResultsUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.GetModelResults(waterQualityManagementPlan));
             var modeledPerformanceViewData = new ModeledPerformanceViewData(_linkGenerator, modelingResultsUrl, "Site Runoff");
             var parcelGridSpec = new ParcelGridSpec();
+
             var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlan,
                 waterQualityManagementPlanVerifyDraft, mapInitJson, treatmentBMPs, parcelGridSpec,
                 waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
                 waterQualityManagementPlanVerifyTreatmentBMP,
-                hruCharacteristicsViewData,
-                dryWeatherFlowOverrides, waterQualityManagementPlanModelingApproaches, modeledPerformanceViewData, sourceControlBMPs, quickBmps, treatmentBMPDelineations);
+                hruCharacteristicsViewData, waterQualityManagementPlanModelingApproaches, modeledPerformanceViewData, sourceControlBMPs, quickBmps, treatmentBMPDelineations, hasWaterQualityManagementPlanBoundary, delineationsDict);
 
             return RazorView<Detail, DetailViewData>(viewData);
         }

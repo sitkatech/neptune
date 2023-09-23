@@ -5,6 +5,6 @@ namespace Neptune.Web.Models
     public static class QuickBMPModelExtensions
     {
         public static bool IsFullyParameterized(this QuickBMP x) =>
-            x.PercentOfSiteTreated != null && x.PercentCaptured != null && x.PercentRetained != null && x.TreatmentBMPType.IsAnalyzedInModelingModule;
+            x is { PercentOfSiteTreated: not null, PercentCaptured: not null, PercentRetained: not null, TreatmentBMPType.IsAnalyzedInModelingModule: true };
     }
 }

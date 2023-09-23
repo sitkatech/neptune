@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public List<EFModels.Entities.TreatmentBMP> TreatmentBMPs { get; }
         public List<QuickBMP> QuickBMPs { get; }
         public IEnumerable<IGrouping<int, SourceControlBMP>> SourceControlBMPs { get; }
-        public Dictionary<int, Delineation> TreatmentBMPDelineationsDict { get; }
+        public Dictionary<int, Delineation?> TreatmentBMPDelineationsDict { get; }
 
         public List<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; }
         public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; }
@@ -65,20 +65,21 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public UrlTemplate<int> VerifyDeleteUrlTemplate { get; }
         public UrlTemplate<int> DocumentEditUrlTemplate { get; }
         public UrlTemplate<int> DocumentDeleteUrlTemplate { get; }
+        public bool HasWaterQualityManagementPlanBoundary { get; }
+        public Dictionary<int, Delineation?> DelineationsDict { get; }
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
-            WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson,
+            WaterQualityManagementPlanVerify? waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson,
             List<EFModels.Entities.TreatmentBMP> treatmentBMPs,
             ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies,
             List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs,
             List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs,
             HRUCharacteristicsViewData hruCharacteristicsViewData,
-            List<DryWeatherFlowOverride> dryWeatherFlowOverrides,
             List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches,
             ModeledPerformanceViewData modeledPerformanceViewData,
             IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs,
-            List<Delineation> treatmentBMPDelineations)
+            List<Delineation?> treatmentBMPDelineations, bool hasWaterQualityManagementPlanBoundary, Dictionary<int, Delineation?> treatmentBMPDelineationsDict)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -154,8 +155,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             TreatmentBMPs = treatmentBMPs;
             QuickBMPs = quickBMPs;
+            HasWaterQualityManagementPlanBoundary = hasWaterQualityManagementPlanBoundary;
             SourceControlBMPs = sourceControlBMPs;
-            TreatmentBMPDelineationsDict = treatmentBMPDelineations.ToDictionary(x => x.TreatmentBMPID);
+            TreatmentBMPDelineationsDict = treatmentBMPDelineationsDict;
 
             var calculatedWQMPAcreage = WaterQualityManagementPlan.CalculateTotalAcreage();
 
@@ -184,8 +186,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             if (UsesDetailedModelingApproach)
             {
-                AnyDetailedBMPsNotFullyParameterized = TreatmentBMPs.Any(x => !x.IsFullyParameterized(x.Delineation));
-                AllDetailedBMPsNotFullyParameterized = TreatmentBMPs.All(x => !x.IsFullyParameterized(x.Delineation));
+                AnyDetailedBMPsNotFullyParameterized = TreatmentBMPs.Any(x => !x.IsFullyParameterized(treatmentBMPDelineationsDict[x.TreatmentBMPID]));
+                AllDetailedBMPsNotFullyParameterized = TreatmentBMPs.All(x => !x.IsFullyParameterized(treatmentBMPDelineationsDict[x.TreatmentBMPID]));
                 // this is redundant but I just want to make this perfectly clear.
                 AnySimpleBMPsNotFullyParameterized = false;
                 AllSimpleBMPsNotFullyParameterized = false;

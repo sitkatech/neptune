@@ -77,7 +77,7 @@ namespace Neptune.Web.Common
             return treatmentBMPLayerGeoJson;
         }
 
-        public static LayerGeoJson MakeDelineationLayerGeoJson(IEnumerable<Delineation> delineation)
+        public static LayerGeoJson MakeDelineationLayerGeoJson(List<Delineation?> delineation)
         {
             var featureCollection = delineation.ToGeoJsonFeatureCollection();
             var catchmentLayerGeoJson = new LayerGeoJson("Delineation", featureCollection, "blue", 1, LayerInitialVisibility.Show) {EnablePopups = false};

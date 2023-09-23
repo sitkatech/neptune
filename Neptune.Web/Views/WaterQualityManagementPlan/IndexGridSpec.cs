@@ -79,7 +79,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 Add("Maintenance Contact Phone", x => x.vWaterQualityManagementPlanDetailed.MaintenanceContactPhone, 70);
             }
             
-            Add("# of Inventoried BMPs", x => currentPerson.GetInventoriedBMPsForWQMP(x.WaterQualityManagementPlan).Count(), 100);
+            Add("# of Inventoried BMPs", x => x.vWaterQualityManagementPlanDetailed.TreatmentBMPCount, 100);
             Add("# of Simplified BMPs", x => x.vWaterQualityManagementPlanDetailed.QuickBMPCount, 100);
             Add("Modeling Approach", x => x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanModelingApproachDisplayName,
                 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
