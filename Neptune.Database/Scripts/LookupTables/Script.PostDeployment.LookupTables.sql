@@ -78,6 +78,8 @@ GO
 GO
 :r ".\dbo.SizingBasisType.sql"
 GO
+:r ".\dbo.SourceControlBMPAttributeCategory.sql"
+GO
 :r ".\dbo.StormwaterBreadCrumbEntity.sql"
 GO
 :r ".\dbo.StormwaterJurisdictionPublicBMPVisibilityType.sql"

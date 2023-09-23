@@ -7,7 +7,7 @@ namespace Neptune.EFModels.Entities
     public partial class SourceControlBMPAttribute : IHavePrimaryKey
     {
         public int PrimaryKey => SourceControlBMPAttributeID;
-
+        public SourceControlBMPAttributeCategory SourceControlBMPAttributeCategory => SourceControlBMPAttributeCategory.AllLookupDictionary[SourceControlBMPAttributeCategoryID];
 
         public static class FieldLengths
         {

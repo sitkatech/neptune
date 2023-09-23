@@ -390,6 +390,7 @@
     <Build Include="dbo\Views\dbo.vLoadReducingResult.sql" />
     <Build Include="dbo\Views\dbo.vLoadGeneratingResult.sql" />
     <Build Include="dbo\Views\dbo.vTreatmentBMPUpstream.sql" />
+    <None Include="Scripts\LookupTables\dbo.SourceControlBMPAttributeCategory.sql" />
   </ItemGroup>
   <UsingTask TaskName="ScriptDeploymentGenerator" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
