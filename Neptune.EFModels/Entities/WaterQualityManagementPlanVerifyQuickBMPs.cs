@@ -46,4 +46,10 @@ public static class WaterQualityManagementPlanVerifyQuickBMPs
         return GetImpl(dbContext).AsNoTracking()
             .Where(x => x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID == waterQualityManagementPlanID).ToList();
     }
+
+    public static List<WaterQualityManagementPlanVerifyQuickBMP> ListByWaterQualityManagementPlanVerifyID(NeptuneDbContext dbContext, int waterQualityManagementPlanVerifyID)
+    {
+        return GetImpl(dbContext).AsNoTracking()
+            .Where(x => x.WaterQualityManagementPlanVerifyID == waterQualityManagementPlanVerifyID).ToList();
+    }
 }

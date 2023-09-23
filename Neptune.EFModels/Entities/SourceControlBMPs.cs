@@ -46,4 +46,9 @@ public static class SourceControlBMPs
         return GetImpl(dbContext).AsNoTracking()
             .Where(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID).ToList();
     }
+
+    public static List<SourceControlBMP> ListByWaterQualityManagementPlanIDWithChangeTracking(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
+    {
+        return GetImpl(dbContext).Where(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID).ToList();
+    }
 }

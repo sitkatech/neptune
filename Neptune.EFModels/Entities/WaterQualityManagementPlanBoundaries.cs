@@ -47,4 +47,9 @@ public static class WaterQualityManagementPlanBoundaries
         return GetImpl(dbContext).AsNoTracking()
             .SingleOrDefault(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID);
     }
+
+    public static WaterQualityManagementPlanBoundary? GetByWaterQualityManagementPlanIDWithChangeTracking(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
+    {
+        return GetImpl(dbContext).SingleOrDefault(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID);
+    }
 }

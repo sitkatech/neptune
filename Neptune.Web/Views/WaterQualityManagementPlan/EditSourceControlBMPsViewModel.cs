@@ -17,25 +17,15 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
         }
 
-        public EditSourceControlBMPsViewModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, List<SourceControlBMPAttribute> sourceControlBMPAttributes)
+        public EditSourceControlBMPsViewModel(List<SourceControlBMPUpsertDto> sourceControlBMPUpsertDtos)
         {
-            SourceControlBMPSimples = waterQualityManagementPlan.SourceControlBMPs.Select(x => x.AsUpsertDto()).ToList();
-
-            if (!SourceControlBMPSimples.Any())
-            {
-                foreach (var sourceControlBMPAttribute in sourceControlBMPAttributes)
-                {
-                    SourceControlBMPSimples.Add(sourceControlBMPAttribute.AsUpsertDto());
-                }
-            }
-
-            SourceControlBMPSimples = SourceControlBMPSimples.OrderBy(x => x.SourceControlBMPAttributeID).ToList();
+            SourceControlBMPSimples = sourceControlBMPUpsertDtos;
         }
 
-        public void UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, List<SourceControlBMPUpsertDto> sourceControlBMPSimple, NeptuneDbContext dbContext)
+        public void UpdateModel(NeptuneDbContext dbContext, EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, ICollection<SourceControlBMP> existingSourceControlBMPs)
         {
             var sourceControlBMPsInDatabase = dbContext.SourceControlBMPs;
-            var sourceControlBMPsToUpdate = sourceControlBMPSimple.Select(x => new SourceControlBMP
+            var sourceControlBMPsToUpdate = SourceControlBMPSimples.Select(x => new SourceControlBMP
                 {
                     SourceControlBMPID = x.SourceControlBMPID ?? ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue(),
                     WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID,
@@ -45,7 +35,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 }
             ).ToList();
 
-            waterQualityManagementPlan.SourceControlBMPs.ToList().Merge(sourceControlBMPsToUpdate, sourceControlBMPsInDatabase, (x, y) => x.SourceControlBMPID == y.SourceControlBMPID,
+            existingSourceControlBMPs.Merge(sourceControlBMPsToUpdate, sourceControlBMPsInDatabase, (x, y) => x.SourceControlBMPID == y.SourceControlBMPID,
                 (x, y) =>
                 {
                     x.IsPresent = y.IsPresent;

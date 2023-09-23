@@ -313,7 +313,8 @@ namespace Neptune.Web.Controllers
         public ViewResult EditWqmpBmps([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = WaterQualityManagementPlans.GetByID(_dbContext, waterQualityManagementPlanPrimaryKey);
-            var viewModel = new EditWqmpBmpsViewModel(waterQualityManagementPlan);
+            var treatmentBmpIDs = TreatmentBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID).Select(x => x.TreatmentBMPID).ToList();
+            var viewModel = new EditWqmpBmpsViewModel(treatmentBmpIDs);
             return ViewEditWqmpBmps(waterQualityManagementPlan, viewModel);
         }
 
@@ -332,7 +333,7 @@ namespace Neptune.Web.Controllers
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay($"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
 
-            NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
+            await NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
 
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(_linkGenerator, x => x.Detail(waterQualityManagementPlanPrimaryKey)));
         }
@@ -375,7 +376,7 @@ namespace Neptune.Web.Controllers
             SetMessageForDisplay(
                 $"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
 
-            NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
+            await NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
             await _dbContext.SaveChangesAsync();
 
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(_linkGenerator, x => x.Detail(waterQualityManagementPlanPrimaryKey)));
@@ -384,7 +385,7 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewEditSimplifiedStructuralBMPs(WaterQualityManagementPlan waterQualityManagementPlan,
             EditSimplifiedStructuralBMPsViewModel viewModel)
         {
-            var treatmentBMPTypes = _dbContext.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList().Select(x => x.AsSimpleDto());
+            var treatmentBMPTypes = TreatmentBMPTypes.List(_dbContext).Select(x => x.AsSimpleDto());
             var dryWeatherFlowOverrides = DryWeatherFlowOverride.All;
             var dryWeatherFlowOverrideDefaultID = DryWeatherFlowOverride.No.DryWeatherFlowOverrideID;
             var dryWeatherFlowOverrideYesID = DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID;
@@ -398,8 +399,18 @@ namespace Neptune.Web.Controllers
         public ViewResult EditSourceControlBMPs([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = WaterQualityManagementPlans.GetByID(_dbContext, waterQualityManagementPlanPrimaryKey);
-            var sourceControlBMPAttributes = _dbContext.SourceControlBMPAttributes.ToList();
-            var viewModel = new EditSourceControlBMPsViewModel(waterQualityManagementPlan, sourceControlBMPAttributes);
+            var sourceControlBMPAttributes = SourceControlBMPAttributes.List(_dbContext);
+            var sourceControlBMPs = SourceControlBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var sourceControlBMPUpsertDtos = new List<SourceControlBMPUpsertDto>();
+            if (!sourceControlBMPs.Any())
+            {
+                sourceControlBMPUpsertDtos.AddRange(sourceControlBMPAttributes.OrderBy(x => x.SourceControlBMPAttributeID).Select(sourceControlBMPAttribute => sourceControlBMPAttribute.AsUpsertDto()));
+            }
+            else
+            {
+                sourceControlBMPUpsertDtos = sourceControlBMPs.Select(x => x.AsUpsertDto()).ToList();
+            }
+            var viewModel = new EditSourceControlBMPsViewModel(sourceControlBMPUpsertDtos);
             return ViewEditSourceControlBMPs(waterQualityManagementPlan, viewModel);
         }
 
@@ -414,11 +425,11 @@ namespace Neptune.Web.Controllers
                 return ViewEditSourceControlBMPs(waterQualityManagementPlan, viewModel);
             }
 
-            viewModel.UpdateModel(waterQualityManagementPlan, viewModel.SourceControlBMPSimples, _dbContext);
-            SetMessageForDisplay(
-                $"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
+            var existingSourceControlBMPs = SourceControlBMPs.ListByWaterQualityManagementPlanIDWithChangeTracking(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            viewModel.UpdateModel(_dbContext, waterQualityManagementPlan, existingSourceControlBMPs);
+            SetMessageForDisplay($"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
 
-            NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
+            await NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
             await _dbContext.SaveChangesAsync();
 
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(_linkGenerator ,x => x.Detail(waterQualityManagementPlanPrimaryKey)));
@@ -521,7 +532,7 @@ namespace Neptune.Web.Controllers
                 return ViewEditWqmpBoundary(waterQualityManagementPlan, viewModel);
             }
 
-            var oldBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.GeometryNative;
+            var oldBoundary = WaterQualityManagementPlanBoundaries.GetByWaterQualityManagementPlanIDWithChangeTracking(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID)?.GeometryNative;
 
             viewModel.UpdateModel(waterQualityManagementPlan, _dbContext);
             SetMessageForDisplay($"Successfully edited boundary for {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()}.");
@@ -533,7 +544,7 @@ namespace Neptune.Web.Controllers
                 ModelingEngineUtilities.QueueLGURefreshForArea(oldBoundary, newBoundary, _dbContext);
             }
 
-            NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
+            await NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
             await _dbContext.SaveChangesAsync();
 
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(_linkGenerator,
@@ -550,17 +561,13 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanVerifyPrimaryKey")]
         public ViewResult WqmpVerify([FromRoute] WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey)
         {
-            var waterQualityManagementPlanVerify = waterQualityManagementPlanVerifyPrimaryKey.EntityObject;
-            var waterQualityManagementPlanVerifyQuickBMP =
-                _dbContext.WaterQualityManagementPlanVerifyQuickBMPs.Where(x =>
-                    x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID ==
-                    waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
-            var waterQualityManagementPlanVerifyTreatmentBMP =
-                _dbContext.WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x =>
-            x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID ==
-            waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
+            var waterQualityManagementPlanVerify = WaterQualityManagementPlanVerifies.GetByID(_dbContext, waterQualityManagementPlanVerifyPrimaryKey);
+            var waterQualityManagementPlanVerifyQuickBMPs =
+                WaterQualityManagementPlanVerifyQuickBMPs.ListByWaterQualityManagementPlanVerifyID(_dbContext, waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
+            var waterQualityManagementPlanVerifyTreatmentBMPs =
+                WaterQualityManagementPlanVerifyTreatmentBMPs.ListByWaterQualityManagementPlanVerifyID(_dbContext, waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
 
-            var viewData = new WqmpVerifyViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMP, waterQualityManagementPlanVerifyTreatmentBMP);
+            var viewData = new WqmpVerifyViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMPs, waterQualityManagementPlanVerifyTreatmentBMPs);
 
             return RazorView<WqmpVerify, WqmpVerifyViewData>(viewData);
         }
@@ -570,9 +577,9 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
         public ViewResult NewWqmpVerify([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
-            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var quickBMPs = waterQualityManagementPlan.QuickBMPs.ToList();
-            var treatmentBMPs = waterQualityManagementPlan.TreatmentBMPs.ToList();
+            var waterQualityManagementPlan = WaterQualityManagementPlans.GetByID(_dbContext, waterQualityManagementPlanPrimaryKey);
+            var quickBMPs = QuickBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var treatmentBMPs = TreatmentBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
             var waterQualityManagementPlanVerify = new WaterQualityManagementPlanVerify
             {
                 WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID,
@@ -588,9 +595,9 @@ namespace Neptune.Web.Controllers
         [HttpPost("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
-        public ActionResult NewWqmpVerify([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, NewWqmpVerifyViewModel viewModel)
+        public async Task<IActionResult> NewWqmpVerify([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, NewWqmpVerifyViewModel viewModel)
         {
-            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var waterQualityManagementPlan = WaterQualityManagementPlans.GetByIDWithChangeTracking(_dbContext, waterQualityManagementPlanPrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewNewWqmpVerify(waterQualityManagementPlan, viewModel);
@@ -606,10 +613,10 @@ namespace Neptune.Web.Controllers
                 VerificationDate = viewModel.VerificationDate
             };
 
-            viewModel.UpdateModel(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson, _dbContext, _fileResourceService);
+            await viewModel.UpdateModel(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson, _dbContext, _fileResourceService);
 
-            _dbContext.WaterQualityManagementPlanVerifies.Add(waterQualityManagementPlanVerify);
-            _dbContext.SaveChanges();
+            await _dbContext.WaterQualityManagementPlanVerifies.AddAsync(waterQualityManagementPlanVerify);
+            await _dbContext.SaveChangesAsync();
 
             SetMessageForDisplay(
                 $"Successfully updated {FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()} for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
@@ -629,15 +636,14 @@ namespace Neptune.Web.Controllers
         [HttpGet("{waterQualityManagementPlanVerifyPrimaryKey}")]
         [WaterQualityManagementPlanVerifyManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanVerifyPrimaryKey")]
-        public ViewResult EditWqmpVerify([FromRoute] WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanPrimaryKey)
+        public ViewResult EditWqmpVerify([FromRoute] WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey)
         {
-            var waterQualityManagementPlanVerify = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var waterQualityManagementPlanVerify = WaterQualityManagementPlanVerifies.GetByID(_dbContext, waterQualityManagementPlanVerifyPrimaryKey);
 
             var waterQualityManagementPlanVerifyQuickBMPs =
-                _dbContext.WaterQualityManagementPlanVerifyQuickBMPs.Where(x =>
-                    x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID == waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
-            var waterQualityManagementPlanVerifyTreatmentBMPs = _dbContext.WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x =>
-                x.WaterQualityManagementPlanVerifyID == waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
+                WaterQualityManagementPlanVerifyQuickBMPs.ListByWaterQualityManagementPlanVerifyID(_dbContext, waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
+            var waterQualityManagementPlanVerifyTreatmentBMPs =
+                WaterQualityManagementPlanVerifyTreatmentBMPs.ListByWaterQualityManagementPlanVerifyID(_dbContext, waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
 
             var viewModel = new EditWqmpVerifyViewModel(waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMPs, waterQualityManagementPlanVerifyTreatmentBMPs, CurrentPerson);
             return ViewEditWqmpVerify(waterQualityManagementPlanVerify.WaterQualityManagementPlan, viewModel);
@@ -646,9 +652,9 @@ namespace Neptune.Web.Controllers
         [HttpPost("{waterQualityManagementPlanVerifyPrimaryKey}")]
         [WaterQualityManagementPlanVerifyManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanVerifyPrimaryKey")]
-        public async Task<IActionResult> EditWqmpVerify([FromRoute] WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpVerifyViewModel viewModel)
+        public async Task<IActionResult> EditWqmpVerify([FromRoute] WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey, EditWqmpVerifyViewModel viewModel)
         {
-            var waterQualityManagementPlanVerify = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var waterQualityManagementPlanVerify = WaterQualityManagementPlanVerifies.GetByIDWithChangeTracking(_dbContext, waterQualityManagementPlanVerifyPrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewEditWqmpVerify(waterQualityManagementPlanVerify.WaterQualityManagementPlan, viewModel);
@@ -767,10 +773,12 @@ namespace Neptune.Web.Controllers
             }
             viewModel.UpdateModel(waterQualityManagementPlan);
 
-            if (waterQualityManagementPlan.WaterQualityManagementPlanBoundary != null)
+
+            var waterQualityManagementPlanBoundary = WaterQualityManagementPlanBoundaries.GetByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            if (waterQualityManagementPlanBoundary != null)
             {
-                ModelingEngineUtilities.QueueLGURefreshForArea(waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.GeometryNative, null, _dbContext);
-                NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
+                ModelingEngineUtilities.QueueLGURefreshForArea(waterQualityManagementPlanBoundary.GeometryNative, null, _dbContext);
+                await NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
             }
             await _dbContext.SaveChangesAsync();
 
