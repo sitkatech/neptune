@@ -8,7 +8,9 @@ public static class WaterQualityManagementPlanParcels
     public static IQueryable<WaterQualityManagementPlanParcel> GetImpl(NeptuneDbContext dbContext)
     {
         return dbContext.WaterQualityManagementPlanParcels
-            .Include(x => x.Parcel);
+            .Include(x => x.Parcel)
+            .ThenInclude(x => x.ParcelGeometry)
+            ;
     }
 
     public static WaterQualityManagementPlanParcel GetByIDWithChangeTracking(NeptuneDbContext dbContext,
@@ -46,5 +48,10 @@ public static class WaterQualityManagementPlanParcels
     {
         return GetImpl(dbContext).AsNoTracking()
             .Where(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID).ToList();
+    }
+
+    public static List<WaterQualityManagementPlanParcel> ListByWaterQualityManagementPlanIDWithChangeTracking(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
+    {
+        return GetImpl(dbContext).Where(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID).ToList();
     }
 }

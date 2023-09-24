@@ -18,29 +18,29 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
         }
 
-        public EditWqmpParcelsViewModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan)
+        public EditWqmpParcelsViewModel(List<int> parcelIDs)
         {
-            ParcelIDs = waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x => x.ParcelID).ToList();
+            ParcelIDs = parcelIDs;
         }
 
-        public void UpdateModels(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, NeptuneDbContext dbContext)
+        public async Task UpdateModels(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, NeptuneDbContext dbContext, List<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcels, WaterQualityManagementPlanBoundary? waterQualityManagementPlanBoundary)
         {
             var newWaterQualityManagementPlanParcels = ParcelIDs?.Select(x => new WaterQualityManagementPlanParcel
             {
                 WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID, ParcelID = x
             }).ToList() ?? new List<WaterQualityManagementPlanParcel>();
 
-            waterQualityManagementPlan.WaterQualityManagementPlanParcels.Merge(
+            waterQualityManagementPlanParcels.Merge(
                 newWaterQualityManagementPlanParcels,
                 dbContext.WaterQualityManagementPlanParcels,
                 (x, y) => x.WaterQualityManagementPlanParcelID == y.WaterQualityManagementPlanParcelID);
 
             // update the cached total boundary
-            var waterQualityManagementPlanBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
             if (waterQualityManagementPlanBoundary == null)
             {
                 waterQualityManagementPlanBoundary = new WaterQualityManagementPlanBoundary
                     { WaterQualityManagementPlan = waterQualityManagementPlan };
+                await dbContext.WaterQualityManagementPlanBoundaries.AddAsync(waterQualityManagementPlanBoundary);
             }
 
             if (ParcelIDs != null)
