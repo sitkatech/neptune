@@ -11,6 +11,10 @@
 
 @inherits Detail
 
+@functions {
+    private ICollection<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments;
+}
+
 @section JavascriptAndStylesContent
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
@@ -605,7 +609,8 @@
 
                 @foreach (var waterQualityManagementPlanDocumentType in WaterQualityManagementPlanDocumentType.All)
                 {
-                    var waterQualityManagementPlanDocuments = ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanDocuments.ToList().Where(x => x.WaterQualityManagementPlanDocumentType == waterQualityManagementPlanDocumentType).OrderBy(x => x.DisplayName).ToList();
+                    WaterQualityManagementPlanDocuments = ViewDataTyped.WaterQualityManagementPlanDocuments;
+                    var waterQualityManagementPlanDocuments = WaterQualityManagementPlanDocuments.ToList().Where(x => x.WaterQualityManagementPlanDocumentType == waterQualityManagementPlanDocumentType).OrderBy(x => x.DisplayName).ToList();
 
                     <h4>@waterQualityManagementPlanDocumentType.WaterQualityManagementPlanDocumentTypeDisplayName</h4>
 
