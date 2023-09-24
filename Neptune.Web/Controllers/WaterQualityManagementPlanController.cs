@@ -457,7 +457,7 @@ namespace Neptune.Web.Controllers
             var waterQualityManagementPlanParcels = WaterQualityManagementPlanParcels.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
             var parcelIDs = waterQualityManagementPlanParcels.Select(x => x.ParcelID).ToList();
             var viewModel = new EditWqmpParcelsViewModel(parcelIDs);
-            return ViewEditWqmpParcels(waterQualityManagementPlan, viewModel, waterQualityManagementPlan.WaterQualityManagementPlanParcels);
+            return ViewEditWqmpParcels(waterQualityManagementPlan, viewModel, waterQualityManagementPlanParcels);
         }
 
         [HttpPost("{waterQualityManagementPlanPrimaryKey}")]
@@ -469,7 +469,7 @@ namespace Neptune.Web.Controllers
             var waterQualityManagementPlanParcels = WaterQualityManagementPlanParcels.ListByWaterQualityManagementPlanIDWithChangeTracking(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
             if (!ModelState.IsValid)
             {
-                return ViewEditWqmpParcels(waterQualityManagementPlan, viewModel, waterQualityManagementPlan.WaterQualityManagementPlanParcels);
+                return ViewEditWqmpParcels(waterQualityManagementPlan, viewModel, waterQualityManagementPlanParcels);
             }
 
             var waterQualityManagementPlanBoundary = WaterQualityManagementPlanBoundaries.GetByWaterQualityManagementPlanIDWithChangeTracking(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);

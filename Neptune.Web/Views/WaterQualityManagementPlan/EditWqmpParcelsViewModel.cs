@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlanParcels.Merge(
                 newWaterQualityManagementPlanParcels,
                 dbContext.WaterQualityManagementPlanParcels,
-                (x, y) => x.WaterQualityManagementPlanParcelID == y.WaterQualityManagementPlanParcelID);
+                (x, y) => x.ParcelID == y.ParcelID);
 
             // update the cached total boundary
             if (waterQualityManagementPlanBoundary == null)

@@ -13,7 +13,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public EditWqmpParcelsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
-            MapInitJson mapInitJson, string mapServiceUrl, string parcelMapServiceLayerName, ICollection<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcels)
+            MapInitJson mapInitJson, string mapServiceUrl, string parcelMapServiceLayerName, IEnumerable<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcels)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
