@@ -315,16 +315,14 @@
                 else
                 {
                     ModeledPerformance.RenderPartialView(Html, ViewDataTyped.ModeledPerformanceViewData);
-
-                    switch (ViewDataTyped)
+                    //this will always be false if not relevant (i.e. Simplified approach is used)
+                    if (ViewDataTyped is { UsesDetailedModelingApproach: true, AnyDetailedBMPsNotFullyParameterized: true })
                     {
-                        //this will always be false if not relevant (i.e. Simplified approach is used)
-                        case { UsesDetailedModelingApproach: true, AnyDetailedBMPsNotFullyParameterized: true }:
-                            <p class="systemText">Some of this WQMPs structural BMPs are not fully parameterized for modeling, or have missing or unverified delineations, so these results may be incomplete or inaccurate.</p>
-                            break;
-                        case { UsesDetailedModelingApproach: false, AnySimpleBMPsNotFullyParameterized: true }:
-                            <p class="systemText">Some of this WQMPs simplified BMPs are not fully parameterized for modeling, so these results may be incomplete or inaccurate.</p>
-                            break;
+                        <p class="systemText">Some of this WQMPs structural BMPs are not fully parameterized for modeling, or have missing or unverified delineations, so these results may be incomplete or inaccurate.</p>
+                    }
+                    else if (ViewDataTyped is { UsesDetailedModelingApproach: false,AnySimpleBMPsNotFullyParameterized: true })
+                    {
+                        <p class="systemText">Some of this WQMPs simplified BMPs are not fully parameterized for modeling, so these results may be incomplete or inaccurate.</p>
                     }
                 }
 
