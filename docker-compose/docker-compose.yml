@@ -6,3 +6,9 @@ services:
     build:
       context: ..
       dockerfile: Neptune.Web/Dockerfile
+
+  neptune.api:
+    image: neptune/api
+    build:
+      context: ..
+      dockerfile: Neptune.API/Dockerfile

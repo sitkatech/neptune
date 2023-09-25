@@ -68,3 +68,9 @@ Source/Neptune.GeoServer/data_dir/logs/
 /.vs/Neptune/config
 /Neptune.API/obj/Debug/net6.0
 /Neptune.API/obj
+/Neptune.API/bin/Debug/net6.0
+/Neptune.GeoServer/data_dir/geoserver-environment.properties
+/Neptune.GeoServer/data_dir/.updatepassword.lock
+/Neptune.GeoServer/data_dir/logs
+/Neptune.GeoServer/data_dir/security
+/Neptune.API/appsecrets.json

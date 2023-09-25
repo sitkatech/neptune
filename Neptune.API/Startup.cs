@@ -23,11 +23,6 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
 using Serilog.Sinks.ApplicationInsights.Sinks.ApplicationInsights.TelemetryConverters;
 using ILogger = Serilog.ILogger;
-using System.Net;
-using Hangfire;
-using Neptune.API.Hangfire;
-using Neptune.API.Services.Filter;
-using Hangfire.SqlServer;
 
 namespace Neptune.API
 {
@@ -139,27 +134,6 @@ namespace Neptune.API
             services.AddScoped(s => UserContext.GetUserFromHttpContext(s.GetService<NeptuneDbContext>(), s.GetService<IHttpContextAccessor>().HttpContext));
             services.AddScoped<AzureBlobStorageService>();
             services.AddControllers();
-
-            #region Hangfire
-            services.AddHangfire(configuration => configuration
-                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-                .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings()
-                .UseSqlServerStorage(neptuneConfiguration.DB_CONNECTION_STRING, new SqlServerStorageOptions
-                {
-                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-                    QueuePollInterval = TimeSpan.Zero,
-                    UseRecommendedIsolationLevel = true,
-                    DisableGlobalLocks = true,
-                    SchemaName = "HangFireNeptune"
-                }));
-
-            services.AddHangfireServer(x =>
-            {
-                x.WorkerCount = 1;
-            });
-            #endregion
             #region Swagger
             // Base swagger services
             services.AddSwaggerGen(options =>
@@ -200,17 +174,6 @@ namespace Neptune.API
             app.UseAuthorization();
 
             app.Use(TelemetryHelper.PostBodyTelemetryMiddleware);
-
-            #region Hangfire
-            app.UseHangfireDashboard("/hangfire", new DashboardOptions()
-            {
-                Authorization = new[] { new HangfireAuthorizationFilter(Configuration) }
-            });
-
-            GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 });
-
-            HangfireJobScheduler.ScheduleRecurringJobs();
-            #endregion
 
             #region Swagger
             // Register swagger middleware and enable the swagger UI which will be 

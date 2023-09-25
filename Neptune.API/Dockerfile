@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /src
 
+COPY ./Neptune.Common ./Neptune.Common
 COPY ./Neptune.Models ./Neptune.Models
 COPY ./Neptune.EFModels ./Neptune.EFModels
 COPY ./Neptune.API ./Neptune.API
