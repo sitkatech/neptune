@@ -506,8 +506,11 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEditWqmpBoundary(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpBoundaryViewModel viewModel)
         {
-            var boundaryLayerGeoJson = waterQualityManagementPlan.GetBoundaryLayerGeoJson();
-            var boundingBoxDto = new BoundingBoxDto(waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.Geometry4326);
+            var waterQualityManagementPlanBoundary = WaterQualityManagementPlanBoundaries.GetByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var geometry4326 = waterQualityManagementPlanBoundary?.Geometry4326;
+            var featureCollection = new FeatureCollection { new Feature(geometry4326, new AttributesTable()) };
+            var boundaryLayerGeoJson = new LayerGeoJson("wqmpBoundary", featureCollection, "#4782ff", 1, LayerInitialVisibility.Show);
+            var boundingBoxDto = new BoundingBoxDto(geometry4326);
             var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext).ToList();
             var mapInitJson = new BoundaryAreaMapInitJson("editWqmpBoundaryMap", boundaryLayerGeoJson, layerGeoJsons, boundingBoxDto);
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.EditWQMPBoundary);
@@ -536,12 +539,16 @@ namespace Neptune.Web.Controllers
                 return ViewEditWqmpBoundary(waterQualityManagementPlan, viewModel);
             }
 
-            var oldBoundary = WaterQualityManagementPlanBoundaries.GetByWaterQualityManagementPlanIDWithChangeTracking(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID)?.GeometryNative;
+            var waterQualityManagementPlanParcels = WaterQualityManagementPlanParcels.ListByWaterQualityManagementPlanIDWithChangeTracking(_dbContext,
+                waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var waterQualityManagementPlanBoundary = WaterQualityManagementPlanBoundaries.GetByWaterQualityManagementPlanIDWithChangeTracking(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var oldBoundary = waterQualityManagementPlanBoundary?.GeometryNative;
 
-            viewModel.UpdateModel(waterQualityManagementPlan, _dbContext);
+            viewModel.UpdateModel(waterQualityManagementPlan, _dbContext, waterQualityManagementPlanBoundary, waterQualityManagementPlanParcels);
+            await _dbContext.SaveChangesAsync();
             SetMessageForDisplay($"Successfully edited boundary for {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()}.");
 
-            var newBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.GeometryNative;
+            var newBoundary = waterQualityManagementPlanBoundary?.GeometryNative;
 
             if (!(oldBoundary == null && newBoundary == null))
             {

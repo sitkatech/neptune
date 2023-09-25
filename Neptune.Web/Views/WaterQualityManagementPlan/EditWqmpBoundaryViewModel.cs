@@ -39,10 +39,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
         }
 
-        public void UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, NeptuneDbContext dbContext)
+        public void UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, NeptuneDbContext dbContext, WaterQualityManagementPlanBoundary? waterQualityManagementPlanBoundary, List<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcels)
         {
             var newWaterQualityManagementPlanParcels = new List<WaterQualityManagementPlanParcel>();
-            var waterQualityManagementPlanBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary;
             if (waterQualityManagementPlanBoundary == null)
             {
                 waterQualityManagementPlanBoundary = new WaterQualityManagementPlanBoundary
@@ -70,7 +69,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 waterQualityManagementPlanBoundary.Geometry4326 = newGeometry4326;
             }
 
-            waterQualityManagementPlan.WaterQualityManagementPlanParcels.Merge(
+            waterQualityManagementPlanParcels.Merge(
                 newWaterQualityManagementPlanParcels,
                 dbContext.WaterQualityManagementPlanParcels,
                 (x, y) => x.WaterQualityManagementPlanParcelID == y.WaterQualityManagementPlanParcelID);
@@ -80,9 +79,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 waterQualityManagementPlanBoundary.GeometryNative = null;
                 waterQualityManagementPlanBoundary.Geometry4326 = null;
             }
-
-            dbContext.SaveChanges();
-            
         }
     }
 }

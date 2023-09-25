@@ -28,26 +28,24 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
     public class EditWqmpBoundaryViewData : NeptuneViewData
     {
-        public EditWqmpBoundaryViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, EFModels.Entities.WaterQualityManagementPlan wqmp, BoundaryAreaMapInitJson mapInitJson, string geoServerUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public EditWqmpBoundaryViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, BoundaryAreaMapInitJson mapInitJson, string geoServerUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
-            WaterQualityManagementPlan = wqmp;
             MapInitJson = mapInitJson;
             EntityName = "Water Quality Management Plan";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
-            SubEntityName = wqmp.WaterQualityManagementPlanName;
-            var wqmpUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(wqmp));
-            SubEntityUrl = wqmpUrl;
+            SubEntityName = waterQualityManagementPlan.WaterQualityManagementPlanName;
+            var detailUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(waterQualityManagementPlan));
+            SubEntityUrl = detailUrl;
             PageTitle = "Refine Area";
 
             MapFormID = "editAreaMapForm";
             GeoServerUrl = geoServerUrl;
-            WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID;
+            WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
 
-            DetailUrl = wqmpUrl;
+            DetailUrl = detailUrl;
         }
 
 
-        public EFModels.Entities.WaterQualityManagementPlan WaterQualityManagementPlan { get; }
         public string MapFormID { get; }
         public string GeoServerUrl { get; }
         public BoundaryAreaMapInitJson MapInitJson { get; }
