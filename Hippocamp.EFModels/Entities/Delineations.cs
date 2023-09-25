@@ -1,15 +1,15 @@
-﻿using Hippocamp.API.Util;
-using Hippocamp.Models.DataTransferObjects;
+﻿using Neptune.API.Util;
+using Neptune.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     public partial class Delineations
     {
-        private static IQueryable<Delineation> GetDelineationsImpl(HippocampDbContext dbContext)
+        private static IQueryable<Delineation> GetDelineationsImpl(NeptuneDbContext dbContext)
         {
             return dbContext.Delineations
                 .Include(x => x.TreatmentBMP)
@@ -17,7 +17,7 @@ namespace Hippocamp.EFModels.Entities
                 .AsNoTracking();
         }
 
-        public static List<DelineationUpsertDto> ListByProjectIDAsUpsertDto(HippocampDbContext dbContext, int projectID)
+        public static List<DelineationUpsertDto> ListByProjectIDAsUpsertDto(NeptuneDbContext dbContext, int projectID)
         {
             return GetDelineationsImpl(dbContext)
                 .Where(x => x.TreatmentBMP.ProjectID == projectID)
@@ -25,7 +25,7 @@ namespace Hippocamp.EFModels.Entities
                 .ToList();
         }
 
-        public static List<DelineationSimpleDto> ListProjectDelineationsAsSimpleDto(HippocampDbContext dbContext)
+        public static List<DelineationSimpleDto> ListProjectDelineationsAsSimpleDto(NeptuneDbContext dbContext)
         {
             var treatmentBMPDisplayDtos = GetDelineationsImpl(dbContext).Where(x => x.TreatmentBMP.ProjectID != null)
                 .Select(x => x.AsSimpleDto())
@@ -34,7 +34,7 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPDisplayDtos;
         }
 
-        public static List<DelineationSimpleDto> ListByPersonIDAsSimpleDto(HippocampDbContext dbContext, int personID)
+        public static List<DelineationSimpleDto> ListByPersonIDAsSimpleDto(NeptuneDbContext dbContext, int personID)
         {
             var person = People.GetByID(dbContext, personID);
             if (person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin)
@@ -52,7 +52,7 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPDisplayDtos;
         }
 
-        public static void MergeDelineations(HippocampDbContext dbContext, List<DelineationUpsertDto> delineationUpsertDtos, Project project)
+        public static void MergeDelineations(NeptuneDbContext dbContext, List<DelineationUpsertDto> delineationUpsertDtos, Project project)
         {
             var existingProjectDelineations = dbContext.Delineations.Include(x => x.TreatmentBMP).Where(x => x.TreatmentBMP.ProjectID == project.ProjectID).ToList();
             
@@ -118,7 +118,7 @@ namespace Hippocamp.EFModels.Entities
             return delineation;
         }
         
-        public static DelineationUpsertDto GetByDelineationID(HippocampDbContext dbContext, int delineationID)
+        public static DelineationUpsertDto GetByDelineationID(NeptuneDbContext dbContext, int delineationID)
         {
             return GetDelineationsImpl(dbContext).SingleOrDefault(x => x.DelineationID == delineationID).AsUpsertDto();
         }

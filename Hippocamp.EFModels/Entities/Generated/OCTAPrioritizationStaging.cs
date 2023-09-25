@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("OCTAPrioritizationStaging")]
     [Index("OCTAPrioritizationKey", Name = "AK_OCTAPrioritizationStaging_OCTAPrioritizationKey", IsUnique = true)]

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("NeptunePageImage")]
     [Index("NeptunePageImageID", "FileResourceID", Name = "AK_NeptunePageImage_NeptunePageImageID_FileResourceID", IsUnique = true)]

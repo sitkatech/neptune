@@ -1,12 +1,12 @@
-﻿using Hippocamp.Models.DataTransferObjects;
+﻿using Neptune.Models.DataTransferObjects;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     public static class NeptunePages
     {
-        public static NeptunePageDto GetByNeptunePageTypeID(HippocampDbContext dbContext, int neptunePageID)
+        public static NeptunePageDto GetByNeptunePageTypeID(NeptuneDbContext dbContext, int neptunePageID)
         {
             var neptunePage = dbContext.NeptunePages
                 .Include(x => x.NeptunePageType)
@@ -15,7 +15,7 @@ namespace Hippocamp.EFModels.Entities
             return neptunePage?.AsDto();
         }
 
-        public static NeptunePageDto UpdateNeptunePage(HippocampDbContext dbContext, int neptunePageID,
+        public static NeptunePageDto UpdateNeptunePage(NeptuneDbContext dbContext, int neptunePageID,
             NeptunePageDto customRichTextUpdateDto)
         {
             var neptunePage = dbContext.NeptunePages

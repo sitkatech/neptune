@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("FileResourceMimeType")]
     [Index("FileResourceMimeTypeDisplayName", Name = "AK_FileResourceMimeType_FileResourceMimeTypeDisplayName", IsUnique = true)]

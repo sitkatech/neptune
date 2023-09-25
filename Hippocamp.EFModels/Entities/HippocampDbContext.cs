@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
-    public partial class HippocampDbContext
+    public partial class NeptuneDbContext
     {
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder)
         {

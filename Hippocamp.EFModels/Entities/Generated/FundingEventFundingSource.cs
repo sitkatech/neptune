@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("FundingEventFundingSource")]
     [Index("FundingSourceID", "FundingEventID", Name = "AK_FundingEventFundingSource_FundingSourceID_FundingEventID", IsUnique = true)]

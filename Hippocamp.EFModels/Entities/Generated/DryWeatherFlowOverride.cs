@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("DryWeatherFlowOverride")]
     [Index("DryWeatherFlowOverrideDisplayName", Name = "AK_DryWeatherFlowOverride_DryWeatherFlowOverrideDisplayName", IsUnique = true)]

@@ -1,6 +1,6 @@
-﻿using Hippocamp.Models.DataTransferObjects;
+﻿using Neptune.Models.DataTransferObjects;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     public static partial class StormwaterJurisdictionExtensionMethods
     {

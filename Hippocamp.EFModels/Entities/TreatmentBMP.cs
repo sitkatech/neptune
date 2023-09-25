@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     public partial class TreatmentBMP
     {
         public double Longitude => LocationPoint4326.Coordinate.X;
         public double Latitude => LocationPoint4326.Coordinate.Y;
-        public RegionalSubbasin GetRegionalSubbasin(HippocampDbContext dbContext)
+        public RegionalSubbasin GetRegionalSubbasin(NeptuneDbContext dbContext)
         {
             return dbContext.RegionalSubbasins.SingleOrDefault(x =>
                     x.CatchmentGeometry.Contains(LocationPoint));
         }
-        public IEnumerable<ProjectHRUCharacteristic> GetHRUCharacteristics(HippocampDbContext dbContext)
+        public IEnumerable<ProjectHRUCharacteristic> GetHRUCharacteristics(NeptuneDbContext dbContext)
         {
             if (Delineation == null)
             {

@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
-using Hippocamp.Models.DataTransferObjects;
+using Neptune.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     public partial class StormwaterJurisdictions
     {
-        private static IQueryable<StormwaterJurisdiction> GetStormwaterJurisdictionsImpl(HippocampDbContext dbContext)
+        private static IQueryable<StormwaterJurisdiction> GetStormwaterJurisdictionsImpl(NeptuneDbContext dbContext)
         {
             return dbContext.StormwaterJurisdictions
                 .Include(x => x.Organization)
                 .AsNoTracking();
         }
 
-        public static List<StormwaterJurisdictionSimpleDto> ListByIDsAsSimpleDto(HippocampDbContext dbContext, List<int> stormwaterJurisdictionIDs)
+        public static List<StormwaterJurisdictionSimpleDto> ListByIDsAsSimpleDto(NeptuneDbContext dbContext, List<int> stormwaterJurisdictionIDs)
         {
             return GetStormwaterJurisdictionsImpl(dbContext)
                 .Where(x => stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdictionID))
@@ -24,7 +24,7 @@ namespace Hippocamp.EFModels.Entities
                 .ToList();
         }
 
-        public static BoundingBoxDto GetBoundingBoxDtoByJurisdictionID(HippocampDbContext dbContext, int stormwaterJurisdictionID)
+        public static BoundingBoxDto GetBoundingBoxDtoByJurisdictionID(NeptuneDbContext dbContext, int stormwaterJurisdictionID)
         {
             var stormwaterJurisdictionGeometry = dbContext.StormwaterJurisdictionGeometries
                 .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID)
@@ -33,7 +33,7 @@ namespace Hippocamp.EFModels.Entities
             return new BoundingBoxDto(stormwaterJurisdictionGeometry);
         }
 
-        public static BoundingBoxDto GetBoundingBoxDtoByPersonID(HippocampDbContext dbContext, int personID)
+        public static BoundingBoxDto GetBoundingBoxDtoByPersonID(NeptuneDbContext dbContext, int personID)
         {
             var person = People.GetByID(dbContext, personID);
             var jurisdictions = dbContext.StormwaterJurisdictionGeometries;

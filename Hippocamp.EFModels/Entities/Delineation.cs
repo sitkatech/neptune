@@ -1,6 +1,6 @@
-﻿using Hippocamp.API.Util;
+﻿using Neptune.API.Util;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     public partial class Delineation
     {

@@ -9,13 +9,6 @@ namespace Neptune.Web.Models
 {
     public static class DelineationModelExtensions
     {
-        public static double? GetDelineationArea(this Delineation? delineation)
-        {
-            return delineation?.DelineationGeometry.Area != null
-                ? Math.Round(delineation.DelineationGeometry.Area * Constants.SquareMetersToAcres, 2)
-                : null;
-        }
-
         public static string GetDelineationAreaString(this Delineation? delineation)
         {
             if (delineation == null)

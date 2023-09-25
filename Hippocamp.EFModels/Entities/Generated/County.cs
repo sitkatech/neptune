@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("County")]
     [Index("CountyName", "StateProvinceID", Name = "AK_County_CountyName_StateProvinceID", IsUnique = true)]

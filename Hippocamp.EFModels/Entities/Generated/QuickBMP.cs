@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("QuickBMP")]
     [Index("WaterQualityManagementPlanID", "QuickBMPName", Name = "AK_QuickBMP_WaterQualityManagementPlanID_QuickBMPName", IsUnique = true)]

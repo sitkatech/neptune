@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("FieldVisitType")]
     [Index("FieldVisitTypeName", Name = "AK_FieldVisitType_FieldVisitTypeName", IsUnique = true)]

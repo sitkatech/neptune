@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("PrecipitationZone")]
     [Index("PrecipitationZoneKey", Name = "AK_PrecipitationZone_PrecipitationZoneKey", IsUnique = true)]

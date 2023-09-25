@@ -7,7 +7,7 @@ using NetTopologySuite.Geometries;
 
 #nullable disable
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("PlannedProjectLoadGeneratingUnit")]
     public partial class PlannedProjectLoadGeneratingUnit

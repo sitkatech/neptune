@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 
+using Neptune.Common;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;

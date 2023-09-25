@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Neptune.Common.JsonConverters;
@@ -172,6 +173,10 @@ public static class GeoJsonSerializer
     {
         await SerializeToStream<FeatureCollection>(featureCollection, jsonSerializerOptions, stream);
     }
+    public static string SerializeAsGeoJsonToString(FeatureCollection featureCollection, JsonSerializerOptions jsonSerializerOptions)
+    {
+        return JsonSerializer.Serialize(featureCollection, jsonSerializerOptions);
+    }
 
     public static byte[] WriteFeaturesToByteArray(IEnumerable<IFeature> features, JsonSerializerOptions jsonSerializerOptions)
     {
@@ -235,5 +240,13 @@ public static class GeoJsonSerializer
     {
         return obj.GetType().GetProperties().Where(x => !x.IsDefined(typeof(JsonIgnoreAttribute), false)).ToDictionary(p => p.Name, p => p.GetValue(obj));
         //            return obj.GetType().GetProperties().Where(x => !x.IsDefined(typeof(JsonIgnoreAttribute), false)).Select(p => new KeyValuePair<string, object>(p.Name, p.GetValue(obj))).ToList();
+    }
+
+    public static string SerializeGeometryToGeoJsonString(Geometry geometry)
+    {
+        var featureCollection = new FeatureCollection();
+        var feature = new Feature(geometry, new AttributesTable());
+        featureCollection.Add(feature);
+        return SerializeAsGeoJsonToString(featureCollection, DefaultSerializerOptions);
     }
 }

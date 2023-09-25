@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("TreatmentBMPDocument")]
     [Index("FileResourceID", "TreatmentBMPID", Name = "AK_TreatmentBMPDocument_FileResourceID_TreatmentBMPID", IsUnique = true)]

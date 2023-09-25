@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
-using Hippocamp.Models.DataTransferObjects;
+using Neptune.Models.DataTransferObjects;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     public partial class FieldDefinition
     {
-        public static List<FieldDefinitionDto> List(HippocampDbContext dbContext)
+        public static List<FieldDefinitionDto> List(NeptuneDbContext dbContext)
         {
             return dbContext.FieldDefinitions.Include(x => x.FieldDefinitionType).Select(x => x.AsDto()).ToList();
         }
 
-        public static FieldDefinitionDto GetByFieldDefinitionTypeID(HippocampDbContext dbContext, int FieldDefinitionTypeID)
+        public static FieldDefinitionDto GetByFieldDefinitionTypeID(NeptuneDbContext dbContext, int FieldDefinitionTypeID)
         {
             var fieldDefinition = dbContext.FieldDefinitions
                 .Include(x => x.FieldDefinitionType)
@@ -21,7 +21,7 @@ namespace Hippocamp.EFModels.Entities
             return fieldDefinition?.AsDto();
         }
 
-        public static FieldDefinitionDto UpdateFieldDefinition(HippocampDbContext dbContext, int FieldDefinitionTypeID,
+        public static FieldDefinitionDto UpdateFieldDefinition(NeptuneDbContext dbContext, int FieldDefinitionTypeID,
             FieldDefinitionDto FieldDefinitionUpdateDto)
         {
             var fieldDefinition = dbContext.FieldDefinitions

@@ -1,4 +1,4 @@
-﻿namespace Hippocamp.EFModels.Entities
+﻿namespace Neptune.EFModels.Entities
 {
     public enum TrashCaptureStatusTypeEnum
     {

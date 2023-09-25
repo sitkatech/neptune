@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("ModelBasinStaging")]
     [Index("ModelBasinKey", Name = "AK_ModelBasinStaging_ModelBasinKey", IsUnique = true)]

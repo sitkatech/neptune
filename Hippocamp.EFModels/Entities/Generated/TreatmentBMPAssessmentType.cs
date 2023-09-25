@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("TreatmentBMPAssessmentType")]
     [Index("TreatmentBMPAssessmentTypeDisplayName", Name = "AK_TreatmentBMPAssessmentType_TreatmentBMPAssessmentTypeDisplayName", IsUnique = true)]

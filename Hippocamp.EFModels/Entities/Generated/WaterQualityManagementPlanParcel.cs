@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("WaterQualityManagementPlanParcel")]
     [Index("WaterQualityManagementPlanID", "ParcelID", Name = "AK_WaterQualityManagementPlanParcel_WaterQualityManagementPlanID_ParcelID", IsUnique = true)]

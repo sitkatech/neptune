@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Keyless]
     [Index("table_schema", "table_name", "pk_column", Name = "UQ__gt_pk_me__E9F04F89F4C92A3B", IsUnique = true)]

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hippocamp.API.Util;
-using Hippocamp.Models.DataTransferObjects;
+using Neptune.API.Util;
+using Neptune.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
-using static Hippocamp.EFModels.Entities.DelineationType;
+using static Neptune.EFModels.Entities.DelineationType;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     public partial class TreatmentBMPs
     {
-        private static IQueryable<TreatmentBMP> GetTreatmentBMPsImpl(HippocampDbContext dbContext)
+        private static IQueryable<TreatmentBMP> GetTreatmentBMPsImpl(NeptuneDbContext dbContext)
         {
             return dbContext.TreatmentBMPs
                 .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
@@ -21,19 +21,19 @@ namespace Hippocamp.EFModels.Entities
                 .AsNoTracking();
         }
 
-        private static IQueryable<TreatmentBMP> GetTreatmentBMPsDisplayOnlyImpl(HippocampDbContext dbContext)
+        private static IQueryable<TreatmentBMP> GetTreatmentBMPsDisplayOnlyImpl(NeptuneDbContext dbContext)
         {
             return dbContext.TreatmentBMPs
                 .Include(x => x.TreatmentBMPType).Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule)
                 .AsNoTracking();
         }
 
-        public static TreatmentBMP GetByTreatmentBMPID (HippocampDbContext dbContext, int treatmentBMPID)
+        public static TreatmentBMP GetByTreatmentBMPID (NeptuneDbContext dbContext, int treatmentBMPID)
         {
             return dbContext.TreatmentBMPs.SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
         }
 
-        public static List<TreatmentBMPUpsertDto> ListByProjectIDAsUpsertDto(HippocampDbContext dbContext, int projectID)
+        public static List<TreatmentBMPUpsertDto> ListByProjectIDAsUpsertDto(NeptuneDbContext dbContext, int projectID)
         {
             var treatmentBMPs = dbContext.TreatmentBMPs
                 .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
@@ -60,7 +60,7 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPUpsertDtos;
         }
 
-        public static List<TreatmentBMPDisplayDto> ListAsDisplayDto(HippocampDbContext dbContext)
+        public static List<TreatmentBMPDisplayDto> ListAsDisplayDto(NeptuneDbContext dbContext)
         {
             var treatmentBMPDisplayDtos = GetTreatmentBMPsDisplayOnlyImpl(dbContext)
                 .Select(x => x.AsDisplayDto())
@@ -69,7 +69,7 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPDisplayDtos;
         }
 
-        public static List<TreatmentBMPDisplayDto> ListByProjectIDsAsDisplayDto(HippocampDbContext dbContext, List<int> projectIDs)
+        public static List<TreatmentBMPDisplayDto> ListByProjectIDsAsDisplayDto(NeptuneDbContext dbContext, List<int> projectIDs)
         {
             var treatmentBMPDisplayDtos = GetTreatmentBMPsDisplayOnlyImpl(dbContext)
                 .Where(x => x.ProjectID.HasValue && projectIDs.Contains(x.ProjectID.Value))
@@ -79,7 +79,7 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPDisplayDtos;
         }
 
-        public static List<TreatmentBMPDisplayDto> ListByPersonIDAsDisplayDto(HippocampDbContext dbContext, int personID)
+        public static List<TreatmentBMPDisplayDto> ListByPersonIDAsDisplayDto(NeptuneDbContext dbContext, int personID)
         {
             var person = People.GetByID(dbContext, personID);
             if (person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin)
@@ -97,7 +97,7 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPDisplayDtos;
         }
 
-        public static List<TreatmentBMPTypeSimpleDto> ListTypesAsSimpleDto(HippocampDbContext dbContext)
+        public static List<TreatmentBMPTypeSimpleDto> ListTypesAsSimpleDto(NeptuneDbContext dbContext)
         {
             var treatmentBMPTypeSimpleDtos = dbContext.TreatmentBMPTypes
                 .OrderBy(x => x.TreatmentBMPTypeName)
@@ -106,7 +106,7 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPTypeSimpleDtos;
         }
 
-        public static int ChangeTreatmentBMPType(HippocampDbContext dbContext, int treatmentBMPID, int treatmentBMPTypeID)
+        public static int ChangeTreatmentBMPType(NeptuneDbContext dbContext, int treatmentBMPID, int treatmentBMPTypeID)
         {
             dbContext.Database.ExecuteSqlRaw(
                 "EXECUTE dbo.pTreatmentBMPUpdateTreatmentBMPType @treatmentBMPID={0}, @treatmentBMPTypeID={1}",
@@ -115,7 +115,7 @@ namespace Hippocamp.EFModels.Entities
             return (int)treatmentBMPModelingType;
         }
 
-        public static List<TreatmentBMPModelingAttributeDropdownItemDto> GetModelingAttributeDropdownItemsAsDto(HippocampDbContext dbContext)
+        public static List<TreatmentBMPModelingAttributeDropdownItemDto> GetModelingAttributeDropdownItemsAsDto(NeptuneDbContext dbContext)
         {
             var treatmentBMPModelingAttributeDropdownItemDtos = new List<TreatmentBMPModelingAttributeDropdownItemDto>();
 
@@ -138,14 +138,14 @@ namespace Hippocamp.EFModels.Entities
             return treatmentBMPModelingAttributeDropdownItemDtos;
         }
 
-        public static List<TreatmentBMPDisplayDto> ListVerifiedTreatmentBMPs(HippocampDbContext dbContext)
+        public static List<TreatmentBMPDisplayDto> ListVerifiedTreatmentBMPs(NeptuneDbContext dbContext)
         {
             return GetTreatmentBMPsImpl(dbContext)
                 .Where(x => x.ProjectID == null && x.InventoryIsVerified && x.TreatmentBMPType.IsAnalyzedInModelingModule)
                 .Select(x => x.AsDisplayDto()).ToList();
         }
 
-        public static void MergeProjectTreatmentBMPs(HippocampDbContext dbContext, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, List<TreatmentBMP> existingTreatmentBMPs, Project project)
+        public static void MergeProjectTreatmentBMPs(NeptuneDbContext dbContext, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, List<TreatmentBMP> existingTreatmentBMPs, Project project)
         {
             var existingProjectTreatmentBMPs = existingTreatmentBMPs.Where(x => x.ProjectID == project.ProjectID).ToList();
             var existingProjectTreatmentBMPModelingAttributes = dbContext.TreatmentBMPModelingAttributes.Where(x => existingProjectTreatmentBMPs.Select(y => y.TreatmentBMPID).Contains(x.TreatmentBMPID)).ToList();
@@ -264,7 +264,7 @@ namespace Hippocamp.EFModels.Entities
             return new Point(longitude, latitude) { SRID = 4326 };
         }
 
-        public static TreatmentBMP TreatmentBMPFromUpsertDtoAndProject(HippocampDbContext dbContext, TreatmentBMPUpsertDto treatmentBMPUpsertDto, Project project)
+        public static TreatmentBMP TreatmentBMPFromUpsertDtoAndProject(NeptuneDbContext dbContext, TreatmentBMPUpsertDto treatmentBMPUpsertDto, Project project)
         {
             
             var locationPointGeometry4326 = CreateLocationPoint4326FromLatLong(treatmentBMPUpsertDto.Latitude.Value, treatmentBMPUpsertDto.Longitude.Value);

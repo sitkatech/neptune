@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Hippocamp.Models.DataTransferObjects;
+using Neptune.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     public partial class Role
     {
-        public static IEnumerable<RoleDto> List(HippocampDbContext dbContext)
+        public static IEnumerable<RoleDto> List(NeptuneDbContext dbContext)
         {
             var roles = dbContext.Roles
                 .AsNoTracking()
@@ -16,7 +16,7 @@ namespace Hippocamp.EFModels.Entities
             return roles;
         }
 
-        public static RoleDto GetByRoleID(HippocampDbContext dbContext, int roleID)
+        public static RoleDto GetByRoleID(NeptuneDbContext dbContext, int roleID)
         {
             var role = dbContext.Roles
                 .AsNoTracking()

@@ -19,6 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.Models.DataTransferObjects;
+
 namespace Neptune.EFModels.Entities
 {
     public partial class Role : IRole

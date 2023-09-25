@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Hippocamp.Models.DataTransferObjects;
-using Hippocamp.Models.DataTransferObjects.Person;
+using Neptune.Models.DataTransferObjects;
+using Neptune.Models.DataTransferObjects.Person;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     public static class People
     {
-        public static PersonDto CreateUnassignedPerson(HippocampDbContext dbContext, PersonCreateDto userCreateDto)
+        public static PersonDto CreateUnassignedPerson(NeptuneDbContext dbContext, PersonCreateDto userCreateDto)
         {
             var userUpsertDto = new PersonUpsertDto()
             {
@@ -22,7 +22,7 @@ namespace Hippocamp.EFModels.Entities
             return CreateNewPerson(dbContext, userUpsertDto, userCreateDto.LoginName, userCreateDto.UserGuid);
         }
 
-        public static List<ErrorMessage> ValidateCreateUnassignedPerson(HippocampDbContext dbContext, PersonCreateDto userCreateDto)
+        public static List<ErrorMessage> ValidateCreateUnassignedPerson(NeptuneDbContext dbContext, PersonCreateDto userCreateDto)
         {
             var result = new List<ErrorMessage>();
 
@@ -41,7 +41,7 @@ namespace Hippocamp.EFModels.Entities
             return result;
         }
 
-        public static PersonDto CreateNewPerson(HippocampDbContext dbContext, PersonUpsertDto personToCreate,  string loginName, Guid userGuid)
+        public static PersonDto CreateNewPerson(NeptuneDbContext dbContext, PersonUpsertDto personToCreate,  string loginName, Guid userGuid)
         {
             if (!personToCreate.RoleID.HasValue)
             {
@@ -75,7 +75,7 @@ namespace Hippocamp.EFModels.Entities
             return GetByIDAsDto(dbContext, person.PersonID);
         }
 
-        public static IEnumerable<string> GetEmailAddressesForAdminsThatReceiveSupportEmails(HippocampDbContext dbContext)
+        public static IEnumerable<string> GetEmailAddressesForAdminsThatReceiveSupportEmails(NeptuneDbContext dbContext)
         {
             var persons = GetPersonImpl(dbContext)
                 .Where(x => x.IsActive && (x.RoleID == (int) RoleEnum.Admin ||  x.RoleID == (int) RoleEnum.SitkaAdmin) && x.ReceiveSupportEmails)
@@ -85,37 +85,37 @@ namespace Hippocamp.EFModels.Entities
             return persons;
         }
 
-        public static List<PersonSimpleDto> ListAsSimpleDto(HippocampDbContext dbContext)
+        public static List<PersonSimpleDto> ListAsSimpleDto(NeptuneDbContext dbContext)
         {
             return GetPersonImpl(dbContext)
                 .OrderBy(x => x.LastName).ThenBy(x => x.FirstName)
                 .Select(x => x.AsSimpleDto()).ToList();
         }
 
-        public static Person GetByID(HippocampDbContext dbContext, int personID)
+        public static Person GetByID(NeptuneDbContext dbContext, int personID)
         {
             return GetPersonImpl(dbContext).SingleOrDefault(x => x.PersonID == personID);
         }
 
-        public static PersonDto GetByIDAsDto(HippocampDbContext dbContext, int personID)
+        public static PersonDto GetByIDAsDto(NeptuneDbContext dbContext, int personID)
         {
             var person = GetPersonImpl(dbContext).SingleOrDefault(x => x.PersonID == personID);
             return person?.AsDto();
         }
 
-        public static PersonDto GetByEmailAsDto(HippocampDbContext dbContext, string email)
+        public static PersonDto GetByEmailAsDto(NeptuneDbContext dbContext, string email)
         {
             var person = GetPersonImpl(dbContext).SingleOrDefault(x => x.Email == email);
             return person?.AsDto();
         }
 
-        public static Person GetByPersonGuid(HippocampDbContext dbContext, Guid personGuid)
+        public static Person GetByPersonGuid(NeptuneDbContext dbContext, Guid personGuid)
         {
             return GetPersonImpl(dbContext)
                 .SingleOrDefault(x => x.PersonGuid == personGuid);
         }
 
-        public static PersonDto GetByPersonGuidAsDto(HippocampDbContext dbContext, Guid personGuid)
+        public static PersonDto GetByPersonGuidAsDto(NeptuneDbContext dbContext, Guid personGuid)
         {
             var person = GetPersonImpl(dbContext)
                 .SingleOrDefault(x => x.PersonGuid == personGuid);
@@ -123,13 +123,13 @@ namespace Hippocamp.EFModels.Entities
             return person?.AsDto();
         }
 
-        public static List<int> ListStormwaterJurisdictionIDsByPersonID(HippocampDbContext dbContext, int personID)
+        public static List<int> ListStormwaterJurisdictionIDsByPersonID(NeptuneDbContext dbContext, int personID)
         {
             var personDto = GetByIDAsDto(dbContext, personID);
             return ListStormwaterJurisdictionIDsByPersonDto(dbContext, personDto);
         }
 
-        public static List<int> ListStormwaterJurisdictionIDsByPersonDto(HippocampDbContext dbContext, PersonDto person)
+        public static List<int> ListStormwaterJurisdictionIDsByPersonDto(NeptuneDbContext dbContext, PersonDto person)
         {
             if (person.Role.RoleID == (int) RoleEnum.Admin || person.Role.RoleID == (int) RoleEnum.SitkaAdmin)
             {
@@ -142,7 +142,7 @@ namespace Hippocamp.EFModels.Entities
                 .ToList();
         }
 
-        private static IQueryable<Person> GetPersonImpl(HippocampDbContext dbContext)
+        private static IQueryable<Person> GetPersonImpl(NeptuneDbContext dbContext)
         {
             return dbContext.People
                 .Include(x => x.Role)

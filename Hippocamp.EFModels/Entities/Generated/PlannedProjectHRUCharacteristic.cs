@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("PlannedProjectHRUCharacteristic")]
     public partial class PlannedProjectHRUCharacteristic

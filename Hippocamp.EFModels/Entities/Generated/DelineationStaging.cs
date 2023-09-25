@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
     [Table("DelineationStaging")]
     [Index("TreatmentBMPName", "StormwaterJurisdictionID", "UploadedByPersonID", Name = "AK_DelineationStaging_TreatmentBMPName_StormwaterJurisdictionID", IsUnique = true)]

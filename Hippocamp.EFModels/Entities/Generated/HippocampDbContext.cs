@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Hippocamp.EFModels.Entities
+namespace Neptune.EFModels.Entities
 {
-    public partial class HippocampDbContext : DbContext
+    public partial class NeptuneDbContext : DbContext
     {
-        public HippocampDbContext()
+        public NeptuneDbContext()
         {
         }
 
-        public HippocampDbContext(DbContextOptions<HippocampDbContext> options)
+        public NeptuneDbContext(DbContextOptions<NeptuneDbContext> options)
             : base(options)
         {
         }
