@@ -74,9 +74,14 @@ public static class StormwaterJurisdictions
             .ThenInclude(x => x.OrganizationType);
     }
 
-    public static List<StormwaterJurisdiction> ListViewableByPerson(NeptuneDbContext dbContext, Person person)
+    public static List<StormwaterJurisdiction> ListViewableByPersonForBMPs(NeptuneDbContext dbContext, Person person)
     {
-        var stormwaterJurisdictionIDsViewable  = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(dbContext, person);
+        var stormwaterJurisdictionIDsViewable  = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(dbContext, person);
         return GetImpl(dbContext).AsNoTracking().Where(x => stormwaterJurisdictionIDsViewable.Contains(x.StormwaterJurisdictionID)).ToList();
+    }
+
+    public static List<StormwaterJurisdiction> ListAssignedForPerson(NeptuneDbContext dbContext, Person person)
+    {
+        return StormwaterJurisdictionPeople.ListByPersonID(dbContext, person.PersonID).Select(x => x.StormwaterJurisdiction).ToList();
     }
 }

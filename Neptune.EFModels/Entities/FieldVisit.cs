@@ -2,14 +2,19 @@
 
 public partial class FieldVisit
 {
-    public TreatmentBMPAssessment GetInitialAssessment()
+    public TreatmentBMPAssessment? GetAssessmentByType(TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
     {
-        return TreatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentType == TreatmentBMPAssessmentType.Initial);
+        return TreatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentTypeID == (int)treatmentBMPAssessmentTypeEnum);
     }
 
-    public TreatmentBMPAssessment GetPostMaintenanceAssessment()
+    public TreatmentBMPAssessment? GetInitialAssessment()
     {
-        return TreatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentType == TreatmentBMPAssessmentType.PostMaintenance);
+        return GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial);
+    }
+
+    public TreatmentBMPAssessment? GetPostMaintenanceAssessment()
+    {
+        return GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance);
     }
 
     public void DeleteFull(NeptuneDbContext dbContext)

@@ -44,17 +44,17 @@
 <hr>
 <div class="row" style="margin-bottom: 21px;">
     <div class="col-xs-12 text-right">
-        
-        <form method="post" class="field-visit-form">
-            <button class="btn btn-neptune" style="display: inline-block;">
+        @using (Html.BeginForm(FormMethod.Post, new { @class = "field-visit-form" }))
+        {
+            <button type="submit" class="btn btn-neptune" style="display: inline-block;">
                 <span>
-                    @(ViewDataTyped.FieldVisit.GetInitialAssessment() == null ? "Begin Assessment" : "Continue Assessment")
+                    @(ViewDataTyped.InitialAssessment == null ? "Begin Assessment" : "Continue Assessment")
                 </span>
                 <span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
             </button>
 
             <a href="@ViewDataTyped.MaintenanceUrl" class="btn btn-neptune" style="display: inline-block;">Skip to Maintenance <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
             <a class="btn btn-neptune" onclick="launchSaveAndWrapUpConfirmModal()">Wrap Up Visit</a>
-        </form>
+        }
     </div>
 </div>

@@ -127,8 +127,6 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<SourceControlBMPAttribute> SourceControlBMPAttributes { get; set; }
 
-    public virtual DbSet<SourceControlBMPAttributeCategory> SourceControlBMPAttributeCategories { get; set; }
-
     public virtual DbSet<StateProvince> StateProvinces { get; set; }
 
     public virtual DbSet<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
@@ -724,15 +722,6 @@ public partial class NeptuneDbContext : DbContext
             entity.HasKey(e => e.SourceControlBMPAttributeID).HasName("PK_SourceControlBMPAttribute_SourceControlBMPAttributeID");
 
             entity.Property(e => e.SourceControlBMPAttributeID).ValueGeneratedNever();
-
-            entity.HasOne(d => d.SourceControlBMPAttributeCategory).WithMany(p => p.SourceControlBMPAttributes).OnDelete(DeleteBehavior.ClientSetNull);
-        });
-
-        modelBuilder.Entity<SourceControlBMPAttributeCategory>(entity =>
-        {
-            entity.HasKey(e => e.SourceControlBMPAttributeCategoryID).HasName("PK_SourceControlBMPAttributeCategory_SourceControlBMPAttributeCategoryID");
-
-            entity.Property(e => e.SourceControlBMPAttributeCategoryID).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<StateProvince>(entity =>

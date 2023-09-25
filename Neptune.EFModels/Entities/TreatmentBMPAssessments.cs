@@ -17,6 +17,7 @@ public static class TreatmentBMPAssessments
             .ThenInclude(x => x.Organization)
             .Include(x => x.TreatmentBMPType)
             .ThenInclude(x => x.TreatmentBMPTypeAssessmentObservationTypes)
+            .ThenInclude(x => x.TreatmentBMPAssessmentObservationType)
             .Include(x => x.TreatmentBMPObservations)
             .ThenInclude(x => x.TreatmentBMPAssessmentObservationType);
     }
@@ -50,6 +51,21 @@ public static class TreatmentBMPAssessments
     public static List<TreatmentBMPAssessment> List(NeptuneDbContext dbContext)
     {
         return GetImpl(dbContext).AsNoTracking().ToList();
+    }
+
+    public static List<TreatmentBMPAssessment> ListByFieldVisitID(NeptuneDbContext dbContext, int fieldVisitID)
+    {
+        return GetImpl(dbContext).AsNoTracking().Where(x => x.FieldVisitID == fieldVisitID).ToList();
+    }
+
+    public static TreatmentBMPAssessment? GetByFieldVisitIDAndTreatmentBMPAssessmentType(NeptuneDbContext dbContext, int fieldVisitID, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
+    {
+        return GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.FieldVisitID == fieldVisitID && x.TreatmentBMPAssessmentTypeID == (int) treatmentBMPAssessmentTypeEnum);
+    }
+
+    public static TreatmentBMPAssessment? GetByFieldVisitIDAndTreatmentBMPAssessmentTypeWithChangeTracking(NeptuneDbContext dbContext, int fieldVisitID, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
+    {
+        return GetImpl(dbContext).SingleOrDefault(x => x.FieldVisitID == fieldVisitID && x.TreatmentBMPAssessmentTypeID == (int) treatmentBMPAssessmentTypeEnum);
     }
 
     public static TreatmentBMPAssessment GetByIDForFeatureContextCheck(NeptuneDbContext dbContext, int treatmentBMPAssessmentID)

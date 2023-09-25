@@ -963,7 +963,7 @@ namespace Neptune.Web.Common
             dbContext.SaveChanges();
         }
 
-        public static void MarkWqmpDirty(WaterQualityManagementPlan waterQualityManagementPlan, NeptuneDbContext dbContext)
+        public static async Task MarkWqmpDirty(WaterQualityManagementPlan waterQualityManagementPlan, NeptuneDbContext dbContext)
         {
             var dirtyModelNode = new DirtyModelNode()
             {
@@ -971,9 +971,9 @@ namespace Neptune.Web.Common
                 WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID
             };
 
-            dbContext.DirtyModelNodes.Add(dirtyModelNode);
+            await dbContext.DirtyModelNodes.AddAsync(dirtyModelNode);
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
     }
     ;

@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Neptune.EFModels.Entities;
 using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.FieldVisit
@@ -45,10 +44,10 @@ namespace Neptune.Web.Views.FieldVisit
         {
         }
 
-        public NewFieldVisitViewModel(EFModels.Entities.FieldVisit inProgressFieldVisit)
+        public NewFieldVisitViewModel(bool inProgressFieldVisitExists, int fieldVisitTypeID)
         {
-            InProgressFieldVisitExists = inProgressFieldVisit != null;
-            FieldVisitTypeID = inProgressFieldVisit?.FieldVisitTypeID ?? FieldVisitType.DryWeather.FieldVisitTypeID;
+            InProgressFieldVisitExists = inProgressFieldVisitExists;
+            FieldVisitTypeID = fieldVisitTypeID;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

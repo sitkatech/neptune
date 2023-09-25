@@ -238,7 +238,7 @@ namespace Neptune.EFModels.Entities
         public override double? GetObservationValueFromObservationData(string observationData)
         {
             var observation = GeoJsonSerializer.Deserialize<PercentageObservationSchema>(observationData);
-            return observation.SingleValueObservations.Sum(x => Convert.ToDouble(x.ObservationValue));
+            return observation.SingleValueObservations.Sum(x => double.Parse(x.ObservationValue.ToString()));
         }
 
         public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)

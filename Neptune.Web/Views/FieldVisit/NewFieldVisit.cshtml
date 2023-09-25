@@ -41,7 +41,7 @@ Source code is available upon request via <support@sitkatech.com>.
              <div class="radio">
                  <label>
                      @Html.RadioButtonFor(m => m.Continue, true)
-                     <strong>Continue the existing visit from @ViewDataTyped.InProgressVisitDate.Value.ToShortDateString()</strong>
+                     <strong>Continue the existing visit from @ViewDataTyped.InProgressVisitDate?.ToShortDateString()</strong>
                  </label>
              </div>
              <div class="radio" style="margin-top: 10px;">

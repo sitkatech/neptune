@@ -18,10 +18,6 @@ public partial class SourceControlBMPAttribute
     [Unicode(false)]
     public string? SourceControlBMPAttributeName { get; set; }
 
-    [ForeignKey("SourceControlBMPAttributeCategoryID")]
-    [InverseProperty("SourceControlBMPAttributes")]
-    public virtual SourceControlBMPAttributeCategory SourceControlBMPAttributeCategory { get; set; } = null!;
-
     [InverseProperty("SourceControlBMPAttribute")]
     public virtual ICollection<SourceControlBMP> SourceControlBMPs { get; set; } = new List<SourceControlBMP>();
 }

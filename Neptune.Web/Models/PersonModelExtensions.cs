@@ -120,7 +120,7 @@ namespace Neptune.Web.Models
         public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson, NeptuneDbContext dbContext)
         {
             return GetStormwaterJurisdictionCqlFilter(currentPerson,
-                StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(dbContext, currentPerson));
+                StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(dbContext, currentPerson));
         }
 
         public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson,
@@ -134,7 +134,7 @@ namespace Neptune.Web.Models
         public static string GetNegativeStormwaterJurisdictionCqlFilter(this Person currentPerson, NeptuneDbContext dbContext)
         {
             return GetNegativeStormwaterJurisdictionCqlFilter(currentPerson,
-                StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(dbContext, currentPerson));
+                StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(dbContext, currentPerson));
         }
 
         public static string GetNegativeStormwaterJurisdictionCqlFilter(this Person currentPerson,
@@ -146,7 +146,7 @@ namespace Neptune.Web.Models
         }
 
         public static List<TreatmentBMP> GetInventoriedBMPsForWQMP(this Person person,
-            WaterQualityManagementPlan waterQualityManagementPlan)
+            WaterQualityManagementPlan waterQualityManagementPlan, List<TreatmentBMP> treatmentBMPs)
         {
             if (person.IsAnonymousOrUnassigned())
             {
@@ -154,14 +154,14 @@ namespace Neptune.Web.Models
                             .StormwaterJurisdictionPublicBMPVisibilityTypeID)
                 {
                     case (int)StormwaterJurisdictionPublicBMPVisibilityTypeEnum.VerifiedOnly:
-                        return waterQualityManagementPlan.TreatmentBMPs.Where(x => x.InventoryIsVerified)
+                        return treatmentBMPs.Where(x => x.InventoryIsVerified)
                             .OrderBy(x => x.TreatmentBMPName).ToList();
                     default:
                         return new List<TreatmentBMP>();
                 }
             }
 
-            return waterQualityManagementPlan.TreatmentBMPs.OrderBy(x => x.TreatmentBMPName).ToList();
+            return treatmentBMPs.OrderBy(x => x.TreatmentBMPName).ToList();
         }
     }
 }

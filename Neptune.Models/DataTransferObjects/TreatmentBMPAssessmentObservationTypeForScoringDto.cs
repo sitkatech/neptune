@@ -8,5 +8,5 @@ public class TreatmentBMPAssessmentObservationTypeForScoringDto
     public double? ThresholdValueInObservedUnits { get; set; }
     public double? BenchmarkValue { get; set; }
     public string Weight { get; set; }
-    public ObservationScoreDto TreatmentBMPObservationSimple { get; set; }
+    public ObservationScoreDto? TreatmentBMPObservationSimple { get; set; }
 }

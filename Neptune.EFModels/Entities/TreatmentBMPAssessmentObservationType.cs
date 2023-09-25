@@ -55,7 +55,7 @@ namespace Neptune.EFModels.Entities
             return ObservationTypeSpecification.ObservationTargetType == ObservationTargetType.SpecificValue;
         }
 
-        public MeasurementUnitType GetMeasurementUnitType()
+        public MeasurementUnitType? GetMeasurementUnitType()
         {
             return BenchmarkMeasurementUnitType();
         }
@@ -83,7 +83,7 @@ namespace Neptune.EFModels.Entities
                 TreatmentBMPAssessmentObservationTypeSchema);
         }
 
-        public MeasurementUnitType BenchmarkMeasurementUnitType()
+        public MeasurementUnitType? BenchmarkMeasurementUnitType()
         {
             var observationTypeCollectionMethod = ObservationTypeSpecification.ObservationTypeCollectionMethod;
             switch (observationTypeCollectionMethod.ToEnum)

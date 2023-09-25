@@ -29,11 +29,11 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public readonly string CalculatedAssessmentScoreFormatted;
         public readonly ScoreDetailViewData ScoreDetailViewData;
 
-        public ScoreViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMPAssessment treatmentBmpAssessment)
+        public ScoreViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMPAssessment treatmentBmpAssessment, EFModels.Entities.TreatmentBMPType treatmentBMPType)
             : base(httpContext, linkGenerator, currentPerson, treatmentBmpAssessment, ThisSectionName)
         {
             CalculatedAssessmentScoreFormatted = treatmentBmpAssessment.FormattedScore();
-            ScoreDetailViewData = new ScoreDetailViewData(treatmentBmpAssessment);
+            ScoreDetailViewData = new ScoreDetailViewData(treatmentBmpAssessment, treatmentBMPType);
         }       
     }
 }

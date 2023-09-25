@@ -25,13 +25,12 @@ using Neptune.Web.Views.Shared.SortOrder;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class ScoreDetailViewData
+    public class ScoreDetailViewData : NeptuneUserControlViewData
     {
         public readonly ScoreViewDataForAngular ViewDataForAngular;
         
-        public ScoreDetailViewData(EFModels.Entities.TreatmentBMPAssessment treatmentBMPAssessment)
+        public ScoreDetailViewData(EFModels.Entities.TreatmentBMPAssessment treatmentBMPAssessment, EFModels.Entities.TreatmentBMPType treatmentBMPType)
         {
-            var treatmentBMPType = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType;
             var treatmentBMPTypeAssessmentObservationTypes = treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes;
             ViewDataForAngular = new ScoreViewDataForAngular(treatmentBMPTypeAssessmentObservationTypes, treatmentBMPAssessment);
             OverrideScore =

@@ -2,6 +2,7 @@
 @using Neptune.Web.Common.ModalDialog
 @using Neptune.Web.Common
 @using Microsoft.AspNetCore.Html
+@using Neptune.EFModels.Entities
 @inherits Detail
 
 @* ReSharper disable UnknownCssClass *@
@@ -141,7 +142,7 @@
                                 <label>BMP Name:</label>
                             </div>
                             <div class="col-sm-9">
-                                @ViewDataTyped.FieldVisit.TreatmentBMP.TreatmentBMPName
+                                @ViewDataTyped.TreatmentBMP.TreatmentBMPName
                             </div>
                         </div>
                         <div class="row">
@@ -149,7 +150,7 @@
                                 <label>BMP Type:</label>
                             </div>
                             <div class="col-sm-9">
-                                @ViewDataTyped.FieldVisit.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName
+                            @ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName
                             </div>
                         </div>
                         <div class="row">
@@ -166,7 +167,7 @@
                                 <label>BMP Verification Status:</label>
                             </div>
                             <div class="col-sm-9">
-                                @(ViewDataTyped.FieldVisit.TreatmentBMP.InventoryIsVerified ? "Verified" : "Not Verified")
+                            @(ViewDataTyped.TreatmentBMP.InventoryIsVerified ? "Verified" : "Not Verified")
                             </div>
                         </div>
                         <div class="row">
@@ -174,8 +175,8 @@
                                 <label>Last Verified by:</label>
                             </div>
                             <div class="col-sm-9">
-                                @(ViewDataTyped.FieldVisit.TreatmentBMP.InventoryIsVerified ?
-                                              ViewDataTyped.FieldVisit.TreatmentBMP.InventoryVerifiedByPerson.GetFullNameFirstLast()
+                            @(ViewDataTyped.TreatmentBMP.InventoryIsVerified ?
+                                ViewDataTyped.TreatmentBMP.InventoryVerifiedByPerson?.GetFullNameFirstLast()
                                               : "N/A")
                             </div>
                         </div>
@@ -184,7 +185,7 @@
                                 <label>Last Verified on:</label>
                             </div>
                             <div class="col-sm-9">
-                                @(ViewDataTyped.FieldVisit.TreatmentBMP.DateOfLastInventoryVerification != null ? ViewDataTyped.FieldVisit.TreatmentBMP.DateOfLastInventoryVerification.Value.ToShortDateString() :
+                            @(ViewDataTyped.TreatmentBMP.DateOfLastInventoryVerification != null ? ViewDataTyped.TreatmentBMP.DateOfLastInventoryVerification.Value.ToShortDateString() :
                                               "N/A")
                             </div>
                         </div>
@@ -274,7 +275,7 @@
                                                             <td>
                                                                 @if (ViewDataTyped.UserHasCustomAttributeTypeManagePermissions)
                                                                 {
-                                                                    <a href="@ViewDataTyped.CustomAttributeTypeDetailUrlTemplate.ParameterReplace(maintenanceRecordObservation.CustomAttributeTypeID)">maintenanceRecordObservation.CustomAttributeType.CustomAttributeTypeName</a>
+                                                                    <a href="@ViewDataTyped.CustomAttributeTypeDetailUrlTemplate.ParameterReplace(maintenanceRecordObservation.CustomAttributeTypeID)">@maintenanceRecordObservation.CustomAttributeType.CustomAttributeTypeName</a>
                                                                 }
                                                                 else
                                                                 {
@@ -343,7 +344,7 @@
                         {
                             <div class="row">
                                 <label class="col-sm-3 control-label text-right">Status</label>
-                                <div class="col-sm-9">@ViewDataTyped.FieldVisit.TreatmentBMP.CustomAttributeStatus()</div>
+                            <div class="col-sm-9">@TreatmentBMP.GetCustomAttributeStatus(ViewDataTyped.TreatmentBMPType, ViewDataTyped.TreatmentBMPCustomAttributes)</div>
                             </div>
                         }
                         <br />
@@ -356,7 +357,9 @@
                         {
                             <div class="row">
                                 <label class="col-sm-3 control-label text-right">Status</label>
-                                <div class="col-sm-9">@(ViewDataTyped.InitialAssessment.GetAssessmentStatus())</div>
+                                <div class="col-sm-9">
+                                    @ViewDataTyped.InitialAssessment.GetAssessmentStatus(ViewDataTyped.InitialAssessmentViewData.TreatmentBMPType)
+                                </div>
                             </div>
                             <div class="row">
                                 <label class="col-sm-3 control-label text-right">Score</label>
@@ -387,7 +390,9 @@
                         {
                             <div class="row">
                                 <label class="col-sm-3 control-label text-right">Status</label>
-                                <div class="col-sm-9">@(ViewDataTyped.PostMaintenanceAssessment.GetAssessmentStatus())</div>
+                                <div class="col-sm-9">
+                                    @ViewDataTyped.PostMaintenanceAssessment.GetAssessmentStatus(ViewDataTyped.PostMaintenanceAssessmentViewData.TreatmentBMPType)
+                                </div>
                             </div>
 
                             <div class="row">

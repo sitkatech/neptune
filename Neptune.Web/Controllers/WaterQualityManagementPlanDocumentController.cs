@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
@@ -43,7 +42,7 @@ namespace Neptune.Web.Controllers
                 return ViewNew(viewModel);
             }
 
-            viewModel.UpdateModel(waterQualityManagementPlan, CurrentPerson, _dbContext, _fileResourceService);
+            await viewModel.UpdateModel(waterQualityManagementPlan, CurrentPerson, _dbContext, _fileResourceService);
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay($"Successfully created new document \"{viewModel.DisplayName}\".");
 
@@ -52,7 +51,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewNew(NewViewModel viewModel)
         {
-            var allDocumentTypes = WaterQualityManagementPlanDocumentType.All.ToSelectListWithDisabledEmptyFirstRow(x=>x.WaterQualityManagementPlanDocumentTypeID.ToString(CultureInfo.InvariantCulture), x=>x.WaterQualityManagementPlanDocumentTypeDisplayName);
+            var allDocumentTypes = WaterQualityManagementPlanDocumentType.All.ToSelectListWithDisabledEmptyFirstRow(x=>x.WaterQualityManagementPlanDocumentTypeID.ToString(), x=>x.WaterQualityManagementPlanDocumentTypeDisplayName);
             var viewData = new NewViewData(allDocumentTypes);
             return RazorPartialView<New, NewViewData, NewViewModel>(viewData, viewModel);
         }
@@ -87,7 +86,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewEdit(EditViewModel viewModel)
         {
-            var allDocumentTypes = WaterQualityManagementPlanDocumentType.All.ToSelectListWithDisabledEmptyFirstRow(x => x.WaterQualityManagementPlanDocumentTypeID.ToString(CultureInfo.InvariantCulture), x => x.WaterQualityManagementPlanDocumentTypeDisplayName);
+            var allDocumentTypes = WaterQualityManagementPlanDocumentType.All.ToSelectListWithDisabledEmptyFirstRow(x => x.WaterQualityManagementPlanDocumentTypeID.ToString(), x => x.WaterQualityManagementPlanDocumentTypeDisplayName);
             var viewData = new EditViewData(allDocumentTypes);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }

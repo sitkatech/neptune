@@ -7,9 +7,11 @@ namespace Neptune.Web.Views.FieldVisit
     {
         public ManagePhotosWithPreviewViewData ManagePhotosWithPreviewViewData { get; }
 
-        public PhotosViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.FieldVisit fieldVisit,
+        public PhotosViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.FieldVisit fieldVisit,
+            List<EFModels.Entities.TreatmentBMPAssessment> treatmentBMPAssessments,
             ManagePhotosWithPreviewViewData managePhotosWithPreviewViewData)
-            : base(httpContext, linkGenerator, currentPerson, fieldVisit, EFModels.Entities.FieldVisitSection.Inventory)
+            : base(httpContext, linkGenerator, currentPerson, fieldVisit, EFModels.Entities.FieldVisitSection.Inventory, fieldVisit.TreatmentBMP.TreatmentBMPType, fieldVisit.MaintenanceRecord, treatmentBMPAssessments)
         {
             SubsectionName = "Photos";
             SectionHeader = "Photos";

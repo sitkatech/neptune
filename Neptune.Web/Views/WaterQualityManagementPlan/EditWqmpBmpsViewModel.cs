@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Neptune.EFModels.Entities;
+﻿using Neptune.EFModels.Entities;
 using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
@@ -15,16 +14,14 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
         }
 
-        public EditWqmpBmpsViewModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan)
+        public EditWqmpBmpsViewModel(List<int> treatmentBmpIDs)
         {
-            TreatmentBmpIDs = waterQualityManagementPlan.TreatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
+            TreatmentBmpIDs = treatmentBmpIDs;
         }
 
         public void UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, NeptuneDbContext dbContext)
         {
             waterQualityManagementPlan.TreatmentBMPs.ToList().ForEach(x => { x.WaterQualityManagementPlan = null; });
-            TreatmentBmpIDs = TreatmentBmpIDs ?? new List<int>();
-
 
             dbContext.TreatmentBMPs.Where(x => TreatmentBmpIDs.Contains(x.TreatmentBMPID))
                 .ToList()

@@ -54,11 +54,6 @@
     }
 </style>
 
-
-@{
-    var assessment = ViewDataTyped.FieldVisit.GetAssessmentByType(ViewDataTyped.TreatmentBMPAssessmentTypeEnum);
-}
-
 <form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="ObservationsControllerApp" ng-controller="ObservationsController" ng-init="initializeData(AngularModel.Observations)" name="observationForm" class="field-visit-form">
     <div class="row observation-panel" ng-repeat="observationTypeSchema in AngularViewData.ObservationTypeSchemas">
         @if (ViewDataTyped.TreatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.PostMaintenance)
@@ -82,9 +77,9 @@
                     <span ng-bind="observationTypeSchema.AssessmentDescription"></span>
                 </div>
                 <br />
-                <div ng-if="observationTypeSchema.ObservationTypeCollectionMethod == 1" observation-type-id="{{observationTypeSchema.TreatmentBMPAssessmentObservationTypeID}}" discrete-value-collection-method datasource="getObservationData(observationTypeSchema)" measurement-unit-label-and-unit="{{observationTypeSchema.MeasurementUnitLabelAndUnit}}" properties-to-observe="observationTypeSchema.PropertiesToObserve" maximum-value-of-observations="{{observationTypeSchema.MaximumValueOfObservations}}" minimum-value-of-observations="{{observationTypeSchema.MinimumValueOfObservations}}"></div>
-                <div ng-if="observationTypeSchema.ObservationTypeCollectionMethod == 3" observation-type-id="{{observationTypeSchema.TreatmentBMPAssessmentObservationTypeID}}" pass-fail-collection-method datasource="getObservationData(observationTypeSchema)" passing-score-label="{{observationTypeSchema.PassingScoreLabel}}" failing-score-label="{{observationTypeSchema.FailingScoreLabel}}"></div>
-                <div ng-if="observationTypeSchema.ObservationTypeCollectionMethod == 4" observation-type-id="{{observationTypeSchema.TreatmentBMPAssessmentObservationTypeID}}" percentage-collection-method datasource="getObservationData(observationTypeSchema)" measurement-unit-label-and-unit="{{observationTypeSchema.MeasurementUnitLabelAndUnit}}"></div>
+                <div ng-if="observationTypeSchema.ObservationTypeCollectionMethod == 'DiscreteValue'" observation-type-id="{{observationTypeSchema.TreatmentBMPAssessmentObservationTypeID}}" discrete-value-collection-method datasource="getObservationData(observationTypeSchema)" measurement-unit-label-and-unit="{{observationTypeSchema.MeasurementUnitLabelAndUnit}}" properties-to-observe="observationTypeSchema.PropertiesToObserve" maximum-value-of-observations="{{observationTypeSchema.MaximumValueOfObservations}}" minimum-value-of-observations="{{observationTypeSchema.MinimumValueOfObservations}}"></div>
+                <div ng-if="observationTypeSchema.ObservationTypeCollectionMethod == 'PassFail'" observation-type-id="{{observationTypeSchema.TreatmentBMPAssessmentObservationTypeID}}" pass-fail-collection-method datasource="getObservationData(observationTypeSchema)" passing-score-label="{{observationTypeSchema.PassingScoreLabel}}" failing-score-label="{{observationTypeSchema.FailingScoreLabel}}"></div>
+                <div ng-if="observationTypeSchema.ObservationTypeCollectionMethod == 'Percentage'" observation-type-id="{{observationTypeSchema.TreatmentBMPAssessmentObservationTypeID}}" percentage-collection-method datasource="getObservationData(observationTypeSchema)" measurement-unit-label-and-unit="{{observationTypeSchema.MeasurementUnitLabelAndUnit}}"></div>
             </div>
         </div>
     </div>

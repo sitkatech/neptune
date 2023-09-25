@@ -56,8 +56,6 @@ namespace Neptune.Web.Common
 
         private const string ControllerSuffix = "Controller";
         private const string ViewsRootNamespace = "Views";
-        public const string DefaultAction = "Index";
-        public const string DefaultController = "Home";
 
         //protected override void OnException(ExceptionContext filterContext)
         //{
@@ -122,56 +120,6 @@ namespace Neptune.Web.Common
         protected void ClearInfoForDisplay()
         {
             RemoveMessage(InfoMessageIndex, TempData);
-        }
-
-        public static List<MethodInfo> FindControllerActions(Type controller)
-        {
-            // Abstract can't be directly routed
-            if (controller.IsAbstract)
-            {
-                return new List<MethodInfo>();
-            }
-            var methods = controller.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
-            // All Asp.net MVC controller actions need return type ActionResult
-            return methods.Where(m => m.ReturnType == typeof(ActionResult) || m.ReturnType.IsSubclassOf(typeof(ActionResult)) || (m.ReturnType.IsGenericType && m.ReturnType.GetGenericTypeDefinition() == typeof(System.Threading.Tasks.Task<>))).ToList();
-
-    }
-
-        public static List<MethodInfo> GetAllControllerActionMethods(Type controllerTypeInTheAssemblyToSearchForOtherControllers)
-        {
-            var aspnetMvcControllerBaseClassType = typeof(Controller);
-            Check.Require(controllerTypeInTheAssemblyToSearchForOtherControllers.IsSubclassOf(aspnetMvcControllerBaseClassType),
-                $"Type \"{controllerTypeInTheAssemblyToSearchForOtherControllers.FullName}\" must be a subclass of \"{aspnetMvcControllerBaseClassType.FullName}\" to make this call. Change call site to get this fixed.");
-
-            // Find all the controllers in the main assembly for all controllers
-            var assembly = Assembly.GetAssembly(controllerTypeInTheAssemblyToSearchForOtherControllers);
-
-            Type[] allTypesInControllerAssembly;
-
-            // To speed up troubleshooting in this area because exceptions of type ReflectionTypeLoadException can be hard to diagnose, try catch rethrow same exception but with more information in the message about *which* types failed to load
-            try
-            {
-                allTypesInControllerAssembly = assembly.GetTypes();
-            }
-            catch (ReflectionTypeLoadException ex)
-            {
-                // Get out the most important part - the LoaderExceptions which will help speed fixing the problem
-                var loaderExceptions = String.Join("\r\n   ", ex.LoaderExceptions.Select(x => x.ToString()));
-                var message = $"{ex.Message}\r\nLoaderExceptions:\r\n{loaderExceptions}";
-                throw new ReflectionTypeLoadException(ex.Types, ex.LoaderExceptions, message);
-            }
-
-            // Find any type that is an ASP.NET MVC Controller type (excluding abstract which can't be routed)
-            var controllerTypes = allTypesInControllerAssembly.Where(t => t.IsSubclassOf(aspnetMvcControllerBaseClassType) && !t.IsAbstract).ToList();
-
-            var allMethods = new List<MethodInfo>();
-
-            foreach (var controller in controllerTypes)
-            {
-                allMethods.AddRange(FindControllerActions(controller));
-            }
-
-            return allMethods;
         }
 
         protected void RequireViewPageIsInControllerViewDirectory<TView>()
@@ -362,36 +310,6 @@ namespace Neptune.Web.Common
 #pragma warning restore 612,618
         }
 
-
-        /// <summary>
-        /// http://support.microsoft.com/kb/316431 Internet Explorer is unable to open Office documents from an SSL Web site
-        /// http://support.microsoft.com/kb/815313 Prevent caching when you download active documents over SSL
-        /// http://support.microsoft.com/kb/323308 Internet Explorer file downloads over SSL do not work with the cache control headers
-        /// </summary>
-        private void SetHeadersForInternetExplorer8Support()
-        {
-            HttpContext.Response.Headers.Remove("Pragma");
-        }
-
-        public override FileContentResult File(byte[] fileContents, string contentType, string fileDownloadName)
-        {
-            SetHeadersForInternetExplorer8Support();
-            return base.File(fileContents, contentType, fileDownloadName);
-        }
-
-        public override FileStreamResult File(Stream fileStream, string contentType, string fileDownloadName)
-        {
-            SetHeadersForInternetExplorer8Support();
-            return base.File(fileStream, contentType, fileDownloadName);
-        }
-
-        protected FileContentResult TemporaryFile(string fileName, string contentType, string fileDownloadName)
-        {
-            SetHeadersForInternetExplorer8Support();
-            var bytes = System.IO.File.ReadAllBytes(fileName);
-            System.IO.File.Delete(fileName);
-            return File(bytes, contentType, fileDownloadName);
-        }
 
         protected async Task<string> RenderPartialViewToString(string viewName, object viewData)
         {

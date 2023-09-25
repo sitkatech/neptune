@@ -9,14 +9,16 @@ namespace Neptune.Web.Views.FieldVisit
     public class DetailViewData : NeptuneViewData
     {
         public EFModels.Entities.FieldVisit FieldVisit { get; }
+        public EFModels.Entities.TreatmentBMP TreatmentBMP { get; }
+        public EFModels.Entities.TreatmentBMPType TreatmentBMPType { get; }
         public bool UserCanDeleteMaintenanceRecord { get; }
         public bool UserHasCustomAttributeTypeManagePermissions { get; }
-        public IOrderedEnumerable<MaintenanceRecordObservation> SortedMaintenanceRecordObservations { get; }
+        public IOrderedEnumerable<MaintenanceRecordObservation>? SortedMaintenanceRecordObservations { get; }
         public AssessmentDetailViewData InitialAssessmentViewData { get; }
         public AssessmentDetailViewData PostMaintenanceAssessmentViewData { get; }
-        public EFModels.Entities.MaintenanceRecord MaintenanceRecord { get; }
-        public EFModels.Entities.TreatmentBMPAssessment InitialAssessment { get; }
-        public EFModels.Entities.TreatmentBMPAssessment PostMaintenanceAssessment { get; }
+        public EFModels.Entities.MaintenanceRecord? MaintenanceRecord { get; }
+        public EFModels.Entities.TreatmentBMPAssessment? InitialAssessment { get; }
+        public EFModels.Entities.TreatmentBMPAssessment? PostMaintenanceAssessment { get; }
         public bool UserCanDeleteInitialAssessment { get; }
         public bool UserCanDeletePostMaintenanceAssessment { get; }
         public bool CanManageStormwaterJurisdiction { get; }
@@ -26,33 +28,38 @@ namespace Neptune.Web.Views.FieldVisit
         public bool CanEditStormwaterJurisdiction { get; }
         public string TreatmentBMPDetailUrl { get; }
         public UrlTemplate<int> CustomAttributeTypeDetailUrlTemplate { get; }
+        public List<CustomAttribute> TreatmentBMPCustomAttributes { get; }
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.FieldVisit fieldVisit,
             AssessmentDetailViewData initialAssessmentViewData,
-            AssessmentDetailViewData postMaintenanceAssessmentViewData) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+            AssessmentDetailViewData postMaintenanceAssessmentViewData, List<CustomAttribute> treatmentBMPCustomAttributes, EFModels.Entities.TreatmentBMPType treatmentBMPType, EFModels.Entities.MaintenanceRecord? maintenanceRecord) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             FieldVisit = fieldVisit;
-            MaintenanceRecord = fieldVisit.MaintenanceRecord;
+            MaintenanceRecord = maintenanceRecord;
             InitialAssessmentViewData = initialAssessmentViewData;
             PostMaintenanceAssessmentViewData = postMaintenanceAssessmentViewData;
+            TreatmentBMPCustomAttributes = treatmentBMPCustomAttributes;
+            TreatmentBMPType = treatmentBMPType;
             EntityName = "Treatment BMP Field Visits";
             EntityUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
-            SubEntityName = fieldVisit.TreatmentBMP.TreatmentBMPName ?? "Preview Treatment BMP Field Visit";
-            SubEntityUrl = fieldVisit.TreatmentBMP.TreatmentBMPName != null ? SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(fieldVisit.TreatmentBMPID)) : "#";
+            var treatmentBMP = fieldVisit.TreatmentBMP;
+            TreatmentBMP = treatmentBMP;
+            SubEntityName = treatmentBMP.TreatmentBMPName ?? "Preview Treatment BMP Field Visit";
+            SubEntityUrl = treatmentBMP.TreatmentBMPName != null ? SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP.TreatmentBMPID)) : "#";
             PageTitle = fieldVisit.VisitDate.ToStringDate();
-            InitialAssessment = FieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial);
-            UserCanDeleteInitialAssessment = InitialAssessment != null &&
+            InitialAssessment = initialAssessmentViewData.TreatmentBMPAssessment;
+            UserCanDeleteInitialAssessment = initialAssessmentViewData.TreatmentBMPAssessment != null &&
                                              new TreatmentBMPAssessmentManageFeature()
-                                                 .HasPermission(currentPerson, InitialAssessment.TreatmentBMP)
+                                                 .HasPermission(currentPerson, treatmentBMP)
                                                  .HasPermission;
-            PostMaintenanceAssessment = FieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance);
-            UserCanDeletePostMaintenanceAssessment = PostMaintenanceAssessment != null &&
+            PostMaintenanceAssessment = postMaintenanceAssessmentViewData.TreatmentBMPAssessment;
+            UserCanDeletePostMaintenanceAssessment = postMaintenanceAssessmentViewData.TreatmentBMPAssessment != null &&
                                                      new TreatmentBMPAssessmentManageFeature()
-                                                         .HasPermission(currentPerson, PostMaintenanceAssessment.TreatmentBMP)
+                                                         .HasPermission(currentPerson, treatmentBMP)
                                                          .HasPermission;
             UserCanDeleteMaintenanceRecord = MaintenanceRecord != null &&
                                              new MaintenanceRecordManageFeature()
-                                                 .HasPermission(currentPerson, MaintenanceRecord.TreatmentBMP)
+                                                 .HasPermission(currentPerson, treatmentBMP)
                                                  .HasPermission;
             SortedMaintenanceRecordObservations = MaintenanceRecord?.MaintenanceRecordObservations.ToList()
                 .OrderBy(x => x.TreatmentBMPTypeCustomAttributeType.SortOrder)
@@ -61,8 +68,8 @@ namespace Neptune.Web.Views.FieldVisit
                 new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
             CanManageStormwaterJurisdiction =
-                currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdictionID);
-            CanEditStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdictionID);
+                currentPerson.CanManageStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
+            CanEditStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
             VerifiedUnverifiedFieldVisitUrl =
                 SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.VerifyFieldVisit(fieldVisit.PrimaryKey));
             MarkAsProvisionalUrl =
@@ -72,7 +79,7 @@ namespace Neptune.Web.Views.FieldVisit
                 SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x =>
                     x.ReturnFieldVisitToEdit(fieldVisit.PrimaryKey));
             TreatmentBMPDetailUrl =
-                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(fieldVisit.TreatmentBMPID));
+                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP.TreatmentBMPID));
             CustomAttributeTypeDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
         }
     }

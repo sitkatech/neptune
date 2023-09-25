@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Neptune.EFModels.Entities;
+﻿using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 
@@ -9,17 +8,18 @@ namespace Neptune.Web.Views.FieldVisit
     {
         public bool IsNew { get; }
         public string PostMaintenanceAssessmentUrl { get; }
-        public IEnumerable<SelectListItem> AllMaintenanceRecordTypes { get; }
         public string EditMaintenanceRecordUrl { get; }
 
-        public MaintainViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.FieldVisit fieldVisit, IEnumerable<SelectListItem> allMaintenanceRecordTypes) : base(httpContext, linkGenerator, currentPerson, fieldVisit, EFModels.Entities.FieldVisitSection.Maintenance)
+        public MaintainViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.FieldVisit fieldVisit,
+            List<EFModels.Entities.TreatmentBMPAssessment> treatmentBMPAssessments,
+            EFModels.Entities.MaintenanceRecord? maintenanceRecord) : base(httpContext, linkGenerator, currentPerson, fieldVisit, EFModels.Entities.FieldVisitSection.Maintenance, fieldVisit.TreatmentBMP.TreatmentBMPType, maintenanceRecord, treatmentBMPAssessments)
         {
-            AllMaintenanceRecordTypes = allMaintenanceRecordTypes;
             PostMaintenanceAssessmentUrl =
                 SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.PostMaintenanceAssessment(fieldVisit));
             EditMaintenanceRecordUrl =
                 SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.EditMaintenanceRecord(fieldVisit));
-            IsNew = fieldVisit.MaintenanceRecord == null;
+            IsNew = maintenanceRecord == null;
         }
     }
 }

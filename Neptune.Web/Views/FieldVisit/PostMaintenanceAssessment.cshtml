@@ -30,7 +30,7 @@
     If maintenance was recently performed on this BMP (e.g. as part of this field visit), you can record a new assessment to quantify the improved condition of the BMP.
 </p>
 <p>
-    Use the navigation to the left to view and enter your assessment details. Be sure to click Save on each page. In order to recieve an assessment score you are required to enter observations in each section.
+    Use the navigation to the left to view and enter your assessment details. Be sure to click Save on each page. In order to receive an assessment score you are required to enter observations in each section.
 </p>
 <p>You will see these icons next to the observation pages – here is what they mean:</p>
 
@@ -45,16 +45,16 @@
 <hr>
 <div class="row" style="margin-bottom: 21px;">
     <div class="col-xs-12 text-right">
-
-        <form method="post" class="field-visit-form">
-            <button class="btn btn-neptune" style="display: inline-block;">
+        @using (Html.BeginForm(FormMethod.Post, new { @class = "field-visit-form" }))
+        {
+            <button type="submit" class="btn btn-neptune" style="display: inline-block;">
                 <span>
-                    @(ViewDataTyped.FieldVisit.GetPostMaintenanceAssessment() == null ? "Begin Post-Maintenance Assessment" : "Continue Post-Maintenance Assessment")
+                    @(ViewDataTyped.PostMaintenanceAssessment == null ? "Begin Post-Maintenance Assessment" : "Continue Post-Maintenance Assessment")
                 </span>
                 <span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
             </button>
 
             <a class="btn btn-neptune" onclick="launchSaveAndWrapUpConfirmModal()">Wrap Up Visit</a>
-        </form>
+        }
     </div>
 </div>

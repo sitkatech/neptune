@@ -20,8 +20,8 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<MaintenanceRecord> AllMaintenanceRecordsGridJsonData()
         {
-            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPerson(_dbContext, CurrentPerson);
-            var customAttributeTypes = _dbContext.CustomAttributeTypes.Include(x => x.TreatmentBMPTypeCustomAttributeTypes).Where(x => x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList();
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson);
+            var customAttributeTypes = CustomAttributeTypes.List(_dbContext).Where(x => x.CustomAttributeTypePurposeID == (int) CustomAttributeTypePurposeEnum.Maintenance);
             var maintenanceRecords = MaintenanceRecords.List(_dbContext)
                 .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.TreatmentBMP.StormwaterJurisdictionID)).ToList();
             var gridSpec = new MaintenanceRecordGridSpec(CurrentPerson, customAttributeTypes, _linkGenerator);
@@ -35,8 +35,9 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("maintenanceRecordPrimaryKey")]
         public ViewResult Detail([FromRoute] MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey)
         {
-            var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, maintenanceRecord);
+            var maintenanceRecord = MaintenanceRecords.GetByID(_dbContext, maintenanceRecordPrimaryKey);
+            var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, maintenanceRecord.TreatmentBMPTypeID);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, maintenanceRecord, treatmentBMPType);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

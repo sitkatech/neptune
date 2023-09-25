@@ -11,6 +11,10 @@
 
 @inherits Detail
 
+@functions {
+    private ICollection<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments;
+}
+
 @section JavascriptAndStylesContent
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
@@ -286,19 +290,19 @@
             </div>
             <div class="panel-body">
 
-                @if (ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.WaterQualityManagementPlan.TreatmentBMPs.Count == 0)
+                @if (ViewDataTyped is { UsesDetailedModelingApproach: true, TreatmentBMPs.Count: 0 })
                 {
                     <p class="systemText">This WQMP is modeled using the detailed approach, but no structural BMPs have been inventoried, so no results are available.</p>
                 }
-                else if (!ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary == null)
+                else if (ViewDataTyped is { UsesDetailedModelingApproach: false, HasWaterQualityManagementPlanBoundary: false })
                 {
                     <p class="systemText">No treatment area has been defined for this Water Quality Management Plan. Add parcels to define the treatment area.</p>
                 }
-                else if (!ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.WaterQualityManagementPlan.QuickBMPs.Count == 0)
+                else if (ViewDataTyped is { UsesDetailedModelingApproach: false, QuickBMPs.Count: 0 })
                 {
                     <p class="systemText">This WQMP is modeled using the simplified approach, but no simplified structural BMPs have been inventoried, so no results are available.</p>
                 }
-                else if (!ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.AllSimpleBMPsNotFullyParameterized)
+                else if (ViewDataTyped is { UsesDetailedModelingApproach: false, AllSimpleBMPsNotFullyParameterized: true })
                 {
                     <p class="systemText">This WQMP is modeled using the simplified approach, but none of its simplified structural BMPs are fully parameterized, so no results are available.</p>
 
@@ -312,11 +316,11 @@
                 {
                     ModeledPerformance.RenderPartialView(Html, ViewDataTyped.ModeledPerformanceViewData);
                     //this will always be false if not relevant (i.e. Simplified approach is used)
-                    if (ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.AnyDetailedBMPsNotFullyParameterized)
+                    if (ViewDataTyped is { UsesDetailedModelingApproach: true, AnyDetailedBMPsNotFullyParameterized: true })
                     {
                         <p class="systemText">Some of this WQMPs structural BMPs are not fully parameterized for modeling, or have missing or unverified delineations, so these results may be incomplete or inaccurate.</p>
                     }
-                    else if (!ViewDataTyped.UsesDetailedModelingApproach && ViewDataTyped.AnySimpleBMPsNotFullyParameterized)
+                    else if (ViewDataTyped is { UsesDetailedModelingApproach: false,AnySimpleBMPsNotFullyParameterized: true })
                     {
                         <p class="systemText">Some of this WQMPs simplified BMPs are not fully parameterized for modeling, so these results may be incomplete or inaccurate.</p>
                     }
@@ -336,7 +340,7 @@
                     {
                         <div>
                             <a class="btn btn-neptune" href="@ViewDataTyped.EditParcelsUrl">Add Parcels</a>
-                            <a class="btn btn-neptune @(ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary == null ? "btn-default disabled" : String.Empty)" href="@ViewDataTyped.EditWqmpBoundaryUrl">Refine Area</a>
+                            <a class="btn btn-neptune @(!ViewDataTyped.HasWaterQualityManagementPlanBoundary ? "btn-default disabled" : String.Empty)" href="@ViewDataTyped.EditWqmpBoundaryUrl">Refine Area</a>
                         </div>
                     }
                     <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
@@ -353,7 +357,7 @@
                     Land Use Statistics
                 </div>
                 <div class="panel-body">
-                    @if (ViewDataTyped.HRUCharacteristicsViewData.HRUCharacteristicsSummaries.Any() && ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary != null)
+                    @if (ViewDataTyped.HRUCharacteristicsViewData.HRUCharacteristicsSummaries.Any() && ViewDataTyped.HasWaterQualityManagementPlanBoundary)
                     {
                         HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
                         if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID == WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
@@ -361,7 +365,7 @@
                             <p class="systemText">Land Use Statistics are derived from the inventoried structural BMPs and may not exactly match the Calculated Parcel Area shown above.</p>
                         }
                     }
-                    else if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundary == null)
+                    else if (!ViewDataTyped.HasWaterQualityManagementPlanBoundary)
                     {
                         <p class="systemText">No treatment area is provided for this @FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a <a href="@ViewDataTyped.EditParcelsUrl">treatment area is provided</a>.</p>
                     }
@@ -465,10 +469,10 @@
                                     </td>
                                     <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
                                     <td class="notes collapsed">@treatmentBMP.Notes</td>
-                                    <td>@treatmentBMP.IsFullyParameterized(treatmentBMP.Delineation).ToYesNo()</td>
+                                    <td>@treatmentBMP.IsFullyParameterized(ViewDataTyped.TreatmentBMPDelineationsDict[treatmentBMP.TreatmentBMPID]).ToYesNo()</td>
                                     <td>@ViewDataTyped.DisplayDryWeatherFlowOverride(treatmentBMP)</td>
-                                    <td>@((ViewDataTyped.TreatmentBMPDelineationsDict.ContainsKey(treatmentBMP.TreatmentBMPID) ? ViewDataTyped.TreatmentBMPDelineationsDict[treatmentBMP.TreatmentBMPID] : null).GetDelineationStatus())</td>
-                                    <td style="text-align: right">@((ViewDataTyped.TreatmentBMPDelineationsDict.ContainsKey(treatmentBMP.TreatmentBMPID) ? ViewDataTyped.TreatmentBMPDelineationsDict[treatmentBMP.TreatmentBMPID] : null).GetDelineationAreaString())</td>
+                                    <td>@(ViewDataTyped.TreatmentBMPDelineationsDict[treatmentBMP.TreatmentBMPID]?.GetDelineationStatus())</td>
+                                    <td style="text-align: right">@(ViewDataTyped.TreatmentBMPDelineationsDict[treatmentBMP.TreatmentBMPID]?.GetDelineationAreaString())</td>
                                 </tr>
                             }
                             </tbody>
@@ -603,7 +607,8 @@
 
                 @foreach (var waterQualityManagementPlanDocumentType in WaterQualityManagementPlanDocumentType.All)
                 {
-                    var waterQualityManagementPlanDocuments = ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanDocuments.ToList().Where(x => x.WaterQualityManagementPlanDocumentType == waterQualityManagementPlanDocumentType).OrderBy(x => x.DisplayName).ToList();
+                    WaterQualityManagementPlanDocuments = ViewDataTyped.WaterQualityManagementPlanDocuments;
+                    var waterQualityManagementPlanDocuments = WaterQualityManagementPlanDocuments.ToList().Where(x => x.WaterQualityManagementPlanDocumentType == waterQualityManagementPlanDocumentType).OrderBy(x => x.DisplayName).ToList();
 
                     <h4>@waterQualityManagementPlanDocumentType.WaterQualityManagementPlanDocumentTypeDisplayName</h4>
 

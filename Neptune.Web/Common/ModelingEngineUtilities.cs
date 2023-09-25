@@ -5,7 +5,7 @@ namespace Neptune.Web.Common
 {
     public static class ModelingEngineUtilities
     {
-        public static void QueueLGURefreshForArea(Geometry oldShape, Geometry newShape, NeptuneDbContext dbContext)
+        public static void QueueLGURefreshForArea(Geometry? oldShape, Geometry? newShape, NeptuneDbContext dbContext)
         {
             Geometry loadGeneratingUnitRefreshAreaGeometry;
 

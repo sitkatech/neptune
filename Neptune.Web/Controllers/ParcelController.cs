@@ -68,9 +68,9 @@ namespace Neptune.Web.Controllers
             return Json(listItems);
         }
 
-        [HttpGet("{term}")]
+        [HttpGet]
         [NeptuneViewFeature]
-        public JsonResult FindSimpleByAddress(string term)
+        public JsonResult FindSimpleByAddress([FromQuery] string term)
         {
             var searchString = term.Trim();
             var listItems = _dbContext.ParcelGeometries.AsNoTracking().Include(x => x.Parcel)
@@ -100,9 +100,9 @@ namespace Neptune.Web.Controllers
             return Json(listItems);
         }
 
-        [HttpGet("{term}")]
+        [HttpGet]
         [NeptuneViewFeature]        
-        public JsonResult FindSimpleByAPN(string term)
+        public JsonResult FindSimpleByAPN([FromQuery] string term)
         {
             var searchString = term.Trim();
             var listItems = _dbContext.ParcelGeometries.AsNoTracking().Include(x => x.Parcel)

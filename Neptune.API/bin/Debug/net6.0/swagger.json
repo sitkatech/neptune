@@ -276,18 +276,6 @@
         }
       }
     },
-    "/FileResource/CkEditorUpload": {
-      "post": {
-        "tags": [
-          "FileResource"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
     "/FileResource/{fileResourceGuidAsString}": {
       "get": {
         "tags": [
@@ -1202,36 +1190,6 @@
       "get": {
         "tags": [
           "Project"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/csv": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/projects/treatmentBMPs/download-shapefile": {
-      "get": {
-        "tags": [
-          "Project"
-        ],
-        "parameters": [
-          {
-            "name": "typeName",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -2213,11 +2171,6 @@
             "type": "string",
             "format": "uuid"
           },
-          "FileResourceData": {
-            "type": "string",
-            "format": "byte",
-            "nullable": true
-          },
           "CreatePerson": {
             "$ref": "#/components/schemas/PersonDto"
           },
@@ -2227,6 +2180,11 @@
           },
           "InBlobStorage": {
             "type": "boolean"
+          },
+          "ContentLength": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2284,11 +2242,6 @@
             "type": "string",
             "format": "uuid"
           },
-          "FileResourceData": {
-            "type": "string",
-            "format": "byte",
-            "nullable": true
-          },
           "CreatePersonID": {
             "type": "integer",
             "format": "int32"
@@ -2299,6 +2252,11 @@
           },
           "InBlobStorage": {
             "type": "boolean"
+          },
+          "ContentLength": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3504,10 +3462,6 @@
           "ProjectStatusDisplayName": {
             "type": "string",
             "nullable": true
-          },
-          "ProjectStatusSortOrder": {
-            "type": "integer",
-            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -3625,6 +3579,10 @@
             "nullable": true
           },
           "TreatmentBMPTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "DisplayName": {
             "type": "string",
             "nullable": true
           },

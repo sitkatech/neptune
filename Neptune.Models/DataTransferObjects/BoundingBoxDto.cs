@@ -21,10 +21,10 @@ namespace Neptune.Models.DataTransferObjects
         {
             if (pointList.Any())
             {
-                Left = pointList.Min(x => x.X);
-                Right = pointList.Max(x => x.X);
-                Bottom = pointList.Min(x => x.Y);
+                Left = pointList.Max(x => x.X);
                 Top = pointList.Max(x => x.Y);
+                Right = pointList.Min(x => x.X);
+                Bottom = pointList.Min(x => x.Y);
             }
             else
             {

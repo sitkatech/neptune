@@ -9,6 +9,8 @@ namespace Neptune.Web.Views.FieldVisit
     public class FieldVisitSectionViewData : NeptuneViewData
     {
         public EFModels.Entities.FieldVisit FieldVisit { get; }
+        public EFModels.Entities.TreatmentBMP TreatmentBMP { get; }
+        public EFModels.Entities.TreatmentBMPType TreatmentBMPType { get; }
         public string SectionName { get; }
         public string SubsectionName { get; set; }
         public bool CanManageStormwaterJurisdiction { get; }
@@ -19,55 +21,64 @@ namespace Neptune.Web.Views.FieldVisit
         public string WrapupUrl { get; }
         public string EditDateAndTypeUrl { get; }
         public bool UserCanDeleteMaintenanceRecord { get; }
-        public EFModels.Entities.MaintenanceRecord MaintenanceRecord { get; }
-        public EFModels.Entities.TreatmentBMPAssessment InitialAssessment { get; }
-        public EFModels.Entities.TreatmentBMPAssessment PostMaintenanceAssessment { get; }
+        public EFModels.Entities.MaintenanceRecord? MaintenanceRecord { get; }
+        public EFModels.Entities.TreatmentBMPAssessment? InitialAssessment { get; }
+        public EFModels.Entities.TreatmentBMPAssessment? PostMaintenanceAssessment { get; }
         public string? TreatmentBMPDetailUrl { get; }
         public string MaintenanceRecordDeleteUrl { get; }
         public string InitialAssessmentDeleteUrl { get; }
         public string PostMaintenanceAssessmentDeleteUrl { get; }
 
 
-        public FieldVisitSectionViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.FieldVisit fieldVisit, EFModels.Entities.FieldVisitSection fieldVisitSection)
+        public FieldVisitSectionViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.FieldVisit fieldVisit, EFModels.Entities.FieldVisitSection fieldVisitSection,
+            EFModels.Entities.TreatmentBMPType treatmentBMPType,
+            EFModels.Entities.MaintenanceRecord? maintenanceRecord,
+            List<EFModels.Entities.TreatmentBMPAssessment> treatmentBMPAssessments)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             FieldVisit = fieldVisit;
+            TreatmentBMPType = treatmentBMPType;
+            var treatmentBMP = fieldVisit.TreatmentBMP;
+            TreatmentBMP = treatmentBMP;
             SectionName = fieldVisitSection.FieldVisitSectionName;
 
             var treatmentBMPDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(fieldVisit.TreatmentBMPID));
 
             EntityName = "Treatment BMP Field Visits";
             EntityUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
-            SubEntityName = fieldVisit.TreatmentBMP.TreatmentBMPName ?? "Preview Treatment BMP Field Visit";
-            SubEntityUrl = fieldVisit.TreatmentBMP.TreatmentBMPName != null ? treatmentBMPDetailUrl : "#";
+            SubEntityName = treatmentBMP.TreatmentBMPName ?? "Preview Treatment BMP Field Visit";
+            SubEntityUrl = treatmentBMP.TreatmentBMPName != null ? treatmentBMPDetailUrl : "#";
             PageTitle = fieldVisit.VisitDate.ToStringDate();
             TreatmentBMPDetailUrl = treatmentBMPDetailUrl;
 
-            EditDateAndTypeUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.EditDateAndType(fieldVisit.PrimaryKey));
+            EditDateAndTypeUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.EditDateAndType(fieldVisit.FieldVisitID));
 
-            CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdictionID);
-            VerifiedUnverifiedFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.VerifyFieldVisit(FieldVisit.PrimaryKey));
+            CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
+            VerifiedUnverifiedFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.VerifyFieldVisit(fieldVisit.FieldVisitID));
 
             SectionHeader = fieldVisitSection.SectionHeader;
             ValidationWarnings = new List<string>();
 
             WrapupUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.VisitSummary(fieldVisit));
 
-            MaintenanceRecord = fieldVisit.MaintenanceRecord;
-            MaintenanceRecordDeleteUrl = fieldVisit.MaintenanceRecord == null ? string.Empty : SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(fieldVisit.MaintenanceRecord));
-            UserCanDeleteMaintenanceRecord = MaintenanceRecord != null &&
+            MaintenanceRecord = maintenanceRecord;
+            MaintenanceRecordDeleteUrl = maintenanceRecord == null ? string.Empty : SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(maintenanceRecord));
+            UserCanDeleteMaintenanceRecord = maintenanceRecord != null &&
                                              new MaintenanceRecordManageFeature()
-                                                 .HasPermission(CurrentPerson, fieldVisit.TreatmentBMP)
+                                                 .HasPermission(CurrentPerson, treatmentBMP)
                                                  .HasPermission;
 
-            InitialAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial);
-            InitialAssessmentDeleteUrl = InitialAssessment == null ? string.Empty : SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(InitialAssessment));
+            var initialAssessment = treatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentTypeID == (int) TreatmentBMPAssessmentTypeEnum.Initial);
+            InitialAssessment = initialAssessment;
+            InitialAssessmentDeleteUrl = initialAssessment == null ? string.Empty : SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(initialAssessment));
 
-            PostMaintenanceAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance);
-            PostMaintenanceAssessmentDeleteUrl = PostMaintenanceAssessment == null ? string.Empty : SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(PostMaintenanceAssessment));
+            var postMaintenanceAssessment = treatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentTypeID == (int)TreatmentBMPAssessmentTypeEnum.PostMaintenance);
+            PostMaintenanceAssessment = postMaintenanceAssessment;
+            PostMaintenanceAssessmentDeleteUrl = postMaintenanceAssessment == null ? string.Empty : SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(postMaintenanceAssessment));
         }
 
-        public bool UserCanDeleteAssessment(EFModels.Entities.TreatmentBMPAssessment assessment)
+        public bool UserCanDeleteAssessment(EFModels.Entities.TreatmentBMPAssessment? assessment)
         {
             return assessment != null &&
                    new TreatmentBMPAssessmentManageFeature().HasPermission(CurrentPerson, assessment.TreatmentBMP).HasPermission;
