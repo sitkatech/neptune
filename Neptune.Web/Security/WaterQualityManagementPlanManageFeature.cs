@@ -37,5 +37,21 @@ namespace Neptune.Web.Security
             return new PermissionCheckResult(
                 $"Person does not belong to the {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()}'s Jurisdiction.");
         }
+
+        public PermissionCheckResult HasPermission(Person person, int stormwaterJurisdictionID)
+        {
+            if (!HasPermissionByPerson(person))
+            {
+                return new PermissionCheckResult("Person does not have permission by role.");
+            }
+
+            if (person.IsAssignedToStormwaterJurisdiction(stormwaterJurisdictionID))
+            {
+                return new PermissionCheckResult();
+            }
+
+            return new PermissionCheckResult(
+                $"Person does not belong to the {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()}'s Jurisdiction.");
+        }
     }
 }

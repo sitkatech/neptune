@@ -58,7 +58,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public bool AnySimpleBMPsNotFullyParameterized { get; set; }
 
         public string EditUrl { get; }
-        public UrlTemplate<int> OrganizationDetailUrlTemplate { get; }
+        public UrlTemplate<int> StormwaterJurisdictionDetailUrlTemplate { get; }
         public UrlTemplate<int> TreatmentBMPDetailUrlTemplate { get; }
         public UrlTemplate<int> VerifyDetailUrlTemplate { get; }
         public UrlTemplate<int> VerifyDeleteUrlTemplate { get; }
@@ -123,7 +123,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             DocumentDeleteUrlTemplate = new UrlTemplate<int>(
                 SitkaRoute<WaterQualityManagementPlanDocumentController>.BuildUrlFromExpression(LinkGenerator,
                     x => x.Delete(UrlTemplate.Parameter1Int)));
-            OrganizationDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            StormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
 
 
             MapInitJson = mapInitJson;

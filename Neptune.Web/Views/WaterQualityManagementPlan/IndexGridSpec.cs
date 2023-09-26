@@ -11,7 +11,7 @@ using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class IndexGridSpec : GridSpec<vWaterQualityManagementPlanDetailedWithWQMPEntity>
+    public class IndexGridSpec : GridSpec<vWaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs>
     {
         public IndexGridSpec(LinkGenerator linkGenerator, Person currentPerson)
         {
@@ -22,8 +22,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ObjectNamePlural = fieldDefinitionWaterQualityManagementPlan.GetFieldDefinitionLabelPluralized();
             SaveFiltersInCookie = true;
 
-            var waterQualityManagementPlanDeleteFeature = new WaterQualityManagementPlanDeleteFeature();
-            var qualityManagementPlanManageFeature = new WaterQualityManagementPlanManageFeature();
+            var waterQualityManagementPlanManageFeature = new WaterQualityManagementPlanManageFeature();
             var isAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
 
             var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
@@ -35,21 +34,21 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             if (!currentPerson.IsAnonymousOrUnassigned())
             {
                 Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(
-                        deleteUrlTemplate.ParameterReplace(x.WaterQualityManagementPlan.WaterQualityManagementPlanID),
-                        waterQualityManagementPlanDeleteFeature
-                            .HasPermission(currentPerson, x.WaterQualityManagementPlan).HasPermission), 26,
+                        deleteUrlTemplate.ParameterReplace(x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanID),
+                        waterQualityManagementPlanManageFeature
+                            .HasPermission(currentPerson, x.vWaterQualityManagementPlanDetailed.StormwaterJurisdictionID).HasPermission), 26,
                     DhtmlxGridColumnFilterType.None);
                 Add(string.Empty,
                     x => DhtmlxGridHtmlHelpers.MakeEditIconAsModalDialogLinkBootstrap(new ModalDialogForm(
-                            editUrlTemplate.ParameterReplace(x.WaterQualityManagementPlan.WaterQualityManagementPlanID),
+                            editUrlTemplate.ParameterReplace(x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanID),
                             ModalDialogFormHelper.DefaultDialogWidth,
                             $"Edit {waterQualityManagementPlanLabelSingular}"),
-                        qualityManagementPlanManageFeature.HasPermission(currentPerson, x.WaterQualityManagementPlan)
+                        waterQualityManagementPlanManageFeature.HasPermission(currentPerson, x.vWaterQualityManagementPlanDetailed.StormwaterJurisdictionID)
                             .HasPermission),
                     26, DhtmlxGridColumnFilterType.None);
             }
 
-            Add("Name", x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlan.WaterQualityManagementPlanID), x.WaterQualityManagementPlan.WaterQualityManagementPlanName), 300, DhtmlxGridColumnFilterType.Text);
+            Add("Name", x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanID), x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanName), 300, DhtmlxGridColumnFilterType.Text);
             Add("Jurisdiction", x => isAnonymousOrUnassigned ? new HtmlString(x.vWaterQualityManagementPlanDetailed.StormwaterJurisdictionName) :
                 UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.vWaterQualityManagementPlanDetailed.StormwaterJurisdictionID), x.vWaterQualityManagementPlanDetailed.StormwaterJurisdictionName), 150);
             Add("Priority", x => x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanPriorityDisplayName,
@@ -83,7 +82,18 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             Add("# of Simplified BMPs", x => x.vWaterQualityManagementPlanDetailed.QuickBMPCount, 100);
             Add("Modeling Approach", x => x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanModelingApproachDisplayName,
                 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add(FieldDefinitionType.FullyParameterized.ToGridHeaderString("Fully Parameterized?"), x => x.WaterQualityManagementPlan.IsFullyParameterized() ? new HtmlString("Yes") : new HtmlString("No"), 120);
+            Add(FieldDefinitionType.FullyParameterized.ToGridHeaderString("Fully Parameterized?"), x =>
+            {
+                if (x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanModelingApproachID ==
+                    WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
+                {
+                    return x.TreatmentBMPsWithModelingAttributesAndDelineation.Any(y => y.TreatmentBMP.IsFullyParameterized(y.Delineation)) ? new HtmlString("Yes") : new HtmlString("No");
+                }
+
+                return x.QuickBMPs.Any(y => y.IsFullyParameterized())
+                        ? new HtmlString("Yes")
+                        : new HtmlString("No");
+            }, 120);
             Add("# of Documents", x => x.vWaterQualityManagementPlanDetailed.DocumentCount, 100);
             Add(FieldDefinitionType.HasAllRequiredDocuments.ToGridHeaderString(),
                 x => (x.vWaterQualityManagementPlanDetailed.HasRequiredDocuments ?? false)

@@ -6,6 +6,7 @@ using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Neptune.Web.Views.Shared.ModeledPerformance;
 using Neptune.Web.Views.WaterQualityManagementPlan;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
@@ -40,18 +41,34 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        public GridJsonNetJObjectResult<vWaterQualityManagementPlanDetailedWithWQMPEntity> WaterQualityManagementPlanIndexGridData()
+        public GridJsonNetJObjectResult<vWaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs> WaterQualityManagementPlanIndexGridData()
         {
             var gridSpec = new IndexGridSpec(_linkGenerator, CurrentPerson);
-            var treatmentBMPs =
-                WaterQualityManagementPlans.ListViewableByPerson(_dbContext, CurrentPerson)
-                    .Join(vWaterQualityManagementPlanDetaileds.ListViewableByPerson(_dbContext, CurrentPerson),
-                        x => x.WaterQualityManagementPlanID,
-                        y => y.WaterQualityManagementPlanID,
-                        (x, y) => new vWaterQualityManagementPlanDetailedWithWQMPEntity(x, y))
-                    .OrderBy(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanName)
+            var treatmentBmps = _dbContext.TreatmentBMPs.Include(x => x.TreatmentBMPType)
+                .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP).AsNoTracking()
+                .Where(x => x.WaterQualityManagementPlanID != null).ToList();
+            var treatmentBMPDetaileds = treatmentBmps.Join(
+                    vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext),
+                    x => x.TreatmentBMPID,
+                    y => y.Key,
+                    (x, y) => new TreatmentBMPWithModelingAttributesAndDelineation(x, y.Value)).ToList();
+            var quickBMPs = QuickBMPs.List(_dbContext);
+            var waterQualityManagementPlans =
+                vWaterQualityManagementPlanDetaileds.ListViewableByPerson(_dbContext, CurrentPerson).OrderBy(x => x.WaterQualityManagementPlanName)
                     .ToList();
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vWaterQualityManagementPlanDetailedWithWQMPEntity>(treatmentBMPs, gridSpec);
+            var query = waterQualityManagementPlans
+                .GroupJoin(treatmentBMPDetaileds,
+                    waterQualityManagementPlanDetailed =>
+                        waterQualityManagementPlanDetailed.WaterQualityManagementPlanID,
+                    treatmentBMPWithModelingAttributesAndDelineation => treatmentBMPWithModelingAttributesAndDelineation
+                        .TreatmentBMP.WaterQualityManagementPlanID,
+                    (waterQualityManagementPlanDetailed, gj) => new { waterQualityManagementPlanDetailed, gj })
+                .GroupJoin(quickBMPs, wqmp => wqmp.waterQualityManagementPlanDetailed.WaterQualityManagementPlanID,
+                    quickBMP => quickBMP.WaterQualityManagementPlanID,
+                    (wqmp, gj2) =>
+                        new vWaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs(
+                            wqmp.waterQualityManagementPlanDetailed, wqmp.gj, gj2)).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vWaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs>(query, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
