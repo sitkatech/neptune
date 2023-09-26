@@ -19,11 +19,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
         }
 
-        public NewViewModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan) : base(waterQualityManagementPlan)
-        {
-            StormwaterJurisdictionID = waterQualityManagementPlan.StormwaterJurisdictionID;
-        }
-
         public override void UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan)
         {
             waterQualityManagementPlan.StormwaterJurisdictionID =

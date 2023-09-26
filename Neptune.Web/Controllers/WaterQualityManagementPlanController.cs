@@ -12,6 +12,7 @@ using Neptune.Common;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using Neptune.Web.Common.Models;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Services;
 using Neptune.Web.Services.Filters;
@@ -210,7 +211,10 @@ namespace Neptune.Web.Controllers
         [WaterQualityManagementPlanCreateFeature]
         public PartialViewResult New()
         {
-            var viewModel = new NewViewModel();
+            var viewModel = new NewViewModel()
+            {
+                WaterQualityManagementPlanID = ModelObjectHelpers.NotYetAssignedID
+            };
             return ViewNew(viewModel);
         }
 
@@ -242,8 +246,8 @@ namespace Neptune.Web.Controllers
         private PartialViewResult ViewNew(NewViewModel viewModel)
         {
             var stormwaterJurisdictions = new List<Role> {Role.Admin, Role.SitkaAdmin}.Contains(CurrentPerson.Role)
-                ? _dbContext.StormwaterJurisdictions.ToList()
-                : CurrentPerson.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList();
+                ? StormwaterJurisdictions.List(_dbContext)
+                : StormwaterJurisdictions.ListViewableByPersonForWQMPs(_dbContext, CurrentPerson);
             var hydrologicSubareas = _dbContext.HydrologicSubareas.ToList();
             var viewData = new NewViewData(stormwaterJurisdictions, hydrologicSubareas, TrashCaptureStatusType.All);
             return RazorPartialView<New, NewViewData, NewViewModel>(viewData, viewModel);
@@ -280,9 +284,8 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewEdit(EditViewModel viewModel)
         {
-            var stormwaterJurisdictions = StormwaterJurisdictions.List(_dbContext);
             var hydrologicSubareas = _dbContext.HydrologicSubareas.ToList();
-            var viewData = new EditViewData(stormwaterJurisdictions, hydrologicSubareas, TrashCaptureStatusType.All);
+            var viewData = new EditViewData(hydrologicSubareas, TrashCaptureStatusType.All);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
