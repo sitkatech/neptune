@@ -43,7 +43,7 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMP.TreatmentBMPTypeID);
-            var viewData = new InstructionsViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPType);
+            var viewData = new InstructionsViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPType, treatmentBMP.TreatmentBMPBenchmarkAndThresholds.ToList());
             return RazorView<Instructions, InstructionsViewData>(viewData);
         }
 
@@ -58,7 +58,7 @@ namespace Neptune.Web.Controllers
             var treatmentBMPBenchmarkAndThresholds = TreatmentBMPBenchmarkAndThresholds.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var viewModel = new EditBenchmarkAndThresholdViewModel(treatmentBMP, treatmentBMPAssessmentObservationType,
                 treatmentBMPBenchmarkAndThresholds);
-            return ViewEditBenchmarkAndThreshold(treatmentBMP, treatmentBMPAssessmentObservationType, viewModel, treatmentBMPType);
+            return ViewEditBenchmarkAndThreshold(treatmentBMP, treatmentBMPAssessmentObservationType, viewModel, treatmentBMPType, treatmentBMPBenchmarkAndThresholds);
         }
 
         [HttpPost("{treatmentBMPPrimaryKey}/{treatmentBMPAssessmentObservationTypeID}")]
@@ -67,15 +67,15 @@ namespace Neptune.Web.Controllers
         public async Task<IActionResult> EditBenchmarkAndThreshold([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, [FromRoute] int treatmentBMPAssessmentObservationTypeID, EditBenchmarkAndThresholdViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMP.TreatmentBMPTypeID);
+            var treatmentBMPType = TreatmentBMPTypes.GetByIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPTypeID);
             var treatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationTypes.GetByIDWithChangeTracking(_dbContext, treatmentBMPAssessmentObservationTypeID);
+            var treatmentBMPBenchmarkAndThresholds = TreatmentBMPBenchmarkAndThresholds.ListByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPID);
             if (!ModelState.IsValid)
             {
                 SetErrorForDisplay("Could not save benchmark and threshold values: Please fix validation errors to proceed.");
-                return ViewEditBenchmarkAndThreshold(treatmentBMP, treatmentBMPAssessmentObservationType, viewModel, treatmentBMPType);
+                return ViewEditBenchmarkAndThreshold(treatmentBMP, treatmentBMPAssessmentObservationType, viewModel, treatmentBMPType, treatmentBMPBenchmarkAndThresholds);
             }
 
-            var treatmentBMPBenchmarkAndThresholds = TreatmentBMPBenchmarkAndThresholds.ListByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPID);
             var treatmentBMPBenchmarkAndThreshold = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMP, treatmentBMPAssessmentObservationType, treatmentBMPBenchmarkAndThresholds, treatmentBMPType);
 
             viewModel.UpdateModel(treatmentBMPBenchmarkAndThreshold, CurrentPerson);
@@ -113,9 +113,9 @@ namespace Neptune.Web.Controllers
         }
 
 
-        private ViewResult ViewEditBenchmarkAndThreshold(TreatmentBMP treatmentBMP, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, EditBenchmarkAndThresholdViewModel viewModel, TreatmentBMPType treatmentBMPType)
+        private ViewResult ViewEditBenchmarkAndThreshold(TreatmentBMP treatmentBMP, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, EditBenchmarkAndThresholdViewModel viewModel, TreatmentBMPType treatmentBMPType, List<TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds)
         {
-            var viewData = new EditBenchmarkAndThresholdViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPAssessmentObservationType, treatmentBMPType);
+            var viewData = new EditBenchmarkAndThresholdViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPAssessmentObservationType, treatmentBMPType, treatmentBMPBenchmarkAndThresholds);
             return RazorView<EditBenchmarkAndThreshold, EditBenchmarkAndThresholdViewData, EditBenchmarkAndThresholdViewModel>(viewData, viewModel);
         }
 

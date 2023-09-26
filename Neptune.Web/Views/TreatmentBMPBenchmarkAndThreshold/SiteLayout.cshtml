@@ -37,7 +37,8 @@ Source code is available upon request via <support@sitkatech.com>.
                     {
                         <li class="@(ViewDataTyped.SectionName == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName ? "active" : string.Empty)">
                             <a href="@ViewDataTyped.BenchmarkAndThresholdUrlTemplate.ParameterReplace(ViewDataTyped.TreatmentBMP.TreatmentBMPID, treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID)">
-                                @if (ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdCompleteForObservationType(treatmentBMPAssessmentObservationType))
+                                @if (ViewDataTyped.TreatmentBMPBenchmarkAndThresholds.SingleOrDefault(x =>
+                                    x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID) != null)
                                 {
                                     <span class="glyphicon glyphicon-ok field-validation-success text-left" style="margin-right: 4px"></span>
                                 }
