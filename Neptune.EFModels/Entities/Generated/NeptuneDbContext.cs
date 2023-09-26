@@ -199,6 +199,8 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<vLoadReducingResult> vLoadReducingResults { get; set; }
 
+    public virtual DbSet<vMaintenanceRecordDetailed> vMaintenanceRecordDetaileds { get; set; }
+
     public virtual DbSet<vModelingResultUnitConversion> vModelingResultUnitConversions { get; set; }
 
     public virtual DbSet<vMostRecentTreatmentBMPAssessment> vMostRecentTreatmentBMPAssessments { get; set; }
@@ -1025,6 +1027,11 @@ public partial class NeptuneDbContext : DbContext
         modelBuilder.Entity<vLoadReducingResult>(entity =>
         {
             entity.ToView("vLoadReducingResult");
+        });
+
+        modelBuilder.Entity<vMaintenanceRecordDetailed>(entity =>
+        {
+            entity.ToView("vMaintenanceRecordDetailed");
         });
 
         modelBuilder.Entity<vModelingResultUnitConversion>(entity =>
