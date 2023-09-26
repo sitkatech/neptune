@@ -334,15 +334,14 @@
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
                     Locations
-                </div>
-                <div class="panel-body">
                     @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                     {
-                        <div>
-                            <a class="btn btn-neptune" href="@ViewDataTyped.EditParcelsUrl">Add Parcels</a>
-                            <a class="btn btn-neptune @(!ViewDataTyped.HasWaterQualityManagementPlanBoundary ? "btn-default disabled" : String.Empty)" href="@ViewDataTyped.EditWqmpBoundaryUrl">Refine Area</a>
-                        </div>
+                        <span class="pull-right">
+                            <a href="@ViewDataTyped.EditWqmpBoundaryUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
+                        </span>
                     }
+                </div>
+                <div class="panel-body">
                     <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
                     <div class="row" style="margin-top: 12px;">
                         <label class="col-sm-5 control-label">Calculated WQMP Acreage:</label>
@@ -367,7 +366,7 @@
                     }
                     else if (!ViewDataTyped.HasWaterQualityManagementPlanBoundary)
                     {
-                        <p class="systemText">No treatment area is provided for this @FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a <a href="@ViewDataTyped.EditParcelsUrl">treatment area is provided</a>.</p>
+                        <p class="systemText">No treatment area is provided for this @FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel(). Land Use Statistics cannot be determined until a <a href="@ViewDataTyped.EditWqmpBoundaryUrl">treatment area is provided</a>.</p>
                     }
                     else
                     {
@@ -382,14 +381,6 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Associated @FieldDefinitionType.Parcel.GetFieldDefinitionLabelPluralized()
-                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
-                {
-                    <span class="pull-right">
-                        <a href="@ViewDataTyped.EditParcelsUrl">
-                            @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")
-                        </a>
-                    </span>
-                }
             </div>
             <div class="panel-body">
                 @Html.DhtmlxGrid(ViewDataTyped.ParcelGridSpec, ViewDataTyped.ParcelGridName, ViewDataTyped.ParcelGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)

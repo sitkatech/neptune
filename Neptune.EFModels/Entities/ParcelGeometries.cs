@@ -9,7 +9,7 @@ public static class ParcelGeometries
     public static Geometry UnionAggregateByParcelIDs(NeptuneDbContext dbContext, IEnumerable<int> parcelIDs)
     {
         return dbContext.ParcelGeometries.AsNoTracking()
-            .Where(x => parcelIDs.Contains(x.ParcelID)).Select(x => x.GeometryNative).ToList()
+            .Where(x => parcelIDs.Contains(x.ParcelID) && x.Geometry4326 != null).Select(x => x.Geometry4326).ToList()
             .UnionListGeometries();
     }
 

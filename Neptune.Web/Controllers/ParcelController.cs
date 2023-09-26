@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Parcel;
 
@@ -123,6 +125,22 @@ namespace Neptune.Web.Controllers
             var parcel = Parcels.GetParcelByParcelNumber(_dbContext, parcelNumber);
             var viewData = new SummaryForMapViewData(CurrentPerson, parcel);
             return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
+        }
+
+        [HttpGet]
+        [NeptuneViewFeature]
+        public ContentResult Union()
+        {
+            return Content("");
+        }
+
+        [HttpPost]
+        [NeptuneViewFeature]
+        public JsonResult Union(UnionOfParcelsViewModel viewModel)
+        {
+            var unionOfParcels = ParcelGeometries.UnionAggregateByParcelIDs(_dbContext, viewModel.ParcelIDs);
+            var featureCollection = unionOfParcels.MultiPolygonToFeatureCollection();
+            return Json(featureCollection);
         }
     }
 }

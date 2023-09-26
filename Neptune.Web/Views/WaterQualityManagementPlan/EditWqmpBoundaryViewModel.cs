@@ -51,7 +51,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             if (WktAndAnnotations != null)
             {
                 var dbGeometries = WktAndAnnotations.Select(x =>
-                    GeometryHelper.FromWKT(x.Wkt, Proj4NetHelper.WEB_MERCATOR).Buffer(0));
+                {
+                    var geometry = GeometryHelper.FromWKT(x.Wkt, Proj4NetHelper.WEB_MERCATOR);
+                    return geometry.Buffer(0);
+                });
                 var newGeometry4326 = dbGeometries.ToList().UnionListGeometries();
                 newWaterQualityManagementPlanParcels = dbContext.ParcelGeometries
                     .Where(x => x.Geometry4326.Intersects(newGeometry4326))
@@ -72,7 +75,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlanParcels.Merge(
                 newWaterQualityManagementPlanParcels,
                 dbContext.WaterQualityManagementPlanParcels,
-                (x, y) => x.WaterQualityManagementPlanParcelID == y.WaterQualityManagementPlanParcelID);
+                (x, y) => x.ParcelID == y.ParcelID && x.WaterQualityManagementPlanID == y.WaterQualityManagementPlanID);
 
             if (WktAndAnnotations == null)
             {

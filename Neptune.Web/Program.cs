@@ -43,7 +43,7 @@ var builder = WebApplication.CreateBuilder(args);
             var geometryFactory = new GeometryFactory(new PrecisionModel(scale), 4326);
             options.JsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));
             options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
-            options.JsonSerializerOptions.Converters.Add(new DoubleConverter(2));
+            options.JsonSerializerOptions.Converters.Add(new DoubleConverter(7));
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
             options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;

@@ -1,4 +1,5 @@
-﻿using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Features;
+using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 
 namespace Neptune.Common.GeoSpatial;
@@ -54,6 +55,30 @@ public static class GeometryHelper
             return null;
 
         var geoReader = new WKTReader(new GeometryFactory(new PrecisionModel(Math.Pow(10, 3)), srid));
-        return geoReader.Read(wkt);
+        var geometry = geoReader.Read(wkt);
+        geometry.SRID = srid;
+        return geometry;
+    }
+
+    public static FeatureCollection MultiPolygonToFeatureCollection(this Geometry potentialMultiPolygon)
+    {
+        if (potentialMultiPolygon.GeometryType.ToUpper() == "MULTIPOLYGON")
+        {
+            var featureCollection = new FeatureCollection();
+
+            // Leaflet.Draw does not support multipolgyon editing because its dev team decided it wasn't necessary.
+            // Unless https://github.com/Leaflet/Leaflet.draw/issues/268 is resolved, we have to break into separate polys.
+            // On an unrelated note, DbGeometry.ElementAt is 1-indexed instead of 0-indexed, which is terrible.
+            for (var i = 0; i < potentialMultiPolygon.NumGeometries; i++)
+            {
+                var geometry = potentialMultiPolygon.GetGeometryN(i);
+                // Reduce is SQL Server's implementation of the Douglas–Peucker downsampling algorithm
+                featureCollection.Add(new Feature(geometry.Buffer(0), new AttributesTable()));
+            }
+
+            return featureCollection;
+        }
+
+        return new FeatureCollection() { new Feature(potentialMultiPolygon, new AttributesTable())};
     }
 }

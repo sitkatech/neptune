@@ -91,7 +91,7 @@ public static class GeoJsonSerializer
 
     public static JsonSerializerOptions CreateGeoJSONSerializerOptions()
     {
-        var jsonSerializerOptions = CreateDefaultJSONSerializerOptions(2);
+        var jsonSerializerOptions = CreateDefaultJSONSerializerOptions(7);
         var scale = Math.Pow(10, 3);
         var geometryFactory = new GeometryFactory(new PrecisionModel(scale), 4326);
         jsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));

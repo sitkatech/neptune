@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Neptune.Common;
 using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities
@@ -17,11 +16,6 @@ namespace Neptune.EFModels.Entities
                     MaintenanceContactState,
                     MaintenanceContactZip
                 }.Where(x => !string.IsNullOrWhiteSpace(x)));
-        }
-
-        public double CalculateTotalAcreage()
-        {
-            return (WaterQualityManagementPlanBoundary?.GeometryNative?.Area ?? 0) * Constants.SquareMetersToAcres;
         }
 
         public string GetLatestOandMVerificationDate()

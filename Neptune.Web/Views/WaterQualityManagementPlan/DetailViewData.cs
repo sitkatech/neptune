@@ -17,7 +17,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string EditInventoriedBMPsUrl { get; }
         public string EditSimplifiedStructuralBMPsUrl { get; }
         public string EditSourceControlBMPsUrl { get; }
-        public string EditParcelsUrl { get; }
         public string EditWqmpBoundaryUrl { get; }
         public string NewDocumentUrl { get; }
         public MapInitJson MapInitJson { get; }
@@ -66,7 +65,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public UrlTemplate<int> DocumentEditUrlTemplate { get; }
         public UrlTemplate<int> DocumentDeleteUrlTemplate { get; }
         public bool HasWaterQualityManagementPlanBoundary { get; }
-        public Dictionary<int, Delineation?> DelineationsDict { get; }
         public List<EFModels.Entities.WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; }
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
@@ -79,7 +77,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             HRUCharacteristicsViewData hruCharacteristicsViewData,
             List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches,
             ModeledPerformanceViewData modeledPerformanceViewData,
-            IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs, bool hasWaterQualityManagementPlanBoundary, Dictionary<int, Delineation?> treatmentBMPDelineationsDict, List<EFModels.Entities.WaterQualityManagementPlanDocument> waterQualityManagementPlanDocuments)
+            IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs, bool hasWaterQualityManagementPlanBoundary, Dictionary<int, Delineation?> treatmentBMPDelineationsDict, List<EFModels.Entities.WaterQualityManagementPlanDocument> waterQualityManagementPlanDocuments, double calculatedWqmpAcreage)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -106,9 +104,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             EditModelingApproachUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
                     x.EditModelingApproach(WaterQualityManagementPlan));
-            EditParcelsUrl =
-                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
-                    x.EditWqmpParcels(WaterQualityManagementPlan));
             EditWqmpBoundaryUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
                     x.EditWqmpBoundary(WaterQualityManagementPlan));
@@ -160,11 +155,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             TreatmentBMPDelineationsDict = treatmentBMPDelineationsDict;
             WaterQualityManagementPlanDocuments = waterQualityManagementPlanDocuments;
 
-            var calculatedWQMPAcreage = WaterQualityManagementPlan.CalculateTotalAcreage();
-
             // TODO: Never compare floating-point values to zero. We should establish an application-wide error tolerance and use that instead of the direct comparison
-            CalculatedWQMPAcreage = calculatedWQMPAcreage != 0
-                ? $"{Math.Round(calculatedWQMPAcreage, 2).ToString(CultureInfo.InvariantCulture)} acres"
+            CalculatedWQMPAcreage = calculatedWqmpAcreage != 0
+                ? $"{Math.Round(calculatedWqmpAcreage, 2).ToString(CultureInfo.InvariantCulture)} acres"
                 : "No parcels have been associated with this WQMP";
 
             TrashCaptureEffectiveness = WaterQualityManagementPlan.TrashCaptureEffectiveness == null
