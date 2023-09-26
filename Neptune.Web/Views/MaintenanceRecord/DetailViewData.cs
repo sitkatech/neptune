@@ -8,11 +8,12 @@ namespace Neptune.Web.Views.MaintenanceRecord
 {
     public class DetailViewData : NeptuneViewData
     {
-        public IOrderedEnumerable<MaintenanceRecordObservation> SortedMaintenanceRecordObservations { get; }
+        public List<TreatmentBMPTypeCustomAttributeType> ObservationTypes { get; }
         public string EditUrl { get; }
         public EFModels.Entities.MaintenanceRecord MaintenanceRecord { get; }
+        public EFModels.Entities.TreatmentBMPType TreatmentBMPType { get; }
         public bool CurrentPersonCanManage { get; }
-        public bool BMPTypeHasObservationTypes { get; }
+        public bool HasObservationTypes { get; }
         public bool UserHasCustomAttributeTypeManagePermissions { get; }
         public UrlTemplate<int> CustomAttributeTypeDetailUrlTemplate { get; }
         public string OrganizationUrl { get; }
@@ -27,14 +28,13 @@ namespace Neptune.Web.Views.MaintenanceRecord
             PageTitle = maintenanceRecord.GetMaintenanceRecordDate().ToStringDate();
             EditUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.EditMaintenanceRecord(maintenanceRecord.FieldVisit));
             MaintenanceRecord = maintenanceRecord;
+            TreatmentBMPType = treatmentBMPType;
             CurrentPersonCanManage = new MaintenanceRecordManageFeature().HasPermissionByPerson(currentPerson);
-            BMPTypeHasObservationTypes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID);
+            ObservationTypes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).OrderBy(x => x.SortOrder).ThenBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
+            HasObservationTypes = ObservationTypes.Any();
             UserHasCustomAttributeTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
             CustomAttributeTypeDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
 
-            SortedMaintenanceRecordObservations = MaintenanceRecord.MaintenanceRecordObservations.ToList()
-                .OrderBy(x => x.TreatmentBMPTypeCustomAttributeType.SortOrder)
-                .ThenBy(x => x.TreatmentBMPTypeCustomAttributeType.GetDisplayName());
             OrganizationUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(maintenanceRecord.FieldVisit.PerformedByPerson.OrganizationID));
         }
     }

@@ -10,6 +10,8 @@ public static class MaintenanceRecordObservations
         return dbContext.MaintenanceRecordObservations
                 .Include(x => x.CustomAttributeType)
                 .Include(x => x.MaintenanceRecordObservationValues)
+                .Include(x => x.TreatmentBMPTypeCustomAttributeType)
+                .ThenInclude(x => x.CustomAttributeType)
             ;
     }
 

@@ -53,7 +53,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
             foreach (var customAttributeType in allMaintenanceAttributeTypes)
             {
                 Add(customAttributeType.DisplayNameWithUnits(),
-                    x => x?.GetObservationValueForAttributeType(customAttributeType), 150, DhtmlxGridColumnFilterType.Text);
+                    x => customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Any(y => y.TreatmentBMPTypeID == x.TreatmentBMPTypeID) ? x.GetObservationValueForAttributeType(customAttributeType) : "n/a", 150, DhtmlxGridColumnFilterType.Text);
             }
         }
     }

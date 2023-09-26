@@ -269,22 +269,22 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach (var maintenanceRecordObservation in ViewDataTyped.SortedMaintenanceRecordObservations)
+                                                    @foreach (var treatmentBMPTypeCustomAttributeType in ViewDataTyped.ObservationTypes)
                                                     {
                                                         <tr>
                                                             <td>
                                                                 @if (ViewDataTyped.UserHasCustomAttributeTypeManagePermissions)
                                                                 {
-                                                                    <a href="@ViewDataTyped.CustomAttributeTypeDetailUrlTemplate.ParameterReplace(maintenanceRecordObservation.CustomAttributeTypeID)">@maintenanceRecordObservation.CustomAttributeType.CustomAttributeTypeName</a>
+                                                                    <a href="@ViewDataTyped.CustomAttributeTypeDetailUrlTemplate.ParameterReplace(treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID)">@treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeName</a>
                                                                 }
                                                                 else
                                                                 {
-                                                                    @maintenanceRecordObservation.CustomAttributeType.CustomAttributeTypeName
+                                                                    @treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeName
                                                                 }
                                                                 <br/>
-                                                                <span class="help-block">@maintenanceRecordObservation.CustomAttributeType.CustomAttributeTypeDescription</span>
+                                                                <span class="help-block">@treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
                                                             </td>
-                                                            <td class="text-right" style="min-width: 150px">@ViewDataTyped.MaintenanceRecord.GetObservationValueForAttributeType(maintenanceRecordObservation.CustomAttributeType)</td>
+                                                            <td class="text-right" style="min-width: 150px">@ViewDataTyped.MaintenanceRecord.GetObservationValueForAttributeType(treatmentBMPTypeCustomAttributeType.CustomAttributeType)</td>
                                                         </tr>
                                                     }
                                                 </tbody>
