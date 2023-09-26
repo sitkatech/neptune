@@ -14,14 +14,20 @@ namespace Neptune.Web.Security
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
         }
 
-        public PermissionCheckResult HasPermission(Person person, FieldVisit contextModelObject,
-            NeptuneDbContext dbContext)
+        public PermissionCheckResult HasPermission(Person person, FieldVisit contextModelObject, NeptuneDbContext dbContext)
         {
-            var isAssignedToStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(contextModelObject.TreatmentBMP.StormwaterJurisdictionID);
+            var treatmentBMP = TreatmentBMPs.GetByIDForFeatureContextCheck(dbContext, contextModelObject.TreatmentBMPID);
+            return HasPermission(person, contextModelObject, treatmentBMP);
+        }
 
+        public PermissionCheckResult HasPermission(Person person, FieldVisit contextModelObject, TreatmentBMP treatmentBMP)
+        {
+            var isAssignedToStormwaterJurisdiction =
+                person.IsAssignedToStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
             if (!isAssignedToStormwaterJurisdiction)
             {
-                return new PermissionCheckResult($"You aren't assigned to edit Field Visit data for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult(
+                    $"You aren't assigned to edit Field Visit data for Jurisdiction {treatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
             return new PermissionCheckResult();

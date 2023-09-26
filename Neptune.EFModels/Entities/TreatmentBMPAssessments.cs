@@ -19,7 +19,10 @@ public static class TreatmentBMPAssessments
             .ThenInclude(x => x.TreatmentBMPTypeAssessmentObservationTypes)
             .ThenInclude(x => x.TreatmentBMPAssessmentObservationType)
             .Include(x => x.TreatmentBMPObservations)
-            .ThenInclude(x => x.TreatmentBMPAssessmentObservationType);
+            .ThenInclude(x => x.TreatmentBMPAssessmentObservationType)
+            .Include(x => x.TreatmentBMP)
+            .ThenInclude(x => x.TreatmentBMPBenchmarkAndThresholds)
+            ;
     }
 
     public static TreatmentBMPAssessment GetByIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPAssessmentID)
