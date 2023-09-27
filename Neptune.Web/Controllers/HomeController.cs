@@ -39,6 +39,8 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost("{gridName}/{printFooter}")]
+        [DisableRequestSizeLimit]
+        [RequestFormLimits(KeyLengthLimit = int.MaxValue, ValueLengthLimit = int.MaxValue)]
         public FileResult ExportGridToExcel([FromRoute] string gridName, [FromRoute] bool printFooter)
         {
             return ExportGridToExcelImpl(gridName, printFooter);

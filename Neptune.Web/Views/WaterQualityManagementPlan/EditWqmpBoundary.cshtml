@@ -21,6 +21,7 @@
 @using Neptune.Web.Common.ModalDialog
 @using Neptune.Web.Views.Shared
 @using Neptune.Web.Common
+@using Neptune.Web.Common.BootstrapWrappers
 @inherits Neptune.Web.Views.WaterQualityManagementPlan.EditWqmpBoundary
 @model Neptune.Web.Views.WaterQualityManagementPlan.EditWqmpBoundaryViewModel
 
@@ -29,9 +30,7 @@
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
 
     <script src=@("https://npmcdn.com/@turf/turf/turf.min.js")></script>
-    <script src="@Url.Content("~/Content/angular-controllers/NeptuneMaps.WqmpBoundaryMap.js")"></script>
     <script src="@Url.Content("~/Content/angular-controllers/EditWqmpBoundary.js")"></script>
-
 }
 
 @{ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);}
@@ -42,12 +41,26 @@
     @using (Html.BeginForm())
     {
         <div id="@ViewDataTyped.MapFormID">
-
+        </div>
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-xs-12" style="margin-bottom: 5px;">
+                <p class="text-danger" id="kinkDanger" style="display: none;">The WQMP Boundary contains edges that intersect each other. Please correct it before submitting.</p>
+            </div>
+            <div class="col-xs-6">
+                <button type="button" class="btn btn-neptune" onclick="resetZoom()">Reset Map Zoom</button>
+            </div>
+            <div class="col-xs-6 text-right">
+                <button type="button" id="pickParcelsButton" class="btn btn-neptune" onclick="pickParcels()">Pick Parcels</button>
+            </div>
         </div>
 
         <hr />
         <div class="row">
-            <div class="col-xs-12 col-sm-12" style="text-align: right">
+            <div class="col-xs-12 col-sm-3">
+                <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+            </div>
+
+            <div class="col-xs-12 col-sm-9" style="text-align: right">
                 <button type="submit" class="btn btn-neptune" value="false" id="saveButton">Save</button>
                 <a class="btn btn-neptune" href="@ViewDataTyped.DetailUrl">Cancel</a>
             </div>
@@ -57,28 +70,40 @@
 
 <script type="text/javascript">
     var mapInitJson = @Html.Raw(ViewDataTyped.MapInitJson.ToJsonHtmlString());
-    var editableFeatureJsonObject = @Html.Raw(ViewDataTyped.MapInitJson.BoundaryLayerGeoJson.ToJsonHtmlString());
+    var editableFeatureJsonObject = @Html.Raw(ViewDataTyped.BoundaryLayerGeoJson.ToJsonHtmlString());
     var saveButtonID = "@ModalDialogFormHelper.SaveButtonID";
 
     var geoServerUrl = "@ViewDataTyped.GeoServerUrl";
 
-    var boundaryAreaMap;
+    var wqmpBoundaryMap;
 
-    var boundaryAreaMapOptions = {
-        WaterQualityManagementPlanID: @ViewDataTyped.WaterQualityManagementPlanID
-    };
+    var wqmpBoundaryMapOptions = {
+        WaterQualityManagementPlanID: @ViewDataTyped.WaterQualityManagementPlanID,
+        ParcelUnionUrl: "@ViewDataTyped.ParcelUnionUrl",
+        InitialParcelIDs: [@(string.Join(",", ViewDataTyped.ParcelIDs))]
+    }
 
     jQuery(document).ready(function () {
-        boundaryAreaMap = new NeptuneMaps.WQMPBoundaryAreaMap(mapInitJson, "Terrain", geoServerUrl, editableFeatureJsonObject, boundaryAreaMapOptions);
-        boundaryAreaMap.createUpdateFeatureCollectionJsonFunctionAsClosure(
-            "@Html.NameFor(m => m.WktAndAnnotations[0].Wkt)",
+        wqmpBoundaryMap = new NeptuneMaps.WQMPBoundaryAreaMap(mapInitJson, "Terrain", geoServerUrl, editableFeatureJsonObject, wqmpBoundaryMapOptions);
+        wqmpBoundaryMap.createUpdateFeatureCollectionJsonFunctionAsClosure(
+            "@Html.NameFor(m=>m.WktAndAnnotations[0].Wkt)",
             "@Html.NameFor(m => m.WktAndAnnotations[0].Annotation)",
             "@ViewDataTyped.MapFormID");
-        boundaryAreaMap.updateFeatureCollectionJson();
+        wqmpBoundaryMap.updateFeatureCollectionJson();
     });
 
-    var resetZoom = function() {
-        boundaryAreaMap.map.fitBounds(boundaryAreaMap.editableFeatureGroup.getBounds());
+    var resetZoom = function () {
+        wqmpBoundaryMap.map.fitBounds(wqmpBoundaryMap.editableFeatureGroup.getBounds());
+    };
+
+    var pickParcels = function () {
+        if (!wqmpBoundaryMap.parcelPickerModeActive) {
+            wqmpBoundaryMap.getParcelsAndPick();
+            jQuery("#pickParcelsButton").html("Accept and Refine");
+        } else {
+            wqmpBoundaryMap.acceptParcelsAndRefine();
+            jQuery("#pickParcelsButton").html("Pick Parcels");
+        }
     };
 
     HookupCheckIfFormIsDirtyNoDisable(undefined);

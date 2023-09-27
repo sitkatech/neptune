@@ -96,9 +96,11 @@ namespace Neptune.Web.Controllers
             var treatmentBMPAssessments = TreatmentBMPAssessments.ListByFieldVisitID(_dbContext, fieldVisit.FieldVisitID);
             var initialTreatmentBMPAssessment = treatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentTypeID == (int) TreatmentBMPAssessmentTypeEnum.Initial);
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, fieldVisit.TreatmentBMP.TreatmentBMPTypeID);
-            var initialAssessmentViewData = new AssessmentDetailViewData(_linkGenerator, CurrentPerson, initialTreatmentBMPAssessment, TreatmentBMPAssessmentTypeEnum.Initial, treatmentBMPType);
+            var initialAssessmentTreatmentBMPAssessmentPhotos = initialTreatmentBMPAssessment == null ? new List<TreatmentBMPAssessmentPhoto>() : TreatmentBMPAssessmentPhotos.ListByTreatmentBMPAssessmentID(_dbContext, initialTreatmentBMPAssessment.TreatmentBMPAssessmentID);
+            var initialAssessmentViewData = new AssessmentDetailViewData(_linkGenerator, CurrentPerson, initialTreatmentBMPAssessment, TreatmentBMPAssessmentTypeEnum.Initial, treatmentBMPType, initialAssessmentTreatmentBMPAssessmentPhotos);
             var postMaintenanceTreatmentBMPAssessment = treatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentTypeID == (int)TreatmentBMPAssessmentTypeEnum.PostMaintenance);
-            var postMaintenanceAssessmentViewData = new AssessmentDetailViewData(_linkGenerator, CurrentPerson, postMaintenanceTreatmentBMPAssessment, TreatmentBMPAssessmentTypeEnum.PostMaintenance, treatmentBMPType);
+            var postMaintenanceTreatmentBMPAssessmentPhotos = postMaintenanceTreatmentBMPAssessment == null ? new List<TreatmentBMPAssessmentPhoto>() : TreatmentBMPAssessmentPhotos.ListByTreatmentBMPAssessmentID(_dbContext, postMaintenanceTreatmentBMPAssessment.TreatmentBMPAssessmentID);
+            var postMaintenanceAssessmentViewData = new AssessmentDetailViewData(_linkGenerator, CurrentPerson, postMaintenanceTreatmentBMPAssessment, TreatmentBMPAssessmentTypeEnum.PostMaintenance, treatmentBMPType, postMaintenanceTreatmentBMPAssessmentPhotos);
             var customAttributes = CustomAttributes.ListByTreatmentBMPID(_dbContext, fieldVisit.TreatmentBMPID);
             var maintenanceRecord = fieldVisit.MaintenanceRecord != null ? MaintenanceRecords.GetByID(_dbContext, fieldVisit.MaintenanceRecord.MaintenanceRecordID) : null;
             var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, initialAssessmentViewData, postMaintenanceAssessmentViewData, customAttributes, treatmentBMPType, maintenanceRecord);

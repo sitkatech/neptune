@@ -46,7 +46,7 @@ namespace Neptune.Web.Views.FieldVisit
             TreatmentBMPAssessmentGridDataUrl =
                 SitkaRoute<AssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.TreatmentBMPAssessmentsGridJsonData());
 
-            MaintenanceRecordGridSpec = new MaintenanceRecordGridSpec(currentPerson, maintenanceAttributeTypes, linkGenerator)
+            MaintenanceRecordGridSpec = new MaintenanceRecordGridSpec(currentPerson, linkGenerator)
             {
                 ObjectNameSingular = "Maintenance Record",
                 ObjectNamePlural = "Maintenance Records",

@@ -66,12 +66,6 @@ namespace Neptune.EFModels.Entities
             return latestAssessment;
         }
 
-        public bool IsBenchmarkAndThresholdCompleteForObservationType(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
-        {
-            return TreatmentBMPBenchmarkAndThresholds.SingleOrDefault(x =>
-                       x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID) != null;
-        }
-
         public string GetCustomAttributeValueWithUnits(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType, ICollection<CustomAttribute> customAttributes)
         {
             if (customAttributes.Any())

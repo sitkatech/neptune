@@ -11,7 +11,7 @@ using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class IndexGridSpec : GridSpec<vWaterQualityManagementPlanDetailedWithWQMPEntity>
+    public class IndexGridSpec : GridSpec<WaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs>
     {
         public IndexGridSpec(LinkGenerator linkGenerator, Person currentPerson)
         {
@@ -22,8 +22,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ObjectNamePlural = fieldDefinitionWaterQualityManagementPlan.GetFieldDefinitionLabelPluralized();
             SaveFiltersInCookie = true;
 
-            var waterQualityManagementPlanDeleteFeature = new WaterQualityManagementPlanDeleteFeature();
-            var qualityManagementPlanManageFeature = new WaterQualityManagementPlanManageFeature();
+            var waterQualityManagementPlanManageFeature = new WaterQualityManagementPlanManageFeature();
             var isAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
 
             var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
@@ -36,68 +35,79 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             {
                 Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(
                         deleteUrlTemplate.ParameterReplace(x.WaterQualityManagementPlan.WaterQualityManagementPlanID),
-                        waterQualityManagementPlanDeleteFeature
-                            .HasPermission(currentPerson, x.WaterQualityManagementPlan).HasPermission), 26,
+                        waterQualityManagementPlanManageFeature
+                            .HasPermission(currentPerson, x.WaterQualityManagementPlan.StormwaterJurisdictionID).HasPermission), 26,
                     DhtmlxGridColumnFilterType.None);
                 Add(string.Empty,
                     x => DhtmlxGridHtmlHelpers.MakeEditIconAsModalDialogLinkBootstrap(new ModalDialogForm(
                             editUrlTemplate.ParameterReplace(x.WaterQualityManagementPlan.WaterQualityManagementPlanID),
                             ModalDialogFormHelper.DefaultDialogWidth,
                             $"Edit {waterQualityManagementPlanLabelSingular}"),
-                        qualityManagementPlanManageFeature.HasPermission(currentPerson, x.WaterQualityManagementPlan)
+                        waterQualityManagementPlanManageFeature.HasPermission(currentPerson, x.WaterQualityManagementPlan.StormwaterJurisdictionID)
                             .HasPermission),
                     26, DhtmlxGridColumnFilterType.None);
             }
 
             Add("Name", x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlan.WaterQualityManagementPlanID), x.WaterQualityManagementPlan.WaterQualityManagementPlanName), 300, DhtmlxGridColumnFilterType.Text);
-            Add("Jurisdiction", x => isAnonymousOrUnassigned ? new HtmlString(x.vWaterQualityManagementPlanDetailed.StormwaterJurisdictionName) :
-                UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.vWaterQualityManagementPlanDetailed.StormwaterJurisdictionID), x.vWaterQualityManagementPlanDetailed.StormwaterJurisdictionName), 150);
-            Add("Priority", x => x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanPriorityDisplayName,
+            Add("Jurisdiction", x => isAnonymousOrUnassigned ? new HtmlString(x.WaterQualityManagementPlan.StormwaterJurisdictionName) :
+                UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlan.StormwaterJurisdictionID), x.WaterQualityManagementPlan.StormwaterJurisdictionName), 150);
+            Add("Priority", x => x.WaterQualityManagementPlan.WaterQualityManagementPlanPriorityDisplayName,
                 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Status", x => x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanStatusDisplayName, 100,
+            Add("Status", x => x.WaterQualityManagementPlan.WaterQualityManagementPlanStatusDisplayName, 100,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Development Type",
-                x => x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanDevelopmentTypeDisplayName,
+                x => x.WaterQualityManagementPlan.WaterQualityManagementPlanDevelopmentTypeDisplayName,
                 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Land Use", x => x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanLandUseDisplayName, 100,
+            Add("Land Use", x => x.WaterQualityManagementPlan.WaterQualityManagementPlanLandUseDisplayName, 100,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Permit Term",
-                x => x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanPermitTermDisplayName, 100,
+                x => x.WaterQualityManagementPlan.WaterQualityManagementPlanPermitTermDisplayName, 100,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Approval Date", x => x.vWaterQualityManagementPlanDetailed.ApprovalDate, 120);
-            Add("Date of Construction", x => x.vWaterQualityManagementPlanDetailed.DateOfContruction, 120);
-            Add(FieldDefinitionType.HydromodificationApplies.ToGridHeaderString(), x => x.vWaterQualityManagementPlanDetailed.HydromodificationAppliesTypeDisplayName, 130,
+            Add("Approval Date", x => x.WaterQualityManagementPlan.ApprovalDate, 120);
+            Add("Date of Construction", x => x.WaterQualityManagementPlan.DateOfContruction, 120);
+            Add(FieldDefinitionType.HydromodificationApplies.ToGridHeaderString(), x => x.WaterQualityManagementPlan.HydromodificationAppliesTypeDisplayName, 130,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Hydrologic Subarea", x => x.vWaterQualityManagementPlanDetailed.HydrologicSubareaName, 120,
+            Add("Hydrologic Subarea", x => x.WaterQualityManagementPlan.HydrologicSubareaName, 120,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
 
             if (!currentPerson.IsAnonymousOrUnassigned())
             {
-                Add("Maintenance Contact Organization", x => x.vWaterQualityManagementPlanDetailed.MaintenanceContactOrganization, 120);
-                Add("Maintenance Contact Name", x => x.vWaterQualityManagementPlanDetailed.MaintenanceContactName, 100);
-                Add("Maintenance Contact Address", x => x.vWaterQualityManagementPlanDetailed.MaintenanceContactAddressToString(), 200);
-                Add("Maintenance Contact Phone", x => x.vWaterQualityManagementPlanDetailed.MaintenanceContactPhone, 70);
+                Add("Maintenance Contact Organization", x => x.WaterQualityManagementPlan.MaintenanceContactOrganization, 120);
+                Add("Maintenance Contact Name", x => x.WaterQualityManagementPlan.MaintenanceContactName, 100);
+                Add("Maintenance Contact Address", x => x.WaterQualityManagementPlan.MaintenanceContactAddressToString(), 200);
+                Add("Maintenance Contact Phone", x => x.WaterQualityManagementPlan.MaintenanceContactPhone, 70);
             }
             
-            Add("# of Inventoried BMPs", x => x.vWaterQualityManagementPlanDetailed.TreatmentBMPCount, 100);
-            Add("# of Simplified BMPs", x => x.vWaterQualityManagementPlanDetailed.QuickBMPCount, 100);
-            Add("Modeling Approach", x => x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanModelingApproachDisplayName,
+            Add("# of Inventoried BMPs", x => x.WaterQualityManagementPlan.TreatmentBMPCount, 100);
+            Add("# of Simplified BMPs", x => x.WaterQualityManagementPlan.QuickBMPCount, 100);
+            Add("Modeling Approach", x => x.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachDisplayName,
                 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add(FieldDefinitionType.FullyParameterized.ToGridHeaderString("Fully Parameterized?"), x => x.WaterQualityManagementPlan.IsFullyParameterized() ? new HtmlString("Yes") : new HtmlString("No"), 120);
-            Add("# of Documents", x => x.vWaterQualityManagementPlanDetailed.DocumentCount, 100);
+            Add(FieldDefinitionType.FullyParameterized.ToGridHeaderString("Fully Parameterized?"), x =>
+            {
+                if (x.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
+                    WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
+                {
+                    return x.TreatmentBMPsWithModelingAttributesAndDelineation.Any(y => y.TreatmentBMP.IsFullyParameterized(y.Delineation)) ? new HtmlString("Yes") : new HtmlString("No");
+                }
+
+                return x.QuickBMPs.Any(y => y.IsFullyParameterized())
+                        ? new HtmlString("Yes")
+                        : new HtmlString("No");
+            }, 120);
+            Add("# of Documents", x => x.WaterQualityManagementPlan.DocumentCount, 100);
             Add(FieldDefinitionType.HasAllRequiredDocuments.ToGridHeaderString(),
-                x => (x.vWaterQualityManagementPlanDetailed.HasRequiredDocuments ?? false)
+                x => (x.WaterQualityManagementPlan.HasRequiredDocuments ?? false)
                     ? BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-ok-circle", "Yes")
                     : new HtmlString("<span style='display:none;'>No</span>")
                 , 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
-            Add("Record Number", x => x.vWaterQualityManagementPlanDetailed.RecordNumber, 150);
-            Add("Recorded Parcel Acreage", x => x.vWaterQualityManagementPlanDetailed.RecordedWQMPAreaInAcres, 100);
-            Add("Calculated WQMP Acreage", x => Math.Round(x.vWaterQualityManagementPlanDetailed.CalculatedWQMPAcreage ?? 0, 1), 100);
-            Add("Associated APNs", x => x.vWaterQualityManagementPlanDetailed.AssociatedAPNs, 200);
+            Add("Record Number", x => x.WaterQualityManagementPlan.RecordNumber, 150);
+            Add("Recorded Parcel Acreage", x => x.WaterQualityManagementPlan.RecordedWQMPAreaInAcres, 100);
+            Add("Calculated WQMP Acreage", x => Math.Round(x.WaterQualityManagementPlan.CalculatedWQMPAcreage ?? 0, 1), 100);
+            Add("Associated APNs", x => x.WaterQualityManagementPlan.AssociatedAPNs, 200);
             Add("Latest O&M Verification",
                 x =>
                 {
-                    var verificationDate = x.vWaterQualityManagementPlanDetailed.VerificationDate;
+                    var verificationDate = x.WaterQualityManagementPlan.VerificationDate;
                     if(!verificationDate.HasValue)
                     {
                         return new HtmlString("N/A");
@@ -109,10 +119,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     }
 
                     return new HtmlString(
-                        $"<a href=\"{verifyDetailUrlTemplate.ParameterReplace(x.vWaterQualityManagementPlanDetailed.WaterQualityManagementPlanVerifyID.Value)}\" alt=\"{verificationDate}\" title=\"{verificationDate}\" >{verificationDate}</a>");
+                        $"<a href=\"{verifyDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlan.WaterQualityManagementPlanVerifyID.Value)}\" alt=\"{verificationDate}\" title=\"{verificationDate}\" >{verificationDate}</a>");
                 }, 100);
             Add(FieldDefinitionType.TrashCaptureStatus.ToGridHeaderString(),
-                x => x.vWaterQualityManagementPlanDetailed.TrashCaptureStatusTypeDisplayName, 130,
+                x => x.WaterQualityManagementPlan.TrashCaptureStatusTypeDisplayName, 130,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
         }
     }

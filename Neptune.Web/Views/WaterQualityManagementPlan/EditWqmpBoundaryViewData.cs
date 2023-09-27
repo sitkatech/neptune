@@ -22,37 +22,44 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Views.WaterQualityManagementPlan.BoundaryMapInitJson;
+using NetTopologySuite.Features;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
     public class EditWqmpBoundaryViewData : NeptuneViewData
     {
-        public EditWqmpBoundaryViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, EFModels.Entities.WaterQualityManagementPlan wqmp, BoundaryAreaMapInitJson mapInitJson, string geoServerUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public EditWqmpBoundaryViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+            EFModels.Entities.NeptunePage neptunePage,
+            EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
+            MapInitJson mapInitJson, string geoServerUrl, IEnumerable<int> parcelIDs, FeatureCollection? boundaryLayerGeoJson) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
-            WaterQualityManagementPlan = wqmp;
             MapInitJson = mapInitJson;
             EntityName = "Water Quality Management Plan";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
-            SubEntityName = wqmp.WaterQualityManagementPlanName;
-            var wqmpUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(wqmp));
-            SubEntityUrl = wqmpUrl;
+            SubEntityName = waterQualityManagementPlan.WaterQualityManagementPlanName;
+            var detailUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(waterQualityManagementPlan));
+            SubEntityUrl = detailUrl;
             PageTitle = "Refine Area";
 
             MapFormID = "editAreaMapForm";
             GeoServerUrl = geoServerUrl;
-            WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID;
+            ParcelIDs = parcelIDs;
+            BoundaryLayerGeoJson = boundaryLayerGeoJson;
+            WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
 
-            DetailUrl = wqmpUrl;
+            ParcelUnionUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(LinkGenerator, x => x.Union());
+
+            DetailUrl = detailUrl;
         }
 
 
-        public EFModels.Entities.WaterQualityManagementPlan WaterQualityManagementPlan { get; }
         public string MapFormID { get; }
         public string GeoServerUrl { get; }
-        public BoundaryAreaMapInitJson MapInitJson { get; }
+        public IEnumerable<int> ParcelIDs { get; }
+        public MapInitJson MapInitJson { get; }
+        public FeatureCollection? BoundaryLayerGeoJson { get; }
         public int WaterQualityManagementPlanID { get; }
+        public string ParcelUnionUrl { get; }
         public string DetailUrl { get; }
-
     }
 }

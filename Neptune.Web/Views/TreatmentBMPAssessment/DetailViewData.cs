@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public ImageCarouselViewData ImageCarouselViewData { get; }
         public string EditUrl { get; }
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMPAssessment treatmentBMPAssessment, EFModels.Entities.TreatmentBMPType treatmentBMPType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMPAssessment treatmentBMPAssessment, EFModels.Entities.TreatmentBMPType treatmentBMPType, List<TreatmentBMPAssessmentPhoto> treatmentBMPAssessmentPhotos) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMPAssessment = treatmentBMPAssessment;
             var treatmentBMP = treatmentBMPAssessment.TreatmentBMP;
@@ -57,7 +57,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
                 SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Assessment(treatmentBMPAssessment.FieldVisitID)) :
                 SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.PostMaintenanceAssessment(treatmentBMPAssessment.FieldVisitID));
 
-            var carouselImages = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos;
+            var carouselImages = treatmentBMPAssessmentPhotos;
             ImageCarouselViewData = new ImageCarouselViewData(carouselImages, 400, linkGenerator);
         }
     }

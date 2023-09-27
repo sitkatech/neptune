@@ -44,7 +44,8 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMPAssessment = TreatmentBMPAssessments.GetByID(_dbContext, treatmentBMPAssessmentPrimaryKey);
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMPAssessment.TreatmentBMPTypeID);
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessment, treatmentBMPType);
+            var treatmentBMPAssessmentPhotos = TreatmentBMPAssessmentPhotos.ListByTreatmentBMPAssessmentID(_dbContext, treatmentBMPAssessment.TreatmentBMPAssessmentID);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessment, treatmentBMPType, treatmentBMPAssessmentPhotos);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

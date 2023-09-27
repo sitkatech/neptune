@@ -19,9 +19,10 @@
     </license>
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Common.BootstrapWrappers
+@using Neptune.EFModels.Entities
 @inherits Neptune.Web.Views.MaintenanceRecord.Detail
 
-    @Html.ValidationSummary()
+@Html.ValidationSummary()
 
 @section RightOfPageTitle{
     @if (ViewDataTyped.CurrentPersonCanManage)
@@ -75,7 +76,7 @@
                 Observations
             </div>
             <div class="panel-body">
-                @if (@ViewDataTyped.BMPTypeHasObservationTypes && ViewDataTyped.MaintenanceRecord.MaintenanceRecordObservations.Any())
+                @if (@ViewDataTyped.HasObservationTypes && ViewDataTyped.MaintenanceRecord.MaintenanceRecordObservations.Any())
                 {
                     <table class="table">
                         <thead>
@@ -85,28 +86,28 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach (var maintenanceRecordObservation in ViewDataTyped.SortedMaintenanceRecordObservations)
+                        @foreach (var treatmentBMPTypeCustomAttributeType in ViewDataTyped.ObservationTypes)
                         {
                             <tr>
                                 <td>
                                     @if (ViewDataTyped.UserHasCustomAttributeTypeManagePermissions)
                                     {
-                                        <a href="@ViewDataTyped.CustomAttributeTypeDetailUrlTemplate.ParameterReplace(maintenanceRecordObservation.CustomAttributeTypeID)">@maintenanceRecordObservation.CustomAttributeType.CustomAttributeTypeName</a>
+                                        <a href="@ViewDataTyped.CustomAttributeTypeDetailUrlTemplate.ParameterReplace(treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID)">@treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeName</a>
                                     }
                                     else
                                     {
-                                        @maintenanceRecordObservation.CustomAttributeType.CustomAttributeTypeName
+                                        @treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeName
                                     }
                                     <br/>
-                                    <span class="help-block">@maintenanceRecordObservation.CustomAttributeType.CustomAttributeTypeDescription</span>
+                                    <span class="help-block">@treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
                                 </td>
-                                <td class="text-right" style="min-width: 150px">@ViewDataTyped.MaintenanceRecord.GetObservationValueForAttributeType(maintenanceRecordObservation.CustomAttributeType)</td>
+                                <td class="text-right" style="min-width: 150px">@ViewDataTyped.MaintenanceRecord.GetObservationValueForAttributeType(treatmentBMPTypeCustomAttributeType.CustomAttributeType)</td>
                             </tr>
                         }
                         </tbody>
                     </table>
                 }
-                else if (@ViewDataTyped.BMPTypeHasObservationTypes && !ViewDataTyped.MaintenanceRecord.MaintenanceRecordObservations.Any())
+                else if (ViewDataTyped.HasObservationTypes && !ViewDataTyped.MaintenanceRecord.MaintenanceRecordObservations.Any())
                 {
                     <p class="systemText">There are no recorded Observation Values for this Maintenance Record</p>
                 }

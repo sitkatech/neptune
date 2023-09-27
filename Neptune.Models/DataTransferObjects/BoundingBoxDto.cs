@@ -40,7 +40,7 @@ namespace Neptune.Models.DataTransferObjects
         {
         }
 
-        public BoundingBoxDto(Geometry geometry) : this(GetPointsFromDbGeometry(geometry))
+        public BoundingBoxDto(Geometry? geometry) : this(GetPointsFromDbGeometry(geometry))
         {
         }
 

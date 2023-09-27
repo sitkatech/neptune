@@ -1,6 +1,4 @@
 ﻿using Neptune.EFModels.Entities;
-using Neptune.Web.Common;
-using NetTopologySuite.Features;
 
 namespace Neptune.Web.Models
 {
@@ -16,20 +14,6 @@ namespace Neptune.Web.Models
             }
 
             return waterQualityManagementPlan.QuickBMPs.Any(x => x.IsFullyParameterized());
-        }
-
-        public static LayerGeoJson GetBoundaryLayerGeoJson(this WaterQualityManagementPlan waterQualityManagementPlan)
-        {
-            var featureCollection = new FeatureCollection();
-            var feature = new Feature(waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.Geometry4326,
-                new AttributesTable());
-            featureCollection.Add(feature);
-
-            var boundaryLayerGeoJson = new LayerGeoJson("wqmpBoundary", featureCollection, "#4782ff",
-                1,
-                LayerInitialVisibility.Show);
-
-            return boundaryLayerGeoJson;
         }
     }
 }

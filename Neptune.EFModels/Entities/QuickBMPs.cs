@@ -55,4 +55,9 @@ public static class QuickBMPs
                 x.TreatmentBMPType.IsAnalyzedInModelingModule)
             .ToList();
     }
+
+    public static List<QuickBMP> List(NeptuneDbContext dbContext)
+    {
+        return GetImpl(dbContext).AsNoTracking().ToList();
+    }
 }

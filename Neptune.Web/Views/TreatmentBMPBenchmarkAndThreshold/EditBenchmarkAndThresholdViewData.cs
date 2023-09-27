@@ -40,8 +40,8 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         public bool TargetIsSweetSpot { get; }
 
         public EditBenchmarkAndThresholdViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP,
-            EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, EFModels.Entities.TreatmentBMPType treatmentBMPType)
-            : base(httpContext, linkGenerator, currentPerson, treatmentBMP, treatmentBMPAssessmentObservationType, treatmentBMPType)
+            EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, EFModels.Entities.TreatmentBMPType treatmentBMPType, List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds)
+            : base(httpContext, linkGenerator, currentPerson, treatmentBMP, treatmentBMPAssessmentObservationType, treatmentBMPType, treatmentBMPBenchmarkAndThresholds)
         {
             BenchmarkMeasurementUnitTypeDisplayName = treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().MeasurementUnitTypeDisplayName;
             ThresholdMeasurementUnitTypeDisplayName = treatmentBMPAssessmentObservationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName;

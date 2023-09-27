@@ -6,13 +6,16 @@ using Neptune.Web.Views.Shared.HRUCharacteristics;
 using Neptune.Web.Views.Shared.ModeledPerformance;
 using Neptune.Web.Views.WaterQualityManagementPlan;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Neptune.Common;
+using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using Neptune.Web.Common.Models;
 using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Services;
 using Neptune.Web.Services.Filters;
-using Neptune.Web.Views.WaterQualityManagementPlan.BoundaryMapInitJson;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 
@@ -39,18 +42,34 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        public GridJsonNetJObjectResult<vWaterQualityManagementPlanDetailedWithWQMPEntity> WaterQualityManagementPlanIndexGridData()
+        public GridJsonNetJObjectResult<WaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs> WaterQualityManagementPlanIndexGridData()
         {
             var gridSpec = new IndexGridSpec(_linkGenerator, CurrentPerson);
-            var treatmentBMPs =
-                WaterQualityManagementPlans.ListViewableByPerson(_dbContext, CurrentPerson)
-                    .Join(vWaterQualityManagementPlanDetaileds.ListViewableByPerson(_dbContext, CurrentPerson),
-                        x => x.WaterQualityManagementPlanID,
-                        y => y.WaterQualityManagementPlanID,
-                        (x, y) => new vWaterQualityManagementPlanDetailedWithWQMPEntity(x, y))
-                    .OrderBy(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanName)
+            var treatmentBmps = _dbContext.TreatmentBMPs.Include(x => x.TreatmentBMPType)
+                .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP).AsNoTracking()
+                .Where(x => x.WaterQualityManagementPlanID != null).ToList();
+            var treatmentBMPDetaileds = treatmentBmps.Join(
+                    vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext),
+                    x => x.TreatmentBMPID,
+                    y => y.Key,
+                    (x, y) => new TreatmentBMPWithModelingAttributesAndDelineation(x, y.Value)).ToList();
+            var quickBMPs = QuickBMPs.List(_dbContext);
+            var waterQualityManagementPlans =
+                vWaterQualityManagementPlanDetaileds.ListViewableByPerson(_dbContext, CurrentPerson).OrderBy(x => x.WaterQualityManagementPlanName)
                     .ToList();
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vWaterQualityManagementPlanDetailedWithWQMPEntity>(treatmentBMPs, gridSpec);
+            var query = waterQualityManagementPlans
+                .GroupJoin(treatmentBMPDetaileds,
+                    waterQualityManagementPlanDetailed =>
+                        waterQualityManagementPlanDetailed.WaterQualityManagementPlanID,
+                    treatmentBMPWithModelingAttributesAndDelineation => treatmentBMPWithModelingAttributesAndDelineation
+                        .TreatmentBMP.WaterQualityManagementPlanID,
+                    (waterQualityManagementPlanDetailed, gj) => new { waterQualityManagementPlanDetailed, gj })
+                .GroupJoin(quickBMPs, wqmp => wqmp.waterQualityManagementPlanDetailed.WaterQualityManagementPlanID,
+                    quickBMP => quickBMP.WaterQualityManagementPlanID,
+                    (wqmp, gj2) =>
+                        new WaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs(
+                            wqmp.waterQualityManagementPlanDetailed, wqmp.gj, gj2)).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<WaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs>(query, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
@@ -107,7 +126,8 @@ namespace Neptune.Web.Controllers
 
             var boundaryAreaFeatureCollection = new FeatureCollection();
 
-            var wqmpGeometry = WaterQualityManagementPlanBoundaries.GetByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID)?.Geometry4326;
+            var waterQualityManagementPlanBoundary = WaterQualityManagementPlanBoundaries.GetByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var wqmpGeometry = waterQualityManagementPlanBoundary?.Geometry4326;
             var hasWaterQualityManagementPlanBoundary = wqmpGeometry != null;
             if (hasWaterQualityManagementPlanBoundary)
             {
@@ -165,11 +185,12 @@ namespace Neptune.Web.Controllers
             var parcelGridSpec = new ParcelGridSpec();
 
             var waterQualityManagementPlanDocuments = WaterQualityManagementPlanDocuments.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var calculateTotalAcreage = (waterQualityManagementPlanBoundary?.GeometryNative?.Area ?? 0) * Constants.SquareMetersToAcres;
             var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlan,
                 waterQualityManagementPlanVerifyDraft, mapInitJson, treatmentBMPs, parcelGridSpec,
                 waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
                 waterQualityManagementPlanVerifyTreatmentBMP,
-                hruCharacteristicsViewData, waterQualityManagementPlanModelingApproaches, modeledPerformanceViewData, sourceControlBMPs, quickBmps, hasWaterQualityManagementPlanBoundary, delineationsDict, waterQualityManagementPlanDocuments);
+                hruCharacteristicsViewData, waterQualityManagementPlanModelingApproaches, modeledPerformanceViewData, sourceControlBMPs, quickBmps, hasWaterQualityManagementPlanBoundary, delineationsDict, waterQualityManagementPlanDocuments, calculateTotalAcreage);
 
             return RazorView<Detail, DetailViewData>(viewData);
         }
@@ -190,7 +211,10 @@ namespace Neptune.Web.Controllers
         [WaterQualityManagementPlanCreateFeature]
         public PartialViewResult New()
         {
-            var viewModel = new NewViewModel();
+            var viewModel = new NewViewModel()
+            {
+                WaterQualityManagementPlanID = ModelObjectHelpers.NotYetAssignedID
+            };
             return ViewNew(viewModel);
         }
 
@@ -222,8 +246,8 @@ namespace Neptune.Web.Controllers
         private PartialViewResult ViewNew(NewViewModel viewModel)
         {
             var stormwaterJurisdictions = new List<Role> {Role.Admin, Role.SitkaAdmin}.Contains(CurrentPerson.Role)
-                ? _dbContext.StormwaterJurisdictions.ToList()
-                : CurrentPerson.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList();
+                ? StormwaterJurisdictions.List(_dbContext)
+                : StormwaterJurisdictions.ListViewableByPersonForWQMPs(_dbContext, CurrentPerson);
             var hydrologicSubareas = _dbContext.HydrologicSubareas.ToList();
             var viewData = new NewViewData(stormwaterJurisdictions, hydrologicSubareas, TrashCaptureStatusType.All);
             return RazorPartialView<New, NewViewData, NewViewModel>(viewData, viewModel);
@@ -260,9 +284,8 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewEdit(EditViewModel viewModel)
         {
-            var stormwaterJurisdictions = StormwaterJurisdictions.List(_dbContext);
             var hydrologicSubareas = _dbContext.HydrologicSubareas.ToList();
-            var viewData = new EditViewData(stormwaterJurisdictions, hydrologicSubareas, TrashCaptureStatusType.All);
+            var viewData = new EditViewData(hydrologicSubareas, TrashCaptureStatusType.All);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
@@ -446,72 +469,17 @@ namespace Neptune.Web.Controllers
 
         #endregion
 
-        #region WQMP Parcels
-
-        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
-        [WaterQualityManagementPlanManageFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
-        public ViewResult EditWqmpParcels([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
-        {
-            var waterQualityManagementPlan = WaterQualityManagementPlans.GetByID(_dbContext, waterQualityManagementPlanPrimaryKey);
-            var waterQualityManagementPlanParcels = WaterQualityManagementPlanParcels.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
-            var parcelIDs = waterQualityManagementPlanParcels.Select(x => x.ParcelID).ToList();
-            var viewModel = new EditWqmpParcelsViewModel(parcelIDs);
-            return ViewEditWqmpParcels(waterQualityManagementPlan, viewModel, waterQualityManagementPlanParcels);
-        }
-
-        [HttpPost("{waterQualityManagementPlanPrimaryKey}")]
-        [WaterQualityManagementPlanManageFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
-        public async Task<IActionResult> EditWqmpParcels([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpParcelsViewModel viewModel)
-        {
-            var waterQualityManagementPlan = WaterQualityManagementPlans.GetByIDWithChangeTracking(_dbContext, waterQualityManagementPlanPrimaryKey);
-            var waterQualityManagementPlanParcels = WaterQualityManagementPlanParcels.ListByWaterQualityManagementPlanIDWithChangeTracking(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
-            if (!ModelState.IsValid)
-            {
-                return ViewEditWqmpParcels(waterQualityManagementPlan, viewModel, waterQualityManagementPlanParcels);
-            }
-
-            var waterQualityManagementPlanBoundary = WaterQualityManagementPlanBoundaries.GetByWaterQualityManagementPlanIDWithChangeTracking(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
-            var oldBoundary = waterQualityManagementPlanBoundary?.GeometryNative;
-
-            await viewModel.UpdateModels(waterQualityManagementPlan, _dbContext, waterQualityManagementPlanParcels, waterQualityManagementPlanBoundary);
-            SetMessageForDisplay($"Successfully edited {FieldDefinitionType.Parcel.GetFieldDefinitionLabelPluralized()} for {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()}.");
-
-            var newBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.GeometryNative;
-
-            if (!(oldBoundary == null && newBoundary == null))
-            {
-                ModelingEngineUtilities.QueueLGURefreshForArea(oldBoundary, newBoundary, _dbContext);
-            }
-
-            await NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
-            await _dbContext.SaveChangesAsync();
-
-            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(_linkGenerator, x => x.Detail(waterQualityManagementPlan)));
-        }
-
-        private ViewResult ViewEditWqmpParcels(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpParcelsViewModel viewModel, ICollection<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcels)
-        {
-            var wqmpParcelGeometries =
-                waterQualityManagementPlanParcels.Select(x => x.Parcel.ParcelGeometry?.Geometry4326);
-            var wqmpJurisdiction = waterQualityManagementPlan.StormwaterJurisdiction;
-            var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, new List<LayerGeoJson>(), wqmpParcelGeometries.Any() ? 
-                    new BoundingBoxDto(wqmpParcelGeometries) : new BoundingBoxDto(wqmpJurisdiction.StormwaterJurisdictionGeometry?.Geometry4326));
-            var viewData = new EditWqmpParcelsViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlan, mapInitJson, _webConfiguration.ParcelMapServiceUrl, _webConfiguration.MapServiceLayerNameParcel, waterQualityManagementPlanParcels);
-            return RazorView<EditWqmpParcels, EditWqmpParcelsViewData, EditWqmpParcelsViewModel>(viewData, viewModel);
-        }
-
-        #endregion
-
         private ViewResult ViewEditWqmpBoundary(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpBoundaryViewModel viewModel)
         {
-            var boundaryLayerGeoJson = waterQualityManagementPlan.GetBoundaryLayerGeoJson();
-            var boundingBoxDto = new BoundingBoxDto(waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.Geometry4326);
-            var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext).ToList();
-            var mapInitJson = new BoundaryAreaMapInitJson("editWqmpBoundaryMap", boundaryLayerGeoJson, layerGeoJsons, boundingBoxDto);
+            var waterQualityManagementPlanParcels = WaterQualityManagementPlanParcels.ListByWaterQualityManagementPlanID(_dbContext,
+                waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var waterQualityManagementPlanBoundary = WaterQualityManagementPlanBoundaries.GetByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var geometry4326 = waterQualityManagementPlanBoundary?.Geometry4326;
+            var featureCollection = geometry4326?.MultiPolygonToFeatureCollection();
+            var boundingBoxDto = new BoundingBoxDto(geometry4326);
+            var mapInitJson = new MapInitJson("editWqmpBoundaryMap", 10, new List<LayerGeoJson>(), boundingBoxDto);
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.EditWQMPBoundary);
-            var viewData = new EditWqmpBoundaryViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, waterQualityManagementPlan, mapInitJson, _webConfiguration.ParcelMapServiceUrl);
+            var viewData = new EditWqmpBoundaryViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, waterQualityManagementPlan, mapInitJson, _webConfiguration.ParcelMapServiceUrl, waterQualityManagementPlanParcels.Select(x => x.ParcelID), featureCollection);
             return RazorView<EditWqmpBoundary, EditWqmpBoundaryViewData, EditWqmpBoundaryViewModel>(viewData, viewModel);
         }
 
@@ -536,12 +504,16 @@ namespace Neptune.Web.Controllers
                 return ViewEditWqmpBoundary(waterQualityManagementPlan, viewModel);
             }
 
-            var oldBoundary = WaterQualityManagementPlanBoundaries.GetByWaterQualityManagementPlanIDWithChangeTracking(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID)?.GeometryNative;
+            var waterQualityManagementPlanParcels = WaterQualityManagementPlanParcels.ListByWaterQualityManagementPlanIDWithChangeTracking(_dbContext,
+                waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var waterQualityManagementPlanBoundary = WaterQualityManagementPlanBoundaries.GetByWaterQualityManagementPlanIDWithChangeTracking(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var oldBoundary = waterQualityManagementPlanBoundary?.GeometryNative;
 
-            viewModel.UpdateModel(waterQualityManagementPlan, _dbContext);
+            viewModel.UpdateModel(waterQualityManagementPlan, _dbContext, waterQualityManagementPlanBoundary, waterQualityManagementPlanParcels);
+            await _dbContext.SaveChangesAsync();
             SetMessageForDisplay($"Successfully edited boundary for {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()}.");
 
-            var newBoundary = waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.GeometryNative;
+            var newBoundary = waterQualityManagementPlanBoundary?.GeometryNative;
 
             if (!(oldBoundary == null && newBoundary == null))
             {
@@ -554,7 +526,6 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(_linkGenerator,
                 x => x.Detail(waterQualityManagementPlan)));
         }
-
         #region WQMP O&M Verification Record
 
 

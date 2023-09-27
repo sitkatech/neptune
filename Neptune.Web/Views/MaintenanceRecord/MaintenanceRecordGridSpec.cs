@@ -19,19 +19,19 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Microsoft.AspNetCore.Html;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
 using Neptune.Web.Common.DhtmlWrappers;
 using Neptune.Web.Common.HtmlHelperExtensions;
 using Neptune.Web.Controllers;
+using Person = Neptune.EFModels.Entities.Person;
 
 namespace Neptune.Web.Views.MaintenanceRecord
 {
-    public class MaintenanceRecordGridSpec : GridSpec<EFModels.Entities.MaintenanceRecord>
+    public class MaintenanceRecordGridSpec : GridSpec<vMaintenanceRecordDetailed>
     {
 
-        public MaintenanceRecordGridSpec(Person currentPerson, IEnumerable<EFModels.Entities.CustomAttributeType> allMaintenanceAttributeTypes, LinkGenerator linkGenerator)
+        public MaintenanceRecordGridSpec(Person currentPerson, LinkGenerator linkGenerator)
         {
             var userDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var treatmentBMPDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
@@ -41,20 +41,27 @@ namespace Neptune.Web.Views.MaintenanceRecord
 
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.MaintenanceRecordID),currentPerson.IsManagerOrAdmin()), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.MaintenanceRecordID), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
-            Add("BMP Name", x => UrlTemplate.MakeHrefString(treatmentBMPDetailUrlTemplate.ParameterReplace(x.TreatmentBMPID), x.TreatmentBMP.TreatmentBMPName), 120, DhtmlxGridColumnFilterType.Html);
-            Add("Date", x => x.GetMaintenanceRecordDate(), 150, DhtmlxGridColumnFormatType.Date);
-            Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.TreatmentBMP.StormwaterJurisdictionID), x.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Performed By", x => x.GetMaintenanceRecordPerson() == null ? new HtmlString(string.Empty) :
-                UrlTemplate.MakeHrefString(userDetailUrlTemplate.ParameterReplace(x.GetMaintenanceRecordPerson().PersonID), x.GetMaintenanceRecordPerson().GetFullNameFirstLast()), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("BMP Name", x => UrlTemplate.MakeHrefString(treatmentBMPDetailUrlTemplate.ParameterReplace(x.TreatmentBMPID), x.TreatmentBMPName), 120, DhtmlxGridColumnFilterType.Html);
+            Add("Date", x => x.VisitDate, 150, DhtmlxGridColumnFormatType.Date);
+            Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.StormwaterJurisdictionName), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Performed By", x => UrlTemplate.MakeHrefString(userDetailUrlTemplate.ParameterReplace(x.PerformedByPersonID), x.PerformedByPersonName), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(FieldDefinitionType.MaintenanceRecordType.ToGridHeaderString("Type"),
-                x => x.MaintenanceRecordType?.MaintenanceRecordTypeDisplayName ?? "Not set", 100,
+                x => x.MaintenanceRecordTypeDisplayName ?? "Not set", 100,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Description", x => x.MaintenanceRecordDescription, 300, DhtmlxGridColumnFilterType.Text);
-            foreach (var customAttributeType in allMaintenanceAttributeTypes)
-            {
-                Add(customAttributeType.DisplayNameWithUnits(),
-                    x => x?.GetObservationValueForAttributeType(customAttributeType), 150, DhtmlxGridColumnFilterType.Text);
-            }
+
+            Add("Infiltration Surface Restored (sq-ft)", x => x.Infiltration_Surface_Restored, 150, DhtmlxGridColumnFilterType.Text);
+            Add("Filtration Surface Restored (sq-ft)", x => x.Filtration_Surface_Restored, 150, DhtmlxGridColumnFilterType.Text);
+            Add("Media Replaced (cu-yd)", x => x.Media_Replaced, 150, DhtmlxGridColumnFilterType.Text);
+            Add("Mulch Added (cu-yd)", x => x.Mulch_Added, 150, DhtmlxGridColumnFilterType.Text);
+            Add("% Trash", x => x.Percent_Trash, 150, DhtmlxGridColumnFilterType.Text);
+            Add("% Green Waste", x => x.Percent_Green_Waste, 150, DhtmlxGridColumnFilterType.Text);
+            Add("% Sediment", x => x.Percent_Sediment, 150, DhtmlxGridColumnFilterType.Text);
+            Add("Area Reseeded (sq-ft)", x => x.Area_Reseeded, 150, DhtmlxGridColumnFilterType.Text);
+            Add("Vegetation Planted (sq-ft)", x => x.Vegetation_Planted, 150, DhtmlxGridColumnFilterType.Text);
+            Add("Surface and Bank Erosion Repaired (sq-ft)", x => x.Surface_and_Bank_Erosion_Repaired, 150, DhtmlxGridColumnFilterType.Text);
+            Add("Total Material Volume Removed (cu-ft)", x => x.Total_Material_Volume_Removed__cu_ft_, 150, DhtmlxGridColumnFilterType.Text);
+            Add("Total Material Volume Removed (gal)", x => x.Total_Material_Volume_Removed__gal_, 150, DhtmlxGridColumnFilterType.Text);
         }
     }
 }

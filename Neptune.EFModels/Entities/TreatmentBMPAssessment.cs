@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using LtInfo.Common;
 using Neptune.Common;
 
 namespace Neptune.EFModels.Entities

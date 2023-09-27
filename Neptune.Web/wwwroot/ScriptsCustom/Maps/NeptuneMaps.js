@@ -360,8 +360,8 @@ NeptuneMaps.Map.prototype.addLayersToMapLayersControl = function(baseLayers, ove
 
 NeptuneMaps.Map.prototype.setMapBounds = function(mapInitJson) {
     this.map.fitBounds([
-        [mapInitJson.BoundingBox.Top, mapInitJson.BoundingBox.Left],
-        [mapInitJson.BoundingBox.Bottom, mapInitJson.BoundingBox.Right]
+        [mapInitJson.BoundingBox.Bottom, mapInitJson.BoundingBox.Left],
+        [mapInitJson.BoundingBox.Top, mapInitJson.BoundingBox.Right]
     ]);
 };
 

@@ -17,7 +17,7 @@ namespace Neptune.Web.Views.FieldVisit
         public string EditBenchmarkAndThresholdUrl { get; }
         public ImageCarouselViewData ImageCarouselViewData { get; }
 
-        public AssessmentDetailViewData(LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMPAssessment? treatmentBMPAssessment, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum, EFModels.Entities.TreatmentBMPType treatmentBMPType)
+        public AssessmentDetailViewData(LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMPAssessment? treatmentBMPAssessment, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum, EFModels.Entities.TreatmentBMPType treatmentBMPType, List<TreatmentBMPAssessmentPhoto> treatmentBMPAssessmentPhotos)
         {
             TreatmentBMPAssessmentTypeEnum = treatmentBMPAssessmentTypeEnum;
             TreatmentBMPType = treatmentBMPType;
@@ -33,8 +33,7 @@ namespace Neptune.Web.Views.FieldVisit
                 CanEdit = CurrentPersonCanManage && treatmentBMPAssessment.CanEdit(currentPerson) &&
                           !treatmentBMPAssessment.IsAssessmentComplete;
 
-                var carouselImages = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos;
-                ImageCarouselViewData = new ImageCarouselViewData(carouselImages, 400, linkGenerator);
+                ImageCarouselViewData = new ImageCarouselViewData(treatmentBMPAssessmentPhotos, 400, linkGenerator);
             }
         }
     }

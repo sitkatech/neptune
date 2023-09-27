@@ -175,14 +175,14 @@ namespace Neptune.Web.Controllers
         [HttpGet("{treatmentBMPTypePrimaryKey}")]
         [NeptuneViewFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPTypePrimaryKey")]
-        public GridJsonNetJObjectResult<vTreatmentBMPDetailedWithTreatmentBMPEntity> TreatmentBMPsInTreatmentBMPTypeGridJsonData([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey)
+        public GridJsonNetJObjectResult<TreatmentBMPDetailedWithTreatmentBMPEntity> TreatmentBMPsInTreatmentBMPTypeGridJsonData([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey)
         {
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMPTypePrimaryKey);
             var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson);
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(CurrentPerson);
             var gridSpec = new TreatmentBMPsInTreatmentBMPTypeGridSpec(CurrentPerson, showDelete, showEdit, treatmentBMPType, _linkGenerator);
-            var treatmentBMPs = 
+            var treatmentBMPDetailedWithTreatmentBMPEntities = 
                 TreatmentBMPs.GetNonPlanningModuleBMPs(_dbContext)
                     .Include(x => x.WaterQualityManagementPlan)
                     .Include(x => x.CustomAttributes)
@@ -194,10 +194,10 @@ namespace Neptune.Web.Controllers
                     .Join(_dbContext.vTreatmentBMPDetaileds,
                         x => x.TreatmentBMPID,
                         y => y.TreatmentBMPID,
-                        (x,y) => new vTreatmentBMPDetailedWithTreatmentBMPEntity(x, y))
+                        (x,y) => new TreatmentBMPDetailedWithTreatmentBMPEntity(x, y))
                     .OrderBy(x => x.TreatmentBMP.TreatmentBMPName)
                     .ToList();
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vTreatmentBMPDetailedWithTreatmentBMPEntity>(treatmentBMPs, gridSpec);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPDetailedWithTreatmentBMPEntity>(treatmentBMPDetailedWithTreatmentBMPEntities, gridSpec);
             return gridJsonNetJObjectResult;
         }
 

@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
 
@@ -7,7 +6,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
     public class EditViewData
     {
-        public IEnumerable<SelectListItem> StormwaterJurisdictionSelectListItems { get; }
         public IEnumerable<WaterQualityManagementPlanPriority> WaterQualityManagementPlanPriorities { get; }
         public IEnumerable<WaterQualityManagementPlanStatus> WaterQualityManagementPlanStatuses { get; }
         public IEnumerable<WaterQualityManagementPlanDevelopmentType> WaterQualityManagementPlanDevelopmentTypes { get; }
@@ -17,15 +15,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public IEnumerable<HydromodificationAppliesType> HydromodificationAppliesTypes { get; }
         public IEnumerable<SelectListItem> TrashCaptureStatusTypes { get; }
 
-        public EditViewData(IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,
-            List<HydrologicSubarea> hydrologicSubareas, IEnumerable<TrashCaptureStatusType> trashCaptureStatusTypes)
+        public EditViewData(List<HydrologicSubarea> hydrologicSubareas, IEnumerable<TrashCaptureStatusType> trashCaptureStatusTypes)
         {
 
             TrashCaptureStatusTypes = trashCaptureStatusTypes.ToSelectListWithDisabledEmptyFirstRow(
-                x => x.TrashCaptureStatusTypeID.ToString(CultureInfo.InvariantCulture),
-                x => x.TrashCaptureStatusTypeDisplayName.ToString(CultureInfo.InvariantCulture));
-            StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
-                .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(), x => x.GetOrganizationDisplayName());
+                x => x.TrashCaptureStatusTypeID.ToString(),
+                x => x.TrashCaptureStatusTypeDisplayName.ToString());
             WaterQualityManagementPlanPriorities = WaterQualityManagementPlanPriority.All
                 .OrderBy(x => x.WaterQualityManagementPlanPriorityDisplayName)
                 .ToList();

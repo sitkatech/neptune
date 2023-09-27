@@ -8,7 +8,7 @@ using Neptune.Web.Views.Shared.SortOrder;
 
 namespace Neptune.Web.Views.TreatmentBMPType;
 
-public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<vTreatmentBMPDetailedWithTreatmentBMPEntity>
+public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<TreatmentBMPDetailedWithTreatmentBMPEntity>
 {
     public TreatmentBMPsInTreatmentBMPTypeGridSpec(Person currentPerson, bool showDelete, bool showEdit,
         EFModels.Entities.TreatmentBMPType treatmentBMPType, LinkGenerator linkGenerator)
@@ -54,54 +54,54 @@ public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<vTreatmentBMPDet
         Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString("Jurisdiction"),
             x => UrlTemplate.MakeHrefString(
                 stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.TreatmentBMP
-                    .StormwaterJurisdictionID), x.vTreatmentBMPDetailed.OrganizationName), 170);
+                    .StormwaterJurisdictionID), x.TreatmentBMPDetailed.OrganizationName), 170);
         Add("Owner Organization",
             x => UrlTemplate.MakeHrefString(
                 organizationDetailUrlTemplate.ParameterReplace(x.TreatmentBMP.OwnerOrganizationID),
-                x.vTreatmentBMPDetailed.OwnerOrganizationName), 170);
+                x.TreatmentBMPDetailed.OwnerOrganizationName), 170);
         Add(FieldDefinitionType.TreatmentBMPType.ToGridHeaderString("Type"),
-            x => x.vTreatmentBMPDetailed.TreatmentBMPTypeName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            x => x.TreatmentBMPDetailed.TreatmentBMPTypeName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
         Add("Year Built", x => x.TreatmentBMP.YearBuilt, 100, DhtmlxGridColumnFormatType.Date);
         Add("ID in System of Record", x => x.TreatmentBMP.SystemOfRecordID, 100);
         Add("Water Quality Management Plan", x => x.TreatmentBMP.WaterQualityManagementPlanID.HasValue ? 
             UrlTemplate.MakeHrefString(wqmpDetailUrlTemplate.ParameterReplace(x.TreatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanID), x.TreatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanName):
             "<p></p>".ToHTMLFormattedString(), 170);
         Add("Notes", x => x.TreatmentBMP.Notes, 195);
-        Add("Last Assessment Date", x => x.vTreatmentBMPDetailed.LatestAssessmentDate, 130);
+        Add("Last Assessment Date", x => x.TreatmentBMPDetailed.LatestAssessmentDate, 130);
         Add("Last Assessed Score",
-            x => x.vTreatmentBMPDetailed.LatestAssessmentScore.HasValue
-                ? x.vTreatmentBMPDetailed.LatestAssessmentScore.Value.ToString("0.0")
+            x => x.TreatmentBMPDetailed.LatestAssessmentScore.HasValue
+                ? x.TreatmentBMPDetailed.LatestAssessmentScore.Value.ToString("0.0")
                 : "-", 100, DhtmlxGridColumnFilterType.FormattedNumeric);
-        Add("# of Assessments", x => x.vTreatmentBMPDetailed.NumberOfAssessments, 100,
+        Add("# of Assessments", x => x.TreatmentBMPDetailed.NumberOfAssessments, 100,
             DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);
-        Add("Last Maintenance Date", x => x.vTreatmentBMPDetailed.LatestMaintenanceDate, 130,
+        Add("Last Maintenance Date", x => x.TreatmentBMPDetailed.LatestMaintenanceDate, 130,
             DhtmlxGridColumnFormatType.Date);
-        Add("# of Maintenance Events", x => x.vTreatmentBMPDetailed.NumberOfMaintenanceRecords, 100,
+        Add("# of Maintenance Events", x => x.TreatmentBMPDetailed.NumberOfMaintenanceRecords, 100,
             DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);
         Add("Benchmark and Threshold Set?",
-            x => (x.vTreatmentBMPDetailed.NumberOfBenchmarkAndThresholds ==
-                  x.vTreatmentBMPDetailed.NumberOfBenchmarkAndThresholdsEntered).ToYesNo(), 80,
+            x => (x.TreatmentBMPDetailed.NumberOfBenchmarkAndThresholds ==
+                  x.TreatmentBMPDetailed.NumberOfBenchmarkAndThresholdsEntered).ToYesNo(), 80,
             DhtmlxGridColumnFilterType.SelectFilterStrict);
         Add("Required Lifespan of Installation",
-            x => x.vTreatmentBMPDetailed.TreatmentBMPLifespanTypeDisplayName ?? "Unknown", 170,
+            x => x.TreatmentBMPDetailed.TreatmentBMPLifespanTypeDisplayName ?? "Unknown", 170,
             DhtmlxGridColumnFilterType.SelectFilterStrict);
-        Add("Lifespan End Date (if Fixed End Date)", x => x.vTreatmentBMPDetailed.TreatmentBMPLifespanEndDate, 130,
+        Add("Lifespan End Date (if Fixed End Date)", x => x.TreatmentBMPDetailed.TreatmentBMPLifespanEndDate, 130,
             DhtmlxGridColumnFormatType.Date);
         Add(FieldDefinitionType.RequiredFieldVisitsPerYear.ToGridHeaderString(),
-            x => x.vTreatmentBMPDetailed.RequiredFieldVisitsPerYear, 130, DhtmlxGridColumnFormatType.Integer);
+            x => x.TreatmentBMPDetailed.RequiredFieldVisitsPerYear, 130, DhtmlxGridColumnFormatType.Integer);
         Add(FieldDefinitionType.RequiredPostStormFieldVisitsPerYear.ToGridHeaderString(),
-            x => x.vTreatmentBMPDetailed.RequiredPostStormFieldVisitsPerYear, 130,
+            x => x.TreatmentBMPDetailed.RequiredPostStormFieldVisitsPerYear, 130,
             DhtmlxGridColumnFormatType.Integer);
         Add(FieldDefinitionType.SizingBasis.ToGridHeaderString(),
-            x => x.vTreatmentBMPDetailed.SizingBasisTypeDisplayName, 130,
+            x => x.TreatmentBMPDetailed.SizingBasisTypeDisplayName, 130,
             DhtmlxGridColumnFilterType.SelectFilterStrict);
         Add(FieldDefinitionType.TrashCaptureStatus.ToGridHeaderString(),
-            x => x.vTreatmentBMPDetailed.TrashCaptureStatusTypeDisplayName, 130,
+            x => x.TreatmentBMPDetailed.TrashCaptureStatusTypeDisplayName, 130,
             DhtmlxGridColumnFilterType.SelectFilterStrict);
         Add(FieldDefinitionType.DelineationType.ToGridHeaderString(),
-            x => string.IsNullOrWhiteSpace(x.vTreatmentBMPDetailed.DelineationTypeDisplayName)
+            x => string.IsNullOrWhiteSpace(x.TreatmentBMPDetailed.DelineationTypeDisplayName)
                 ? new HtmlString("<p class='systemText'>No Delineation Provided</p>")
-                : new HtmlString(x.vTreatmentBMPDetailed.DelineationTypeDisplayName), 130,
+                : new HtmlString(x.TreatmentBMPDetailed.DelineationTypeDisplayName), 130,
             DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
 
         foreach (var purpose in CustomAttributeTypePurpose.All)

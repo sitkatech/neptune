@@ -9,19 +9,16 @@ public static class MaintenanceRecords
     {
         return dbContext.MaintenanceRecords
             .Include(x => x.FieldVisit)
-            .ThenInclude(x => x.PerformedByPerson)
-            .ThenInclude(x => x.Organization)
+                .ThenInclude(x => x.PerformedByPerson)
+                .ThenInclude(x => x.Organization)
             .Include(x => x.TreatmentBMP)
-            .ThenInclude(x => x.StormwaterJurisdiction)
-            .ThenInclude(x => x.Organization)
+                .ThenInclude(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
             .Include(x => x.TreatmentBMPType)
+                .ThenInclude(x => x.TreatmentBMPTypeCustomAttributeTypes)
+                    .ThenInclude(x => x.CustomAttributeType)
             .Include(x => x.MaintenanceRecordObservations)
-            .ThenInclude(x => x.MaintenanceRecordObservationValues)
-            .Include(x => x.MaintenanceRecordObservations)
-            .ThenInclude(x => x.TreatmentBMPTypeCustomAttributeType)
-            .ThenInclude(x => x.CustomAttributeType)
-            .Include(x => x.MaintenanceRecordObservations)
-            .ThenInclude(x => x.CustomAttributeType)
+                .ThenInclude(x => x.MaintenanceRecordObservationValues)
             ;
     }
 
