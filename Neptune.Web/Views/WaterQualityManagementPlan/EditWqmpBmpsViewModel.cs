@@ -19,9 +19,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             TreatmentBmpIDs = treatmentBmpIDs;
         }
 
-        public void UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, NeptuneDbContext dbContext)
+        public void UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, NeptuneDbContext dbContext, List<EFModels.Entities.TreatmentBMP> existingTreatmentBMPs)
         {
-            waterQualityManagementPlan.TreatmentBMPs.ToList().ForEach(x => { x.WaterQualityManagementPlan = null; });
+            existingTreatmentBMPs.ForEach(x => { x.WaterQualityManagementPlan = null; });
 
             dbContext.TreatmentBMPs.Where(x => TreatmentBmpIDs.Contains(x.TreatmentBMPID))
                 .ToList()

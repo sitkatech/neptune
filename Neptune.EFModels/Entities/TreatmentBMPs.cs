@@ -118,11 +118,15 @@ namespace Neptune.EFModels.Entities
                 .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID).ToList();
         }
 
-
         public static List<TreatmentBMP> ListByWaterQualityManagementPlanID(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
         {
             return GetImpl(dbContext).AsNoTracking()
                 .Where(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID).ToList();
+        }
+
+        public static List<TreatmentBMP> ListByWaterQualityManagementPlanIDWithChangeTracking(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
+        {
+            return GetImpl(dbContext).Where(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID).ToList();
         }
 
         public static List<TreatmentBMP> ListByTreatmentBMPIDList(NeptuneDbContext dbContext, List<int> treatmentBMPIDList)

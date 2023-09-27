@@ -353,7 +353,8 @@ namespace Neptune.Web.Controllers
                 return ViewEditWqmpBmps(waterQualityManagementPlan, viewModel);
             }
 
-            viewModel.UpdateModel(waterQualityManagementPlan, _dbContext);
+            var treatmentBMPs = TreatmentBMPs.ListByWaterQualityManagementPlanIDWithChangeTracking(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            viewModel.UpdateModel(waterQualityManagementPlan, _dbContext, treatmentBMPs);
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay($"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
 
@@ -381,7 +382,8 @@ namespace Neptune.Web.Controllers
         public ViewResult EditSimplifiedStructuralBMPs([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = WaterQualityManagementPlans.GetByID(_dbContext, waterQualityManagementPlanPrimaryKey);
-            var viewModel = new EditSimplifiedStructuralBMPsViewModel(waterQualityManagementPlan);
+            var quickBMPSimpleDtos = QuickBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID).Select(x => x.AsSimpleDto()).ToList();
+            var viewModel = new EditSimplifiedStructuralBMPsViewModel(quickBMPSimpleDtos);
             return ViewEditSimplifiedStructuralBMPs(waterQualityManagementPlan, viewModel);
         }
 
@@ -396,12 +398,13 @@ namespace Neptune.Web.Controllers
                 return ViewEditSimplifiedStructuralBMPs(waterQualityManagementPlan, viewModel);
             }
 
-            viewModel.UpdateModel(waterQualityManagementPlan, viewModel.QuickBmpSimples, _dbContext);
+            var existingQuickBMPs = QuickBMPs.ListByWaterQualityManagementPlanIDWithChangeTracking(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            viewModel.UpdateModel(waterQualityManagementPlan, viewModel.QuickBmpSimples, _dbContext, existingQuickBMPs);
+            await _dbContext.SaveChangesAsync();
             SetMessageForDisplay(
                 $"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
 
             await NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
-            await _dbContext.SaveChangesAsync();
 
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(_linkGenerator, x => x.Detail(waterQualityManagementPlanPrimaryKey)));
         }
@@ -454,7 +457,6 @@ namespace Neptune.Web.Controllers
             SetMessageForDisplay($"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
 
             await NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
-            await _dbContext.SaveChangesAsync();
 
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(_linkGenerator ,x => x.Detail(waterQualityManagementPlanPrimaryKey)));
         }
@@ -517,11 +519,10 @@ namespace Neptune.Web.Controllers
 
             if (!(oldBoundary == null && newBoundary == null))
             {
-                ModelingEngineUtilities.QueueLGURefreshForArea(oldBoundary, newBoundary, _dbContext);
+                await ModelingEngineUtilities.QueueLGURefreshForArea(oldBoundary, newBoundary, _dbContext);
             }
 
             await NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
-            await _dbContext.SaveChangesAsync();
 
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(_linkGenerator,
                 x => x.Detail(waterQualityManagementPlan)));
@@ -747,15 +748,14 @@ namespace Neptune.Web.Controllers
                 return ViewEditModelingApproach(viewModel);
             }
             viewModel.UpdateModel(waterQualityManagementPlan);
-
+            await _dbContext.SaveChangesAsync();
 
             var waterQualityManagementPlanBoundary = WaterQualityManagementPlanBoundaries.GetByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
             if (waterQualityManagementPlanBoundary != null)
             {
-                ModelingEngineUtilities.QueueLGURefreshForArea(waterQualityManagementPlanBoundary.GeometryNative, null, _dbContext);
+                await ModelingEngineUtilities.QueueLGURefreshForArea(waterQualityManagementPlanBoundary.GeometryNative, null, _dbContext);
                 await NereidUtilities.MarkWqmpDirty(waterQualityManagementPlan, _dbContext);
             }
-            await _dbContext.SaveChangesAsync();
 
             SetMessageForDisplay($"Modeling Approach successfully changed for {waterQualityManagementPlan.WaterQualityManagementPlanName}.");
             return new ModalDialogFormJsonResult();

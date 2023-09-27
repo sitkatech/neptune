@@ -18,12 +18,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
         }
 
-        public EditSimplifiedStructuralBMPsViewModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan)
+        public EditSimplifiedStructuralBMPsViewModel(List<QuickBMPSimpleDto> quickBMPSimpleDtos)
         {
-            QuickBmpSimples = waterQualityManagementPlan.QuickBMPs.Select(x => x.AsSimpleDto()).ToList();
+            QuickBmpSimples = quickBMPSimpleDtos;
         }
 
-        public void UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, List<QuickBMPSimpleDto> quickBMPSimples, NeptuneDbContext dbContext)
+        public void UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, List<QuickBMPSimpleDto> quickBMPSimples, NeptuneDbContext dbContext, List<QuickBMP> existingQuickBMPs)
         {
             var quickBMPsInDatabase = dbContext.QuickBMPs;
             var quickBMPsToUpdate = quickBMPSimples != null
@@ -41,7 +41,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 }).ToList()
                 : new List<QuickBMP>();
 
-            waterQualityManagementPlan.QuickBMPs.ToList().Merge(quickBMPsToUpdate, quickBMPsInDatabase,
+            existingQuickBMPs.Merge(quickBMPsToUpdate, quickBMPsInDatabase,
                 (x, y) => x.WaterQualityManagementPlanID == y.WaterQualityManagementPlanID &&
                           x.QuickBMPID == y.QuickBMPID, (x, y) =>
                 {

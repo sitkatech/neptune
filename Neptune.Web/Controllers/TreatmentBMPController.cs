@@ -548,7 +548,7 @@ namespace Neptune.Web.Controllers
             // queue an LGU refresh for the area no longer governed by this BMP
             if (isDelineationDistributed && delineationGeometry != null)
             {
-                ModelingEngineUtilities.QueueLGURefreshForArea(delineationGeometry, null, _dbContext);
+                await ModelingEngineUtilities.QueueLGURefreshForArea(delineationGeometry, null, _dbContext);
             }
 
             SetMessageForDisplay($"Successfully deleted the Treatment BMP {treatmentBMPTreatmentBMPName}");
@@ -631,7 +631,7 @@ namespace Neptune.Web.Controllers
                     // queue an LGU refresh for the area no longer governed by this BMP
                     if (isDelineationDistributed && delineation?.DelineationGeometry != null)
                     {
-                        ModelingEngineUtilities.QueueLGURefreshForArea(delineation?.DelineationGeometry, null, _dbContext);
+                        await ModelingEngineUtilities.QueueLGURefreshForArea(delineation.DelineationGeometry, null, _dbContext);
                     }
                 }
 
