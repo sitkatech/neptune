@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,14 +11,13 @@ using Neptune.Models.DataTransferObjects;
 using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
-using Neptune.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+using Neptune.Common.GeoSpatial;
 using DelineationSimpleDto = Neptune.Models.DataTransferObjects.DelineationSimpleDto;
 using ProjectDocumentSimpleDto = Neptune.Models.DataTransferObjects.ProjectDocumentSimpleDto;
 using ProjectSimpleDto = Neptune.Models.DataTransferObjects.ProjectSimpleDto;
@@ -337,7 +335,7 @@ namespace Neptune.API.Controllers
                 requestBaseURL = "http://host.docker.internal";
             }
 
-            var result = _neptuneClient.PostAsync($"{requestBaseURL}/Nereid/NetworkSolveForProject/{projectID}", new StringContent(JsonConvert.SerializeObject(requestObject), Encoding.UTF8, "application/json")).Result;
+            var result = _neptuneClient.PostAsync($"{requestBaseURL}/Nereid/NetworkSolveForProject/{projectID}", new StringContent(GeoJsonSerializer.Serialize(requestObject), Encoding.UTF8, "application/json")).Result;
             var body = result.Content.ReadAsStringAsync().Result;
 
             if (!result.IsSuccessStatusCode)

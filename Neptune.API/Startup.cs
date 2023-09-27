@@ -11,8 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Serilog;
 using Neptune.API.Services;
 using Neptune.API.Services.Telemetry;
@@ -23,6 +21,11 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
 using Serilog.Sinks.ApplicationInsights.Sinks.ApplicationInsights.TelemetryConverters;
 using ILogger = Serilog.ILogger;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO.Converters;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using Neptune.Common.JsonConverters;
 
 namespace Neptune.API
 {
@@ -57,22 +60,21 @@ namespace Neptune.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationInsightsTelemetry(_instrumentationKey);
-            services.AddControllers().AddNewtonsoftJson(opt =>
-                {
-                    if (!_environment.IsProduction())
-                    {
-                        opt.SerializerSettings.Formatting = Formatting.Indented;
-                    }
-                    opt.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-                    var resolver = opt.SerializerSettings.ContractResolver;
-                    if (resolver != null)
-                    {
-                        if (resolver is DefaultContractResolver defaultResolver)
-                        {
-                            defaultResolver.NamingStrategy = null;
-                        }
-                    }
-                });
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                var scale = Math.Pow(10, 3);
+                var geometryFactory = new GeometryFactory(new PrecisionModel(scale), 4326);
+                options.JsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));
+                options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+                options.JsonSerializerOptions.Converters.Add(new DoubleConverter(7));
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+                options.JsonSerializerOptions.WriteIndented = false;
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+            });
 
             services.Configure<NeptuneConfiguration>(Configuration);
             var neptuneConfiguration = Configuration.Get<NeptuneConfiguration>();

@@ -5,9 +5,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
+using Neptune.Common.GeoSpatial;
 
 namespace Neptune.API.Services
 {
@@ -114,7 +115,7 @@ namespace Neptune.API.Services
                 return new KeystoneApiResponse<KeystoneNewUserModel> { StatusCode = HttpStatusCode.Forbidden };
             }
 
-            var content = new StringContent(JsonConvert.SerializeObject(inviteModel), Encoding.UTF8, "application/json");
+            var content = new StringContent(GeoJsonSerializer.Serialize(inviteModel), Encoding.UTF8, "application/json");
             var response = await client.PostAsync($"{_baseUrl}/invite", content);
             return await ProcessResponse<KeystoneNewUserModel>(response);
         }
@@ -157,10 +158,8 @@ namespace Neptune.API.Services
 
         private static async Task<T> ProcessResponseImpl<T>(HttpResponseMessage response)
         {
-            using var sr = new StreamReader(await response.Content.ReadAsStreamAsync());
-            using var jsonTextReader = new JsonTextReader(sr);
-            var serializer = new JsonSerializer();
-            return serializer.Deserialize<T>(jsonTextReader);
+            return await JsonSerializer.DeserializeAsync<T>(await response.Content.ReadAsStreamAsync(),
+                GeoJsonSerializer.DefaultSerializerOptions);
         }
     }
 }

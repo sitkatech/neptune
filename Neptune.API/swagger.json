@@ -61,11 +61,6 @@
         ],
         "requestBody": {
           "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/NeptunePageDto"
-              }
-            },
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/NeptunePageDto"
@@ -230,11 +225,6 @@
         ],
         "requestBody": {
           "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/FieldDefinitionDto"
-              }
-            },
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/FieldDefinitionDto"
@@ -433,11 +423,6 @@
         ],
         "requestBody": {
           "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProjectUpsertDto"
-              }
-            },
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ProjectUpsertDto"
@@ -497,11 +482,6 @@
         ],
         "requestBody": {
           "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProjectUpsertDto"
-              }
-            },
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ProjectUpsertDto"
@@ -717,11 +697,6 @@
         ],
         "requestBody": {
           "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProjectDocumentUpdateDto"
-              }
-            },
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ProjectDocumentUpdateDto"
@@ -1082,14 +1057,6 @@
         ],
         "requestBody": {
           "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/DelineationUpsertDto"
-                }
-              }
-            },
             "application/json": {
               "schema": {
                 "type": "array",
@@ -1643,11 +1610,6 @@
         ],
         "requestBody": {
           "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
-              }
-            },
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
@@ -1739,14 +1701,6 @@
         ],
         "requestBody": {
           "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
-                }
-              }
-            },
             "application/json": {
               "schema": {
                 "type": "array",
@@ -1856,11 +1810,6 @@
         ],
         "requestBody": {
           "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/PersonCreateDto"
-              }
-            },
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/PersonCreateDto"
@@ -2014,19 +1963,19 @@
       "BoundingBoxDto": {
         "type": "object",
         "properties": {
-          "Left": {
+          "left": {
             "type": "number",
             "format": "double"
           },
-          "Bottom": {
+          "bottom": {
             "type": "number",
             "format": "double"
           },
-          "Right": {
+          "right": {
             "type": "number",
             "format": "double"
           },
-          "Top": {
+          "top": {
             "type": "number",
             "format": "double"
           }
@@ -2036,49 +1985,49 @@
       "DelineationSimpleDto": {
         "type": "object",
         "properties": {
-          "Geometry": {
+          "geometry": {
             "type": "string",
             "nullable": true
           },
-          "DelineationArea": {
+          "delineationArea": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "DelineationTypeName": {
+          "delineationTypeName": {
             "type": "string",
             "nullable": true
           },
-          "DelineationID": {
+          "delineationID": {
             "type": "integer",
             "format": "int32"
           },
-          "DelineationTypeID": {
+          "delineationTypeID": {
             "type": "integer",
             "format": "int32"
           },
-          "IsVerified": {
+          "isVerified": {
             "type": "boolean"
           },
-          "DateLastVerified": {
+          "dateLastVerified": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           },
-          "VerifiedByPersonID": {
+          "verifiedByPersonID": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "TreatmentBMPID": {
+          "treatmentBMPID": {
             "type": "integer",
             "format": "int32"
           },
-          "DateLastModified": {
+          "dateLastModified": {
             "type": "string",
             "format": "date-time"
           },
-          "HasDiscrepancies": {
+          "hasDiscrepancies": {
             "type": "boolean"
           }
         },
@@ -2087,28 +2036,28 @@
       "DelineationUpsertDto": {
         "type": "object",
         "properties": {
-          "DelineationID": {
+          "delineationID": {
             "type": "integer",
             "format": "int32"
           },
-          "DelineationTypeID": {
+          "delineationTypeID": {
             "type": "integer",
             "format": "int32"
           },
-          "DelineationArea": {
+          "delineationArea": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "Geometry": {
+          "geometry": {
             "type": "string",
             "nullable": true
           },
-          "TreatmentBMPID": {
+          "treatmentBMPID": {
             "type": "integer",
             "format": "int32"
           },
-          "HasDiscrepancies": {
+          "hasDiscrepancies": {
             "type": "boolean"
           }
         },
@@ -2117,14 +2066,14 @@
       "FieldDefinitionDto": {
         "type": "object",
         "properties": {
-          "FieldDefinitionID": {
+          "fieldDefinitionID": {
             "type": "integer",
             "format": "int32"
           },
-          "FieldDefinitionType": {
+          "fieldDefinitionType": {
             "$ref": "#/components/schemas/FieldDefinitionTypeDto"
           },
-          "FieldDefinitionValue": {
+          "fieldDefinitionValue": {
             "type": "string",
             "nullable": true
           }
@@ -2134,15 +2083,15 @@
       "FieldDefinitionTypeDto": {
         "type": "object",
         "properties": {
-          "FieldDefinitionTypeID": {
+          "fieldDefinitionTypeID": {
             "type": "integer",
             "format": "int32"
           },
-          "FieldDefinitionTypeName": {
+          "fieldDefinitionTypeName": {
             "type": "string",
             "nullable": true
           },
-          "FieldDefinitionTypeDisplayName": {
+          "fieldDefinitionTypeDisplayName": {
             "type": "string",
             "nullable": true
           }
@@ -2152,36 +2101,36 @@
       "FileResourceDto": {
         "type": "object",
         "properties": {
-          "FileResourceID": {
+          "fileResourceID": {
             "type": "integer",
             "format": "int32"
           },
-          "FileResourceMimeType": {
+          "fileResourceMimeType": {
             "$ref": "#/components/schemas/FileResourceMimeTypeDto"
           },
-          "OriginalBaseFilename": {
+          "originalBaseFilename": {
             "type": "string",
             "nullable": true
           },
-          "OriginalFileExtension": {
+          "originalFileExtension": {
             "type": "string",
             "nullable": true
           },
-          "FileResourceGUID": {
+          "fileResourceGUID": {
             "type": "string",
             "format": "uuid"
           },
-          "CreatePerson": {
+          "createPerson": {
             "$ref": "#/components/schemas/PersonDto"
           },
-          "CreateDate": {
+          "createDate": {
             "type": "string",
             "format": "date-time"
           },
-          "InBlobStorage": {
+          "inBlobStorage": {
             "type": "boolean"
           },
-          "ContentLength": {
+          "contentLength": {
             "type": "integer",
             "format": "int64",
             "nullable": true
@@ -2192,27 +2141,27 @@
       "FileResourceMimeTypeDto": {
         "type": "object",
         "properties": {
-          "FileResourceMimeTypeID": {
+          "fileResourceMimeTypeID": {
             "type": "integer",
             "format": "int32"
           },
-          "FileResourceMimeTypeName": {
+          "fileResourceMimeTypeName": {
             "type": "string",
             "nullable": true
           },
-          "FileResourceMimeTypeDisplayName": {
+          "fileResourceMimeTypeDisplayName": {
             "type": "string",
             "nullable": true
           },
-          "FileResourceMimeTypeContentTypeName": {
+          "fileResourceMimeTypeContentTypeName": {
             "type": "string",
             "nullable": true
           },
-          "FileResourceMimeTypeIconSmallFilename": {
+          "fileResourceMimeTypeIconSmallFilename": {
             "type": "string",
             "nullable": true
           },
-          "FileResourceMimeTypeIconNormalFilename": {
+          "fileResourceMimeTypeIconNormalFilename": {
             "type": "string",
             "nullable": true
           }
@@ -2222,38 +2171,38 @@
       "FileResourceSimpleDto": {
         "type": "object",
         "properties": {
-          "FileResourceID": {
+          "fileResourceID": {
             "type": "integer",
             "format": "int32"
           },
-          "FileResourceMimeTypeID": {
+          "fileResourceMimeTypeID": {
             "type": "integer",
             "format": "int32"
           },
-          "OriginalBaseFilename": {
+          "originalBaseFilename": {
             "type": "string",
             "nullable": true
           },
-          "OriginalFileExtension": {
+          "originalFileExtension": {
             "type": "string",
             "nullable": true
           },
-          "FileResourceGUID": {
+          "fileResourceGUID": {
             "type": "string",
             "format": "uuid"
           },
-          "CreatePersonID": {
+          "createPersonID": {
             "type": "integer",
             "format": "int32"
           },
-          "CreateDate": {
+          "createDate": {
             "type": "string",
             "format": "date-time"
           },
-          "InBlobStorage": {
+          "inBlobStorage": {
             "type": "boolean"
           },
-          "ContentLength": {
+          "contentLength": {
             "type": "integer",
             "format": "int64",
             "nullable": true
@@ -2264,11 +2213,11 @@
       "GeometryGeoJSONAndAreaDto": {
         "type": "object",
         "properties": {
-          "GeometryGeoJSON": {
+          "geometryGeoJSON": {
             "type": "string",
             "nullable": true
           },
-          "Area": {
+          "area": {
             "type": "number",
             "format": "double"
           }
@@ -2278,18 +2227,18 @@
       "NeptunePageDto": {
         "type": "object",
         "properties": {
-          "NeptunePageID": {
+          "neptunePageID": {
             "type": "integer",
             "format": "int32"
           },
-          "NeptunePageType": {
+          "neptunePageType": {
             "$ref": "#/components/schemas/NeptunePageTypeDto"
           },
-          "NeptunePageContent": {
+          "neptunePageContent": {
             "type": "string",
             "nullable": true
           },
-          "IsEmptyContent": {
+          "isEmptyContent": {
             "type": "boolean"
           }
         },
@@ -2298,15 +2247,15 @@
       "NeptunePageTypeDto": {
         "type": "object",
         "properties": {
-          "NeptunePageTypeID": {
+          "neptunePageTypeID": {
             "type": "integer",
             "format": "int32"
           },
-          "NeptunePageTypeName": {
+          "neptunePageTypeName": {
             "type": "string",
             "nullable": true
           },
-          "NeptunePageTypeDisplayName": {
+          "neptunePageTypeDisplayName": {
             "type": "string",
             "nullable": true
           }
@@ -2316,37 +2265,37 @@
       "OrganizationDto": {
         "type": "object",
         "properties": {
-          "OrganizationID": {
+          "organizationID": {
             "type": "integer",
             "format": "int32"
           },
-          "OrganizationGuid": {
+          "organizationGuid": {
             "type": "string",
             "format": "uuid",
             "nullable": true
           },
-          "OrganizationName": {
+          "organizationName": {
             "type": "string",
             "nullable": true
           },
-          "OrganizationShortName": {
+          "organizationShortName": {
             "type": "string",
             "nullable": true
           },
-          "PrimaryContactPerson": {
+          "primaryContactPerson": {
             "$ref": "#/components/schemas/PersonDto"
           },
-          "IsActive": {
+          "isActive": {
             "type": "boolean"
           },
-          "OrganizationUrl": {
+          "organizationUrl": {
             "type": "string",
             "nullable": true
           },
-          "LogoFileResource": {
+          "logoFileResource": {
             "$ref": "#/components/schemas/FileResourceDto"
           },
-          "OrganizationType": {
+          "organizationType": {
             "$ref": "#/components/schemas/OrganizationTypeDto"
           }
         },
@@ -2355,41 +2304,41 @@
       "OrganizationSimpleDto": {
         "type": "object",
         "properties": {
-          "OrganizationID": {
+          "organizationID": {
             "type": "integer",
             "format": "int32"
           },
-          "OrganizationGuid": {
+          "organizationGuid": {
             "type": "string",
             "format": "uuid",
             "nullable": true
           },
-          "OrganizationName": {
+          "organizationName": {
             "type": "string",
             "nullable": true
           },
-          "OrganizationShortName": {
+          "organizationShortName": {
             "type": "string",
             "nullable": true
           },
-          "PrimaryContactPersonID": {
+          "primaryContactPersonID": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "IsActive": {
+          "isActive": {
             "type": "boolean"
           },
-          "OrganizationUrl": {
+          "organizationUrl": {
             "type": "string",
             "nullable": true
           },
-          "LogoFileResourceID": {
+          "logoFileResourceID": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "OrganizationTypeID": {
+          "organizationTypeID": {
             "type": "integer",
             "format": "int32"
           }
@@ -2399,23 +2348,23 @@
       "OrganizationTypeDto": {
         "type": "object",
         "properties": {
-          "OrganizationTypeID": {
+          "organizationTypeID": {
             "type": "integer",
             "format": "int32"
           },
-          "OrganizationTypeName": {
+          "organizationTypeName": {
             "type": "string",
             "nullable": true
           },
-          "OrganizationTypeAbbreviation": {
+          "organizationTypeAbbreviation": {
             "type": "string",
             "nullable": true
           },
-          "LegendColor": {
+          "legendColor": {
             "type": "string",
             "nullable": true
           },
-          "IsDefaultOrganizationType": {
+          "isDefaultOrganizationType": {
             "type": "boolean"
           }
         },
@@ -2423,31 +2372,31 @@
       },
       "PersonCreateDto": {
         "required": [
-          "Email",
-          "FirstName",
-          "LastName",
-          "LoginName",
-          "UserGuid"
+          "email",
+          "firstName",
+          "lastName",
+          "loginName",
+          "userGuid"
         ],
         "type": "object",
         "properties": {
-          "FirstName": {
+          "firstName": {
             "type": "string"
           },
-          "LastName": {
+          "lastName": {
             "type": "string"
           },
-          "OrganizationName": {
+          "organizationName": {
             "type": "string",
             "nullable": true
           },
-          "Email": {
+          "email": {
             "type": "string"
           },
-          "LoginName": {
+          "loginName": {
             "type": "string"
           },
-          "UserGuid": {
+          "userGuid": {
             "type": "string",
             "format": "uuid"
           }
@@ -2457,71 +2406,71 @@
       "PersonDto": {
         "type": "object",
         "properties": {
-          "PersonID": {
+          "personID": {
             "type": "integer",
             "format": "int32"
           },
-          "PersonGuid": {
+          "personGuid": {
             "type": "string",
             "format": "uuid"
           },
-          "FirstName": {
+          "firstName": {
             "type": "string",
             "nullable": true
           },
-          "LastName": {
+          "lastName": {
             "type": "string",
             "nullable": true
           },
-          "Email": {
+          "email": {
             "type": "string",
             "nullable": true
           },
-          "Phone": {
+          "phone": {
             "type": "string",
             "nullable": true
           },
-          "Role": {
+          "role": {
             "$ref": "#/components/schemas/RoleDto"
           },
-          "CreateDate": {
+          "createDate": {
             "type": "string",
             "format": "date-time"
           },
-          "UpdateDate": {
+          "updateDate": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           },
-          "LastActivityDate": {
+          "lastActivityDate": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           },
-          "IsActive": {
+          "isActive": {
             "type": "boolean"
           },
-          "Organization": {
+          "organization": {
             "$ref": "#/components/schemas/OrganizationDto"
           },
-          "ReceiveSupportEmails": {
+          "receiveSupportEmails": {
             "type": "boolean"
           },
-          "LoginName": {
+          "loginName": {
             "type": "string",
             "nullable": true
           },
-          "ReceiveRSBRevisionRequestEmails": {
+          "receiveRSBRevisionRequestEmails": {
             "type": "boolean"
           },
-          "WebServiceAccessToken": {
+          "webServiceAccessToken": {
             "type": "string",
             "format": "uuid"
           },
-          "IsOCTAGrantReviewer": {
+          "isOCTAGrantReviewer": {
             "type": "boolean"
           },
-          "FullName": {
+          "fullName": {
             "type": "string",
             "nullable": true,
             "readOnly": true
@@ -2532,73 +2481,73 @@
       "PersonSimpleDto": {
         "type": "object",
         "properties": {
-          "PersonID": {
+          "personID": {
             "type": "integer",
             "format": "int32"
           },
-          "PersonGuid": {
+          "personGuid": {
             "type": "string",
             "format": "uuid"
           },
-          "FirstName": {
+          "firstName": {
             "type": "string",
             "nullable": true
           },
-          "LastName": {
+          "lastName": {
             "type": "string",
             "nullable": true
           },
-          "Email": {
+          "email": {
             "type": "string",
             "nullable": true
           },
-          "Phone": {
+          "phone": {
             "type": "string",
             "nullable": true
           },
-          "RoleID": {
+          "roleID": {
             "type": "integer",
             "format": "int32"
           },
-          "CreateDate": {
+          "createDate": {
             "type": "string",
             "format": "date-time"
           },
-          "UpdateDate": {
+          "updateDate": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           },
-          "LastActivityDate": {
+          "lastActivityDate": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           },
-          "IsActive": {
+          "isActive": {
             "type": "boolean"
           },
-          "OrganizationID": {
+          "organizationID": {
             "type": "integer",
             "format": "int32"
           },
-          "ReceiveSupportEmails": {
+          "receiveSupportEmails": {
             "type": "boolean"
           },
-          "LoginName": {
+          "loginName": {
             "type": "string",
             "nullable": true
           },
-          "ReceiveRSBRevisionRequestEmails": {
+          "receiveRSBRevisionRequestEmails": {
             "type": "boolean"
           },
-          "WebServiceAccessToken": {
+          "webServiceAccessToken": {
             "type": "string",
             "format": "uuid"
           },
-          "IsOCTAGrantReviewer": {
+          "isOCTAGrantReviewer": {
             "type": "boolean"
           },
-          "FullName": {
+          "fullName": {
             "type": "string",
             "nullable": true,
             "readOnly": true
@@ -2609,24 +2558,24 @@
       "ProblemDetails": {
         "type": "object",
         "properties": {
-          "Type": {
+          "type": {
             "type": "string",
             "nullable": true
           },
-          "Title": {
+          "title": {
             "type": "string",
             "nullable": true
           },
-          "Status": {
+          "status": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "Detail": {
+          "detail": {
             "type": "string",
             "nullable": true
           },
-          "Instance": {
+          "instance": {
             "type": "string",
             "nullable": true
           }
@@ -2636,31 +2585,31 @@
       "ProjectDocumentSimpleDto": {
         "type": "object",
         "properties": {
-          "ProjectDocumentID": {
+          "projectDocumentID": {
             "type": "integer",
             "format": "int32"
           },
-          "FileResourceID": {
+          "fileResourceID": {
             "type": "integer",
             "format": "int32"
           },
-          "ProjectID": {
+          "projectID": {
             "type": "integer",
             "format": "int32"
           },
-          "DisplayName": {
+          "displayName": {
             "type": "string",
             "nullable": true
           },
-          "UploadDate": {
+          "uploadDate": {
             "type": "string",
             "format": "date-time"
           },
-          "DocumentDescription": {
+          "documentDescription": {
             "type": "string",
             "nullable": true
           },
-          "FileResource": {
+          "fileResource": {
             "$ref": "#/components/schemas/FileResourceSimpleDto"
           }
         },
@@ -2668,21 +2617,21 @@
       },
       "ProjectDocumentUpdateDto": {
         "required": [
-          "DisplayName",
-          "ProjectID"
+          "displayName",
+          "projectID"
         ],
         "type": "object",
         "properties": {
-          "ProjectID": {
+          "projectID": {
             "type": "integer",
             "format": "int32"
           },
-          "DisplayName": {
+          "displayName": {
             "maxLength": 200,
             "minLength": 0,
             "type": "string"
           },
-          "DocumentDescription": {
+          "documentDescription": {
             "maxLength": 500,
             "minLength": 0,
             "type": "string",
@@ -2694,178 +2643,178 @@
       "ProjectLoadGeneratingResultDto": {
         "type": "object",
         "properties": {
-          "ProjectID": {
+          "projectID": {
             "type": "integer",
             "format": "int32"
           },
-          "DelineationID": {
+          "delineationID": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "WetWeatherVolumeGenerated": {
+          "wetWeatherVolumeGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WetWeatherTSSGenerated": {
+          "wetWeatherTSSGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WetWeatherTNGenerated": {
+          "wetWeatherTNGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WetWeatherTPGenerated": {
+          "wetWeatherTPGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WetWeatherFCGenerated": {
+          "wetWeatherFCGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WetWeatherTCuGenerated": {
+          "wetWeatherTCuGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WetWeatherTPbGenerated": {
+          "wetWeatherTPbGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WetWeatherTZnGenerated": {
+          "wetWeatherTZnGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "SummerDryWeatherVolumeGenerated": {
+          "summerDryWeatherVolumeGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "SummerDryWeatherTSSGenerated": {
+          "summerDryWeatherTSSGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "SummerDryWeatherTNGenerated": {
+          "summerDryWeatherTNGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "SummerDryWeatherTPGenerated": {
+          "summerDryWeatherTPGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "SummerDryWeatherFCGenerated": {
+          "summerDryWeatherFCGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "SummerDryWeatherTCuGenerated": {
+          "summerDryWeatherTCuGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "SummerDryWeatherTPbGenerated": {
+          "summerDryWeatherTPbGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "SummerDryWeatherTZnGenerated": {
+          "summerDryWeatherTZnGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WinterDryWeatherVolumeGenerated": {
+          "winterDryWeatherVolumeGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WinterDryWeatherTSSGenerated": {
+          "winterDryWeatherTSSGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WinterDryWeatherTNGenerated": {
+          "winterDryWeatherTNGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WinterDryWeatherTPGenerated": {
+          "winterDryWeatherTPGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WinterDryWeatherFCGenerated": {
+          "winterDryWeatherFCGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WinterDryWeatherTCuGenerated": {
+          "winterDryWeatherTCuGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WinterDryWeatherTPbGenerated": {
+          "winterDryWeatherTPbGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WinterDryWeatherTZnGenerated": {
+          "winterDryWeatherTZnGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "DryWeatherVolumeGenerated": {
+          "dryWeatherVolumeGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true,
             "readOnly": true
           },
-          "DryWeatherTSSGenerated": {
+          "dryWeatherTSSGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true,
             "readOnly": true
           },
-          "DryWeatherTNGenerated": {
+          "dryWeatherTNGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true,
             "readOnly": true
           },
-          "DryWeatherTPGenerated": {
+          "dryWeatherTPGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true,
             "readOnly": true
           },
-          "DryWeatherFCGenerated": {
+          "dryWeatherFCGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true,
             "readOnly": true
           },
-          "DryWeatherTCuGenerated": {
+          "dryWeatherTCuGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true,
             "readOnly": true
           },
-          "DryWeatherTPbGenerated": {
+          "dryWeatherTPbGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true,
             "readOnly": true
           },
-          "DryWeatherTZnGenerated": {
+          "dryWeatherTZnGenerated": {
             "type": "number",
             "format": "double",
             "nullable": true,
@@ -2877,394 +2826,394 @@
       "ProjectLoadReducingResultDto": {
         "type": "object",
         "properties": {
-          "TreatmentBMPID": {
+          "treatmentBMPID": {
             "type": "integer",
             "format": "int32"
           },
-          "TreatmentBMPName": {
+          "treatmentBMPName": {
             "type": "string",
             "nullable": true
           },
-          "ProjectID": {
+          "projectID": {
             "type": "integer",
             "format": "int32"
           },
-          "ProjectName": {
+          "projectName": {
             "type": "string",
             "nullable": true
           },
-          "EffectiveAreaAcres": {
+          "effectiveAreaAcres": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "DesignStormDepth85thPercentile": {
+          "designStormDepth85thPercentile": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "DesignVolume85thPercentile": {
+          "designVolume85thPercentile": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WetWeatherInflow": {
+          "wetWeatherInflow": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherTreated": {
+          "wetWeatherTreated": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherRetained": {
+          "wetWeatherRetained": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherUntreated": {
+          "wetWeatherUntreated": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherTSSReduced": {
+          "wetWeatherTSSReduced": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherTNReduced": {
+          "wetWeatherTNReduced": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherTPReduced": {
+          "wetWeatherTPReduced": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherFCReduced": {
+          "wetWeatherFCReduced": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherTCuReduced": {
+          "wetWeatherTCuReduced": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherTPbReduced": {
+          "wetWeatherTPbReduced": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherTZnReduced": {
+          "wetWeatherTZnReduced": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherTSSInflow": {
+          "wetWeatherTSSInflow": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherTNInflow": {
+          "wetWeatherTNInflow": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherTPInflow": {
+          "wetWeatherTPInflow": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherFCInflow": {
+          "wetWeatherFCInflow": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherTCuInflow": {
+          "wetWeatherTCuInflow": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherTPbInflow": {
+          "wetWeatherTPbInflow": {
             "type": "number",
             "format": "double"
           },
-          "WetWeatherTZnInflow": {
+          "wetWeatherTZnInflow": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherInflow": {
+          "summerDryWeatherInflow": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherTreated": {
+          "summerDryWeatherTreated": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherRetained": {
+          "summerDryWeatherRetained": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherUntreated": {
+          "summerDryWeatherUntreated": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherTSSReduced": {
+          "summerDryWeatherTSSReduced": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherTNReduced": {
+          "summerDryWeatherTNReduced": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherTPReduced": {
+          "summerDryWeatherTPReduced": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherFCReduced": {
+          "summerDryWeatherFCReduced": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherTCuReduced": {
+          "summerDryWeatherTCuReduced": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherTPbReduced": {
+          "summerDryWeatherTPbReduced": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherTZnReduced": {
+          "summerDryWeatherTZnReduced": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherTSSInflow": {
+          "summerDryWeatherTSSInflow": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherTNInflow": {
+          "summerDryWeatherTNInflow": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherTPInflow": {
+          "summerDryWeatherTPInflow": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherFCInflow": {
+          "summerDryWeatherFCInflow": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherTCuInflow": {
+          "summerDryWeatherTCuInflow": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherTPbInflow": {
+          "summerDryWeatherTPbInflow": {
             "type": "number",
             "format": "double"
           },
-          "SummerDryWeatherTZnInflow": {
+          "summerDryWeatherTZnInflow": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherInflow": {
+          "winterDryWeatherInflow": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherTreated": {
+          "winterDryWeatherTreated": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherRetained": {
+          "winterDryWeatherRetained": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherUntreated": {
+          "winterDryWeatherUntreated": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherTSSReduced": {
+          "winterDryWeatherTSSReduced": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherTNReduced": {
+          "winterDryWeatherTNReduced": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherTPReduced": {
+          "winterDryWeatherTPReduced": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherFCReduced": {
+          "winterDryWeatherFCReduced": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherTCuReduced": {
+          "winterDryWeatherTCuReduced": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherTPbReduced": {
+          "winterDryWeatherTPbReduced": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherTZnReduced": {
+          "winterDryWeatherTZnReduced": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherTSSInflow": {
+          "winterDryWeatherTSSInflow": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherTNInflow": {
+          "winterDryWeatherTNInflow": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherTPInflow": {
+          "winterDryWeatherTPInflow": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherFCInflow": {
+          "winterDryWeatherFCInflow": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherTCuInflow": {
+          "winterDryWeatherTCuInflow": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherTPbInflow": {
+          "winterDryWeatherTPbInflow": {
             "type": "number",
             "format": "double"
           },
-          "WinterDryWeatherTZnInflow": {
+          "winterDryWeatherTZnInflow": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherInflow": {
+          "dryWeatherInflow": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherTreated": {
+          "dryWeatherTreated": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherRetained": {
+          "dryWeatherRetained": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherUntreated": {
+          "dryWeatherUntreated": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherTSSReduced": {
+          "dryWeatherTSSReduced": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherTNReduced": {
+          "dryWeatherTNReduced": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherTPReduced": {
+          "dryWeatherTPReduced": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherFCReduced": {
+          "dryWeatherFCReduced": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherTCuReduced": {
+          "dryWeatherTCuReduced": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherTPbReduced": {
+          "dryWeatherTPbReduced": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherTZnReduced": {
+          "dryWeatherTZnReduced": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherTSSInflow": {
+          "dryWeatherTSSInflow": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherTNInflow": {
+          "dryWeatherTNInflow": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherTPInflow": {
+          "dryWeatherTPInflow": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherFCInflow": {
+          "dryWeatherFCInflow": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherTCuInflow": {
+          "dryWeatherTCuInflow": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherTPbInflow": {
+          "dryWeatherTPbInflow": {
             "type": "number",
             "format": "double"
           },
-          "DryWeatherTZnInflow": {
+          "dryWeatherTZnInflow": {
             "type": "number",
             "format": "double"
           },
-          "TotalInflow": {
+          "totalInflow": {
             "type": "number",
             "format": "double"
           },
-          "TotalTreated": {
+          "totalTreated": {
             "type": "number",
             "format": "double"
           },
-          "TotalRetained": {
+          "totalRetained": {
             "type": "number",
             "format": "double"
           },
-          "TotalUntreated": {
+          "totalUntreated": {
             "type": "number",
             "format": "double"
           },
-          "TotalTSSReduced": {
+          "totalTSSReduced": {
             "type": "number",
             "format": "double"
           },
-          "TotalTNReduced": {
+          "totalTNReduced": {
             "type": "number",
             "format": "double"
           },
-          "TotalTPReduced": {
+          "totalTPReduced": {
             "type": "number",
             "format": "double"
           },
-          "TotalFCReduced": {
+          "totalFCReduced": {
             "type": "number",
             "format": "double"
           },
-          "TotalTCuReduced": {
+          "totalTCuReduced": {
             "type": "number",
             "format": "double"
           },
-          "TotalTPbReduced": {
+          "totalTPbReduced": {
             "type": "number",
             "format": "double"
           },
-          "TotalTZnReduced": {
+          "totalTZnReduced": {
             "type": "number",
             "format": "double"
           },
-          "TotalTSSInflow": {
+          "totalTSSInflow": {
             "type": "number",
             "format": "double"
           },
-          "TotalTNInflow": {
+          "totalTNInflow": {
             "type": "number",
             "format": "double"
           },
-          "TotalTPInflow": {
+          "totalTPInflow": {
             "type": "number",
             "format": "double"
           },
-          "TotalFCInflow": {
+          "totalFCInflow": {
             "type": "number",
             "format": "double"
           },
-          "TotalTCuInflow": {
+          "totalTCuInflow": {
             "type": "number",
             "format": "double"
           },
-          "TotalTPbInflow": {
+          "totalTPbInflow": {
             "type": "number",
             "format": "double"
           },
-          "TotalTZnInflow": {
+          "totalTZnInflow": {
             "type": "number",
             "format": "double"
           }
@@ -3274,27 +3223,27 @@
       "ProjectNetworkSolveHistorySimpleDto": {
         "type": "object",
         "properties": {
-          "ProjectNetworkSolveHistoryID": {
+          "projectNetworkSolveHistoryID": {
             "type": "integer",
             "format": "int32"
           },
-          "ProjectID": {
+          "projectID": {
             "type": "integer",
             "format": "int32"
           },
-          "RequestedByPersonID": {
+          "requestedByPersonID": {
             "type": "integer",
             "format": "int32"
           },
-          "ProjectNetworkSolveHistoryStatusTypeID": {
+          "projectNetworkSolveHistoryStatusTypeID": {
             "type": "integer",
             "format": "int32"
           },
-          "LastUpdated": {
+          "lastUpdated": {
             "type": "string",
             "format": "date-time"
           },
-          "ErrorMessage": {
+          "errorMessage": {
             "type": "string",
             "nullable": true
           }
@@ -3304,145 +3253,145 @@
       "ProjectSimpleDto": {
         "type": "object",
         "properties": {
-          "ProjectID": {
+          "projectID": {
             "type": "integer",
             "format": "int32"
           },
-          "ProjectName": {
+          "projectName": {
             "type": "string",
             "nullable": true
           },
-          "OrganizationID": {
+          "organizationID": {
             "type": "integer",
             "format": "int32"
           },
-          "StormwaterJurisdictionID": {
+          "stormwaterJurisdictionID": {
             "type": "integer",
             "format": "int32"
           },
-          "ProjectStatusID": {
+          "projectStatusID": {
             "type": "integer",
             "format": "int32"
           },
-          "PrimaryContactPersonID": {
+          "primaryContactPersonID": {
             "type": "integer",
             "format": "int32"
           },
-          "CreatePersonID": {
+          "createPersonID": {
             "type": "integer",
             "format": "int32"
           },
-          "DateCreated": {
+          "dateCreated": {
             "type": "string",
             "format": "date-time"
           },
-          "ProjectDescription": {
+          "projectDescription": {
             "type": "string",
             "nullable": true
           },
-          "AdditionalContactInformation": {
+          "additionalContactInformation": {
             "type": "string",
             "nullable": true
           },
-          "DoesNotIncludeTreatmentBMPs": {
+          "doesNotIncludeTreatmentBMPs": {
             "type": "boolean"
           },
-          "CalculateOCTAM2Tier2Scores": {
+          "calculateOCTAM2Tier2Scores": {
             "type": "boolean"
           },
-          "ShareOCTAM2Tier2Scores": {
+          "shareOCTAM2Tier2Scores": {
             "type": "boolean"
           },
-          "OCTAM2Tier2ScoresLastSharedDate": {
+          "octaM2Tier2ScoresLastSharedDate": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           },
-          "OCTAWatersheds": {
+          "octaWatersheds": {
             "type": "string",
             "nullable": true
           },
-          "PollutantVolume": {
+          "pollutantVolume": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "PollutantMetals": {
+          "pollutantMetals": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "PollutantBacteria": {
+          "pollutantBacteria": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "PollutantNutrients": {
+          "pollutantNutrients": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "PollutantTSS": {
+          "pollutantTSS": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "TPI": {
+          "tpi": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "SEA": {
+          "sea": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "DryWeatherWQLRI": {
+          "dryWeatherWQLRI": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WetWeatherWQLRI": {
+          "wetWeatherWQLRI": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "AreaTreatedAcres": {
+          "areaTreatedAcres": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "ImperviousAreaTreatedAcres": {
+          "imperviousAreaTreatedAcres": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "UpdatePersonID": {
+          "updatePersonID": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "DateUpdated": {
+          "dateUpdated": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           },
-          "Organization": {
+          "organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"
           },
-          "StormwaterJurisdiction": {
+          "stormwaterJurisdiction": {
             "$ref": "#/components/schemas/StormwaterJurisdictionSimpleDto"
           },
-          "ProjectStatus": {
+          "projectStatus": {
             "$ref": "#/components/schemas/ProjectStatusSimpleDto"
           },
-          "PrimaryContactPerson": {
+          "primaryContactPerson": {
             "$ref": "#/components/schemas/PersonSimpleDto"
           },
-          "CreatePerson": {
+          "createPerson": {
             "$ref": "#/components/schemas/PersonSimpleDto"
           },
-          "HasModeledResults": {
+          "hasModeledResults": {
             "type": "boolean"
           }
         },
@@ -3451,15 +3400,15 @@
       "ProjectStatusSimpleDto": {
         "type": "object",
         "properties": {
-          "ProjectStatusID": {
+          "projectStatusID": {
             "type": "integer",
             "format": "int32"
           },
-          "ProjectStatusName": {
+          "projectStatusName": {
             "type": "string",
             "nullable": true
           },
-          "ProjectStatusDisplayName": {
+          "projectStatusDisplayName": {
             "type": "string",
             "nullable": true
           }
@@ -3468,49 +3417,49 @@
       },
       "ProjectUpsertDto": {
         "required": [
-          "OrganizationID",
-          "PrimaryContactPersonID",
-          "ProjectName",
-          "StormwaterJurisdictionID"
+          "organizationID",
+          "primaryContactPersonID",
+          "projectName",
+          "stormwaterJurisdictionID"
         ],
         "type": "object",
         "properties": {
-          "ProjectName": {
+          "projectName": {
             "maxLength": 200,
             "minLength": 0,
             "type": "string"
           },
-          "OrganizationID": {
+          "organizationID": {
             "type": "integer",
             "format": "int32"
           },
-          "StormwaterJurisdictionID": {
+          "stormwaterJurisdictionID": {
             "type": "integer",
             "format": "int32"
           },
-          "PrimaryContactPersonID": {
+          "primaryContactPersonID": {
             "type": "integer",
             "format": "int32"
           },
-          "ProjectDescription": {
+          "projectDescription": {
             "maxLength": 500,
             "minLength": 0,
             "type": "string",
             "nullable": true
           },
-          "AdditionalContactInformation": {
+          "additionalContactInformation": {
             "maxLength": 500,
             "minLength": 0,
             "type": "string",
             "nullable": true
           },
-          "DoesNotIncludeTreatmentBMPs": {
+          "doesNotIncludeTreatmentBMPs": {
             "type": "boolean"
           },
-          "CalculateOCTAM2Tier2Scores": {
+          "calculateOCTAM2Tier2Scores": {
             "type": "boolean"
           },
-          "ShareOCTAM2Tier2Scores": {
+          "shareOCTAM2Tier2Scores": {
             "type": "boolean"
           }
         },
@@ -3519,19 +3468,19 @@
       "RoleDto": {
         "type": "object",
         "properties": {
-          "RoleID": {
+          "roleID": {
             "type": "integer",
             "format": "int32"
           },
-          "RoleName": {
+          "roleName": {
             "type": "string",
             "nullable": true
           },
-          "RoleDisplayName": {
+          "roleDisplayName": {
             "type": "string",
             "nullable": true
           },
-          "RoleDescription": {
+          "roleDescription": {
             "type": "string",
             "nullable": true
           }
@@ -3541,27 +3490,27 @@
       "StormwaterJurisdictionSimpleDto": {
         "type": "object",
         "properties": {
-          "StormwaterJurisdictionID": {
+          "stormwaterJurisdictionID": {
             "type": "integer",
             "format": "int32"
           },
-          "OrganizationID": {
+          "organizationID": {
             "type": "integer",
             "format": "int32"
           },
-          "StateProvinceID": {
+          "stateProvinceID": {
             "type": "integer",
             "format": "int32"
           },
-          "StormwaterJurisdictionPublicBMPVisibilityTypeID": {
+          "stormwaterJurisdictionPublicBMPVisibilityTypeID": {
             "type": "integer",
             "format": "int32"
           },
-          "StormwaterJurisdictionPublicWQMPVisibilityTypeID": {
+          "stormwaterJurisdictionPublicWQMPVisibilityTypeID": {
             "type": "integer",
             "format": "int32"
           },
-          "Organization": {
+          "organization": {
             "$ref": "#/components/schemas/OrganizationSimpleDto"
           }
         },
@@ -3570,36 +3519,36 @@
       "TreatmentBMPDisplayDto": {
         "type": "object",
         "properties": {
-          "TreatmentBMPID": {
+          "treatmentBMPID": {
             "type": "integer",
             "format": "int32"
           },
-          "TreatmentBMPName": {
+          "treatmentBMPName": {
             "type": "string",
             "nullable": true
           },
-          "TreatmentBMPTypeName": {
+          "treatmentBMPTypeName": {
             "type": "string",
             "nullable": true
           },
-          "DisplayName": {
+          "displayName": {
             "type": "string",
             "nullable": true
           },
-          "Longitude": {
+          "longitude": {
             "type": "number",
             "format": "double"
           },
-          "Latitude": {
+          "latitude": {
             "type": "number",
             "format": "double"
           },
-          "ProjectID": {
+          "projectID": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "InventoryIsVerified": {
+          "inventoryIsVerified": {
             "type": "boolean"
           }
         },
@@ -3608,19 +3557,19 @@
       "TreatmentBMPHRUCharacteristicsSummarySimpleDto": {
         "type": "object",
         "properties": {
-          "TreatmentBMPID": {
+          "treatmentBMPID": {
             "type": "integer",
             "format": "int32"
           },
-          "LandUse": {
+          "landUse": {
             "type": "string",
             "nullable": true
           },
-          "Area": {
+          "area": {
             "type": "number",
             "format": "double"
           },
-          "ImperviousCover": {
+          "imperviousCover": {
             "type": "number",
             "format": "double"
           }
@@ -3630,15 +3579,15 @@
       "TreatmentBMPModelingAttributeDropdownItemDto": {
         "type": "object",
         "properties": {
-          "ItemID": {
+          "itemID": {
             "type": "integer",
             "format": "int32"
           },
-          "ItemName": {
+          "itemName": {
             "type": "string",
             "nullable": true
           },
-          "FieldName": {
+          "fieldName": {
             "type": "string",
             "nullable": true
           }
@@ -3648,22 +3597,22 @@
       "TreatmentBMPTypeSimpleDto": {
         "type": "object",
         "properties": {
-          "TreatmentBMPTypeID": {
+          "treatmentBMPTypeID": {
             "type": "integer",
             "format": "int32"
           },
-          "TreatmentBMPTypeName": {
+          "treatmentBMPTypeName": {
             "type": "string",
             "nullable": true
           },
-          "TreatmentBMPTypeDescription": {
+          "treatmentBMPTypeDescription": {
             "type": "string",
             "nullable": true
           },
-          "IsAnalyzedInModelingModule": {
+          "isAnalyzedInModelingModule": {
             "type": "boolean"
           },
-          "TreatmentBMPModelingTypeID": {
+          "treatmentBMPModelingTypeID": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -3673,203 +3622,203 @@
       },
       "TreatmentBMPUpsertDto": {
         "required": [
-          "Latitude",
-          "Longitude",
-          "TreatmentBMPName",
-          "TreatmentBMPTypeID"
+          "latitude",
+          "longitude",
+          "treatmentBMPName",
+          "treatmentBMPTypeID"
         ],
         "type": "object",
         "properties": {
-          "TreatmentBMPID": {
+          "treatmentBMPID": {
             "type": "integer",
             "format": "int32"
           },
-          "TreatmentBMPName": {
+          "treatmentBMPName": {
             "type": "string"
           },
-          "TreatmentBMPTypeID": {
+          "treatmentBMPTypeID": {
             "type": "integer",
             "format": "int32"
           },
-          "TreatmentBMPTypeName": {
+          "treatmentBMPTypeName": {
             "type": "string",
             "nullable": true
           },
-          "TreatmentBMPModelingTypeID": {
+          "treatmentBMPModelingTypeID": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "StormwaterJurisdictionName": {
+          "stormwaterJurisdictionName": {
             "type": "string",
             "nullable": true
           },
-          "WatershedName": {
+          "watershedName": {
             "type": "string",
             "nullable": true
           },
-          "Longitude": {
+          "longitude": {
             "type": "number",
             "format": "double"
           },
-          "Latitude": {
+          "latitude": {
             "type": "number",
             "format": "double"
           },
-          "Notes": {
+          "notes": {
             "type": "string",
             "nullable": true
           },
-          "AverageDivertedFlowrate": {
+          "averageDivertedFlowrate": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "AverageTreatmentFlowrate": {
+          "averageTreatmentFlowrate": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "DesignDryWeatherTreatmentCapacity": {
+          "designDryWeatherTreatmentCapacity": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "DesignLowFlowDiversionCapacity": {
+          "designLowFlowDiversionCapacity": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "DesignMediaFiltrationRate": {
+          "designMediaFiltrationRate": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "DesignResidenceTimeforPermanentPool": {
+          "designResidenceTimeforPermanentPool": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "DiversionRate": {
+          "diversionRate": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "DrawdownTimeforWQDetentionVolume": {
+          "drawdownTimeforWQDetentionVolume": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "EffectiveFootprint": {
+          "effectiveFootprint": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "EffectiveRetentionDepth": {
+          "effectiveRetentionDepth": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "InfiltrationDischargeRate": {
+          "infiltrationDischargeRate": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "InfiltrationSurfaceArea": {
+          "infiltrationSurfaceArea": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "MediaBedFootprint": {
+          "mediaBedFootprint": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "PermanentPoolorWetlandVolume": {
+          "permanentPoolorWetlandVolume": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "StorageVolumeBelowLowestOutletElevation": {
+          "storageVolumeBelowLowestOutletElevation": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "SummerHarvestedWaterDemand": {
+          "summerHarvestedWaterDemand": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "DrawdownTimeForDetentionVolume": {
+          "drawdownTimeForDetentionVolume": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "TotalEffectiveBMPVolume": {
+          "totalEffectiveBMPVolume": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "TotalEffectiveDrywellBMPVolume": {
+          "totalEffectiveDrywellBMPVolume": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "TreatmentRate": {
+          "treatmentRate": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "UnderlyingInfiltrationRate": {
+          "underlyingInfiltrationRate": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WaterQualityDetentionVolume": {
+          "waterQualityDetentionVolume": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WettedFootprint": {
+          "wettedFootprint": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "WinterHarvestedWaterDemand": {
+          "winterHarvestedWaterDemand": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "RoutingConfigurationID": {
+          "routingConfigurationID": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "TimeOfConcentrationID": {
+          "timeOfConcentrationID": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "UnderlyingHydrologicSoilGroupID": {
+          "underlyingHydrologicSoilGroupID": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "MonthsOfOperationID": {
+          "monthsOfOperationID": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "DryWeatherFlowOverrideID": {
+          "dryWeatherFlowOverrideID": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "AreAllModelingAttributesComplete": {
+          "areAllModelingAttributesComplete": {
             "type": "boolean",
             "nullable": true
           },
-          "IsFullyParameterized": {
+          "isFullyParameterized": {
             "type": "boolean",
             "nullable": true
           }

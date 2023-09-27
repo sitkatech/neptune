@@ -14,7 +14,7 @@ namespace Neptune.EFModels.Entities
                 DelineationID = delineation.DelineationID,
                 DelineationTypeID = delineation.DelineationTypeID,
                 DelineationArea = delineation.GetDelineationArea(),
-                Geometry = delineation.Geometry4326GeoJson,
+                Geometry = delineation.GetGeometry4326GeoJson(),
                 HasDiscrepancies = delineation.HasDiscrepancies,
                 TreatmentBMPID = delineation.TreatmentBMPID
             };
@@ -24,7 +24,7 @@ namespace Neptune.EFModels.Entities
 
         static partial void DoCustomSimpleDtoMappings(Delineation delineation, DelineationSimpleDto delineationSimpleDto)
         {
-            delineationSimpleDto.Geometry = delineation.Geometry4326GeoJson;
+            delineationSimpleDto.Geometry = delineation.GetGeometry4326GeoJson();
             delineationSimpleDto.DelineationArea = delineation.GetDelineationArea();
             delineationSimpleDto.DelineationTypeName = delineation.DelineationType.DelineationTypeName;
         }
@@ -43,7 +43,7 @@ namespace Neptune.EFModels.Entities
         {
             return new GeometryGeoJSONAndAreaDto()
             {
-                GeometryGeoJSON = regionalSubbasinUpstreamCatchmentGeometry4326.UpstreamCatchGeometry4326GeoJson,
+                GeometryGeoJSON = regionalSubbasinUpstreamCatchmentGeometry4326.GetUpstreamCatchGeometry4326GeoJson(),
                 Area = Math.Round(regionalSubbasinUpstreamCatchmentGeometry4326.UpstreamCatchmentGeometry4326.ProjectTo2771().Area * DbSpatialHelper.SquareMetersToAcres, 2)
             };
         }

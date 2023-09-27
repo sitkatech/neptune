@@ -493,26 +493,9 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   }
 
   private mapDelineationsToGeoJson(delineations: DelineationUpsertDto[]) {
-    return {
-      type: "FeatureCollection",
-      features: delineations.map(x => {
-        let delineationGeoJson =
-          this.mapDelineationToFeature(x);
-        return delineationGeoJson;
-      })
-    }
+    return delineations.map(x => JSON.parse(x.Geometry));
   }
 
-  private mapDelineationToFeature(x: DelineationUpsertDto) {
-    return {
-      "type": "Feature",
-      "geometry": x.Geometry != null && x.Geometry != undefined ? JSON.parse(x.Geometry) : null,
-      "properties": {
-        DelineationID: x.DelineationID,
-        TreatmentBMPID: x.TreatmentBMPID
-      }
-    };
-  }
 
   public setControl(): void {
     this.layerControl = new L.Control.Layers(this.tileLayers, this.overlayLayers, { collapsed: false })

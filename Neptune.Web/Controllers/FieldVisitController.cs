@@ -33,7 +33,6 @@ using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.EditAttributes;
 using Neptune.Web.Views.Shared.Location;
 using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
-using Newtonsoft.Json;
 using FieldVisit = Neptune.EFModels.Entities.FieldVisit;
 using FieldVisitSection = Neptune.EFModels.Entities.FieldVisitSection;
 using Index = Neptune.Web.Views.FieldVisit.Index;
