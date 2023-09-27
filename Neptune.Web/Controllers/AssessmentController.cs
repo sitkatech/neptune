@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
@@ -28,16 +29,24 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<TreatmentBMPAssessment> TreatmentBMPAssessmentsGridJsonData()
+        public GridJsonNetJObjectResult<TreatmentBMPAssessmentDetailedWithObservations> TreatmentBMPAssessmentsGridJsonData()
         {
-            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson);
             var treatmentBMPAssessmentObservationTypes = TreatmentBMPAssessmentObservationTypes.List(_dbContext);
             var gridSpec = new TreatmentBMPAssessmentGridSpec(CurrentPerson, treatmentBMPAssessmentObservationTypes, _linkGenerator);
-            var bmpAssessments = TreatmentBMPAssessments.List(_dbContext)
-                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.TreatmentBMP.StormwaterJurisdictionID)).ToList()
-                .OrderByDescending(x => x.GetAssessmentDate()).ToList();
+            var treatmentBMPObservations = _dbContext.vTreatmentBMPObservations.AsNoTracking().ToList();
+            var treatmentBMPAssessmentDetaileds = vTreatmentBMPAssessmentDetaileds.ListViewableByPerson(_dbContext, CurrentPerson)
+                .OrderByDescending(x => x.VisitDate).ToList();
+
+
+            var treatmentBMPAssessmentDetailedWithObservations = treatmentBMPAssessmentDetaileds
+                .GroupJoin(treatmentBMPObservations,
+                    treatmentBMPAssessmentDetailed =>
+                        treatmentBMPAssessmentDetailed.TreatmentBMPAssessmentID,
+                    treatmentBMPObservation => treatmentBMPObservation.TreatmentBMPAssessmentID,
+                    (treatmentBMPAssessmentDetailed, vTreatmentBMPObservations) => new TreatmentBMPAssessmentDetailedWithObservations(treatmentBMPAssessmentDetailed, vTreatmentBMPObservations)).ToList();
+
             var gridJsonNetJObjectResult =
-                new GridJsonNetJObjectResult<TreatmentBMPAssessment>(bmpAssessments, gridSpec);
+                new GridJsonNetJObjectResult<TreatmentBMPAssessmentDetailedWithObservations>(treatmentBMPAssessmentDetailedWithObservations, gridSpec);
             return gridJsonNetJObjectResult;
         }
     }

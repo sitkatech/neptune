@@ -42,7 +42,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        public GridJsonNetJObjectResult<vWaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs> WaterQualityManagementPlanIndexGridData()
+        public GridJsonNetJObjectResult<WaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs> WaterQualityManagementPlanIndexGridData()
         {
             var gridSpec = new IndexGridSpec(_linkGenerator, CurrentPerson);
             var treatmentBmps = _dbContext.TreatmentBMPs.Include(x => x.TreatmentBMPType)
@@ -67,9 +67,9 @@ namespace Neptune.Web.Controllers
                 .GroupJoin(quickBMPs, wqmp => wqmp.waterQualityManagementPlanDetailed.WaterQualityManagementPlanID,
                     quickBMP => quickBMP.WaterQualityManagementPlanID,
                     (wqmp, gj2) =>
-                        new vWaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs(
+                        new WaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs(
                             wqmp.waterQualityManagementPlanDetailed, wqmp.gj, gj2)).ToList();
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vWaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs>(query, gridSpec);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<WaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs>(query, gridSpec);
             return gridJsonNetJObjectResult;
         }
 

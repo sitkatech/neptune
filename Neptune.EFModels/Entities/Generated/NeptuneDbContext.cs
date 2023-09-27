@@ -247,7 +247,19 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<vTrashGeneratingUnitLoadStatistic> vTrashGeneratingUnitLoadStatistics { get; set; }
 
+    public virtual DbSet<vTreatmentBMPAssessmentDetailed> vTreatmentBMPAssessmentDetaileds { get; set; }
+
+    public virtual DbSet<vTreatmentBMPAssessmentObservationTypeDiscreteValue> vTreatmentBMPAssessmentObservationTypeDiscreteValues { get; set; }
+
+    public virtual DbSet<vTreatmentBMPAssessmentObservationTypePassFail> vTreatmentBMPAssessmentObservationTypePassFails { get; set; }
+
     public virtual DbSet<vTreatmentBMPDetailed> vTreatmentBMPDetaileds { get; set; }
+
+    public virtual DbSet<vTreatmentBMPObservation> vTreatmentBMPObservations { get; set; }
+
+    public virtual DbSet<vTreatmentBMPObservationDiscreteValue> vTreatmentBMPObservationDiscreteValues { get; set; }
+
+    public virtual DbSet<vTreatmentBMPObservationPassFail> vTreatmentBMPObservationPassFails { get; set; }
 
     public virtual DbSet<vTreatmentBMPUpstream> vTreatmentBMPUpstreams { get; set; }
 
@@ -1149,9 +1161,41 @@ public partial class NeptuneDbContext : DbContext
             entity.ToView("vTrashGeneratingUnitLoadStatistic");
         });
 
+        modelBuilder.Entity<vTreatmentBMPAssessmentDetailed>(entity =>
+        {
+            entity.ToView("vTreatmentBMPAssessmentDetailed");
+        });
+
+        modelBuilder.Entity<vTreatmentBMPAssessmentObservationTypeDiscreteValue>(entity =>
+        {
+            entity.ToView("vTreatmentBMPAssessmentObservationTypeDiscreteValue");
+        });
+
+        modelBuilder.Entity<vTreatmentBMPAssessmentObservationTypePassFail>(entity =>
+        {
+            entity.ToView("vTreatmentBMPAssessmentObservationTypePassFail");
+        });
+
         modelBuilder.Entity<vTreatmentBMPDetailed>(entity =>
         {
             entity.ToView("vTreatmentBMPDetailed");
+        });
+
+        modelBuilder.Entity<vTreatmentBMPObservation>(entity =>
+        {
+            entity.ToView("vTreatmentBMPObservation");
+
+            entity.Property(e => e.TreatmentBMPObservationID).ValueGeneratedOnAdd();
+        });
+
+        modelBuilder.Entity<vTreatmentBMPObservationDiscreteValue>(entity =>
+        {
+            entity.ToView("vTreatmentBMPObservationDiscreteValue");
+        });
+
+        modelBuilder.Entity<vTreatmentBMPObservationPassFail>(entity =>
+        {
+            entity.ToView("vTreatmentBMPObservationPassFail");
         });
 
         modelBuilder.Entity<vTreatmentBMPUpstream>(entity =>

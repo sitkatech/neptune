@@ -392,6 +392,12 @@
     <Build Include="dbo\Views\dbo.vTreatmentBMPUpstream.sql" />
     <None Include="Scripts\LookupTables\dbo.SourceControlBMPAttributeCategory.sql" />
     <Build Include="dbo\Views\dbo.vMaintenanceRecordDetailed.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPAssessmentDetailed.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPAssessmentObservationTypePassFail.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPAssessmentObservationTypeDiscreteValue.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPObservationDiscreteValue.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPObservationPassFail.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPObservation.sql" />
   </ItemGroup>
   <UsingTask TaskName="ScriptDeploymentGenerator" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>

@@ -51,70 +51,70 @@ public partial class vMaintenanceRecordDetailed
     [Column("Structural Repair Conducted")]
     [StringLength(8000)]
     [Unicode(false)]
-    public string? Structural_Repair_Conducted { get; set; }
+    public string Structural_Repair_Conducted { get; set; } = null!;
 
     [Column("Mechanical Repair Conducted")]
     [StringLength(8000)]
     [Unicode(false)]
-    public string? Mechanical_Repair_Conducted { get; set; }
+    public string Mechanical_Repair_Conducted { get; set; } = null!;
 
     [Column("Infiltration Surface Restored")]
     [StringLength(8000)]
     [Unicode(false)]
-    public string? Infiltration_Surface_Restored { get; set; }
+    public string Infiltration_Surface_Restored { get; set; } = null!;
 
     [Column("Filtration Surface Restored")]
     [StringLength(8000)]
     [Unicode(false)]
-    public string? Filtration_Surface_Restored { get; set; }
+    public string Filtration_Surface_Restored { get; set; } = null!;
 
     [Column("Media Replaced")]
     [StringLength(8000)]
     [Unicode(false)]
-    public string? Media_Replaced { get; set; }
+    public string Media_Replaced { get; set; } = null!;
 
     [Column("Mulch Added")]
     [StringLength(8000)]
     [Unicode(false)]
-    public string? Mulch_Added { get; set; }
+    public string Mulch_Added { get; set; } = null!;
 
     [Column("Percent Trash")]
     [StringLength(8000)]
     [Unicode(false)]
-    public string? Percent_Trash { get; set; }
+    public string Percent_Trash { get; set; } = null!;
 
     [Column("Percent Green Waste")]
     [StringLength(8000)]
     [Unicode(false)]
-    public string? Percent_Green_Waste { get; set; }
+    public string Percent_Green_Waste { get; set; } = null!;
 
     [Column("Percent Sediment")]
     [StringLength(8000)]
     [Unicode(false)]
-    public string? Percent_Sediment { get; set; }
+    public string Percent_Sediment { get; set; } = null!;
 
     [Column("Area Reseeded")]
     [StringLength(8000)]
     [Unicode(false)]
-    public string? Area_Reseeded { get; set; }
+    public string Area_Reseeded { get; set; } = null!;
 
     [Column("Vegetation Planted")]
     [StringLength(8000)]
     [Unicode(false)]
-    public string? Vegetation_Planted { get; set; }
+    public string Vegetation_Planted { get; set; } = null!;
 
     [Column("Surface and Bank Erosion Repaired")]
     [StringLength(8000)]
     [Unicode(false)]
-    public string? Surface_and_Bank_Erosion_Repaired { get; set; }
+    public string Surface_and_Bank_Erosion_Repaired { get; set; } = null!;
 
     [Column("Total Material Volume Removed (cu-ft)")]
     [StringLength(8000)]
     [Unicode(false)]
-    public string? Total_Material_Volume_Removed__cu_ft_ { get; set; }
+    public string Total_Material_Volume_Removed__cu_ft_ { get; set; } = null!;
 
     [Column("Total Material Volume Removed (gal)")]
     [StringLength(8000)]
     [Unicode(false)]
-    public string? Total_Material_Volume_Removed__gal_ { get; set; }
+    public string Total_Material_Volume_Removed__gal_ { get; set; } = null!;
 }
