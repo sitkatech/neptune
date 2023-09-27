@@ -24,7 +24,7 @@ namespace Neptune.API
                 .ConfigureAppConfiguration((hostContext, config) =>
                 {
                     var configurationRoot = config.Build();
-                    var secretPath = configurationRoot["SECRET_PATH"];
+                    var secretPath = configurationRoot["NeptuneAPISecretPath"];
                     if (File.Exists(secretPath))
                     {
                         config.AddJsonFile(secretPath);

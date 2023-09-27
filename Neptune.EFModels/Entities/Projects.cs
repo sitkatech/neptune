@@ -16,7 +16,6 @@ namespace Neptune.EFModels.Entities
             return dbContext.Projects
                 .Include(x => x.Organization)
                 .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
-                .Include(x => x.ProjectStatus)
                 .Include(x => x.CreatePerson)
                 .Include(x => x.PrimaryContactPerson)
                 .AsNoTracking();

@@ -8,19 +8,18 @@ namespace Neptune.EFModels.Entities
 {
     public class ProjectDocuments
     {
-        public static IQueryable<ProjectDocument> GetProjectDocumentsImpl(NeptuneDbContext dbContext)
+        public static IQueryable<ProjectDocument> GetProjectDocumentsImplNoTracking(NeptuneDbContext dbContext)
         {
             return dbContext.ProjectDocuments
                 .Include(x => x.Project)
                     .ThenInclude(x => x.StormwaterJurisdiction)
                 .Include(x => x.FileResource)
-                    .ThenInclude(x => x.FileResourceMimeType)
                 .AsNoTracking();
         }
 
         public static ProjectDocument GetByID(NeptuneDbContext dbContext, int projectDocumentID)
         {
-            return GetProjectDocumentsImpl(dbContext)
+            return GetProjectDocumentsImplNoTracking(dbContext)
                 .SingleOrDefault(x => x.ProjectDocumentID == projectDocumentID);
         }
 
@@ -30,13 +29,12 @@ namespace Neptune.EFModels.Entities
                 .Include(x => x.Project)
                     .ThenInclude(x => x.StormwaterJurisdiction)
                 .Include(x => x.FileResource)
-                    .ThenInclude(x => x.FileResourceMimeType)
                 .SingleOrDefault(x => x.ProjectDocumentID == projectDocumentID);
         }
 
         public static List<ProjectDocumentSimpleDto> ListByProjectIDAsSimpleDto(NeptuneDbContext dbContext, int projectID)
         {
-            return GetProjectDocumentsImpl(dbContext)
+            return GetProjectDocumentsImplNoTracking(dbContext)
                 .Where(x => x.ProjectID == projectID)
                 .Select(x => x.AsSimpleDto())
                 .ToList();

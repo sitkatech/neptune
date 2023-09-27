@@ -33,8 +33,7 @@ namespace Neptune.EFModels.Entities
         public static IQueryable<Delineation> GetImpl(NeptuneDbContext dbContext)
         {
             return dbContext.Delineations
-                    .Include(x => x.TreatmentBMP)
-                    .Include(x => x.DelineationType);
+                    .Include(x => x.TreatmentBMP);
         }
 
         public static Delineation GetByIDWithChangeTracking(NeptuneDbContext dbContext,

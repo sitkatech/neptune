@@ -160,7 +160,6 @@ namespace Neptune.EFModels.Entities
 
                 return dbContext.ProjectHRUCharacteristics
                     .Include(x => x.ProjectLoadGeneratingUnit)
-                    .Include(x => x.HRUCharacteristicLandUseCode)
                     .Where(x =>
                         x.ProjectID == ProjectID &&
                         x.ProjectLoadGeneratingUnit.RegionalSubbasinID != null &&
@@ -172,7 +171,6 @@ namespace Neptune.EFModels.Entities
                 return dbContext.ProjectHRUCharacteristics
                     .Include(x => x.ProjectLoadGeneratingUnit)
                     .ThenInclude(x => x.Delineation)
-                    .Include(x => x.HRUCharacteristicLandUseCode)
                     .Where(x =>
                         x.ProjectID == ProjectID &&
                         x.ProjectLoadGeneratingUnit.Delineation != null &&

@@ -43,7 +43,6 @@ namespace Neptune.EFModels.Entities
         public static FieldDefinitionDto GetByFieldDefinitionTypeID(NeptuneDbContext dbContext, int FieldDefinitionTypeID)
         {
             var fieldDefinition = dbContext.FieldDefinitions
-                .Include(x => x.FieldDefinitionType)
                 .SingleOrDefault(x => x.FieldDefinitionTypeID == FieldDefinitionTypeID);
 
             return fieldDefinition?.AsDto();

@@ -14,4 +14,9 @@ public static partial class StormwaterJurisdictionExtensionMethods
         return treatmentBMPSimpleDto;
     }
 
+    static partial void DoCustomSimpleDtoMappings(StormwaterJurisdiction stormwaterJurisdiction, StormwaterJurisdictionSimpleDto stormwaterJurisdictionSimpleDto)
+    {
+        stormwaterJurisdictionSimpleDto.Organization = stormwaterJurisdiction.Organization.AsSimpleDto();
+    }
+
 }

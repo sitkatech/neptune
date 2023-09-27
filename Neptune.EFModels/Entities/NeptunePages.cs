@@ -49,7 +49,6 @@ namespace Neptune.EFModels.Entities
         public static NeptunePageDto GetByNeptunePageTypeID(NeptuneDbContext dbContext, int neptunePageID)
         {
             var neptunePage = dbContext.NeptunePages
-                .Include(x => x.NeptunePageType)
                 .SingleOrDefault(x => x.NeptunePageTypeID == neptunePageID);
 
             return neptunePage?.AsDto();

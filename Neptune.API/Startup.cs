@@ -77,7 +77,7 @@ namespace Neptune.API
             services.Configure<NeptuneConfiguration>(Configuration);
             var neptuneConfiguration = Configuration.Get<NeptuneConfiguration>();
 
-            var keystoneHost = neptuneConfiguration.KEYSTONE_HOST;
+            var keystoneHost = neptuneConfiguration.KeystoneOpenIDUrl;
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -112,7 +112,7 @@ namespace Neptune.API
 
             services.AddDbContext<NeptuneDbContext>(c =>
             {
-                c.UseSqlServer(neptuneConfiguration.DB_CONNECTION_STRING, x =>
+                c.UseSqlServer(neptuneConfiguration.DatabaseConnectionString, x =>
                 {
                     x.CommandTimeout((int)TimeSpan.FromMinutes(3).TotalSeconds);
                     x.UseNetTopologySuite();

@@ -200,7 +200,7 @@ namespace Neptune.API.Controllers
         public IActionResult DeleteAttachment([FromRoute] int attachmentID)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var projectDocument = ProjectDocuments.GetProjectDocumentsImpl(_dbContext).SingleOrDefault(x => x.ProjectDocumentID == attachmentID);
+            var projectDocument = ProjectDocuments.GetByIDWithTracking(_dbContext, attachmentID);
             if (ThrowNotFound(projectDocument, "ProjectDocument", attachmentID, out var actionResult))
             {
                 return actionResult;
