@@ -262,25 +262,7 @@ export class ModeledPerformanceComponent implements OnInit {
   }
 
   private mapDelineationsToGeoJson(delineations: DelineationUpsertDto[]) {
-    return {
-      type: "FeatureCollection",
-      features: delineations.map(x => {
-        let delineationGeoJson =
-          this.mapDelineationToFeature(x);
-        return delineationGeoJson;
-      })
-    }
-  }
-
-  private mapDelineationToFeature(x: DelineationUpsertDto) {
-    return {
-      "type": "Feature",
-      "geometry": x.Geometry != null && x.Geometry != undefined ? JSON.parse(x.Geometry) : null,
-      "properties": {
-        DelineationID: x.DelineationID,
-        TreatmentBMPID: x.TreatmentBMPID
-      }
-    };
+    return delineations.map(x => JSON.parse(x.Geometry));
   }
 
   private selectFeatureImpl(treatmentBMPID: number) {

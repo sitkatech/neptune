@@ -404,21 +404,7 @@ export class PlanningMapComponent implements OnInit {
   }
 
   private mapDelineationsToGeoJson(delineations: DelineationSimpleDto[]) {
-    return {
-      type: "FeatureCollection",
-      features: delineations.map(x => this.mapDelineationToFeature(x))
-    }
-  }
-
-  private mapDelineationToFeature(x: DelineationSimpleDto) {
-    return {
-      "type": "Feature",
-      "geometry": x.Geometry != null && x.Geometry != undefined ? JSON.parse(x.Geometry) : null,
-      "properties": {
-        TreatmentBMPID: x.TreatmentBMPID,
-        DelineationID: x.DelineationID
-      }
-    };
+    return delineations.map(x => JSON.parse(x.Geometry));
   }
 
   public selectTreatmentBMPImpl(treatmentBMPID: number) {
