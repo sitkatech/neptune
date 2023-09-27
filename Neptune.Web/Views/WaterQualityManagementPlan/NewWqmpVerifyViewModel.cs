@@ -63,8 +63,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             WaterQualityManagementPlanVerifyTreatmentBMPSimples = treatmentBMPs.Select(x => x.AsWaterQualityManagementPlanVerifyTreatmentBMPSimpleDto()).OrderBy(x => x.TreatmentBMPName).ToList();
         }
 
-        public async Task UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
-            WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<WaterQualityManagementPlanVerifyQuickBMPSimpleDto> waterQualityManagementPlanVerifyQuickBMPSimples, List<WaterQualityManagementPlanVerifyTreatmentBMPSimpleDto> waterQualityManagementPlanVerifyTreatmentBMPSimples, Person currentPerson, NeptuneDbContext dbContext, FileResourceService fileResourceService)
+        public async Task UpdateModel(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, Person currentPerson, NeptuneDbContext dbContext, FileResourceService fileResourceService, List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBMPs, List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBMPs)
         {
             if (StructuralDocumentFile != null)
             {
@@ -81,7 +80,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 }
             }
 
-            waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID = WaterQualityManagementPlanVerifyID ?? ModelObjectHelpers.NotYetAssignedID;
             waterQualityManagementPlanVerify.EnforcementOrFollowupActions = EnforcementOrFollowupActions;
             waterQualityManagementPlanVerify.SourceControlCondition = SourceControlCondition;
             waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatusID = WaterQualityManagementPlanVerifyStatusID;
@@ -89,13 +87,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlanVerify.LastEditedDate = DateTime.Now;
             waterQualityManagementPlanVerify.VerificationDate = VerificationDate;
 
-
             var allWaterQualityManagementPlanVerifyQuickBMPsInDatabase = dbContext.WaterQualityManagementPlanVerifyQuickBMPs;
-            var waterQualityManagementPlanVerifyQuickBmpsForThisVerification = waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyQuickBMPs.ToList();
-            var waterQualityManagementPlanVerifyQuickBMPsToUpdate = waterQualityManagementPlanVerifyQuickBMPSimples
+            var waterQualityManagementPlanVerifyQuickBMPsToUpdate = WaterQualityManagementPlanVerifyQuickBMPSimples
                 ?.Select(x => new WaterQualityManagementPlanVerifyQuickBMP
                     {
-                        WaterQualityManagementPlanVerifyQuickBMPID = x.WaterQualityManagementPlanVerifyQuickBMPID,
                         WaterQualityManagementPlanVerifyID =
                             waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID,
                         QuickBMPID = x.QuickBMPID,
@@ -105,7 +100,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     }
                 ).ToList() ?? new List<WaterQualityManagementPlanVerifyQuickBMP>();
 
-            waterQualityManagementPlanVerifyQuickBmpsForThisVerification.Merge(waterQualityManagementPlanVerifyQuickBMPsToUpdate, allWaterQualityManagementPlanVerifyQuickBMPsInDatabase, (x, y) => x.WaterQualityManagementPlanVerifyQuickBMPID == y.WaterQualityManagementPlanVerifyQuickBMPID,
+            waterQualityManagementPlanVerifyQuickBMPs.Merge(waterQualityManagementPlanVerifyQuickBMPsToUpdate, allWaterQualityManagementPlanVerifyQuickBMPsInDatabase, (x, y) => x.WaterQualityManagementPlanVerifyID == y.WaterQualityManagementPlanVerifyID && x.QuickBMPID == y.QuickBMPID,
                 (x, y) =>
                 {
                     x.IsAdequate = y.IsAdequate;
@@ -114,13 +109,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
 
             var allWaterQualityManagementPlanVerifyTreatmentBMPsInDatabase = dbContext.WaterQualityManagementPlanVerifyTreatmentBMPs;
-            var waterQualityManagementPlanVerifyTreatmentBmpsForThisVerification = waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyTreatmentBMPs.ToList();
             var waterQualityManagementPlanVerifyTreatmentBMPsToUpdate =
-                waterQualityManagementPlanVerifyTreatmentBMPSimples?.Select(x =>
+                WaterQualityManagementPlanVerifyTreatmentBMPSimples?.Select(x =>
                     new WaterQualityManagementPlanVerifyTreatmentBMP
                     {
-                        WaterQualityManagementPlanVerifyTreatmentBMPID =
-                            x.WaterQualityManagementPlanVerifyTreatmentBMPID,
                         WaterQualityManagementPlanVerifyID =
                             waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID,
                         TreatmentBMPID = x.TreatmentBMPID,
@@ -130,7 +122,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     }).ToList() ?? new List<WaterQualityManagementPlanVerifyTreatmentBMP>();
 
 
-            waterQualityManagementPlanVerifyTreatmentBmpsForThisVerification.Merge(waterQualityManagementPlanVerifyTreatmentBMPsToUpdate, allWaterQualityManagementPlanVerifyTreatmentBMPsInDatabase, (x, y) => x.WaterQualityManagementPlanVerifyTreatmentBMPID == y.WaterQualityManagementPlanVerifyTreatmentBMPID,
+            waterQualityManagementPlanVerifyTreatmentBMPs.Merge(waterQualityManagementPlanVerifyTreatmentBMPsToUpdate, allWaterQualityManagementPlanVerifyTreatmentBMPsInDatabase, (x, y) => x.WaterQualityManagementPlanVerifyID == y.WaterQualityManagementPlanVerifyID && x.TreatmentBMPID == y.TreatmentBMPID,
                 (x, y) =>
                 {
                     x.IsAdequate = y.IsAdequate;

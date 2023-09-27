@@ -588,10 +588,11 @@ namespace Neptune.Web.Controllers
                 IsDraft = !viewModel.HiddenIsFinalizeVerificationInput,
                 VerificationDate = viewModel.VerificationDate
             };
-
-            await viewModel.UpdateModel(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson, _dbContext, _fileResourceService);
-
             await _dbContext.WaterQualityManagementPlanVerifies.AddAsync(waterQualityManagementPlanVerify);
+            await _dbContext.SaveChangesAsync();
+
+            await viewModel.UpdateModel(waterQualityManagementPlanVerify, CurrentPerson, _dbContext, _fileResourceService, new List<WaterQualityManagementPlanVerifyQuickBMP>(), new List<WaterQualityManagementPlanVerifyTreatmentBMP>());
+
             await _dbContext.SaveChangesAsync();
 
             SetMessageForDisplay(
@@ -621,7 +622,7 @@ namespace Neptune.Web.Controllers
             var waterQualityManagementPlanVerifyTreatmentBMPs =
                 WaterQualityManagementPlanVerifyTreatmentBMPs.ListByWaterQualityManagementPlanVerifyID(_dbContext, waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
 
-            var viewModel = new EditWqmpVerifyViewModel(waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMPs, waterQualityManagementPlanVerifyTreatmentBMPs, CurrentPerson);
+            var viewModel = new EditWqmpVerifyViewModel(waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMPs, waterQualityManagementPlanVerifyTreatmentBMPs);
             return ViewEditWqmpVerify(waterQualityManagementPlanVerify.WaterQualityManagementPlan, viewModel);
         }
 
@@ -637,7 +638,9 @@ namespace Neptune.Web.Controllers
             }
             var waterQualityManagementPlan = waterQualityManagementPlanVerify.WaterQualityManagementPlan;
             waterQualityManagementPlanVerify.IsDraft = !viewModel.HiddenIsFinalizeVerificationInput;
-            viewModel.UpdateModel(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.DeleteStructuralDocumentFile, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson, _dbContext, _fileResourceService);
+            var waterQualityManagementPlanVerifyQuickBMPs = WaterQualityManagementPlanVerifyQuickBMPs.ListByWaterQualityManagementPlanVerifyIDWithChangeTracking(_dbContext, waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
+            var waterQualityManagementPlanVerifyTreatmentBMPs = WaterQualityManagementPlanVerifyTreatmentBMPs.ListByWaterQualityManagementPlanVerifyIDWithChangeTracking(_dbContext, waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
+            await viewModel.UpdateModel(waterQualityManagementPlanVerify, CurrentPerson, _dbContext, _fileResourceService, waterQualityManagementPlanVerifyQuickBMPs, waterQualityManagementPlanVerifyTreatmentBMPs);
 
             await _dbContext.SaveChangesAsync();
 

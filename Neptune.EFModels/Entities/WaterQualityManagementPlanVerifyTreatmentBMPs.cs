@@ -7,7 +7,12 @@ public static class WaterQualityManagementPlanVerifyTreatmentBMPs
 {
     public static IQueryable<WaterQualityManagementPlanVerifyTreatmentBMP> GetImpl(NeptuneDbContext dbContext)
     {
-        return dbContext.WaterQualityManagementPlanVerifyTreatmentBMPs.Include(x => x.WaterQualityManagementPlanVerify).ThenInclude(x => x.WaterQualityManagementPlan);
+        return dbContext.WaterQualityManagementPlanVerifyTreatmentBMPs
+            .Include(x => x.WaterQualityManagementPlanVerify)
+            .ThenInclude(x => x.WaterQualityManagementPlan)
+            .Include(x => x.TreatmentBMP)
+            .ThenInclude(x => x.TreatmentBMPType)
+            ;
     }
 
     public static WaterQualityManagementPlanVerifyTreatmentBMP GetByIDWithChangeTracking(NeptuneDbContext dbContext,
@@ -51,5 +56,10 @@ public static class WaterQualityManagementPlanVerifyTreatmentBMPs
     {
         return GetImpl(dbContext).AsNoTracking()
             .Where(x => x.WaterQualityManagementPlanVerifyID == waterQualityManagementPlanVerifyID).ToList();
+    }
+
+    public static List<WaterQualityManagementPlanVerifyTreatmentBMP> ListByWaterQualityManagementPlanVerifyIDWithChangeTracking(NeptuneDbContext dbContext, int waterQualityManagementPlanVerifyID)
+    {
+        return GetImpl(dbContext).Where(x => x.WaterQualityManagementPlanVerifyID == waterQualityManagementPlanVerifyID).ToList();
     }
 }
