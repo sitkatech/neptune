@@ -83,7 +83,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlanVerify.EnforcementOrFollowupActions = EnforcementOrFollowupActions;
             waterQualityManagementPlanVerify.SourceControlCondition = SourceControlCondition;
             waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatusID = WaterQualityManagementPlanVerifyStatusID;
-            waterQualityManagementPlanVerify.LastEditedByPerson = currentPerson;
+            waterQualityManagementPlanVerify.LastEditedByPersonID = currentPerson.PersonID;
             waterQualityManagementPlanVerify.LastEditedDate = DateTime.Now;
             waterQualityManagementPlanVerify.VerificationDate = VerificationDate;
 
