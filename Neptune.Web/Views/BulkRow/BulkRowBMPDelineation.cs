@@ -18,9 +18,10 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-namespace Neptune.Web.Views.Shared.ProjectControls
+
+namespace Neptune.Web.Views.BulkRow
 {
-    public abstract class BulkRowBMPDelineation : LtInfo.Common.Mvc.TypedWebPartialViewPage<BulkRowBMPDelineationViewData, BulkRowBMPDelineationViewModel>
+    public abstract class BulkRowBMPDelineation : Common.Mvc.TypedWebPartialViewPage<BulkRowBMPDelineationViewData, BulkRowBMPDelineationViewModel>
     {
     }
 }

@@ -18,25 +18,22 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Collections.Generic;
 
-
-namespace Neptune.Web.Views.Shared.ProjectControls
+namespace Neptune.Web.Views.BulkRow
 {
     public class BulkRowFieldVisitViewData
     {
-        public List<Models.FieldVisit> FieldVisits { get; }
+        public List<EFModels.Entities.FieldVisit> FieldVisits { get; }
         public string BulkRowPostUrl { get; }
         public string EntityLabel { get; }
         public string EntityModalDescription { get; }
 
-        public BulkRowFieldVisitViewData(List<Models.FieldVisit> fieldVisits, string bulkRowPostUrl, string entityLabel, string entityModalDescription)
+        public BulkRowFieldVisitViewData(List<EFModels.Entities.FieldVisit> fieldVisits, string bulkRowPostUrl, string entityLabel, string entityModalDescription)
         {
             FieldVisits = fieldVisits;
             BulkRowPostUrl = bulkRowPostUrl;
 
-            EntityLabel = entityLabel + (fieldVisits.Count > 1 ? "s" : String.Empty);
+            EntityLabel = entityLabel + (fieldVisits.Count > 1 ? "s" : string.Empty);
             EntityModalDescription = entityModalDescription;
         }
     }

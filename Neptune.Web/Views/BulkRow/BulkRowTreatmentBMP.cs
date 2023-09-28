@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="BulkRowFieldVisit.cs" company="Tahoe Regional Planning Agency">
+<copyright file="BulkRowTreatmentBMP.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,9 +18,10 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-namespace Neptune.Web.Views.Shared.ProjectControls
+
+namespace Neptune.Web.Views.BulkRow
 {
-    public abstract class BulkRowFieldVisit : LtInfo.Common.Mvc.TypedWebPartialViewPage<BulkRowFieldVisitViewData, BulkRowFieldVisitViewModel>
+    public abstract class BulkRowTreatmentBMP : Common.Mvc.TypedWebPartialViewPage<BulkRowTreatmentBMPViewData, BulkRowTreatmentBMPViewModel>
     {
     }
 }

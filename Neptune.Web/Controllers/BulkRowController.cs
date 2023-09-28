@@ -19,23 +19,25 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Web.Mvc;
 using Neptune.Web.Common;
-using Neptune.Web.Models;
 using Neptune.Web.Security;
-
-using System.Collections.Generic;
-using System.Linq;
 using LtInfo.Common;
-using LtInfo.Common.MvcResults;
-using Neptune.Web.Views.Shared.ProjectControls;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Neptune.EFModels.Entities;
+using Neptune.Web.Common.MvcResults;
+using Neptune.Web.Models;
+using Neptune.Web.Views.BulkRow;
 
 
 namespace Neptune.Web.Controllers
 {
-    public class BulkRowController : NeptuneBaseController
+    public class BulkRowController : NeptuneBaseController<BulkRowController>
     {
-        [CrossAreaRoute]
+        public BulkRowController(NeptuneDbContext dbContext, ILogger<BulkRowController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
+        {
+        }
+
         [HttpGet]
         [JurisdictionManageFeature]
         public ContentResult MarkTreatmentBMPAsVerifiedModal()
@@ -43,84 +45,70 @@ namespace Neptune.Web.Controllers
             return new ContentResult();
         }
 
-        [CrossAreaRoute]
         [HttpPost]
         [JurisdictionManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult MarkTreatmentBMPAsVerifiedModal(BulkRowTreatmentBMPViewModel viewModel)
+        public async Task<IActionResult> MarkTreatmentBMPAsVerifiedModal(BulkRowTreatmentBMPViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return new ModalDialogFormJsonResult();
             }
 
-            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => viewModel.EntityIDList.Contains(x.TreatmentBMPID)).ToList();
+            var treatmentBMPs = TreatmentBMPs.ListByTreatmentBMPIDListWithChangeTracking(_dbContext, viewModel.EntityIDList);
             treatmentBMPs.ForEach(x => x.MarkAsVerified(CurrentPerson));
+            await _dbContext.SaveChangesAsync();
             var numberOfVerifiedTreatmentBMPs = treatmentBMPs.Count;
             SetMessageForDisplay($"{numberOfVerifiedTreatmentBMPs} BMPs were successfully verified.");
             return new ModalDialogFormJsonResult();
         }
 
-        [CrossAreaRoute]
         [HttpGet]
         [JurisdictionManageFeature]
-        public ContentResult MarkBMPDelineationAsVerifiedModal()
+        public ContentResult MarkDelineationAsVerifiedModal()
         {
             return new ContentResult();
         }
 
-        [CrossAreaRoute]
         [HttpPost]
         [JurisdictionManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult MarkBMPDelineationAsVerifiedModal(BulkRowTreatmentBMPViewModel viewModel)
+        public async Task<IActionResult> MarkDelineationAsVerifiedModal(BulkRowTreatmentBMPViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return new ModalDialogFormJsonResult();
             }
 
-            var bmpDelineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => viewModel.EntityIDList.Contains(x.DelineationID)).ToList();
-            bmpDelineations.ForEach(x => x.MarkAsVerified(CurrentPerson));
-
-            NereidUtilities.MarkDelineationDirty(bmpDelineations, HttpRequestStorage.DatabaseEntities);
-
-            var numberOfVerifiedBMPDelineations = bmpDelineations.Count;
-
+            var delineations = Delineations.ListByDelineationIDListWithChangeTracking(_dbContext, viewModel.EntityIDList);
+            delineations.ForEach(x => x.MarkAsVerified(CurrentPerson));
+            await NereidUtilities.MarkDelineationDirty(delineations, _dbContext);
+            var numberOfVerifiedBMPDelineations = delineations.Count;
             SetMessageForDisplay($"{numberOfVerifiedBMPDelineations} BMP Delineations were successfully verified.");
-            
             return new ModalDialogFormJsonResult();
         }
 
-        [CrossAreaRoute]
         [HttpGet]
         [JurisdictionManageFeature]
-        public ContentResult MarkFieldVistsVerifiedModal()
+        public ContentResult MarkFieldVisitsVerifiedModal()
         {
             return new ContentResult();
         }
 
-        [CrossAreaRoute]
         [HttpPost]
         [JurisdictionManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult MarkFieldVistsVerifiedModal(BulkRowFieldVisitViewModel viewModel)
+        public async Task<IActionResult> MarkFieldVisitsVerifiedModal(BulkRowFieldVisitViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return new ModalDialogFormJsonResult();
             }
 
-            var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x => viewModel.EntityIDList.Contains(x.FieldVisitID)).ToList();
+            var fieldVisits = FieldVisits.ListByFieldVisitIDListWithChangeTracking(_dbContext, viewModel.EntityIDList);
             fieldVisits.ForEach(x => x.VerifyFieldVisit(CurrentPerson));
+            await _dbContext.SaveChangesAsync();
             SetMessageForDisplay($"{fieldVisits.Count} Field Visits were successfully verified.");
             return new ModalDialogFormJsonResult();
         }
 
-
-
-
-        [CrossAreaRoute]
         [HttpGet]
         [JurisdictionManageFeature]
         public ContentResult BulkRowTreatmentBMPs()
@@ -128,24 +116,20 @@ namespace Neptune.Web.Controllers
             return new ContentResult();
         }
 
-
-        [CrossAreaRoute]
         [HttpPost]
         [JurisdictionManageFeature]
-        public PartialViewResult BulkRowTreatmentBMPs(BulkRowTreatmentBMPViewModel viewModel)
+        public PartialViewResult BulkRowTreatmentBMPs([FromBody] BulkRowTreatmentBMPViewModel viewModel)
         {
             var treatmentBMPs = new List<TreatmentBMP>();
-
             if (viewModel.EntityIDList != null)
             {
-                treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => viewModel.EntityIDList.Contains(x.TreatmentBMPID)).OrderBy(x => x.TreatmentBMPName).ToList();
+                treatmentBMPs = TreatmentBMPs.ListByTreatmentBMPIDList(_dbContext, viewModel.EntityIDList).ToList();
             }
             ModelState.Clear(); // we intentionally want to clear any error messages here since this post route is returning a view
-            var viewData = new BulkRowTreatmentBMPViewData(treatmentBMPs, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkTreatmentBMPAsVerifiedModal(null)), "Treatment BMP", "The BMP inventory for the selected BMPs will be marked as Verified until the inventory is updated or a Jurisdiction Manager later flags the data as provisional.");
+            var viewData = new BulkRowTreatmentBMPViewData(treatmentBMPs, SitkaRoute<BulkRowController>.BuildUrlFromExpression(_linkGenerator, x => x.MarkTreatmentBMPAsVerifiedModal(null)), "Treatment BMP", "The BMP inventory for the selected BMPs will be marked as Verified until the inventory is updated or a Jurisdiction Manager later flags the data as provisional.");
             return RazorPartialView<BulkRowTreatmentBMP, BulkRowTreatmentBMPViewData, BulkRowTreatmentBMPViewModel>(viewData, viewModel);
         }
 
-        [CrossAreaRoute]
         [HttpGet]
         [JurisdictionManageFeature]
         public ContentResult BulkRowBMPDelineation()
@@ -153,24 +137,20 @@ namespace Neptune.Web.Controllers
             return new ContentResult();
         }
 
-        [CrossAreaRoute]
         [HttpPost]
         [JurisdictionManageFeature]
-        public PartialViewResult BulkRowBMPDelineation(BulkRowBMPDelineationViewModel viewModel)
+        public PartialViewResult BulkRowBMPDelineation([FromBody] BulkRowBMPDelineationViewModel viewModel)
         {
-            var bmpDelineations = new List<Delineation>();
+            var delineations = new List<Delineation>();
             if (viewModel.EntityIDList != null)
             {
-                bmpDelineations = HttpRequestStorage.DatabaseEntities.Delineations
-                    .Where(x => viewModel.EntityIDList.Contains(x.DelineationID))
-                    .ToList().OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+                delineations = Delineations.ListByDelineationIDList(_dbContext, viewModel.EntityIDList);
             }
             ModelState.Clear();
-            var viewData = new BulkRowBMPDelineationViewData(bmpDelineations, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkBMPDelineationAsVerifiedModal(null)), "BMP Delineation", "The BMP Delineations for the selected BMP Delineations will be marked as Verified until the delineation is updated or a Jurisdiction Manager later flags the data as provisional.");
+            var viewData = new BulkRowBMPDelineationViewData(delineations, SitkaRoute<BulkRowController>.BuildUrlFromExpression(_linkGenerator, x => x.MarkDelineationAsVerifiedModal(null)), "BMP Delineation", "The BMP Delineations for the selected BMP Delineations will be marked as Verified until the delineation is updated or a Jurisdiction Manager later flags the data as provisional.");
             return RazorPartialView<BulkRowBMPDelineation, BulkRowBMPDelineationViewData, BulkRowBMPDelineationViewModel
             >(viewData, viewModel);
         }
-
 
         [CrossAreaRoute]
         [HttpGet]
@@ -180,20 +160,17 @@ namespace Neptune.Web.Controllers
             return new ContentResult();
         }
 
-
-        [CrossAreaRoute]
         [HttpPost]
         [JurisdictionManageFeature]
-        public PartialViewResult BulkRowFieldVisits(BulkRowFieldVisitViewModel viewModel)
+        public PartialViewResult BulkRowFieldVisits([FromBody] BulkRowFieldVisitViewModel viewModel)
         {
-            var fieldVisits = new List<FieldVisit>();
-
+            var fieldVisits = new List<EFModels.Entities.FieldVisit>();
             if (viewModel.EntityIDList != null)
             {
-                fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x => viewModel.EntityIDList.Contains(x.FieldVisitID)).OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+                fieldVisits = FieldVisits.ListByFieldVisitIDList(_dbContext, viewModel.EntityIDList);
             }
             ModelState.Clear(); // we intentionally want to clear any error messages here since this post route is returning a view
-            var viewData = new BulkRowFieldVisitViewData(fieldVisits, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkFieldVistsVerifiedModal(null)), "Field Visit", "The selected Field Visits will be marked as Verified until the Field Visit is updated or a Jurisdiction Manager later flags the data as provisional.");
+            var viewData = new BulkRowFieldVisitViewData(fieldVisits, SitkaRoute<BulkRowController>.BuildUrlFromExpression(_linkGenerator, x => x.MarkFieldVisitsVerifiedModal(null)), "Field Visit", "The selected Field Visits will be marked as Verified until the Field Visit is updated or a Jurisdiction Manager later flags the data as provisional.");
             return RazorPartialView<BulkRowFieldVisit, BulkRowFieldVisitViewData, BulkRowFieldVisitViewModel>(viewData, viewModel);
         }
     }

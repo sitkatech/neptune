@@ -934,7 +934,7 @@ namespace Neptune.Web.Common
             dbContext.SaveChanges();
         }
 
-        public static void MarkDelineationDirty(IEnumerable<Delineation> delineations, NeptuneDbContext dbContext)
+        public static async Task MarkDelineationDirty(IEnumerable<Delineation> delineations, NeptuneDbContext dbContext)
         {
             foreach (var delineation in delineations)
             {
@@ -944,10 +944,10 @@ namespace Neptune.Web.Common
                     DelineationID = delineation.DelineationID
                 };
 
-                dbContext.DirtyModelNodes.Add(dirtyModelNode);
+                await dbContext.DirtyModelNodes.AddAsync(dirtyModelNode);
             }
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
 
         public static void MarkDelineationDirty(Delineation delineation, NeptuneDbContext dbContext)

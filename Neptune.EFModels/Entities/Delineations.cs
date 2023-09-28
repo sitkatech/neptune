@@ -96,11 +96,15 @@ namespace Neptune.EFModels.Entities
                 .OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
         }
 
-        public static void MarkAsVerified(Delineation delineation, Person currentPerson)
+        public static List<Delineation> ListByDelineationIDList(NeptuneDbContext dbContext, List<int> delineationIDList)
         {
-            delineation.IsVerified = true;
-            delineation.DateLastVerified = DateTime.Now;
-            delineation.VerifiedByPersonID = currentPerson.PersonID;
+            return GetImpl(dbContext).AsNoTracking()
+                .Where(x => delineationIDList.Contains(x.DelineationID)).ToList();
+        }
+
+        public static List<Delineation> ListByDelineationIDListWithChangeTracking(NeptuneDbContext dbContext, List<int> delineationIDList)
+        {
+            return GetImpl(dbContext).Where(x => delineationIDList.Contains(x.DelineationID)).ToList();
         }
     }
 }

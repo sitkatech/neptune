@@ -6,5 +6,12 @@ namespace Neptune.EFModels.Entities
         {
             return currentPerson.IsAssignedToStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdictionID);
         }
+
+        public void MarkAsVerified(Person currentPerson)
+        {
+            IsVerified = true;
+            DateLastVerified = DateTime.Now;
+            VerifiedByPersonID = currentPerson.PersonID;
+        }
     }
 }

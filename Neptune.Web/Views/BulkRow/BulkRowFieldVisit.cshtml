@@ -1,5 +1,5 @@
 ﻿@*-----------------------------------------------------------------------
-    <copyright file="BulkRowTreatmentBMP.cshtml" company="Tahoe Regional Planning Agency">
+    <copyright file="BulkRowFieldVisit.cshtml" company="Tahoe Regional Planning Agency">
     Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
     <author>Sitka Technology Group</author>
     </copyright>
@@ -18,8 +18,10 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@using LtInfo.Common.ModalDialog
-@inherits Neptune.Web.Views.Shared.ProjectControls.BulkRowTreatmentBMP
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Neptune.Web.Common.ModalDialog
+@inherits Neptune.Web.Views.BulkRow.BulkRowFieldVisit
+@model Neptune.Web.Views.BulkRow.BulkRowFieldVisitViewModel
 
 @if (Model.EntityIDList == null || !Model.EntityIDList.Any())
 {
@@ -41,39 +43,21 @@ else
     <form action="@ViewDataTyped.BulkRowPostUrl" method="post">      
         <div style="min-height: 150px; max-height: 350px; overflow-y: auto; overflow-x: hidden">
             <div style="margin: 5px 0">Do you want to set the inventory status for @Model.EntityIDList.Count @ViewDataTyped.EntityLabel to Verified? @ViewDataTyped.EntityModalDescription</div>
-            <table class="table table-condensed">
+            <table class="table">
                 <thead>
                 <tr>
                     <th scope="col">BMP Name</th>
-                    <th scope="col">Last Verified By</th>
-                    <th scope="col">Date of Last Inventory Change</th>
+                    <th scope="col">Performed By</th>
+                    <th scope="col">Visit Date</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
+                @foreach (var fieldVisit in ViewDataTyped.FieldVisits.OrderBy(x => x.TreatmentBMP.TreatmentBMPName))
                 {
                     <tr>
-                        <td>@treatmentBMP.TreatmentBMPName</td>
-                        <td>
-                            @if (treatmentBMP.InventoryVerifiedByPerson != null)
-                            {
-                                @treatmentBMP.InventoryVerifiedByPerson.GetFullNameFirstLast()
-                            }
-                            else
-                            {
-                                <span>N/A</span>
-                            }
-                        </td>
-                        <td>
-                            @if (treatmentBMP.InventoryLastChangedDate != null)
-                            {
-                                <span>@treatmentBMP.InventoryLastChangedDate</span>
-                            }
-                            else
-                            {
-                                <span>N/A</span>
-                            }
-                        </td>
+                        <td>@fieldVisit.TreatmentBMP.TreatmentBMPName</td>
+                        <td>@fieldVisit.PerformedByPerson.GetFullNameFirstLast()</td>
+                        <td>@fieldVisit.VisitDate</td>
                     </tr>
                 }
                 </tbody>

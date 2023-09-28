@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="BulkRowTreatmentBMPViewData.cs" company="Tahoe Regional Planning Agency">
+<copyright file="BulkRowTreatmentBMPViewModel.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,26 +18,16 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Collections.Generic;
 
+using System.ComponentModel.DataAnnotations;
+using Neptune.Web.Common.Models;
 
-namespace Neptune.Web.Views.Shared.ProjectControls
+namespace Neptune.Web.Views.BulkRow
 {
-    public class BulkRowTreatmentBMPViewData
+    public class BulkRowBMPDelineationViewModel : FormViewModel
     {
-        public List<Models.TreatmentBMP> TreatmentBMPs { get; }
-        public string BulkRowPostUrl { get; }
-        public string EntityLabel { get;  }
-        public string EntityModalDescription { get;  }
+        [Required]
+        public List<int> EntityIDList { get; set; }
 
-        public BulkRowTreatmentBMPViewData(List<Models.TreatmentBMP> treatmentBMPs, string bulkRowPostUrl, string entityLabel, string entityModalDescription)
-        {
-            TreatmentBMPs = treatmentBMPs;
-            BulkRowPostUrl = bulkRowPostUrl;
-
-            EntityLabel = entityLabel + (TreatmentBMPs.Count > 1 ? "s" : String.Empty);
-            EntityModalDescription = entityModalDescription;
-        }
     }
 }

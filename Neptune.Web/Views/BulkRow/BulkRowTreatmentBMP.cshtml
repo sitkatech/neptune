@@ -1,5 +1,5 @@
 ﻿@*-----------------------------------------------------------------------
-    <copyright file="BulkRowbmpDelineation.cshtml" company="Tahoe Regional Planning Agency">
+    <copyright file="BulkRowTreatmentBMP.cshtml" company="Tahoe Regional Planning Agency">
     Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
     <author>Sitka Technology Group</author>
     </copyright>
@@ -18,8 +18,10 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@using LtInfo.Common.ModalDialog
-@inherits Neptune.Web.Views.Shared.ProjectControls.BulkRowBMPDelineation
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Neptune.Web.Common.ModalDialog
+@inherits Neptune.Web.Views.BulkRow.BulkRowTreatmentBMP
+@model Neptune.Web.Views.BulkRow.BulkRowTreatmentBMPViewModel
 
 @if (Model.EntityIDList == null || !Model.EntityIDList.Any())
 {
@@ -40,24 +42,24 @@ else
 {
     <form action="@ViewDataTyped.BulkRowPostUrl" method="post">      
         <div style="min-height: 150px; max-height: 350px; overflow-y: auto; overflow-x: hidden">
-            <div style="margin: 5px 0">Do you want to set the delineation status for @Model.EntityIDList.Count @ViewDataTyped.EntityLabel to Verified? @ViewDataTyped.EntityModalDescription</div>
+            <div style="margin: 5px 0">Do you want to set the inventory status for @Model.EntityIDList.Count @ViewDataTyped.EntityLabel to Verified? @ViewDataTyped.EntityModalDescription</div>
             <table class="table table-condensed">
                 <thead>
                 <tr>
                     <th scope="col">BMP Name</th>
-                    <th scope="col">Verified By</th>
-                    <th scope="col">Date Delineation Last Verified</th>
+                    <th scope="col">Last Verified By</th>
+                    <th scope="col">Date of Last Inventory Change</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var bmpDelineation in ViewDataTyped.bmpDelineations)
+                @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs.OrderBy(x => x.TreatmentBMPName))
                 {
                     <tr>
-                        <td>@bmpDelineation.TreatmentBMP.TreatmentBMPName</td>
+                        <td>@treatmentBMP.TreatmentBMPName</td>
                         <td>
-                            @if (bmpDelineation.VerifiedByPerson != null)
+                            @if (treatmentBMP.InventoryVerifiedByPerson != null)
                             {
-                                @bmpDelineation.VerifiedByPerson.GetFullNameFirstLast()
+                                @treatmentBMP.InventoryVerifiedByPerson.GetFullNameFirstLast()
                             }
                             else
                             {
@@ -65,9 +67,9 @@ else
                             }
                         </td>
                         <td>
-                            @if (bmpDelineation.DateLastVerified != null)
+                            @if (treatmentBMP.InventoryLastChangedDate != null)
                             {
-                                <span>@bmpDelineation.DateLastVerified</span>
+                                <span>@treatmentBMP.InventoryLastChangedDate</span>
                             }
                             else
                             {

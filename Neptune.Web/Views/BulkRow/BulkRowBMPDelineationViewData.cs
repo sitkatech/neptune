@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="BulkRowTreatmentBMP.cs" company="Tahoe Regional Planning Agency">
+<copyright file="BulkRowTreatmentBMPViewData.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,9 +18,23 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-namespace Neptune.Web.Views.Shared.ProjectControls
+
+namespace Neptune.Web.Views.BulkRow
 {
-    public abstract class BulkRowTreatmentBMP : LtInfo.Common.Mvc.TypedWebPartialViewPage<BulkRowTreatmentBMPViewData, BulkRowTreatmentBMPViewModel>
+    public class BulkRowBMPDelineationViewData
     {
+        public List<EFModels.Entities.Delineation> bmpDelineations { get; }
+        public string BulkRowPostUrl { get; }
+        public string EntityLabel { get;  }
+        public string EntityModalDescription { get;  }
+
+        public BulkRowBMPDelineationViewData(List<EFModels.Entities.Delineation> bmpDelineations, string bulkRowPostUrl, string entityLabel, string entityModalDescription)
+        {
+            this.bmpDelineations = bmpDelineations;
+            BulkRowPostUrl = bulkRowPostUrl;
+
+            EntityLabel = entityLabel + (this.bmpDelineations.Count > 1 ? "s" : string.Empty);
+            EntityModalDescription = entityModalDescription;
+        }
     }
 }
