@@ -2,23 +2,26 @@
   "name": "hippocamp-web",
   "version": "0.0.0",
   "config": {
-    "template_dir": "../../Build/typescript-angular",
+    "template_dir": "../Build/typescript-angular",
     "output_dir": "src/app/shared/generated",
-    "swagger_json_path": "../Hippocamp.API/swagger.json"
+    "swagger_json_path": "../Neptune.API/swagger.json"
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 0.0.0.0 --disable-host-check true --port 8213",
-    "start-ssl": "ng serve --host 0.0.0.0 --disable-host-check true --port 8214 --ssl --ssl-cert dev_cert.pfx --ssl-key password#1",
+    "start": "ng serve --disable-host-check true --ssl --ssl-cert server.crt --ssl-key server.key",
     "build": "ng build",
     "build-dev": "ng build",
-    "build-qa": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --configuration=qa --configuration production",
-    "build-prod": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --configuration=production --configuration production",
+    "build-qa": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --configuration=qa",
+    "build-ci": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --configuration=qa",
+    "build-prod": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --configuration=production",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "clean-model": "node src/scripts/clean-model.js",
-    "gen-model": "npm run clean-model %npm_package_config_output_dir% && npx @openapitools/openapi-generator-cli generate --additional-properties=modelPropertyNaming=original,fileNaming=kebab-case,useHttpClient=true,supportsES6=true,useRxJS6=true,genericModuleWithProviders=true,ngVersion=12.2.213 -i %npm_package_config_swagger_json_path% -g typescript-angular -o %npm_package_config_output_dir% -t %npm_package_config_template_dir%"
+    "gen-model": "npm run clean-model %npm_package_config_output_dir% && npx @openapitools/openapi-generator-cli generate --additional-properties=modelPropertyNaming=original,fileNaming=kebab-case,useHttpClient=true,supportsES6=true,useRxJS6=true,genericModuleWithProviders=true,ngVersion=12.2.213 -i %npm_package_config_swagger_json_path% -g typescript-angular -o %npm_package_config_output_dir% -t %npm_package_config_template_dir%",
+    "prestart": "@powershell if((Test-Path server.crt) -eq $false -or (Test-Path server.key) -eq $false) { npm run create-dev-cert } && npm run trust-dev-cert",
+    "create-dev-cert": "openssl req -newkey rsa:2048 -x509 -nodes -keyout server.key -new -out server.crt -config ./dev-cert.cnf -sha256 -days 3650",
+    "trust-dev-cert": "@powershell Import-Certificate -FilePath server.crt -CertStoreLocation cert:\\LocalMachine\\Root"
   },
   "private": true,
   "dependencies": {
