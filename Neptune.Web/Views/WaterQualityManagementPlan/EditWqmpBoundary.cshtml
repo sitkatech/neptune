@@ -49,9 +49,6 @@
             <div class="col-xs-6">
                 <button type="button" class="btn btn-neptune" onclick="resetZoom()">Reset Map Zoom</button>
             </div>
-            <div class="col-xs-6 text-right">
-                <button type="button" id="pickParcelsButton" class="btn btn-neptune" onclick="pickParcels()">Pick Parcels</button>
-            </div>
         </div>
 
         <hr />
@@ -79,8 +76,6 @@
 
     var wqmpBoundaryMapOptions = {
         WaterQualityManagementPlanID: @ViewDataTyped.WaterQualityManagementPlanID,
-        ParcelUnionUrl: "@ViewDataTyped.ParcelUnionUrl",
-        InitialParcelIDs: [@(string.Join(",", ViewDataTyped.ParcelIDs))]
     }
 
     jQuery(document).ready(function () {
@@ -90,22 +85,11 @@
             "@Html.NameFor(m => m.WktAndAnnotations[0].Annotation)",
             "@ViewDataTyped.MapFormID");
         wqmpBoundaryMap.updateFeatureCollectionJson();
+
+        HookupCheckIfFormIsDirtyNoDisable(undefined);
     });
 
     var resetZoom = function () {
         wqmpBoundaryMap.map.fitBounds(wqmpBoundaryMap.editableFeatureGroup.getBounds());
     };
-
-    var pickParcels = function () {
-        if (!wqmpBoundaryMap.parcelPickerModeActive) {
-            wqmpBoundaryMap.getParcelsAndPick();
-            jQuery("#pickParcelsButton").html("Accept and Refine");
-        } else {
-            wqmpBoundaryMap.acceptParcelsAndRefine();
-            jQuery("#pickParcelsButton").html("Pick Parcels");
-        }
-    };
-
-    HookupCheckIfFormIsDirtyNoDisable(undefined);
-
 </script>

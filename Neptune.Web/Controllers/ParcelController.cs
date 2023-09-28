@@ -126,21 +126,5 @@ namespace Neptune.Web.Controllers
             var viewData = new SummaryForMapViewData(CurrentPerson, parcel);
             return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
         }
-
-        [HttpGet]
-        [NeptuneViewFeature]
-        public ContentResult Union()
-        {
-            return Content("");
-        }
-
-        [HttpPost]
-        [NeptuneViewFeature]
-        public JsonResult Union(UnionOfParcelsViewModel viewModel)
-        {
-            var unionOfParcels = ParcelGeometries.UnionAggregateByParcelIDs(_dbContext, viewModel.ParcelIDs);
-            var featureCollection = unionOfParcels.MultiPolygonToFeatureCollection();
-            return Json(featureCollection);
-        }
     }
 }

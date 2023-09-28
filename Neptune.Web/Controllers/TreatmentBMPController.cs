@@ -1019,19 +1019,14 @@ namespace Neptune.Web.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public ContentResult MapPopup([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMP = TreatmentBMPs.GetByID(_dbContext, treatmentBMPPrimaryKey);
             var properties = new Dictionary<string, HtmlString>
             {
                 {"Name", UrlTemplate.MakeHrefString(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMP)), treatmentBMP.TreatmentBMPName)},
-                {
-                    $"{FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabel()}",
-                    UrlTemplate.MakeHrefString(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMP.StormwaterJurisdiction)), treatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName())
-                },
+                {"Jurisdiction", UrlTemplate.MakeHrefString(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMP.StormwaterJurisdiction)), treatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName())},
                 {"Type", new HtmlString(treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName)},
             };
-            var dl = new TagBuilder("dl");
-            dl.InnerHtml.AppendHtml(string.Join("", properties.Select(x => $"<dt>{x.Key}</dt><dd>{x.Value}</dd>").ToList()));
-            return Content(dl.ToString());
+            return Content($"<dl>{string.Join("", properties.Select(x => $"<dt>{x.Key}</dt><dd>{x.Value}</dd>").ToList())}</dl>");
         }
 
         //todo: use gdalservice

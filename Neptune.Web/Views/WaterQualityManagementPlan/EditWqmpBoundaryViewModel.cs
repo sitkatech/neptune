@@ -22,7 +22,6 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
-using Neptune.Web.Common;
 using Neptune.Web.Common.Models;
 using Neptune.Web.Models;
 
@@ -39,9 +38,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
         }
 
-        public void UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, NeptuneDbContext dbContext, WaterQualityManagementPlanBoundary? waterQualityManagementPlanBoundary, List<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcels)
+        public void UpdateModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, NeptuneDbContext dbContext, WaterQualityManagementPlanBoundary? waterQualityManagementPlanBoundary)
         {
-            var newWaterQualityManagementPlanParcels = new List<WaterQualityManagementPlanParcel>();
             if (waterQualityManagementPlanBoundary == null)
             {
                 waterQualityManagementPlanBoundary = new WaterQualityManagementPlanBoundary
@@ -50,32 +48,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             if (WktAndAnnotations != null)
             {
-                var dbGeometries = WktAndAnnotations.Select(x =>
-                {
-                    var geometry = GeometryHelper.FromWKT(x.Wkt, Proj4NetHelper.WEB_MERCATOR);
-                    return geometry.Buffer(0);
-                });
+                var dbGeometries = WktAndAnnotations.Select(x => GeometryHelper.FromWKT(x.Wkt, Proj4NetHelper.WEB_MERCATOR).Buffer(0));
                 var newGeometry4326 = dbGeometries.ToList().UnionListGeometries();
-                newWaterQualityManagementPlanParcels = dbContext.ParcelGeometries
-                    .Where(x => x.Geometry4326.Intersects(newGeometry4326))
-                    .ToList()
-                    .Select(x =>
-                        new WaterQualityManagementPlanParcel
-                        {
-                            WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID, 
-                            ParcelID = x.ParcelID
-                        })
-                    .ToList();
-
                 // since this is coming from the browser, we have to transform to State Plane
                 waterQualityManagementPlanBoundary.GeometryNative = newGeometry4326.ProjectTo2771();
                 waterQualityManagementPlanBoundary.Geometry4326 = newGeometry4326;
             }
-
-            waterQualityManagementPlanParcels.Merge(
-                newWaterQualityManagementPlanParcels,
-                dbContext.WaterQualityManagementPlanParcels,
-                (x, y) => x.ParcelID == y.ParcelID && x.WaterQualityManagementPlanID == y.WaterQualityManagementPlanID);
 
             if (WktAndAnnotations == null)
             {

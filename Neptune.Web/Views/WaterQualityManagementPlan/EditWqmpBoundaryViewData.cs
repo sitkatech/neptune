@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public EditWqmpBoundaryViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.NeptunePage neptunePage,
             EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
-            MapInitJson mapInitJson, string geoServerUrl, IEnumerable<int> parcelIDs, FeatureCollection? boundaryLayerGeoJson) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            MapInitJson mapInitJson, string geoServerUrl, FeatureCollection? boundaryLayerGeoJson) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             MapInitJson = mapInitJson;
             EntityName = "Water Quality Management Plan";
@@ -43,11 +43,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             MapFormID = "editAreaMapForm";
             GeoServerUrl = geoServerUrl;
-            ParcelIDs = parcelIDs;
             BoundaryLayerGeoJson = boundaryLayerGeoJson;
             WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
-
-            ParcelUnionUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(LinkGenerator, x => x.Union());
 
             DetailUrl = detailUrl;
         }
@@ -55,11 +52,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public string MapFormID { get; }
         public string GeoServerUrl { get; }
-        public IEnumerable<int> ParcelIDs { get; }
         public MapInitJson MapInitJson { get; }
         public FeatureCollection? BoundaryLayerGeoJson { get; }
         public int WaterQualityManagementPlanID { get; }
-        public string ParcelUnionUrl { get; }
         public string DetailUrl { get; }
     }
 }
