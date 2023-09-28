@@ -24,7 +24,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("treatmentBMPs/{projectID}/getByProjectID")]
         [UserViewFeature]
-        public ActionResult<TreatmentBMPUpsertDto> GetByProjectID([FromRoute] int projectID)
+        public ActionResult<List<TreatmentBMPUpsertDto>> GetByProjectID([FromRoute] int projectID)
         {
             var treatmentBMPUpsertDtos = TreatmentBMPs.ListByProjectIDAsUpsertDto(_dbContext, projectID);
             return Ok(treatmentBMPUpsertDtos);
@@ -32,7 +32,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("treatmentBMPs")]
         [JurisdictionEditFeature]
-        public ActionResult<TreatmentBMPDisplayDto> ListByPersonID()
+        public ActionResult<List<TreatmentBMPDisplayDto>> ListByPersonID()
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var treatmentBMPDisplayDtos = TreatmentBMPs.ListByPersonIDAsDisplayDto(_dbContext, personDto.PersonID);
@@ -41,7 +41,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("treatmentBMPs/types")]
         [UserViewFeature]
-        public ActionResult<TreatmentBMPTypeSimpleDto> ListTypes()
+        public ActionResult<List<TreatmentBMPTypeSimpleDto>> ListTypes()
         {
             var treatmentBMPTypeSimpleDtos = TreatmentBMPs.ListTypesAsSimpleDto(_dbContext);
             return Ok(treatmentBMPTypeSimpleDtos);
@@ -64,7 +64,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("treatmentBMPs/modelingAttributeDropdownItems")]
         [JurisdictionEditFeature]
-        public ActionResult<TreatmentBMPModelingAttributeDropdownItemDto> GetModelingAttributeDropdownItems()
+        public ActionResult<List<TreatmentBMPModelingAttributeDropdownItemDto>> GetModelingAttributeDropdownItems()
         {
             var treatmentBMPModelingAttributeDropdownItemDtos = TreatmentBMPs.GetModelingAttributeDropdownItemsAsDto(_dbContext);
             return Ok(treatmentBMPModelingAttributeDropdownItemDtos);
@@ -122,7 +122,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("treatmentBMPs/verified")]
         [UserViewFeature]
-        public ActionResult<TreatmentBMPDisplayDto> ListVerifiedTreatmentBMPs()
+        public ActionResult<List<TreatmentBMPDisplayDto>> ListVerifiedTreatmentBMPs()
         {
             var treatmentBMPDisplayDtos = TreatmentBMPs.ListVerifiedTreatmentBMPs(_dbContext);
             return Ok(treatmentBMPDisplayDtos);

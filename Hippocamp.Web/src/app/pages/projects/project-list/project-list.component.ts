@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { ProjectService } from 'src/app/services/project/project.service';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, GridApi } from 'ag-grid-community';
 import { UtilityFunctionsService } from 'src/app/services/utility-functions.service';
@@ -16,6 +15,7 @@ import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-re
 import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
 import { CustomDropdownFilterComponent } from 'src/app/shared/components/custom-dropdown-filter/custom-dropdown-filter.component';
 import { environment } from 'src/environments/environment';
+import { ProjectService } from 'src/app/shared/generated/api/project.service';
 
 
 @Component({
@@ -138,7 +138,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   private updateGridData() {
-    this.projectService.getProjectsByPersonID().subscribe(projects => {
+    this.projectService.projectsGet().subscribe(projects => {
       this.projectsGrid.api.setRowData(projects);
       this.projectsGrid.api.sizeColumnsToFit();
     });
@@ -174,7 +174,7 @@ export class ProjectListComponent implements OnInit {
   public deleteProject() {
     this.isLoadingDelete = true;
 
-    this.projectService.deleteProject(this.projectIDToDelete).subscribe(() => {
+    this.projectService.projectsProjectIDDeleteDelete(this.projectIDToDelete).subscribe(() => {
       this.isLoadingDelete = false;
       this.modalReference.close();
       this.alertService.pushAlert(new Alert('Project was successfully deleted.', AlertContext.Success, true));
@@ -187,7 +187,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   public downloadProjectModelResults() {
-    this.projectService.downloadProjectModelResults().subscribe(csv => {
+    this.projectService.projectsDownloadGet().subscribe(csv => {
       //Create a fake object for us to click and download
       var a = document.createElement('a');
       a.href = URL.createObjectURL(csv);
@@ -203,7 +203,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   public downloadTreatmentBMPModelResults() {
-    this.projectService.downloadBMPModelResults().subscribe(csv => {
+    this.projectService.projectsTreatmentBMPsDownloadGet().subscribe(csv => {
       //Create a fake object for us to click and download
       var a = document.createElement('a');
       a.href = URL.createObjectURL(csv);

@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProjectWorkflowService } from 'src/app/services/project-workflow.service';
-import { ProjectService } from 'src/app/services/project/project.service';
-import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
+import { ProjectService } from 'src/app/shared/generated/api/project.service';
+import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 import { ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/model/project-network-solve-history-simple-dto';
@@ -51,11 +51,11 @@ export class ReviewComponent implements OnInit {
       if (projectID) {
         this.projectID = parseInt(projectID);
         forkJoin({
-          project: this.projectService.getByID(this.projectID),
-          treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
-          delineations: this.projectService.getDelineationsByProjectID(this.projectID),
-          projectNetworkSolveHistories: this.projectService.getNetworkSolveHistoriesByProjectID(this.projectID),
-          attachments: this.projectService.getAttachmentsByProjectID(this.projectID)
+          project: this.projectService.projectsProjectIDGet(this.projectID),
+          treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
+          delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
+          projectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID),
+          attachments: this.projectService.projectsProjectIDAttachmentsGet(this.projectID)
         }).subscribe(({project, treatmentBMPs, delineations, projectNetworkSolveHistories, attachments}) => {
           this.treatmentBMPs = treatmentBMPs;
           this.delineations = delineations;
@@ -112,7 +112,7 @@ export class ReviewComponent implements OnInit {
         var model = this.mapProjectToUpsertDto();
         model.ShareOCTAM2Tier2Scores = !this.project.ShareOCTAM2Tier2Scores;
     
-        this.projectService.updateProject(this.projectID, model).subscribe(() => {
+        this.projectService.projectsProjectIDUpdatePost(this.projectID, model).subscribe(() => {
           this.isLoadingSubmit = false;
           this.projectWorkflowService.emitWorkflowUpdate();
           this.project.ShareOCTAM2Tier2Scores = !this.project.ShareOCTAM2Tier2Scores;

@@ -4,9 +4,6 @@ import { forkJoin } from 'rxjs';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { OrganizationService } from 'src/app/services/organization/organization.service';
-import { ProjectService } from 'src/app/services/project/project.service';
-import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { OrganizationSimpleDto } from 'src/app/shared/generated/model/organization-simple-dto';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { ProjectUpsertDto } from 'src/app/shared/generated/model/project-upsert-dto';
@@ -14,8 +11,11 @@ import { StormwaterJurisdictionSimpleDto } from 'src/app/shared/generated/model/
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { PersonSimpleDto } from 'src/app/shared/generated/model/person-simple-dto';
-import { UserService } from 'src/app/services/user/user.service';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
+import { ProjectService } from 'src/app/shared/generated/api/project.service';
+import { OrganizationService } from 'src/app/shared/generated/api/organization.service';
+import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stormwater-jurisdiction.service';
+import { UserService } from 'src/app/shared/generated/api/user.service';
 
 @Component({
   selector: 'hippocamp-project-basics',
@@ -59,7 +59,7 @@ export class ProjectBasicsComponent implements OnInit {
       this.projectModel = new ProjectUpsertDto();
       if (projectID) {
         this.projectID = parseInt(projectID);
-        this.projectService.getByID(this.projectID).subscribe(project => {
+        this.projectService.projectsProjectIDGet(this.projectID).subscribe(project => {
           // redirect to review step if project is shared with OCTA grant program
           if (project.ShareOCTAM2Tier2Scores) {
             this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
@@ -74,9 +74,9 @@ export class ProjectBasicsComponent implements OnInit {
       }
 
       forkJoin({
-        organizations: this.organizationService.getAllOrganizations(),
-        stormwaterJurisdictions: this.stormwaterJurisdictionService.getByPersonID(this.currentUser.PersonID),
-        users: this.userService.getUsers()
+        organizations: this.organizationService.organizationsGet(),
+        stormwaterJurisdictions: this.stormwaterJurisdictionService.jurisdictionsPersonIDGet(this.currentUser.PersonID),
+        users: this.userService.usersGet()
       }).subscribe(({organizations, stormwaterJurisdictions, users}) => {
         this.organizations = organizations;
         this.stormwaterJurisdictions = stormwaterJurisdictions;
@@ -141,13 +141,13 @@ export class ProjectBasicsComponent implements OnInit {
     this.alertService.clearAlerts();
 
     if (this.projectID) {
-      this.projectService.updateProject(this.projectID, this.projectModel).subscribe(() => {
+      this.projectService.projectsProjectIDUpdatePost(this.projectID, this.projectModel).subscribe(() => {
         this.onSubmitSuccess("Your project was successfully updated.", this.projectID, continueToNextStep)
       }, error => {
         this.onSubmitFailure(error);
       });
     } else {
-      this.projectService.newProject(this.projectModel).subscribe(project => {
+      this.projectService.projectsNewPost(this.projectModel).subscribe(project => {
         this.onSubmitSuccess("Your project was successfully created.", project.ProjectID, continueToNextStep)
       }, error => {
         this.onSubmitFailure(error);

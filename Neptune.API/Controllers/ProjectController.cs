@@ -348,7 +348,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("projects/{projectID}/delineations")]
         [UserViewFeature]
-        public ActionResult<DelineationUpsertDto> GetDelineationsByProjectID([FromRoute] int projectID)
+        public ActionResult<List<DelineationUpsertDto>> GetDelineationsByProjectID([FromRoute] int projectID)
         {
             var DelineationUpsertDtos = Delineations.ListByProjectIDAsUpsertDto(_dbContext, projectID);
             return Ok(DelineationUpsertDtos);
@@ -522,7 +522,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("projects/delineations")]
         [UserViewFeature]
-        public ActionResult<DelineationSimpleDto> List()
+        public ActionResult<List<DelineationSimpleDto>> List()
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             if (!personDto.IsOCTAGrantReviewer)

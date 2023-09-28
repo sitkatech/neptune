@@ -1,4 +1,18 @@
 .gitignore
+api.module.ts
+api/custom-rich-text.service.ts
+api/delineation.service.ts
+api/field-definition.service.ts
+api/file-resource.service.ts
+api/health.service.ts
+api/organization.service.ts
+api/project.service.ts
+api/role.service.ts
+api/stormwater-jurisdiction.service.ts
+api/treatment-bmp.service.ts
+api/user.service.ts
+configuration.ts
+encoder.ts
 model/bounding-box-dto.ts
 model/delineation-simple-dto.ts
 model/delineation-upsert-dto.ts
@@ -33,3 +47,4 @@ model/treatment-bmp-modeling-attribute-dropdown-item-dto.ts
 model/treatment-bmp-type-simple-dto.ts
 model/treatment-bmp-upsert-dto.ts
 model/treatment-bmphru-characteristics-summary-simple-dto.ts
+variables.ts

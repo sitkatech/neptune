@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ChangeDetectorRef, AfterViewChecked, ViewChild } from '@angular/core';
-import { CustomRichTextService } from '../../services/custom-rich-text.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { AlertService } from '../../services/alert.service';
 import { Alert } from '../../models/alert';
@@ -9,6 +8,7 @@ import { NeptunePageDto } from '../../generated/model/neptune-page-dto';
 import { PersonDto } from '../../generated/model/person-dto';
 import { EditorComponent } from '@tinymce/tinymce-angular';
 import TinyMCEHelpers from '../../helpers/tiny-mce-helpers';
+import { CustomRichTextService } from '../../generated/api/custom-rich-text.service';
 
 @Component({
   selector: 'custom-rich-text',
@@ -39,7 +39,7 @@ export class CustomRichTextComponent implements OnInit, AfterViewChecked {
       this.currentUser = currentUser;
     });
 
-    this.customRichTextService.getCustomRichText(this.customRichTextTypeID).subscribe(x => {
+    this.customRichTextService.customRichTextCustomRichTextTypeIDGet(this.customRichTextTypeID).subscribe(x => {
       this.customRichTextContent = this.sanitizer.bypassSecurityTrustHtml(x.NeptunePageContent);
       this.isEmptyContent = x.IsEmptyContent;
       this.editedContent = x.NeptunePageContent;
@@ -76,7 +76,7 @@ export class CustomRichTextComponent implements OnInit, AfterViewChecked {
     this.isEditing = false;
     this.isLoading = true;
     const updateDto = new NeptunePageDto({ NeptunePageContent: this.editedContent });
-    this.customRichTextService.updateCustomRichText(this.customRichTextTypeID, updateDto).subscribe(x => {
+    this.customRichTextService.customRichTextCustomRichTextTypeIDPut(this.customRichTextTypeID, updateDto).subscribe(x => {
       this.customRichTextContent = this.sanitizer.bypassSecurityTrustHtml(x.NeptunePageContent);
       this.editedContent = x.NeptunePageContent;
       this.isLoading = false;

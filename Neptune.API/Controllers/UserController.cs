@@ -5,6 +5,7 @@ using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using System;
+using System.Collections.Generic;
 using System.Net.Mail;
 using Neptune.Models.DataTransferObjects;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,7 +50,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("users")]
         [UserViewFeature]
-        public ActionResult<PersonSimpleDto> List()
+        public ActionResult<List<PersonSimpleDto>> List()
         {
             var userList = People.ListAsSimpleDto(_dbContext);
             return Ok(userList);

@@ -5,9 +5,6 @@ import 'leaflet.fullscreen';
 import * as esri from 'esri-leaflet';
 import { forkJoin } from 'rxjs';
 import { ProjectWorkflowService } from 'src/app/services/project-workflow.service';
-import { ProjectService } from 'src/app/services/project/project.service';
-import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
-import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 import { BoundingBoxDto } from 'src/app/shared/generated/model/bounding-box-dto';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
@@ -27,6 +24,9 @@ import { environment } from 'src/environments/environment';
 import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
 import { Router } from '@angular/router';
 import { WfsService } from 'src/app/shared/services/wfs.service';
+import { ProjectService } from 'src/app/shared/generated/api/project.service';
+import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stormwater-jurisdiction.service';
+import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
 
 declare var $: any
 
@@ -241,12 +241,12 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     if (this.projectID) {
 
       forkJoin({
-        project: this.projectService.getByID(this.projectID),
-        treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
-        delineations: this.projectService.getDelineationsByProjectID(this.projectID),
-        boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
-        treatmentBMPTypes: this.treatmentBMPService.getTypes(),
-        modelingAttributeDropdownItems: this.treatmentBMPService.getModelingAttributesDropdownitems()
+        project: this.projectService.projectsProjectIDGet(this.projectID),
+        treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
+        delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
+        boundingBox: this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID),
+        treatmentBMPTypes: this.treatmentBMPService.treatmentBMPsTypesGet(),
+        modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBMPsModelingAttributeDropdownItemsGet()
       }).subscribe(({ project, treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
         this.mapProjectSimpleDtoToProject(project);
         this.originalDoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
@@ -631,7 +631,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   }
 
   public changeTreatmentBMPType(treatmentBMPType: number){
-    this.treatmentBMPService.changeTreatmentBMPType(this.selectedTreatmentBMP.TreatmentBMPID, treatmentBMPType, this.selectedTreatmentBMP).subscribe((temp) => {
+    this.treatmentBMPService.treatmentBMPsTreatmentBMPIDTreatmentBMPTypeTreatmentBMPTypeIDPut(this.selectedTreatmentBMP.TreatmentBMPID, treatmentBMPType, this.selectedTreatmentBMP).subscribe((temp) => {
       this.modalReference.close();
       this.selectedTreatmentBMP.TreatmentBMPTypeID = treatmentBMPType;
       this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = temp;
@@ -684,11 +684,11 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     this.alertService.clearAlerts();
     this.project.DoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs && (this.treatmentBMPs == null || this.treatmentBMPs.length == 0);
 
-    this.projectService.updateProject(this.projectID, this.project).subscribe(() => {
-      this.treatmentBMPService.mergeTreatmentBMPs(this.treatmentBMPs, this.projectID).subscribe(() => {
+    this.projectService.projectsProjectIDUpdatePost(this.projectID, this.project).subscribe(() => {
+      this.treatmentBMPService.treatmentBMPsProjectIDPut(this.projectID, this.treatmentBMPs).subscribe(() => {
         this.isLoadingSubmit = false;
         this.projectWorkflowService.emitWorkflowUpdate();
-        this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID).subscribe(treatmentBMPs => {
+        this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID).subscribe(treatmentBMPs => {
           this.treatmentBMPs = treatmentBMPs;
           this.originalTreatmentBMPs = JSON.stringify(treatmentBMPs);
           this.originalDoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs;

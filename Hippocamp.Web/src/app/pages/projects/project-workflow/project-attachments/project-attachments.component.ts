@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { ProjectService } from 'src/app/services/project/project.service';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { ProjectDocumentUpsertDto } from 'src/app/shared/models/project-document-upsert-dto';
 import { Alert } from 'src/app/shared/models/alert';
@@ -12,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { ProjectDocumentUpdateDto } from 'src/app/shared/models/project-document-update-dto';
+import { ProjectService } from 'src/app/shared/generated/api/project.service';
 
 @Component({
   selector: 'hippocamp-project-attachments',
@@ -63,7 +63,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
 
-      this.projectService.getByID(this.projectID).subscribe(project => {
+      this.projectService.projectsProjectIDGet(this.projectID).subscribe(project => {
         // redirect to review step if project is shared with OCTA grant program
         if (project.ShareOCTAM2Tier2Scores) {
           this.router.navigateByUrl(`projects/edit/${this.projectID}/review-and-share`);
@@ -162,7 +162,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     this.isLoadingDelete = true;
     this.alertService.clearAlerts();
 
-    this.projectService.deleteAttachmentByID(this.attachmentIDToRemove).subscribe(() => {
+    this.projectService.projectsAttachmentsAttachmentIDDelete(this.attachmentIDToRemove).subscribe(() => {
       this.isLoadingDelete = false;
       this.modalReference.close();
       this.alertService.pushAlert(new Alert('Attachment was successfully deleted.', AlertContext.Success, true));
@@ -175,7 +175,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
   }
 
   refreshAttachments(): void {
-    this.projectService.getAttachmentsByProjectID(this.projectID).subscribe(attachments => {
+    this.projectService.projectsProjectIDAttachmentsGet(this.projectID).subscribe(attachments => {
       this.attachments = attachments;
       this.cdr.detectChanges();
     });
@@ -194,7 +194,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     this.invalidFields = [];
     this.alertService.clearAlerts();
 
-    this.projectService.addAttachmentByProjectID(this.projectID, this.model)
+    this.projectService.projectsProjectIDAttachmentsPost(this.projectID, this.model.ProjectID, this.model.FileResource, this.model.DisplayName, this.model.DocumentDescription)
       .subscribe(response => {
         this.onSubmitSuccess(addAttachmentForm, "Project attachment '" + response.DisplayName + "' successfully added.");
       }, error => {
@@ -208,7 +208,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     this.invalidFields = [];
     this.alertService.clearAlerts();
 
-    this.projectService.updateAttachmentByID(this.editAttachmentID, this.editModel)
+    this.projectService.projectsAttachmentsAttachmentIDPut(this.editAttachmentID, this.editModel)
       .subscribe(response => {
         this.isLoadingUpdate = false;
         this.modalReference.close('editAttachmentModal');

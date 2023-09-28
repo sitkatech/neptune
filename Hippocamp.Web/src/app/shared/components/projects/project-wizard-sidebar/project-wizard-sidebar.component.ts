@@ -4,14 +4,13 @@ import { forkJoin, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProjectWorkflowService } from 'src/app/services/project-workflow.service';
-import { ProjectService } from 'src/app/services/project/project.service';
-import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
-import { UserService } from 'src/app/services/user/user.service';
 import { DelineationUpsertDto } from '../../../generated/model/delineation-upsert-dto';
 import { ProjectLoadReducingResultDto } from '../../../generated/model/models';
 import { PersonDto } from '../../../generated/model/person-dto';
 import { ProjectUpsertDto } from '../../../generated/model/project-upsert-dto';
 import { TreatmentBMPUpsertDto } from '../../../generated/model/treatment-bmp-upsert-dto';
+import { ProjectService } from 'src/app/shared/generated/api/project.service';
+import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
 
 @Component({
   selector: 'hippocamp-project-wizard-sidebar',
@@ -36,7 +35,6 @@ export class ProjectWizardSidebarComponent implements OnInit, OnChanges, OnDestr
     private router: Router,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private userService: UserService,
     private authenticationService: AuthenticationService,
     private treatmentBMPService: TreatmentBMPService,
     private projectService: ProjectService,
@@ -85,9 +83,9 @@ export class ProjectWizardSidebarComponent implements OnInit, OnChanges, OnDestr
 
   getProjectRelatedEntities() {
     forkJoin({
-      treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
-      delineations: this.projectService.getDelineationsByProjectID(this.projectID),
-      modeledResults: this.projectService.getLoadReducingResultsByProjectID(this.projectID)
+      treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
+      delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
+      modeledResults: this.projectService.projectsProjectIDLoadReducingResultsGet(this.projectID)
     }).subscribe(({ treatmentBMPs, delineations, modeledResults }) => {
       this.treatmentBMPs = treatmentBMPs;
       this.delineations = delineations;

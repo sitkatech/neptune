@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { UserService } from './user/user.service';
 import { Observable, Subject, race } from 'rxjs';
 import { filter, first, map } from 'rxjs/operators';
 import { CookieStorageService } from '../shared/services/cookies/cookie-storage.service';
@@ -12,6 +11,7 @@ import { AlertContext } from '../shared/models/enums/alert-context.enum';
 import { environment } from 'src/environments/environment';
 import { PersonCreateDto } from '../shared/generated/model/person-create-dto';
 import { PersonDto } from '../shared/generated/model/person-dto';
+import { UserService } from '../shared/generated/api/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -67,7 +67,7 @@ export class AuthenticationService {
     private getUser(claims: any) {
       var globalID = claims["sub"];
   
-      this.userService.getUserFromGlobalID(globalID).subscribe(
+      this.userService.userClaimsGlobalIDGet(globalID).subscribe(
         result => { this.updateUser(result) },
         error => { this.onGetUserError(error, claims) }
       );
@@ -92,7 +92,7 @@ export class AuthenticationService {
           UserGuid: claims["sub"],
         });
   
-        this.userService.createNewUser(newUser).subscribe(user => {
+        this.userService.usersPost(newUser).subscribe(user => {
           this.updateUser(user);
         })
       }

@@ -36,7 +36,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("jurisdictions/boundingBox")]
         [UserViewFeature]
-        public ActionResult<BoundingBoxDto> GetBoundingBoxByPersonID([FromRoute] int projectID)
+        public ActionResult<BoundingBoxDto> GetBoundingBoxByPersonID()
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByPersonID(_dbContext, personDto.PersonID);

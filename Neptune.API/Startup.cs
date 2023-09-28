@@ -142,7 +142,6 @@ namespace Neptune.API
             {
                 // extra options here if you wanted
             });
-            services.AddSwaggerGenNewtonsoftSupport();
             #endregion
         }
 

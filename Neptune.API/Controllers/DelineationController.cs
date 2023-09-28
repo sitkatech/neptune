@@ -1,4 +1,5 @@
-﻿using Neptune.API.Services;
+﻿using System.Collections.Generic;
+using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
@@ -17,7 +18,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("delineations")]
         [JurisdictionEditFeature]
-        public ActionResult<DelineationSimpleDto> ListByPersonID()
+        public ActionResult<List<DelineationSimpleDto>> ListByPersonID()
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var delineationsUpsertDtos = Delineations.ListByPersonIDAsSimpleDto(_dbContext, personDto.PersonID);

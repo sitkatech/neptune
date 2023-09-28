@@ -11,9 +11,7 @@ import { BoundingBoxDto, DelineationSimpleDto, ProjectSimpleDto, TreatmentBMPDis
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
-import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
-import { ProjectService } from 'src/app/services/project/project.service';
 import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { PrioritizationMetric } from 'src/app/shared/models/prioritization-metric';
 import { WfsService } from 'src/app/shared/services/wfs.service';
@@ -26,7 +24,9 @@ import { AlertService } from 'src/app/shared/services/alert.service';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
-import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
+import { ProjectService } from 'src/app/shared/generated/api/project.service';
+import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stormwater-jurisdiction.service';
+import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
 
 declare var $: any;
 
@@ -99,13 +99,14 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.authenticationService.getCurrentUser().subscribe(result => {
       this.currentUser = result;
-      this.stormwaterJurisdictionService.getBoundingBoxByLoggedInPerson().subscribe(result => {
+      //TODO check this
+      this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet().subscribe(result => {
         this.boundingBox = result;
         forkJoin({
-          projects: this.projectService.getProjectsSharedWithOCTAM2Tier2GrantProgram(),
-          treatmentBMPs: this.projectService.getTreatmentBMPsSharedWithOCTAM2Tier2GrantProgram(),
-          verifiedTreatmentBMPs: this.treatmentBMPService.getVerifiedTreatmentBMPs(),
-          delineations: this.projectService.getAllDelineations(),
+          projects: this.projectService.projectsOCTAM2Tier2GrantProgramGet(),
+          treatmentBMPs: this.projectService.projectsOCTAM2Tier2GrantProgramTreatmentBMPsGet(),
+          verifiedTreatmentBMPs: this.treatmentBMPService.treatmentBMPsVerifiedGet(),
+          delineations: this.projectService.projectsDelineationsGet(),
         }).subscribe(({ projects, treatmentBMPs, verifiedTreatmentBMPs, delineations}) => {
           this.projects = projects;
           this.treatmentBMPs = treatmentBMPs;
@@ -496,6 +497,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   } 
 
   public getProjectModelResultsDownloadLink() {
+    //TODO: move this?
     return `${environment.mainAppApiUrl}/projects/OCTAM2Tier2GrantProgram/download`;
   }
   
@@ -504,7 +506,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   }
 
   public downloadProjectModelResults() {
-    this.projectService.downloadOCTAM2Tier2GrantProgramProjectModelResults().subscribe(csv => {
+    this.projectService.projectsOCTAM2Tier2GrantProgramDownloadGet().subscribe(csv => {
       //Create a fake object for us to click and download
       var a = document.createElement('a');
       a.href = URL.createObjectURL(csv);
@@ -520,7 +522,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   }
 
   public downloadTreatmentBMPModelResults() {
-    this.projectService.downloadOCTAM2Tier2GrantProgramBMPModelResults().subscribe(csv => {
+    this.projectService.projectsOCTAM2Tier2GrantProgramTreatmentBMPsDownloadGet().subscribe(csv => {
       //Create a fake object for us to click and download
       var a = document.createElement('a');
       a.href = URL.createObjectURL(csv);

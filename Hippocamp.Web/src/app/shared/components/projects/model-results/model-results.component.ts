@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
-import { ProjectService } from 'src/app/services/project/project.service';
+import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
 import { ProjectLoadReducingResultDto } from 'src/app/shared/generated/model/project-load-reducing-result-dto';
 import { ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/model/project-network-solve-history-simple-dto';
@@ -43,8 +43,8 @@ export class ModelResultsComponent implements OnInit {
       this.projectNetworkSolveHistories != undefined &&
       this.projectNetworkSolveHistories.filter(x => x.ProjectNetworkSolveHistoryStatusTypeID == ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded).length > 0) {
       forkJoin({
-        modeledResults: this.projectService.getLoadReducingResultsByProjectID(this.projectID),
-        treatmentBMPHRUCharacteristicSummaries: this.projectService.getTreatmentBMPHRUCharacteristicSummariesByProjectID(this.projectID)
+        modeledResults: this.projectService.projectsProjectIDLoadReducingResultsGet(this.projectID),
+        treatmentBMPHRUCharacteristicSummaries: this.projectService.projectsProjectIDTreatmentBmpHruCharacteristicsGet(this.projectID)
       })
         .subscribe(({ modeledResults, treatmentBMPHRUCharacteristicSummaries }) => {
           this.projectLoadReducingResults = modeledResults;
