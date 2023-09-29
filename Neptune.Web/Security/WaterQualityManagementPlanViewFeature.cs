@@ -16,25 +16,26 @@ namespace Neptune.Web.Security
         public PermissionCheckResult HasPermission(Person person, WaterQualityManagementPlan contextModelObject,
             NeptuneDbContext dbContext)
         {
+            var waterQualityManagementPlan = WaterQualityManagementPlans.GetByIDForFeatureContextCheck(dbContext, contextModelObject.WaterQualityManagementPlanID);
             if (person.IsAnonymousOrUnassigned() &&
-                contextModelObject.StormwaterJurisdiction.StormwaterJurisdictionPublicWQMPVisibilityTypeID ==
+                waterQualityManagementPlan.StormwaterJurisdiction.StormwaterJurisdictionPublicWQMPVisibilityTypeID ==
                 (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.None)
             {
-                return new PermissionCheckResult($"You don't have permission to view WQMPs for Jurisdiction {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult($"You don't have permission to view WQMPs for Jurisdiction {waterQualityManagementPlan.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
             if (person.IsAnonymousOrUnassigned() &&
-                contextModelObject.StormwaterJurisdiction.StormwaterJurisdictionPublicWQMPVisibilityTypeID ==
+                waterQualityManagementPlan.StormwaterJurisdiction.StormwaterJurisdictionPublicWQMPVisibilityTypeID ==
                 (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.ActiveOnly && 
-                contextModelObject.WaterQualityManagementPlanStatusID == (int)WaterQualityManagementPlanStatusEnum.Inactive)
+                waterQualityManagementPlan.WaterQualityManagementPlanStatusID == (int)WaterQualityManagementPlanStatusEnum.Inactive)
             {
                 return new PermissionCheckResult($"You don't have permission to view this WQMP.");
             }
 
-            var isAssignedToTreatmentBMP = person.IsAssignedToStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID);
+            var isAssignedToTreatmentBMP = person.IsAssignedToStormwaterJurisdiction(waterQualityManagementPlan.StormwaterJurisdictionID);
             if (!person.IsAnonymousOrUnassigned() && !isAssignedToTreatmentBMP)
             {
-                return new PermissionCheckResult($"You don't have permission to view WQMPs for Jurisdiction {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult($"You don't have permission to view WQMPs for Jurisdiction {waterQualityManagementPlan.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
             return new PermissionCheckResult();
