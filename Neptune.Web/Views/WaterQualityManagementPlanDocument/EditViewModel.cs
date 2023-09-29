@@ -53,9 +53,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlanDocument
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var dbContext = validationContext.GetService<NeptuneDbContext>();
-            if (dbContext.WaterQualityManagementPlanDocuments.AsNoTracking()
-                .Single(x => x.WaterQualityManagementPlanDocumentID == WaterQualityManagementPlanDocumentID)
-                .WaterQualityManagementPlan.WaterQualityManagementPlanDocuments.Any(x =>
+            var waterQualityManagementPlanDocument = dbContext.WaterQualityManagementPlanDocuments.AsNoTracking()
+                .Single(x => x.WaterQualityManagementPlanDocumentID == WaterQualityManagementPlanDocumentID);
+            if (WaterQualityManagementPlanDocuments.ListByWaterQualityManagementPlanID(dbContext, waterQualityManagementPlanDocument.WaterQualityManagementPlanID).Any(x =>
                     x.DisplayName == DisplayName &&
                     x.WaterQualityManagementPlanDocumentID != WaterQualityManagementPlanDocumentID))
             {
