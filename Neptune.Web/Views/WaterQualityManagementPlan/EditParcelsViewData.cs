@@ -5,13 +5,13 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class EditWqmpParcelsViewData : NeptuneViewData
+    public class EditParcelsViewData : NeptuneViewData
     {
         public EFModels.Entities.WaterQualityManagementPlan WaterQualityManagementPlan { get; }
         public EditWqmpParcelsViewDataForAngular ViewDataForAngular { get; }
         public decimal? RecordedWQMPAreaInAcres { get; }
 
-        public EditWqmpParcelsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public EditParcelsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
             MapInitJson mapInitJson, string mapServiceUrl, string parcelMapServiceLayerName, IEnumerable<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcels)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)

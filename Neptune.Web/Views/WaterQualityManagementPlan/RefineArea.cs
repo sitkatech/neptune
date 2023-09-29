@@ -23,7 +23,7 @@ using Neptune.Web.Common.Mvc;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public abstract class EditWqmpBoundary : TypedWebViewPage<EditWqmpBoundaryViewData, EditWqmpBoundaryViewModel>
+    public abstract class RefineArea : TypedWebViewPage<RefineAreaViewData, RefineAreaViewModel>
     {
     }
 }

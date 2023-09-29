@@ -26,9 +26,9 @@ using NetTopologySuite.Features;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class EditWqmpBoundaryViewData : NeptuneViewData
+    public class RefineAreaViewData : NeptuneViewData
     {
-        public EditWqmpBoundaryViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public RefineAreaViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.NeptunePage neptunePage,
             EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
             MapInitJson mapInitJson, string geoServerUrl, FeatureCollection? boundaryLayerGeoJson) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)

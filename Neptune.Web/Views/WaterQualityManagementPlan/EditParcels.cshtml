@@ -2,12 +2,12 @@
 @using Neptune.Web.Views.WaterQualityManagementPlan
 @using Neptune.EFModels.Entities
 @using Neptune.Web.Common
-@model EditWqmpParcelsViewModel
-@inherits EditWqmpParcels
+@model EditParcelsViewModel
+@inherits EditParcels
 
 @section JavascriptAndStylesContent {
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
-    <script type="text/javascript" src="@Url.Content("~/Content/angular-controllers/EditWqmpParcelsController.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/angular-controllers/EditWQMPParcelsController.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/typeahead/typeahead.min.js")"></script>
     <script type="text/javascript">
         // <![CDATA[

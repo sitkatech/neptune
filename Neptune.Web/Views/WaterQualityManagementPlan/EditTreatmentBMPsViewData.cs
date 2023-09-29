@@ -6,13 +6,13 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class EditWqmpBmpsViewData : NeptuneViewData
+    public class EditTreatmentBMPsViewData : NeptuneViewData
     {
         public EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular ViewDataForAngular { get; }
         public string WaterQualityManagementPlanDetailUrl { get; }
         public string NewTreatmentBMPUrl { get; }
 
-        public EditWqmpBmpsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, List<TreatmentBMPDisplayDto> treatmentBMPDisplayDtos) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditTreatmentBMPsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, List<TreatmentBMPDisplayDto> treatmentBMPDisplayDtos) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());

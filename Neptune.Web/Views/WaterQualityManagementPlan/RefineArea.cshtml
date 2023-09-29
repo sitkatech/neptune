@@ -22,15 +22,15 @@
 @using Neptune.Web.Views.Shared
 @using Neptune.Web.Common
 @using Neptune.Web.Common.BootstrapWrappers
-@inherits Neptune.Web.Views.WaterQualityManagementPlan.EditWqmpBoundary
-@model Neptune.Web.Views.WaterQualityManagementPlan.EditWqmpBoundaryViewModel
+@inherits Neptune.Web.Views.WaterQualityManagementPlan.RefineArea
+@model Neptune.Web.Views.WaterQualityManagementPlan.RefineAreaViewModel
 
 @section JavascriptAndStylesContent
 {
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
 
     <script src=@("https://npmcdn.com/@turf/turf/turf.min.js")></script>
-    <script src="@Url.Content("~/Content/angular-controllers/EditWqmpBoundary.js")"></script>
+    <script src="@Url.Content("~/Content/angular-controllers/EditWQMPBoundary.js")"></script>
 }
 
 @{ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);}

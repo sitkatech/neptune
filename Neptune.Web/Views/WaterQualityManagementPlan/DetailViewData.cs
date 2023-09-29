@@ -95,7 +95,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     x.Edit(WaterQualityManagementPlan));
             EditInventoriedBMPsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
-                    x.EditWqmpBmps(WaterQualityManagementPlan));
+                    x.EditTreatmentBMPs(WaterQualityManagementPlan));
             EditSimplifiedStructuralBMPsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
                     x.EditSimplifiedStructuralBMPs(WaterQualityManagementPlan));
@@ -107,10 +107,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     x.EditModelingApproach(WaterQualityManagementPlan));
             EditParcelsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
-                    x.EditWqmpParcels(WaterQualityManagementPlan));
+                    x.EditParcels(WaterQualityManagementPlan));
             EditWqmpBoundaryUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
-                    x.EditWqmpBoundary(WaterQualityManagementPlan));
+                    x.RefineArea(WaterQualityManagementPlan));
             NewDocumentUrl = SitkaRoute<WaterQualityManagementPlanDocumentController>.BuildUrlFromExpression(LinkGenerator, x => x.New(waterQualityManagementPlan));
             TreatmentBMPDetailUrlTemplate = new UrlTemplate<int>(
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator,

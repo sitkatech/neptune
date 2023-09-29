@@ -27,14 +27,14 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class EditWqmpBoundaryViewModel : FormViewModel
+    public class RefineAreaViewModel : FormViewModel
     {
         public List<WktAndAnnotation> WktAndAnnotations { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
-        public EditWqmpBoundaryViewModel()
+        public RefineAreaViewModel()
         {
         }
 

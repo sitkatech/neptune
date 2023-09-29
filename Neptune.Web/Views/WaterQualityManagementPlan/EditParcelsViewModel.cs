@@ -6,7 +6,7 @@ using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class EditWqmpParcelsViewModel : FormViewModel
+    public class EditParcelsViewModel : FormViewModel
     {
         [DisplayName("Parcels")]
         public IEnumerable<int> ParcelIDs { get; set; }
@@ -14,11 +14,11 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         /// <summary>
         /// Needed by Model Binder
         /// </summary>
-        public EditWqmpParcelsViewModel()
+        public EditParcelsViewModel()
         {
         }
 
-        public EditWqmpParcelsViewModel(List<int> parcelIDs)
+        public EditParcelsViewModel(List<int> parcelIDs)
         {
             ParcelIDs = parcelIDs;
         }

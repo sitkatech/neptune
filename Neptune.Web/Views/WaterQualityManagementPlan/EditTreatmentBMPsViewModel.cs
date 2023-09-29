@@ -3,18 +3,18 @@ using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class EditWqmpBmpsViewModel : FormViewModel
+    public class EditTreatmentBMPsViewModel : FormViewModel
     {
         public IEnumerable<int> TreatmentBmpIDs { get; set; }
 
         /// <summary>
         /// Needed by model binder
         /// </summary>
-        public EditWqmpBmpsViewModel()
+        public EditTreatmentBMPsViewModel()
         {
         }
 
-        public EditWqmpBmpsViewModel(List<int> treatmentBmpIDs)
+        public EditTreatmentBMPsViewModel(List<int> treatmentBmpIDs)
         {
             TreatmentBmpIDs = treatmentBmpIDs;
         }
