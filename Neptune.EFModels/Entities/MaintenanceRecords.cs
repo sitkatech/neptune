@@ -15,10 +15,10 @@ public static class MaintenanceRecords
                 .ThenInclude(x => x.StormwaterJurisdiction)
                 .ThenInclude(x => x.Organization)
             .Include(x => x.TreatmentBMPType)
-                .ThenInclude(x => x.TreatmentBMPTypeCustomAttributeTypes)
-                    .ThenInclude(x => x.CustomAttributeType)
             .Include(x => x.MaintenanceRecordObservations)
                 .ThenInclude(x => x.MaintenanceRecordObservationValues)
+            .Include(x => x.MaintenanceRecordObservations)
+                .ThenInclude(x => x.CustomAttributeType)
             ;
     }
 
