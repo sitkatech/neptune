@@ -536,7 +536,7 @@ namespace Neptune.Web.Controllers
             var geometry4326 = waterQualityManagementPlanBoundary?.Geometry4326;
             var featureCollection = geometry4326?.MultiPolygonToFeatureCollection();
             var boundingBoxDto = new BoundingBoxDto(geometry4326);
-            var mapInitJson = new MapInitJson("editWqmpBoundaryMap", 10, new List<LayerGeoJson>(), boundingBoxDto);
+            var mapInitJson = new MapInitJson("EditWQMPBoundaryMap", 10, new List<LayerGeoJson>(), boundingBoxDto);
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.EditWQMPBoundary);
             var viewData = new RefineAreaViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, waterQualityManagementPlan, mapInitJson, _webConfiguration.ParcelMapServiceUrl, featureCollection);
             return RazorView<RefineArea, RefineAreaViewData, RefineAreaViewModel>(viewData, viewModel);

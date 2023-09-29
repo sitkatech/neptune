@@ -1,4 +1,4 @@
-﻿angular.module("NeptuneApp").controller("EditWqmpParcelsController", function ($scope, angularModelAndViewData) {
+﻿angular.module("NeptuneApp").controller("EditWQMPParcelsController", function ($scope, angularModelAndViewData) {
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 

@@ -1,5 +1,5 @@
 ﻿angular.module("NeptuneApp")
-    .controller("EditWqmpTreatmentBmpsController", function ($scope, angularModelAndViewData) {
+    .controller("EditWQMPTreatmentBMPsController", function ($scope, angularModelAndViewData) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
