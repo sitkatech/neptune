@@ -20,6 +20,56 @@ global:
     pyqgisPassword: "passwordhere"
     keystoneOpenIDClientSecret: "secrethere"
 
+api:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/neptune/api
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+    # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: ""
+    annotations:
+      kubernetes.io/ingress.class: azure/application-gateway
+      cert-manager.io/cluster-issuer: letsencrypt
+      acme.cert-manager.io/http01-edit-in-place: "true"
+      appgw.ingress.kubernetes.io/ssl-redirect: "true"
+      appgw.ingress.kubernetes.io/request-timeout: "300"
+      cert-manager.io/issue-temporary-certificate: "true"
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
 webmvc:
   replicaCount: 1
   image:
