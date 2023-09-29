@@ -37,7 +37,7 @@ namespace Neptune.EFModels.Entities
         }
         public static List<FieldDefinitionDto> List(NeptuneDbContext dbContext)
         {
-            return dbContext.FieldDefinitions.Include(x => x.FieldDefinitionType).Select(x => x.AsDto()).ToList();
+            return dbContext.FieldDefinitions.Select(x => x.AsDto()).ToList();
         }
 
         public static FieldDefinitionDto GetByFieldDefinitionTypeID(NeptuneDbContext dbContext, int FieldDefinitionTypeID)
