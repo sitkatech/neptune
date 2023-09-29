@@ -99,7 +99,6 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.authenticationService.getCurrentUser().subscribe(result => {
       this.currentUser = result;
-      //TODO check this
       this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet().subscribe(result => {
         this.boundingBox = result;
         forkJoin({
@@ -495,15 +494,6 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     let columnIDs = this.projectsGrid.columnApi.getAllGridColumns().map(x => x.getColId());
     this.utilityFunctionsService.exportGridToCsv(this.projectsGrid, 'OCTA-M2-Tier2-projects' + '.csv', columnIDs);
   } 
-
-  public getProjectModelResultsDownloadLink() {
-    //TODO: move this?
-    return `${environment.mainAppApiUrl}/projects/OCTAM2Tier2GrantProgram/download`;
-  }
-  
-  public getTreatmentBMPModelResultsDownloadLink() {
-    return `${environment.mainAppApiUrl}/FileResource/962E0B1B-78D3-4FC8-B716-24E42E353F2F`;
-  }
 
   public downloadProjectModelResults() {
     this.projectService.projectsOCTAM2Tier2GrantProgramDownloadGet().subscribe(csv => {

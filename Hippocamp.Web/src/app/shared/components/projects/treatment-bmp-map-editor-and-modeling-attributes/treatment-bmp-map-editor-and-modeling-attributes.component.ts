@@ -337,7 +337,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
           }
       })
 
-      this.layerControl.addOverlay(layer, "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins")
+      this.layerControl?.addOverlay(layer, "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins")
   });
 
     this.compileService.configure(this.appRef);

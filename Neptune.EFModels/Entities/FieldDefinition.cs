@@ -52,7 +52,6 @@ namespace Neptune.EFModels.Entities
             FieldDefinitionDto FieldDefinitionUpdateDto)
         {
             var fieldDefinition = dbContext.FieldDefinitions
-                .Include(x => x.FieldDefinitionType)
                 .SingleOrDefault(x => x.FieldDefinitionTypeID == FieldDefinitionTypeID);
 
             // null check occurs in calling endpoint method.
