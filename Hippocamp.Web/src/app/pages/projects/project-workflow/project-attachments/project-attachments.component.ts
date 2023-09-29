@@ -194,6 +194,15 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     this.invalidFields = [];
     this.alertService.clearAlerts();
 
+    if(!this.model.FileResource){
+      this.alertService.pushAlert(new Alert("No File found. Please upload a file.", AlertContext.Danger, true));
+      this.isLoadingSubmit = false;
+    }
+    if(!this.model.DisplayName){
+      this.alertService.pushAlert(new Alert("Please include a display name.", AlertContext.Danger, true));
+      this.isLoadingSubmit = false;
+    }
+
     this.projectService.projectsProjectIDAttachmentsPost(this.projectID, this.model.ProjectID, this.model.FileResource, this.model.DisplayName, this.model.DocumentDescription)
       .subscribe(response => {
         this.onSubmitSuccess(addAttachmentForm, "Project attachment '" + response.DisplayName + "' successfully added.");
@@ -215,6 +224,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
         this.onSubmitSuccess(editAttachmentForm, "Project attachment '" + response.DisplayName + "' successfully updated.");
       }, error => {
         this.onSubmitFailure(error);
+        this.isLoadingSubmit = false;
       });
   }
 

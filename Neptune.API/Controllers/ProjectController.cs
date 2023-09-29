@@ -154,8 +154,6 @@ namespace Neptune.API.Controllers
             var fileResource =
                 await HttpUtilities.MakeFileResourceFromFormFile(projectDocumentUpsertDto.FileResource, _dbContext,
                     HttpContext, _blobStorageService);
-            
-            _dbContext.FileResources.Add(fileResource);
 
             var projectDocument = new ProjectDocument()
             {
@@ -166,7 +164,7 @@ namespace Neptune.API.Controllers
                 UploadDate = DateTime.Now
             };
 
-            await _dbContext.ProjectDocuments.AddAsync(projectDocument);
+            _dbContext.ProjectDocuments.Add(projectDocument);
             await _dbContext.SaveChangesAsync();
             await _dbContext.Entry(projectDocument).ReloadAsync();
 
