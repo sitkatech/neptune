@@ -27,7 +27,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             var sourceControlBMPsInDatabase = dbContext.SourceControlBMPs;
             var sourceControlBMPsToUpdate = SourceControlBMPSimples.Select(x => new SourceControlBMP
                 {
-                    SourceControlBMPID = x.SourceControlBMPID ?? ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue(),
                     WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID,
                     SourceControlBMPAttributeID = x.SourceControlBMPAttributeID,
                     IsPresent = x.IsPresent,
@@ -35,7 +34,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 }
             ).ToList();
 
-            existingSourceControlBMPs.Merge(sourceControlBMPsToUpdate, sourceControlBMPsInDatabase, (x, y) => x.SourceControlBMPID == y.SourceControlBMPID,
+            existingSourceControlBMPs.Merge(sourceControlBMPsToUpdate, sourceControlBMPsInDatabase, (x, y) => x.WaterQualityManagementPlanID == y.WaterQualityManagementPlanID && x.SourceControlBMPAttributeID == y.SourceControlBMPAttributeID,
                 (x, y) =>
                 {
                     x.IsPresent = y.IsPresent;

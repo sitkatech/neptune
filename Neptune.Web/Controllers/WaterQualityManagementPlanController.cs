@@ -382,7 +382,7 @@ namespace Neptune.Web.Controllers
         public ViewResult EditSimplifiedStructuralBMPs([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = WaterQualityManagementPlans.GetByID(_dbContext, waterQualityManagementPlanPrimaryKey);
-            var quickBMPSimpleDtos = QuickBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID).Select(x => x.AsSimpleDto()).ToList();
+            var quickBMPSimpleDtos = QuickBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID).Select(x => x.AsUpsertDto()).ToList();
             var viewModel = new EditSimplifiedStructuralBMPsViewModel(quickBMPSimpleDtos);
             return ViewEditSimplifiedStructuralBMPs(waterQualityManagementPlan, viewModel);
         }
@@ -399,7 +399,7 @@ namespace Neptune.Web.Controllers
             }
 
             var existingQuickBMPs = QuickBMPs.ListByWaterQualityManagementPlanIDWithChangeTracking(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
-            viewModel.UpdateModel(waterQualityManagementPlan, viewModel.QuickBmpSimples, _dbContext, existingQuickBMPs);
+            viewModel.UpdateModel(waterQualityManagementPlan, _dbContext, existingQuickBMPs);
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay(
                 $"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");

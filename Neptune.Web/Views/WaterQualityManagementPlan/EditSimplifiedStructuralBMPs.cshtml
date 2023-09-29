@@ -49,11 +49,11 @@
         </div>
         <div class="row">
             <div class="col-xs-12" style="overflow-x:auto">
-                <p class="systemText" ng-if="ifAnyQuickBMPSimple(AngularModel.QuickBmpSimples) == false">There are no Other Structural BMPs associated with this WQMP. Use the Add button to enter one or more Other Structural BMPs</p>
+                <p class="systemText" ng-if="ifAnyQuickBMP(AngularModel.QuickBMPs) == false">There are no Other Structural BMPs associated with this WQMP. Use the Add button to enter one or more Other Structural BMPs</p>
 
-                <table class="dialogFormLayout table table-condensed" ng-if="ifAnyQuickBMPSimple(AngularModel.QuickBmpSimples) == true">
+                <table class="dialogFormLayout table table-condensed" ng-if="ifAnyQuickBMP(AngularModel.QuickBMPs) == true">
                     <tbody>
-                        <tr ng-repeat-start="quickBmp in AngularModel.QuickBmpSimples">
+                        <tr ng-repeat-start="quickBmp in AngularModel.QuickBMPs">
                             <th style="width: 30px; border:none">  </th>
                             <th class="col-sm-3" style="vertical-align: bottom; white-space: nowrap; border:none;"> Name <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
                             <th class="col-sm-3"style="vertical-align: bottom; white-space: nowrap; border:none;"> Type <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
@@ -63,14 +63,13 @@
                         </tr>
                     <tr>
                         <td style="width: 30px; border:none">
-                            <input type="hidden" name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickBMPID).ToString().Replace("0", "{{$index}}")" value="{{quickBmp.QuickBMPID}}" />
-                            <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteQuickBMPRow(AngularModel.QuickBmpSimples, quickBmp)" style="cursor: pointer"></span>
+                            <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteQuickBMPRow(AngularModel.QuickBMPs, quickBmp)" style="cursor: pointer"></span>
                         </td>
                         <td style="text-align: right; padding-right: 17px; border:none">
-                                <input type="text" name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickBMPName).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.QuickBMPName" value="{{quickBmp.QuickBMPName}}" />
+                                <input type="text" name="@Html.NameFor(x => x.QuickBMPs[0].QuickBMPName).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.QuickBMPName" value="{{quickBmp.QuickBMPName}}" />
                         </td>
                         <td style="text-align: right; padding-right: 17px; border:none">
-                            <select name="@Html.NameFor(x => x.QuickBmpSimples[0].TreatmentBMPTypeID).ToString().Replace("0", "{{$index}}")"
+                            <select name="@Html.NameFor(x => x.QuickBMPs[0].TreatmentBMPTypeID).ToString().Replace("0", "{{$index}}")"
                                     class="selectpicker"
                                     data-live-search="true"
                                     data-container="body"
@@ -85,7 +84,7 @@
                         </td>
                         <td style="padding-right: 17px; border: none">
                             <div class="input-group">
-                                <input type="number" style="text-align: right; padding-right:0" name="@Html.NameFor(x => x.QuickBmpSimples[0].PercentOfSiteTreated).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max="100" ng-model="quickBmp.PercentOfSiteTreated" />
+                                <input type="number" style="text-align: right; padding-right:0" name="@Html.NameFor(x => x.QuickBMPs[0].PercentOfSiteTreated).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max="100" ng-model="quickBmp.PercentOfSiteTreated" />
                                 <div class="input-group-addon">
                                     <span>%</span>
                                 </div>
@@ -93,7 +92,7 @@
                             </td>
                         <td style="padding-right: 17px; border: none">
                             <div class="input-group">
-                                <input type="number" style="text-align: right; padding-right:0" name="@Html.NameFor(x => x.QuickBmpSimples[0].PercentCaptured).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max="100" ng-model="quickBmp.PercentCaptured" />
+                                <input type="number" style="text-align: right; padding-right:0" name="@Html.NameFor(x => x.QuickBMPs[0].PercentCaptured).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max="100" ng-model="quickBmp.PercentCaptured" />
                                 <div class="input-group-addon">
                                     <span>%</span>
                                 </div>
@@ -101,7 +100,7 @@
                         </td>
                         <td style="padding-right: 17px; border: none">
                             <div class="input-group">
-                                <input type="number" style="text-align: right; padding-right:0" name="@Html.NameFor(x => x.QuickBmpSimples[0].PercentRetained).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max="100" ng-model="quickBmp.PercentRetained" />
+                                <input type="number" style="text-align: right; padding-right:0" name="@Html.NameFor(x => x.QuickBMPs[0].PercentRetained).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max="100" ng-model="quickBmp.PercentRetained" />
                                 <div class="input-group-addon">
                                     <span>%</span>
                                 </div>
@@ -116,10 +115,10 @@
                     <tr ng-repeat-end style="border-bottom: 2px solid #ddd;">
                         <td style="width: 30px; border:none"></td>
                         <td colspan="3" style="padding-right: 17px; border: none;">
-                            <textarea name="@Html.NameFor(x => x.QuickBmpSimples[0].QuickBMPNote).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.QuickBMPNote"></textarea>
+                            <textarea name="@Html.NameFor(x => x.QuickBMPs[0].QuickBMPNote).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.QuickBMPNote"></textarea>
                         </td>
                         <td colspan="2" style="text-align: right; padding-right: 17px; border:none">
-                            <select name="@Html.NameFor(x => x.QuickBmpSimples[0].DryWeatherFlowOverrideID).ToString().Replace("0", "{{$index}}")"
+                            <select name="@Html.NameFor(x => x.QuickBMPs[0].DryWeatherFlowOverrideID).ToString().Replace("0", "{{$index}}")"
                                     class="selectpicker"
                                     data-container="body"
                                     data-width="100%" selectpicker
@@ -152,7 +151,7 @@
             </div>
             <div class="col-xs-12">
                 <div class="pull-right">
-                    <button class="btn btn-neptune" type="button" ng-click="addQuickBMPRow(AngularModel.QuickBmpSimples)" style="margin: 0 17px 0 0">
+                    <button class="btn btn-neptune" type="button" ng-click="addQuickBMPRow(AngularModel.QuickBMPs)" style="margin: 0 17px 0 0">
                         <span class="glyphicon glyphicon-plus"></span> Add
                     </button>
                 </div>
