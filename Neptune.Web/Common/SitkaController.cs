@@ -57,26 +57,6 @@ namespace Neptune.Web.Common
         private const string ControllerSuffix = "Controller";
         private const string ViewsRootNamespace = "Views";
 
-        //protected override void OnException(ExceptionContext filterContext)
-        //{
-        //    var lastError = filterContext.Exception;
-        //    if (lastError is SitkaRecordNotAuthorizedException && IsCurrentUserAnonymous())
-        //    {
-        //        var requestUrl = Request.Url != null ? Request.Url.ToString() : String.Empty;
-        //        var url = $"{LoginUrl}?returnUrl={Server.UrlEncode(requestUrl)}";
-        //        filterContext.ExceptionHandled = true;
-        //        Response.Redirect(url);
-        //        return;
-        //    }
-
-        //    if (lastError is SitkaRecordNotFoundException)
-        //    {
-        //        SitkaHttpRequestStorage.NotFoundStoredError = lastError as SitkaRecordNotFoundException;
-        //    }
-
-        //    base.OnException(filterContext);
-        //}
-
         public static void SetErrorForDisplay(TempDataDictionary tempData, string errorMessage)
         {
             SetMessage(StatusErrorIndex, errorMessage, tempData);

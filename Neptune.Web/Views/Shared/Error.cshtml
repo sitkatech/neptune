@@ -22,7 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 @inherits Neptune.Web.Views.Shared.Error
 
 <div style="margin-top: 20px; min-height: 200px">
-    <div id="@SitkaController.CustomErrorMessageDivID">@SitkaController.CustomErrorMessageReplaceToken</div>
+    <div id="@SitkaController.CustomErrorMessageDivID" style="margin-bottom: 10px">@ViewDataTyped.ErrorMessage</div>
 
     @if (ViewDataTyped.UrlReferer != null)
     {

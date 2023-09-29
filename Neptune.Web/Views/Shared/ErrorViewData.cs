@@ -25,9 +25,10 @@ namespace Neptune.Web.Views.Shared
 {
     public class ErrorViewData : NeptuneViewData
     {
-        public ErrorViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson)
+        public ErrorViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, string? errorMessage)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
+            ErrorMessage = errorMessage;
             UrlReferer = httpContext.Request.GetReferrer();
             HtmlPageTitle = "Error Page";
             PageTitle = "Error Page";
@@ -35,5 +36,6 @@ namespace Neptune.Web.Views.Shared
         }
 
         public string UrlReferer { get; }
+        public string? ErrorMessage { get; }
     }
 }
