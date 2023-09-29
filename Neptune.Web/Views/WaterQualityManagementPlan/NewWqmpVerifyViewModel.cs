@@ -11,10 +11,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
     public class NewWqmpVerifyViewModel : FormViewModel, IValidatableObject
     {
-
-        public int WaterQualityManagementPlanID { get; set; }
-        public int? WaterQualityManagementPlanVerifyID { get; set;  }
-
         [Required]
         [DisplayName("Type of Verification")]
         public int WaterQualityManagementPlanVerifyTypeID { get; set; }
@@ -49,8 +45,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public NewWqmpVerifyViewModel(EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<QuickBMP> quickBMPs, List<EFModels.Entities.TreatmentBMP> treatmentBMPs)
         {
-            WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
-            WaterQualityManagementPlanVerifyID = waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID;
             WaterQualityManagementPlanVerifyTypeID = waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyTypeID;
             WaterQualityManagementPlanVisitStatusID = waterQualityManagementPlanVerify.WaterQualityManagementPlanVisitStatusID;
             WaterQualityManagementPlanVerifyStatusID = waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatusID;
@@ -130,8 +124,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 });
         }
 
-
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
@@ -140,7 +132,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             var sourceControlConditionMaxLength = WaterQualityManagementPlanVerify.FieldLengths.SourceControlCondition;
             var enforcementOrFollowupActionsMaxLength = WaterQualityManagementPlanVerify.FieldLengths.EnforcementOrFollowupActions;
 
-            foreach (var waterQualityManagementPlanVerifyQuickBMPSimple in WaterQualityManagementPlanVerifyQuickBMPSimples)
+            foreach (var waterQualityManagementPlanVerifyQuickBMPSimple in WaterQualityManagementPlanVerifyQuickBMPSimples?? new List<WaterQualityManagementPlanVerifyQuickBMPSimpleDto>())
             {
                 var waterQualityManagementPlanVerifyQuickBMPSimpleNoteLength = waterQualityManagementPlanVerifyQuickBMPSimple.WaterQualityManagementPlanVerifyQuickBMPNote?.Length;
                 if (waterQualityManagementPlanVerifyQuickBMPSimpleNoteLength != null && waterQualityManagementPlanVerifyQuickBMPSimpleNoteLength > waterQualityManagementPlanVerifyQuickBMPNoteMaxLength)
@@ -150,7 +142,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 }
             }
 
-            foreach (var waterQualityManagementPlanVerifyTreatmentBMPSimple in WaterQualityManagementPlanVerifyTreatmentBMPSimples)
+            foreach (var waterQualityManagementPlanVerifyTreatmentBMPSimple in WaterQualityManagementPlanVerifyTreatmentBMPSimples ?? new List<WaterQualityManagementPlanVerifyTreatmentBMPSimpleDto>() )
             {
                 var waterQualityManagementPlanVerifyTreatmentBMPSimpleNoteLength = waterQualityManagementPlanVerifyTreatmentBMPSimple.WaterQualityManagementPlanVerifyTreatmentBMPNote?.Length;
                 if (waterQualityManagementPlanVerifyTreatmentBMPSimpleNoteLength != null && waterQualityManagementPlanVerifyTreatmentBMPSimpleNoteLength > waterQualityManagementPlanVerifyTreatmentBMPNoteMaxLength)
@@ -164,7 +156,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             {
                 validationResults.Add(new ValidationResult($"\"Source control BMPs\"'s message is too long. It has a maximum of {sourceControlConditionMaxLength} characters and is {SourceControlCondition.Length - sourceControlConditionMaxLength} over the limit."));
             }
-
 
             if (EnforcementOrFollowupActions != null && EnforcementOrFollowupActions.Length > enforcementOrFollowupActionsMaxLength)
             {
