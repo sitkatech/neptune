@@ -14,6 +14,7 @@
         <div class="form-horizontal">
             @using (Html.BeginForm())
             {
+            @Html.HiddenFor(m => m.WaterQualityManagementPlanID)
             <fieldset>
                 <legend>Water Quality Management Plan Details</legend>
                 <div class="form-group">
@@ -90,7 +91,7 @@
                         @Html.LabelWithSugarFor(m => m.ApprovalDate)
                     </div>
                     <div class="col-xs-12 col-sm-9">
-                        @Html.TextBoxFor(m => m.ApprovalDate, new { @class = "form-control", type = "date"  })
+                        @Html.EditorFor(m => m.ApprovalDate)
                         @Html.ValidationMessageFor(m => m.ApprovalDate)
                     </div>
                 </div>
@@ -99,7 +100,7 @@
                         @Html.LabelWithSugarFor(m => m.DateOfConstruction)
                     </div>
                     <div class="col-xs-12 col-sm-9">
-                        @Html.TextBoxFor(m => m.DateOfConstruction, new { @class = "form-control", type = "date" })
+                        @Html.EditorFor(m => m.DateOfConstruction)
                         @Html.ValidationMessageFor(m => m.DateOfConstruction)
                     </div>
                 </div>
