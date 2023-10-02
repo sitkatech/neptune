@@ -53,7 +53,7 @@ export class FieldDefinitionEditComponent implements OnInit {
   saveDefinition(): void {
     this.isLoadingSubmit = true;
 
-    this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDPut(this.fieldDefinition.FieldDefinitionID, this.fieldDefinition)
+    this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDPut(this.fieldDefinition.FieldDefinitionType.FieldDefinitionTypeID, this.fieldDefinition)
       .subscribe(response => {
         this.isLoadingSubmit = false;
         this.router.navigateByUrl("/labels-and-definitions").then(x => {

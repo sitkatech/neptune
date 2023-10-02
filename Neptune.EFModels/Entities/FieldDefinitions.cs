@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.EntityFrameworkCore;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
@@ -45,13 +46,31 @@ namespace Neptune.EFModels.Entities
             return dbContext.FieldDefinitions.AsNoTracking();
         }
 
+        public static List<FieldDefinitionDto> List(NeptuneDbContext dbContext)
+        {
+            return dbContext.FieldDefinitions.Select(x => x.AsDto()).ToList();
+        }
 
-        //public static FieldDefinition GetFieldDefinitionByFieldDefinitionType(
-        //    this IQueryable<FieldDefinition> fieldDefinitions,
-        //    FieldDefinitionTypePrimaryKey fieldDefinitionTypePrimaryKey)
-        //{
-        //    return fieldDefinitions.SingleOrDefault(x =>
-        //        x.FieldDefinitionTypeID == fieldDefinitionTypePrimaryKey.PrimaryKeyValue);
-        //}
+        public static FieldDefinitionDto GetByFieldDefinitionTypeID(NeptuneDbContext dbContext, int FieldDefinitionTypeID)
+        {
+            var fieldDefinition = dbContext.FieldDefinitions.AsNoTracking()
+                .SingleOrDefault(x => x.FieldDefinitionTypeID == FieldDefinitionTypeID);
+
+            return fieldDefinition?.AsDto();
+        }
+
+        public static FieldDefinitionDto UpdateFieldDefinition(NeptuneDbContext dbContext, int FieldDefinitionTypeID,
+            FieldDefinitionDto FieldDefinitionUpdateDto)
+        {
+            var fieldDefinition = dbContext.FieldDefinitions
+                .SingleOrDefault(x => x.FieldDefinitionTypeID == FieldDefinitionTypeID);
+
+            // null check occurs in calling endpoint method.
+            fieldDefinition.FieldDefinitionValue = FieldDefinitionUpdateDto.FieldDefinitionValue;
+
+            dbContext.SaveChanges();
+
+            return fieldDefinition.AsDto();
+        }
     }
 }

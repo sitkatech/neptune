@@ -19,7 +19,7 @@ namespace Neptune.API.Controllers
         [HttpGet("/fieldDefinitions")]
         public ActionResult<List<FieldDefinitionDto>> ListAllFieldDefinitions()
         {
-            var fieldDefinitionDtos = FieldDefinition.List(_dbContext);
+            var fieldDefinitionDtos = FieldDefinitions.List(_dbContext);
             return fieldDefinitionDtos;
         }
 
@@ -27,7 +27,7 @@ namespace Neptune.API.Controllers
         [HttpGet("fieldDefinitions/{fieldDefinitionTypeID}")]
         public ActionResult<FieldDefinitionDto> GetFieldDefinition([FromRoute] int fieldDefinitionTypeID)
         {
-            var fieldDefinitionDto = FieldDefinition.GetByFieldDefinitionTypeID(_dbContext, fieldDefinitionTypeID);
+            var fieldDefinitionDto = FieldDefinitions.GetByFieldDefinitionTypeID(_dbContext, fieldDefinitionTypeID);
             return RequireNotNullThrowNotFound(fieldDefinitionDto, "FieldDefinition", fieldDefinitionTypeID);
         }
 
@@ -36,7 +36,7 @@ namespace Neptune.API.Controllers
         public ActionResult<FieldDefinitionDto> UpdateFieldDefinition([FromRoute] int fieldDefinitionTypeID,
             [FromBody] FieldDefinitionDto fieldDefinitionUpdateDto)
         {
-            var fieldDefinitionDto = FieldDefinition.GetByFieldDefinitionTypeID(_dbContext, fieldDefinitionTypeID);
+            var fieldDefinitionDto = FieldDefinitions.GetByFieldDefinitionTypeID(_dbContext, fieldDefinitionTypeID);
             if (ThrowNotFound(fieldDefinitionDto, "FieldDefinition", fieldDefinitionTypeID, out var actionResult))
             {
                 return actionResult;
@@ -48,7 +48,7 @@ namespace Neptune.API.Controllers
             }
 
             var updatedFieldDefinitionDto =
-                FieldDefinition.UpdateFieldDefinition(_dbContext, fieldDefinitionTypeID, fieldDefinitionUpdateDto);
+                FieldDefinitions.UpdateFieldDefinition(_dbContext, fieldDefinitionTypeID, fieldDefinitionUpdateDto);
             return Ok(updatedFieldDefinitionDto);
         }
     }
