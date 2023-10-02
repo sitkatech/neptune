@@ -60,7 +60,11 @@ namespace Neptune.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationInsightsTelemetry(_instrumentationKey);
-            services.AddControllers().AddJsonOptions(options =>
+            services.AddControllers(options =>
+                {
+                    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+                })
+                .AddJsonOptions(options =>
             {
                 var scale = Math.Pow(10, 3);
                 var geometryFactory = new GeometryFactory(new PrecisionModel(scale), 4326);
