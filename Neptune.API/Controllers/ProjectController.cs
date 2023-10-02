@@ -100,10 +100,6 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public IActionResult Update([FromRoute] int projectID, [FromBody] ProjectUpsertDto projectCreateDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var project = Projects.GetByID(_dbContext, projectID);
             if (ThrowNotFound(project, "Project", projectID, out var actionResult))
