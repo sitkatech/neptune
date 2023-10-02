@@ -14,7 +14,6 @@ import { CustomCompileService } from 'src/app/shared/services/custom-compile.ser
 import { environment } from 'src/environments/environment';
 import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { PrioritizationMetric } from 'src/app/shared/models/prioritization-metric';
 import { WfsService } from 'src/app/shared/services/wfs.service';
 import { OctaPrioritizationDetailPopupComponent } from 'src/app/shared/components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component';
@@ -27,6 +26,7 @@ import { DelineationService } from 'src/app/shared/generated/api/delineation.ser
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stormwater-jurisdiction.service';
 import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 declare var $: any;
 
@@ -39,7 +39,7 @@ export class PlanningMapComponent implements OnInit {
   @ViewChild("projectsGrid") projectsGrid: AgGridAngular;
 
   private currentUser: PersonDto;
-  public richTextTypeID = CustomRichTextType.PlanningMap;
+  public richTextTypeID = NeptunePageTypeEnum.HippocampPlanningMap;
 
   public projects: Array<ProjectSimpleDto>;
   private treatmentBMPs: Array<TreatmentBMPDisplayDto>;

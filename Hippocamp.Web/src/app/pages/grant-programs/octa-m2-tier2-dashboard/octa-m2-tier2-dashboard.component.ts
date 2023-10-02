@@ -12,7 +12,6 @@ import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
 import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { PrioritizationMetric } from 'src/app/shared/models/prioritization-metric';
 import { WfsService } from 'src/app/shared/services/wfs.service';
 import { OctaPrioritizationDetailPopupComponent } from 'src/app/shared/components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component';
@@ -27,6 +26,7 @@ import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/fi
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stormwater-jurisdiction.service';
 import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 declare var $: any;
 
@@ -39,7 +39,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   @ViewChild("projectsGrid") projectsGrid: AgGridAngular;
 
   private currentUser: PersonDto;
-  public richTextTypeID = CustomRichTextType.OCTAM2Tier2GrantProgramDashboard;
+  public richTextTypeID = NeptunePageTypeEnum.OCTAM2Tier2GrantProgramDashboard;
 
   public projects: Array<ProjectSimpleDto>;
   private treatmentBMPs: Array<TreatmentBMPDisplayDto>;

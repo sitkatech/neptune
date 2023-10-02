@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { RoleEnum } from 'src/app/shared/models/enums/role.enum';
 import { environment } from 'src/environments/environment';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
+import { RoleEnum } from 'src/app/shared/generated/enum/role-enum';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 @Component({
     selector: 'app-home-index',
@@ -15,7 +15,7 @@ export class HomeIndexComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;
     public currentUser: PersonDto;
 
-    public richTextTypeID: number = CustomRichTextType.Homepage;
+    public richTextTypeID: number = NeptunePageTypeEnum.HippocampHomePage;
 
     constructor(private authenticationService: AuthenticationService,
         private router: Router,

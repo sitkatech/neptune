@@ -14,10 +14,6 @@ import { TreatmentBMPTypeSimpleDto } from 'src/app/shared/generated/model/treatm
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
-import { FieldDefinitionTypeEnum } from 'src/app/shared/models/enums/field-definition-type.enum';
-import { TimeOfConcentrationEnum } from 'src/app/shared/models/enums/time-of-concentration.enum';
-import { TreatmentBMPModelingType } from 'src/app/shared/models/enums/treatment-bmp-modeling-type.enum';
-import { UnderlyingHydrologicSoilGroupEnum } from 'src/app/shared/models/enums/underlying-hydrologic-soil-group.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
@@ -27,6 +23,10 @@ import { WfsService } from 'src/app/shared/services/wfs.service';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stormwater-jurisdiction.service';
 import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
+import { FieldDefinitionTypeEnum } from 'src/app/shared/generated/enum/field-definition-type-enum';
+import { TimeOfConcentrationEnum } from 'src/app/shared/generated/enum/time-of-concentration-enum';
+import { TreatmentBMPModelingTypeEnum } from 'src/app/shared/generated/enum/treatment-b-m-p-modeling-type-enum';
+import { UnderlyingHydrologicSoilGroupEnum } from 'src/app/shared/generated/enum/underlying-hydrologic-soil-group-enum';
 
 declare var $: any
 
@@ -93,7 +93,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     fillOpacity: 0.2,
     opacity: 1
   }
-  public treatmentBMPModelingTypeEnum = TreatmentBMPModelingType;
+  public treatmentBMPModelingTypeEnum = TreatmentBMPModelingTypeEnum;
   public fieldDefinitionTypeEnum = FieldDefinitionTypeEnum;
   public modelingAttributeDropdownItems: Array<TreatmentBMPModelingAttributeDropdownItemDto>;
   public treatmentBMPTypes: Array<TreatmentBMPTypeSimpleDto>;
@@ -103,86 +103,86 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   public isEditingLocation = false;
 
   public static modelingAttributesByModelingType = {
-    [TreatmentBMPModelingType.BioinfiltrationBioretentionWithRaisedUnderdrain]:
+    [TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain]:
       [
         'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
         'MediaBedFootprint', 'DesignMediaFiltrationRate', 'UnderlyingHydrologicSoilGroupID'
       ],
-    [TreatmentBMPModelingType.BioretentionWithNoUnderdrain]:
+    [TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain]:
       [
         'TotalEffectiveBMPVolume', 'InfiltrationSurfaceArea', 'UnderlyingInfiltrationRate'
       ],
-    [TreatmentBMPModelingType.BioretentionWithUnderdrainAndImperviousLiner]:
+    [TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner]:
       [
         'TotalEffectiveBMPVolume', 'MediaBedFootprint', 'DesignMediaFiltrationRate',
       ],
-    [TreatmentBMPModelingType.CisternsForHarvestAndUse]:
+    [TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse]:
       [
         'TotalEffectiveBMPVolume', 'WinterHarvestedWaterDemand', 'SummerHarvestedWaterDemand'
       ],
-    [TreatmentBMPModelingType.ConstructedWetland]:
+    [TreatmentBMPModelingTypeEnum.ConstructedWetland]:
       [
         'PermanentPoolorWetlandVolume', 'WaterQualityDetentionVolume'
       ],
-    [TreatmentBMPModelingType.DryExtendedDetentionBasin]:
+    [TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin]:
       [
         'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
         'EffectiveFootprint', 'DrawdownTimeforWQDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
       ],
-    [TreatmentBMPModelingType.DryWeatherTreatmentSystems]:
+    [TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems]:
       ['DesignDryWeatherTreatmentCapacity', 'AverageTreatmentFlowrate', 'MonthsOfOperationID'],
-    [TreatmentBMPModelingType.Drywell]:
+    [TreatmentBMPModelingTypeEnum.Drywell]:
       ['TotalEffectiveDrywellBMPVolume', 'InfiltrationDischargeRate'],
-    [TreatmentBMPModelingType.FlowDurationControlBasin]:
+    [TreatmentBMPModelingTypeEnum.FlowDurationControlBasin]:
       [
         'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
         'EffectiveFootprint', 'DrawdownTimeforWQDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
       ],
-    [TreatmentBMPModelingType.FlowDurationControlTank]:
+    [TreatmentBMPModelingTypeEnum.FlowDurationControlTank]:
       [
         'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
         'EffectiveFootprint', 'DrawdownTimeforWQDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
       ],
-    [TreatmentBMPModelingType.HydrodynamicSeparator]:
+    [TreatmentBMPModelingTypeEnum.HydrodynamicSeparator]:
       ['TreatmentRate', 'TimeOfConcentrationID'],
-    [TreatmentBMPModelingType.InfiltrationBasin]:
+    [TreatmentBMPModelingTypeEnum.InfiltrationBasin]:
       [
         'TotalEffectiveBMPVolume', 'InfiltrationSurfaceArea', 'UnderlyingInfiltrationRate'
       ],
-    [TreatmentBMPModelingType.InfiltrationTrench]:
+    [TreatmentBMPModelingTypeEnum.InfiltrationTrench]:
       [
         'TotalEffectiveBMPVolume', 'InfiltrationSurfaceArea', 'UnderlyingInfiltrationRate'
       ],
-    [TreatmentBMPModelingType.LowFlowDiversions]:
+    [TreatmentBMPModelingTypeEnum.LowFlowDiversions]:
       ['DesignLowFlowDiversionCapacity', 'AverageDivertedFlowrate', 'MonthsOfOperationID'],
-    [TreatmentBMPModelingType.PermeablePavement]:
+    [TreatmentBMPModelingTypeEnum.PermeablePavement]:
       [
         'TotalEffectiveBMPVolume', 'InfiltrationSurfaceArea', 'UnderlyingInfiltrationRate'
       ],
-    [TreatmentBMPModelingType.ProprietaryBiotreatment]:
+    [TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment]:
       ['TreatmentRate', 'TimeOfConcentrationID'],
-    [TreatmentBMPModelingType.ProprietaryTreatmentControl]:
+    [TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl]:
       ['TreatmentRate', 'TimeOfConcentrationID'],
-    [TreatmentBMPModelingType.SandFilters]:
+    [TreatmentBMPModelingTypeEnum.SandFilters]:
       [
         'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
         'EffectiveFootprint', 'DrawdownTimeForDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
       ],
-    [TreatmentBMPModelingType.UndergroundInfiltration]:
+    [TreatmentBMPModelingTypeEnum.UndergroundInfiltration]:
       [
         'TotalEffectiveBMPVolume', 'InfiltrationSurfaceArea', 'UnderlyingInfiltrationRate'
       ],
-    [TreatmentBMPModelingType.VegetatedFilterStrip]:
+    [TreatmentBMPModelingTypeEnum.VegetatedFilterStrip]:
       [
         'TimeOfConcentrationID', 'TreatmentRate', 'WettedFootprint',
         'EffectiveRetentionDepth', 'UnderlyingHydrologicSoilGroupID'
       ],
-    [TreatmentBMPModelingType.VegetatedSwale]:
+    [TreatmentBMPModelingTypeEnum.VegetatedSwale]:
       [
         'TimeOfConcentrationID', 'TreatmentRate', 'WettedFootprint',
         'EffectiveRetentionDepth', 'UnderlyingHydrologicSoilGroupID'
       ],
-    [TreatmentBMPModelingType.WetDetentionBasin]:
+    [TreatmentBMPModelingTypeEnum.WetDetentionBasin]:
       [
         'PermanentPoolorWetlandVolume', 'WaterQualityDetentionVolume'
       ]

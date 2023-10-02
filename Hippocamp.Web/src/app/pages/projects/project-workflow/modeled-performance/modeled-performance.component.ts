@@ -4,7 +4,6 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { BoundingBoxDto, DelineationUpsertDto, PersonDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPUpsertDto, ProjectSimpleDto } from 'src/app/shared/generated/model/models';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import * as L from 'leaflet';
@@ -13,11 +12,12 @@ import * as esri from 'esri-leaflet';
 import { GestureHandling } from "leaflet-gesture-handling";
 import { forkJoin } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ProjectNetworkSolveHistoryStatusTypeEnum } from 'src/app/shared/models/enums/project-network-solve-history-status-type.enum';
 import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stormwater-jurisdiction.service';
 import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
+import { ProjectNetworkSolveHistoryStatusTypeEnum } from 'src/app/shared/generated/enum/project-network-solve-history-status-type-enum';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 declare var $: any
 
@@ -60,7 +60,7 @@ export class ModeledPerformanceComponent implements OnInit {
 
   public projectID: number;
   public project: ProjectSimpleDto;
-  public customRichTextTypeID = CustomRichTextType.ModeledPerformance;
+  public customRichTextTypeID = NeptunePageTypeEnum.HippocampModeledPerformance;
 
   constructor(
     private cdr: ChangeDetectorRef,

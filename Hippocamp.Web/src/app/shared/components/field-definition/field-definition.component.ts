@@ -7,9 +7,9 @@ import { AlertContext } from "../../models/enums/alert-context.enum";
 import { AlertService } from "../../services/alert.service";
 import { FieldDefinitionDto } from "../../generated/model/field-definition-dto";
 import { PersonDto } from "../../generated/model/person-dto";
-import { FieldDefinitionTypeEnum } from "../../models/enums/field-definition-type.enum";
 import { NgbPopover } from "@ng-bootstrap/ng-bootstrap/popover/popover";
 import { FieldDefinitionService } from "../../generated/api/field-definition.service";
+import { FieldDefinitionTypeEnum } from "../../generated/enum/field-definition-type-enum";
 
 declare var $: any;
 

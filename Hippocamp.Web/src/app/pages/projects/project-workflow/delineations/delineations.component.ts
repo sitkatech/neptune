@@ -9,10 +9,8 @@ import { forkJoin } from 'rxjs';
 import { BoundingBoxDto } from 'src/app/shared/generated/model/bounding-box-dto';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
-import { DelineationTypeEnum } from 'src/app/shared/models/enums/delineation-type.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
@@ -22,6 +20,8 @@ import { WfsService } from 'src/app/shared/services/wfs.service';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stormwater-jurisdiction.service';
 import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
+import { DelineationTypeEnum } from 'src/app/shared/generated/enum/delineation-type-enum';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 declare var $: any
 
@@ -85,7 +85,7 @@ export class DelineationsComponent implements OnInit {
     opacity: 0
   }
   public projectID: number;
-  public customRichTextTypeID = CustomRichTextType.Delineations;
+  public customRichTextTypeID = NeptunePageTypeEnum.HippocampDelineations;
 
   private isPerformingDrawAction: boolean = false;
   private defaultDrawControlSpec: L.Control.DrawConstructorOptions = {

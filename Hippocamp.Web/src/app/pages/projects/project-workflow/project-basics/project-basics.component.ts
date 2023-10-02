@@ -11,11 +11,11 @@ import { StormwaterJurisdictionSimpleDto } from 'src/app/shared/generated/model/
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { PersonSimpleDto } from 'src/app/shared/generated/model/person-simple-dto';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { OrganizationService } from 'src/app/shared/generated/api/organization.service';
 import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stormwater-jurisdiction.service';
 import { UserService } from 'src/app/shared/generated/api/user.service';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 @Component({
   selector: 'hippocamp-project-basics',
@@ -32,7 +32,7 @@ export class ProjectBasicsComponent implements OnInit {
   public stormwaterJurisdictions: Array<StormwaterJurisdictionSimpleDto>;
   public invalidFields: Array<string> = [];
   public isLoadingSubmit = false;
-  public customRichTextTypeID : number = CustomRichTextType.ProjectBasics;
+  public customRichTextTypeID : number = NeptunePageTypeEnum.HippocampProjectBasics;
   public originalProjectModel: string;
 
 

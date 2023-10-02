@@ -7,11 +7,10 @@ import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
-import { environment } from 'src/environments/environment';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { ProjectDocumentUpdateDto } from 'src/app/shared/models/project-document-update-dto';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 @Component({
   selector: 'hippocamp-project-attachments',
@@ -24,7 +23,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
   @ViewChild('editAttachmentModal') editAttachmentModal: any
 
   public currentUser: PersonDto;
-  public richTextTypeID = CustomRichTextType.ProjectAttachments;
+  public richTextTypeID = NeptunePageTypeEnum.HippocampProjectAttachments;
 
   public projectID: number;
   public model: ProjectDocumentUpsertDto;

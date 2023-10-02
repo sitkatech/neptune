@@ -2,10 +2,10 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 import { ColDef } from 'ag-grid-community';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { AgGridAngular } from 'ag-grid-angular';
 import { FieldDefinitionDto, PersonDto } from 'src/app/shared/generated/model/models';
 import { FieldDefinitionService } from 'src/app/shared/generated/api/field-definition.service';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 @Component({
   selector: 'hippocamp-field-definition-list',
@@ -19,7 +19,7 @@ export class FieldDefinitionListComponent implements OnInit {
   private currentUser: PersonDto;
 
   public fieldDefinitions: Array<FieldDefinitionDto>
-  public richTextTypeID : number = CustomRichTextType.LabelsAndDefinitionsList;
+  public richTextTypeID : number = NeptunePageTypeEnum.HippocampLabelsAndDefinitionsList;
 
   public rowData = [];
   public columnDefs: ColDef[];

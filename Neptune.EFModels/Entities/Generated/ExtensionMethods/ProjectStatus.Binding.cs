@@ -107,6 +107,11 @@ namespace Neptune.EFModels.Entities
         }
     }
 
+    public enum ProjectStatusEnum
+    {
+        Draft = 1
+    }
+
     public partial class ProjectStatusDraft : ProjectStatus
     {
         private ProjectStatusDraft(int projectStatusID, string projectStatusName, string projectStatusDisplayName) : base(projectStatusID, projectStatusName, projectStatusDisplayName) {}

@@ -1,11 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import 'leaflet.fullscreen';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { TreatmentBmpMapEditorAndModelingAttributesComponent } from 'src/app/shared/components/projects/treatment-bmp-map-editor-and-modeling-attributes/treatment-bmp-map-editor-and-modeling-attributes.component';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 declare var $: any
 
@@ -19,7 +19,7 @@ export class TreatmentBmpsComponent implements OnInit {
   @ViewChild('treatmentBMPMapAndModelingAttributes') treatmentBMPMapAndModelingAttributes: TreatmentBmpMapEditorAndModelingAttributesComponent;
   private currentUser: PersonDto;
   public projectID: number;
-  public customRichTextTypeID = CustomRichTextType.TreatmentBMPs;
+  public customRichTextTypeID = NeptunePageTypeEnum.HippocampTreatmentBMPs;
 
   constructor(
     private authenticationService: AuthenticationService,

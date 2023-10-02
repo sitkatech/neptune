@@ -10,12 +10,12 @@ import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { FontAwesomeIconLinkRendererComponent } from 'src/app/shared/components/ag-grid/fontawesome-icon-link-renderer/fontawesome-icon-link-renderer.component';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
 import { CustomDropdownFilterComponent } from 'src/app/shared/components/custom-dropdown-filter/custom-dropdown-filter.component';
 import { environment } from 'src/environments/environment';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class ProjectListComponent implements OnInit {
   private currentUser: PersonDto;
 
   private gridApi: GridApi;
-  public richTextTypeID = CustomRichTextType.ProjectsList;
+  public richTextTypeID = NeptunePageTypeEnum.HippocampProjectsList;
   public projectColumnDefs: Array<ColDef>;
   public defaultColDef: ColDef;
   private modalReference: NgbModalRef;
