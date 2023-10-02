@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Neptune.EFModels.Entities;
-using Neptune.Web.Models;
+﻿using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Security
 {
@@ -19,10 +17,17 @@ namespace Neptune.Web.Security
         public PermissionCheckResult HasPermission(Person person, TreatmentBMP contextModelObject,
             NeptuneDbContext dbContext)
         {
-            var isAssignedToTreatmentBMP = person.IsAssignedToStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID);
+            return HasPermission(person, contextModelObject);
+        }
+
+        public PermissionCheckResult HasPermission(Person person, TreatmentBMP contextModelObject)
+        {
+            var isAssignedToTreatmentBMP =
+                person.IsAssignedToStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID);
             if (!isAssignedToTreatmentBMP)
             {
-                return new PermissionCheckResult($"You aren't assigned as an editor for Jurisdiction {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult(
+                    $"You aren't assigned as an editor for Jurisdiction {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
             return new PermissionCheckResult();

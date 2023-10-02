@@ -56,7 +56,7 @@ namespace Neptune.Web.Views.Home
             EditUserRolesUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             AddAFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             ManagerDashboardUrl = SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
-            ViewDelineationReconciliationReportUrl = ""; //todo SitkaRoute<DelineationController>.BuildUrlFromExpression(linkGenerator, x => x.DelineationReconciliationReport());
+            ViewDelineationReconciliationReportUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(linkGenerator, x => x.DelineationReconciliationReport());
             StormwaterJurisdictionUrlTemplate = new UrlTemplate<int>(
                 SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator,
                     x => x.Detail(UrlTemplate.Parameter1Int)));

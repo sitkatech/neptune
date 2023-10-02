@@ -774,7 +774,6 @@ namespace Neptune.Web.Controllers
             var treatmentBMPType = TreatmentBMPTypes.GetByIDWithChangeTracking(_dbContext, fieldVisit.TreatmentBMP.TreatmentBMPTypeID);
             foreach (var collectionMethodSectionViewModel in viewModel.Observations)
             {
-                // TODO: there should probably be a null-check here
                 var treatmentBMPAssessmentObservationType =
                     TreatmentBMPAssessmentObservationTypes.GetByIDWithChangeTracking(_dbContext, collectionMethodSectionViewModel
                             .TreatmentBMPAssessmentObservationTypeID.Value);
@@ -1454,7 +1453,7 @@ namespace Neptune.Web.Controllers
         }
 
 
-        // todo: I don't think this is handling the post-maintenance assessment at allllllllll
+        // todo: I don't think this is handling the post-maintenance assessment at all
         private static async Task UpdateOrCreateSingleValueObservationFromDataTableRow(DataRow row,
             Dictionary<string, TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypeDictionary, int rowNumber, TreatmentBMPAssessment assessment, string observationTypeName, bool isPassFail, bool isPostMaintenance, NeptuneDbContext dbContext)
         {
@@ -1507,7 +1506,7 @@ namespace Neptune.Web.Controllers
             initialInletConditionObservation.ObservationData = inletConditionJson;
         }
 
-        //todo:
+        //todo: bulk upload trash
         //[HttpGet]
         //[JurisdictionManageFeature]
         //public FileResult TrashScreenBulkUploadTemplate()

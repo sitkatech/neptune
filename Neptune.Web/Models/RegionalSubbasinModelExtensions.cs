@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         public static List<RegionalSubbasin> GetRegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment(
             this RegionalSubbasin regionalSubbasin, NeptuneDbContext dbContext)
         {
-            return dbContext.RegionalSubbasins
+            return dbContext.RegionalSubbasins.AsNoTracking()
                 .Where(x => x.OCSurveyDownstreamCatchmentID == regionalSubbasin.OCSurveyCatchmentID).ToList();
         }
 
@@ -43,7 +43,7 @@ namespace Neptune.Web.Models
 
         public static IEnumerable<HRUCharacteristic> GetHRUCharacteristics(this RegionalSubbasin regionalSubbasin, NeptuneDbContext dbContext)
         {
-            return dbContext.HRUCharacteristics.Where(x =>
+            return dbContext.HRUCharacteristics.AsNoTracking().Where(x =>
                 x.LoadGeneratingUnit.RegionalSubbasinID == regionalSubbasin.RegionalSubbasinID);
         }
 

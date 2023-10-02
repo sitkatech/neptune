@@ -28,5 +28,17 @@
     "inputFiles": [
       "wwwroot/Scripts/tinymce/skins/ui/oxide/skin.css"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/Content/angular-controllers/DelineationMap.min.js",
+    "inputFiles": [
+      "wwwroot/Content/angular-controllers/DelineationMap.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/Content/angular-controllers/DelineationMapControls.min.js",
+    "inputFiles": [
+      "wwwroot/Content/angular-controllers/DelineationMapControls.js"
+    ]
   }
 ]

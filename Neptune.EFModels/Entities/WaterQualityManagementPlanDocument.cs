@@ -4,8 +4,8 @@
     {
         public void DeleteFull(NeptuneDbContext dbContext)
         {
-            //todo:
-            throw new NotImplementedException();
+            //todo: deletefull
+            throw new NotImplementedException("Deleting of WQMP not implemented yet!");
         }
     }
 }

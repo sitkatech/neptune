@@ -93,7 +93,7 @@ namespace Neptune.Web.Views.Shared
         {
             var errors = new List<ValidationResult>();
 
-            // TODO:
+            // TODO: recaptcha
             //var httpContext = HttpContext;
             //if (!httpContext.User.Identity.IsAuthenticated) // this means we are anonymous
             //{

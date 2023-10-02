@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public List<EFModels.Entities.TreatmentBMP> TreatmentBMPs { get; }
         public List<QuickBMP> QuickBMPs { get; }
         public IEnumerable<IGrouping<int, SourceControlBMP>> SourceControlBMPs { get; }
-        public Dictionary<int, Delineation?> TreatmentBMPDelineationsDict { get; }
+        public Dictionary<int, EFModels.Entities.Delineation?> TreatmentBMPDelineationsDict { get; }
 
         public List<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; }
         public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; }
@@ -78,7 +78,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             HRUCharacteristicsViewData hruCharacteristicsViewData,
             List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches,
             ModeledPerformanceViewData modeledPerformanceViewData,
-            IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs, bool hasWaterQualityManagementPlanBoundary, Dictionary<int, Delineation?> treatmentBMPDelineationsDict, List<EFModels.Entities.WaterQualityManagementPlanDocument> waterQualityManagementPlanDocuments, double calculatedWqmpAcreage)
+            IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs, bool hasWaterQualityManagementPlanBoundary, Dictionary<int, EFModels.Entities.Delineation?> treatmentBMPDelineationsDict, List<EFModels.Entities.WaterQualityManagementPlanDocument> waterQualityManagementPlanDocuments, double calculatedWqmpAcreage)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;

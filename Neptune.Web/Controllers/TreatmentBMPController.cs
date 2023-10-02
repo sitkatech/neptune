@@ -50,6 +50,8 @@ using EditOtherDesignAttributes = Neptune.Web.Views.TreatmentBMP.EditOtherDesign
 using EditViewData = Neptune.Web.Views.TreatmentBMP.EditViewData;
 using EditViewModel = Neptune.Web.Views.TreatmentBMP.EditViewModel;
 using TreatmentBMPAssessmentSummary = Neptune.EFModels.Entities.TreatmentBMPAssessmentSummary;
+using DocumentFormat.OpenXml.InkML;
+using NetTopologySuite.Geometries;
 
 namespace Neptune.Web.Controllers
 {
@@ -204,7 +206,9 @@ namespace Neptune.Web.Controllers
             var treatmentBMPBenchmarkAndThresholds = TreatmentBMPBenchmarkAndThresholds.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var treatmentBMPDocuments = TreatmentBMPDocuments.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var hasMissingModelingAttributes = treatmentBMPType.HasMissingModelingAttributes(treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP);
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPType, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl, hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, otherTreatmentBmpsExistInSubbasin, hasMissingModelingAttributes, customAttributes, fundingEvents, treatmentBMPBenchmarkAndThresholds, treatmentBMPDocuments, delineation, delineationOverlapDelineations, upstreamestBMP);
+            var regionalSubbasinRevisionRequest = RegionalSubbasinRevisionRequests.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID).SingleOrDefault(x =>
+                x.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Open);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPType, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl, hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, otherTreatmentBmpsExistInSubbasin, hasMissingModelingAttributes, customAttributes, fundingEvents, treatmentBMPBenchmarkAndThresholds, treatmentBMPDocuments, delineation, delineationOverlapDelineations, upstreamestBMP, regionalSubbasinRevisionRequest);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -248,15 +252,20 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewNew(NewViewModel viewModel)
         {
             var stormwaterJurisdictions = StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson);
-            var geometries = StormwaterJurisdictionGeometries
-                .ListByStormwaterJurisdictionIDList(_dbContext,
-                    stormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID)).Select(x => x.Geometry4326);
             var treatmentBMPTypes = TreatmentBMPTypes.List(_dbContext);
             var organizations = Organizations.List(_dbContext);
             var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext).ToList();
-            var boundingBox = stormwaterJurisdictions.Any()
-                ? new BoundingBoxDto(geometries)
-                : new BoundingBoxDto();
+            BoundingBoxDto boundingBox;
+            if (stormwaterJurisdictions.Any())
+            {
+                var geometries = StormwaterJurisdictionGeometries.ListByStormwaterJurisdictionIDList(_dbContext, stormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID)).Select(x => x.Geometry4326);
+                boundingBox = new BoundingBoxDto(geometries);
+            }
+            else
+            {
+                boundingBox = new BoundingBoxDto();
+            }
+
             var zoomLevel = CurrentPerson.IsAdministrator() ? MapInitJson.DefaultZoomLevel : MapInitJson.DefaultZoomLevel + 2;
 
             var mapInitJson =
@@ -351,7 +360,11 @@ namespace Neptune.Web.Controllers
         public async Task<IActionResult> RemoveUpstreamBMP([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = TreatmentBMPs.GetByIDWithChangeTracking(_dbContext, treatmentBMPPrimaryKey);
-            await treatmentBMP.RemoveUpstreamBMP(_dbContext);
+            treatmentBMP.UpstreamBMPID = null;
+            await _dbContext.SaveChangesAsync();
+
+            // need to re-execute the Nereid model here since source of run-off was removed.
+            await NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, _dbContext);
             SetMessageForDisplay("Upstream BMP successfully removed");
 
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.Detail(treatmentBMP.PrimaryKey)));
@@ -858,13 +871,25 @@ namespace Neptune.Web.Controllers
         {
             var mapFormID = "treatmentBMPEditLocation";
             var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext).ToList();
-            var stormwaterJurisdictions = StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson);
-            var boundingBox = treatmentBMP.LocationPoint != null
-                ? new BoundingBoxDto(treatmentBMP.LocationPoint4326)
-                : stormwaterJurisdictions.Any()
-                    ? new BoundingBoxDto(stormwaterJurisdictions
-                        .Select(x => x.StormwaterJurisdictionGeometry.Geometry4326))
-                    : new BoundingBoxDto();
+            var stormwaterJurisdictionIDs = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson).ToList();
+            BoundingBoxDto boundingBox;
+            if (treatmentBMP.LocationPoint != null)
+            {
+                boundingBox = new BoundingBoxDto(treatmentBMP.LocationPoint4326);
+            }
+            else
+            {
+                if (stormwaterJurisdictionIDs.Any())
+                {
+                    var geometries = StormwaterJurisdictionGeometries .ListByStormwaterJurisdictionIDList(_dbContext, stormwaterJurisdictionIDs).Select(x => x.Geometry4326);
+                    boundingBox = new BoundingBoxDto(geometries);
+                }
+                else
+                {
+                    boundingBox = new BoundingBoxDto();
+                }
+            }
+
             var zoomLevel = MapInitJson.DefaultZoomLevel + 6;
 
             var mapInitJson =

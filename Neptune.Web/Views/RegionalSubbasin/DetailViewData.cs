@@ -8,12 +8,12 @@ namespace Neptune.Web.Views.RegionalSubbasin
     public class DetailViewData : NeptuneViewData
     {
         public EFModels.Entities.RegionalSubbasin RegionalSubbasin { get; }
-        public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
+        public HRUCharacteristicsViewData? HRUCharacteristicsViewData { get; }
         public StormwaterMapInitJson MapInitJson { get; }
         public bool HasAnyHRUCharacteristics { get; }
-        public string OCSurveyDownstreamCatchmentDetailUrl { get; }
+        public string? OCSurveyDownstreamCatchmentDetailUrl { get; }
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.RegionalSubbasin regionalSubbasin, HRUCharacteristicsViewData hruCharacteristicsViewData, StormwaterMapInitJson mapInitJson, bool hasAnyHRUCharacteristics) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.RegionalSubbasin regionalSubbasin, HRUCharacteristicsViewData hruCharacteristicsViewData, StormwaterMapInitJson mapInitJson, bool hasAnyHRUCharacteristics, EFModels.Entities.RegionalSubbasin? ocSurveyDownstreamCatchment) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             HasAnyHRUCharacteristics = hasAnyHRUCharacteristics;
             EntityName = "Regional Subbasin";
@@ -23,9 +23,9 @@ namespace Neptune.Web.Views.RegionalSubbasin
             RegionalSubbasin = regionalSubbasin;
             HRUCharacteristicsViewData = hruCharacteristicsViewData;
             MapInitJson = mapInitJson;
-            OCSurveyDownstreamCatchmentDetailUrl = regionalSubbasin.OCSurveyDownstreamCatchmentID != null
+            OCSurveyDownstreamCatchmentDetailUrl = ocSurveyDownstreamCatchment != null
                 ? SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(LinkGenerator,
-                    x => x.Detail(regionalSubbasin.OCSurveyDownstreamCatchment.RegionalSubbasinID)) : "";
+                    x => x.Detail(ocSurveyDownstreamCatchment.RegionalSubbasinID)) : "";
         }
     }
 }

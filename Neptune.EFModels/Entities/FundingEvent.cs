@@ -4,8 +4,8 @@ namespace Neptune.EFModels.Entities
     {
         public void DeleteFull(NeptuneDbContext dbContext)
         {
-            // todo:
-            throw new NotImplementedException();
+            // todo: deletefull
+            throw new NotImplementedException("Deleting of Funding Event not implemented yet!");
         }
 
         public string GetDisplayName()

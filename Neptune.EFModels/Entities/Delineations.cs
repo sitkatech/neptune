@@ -106,5 +106,34 @@ namespace Neptune.EFModels.Entities
         {
             return GetImpl(dbContext).Where(x => delineationIDList.Contains(x.DelineationID)).ToList();
         }
+
+        public static List<Delineation> ListHavingOverlaps(NeptuneDbContext dbContext, Person currentPerson)
+        {
+            return GetImpl(dbContext).AsNoTracking()
+                .Include(x => x.TreatmentBMP)
+                .ThenInclude(x => x.TreatmentBMPType)
+                .Include(x => x.TreatmentBMP)
+                .ThenInclude(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
+                .Include(x => x.DelineationOverlapDelineations)
+                .ThenInclude(x => x.OverlappingDelineation)
+                .ThenInclude(x => x.TreatmentBMP)
+                .Where(x => x.DelineationOverlapDelineations.Any()).ToList()
+                .Where(x => x.TreatmentBMP.CanView(currentPerson))
+                .OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+        }
+
+        public static List<Delineation> ListHavingDiscrepancies(NeptuneDbContext dbContext, Person currentPerson)
+        {
+            return GetImpl(dbContext).AsNoTracking()
+                .Include(x => x.TreatmentBMP)
+                .ThenInclude(x => x.TreatmentBMPType)
+                .Include(x => x.TreatmentBMP)
+                .ThenInclude(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
+                .Where(x => x.HasDiscrepancies).ToList()
+                .Where(x => x.TreatmentBMP.CanView(currentPerson))
+                .OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+        }
     }
 }

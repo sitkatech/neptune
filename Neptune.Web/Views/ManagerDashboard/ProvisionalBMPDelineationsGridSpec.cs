@@ -29,12 +29,14 @@ using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views.ManagerDashboard
 {
-    public class ProvisionalBMPDelineationsGridSpec : GridSpec<Delineation>
+    public class ProvisionalBMPDelineationsGridSpec : GridSpec<EFModels.Entities.Delineation>
     {
         public ProvisionalBMPDelineationsGridSpec(LinkGenerator linkGenerator, Person currentPerson, string gridName)
         {
             var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var treatmentBMPDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
+            var delineationMapUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(linkGenerator, x => x.DelineationMap(UrlTemplate.Parameter1Int)));
 
             ObjectNameSingular = "Delineation";
             ObjectNamePlural = "Delineations";
@@ -49,9 +51,9 @@ namespace Neptune.Web.Views.ManagerDashboard
             AddCheckBoxColumn();
             Add("EntityID", x => x.DelineationID, 0);
             Add(string.Empty,
-                x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), new DelineationDeleteFeature().HasPermission(currentPerson, x.TreatmentBMP).HasPermission), 20,
+                x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.DelineationID), new DelineationDeleteFeature().HasPermission(currentPerson, x.TreatmentBMP).HasPermission), 20,
                 DhtmlxGridColumnFilterType.None);
-            Add(string.Empty,x => x.GetDetailUrlForGrid(), 45, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty,x => UrlTemplate.MakeHrefString(delineationMapUrlTemplate.ParameterReplace(x.DelineationID), "View", new Dictionary<string, string> {{"class", "gridButton"}}), 45, DhtmlxGridColumnFilterType.None);
             Add("BMP Name", x => UrlTemplate.MakeHrefString(treatmentBMPDetailUrlTemplate.ParameterReplace(x.TreatmentBMPID), x.TreatmentBMP.TreatmentBMPName), 120, DhtmlxGridColumnFilterType.Html);
             Add("BMP Type", x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Delineation Type", x => x.DelineationType.DelineationTypeDisplayName,80, DhtmlxGridColumnFilterType.SelectFilterStrict);

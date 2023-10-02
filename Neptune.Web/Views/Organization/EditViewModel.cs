@@ -122,7 +122,7 @@ namespace Neptune.Web.Views.Organization
                 validationResults.Add(new SitkaValidationResult<EditViewModel, IFormFile>(errorMessage, x => x.LogoFileResourceData));
             }
 
-            //todo:
+            //todo: organization keystone validation
             //var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(HttpRequestStorage.Person);
             //if (OrganizationGuid.HasValue && isSitkaAdmin)
             //{

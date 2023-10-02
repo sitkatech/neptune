@@ -25,7 +25,6 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Microsoft.AspNetCore.Html;
-using Neptune.Common;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Views.FieldVisit;
@@ -72,7 +71,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string TrashCaptureEffectiveness { get; }
         public string ChangeTreatmentBMPTypeUrl { get; }
         
-        public HRUCharacteristicsViewData HRUCharacteristicsViewData { get; }
+        public HRUCharacteristicsViewData? HRUCharacteristicsViewData { get; }
         public string MapServiceUrl { get; }
 
         public List<HtmlString> DelineationErrors { get; }
@@ -109,7 +108,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public FieldDefinitionType FieldDefinitionForDesignStormwaterDepth { get; }
         public FieldDefinitionType FieldDefinitionForDryWeatherFlowOverride { get; }
         public bool HasModelingAttributes { get; }
-        public RegionalSubbasinRevisionRequest OpenRevisionRequest { get; }
+        public EFModels.Entities.RegionalSubbasinRevisionRequest? OpenRevisionRequest { get; }
         public string EditUpstreamBMPUrl { get; }
         public string RemoveUpstreamBMPUrl { get; }
 
@@ -140,7 +139,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public List<EFModels.Entities.FundingEvent> FundingEvents { get; }
         public List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; }
         public List<EFModels.Entities.TreatmentBMPDocument> TreatmentBMPDocuments { get; }
-        public Delineation? Delineation { get; }
+        public EFModels.Entities.Delineation? Delineation { get; }
         public EFModels.Entities.TreatmentBMP? UpstreamestBMP { get; }
 
 
@@ -150,14 +149,14 @@ namespace Neptune.Web.Views.TreatmentBMP
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
             string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl,
             ModeledPerformanceViewData modeledPerformanceViewData, bool otherTreatmentBmpsExistInSubbasin,
-            bool hasMissingModelingAttributes, List<CustomAttribute> customAttributes, List<EFModels.Entities.FundingEvent> fundingEvents, List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, List<EFModels.Entities.TreatmentBMPDocument> treatmentBMPDocuments, Delineation? delineation, ICollection<DelineationOverlap> delineationOverlapDelineations, EFModels.Entities.TreatmentBMP? upstreamestBMP)
+            bool hasMissingModelingAttributes, List<CustomAttribute> customAttributes, List<EFModels.Entities.FundingEvent> fundingEvents, List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, List<EFModels.Entities.TreatmentBMPDocument> treatmentBMPDocuments, EFModels.Entities.Delineation? delineation, ICollection<DelineationOverlap>? delineationOverlapDelineations, EFModels.Entities.TreatmentBMP? upstreamestBMP, EFModels.Entities.RegionalSubbasinRevisionRequest? regionalSubbasinRevisionRequest)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
             TreatmentBMPType = treatmentBMPType;
             Delineation = delineation;
             UpstreamestBMP = upstreamestBMP;
-            DelineationArea = (delineation?.DelineationGeometry.Area * Constants.SquareMetersToAcres)?.ToString("0.00") ?? "-";
+            DelineationArea = delineation?.GetDelineationAreaString();;
             DelineationStatus = delineation.GetDelineationStatus();
             DelineationErrors = CheckForDelineationErrors(delineation, delineationOverlapDelineations);
             ParameterizationErrors = CheckForParameterizationErrors(treatmentBMP, hasMissingModelingAttributes, delineation);
@@ -215,8 +214,6 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             CustomAttributeTypeDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             TreatmentBMPAssessmentObservationTypeDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
-            OpenRevisionRequestDetailUrl = string.Empty; // todo:
-
 
             VerifiedUnverifiedUrl = verifiedUnverifiedUrl;
             HRUCharacteristicsViewData = hruCharacteristicsViewData;
@@ -228,7 +225,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             TrashCaptureEffectiveness = TreatmentBMP.TrashCaptureEffectiveness == null ? "Not Provided" : TreatmentBMP.TrashCaptureEffectiveness + "%";
 
-            DelineationMapUrl = "";//todo: treatmentBMP.GetDelineationMapUrl();
+            DelineationMapUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(linkGenerator, x => x.DelineationMap(treatmentBMP.TreatmentBMPID));
 
             ChangeTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.ConvertTreatmentBMPType(treatmentBMP));
             
@@ -266,8 +263,11 @@ namespace Neptune.Web.Views.TreatmentBMP
             FieldDefinitionForDesignStormwaterDepth = FieldDefinitionType.DesignStormwaterDepth;
             FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverride;
 
-            OpenRevisionRequest = TreatmentBMP.RegionalSubbasinRevisionRequests.SingleOrDefault(x =>
-                x.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Open);
+            OpenRevisionRequest = regionalSubbasinRevisionRequest;
+            OpenRevisionRequestDetailUrl = regionalSubbasinRevisionRequest == null
+                ? string.Empty
+                : SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(linkGenerator,
+                    x => x.Detail(regionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestID));
 
             EditUpstreamBMPUrl =
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.EditUpstreamBMP(treatmentBMP));
@@ -279,7 +279,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         }
 
-        private List<HtmlString> CheckForDelineationErrors(Delineation? delineation, ICollection<DelineationOverlap> delineationOverlapDelineations)
+        private List<HtmlString> CheckForDelineationErrors(EFModels.Entities.Delineation? delineation, ICollection<DelineationOverlap>? delineationOverlapDelineations)
         {
             var delineationErrors = new List<HtmlString>();
             var delineationHasDiscrepancies = delineation?.HasDiscrepancies ?? false;
@@ -299,7 +299,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             return delineationErrors;
         }
 
-        private List<HtmlString> CheckForParameterizationErrors(EFModels.Entities.TreatmentBMP treatmentBmp, bool hasMissingModelingAttributes, Delineation? delineation)
+        private List<HtmlString> CheckForParameterizationErrors(EFModels.Entities.TreatmentBMP treatmentBmp, bool hasMissingModelingAttributes, EFModels.Entities.Delineation? delineation)
         {
             var parameterizationErrors = new List<HtmlString>();
 

@@ -848,7 +848,7 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public async Task<IActionResult> UploadWqmps(UploadWqmpsViewModel viewModel)
         {
-            //todo:
+            //todo: bulk upload wqmps
             //var uploadedCSVFile = viewModel.UploadCSV;
             //var wqmps = WQMPCsvParserHelper.CSVUpload(uploadedCSVFile.InputStream, out var errorList);
 

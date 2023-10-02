@@ -42,7 +42,7 @@ namespace Neptune.Web.Controllers
             return Json(new {regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList(_dbContext) });
         }
 
-        [HttpGet("{regionalSubbasinPrimaryKey}")]
+        [HttpGet("{treatmentBMPPrimaryKey}")]
         [NeptuneViewFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("regionalSubbasinPrimaryKey")]
         public JsonResult UpstreamDelineation([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
@@ -66,10 +66,10 @@ namespace Neptune.Web.Controllers
             var layerGeoJson = new LayerGeoJson("Catchment Boundary", featureCollection,"#000000", 1, LayerInitialVisibility.Show, false );
             var stormwaterMapInitJson = new StormwaterMapInitJson("map", MapInitJson.DefaultZoomLevel, new List<LayerGeoJson>{layerGeoJson}, new BoundingBoxDto(regionalSubbasinCatchmentGeometry4326));
 
-
             var hruCharacteristics = regionalSubbasin.GetHRUCharacteristics(_dbContext).ToList();
             var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, regionalSubbasin, hruCharacteristicsViewData, stormwaterMapInitJson, hruCharacteristics.Any());
+            var ocSurveyDownstreamCatchment = regionalSubbasin.OCSurveyDownstreamCatchmentID != null ? RegionalSubbasins.GetByOCSurveyCatchmentID(_dbContext, regionalSubbasin.OCSurveyDownstreamCatchmentID.Value) : null;
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, regionalSubbasin, hruCharacteristicsViewData, stormwaterMapInitJson, hruCharacteristics.Any(), ocSurveyDownstreamCatchment);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -101,6 +101,7 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
+        [HttpGet]
         [NeptuneAdminFeature]
         public ViewResult Grid()
         {
@@ -109,6 +110,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Grid, GridViewData>(viewData);
         }
 
+        [HttpGet]
         [NeptuneAdminFeature]
         public GridJsonNetJObjectResult<RegionalSubbasin> RegionalSubbasinGridJsonData()
         {
