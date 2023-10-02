@@ -184,7 +184,7 @@ namespace Neptune.EFModels.Entities
 
         public static Delineation DelineationFromUpsertDto(DelineationUpsertDto delineationUpsertDto)
         {
-            var delineationGeometry = !string.IsNullOrWhiteSpace(delineationUpsertDto.Geometry) ? GeoJsonSerializer.Deserialize<Feature>(delineationUpsertDto.Geometry) : null;
+            var delineationGeometry = !string.IsNullOrWhiteSpace(delineationUpsertDto.Geometry) ? GeoJsonSerializer.Deserialize<IFeature>(delineationUpsertDto.Geometry) : null;
             var delineation = new Delineation()
             {
                 DelineationTypeID = delineationUpsertDto.DelineationTypeID,

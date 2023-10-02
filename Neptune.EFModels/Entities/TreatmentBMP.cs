@@ -146,7 +146,7 @@ namespace Neptune.EFModels.Entities
                 return new List<ProjectHRUCharacteristic>();
             }
 
-            if (Delineation.DelineationTypeID == (int)DelineationType.DelineationTypeEnum.Centralized && TreatmentBMPType.TreatmentBMPModelingTypeID != null)
+            if (Delineation.DelineationTypeID == (int)DelineationTypeEnum.Centralized && TreatmentBMPType.TreatmentBMPModelingTypeID != null)
             {
                 var catchmentRegionalSubbasins = GetRegionalSubbasin(dbContext).TraceUpstreamCatchmentsReturnIDList(dbContext);
 

@@ -263,6 +263,5 @@ namespace Neptune.EFModels.Entities
 
             return GetByIDAsDto(dbContext, person.PersonID);
         }
-
     }
 }
