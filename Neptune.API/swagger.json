@@ -2539,11 +2539,6 @@
           },
           "IsOCTAGrantReviewer": {
             "type": "boolean"
-          },
-          "FullName": {
-            "type": "string",
-            "nullable": true,
-            "readOnly": true
           }
         },
         "additionalProperties": false
