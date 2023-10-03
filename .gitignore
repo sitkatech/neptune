@@ -35,7 +35,6 @@ Source/Neptune.GeoServer/data_dir/logs/
 /.vs/Neptune/FileContentIndex
 /.vs/ProjectEvaluation
 /.vs/Neptune/v17
-/Build/build.ini
 /Build/secrets.ini
 /Neptune.Models/obj/Debug/net6.0
 /Neptune.Models/obj
