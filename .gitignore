@@ -74,3 +74,4 @@ Source/Neptune.GeoServer/data_dir/logs/
 /Neptune.GeoServer/data_dir/logs
 /Neptune.GeoServer/data_dir/security
 /Neptune.API/appsecrets.json
+/*.user
