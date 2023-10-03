@@ -8,9 +8,9 @@ import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ProjectDocumentUpdateDto } from 'src/app/shared/models/project-document-update-dto';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
+import { ProjectDocumentUpdateDto } from 'src/app/shared/generated/model/project-document-update-dto';
 
 @Component({
   selector: 'hippocamp-project-attachments',
