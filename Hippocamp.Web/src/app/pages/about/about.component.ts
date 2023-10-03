@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 @Component({
   selector: 'hippocamp-about',
@@ -10,7 +10,7 @@ export class AboutComponent implements OnInit {
 
   constructor() { }
 
-  public richTextTypeID : number = CustomRichTextType.About;
+  public richTextTypeID : number = NeptunePageTypeEnum.HippocampAbout;
   
   ngOnInit(): void {
   }

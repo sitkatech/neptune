@@ -1,11 +1,9 @@
 import { ApplicationRef, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { ProjectService } from 'src/app/services/project/project.service';
 import { BoundingBoxDto, DelineationUpsertDto, PersonDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPUpsertDto, ProjectSimpleDto } from 'src/app/shared/generated/model/models';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import * as L from 'leaflet';
@@ -13,11 +11,13 @@ import 'leaflet.fullscreen';
 import * as esri from 'esri-leaflet';
 import { GestureHandling } from "leaflet-gesture-handling";
 import { forkJoin } from 'rxjs';
-import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
-import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { environment } from 'src/environments/environment';
-import { ProjectNetworkSolveHistoryStatusTypeEnum } from 'src/app/shared/models/enums/project-network-solve-history-status-type.enum';
 import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
+import { ProjectService } from 'src/app/shared/generated/api/project.service';
+import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stormwater-jurisdiction.service';
+import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
+import { ProjectNetworkSolveHistoryStatusTypeEnum } from 'src/app/shared/generated/enum/project-network-solve-history-status-type-enum';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 declare var $: any
 
@@ -60,7 +60,7 @@ export class ModeledPerformanceComponent implements OnInit {
 
   public projectID: number;
   public project: ProjectSimpleDto;
-  public customRichTextTypeID = CustomRichTextType.ModeledPerformance;
+  public customRichTextTypeID = NeptunePageTypeEnum.HippocampModeledPerformance;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -83,11 +83,11 @@ export class ModeledPerformanceComponent implements OnInit {
       if (projectID) {
         this.projectID = parseInt(projectID);
         forkJoin({
-          project: this.projectService.getByID(this.projectID),
-          treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
-          delineations: this.projectService.getDelineationsByProjectID(this.projectID),
-          boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
-          projectNetworkSolveHistories:  this.projectService.getNetworkSolveHistoriesByProjectID(this.projectID)
+          project: this.projectService.projectsProjectIDGet(this.projectID),
+          treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
+          delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
+          boundingBox: this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID),
+          projectNetworkSolveHistories:  this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID)
         }).subscribe(({ project, treatmentBMPs, delineations, boundingBox, projectNetworkSolveHistories }) => {
           // redirect to review step if project is shared with OCTA grant program
           if (project.ShareOCTAM2Tier2Scores) {
@@ -262,25 +262,7 @@ export class ModeledPerformanceComponent implements OnInit {
   }
 
   private mapDelineationsToGeoJson(delineations: DelineationUpsertDto[]) {
-    return {
-      type: "FeatureCollection",
-      features: delineations.map(x => {
-        let delineationGeoJson =
-          this.mapDelineationToFeature(x);
-        return delineationGeoJson;
-      })
-    }
-  }
-
-  private mapDelineationToFeature(x: DelineationUpsertDto) {
-    return {
-      "type": "Feature",
-      "geometry": x.Geometry != null && x.Geometry != undefined ? JSON.parse(x.Geometry) : null,
-      "properties": {
-        DelineationID: x.DelineationID,
-        TreatmentBMPID: x.TreatmentBMPID
-      }
-    };
+    return delineations.map(x => JSON.parse(x.Geometry));
   }
 
   private selectFeatureImpl(treatmentBMPID: number) {
@@ -318,10 +300,10 @@ export class ModeledPerformanceComponent implements OnInit {
   }
 
   triggerModelRunForProject(): void {
-    this.projectService.triggerNetworkSolveByProjectID(this.projectID).subscribe(results => {
+    this.projectService.projectsProjectIDModeledPerformancePost(this.projectID).subscribe(results => {
       this.alertService.pushAlert(new Alert('Model run was successfully started and will run in the background.', AlertContext.Success, true));
       window.scroll(0, 0);
-      this.projectService.getNetworkSolveHistoriesByProjectID(this.projectID).subscribe(result => {
+      this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID).subscribe(result => {
         this.projectNetworkSolveHistories = result;
       })
     },

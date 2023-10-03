@@ -41,3 +41,17 @@ services:
       - NereidUrl=${NereidUrl}
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
       - AzureBlobStorageConnectionString=${AzureBlobStorageConnectionString}
+
+  neptune.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
+      - SitkaEmailRedirect=${SitkaEmailRedirect}
+      - HippocampWebUrl=${HippocampWebUrl}
+      - NeptuneAPISecretPath=${NeptuneAPISecretPath}
+      - KeystoneRedirectUrl=${KeystoneRedirectUrl}
+      - PlatformLongName=${PlatformLongName}
+      - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
+      - OcStormwaterToolsBaseUrl=${OcStormwaterToolsBaseUrl}
+      - OcStormwaterToolsModelingBaseUrl=${OcStormwaterToolsModelingBaseUrl}
+      - AzureBlobStorageConnectionString=${AzureBlobStorageConnectionString}

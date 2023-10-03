@@ -21,12 +21,7 @@
 #docs/*.md
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
-/api
-api/*
-api.module.ts
-configuration.ts
-encoder.ts
+api/api.ts
 git_push.sh
 index.ts
-variables.ts
 README.md

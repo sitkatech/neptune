@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { ProjectService } from 'src/app/services/project/project.service';
-import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
+import { ProjectService } from 'src/app/shared/generated/api/project.service';
+import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
 import { PersonDto, ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/models';
 import { ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/model/project-network-solve-history-simple-dto';
@@ -53,11 +53,11 @@ export class ProjectDetailComponent implements OnInit {
       if (projectID) {
         this.projectID = parseInt(projectID);
         forkJoin({
-          project: this.projectService.getByID(this.projectID),
-          treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
-          delineations: this.projectService.getDelineationsByProjectID(this.projectID),
-          projectNetworkSolveHistories: this.projectService.getNetworkSolveHistoriesByProjectID(this.projectID),
-          attachments: this.projectService.getAttachmentsByProjectID(this.projectID)
+          project: this.projectService.projectsProjectIDGet(this.projectID),
+          treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
+          delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
+          projectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID),
+          attachments: this.projectService.projectsProjectIDAttachmentsGet(this.projectID)
         }).subscribe(({project, treatmentBMPs, delineations, projectNetworkSolveHistories, attachments}) => {
           this.treatmentBMPs = treatmentBMPs;
           this.delineations = delineations;
@@ -86,7 +86,7 @@ export class ProjectDetailComponent implements OnInit {
     this.confirmService.confirm({ modalSize: "md", buttonClassYes: "btn-hippocamp", buttonTextYes: "Copy", buttonTextNo: "Cancel", title: "Copy Project", message: modalContents }).then(confirmed => {
       if (confirmed) {
         this.isCopyingProject = true;
-        this.projectService.newProjectCopy(this.projectID).subscribe(newProjectID => {
+        this.projectService.projectsProjectIDCopyPost(this.projectID).subscribe(newProjectID => {
           this.router.navigateByUrl(`/projects/${newProjectID}`).then(() => {
             this.alertService.pushAlert(new Alert('Project successfully copied.', AlertContext.Success));
           });

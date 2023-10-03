@@ -44,6 +44,8 @@ import { ProjectDetailComponent } from './pages/projects/project-detail/project-
 import { ReviewComponent } from './pages/projects/project-workflow/review/review.component';
 import { PlanningMapComponent } from './pages/planning-map/planning-map.component';
 import { OCTAM2Tier2DashboardComponent } from './pages/grant-programs/octa-m2-tier2-dashboard/octa-m2-tier2-dashboard.component';
+import { ApiModule } from './shared/generated/api.module';
+import { Configuration } from './shared/generated/configuration';
 
 export function init_app(appLoadService: AppInitService, appInsightsService:  AppInsightsService) {
   return () => appLoadService.init().then(() => {
@@ -90,6 +92,11 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
         AgGridModule.withComponents([]),
         DragDropModule,
         NgSelectModule,
+        ApiModule.forRoot(() => {
+          return new Configuration({
+              basePath: `${environment.mainAppApiUrl}`,
+          });
+        })
     ],
     providers: [
         CookieService,

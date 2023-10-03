@@ -7,9 +7,9 @@ import { AlertContext } from "../../models/enums/alert-context.enum";
 import { AlertService } from "../../services/alert.service";
 import { FieldDefinitionDto } from "../../generated/model/field-definition-dto";
 import { PersonDto } from "../../generated/model/person-dto";
-import { FieldDefinitionService } from "../../services/field-definition-service";
-import { FieldDefinitionTypeEnum } from "../../models/enums/field-definition-type.enum";
 import { NgbPopover } from "@ng-bootstrap/ng-bootstrap/popover/popover";
+import { FieldDefinitionService } from "../../generated/api/field-definition.service";
+import { FieldDefinitionTypeEnum } from "../../generated/enum/field-definition-type-enum";
 
 declare var $: any;
 
@@ -56,7 +56,7 @@ export class FieldDefinitionComponent implements OnInit {
             this.currentUser = currentUser;
         });
 
-        this.fieldDefinitionService.getFieldDefinition(
+        this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDGet(
             FieldDefinitionTypeEnum[this.fieldDefinitionType]
         ).subscribe(x => this.loadFieldDefinition(x));
     }
@@ -103,7 +103,7 @@ export class FieldDefinitionComponent implements OnInit {
         this.isLoading = true;
         
         this.fieldDefinition.FieldDefinitionValue = this.editedContent;
-        this.fieldDefinitionService.updateFieldDefinition(this.fieldDefinition).subscribe(x => {
+        this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDPut(this.fieldDefinition.FieldDefinitionID, this.fieldDefinition).subscribe(x => {
           this.loadFieldDefinition(x);
           
           setTimeout(() => {

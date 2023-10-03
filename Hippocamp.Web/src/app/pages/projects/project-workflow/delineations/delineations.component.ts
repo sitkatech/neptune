@@ -6,22 +6,22 @@ import 'leaflet.fullscreen';
 import * as esri from 'esri-leaflet'
 import { GestureHandling } from "leaflet-gesture-handling";
 import { forkJoin } from 'rxjs';
-import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
-import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 import { BoundingBoxDto } from 'src/app/shared/generated/model/bounding-box-dto';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
-import { DelineationTypeEnum } from 'src/app/shared/models/enums/delineation-type.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { ProjectWorkflowService } from 'src/app/services/project-workflow.service';
-import { ProjectService } from 'src/app/services/project/project.service';
 import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
 import { WfsService } from 'src/app/shared/services/wfs.service';
+import { ProjectService } from 'src/app/shared/generated/api/project.service';
+import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stormwater-jurisdiction.service';
+import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
+import { DelineationTypeEnum } from 'src/app/shared/generated/enum/delineation-type-enum';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 declare var $: any
 
@@ -85,7 +85,7 @@ export class DelineationsComponent implements OnInit {
     opacity: 0
   }
   public projectID: number;
-  public customRichTextTypeID = CustomRichTextType.Delineations;
+  public customRichTextTypeID = NeptunePageTypeEnum.HippocampDelineations;
 
   private isPerformingDrawAction: boolean = false;
   private defaultDrawControlSpec: L.Control.DrawConstructorOptions = {
@@ -148,10 +148,10 @@ export class DelineationsComponent implements OnInit {
       this.projectID = parseInt(projectID);
 
       forkJoin({
-        project: this.projectService.getByID(this.projectID),
-        treatmentBMPs: this.treatmentBMPService.getTreatmentBMPsByProjectID(this.projectID),
-        delineations: this.projectService.getDelineationsByProjectID(this.projectID),
-        boundingBox: this.stormwaterJurisdictionService.getBoundingBoxByProjectID(this.projectID),
+        project: this.projectService.projectsProjectIDGet(this.projectID),
+        treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
+        delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
+        boundingBox: this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID),
       }).subscribe(({ project, treatmentBMPs, delineations, boundingBox }) => {
         // redirect to review step if project is shared with OCTA grant program
         if (project.ShareOCTAM2Tier2Scores) {
@@ -323,27 +323,9 @@ export class DelineationsComponent implements OnInit {
   }
 
   private mapDelineationsToGeoJson(delineations: DelineationUpsertDto[]) {
-    return {
-      type: "FeatureCollection",
-      features: delineations.map(x => {
-        let delineationGeoJson =
-          this.mapDelineationToFeature(x);
-        return delineationGeoJson;
-      })
-    }
+    return delineations.map(x => JSON.parse(x.Geometry));
   }
-
-  private mapDelineationToFeature(x: DelineationUpsertDto) {
-    return {
-      "type": "Feature",
-      "geometry": x.Geometry != null && x.Geometry != undefined ? JSON.parse(x.Geometry) : null,
-      "properties": {
-        DelineationID: x.DelineationID,
-        TreatmentBMPID: x.TreatmentBMPID
-      }
-    };
-  }
-
+  
   public addFeatureCollectionToFeatureGroup(featureJsons: any, featureGroup: L.FeatureGroup) {
     L.geoJson(featureJsons, {
       onEachFeature: (feature, layer) => {
@@ -412,7 +394,8 @@ export class DelineationsComponent implements OnInit {
           this.newDelineationID--;
         }
         delineationUpsertDto.DelineationTypeID = DelineationTypeEnum.Distributed;
-        delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON().geometry);
+        const geometry = layer.toGeoJSON();
+        delineationUpsertDto.Geometry = JSON.stringify(geometry);
         delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
         this.resetDelineationFeatureGroups();
         this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
@@ -422,7 +405,7 @@ export class DelineationsComponent implements OnInit {
         const layers = (event as L.DrawEvents.Edited).layers;
         layers.eachLayer((layer) => {
           var delineationUpsertDto = this.delineations.filter(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID)[0];
-          delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON().geometry);
+          delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON());
           delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
         });
         this.resetDelineationFeatureGroups();
@@ -606,13 +589,13 @@ export class DelineationsComponent implements OnInit {
     this.getFullyQualifiedJSONGeometryForDelineations(this.delineations);
     var updatedDelineations = this.delineations.filter(x => x.Geometry != null);
     forkJoin({
-      delineations: this.projectService.mergeDelineationsByProjectID(updatedDelineations, this.projectID),
-      treatmentBMPs: this.treatmentBMPService.mergeTreatmentBMPs(this.treatmentBMPs, this.projectID)
+      delineations: this.projectService.projectsProjectIDDelineationsPut(this.projectID, updatedDelineations),
+      treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDPut(this.projectID, this.treatmentBMPs)
     }).subscribe(({delineations, treatmentBMPs}) => {
       window.scroll(0, 0); 
       this.isLoadingSubmit = false;
       this.projectWorkflowService.emitWorkflowUpdate();
-      this.projectService.getDelineationsByProjectID(this.projectID).subscribe(delineations => {
+      this.projectService.projectsProjectIDDelineationsGet(this.projectID).subscribe(delineations => {
         this.delineations = delineations;
         this.originalDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));
         this.resetDelineationFeatureGroups();
@@ -651,7 +634,7 @@ export class DelineationsComponent implements OnInit {
   }
 
   public getUpstreamRSBCatchmentForTreatmentBMP(treatmentBMPID: number) {
-    this.treatmentBMPService.getUpstreamRSBCatchmentGeoJSON(treatmentBMPID).subscribe(result => {
+    this.treatmentBMPService.treatmentBMPsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID).subscribe(result => {
       let currentDelineationForTreatmentBMP = this.delineations.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
       if (currentDelineationForTreatmentBMP == null) {
         currentDelineationForTreatmentBMP = new DelineationUpsertDto({

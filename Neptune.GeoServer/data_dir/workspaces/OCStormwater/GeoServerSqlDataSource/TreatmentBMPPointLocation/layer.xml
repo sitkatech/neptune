@@ -1,0 +1,15 @@
+<layer>
+  <name>TreatmentBMPPointLocation</name>
+  <id>LayerInfoImpl-488ed81a:18ace692067:-7ec6</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-37b18cc6:14d5d036d48:-8000</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-488ed81a:18ace692067:-7ec7</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

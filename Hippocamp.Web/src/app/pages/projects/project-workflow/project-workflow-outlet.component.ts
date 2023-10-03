@@ -1,17 +1,14 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { OrganizationService } from 'src/app/services/organization/organization.service';
-import { ProjectService } from 'src/app/services/project/project.service';
-import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { OrganizationSimpleDto } from 'src/app/shared/generated/model/organization-simple-dto';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { ProjectUpsertDto } from 'src/app/shared/generated/model/project-upsert-dto';
 import { StormwaterJurisdictionSimpleDto } from 'src/app/shared/generated/model/stormwater-jurisdiction-simple-dto';
-import { AlertService } from 'src/app/shared/services/alert.service';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { ProjectWorkflowService } from 'src/app/services/project-workflow.service';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { ProjectService } from 'src/app/shared/generated/api/project.service';
 
 @Component({
   selector: 'hippocamp-project-workflow-outlet',
@@ -63,7 +60,7 @@ export class ProjectWorkflowOutletComponent implements OnInit {
     const projectID = this.route.snapshot.paramMap.get("projectID");
       if (projectID) {
         this.projectID = parseInt(projectID);
-        this.projectService.getByID(this.projectID).subscribe(project => {
+        this.projectService.projectsProjectIDGet(this.projectID).subscribe(project => {
           this.mapProjectSimpleDtoToProjectModel(project);
         });
       }

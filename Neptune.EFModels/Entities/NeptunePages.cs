@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
@@ -44,6 +45,27 @@ namespace Neptune.EFModels.Entities
                 .SingleOrDefault(x => x.NeptunePageTypeID == neptunePageType.NeptunePageTypeID);
             Check.RequireNotNull(neptunePage);
             return neptunePage;
+        }
+        public static NeptunePageDto GetByNeptunePageTypeID(NeptuneDbContext dbContext, int neptunePageID)
+        {
+            var neptunePage = dbContext.NeptunePages
+                .SingleOrDefault(x => x.NeptunePageTypeID == neptunePageID);
+
+            return neptunePage?.AsDto();
+        }
+
+        public static NeptunePageDto UpdateNeptunePage(NeptuneDbContext dbContext, int neptunePageID,
+            NeptunePageDto customRichTextUpdateDto)
+        {
+            var neptunePage = dbContext.NeptunePages
+                .SingleOrDefault(x => x.NeptunePageTypeID == neptunePageID);
+
+            // null check occurs in calling endpoint method.
+            neptunePage.NeptunePageContent = customRichTextUpdateDto.NeptunePageContent;
+
+            dbContext.SaveChanges();
+
+            return neptunePage.AsDto();
         }
     }
 }

@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using Neptune.Common;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.Web.Common;

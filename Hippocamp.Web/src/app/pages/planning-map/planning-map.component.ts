@@ -8,17 +8,12 @@ import 'leaflet-loading';
 import 'leaflet.markercluster';
 import * as esri from 'esri-leaflet';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { DelineationService } from 'src/app/services/delineation.service';
-import { TreatmentBMPService } from 'src/app/services/treatment-bmp/treatment-bmp.service';
 import { BoundingBoxDto, DelineationSimpleDto, TreatmentBMPDisplayDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto } from 'src/app/shared/generated/model/models';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
-import { StormwaterJurisdictionService } from 'src/app/services/stormwater-jurisdiction/stormwater-jurisdiction.service';
 import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
-import { ProjectService } from 'src/app/services/project/project.service';
 import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { PrioritizationMetric } from 'src/app/shared/models/prioritization-metric';
 import { WfsService } from 'src/app/shared/services/wfs.service';
 import { OctaPrioritizationDetailPopupComponent } from 'src/app/shared/components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component';
@@ -27,6 +22,11 @@ import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-re
 import { UtilityFunctionsService } from 'src/app/services/utility-functions.service';
 import { AgGridAngular } from 'ag-grid-angular';
 import { FieldDefinitionGridHeaderComponent } from 'src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component';
+import { DelineationService } from 'src/app/shared/generated/api/delineation.service';
+import { ProjectService } from 'src/app/shared/generated/api/project.service';
+import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stormwater-jurisdiction.service';
+import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 declare var $: any;
 
@@ -39,7 +39,7 @@ export class PlanningMapComponent implements OnInit {
   @ViewChild("projectsGrid") projectsGrid: AgGridAngular;
 
   private currentUser: PersonDto;
-  public richTextTypeID = CustomRichTextType.PlanningMap;
+  public richTextTypeID = NeptunePageTypeEnum.HippocampPlanningMap;
 
   public projects: Array<ProjectSimpleDto>;
   private treatmentBMPs: Array<TreatmentBMPDisplayDto>;
@@ -102,12 +102,12 @@ export class PlanningMapComponent implements OnInit {
   ngOnInit(): void {
     this.authenticationService.getCurrentUser().subscribe(result => {
       this.currentUser = result;
-      this.stormwaterJurisdictionService.getBoundingBoxByLoggedInPerson().subscribe(result => {
+      this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet().subscribe(result => {
         this.boundingBox = result;
         forkJoin({
-          projects: this.projectService.getProjectsByPersonID(),
-          treatmentBMPs: this.treatmentBMPService.getTreatmentBMPs(),
-          delineations: this.delineationService.getDelineations()
+          projects: this.projectService.projectsGet(),
+          treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
+          delineations: this.delineationService.delineationsGet()
         }).subscribe(({ projects, treatmentBMPs, delineations }) => {
           this.projects = projects;
 
@@ -404,21 +404,7 @@ export class PlanningMapComponent implements OnInit {
   }
 
   private mapDelineationsToGeoJson(delineations: DelineationSimpleDto[]) {
-    return {
-      type: "FeatureCollection",
-      features: delineations.map(x => this.mapDelineationToFeature(x))
-    }
-  }
-
-  private mapDelineationToFeature(x: DelineationSimpleDto) {
-    return {
-      "type": "Feature",
-      "geometry": x.Geometry != null && x.Geometry != undefined ? JSON.parse(x.Geometry) : null,
-      "properties": {
-        TreatmentBMPID: x.TreatmentBMPID,
-        DelineationID: x.DelineationID
-      }
-    };
+    return delineations.map(x => JSON.parse(x.Geometry));
   }
 
   public selectTreatmentBMPImpl(treatmentBMPID: number) {

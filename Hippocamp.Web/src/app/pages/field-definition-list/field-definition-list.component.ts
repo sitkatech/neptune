@@ -1,11 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { FieldDefinitionService } from 'src/app/shared/services/field-definition-service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 import { ColDef } from 'ag-grid-community';
-import { CustomRichTextType } from 'src/app/shared/models/enums/custom-rich-text-type.enum';
 import { AgGridAngular } from 'ag-grid-angular';
 import { FieldDefinitionDto, PersonDto } from 'src/app/shared/generated/model/models';
+import { FieldDefinitionService } from 'src/app/shared/generated/api/field-definition.service';
+import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 
 @Component({
   selector: 'hippocamp-field-definition-list',
@@ -19,7 +19,7 @@ export class FieldDefinitionListComponent implements OnInit {
   private currentUser: PersonDto;
 
   public fieldDefinitions: Array<FieldDefinitionDto>
-  public richTextTypeID : number = CustomRichTextType.LabelsAndDefinitionsList;
+  public richTextTypeID : number = NeptunePageTypeEnum.HippocampLabelsAndDefinitionsList;
 
   public rowData = [];
   public columnDefs: ColDef[];
@@ -32,8 +32,8 @@ export class FieldDefinitionListComponent implements OnInit {
   ngOnInit() {
     this.authenticationService.getCurrentUser().subscribe(currentUser => {
       this.currentUser = currentUser;
-      this.fieldDefinitionsGrid.api.showLoadingOverlay();
-      this.fieldDefinitionService.listAllFieldDefinitions().subscribe(fieldDefinitions => {
+      this.fieldDefinitionsGrid?.api.showLoadingOverlay();
+      this.fieldDefinitionService.fieldDefinitionsGet().subscribe(fieldDefinitions => {
         this.fieldDefinitions = fieldDefinitions;
         this.rowData = fieldDefinitions;
         this.fieldDefinitionsGrid.api.hideOverlay();

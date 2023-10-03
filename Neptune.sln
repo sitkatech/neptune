@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptune.EFModels", "Neptune
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptune.Models", "Neptune.Models\Neptune.Models.csproj", "{4F505B9F-9655-4DB8-AFF9-1AEBEE1A1233}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptune.API", "Neptune.API\Neptune.API.csproj", "{08A79878-7C33-4006-BF72-F0862B30A916}"
+EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Neptune.Database", "Neptune.Database\Neptune.Database.sqlproj", "{18896E6A-80C1-423A-B354-62466F4DE70D}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose\docker-compose.dcproj", "{FD1871DB-6453-466E-A171-0C83CD29D48F}"
@@ -53,6 +55,10 @@ Global
 		{16074F6E-EEE4-40AC-932D-E557552E1DEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16074F6E-EEE4-40AC-932D-E557552E1DEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16074F6E-EEE4-40AC-932D-E557552E1DEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08A79878-7C33-4006-BF72-F0862B30A916}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08A79878-7C33-4006-BF72-F0862B30A916}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08A79878-7C33-4006-BF72-F0862B30A916}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08A79878-7C33-4006-BF72-F0862B30A916}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

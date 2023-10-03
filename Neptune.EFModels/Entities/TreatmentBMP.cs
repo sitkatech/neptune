@@ -19,6 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Neptune.EFModels.Entities
 {
     public partial class TreatmentBMP
@@ -125,6 +127,45 @@ namespace Neptune.EFModels.Entities
         {
             //todo: delete full
             throw new NotImplementedException("Deleting of Treatment BMP not implemented yet!");
+        }
+
+        public IEnumerable<ProjectHRUCharacteristic> GetHRUCharacteristics(NeptuneDbContext dbContext)
+        {
+            if (Delineation == null)
+            {
+                return new List<ProjectHRUCharacteristic>();
+            }
+
+            if (Delineation.DelineationTypeID == (int)DelineationTypeEnum.Centralized && TreatmentBMPType.TreatmentBMPModelingTypeID != null)
+            {
+                var catchmentRegionalSubbasins = GetRegionalSubbasin(dbContext).TraceUpstreamCatchmentsReturnIDList(dbContext);
+
+                catchmentRegionalSubbasins.Add(RegionalSubbasinID.GetValueOrDefault());
+
+                return dbContext.ProjectHRUCharacteristics
+                    .Include(x => x.ProjectLoadGeneratingUnit)
+                    .Where(x =>
+                        x.ProjectID == ProjectID &&
+                        x.ProjectLoadGeneratingUnit.RegionalSubbasinID != null &&
+                        catchmentRegionalSubbasins.Contains(x.ProjectLoadGeneratingUnit.RegionalSubbasinID.Value));
+            }
+
+            else
+            {
+                return dbContext.ProjectHRUCharacteristics
+                    .Include(x => x.ProjectLoadGeneratingUnit)
+                    .ThenInclude(x => x.Delineation)
+                    .Where(x =>
+                        x.ProjectID == ProjectID &&
+                        x.ProjectLoadGeneratingUnit.Delineation != null &&
+                        x.ProjectLoadGeneratingUnit.Delineation.TreatmentBMPID == TreatmentBMPID);
+            }
+        }
+
+        public RegionalSubbasin GetRegionalSubbasin(NeptuneDbContext dbContext)
+        {
+            return dbContext.RegionalSubbasins.SingleOrDefault(x =>
+                x.CatchmentGeometry.Contains(LocationPoint));
         }
     }
 }

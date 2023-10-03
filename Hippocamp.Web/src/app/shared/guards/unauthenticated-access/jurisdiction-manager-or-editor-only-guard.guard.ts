@@ -3,8 +3,8 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTr
 import { Observable } from 'rxjs';
 import { map } from "rxjs/operators";
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { RoleEnum } from '../../models/enums/role.enum';
 import { AlertService } from '../../services/alert.service';
+import { RoleEnum } from '../../generated/enum/role-enum';
 
 @Injectable({
   providedIn: 'root'

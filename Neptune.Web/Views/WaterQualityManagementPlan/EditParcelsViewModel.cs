@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
+using Neptune.Common;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
-using Neptune.Web.Common;
 using Neptune.Web.Common.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
