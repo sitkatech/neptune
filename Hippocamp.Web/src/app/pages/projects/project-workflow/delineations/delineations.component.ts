@@ -394,7 +394,8 @@ export class DelineationsComponent implements OnInit {
           this.newDelineationID--;
         }
         delineationUpsertDto.DelineationTypeID = DelineationTypeEnum.Distributed;
-        delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON().geometry);
+        const geometry = layer.toGeoJSON();
+        delineationUpsertDto.Geometry = JSON.stringify(geometry);
         delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
         this.resetDelineationFeatureGroups();
         this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
@@ -404,7 +405,7 @@ export class DelineationsComponent implements OnInit {
         const layers = (event as L.DrawEvents.Edited).layers;
         layers.eachLayer((layer) => {
           var delineationUpsertDto = this.delineations.filter(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID)[0];
-          delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON().geometry);
+          delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON());
           delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
         });
         this.resetDelineationFeatureGroups();
