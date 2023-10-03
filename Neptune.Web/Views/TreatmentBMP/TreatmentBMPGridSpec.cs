@@ -107,7 +107,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
     public class ViewTreatmentBMPModelingAttributesGridSpec : GridSpec<EFModels.Entities.TreatmentBMP>
     {
-        public ViewTreatmentBMPModelingAttributesGridSpec(LinkGenerator linkGenerator, Dictionary<int, Delineation?> delineationsDict, Dictionary<int, string?> watershedsDict, Dictionary<int, double> precipitationZonesDict)
+        public ViewTreatmentBMPModelingAttributesGridSpec(LinkGenerator linkGenerator, Dictionary<int, EFModels.Entities.Delineation?> delineationsDict, Dictionary<int, string?> watershedsDict, Dictionary<int, double> precipitationZonesDict)
         {
             var treatmentBMPTypeDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));
             var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));

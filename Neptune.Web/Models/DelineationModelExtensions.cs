@@ -1,8 +1,7 @@
-﻿using Neptune.Web.Common;
-using System.Drawing;
-using Microsoft.AspNetCore.Html;
+﻿using System.Drawing;
 using Neptune.Common;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 using NetTopologySuite.Features;
 
 namespace Neptune.Web.Models
@@ -22,24 +21,6 @@ namespace Neptune.Web.Models
         public static string GetDelineationStatus(this Delineation? delineation)
         {
             return delineation != null ? delineation.IsVerified ? "Verified" : "Provisional" : "None";
-        }
-
-
-        //public static readonly UrlTemplate<int> DeleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(t => t.Delete(UrlTemplate.Parameter1Int)));
-
-        public static string GetDeleteUrl(this Delineation delineation)
-        {
-            return ""; //todo DeleteUrlTemplate.ParameterReplace(delineation.DelineationID);
-        }
-
-        public static string GetDetailUrl(this Delineation delineation)
-        {
-            return ""; //todo delineation.TreatmentBMP.GetDelineationMapUrl();
-        }
-
-        public static HtmlString GetDetailUrlForGrid(this Delineation delineation)
-        {
-            return UrlTemplate.MakeHrefString(GetDetailUrl(delineation), "View", new Dictionary<string, string> {{"class", "gridButton"}});
         }
 
         public static FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<Delineation> delineationGeometryStagings)
@@ -90,8 +71,7 @@ namespace Neptune.Web.Models
             dbContext.Delineations.Remove(treatmentBMPDelineation);
             await dbContext.SaveChangesAsync();
 
-            // todo:
-            //NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, dbContext);
+            await NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, dbContext);
         }
     }
 }

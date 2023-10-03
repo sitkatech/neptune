@@ -19,10 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
-using Neptune.Common;
 using Neptune.Common.DesignByContract;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
@@ -242,11 +239,6 @@ namespace Neptune.Web.Models
             };
             return attributesTable;
         }
-
-        //public static string GetDelineationAreaString(this TreatmentBMP treatmentBMP)
-        //{
-        //    return (treatmentBMP.Delineation?.DelineationGeometry.Area * Constants.SquareMetersToAcres)?.ToString("0.00") ?? "-";
-        //}
 
         /// <summary>
         /// Performs the RSB trace for a given Treatment BMP using the EPSG 4326 representation of the regional subbasin geometries

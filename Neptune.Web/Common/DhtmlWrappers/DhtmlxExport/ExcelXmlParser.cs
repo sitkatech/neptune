@@ -15,11 +15,9 @@ namespace Neptune.Web.Common.DhtmlWrappers.DhtmlxExport
 
         public void setXML(string xml)
         {
-
-            XmlDocument dom = new XmlDocument(); ;
+            var dom = new XmlDocument(); ;
             try
             {
-                ///TODO: handle exceptions, log maybe
                 dom.LoadXml(xml);
             }
             catch (Exception se)

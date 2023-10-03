@@ -123,20 +123,10 @@ namespace Neptune.EFModels.Entities
             InventoryVerifiedByPersonID = currentPerson.PersonID;
         }
 
-        public async Task RemoveUpstreamBMP(NeptuneDbContext dbContext)
-        { 
-            UpstreamBMPID = null;
-            await dbContext.SaveChangesAsync();
-
-            //todo:
-            // need to re-execute the Nereid model here since source of run-off was removed.
-            //NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, _dbContext);
-        }
-
         public void DeleteFull(NeptuneDbContext dbContext)
         {
-            //todo:
-            throw new NotImplementedException();
+            //todo: delete full
+            throw new NotImplementedException("Deleting of Treatment BMP not implemented yet!");
         }
 
         public IEnumerable<ProjectHRUCharacteristic> GetHRUCharacteristics(NeptuneDbContext dbContext)

@@ -19,7 +19,7 @@ public partial class FieldVisit
 
     public void DeleteFull(NeptuneDbContext dbContext)
     {
-        // todo:
-        throw new NotImplementedException();
+        // todo: deletefull
+        throw new NotImplementedException("Deleting of Field Visit not implemented yet!");
     }
 }

@@ -13,6 +13,15 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 {
+    builder.Logging.ClearProviders();
+    builder.Logging.AddConsole();
+
+    using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
+        .SetMinimumLevel(LogLevel.Information)
+        .AddConsole());
+
+    ILogger logger = loggerFactory.CreateLogger<Program>();
+
     // Add services to the container.
     var services = builder.Services;
     services.AddRazorPages();
@@ -100,7 +109,7 @@ var builder = WebApplication.CreateBuilder(args);
 
                     if (tvc.Principal.Identity != null && tvc.Principal.Identity.IsAuthenticated) // we have a token and we can determine the person.
                     {
-                        AuthenticationHelper.ProcessLoginFromKeystone(tvc, dbContext, configuration);
+                        AuthenticationHelper.ProcessLoginFromKeystone(tvc, dbContext, configuration, logger);
                     }
                     return Task.FromResult(0);
                 }
@@ -121,6 +130,47 @@ var app = builder.Build();
     if (!app.Environment.IsDevelopment())
     {
         app.UseExceptionHandler("/Home/Error");
+        //todo: explore this more on error handling but for now we are doing the handling on the Home/Error route
+        //app.UseExceptionHandler(exceptionHandlerApp =>
+        //{
+        //    exceptionHandlerApp.Run(async context =>
+        //    {
+        //        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+        //        // using static System.Net.Mime.MediaTypeNames;
+        //        context.Response.ContentType = MediaTypeNames.Text.Html;
+
+        //        await context.Response.WriteAsync("An exception was thrown.");
+
+        //        var exceptionHandlerPathFeature =
+        //            context.Features.Get<IExceptionHandlerPathFeature>();
+
+        //        var lastError = exceptionHandlerPathFeature?.Error;
+        //        switch (lastError)
+        //        {
+        //            //case SitkaRecordNotFoundException:
+        //            //    SitkaHttpRequestStorage.NotFoundStoredError = lastError as SitkaRecordNotFoundException;
+        //            //    break;
+
+        //            case FileNotFoundException:
+        //                await context.Response.WriteAsync(" The file was not found.");
+        //                break;
+        //            case NotImplementedException:
+        //                await context.Response.WriteAsync(exceptionHandlerPathFeature.Error.Message);
+        //                break;
+        //        }
+
+        //        if (exceptionHandlerPathFeature?.Path == "/")
+        //        {
+        //            await context.Response.WriteAsync(" Page: Home.");
+        //        }
+        //        else
+        //        {
+        //            context.Response.Redirect("/Home/Error");
+        //        }
+        //    });
+        //});
+
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }

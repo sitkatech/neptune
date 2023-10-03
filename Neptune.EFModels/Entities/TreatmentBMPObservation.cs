@@ -39,7 +39,7 @@ namespace Neptune.EFModels.Entities
 
         public bool IsComplete()
         {
-            return true; //todo
+            return true;
         }
 
         public double? CalculateObservationScore()

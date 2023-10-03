@@ -13,7 +13,7 @@ namespace Neptune.Web.Common
         public const double GPD_TO_CFS = 0.0000015;
         public const int BASELINE_CUTOFF_YEAR = 2002;
         //todo: private static ILogger _logger = LogManager.GetLogger(typeof(NereidUtilities));
-        //todo:
+        //todo: nereid
         //public static Graph BuildTotalNetworkGraph(NeptuneDbContext dbContext)
         //{
         //    var nodes = new List<Node>();
@@ -837,7 +837,7 @@ namespace Neptune.Web.Common
         //    return results;
         //}
 
-        public static void MarkTreatmentBMPDirty(TreatmentBMP treatmentBMP, NeptuneDbContext dbContext)
+        public static async Task MarkTreatmentBMPDirty(TreatmentBMP treatmentBMP, NeptuneDbContext dbContext)
         {
             var dirtyModelNode = new DirtyModelNode()
             {
@@ -845,9 +845,9 @@ namespace Neptune.Web.Common
                 TreatmentBMPID = treatmentBMP.TreatmentBMPID
             };
 
-            dbContext.DirtyModelNodes.Add(dirtyModelNode);
+            await dbContext.DirtyModelNodes.AddAsync(dirtyModelNode);
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
 
         public static void MarkTreatmentBMPDirty(IEnumerable<TreatmentBMP> treatmentBmpsUpdated, NeptuneDbContext dbContext)
@@ -934,7 +934,7 @@ namespace Neptune.Web.Common
             dbContext.SaveChanges();
         }
 
-        public static void MarkDelineationDirty(IEnumerable<Delineation> delineations, NeptuneDbContext dbContext)
+        public static async Task MarkDelineationDirty(IEnumerable<Delineation> delineations, NeptuneDbContext dbContext)
         {
             foreach (var delineation in delineations)
             {
@@ -944,13 +944,13 @@ namespace Neptune.Web.Common
                     DelineationID = delineation.DelineationID
                 };
 
-                dbContext.DirtyModelNodes.Add(dirtyModelNode);
+                await dbContext.DirtyModelNodes.AddAsync(dirtyModelNode);
             }
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
 
-        public static void MarkDelineationDirty(Delineation delineation, NeptuneDbContext dbContext)
+        public static async Task MarkDelineationDirty(Delineation delineation, NeptuneDbContext dbContext)
         {
             var dirtyModelNode = new DirtyModelNode()
             {
@@ -958,9 +958,9 @@ namespace Neptune.Web.Common
                 DelineationID = delineation.DelineationID
             };
 
-            dbContext.DirtyModelNodes.Add(dirtyModelNode);
+            await dbContext.DirtyModelNodes.AddAsync(dirtyModelNode);
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
 
         public static async Task MarkWqmpDirty(WaterQualityManagementPlan waterQualityManagementPlan, NeptuneDbContext dbContext)

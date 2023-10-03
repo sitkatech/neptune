@@ -33,8 +33,8 @@ namespace Neptune.EFModels.Entities
 
         public void DeleteFull(NeptuneDbContext dbContext)
         {
-            //todo:
-            throw new NotImplementedException();
+            //todo: deletefull
+            throw new NotImplementedException("Deleting of Custom Attribute Type not implemented yet!");
         }
     }
 }

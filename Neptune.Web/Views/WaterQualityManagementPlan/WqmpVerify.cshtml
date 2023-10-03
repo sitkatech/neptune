@@ -146,9 +146,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @for (var i = 0; i < ViewDataTyped.WaterQualityManagementPlanVerifyQuickBMPs.Count; i++)
+                    @foreach (var waterQualityManagementPlanVerifyQuickBMP in ViewDataTyped.WaterQualityManagementPlanVerifyQuickBMPs)
                     {
-                        var waterQualityManagementPlanVerifyQuickBMP = ViewDataTyped.WaterQualityManagementPlanVerifyQuickBMPs[i];
                         <tr>
                             <td> @waterQualityManagementPlanVerifyQuickBMP.QuickBMP.QuickBMPName</td>
                             <td> @waterQualityManagementPlanVerifyQuickBMP.QuickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>

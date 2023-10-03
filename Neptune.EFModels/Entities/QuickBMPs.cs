@@ -48,6 +48,11 @@ public static class QuickBMPs
             .Where(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID).OrderBy(x => x.QuickBMPName).ToList();
     }
 
+    public static List<QuickBMP> ListByWaterQualityManagementPlanIDWithChangeTracking(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
+    {
+        return GetImpl(dbContext).Where(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID).OrderBy(x => x.QuickBMPName).ToList();
+    }
+
     public static List<QuickBMP> GetFullyParameterized(NeptuneDbContext dbContext)
     {
         return GetImpl(dbContext).AsNoTracking().Where(x =>

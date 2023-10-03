@@ -6,6 +6,8 @@ namespace Neptune.Common.GeoSpatial;
 
 public static class GeometryHelper
 {
+    public const string POLYGON_EMPTY = "POLYGON EMPTY";
+
     public static Geometry CreateLocationPoint4326FromLatLong(double latitude, double longitude)
     {
         return new Point(longitude, latitude) { SRID = 4326 };

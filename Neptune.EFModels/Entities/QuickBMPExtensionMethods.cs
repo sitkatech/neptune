@@ -17,4 +17,20 @@ public static partial class QuickBMPExtensionMethods
         };
         return waterQualityManagementPlanVerifyQuickBMPSimpleDto;
     }
+
+    public static QuickBMPUpsertDto AsUpsertDto(
+        this QuickBMP quickBMP)
+    {
+        var quickBMPUpsertDto = new QuickBMPUpsertDto()
+        {
+            TreatmentBMPTypeID = quickBMP.TreatmentBMPTypeID,
+            QuickBMPName = quickBMP.QuickBMPName,
+            QuickBMPNote = quickBMP.QuickBMPNote,
+            PercentOfSiteTreated = quickBMP.PercentOfSiteTreated,
+            PercentCaptured = quickBMP.PercentCaptured,
+            PercentRetained = quickBMP.PercentRetained,
+            DryWeatherFlowOverrideID = quickBMP.DryWeatherFlowOverrideID
+        };
+        return quickBMPUpsertDto;
+    }
 }

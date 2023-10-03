@@ -5,25 +5,24 @@
 
         $scope.addQuickBMPRow = function () {
             var newQuickBMP = $scope.createNewQuickBMPRow();
-            if ($scope.AngularModel.QuickBmpSimples) {
-                $scope.AngularModel.QuickBmpSimples.push(newQuickBMP);
+            if ($scope.AngularModel.QuickBMPs) {
+                $scope.AngularModel.QuickBMPs.push(newQuickBMP);
             } else {
-                $scope.AngularModel.QuickBmpSimples = [newQuickBMP];
+                $scope.AngularModel.QuickBMPs = [newQuickBMP];
             }
         };
 
-        $scope.getQuickBMPSimples = function () {
-            console.log($scope.AngularModel.QuickBmpSimples);
-            return $scope.AngularModel.QuickBmpSimples;
+        $scope.getQuickBMPs = function () {
+            return $scope.AngularModel.QuickBMPs;
         }
 
         $scope.setAllDryWeatherOverridesToYes = function () {
-            $scope.AngularModel.QuickBmpSimples.forEach(x => x.DryWeatherFlowOverrideID = $scope.AngularViewData.DryWeatherFlowOverrideYesID);
+            $scope.AngularModel.QuickBMPs.forEach(x => x.DryWeatherFlowOverrideID = $scope.AngularViewData.DryWeatherFlowOverrideYesID);
         }
 
         $scope.updateEntireSiteEliminatesDryWeatherFlow = function() {
             $scope.entireSiteEliminatesDryWeatherFlow =
-                $scope.AngularModel.QuickBmpSimples.every(x => x.DryWeatherFlowOverrideID ===
+                $scope.AngularModel.QuickBMPs.every(x => x.DryWeatherFlowOverrideID ===
                     $scope.dryWeatherFlowOverrideTrue);
         }
 
@@ -46,8 +45,8 @@
             Sitka.Methods.removeFromJsonArray(quickBmps, rowToDelete);
         };
 
-        $scope.ifAnyQuickBMPSimple = function(quickBmpSimples) {
-            if (quickBmpSimples && quickBmpSimples.length > 0) {
+        $scope.ifAnyQuickBMP = function(quickBMPs) {
+            if (quickBMPs && quickBMPs.length > 0) {
                 return true;
             }
             return false;
@@ -62,13 +61,13 @@
         };
 
         $scope.updateDryWeatherFlowOverrideIDForQuickBmp = function(index, quickBmp) {
-            console.log($scope.AngularModel.QuickBmpSimples[index]);
+            console.log($scope.AngularModel.QuickBMPs[index]);
             console.log(quickBmp);
-            $scope.AngularModel.QuickBmpSimples[index].DryWeatherFlowOverrideID = quickBmp.DryWeatherFlowOverrideID;
+            $scope.AngularModel.QuickBMPs[index].DryWeatherFlowOverrideID = quickBmp.DryWeatherFlowOverrideID;
         }
 
         $scope.calculateRemainingPercent = function () {
-            var sum = _.reduce($scope.AngularModel.QuickBmpSimples,
+            var sum = _.reduce($scope.AngularModel.QuickBMPs,
                 function (sum, n) {
                     var toAdd = n.PercentOfSiteTreated == null ? 0 : n.PercentOfSiteTreated;
                     return sum + toAdd;

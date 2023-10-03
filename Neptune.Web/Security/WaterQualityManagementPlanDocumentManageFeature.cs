@@ -17,7 +17,8 @@ namespace Neptune.Web.Security
         public PermissionCheckResult HasPermission(Person person,
             WaterQualityManagementPlanDocument waterQualityManagementPlanDocument, NeptuneDbContext dbContext)
         {
-            return new WaterQualityManagementPlanManageFeature().HasPermission(person, waterQualityManagementPlanDocument.WaterQualityManagementPlan);
+            var waterQualityManagementPlan = WaterQualityManagementPlans.GetByIDForFeatureContextCheck(dbContext, waterQualityManagementPlanDocument.WaterQualityManagementPlanID);
+            return new WaterQualityManagementPlanManageFeature().HasPermission(person, waterQualityManagementPlan);
         }
     }
 }

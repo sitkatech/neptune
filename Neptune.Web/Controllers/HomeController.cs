@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.AspNetCore.Diagnostics;
 using Neptune.Web.Common;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Home;
@@ -26,6 +27,7 @@ using Neptune.Web.Views.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Neptune.Common;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Models;
 using Neptune.Web.Views.Shared.JurisdictionControls;
@@ -84,9 +86,40 @@ namespace Neptune.Web.Controllers
 
         public ViewResult Error()
         {
-            var viewData = new ErrorViewData(HttpContext, _linkGenerator, CurrentPerson);
+            var errorMessage = "Oops, an error has occurred!";
+            var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();
+            if (exceptionFeature != null)
+            {
+                _logger.LogError(exceptionFeature.Error, exceptionFeature.Error.Message);
+                var error = GetSitkaDisplayableExceptionIfAny(exceptionFeature.Error);
+                if (error != null)
+                {
+                    errorMessage = error.Message;
+                }
+            }
+
+            var viewData = new ErrorViewData(HttpContext, _linkGenerator, CurrentPerson, errorMessage);
             return RazorView<Error, ErrorViewData>(viewData);
         }
+
+        private static SitkaDisplayErrorException? GetSitkaDisplayableExceptionIfAny(Exception lastError)
+        {
+            while (true)
+            {
+                if (lastError is SitkaDisplayErrorException error)
+                {
+                    return error;
+                }
+
+                if (lastError.InnerException == null)
+                {
+                    return null;
+                }
+
+                lastError = lastError.InnerException;
+            }
+        }
+
 
         public ViewResult NotFound()
         {

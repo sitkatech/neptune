@@ -22,7 +22,7 @@ namespace Neptune.Web.Views.ParcelLayerUpload
 
             var currentPerson = People.GetByID(dbContext, PersonID);
 
-            //todo:
+            //todo: ogr2ogr
             //dbContext.pParcelStagingDeleteByPersonID(currentPerson.PersonID);
             //FileResourceService.ValidateFileSize(FileResourceData, errors, "FileResourceData"));
 
@@ -105,7 +105,7 @@ namespace Neptune.Web.Views.ParcelLayerUpload
 
         public void UpdateModel(Person currentPerson)
         {
-            // todo:
+            // todo: hangfire
             //BackgroundJob.Schedule(() =>
             //    ScheduledBackgroundJobLaunchHelper.RunParcelLayerUploadBackgroundJob(currentPerson.PersonID), TimeSpan.FromSeconds(30));
         }

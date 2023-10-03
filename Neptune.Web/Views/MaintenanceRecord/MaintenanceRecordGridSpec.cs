@@ -50,6 +50,9 @@ namespace Neptune.Web.Views.MaintenanceRecord
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Description", x => x.MaintenanceRecordDescription, 300, DhtmlxGridColumnFilterType.Text);
 
+            Add("Structural Repair Conducted", x => x.Structural_Repair_Conducted, 150, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Mechanical Repair Conducted", x => x.Mechanical_Repair_Conducted, 150, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Filtration Surface Restored (sq-ft)", x => x.Filtration_Surface_Restored, 150, DhtmlxGridColumnFilterType.Text);
             Add("Infiltration Surface Restored (sq-ft)", x => x.Infiltration_Surface_Restored, 150, DhtmlxGridColumnFilterType.Text);
             Add("Filtration Surface Restored (sq-ft)", x => x.Filtration_Surface_Restored, 150, DhtmlxGridColumnFilterType.Text);
             Add("Media Replaced (cu-yd)", x => x.Media_Replaced, 150, DhtmlxGridColumnFilterType.Text);

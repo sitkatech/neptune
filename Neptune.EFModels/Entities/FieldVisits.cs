@@ -68,4 +68,15 @@ public static class FieldVisits
             x.TreatmentBMPID == treatmentBMPID &&
             x.FieldVisitStatusID == FieldVisitStatus.InProgress.FieldVisitStatusID);
     }
+
+    public static List<FieldVisit> ListByFieldVisitIDList(NeptuneDbContext dbContext, List<int> fieldVisitIDList)
+    {
+        return GetImpl(dbContext).AsNoTracking()
+            .Where(x => fieldVisitIDList.Contains(x.FieldVisitID)).ToList();
+    }
+
+    public static List<FieldVisit> ListByFieldVisitIDListWithChangeTracking(NeptuneDbContext dbContext, List<int> fieldVisitIDList)
+    {
+        return GetImpl(dbContext).Where(x => fieldVisitIDList.Contains(x.FieldVisitID)).ToList();
+    }
 }

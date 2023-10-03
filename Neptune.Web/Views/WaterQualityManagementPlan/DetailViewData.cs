@@ -17,7 +17,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string EditInventoriedBMPsUrl { get; }
         public string EditSimplifiedStructuralBMPsUrl { get; }
         public string EditSourceControlBMPsUrl { get; }
-        public string EditWqmpBoundaryUrl { get; }
+        public string EditParcelsUrl { get; }
+        public string RefineAreaUrl { get; }
         public string NewDocumentUrl { get; }
         public MapInitJson MapInitJson { get; }
         public ParcelGridSpec ParcelGridSpec { get; }
@@ -30,7 +31,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public List<EFModels.Entities.TreatmentBMP> TreatmentBMPs { get; }
         public List<QuickBMP> QuickBMPs { get; }
         public IEnumerable<IGrouping<int, SourceControlBMP>> SourceControlBMPs { get; }
-        public Dictionary<int, Delineation?> TreatmentBMPDelineationsDict { get; }
+        public Dictionary<int, EFModels.Entities.Delineation?> TreatmentBMPDelineationsDict { get; }
 
         public List<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; }
         public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; }
@@ -77,7 +78,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             HRUCharacteristicsViewData hruCharacteristicsViewData,
             List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches,
             ModeledPerformanceViewData modeledPerformanceViewData,
-            IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs, bool hasWaterQualityManagementPlanBoundary, Dictionary<int, Delineation?> treatmentBMPDelineationsDict, List<EFModels.Entities.WaterQualityManagementPlanDocument> waterQualityManagementPlanDocuments, double calculatedWqmpAcreage)
+            IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs, bool hasWaterQualityManagementPlanBoundary, Dictionary<int, EFModels.Entities.Delineation?> treatmentBMPDelineationsDict, List<EFModels.Entities.WaterQualityManagementPlanDocument> waterQualityManagementPlanDocuments, double calculatedWqmpAcreage)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -94,7 +95,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     x.Edit(WaterQualityManagementPlan));
             EditInventoriedBMPsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
-                    x.EditWqmpBmps(WaterQualityManagementPlan));
+                    x.EditTreatmentBMPs(WaterQualityManagementPlan));
             EditSimplifiedStructuralBMPsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
                     x.EditSimplifiedStructuralBMPs(WaterQualityManagementPlan));
@@ -104,9 +105,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             EditModelingApproachUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
                     x.EditModelingApproach(WaterQualityManagementPlan));
-            EditWqmpBoundaryUrl =
+            EditParcelsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
-                    x.EditWqmpBoundary(WaterQualityManagementPlan));
+                    x.EditParcels(WaterQualityManagementPlan));
+            RefineAreaUrl =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
+                    x.RefineArea(WaterQualityManagementPlan));
             NewDocumentUrl = SitkaRoute<WaterQualityManagementPlanDocumentController>.BuildUrlFromExpression(LinkGenerator, x => x.New(waterQualityManagementPlan));
             TreatmentBMPDetailUrlTemplate = new UrlTemplate<int>(
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator,

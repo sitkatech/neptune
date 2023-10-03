@@ -4,7 +4,7 @@ public partial class CustomAttribute
 {
     public void DeleteFull(NeptuneDbContext dbContext)
     {
-        // todo:
-        throw new NotImplementedException();
+        // todo: deletefull
+        throw new NotImplementedException("Deleting of Custom Attribute not implemented yet!");
     }
 }

@@ -5,7 +5,7 @@ namespace Neptune.Web.Common
 {
     public static class ModelingEngineUtilities
     {
-        public static void QueueLGURefreshForArea(Geometry? oldShape, Geometry? newShape, NeptuneDbContext dbContext)
+        public static async Task QueueLGURefreshForArea(Geometry? oldShape, Geometry? newShape, NeptuneDbContext dbContext)
         {
             Geometry loadGeneratingUnitRefreshAreaGeometry;
 
@@ -33,8 +33,8 @@ namespace Neptune.Web.Common
                 ProcessDate = DateTime.Now
             };
 
-            dbContext.LoadGeneratingUnitRefreshAreas.Add(loadGeneratingUnitRefreshArea);
-            dbContext.SaveChanges();
+            await dbContext.LoadGeneratingUnitRefreshAreas.AddAsync(loadGeneratingUnitRefreshArea);
+            await dbContext.SaveChangesAsync();
 
             //BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(loadGeneratingUnitRefreshArea.LoadGeneratingUnitRefreshAreaID));
         }

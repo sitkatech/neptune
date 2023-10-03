@@ -37,17 +37,10 @@ NeptuneMaps.WQMPBoundaryAreaMap = function (mapInitJson, initialBaseLayerShown, 
 
     this.originalAssessmentAreaGeoJson = originalAssessmentAreaGeoJson;
     this.waterQualityManagementPlanID = options.WaterQualityManagementPlanID;
-    this.ParcelIDs = options.InitialParcelIDs;
 
     this.map.setMaxZoom(24);
     this.setUpDraw();
     var self = this;
-    this.map.on("click",
-        function (event) {
-            if (self.parcelPickerModeActive) {
-                self.onClickPickParcel(event);
-            }
-        });
 
     jQuery("#saveButton").on("click",
         function () {
@@ -71,34 +64,6 @@ NeptuneMaps.WQMPBoundaryAreaMap.prototype.prepFeatureGroupAndDrawControl = funct
     }
 };
 
-NeptuneMaps.WQMPBoundaryAreaMap.prototype.onClickPickParcel = function (event) {
-    var latlng = event.latlng;
-
-    var self = this;
-    self.getFeatureInfo("OCStormwater:Parcels", [latlng.lng, latlng.lat]).then(function (response) {
-        if (response.features.length === 0)
-            return;
-
-        var mergedProperties = _.merge.apply(_, _.map(response.features, "properties"));
-
-        var parcelId = mergedProperties.ParcelID;
-
-        if (_.includes(self.ParcelIDs, parcelId)) {
-            _.pull(self.ParcelIDs, parcelId);
-        } else {
-            self.ParcelIDs.push(parcelId);
-        }
-
-        self.updateSelectedParcelLayer();
-
-    }).fail(
-        function () {
-            console.error("There was an error selecting the " + $scope.AngularViewData.ParcelFieldDefinitionLabel + " from list");
-        });
-}
-
-NeptuneMaps.WQMPBoundaryAreaMap.prototype.getTextAreaId = function (featureId) { return "textareaFor" + featureId; };
-
 NeptuneMaps.WQMPBoundaryAreaMap.prototype.setUpDraw = function (geoJson) {
     if (!geoJson) {
         geoJson = this.originalAssessmentAreaGeoJson;
@@ -106,7 +71,6 @@ NeptuneMaps.WQMPBoundaryAreaMap.prototype.setUpDraw = function (geoJson) {
     this.editableFeatureGroup = new L.FeatureGroup();
     var self = this;
 
-    this.parcelPickerModeActive = false;
     var editableFeatureGroup = this.editableFeatureGroup;
     var layerGroup = L.geoJson(geoJson,
         {
@@ -221,69 +185,6 @@ NeptuneMaps.WQMPBoundaryAreaMap.prototype.setUpBetterDeleteControl = function ()
         });
 };
 
-NeptuneMaps.WQMPBoundaryAreaMap.prototype.acceptParcelsAndRefine = function () {
-
-    if (this.ParcelIDs === null) {
-        this.ParcelIDs = [];
-    }
-
-    if (this.selectedParcelLayer) {
-        this.layerControl.removeLayer(this.selectedParcelLayer);
-        this.map.removeLayer(this.selectedParcelLayer);
-    }
-
-    var self = this;
-    jQuery.ajax({
-        url: self.customOptions.ParcelUnionUrl,
-        data: { ParcelIDs: this.ParcelIDs },
-        type: "POST"
-
-    }).then(function (response) {
-        self.setUpDraw(response);
-        self.updateFeatureCollectionJson();
-    });
-
-};
-
-NeptuneMaps.WQMPBoundaryAreaMap.prototype.getParcelsAndPick = function () {
-    this.drawControl.remove();
-    this.map.removeLayer(this.editableFeatureGroup);
-    this.drawControl = null;
-    this.editableFeatureGroup = null;
-    this.parcelPickerModeActive = true;
-
-    this.map.off("draw:created");
-    this.map.off("draw:edited");
-    this.map.off("draw:editstop");
-    this.map.off("draw:editvertex");
-    this.map.off("draw:deleted");
-
-    this.updateSelectedParcelLayer();
-};
-
-NeptuneMaps.WQMPBoundaryAreaMap.prototype.updateSelectedParcelLayer = function () {
-    if (this.ParcelIDs === null) {
-        this.ParcelIDs = [];
-    }
-
-    if (this.selectedParcelLayer) {
-        this.layerControl.removeLayer(this.selectedParcelLayer);
-        this.map.removeLayer(this.selectedParcelLayer);
-    }
-
-    var wmsParametersExtended = {
-        layers: "OCStormwater:Parcels",
-        cql_filter: "ParcelID in (" + this.ParcelIDs.join(",") + ")",
-        styles: "parcel_yellow"
-    };
-
-    L.Util.extend(wmsParametersExtended, this.wmsParams);
-
-    this.selectedParcelLayer = L.tileLayer.wms(this.geoserverUrlOWS, wmsParametersExtended);
-    this.layerControl.addOverlay(this.selectedParcelLayer,
-        "<span><img src='/Content/img/legendImages/selectedGeometry.png' height='12px' style='margin-bottom:3px;'/> Selected Parcels</span>");
-    this.map.addLayer(this.selectedParcelLayer);
-};
 
 NeptuneMaps.WQMPBoundaryAreaMap.prototype.createUpdateFeatureCollectionJsonFunctionAsClosure = function (nameForWkt, nameForAnnotation, mapFormID) {
     this.updateFeatureCollectionJson = function () {
@@ -316,15 +217,6 @@ NeptuneMaps.WQMPBoundaryAreaMap.prototype.createUpdateFeatureCollectionJsonFunct
                     "\" />");
             }
         }
-
-        if (this.ParcelIDs) {
-
-            for (var i = 0; i < this.ParcelIDs.length; i++) {
-                hiddens.push("<input type='hidden' name='ParcelIDs[" + i + "]' value='" + this.ParcelIDs[i] + "' />");
-            }
-        }
-
-        hiddens.push("<input type='hidden' name='IsParcelPicker' value='" + this.parcelPickerModeActive + "' />");
 
         mapForm.html(hiddens.join("\r\n"));
 

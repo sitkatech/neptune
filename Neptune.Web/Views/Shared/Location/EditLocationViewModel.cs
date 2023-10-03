@@ -48,7 +48,7 @@ namespace Neptune.Web.Views.Shared.Location
         }
 
         public virtual void UpdateModel(NeptuneDbContext dbContext, EFModels.Entities.TreatmentBMP treatmentBMP,
-            Person currentPerson, Delineation? delineation)
+            Person currentPerson, EFModels.Entities.Delineation? delineation)
         {
             SetTreatmentBMPLocationAndPointInPolygonData(dbContext, treatmentBMP);
 

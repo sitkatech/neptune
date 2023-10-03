@@ -29,8 +29,10 @@ namespace Neptune.Web.Views.ManagerDashboard
         public string ProvisionalBMPDelineationGridCheckAllUrl { get; }
         public string ProvisionalBMPDelineationGridUncheckAllUrl { get; }
         public int BMPDelineationsCount { get; }
-        public string DelineationIndexUrl { get; }
         public bool UserCanViewBMPDelineations { get; }
+        public string BulkRowFieldVisitsUrl { get; }
+        public string BulkRowTreatmentBMPsUrl { get; }
+        public string BulkRowDelineationsUrl { get; }
 
         public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.NeptunePage neptunePage, int fieldVisitCount, int treatmentBMPsCount, int bmpDelineationsCount)
@@ -82,7 +84,10 @@ namespace Neptune.Web.Views.ManagerDashboard
             ProvisionalBMPDelineationGridUncheckAllUrl = $"Sitka.{ProvisionalBMPDelineationGridName}.gird.uncheckAll()";
             BMPDelineationsCount = bmpDelineationsCount;
             UserCanViewBMPDelineations = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
-            //DelineationIndexUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(_linkGenerator, x => x.Index)
+
+            BulkRowFieldVisitsUrl = SitkaRoute<BulkRowController>.BuildUrlFromExpression(linkGenerator, x => x.BulkRowFieldVisits(null));
+            BulkRowTreatmentBMPsUrl = SitkaRoute<BulkRowController>.BuildUrlFromExpression(linkGenerator, x => x.BulkRowTreatmentBMPs(null));
+            BulkRowDelineationsUrl = SitkaRoute<BulkRowController>.BuildUrlFromExpression(linkGenerator, x => x.BulkRowBMPDelineation(null));
         }
     }
 }

@@ -111,8 +111,8 @@ namespace Neptune.Web.Views
         {
             var delineationMenu = new LtInfoMenuItem("Delineation");
 
-            //delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(x => x.DelineationMap(null)), currentPerson, "Delineation Map", "Group1"));
-            //delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(x => x.DelineationReconciliationReport()), currentPerson, "Delineation Reconciliation Report", "Group1"));
+            delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(LinkGenerator, x => x.DelineationMap(null)), currentPerson, "Delineation Map", "Group1"));
+            delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(LinkGenerator, x => x.DelineationReconciliationReport()), currentPerson, "Delineation Reconciliation Report", "Group1"));
 
             return delineationMenu;
         }
@@ -183,13 +183,13 @@ namespace Neptune.Web.Views
             }
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<CustomAttributeTypeController>(LinkGenerator, x => x.Manage()), currentPerson, "Custom Attributes", "Group2"));
 
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TrashGeneratingUnitController>(x => x.Index()), currentPerson, "Trash Generating Units", "Group3"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LandUseBlockController>(x => x.Index()), currentPerson, "Land Use Blocks", "Group3"));
+            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TrashGeneratingUnitController>(LinkGenerator, x => x.Index()), currentPerson, "Trash Generating Units", "Group3"));
+            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LandUseBlockController>(LinkGenerator, x => x.Index()), currentPerson, "Land Use Blocks", "Group3"));
 
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HRUCharacteristicController>(x => x.Index()), currentPerson, "HRU Characteristics", "Group4"));
+            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HRUCharacteristicController>(LinkGenerator, x => x.Index()), currentPerson, "HRU Characteristics", "Group4"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinController>(LinkGenerator, x => x.Index()), currentPerson, "Regional Subbasins", "Group4"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinController>(LinkGenerator, x => x.Grid()), currentPerson, "Regional Subbasin Grid", "Group4"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinRevisionRequestController>(x => x.Index()), currentPerson, "Regional Subbasin Revision Requests", "Group4"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinRevisionRequestController>(LinkGenerator, x => x.Index()), currentPerson, "Regional Subbasin Revision Requests", "Group4"));
 
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<WaterQualityManagementPlanController>(LinkGenerator, x => x.LGUAudit()), currentPerson, "Water Quality Management Plan LGU Audit", "Group5"));
 
