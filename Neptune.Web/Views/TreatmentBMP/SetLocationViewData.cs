@@ -29,8 +29,8 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class SetLocationViewData : NeptuneViewData
     {
-        public SetLocationViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            EFModels.Entities.TreatmentBMP treatmentBMP, EditLocationViewData editLocationViewData) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public SetLocationViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
+            EFModels.Entities.TreatmentBMP treatmentBMP, EditLocationViewData editLocationViewData) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.FindABMP());

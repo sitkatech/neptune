@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public ImageCarouselViewData ImageCarouselViewData { get; }
         public string EditUrl { get; }
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMPAssessment treatmentBMPAssessment, EFModels.Entities.TreatmentBMPType treatmentBMPType, List<TreatmentBMPAssessmentPhoto> treatmentBMPAssessmentPhotos) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.TreatmentBMPAssessment treatmentBMPAssessment, EFModels.Entities.TreatmentBMPType treatmentBMPType, List<TreatmentBMPAssessmentPhoto> treatmentBMPAssessmentPhotos) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             TreatmentBMPAssessment = treatmentBMPAssessment;
             var treatmentBMP = treatmentBMPAssessment.TreatmentBMP;

@@ -7,7 +7,7 @@ namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
 {
     public class IndexViewData : NeptuneViewData
     {
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, RegionalSubbasinRevisionRequestGridSpec gridSpec) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, RegionalSubbasinRevisionRequestGridSpec gridSpec) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = "Regional Subbasin Revision Requests";
             PageTitle = "Index";

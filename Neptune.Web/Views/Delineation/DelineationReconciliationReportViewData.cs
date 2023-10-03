@@ -15,7 +15,7 @@ namespace Neptune.Web.Views.Delineation
         public string OverlappingTreatmentBMPsGridName { get; }
         public DelineationOverlapsDelineationGridSpec OverlappingTreatmentBMPsGridSpec { get; }
 
-        public DelineationReconciliationReportViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, DateTime? regionalSubbasinsLastUpdated) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public DelineationReconciliationReportViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, DateTime? regionalSubbasinsLastUpdated) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             RegionalSubbasinsLastUpdated = regionalSubbasinsLastUpdated.HasValue ? regionalSubbasinsLastUpdated.ToStringDateTime() : "n/a";
             EntityName = FieldDefinitionType.Delineation.FieldDefinitionTypeDisplayName;

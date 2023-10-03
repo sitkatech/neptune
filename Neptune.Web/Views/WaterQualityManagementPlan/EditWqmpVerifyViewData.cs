@@ -8,12 +8,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     public class EditWqmpVerifyViewData : NewWqmpVerifyViewData
     {
 
-        public EditWqmpVerifyViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public EditWqmpVerifyViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, 
             List<WaterQualityManagementPlanVerifyType>  waterQualityManagementPlanVerifyTypes, 
             List<WaterQualityManagementPlanVisitStatus> waterQualityManagementPlanVisitStatuses,
             List<WaterQualityManagementPlanVerifyStatus>  waterQualityManagementPlanVerifyStatuses) 
-            : base(httpContext, linkGenerator, currentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyTypes, waterQualityManagementPlanVisitStatuses, waterQualityManagementPlanVerifyStatuses)
+            : base(httpContext, linkGenerator, webConfiguration, currentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyTypes, waterQualityManagementPlanVisitStatuses, waterQualityManagementPlanVerifyStatuses)
         {
             PageTitle = "Edit Water Quality Management Plan O&M Verification";
 

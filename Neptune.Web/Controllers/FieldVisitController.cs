@@ -59,7 +59,7 @@ namespace Neptune.Web.Controllers
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.FieldRecords);
             var maintenanceAttributeTypes =
                 _dbContext.CustomAttributeTypes.Where(x => x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList();
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, maintenanceAttributeTypes, _dbContext.TreatmentBMPAssessmentObservationTypes);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, maintenanceAttributeTypes, _dbContext.TreatmentBMPAssessmentObservationTypes);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
@@ -103,7 +103,7 @@ namespace Neptune.Web.Controllers
             var postMaintenanceAssessmentViewData = new AssessmentDetailViewData(_linkGenerator, CurrentPerson, postMaintenanceTreatmentBMPAssessment, TreatmentBMPAssessmentTypeEnum.PostMaintenance, treatmentBMPType, postMaintenanceTreatmentBMPAssessmentPhotos);
             var customAttributes = CustomAttributes.ListByTreatmentBMPID(_dbContext, fieldVisit.TreatmentBMPID);
             var maintenanceRecord = fieldVisit.MaintenanceRecord != null ? MaintenanceRecords.GetByID(_dbContext, fieldVisit.MaintenanceRecord.MaintenanceRecordID) : null;
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, initialAssessmentViewData, postMaintenanceAssessmentViewData, customAttributes, treatmentBMPType, maintenanceRecord);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, fieldVisit, initialAssessmentViewData, postMaintenanceAssessmentViewData, customAttributes, treatmentBMPType, maintenanceRecord);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -217,7 +217,7 @@ namespace Neptune.Web.Controllers
             var fieldVisit = FieldVisits.GetByID(_dbContext, fieldVisitPrimaryKey);
             var treatmentBMPAssessments = TreatmentBMPAssessments.ListByFieldVisitID(_dbContext, fieldVisit.FieldVisitID);
             var maintenanceRecord = fieldVisit.MaintenanceRecord != null ? MaintenanceRecords.GetByID(_dbContext, fieldVisit.MaintenanceRecord.MaintenanceRecordID) : null;
-            var viewData = new InventoryViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, treatmentBMPAssessments, maintenanceRecord);
+            var viewData = new InventoryViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, fieldVisit, treatmentBMPAssessments, maintenanceRecord);
             return RazorView<Inventory, InventoryViewData>(viewData);
         }
 
@@ -271,7 +271,7 @@ namespace Neptune.Web.Controllers
             var editLocationViewData = new EditLocationViewData(mapInitJson, "treatmentBMPLocation");
             var treatmentBMPAssessments = TreatmentBMPAssessments.ListByFieldVisitID(_dbContext, fieldVisit.FieldVisitID);
             var maintenanceRecord = fieldVisit.MaintenanceRecord != null ? MaintenanceRecords.GetByID(_dbContext, fieldVisit.MaintenanceRecord.MaintenanceRecordID) : null;
-            var viewData = new LocationViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, treatmentBMPAssessments, editLocationViewData, maintenanceRecord);
+            var viewData = new LocationViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, fieldVisit, treatmentBMPAssessments, editLocationViewData, maintenanceRecord);
 
             return RazorView<Location, LocationViewData, LocationViewModel>(viewData, viewModel);
         }
@@ -340,9 +340,9 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewPhotos(FieldVisit fieldVisit, PhotosViewModel viewModel, List<TreatmentBMPImage> treatmentBMPImages)
         {
-            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPImages);
+            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMPImages);
             var treatmentBMPAssessments = TreatmentBMPAssessments.ListByFieldVisitID(_dbContext, fieldVisit.FieldVisitID);
-            var viewData = new PhotosViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, treatmentBMPAssessments, managePhotosWithPreviewViewData);
+            var viewData = new PhotosViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, fieldVisit, treatmentBMPAssessments, managePhotosWithPreviewViewData);
             return RazorView<Photos, PhotosViewData, PhotosViewModel>(viewData, viewModel);
         }
 
@@ -370,7 +370,7 @@ namespace Neptune.Web.Controllers
             var editAttributesViewData = new EditAttributesViewData(treatmentBMPType, CustomAttributeTypePurposeEnum.OtherDesignAttributes, missingRequiredAttributes);
             var treatmentBMPAssessments = TreatmentBMPAssessments.ListByFieldVisitID(_dbContext, fieldVisit.FieldVisitID);
             var maintenanceRecord = fieldVisit.MaintenanceRecord != null ? MaintenanceRecords.GetByID(_dbContext, fieldVisit.MaintenanceRecord.MaintenanceRecordID) : null;
-            var viewData = new AttributesViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, treatmentBMPAssessments, maintenanceRecord, editAttributesViewData);
+            var viewData = new AttributesViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, fieldVisit, treatmentBMPAssessments, maintenanceRecord, editAttributesViewData);
             return RazorView<Attributes, AttributesViewData, EditAttributesViewModel>(viewData, viewModel);
         }
 
@@ -411,7 +411,7 @@ namespace Neptune.Web.Controllers
             var fieldVisit = FieldVisits.GetByID(_dbContext, fieldVisitPrimaryKey);
             var treatmentBMPAssessments = TreatmentBMPAssessments.ListByFieldVisitID(_dbContext, fieldVisit.FieldVisitID);
             var maintenanceRecord = fieldVisit.MaintenanceRecord != null ? MaintenanceRecords.GetByID(_dbContext, fieldVisit.MaintenanceRecord.MaintenanceRecordID) : null;
-            var viewData = new AssessmentViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, treatmentBMPAssessments, maintenanceRecord);
+            var viewData = new AssessmentViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, fieldVisit, treatmentBMPAssessments, maintenanceRecord);
             return RazorView<Assessment, AssessmentViewData>(viewData);
         }
 
@@ -433,7 +433,7 @@ namespace Neptune.Web.Controllers
             var fieldVisit = FieldVisits.GetByID(_dbContext, fieldVisitPrimaryKey);
             var treatmentBMPAssessments = TreatmentBMPAssessments.ListByFieldVisitID(_dbContext, fieldVisit.FieldVisitID);
             var maintenanceRecord = fieldVisit.MaintenanceRecord != null ? MaintenanceRecords.GetByID(_dbContext, fieldVisit.MaintenanceRecord.MaintenanceRecordID) : null;
-            var viewData = new PostMaintenanceAssessmentViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, treatmentBMPAssessments, maintenanceRecord);
+            var viewData = new PostMaintenanceAssessmentViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, fieldVisit, treatmentBMPAssessments, maintenanceRecord);
             return RazorView<PostMaintenanceAssessment, PostMaintenanceAssessmentViewData>(viewData);
         }
 
@@ -482,7 +482,7 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMPAssessments = TreatmentBMPAssessments.ListByFieldVisitID(_dbContext, fieldVisit.FieldVisitID);
             var maintenanceRecord = fieldVisit.MaintenanceRecord != null ? MaintenanceRecords.GetByID(_dbContext, fieldVisit.MaintenanceRecord.MaintenanceRecordID) : null;
-            var viewData = new MaintainViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, treatmentBMPAssessments, maintenanceRecord);
+            var viewData = new MaintainViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, fieldVisit, treatmentBMPAssessments, maintenanceRecord);
             return RazorView<Maintain, MaintainViewData, MaintainViewModel>(viewData, viewModel);
         }
 
@@ -544,7 +544,7 @@ namespace Neptune.Web.Controllers
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, fieldVisit.TreatmentBMP.TreatmentBMPTypeID);
             var editMaintenanceRecordObservationsViewData = new EditAttributesViewData(treatmentBMPType, CustomAttributeTypePurposeEnum.Maintenance, missingRequiredAttributes);
             var treatmentBMPAssessments = TreatmentBMPAssessments.ListByFieldVisitID(_dbContext, fieldVisit.FieldVisitID);
-            var viewData = new EditMaintenanceRecordViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit, treatmentBMPAssessments, maintenanceRecord, editMaintenanceRecordObservationsViewData);
+            var viewData = new EditMaintenanceRecordViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, fieldVisit, treatmentBMPAssessments, maintenanceRecord, editMaintenanceRecordObservationsViewData);
             return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
                 EditMaintenanceRecordViewModel>(viewData, viewModel);
         }
@@ -611,7 +611,7 @@ namespace Neptune.Web.Controllers
             var treatmentBMPAssessments = TreatmentBMPAssessments.ListByFieldVisitID(_dbContext, fieldVisit.FieldVisitID);
             var customAttributes = CustomAttributes.ListByTreatmentBMPID(_dbContext, fieldVisit.TreatmentBMPID);
             var maintenanceRecord = fieldVisit.MaintenanceRecord != null ? MaintenanceRecords.GetByID(_dbContext, fieldVisit.MaintenanceRecord.MaintenanceRecordID) : null;
-            var viewData = new VisitSummaryViewData(HttpContext, _linkGenerator, CurrentPerson, fieldVisit,
+            var viewData = new VisitSummaryViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, fieldVisit,
                 treatmentBMPAssessments, maintenanceRecord, treatmentBMPType, customAttributes);
             return RazorView<VisitSummary, VisitSummaryViewData, VisitSummaryViewModel>(viewData, viewModel);
         }
@@ -800,7 +800,7 @@ namespace Neptune.Web.Controllers
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, fieldVisit.TreatmentBMP.TreatmentBMPTypeID);
             var treatmentBMPAssessments = TreatmentBMPAssessments.ListByFieldVisitID(_dbContext, fieldVisit.FieldVisitID);
             var maintenanceRecord = fieldVisit.MaintenanceRecord != null ? MaintenanceRecords.GetByID(_dbContext, fieldVisit.MaintenanceRecord.MaintenanceRecordID) : null;
-            var viewData = new ObservationsViewData(HttpContext, _linkGenerator,
+            var viewData = new ObservationsViewData(HttpContext, _linkGenerator, _webConfiguration,
                 CurrentPerson, fieldVisit, treatmentBMPAssessments, maintenanceRecord, treatmentBMPType, treatmentBMPAssessmentTypeEnum);
             return RazorView<Observations, ObservationsViewData, ObservationsViewModel>(viewData, viewModel);
         }
@@ -920,12 +920,12 @@ namespace Neptune.Web.Controllers
         {
             var fieldVisitSection = treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial ? (FieldVisitSection)FieldVisitSection.Assessment : FieldVisitSection.PostMaintenanceAssessment;
 
-            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessmentPhotos);
+            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMPAssessmentPhotos);
 
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMPAssessment.TreatmentBMPTypeID);
             var treatmentBMPAssessments = TreatmentBMPAssessments.ListByFieldVisitID(_dbContext, treatmentBMPAssessment.FieldVisitID);
             var maintenanceRecord = treatmentBMPAssessment.FieldVisit.MaintenanceRecord;
-            var viewData = new AssessmentPhotosViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessment, fieldVisitSection, managePhotosWithPreviewViewData, treatmentBMPType, maintenanceRecord, treatmentBMPAssessments);
+            var viewData = new AssessmentPhotosViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMPAssessment, fieldVisitSection, managePhotosWithPreviewViewData, treatmentBMPType, maintenanceRecord, treatmentBMPAssessments);
             return RazorView<AssessmentPhotos, AssessmentPhotosViewData, AssessmentPhotosViewModel>(viewData, viewModel);
         }
 
@@ -993,7 +993,7 @@ namespace Neptune.Web.Controllers
             BulkUploadTrashScreenVisitViewModel bulkUploadTrashScreenVisitViewModel)
         {
             var neptunePage = EFModels.Entities.NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.BulkUploadFieldVisits);
-            var bulkUploadTrashScreenVisitViewData = new BulkUploadTrashScreenVisitViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage);
+            var bulkUploadTrashScreenVisitViewData = new BulkUploadTrashScreenVisitViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
 
             return RazorView<BulkUploadTrashScreenVisit, BulkUploadTrashScreenVisitViewData,
                 BulkUploadTrashScreenVisitViewModel>(bulkUploadTrashScreenVisitViewData,

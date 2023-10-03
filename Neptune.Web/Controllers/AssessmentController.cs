@@ -23,7 +23,7 @@ namespace Neptune.Web.Controllers
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.Assessment);
             var treatmentBMPAssessmentObservationTypes = _dbContext.TreatmentBMPAssessmentObservationTypes.ToList();
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, treatmentBMPAssessmentObservationTypes);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, treatmentBMPAssessmentObservationTypes);
             return RazorView<Index, IndexViewData>(viewData);
         }
 

@@ -36,8 +36,8 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string TreatmentBMPDetailUrl { get; }
         public string StormwaterJurisdictionDetailUrl { get; }
 
-        public SummaryForMapViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            EFModels.Entities.TreatmentBMP treatmentBMP, EFModels.Entities.TreatmentBMPImage? keyPhoto) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public SummaryForMapViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
+            EFModels.Entities.TreatmentBMP treatmentBMP, EFModels.Entities.TreatmentBMPImage? keyPhoto) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             TreatmentBMP = treatmentBMP;
             KeyPhoto = keyPhoto;

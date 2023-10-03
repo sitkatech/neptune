@@ -25,8 +25,8 @@ namespace Neptune.Web.Views.Shared
 {
     public class ErrorViewData : NeptuneViewData
     {
-        public ErrorViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, string? errorMessage)
-            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public ErrorViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, string? errorMessage)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             ErrorMessage = errorMessage;
             UrlReferer = httpContext.Request.GetReferrer();

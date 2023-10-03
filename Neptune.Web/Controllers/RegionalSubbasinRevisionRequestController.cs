@@ -31,7 +31,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var gridSpec = new RegionalSubbasinRevisionRequestGridSpec(_linkGenerator);
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, gridSpec);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, gridSpec);
             return RazorView<Views.RegionalSubbasinRevisionRequest.Index, IndexViewData>(viewData);
         }
 
@@ -65,7 +65,7 @@ namespace Neptune.Web.Controllers
                 MapInitJson.DefaultZoomLevel, new List<LayerGeoJson>(),
                 new BoundingBoxDto(new List<Geometry> { geometry }), layerGeoJson);
 
-            var viewData = new NewViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, mapInitJson, _webConfiguration.ParcelMapServiceUrl);
+            var viewData = new NewViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, mapInitJson, _webConfiguration.ParcelMapServiceUrl);
 
             return RazorView<New, NewViewData, NewViewModel>(viewData, viewModel);
         }
@@ -126,7 +126,7 @@ namespace Neptune.Web.Controllers
 
             var mapInitJson = new RegionalSubbasinRevisionRequestMapInitJson("revisionRequestMap", MapInitJson.DefaultZoomLevel, new List<LayerGeoJson>(), new BoundingBoxDto(new List<Geometry> { geometry }), layerGeoJson);
 
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, regionalSubbasinRevisionRequest, mapInitJson, _webConfiguration.ParcelMapServiceUrl);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, regionalSubbasinRevisionRequest, mapInitJson, _webConfiguration.ParcelMapServiceUrl);
 
             return RazorView<Detail, DetailViewData>(viewData);
         }

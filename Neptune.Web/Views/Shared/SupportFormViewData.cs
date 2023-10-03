@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.Shared
 {
@@ -33,10 +34,10 @@ namespace Neptune.Web.Views.Shared
         public readonly IEnumerable<SelectListItem> SupportRequestTypes;
         public string CancelUrl { get; }
 
-        public SupportFormViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public SupportFormViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.NeptunePage neptunePage, string successMessage,
             bool isUserAnonymous, IEnumerable<SelectListItem> supportRequestTypes,
-            List<SupportRequestTypeSimpleDto> supportRequestTypeSimples, string cancelUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            List<SupportRequestTypeSimpleDto> supportRequestTypeSimples, string cancelUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = "Stormwater Tools";
             PageTitle = "Request Support";

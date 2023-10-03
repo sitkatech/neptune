@@ -12,8 +12,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; }
         public UrlTemplate<int> TreatmentBMPDetailUrlTemplate { get; }
 
-        public WqmpVerifyViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs, List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs)
-            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public WqmpVerifyViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs, List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             PageTitle = $"{waterQualityManagementPlanVerify.WaterQualityManagementPlan.WaterQualityManagementPlanName} Verification {waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()}";
             SubEntityName = waterQualityManagementPlanVerify.WaterQualityManagementPlan.WaterQualityManagementPlanName;

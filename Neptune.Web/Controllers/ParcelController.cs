@@ -31,7 +31,7 @@ namespace Neptune.Web.Controllers
                 SitkaRoute<ParcelLayerUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateParcelLayerGeometry(null));
             var mapInitJson = GetMapInitJson();
 
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson,
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson,
                 neptunePageHome,
                 neptunePageHome.NeptunePageContent,
                 mapInitJson,

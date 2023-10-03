@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMP
@@ -12,9 +13,9 @@ namespace Neptune.Web.Views.TreatmentBMP
 
 
 
-        public UploadTreatmentBMPsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public UploadTreatmentBMPsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             IEnumerable<SelectListItem> treatmentBMPTypes, List<string> errorList, EFModels.Entities.NeptunePage neptunePage,
-            string treatmentBMPsUploadUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            string treatmentBMPsUploadUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             PageTitle = "BMP Bulk Upload";
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";

@@ -33,7 +33,7 @@ public class IndexViewData : NeptuneViewData
     public string GridDataUrl { get; }
     public string NeptunePageUrl { get; }
 
-    public IndexViewData(Person currentPerson, LinkGenerator linkGenerator, HttpContext httpContext) : base(httpContext, linkGenerator, currentPerson, null, NeptuneArea.OCStormwaterTools)
+    public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson) : base(httpContext, linkGenerator, currentPerson, null, NeptuneArea.OCStormwaterTools, webConfiguration)
     {
         EntityName = "Page Content";
         PageTitle = "Manage Page Content";

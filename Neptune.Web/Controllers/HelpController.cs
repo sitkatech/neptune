@@ -90,7 +90,7 @@ namespace Neptune.Web.Controllers
             var cancelUrl = referrer ?? SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
             viewModel.ReturnUrl = cancelUrl;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            var viewData = new SupportFormViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, successMessage, CurrentPerson.IsAnonymousUser(), supportRequestTypes, allSupportRequestTypes.Select(x => x.AsSimpleDto()).ToList(), cancelUrl);
+            var viewData = new SupportFormViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, successMessage, CurrentPerson.IsAnonymousUser(), supportRequestTypes, allSupportRequestTypes.Select(x => x.AsSimpleDto()).ToList(), cancelUrl);
             return RazorView<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 
@@ -151,7 +151,7 @@ namespace Neptune.Web.Controllers
             var cancelUrl = referrer ?? SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
             viewModel.ReturnUrl = cancelUrl;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            var viewData = new SupportFormViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, string.Empty, isAnonymousUser, supportRequestTypes, allSupportRequestTypes.Select(x => x.AsSimpleDto()).ToList(), cancelUrl);
+            var viewData = new SupportFormViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, string.Empty, isAnonymousUser, supportRequestTypes, allSupportRequestTypes.Select(x => x.AsSimpleDto()).ToList(), cancelUrl);
             return RazorView<Views.Help.RequestOrganizationNameChange, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 
@@ -189,7 +189,7 @@ namespace Neptune.Web.Controllers
         public ViewResult BulkUploadRequest()
         {
             return RazorView<BulkUploadRequest, BulkUploadRequestViewData>(
-                new BulkUploadRequestViewData(HttpContext, _linkGenerator, CurrentPerson, NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.BulkUploadRequest)));
+                new BulkUploadRequestViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.BulkUploadRequest)));
         }
     }
 }

@@ -15,11 +15,11 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public FieldDefinitionType FieldDefinitionForPercentRetained { get; }
         public FieldDefinitionType FieldDefinitionForDryWeatherFlowOverride { get; }
 
-        public EditSimplifiedStructuralBMPsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public EditSimplifiedStructuralBMPsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
             IEnumerable<TreatmentBMPTypeSimpleDto> treatmentBMPTypes, List<DryWeatherFlowOverride> dryWeatherFlowOverrides,
             int dryWeatherFlowOverrideDefaultID,
-            int dryWeatherFlowOverrideYesID) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+            int dryWeatherFlowOverrideYesID) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = $"{FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());

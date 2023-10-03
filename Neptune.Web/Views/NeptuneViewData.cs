@@ -47,14 +47,15 @@ namespace Neptune.Web.Views
         public ViewPageContentViewData ViewPageContentViewData { get; }
         public NeptuneNavBarViewData NeptuneNavBarViewData { get; }
         public List<LtInfoMenuItem> TopLevelLtInfoMenuItems;
-        public readonly LinkGenerator LinkGenerator;
-        private readonly HttpContext _httpContext;
+        public LinkGenerator LinkGenerator { get; }
+        private HttpContext _httpContext { get; }
+        protected WebConfiguration webConfiguration { get; }
 
         /// <summary>
         /// Call for page without associated NeptunePage
         /// </summary>
         protected NeptuneViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            NeptuneArea neptuneArea) : this(httpContext, linkGenerator, currentPerson, null, neptuneArea)
+            NeptuneArea neptuneArea, WebConfiguration webConfiguration) : this(httpContext, linkGenerator, currentPerson, null, neptuneArea, webConfiguration)
         {
         }
 
@@ -63,9 +64,10 @@ namespace Neptune.Web.Views
         /// </summary>
         protected NeptuneViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.NeptunePage neptunePage, bool isHomePage,
-            NeptuneArea neptuneArea)
+            NeptuneArea neptuneArea, WebConfiguration webConfiguration)
         {
             NeptunePage = neptunePage;
+            this.webConfiguration = webConfiguration;
             LinkGenerator = linkGenerator;
             _httpContext = httpContext;
 
@@ -80,13 +82,13 @@ namespace Neptune.Web.Views
             LegalUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, x => x.Legal());
 
             MakeNeptuneMenu(currentPerson);
-            NeptuneNavBarViewData = new NeptuneNavBarViewData(linkGenerator, currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl, neptuneArea, isHomePage);
+            NeptuneNavBarViewData = new NeptuneNavBarViewData(linkGenerator, currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl, neptuneArea, isHomePage, webConfiguration.PlanningModuleUrl);
 
             ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(linkGenerator, neptunePage, currentPerson) : null;
         }
 
         protected NeptuneViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            EFModels.Entities.NeptunePage neptunePage, NeptuneArea neptuneArea) : this(httpContext, linkGenerator, currentPerson, neptunePage, false, neptuneArea)
+            EFModels.Entities.NeptunePage neptunePage, NeptuneArea neptuneArea, WebConfiguration webConfiguration) : this(httpContext, linkGenerator, currentPerson, neptunePage, false, neptuneArea, webConfiguration)
         {
 
         }

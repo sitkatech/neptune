@@ -35,16 +35,16 @@ namespace Neptune.Web.Views.Shared
         public List<LtInfoMenuItem> TopLevelNeptuneMenus { get; }
         public IEnumerable<NeptuneArea> NeptuneAreas { get; }
         public string CurrentPersonDetailUrl { get; }
-
+        public string PlanningModuleUrl { get; }
         public readonly string HomeUrl;
 
-        public readonly NeptuneArea NeptuneArea;
-        private readonly LinkGenerator _linkGenerator;
-        public readonly bool ShowLinkToArea;
+        public NeptuneArea NeptuneArea { get; }
+        private LinkGenerator _linkGenerator { get; }
+        public bool ShowLinkToArea { get; }
 
         public NeptuneNavBarViewData(LinkGenerator linkGenerator, Person currentPerson, string logInUrl,
             string logOutUrl, string requestSupportUrl,
-            NeptuneArea neptuneArea, bool isHomePage)
+            NeptuneArea neptuneArea, bool isHomePage, string planningModuleUrl)
         {
             CurrentPerson = currentPerson;
             _linkGenerator = linkGenerator;
@@ -61,6 +61,7 @@ namespace Neptune.Web.Views.Shared
 
             NeptuneAreas = NeptuneArea.All.Where(x => x.ShowOnPrimaryNavigation).OrderBy(x => x.NeptuneAreaDisplayName);
             NeptuneArea = neptuneArea;
+            PlanningModuleUrl = planningModuleUrl;
             ShowLinkToArea = !isHomePage;
         }
 
@@ -87,5 +88,20 @@ namespace Neptune.Web.Views.Shared
             return topLevelLtInfoMenuItems;
         }
 
+        public string GetNeptuneAreaHomeUrl(NeptuneArea neptuneArea)
+        {
+            var neptuneAreaEnum = neptuneArea.ToEnum;
+            switch (neptuneAreaEnum)
+            {
+                case NeptuneAreaEnum.Planning:
+                    return PlanningModuleUrl;
+                case NeptuneAreaEnum.Trash:
+                case NeptuneAreaEnum.OCStormwaterTools:
+                case NeptuneAreaEnum.Modeling:
+                    return neptuneArea.NeptuneAreaName;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
 }

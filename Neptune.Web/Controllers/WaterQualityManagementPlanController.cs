@@ -37,7 +37,7 @@ namespace Neptune.Web.Controllers
             var gridSpec = new IndexGridSpec(_linkGenerator, CurrentPerson);
             var verificationNeptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WaterQualityMaintenancePlanOandMVerifications);
             var verificationGridSpec = new WaterQualityManagementPlanVerificationGridSpec(_linkGenerator, CurrentPerson);
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, gridSpec, verificationNeptunePage, verificationGridSpec);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, gridSpec, verificationNeptunePage, verificationGridSpec);
             return RazorView< Views.WaterQualityManagementPlan.Index, IndexViewData>(viewData);
         }
 
@@ -87,7 +87,7 @@ namespace Neptune.Web.Controllers
         public ViewResult LGUAudit()
         {
             var wqmpGridSpec = new WaterQualityManagementPlanLGUAuditGridSpec(_linkGenerator);
-            var viewData = new LGUAuditViewData(HttpContext, _linkGenerator, CurrentPerson, wqmpGridSpec);
+            var viewData = new LGUAuditViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, wqmpGridSpec);
             return RazorView<LGUAudit, LGUAuditViewData>(viewData);
         }
 
@@ -186,7 +186,7 @@ namespace Neptune.Web.Controllers
 
             var waterQualityManagementPlanDocuments = WaterQualityManagementPlanDocuments.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
             var calculateTotalAcreage = (waterQualityManagementPlanBoundary?.GeometryNative?.Area ?? 0) * Constants.SquareMetersToAcres;
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlan,
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, waterQualityManagementPlan,
                 waterQualityManagementPlanVerifyDraft, mapInitJson, treatmentBMPs, parcelGridSpec,
                 waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
                 waterQualityManagementPlanVerifyTreatmentBMP,
@@ -369,7 +369,7 @@ namespace Neptune.Web.Controllers
             var treatmentBmps = TreatmentBMPs.ListByStormwaterJurisdictionID(_dbContext, waterQualityManagementPlan.StormwaterJurisdictionID)
                 .Where(x => x.WaterQualityManagementPlanID == null ||
                             x.WaterQualityManagementPlanID == waterQualityManagementPlan.WaterQualityManagementPlanID);
-            var viewData = new EditTreatmentBMPsViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlan, treatmentBmps
+            var viewData = new EditTreatmentBMPsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, waterQualityManagementPlan, treatmentBmps
                 .Select(x => x.AsDisplayDto())
                 .OrderBy(x => x.DisplayName)
                 .ToList());
@@ -416,7 +416,7 @@ namespace Neptune.Web.Controllers
             var dryWeatherFlowOverrides = DryWeatherFlowOverride.All;
             var dryWeatherFlowOverrideDefaultID = DryWeatherFlowOverride.No.DryWeatherFlowOverrideID;
             var dryWeatherFlowOverrideYesID = DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID;
-            var viewData = new EditSimplifiedStructuralBMPsViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlan, treatmentBMPTypes, dryWeatherFlowOverrides, dryWeatherFlowOverrideDefaultID, dryWeatherFlowOverrideYesID);
+            var viewData = new EditSimplifiedStructuralBMPsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, waterQualityManagementPlan, treatmentBMPTypes, dryWeatherFlowOverrides, dryWeatherFlowOverrideDefaultID, dryWeatherFlowOverrideYesID);
             return RazorView<EditSimplifiedStructuralBMPs, EditSimplifiedStructuralBMPsViewData, EditSimplifiedStructuralBMPsViewModel>(viewData, viewModel);
         }
 
@@ -464,7 +464,7 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewEditSourceControlBMPs(WaterQualityManagementPlan waterQualityManagementPlan,
             EditSourceControlBMPsViewModel viewModel)
         {
-            var viewData = new EditSourceControlBMPsViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlan);
+            var viewData = new EditSourceControlBMPsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, waterQualityManagementPlan);
             return RazorView<EditSourceControlBMPs, EditSourceControlBMPsViewData, EditSourceControlBMPsViewModel>(viewData, viewModel);
         }
 
@@ -523,7 +523,7 @@ namespace Neptune.Web.Controllers
             var wqmpJurisdiction = waterQualityManagementPlan.StormwaterJurisdiction;
             var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, new List<LayerGeoJson>(), wqmpParcelGeometries.Any() ?
                     new BoundingBoxDto(wqmpParcelGeometries) : new BoundingBoxDto(wqmpJurisdiction.StormwaterJurisdictionGeometry?.Geometry4326));
-            var viewData = new EditParcelsViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlan, mapInitJson, _webConfiguration.ParcelMapServiceUrl, _webConfiguration.MapServiceLayerNameParcel, waterQualityManagementPlanParcels);
+            var viewData = new EditParcelsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, waterQualityManagementPlan, mapInitJson, _webConfiguration.ParcelMapServiceUrl, _webConfiguration.MapServiceLayerNameParcel, waterQualityManagementPlanParcels);
             return RazorView<EditParcels, EditParcelsViewData, EditParcelsViewModel>(viewData, viewModel);
         }
 
@@ -538,7 +538,7 @@ namespace Neptune.Web.Controllers
             var boundingBoxDto = new BoundingBoxDto(geometry4326);
             var mapInitJson = new MapInitJson("EditWQMPBoundaryMap", 10, new List<LayerGeoJson>(), boundingBoxDto);
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.EditWQMPBoundary);
-            var viewData = new RefineAreaViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, waterQualityManagementPlan, mapInitJson, _webConfiguration.ParcelMapServiceUrl, featureCollection);
+            var viewData = new RefineAreaViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, waterQualityManagementPlan, mapInitJson, _webConfiguration.ParcelMapServiceUrl, featureCollection);
             return RazorView<RefineArea, RefineAreaViewData, RefineAreaViewModel>(viewData, viewModel);
         }
 
@@ -598,7 +598,7 @@ namespace Neptune.Web.Controllers
             var waterQualityManagementPlanVerifyTreatmentBMPs =
                 WaterQualityManagementPlanVerifyTreatmentBMPs.ListByWaterQualityManagementPlanVerifyID(_dbContext, waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
 
-            var viewData = new WqmpVerifyViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMPs, waterQualityManagementPlanVerifyTreatmentBMPs);
+            var viewData = new WqmpVerifyViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMPs, waterQualityManagementPlanVerifyTreatmentBMPs);
 
             return RazorView<WqmpVerify, WqmpVerifyViewData>(viewData);
         }
@@ -661,7 +661,7 @@ namespace Neptune.Web.Controllers
             var waterQualityManagementPlanVerifyTypes = WaterQualityManagementPlanVerifyType.All;
             var waterQualityManagementPlanVisitStatuses = WaterQualityManagementPlanVisitStatus.All;
             var waterQualityManagementPlanVerifyStatuses = WaterQualityManagementPlanVerifyStatus.All;
-            var viewData = new NewWqmpVerifyViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyTypes, waterQualityManagementPlanVisitStatuses, waterQualityManagementPlanVerifyStatuses);
+            var viewData = new NewWqmpVerifyViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyTypes, waterQualityManagementPlanVisitStatuses, waterQualityManagementPlanVerifyStatuses);
             return RazorView<NewWqmpVerify, NewWqmpVerifyViewData, NewWqmpVerifyViewModel>(viewData, viewModel);
         }
 
@@ -710,7 +710,7 @@ namespace Neptune.Web.Controllers
             var waterQualityManagementPlanVerifyTypes = WaterQualityManagementPlanVerifyType.All;
             var waterQualityManagementPlanVisitStatuses = WaterQualityManagementPlanVisitStatus.All;
             var waterQualityManagementPlanVerifyStatuses = WaterQualityManagementPlanVerifyStatus.All;
-            var viewData = new EditWqmpVerifyViewData(HttpContext, _linkGenerator, CurrentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyTypes, waterQualityManagementPlanVisitStatuses, waterQualityManagementPlanVerifyStatuses);
+            var viewData = new EditWqmpVerifyViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyTypes, waterQualityManagementPlanVisitStatuses, waterQualityManagementPlanVerifyStatuses);
             return RazorView<EditWqmpVerify, EditWqmpVerifyViewData, EditWqmpVerifyViewModel>(viewData, viewModel);
         }
 
@@ -871,7 +871,7 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewUploadWqmps(UploadWqmpsViewModel viewModel, List<string> errorList)
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadWQMPs);
-            var viewData = new UploadWqmpsViewData(HttpContext, _linkGenerator, CurrentPerson, errorList, neptunePage,
+            var viewData = new UploadWqmpsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, errorList, neptunePage,
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.UploadWqmps()));
             return RazorView<UploadWqmps, UploadWqmpsViewData, UploadWqmpsViewModel>(viewData,
                 viewModel);

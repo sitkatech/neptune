@@ -29,7 +29,7 @@ namespace Neptune.Web.Controllers
             var geoServerUrl = _webConfiguration.ParcelMapServiceUrl;
             var regionalSubbasinLayerName = _webConfiguration.MapServiceLayerNameRegionalSubbasin;
 
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, new RegionalSubbasinMapInitJson("regionalSubbasinMap"), geoServerUrl, regionalSubbasinLayerName);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, new RegionalSubbasinMapInitJson("regionalSubbasinMap"), geoServerUrl, regionalSubbasinLayerName);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
@@ -69,7 +69,7 @@ namespace Neptune.Web.Controllers
             var hruCharacteristics = regionalSubbasin.GetHRUCharacteristics(_dbContext).ToList();
             var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
             var ocSurveyDownstreamCatchment = regionalSubbasin.OCSurveyDownstreamCatchmentID != null ? RegionalSubbasins.GetByOCSurveyCatchmentID(_dbContext, regionalSubbasin.OCSurveyDownstreamCatchmentID.Value) : null;
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, regionalSubbasin, hruCharacteristicsViewData, stormwaterMapInitJson, hruCharacteristics.Any(), ocSurveyDownstreamCatchment);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, regionalSubbasin, hruCharacteristicsViewData, stormwaterMapInitJson, hruCharacteristics.Any(), ocSurveyDownstreamCatchment);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -106,7 +106,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Grid()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext,NeptunePageType.RegionalSubbasins);
-            var viewData = new GridViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage);
+            var viewData = new GridViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
             return RazorView<Grid, GridViewData>(viewData);
         }
 

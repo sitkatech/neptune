@@ -23,6 +23,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Views.FieldVisit
@@ -32,11 +33,11 @@ namespace Neptune.Web.Views.FieldVisit
         public IEnumerable<SelectListItem> AllMaintenanceRecordTypes { get; }
         public EditAttributesViewData EditAttributesViewData { get; }
 
-        public EditMaintenanceRecordViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public EditMaintenanceRecordViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.FieldVisit fieldVisit,
             List<EFModels.Entities.TreatmentBMPAssessment> treatmentBMPAssessments,
             EFModels.Entities.MaintenanceRecord? maintenanceRecord,
-            EditAttributesViewData editAttributesViewData) : base(httpContext, linkGenerator, currentPerson, fieldVisit, EFModels.Entities.FieldVisitSection.Maintenance, fieldVisit.TreatmentBMP.TreatmentBMPType, maintenanceRecord, treatmentBMPAssessments)
+            EditAttributesViewData editAttributesViewData) : base(httpContext, linkGenerator, webConfiguration, currentPerson, fieldVisit, EFModels.Entities.FieldVisitSection.Maintenance, fieldVisit.TreatmentBMP.TreatmentBMPType, maintenanceRecord, treatmentBMPAssessments)
         {
             SubsectionName = "Edit Maintenance Record";
             EditAttributesViewData = editAttributesViewData;

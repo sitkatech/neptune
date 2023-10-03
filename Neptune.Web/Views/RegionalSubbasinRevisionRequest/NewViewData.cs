@@ -17,7 +17,7 @@ namespace Neptune.Web.Views.RegionalSubbasinRevisionRequest
         public string TreatmentBMPDelineationMapUrl { get; }
         public string? ExistingOpenRequestDetailUrl { get; }
 
-        public NewViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, RegionalSubbasinRevisionRequestMapInitJson mapInitJson, string geoServerUrl) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public NewViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, RegionalSubbasinRevisionRequestMapInitJson mapInitJson, string geoServerUrl) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             TreatmentBMP = treatmentBMP;
             MapInitJson = mapInitJson;

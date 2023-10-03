@@ -45,7 +45,7 @@ namespace Neptune.Web.Controllers
         [FieldDefinitionViewListFeature]
         public ViewResult Index()
         {
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson);
             return RazorView<Views.FieldDefinition.Index, IndexViewData>(viewData);
         }
 
@@ -99,7 +99,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEdit(FieldDefinitionType fieldDefinitionType, EditViewModel viewModel)
         {
-            var viewData = new EditViewData(HttpContext, _linkGenerator, CurrentPerson, fieldDefinitionType);
+            var viewData = new EditViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, fieldDefinitionType);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

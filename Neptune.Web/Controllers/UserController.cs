@@ -46,7 +46,7 @@ namespace Neptune.Web.Controllers
         [UserEditFeature]
         public ViewResult Index()
         {
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson);
             return RazorView<Views.User.Index, IndexViewData>(viewData);
         }
 
@@ -163,7 +163,7 @@ namespace Neptune.Web.Controllers
             var userNotificationGridDataUrl = SitkaRoute<UserController>.BuildUrlFromExpression(_linkGenerator, x => x.UserNotificationsGridJsonData(personPrimaryKey));
             var activateInactivateUrl = SitkaRoute<UserController>.BuildUrlFromExpression(_linkGenerator, x => x.ActivateInactivatePerson(person));
             var organizations = Organizations.ListByPrimaryContactPersonID(_dbContext, person.PersonID);
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, person, userNotificationGridSpec, "userNotifications", userNotificationGridDataUrl, activateInactivateUrl, organizations);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, person, userNotificationGridSpec, "userNotifications", userNotificationGridDataUrl, activateInactivateUrl, organizations);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -267,7 +267,7 @@ namespace Neptune.Web.Controllers
         {
             var allStormwaterJurisdictions = StormwaterJurisdictions.List(_dbContext);
             var stormwaterJurisdictionsCurrentPersonCanManage = StormwaterJurisdictions.ListAssignedForPerson(_dbContext, CurrentPerson);
-            var viewData = new EditUserJurisdictionsViewData(HttpContext, _linkGenerator, CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage, true);
+            var viewData = new EditUserJurisdictionsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage, true);
             return RazorPartialView<EditUserJurisdictions, EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>(viewData, viewModel);
         }
 
@@ -284,7 +284,7 @@ namespace Neptune.Web.Controllers
         //    var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.InviteUser);
         //    var organizations = _dbContext.Organizations.OrderBy(x => x.OrganizationName).ToList();
         //    var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
-        //    var viewData = new InviteViewData(HttpContext, _linkGenerator, CurrentPerson, organizations, neptunePage, cancelUrl);
+        //    var viewData = new InviteViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, organizations, neptunePage, cancelUrl);
         //    return RazorView<Invite, InviteViewData, InviteViewModel>(viewData, viewModel);
         //}
 

@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.CustomAttributeType
         public string TreatmentBMPTypeGridDataUrl { get; }
         public string EditUrl { get; }
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.CustomAttributeType customAttributeType, Dictionary<int, int> countByTreatmentBMPType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.CustomAttributeType customAttributeType, Dictionary<int, int> countByTreatmentBMPType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             CustomAttributeType = customAttributeType;
             EntityName = FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabelPluralized();

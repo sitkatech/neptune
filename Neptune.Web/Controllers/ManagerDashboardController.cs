@@ -45,7 +45,7 @@ namespace Neptune.Web.Controllers
             var fieldVisitCount = vFieldVisitDetaileds.GetProvisionalFieldVisits(_dbContext, stormwaterJurisdictionIDs).Count;
             var treatmentBMPsCount = TreatmentBMPs.GetProvisionalTreatmentBMPs(_dbContext, CurrentPerson).Count;
             var bmpDelineationsCount = Delineations.GetProvisionalBMPDelineations(_dbContext, CurrentPerson).Count;
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, fieldVisitCount, treatmentBMPsCount, bmpDelineationsCount);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, fieldVisitCount, treatmentBMPsCount, bmpDelineationsCount);
             return RazorView<Index, IndexViewData>(viewData);
 
         }

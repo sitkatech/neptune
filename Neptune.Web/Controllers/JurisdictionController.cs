@@ -51,7 +51,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.Jurisdiction);
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
@@ -112,7 +112,7 @@ namespace Neptune.Web.Controllers
         {
             var stormwaterJurisdiction = StormwaterJurisdictions.GetByID(_dbContext, stormwaterJurisdictionPrimaryKey);
             var usersAssignedToJurisdiction = StormwaterJurisdictionPeople.ListByStormwaterJurisdictionID(_dbContext, stormwaterJurisdiction.StormwaterJurisdictionID).Select(x => x.Person).ToList();
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, stormwaterJurisdiction, usersAssignedToJurisdiction);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, stormwaterJurisdiction, usersAssignedToJurisdiction);
             return RazorView<Detail, DetailViewData>(viewData);        
         }
 

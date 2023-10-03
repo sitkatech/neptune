@@ -78,7 +78,7 @@ namespace Neptune.Web.Controllers
             var delineationMapInitJson = new DelineationMapInitJson("delineationMap", treatmentBMPs, boundingBoxDto, MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext).ToList(), _linkGenerator);
             var bulkUploadTreatmentBMPDelineationsUrl = ""; // todo: SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateDelineationGeometry());
             var stormwaterJurisdictionCqlFilter = CurrentPerson.GetStormwaterJurisdictionCqlFilter(_dbContext);
-            var viewData = new DelineationMapViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP, bulkUploadTreatmentBMPDelineationsUrl, stormwaterJurisdictionCqlFilter, _webConfiguration.ParcelMapServiceUrl, _webConfiguration.AutoDelineateServiceUrl);
+            var viewData = new DelineationMapViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP, bulkUploadTreatmentBMPDelineationsUrl, stormwaterJurisdictionCqlFilter, _webConfiguration.ParcelMapServiceUrl, _webConfiguration.AutoDelineateServiceUrl);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
         }
 
@@ -88,7 +88,7 @@ namespace Neptune.Web.Controllers
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.DelineationReconciliationReport);
             var regionalSubbasinsLastUpdated = _dbContext.RegionalSubbasins.Max(x => x.LastUpdate);
-            var viewData = new DelineationReconciliationReportViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, regionalSubbasinsLastUpdated);
+            var viewData = new DelineationReconciliationReportViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, regionalSubbasinsLastUpdated);
             return RazorView<DelineationReconciliationReport, DelineationReconciliationReportViewData>(viewData);
         }
 

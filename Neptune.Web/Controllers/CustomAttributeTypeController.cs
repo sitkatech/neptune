@@ -31,7 +31,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Manage()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.ManageCustomAttributeTypesList);
-            var viewData = new ManageViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage);
+            var viewData = new ManageViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
             return RazorView<Manage, ManageViewData>(viewData);
         }
 
@@ -116,7 +116,7 @@ namespace Neptune.Web.Controllers
             var customAttributeInstructionsNeptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.ManageCustomAttributeInstructions);
 
             var submitUrl = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.CustomAttributeTypeID) ? SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(_linkGenerator, x => x.Edit(viewModel.CustomAttributeTypeID)) : SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(_linkGenerator, x => x.New());
-            var viewData = new EditViewData(HttpContext, _linkGenerator, CurrentPerson, MeasurementUnitType.All, CustomAttributeDataType.All, submitUrl, instructionsNeptunePage, customAttributeInstructionsNeptunePage, customAttributeType);
+            var viewData = new EditViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, MeasurementUnitType.All, CustomAttributeDataType.All, submitUrl, instructionsNeptunePage, customAttributeInstructionsNeptunePage, customAttributeType);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
@@ -127,7 +127,7 @@ namespace Neptune.Web.Controllers
         {
             var customAttributeType = customAttributeTypePrimaryKey.EntityObject;
             var countByTreatmentBMPType = new Dictionary<int, int>();
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, customAttributeType, countByTreatmentBMPType);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, customAttributeType, countByTreatmentBMPType);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

@@ -30,12 +30,12 @@ namespace Neptune.Web.Views.FieldVisit
         public string PostMaintenanceAssessmentDeleteUrl { get; }
 
 
-        public FieldVisitSectionViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public FieldVisitSectionViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.FieldVisit fieldVisit, EFModels.Entities.FieldVisitSection fieldVisitSection,
             EFModels.Entities.TreatmentBMPType treatmentBMPType,
             EFModels.Entities.MaintenanceRecord? maintenanceRecord,
             List<EFModels.Entities.TreatmentBMPAssessment> treatmentBMPAssessments)
-            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             FieldVisit = fieldVisit;
             TreatmentBMPType = treatmentBMPType;

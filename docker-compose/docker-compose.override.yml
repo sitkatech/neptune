@@ -39,6 +39,7 @@ services:
       - PathToPyqgisLauncher=${PathToPyqgisLauncher}
       - PathToPyqgisProjData=${PathToPyqgisProjData}
       - NereidUrl=${NereidUrl}
+      - PlanningModuleUrl=${PlanningModuleUrl}
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
       - AzureBlobStorageConnectionString=${AzureBlobStorageConnectionString}
 
@@ -47,7 +48,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
       - SitkaEmailRedirect=${SitkaEmailRedirect}
-      - HippocampWebUrl=${HippocampWebUrl}
       - NeptuneAPISecretPath=${NeptuneAPISecretPath}
       - KeystoneRedirectUrl=${KeystoneRedirectUrl}
       - PlatformLongName=${PlatformLongName}

@@ -9,7 +9,7 @@ namespace Neptune.Web.Views.ParcelLayerUpload
         public string NewGisUploadUrl { get; }
         
 
-        public UploadParcelLayerViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, string newGisUploadUrl) : base(httpContext, linkGenerator, currentPerson, null, NeptuneArea.OCStormwaterTools)
+        public UploadParcelLayerViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, string newGisUploadUrl) : base(httpContext, linkGenerator, currentPerson, null, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             NewGisUploadUrl = newGisUploadUrl;
             EntityName = "Parcel Layer";

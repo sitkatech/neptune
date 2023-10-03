@@ -45,10 +45,10 @@ namespace Neptune.Web.Views.CustomAttributeType
         public IEnumerable<SelectListItem> YesNos { get; }
         public ViewDataForAngular ViewDataForAngular { get; }
 
-        public EditViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
+        public EditViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
             List<CustomAttributeDataType> customAttributeDataTypes, string submitUrl,
             EFModels.Entities.NeptunePage instructionsNeptunePage, EFModels.Entities.NeptunePage customAttributeInstructionsNeptunePage,
-            EFModels.Entities.CustomAttributeType customAttributeType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+            EFModels.Entities.CustomAttributeType customAttributeType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = "Attribute Type";
             var manageUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Manage());

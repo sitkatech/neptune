@@ -16,7 +16,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
     public class LGUAuditViewData : NeptuneViewData
     {
-        public LGUAuditViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, WaterQualityManagementPlanLGUAuditGridSpec wqmpGridSpec) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public LGUAuditViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, WaterQualityManagementPlanLGUAuditGridSpec wqmpGridSpec) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             var waterQualityManagementPlanPluralized = FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized();
             PageTitle = $"Water Quality Management Plan LGU Audit";

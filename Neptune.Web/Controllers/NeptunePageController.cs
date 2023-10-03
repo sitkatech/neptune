@@ -41,7 +41,7 @@ namespace Neptune.Web.Controllers
         [NeptunePageViewListFeature]
         public ViewResult Index()
         {
-            var viewData = new IndexViewData(CurrentPerson, _linkGenerator, HttpContext);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson);
             return RazorView<Index, IndexViewData>(viewData);
         }
 

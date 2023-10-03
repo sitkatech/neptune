@@ -41,8 +41,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
         public string EditUrl { get; }
 
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
+            EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationType;
             EntityName = "Observation Type";

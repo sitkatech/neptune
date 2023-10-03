@@ -30,8 +30,8 @@ namespace Neptune.Web.Views.FieldDefinition
         public readonly FieldDefinitionType FieldDefinitionType;
         public readonly string CancelUrl;
 
-        public EditViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            FieldDefinitionType fieldDefinitionType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
+            FieldDefinitionType fieldDefinitionType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = "Field Definitions";
             EntityUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(linkGenerator, x => x.Index());

@@ -43,7 +43,7 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMP.TreatmentBMPTypeID);
-            var viewData = new InstructionsViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPType, treatmentBMP.TreatmentBMPBenchmarkAndThresholds.ToList());
+            var viewData = new InstructionsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, treatmentBMPType, treatmentBMP.TreatmentBMPBenchmarkAndThresholds.ToList());
             return RazorView<Instructions, InstructionsViewData>(viewData);
         }
 
@@ -115,7 +115,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEditBenchmarkAndThreshold(TreatmentBMP treatmentBMP, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, EditBenchmarkAndThresholdViewModel viewModel, TreatmentBMPType treatmentBMPType, List<TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds)
         {
-            var viewData = new EditBenchmarkAndThresholdViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, treatmentBMPAssessmentObservationType, treatmentBMPType, treatmentBMPBenchmarkAndThresholds);
+            var viewData = new EditBenchmarkAndThresholdViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, treatmentBMPAssessmentObservationType, treatmentBMPType, treatmentBMPBenchmarkAndThresholds);
             return RazorView<EditBenchmarkAndThreshold, EditBenchmarkAndThresholdViewData, EditBenchmarkAndThresholdViewModel>(viewData, viewModel);
         }
 

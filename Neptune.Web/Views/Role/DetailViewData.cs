@@ -39,8 +39,8 @@ namespace Neptune.Web.Views.Role
         public string NeptuneAreaName { get; }
 
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, IRole role)
-            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, IRole role)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             RoleName = role.RoleDisplayName;
             RoleDescription = role.RoleDescription;

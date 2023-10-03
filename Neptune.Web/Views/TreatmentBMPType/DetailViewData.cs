@@ -38,8 +38,8 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public string GridDataUrl { get; }
         public string EditUrl { get; set; }
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            EFModels.Entities.TreatmentBMPType treatmentBMPType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
+            EFModels.Entities.TreatmentBMPType treatmentBMPType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             CurrentPersonIsAnonymousOrUnassigned = currentPerson.IsAnonymousOrUnassigned();
             TreatmentBMPType = treatmentBMPType;

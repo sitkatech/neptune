@@ -9,7 +9,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     {
         public string WaterQualityManagementPlanDetailUrl { get; }
 
-        public EditSourceControlBMPsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditSourceControlBMPsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = $"{FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());

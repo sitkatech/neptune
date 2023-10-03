@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.Shared.UserJurisdictions
 {
@@ -31,8 +32,8 @@ namespace Neptune.Web.Views.Shared.UserJurisdictions
 
         public bool Standalone { get; }
 
-        public EditUserJurisdictionsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage, bool standalone)
-            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditUserJurisdictionsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage, bool standalone)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             ViewDataForAngular = new EditViewDataForAngular(allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage);
             Standalone = standalone;

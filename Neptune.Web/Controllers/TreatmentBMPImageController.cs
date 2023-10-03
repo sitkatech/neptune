@@ -54,8 +54,8 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewManageTreatmentBMPImages(ManageTreatmentBMPImagesViewModel viewModel,
             TreatmentBMP treatmentBMP, IEnumerable<TreatmentBMPImage> treatmentBMPImages)
         {
-            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPImages);
-            var viewData = new ManageTreatmentBMPImagesViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMP, managePhotosWithPreviewViewData);
+            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMPImages);
+            var viewData = new ManageTreatmentBMPImagesViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, managePhotosWithPreviewViewData);
             return RazorView<ManageTreatmentBMPImages, ManageTreatmentBMPImagesViewData, ManageTreatmentBMPImagesViewModel>(viewData, viewModel);
         }
     }

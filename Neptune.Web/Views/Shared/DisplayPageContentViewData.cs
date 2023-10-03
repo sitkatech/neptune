@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.Shared
 {
@@ -27,8 +28,8 @@ namespace Neptune.Web.Views.Shared
     {
         public readonly ViewPageContentViewData ViewWholePageContentViewData;
 
-        public DisplayPageContentViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            EFModels.Entities.NeptunePage neptunePage) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public DisplayPageContentViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
+            EFModels.Entities.NeptunePage neptunePage) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = "Stormwater Tools";
             PageTitle = neptunePage.NeptunePageType.NeptunePageTypeDisplayName;

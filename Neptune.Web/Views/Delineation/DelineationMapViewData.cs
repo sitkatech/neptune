@@ -6,7 +6,7 @@ namespace Neptune.Web.Views.Delineation
 {
     public class DelineationMapViewData : NeptuneViewData
     {
-        public DelineationMapViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, StormwaterMapInitJson mapInitJson, EFModels.Entities.TreatmentBMP initialTreatmentBMP, string bulkUploadTreatmentBMPDelineationsUrl, string getStormwaterJurisdictionCqlFilter, string geoServerUrl, string autoDelineateServiceUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public DelineationMapViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, StormwaterMapInitJson mapInitJson, EFModels.Entities.TreatmentBMP initialTreatmentBMP, string bulkUploadTreatmentBMPDelineationsUrl, string getStormwaterJurisdictionCqlFilter, string geoServerUrl, string autoDelineateServiceUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             MapInitJson = mapInitJson;
             IsInitialTreatmentBMPProvided = initialTreatmentBMP != null;

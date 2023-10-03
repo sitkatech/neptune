@@ -34,9 +34,9 @@ namespace Neptune.Web.Views.ManagerDashboard
         public string BulkRowTreatmentBMPsUrl { get; }
         public string BulkRowDelineationsUrl { get; }
 
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.NeptunePage neptunePage, int fieldVisitCount, int treatmentBMPsCount, int bmpDelineationsCount)
-            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             PageTitle = "Manager Dashboard";
             EntityName = "Stormwater Tools";

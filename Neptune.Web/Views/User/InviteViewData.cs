@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.User
 {
@@ -30,8 +31,8 @@ namespace Neptune.Web.Views.User
         public IEnumerable<SelectListItem> AllOrganizations { get; }
         public string CancelUrl { get; }
 
-        public InviteViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            List<EFModels.Entities.Organization> organizations, EFModels.Entities.NeptunePage neptunePage, string cancelUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public InviteViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
+            List<EFModels.Entities.Organization> organizations, EFModels.Entities.NeptunePage neptunePage, string cancelUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             CancelUrl = cancelUrl;
             PageTitle = "Invite User";

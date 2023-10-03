@@ -33,13 +33,13 @@ namespace Neptune.Web.Views.FieldVisit
         public string SubmitUrl { get; }    
         public TreatmentBMPAssessmentTypeEnum TreatmentBMPAssessmentTypeEnum { get; set; }
 
-        public ObservationsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public ObservationsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.FieldVisit fieldVisit,
             List<EFModels.Entities.TreatmentBMPAssessment> treatmentBMPAssessments,
             EFModels.Entities.MaintenanceRecord? maintenanceRecord,
             EFModels.Entities.TreatmentBMPType treatmentBMPType,
             TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
-            : base(httpContext, linkGenerator, currentPerson, fieldVisit, treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial ? EFModels.Entities.FieldVisitSection.Assessment : EFModels.Entities.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPType, maintenanceRecord, treatmentBMPAssessments)
+            : base(httpContext, linkGenerator, webConfiguration, currentPerson, fieldVisit, treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial ? EFModels.Entities.FieldVisitSection.Assessment : EFModels.Entities.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPType, maintenanceRecord, treatmentBMPAssessments)
         {
             var initialAssessmentObservations = InitialAssessment?.TreatmentBMPObservations.Select(x =>
                 new CollectionMethodSectionViewModel(x, x.TreatmentBMPAssessmentObservationType)).ToList();

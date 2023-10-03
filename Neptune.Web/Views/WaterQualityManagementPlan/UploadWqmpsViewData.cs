@@ -11,7 +11,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string WqmpIndexUrl { get; }
         public List<string> ErrorList { get; }
         
-        public UploadWqmpsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, List<string> errorList, EFModels.Entities.NeptunePage neptunePage, string wqmpsUploadUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public UploadWqmpsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<string> errorList, EFModels.Entities.NeptunePage neptunePage, string wqmpsUploadUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             PageTitle = "WQMP Bulk Upload";
             EntityName = $"{FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";

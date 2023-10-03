@@ -53,7 +53,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.ManageObservationTypesList);
-            var viewData = new ManageViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage);
+            var viewData = new ManageViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
             return RazorView<Manage, ManageViewData>(viewData);
         }
 
@@ -62,7 +62,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Manage()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.ManageObservationTypesList);
-            var viewData = new ManageViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage);
+            var viewData = new ManageViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
             return RazorView<Manage, ManageViewData>(viewData);
         }
 
@@ -151,7 +151,7 @@ namespace Neptune.Web.Controllers
             var labelAndUnitsInstructionsNeptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.ManageObservationTypeLabelsAndUnitsInstructions);
 
             var submitUrl = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPAssessmentObservationTypeID) ? SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(_linkGenerator, x => x.Edit(viewModel.TreatmentBMPAssessmentObservationTypeID)) : SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(_linkGenerator, x => x.New());
-            var viewData = new EditViewData(HttpContext, _linkGenerator, CurrentPerson, MeasurementUnitType.All, ObservationTypeSpecification.All, ObservationThresholdType.All, ObservationTargetType.All, ObservationTypeCollectionMethod.All.ToList(), submitUrl, instructionsNeptunePage, observationInstructionsNeptunePage, labelAndUnitsInstructionsNeptunePage, treatmentBMPAssessmentObservationType);
+            var viewData = new EditViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, MeasurementUnitType.All, ObservationTypeSpecification.All, ObservationThresholdType.All, ObservationTargetType.All, ObservationTypeCollectionMethod.All.ToList(), submitUrl, instructionsNeptunePage, observationInstructionsNeptunePage, labelAndUnitsInstructionsNeptunePage, treatmentBMPAssessmentObservationType);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
@@ -160,7 +160,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail([FromRoute] TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationTypes.GetByID(_dbContext, treatmentBMPAssessmentObservationTypePrimaryKey);
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPAssessmentObservationType);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMPAssessmentObservationType);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

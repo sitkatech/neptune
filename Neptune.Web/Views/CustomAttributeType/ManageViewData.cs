@@ -32,8 +32,8 @@ namespace Neptune.Web.Views.CustomAttributeType
         public readonly string GridDataUrl;
         public readonly string NewCustomAttributeTypeUrl;
 
-        public ManageViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage)
-            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public ManageViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = "Attribute Type";
             PageTitle = "All Attribute Types";

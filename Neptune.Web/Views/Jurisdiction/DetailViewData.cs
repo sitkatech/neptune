@@ -45,7 +45,7 @@ namespace Neptune.Web.Views.Jurisdiction
         public UrlTemplate<int> OrganizationDetailUrlTemplate { get; }
 
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, StormwaterJurisdiction stormwaterJurisdiction, List<Person> usersAssignedToJurisdiction) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools) 
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, StormwaterJurisdiction stormwaterJurisdiction, List<Person> usersAssignedToJurisdiction) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration) 
         {
             StormwaterJurisdiction = stormwaterJurisdiction;
             PageTitle = stormwaterJurisdiction.GetOrganizationDisplayName();

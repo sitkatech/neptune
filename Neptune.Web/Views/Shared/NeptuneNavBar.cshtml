@@ -47,7 +47,7 @@
                             if (neptuneArea.IsAreaVisibleToPerson(ViewDataTyped.CurrentPerson))
                             {
                                 <li>
-                                    <a href="@neptuneArea.NeptuneAreaName" title="">
+                                    <a href="@ViewDataTyped.GetNeptuneAreaHomeUrl(neptuneArea)" title="">
                                         <img src="@neptuneArea.GetIconUrl()" style="height: 35px; padding-right: 15px" />
                                         @neptuneArea.NeptuneAreaDisplayName
                                     </a>

@@ -30,9 +30,9 @@ namespace Neptune.Web.Views.FieldVisit
         public List<CustomAttribute> TreatmentBMPCustomAttributes { get; }
         public List<TreatmentBMPTypeCustomAttributeType> ObservationTypes { get; }
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.FieldVisit fieldVisit,
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.FieldVisit fieldVisit,
             AssessmentDetailViewData initialAssessmentViewData,
-            AssessmentDetailViewData postMaintenanceAssessmentViewData, List<CustomAttribute> treatmentBMPCustomAttributes, EFModels.Entities.TreatmentBMPType treatmentBMPType, EFModels.Entities.MaintenanceRecord? maintenanceRecord) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+            AssessmentDetailViewData postMaintenanceAssessmentViewData, List<CustomAttribute> treatmentBMPCustomAttributes, EFModels.Entities.TreatmentBMPType treatmentBMPType, EFModels.Entities.MaintenanceRecord? maintenanceRecord) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             FieldVisit = fieldVisit;
             MaintenanceRecord = maintenanceRecord;

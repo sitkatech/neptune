@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.Parcel
         public readonly string GeoserverUrl;
         public readonly string ParcelLayerUploadUrl;
 
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.NeptunePage neptunePage,
             string introNarrativeContent,
             MapInitJson mapInitJson,
@@ -43,7 +43,7 @@ namespace Neptune.Web.Views.Parcel
             string findParcelByApnUrl,
             string geoserverUrl,
             string parcelSummaryForMapUrl,
-            string parcelLayerUploadUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            string parcelLayerUploadUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             IntroNarrativeContent = new HtmlString(introNarrativeContent);
             EntityName = "Parcels";

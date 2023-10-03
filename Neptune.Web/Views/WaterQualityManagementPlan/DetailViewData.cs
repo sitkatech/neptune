@@ -68,7 +68,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public bool HasWaterQualityManagementPlanBoundary { get; }
         public List<EFModels.Entities.WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; }
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
             WaterQualityManagementPlanVerify? waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson,
             List<EFModels.Entities.TreatmentBMP> treatmentBMPs,
@@ -79,7 +79,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches,
             ModeledPerformanceViewData modeledPerformanceViewData,
             IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs, bool hasWaterQualityManagementPlanBoundary, Dictionary<int, EFModels.Entities.Delineation?> treatmentBMPDelineationsDict, List<EFModels.Entities.WaterQualityManagementPlanDocument> waterQualityManagementPlanDocuments, double calculatedWqmpAcreage)
-            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
             PageTitle = WaterQualityManagementPlan.WaterQualityManagementPlanName;

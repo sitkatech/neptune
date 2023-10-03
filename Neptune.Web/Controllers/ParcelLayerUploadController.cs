@@ -41,7 +41,7 @@ namespace Neptune.Web.Controllers
         {
             var newGisUploadUrl = SitkaRoute<ParcelLayerUploadController>.BuildUrlFromExpression(_linkGenerator, c => c.UpdateParcelLayerGeometry());
 
-            var viewData = new UploadParcelLayerViewData(HttpContext, _linkGenerator, CurrentPerson, newGisUploadUrl);
+            var viewData = new UploadParcelLayerViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, newGisUploadUrl);
             return RazorView<UploadParcelLayer, UploadParcelLayerViewData, UploadParcelLayerViewModel>(viewData, viewModel);
         }
     }

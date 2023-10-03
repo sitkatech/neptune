@@ -13,7 +13,7 @@ namespace Neptune.Web.Views.RegionalSubbasin
         public bool HasAnyHRUCharacteristics { get; }
         public string? OCSurveyDownstreamCatchmentDetailUrl { get; }
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.RegionalSubbasin regionalSubbasin, HRUCharacteristicsViewData hruCharacteristicsViewData, StormwaterMapInitJson mapInitJson, bool hasAnyHRUCharacteristics, EFModels.Entities.RegionalSubbasin? ocSurveyDownstreamCatchment) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.RegionalSubbasin regionalSubbasin, HRUCharacteristicsViewData hruCharacteristicsViewData, StormwaterMapInitJson mapInitJson, bool hasAnyHRUCharacteristics, EFModels.Entities.RegionalSubbasin? ocSurveyDownstreamCatchment) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             HasAnyHRUCharacteristics = hasAnyHRUCharacteristics;
             EntityName = "Regional Subbasin";

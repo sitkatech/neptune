@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.Role
 {
@@ -29,7 +30,7 @@ namespace Neptune.Web.Views.Role
         public readonly string GridName;
         public readonly string? GridDataUrl;
 
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             GridSpec = new IndexGridSpec(linkGenerator) { ObjectNameSingular = "Role", ObjectNamePlural = "Roles", SaveFiltersInCookie = true };
             GridName = "RoleGrid";

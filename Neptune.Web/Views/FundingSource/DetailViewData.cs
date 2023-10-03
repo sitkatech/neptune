@@ -34,8 +34,8 @@ namespace Neptune.Web.Views.FundingSource
         public string OrganizationUrl { get; }
         public UrlTemplate<int> TreatmentBMPDetailUrlTemplate { get; }
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            EFModels.Entities.FundingSource fundingSource) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
+            EFModels.Entities.FundingSource fundingSource) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             FundingSource = fundingSource;
             PageTitle = fundingSource.GetDisplayName();

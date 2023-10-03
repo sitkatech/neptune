@@ -15,12 +15,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public IEnumerable<SelectListItem> WaterQualityManagementPlanVerifyStatuses { get; }
         public string WaterQualityManagementPlanUrl { get; }
 
-        public NewWqmpVerifyViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, 
+        public NewWqmpVerifyViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, 
             EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan, 
             List<WaterQualityManagementPlanVerifyType>  waterQualityManagementPlanVerifyTypes, 
             List<WaterQualityManagementPlanVisitStatus> waterQualityManagementPlanVisitStatuses,
             List<WaterQualityManagementPlanVerifyStatus>  waterQualityManagementPlanVerifyStatuses) 
-            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
             PageTitle = "New Water Quality Management Plan O&M Verification";

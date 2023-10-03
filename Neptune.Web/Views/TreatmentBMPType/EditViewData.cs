@@ -35,12 +35,12 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public string SubmitUrl { get; }
         public ViewPageContentViewData ViewInstructionsNeptunePage { get; }
 
-        public EditViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public EditViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             IEnumerable<TreatmentBMPTypeAssessmentObservationType> observationTypes, string submitUrl,
             EFModels.Entities.NeptunePage instructionsNeptunePage, EFModels.Entities.TreatmentBMPType treatmentBMPType,
             IEnumerable<TreatmentBMPTypeCustomAttributeType> customAttributeTypes,
             IEnumerable<EFModels.Entities.TreatmentBMPAssessmentObservationType> allObservationTypes,
-            IEnumerable<EFModels.Entities.CustomAttributeType> allCustomAttributeTypes) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+            IEnumerable<EFModels.Entities.CustomAttributeType> allCustomAttributeTypes) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Manage());

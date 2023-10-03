@@ -28,10 +28,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
     public class RefineAreaViewData : NeptuneViewData
     {
-        public RefineAreaViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public RefineAreaViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.NeptunePage neptunePage,
             EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
-            MapInitJson mapInitJson, string geoServerUrl, FeatureCollection? boundaryLayerGeoJson) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            MapInitJson mapInitJson, string geoServerUrl, FeatureCollection? boundaryLayerGeoJson) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             MapInitJson = mapInitJson;
             EntityName = "Water Quality Management Plan";

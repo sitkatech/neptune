@@ -20,14 +20,15 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.Home
 {
     public class ManageHomePageImagesViewData : NeptuneViewData
     {
-        public ManageHomePageImagesViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
-            ImageGalleryViewData imageGalleryViewData) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public ManageHomePageImagesViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
+            ImageGalleryViewData imageGalleryViewData) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = "Home Page Configuration";
             PageTitle = "Manage Home Page Images";

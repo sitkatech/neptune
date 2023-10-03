@@ -13,8 +13,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public string SectionName { get; }
         public bool AssessmentInformationComplete { get; }
 
-        public AssessmentSectionViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMPAssessment treatmentBMPAssessment, string sectionName)
-            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public AssessmentSectionViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.TreatmentBMPAssessment treatmentBMPAssessment, string sectionName)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             TreatmentBMPAssessment = treatmentBMPAssessment;
 

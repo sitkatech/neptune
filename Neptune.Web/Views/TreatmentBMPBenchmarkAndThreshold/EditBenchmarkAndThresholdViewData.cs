@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
@@ -39,9 +40,9 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         public string DefaultThresholdPlaceholder { get; }
         public bool TargetIsSweetSpot { get; }
 
-        public EditBenchmarkAndThresholdViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP,
+        public EditBenchmarkAndThresholdViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP,
             EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, EFModels.Entities.TreatmentBMPType treatmentBMPType, List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds)
-            : base(httpContext, linkGenerator, currentPerson, treatmentBMP, treatmentBMPAssessmentObservationType, treatmentBMPType, treatmentBMPBenchmarkAndThresholds)
+            : base(httpContext, linkGenerator, webConfiguration, currentPerson, treatmentBMP, treatmentBMPAssessmentObservationType, treatmentBMPType, treatmentBMPBenchmarkAndThresholds)
         {
             BenchmarkMeasurementUnitTypeDisplayName = treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().MeasurementUnitTypeDisplayName;
             ThresholdMeasurementUnitTypeDisplayName = treatmentBMPAssessmentObservationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName;

@@ -52,13 +52,13 @@ namespace Neptune.Web.Views.User
         public string RoleDetailUrl { get; }
         public List<EFModels.Entities.Organization> PrimaryContactOrganizations { get; }
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             Person personToView,
             UserNotificationGridSpec userNotificationGridSpec,
             string userNotificationGridName,
             string userNotificationGridDataUrl,
             string activateInactivateUrl, List<EFModels.Entities.Organization> primaryContactOrganizations)
-            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             Person = personToView;
             PageTitle = personToView.GetFullNameFirstLast() + (!personToView.IsActive ? " (inactive)" : string.Empty);

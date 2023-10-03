@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string ParentDetailUrl { get; set; }
         public Shared.EditAttributes.EditAttributesViewData EditAttributesViewData { get; }
 
-        public EditOtherDesignAttributesViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, string parentDetailUrl, Views.Shared.EditAttributes.EditAttributesViewData editAttributesViewData) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public EditOtherDesignAttributesViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, string parentDetailUrl, Views.Shared.EditAttributes.EditAttributesViewData editAttributesViewData) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.FindABMP());

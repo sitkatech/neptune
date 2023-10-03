@@ -42,12 +42,12 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool HasEditPermissions { get; set; }
 
 
-        public FindABMPViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public FindABMPViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             SearchMapInitJson mapInitJson, EFModels.Entities.NeptunePage neptunePage,
             List<TreatmentBMPDisplayDto> treatmentBMPDisplayDtos,
             List<TreatmentBMPTypeDisplayDto> treatmentBMPTypeDisplayDtos,
             List<StormwaterJurisdictionDisplayDto> jurisdictions)
-            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             PageTitle = "Find a BMP";
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";

@@ -32,8 +32,8 @@ namespace Neptune.Web.Views.Jurisdiction
         public readonly string GridName;
         public readonly string GridDataUrl;
       
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage)
-            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             PageTitle = "All Jurisdictions";
             EntityName = $"{FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabelPluralized()}";

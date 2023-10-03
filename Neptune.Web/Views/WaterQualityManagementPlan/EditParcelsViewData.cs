@@ -11,10 +11,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public EditWqmpParcelsViewDataForAngular ViewDataForAngular { get; }
         public decimal? RecordedWQMPAreaInAcres { get; }
 
-        public EditParcelsViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public EditParcelsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
             MapInitJson mapInitJson, string mapServiceUrl, string parcelMapServiceLayerName, IEnumerable<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcels)
-            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+            : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
             EntityName = $"{FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";

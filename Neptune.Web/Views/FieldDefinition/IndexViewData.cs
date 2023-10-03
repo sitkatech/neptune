@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.FieldDefinition
         public readonly string GridName;
         public readonly string GridDataUrl;
 
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = "Field Definitions";
             PageTitle = "Manage Field Definitions";

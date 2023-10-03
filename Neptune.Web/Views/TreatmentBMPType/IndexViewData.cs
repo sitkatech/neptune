@@ -33,10 +33,10 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public UrlTemplate<int> DetailUrlTemplate { get; }
         public UrlTemplate<int> TreatmentBMPAssessmentObservationTypeDetailUrlTemplate { get; }
 
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.NeptunePage neptunePage,
             List<EFModels.Entities.TreatmentBMPType> treatmentBMPTypes, Dictionary<int, int> countByTreatmentBMPType)
-            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
             PageTitle = "All BMP Types";

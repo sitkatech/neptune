@@ -13,7 +13,7 @@ namespace Neptune.Web.Views.RegionalSubbasin
         public bool HasAdminPermissions { get; }
         public string RefreshUrl { get; }
 
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, MapInitJson mapInitJson, string geoServerUrl, string regionalSubbasinLayerName) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, MapInitJson mapInitJson, string geoServerUrl, string regionalSubbasinLayerName) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             MapInitJson = mapInitJson;
             GeoServerUrl = geoServerUrl;

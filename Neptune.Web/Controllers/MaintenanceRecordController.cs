@@ -33,7 +33,7 @@ namespace Neptune.Web.Controllers
         {
             var maintenanceRecord = MaintenanceRecords.GetByID(_dbContext, maintenanceRecordPrimaryKey);
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, maintenanceRecord.TreatmentBMPTypeID);
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, maintenanceRecord, treatmentBMPType);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, maintenanceRecord, treatmentBMPType);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
@@ -29,8 +30,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public readonly string CalculatedAssessmentScoreFormatted;
         public readonly ScoreDetailViewData ScoreDetailViewData;
 
-        public ScoreViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.TreatmentBMPAssessment treatmentBmpAssessment, EFModels.Entities.TreatmentBMPType treatmentBMPType)
-            : base(httpContext, linkGenerator, currentPerson, treatmentBmpAssessment, ThisSectionName)
+        public ScoreViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.TreatmentBMPAssessment treatmentBmpAssessment, EFModels.Entities.TreatmentBMPType treatmentBMPType)
+            : base(httpContext, linkGenerator, webConfiguration, currentPerson, treatmentBmpAssessment, ThisSectionName)
         {
             CalculatedAssessmentScoreFormatted = treatmentBmpAssessment.FormattedScore();
             ScoreDetailViewData = new ScoreDetailViewData(treatmentBmpAssessment, treatmentBMPType);

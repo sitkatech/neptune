@@ -79,7 +79,7 @@ namespace Neptune.Web.Controllers
             var managerDashboardDescription = GetManagerDashboardDescription();
             var launchPadViewData = new LaunchPadViewData(_linkGenerator, CurrentPerson, launchPadNeptunePage, numberOfBmpTypes, managerDashboardDescription);
 
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePageByPageTypeHomePage, neptunePageByPageTypeHomePageAdditionalInfo, neptunePageByPageTypeHomePageMapInfo, neptuneHomePageImages, projectLocationsMapViewData, projectLocationsMapInitJson, launchPadViewData);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePageByPageTypeHomePage, neptunePageByPageTypeHomePageAdditionalInfo, neptunePageByPageTypeHomePageMapInfo, neptuneHomePageImages, projectLocationsMapViewData, projectLocationsMapInitJson, launchPadViewData);
 
             return RazorView<Views.Home.Index, IndexViewData>(viewData);
         }
@@ -98,7 +98,7 @@ namespace Neptune.Web.Controllers
                 }
             }
 
-            var viewData = new ErrorViewData(HttpContext, _linkGenerator, CurrentPerson, errorMessage);
+            var viewData = new ErrorViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, errorMessage);
             return RazorView<Error, ErrorViewData>(viewData);
         }
 
@@ -123,7 +123,7 @@ namespace Neptune.Web.Controllers
 
         public ViewResult NotFound()
         {
-            var viewData = new NotFoundViewData(HttpContext, _linkGenerator, CurrentPerson);
+            var viewData = new NotFoundViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson);
             return RazorView<NotFound, NotFoundViewData>(viewData);
         }
 
@@ -132,7 +132,7 @@ namespace Neptune.Web.Controllers
         {
             var neptunePageType = NeptunePageType.ToType(neptunePageTypeEnum);
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, neptunePageType);
-            var viewData = new DisplayPageContentViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage);
+            var viewData = new DisplayPageContentViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
             return RazorView<DisplayPageContent, DisplayPageContentViewData>(viewData);
         }
 
@@ -162,7 +162,7 @@ namespace Neptune.Web.Controllers
         public ViewResult ManageHomePageImages()
         {
             var imageGalleryViewData = BuildImageGalleryViewData(_linkGenerator, CurrentPerson, _dbContext);
-            var viewData = new ManageHomePageImagesViewData(HttpContext, _linkGenerator, CurrentPerson, imageGalleryViewData);
+            var viewData = new ManageHomePageImagesViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, imageGalleryViewData);
             return RazorView<ManageHomePageImages, ManageHomePageImagesViewData>(viewData);
         }
 
@@ -189,7 +189,7 @@ namespace Neptune.Web.Controllers
             var neptunePageByPageTypeHomePage = NeptunePages.GetNeptunePageByPageType(_dbContext, neptunePageTypeTraining);
             var trainingVideos = _dbContext.TrainingVideos.AsNoTracking().ToList();
 
-            var viewData = new TrainingViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePageByPageTypeHomePage, trainingVideos);
+            var viewData = new TrainingViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePageByPageTypeHomePage, trainingVideos);
             return RazorView<Training, TrainingViewData>(viewData);
         }
 

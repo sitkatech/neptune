@@ -33,9 +33,9 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public readonly string GridDataUrl;
         public readonly string NewTreatmentBMPTypeUrl;
 
-        public ManageViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public ManageViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.NeptunePage neptunePage)
-            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
             PageTitle = $"Manage {FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";

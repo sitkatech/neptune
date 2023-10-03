@@ -41,7 +41,7 @@ namespace Neptune.Web.Controllers
         [HttpGet]
         public ViewResult Index()
         {
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson);
             return RazorView<Views.Role.Index, IndexViewData>(viewData);
         }
 
@@ -95,7 +95,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewDetail(IRole role)
         {
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, role);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, role);
             return RazorView<Detail, DetailViewData>(viewData);
         }
     }

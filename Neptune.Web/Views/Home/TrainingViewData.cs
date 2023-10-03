@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels.Entities;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.Home
 {
@@ -27,9 +28,9 @@ namespace Neptune.Web.Views.Home
     {
         public List<TrainingVideo> TrainingVideos { get; }
 
-        public TrainingViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson,
+        public TrainingViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.NeptunePage neptunePage,
-            List<TrainingVideo> trainingVideos) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            List<TrainingVideo> trainingVideos) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             PageTitle = "Training";
             EntityName = "Stormwater Tools";

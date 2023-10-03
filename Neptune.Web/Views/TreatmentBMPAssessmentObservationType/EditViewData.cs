@@ -39,13 +39,13 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
         public ViewPageContentViewData ViewObservationInstructionsNeptunePage { get; }
         public ViewPageContentViewData ViewLabelsAndUnitsInstructionsNeptunePage { get; }
 
-        public EditViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
+        public EditViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
             List<ObservationTypeSpecification> observationTypeSpecifications,
             List<ObservationThresholdType> observationThresholdTypes,
             List<ObservationTargetType> observationTargetTypes,
             List<ObservationTypeCollectionMethod> observationTypeCollectionMethods, string submitUrl,
             EFModels.Entities.NeptunePage instructionsNeptunePage, EFModels.Entities.NeptunePage observationInstructionsNeptunePage,
-            EFModels.Entities.NeptunePage labelAndUnitsInstructionsNeptunePage, EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools)
+            EFModels.Entities.NeptunePage labelAndUnitsInstructionsNeptunePage, EFModels.Entities.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = "Observation Type";
             EntityUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Index());

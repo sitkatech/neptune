@@ -31,8 +31,8 @@ namespace Neptune.Web.Views.Assessment
         public readonly string BMPAssessmentGridName;
         public readonly string BMPAssessmentGridDataUrl;
 
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, IEnumerable<EFModels.Entities.TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypes)
-            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, IEnumerable<EFModels.Entities.TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypes)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = "Treatment BMP Assessments";
             PageTitle = "All Assessments";

@@ -21,9 +21,9 @@ namespace Neptune.Web.Views.FieldVisit
         public bool HasManagePermissions { get; }
         public string BulkUploadTrashScreenVisitUrl { get; set; }
 
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, EFModels.Entities.NeptunePage neptunePage,
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage,
             IEnumerable<EFModels.Entities.CustomAttributeType> maintenanceAttributeTypes, IQueryable<EFModels.Entities.TreatmentBMPAssessmentObservationType> allObservationTypes)
-            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             PageTitle = "All Field Records";
             EntityName = "Field Records";

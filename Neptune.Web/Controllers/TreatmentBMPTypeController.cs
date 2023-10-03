@@ -47,7 +47,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Manage()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.ManageObservationTypesList);
-            var viewData = new ManageViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage);
+            var viewData = new ManageViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
             return RazorView<Manage, ManageViewData>(viewData);
         }
 
@@ -148,7 +148,7 @@ namespace Neptune.Web.Controllers
             var customAttributeTypes = treatmentBMPType?.TreatmentBMPTypeCustomAttributeTypes.ToList() ?? new List<TreatmentBMPTypeCustomAttributeType>();
             var allTreatmentBMPAssessmentObservationTypes = _dbContext.TreatmentBMPAssessmentObservationTypes.ToList();
             var allCustomAttributeTypes = _dbContext.CustomAttributeTypes.ToList();
-            var viewData = new EditViewData(HttpContext, _linkGenerator, CurrentPerson, observationTypes, submitUrl, instructionsNeptunePage, treatmentBMPType, customAttributeTypes, allTreatmentBMPAssessmentObservationTypes, allCustomAttributeTypes);
+            var viewData = new EditViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, observationTypes, submitUrl, instructionsNeptunePage, treatmentBMPType, customAttributeTypes, allTreatmentBMPAssessmentObservationTypes, allCustomAttributeTypes);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
@@ -158,7 +158,7 @@ namespace Neptune.Web.Controllers
             var treatmentBMPTypes = TreatmentBMPTypes.List(_dbContext);
             var neptunePage = NeptunePages.GetNeptunePageByPageType( _dbContext, NeptunePageType.TreatmentBMPType);
             var countByTreatmentBMPType = TreatmentBMPs.ListCountByTreatmentBMPType(_dbContext);
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, neptunePage, treatmentBMPTypes, countByTreatmentBMPType);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, treatmentBMPTypes, countByTreatmentBMPType);
             return RazorView<Views.TreatmentBMPType.Index, IndexViewData>(viewData);
         }
 
@@ -168,7 +168,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey)
         {
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMPTypePrimaryKey);
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, treatmentBMPType);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMPType);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
