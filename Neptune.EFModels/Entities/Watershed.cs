@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Models.DataTransferObjects;
-using Neptune.Models.DataTransferObjects.Watershed;
 
 namespace Neptune.EFModels.Entities
 {
