@@ -395,6 +395,10 @@ export class DelineationsComponent implements OnInit {
         }
         delineationUpsertDto.DelineationTypeID = DelineationTypeEnum.Distributed;
         const geometry = layer.toGeoJSON();
+        geometry.properties = {
+          "TreatmentBMPID" : this.selectedTreatmentBMP.TreatmentBMPID,
+          "DelineationID" : this.newDelineationID
+        }
         delineationUpsertDto.Geometry = JSON.stringify(geometry);
         delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
         this.resetDelineationFeatureGroups();
