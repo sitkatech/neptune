@@ -24,7 +24,7 @@ using ApprovalTests.Reporters;using DocumentFormat.OpenXml.Drawing;
 using IdentityServer4.Validation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Neptune.EFModels.Entities;
-using Neptune.Web.Common.HtmlHelperExtensions;
+using Neptune.WebMvc.Common.HtmlHelperExtensions;
 
 namespace Neptune.Tests
 {

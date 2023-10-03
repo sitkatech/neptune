@@ -1,5 +1,5 @@
 ﻿using Neptune.Models.DataTransferObjects;
-using Neptune.Web.Common;
+using Neptune.WebMvc.Common;
 
 namespace Neptune.EFModels.Entities;
 

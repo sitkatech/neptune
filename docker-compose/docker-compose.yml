@@ -5,7 +5,7 @@ services:
     image: neptune/webmvc
     build:
       context: ..
-      dockerfile: Neptune.Web/Dockerfile
+      dockerfile: Neptune.WebMvc/Dockerfile
 
   neptune.api:
     image: neptune/api

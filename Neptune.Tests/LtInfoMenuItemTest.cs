@@ -25,7 +25,7 @@ using ApprovalTests;
 using ApprovalTests.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Neptune.Common.DesignByContract;
-using Neptune.Web.Views;
+using Neptune.WebMvc.Views;
 
 namespace Neptune.Tests
 {

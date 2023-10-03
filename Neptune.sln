@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptune.Web", "Neptune.Web\Neptune.Web.csproj", "{5CA350B9-C4E2-4F7A-AE29-62B975CC0F0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptune.WebMvc", "Neptune.WebMvc\Neptune.WebMvc.csproj", "{5CA350B9-C4E2-4F7A-AE29-62B975CC0F0A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptune.EFModels", "Neptune.EFModels\Neptune.EFModels.csproj", "{ABE6DF19-5CEB-4306-B866-737186A00E1C}"
 EndProject

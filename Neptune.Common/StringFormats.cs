@@ -23,7 +23,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using Neptune.Common;
 
-namespace Neptune.Web.Common
+namespace Neptune.WebMvc.Common
 {
     public static class StringFormats
     {

@@ -22,7 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Neptune.Web.Common;
+using Neptune.WebMvc.Common;
 
 namespace Neptune.Tests
 {

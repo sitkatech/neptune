@@ -23,7 +23,7 @@ using System.Reflection;
 using System.Text;
 using Neptune.Common.DesignByContract;
 
-namespace Neptune.Web.Common
+namespace Neptune.WebMvc.Common
 {
     public static class ExtensionMethods
     {

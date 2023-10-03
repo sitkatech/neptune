@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Neptune.Web.Common;
+using Neptune.WebMvc.Common;
 
 namespace Neptune.Tests
 {

@@ -22,9 +22,9 @@ using System.Collections.Generic;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Neptune.Web.Common;
-using Neptune.Web.Common.DhtmlWrappers;
-using Neptune.Web.Common.ModalDialog;
+using Neptune.WebMvc.Common;
+using Neptune.WebMvc.Common.DhtmlWrappers;
+using Neptune.WebMvc.Common.ModalDialog;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Neptune.Tests

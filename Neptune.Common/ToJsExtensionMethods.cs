@@ -19,7 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-namespace Neptune.Web.Common
+namespace Neptune.WebMvc.Common
 {
     /// <summary>
     /// Handles encoding into Javascript

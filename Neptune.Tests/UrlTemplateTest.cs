@@ -21,7 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Neptune.Common.DesignByContract;
-using Neptune.Web.Common;
+using Neptune.WebMvc.Common;
 
 namespace Neptune.Tests
 {
@@ -91,7 +91,7 @@ namespace Neptune.Tests
         //[Test]
         //public void JavascriptAndCSharpConstantsAreTheSame()
         //{
-        //    var sitkaJsFile = FileUtility.FirstMatchingFileUpDirectoryTree(@"Neptune.Web\ScriptsCustom\sitka.js");
+        //    var sitkaJsFile = FileUtility.FirstMatchingFileUpDirectoryTree(@"Neptune.WebMvc\ScriptsCustom\sitka.js");
         //    var sitkaJsFileContents = FileUtility.FileToString(sitkaJsFile);
 
         //    var allParameters = UrlTemplate.StringParameters.Union(UrlTemplate.IntParameters.Select(x => x.ToString())).ToList();

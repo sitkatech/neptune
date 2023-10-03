@@ -23,7 +23,7 @@ using Microsoft.EntityFrameworkCore;
 using Neptune.Common;
 using Neptune.Common.DesignByContract;
 using Neptune.Common.GeoSpatial;
-using Neptune.Web.Common;
+using Neptune.WebMvc.Common;
 using NetTopologySuite.Features;
 
 namespace Neptune.EFModels.Entities
