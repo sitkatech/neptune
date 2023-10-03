@@ -134,7 +134,7 @@ namespace Neptune.EFModels.Entities
             return person.AsDto();
         }
 
-        public static PersonDto GetByEmailAsDto(NeptuneDbContext dbContext, string email)
+        public static PersonDto? GetByEmailAsDto(NeptuneDbContext dbContext, string email)
         {
             var person = GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.Email == email);
             return person?.AsDto();
@@ -145,7 +145,7 @@ namespace Neptune.EFModels.Entities
             return GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.PersonGuid == personGuid);
         }
 
-        public static PersonDto GetByGuidAsDto(NeptuneDbContext dbContext, Guid personGuid)
+        public static PersonDto? GetByGuidAsDto(NeptuneDbContext dbContext, Guid personGuid)
         {
             var person = GetByGuid(dbContext, personGuid);
             return person?.AsDto();

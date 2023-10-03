@@ -1,16 +1,13 @@
-﻿using Neptune.Common.DesignByContract;
-using System.Reflection;
+﻿using Neptune.Common.Email;
 
 namespace Neptune.Web.Common;
 
-public class WebConfiguration
+public class WebConfiguration : SendGridConfiguration
 {
     public string DatabaseConnectionString { get; set; }
     public string RecaptchaPublicKey { get; set; }
     public string RecaptchaPrivateKey { get; set; }
     public string RecaptchaValidatorUrl { get; set; }
-    public string SitkaSupportEmail { get; set; }
-    public string DoNotReplyEmail { get; set; }
     public string Ogr2OgrExecutable { get; set; }
     public string OgrInfoExecutable { get; set; }
 
@@ -46,8 +43,6 @@ public class WebConfiguration
     public string LogFileFolder { get; set; }
     public string NereidLogFileFolder { get; set; }
 
-    public string SitkaEmailRedirect { get; set; }
-    public string MailLogBcc { get; set; }
     public string AzureBlobStorageConnectionString { get; set; }
     public string PlanningModuleUrl { get; set; }
 

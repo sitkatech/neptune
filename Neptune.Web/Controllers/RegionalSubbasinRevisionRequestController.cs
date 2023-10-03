@@ -17,13 +17,17 @@ using Neptune.Web.Common.MvcResults;
 using Neptune.Web.Services.Filters;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
+using Neptune.Common.Email;
 
 namespace Neptune.Web.Controllers
 {
     public class RegionalSubbasinRevisionRequestController : NeptuneBaseController<RegionalSubbasinRevisionRequestController>
     {
-        public RegionalSubbasinRevisionRequestController(NeptuneDbContext dbContext, ILogger<RegionalSubbasinRevisionRequestController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
+        private readonly SitkaSmtpClientService _sitkaSmtpClientService;
+
+        public RegionalSubbasinRevisionRequestController(NeptuneDbContext dbContext, ILogger<RegionalSubbasinRevisionRequestController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
+            _sitkaSmtpClientService = sitkaSmtpClientService;
         }
 
         [HttpGet]
@@ -99,7 +103,7 @@ namespace Neptune.Web.Controllers
             await _dbContext.RegionalSubbasinRevisionRequests.AddAsync(regionalSubbasinRevisionRequest);
             await _dbContext.SaveChangesAsync();
 
-            SendRSBRevisionRequestSubmittedEmail(CurrentPerson, treatmentBMP, regionalSubbasinRevisionRequest);
+            await SendRSBRevisionRequestSubmittedEmail(CurrentPerson, treatmentBMP, regionalSubbasinRevisionRequest);
 
             SetMessageForDisplay("Successfully submitted the Regional Subbasin Revision Request");
 
@@ -164,7 +168,7 @@ namespace Neptune.Web.Controllers
             regionalSubbasinRevisionRequest.ClosedDate = DateTime.Now;
             await _dbContext.SaveChangesAsync();
 
-            SendRSBRevisionRequestClosedEmail(CurrentPerson, regionalSubbasinRevisionRequest);
+            await SendRSBRevisionRequestClosedEmail(CurrentPerson, regionalSubbasinRevisionRequest);
 
             SetMessageForDisplay("Successfully closed the Regional Subbasin Revision Request");
 
@@ -216,7 +220,7 @@ namespace Neptune.Web.Controllers
         }
 
 
-        private void SendRSBRevisionRequestSubmittedEmail(Person requestPerson,
+        private async Task SendRSBRevisionRequestSubmittedEmail(Person requestPerson,
             TreatmentBMP requestBMP, RegionalSubbasinRevisionRequest request)
         {
             var subject = $"A new Regional Subbasin Revision Request was submitted";
@@ -252,11 +256,10 @@ Please review it, make revisions, and close it at your earliest convenience. <a 
                 mailMessage.To.Add(revisionRequestPeople.Email);
             }
 
-            //todo: sendgrid email
-            //SitkaSmtpClient.Send(mailMessage);
+            await _sitkaSmtpClientService.Send(mailMessage);
         }
 
-        private void SendRSBRevisionRequestClosedEmail(Person closingPerson, RegionalSubbasinRevisionRequest regionalSubbasinRevisionRequest)
+        private async Task SendRSBRevisionRequestClosedEmail(Person closingPerson, RegionalSubbasinRevisionRequest regionalSubbasinRevisionRequest)
         {
 
             var subject = $"A Regional Subbasin Revision Request was closed";
@@ -295,8 +298,7 @@ The changes resulting from this update will be available for your use next Monda
                 mailMessage.CC.Add(revisionRequestPeople.Email);
             }
 
-            //todo: sendgrid email
-            //SitkaSmtpClient.Send(mailMessage);
+            await _sitkaSmtpClientService.Send(mailMessage);
         }
 
         private static List<Person> GetPeopleWhoReceiveRSBRevisionRequests(NeptuneDbContext dbContext)

@@ -27,16 +27,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
-using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Help;
+using System.Net.Mail;
+using Neptune.Common;
+using Neptune.Common.Email;
 
 namespace Neptune.Web.Controllers
 {
     public class HelpController : NeptuneBaseController<HelpController>
     {
-        public HelpController(NeptuneDbContext dbContext, ILogger<HelpController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
+        private readonly SitkaSmtpClientService _sitkaSmtpClientService;
+
+        public HelpController(NeptuneDbContext dbContext, ILogger<HelpController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
+            _sitkaSmtpClientService = sitkaSmtpClientService;
         }
 
         [HttpGet]
@@ -105,7 +110,7 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModel(supportRequestLog, CurrentPerson);
             await _dbContext.SupportRequestLogs.AddAsync(supportRequestLog);
             await _dbContext.SaveChangesAsync();
-            //supportRequestLog.SendMessage(Request.UserHostAddress, Request.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
+            await SendMessage(supportRequestLog, HttpContext.Connection.RemoteIpAddress.ToString(), HttpContext.Request.Headers.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);
             SetMessageForDisplay("Support request sent.");
             return Redirect(viewModel.ReturnUrl);
         }
@@ -166,7 +171,7 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModel(supportRequestLog, CurrentPerson);
             await _dbContext.SupportRequestLogs.AddAsync(supportRequestLog);
             await _dbContext.SaveChangesAsync();
-            supportRequestLog.SendMessage(HttpContext.Connection.RemoteIpAddress.ToString(), HttpContext.Request.Headers.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
+            await SendMessage(supportRequestLog, HttpContext.Connection.RemoteIpAddress.ToString(), HttpContext.Request.Headers.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
             SetMessageForDisplay("Support request sent.");
             return Redirect(SitkaRoute<OrganizationController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
         }
@@ -190,6 +195,76 @@ namespace Neptune.Web.Controllers
         {
             return RazorView<BulkUploadRequest, BulkUploadRequestViewData>(
                 new BulkUploadRequestViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.BulkUploadRequest)));
+        }
+
+        private async Task SendMessage(SupportRequestLog supportRequestLog, string ipAddress, string userAgent, string currentUrl, SupportRequestType supportRequestType)
+        {
+            var subject = $"Support Request for Neptune - {DateTime.Now.ToStringDateTime()}";
+            var message = string.Format(@"
+<div style='font-size: 12px; font-family: Arial'>
+    <strong>{0}</strong><br />
+    <br />
+    <strong>From:</strong> {1} - {2}<br />
+    <strong>Email:</strong> {3}<br />
+    <strong>Phone:</strong> {4}<br />
+    <br />
+    <strong>Subject:</strong> {5}<br />
+    <br />
+    <strong>Description:</strong><br />
+    {6}
+    <br />
+    <br />
+    <br />
+    <div style='font-size: 10px; color: gray'>
+    OTHER DETAILS:<br />
+    LOGIN: {7}<br />
+    IP ADDRESS: {8}<br />
+    USERAGENT: {9}<br />
+    URL FROM: {10}<br />
+    <br />
+    </div>
+    <div>You received this email because you are set up as a point of contact for support - if that's not correct, let us know: {11}</div>.
+</div>
+",
+                subject,
+                supportRequestLog.RequestPersonName,
+                supportRequestLog.RequestPersonOrganization ?? "(not provided)",
+                supportRequestLog.RequestPersonEmail,
+                supportRequestLog.RequestPersonPhone ?? "(not provided)",
+                supportRequestType.SupportRequestTypeDisplayName,
+                supportRequestLog.RequestDescription.HtmlEncodeWithBreaks(),
+                supportRequestLog.RequestPerson != null ? $"{supportRequestLog.RequestPerson.GetFullNameFirstLast()} (UserID {supportRequestLog.RequestPerson.PersonID})" : "(anonymous user)",
+                ipAddress,
+                userAgent,
+                currentUrl,
+                "support@sitkatech.com");
+            // Create Notification
+            var mailMessage = new MailMessage { From = new MailAddress("DoNotReplyEmail"), Subject = subject, Body = message, IsBodyHtml = true };
+
+            // Reply-To Header
+            mailMessage.ReplyToList.Add(supportRequestLog.RequestPersonEmail);
+
+            // TO field
+            SetEmailRecipientsOfSupportRequest(_dbContext, mailMessage);
+
+            await _sitkaSmtpClientService.Send(mailMessage);
+        }
+
+
+        private static void SetEmailRecipientsOfSupportRequest(NeptuneDbContext dbContext, MailMessage mailMessage)
+        {
+            var supportPersonEmails = People.GetEmailAddressesForAdminsThatReceiveSupportEmails(dbContext).ToList();
+
+            if (!supportPersonEmails.Any())
+            {
+                var defaultSupportPerson = People.GetByID(dbContext, 2);
+                supportPersonEmails.Add(defaultSupportPerson.Email);
+                mailMessage.Body = $"<p style=\"font-weight:bold\">Note: No users are currently configured to receive support emails. Defaulting to User: {defaultSupportPerson}</p>{mailMessage.Body}";
+            }
+            foreach (var supportPerson in supportPersonEmails)
+            {
+                mailMessage.To.Add(supportPerson);
+            }
         }
     }
 }

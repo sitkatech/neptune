@@ -7,8 +7,11 @@ using Neptune.EFModels.Entities;
 using System;
 using System.Collections.Generic;
 using System.Net.Mail;
+using System.Threading.Tasks;
 using Neptune.Models.DataTransferObjects;
 using Microsoft.Extensions.DependencyInjection;
+using Neptune.Common;
+using Neptune.Common.Email;
 using Neptune.Models.DataTransferObjects.Person;
 
 namespace Neptune.API.Controllers
@@ -16,8 +19,11 @@ namespace Neptune.API.Controllers
     [ApiController]
     public class UserController : SitkaController<UserController>
     {
-        public UserController(NeptuneDbContext dbContext, ILogger<UserController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration) : base(dbContext, logger, keystoneService, neptuneConfiguration)
+        private readonly SitkaSmtpClientService _sitkaSmtpClientService;
+
+        public UserController(NeptuneDbContext dbContext, ILogger<UserController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration, SitkaSmtpClientService sitkaSmtpClientService) : base(dbContext, logger, keystoneService, neptuneConfiguration)
         {
+            _sitkaSmtpClientService = sitkaSmtpClientService;
         }
 
         [HttpPost("users")]
@@ -39,11 +45,10 @@ namespace Neptune.API.Controllers
             }
             var user = People.CreateUnassignedPerson(_dbContext, personCreateDto);
 
-            var smtpClient = HttpContext.RequestServices.GetRequiredService<SitkaSmtpClientService>();
-            var mailMessage = GenerateUserCreatedEmail(user, smtpClient);
+            var mailMessage = GenerateUserCreatedEmail(user);
             SitkaSmtpClientService.AddCcRecipientsToEmail(mailMessage,
                         People.GetEmailAddressesForAdminsThatReceiveSupportEmails(_dbContext));
-            SendEmailMessage(smtpClient, mailMessage);
+            SendEmailMessage(mailMessage);
 
             return Ok(user);
         }
@@ -84,7 +89,7 @@ namespace Neptune.API.Controllers
             return Ok(userDto);
         }
 
-        private MailMessage GenerateUserCreatedEmail(PersonDto person, SitkaSmtpClientService smtpClient)
+        private MailMessage GenerateUserCreatedEmail(PersonDto person)
         {
             var messageBody = $@"
 <div style='font-size: 12px; font-family: Arial'>
@@ -103,26 +108,26 @@ namespace Neptune.API.Controllers
     LOGIN: {person.LoginName}<br />
     <br />
     </div>
-    {smtpClient.GetSupportNotificationEmailSignature()}
+    {_sitkaSmtpClientService.GetSupportNotificationEmailSignature()}
 </div>
 ";
 
             var mailMessage = new MailMessage
             {
-                Subject = $"New User in {_neptuneConfiguration.PlatformLongName}",
+                Subject = $"New User in OC Stormwater Tools",
                 Body = $"Hello,<br /><br />{messageBody}",
             };
 
-            mailMessage.To.Add(smtpClient.GetDefaultEmailFrom());
+            mailMessage.To.Add(_sitkaSmtpClientService.GetDefaultEmailFrom());
             return mailMessage;
         }
 
-        private void SendEmailMessage(SitkaSmtpClientService smtpClient, MailMessage mailMessage)
+        private async Task SendEmailMessage(MailMessage mailMessage)
         {
             mailMessage.IsBodyHtml = true;
-            mailMessage.From = smtpClient.GetDefaultEmailFrom();
-            mailMessage.ReplyToList.Add(!String.IsNullOrWhiteSpace(_neptuneConfiguration.LeadOrganizationEmail) ? _neptuneConfiguration.LeadOrganizationEmail : "donotreply@sitkatech.com");
-            smtpClient.Send(mailMessage);
+            mailMessage.From = _sitkaSmtpClientService.GetDefaultEmailFrom();
+            mailMessage.ReplyToList.Add(_neptuneConfiguration.DoNotReplyEmail);
+            await _sitkaSmtpClientService.Send(mailMessage);
         }
     }
 }

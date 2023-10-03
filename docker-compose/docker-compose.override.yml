@@ -5,19 +5,15 @@ services:
     environment:
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
-      - SITKA_EMAIL_REDIRECT=${SITKA_EMAIL_REDIRECT}
-      - WEB_URL=${WEB_URL}
       - SECRET_PATH=${SECRET_PATH}
-      - KEYSTONE_REDIRECT_URL=${KEYSTONE_REDIRECT_URL}
       - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
       - SitkaEmailRedirect=${SitkaEmailRedirect}
-      - IsEmailEnabled=${IsEmailEnabled}
+      - SitkaSupportEmail=${SitkaSupportEmail}
+      - DoNotReplyEmail=${DoNotReplyEmail}
       - MailLogBcc=${MailLogBcc}
       - RecaptchaPublicKey=${RecaptchaPublicKey}
       - RecaptchaPrivateKey=${RecaptchaPrivateKey}
       - RecaptchaValidatorUrl=${RecaptchaValidatorUrl}
-      - SitkaSupportEmail=${SitkaSupportEmail}
-      - DoNotReplyEmail=${DoNotReplyEmail}
       - Ogr2OgrExecutable=${Ogr2OgrExecutable}
       - OgrInfoExecutable=${OgrInfoExecutable}
       - LogFileFolder=${LogFileFolder}
@@ -41,17 +37,15 @@ services:
       - NereidUrl=${NereidUrl}
       - PlanningModuleUrl=${PlanningModuleUrl}
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
-      - AzureBlobStorageConnectionString=${AzureBlobStorageConnectionString}
 
   neptune.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
       - SitkaEmailRedirect=${SitkaEmailRedirect}
+      - DoNotReplyEmail=${DoNotReplyEmail}
       - NeptuneAPISecretPath=${NeptuneAPISecretPath}
       - KeystoneRedirectUrl=${KeystoneRedirectUrl}
-      - PlatformLongName=${PlatformLongName}
       - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
       - OcStormwaterToolsBaseUrl=${OcStormwaterToolsBaseUrl}
       - OcStormwaterToolsModelingBaseUrl=${OcStormwaterToolsModelingBaseUrl}
-      - AzureBlobStorageConnectionString=${AzureBlobStorageConnectionString}

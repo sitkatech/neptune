@@ -25,7 +25,10 @@ using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Converters;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Neptune.Common;
+using Neptune.Common.Email;
 using Neptune.Common.JsonConverters;
+using SendGrid.Extensions.DependencyInjection;
 
 namespace Neptune.API
 {
@@ -81,9 +84,9 @@ namespace Neptune.API
             });
 
             services.Configure<NeptuneConfiguration>(Configuration);
-            var neptuneConfiguration = Configuration.Get<NeptuneConfiguration>();
+            var configuration = Configuration.Get<NeptuneConfiguration>();
 
-            var keystoneHost = neptuneConfiguration.KeystoneOpenIDUrl;
+            var keystoneHost = configuration.KeystoneOpenIDUrl;
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -118,7 +121,7 @@ namespace Neptune.API
 
             services.AddDbContext<NeptuneDbContext>(c =>
             {
-                c.UseSqlServer(neptuneConfiguration.DatabaseConnectionString, x =>
+                c.UseSqlServer(configuration.DatabaseConnectionString, x =>
                 {
                     x.CommandTimeout((int)TimeSpan.FromMinutes(3).TotalSeconds);
                     x.UseNetTopologySuite();
@@ -134,12 +137,14 @@ namespace Neptune.API
 
             services.AddTransient(s => new KeystoneService(s.GetService<IHttpContextAccessor>(), keystoneHost));
 
-            services.AddSingleton(x => new SitkaSmtpClientService(neptuneConfiguration));
+            services.AddSendGrid(options => { options.ApiKey = configuration.SendGridApiKey; });
+            services.AddSingleton<SitkaSmtpClientService>();
 
             services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext);
             services.AddScoped(s => UserContext.GetUserFromHttpContext(s.GetService<NeptuneDbContext>(), s.GetService<IHttpContextAccessor>().HttpContext));
             services.AddScoped<AzureBlobStorageService>();
             services.AddControllers();
+
             #region Swagger
             // Base swagger services
             services.AddSwaggerGen(options =>

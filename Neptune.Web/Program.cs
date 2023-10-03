@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
+using Neptune.Common.Email;
 using Neptune.Common.JsonConverters;
 using Neptune.EFModels.Entities;
 using Neptune.Web.Common;
@@ -7,6 +8,7 @@ using Neptune.Web.Common.OpenID;
 using Neptune.Web.Services;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Converters;
+using SendGrid.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -77,6 +79,8 @@ var builder = WebApplication.CreateBuilder(args);
     });
 
     services.AddAuthorizationPolicies();
+    services.AddSendGrid(options => { options.ApiKey = configuration.SendGridApiKey; });
+    services.AddSingleton<SitkaSmtpClientService>();
 
     JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
     services.AddAuthentication(options =>
@@ -106,10 +110,11 @@ var builder = WebApplication.CreateBuilder(args);
                 OnTokenValidated = tvc =>
                 {
                     var dbContext = tvc.HttpContext.RequestServices.GetRequiredService<NeptuneDbContext>();
+                    var sitkaSmtpClientService = tvc.HttpContext.RequestServices.GetRequiredService<SitkaSmtpClientService>();
 
-                    if (tvc.Principal.Identity != null && tvc.Principal.Identity.IsAuthenticated) // we have a token and we can determine the person.
+                    if (tvc.Principal.Identity?.IsAuthenticated == true) // we have a token and we can determine the person.
                     {
-                        AuthenticationHelper.ProcessLoginFromKeystone(tvc, dbContext, configuration, logger);
+                        AuthenticationHelper.ProcessLoginFromKeystone(tvc, dbContext, configuration, logger, sitkaSmtpClientService);
                     }
                     return Task.FromResult(0);
                 }

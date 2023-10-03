@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Neptune.Common.Email;
 using Neptune.EFModels.Entities;
 
 namespace Neptune.Web.Common.OpenID;
@@ -60,7 +61,7 @@ public static class AuthenticationHelper
         await next();
     }
 
-    public static void ProcessLoginFromKeystone(TokenValidatedContext tokenValidatedContext, NeptuneDbContext dbContext, WebConfiguration configuration, ILogger _logger)
+    public static async Task ProcessLoginFromKeystone(TokenValidatedContext tokenValidatedContext, NeptuneDbContext dbContext, WebConfiguration configuration, ILogger _logger, SitkaSmtpClientService sitkaSmtpClientService)
     {
         var sendNewUserNotification = false;
         var sendNewOrganizationNotification = false;
@@ -89,7 +90,7 @@ public static class AuthenticationHelper
                 OrganizationID = unknownOrganization.OrganizationID,
                 LoginName = loginName
             };
-            dbContext.People.Add(person);
+            await dbContext.People.AddAsync(person);
             sendNewUserNotification = true;
         }
         else
@@ -131,7 +132,7 @@ public static class AuthenticationHelper
                     OrganizationShortName = keystoneOrganizationShortName,
                     OrganizationGuid = keystoneOrganizationGuid // TODO: Get OrganizationUrl from Keystone
                 };
-                dbContext.Organizations.Add(organization);
+                await dbContext.Organizations.AddAsync(organization);
                 sendNewOrganizationNotification = true;
             }
 
@@ -153,23 +154,23 @@ public static class AuthenticationHelper
 
         person.LastActivityDate = DateTime.Now;
         // databaseEntities.SaveChanges(person); // TODO: Need to enable this for audit logging
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
 
         if (sendNewUserNotification)
         {
-            SendNewUserCreatedMessage(dbContext, configuration, person, loginName);
+            await SendNewUserCreatedMessage(dbContext, configuration, person, loginName, sitkaSmtpClientService);
         }
 
         if (sendNewOrganizationNotification)
         {
-            SendNewOrganizationCreatedMessage(dbContext, configuration, person, loginName);
+            await SendNewOrganizationCreatedMessage(dbContext, configuration, person, loginName, sitkaSmtpClientService);
         }
     }
 
 
     // Match user's email to an organizations email domain, return unknown organization if no match found
 
-    public static void SendNewUserCreatedMessage(NeptuneDbContext dbContext, WebConfiguration configuration, Person person, string loginName)
+    public static async Task SendNewUserCreatedMessage(NeptuneDbContext dbContext, WebConfiguration configuration, Person person, string loginName, SitkaSmtpClientService sitkaSmtpClientService)
     {
         var subject = $"User added: {person.GetFullNameFirstLastAndOrg()}";
         var message = $@"
@@ -195,10 +196,10 @@ public static class AuthenticationHelper
 </div>
 ";
 
-        SendMessageImpl(dbContext, configuration, person, subject, message);
+        await SendMessageImpl(dbContext, configuration, person, subject, message, sitkaSmtpClientService);
     }
 
-    private static void SendNewOrganizationCreatedMessage(NeptuneDbContext dbContext, WebConfiguration configuration, Person person, string loginName)
+    private static async Task SendNewOrganizationCreatedMessage(NeptuneDbContext dbContext, WebConfiguration configuration, Person person, string loginName, SitkaSmtpClientService sitkaSmtpClientService)
     {
         var organization = person.Organization;
         var fieldDefinitionOrganizationLabel = "Organization"; //FieldDefinitionEnum.Organization.ToType().GetFieldDefinitionLabel(); TODO: Need to fix FieldDefinition generated files - hybrid-enum-list entities
@@ -228,10 +229,10 @@ public static class AuthenticationHelper
 </div>
 ";
 
-        SendMessageImpl(dbContext, configuration, person, subject, message);
+        await SendMessageImpl(dbContext, configuration, person, subject, message, sitkaSmtpClientService);
     }
 
-    private static void SendMessageImpl(NeptuneDbContext dbContext, WebConfiguration configuration, Person person, string subject, string message)
+    private static async Task SendMessageImpl(NeptuneDbContext dbContext, SendGridConfiguration configuration, Person person, string subject, string message, SitkaSmtpClientService sitkaSmtpClientService)
     {
         var mailMessage = new MailMessage
         {
@@ -245,27 +246,13 @@ public static class AuthenticationHelper
         mailMessage.ReplyToList.Add(person.Email);
 
         // TO field
-        //var supportPersons = NeptuneArea.OCStormwaterTools.GetSupportRequestRecipients(dbContext);
-        //foreach (var supportPerson in supportPersons)
-        //{
-        //    mailMessage.To.Add(supportPerson.Email);
-        //}
-        // TODO: Actually send the email
-        // SitkaSmtpClient.Send(mailMessage);
+        var supportPersonEmails = People.GetEmailAddressesForAdminsThatReceiveSupportEmails(dbContext);
+        foreach (var supportPersonEmail in supportPersonEmails)
+        {
+            mailMessage.To.Add(supportPersonEmail);
+        }
+        await sitkaSmtpClientService.Send(mailMessage);
     }
-
-    // public static void AuthenticateUserFromSamlResponse(ADFSSamlResponse adfsSamlResponse, IAuthenticationManager authentication, string applicationDomain)
-    // {
-    //     var firstName = adfsSamlResponse.GetFirstName();
-    //     var lastName = adfsSamlResponse.GetLastName();
-    //     var email = adfsSamlResponse.GetEmail();
-    //     SitkaHttpApplication.Logger.Info($"{applicationDomain}: Successfully decrypted SAML response for {firstName} {lastName} - ready to process login");
-    //
-    //     var person = ProcessLogin(firstName, lastName, email, applicationDomain);
-    //     IdentitySignIn(authentication, person);
-    //
-    // }
-
 
 
     // Authentication helpers?

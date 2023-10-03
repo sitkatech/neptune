@@ -1,36 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Mail;
+﻿using System.Net.Mail;
 using System.Net.Mime;
+using Microsoft.Extensions.Options;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
-namespace Neptune.API.Services
+namespace Neptune.Common.Email
 {
     public class SitkaSmtpClientService
     {
-        private readonly NeptuneConfiguration _neptuneConfiguration;
+        private readonly ISendGridClient _sendGridClient;
+        private readonly SendGridConfiguration _configuration;
 
-        //private static readonly ILog _logger = LogManager.GetLogger(typeof(SitkaSmtpClient));
-
-        public SitkaSmtpClientService(NeptuneConfiguration neptuneConfiguration)
+        public SitkaSmtpClientService(ISendGridClient sendGridClient, IOptions<SendGridConfiguration> configuration)
         {
-            _neptuneConfiguration = neptuneConfiguration;
+            _sendGridClient = sendGridClient;
+            _configuration = configuration.Value;
         }
 
         /// <summary>
-        /// Sends an email including mock mode and address redirection  <see cref="NeptuneConfiguration.SITKA_EMAIL_REDIRECT"/>, then calls onward to <see cref="SendDirectly"/>
+        /// Sends an email including mock mode and address redirection  <see cref="ISendGridConfiguration.SitkaEmailRedirect"/>, then calls onward to <see cref="SendDirectly"/>
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="linkedResources"></param>
-        public void Send(MailMessage message, IEnumerable<LinkedResource> linkedResources = null)
+        public async Task Send(MailMessage message)
         {
             var messageWithAnyAlterations = AlterMessageIfInRedirectMode(message);
-            var messageAfterAlterationsAndCreatingAlternateViews = CreateAlternateViewsIfNeeded(messageWithAnyAlterations, linkedResources);
-            SendDirectly(messageAfterAlterationsAndCreatingAlternateViews);
+            var messageAfterAlterationsAndCreatingAlternateViews = CreateAlternateViewsIfNeeded(messageWithAnyAlterations);
+            await SendDirectly(messageAfterAlterationsAndCreatingAlternateViews);
         }
 
-        private static MailMessage CreateAlternateViewsIfNeeded(MailMessage message, IEnumerable<LinkedResource> linkedResources)
+        private static MailMessage CreateAlternateViewsIfNeeded(MailMessage message)
         {
             if (!message.IsBodyHtml)
             {
@@ -50,14 +48,6 @@ namespace Neptune.API.Services
             var htmlBody = message.Body;
 
             var htmlView = AlternateView.CreateAlternateViewFromString(htmlBody, null, MediaTypeNames.Text.Html);
-
-            if (linkedResources != null)
-            {
-                foreach (var linkedResource in linkedResources)
-                {
-                    htmlView.LinkedResources.Add(linkedResource);
-                }
-            }
             message.AlternateViews.Add(htmlView);
 
 
@@ -66,31 +56,47 @@ namespace Neptune.API.Services
 
 
         /// <summary>
-        /// Sends an email message at a lower level than <see cref="Send"/>, skipping mock mode and address redirection  <see cref="NeptuneConfiguration.SITKA_EMAIL_REDIRECT"/>
+        /// Sends an email message at a lower level than <see cref="Send"/>, skipping mock mode and address redirection  <see cref="ISendGridConfiguration.SitkaEmailRedirect"/>
         /// </summary>
         /// <param name="mailMessage"></param>
-        public void SendDirectly(MailMessage mailMessage)
+        public async Task SendDirectly(MailMessage mailMessage)
         {
-            //if (!string.IsNullOrWhiteSpace(NeptuneConfiguration.MailLogBcc))
+            //if (!string.IsNullOrWhiteSpace(RioConfiguration.MailLogBcc))
             //{
-            //    mailMessage.Bcc.Add(SitkaWebConfiguration.MailLogBcc);
+            //    sendGridMessage.Bcc.Add(SitkaWebConfiguration.MailLogBcc);
             //}
-            var humanReadableDisplayOfMessage = GetHumanReadableDisplayOfMessage(mailMessage);
-            var smtpClient = new SmtpClient(_neptuneConfiguration.SMTP_HOST, _neptuneConfiguration.SMTP_PORT);
-            smtpClient.Send(mailMessage);
+            var defaultEmailFrom = GetDefaultEmailFrom();
+            var sendGridMessage = new SendGridMessage()
+            {
+                From = new EmailAddress(defaultEmailFrom.Address, defaultEmailFrom.DisplayName),
+                Subject = mailMessage.Subject,
+                PlainTextContent = mailMessage.Body,
+                HtmlContent = mailMessage.IsBodyHtml ? mailMessage.Body : null
+            };
+            sendGridMessage.AddTos(mailMessage.To.Select(x => new EmailAddress(x.Address, x.DisplayName)).ToList());
+            if (mailMessage.CC.Any())
+            {
+                sendGridMessage.AddCcs(mailMessage.CC.Select(x => new EmailAddress(x.Address, x.DisplayName)).ToList());
+            }
+
+            if (mailMessage.Bcc.Any())
+            {
+                sendGridMessage.AddBccs(mailMessage.Bcc.Select(x => new EmailAddress(x.Address, x.DisplayName)).ToList());
+            }
+
+            var response = await _sendGridClient.SendEmailAsync(sendGridMessage);
             //_logger.Info($"Email sent to SMTP server \"{smtpClient.Host}\", Details:\r\n{humanReadableDisplayOfMessage}");
         }
 
         /// <summary>
-        /// Alter message TO, CC, BCC if the setting <see cref="NeptuneConfiguration.SITKA_EMAIL_REDIRECT"/> is set
+        /// Alter message TO, CC, BCC if the setting <see cref="_sitkaEmailRedirect"/> is set
         /// Appends the real to the body
         /// </summary>
         /// <param name="realMailMessage"></param>
         /// <returns></returns>
         private MailMessage AlterMessageIfInRedirectMode(MailMessage realMailMessage)
         {
-            var redirectEmail = _neptuneConfiguration.SITKA_EMAIL_REDIRECT;
-            var isInRedirectMode = !String.IsNullOrWhiteSpace(redirectEmail);
+            var isInRedirectMode = !string.IsNullOrWhiteSpace(_configuration.SitkaEmailRedirect);
 
             if (!isInRedirectMode)
             {
@@ -101,7 +107,7 @@ namespace Neptune.API.Services
             ClearOriginalAddressesAndAppendToBody(realMailMessage, "CC", realMailMessage.CC);
             ClearOriginalAddressesAndAppendToBody(realMailMessage, "BCC", realMailMessage.Bcc);
 
-            realMailMessage.To.Add(redirectEmail);
+            realMailMessage.To.Add(_configuration.SitkaEmailRedirect);
 
             return realMailMessage;
         }
@@ -112,7 +118,7 @@ namespace Neptune.API.Services
             var separator = newline + "\t";
 
             var toExpected = addresses.Aggregate(String.Empty, (s, mailAddress) => s + Environment.NewLine + "\t" + mailAddress.ToString());
-            if (!String.IsNullOrWhiteSpace(toExpected))
+            if (!string.IsNullOrWhiteSpace(toExpected))
             {
                 var toAppend =
                     $"{newline}{separator}Actual {addressType}:{(realMailMessage.IsBodyHtml ? toExpected.HtmlEncodeWithBreaks() : toExpected)}";
@@ -121,14 +127,12 @@ namespace Neptune.API.Services
                 for (var i = 0; i < realMailMessage.AlternateViews.Count; i++)
                 {
                     var stream = realMailMessage.AlternateViews[i].ContentStream;
-                    using (var reader = new StreamReader(stream))
-                    {
-                        var alternateBody = reader.ReadToEnd();
-                        alternateBody += toAppend;
-                        var newAlternateView = AlternateView.CreateAlternateViewFromString(alternateBody, null, realMailMessage.AlternateViews[i].ContentType.MediaType);
-                        realMailMessage.AlternateViews[i].LinkedResources.ToList().ForEach(x => newAlternateView.LinkedResources.Add(x));
-                        realMailMessage.AlternateViews[i] = newAlternateView;
-                    }
+                    using var reader = new StreamReader(stream);
+                    var alternateBody = reader.ReadToEnd();
+                    alternateBody += toAppend;
+                    var newAlternateView = AlternateView.CreateAlternateViewFromString(alternateBody, null, realMailMessage.AlternateViews[i].ContentType.MediaType);
+                    realMailMessage.AlternateViews[i].LinkedResources.ToList().ForEach(x => newAlternateView.LinkedResources.Add(x));
+                    realMailMessage.AlternateViews[i] = newAlternateView;
                 }
 
 
@@ -136,56 +140,40 @@ namespace Neptune.API.Services
             addresses.Clear();
         }
 
-        private static string GetHumanReadableDisplayOfMessage(MailMessage mm)
-        {
-            var currentDateFormattedForEmail = DateTime.Now.ToString("ddd dd MMM yyyy HH:mm:ss zzz");
-            var messageString = $@"Date: {currentDateFormattedForEmail}
-From: {mm.From}
-To: {FlattenMailAddresses(mm.To)}
-Reply-To: {FlattenMailAddresses(mm.ReplyToList)}
-CC: {FlattenMailAddresses(mm.CC)}
-Bcc: {FlattenMailAddresses(mm.Bcc)}
-Subject: {mm.Subject}
-
-{mm.Body}";
-
-            return messageString;
-        }
-
         private static string FlattenMailAddresses(IEnumerable<MailAddress> addresses)
         {
-            return String.Join("; ", addresses.Select(x => x.ToString()));
+            return string.Join("; ", addresses.Select(x => x.ToString()));
         }
 
         public string GetDefaultEmailSignature()
         {
             string defaultEmailSignature = $@"<br /><br />
-Respectfully, the {_neptuneConfiguration.PlatformLongName} team
+Respectfully, the OC Stormwater Tools team
 <br /><br />
 ***
 <br /><br />
-You have received this email because you are a registered user of the {_neptuneConfiguration.PlatformLongName}. 
+You have received this email because you are a registered user of the OC Stormwater Tools. 
 <br /><br />
-<a href=""mailto:{_neptuneConfiguration.LeadOrganizationEmail}"">{_neptuneConfiguration.LeadOrganizationEmail}</a>";
+<a href=""mailto:{_configuration.SitkaSupportEmail}"">{_configuration.SitkaSupportEmail}</a>";
             return defaultEmailSignature;
         }
 
         public string GetSupportNotificationEmailSignature()
         {
             string supportNotificationEmailSignature = $@"<br /><br />
-Respectfully, the {_neptuneConfiguration.PlatformLongName} team
+Respectfully, the OC Stormwater Tools team
 <br /><br />
 ***
 <br /><br />
-You have received this email because you are assigned to receive support notifications within the {_neptuneConfiguration.PlatformLongName}. 
+You have received this email because you are assigned to receive support notifications within the OC Stormwater Tools. 
 <br /><br />
-<a href=""mailto:{_neptuneConfiguration.LeadOrganizationEmail}"">{_neptuneConfiguration.LeadOrganizationEmail}</a>";
+<a href=""mailto:{_configuration.SitkaSupportEmail}"">{_configuration.SitkaSupportEmail}</a>";
             return supportNotificationEmailSignature;
         }
 
         public MailAddress GetDefaultEmailFrom()
         {
-            return new MailAddress("donotreply@sitkatech.com", $"{_neptuneConfiguration.PlatformLongName}");
+            return new MailAddress("donotreply@sitkatech.net", "OC Stormwater Tools");
         }
 
         public static void AddBccRecipientsToEmail(MailMessage mailMessage, IEnumerable<string> recipients)
