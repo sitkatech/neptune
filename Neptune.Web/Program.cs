@@ -4,7 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Hippocamp.Web
+namespace Neptune.Web
 {
     public class Program
     {

@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Hippocamp.Web": {
+    "Neptune.Web": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

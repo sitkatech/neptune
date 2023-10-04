@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
-namespace Hippocamp.Web
+namespace Neptune.Web
 {
     public class Startup
     {

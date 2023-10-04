@@ -15,12 +15,12 @@ RUN curl -SL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-lin
     && ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
     
-COPY Hippocamp.Web/                        ./Hippocamp.Web
+COPY Neptune.Web/                        ./Neptune.Web
 
-RUN dotnet restore Hippocamp.Web/Hippocamp.Web.csproj
+RUN dotnet restore Neptune.Web/Neptune.Web.csproj
 
-RUN dotnet build ./Hippocamp.Web/Hippocamp.Web.csproj -c Release -o /app
-WORKDIR /src/Hippocamp.Web/
+RUN dotnet build ./Neptune.Web/Neptune.Web.csproj -c Release -o /app
+WORKDIR /src/Neptune.Web/
 
 RUN npm cache clean --force
 RUN npm uninstall   -g angular-cli
@@ -31,9 +31,9 @@ ARG env
 RUN npm run build-${env}
 
 FROM build AS publish
-RUN dotnet publish Hippocamp.Web.csproj -c Release -o /app
+RUN dotnet publish Neptune.Web.csproj -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "Hippocamp.Web.dll"]
+ENTRYPOINT ["dotnet", "Neptune.Web.dll"]

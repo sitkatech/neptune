@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Hippocamp.Web": {
+    "Neptune.Web": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -101,20 +101,20 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "Hippocamp.Web:build",
+            "browserTarget": "Neptune.Web:build",
             "host" : "neptune.localhost.sitkatech.com",
             "port" : 8213
           },
           "configurations": {
             "production": {
-              "browserTarget": "Hippocamp.Web:build:production"
+              "browserTarget": "Neptune.Web:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Hippocamp.Web:build"
+            "browserTarget": "Neptune.Web:build"
           }
         },
         "test": {
@@ -137,7 +137,7 @@
         }
       }
     },
-    "Hippocamp.Web-e2e": {
+    "Neptune.Web-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -146,18 +146,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "Hippocamp.Web:serve"
+            "devServerTarget": "Neptune.Web:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "Hippocamp.Web:serve:production"
+              "devServerTarget": "Neptune.Web:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "Hippocamp.Web",
+  "defaultProject": "Neptune.Web",
   "cli": {
     "analytics": false
   }

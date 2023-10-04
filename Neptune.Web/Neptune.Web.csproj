@@ -35,7 +35,7 @@
         <None Remove=".gitignore" />
         <None Remove="angular.json" />
         <None Remove="package-lock.json" />
-        <None Remove="Hippocamp.Web.sln.DotSettings" />
+        <None Remove="Neptune.Web.sln.DotSettings" />
         <None Remove="tsconfig.json" />
         <None Remove="tslint.json" />
         <None Remove="workspace.code-workspace" />
