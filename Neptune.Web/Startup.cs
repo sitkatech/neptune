@@ -79,7 +79,6 @@ namespace Neptune.Web
             CreateAccountRedirectUrl = configuration["CreateAccountRedirectUrl"];
             GeoserverMapServiceUrl = configuration["GeoserverMapServiceUrl"];
             KeystoneAuthConfiguration = new KeystoneAuthConfigurationDto(configuration);
-            FaviconFilename = configuration["FaviconFilename"];
             AppInsightsInstrumentationKey =  configuration["AppInsightsInstrumentationKey"];
             OcStormwaterToolsBaseUrl = configuration["OcStormwaterToolsBaseUrl"];
         }
