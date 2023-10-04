@@ -13,10 +13,10 @@ namespace Neptune.WebMvc.Models
             }
         }
 
-        public static void VerifyFieldVisit(this EFModels.Entities.FieldVisit fieldVisit, Person person)
+        public static void VerifyFieldVisit(this EFModels.Entities.FieldVisit fieldVisit)
         {
             fieldVisit.IsFieldVisitVerified = true;
-            fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            fieldVisit.FieldVisitStatusID = (int) FieldVisitStatusEnum.Complete;
         }
 
         public static void MarkFieldVisitAsProvisional(this EFModels.Entities.FieldVisit fieldVisit)
@@ -27,7 +27,7 @@ namespace Neptune.WebMvc.Models
         public static void ReturnFieldVisitToEdit(this EFModels.Entities.FieldVisit fieldVisit)
         {
             fieldVisit.IsFieldVisitVerified = false;
-            fieldVisit.FieldVisitStatusID = FieldVisitStatus.ReturnedToEdit.FieldVisitStatusID;
+            fieldVisit.FieldVisitStatusID = (int) FieldVisitStatusEnum.ReturnedToEdit;
         }
 
         //public static readonly UrlTemplate<int> WorkflowUrlTemplate = new UrlTemplate<int>(

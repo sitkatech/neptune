@@ -637,7 +637,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewVerifyFieldVisit(fieldVisit, viewModel);
             }
 
-            fieldVisit.VerifyFieldVisit(CurrentPerson);
+            fieldVisit.VerifyFieldVisit();
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay("The Field Visit was successfully verified.");
             return new ModalDialogFormJsonResult(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(fieldVisitPrimaryKey)));

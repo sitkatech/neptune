@@ -54,8 +54,11 @@ namespace Neptune.WebMvc.Controllers
                 return new ModalDialogFormJsonResult();
             }
 
-            var treatmentBMPs = TreatmentBMPs.ListByTreatmentBMPIDListWithChangeTracking(_dbContext, viewModel.EntityIDList);
-            treatmentBMPs.ForEach(x => x.MarkAsVerified(CurrentPerson));
+            var treatmentBMPs = _dbContext.TreatmentBMPs.Where(x => viewModel.EntityIDList.Contains(x.TreatmentBMPID)).ToList();
+            foreach (var treatmentBMP in treatmentBMPs)
+            {
+                treatmentBMP.MarkAsVerified(CurrentPerson);
+            }
             await _dbContext.SaveChangesAsync();
             var numberOfVerifiedTreatmentBMPs = treatmentBMPs.Count;
             SetMessageForDisplay($"{numberOfVerifiedTreatmentBMPs} BMPs were successfully verified.");
@@ -78,8 +81,11 @@ namespace Neptune.WebMvc.Controllers
                 return new ModalDialogFormJsonResult();
             }
 
-            var delineations = Delineations.ListByDelineationIDListWithChangeTracking(_dbContext, viewModel.EntityIDList);
-            delineations.ForEach(x => x.MarkAsVerified(CurrentPerson));
+            var delineations = _dbContext.Delineations.Where(x => viewModel.EntityIDList.Contains(x.DelineationID)).ToList();
+            foreach (var delineation in delineations)
+            {
+                delineation.MarkAsVerified(CurrentPerson);
+            }
             await NereidUtilities.MarkDelineationDirty(delineations, _dbContext);
             var numberOfVerifiedBMPDelineations = delineations.Count;
             SetMessageForDisplay($"{numberOfVerifiedBMPDelineations} BMP Delineations were successfully verified.");
@@ -102,8 +108,11 @@ namespace Neptune.WebMvc.Controllers
                 return new ModalDialogFormJsonResult();
             }
 
-            var fieldVisits = FieldVisits.ListByFieldVisitIDListWithChangeTracking(_dbContext, viewModel.EntityIDList);
-            fieldVisits.ForEach(x => x.VerifyFieldVisit(CurrentPerson));
+            var fieldVisits = _dbContext.FieldVisits.Where(x => viewModel.EntityIDList.Contains(x.FieldVisitID)).ToList();
+            foreach (var fieldVisit in fieldVisits)
+            {
+                fieldVisit.VerifyFieldVisit();
+            }
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay($"{fieldVisits.Count} Field Visits were successfully verified.");
             return new ModalDialogFormJsonResult();
