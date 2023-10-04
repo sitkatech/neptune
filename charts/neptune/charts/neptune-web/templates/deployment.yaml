@@ -47,14 +47,14 @@ spec:
           # the liveness probe kicks into effect.
           startupProbe: 
             httpGet:
-              path: /healthz
+              path: /
               scheme: HTTP
               port: 80
             failureThreshold: 30
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: /
               scheme: HTTP
               port: 80
             periodSeconds: 4
@@ -62,15 +62,13 @@ spec:
             failureThreshold: 3
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: /
               scheme: HTTP
               port: 80
           lifecycle:
             preStop:
               exec:
                 command: ["sleep","120"]
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
           envFrom:
           - configMapRef:
               name: {{ include "web.fullname" . }}-{{ .Values.global.env.name }}-configmap
@@ -78,6 +76,8 @@ spec:
           # - name: secrets
           #   mountPath: /app/secrets
           #   readOnly: true
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
       terminationGracePeriodSeconds: 131
       {{- with .Values.nodeSelector }}
       nodeSelector:
