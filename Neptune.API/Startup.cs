@@ -25,7 +25,6 @@ using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Converters;
 using System.Text.Json.Serialization;
 using System.Text.Json;
-using Neptune.Common;
 using Neptune.Common.Email;
 using Neptune.Common.JsonConverters;
 using SendGrid.Extensions.DependencyInjection;
@@ -152,6 +151,8 @@ namespace Neptune.API
                 // extra options here if you wanted
             });
             #endregion
+
+            services.AddHealthChecks().AddDbContextCheck<NeptuneDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
