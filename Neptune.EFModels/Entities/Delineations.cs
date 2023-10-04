@@ -23,7 +23,6 @@ using Microsoft.EntityFrameworkCore;
 using Neptune.Common;
 using Neptune.Common.DesignByContract;
 using Neptune.Common.GeoSpatial;
-using Neptune.WebMvc.Common;
 using NetTopologySuite.Features;
 
 namespace Neptune.EFModels.Entities
@@ -33,7 +32,9 @@ namespace Neptune.EFModels.Entities
         public static IQueryable<Delineation> GetImpl(NeptuneDbContext dbContext)
         {
             return dbContext.Delineations
-                    .Include(x => x.TreatmentBMP);
+                    .Include(x => x.TreatmentBMP)
+                    .Include(x => x.VerifiedByPerson)
+                ;
         }
 
         public static Delineation GetByIDWithChangeTracking(NeptuneDbContext dbContext,

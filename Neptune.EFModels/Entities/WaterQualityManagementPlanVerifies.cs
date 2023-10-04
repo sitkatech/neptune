@@ -11,7 +11,8 @@ public static class WaterQualityManagementPlanVerifies
             .Include(x => x.WaterQualityManagementPlan)
             .ThenInclude(x => x.StormwaterJurisdiction)
             .ThenInclude(x => x.Organization)
-            .Include(x => x.LastEditedByPerson);
+            .Include(x => x.LastEditedByPerson)
+            ;
     }
 
     public static WaterQualityManagementPlanVerify GetByIDWithChangeTracking(NeptuneDbContext dbContext,
