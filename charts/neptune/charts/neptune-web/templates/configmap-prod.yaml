@@ -11,6 +11,7 @@ data:
   mainAppApiUrl: "https://{{ .Values.global.domains.api }}"
   createAccountRedirectUrl: "https://{{ .Values.global.domains.web }}/create-user-callback"
   geoserverMapServiceUrl: "https://{{ .Values.global.domains.geoserver }}/geoserver/OCStormwater"
+  ocStormwaterToolsBaseUrl: "https://{{ .Values.global.domains.webmvc }}"
   keystone_clientId: "Neptune"
   keystone_issuer: "https://identity.sitkatech.com"
   keystone_redirectUriRelative: "/signin-oidc"
