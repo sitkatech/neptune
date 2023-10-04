@@ -199,6 +199,7 @@ namespace Neptune.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/healthz");
             });
 
             applicationLifetime.ApplicationStopping.Register(OnShutdown);
