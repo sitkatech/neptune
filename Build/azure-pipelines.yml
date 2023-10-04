@@ -21,19 +21,6 @@ stages:
         command: restore
         projects: 'Neptune.Tests/Neptune.Tests.csproj'
         
-    # - task: replacetokens@3
-    #   displayName: 'Create Test environment.json'
-    #   inputs:
-    #     rootDirectory: 'Neptune.Tests/'
-    #     targetFiles: 'environment.json.template => environment.json'
-    #     encoding: 'auto'
-    #     writeBOM: true
-    #     escapeType: 'json'
-    #     actionOnMissing: 'fail'
-    #     keepToken: false
-    #     tokenPrefix: '#{'
-    #     tokenSuffix: '}#'
-
     - task: DotNetCoreCLI@2
       displayName: 'dotnet test'
       inputs:
@@ -60,19 +47,6 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - checkout: self
-
-    - task: gitversion/setup@0
-      inputs:
-        versionSpec: '5.x'
-
-    - task: gitversion/execute@0
-      inputs:
-        additionalArguments: '/updateprojectfiles'
-
-    - powershell: |
-        $newBuildNumber = "$(Build.BuildNumber)" -replace "\+", "."
-        echo "New Build Number: $newBuildNumber"
-        echo "##vso[build.updatebuildnumber]$newBuildNumber"
 
     - task: DockerCompose@0
       displayName: Build API services
@@ -111,19 +85,6 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - checkout: self
-
-    - task: gitversion/setup@0
-      inputs:
-        versionSpec: '5.x'
-
-    - task: gitversion/execute@0
-      inputs:
-        additionalArguments: '/updateprojectfiles'
-
-    - powershell: |
-        $newBuildNumber = "$(Build.BuildNumber)" -replace "\+", "."
-        echo "New Build Number: $newBuildNumber"
-        echo "##vso[build.updatebuildnumber]$newBuildNumber"
         
     - task: DockerCompose@0
       displayName: Build Web services
