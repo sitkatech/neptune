@@ -1,8 +1,8 @@
 version: '3.7'
 
 services:
-  hippocamp.web:
-    image: hippocamp/web
+  neptune.web:
+    image: neptune/web
     build:
       args:
         env: ${ENVIRONMENT}

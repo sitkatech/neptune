@@ -12,7 +12,7 @@ export class AppInsightsService {
   initAppInsights() {
     const appInsights = new ApplicationInsights({
       config: {
-        appId: "Hippocamp",
+        appId: "Neptune",
         enableAutoRouteTracking: true, 
         disableFetchTracking: false,
         enableCorsCorrelation: true,

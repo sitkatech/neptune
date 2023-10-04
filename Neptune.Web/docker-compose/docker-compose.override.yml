@@ -1,6 +1,6 @@
 version: '3.7'
 
 services:
-  hippocamp.web:  
+  neptune.web:  
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

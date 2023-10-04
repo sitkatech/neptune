@@ -1,11 +1,11 @@
 version: '3.7'
 
 services:
-  hippocamp.web:
+  neptune.web:
     build:
       args:
         source: ${DOCKER_BUILD_SOURCE}
-    image: hippocamp/web
+    image: neptune/web
     ports:
       - "8113:80"
       - "8114:443"

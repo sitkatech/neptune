@@ -1,5 +1,5 @@
 {
-  "name": "hippocamp-web",
+  "name": "neptune-web",
   "version": "0.0.0",
   "config": {
     "template_dir": "../Build/typescript-angular",

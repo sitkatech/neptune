@@ -1,9 +1,9 @@
 version: '3.7'
 
 services:
-  hippocamp.web:
+  neptune.web:
     environment:
       - DOTNET_USE_POLLING_FILE_WATCHER=1    
-    image: hippocamp/web
+    image: neptune/web
     labels:
       - "com.microsoft.visualstudio.targetoperatingsystem=linux"
