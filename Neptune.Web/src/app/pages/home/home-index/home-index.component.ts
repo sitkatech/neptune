@@ -94,14 +94,6 @@ export class HomeIndexComponent implements OnInit, OnDestroy {
         return `${environment.keystoneAuthConfiguration.issuer}/Account/Support/20?${this.authenticationService.getClientIDAndRedirectUrlForKeystone()}`;
     }
 
-    public platformLongName(): string {
-        return environment.platformLongName;
-    }
-
-    public platformShortName(): string {
-        return environment.platformShortName;
-    }
-
     public requestSupportUrl(): string {
         return `${this.ocstBaseUrl()}/Help/Support`;
     }

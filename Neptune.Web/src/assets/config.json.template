@@ -8,10 +8,6 @@
     "keystoneSupportBaseUrl": [TODO],
     "geoserverMapServiceUrl": [TODO],
     
-    "platformLongName": [TODO],
-    "platformShortName": [TODO],
-
-    "faviconFilename": [TODO],
     "ocStormwaterToolsBaseUrl": [TODO],
   
     "keystoneAuthConfiguration": {

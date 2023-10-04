@@ -45,18 +45,6 @@ export class DynamicEnvironment {
         return window.config.keystoneAuthConfiguration;
     }
 
-    public get platformLongName(){
-        return window.config.platformLongName;
-    }
-
-    public get platformShortName(){
-        return window.config.platformShortName;
-    }
-
-    public get faviconFilename(){
-        return window.config.faviconFilename;
-    }
-
     public get appInsightsInstrumentationKey() {
         return window.config.appInsightsInstrumentationKey;
     }

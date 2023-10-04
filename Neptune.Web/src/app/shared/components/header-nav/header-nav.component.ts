@@ -79,10 +79,6 @@ export class HeaderNavComponent implements OnInit, OnDestroy {
         });
     }
 
-    public platformShortName(): string{
-        return environment.platformShortName;
-    }
-	
     public usersListUrl(): string{
         return `${environment.ocStormwaterToolsBaseUrl}/User/Index`;
     }

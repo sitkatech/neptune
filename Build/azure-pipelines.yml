@@ -49,19 +49,33 @@ stages:
 
 
 - stage: BuildWeb
-  displayName: Build Web
+  displayName: Build API/Web/WebMVC
   dependsOn: Test
   condition: in(dependencies.Test.result, 'Succeeded', 'SucceededWithIssues', 'Skipped')
   jobs:
-  - job: BuildWebMVC
-    displayName: Build Web MVC
+  - job: BuildAPI
+    displayName: Build API and WebMVC
     condition: eq(variables['build'], 'true')
     pool:
       vmImage: ubuntu-latest
     steps:
     - checkout: self
+
+    - task: gitversion/setup@0
+      inputs:
+        versionSpec: '5.x'
+
+    - task: gitversion/execute@0
+      inputs:
+        additionalArguments: '/updateprojectfiles'
+
+    - powershell: |
+        $newBuildNumber = "$(Build.BuildNumber)" -replace "\+", "."
+        echo "New Build Number: $newBuildNumber"
+        echo "##vso[build.updatebuildnumber]$newBuildNumber"
+
     - task: DockerCompose@0
-      displayName: Build Web MVC services
+      displayName: Build API services
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
         azureContainerRegistry: '$(containerRegistry)'
@@ -75,7 +89,7 @@ stages:
         includeLatestTag: true
 
     - task: DockerCompose@0
-      displayName: Push Web MVC Image to Registry  
+      displayName: Push API Image to Registry  
       condition: eq(variables['pushImages'], 'true')
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
@@ -87,7 +101,58 @@ stages:
           $(Build.BuildNumber)-$(environment)
 
           $(environment)
-        includeLatestTag: true    
+        includeLatestTag: true
+
+
+  - job: BuildWeb
+    displayName: Build Web
+    condition: eq(variables['build'], 'true')
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - checkout: self
+
+    - task: gitversion/setup@0
+      inputs:
+        versionSpec: '5.x'
+
+    - task: gitversion/execute@0
+      inputs:
+        additionalArguments: '/updateprojectfiles'
+
+    - powershell: |
+        $newBuildNumber = "$(Build.BuildNumber)" -replace "\+", "."
+        echo "New Build Number: $newBuildNumber"
+        echo "##vso[build.updatebuildnumber]$newBuildNumber"
+        
+    - task: DockerCompose@0
+      displayName: Build Web services
+      inputs:
+        azureSubscriptionEndpoint: '$(azureSubscription)'
+        azureContainerRegistry: '$(containerRegistry)'
+        dockerComposeFile: Neptune.Web/docker-compose/docker-compose.yml
+        dockerComposeFileArgs: env=$(environment)
+        action: Build services
+        additionalImageTags: >-
+          $(Build.BuildNumber)-$(environment)
+
+          $(environment)
+        includeLatestTag: true
+
+    - task: DockerCompose@0
+      displayName: Push Web Image to Registry  
+      condition: eq(variables['pushImages'], 'true')
+      inputs:
+        azureSubscriptionEndpoint: '$(azureSubscription)'
+        azureContainerRegistry: '$(containerRegistry)'      
+        dockerComposeFile: Neptune.Web/docker-compose/docker-compose.yml
+        dockerComposeFileArgs: env=$(environment)
+        action: Push services
+        additionalImageTags: >-
+          $(Build.BuildNumber)-$(environment)
+
+          $(environment)
+        includeLatestTag: true
 
 - stage: BuildTerraform
   displayName: Terraform Plan
@@ -527,6 +592,8 @@ stages:
               releaseName: 'neptune'
               overrideValues: |
                 global.env.appInsightsInstrumentationKey="$(INSTRUMENTATION_KEY)"
+                global.domains.api="$(domainApi)"
+                global.domains.web="$(domainWeb)"
                 global.domains.webMvc="$(domainWebMvc)"
                 global.domains.geoserver="$(domainGeoserver)"
                 global.env.name="$(Environment)"
