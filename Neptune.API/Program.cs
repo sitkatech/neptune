@@ -1,13 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Serilog;
-using Serilog.Events;
 
 namespace Neptune.API
 {
@@ -24,7 +18,7 @@ namespace Neptune.API
                 .ConfigureAppConfiguration((hostContext, config) =>
                 {
                     var configurationRoot = config.Build();
-                    var secretPath = configurationRoot["NeptuneAPISecretPath"];
+                    var secretPath = configurationRoot["SECRET_PATH"];
                     if (File.Exists(secretPath))
                     {
                         config.AddJsonFile(secretPath);

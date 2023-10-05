@@ -41,10 +41,10 @@ services:
   neptune.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - SECRET_PATH=${NeptuneAPISecretPath}
       - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
       - SitkaEmailRedirect=${SitkaEmailRedirect}
       - DoNotReplyEmail=${DoNotReplyEmail}
-      - NeptuneAPISecretPath=${NeptuneAPISecretPath}
       - KeystoneRedirectUrl=${KeystoneRedirectUrl}
       - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
       - OcStormwaterToolsBaseUrl=${OcStormwaterToolsBaseUrl}
