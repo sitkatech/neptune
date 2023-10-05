@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using NetTopologySuite.Geometries;
 
-namespace Qanat.Common.GeoSpatial;
+namespace Neptune.Common.GeoSpatial;
 
 public interface IHasGeometry
 {

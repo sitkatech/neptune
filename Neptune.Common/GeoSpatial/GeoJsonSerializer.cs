@@ -6,7 +6,6 @@ using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Prepared;
 using NetTopologySuite.IO.Converters;
-using Qanat.Common.GeoSpatial;
 
 namespace Neptune.Common.GeoSpatial;
 
