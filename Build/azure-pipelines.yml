@@ -610,7 +610,7 @@ stages:
                 webmvc.image.tag="$(Build.BuildNumber)-$(environment)"
                 webmvc.image.repository="$(containerRegistry)/neptune/webmvc"
                 nereid.image.repository="$(containerRegistry)/ocstormwatertools/nereid_nereid"
-                nereid-tests.image.repository="$(containerRegistry)/ocstormwatertools/nereid_tests"
+                nereid-tests.image.repository="$(containerRegistry)/ocstormwatertools/nereid_nereid-tests"
                 nereid-redis.image.repository="$(containerRegistry)/ocstormwatertools/nereid_redis"
                 nereid-flower.image.repository="$(containerRegistry)/ocstormwatertools/nereid_flower"
                 nereid-celeryworker.image.repository="$(containerRegistry)/ocstormwatertools/nereid_celeryworker"

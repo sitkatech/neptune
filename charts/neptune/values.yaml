@@ -281,7 +281,7 @@ nereid:
 nereid-tests:
   replicaCount: 1
   image:
-    repository: esacontainers.azurecr.io/ocstormwatertools/nereid_tests
+    repository: esacontainers.azurecr.io/ocstormwatertools/nereid_nereid-tests
     tag: "v0.7.0"
     pullPolicy: Always
   nameOverride: ""
