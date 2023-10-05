@@ -48,19 +48,6 @@ stages:
     steps:
     - checkout: self
 
-    - task: gitversion/setup@0
-      inputs:
-        versionSpec: '5.x'
-
-    - task: gitversion/execute@0
-      inputs:
-        additionalArguments: '/updateprojectfiles'
-
-    - powershell: |
-        $newBuildNumber = "$(Build.BuildNumber)" -replace "\+", "."
-        echo "New Build Number: $newBuildNumber"
-        echo "##vso[build.updatebuildnumber]$newBuildNumber"
-
     - task: DockerCompose@0
       displayName: Build API services
       inputs:
@@ -98,19 +85,6 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - checkout: self
-
-    - task: gitversion/setup@0
-      inputs:
-        versionSpec: '5.x'
-
-    - task: gitversion/execute@0
-      inputs:
-        additionalArguments: '/updateprojectfiles'
-
-    - powershell: |
-        $newBuildNumber = "$(Build.BuildNumber)" -replace "\+", "."
-        echo "New Build Number: $newBuildNumber"
-        echo "##vso[build.updatebuildnumber]$newBuildNumber"
         
     - task: DockerCompose@0
       displayName: Build Web services
