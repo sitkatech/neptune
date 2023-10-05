@@ -75,6 +75,14 @@ variable "datadogAppKey" {
   sensitive = true
 }
 
+variable "domainApi" {
+  type = string
+}
+
+variable "domainWeb" {
+  type = string
+}
+
 variable "domainWebMvc" {
   type = string
 }
@@ -635,6 +643,76 @@ resource "datadog_synthetics_test" "test_webmvc" {
     }
   }
   name    = "${var.environment} - ${var.domainWebMvc} Web MVC test"
+  message = "Notify @rlee@esassoc.com @sgordon@esassoc.com"
+  tags    = ["env:${var.environment}", "managed:terraformed", "team:h2o"]
+
+  status = "live"
+}
+
+resource "datadog_synthetics_test" "test_api" {
+  type    = "api"
+  subtype = "http"
+  request_definition {
+    method = "GET"
+    url    = "https://${var.domainApi}"
+  }
+  request_headers = {
+    Content-Type   = "application/json"
+  }
+  assertion {
+    type     = "statusCode"
+    operator = "is"
+    target   = "200"
+  }
+  locations = ["aws:us-west-1","aws:us-east-1"]
+  options_list {
+    tick_every = 900
+
+    retry {
+      count    = 2
+      interval = 30000
+    }
+
+    monitor_options {
+      renotify_interval = 120
+    }
+  }
+  name    = "${var.environment} - ${var.domainApi} API test"
+  message = "Notify @rlee@esassoc.com @sgordon@esassoc.com"
+  tags    = ["env:${var.environment}", "managed:terraformed", "team:h2o"]
+
+  status = "live"
+}
+
+resource "datadog_synthetics_test" "test_web" {
+  type    = "api"
+  subtype = "http"
+  request_definition {
+    method = "GET"
+    url    = "https://${var.domainWeb}"
+  }
+  request_headers = {
+    Content-Type   = "application/json"
+  }
+  assertion {
+    type     = "statusCode"
+    operator = "is"
+    target   = "200"
+  }
+  locations = ["aws:us-west-1","aws:us-east-1"]
+  options_list {
+    tick_every = 900
+
+    retry {
+      count    = 2
+      interval = 30000
+    }
+
+    monitor_options {
+      renotify_interval = 120
+    }
+  }
+  name    = "${var.environment} - ${var.domainWeb} Web test"
   message = "Notify @rlee@esassoc.com @sgordon@esassoc.com"
   tags    = ["env:${var.environment}", "managed:terraformed", "team:h2o"]
 
