@@ -19,7 +19,6 @@ using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
-using Serilog.Sinks.ApplicationInsights.Sinks.ApplicationInsights.TelemetryConverters;
 using ILogger = Serilog.ILogger;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Converters;
@@ -28,6 +27,7 @@ using System.Text.Json;
 using Neptune.Common.Email;
 using Neptune.Common.JsonConverters;
 using SendGrid.Extensions.DependencyInjection;
+using Serilog.Sinks.ApplicationInsights.TelemetryConverters;
 
 namespace Neptune.API
 {

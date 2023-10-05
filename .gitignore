@@ -76,3 +76,4 @@ Source/Neptune.GeoServer/data_dir/logs/
 /*.user
 /Hippocamp.Web/obj/Debug/net6.0
 /Neptune.Web/obj/Debug/net6.0
+/docker-compose/obj/Docker

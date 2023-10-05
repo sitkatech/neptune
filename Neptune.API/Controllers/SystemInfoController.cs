@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Neptune.API.Controllers;
-using System;
 using Neptune.API.Services;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 
-namespace Qanat.API.Controllers
+namespace Neptune.API.Controllers
 {
     [ApiController]
     public class SystemInfoController : SitkaController<SystemInfoController>
@@ -26,7 +25,7 @@ namespace Qanat.API.Controllers
         [AllowAnonymous]
         public ActionResult<SystemInfoDto> GetSystemInfo([FromServices] IWebHostEnvironment environment)
         {
-            SystemInfoDto systemInfo = new SystemInfoDto
+            var systemInfo = new SystemInfoDto
             {
                 Environment = environment.EnvironmentName,
                 CurrentTimeUTC = DateTime.UtcNow.ToString("o"),
