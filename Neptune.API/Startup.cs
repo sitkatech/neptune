@@ -35,7 +35,7 @@ namespace Neptune.API
     {
         private readonly TelemetryClient _telemetryClient;
         private readonly IWebHostEnvironment _environment;
-        private string _instrumentationKey;
+        private readonly string _instrumentationKey;
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
             Configuration = configuration;
@@ -130,7 +130,7 @@ namespace Neptune.API
             services.AddSingleton(Configuration);
             services.AddSingleton<ITelemetryInitializer, CloudRoleNameTelemetryInitializer>();
             services.AddSingleton<ITelemetryInitializer, UserInfoTelemetryInitializer>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             var logger = GetSerilogLogger();
             services.AddSingleton(logger);
 
@@ -139,8 +139,7 @@ namespace Neptune.API
             services.AddSendGrid(options => { options.ApiKey = configuration.SendGridApiKey; });
             services.AddSingleton<SitkaSmtpClientService>();
 
-            services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext);
-            services.AddScoped(s => UserContext.GetUserFromHttpContext(s.GetService<NeptuneDbContext>(), s.GetService<IHttpContextAccessor>().HttpContext));
+            services.AddHttpContextAccessor();
             services.AddScoped<AzureBlobStorageService>();
             services.AddControllers();
 
