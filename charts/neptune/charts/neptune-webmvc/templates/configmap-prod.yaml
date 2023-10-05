@@ -26,7 +26,7 @@ data:
   PyqgisWorkingDirectory: "PyQgis"
   PathToPyqgisLauncher: "/bin/python-qgis-ltr.bat"
   PathToPyqgisProjData: "/share/proj"
-  NereidUrl: "https://nereid.yachats.sitka.local:8443"
+  NereidUrl: "https://{{ .Values.global.domains.nereid }}"
   PathToFieldVisitUploadTemplate: "Content/Bulk_Upload_FieldVisists_for_Trash_Screens_Template.xlsx"
   KeystoneOpenIDUrl: "https://identity.sitkatech.com"
   KeystoneOpenIDClientID: "Neptune"
