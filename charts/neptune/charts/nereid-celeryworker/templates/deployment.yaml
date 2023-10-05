@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nereid-celeryworker.fullname" . }}
+  labels:
+    {{- include "nereid-celeryworker.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "nereid-celeryworker.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }} # roll deployments on every upgrade: https://helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "nereid-celeryworker.selectorLabels" . | nindent 8 }}
+    spec:
+      volumes:
+      - name: nereid-celeryworker-data
+        azureFile: 
+          secretName: nereid-celeryworker-volume-secret
+          shareName: nereid
+          readOnly: false
+      - name: config
+        projected:
+          sources:
+          - configMap:
+              name: {{ include "nereid-celeryworker.fullname" . }}-environment-properties-{{ .Values.global.env.name }}-configmap
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "nereid-celeryworker.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep","120"]
+          volumeMounts:
+          - name: nereid-celeryworker-data
+            mountPath: /nereid/nereid/data/project_data
+            readOnly: false            
+          envFrom:
+          - configMapRef:
+              name: {{ include "nereid-celeryworker.fullname" . }}-{{ .Values.global.env.name }}-configmap
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      terminationGracePeriodSeconds: 131
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -3,7 +3,11 @@ resources:
   - repository: self
     type: git
     ref: develop
-
+  - repository: nereiddata
+    name: Geosyntec/nereid-data
+    type: github
+    ref: master
+    endpoint: NereidGithubServiceConnection
     
 stages:
 - stage: Test
@@ -158,7 +162,7 @@ stages:
       inputs:
         command: 'plan'
         environmentServiceName: '$(azureSubscription)'
-        commandOptions: '-var "appInsightsName=$(appInsightsName)" -var "keyVaultName=$(keyVaultName)" -var "storageAccountName=$(storageAccountApplicationName)" -var "resourceGroupName=$(resourceGroupName)" -var "dbServerName=$(dbServerName)" -var "aspNetEnvironment=$(aspNetEnvironment)" -var "databaseName=$(databaseName)" -var "databaseEdition=$(databaseEdition)" -var "databaseTier=$(databaseTier)" -var "sqlPassword=$(sqlPassword)" -var "sqlUsername=$(sqlUsername)" -var "azureClusterResourceGroup=$(azureClusterResourceGroup)" -var "sqlApiUsername=$(sqlApiUsername)" -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" -var "datadogApiKey=$(datadogApiKey)" -var "datadogAppKey=$(datadogAppKey)" -var "domainWeb=$(domainWeb)" -var "domainApi=$(domainApi)" -var "domainWebMvc=$(domainWebMvc)" -var "domainGeoserver=$(domainGeoserver)" -var "environment=$(environment)" -var "storageAccountDevApplicationName=$(storageAccountDevApplicationName)"'
+        commandOptions: '-var "appInsightsName=$(appInsightsName)" -var "keyVaultName=$(keyVaultName)" -var "storageAccountName=$(storageAccountApplicationName)" -var "resourceGroupName=$(resourceGroupName)" -var "dbServerName=$(dbServerName)" -var "aspNetEnvironment=$(aspNetEnvironment)" -var "databaseName=$(databaseName)" -var "databaseEdition=$(databaseEdition)" -var "databaseTier=$(databaseTier)" -var "sqlPassword=$(sqlPassword)" -var "sqlUsername=$(sqlUsername)" -var "azureClusterResourceGroup=$(azureClusterResourceGroup)" -var "sqlApiUsername=$(sqlApiUsername)" -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" -var "datadogApiKey=$(datadogApiKey)" -var "datadogAppKey=$(datadogAppKey)" -var "domainWeb=$(domainWeb)" -var "domainApi=$(domainApi)" -var "domainWebMvc=$(domainWebMvc)" -var "domainGeoserver=$(domainGeoserver)" -var "domainGeoserver=$(domainNereid)" -var "environment=$(environment)" -var "storageAccountDevApplicationName=$(storageAccountDevApplicationName)"'
         allowTelemetryCollection: true
         publishPlanResults: 'tfplan'
         
@@ -187,8 +191,6 @@ stages:
         artifactName: GeoServerArtifacts
         pathtoPublish: 'Neptune.GeoServer/data_dir'
       condition: and(succeeded(), eq(variables['deploy'], 'true'))
-
-
 
 - stage: BuildDB
   displayName: Build DB
@@ -256,7 +258,7 @@ stages:
               command: 'apply'
               workingDirectory: '$(Pipeline.Workspace)/terraform'
               environmentServiceName: '$(azureSubscription)'
-              commandOptions: '-var "appInsightsName=$(appInsightsName)" -var "keyVaultName=$(keyVaultName)" -var "storageAccountName=$(storageAccountApplicationName)" -var "resourceGroupName=$(resourceGroupName)" -var "dbServerName=$(dbServerName)" -var "aspNetEnvironment=$(aspNetEnvironment)" -var "databaseName=$(databaseName)" -var "databaseEdition=$(databaseEdition)" -var "databaseTier=$(databaseTier)" -var "sqlPassword=$(sqlPassword)" -var "sqlUsername=$(sqlUsername)" -var "azureClusterResourceGroup=$(azureClusterResourceGroup)"  -var "sqlApiUsername=$(sqlApiUsername)" -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" -var "datadogApiKey=$(datadogApiKey)" -var "datadogAppKey=$(datadogAppKey)" -var "domainWeb=$(domainWeb)" -var "domainApi=$(domainApi)" -var "domainWebMvc=$(domainWebMvc)" -var "domainGeoserver=$(domainGeoserver)" -var "environment=$(environment)" -var "storageAccountDevApplicationName=$(storageAccountDevApplicationName)"'
+              commandOptions: '-var "appInsightsName=$(appInsightsName)" -var "keyVaultName=$(keyVaultName)" -var "storageAccountName=$(storageAccountApplicationName)" -var "resourceGroupName=$(resourceGroupName)" -var "dbServerName=$(dbServerName)" -var "aspNetEnvironment=$(aspNetEnvironment)" -var "databaseName=$(databaseName)" -var "databaseEdition=$(databaseEdition)" -var "databaseTier=$(databaseTier)" -var "sqlPassword=$(sqlPassword)" -var "sqlUsername=$(sqlUsername)" -var "azureClusterResourceGroup=$(azureClusterResourceGroup)"  -var "sqlApiUsername=$(sqlApiUsername)" -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" -var "datadogApiKey=$(datadogApiKey)" -var "datadogAppKey=$(datadogAppKey)" -var "domainWeb=$(domainWeb)" -var "domainApi=$(domainApi)" -var "domainWebMvc=$(domainWebMvc)" -var "domainGeoserver=$(domainGeoserver)" -var "domainGeoserver=$(domainNereid)" -var "environment=$(environment)" -var "storageAccountDevApplicationName=$(storageAccountDevApplicationName)"'
               allowTelemetryCollection: true
 
           - task: TerraformCLI@0
@@ -476,16 +478,48 @@ stages:
               inlineScript: |
                 azcopy copy "$(Pipeline.Workspace)\GeoServerArtifacts\*" "https://$(storageAccountApplicationName).file.core.windows.net/geoserver/data_dir/$(STORAGE_ACCOUNT_SAS_KEY)" --from-to=LocalFile --recursive
 
+- stage: DeployNereid
+  displayName: Deploy Nereid
+  dependsOn: DeployTerraform
+  condition: |
+    and
+    (
+      in(dependencies.DeployTerraform.result, 'Succeeded', 'SucceededWithIssues'),
+      eq(variables['deploy'], 'true')
+    )
+  jobs:  
+  - deployment: Nereid
+    pool:
+      vmImage: 'windows-latest'
+    variables: 
+      STORAGE_ACCOUNT_SAS_KEY: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.STORAGE_ACCOUNT_SAS_KEY'] ]
+    # creates an environment if it doesn't exist
+    environment: $(Environment)
+    strategy:
+      # default deployment strategy, more coming...
+      runOnce:
+        deploy:
+          steps:        
+          - checkout: nereiddata             
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: '$(azureSubscription)'
+              scriptType: 'ps'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                azcopy copy "$(Build.SourcesDirectory)\*" "https://$(storageAccountApplicationName).file.core.windows.net/nereid/$(STORAGE_ACCOUNT_SAS_KEY)" --from-to=LocalFile --recursive
 
 - stage: DeployHelm
   displayName: Deploy Helm
   dependsOn: 
+  - DeployNereid
   - DeployGeoServer
   - DeployDB
   - DeployTerraform
   condition: |
     and
     (
+      in(dependencies.DeployNereid.result, 'Succeeded', 'SucceededWithIssues'),
       in(dependencies.DeployGeoServer.result, 'Succeeded', 'SucceededWithIssues'),
       in(dependencies.DeployDB.result, 'Succeeded', 'SucceededWithIssues'),
       in(dependencies.DeployTerraform.result, 'Succeeded', 'SucceededWithIssues'),
@@ -557,6 +591,7 @@ stages:
                 global.domains.web="$(domainWeb)"
                 global.domains.webMvc="$(domainWebMvc)"
                 global.domains.geoserver="$(domainGeoserver)"
+                global.domains.nereid="$(domainNereid)"
                 global.env.name="$(Environment)"
                 global.secrets.geoserverSqlServerPassword="$(SQL_GEOSERVER_PASSWORD)"
                 global.secrets.geoserverAdminPassword="$(GEOSERVER_ADMIN_PASSWORD)"
@@ -569,11 +604,16 @@ stages:
                 global.secrets.apiSqlPassword=$(SQL_API_PASSWORD)
                 global.secrets.sendGridApiKey="$(SendGridApiKey)"
                 api.image.tag="$(Build.BuildNumber)-$(environment)"
-                web.image.tag="$(Build.BuildNumber)-$(environment)"
                 api.image.repository="$(containerRegistry)/neptune/api"
+                web.image.tag="$(Build.BuildNumber)-$(environment)"
                 web.image.repository="$(containerRegistry)/neptune/web"
                 webmvc.image.tag="$(Build.BuildNumber)-$(environment)"
                 webmvc.image.repository="$(containerRegistry)/neptune/webmvc"
+                nereid.image.repository="$(containerRegistry)/ocstormwatertools/nereid_nereid"
+                nereid-tests.image.repository="$(containerRegistry)/ocstormwatertools/nereid_tests"
+                nereid-redis.image.repository="$(containerRegistry)/ocstormwatertools/nereid_redis"
+                nereid-flower.image.repository="$(containerRegistry)/ocstormwatertools/nereid_flower"
+                nereid-celeryworker.image.repository="$(containerRegistry)/ocstormwatertools/nereid_celeryworker"
                 global.secrets.hangfirePassword="$(HANGFIRE_PASSWORD)"
                 global.secrets.pyqgisPassword="$(PYQGIS_PASSWORD)"
                 global.secrets.keystoneOpenIDClientSecret="$(keystoneOpenIDClientSecret)"

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "nereid-flower.fullname" . }}-prod-configmap
+data:
+  CELERY_BROKER_URL: "redis://nereid-redis:6379/0"
+  CELERY_RESULT_BACKEND: "redis://nereid-redis:6379/0"

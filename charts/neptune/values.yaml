@@ -11,6 +11,7 @@ global:
     web: "planning-neptune.aks-qa.sitkatech.com"
     webmvc: "neptune.aks-qa.sitkatech.com"
     geoserver: "geoserver-neptune.aks-qa.sitkatech.com"
+    nereid: "nereid.aks-qa.sitkatech.com"
   secrets:
     geoserverSqlServerPassword: "passwordhere"
     geoserverAdminPassword: "geomaster"
@@ -236,6 +237,176 @@ geoserver:
     enabled: false
     minReplicas: 1
     maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+nereid:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/ocstormwatertools/nereid_nereid
+    tag: "v0.7.0"
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+nereid-tests:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/ocstormwatertools/nereid_tests
+    tag: "v0.7.0"
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+nereid-redis:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/ocstormwatertools/nereid_redis
+    tag: "v0.7.0"
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+nereid-flower:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/ocstormwatertools/nereid_flower
+    tag: "v0.7.0"
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+nereid-tests:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/ocstormwatertools/nereid_celeryworker
+    tag: "v0.7.0"
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
   nodeSelector: 
