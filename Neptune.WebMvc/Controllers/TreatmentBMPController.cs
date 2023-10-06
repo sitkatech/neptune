@@ -51,6 +51,7 @@ using EditViewData = Neptune.WebMvc.Views.TreatmentBMP.EditViewData;
 using EditViewModel = Neptune.WebMvc.Views.TreatmentBMP.EditViewModel;
 using TreatmentBMPAssessmentSummary = Neptune.EFModels.Entities.TreatmentBMPAssessmentSummary;
 using DocumentFormat.OpenXml.InkML;
+using Neptune.EFModels.Nereid;
 using NetTopologySuite.Geometries;
 
 namespace Neptune.WebMvc.Controllers
@@ -537,7 +538,7 @@ namespace Neptune.WebMvc.Controllers
             var delineationGeometry = delineation?.DelineationGeometry;
             var isDelineationDistributed = delineation != null && delineation.DelineationType == DelineationType.Distributed;
 
-            NereidUtilities.MarkDownstreamNodeDirty(treatmentBMP, _dbContext);
+            await NereidUtilities.MarkDownstreamNodeDirty(treatmentBMP, _dbContext);
 
             if (!ModelState.IsValid)
             {
@@ -627,7 +628,7 @@ namespace Neptune.WebMvc.Controllers
                     var delineation = delineations.ContainsKey(treatmentBMP.TreatmentBMPID) ? delineations[treatmentBMP.TreatmentBMPID] : null;
                     var isDelineationDistributed = delineation != null && delineation.DelineationType == DelineationType.Distributed;
 
-                    NereidUtilities.MarkDownstreamNodeDirty(treatmentBMP, _dbContext);
+                    await NereidUtilities.MarkDownstreamNodeDirty(treatmentBMP, _dbContext);
 
                     foreach (var downstreamBMP in treatmentBMP.InverseUpstreamBMP)
                     {
@@ -840,7 +841,7 @@ namespace Neptune.WebMvc.Controllers
             SetMessageForDisplay("Modeling Attributes successfully saved.");
 
             // need to re-execute the model at this node since it was re-parameterized
-            NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, _dbContext);
+            await NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, _dbContext);
 
             await _dbContext.SaveChangesAsync();
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.Detail(treatmentBMP.PrimaryKey)));
@@ -1142,7 +1143,7 @@ namespace Neptune.WebMvc.Controllers
 
             // Need to re-executed model for updated BMPs since they may have been re-parameterized
             // can safely ignore the new BMPs since they won't have delineations yet
-            NereidUtilities.MarkTreatmentBMPDirty(treatmentBmpsUpdated, _dbContext);
+            await NereidUtilities.MarkTreatmentBMPDirty(treatmentBmpsUpdated, _dbContext);
 
             var message = $"Upload Successful: {treatmentBmpsAdded.Count.ToGroupedNumeric()} records added, {treatmentBmpsUpdated.Count.ToGroupedNumeric()} records updated!";
             SetMessageForDisplay(message);

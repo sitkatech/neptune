@@ -1,8 +1,7 @@
 ﻿using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
-using Neptune.WebMvc.Areas.Modeling.Models.Nereid;
 
-namespace Neptune.WebMvc.Common.Models.Nereid;
+namespace Neptune.EFModels.Nereid;
 
 public class SolutionResponseObject : GenericNeriedResponse
 {
@@ -14,6 +13,4 @@ public class SolutionResponseObject : GenericNeriedResponse
 
     [JsonPropertyName("previous_results_keys")]
     public List<string> PreviousResultsKeys { get; set; }
-
-
 }

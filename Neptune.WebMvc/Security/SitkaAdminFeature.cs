@@ -24,7 +24,7 @@ using Neptune.EFModels.Entities;
 namespace Neptune.WebMvc.Security
 {
     /// <summary>
-    /// Feature for Sitka admins to adminster across tenants
+    /// Feature for Sitka admins to administer across tenants
     /// </summary>
     [SecurityFeatureDescription("_SitkaAdmin ")]
     public class SitkaAdminFeature : NeptuneFeature

@@ -122,9 +122,23 @@ namespace Neptune.API
             {
                 c.UseSqlServer(configuration.DatabaseConnectionString, x =>
                 {
-                    x.CommandTimeout((int)TimeSpan.FromMinutes(3).TotalSeconds);
+                    x.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds);
                     x.UseNetTopologySuite();
                 });
+            });
+
+            services.AddHttpClient<NereidService>(c =>
+            {
+                c.BaseAddress = new Uri(configuration.NereidUrl);
+                c.Timeout = TimeSpan.FromDays(1);
+            }).ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                var httpClientHandler = new HttpClientHandler();
+                httpClientHandler.ClientCertificateOptions = ClientCertificateOption.Manual;
+                httpClientHandler.ServerCertificateCustomValidationCallback =
+                    (_, _, _, _) => true;
+
+                return httpClientHandler;
             });
 
             services.AddSingleton(Configuration);

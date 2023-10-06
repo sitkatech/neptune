@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Neptune.WebMvc.Common.Models.Nereid
+namespace Neptune.EFModels.Nereid
 {
     public class TreatmentFacility
     {

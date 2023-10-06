@@ -204,7 +204,21 @@ public static partial class TreatmentBMPExtensionMethods
         return true;
     }
 
-    private static bool IsFullyParameterized(this TreatmentBMP treatmentBMP, TreatmentBMPModelingAttribute bmpModelingAttributes)
+    public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP, Delineation? delineation)
+    {
+        // Planning BMPs don't need verified delineations
+        // assumes the delineation passed in is the from the "upstreamest" BMP
+        if (treatmentBMP.ProjectID == null && !(delineation?.IsVerified ?? false))
+        {
+            return false;
+        }
+
+        var treatmentBMPType = treatmentBMP.TreatmentBMPType;
+        var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
+        return !treatmentBMPType.HasMissingModelingAttributes(treatmentBMPModelingAttribute);
+    }
+
+    public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP, TreatmentBMPModelingAttribute bmpModelingAttributes)
     {
         if (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID == null)
         {

@@ -345,20 +345,6 @@ namespace Neptune.WebMvc.Models
             }
         }
 
-        public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP, Delineation? delineation)
-        {
-            // Planning BMPs don't need verified delineations
-            // assumes the delineation passed in is the from the "upstreamest" BMP
-            if (treatmentBMP.ProjectID == null && !(delineation?.IsVerified ?? false))
-            {
-                return false;
-            }
-
-            var treatmentBMPType = treatmentBMP.TreatmentBMPType;
-            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
-            return !treatmentBMPType.HasMissingModelingAttributes(treatmentBMPModelingAttribute);
-        }
-
         public static void SetTreatmentBMPPointInPolygonDataByLocationPoint(this TreatmentBMP treatmentBMP,
             Geometry locationPoint, NeptuneDbContext dbContext)
         {

@@ -10,7 +10,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
+using Neptune.EFModels;
 using Neptune.EFModels.Entities;
+using Neptune.EFModels.Nereid;
 using Neptune.Models.DataTransferObjects;
 using Neptune.WebMvc.Common.Models;
 using Neptune.WebMvc.Common.MvcResults;
@@ -310,7 +312,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewDelete(waterQualityManagementPlan, viewModel);
             }
 
-            NereidUtilities.MarkDownstreamNodeDirty(waterQualityManagementPlan, _dbContext);
+            await NereidUtilities.MarkDownstreamNodeDirty(waterQualityManagementPlan, _dbContext);
 
             waterQualityManagementPlan.DeleteFull(_dbContext);
             await _dbContext.SaveChangesAsync();

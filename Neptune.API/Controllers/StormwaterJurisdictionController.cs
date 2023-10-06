@@ -29,7 +29,7 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<BoundingBoxDto> GetBoundingBoxByProjectID([FromRoute] int projectID)
         {
-            var stormwaterJurisdictionID = Projects.GetByID(_dbContext, projectID).StormwaterJurisdictionID;
+            var stormwaterJurisdictionID = Projects.GetByIDWithChangeTracking(_dbContext, projectID).StormwaterJurisdictionID;
             var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByJurisdictionID(_dbContext, stormwaterJurisdictionID);
             return Ok(boundingBoxDto);
         }

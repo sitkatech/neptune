@@ -1,7 +1,7 @@
-﻿using Neptune.EFModels.Entities;
-using Neptune.WebMvc.Models;
+﻿using Neptune.Common;
+using Neptune.EFModels.Entities;
 
-namespace Neptune.WebMvc.Common.Models.Nereid;
+namespace Neptune.EFModels.Nereid;
 
 public static class TreatmentFacilityExtensions
 {
@@ -15,7 +15,7 @@ public static class TreatmentFacilityExtensions
 
         // in the baseline condition, anything built after 2003 is treated as if it doesn't exist.
         if (!isFullyParameterized || 
-            (isBaselineCondition && treatmentBMP.YearBuilt.HasValue && treatmentBMP.YearBuilt.Value > NereidUtilities.BASELINE_CUTOFF_YEAR))
+            (isBaselineCondition && treatmentBMP.YearBuilt.HasValue && treatmentBMP.YearBuilt.Value > Constants.NEREID_BASELINE_CUTOFF_YEAR))
         {
             return new TreatmentFacility
             {
@@ -39,7 +39,7 @@ public static class TreatmentFacilityExtensions
         else if (modelingAttribute.AverageDivertedFlowrate != null)
         {
             // AverageDivertedFlowrate is collected in gallons per day instead of CFS, but we need to send CFS to Nereid.
-            treatmentRate = modelingAttribute.AverageDivertedFlowrate * NereidUtilities.GPD_TO_CFS;
+            treatmentRate = modelingAttribute.AverageDivertedFlowrate * Constants.GPD_TO_CFS;
         }
         else if (modelingAttribute.AverageTreatmentFlowrate != null)
         {
@@ -75,7 +75,7 @@ public static class TreatmentFacilityExtensions
         else if (modelingAttribute.DesignLowFlowDiversionCapacity != null)
         {
             // DesignLowFlowDiversionCapacity is collected in GPD, so convert to CFS
-            designCapacity = modelingAttribute.DesignLowFlowDiversionCapacity * NereidUtilities.GPD_TO_CFS;
+            designCapacity = modelingAttribute.DesignLowFlowDiversionCapacity * Constants.GPD_TO_CFS;
         }
 
         if (designCapacity == null)
@@ -109,7 +109,7 @@ public static class TreatmentFacilityExtensions
             RoutingConfiguration = modelingAttribute.RoutingConfigurationID == RoutingConfiguration.Online.RoutingConfigurationID,
             StorageVolumeBelowLowestOutletElevation = modelingAttribute.StorageVolumeBelowLowestOutletElevation,
             // SummerHarvestedWaterDemand is collected in GPD, so convert to CFS
-            SummerHarvestedWaterDemand = modelingAttribute.SummerHarvestedWaterDemand  * NereidUtilities.GPD_TO_CFS,
+            SummerHarvestedWaterDemand = modelingAttribute.SummerHarvestedWaterDemand  * Constants.GPD_TO_CFS,
             TimeOfConcentration = modelingAttribute.TimeOfConcentration?.TimeOfConcentrationDisplayName ?? TimeOfConcentration.FiveMinutes.TimeOfConcentrationDisplayName,
             TotalDrawdownTime = modelingAttribute.DrawdownTimeforWQDetentionVolume,
             TotalEffectiveBMPVolume = modelingAttribute.TotalEffectiveBMPVolume,
@@ -119,7 +119,7 @@ public static class TreatmentFacilityExtensions
             UpstreamBMP = modelingAttribute.UpstreamTreatmentBMPID.HasValue ? NereidUtilities.TreatmentBMPNodeID(modelingAttribute.UpstreamTreatmentBMPID.Value) : null,
             WaterQualityDetentionVolume = modelingAttribute.WaterQualityDetentionVolume,
             // WinterHarvestedWaterDemand is collected in GPD, so convert to CFS
-            WinterHarvestedWaterDemand = modelingAttribute.WinterHarvestedWaterDemand * NereidUtilities.GPD_TO_CFS,
+            WinterHarvestedWaterDemand = modelingAttribute.WinterHarvestedWaterDemand * Constants.GPD_TO_CFS,
             EliminateAllDryWeatherFlowOverride = modelingAttribute.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
         };
         return treatmentFacility;

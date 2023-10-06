@@ -1,4 +1,4 @@
-﻿namespace Neptune.WebMvc.Common.Models.Nereid
+﻿namespace Neptune.EFModels.Nereid
 {
     public enum NereidJobStatus
     {

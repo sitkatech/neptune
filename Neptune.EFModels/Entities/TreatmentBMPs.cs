@@ -475,5 +475,20 @@ namespace Neptune.EFModels.Entities
                 .Where(x => x.ProjectID == null && x.InventoryIsVerified && x.TreatmentBMPType.IsAnalyzedInModelingModule)
                 .Select(x => x.AsDisplayDto()).ToList();
         }
+
+        public static List<TreatmentBMP> ListModelingTreatmentBMPs(NeptuneDbContext dbContext, int? projectID = null, List<int>? projectRSBIDs = null)
+        {
+            var toReturn = dbContext.TreatmentBMPs.AsNoTracking().Where(x => x.RegionalSubbasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null && x.ModelBasinID != null).ToList();
+
+            if (projectID != null && projectRSBIDs != null)
+            {
+                toReturn = toReturn.Where(x => projectRSBIDs.Contains(x.RegionalSubbasinID.Value) && (x.ProjectID == null || x.ProjectID == projectID)).ToList();
+            }
+            else
+            {
+                toReturn = toReturn.Where(x => x.ProjectID == null).ToList();
+            }
+            return toReturn;
+        }
     }
 }

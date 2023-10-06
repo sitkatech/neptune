@@ -1,8 +1,7 @@
 ﻿using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
-using Neptune.WebMvc.Areas.Modeling.Models.Nereid;
 
-namespace Neptune.WebMvc.Common.Models.Nereid
+namespace Neptune.EFModels.Nereid
 {
     public class SolutionRequestObject
     {

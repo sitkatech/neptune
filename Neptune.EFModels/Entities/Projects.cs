@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using Neptune.Models.DataTransferObjects;
-using Microsoft.AspNetCore.Http;
+﻿using Neptune.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+using Neptune.Common.DesignByContract;
 
 namespace Neptune.EFModels.Entities
 {
     public partial class Projects
     {
-        private static IQueryable<Project> GetProjectsImpl(NeptuneDbContext dbContext)
+        private static IQueryable<Project> GetImpl(NeptuneDbContext dbContext)
         {
             return dbContext.Projects
                 .Include(x => x.Organization)
-                .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
+                .Include(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
                 .Include(x => x.CreatePerson)
                 .Include(x => x.PrimaryContactPerson)
                 .AsNoTracking();
@@ -23,17 +19,38 @@ namespace Neptune.EFModels.Entities
 
         public static List<ProjectSimpleDto> ListAsSimpleDto(NeptuneDbContext dbContext)
         {
-            return GetProjectsImpl(dbContext).OrderByDescending(x => x.ProjectID).Select(x => x.AsSimpleDto()).ToList();
+            return GetImpl(dbContext).OrderByDescending(x => x.ProjectID).Select(x => x.AsSimpleDto()).ToList();
+        }
+
+        public static Project GetByIDWithChangeTracking(NeptuneDbContext dbContext, int projectID)
+        {
+            var project = GetImpl(dbContext)
+                .SingleOrDefault(x => x.ProjectID == projectID);
+            Check.RequireNotNull(project, $"Project with ID {projectID} not found!");
+            return project;
+        }
+
+        public static Project GetByIDWithChangeTracking(NeptuneDbContext dbContext, ProjectPrimaryKey projectPrimaryKey)
+        {
+            return GetByIDWithChangeTracking(dbContext, projectPrimaryKey.PrimaryKeyValue);
         }
 
         public static Project GetByID(NeptuneDbContext dbContext, int projectID)
         {
-            return dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
+            var project = GetImpl(dbContext).AsNoTracking()
+                .SingleOrDefault(x => x.ProjectID == projectID);
+            Check.RequireNotNull(project, $"Project with ID {projectID} not found!");
+            return project;
+        }
+
+        public static Project GetByID(NeptuneDbContext dbContext, ProjectPrimaryKey projectPrimaryKey)
+        {
+            return GetByID(dbContext, projectPrimaryKey.PrimaryKeyValue);
         }
 
         public static ProjectSimpleDto GetByIDAsSimpleDto(NeptuneDbContext dbContext, int projectID)
         {
-            return GetProjectsImpl(dbContext).SingleOrDefault(x => x.ProjectID == projectID).AsSimpleDto();
+            return GetByID(dbContext, projectID).AsSimpleDto();
         }
 
         public static List<int> ListProjectIDs(NeptuneDbContext dbContext)
@@ -51,7 +68,7 @@ namespace Neptune.EFModels.Entities
 
             var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
 
-            return GetProjectsImpl(dbContext)
+            return GetImpl(dbContext)
                 .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
                 .OrderByDescending(x => x.ProjectID)
                 .Select(x => x.AsSimpleDto())
@@ -290,7 +307,7 @@ namespace Neptune.EFModels.Entities
 
         public static IEnumerable<Project> ListOCTAM2Tier2Projects(NeptuneDbContext dbContext)
         {
-            return GetProjectsImpl(dbContext).Where(x => x.ShareOCTAM2Tier2Scores).ToList();
+            return GetImpl(dbContext).Where(x => x.ShareOCTAM2Tier2Scores).ToList();
         }
 
         public static List<int> ListOCTAM2Tier2ProjectIDs(NeptuneDbContext dbContext)

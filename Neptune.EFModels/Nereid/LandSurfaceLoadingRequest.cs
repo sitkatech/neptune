@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Neptune.EFModels.Entities;
 
-namespace Neptune.WebMvc.Common.Models.Nereid
+namespace Neptune.EFModels.Nereid
 {
     public class LandSurfaceLoadingRequest
     {

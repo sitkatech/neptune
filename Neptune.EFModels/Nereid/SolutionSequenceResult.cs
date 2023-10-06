@@ -1,30 +1,28 @@
-﻿using System.Collections.Generic;
-using Neptune.WebMvc.Common.Models.Nereid;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace Neptune.WebMvc.Areas.Modeling.Models.Nereid
+namespace Neptune.EFModels.Nereid
 {
     public class SolutionSequenceResult
     {
-        [JsonProperty("solution_sequence")]
+        [JsonPropertyName("solution_sequence")]
         public SolutionSequenceInternal SolutionSequence { get; set; }
     }
 
     public class SolutionSequenceInternal
     {
-        [JsonProperty("parallel")]
+        [JsonPropertyName("parallel")]
         public List<SolutionSequenceParallel> Parallel { get; set; }
     }
 
     public class SolutionSequenceParallel
     {
-        [JsonProperty("series")]
+        [JsonPropertyName("series")]
         public List<SolutionSequenceSeries> Series { get; set; }
     }
 
     public class SolutionSequenceSeries
     {
-        [JsonProperty("nodes")]
+        [JsonPropertyName("nodes")]
         public List<Node> Nodes { get; set; }
     }
 }

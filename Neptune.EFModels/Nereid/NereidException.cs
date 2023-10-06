@@ -1,4 +1,4 @@
-namespace Neptune.WebMvc.Common;
+namespace Neptune.EFModels.Nereid;
 
 public class NereidException<TReq, TResp> : Exception
 {
