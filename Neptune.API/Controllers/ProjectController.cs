@@ -3,21 +3,16 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using CsvHelper;
 using Neptune.Models.DataTransferObjects;
 using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Neptune.Common.GeoSpatial;
 using DelineationSimpleDto = Neptune.Models.DataTransferObjects.DelineationSimpleDto;
 using ProjectDocumentSimpleDto = Neptune.Models.DataTransferObjects.ProjectDocumentSimpleDto;
 using ProjectSimpleDto = Neptune.Models.DataTransferObjects.ProjectSimpleDto;
@@ -28,21 +23,15 @@ namespace Neptune.API.Controllers
 
     public class ProjectController : SitkaController<ProjectController>
     {
-        private readonly HttpClient _neptuneClient;
-        private readonly IWebHostEnvironment _environment;
-        private readonly AzureBlobStorageService _blobStorageService;
+        private readonly AzureBlobStorageService _azureBlobStorageService;
 
         public ProjectController(NeptuneDbContext dbContext,
             ILogger<ProjectController> logger,
             KeystoneService keystoneService,
             IOptions<NeptuneConfiguration> neptuneConfiguration,
-            IHttpClientFactory httpClientFactory, 
-            IWebHostEnvironment environment,
-            AzureBlobStorageService blobStorageService) : base(dbContext, logger, keystoneService, neptuneConfiguration)
+            AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, keystoneService, neptuneConfiguration)
         {
-            _neptuneClient = httpClientFactory.CreateClient("NeptuneClient");
-            _environment = environment;
-            _blobStorageService = blobStorageService;
+            _azureBlobStorageService = azureBlobStorageService;
         }
 
         [HttpGet("projects/{projectID}")]
@@ -149,7 +138,7 @@ namespace Neptune.API.Controllers
 
             var fileResource =
                 await HttpUtilities.MakeFileResourceFromFormFile(projectDocumentUpsertDto.FileResource, _dbContext,
-                    HttpContext, _blobStorageService);
+                    HttpContext, _azureBlobStorageService);
 
             var projectDocument = new ProjectDocument()
             {
@@ -288,40 +277,27 @@ namespace Neptune.API.Controllers
 
         [HttpPost("projects/{projectID}/modeled-performance")]
         [JurisdictionEditFeature]
-        public IActionResult TriggerModeledPerformanceForProject([FromRoute] int projectID)
+        public async Task<IActionResult> TriggerModeledPerformanceForProject([FromRoute] int projectID)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var project = Projects.GetByIDWithChangeTracking(_dbContext, projectID);
-            if (ThrowNotFound(project, "Project", projectID, out var actionResult))
-            {
-                return actionResult;
-            }
             if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
             {
                 return Forbid();
             }
 
-            var requestObject = new
+            var projectNetworkSolveHistoryEntity = new ProjectNetworkSolveHistory
             {
-                webServiceAccessTokenGuidAsString = personDto.WebServiceAccessToken.ToString()
+                ProjectID = projectID,
+                RequestedByPersonID = personDto.PersonID,
+                ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Queued,
+                LastUpdated = DateTime.UtcNow
             };
-
-            var requestBaseURL = _neptuneConfiguration.OcStormwaterToolsModelingBaseUrl;
-            //Necessary for circumnavigating the container accessing localhost issue
-            if (_environment.IsDevelopment())
-            {
-                requestBaseURL = "http://host.docker.internal";
-            }
-
-            var result = _neptuneClient.PostAsync($"{requestBaseURL}/Nereid/NetworkSolveForProject/{projectID}", new StringContent(GeoJsonSerializer.Serialize(requestObject), Encoding.UTF8, "application/json")).Result;
-            var body = result.Content.ReadAsStringAsync().Result;
-
-            if (!result.IsSuccessStatusCode)
-            {
-                return StatusCode((int)result.StatusCode, body);
-            }
-
-            return Ok();
+            await _dbContext.ProjectNetworkSolveHistories.AddAsync(projectNetworkSolveHistoryEntity);
+            await _dbContext.SaveChangesAsync();
+            // todo: hangfire
+            //BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunNetworkSolveForProject(projectID, projectNetworkSolveHistoryEntity.ProjectNetworkSolveHistoryID));
+            return Ok($"Network solve for Project with ID:{projectID} has begun.");
         }
 
         [HttpGet("projects/{projectID}/delineations")]

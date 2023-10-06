@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -17,7 +18,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpGet("/fieldDefinitions")]
-        public ActionResult<List<FieldDefinitionDto>> ListAllFieldDefinitions()
+        public ActionResult<List<FieldDefinitionDto>> List()
         {
             var fieldDefinitionDtos = FieldDefinitions.List(_dbContext);
             return fieldDefinitionDtos;
@@ -25,7 +26,7 @@ namespace Neptune.API.Controllers
 
 
         [HttpGet("fieldDefinitions/{fieldDefinitionTypeID}")]
-        public ActionResult<FieldDefinitionDto> GetFieldDefinition([FromRoute] int fieldDefinitionTypeID)
+        public ActionResult<FieldDefinitionDto> Get([FromRoute] int fieldDefinitionTypeID)
         {
             var fieldDefinitionDto = FieldDefinitions.GetByFieldDefinitionTypeID(_dbContext, fieldDefinitionTypeID);
             return RequireNotNullThrowNotFound(fieldDefinitionDto, "FieldDefinition", fieldDefinitionTypeID);
@@ -33,10 +34,10 @@ namespace Neptune.API.Controllers
 
         [HttpPut("fieldDefinitions/{fieldDefinitionTypeID}")]
         [AdminFeature]
-        public ActionResult<FieldDefinitionDto> UpdateFieldDefinition([FromRoute] int fieldDefinitionTypeID,
+        public async Task<ActionResult<FieldDefinitionDto>> Update([FromRoute] int fieldDefinitionTypeID,
             [FromBody] FieldDefinitionDto fieldDefinitionUpdateDto)
         {
-            var fieldDefinitionDto = FieldDefinitions.GetByFieldDefinitionTypeID(_dbContext, fieldDefinitionTypeID);
+            var fieldDefinitionDto = EFModels.Entities.FieldDefinitions.GetByFieldDefinitionTypeID(_dbContext, fieldDefinitionTypeID);
             if (ThrowNotFound(fieldDefinitionDto, "FieldDefinition", fieldDefinitionTypeID, out var actionResult))
             {
                 return actionResult;
@@ -47,8 +48,7 @@ namespace Neptune.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var updatedFieldDefinitionDto =
-                FieldDefinitions.UpdateFieldDefinition(_dbContext, fieldDefinitionTypeID, fieldDefinitionUpdateDto);
+            var updatedFieldDefinitionDto = await FieldDefinitions.Update(_dbContext, fieldDefinitionTypeID, fieldDefinitionUpdateDto);
             return Ok(updatedFieldDefinitionDto);
         }
     }

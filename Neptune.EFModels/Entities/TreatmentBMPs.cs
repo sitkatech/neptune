@@ -478,7 +478,7 @@ namespace Neptune.EFModels.Entities
 
         public static List<TreatmentBMP> ListModelingTreatmentBMPs(NeptuneDbContext dbContext, int? projectID = null, List<int>? projectRSBIDs = null)
         {
-            var toReturn = dbContext.TreatmentBMPs.AsNoTracking().Where(x => x.RegionalSubbasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null && x.ModelBasinID != null).ToList();
+            var toReturn = GetImpl(dbContext).AsNoTracking().Where(x => x.RegionalSubbasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null && x.ModelBasinID != null).ToList();
 
             if (projectID != null && projectRSBIDs != null)
             {

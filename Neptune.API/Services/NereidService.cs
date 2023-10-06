@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -60,40 +59,35 @@ public class NereidService
         return list;
     }
 
+    public async Task<object> HealthCheck()
+    {
+        return await GetJsonImpl<object>("config", GeoJsonSerializer.DefaultSerializerOptions);
+
+    }
+
     public async Task<NereidResult<TResp>> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl)
     {
-        NereidResult<TResp> responseObject = null;
         var serializedRequest = GeoJsonSerializer.Serialize(nereidRequestObject);
         var requestStringContent = new StringContent(serializedRequest, System.Text.Encoding.UTF8, "application/json");
         _logger.LogInformation($"Executing Nereid request: {nereidRequestUrl}");
-        var requestLogFile = Path.Combine(_neptuneConfiguration.NereidLogFileFolder, $"NereidRequest_{DateTime.Now:yyyyMMddHHmmss}.json");
-        await File.WriteAllTextAsync(requestLogFile, serializedRequest);
+        //todo: log nereid requests for troubleshooting?
+        //var requestLogFile = Path.Combine(_neptuneConfiguration.NereidLogFileFolder, $"NereidRequest_{DateTime.Now:yyyyMMddHHmmss}.json");
+        //await File.WriteAllTextAsync(requestLogFile, serializedRequest);
         var httpResponseMessage = await PostJsonImpl<TReq>(nereidRequestUrl, nereidRequestObject, GeoJsonSerializer.DefaultSerializerOptions);
             var postResultContentAsStringResult = await httpResponseMessage.Content.ReadAsStringAsync();
-        var responseLogFile = Path.Combine(_neptuneConfiguration.NereidLogFileFolder, $"NereidResponse_{DateTime.Now:yyyyMMddHHmmss}.json");
-        await File.WriteAllTextAsync(responseLogFile, postResultContentAsStringResult);
+        //todo: log nereid responses for troubleshooting?
+        //var responseLogFile = Path.Combine(_neptuneConfiguration.NereidLogFileFolder, $"NereidResponse_{DateTime.Now:yyyyMMddHHmmss}.json");
+        //await File.WriteAllTextAsync(responseLogFile, postResultContentAsStringResult);
 
-        NereidResult<TResp> deserializeObject = null;
-        try
+        NereidResult<TResp> nereidResultResponse = null;
+        nereidResultResponse = GeoJsonSerializer.Deserialize<NereidResult<TResp>>(postResultContentAsStringResult);
+        if (nereidResultResponse.Detail != null)
         {
-            deserializeObject = GeoJsonSerializer.Deserialize<NereidResult<TResp>>(postResultContentAsStringResult);
-        }
-        catch (Exception jre)
-        {
-            throw new Exception(
-                $"Error deserializing result from Nereid. Raw result content logged at {responseLogFile}. Raw request content logged at {requestLogFile}",
-                jre);
+            throw new Exception(nereidResultResponse.Detail.ToString());
         }
 
-        if (deserializeObject.Detail != null)
-        {
-            throw new Exception(deserializeObject.Detail.ToString());
-        }
-
-        return responseObject;
+        return nereidResultResponse;
     }
-
-
 
     public async Task<NetworkSolveResult> DeltaSolve(NeptuneDbContext dbContext, List<DirtyModelNode> dirtyModelNodes, bool isBaselineCondition)
     {
@@ -514,7 +508,7 @@ public class NereidService
         return graph;
     }
 
-    public void MakeRSBNodesAndEdges(List<RegionalSubbasin> regionalSubbasinsInCoverage, out List<Edge> rsbEdges, out List<Node> rsbNodes)
+    private static void MakeRSBNodesAndEdges(List<RegionalSubbasin> regionalSubbasinsInCoverage, out List<Edge> rsbEdges, out List<Node> rsbNodes)
     {
         rsbNodes = regionalSubbasinsInCoverage
             .Select(x => new Node { ID = NereidUtilities.RegionalSubbasinNodeID(x.OCSurveyCatchmentID), RegionalSubbasinID = x.RegionalSubbasinID }).ToList();
@@ -528,7 +522,7 @@ public class NereidService
                 }).ToList();
     }
 
-    public void MakeDistributedBMPNodesAndEdges(NeptuneDbContext dbContext, out List<Edge> distributedBMPEdges, out List<Node> distributedBMPNodes, int? projectID = null, List<int> projectRegionalSubbasinIDs = null)
+    private static void MakeDistributedBMPNodesAndEdges(NeptuneDbContext dbContext, out List<Edge> distributedBMPEdges, out List<Node> distributedBMPNodes, int? projectID = null, List<int> projectRegionalSubbasinIDs = null)
     {
         var vNereidTreatmentBMPRegionalSubbasins = dbContext.vNereidTreatmentBMPRegionalSubbasins.ToList();
         if (projectRegionalSubbasinIDs != null && projectRegionalSubbasinIDs.Any())
@@ -557,7 +551,7 @@ public class NereidService
         }
     }
 
-    public void MakeDistributedDelineationNodesAndEdges(NeptuneDbContext dbContext, out List<Edge> delineationEdges, out List<Node> delineationNodes, int? projectID = null, List<int> projectRegionalSubbasinIDs = null)
+    private static void MakeDistributedDelineationNodesAndEdges(NeptuneDbContext dbContext, out List<Edge> delineationEdges, out List<Node> delineationNodes, int? projectID = null, List<int> projectRegionalSubbasinIDs = null)
     {
         var distributedDelineations = dbContext.Delineations.Include(x => x.TreatmentBMP)
             .Where(x => x.DelineationTypeID == DelineationType.Distributed.DelineationTypeID &&

@@ -297,6 +297,209 @@
         }
       }
     },
+    "/nereid/health": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/validate": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/subgraph": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/solution-sequence": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/land-surface-loading": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/land-surface-loading-baseline": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/treatment-facility-validate": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/treatment-facility-validate/{treatmentBMPID}": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/no-treatment-facility-validate": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/treatment-sites": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/treatment-facilities": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/land-surface-table": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/total-network-graph": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/solution-test-case": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/solve-oc": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/delta-solve-test": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/organizations": {
       "get": {
         "tags": [
@@ -1494,7 +1697,6 @@
         "tags": [
           "SystemInfo"
         ],
-        "operationId": "GetSystemInfo",
         "responses": {
           "200": {
             "description": "Success",

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +15,7 @@ using Neptune.EFModels.Nereid;
 
 namespace Neptune.API.Controllers
 {
+    //todo: turn SitkaAdminFeature back on for nereid endpoints when done testing
     public class NereidController : SitkaController<NereidController>
     {
         private readonly NereidService _nereidService;
@@ -27,14 +27,6 @@ namespace Neptune.API.Controllers
             NereidService nereidService) : base(dbContext, logger, keystoneService, neptuneConfiguration)
         {
             _nereidService = nereidService;
-        }
-
-
-        public static HttpClient HttpClient { get; set; }
-
-        static NereidController()
-        {
-            HttpClient = new HttpClient();
         }
 
         ///// <summary>
@@ -64,6 +56,21 @@ namespace Neptune.API.Controllers
         //    return Content("HRU refresh will run in the background");
         //}
 
+        //[HttpGet]
+        //[SitkaAdminFeature]
+        //public IActionResult DeltaSolve()
+        //{
+        //    BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDeltaSolve());
+        //    return Ok("En-queued");
+        //}
+
+        [HttpGet("nereid/health")]
+        public async Task<IActionResult> HealthCheck()
+        {
+            var healthCheck = await _nereidService.HealthCheck();
+            return Ok(healthCheck);
+        }
+
         /// <summary>
         /// Build the entire Network Graph and send it to the Nereid network/validate endpoint.
         /// Can be used to diagnose issues in the network data, the network builder, or the Nereid validator.
@@ -71,8 +78,8 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
+        [HttpGet("nereid/validate")]
+        //[SitkaAdminFeature]
         public async Task<IActionResult> ValidateNetworkGraph()
         {
             var networkValidatorUrl = "api/v1/network/validate";
@@ -108,8 +115,8 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
+        [HttpGet("nereid/subgraph")]
+        //[SitkaAdminFeature]
         public async Task<IActionResult> Subgraph()
         {
             var subgraphUrl = "api/v1/network/subgraph";
@@ -147,8 +154,8 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
+        [HttpGet("nereid/solution-sequence")]
+        //[SitkaAdminFeature]
         public async Task<IActionResult> SolutionSequence()
         {
             var solutionSequenceUrl = "api/v1/network/solution_sequence?min_branch_size=12";
@@ -185,8 +192,8 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
+        [HttpGet("nereid/land-surface-loading")]
+        //[SitkaAdminFeature]
         public async Task<IActionResult> Loading()
         {
             var landSurfaceLoadingUrl = "api/v1/land_surface/loading?details=true&state=ca&region=oc";
@@ -204,7 +211,7 @@ namespace Neptune.API.Controllers
 
             var returnValue = new
             {
-                SubgraphResult = GeoJsonSerializer.Serialize(responseObject),
+                SubgraphResult = responseObject,
                 SubgraphCallElapsedTime = (buildLoadingInputEndTime - buildLoadingInputStartTime).Milliseconds,
             };
 
@@ -217,8 +224,8 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
+        [HttpGet("nereid/land-surface-loading-baseline")]
+        //[SitkaAdminFeature]
         public async Task<IActionResult> BaselineLoading()
         {
             var landSurfaceLoadingUrl = "api/v1/land_surface/loading?details=true&state=ca&region=oc";
@@ -237,21 +244,21 @@ namespace Neptune.API.Controllers
             var returnValue = new
             {
                 LoadingRequest = landSurfaceLoadingRequest,
-                LoadingResult = GeoJsonSerializer.Serialize(responseObject),
+                LoadingResult = responseObject,
                 SubgraphCallElapsedTime = (buildLoadingInputEndTime - buildLoadingInputStartTime).Milliseconds,
             };
 
             return Ok(returnValue);
         }
-        
+
         /// <summary>
         /// Runs a test case against the Nereid treatment_facility/validate endpoint.
         /// Confirms that we are building one of the four inputs to the Nereid watershed/solve endpoint correctly.
         /// Available only to Sitka Admins.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
+        [HttpGet("nereid/treatment-facility-validate")]
+        //[SitkaAdminFeature]
         public async Task<IActionResult> TreatmentFacility()
         {
             var modelingTreatmentBMPs = TreatmentBMPs.ListModelingTreatmentBMPs(_dbContext);
@@ -271,9 +278,9 @@ namespace Neptune.API.Controllers
 
             return Ok(new
             {
-                rpcTime = stopwatchElapsedMilliseconds,
-                responseObject = GeoJsonSerializer.Serialize(responseObject),
-                requestContent = GeoJsonSerializer.Serialize(treatmentFacilityTable)
+                ElapsedTime = stopwatchElapsedMilliseconds,
+                ResponseObject = responseObject,
+                RequestContent = treatmentFacilityTable
             });
         }
 
@@ -283,13 +290,13 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
-        public async Task<IActionResult> ValidateTreatmentFacility(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        [HttpGet("nereid/treatment-facility-validate/{treatmentBMPID}")]
+        //[SitkaAdminFeature]
+        public async Task<IActionResult> ValidateTreatmentFacility([FromRoute] int treatmentBMPID)
         {
             var treatmentFacilityUrl = "api/v1/treatment_facility/validate?state=ca&region=oc";
 
-            var treatmentFacility = treatmentBMPPrimaryKey.EntityObject.ToTreatmentFacility(true);
+            var treatmentFacility = TreatmentBMPs.GetByID(_dbContext, treatmentBMPID).ToTreatmentFacility(true);
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = new List<TreatmentFacility> {treatmentFacility} };
 
@@ -301,9 +308,9 @@ namespace Neptune.API.Controllers
             return Ok(
                 new
                 {
-                    rpcTime = stopwatchElapsedMilliseconds,
-                    responseObject = GeoJsonSerializer.Serialize(responseObject),
-                    requestContent = GeoJsonSerializer.Serialize(treatmentFacilityTable)
+                    ElapsedTime = stopwatchElapsedMilliseconds,
+                    ResponseObject = responseObject,
+                    RequestContent = treatmentFacilityTable
                 });
         }
 
@@ -314,8 +321,8 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
+        [HttpGet("nereid/no-treatment-facility-validate")]
+        //[SitkaAdminFeature]
         public async Task<IActionResult> NoTreatmentFacility()
         {
             var treatmentFacilityUrl = "api/v1/treatment_facility/validate?state=ca&region=oc";
@@ -330,9 +337,9 @@ namespace Neptune.API.Controllers
                 return Ok(
                     new
                     {
-                        firstCallFailed = false,
-                        responseObject = GeoJsonSerializer.Serialize(responseObject),
-                        requestContent = GeoJsonSerializer.Serialize(treatmentFacilityTable)
+                        FirstCallFailed = false,
+                        ResponseObject = responseObject,
+                        RequestContent = treatmentFacilityTable
                     });
             }
             catch (Exception)
@@ -340,8 +347,8 @@ namespace Neptune.API.Controllers
                 return Ok(
                     new
                     {
-                        firstCallFailed = true,
-                        requestContent = GeoJsonSerializer.Serialize(treatmentFacilityTable)
+                        FirstCallFailed = true,
+                        RequestContent = treatmentFacilityTable
                     });
             }
         }
@@ -349,12 +356,12 @@ namespace Neptune.API.Controllers
 
         /// <summary>
         /// Builds and displays the treatment_site table, one of the four inputs to the Nereid watershed/solve endpoint.
-        /// Thre is no validator for this; the only test fixture available is to manually confirm the schema and the data.
+        /// There is no validator for this; the only test fixture available is to manually confirm the schema and the data.
         /// Available only to Sitka Admins
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
+        [HttpGet("nereid/treatment-sites")]
+        //[SitkaAdminFeature]
         public IActionResult TreatmentSiteTable()
         {
             var waterQualityManagementPlanNodes = _nereidService.GetWaterQualityManagementPlanNodes(_dbContext);
@@ -377,11 +384,11 @@ namespace Neptune.API.Controllers
 
             var treatmentSiteTable = new TreatmentSiteTable(){TreatmentSites = treatmentSites};
 
-            return Ok(GeoJsonSerializer.Serialize(treatmentSiteTable));
+            return Ok(treatmentSiteTable);
         }
 
-        [HttpGet]
-        [SitkaAdminFeature]
+        [HttpGet("nereid/treatment-facilities")]
+        //[SitkaAdminFeature]
         public IActionResult TreatmentFacilityTable()
         {
             var treatmentFacilities = TreatmentBMPs.ListModelingTreatmentBMPs(_dbContext)
@@ -389,31 +396,25 @@ namespace Neptune.API.Controllers
                 .Select(x => x.ToTreatmentFacility(false)).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities };
-
-            var serializeObject = GeoJsonSerializer.Serialize(treatmentFacilityTable);
-
-            return Ok(serializeObject);
+            return Ok(treatmentFacilityTable);
         }
 
 
-        [HttpGet]
-        [SitkaAdminFeature]
+        [HttpGet("nereid/land-surface-table")]
+        //[SitkaAdminFeature]
         public IActionResult LandSurfaceTable()
         {
             var vNereidLoadingInputs = _dbContext.vNereidLoadingInputs.ToList();
             var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest(vNereidLoadingInputs, false);
-
-
-            return Ok(GeoJsonSerializer.Serialize(landSurfaceLoadingRequest));
+            return Ok(landSurfaceLoadingRequest);
         }
 
-        [HttpGet]
-        [SitkaAdminFeature]
+        [HttpGet("nereid/total-network-graph")]
+        //[SitkaAdminFeature]
         public IActionResult NetworkTable()
         {
-
             var graph = _nereidService.BuildTotalNetworkGraph(_dbContext);
-            return Ok(GeoJsonSerializer.Serialize(graph));
+            return Ok(graph);
         }
 
         /// <summary>
@@ -424,8 +425,8 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
+        [HttpGet("nereid/solution-test-case")]
+        //[SitkaAdminFeature]
         public async Task<IActionResult> SolutionTestCase()
         {
             var stopwatch = new Stopwatch();
@@ -448,15 +449,15 @@ namespace Neptune.API.Controllers
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
             stopwatch.Stop();
 
-            return Ok(new { elapsed = stopwatchElapsedMilliseconds, responseContent });
+            return Ok(new { ElapsedTime = stopwatchElapsedMilliseconds, ResponseContent = responseContent });
         }
 
         /// <summary>
         /// Runs Nereid on the entire OC network graph using the solution sequence pattern.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
+        [HttpGet("nereid/solve-oc")]
+        //[SitkaAdminFeature]
         public async Task<IActionResult> SolveOC()
         {
             try
@@ -492,8 +493,8 @@ namespace Neptune.API.Controllers
         /// Testing purposes only; Sitka Admins only.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
+        [HttpGet("nereid/delta-solve-test")]
+        //[SitkaAdminFeature]
         public async Task<IActionResult> DeltaSolveTest()
         {
             var dirtyModelNodes = _dbContext.DirtyModelNodes.ToList();
@@ -530,52 +531,5 @@ namespace Neptune.API.Controllers
                 return Ok(solutionSummary);
             }
         }
-
-        //[LoggedInUnclassifiedFeature]
-        //public IActionResult DeltaSolve()
-        //{
-        //    BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDeltaSolve());
-        //    return Ok("En-queued");
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> NetworkSolveForProject(int projectID, [FromBody] string webServiceAccessTokenGuidAsString)
-        //{
-        //    WebServiceToken webServiceAccessToken;
-        //    try
-        //    {
-        //        //This will validate our request. If it's a valid guid they get to keep going and constructing the token will demand a valid guid
-        //        webServiceAccessToken = new WebServiceToken(webServiceAccessTokenGuidAsString);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        var error = ex;
-        //        Response.StatusCode = 400;
-        //        return Content($"Could not find user with access token: {webServiceAccessTokenGuidAsString}");
-        //    }
-
-        //    var project = Projects.GetByID(_dbContext, projectID);
-
-        //    try
-        //    {
-        //        var projectNetworkSolveHistoryEntity = new ProjectNetworkSolveHistory
-        //        {
-        //            ProjectID = projectID, 
-        //            RequestedByPersonID = webServiceAccessToken.Person.PersonID,
-        //            ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Queued,
-        //            LastUpdated = DateTime.UtcNow
-        //        };
-        //        await _dbContext.ProjectNetworkSolveHistories.AddAsync(projectNetworkSolveHistoryEntity);
-        //        await _dbContext.SaveChangesAsync();
-        //        BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunNetworkSolveForProject(projectID, projectNetworkSolveHistoryEntity.ProjectNetworkSolveHistoryID));
-        //        return Content($"Network solve for Project with ID:{projectID} has begun.");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        var error = ex;
-        //        Response.StatusCode = 500;
-        //        return Content($"Unable to start the Network Solve for ProjectID:{projectID}. Error message:{ex.Message}");
-        //    }
-        //}
     }
 }

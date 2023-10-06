@@ -26,49 +26,54 @@ namespace Neptune.EFModels.Entities
 {
     public static class FieldDefinitions
     {
-        public static FieldDefinition GetFieldDefinitionByFieldDefinitionType(NeptuneDbContext dbContext, FieldDefinitionType fieldDefinitionType)
+        public static FieldDefinition? GetByFieldDefinitionType(NeptuneDbContext dbContext, FieldDefinitionType fieldDefinitionType)
         {
-            return GetFieldDefinitionByFieldDefinitionType(dbContext, fieldDefinitionType.FieldDefinitionTypeID);
+            return GetByFieldDefinitionType(dbContext, fieldDefinitionType.FieldDefinitionTypeID);
         }
 
-        public static FieldDefinition GetFieldDefinitionByFieldDefinitionType(NeptuneDbContext dbContext, int fieldDefinitionTypeID)
+        public static FieldDefinition? GetByFieldDefinitionType(NeptuneDbContext dbContext, int fieldDefinitionTypeID)
         {
-            return GetFieldDefintionImpl(dbContext).SingleOrDefault(x => x.FieldDefinitionTypeID == fieldDefinitionTypeID);
+            return GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.FieldDefinitionTypeID == fieldDefinitionTypeID);
         }
 
-        public static FieldDefinition GetFieldDefinitionByFieldDefinitionType(NeptuneDbContext dbContext, FieldDefinitionTypeEnum fieldDefinitionTypeEnum)
+        public static FieldDefinition? GetByFieldDefinitionTypeWithChangeTracking(NeptuneDbContext dbContext, int fieldDefinitionTypeID)
         {
-            return GetFieldDefintionImpl(dbContext).SingleOrDefault(x => x.FieldDefinitionTypeID == (int)fieldDefinitionTypeEnum);
+            return GetImpl(dbContext).SingleOrDefault(x => x.FieldDefinitionTypeID == fieldDefinitionTypeID);
         }
 
-        private static IQueryable<FieldDefinition> GetFieldDefintionImpl(NeptuneDbContext dbContext)
+        public static FieldDefinition? GetByFieldDefinitionType(NeptuneDbContext dbContext, FieldDefinitionTypeEnum fieldDefinitionTypeEnum)
+        {
+            return GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.FieldDefinitionTypeID == (int)fieldDefinitionTypeEnum);
+        }
+
+        private static IQueryable<FieldDefinition> GetImpl(NeptuneDbContext dbContext)
         {
             return dbContext.FieldDefinitions.AsNoTracking();
         }
 
         public static List<FieldDefinitionDto> List(NeptuneDbContext dbContext)
         {
-            return dbContext.FieldDefinitions.Select(x => x.AsDto()).ToList();
+            return GetImpl(dbContext).AsNoTracking().Select(x => x.AsDto()).ToList();
         }
 
-        public static FieldDefinitionDto GetByFieldDefinitionTypeID(NeptuneDbContext dbContext, int FieldDefinitionTypeID)
+        public static FieldDefinitionDto? GetByFieldDefinitionTypeID(NeptuneDbContext dbContext, int fieldDefinitionTypeID)
         {
-            var fieldDefinition = dbContext.FieldDefinitions.AsNoTracking()
-                .SingleOrDefault(x => x.FieldDefinitionTypeID == FieldDefinitionTypeID);
+            var fieldDefinition = GetImpl(dbContext).AsNoTracking()
+                .SingleOrDefault(x => x.FieldDefinitionTypeID == fieldDefinitionTypeID);
 
             return fieldDefinition?.AsDto();
         }
 
-        public static FieldDefinitionDto UpdateFieldDefinition(NeptuneDbContext dbContext, int FieldDefinitionTypeID,
-            FieldDefinitionDto FieldDefinitionUpdateDto)
+        public static async Task<FieldDefinitionDto> Update(NeptuneDbContext dbContext, int fieldDefinitionTypeID,
+            FieldDefinitionDto fieldDefinitionUpdateDto)
         {
             var fieldDefinition = dbContext.FieldDefinitions
-                .SingleOrDefault(x => x.FieldDefinitionTypeID == FieldDefinitionTypeID);
+                .Single(x => x.FieldDefinitionTypeID == fieldDefinitionTypeID);
 
             // null check occurs in calling endpoint method.
-            fieldDefinition.FieldDefinitionValue = FieldDefinitionUpdateDto.FieldDefinitionValue;
+            fieldDefinition.FieldDefinitionValue = fieldDefinitionUpdateDto.FieldDefinitionValue;
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return fieldDefinition.AsDto();
         }

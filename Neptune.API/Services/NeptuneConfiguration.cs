@@ -9,8 +9,6 @@ namespace Neptune.API.Services
         public string KeystoneOpenIDUrl { get; set; }
         public string APPINSIGHTS_INSTRUMENTATIONKEY { get; set; }
         public string OcStormwaterToolsBaseUrl { get; set; }
-        public string OcStormwaterToolsModelingBaseUrl { get; set; }
         public string NereidUrl { get; set; }
-        public string NereidLogFileFolder { get; set; }
     }
 }

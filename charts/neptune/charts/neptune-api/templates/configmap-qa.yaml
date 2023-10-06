@@ -13,5 +13,5 @@ data:
   KeystoneOpenIDUrl: "https://identity-qa.sitkatech.com"
   KeystoneRedirectUrl: "https://{{ .Values.global.domains.web }}/create-user-callback"
   OcStormwaterToolsBaseUrl: "https://{{ .Values.global.domains.webmvc }}"
-  OcStormwaterToolsModelingBaseUrl: "https://modeling-{{ .Values.global.domains.webmvc }}"
+  NereidUrl: "https://{{ .Values.global.domains.nereid }}"
 {{ end }}

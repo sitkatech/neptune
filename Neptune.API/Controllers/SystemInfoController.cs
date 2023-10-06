@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -21,8 +20,8 @@ namespace Neptune.API.Controllers
             _neptuneConfiguration = neptuneConfiguration;
         }
 
-        [HttpGet("/", Name = "GetSystemInfo")]  // MCS: the pattern seems to be to allow anonymous access to this endpoint
-        [AllowAnonymous]
+        [Route("/")] // Default Route
+        [HttpGet]
         public ActionResult<SystemInfoDto> GetSystemInfo([FromServices] IWebHostEnvironment environment)
         {
             var systemInfo = new SystemInfoDto

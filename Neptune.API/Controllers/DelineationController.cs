@@ -18,7 +18,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("delineations")]
         [JurisdictionEditFeature]
-        public ActionResult<List<DelineationSimpleDto>> ListByPersonID()
+        public ActionResult<List<DelineationSimpleDto>> List()
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var delineationsUpsertDtos = Delineations.ListByPersonIDAsSimpleDto(_dbContext, personDto.PersonID);

@@ -17,7 +17,6 @@ services:
       - Ogr2OgrExecutable=${Ogr2OgrExecutable}
       - OgrInfoExecutable=${OgrInfoExecutable}
       - LogFileFolder=${LogFileFolder}
-      - NereidLogFileFolder=${LogFileFolder}/NeriedLogs
       - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
       - KeystoneOpenIDClientID=${KeystoneOpenIDClientID}
       - ParcelMapServiceUrl=${ParcelMapServiceUrl}
@@ -34,7 +33,6 @@ services:
       - PyqgisWorkingDirectory=${PyqgisWorkingDirectory}
       - PathToPyqgisLauncher=${PathToPyqgisLauncher}
       - PathToPyqgisProjData=${PathToPyqgisProjData}
-      - NereidUrl=${NereidUrl}
       - PlanningModuleUrl=${PlanningModuleUrl}
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
 
@@ -48,4 +46,4 @@ services:
       - KeystoneRedirectUrl=${KeystoneRedirectUrl}
       - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
       - OcStormwaterToolsBaseUrl=${OcStormwaterToolsBaseUrl}
-      - OcStormwaterToolsModelingBaseUrl=${OcStormwaterToolsModelingBaseUrl}
+      - NereidUrl=${NereidUrl}

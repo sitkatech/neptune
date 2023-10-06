@@ -64,7 +64,7 @@ namespace Neptune.WebMvc.Controllers
         public ViewResult Edit([FromRoute] int fieldDefinitionTypeID)
         {
             var fieldDefinitionType = FieldDefinitionType.AllLookupDictionary[fieldDefinitionTypeID];
-            var fieldDefinitionData = FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(_dbContext, fieldDefinitionTypeID);
+            var fieldDefinitionData = FieldDefinitions.GetByFieldDefinitionType(_dbContext, fieldDefinitionTypeID);
             var viewModel = new EditViewModel(fieldDefinitionData);
             return ViewEdit(fieldDefinitionType, viewModel);
         }
@@ -83,11 +83,11 @@ namespace Neptune.WebMvc.Controllers
             {
                 return ViewEdit(fieldDefinitionType, viewModel);
             }
-            var fieldDefinition = _dbContext.FieldDefinitions.SingleOrDefault(x => x.FieldDefinitionTypeID == fieldDefinitionTypeID);
+            var fieldDefinition = FieldDefinitions.GetByFieldDefinitionTypeWithChangeTracking(_dbContext, fieldDefinitionTypeID);
             if (fieldDefinition == null)
             {
                 fieldDefinition = new FieldDefinition() { FieldDefinitionTypeID = fieldDefinitionTypeID };
-                _dbContext.FieldDefinitions.Add(fieldDefinition);
+                await _dbContext.FieldDefinitions.AddAsync(fieldDefinition);
             }
 
             viewModel.UpdateModel(fieldDefinition);
@@ -109,7 +109,7 @@ namespace Neptune.WebMvc.Controllers
         public PartialViewResult FieldDefinitionDetails([FromRoute] int fieldDefinitionTypeID)
         {
             var fieldDefinitionType = FieldDefinitionType.AllLookupDictionary[fieldDefinitionTypeID];
-            var fieldDefinition = FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(_dbContext, fieldDefinitionTypeID);
+            var fieldDefinition = FieldDefinitions.GetByFieldDefinitionType(_dbContext, fieldDefinitionTypeID);
             var showEditLink = new FieldDefinitionManageFeature().HasPermissionByPerson(CurrentPerson); 
             var viewData = new FieldDefinitionDetailsViewData(fieldDefinitionType, fieldDefinition, showEditLink, _linkGenerator);
             return RazorPartialView<FieldDefinitionDetails, FieldDefinitionDetailsViewData>(viewData);

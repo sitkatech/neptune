@@ -6,9 +6,9 @@ public static class FieldDefinitionTypeModelExtensions
 {
     //private static readonly EnglishPluralizationService PluralizationService = new EnglishPluralizationService();
 
-    public static FieldDefinition GetFieldDefinitionData(this FieldDefinitionType fieldDefinitionType, NeptuneDbContext dbContext)
+    public static FieldDefinition? GetFieldDefinitionData(this FieldDefinitionType fieldDefinitionType, NeptuneDbContext dbContext)
     {
-        return FieldDefinitions.GetFieldDefinitionByFieldDefinitionType(dbContext, fieldDefinitionType);
+        return FieldDefinitions.GetByFieldDefinitionType(dbContext, fieldDefinitionType);
     }
 
 
