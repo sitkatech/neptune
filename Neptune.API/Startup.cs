@@ -156,6 +156,7 @@ namespace Neptune.API
             services.AddHttpContextAccessor();
             services.AddScoped<AzureBlobStorageService>();
             services.AddControllers();
+            services.AddCors();
 
             #region Swagger
             // Base swagger services
