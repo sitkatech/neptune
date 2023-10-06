@@ -53,7 +53,7 @@ namespace Neptune.WebMvc.Views.ManagerDashboard
             Add(string.Empty,
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.DelineationID), new DelineationDeleteFeature().HasPermission(currentPerson, x.TreatmentBMP).HasPermission), 20,
                 DhtmlxGridColumnFilterType.None);
-            Add(string.Empty,x => UrlTemplate.MakeHrefString(delineationMapUrlTemplate.ParameterReplace(x.DelineationID), "View", new Dictionary<string, string> {{"class", "gridButton"}}), 45, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty,x => UrlTemplate.MakeHrefString(delineationMapUrlTemplate.ParameterReplace(x.TreatmentBMPID), "View", new Dictionary<string, string> {{"class", "gridButton"}}), 45, DhtmlxGridColumnFilterType.None);
             Add("BMP Name", x => UrlTemplate.MakeHrefString(treatmentBMPDetailUrlTemplate.ParameterReplace(x.TreatmentBMPID), x.TreatmentBMP.TreatmentBMPName), 120, DhtmlxGridColumnFilterType.Html);
             Add("BMP Type", x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Delineation Type", x => x.DelineationType.DelineationTypeDisplayName,80, DhtmlxGridColumnFilterType.SelectFilterStrict);
