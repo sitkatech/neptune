@@ -44,7 +44,7 @@ namespace Neptune.WebMvc.Controllers
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [NeptuneViewFeature]
-        [ValidateEntityExistsAndPopulateParameterFilter("regionalSubbasinPrimaryKey")]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public JsonResult UpstreamDelineation([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var dbGeometry = treatmentBMPPrimaryKey.EntityObject.GetCentralizedDelineationGeometry4326(_dbContext);

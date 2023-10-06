@@ -758,8 +758,7 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
 
     var self = this;
 
-    this.retrieveDelineationFromNetworkTrace(selectedBMPID).then(function (response) {
-        var geoJson = JSON.parse(response);
+    this.retrieveDelineationFromNetworkTrace(selectedBMPID).then(function (geoJson) {
         self.processAndShowTraceDelineation(geoJson);
         self.removeLoading();
         self.enableUserInteraction();

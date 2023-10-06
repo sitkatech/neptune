@@ -32,7 +32,6 @@ using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common.MvcResults;
 using Microsoft.Extensions.Options;
 using Neptune.Common.GeoSpatial;
-using Neptune.EFModels;
 using Neptune.EFModels.Nereid;
 using Neptune.Models.DataTransferObjects;
 using Neptune.WebMvc.Services.Filters;
