@@ -11,7 +11,7 @@ global:
     web: "planning-neptune.aks-qa.sitkatech.com"
     webmvc: "neptune.aks-qa.sitkatech.com"
     geoserver: "geoserver-neptune.aks-qa.sitkatech.com"
-    nereid: "nereid.aks-qa.sitkatech.com"
+    nereid: "nereid"
   secrets:
     geoserverSqlServerPassword: "passwordhere"
     geoserverAdminPassword: "geomaster"
