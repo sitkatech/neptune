@@ -366,8 +366,8 @@ namespace Neptune.API.Controllers
         {
             var waterQualityManagementPlanNodes = _nereidService.GetWaterQualityManagementPlanNodes(_dbContext);
 
-            var list = _dbContext.WaterQualityManagementPlans.AsNoTracking()
-                .SelectMany(x => x.QuickBMPs.Where(y => y.TreatmentBMPType.IsAnalyzedInModelingModule)).Join(
+            var list = _dbContext.QuickBMPs.Include(x => x.TreatmentBMPType).AsNoTracking()
+                .Where(y => y.TreatmentBMPType.IsAnalyzedInModelingModule).ToList().Join(
                     waterQualityManagementPlanNodes, x => x.WaterQualityManagementPlanID,
                     x => x.WaterQualityManagementPlanID, (bmp, node) => new { bmp, node }).ToList();
 
