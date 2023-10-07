@@ -129,7 +129,7 @@ stages:
   dependsOn: Test
   condition: in(dependencies.Test.result, 'Succeeded', 'SucceededWithIssues', 'Skipped')
   jobs:
-  - job: Build Nereid
+  - job: BuildNereid
     displayName: Build Nereid
     condition: eq(variables['buildNereid'], 'true')
     pool:
