@@ -142,7 +142,7 @@ stages:
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
         azureContainerRegistry: '$(containerRegistry)'
-        dockerComposeFile: '**/docker-compose.shared.depends.yml'
+        dockerComposeFile: docker-compose.shared.depends.yml
         additionalDockerComposeFiles: |
          docker-compose.shared.env.yml
          docker-compose.shared.volumes.yml
@@ -164,7 +164,7 @@ stages:
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
         azureContainerRegistry: '$(containerRegistry)'
-        dockerComposeFile: '**/docker-compose.shared.depends.yml'
+        dockerComposeFile: docker-compose.shared.depends.yml
         additionalDockerComposeFiles: |
          docker-compose.shared.env.yml
          docker-compose.shared.volumes.yml
