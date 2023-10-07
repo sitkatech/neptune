@@ -144,11 +144,14 @@ stages:
         azureContainerRegistry: '$(containerRegistry)'
         dockerComposeFile: docker-compose.shared.depends.yml
         additionalDockerComposeFiles: |
-         docker-compose.shared.env.yml
-         docker-compose.shared.volumes.yml
-         docker-compose.shared.ports.yml
-         docker-compose.shared.build.yml
-         docker-compose.deploy.images.yml
+          docker-compose.shared.env.yml
+          docker-compose.shared.volumes.yml
+          docker-compose.shared.ports.yml
+          docker-compose.shared.build.yml
+          docker-compose.deploy.images.yml
+        dockerComposeFileArgs: |
+          ACR_SERVER=$(containerRegistry)
+          ACR_REPOSITORY=neptune
 
         action: Build services
         additionalImageTags: >-
@@ -166,11 +169,14 @@ stages:
         azureContainerRegistry: '$(containerRegistry)'
         dockerComposeFile: docker-compose.shared.depends.yml
         additionalDockerComposeFiles: |
-         docker-compose.shared.env.yml
-         docker-compose.shared.volumes.yml
-         docker-compose.shared.ports.yml
-         docker-compose.shared.build.yml
-         docker-compose.deploy.images.yml
+          docker-compose.shared.env.yml
+          docker-compose.shared.volumes.yml
+          docker-compose.shared.ports.yml
+          docker-compose.shared.build.yml
+          docker-compose.deploy.images.yml
+        dockerComposeFileArgs: |
+          ACR_SERVER=$(containerRegistry)
+          ACR_REPOSITORY=neptune
         action: Push services
         additionalImageTags: >-
           $(Build.BuildNumber)-$(environment)
