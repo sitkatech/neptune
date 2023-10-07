@@ -91,10 +91,6 @@ variable "domainGeoserver" {
   type = string
 }
 
-variable "domainNereid" {
-  type = string
-}
-
 // this variable is used for the keepers for the random resources https://registry.terraform.io/providers/hashicorp/random/latest/docs
 variable "amd_id" {
   type = string
