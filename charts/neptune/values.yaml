@@ -11,7 +11,7 @@ global:
     web: "planning-neptune.aks-qa.sitkatech.com"
     webmvc: "neptune.aks-qa.sitkatech.com"
     geoserver: "geoserver-neptune.aks-qa.sitkatech.com"
-    nereid: "nereid"
+    nereid: "neptune-nereid"
   secrets:
     geoserverSqlServerPassword: "passwordhere"
     geoserverAdminPassword: "geomaster"
@@ -288,7 +288,7 @@ nereid-tests:
   fullnameOverride: ""
   namespace: h2o
   serviceAccount:
-    create: true
+    create: true  
     annotations: {}
     name: ""
   podAnnotations: {}
