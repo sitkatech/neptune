@@ -158,6 +158,8 @@ stages:
           $(Build.BuildNumber)-$(environment)
 
           $(environment)
+
+          $(nereidTag)
         includeSourceTags: true
         includeLatestTag: true
 
@@ -182,6 +184,8 @@ stages:
           $(Build.BuildNumber)-$(environment)
 
           $(environment)
+
+          $(nereidTag)
         includeSourceTags: true
         includeLatestTag: true
 
