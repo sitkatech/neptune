@@ -2671,9 +2671,11 @@
         "type": "object",
         "properties": {
           "FirstName": {
+            "minLength": 1,
             "type": "string"
           },
           "LastName": {
+            "minLength": 1,
             "type": "string"
           },
           "OrganizationName": {
@@ -2681,9 +2683,11 @@
             "nullable": true
           },
           "Email": {
+            "minLength": 1,
             "type": "string"
           },
           "LoginName": {
+            "minLength": 1,
             "type": "string"
           },
           "UserGuid": {
@@ -3954,6 +3958,7 @@
             "format": "int32"
           },
           "TreatmentBMPName": {
+            "minLength": 1,
             "type": "string"
           },
           "TreatmentBMPTypeID": {
