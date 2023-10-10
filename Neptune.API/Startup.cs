@@ -28,6 +28,10 @@ using Neptune.Common.Email;
 using Neptune.Common.JsonConverters;
 using SendGrid.Extensions.DependencyInjection;
 using Serilog.Sinks.ApplicationInsights.TelemetryConverters;
+using Hangfire;
+using Hangfire.SqlServer;
+using Neptune.API.Hangfire;
+using Neptune.API.Services.Filter;
 
 namespace Neptune.API
 {
@@ -156,7 +160,27 @@ namespace Neptune.API
             services.AddHttpContextAccessor();
             services.AddScoped<AzureBlobStorageService>();
             services.AddControllers();
-            services.AddCors();
+
+            #region Hangfire
+            services.AddHangfire(x => x
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(configuration.DatabaseConnectionString, new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
+
+            services.AddHangfireServer(x =>
+            {
+                x.WorkerCount = 1;
+            });
+            #endregion
+
 
             #region Swagger
             // Base swagger services
@@ -199,6 +223,17 @@ namespace Neptune.API
             app.UseAuthorization();
 
             app.Use(TelemetryHelper.PostBodyTelemetryMiddleware);
+
+            #region Hangfire
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions()
+            {
+                Authorization = new[] { new HangfireAuthorizationFilter(Configuration) }
+            });
+
+            GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 });
+
+            HangfireJobScheduler.ScheduleRecurringJobs();
+            #endregion
 
             #region Swagger
             // Register swagger middleware and enable the swagger UI which will be 

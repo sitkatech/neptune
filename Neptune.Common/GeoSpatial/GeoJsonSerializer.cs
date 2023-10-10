@@ -106,11 +106,6 @@ public static class GeoJsonSerializer
         return jsonSerializerOptions;
     }
 
-    public static JsonSerializerOptions CreateDefaultJSONSerializerOptions()
-    {
-        return CreateDefaultJSONSerializerOptions(3);
-    }
-
     public static JsonSerializerOptions CreateDefaultJSONSerializerOptions(int numberOfSignificantDigits)
     {
         var jsonSerializerOptions = new JsonSerializerOptions

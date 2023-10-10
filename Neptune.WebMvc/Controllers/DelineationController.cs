@@ -153,13 +153,13 @@ namespace Neptune.WebMvc.Controllers
             {
                 geom4326 = viewModel.WellKnownText[0] == GeometryHelper.POLYGON_EMPTY
                     ? null
-                    : GeometryHelper.FromWKT(viewModel.WellKnownText[0], Proj4NetHelper.WEB_MERCATOR).Buffer(0);
+                    : GeometryHelper.FromWKT(viewModel.WellKnownText[0], Proj4NetHelper.WEB_MERCATOR).MakeValid();
             }
             else
             {
                 geom4326 = viewModel.WellKnownText
                     .Select(x =>
-                        GeometryHelper.FromWKT(x, Proj4NetHelper.WEB_MERCATOR).Buffer(0)).ToList()
+                        GeometryHelper.FromWKT(x, Proj4NetHelper.WEB_MERCATOR).MakeValid()).ToList()
                     .UnionListGeometries();
             }
 

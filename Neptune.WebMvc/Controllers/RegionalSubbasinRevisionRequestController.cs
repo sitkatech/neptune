@@ -88,7 +88,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewNew(viewModel, treatmentBMP);
             }
 
-            var unionListGeometries = viewModel.WktAndAnnotations.Select(x => GeometryHelper.FromWKT(x.Wkt, Proj4NetHelper.WEB_MERCATOR).Buffer(0)).ToList().UnionListGeometries();
+            var unionListGeometries = viewModel.WktAndAnnotations.Select(x => GeometryHelper.FromWKT(x.Wkt, Proj4NetHelper.WEB_MERCATOR).MakeValid()).ToList().UnionListGeometries();
 
             var regionalSubbasinRevisionRequest = new RegionalSubbasinRevisionRequest
             {

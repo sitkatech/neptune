@@ -67,15 +67,8 @@ namespace Neptune.API.Controllers
         [HttpGet("nereid/health")]
         public async Task<IActionResult> HealthCheck()
         {
-            try
-            {
-                var healthCheck = await _nereidService.HealthCheck();
-                return Ok(healthCheck);
-            }
-            catch(Exception ex)
-            {
-                return Ok(ex.Message);
-            }
+            var healthCheck = await _nereidService.HealthCheck();
+            return Ok(healthCheck);
         }
 
         /// <summary>

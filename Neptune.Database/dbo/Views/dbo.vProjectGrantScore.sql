@@ -44,7 +44,7 @@ as
         , plgu.WaterQualityManagementPlanID
         , pd.DelineationTypeID
         from projectDelineations pd
-        join vRegionalSubbasinUpstream u on pd.RegionalSubbasinID = u.PrimaryKey
+        join dbo.vRegionalSubbasinUpstream u on pd.RegionalSubbasinID = u.PrimaryKey
         join dbo.ProjectLoadGeneratingUnit plgu on u.RegionalSubbasinID = plgu.RegionalSubbasinID and pd.ProjectID = plgu.ProjectID
         where pd.DelineationTypeID = 1
 ),

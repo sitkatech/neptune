@@ -234,58 +234,6 @@ namespace Neptune.WebMvc.Models
             return attributesTable;
         }
 
-        /// <summary>
-        /// Performs the RSB trace for a given Treatment BMP using the EPSG 4326 representation of the regional subbasin geometries
-        /// </summary>
-        /// <param name="treatmentBMP"></param>
-        /// <param name="dbContext"></param>
-        /// <returns></returns>
-        public static Geometry GetCentralizedDelineationGeometry4326(this TreatmentBMP treatmentBMP, NeptuneDbContext dbContext)
-        {
-            var regionalSubbasin = dbContext.RegionalSubbasins.AsNoTracking().SingleOrDefault(x => x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
-
-            var regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList(dbContext);
-
-            regionalSubbasinIDs.Add(regionalSubbasin.RegionalSubbasinID);
-
-            var unionOfUpstreamRegionalSubbasins = dbContext.RegionalSubbasins.AsNoTracking()
-                .Where(x => regionalSubbasinIDs.Contains(x.RegionalSubbasinID)).Select(x => x.CatchmentGeometry4326)
-                .ToList().UnionListGeometries();
-
-            // Remove interior slivers introduced in the case that the non-cascading union strategy is used (see UnionListGeometries for more info)
-            var dbGeometry = unionOfUpstreamRegionalSubbasins.Buffer(0);
-            return dbGeometry;
-        }
-
-        /// <summary>
-        /// Performs the RSB trace for a given Treatment BMP using the EPSG 2771 representation of the regional subbasin geometries
-        /// </summary>
-        /// <param name="treatmentBMP"></param>
-        /// <param name="dbContext"></param>
-        /// <returns></returns>
-        public static Geometry GetCentralizedDelineationGeometry2771(this TreatmentBMP treatmentBMP, NeptuneDbContext dbContext)
-        {
-            var regionalSubbasin = dbContext.RegionalSubbasins.AsNoTracking().SingleOrDefault(x =>
-                    x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
-
-            var regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList(dbContext);
-
-            regionalSubbasinIDs.Add(regionalSubbasin.RegionalSubbasinID);
-
-            var unionOfUpstreamRegionalSubbasins = dbContext.RegionalSubbasins.AsNoTracking()
-                .Where(x => regionalSubbasinIDs.Contains(x.RegionalSubbasinID)).Select(x => x.CatchmentGeometry)
-                .ToList().UnionListGeometries();
-
-            // Remove interior slivers introduced in the case that the non-cascading union strategy is used (see UnionListGeometries for more info)
-            var dbGeometry = unionOfUpstreamRegionalSubbasins.Buffer(0);
-            return dbGeometry;
-        }
-
-        public static RegionalSubbasin GetRegionalSubbasin(this TreatmentBMP treatmentBMP, NeptuneDbContext dbContext)
-        {
-            return dbContext.RegionalSubbasins.SingleOrDefault(x => x.CatchmentGeometry.Contains(treatmentBMP.LocationPoint));
-        }
-
 
         public static void UpdateUpstreamBMPReferencesIfNecessary(this TreatmentBMP treatmentBMP, NeptuneDbContext dbContext)
         {

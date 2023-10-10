@@ -8,6 +8,11 @@ public static class GeometryHelper
 {
     public const string POLYGON_EMPTY = "POLYGON EMPTY";
 
+    public static Geometry MakeValid(this Geometry geometry)
+    {
+        return !geometry.IsValid ? NetTopologySuite.Geometries.Utilities.GeometryFixer.Fix(geometry) : geometry;
+    }
+
     public static Geometry CreateLocationPoint4326FromLatLong(double latitude, double longitude)
     {
         return new Point(longitude, latitude) { SRID = 4326 };
@@ -28,7 +33,7 @@ public static class GeometryHelper
         {
             var reader = new NetTopologySuite.IO.WKBReader();
 
-            var internalGeometries = inputGeometries.Select(x => x.Buffer(0)).Select(x => reader.Read(x.AsBinary()))
+            var internalGeometries = inputGeometries.Select(x => x.MakeValid()).Select(x => reader.Read(x.AsBinary()))
                 .ToList();
 
             union = NetTopologySuite.Operation.Union.CascadedPolygonUnion.Union(internalGeometries);
@@ -75,7 +80,7 @@ public static class GeometryHelper
             {
                 var geometry = potentialMultiPolygon.GetGeometryN(i);
                 // Reduce is SQL Server's implementation of the Douglas–Peucker downsampling algorithm
-                featureCollection.Add(new Feature(geometry.Buffer(0), new AttributesTable()));
+                featureCollection.Add(new Feature(geometry.MakeValid(), new AttributesTable()));
             }
 
             return featureCollection;
@@ -83,4 +88,28 @@ public static class GeometryHelper
 
         return new FeatureCollection() { new Feature(potentialMultiPolygon, new AttributesTable())};
     }
+
+    public static IEnumerable<Geometry> GeometryToDbGeometryAndMakeValidAndExplodeIfNeeded(Geometry geometry)
+    {
+        var geometries = new List<Geometry>();
+        if (!geometry.IsValid)
+        {
+            var validGeometry = geometry.MakeValid();
+            for (var i = 1; i <= validGeometry.NumGeometries; i++)
+            {
+                var geometryPart = validGeometry.GetGeometryN(i);
+                if (geometryPart.GeometryType.ToUpper() == "POLYGON")
+                {
+                    geometries.Add(geometryPart);
+                }
+            }
+        }
+        else
+        {
+            geometries.Add(geometry);
+        }
+
+        return geometries;
+    }
+
 }

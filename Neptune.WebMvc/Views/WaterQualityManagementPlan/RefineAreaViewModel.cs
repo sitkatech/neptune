@@ -49,7 +49,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
 
             if (WktAndAnnotations != null)
             {
-                var dbGeometries = WktAndAnnotations.Select(x => GeometryHelper.FromWKT(x.Wkt, Proj4NetHelper.WEB_MERCATOR).Buffer(0));
+                var dbGeometries = WktAndAnnotations.Select(x => GeometryHelper.FromWKT(x.Wkt, Proj4NetHelper.WEB_MERCATOR).MakeValid());
                 var newGeometry4326 = dbGeometries.ToList().UnionListGeometries();
                 // since this is coming from the browser, we have to transform to State Plane
                 waterQualityManagementPlanBoundary.GeometryNative = newGeometry4326.ProjectTo2771();

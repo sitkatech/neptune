@@ -6,6 +6,7 @@ namespace Neptune.Common.GeoSpatial
 {
     public static class Proj4NetHelper
     {
+        public const int NAD_83_CA_ZONE_VI_SRID = 2230;
         public const int NAD_83_HARN_CA_ZONE_VI_SRID = 2771;
         public const int WEB_MERCATOR = 4326;
 
@@ -193,44 +194,44 @@ namespace Neptune.Common.GeoSpatial
 
         public static Geometry ProjectTo2771(this Geometry geometry)
         {
-            if (geometry.SRID == 2771)
+            if (geometry.SRID == NAD_83_HARN_CA_ZONE_VI_SRID)
             {
                 return geometry;
             }
 
-            var targetCoordinateSystem = new CoordinateSystemFactory().CreateFromWkt(CoordinateSystemsWkTs[2771]);
-            var fromCoordinateSystem = geometry.SRID == 4326 
+            var targetCoordinateSystem = new CoordinateSystemFactory().CreateFromWkt(CoordinateSystemsWkTs[NAD_83_HARN_CA_ZONE_VI_SRID]);
+            var fromCoordinateSystem = geometry.SRID == WEB_MERCATOR
                 ? GeographicCoordinateSystem.WGS84 
                 : new CoordinateSystemFactory().CreateFromWkt(CoordinateSystemsWkTs[geometry.SRID]);
             var transformation = new CoordinateTransformationFactory().CreateFromCoordinateSystems(fromCoordinateSystem, targetCoordinateSystem);
-            return Transform(geometry, transformation.MathTransform, 2771);
+            return Transform(geometry, transformation.MathTransform, NAD_83_HARN_CA_ZONE_VI_SRID);
         }
 
         public static Geometry ProjectTo2230(this Geometry geometry)
         {
-            if (geometry.SRID == 2230)
+            if (geometry.SRID == NAD_83_CA_ZONE_VI_SRID)
             {
                 return geometry;
             }
 
-            var targetCoordinateSystem = new CoordinateSystemFactory().CreateFromWkt(CoordinateSystemsWkTs[2230]);
-            var fromCoordinateSystem = geometry.SRID == 4326 
+            var targetCoordinateSystem = new CoordinateSystemFactory().CreateFromWkt(CoordinateSystemsWkTs[NAD_83_CA_ZONE_VI_SRID]);
+            var fromCoordinateSystem = geometry.SRID == WEB_MERCATOR
                 ? GeographicCoordinateSystem.WGS84 
                 : new CoordinateSystemFactory().CreateFromWkt(CoordinateSystemsWkTs[geometry.SRID]);
             var transformation = new CoordinateTransformationFactory().CreateFromCoordinateSystems(fromCoordinateSystem, targetCoordinateSystem);
-            return Transform(geometry, transformation.MathTransform, 2230);
+            return Transform(geometry, transformation.MathTransform, NAD_83_CA_ZONE_VI_SRID);
         }
 
         public static Geometry ProjectTo4326(this Geometry geometry)
         {
-            if (geometry.SRID == 4326)
+            if (geometry.SRID == WEB_MERCATOR)
             {
                 return geometry;
             }
 
             var sourceCoordinateSystem = new CoordinateSystemFactory().CreateFromWkt(CoordinateSystemsWkTs[geometry.SRID]);
             var transformation = new CoordinateTransformationFactory().CreateFromCoordinateSystems(sourceCoordinateSystem, GeographicCoordinateSystem.WGS84);
-            return Transform(geometry, transformation.MathTransform, 4326);
+            return Transform(geometry, transformation.MathTransform, WEB_MERCATOR);
         }
 
         public static Geometry ProjectToSrid(this Geometry geometry, int targetSrid)

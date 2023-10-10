@@ -243,9 +243,9 @@ public class NereidService
         return networkSolveResult;
     }
 
-    public async Task<NetworkSolveResult> ProjectNetworkSolve(Graph graph, NeptuneDbContext dbContext, bool isBaselineCondition, int projectID, List<int> projectRSBIDs, List<int> projectDistributedDelineationIDs)
+    public async Task<NetworkSolveResult> ProjectNetworkSolve(NeptuneDbContext dbContext, bool isBaselineCondition, int projectID, List<int> projectRSBIDs, List<int> projectDistributedDelineationIDs)
     {
-        graph = BuildProjectNetworkGraph(dbContext, projectID, projectRSBIDs);
+        var graph = BuildProjectNetworkGraph(dbContext, projectID, projectRSBIDs);
 
         var networkSolveResult = await NetworkSolveImpl(graph, dbContext, false, isBaselineCondition, projectID, projectRSBIDs, projectDistributedDelineationIDs);
 

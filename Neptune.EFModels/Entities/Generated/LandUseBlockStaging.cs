@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
@@ -22,7 +20,7 @@ public partial class LandUseBlockStaging
     public string? LandUseDescription { get; set; }
 
     [Column(TypeName = "geometry")]
-    public Geometry LandUseBlockStagingGeometry { get; set; } = null!;
+    public Geometry? LandUseBlockStagingGeometry { get; set; } = null!;
 
     [Column(TypeName = "decimal(4, 1)")]
     public decimal? TrashGenerationRate { get; set; }
