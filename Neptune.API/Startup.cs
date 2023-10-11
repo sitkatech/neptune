@@ -146,6 +146,20 @@ namespace Neptune.API
                 return httpClientHandler;
             });
 
+            services.AddHttpClient<OCGISService>(c =>
+            {
+                c.BaseAddress = new Uri(configuration.OCGISBaseUrl);
+                c.Timeout = TimeSpan.FromDays(1);
+            }).ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                var httpClientHandler = new HttpClientHandler();
+                httpClientHandler.ClientCertificateOptions = ClientCertificateOption.Manual;
+                httpClientHandler.ServerCertificateCustomValidationCallback =
+                    (_, _, _, _) => true;
+
+                return httpClientHandler;
+            });
+
             services.AddHttpClient<GDALAPIService>(c =>
             {
                 c.BaseAddress = new Uri(configuration.GDALAPIBaseUrl);
@@ -155,7 +169,7 @@ namespace Neptune.API
                 var httpClientHandler = new HttpClientHandler();
                 httpClientHandler.ClientCertificateOptions = ClientCertificateOption.Manual;
                 httpClientHandler.ServerCertificateCustomValidationCallback =
-                    (httpRequestMessage, cert, cetChain, policyErrors) => true;
+                    (_, _, _, _) => true;
 
                 return httpClientHandler;
             });

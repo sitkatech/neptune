@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Hangfire;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
@@ -37,6 +38,7 @@ using Neptune.Models.DataTransferObjects;
 using Neptune.WebMvc.Services.Filters;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
+using DocumentFormat.OpenXml.InkML;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -371,8 +373,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewCheckForDiscrepancies(viewModel);
             }
 
-            //todo: hangfire
-            //BackgroundJob.Schedule(() => ScheduledBackgroundJobLaunchHelper.RunDelineationDiscrepancyCheckerJob(), TimeSpan.FromSeconds(1));
+            BackgroundJob.Schedule(() => _dbContext.Database.ExecuteSqlRaw("EXEC dbo.pDelineationMarkThoseThatHaveDiscrepancies"), TimeSpan.FromSeconds(1));
             SetMessageForDisplay("The job to check BMP delineation discrepancies and overlaps has been queued. Please check back in a few minutes to see the new results.");
             return new ModalDialogFormJsonResult();
         }

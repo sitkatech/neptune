@@ -14,10 +14,7 @@ namespace Neptune.API.Services
         public string PlanningModuleBaseUrl { get; set; }
         public string PyqgisWorkingDirectory { get; set; }
 
-        public string ModelBasinServiceUrl { get; set; }
-        public string OCTAPrioritizationServiceUrl { get; set; }
-        public string PrecipitationZoneServiceUrl { get; set; }
-        public string RegionalSubbasinServiceUrl { get; set; }
         public string GDALAPIBaseUrl { get; set; }
+        public string OCGISBaseUrl { get; set; }
     }
 }

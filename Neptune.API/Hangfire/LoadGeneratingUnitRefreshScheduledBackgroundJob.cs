@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -94,7 +93,7 @@ namespace Neptune.API.Hangfire
             //    DbContext.Database.ExecuteSqlRaw("EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
             //}
 
-            var jsonSerializerOptions = GeoJsonSerializer.CreateGeoJSONSerializerOptions();
+            var jsonSerializerOptions = GeoJsonSerializer.DefaultSerializerOptions;
             using (var openStream = File.OpenRead(outputLayerPath))
             {
                 var featureCollection = JsonSerializer.DeserializeAsync<FeatureCollection>(openStream, jsonSerializerOptions).Result;

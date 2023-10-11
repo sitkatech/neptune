@@ -26,15 +26,15 @@ public class DeltaSolveJob : ScheduledBackgroundJobBase<DeltaSolveJob>
 
     public override List<RunEnvironment> RunEnvironments => new() { RunEnvironment.Development, RunEnvironment.Staging, RunEnvironment.Production };
 
-    protected override void RunJobImplementation()
+    protected override async void RunJobImplementation()
     {
         var dirtyModelNodes = DbContext.DirtyModelNodes.ToList();
             
-        _nereidService.DeltaSolve(DbContext, dirtyModelNodes, true);
-        _nereidService.DeltaSolve(DbContext, dirtyModelNodes, false);
+        await _nereidService.DeltaSolve(DbContext, dirtyModelNodes, true);
+        await _nereidService.DeltaSolve(DbContext, dirtyModelNodes, false);
 
         DbContext.DirtyModelNodes.RemoveRange(dirtyModelNodes);
         DbContext.Database.SetCommandTimeout(600);
-        DbContext.SaveChanges();
+        await DbContext.SaveChangesAsync();
     }
 }

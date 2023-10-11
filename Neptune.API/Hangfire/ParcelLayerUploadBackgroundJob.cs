@@ -31,9 +31,9 @@ namespace Neptune.API.Hangfire
 
         public override List<RunEnvironment> RunEnvironments => new() { RunEnvironment.Development, RunEnvironment.Staging, RunEnvironment.Production };
 
-        protected override void RunJobImplementation()
+        protected override async void RunJobImplementation()
         {
-            var person = DbContext.People.Find(PersonID);
+            var person = await DbContext.People.FindAsync(PersonID);
 
             if (person == null)
             {
@@ -46,11 +46,11 @@ namespace Neptune.API.Hangfire
                 if (parcelStagingsCount > 0)
                 {
                     // first wipe the dependent WQMPParcel table, then wipe the old parcels
-                    DbContext.Database.ExecuteSqlRaw("ALTER TABLE dbo.WaterQualityManagementPlanParcel drop constraint FK_WaterQualityManagementPlanParcel_Parcel_ParcelID");
-                    DbContext.Database.ExecuteSqlRaw("TRUNCATE TABLE dbo.WaterQualityManagementPlanParcel");
-                    DbContext.Database.ExecuteSqlRaw("TRUNCATE TABLE dbo.Parcel");
-                    DbContext.Database.ExecuteSqlRaw("ALTER TABLE dbo.WaterQualityManagementPlanParcel add constraint FK_WaterQualityManagementPlanParcel_Parcel_ParcelID foreign key (ParcelID) references dbo.Parcel(ParcelID)");
-                    DbContext.Database.ExecuteSqlRaw("EXECUTE dbo.pParcelUpdateFromStaging");
+                    await DbContext.Database.ExecuteSqlRawAsync("ALTER TABLE dbo.WaterQualityManagementPlanParcel drop constraint FK_WaterQualityManagementPlanParcel_Parcel_ParcelID");
+                    await DbContext.Database.ExecuteSqlRawAsync("TRUNCATE TABLE dbo.WaterQualityManagementPlanParcel");
+                    await DbContext.Database.ExecuteSqlRawAsync("TRUNCATE TABLE dbo.Parcel");
+                    await DbContext.Database.ExecuteSqlRawAsync("ALTER TABLE dbo.WaterQualityManagementPlanParcel add constraint FK_WaterQualityManagementPlanParcel_Parcel_ParcelID foreign key (ParcelID) references dbo.Parcel(ParcelID)");
+                    await DbContext.Database.ExecuteSqlRawAsync("EXECUTE dbo.pParcelUpdateFromStaging");
 
                     // we need to get the 4326 representation of the geometry; unfortunately can't do it in sql
                     var parcels = DbContext.ParcelGeometries.ToList();
@@ -59,7 +59,7 @@ namespace Neptune.API.Hangfire
                         parcel.Geometry4326 = parcel.GeometryNative.ProjectTo4326();
                     }
 
-                    DbContext.SaveChanges();
+                    await DbContext.SaveChangesAsync();
 
                     // calculate wqmp parcel intersections
                     foreach (var waterQualityManagementPlanBoundary in DbContext.WaterQualityManagementPlanBoundaries)
@@ -77,7 +77,7 @@ namespace Neptune.API.Hangfire
                             .ToList();
                         DbContext.WaterQualityManagementPlanParcels.AddRange(waterQualityManagementPlanParcels);
                     }
-                    DbContext.SaveChanges();
+                    await DbContext.SaveChangesAsync();
 
                     var errorCount = parcelStagingsCount - parcels.Count;
                     var errorMessage = errorCount > 0
@@ -94,10 +94,10 @@ namespace Neptune.API.Hangfire
                     };
 
                     mailMessage.To.Add(person.Email);
-                    _sitkaSmtpClient.Send(mailMessage);
+                    await _sitkaSmtpClient.Send(mailMessage);
                 }
 
-                DbContext.Database.ExecuteSqlRaw($"EXEC dbo.pParcelStagingDeleteByPersonID @PersonID = {PersonID}");
+                await DbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pParcelStagingDeleteByPersonID @PersonID = {PersonID}");
             }
             catch (Exception)
             {
@@ -112,7 +112,7 @@ namespace Neptune.API.Hangfire
                 };
 
                 mailMessage.To.Add(person.Email);
-                _sitkaSmtpClient.Send(mailMessage);
+                await _sitkaSmtpClient.Send(mailMessage);
 
                 throw;
             }

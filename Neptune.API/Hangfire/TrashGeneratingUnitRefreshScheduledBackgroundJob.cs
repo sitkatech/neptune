@@ -68,7 +68,7 @@ namespace Neptune.API.Hangfire
         {
             // kill the old TGUs
             dbContext.Database.ExecuteSqlRaw("TRUNCATE TABLE dbo.TrashGeneratingUnit");
-            var jsonSerializerOptions = GeoJsonSerializer.CreateGeoJSONSerializerOptions();
+            var jsonSerializerOptions = GeoJsonSerializer.DefaultSerializerOptions;
             using var openStream = File.OpenRead(outputLayerPath);
             var featureCollection = JsonSerializer.DeserializeAsync<FeatureCollection>(openStream, jsonSerializerOptions)
                 .Result;

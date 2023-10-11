@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
@@ -17,46 +15,10 @@ using Neptune.EFModels.Nereid;
 
 namespace Neptune.API.Services;
 
-public class NereidService
+public class NereidService : BaseAPIService<NereidService>
 {
-    private readonly HttpClient _httpClient;
-    private readonly ILogger<NereidService> _logger;
-    private readonly NeptuneConfiguration _neptuneConfiguration;
-
-    public NereidService(HttpClient httpClient, ILogger<NereidService> logger, IOptions<NeptuneConfiguration> neptuneConfigurationOptions)
+    public NereidService(HttpClient httpClient, ILogger<NereidService> logger, IOptions<NeptuneConfiguration> neptuneConfigurationOptions) : base(httpClient, logger, neptuneConfigurationOptions, "Nereid Service")
     {
-        _httpClient = httpClient;
-        _logger = logger;
-        _neptuneConfiguration = neptuneConfigurationOptions.Value;
-    }
-
-    private async Task<TV> GetJsonImpl<TV>(string uri, JsonSerializerOptions jsonSerializerOptions)
-    {
-        return await _httpClient.GetFromJsonAsync<TV>(uri, jsonSerializerOptions);
-    }
-
-    public async Task<HttpResponseMessage> PostJsonImpl<T>(string uri, T value, JsonSerializerOptions jsonSerializerOptions)
-    {
-        var postResponse = await _httpClient.PostAsJsonAsync(uri, value, jsonSerializerOptions);
-        postResponse.EnsureSuccessStatusCode();
-        return postResponse;
-    }
-
-    private async Task<List<TV>> GetIEnumerableImpl<TV>(string uri, JsonSerializerOptions jsonSerializerOptions)
-    {
-        using var response = await _httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-        response.EnsureSuccessStatusCode();
-
-        var list = new List<TV>();
-        await using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-
-        await foreach (var item in JsonSerializer.DeserializeAsyncEnumerable<TV>(responseStream,
-                           new JsonSerializerOptions { PropertyNameCaseInsensitive = true, DefaultBufferSize = 512 }))
-        {
-            list.Add(item);
-        }
-
-        return list;
     }
 
     public async Task<object> HealthCheck()
@@ -69,7 +31,7 @@ public class NereidService
     {
         var serializedRequest = GeoJsonSerializer.Serialize(nereidRequestObject);
         var requestStringContent = new StringContent(serializedRequest, System.Text.Encoding.UTF8, "application/json");
-        _logger.LogInformation($"Executing Nereid request: {nereidRequestUrl}");
+        Logger.LogInformation($"Executing Nereid request: {nereidRequestUrl}");
         //todo: log nereid requests for troubleshooting?
         //var requestLogFile = Path.Combine(_neptuneConfiguration.NereidLogFileFolder, $"NereidRequest_{DateTime.Now:yyyyMMddHHmmss}.json");
         //await File.WriteAllTextAsync(requestLogFile, serializedRequest);
@@ -751,7 +713,7 @@ public class NereidService
                     edgeToDownstreamNode = existingEdges.SingleOrDefault(x => x.SourceID == currentTargetID);
                     if (edgeToDownstreamNode == null)
                     {
-                        _logger.LogInformation($"No existingEdges found with SourceID {currentTargetID}");
+                        Logger.LogInformation($"No existingEdges found with SourceID {currentTargetID}");
                         break;
                     }
                 }

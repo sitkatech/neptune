@@ -207,6 +207,11 @@ public static class GeoJsonSerializer
         return featureCollection.AsParallel().Select(x => DeserializeFromFeature<T>(x, geoJSONSerializerOptions)).ToList();
     }
 
+    public static List<T> DeserializeFromFeatureCollection<T>(FeatureCollection featureCollection) where T : IHasGeometry
+    {
+        return featureCollection.AsParallel().Select(x => DeserializeFromFeature<T>(x, DefaultSerializerOptions)).ToList();
+    }
+
     public static async Task<List<T>> DeserializeFromFeatureCollectionWithNoGeometry<T>(byte[] byteArray, JsonSerializerOptions geoJSONSerializerOptions)
     {
         var featureCollection = await GetFeatureCollectionFromGeoJsonByteArray(byteArray, geoJSONSerializerOptions);

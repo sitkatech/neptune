@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -18,71 +19,72 @@ using Neptune.EFModels.Entities;
 
 namespace Neptune.API.Hangfire
 {
-    public class ProjectNetworkSolveJob : ScheduledBackgroundJobBase<ProjectNetworkSolveJob>
+    public class ProjectNetworkSolveJob
     {
         public const string JobName = "Nereid Planned Project Network Solve";
 
         private readonly NereidService _nereidService;
-        private readonly int projectID;
-        private readonly int ProjectNetworkSolveHistoryID;
+        private readonly ILogger<ProjectNetworkSolveJob> _logger;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly NeptuneDbContext _dbContext;
+        private readonly NeptuneConfiguration _neptuneConfiguration;
+        private readonly SitkaSmtpClientService _sitkaSmtpClient;
 
-        public ProjectNetworkSolveJob(ILogger<ProjectNetworkSolveJob> logger,
-            IWebHostEnvironment webHostEnvironment, NeptuneDbContext neptuneDbContext,
-            IOptions<NeptuneConfiguration> neptuneConfiguration, SitkaSmtpClientService sitkaSmtpClientService, NereidService nereidService, int projectID, int projectNetworkSolveHistoryID) : base(JobName, logger, webHostEnvironment,
-            neptuneDbContext, neptuneConfiguration, sitkaSmtpClientService)
+        public ProjectNetworkSolveJob(ILogger<ProjectNetworkSolveJob> logger, IWebHostEnvironment webHostEnvironment, NeptuneDbContext dbContext,
+            IOptions<NeptuneConfiguration> neptuneConfiguration, SitkaSmtpClientService sitkaSmtpClientService, NereidService nereidService)
         {
             _nereidService = nereidService;
-            this.projectID = projectID;
-            ProjectNetworkSolveHistoryID = projectNetworkSolveHistoryID;
+            _logger = logger;
+            _webHostEnvironment = webHostEnvironment;
+            _dbContext = dbContext;
+            _neptuneConfiguration = neptuneConfiguration.Value;
+            _sitkaSmtpClient = sitkaSmtpClientService;
         }
 
-        public override List<RunEnvironment> RunEnvironments => new() { RunEnvironment.Development, RunEnvironment.Staging, RunEnvironment.Production };
-
-        protected override void RunJobImplementation()
+        public async void RunNetworkSolveForProject(int projectID, int projectNetworkSolveHistoryID)
         {
-            var project = DbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
+            var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
             if (project == null)
             {
                 throw new NullReferenceException($"Project with ID {projectID} does not exist!");
             }
-            var projectNetworkSolveHistory = DbContext.ProjectNetworkSolveHistories.Include(x => x.RequestedByPerson).AsNoTracking().First(x => x.ProjectNetworkSolveHistoryID == ProjectNetworkSolveHistoryID);
-            var projectRegionalSubbasinIDs = DbContext.TreatmentBMPs.AsNoTracking().Where(x => x.ProjectID == projectID).Select(x => x.RegionalSubbasinID).Distinct().ToList();
+            var projectNetworkSolveHistory = _dbContext.ProjectNetworkSolveHistories.Include(x => x.RequestedByPerson).AsNoTracking().First(x => x.ProjectNetworkSolveHistoryID == projectNetworkSolveHistoryID);
+            var projectRegionalSubbasinIDs = _dbContext.TreatmentBMPs.AsNoTracking().Where(x => x.ProjectID == projectID).Select(x => x.RegionalSubbasinID).Distinct().ToList();
 
-            var regionalSubbasinIDs = DbContext.vRegionalSubbasinUpstreams.AsNoTracking()
+            var regionalSubbasinIDs = _dbContext.vRegionalSubbasinUpstreams.AsNoTracking()
                 .Where(x => projectRegionalSubbasinIDs.Contains(x.PrimaryKey) && x.RegionalSubbasinID.HasValue).Select(x => x.RegionalSubbasinID.Value).ToList();
             var projectDistributedDelineationIDs = project.TreatmentBMPs.Select(x => x.Delineation).Where(y => y.DelineationTypeID == (int)DelineationTypeEnum.Distributed).Select(x => x.DelineationID).ToList();
             try
             {
                 //Get our LGUs
-                LoadGeneratingUnitRefreshImpl(regionalSubbasinIDs);
+                LoadGeneratingUnitRefreshImpl(regionalSubbasinIDs, projectID);
                 //Get our HRUs
-                HRURefreshImpl();
-                _nereidService.ProjectNetworkSolve(DbContext, false, projectID, regionalSubbasinIDs, projectDistributedDelineationIDs);
+                HRURefreshImpl(projectID);
+                await _nereidService.ProjectNetworkSolve(_dbContext, false, projectID, regionalSubbasinIDs, projectDistributedDelineationIDs);
                 projectNetworkSolveHistory.ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded;
                 projectNetworkSolveHistory.LastUpdated = DateTime.UtcNow;
-                DbContext.SaveChanges();
-                SendProjectNetworkSolveTerminalStatusEmail(projectNetworkSolveHistory.RequestedByPerson, project, true, null);
+                await _dbContext.SaveChangesAsync();
+                await SendProjectNetworkSolveTerminalStatusEmail(projectNetworkSolveHistory.RequestedByPerson, project, true, null);
             }
             catch (Exception ex)
             {
                 projectNetworkSolveHistory.ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Failed;
                 projectNetworkSolveHistory.LastUpdated = DateTime.UtcNow;
                 projectNetworkSolveHistory.ErrorMessage = ex.Message;
-                DbContext.SaveChanges();
-                SendProjectNetworkSolveTerminalStatusEmail(projectNetworkSolveHistory.RequestedByPerson, project, false, ex.Message);
+                await _dbContext.SaveChangesAsync();
+                await SendProjectNetworkSolveTerminalStatusEmail(projectNetworkSolveHistory.RequestedByPerson, project, false, ex.Message);
                 throw;
             }
-            
         }
 
-        private void SendProjectNetworkSolveTerminalStatusEmail(Person requestPerson,
+        private async Task SendProjectNetworkSolveTerminalStatusEmail(Person requestPerson,
             Project project, bool successful, string errorMessage)
         {
             var projectName = project.ProjectName;
             var subject = successful ? $"Modeled Results calculated for Project: {projectName}" : $"Model Results calculation failed for Project: {projectName}";
             var requestPersonEmail = requestPerson.Email;
             var errorContext = $"<br /><br/>See the provided error message for more details:\n {errorMessage}";
-            var planningURL = $"{NeptuneConfiguration.PlanningModuleBaseUrl}/projects/edit/{project.ProjectID}/stormwater-treatments/modeled-performance-and-metrics";
+            var planningURL = $"{_neptuneConfiguration.PlanningModuleBaseUrl}/projects/edit/{project.ProjectID}/stormwater-treatments/modeled-performance-and-metrics";
             var message = $@"
 <div style='font-size: 12px; font-family: Arial'>
 <strong>{subject}</strong><br />
@@ -96,7 +98,7 @@ You can view the results or trigger another network solve <a href='{planningURL}
             // Create Notification
             var mailMessage = new MailMessage
             {
-                From = new MailAddress(NeptuneConfiguration.DoNotReplyEmail),
+                From = new MailAddress(_neptuneConfiguration.DoNotReplyEmail),
                 Subject = subject,
                 Body = message,
                 IsBodyHtml = true
@@ -106,18 +108,18 @@ You can view the results or trigger another network solve <a href='{planningURL}
 
             if (!successful)
             {
-                foreach (var email in People.GetEmailAddressesForAdminsThatReceiveSupportEmails(DbContext))
+                foreach (var email in People.GetEmailAddressesForAdminsThatReceiveSupportEmails(_dbContext))
                 {
                     mailMessage.CC.Add(email);
                 }
             }
 
-            _sitkaSmtpClient.Send(mailMessage);
+            await _sitkaSmtpClient.Send(mailMessage);
         }
 
-        private void LoadGeneratingUnitRefreshImpl(List<int> regionalSubbasinIDs)
+        private void LoadGeneratingUnitRefreshImpl(List<int> regionalSubbasinIDs, int projectID)
         {
-            Logger.LogInformation($"Processing '{JobName}'-LoadGeneratingUnitRefresh for {projectID}");
+            _logger.LogInformation($"Processing '{JobName}'-LoadGeneratingUnitRefresh for {projectID}");
             var outputLayerName = $"PLGU{DateTime.Now.Ticks}";
             var outputFolder = Path.GetTempPath();
             var outputLayerPath = $"{Path.Combine(outputFolder, outputLayerName)}.geojson";
@@ -135,10 +137,10 @@ You can view the results or trigger another network solve <a href='{planningURL}
             //    throw new GeoprocessingException(processUtilityResult.StdOutAndStdErr);
             //}
 
-            DbContext.Database.ExecuteSqlRaw(
+            _dbContext.Database.ExecuteSqlRaw(
                 $"EXEC dbo.pDeleteProjectLoadGeneratingUnitsPriorToRefreshForProject @ProjectID = {projectID}");
 
-            var jsonSerializerOptions = GeoJsonSerializer.CreateGeoJSONSerializerOptions();
+            var jsonSerializerOptions = GeoJsonSerializer.DefaultSerializerOptions;
             using(var openStream = File.OpenRead(outputLayerPath))
             {
                 var featureCollection = JsonSerializer.DeserializeAsync<NetTopologySuite.Features.FeatureCollection>(openStream, jsonSerializerOptions).Result;
@@ -170,8 +172,8 @@ You can view the results or trigger another network solve <a href='{planningURL}
 
                 if (projectLoadGeneratingUnits.Any())
                 {
-                    DbContext.ProjectLoadGeneratingUnits.AddRange(projectLoadGeneratingUnits);
-                    DbContext.SaveChanges();
+                    _dbContext.ProjectLoadGeneratingUnits.AddRange(projectLoadGeneratingUnits);
+                    _dbContext.SaveChanges();
                 }
             }
 
@@ -182,16 +184,16 @@ You can view the results or trigger another network solve <a href='{planningURL}
             }
         }
 
-        private void HRURefreshImpl()
+        private void HRURefreshImpl(int projectID)
         {
             // collect the load generating units that require updates, which will be all for the Project
             // group them by Model basin so requests to the HRU service are spatially bounded. It is possible that a number of these won't have a model basin, but if the system is used in a logical manner any of these that don't have model basins will be in an rsb that is in North OC, so technically will still be spatially bounded
             // and batch them for processing 25 at a time so requests are small.
-            Logger.LogInformation($"Processing '{JobName}'-HRURefresh for {projectID}");
+            _logger.LogInformation($"Processing '{JobName}'-HRURefresh for {projectID}");
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var loadGeneratingUnitsToUpdate = DbContext.ProjectLoadGeneratingUnits.Where(x => x.ProjectID == projectID && x.ProjectLoadGeneratingUnitGeometry.Area >= 10).ToList();
+            var loadGeneratingUnitsToUpdate = _dbContext.ProjectLoadGeneratingUnits.Where(x => x.ProjectID == projectID && x.ProjectLoadGeneratingUnitGeometry.Area >= 10).ToList();
             var loadGeneratingUnitsToUpdateGroupedByModelBasin = loadGeneratingUnitsToUpdate.GroupBy(x => x.ModelBasin);
 
             foreach (var group in loadGeneratingUnitsToUpdateGroupedByModelBasin)
@@ -203,7 +205,7 @@ You can view the results or trigger another network solve <a href='{planningURL}
                     try
                     {
                         var projectLoadGeneratingUnits = batch.ToList();
-                        var batchHRUResponseFeatures = HRUUtilities.RetrieveHRUResponseFeatures(projectLoadGeneratingUnits.GetHRURequestFeatures().ToList(), Logger).ToList();
+                        var batchHRUResponseFeatures = HRUUtilities.RetrieveHRUResponseFeatures(projectLoadGeneratingUnits.GetHRURequestFeatures().ToList(), _logger).ToList();
 
                         if (!batchHRUResponseFeatures.Any())
                         {
@@ -211,7 +213,7 @@ You can view the results or trigger another network solve <a href='{planningURL}
                             {
                                 loadGeneratingUnit.IsEmptyResponseFromHRUService = true;
                             }
-                            Logger.LogWarning($"No data for ProjectLGUs with these IDs: {string.Join(", ", projectLoadGeneratingUnits.Select(x => x.ProjectLoadGeneratingUnitID.ToString()))}");
+                            _logger.LogWarning($"No data for ProjectLGUs with these IDs: {string.Join(", ", projectLoadGeneratingUnits.Select(x => x.ProjectLoadGeneratingUnitID.ToString()))}");
                         }
 
                         var projectHruCharacteristics = batchHRUResponseFeatures.Select(x =>
@@ -219,13 +221,13 @@ You can view the results or trigger another network solve <a href='{planningURL}
                             var hruCharacteristic = x.ToProjectHRUCharacteristic(projectID);
                             return hruCharacteristic;
                         }).ToList();
-                        DbContext.ProjectHRUCharacteristics.AddRange(projectHruCharacteristics);
-                        DbContext.SaveChanges();
+                        _dbContext.ProjectHRUCharacteristics.AddRange(projectHruCharacteristics);
+                        _dbContext.SaveChanges();
                     }
                     catch (Exception ex)
                     {
                         // this batch failed, but we don't want to give up the whole job.
-                        Logger.LogWarning(ex.Message);
+                        _logger.LogWarning(ex.Message);
                     }
 
                     if (stopwatch.Elapsed.Minutes > 20)

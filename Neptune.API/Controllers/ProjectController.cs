@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
+using Hangfire;
 using Neptune.Models.DataTransferObjects;
 using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Neptune.API.Hangfire;
 using DelineationSimpleDto = Neptune.Models.DataTransferObjects.DelineationSimpleDto;
 using ProjectDocumentSimpleDto = Neptune.Models.DataTransferObjects.ProjectDocumentSimpleDto;
 using ProjectSimpleDto = Neptune.Models.DataTransferObjects.ProjectSimpleDto;
@@ -295,8 +297,8 @@ namespace Neptune.API.Controllers
             };
             await _dbContext.ProjectNetworkSolveHistories.AddAsync(projectNetworkSolveHistoryEntity);
             await _dbContext.SaveChangesAsync();
-            // todo: hangfire
-            //BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunNetworkSolveForProject(projectID, projectNetworkSolveHistoryEntity.ProjectNetworkSolveHistoryID));
+
+            BackgroundJob.Enqueue<ProjectNetworkSolveJob>(x => x.RunNetworkSolveForProject(projectID, projectNetworkSolveHistoryEntity.ProjectNetworkSolveHistoryID));
             return Ok($"Network solve for Project with ID:{projectID} has begun.");
         }
 

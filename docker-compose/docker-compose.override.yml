@@ -48,6 +48,7 @@ services:
       - OcStormwaterToolsBaseUrl=${OcStormwaterToolsBaseUrl}
       - NereidUrl=${NereidUrl}
       - GDALAPIBaseUrl=${GDALAPIBaseUrl}
+      - OCGISBaseUrl=${OCGISBaseUrl}
 
   neptune.gdalapi:
     environment:
