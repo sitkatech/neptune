@@ -78,3 +78,6 @@ Source/Neptune.GeoServer/data_dir/logs/
 /Neptune.Web/obj/Debug/net6.0
 /docker-compose/obj/Docker
 /Neptune.Web/.vscode
+/Neptune.GDALAPI/bin/Debug/net6.0
+/Neptune.GDALAPI/obj/Debug/net6.0
+/Neptune.GDALAPI/obj

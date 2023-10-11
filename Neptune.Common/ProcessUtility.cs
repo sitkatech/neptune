@@ -18,22 +18,17 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Collections.Generic;
+
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using log4net;
+using Microsoft.Extensions.Logging;
 
-namespace LtInfo.Common
+namespace Neptune.Common
 {
     public static class ProcessUtility
     {
         private static readonly TimeSpan MaxTimeout = TimeSpan.FromMinutes(10);
-        private static ILog Logger = LogManager.GetLogger(typeof(ProcessUtility));
 
         public static string ConjoinCommandLineArguments(List<string> commandLineArguments)
         {
@@ -47,17 +42,17 @@ namespace LtInfo.Common
 
         public static string ConjoinEnvironmentVariables(Dictionary<string, string> environmentVariables)
         {
-            return string.Join("\r\n\t", environmentVariables.Select(x => x.Key + ": " + x.Value).ToList());
+            return string.Join("\r\n\t", environmentVariables.Select(x => $"{x.Key}: {x.Value}").ToList());
         }
 
         public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName,
             List<string> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs,
-            Dictionary<string, string> environmentVariables)
+            Dictionary<string, string> environmentVariables, ILogger logger)
         {
-            return ShellAndWaitImpl(workingDirectory, exeFileName, commandLineArguments.ToDictionary(x => x, x => false), redirectStdErrAndStdOut, maxTimeoutMs, environmentVariables);
+            return ShellAndWaitImpl(workingDirectory, exeFileName, commandLineArguments.ToDictionary(x => x, x => false), redirectStdErrAndStdOut, maxTimeoutMs, environmentVariables, logger);
         }
 
-        public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName, Dictionary<string, bool> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs, Dictionary<string, string> environmentVariables)
+        public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName, Dictionary<string, bool> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs, Dictionary<string, string> environmentVariables, ILogger Logger)
         {
             var argumentsAsString = ConjoinCommandLineArguments(commandLineArguments.Select(x => x.Key).ToList());
             var stdErrAndStdOut = string.Empty;
@@ -90,7 +85,7 @@ namespace LtInfo.Common
             }
 
             var processDebugInfo = $"Process Details:\r\n\"{exeFileName}\" {ConjoinAndMaskCommandLineArguments(commandLineArguments)}\r\nWorking Directory: {workingDirectory}\r\nEnvironment Variables: {ConjoinEnvironmentVariables(environmentVariables)}";
-            Logger.Info($"Starting Process: {processDebugInfo}");
+            Logger.LogInformation($"Starting Process: {processDebugInfo}");
             try
             {
                 objProc.Start();
@@ -117,7 +112,7 @@ namespace LtInfo.Common
 
             if (redirectStdErrAndStdOut)
             {
-                // TODO: Fix this so it works without a hacky "Sleep", right now this hack waits for the output to trickle in. The asychronous reads of STDERR and STDOUT may not yet be complete (run unit test under debugger for example) even though the process has exited. -MF & ASW 11/21/2011
+                // TODO: Fix this so it works without a hacky "Sleep", right now this hack waits for the output to trickle in. The asynchronous reads of STDERR and STDOUT may not yet be complete (run unit test under debugger for example) even though the process has exited. -MF & ASW 11/21/2011
                 Thread.Sleep(TimeSpan.FromSeconds(.25));
                 stdErrAndStdOut = streamReader.StdOutAndStdErr;
             }
@@ -137,27 +132,27 @@ namespace LtInfo.Common
         private class ProcessStreamReader
         {
             private readonly object _outputLock = new object();
-            private StringBuilder _diagnosticOutput = new StringBuilder();
-            private StringBuilder _standardOut = new StringBuilder();
+            private readonly StringBuilder _diagnosticOutput = new();
+            private readonly StringBuilder _standardOut = new();
 
             public void ReceiveStdOut(object sender, DataReceivedEventArgs e)
             {
                 lock (_outputLock)
                 {
-                    _diagnosticOutput.Append(string.Format("{0}\r\n", string.Format("[stdout] {0}", e.Data)));
+                    _diagnosticOutput.Append($"[stdout] {e.Data}\r\n");
                     if (!string.IsNullOrWhiteSpace(e.Data))
                     {
-                        _standardOut.Append(string.Format("{0}\r\n", e.Data));
+                        _standardOut.Append($"{e.Data}\r\n");
                     }
                 }
             }
 
             public void ReceiveStdErr(object sender, DataReceivedEventArgs e)
             {
-                var message = string.Format("[stderr] {0}", e.Data);
+                var message = $"[stderr] {e.Data}";
                 lock (_outputLock)
                 {
-                    _diagnosticOutput.Append(string.Format("{0}\r\n", message));
+                    _diagnosticOutput.Append($"{message}\r\n");
                 }
             }
 
@@ -285,7 +280,7 @@ namespace LtInfo.Common
 
             // We must surround with DQUOTE, but first handle special BACKSLASH and embedded DQUOTE stuff
             const char backslash = '\\';
-            var encodedArgument = String.Empty;
+            var encodedArgument = string.Empty;
             for (var i = 0; ; i++)
             {
                 var numberOfBackslashes = 0;
@@ -322,7 +317,7 @@ namespace LtInfo.Common
                 }
             }
             // Surround the entire argument with DQUOTE
-            return String.Format("\"{0}\"", encodedArgument);
+            return $"\"{encodedArgument}\"";
         }
     }
 }

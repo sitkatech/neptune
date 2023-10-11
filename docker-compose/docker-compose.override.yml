@@ -47,3 +47,8 @@ services:
       - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
       - OcStormwaterToolsBaseUrl=${OcStormwaterToolsBaseUrl}
       - NereidUrl=${NereidUrl}
+      - GDALAPIBaseUrl=${GDALAPIBaseUrl}
+
+  neptune.gdalapi:
+    environment:
+      - AzureBlobStorageConnectionString=${AzureBlobStorageConnectionString}

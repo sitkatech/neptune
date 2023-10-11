@@ -18,11 +18,10 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.IO;
-using LtInfo.Common.DesignByContract;
 
-namespace LtInfo.Common
+using Neptune.Common.DesignByContract;
+
+namespace Neptune.Common
 {
     public class DisposableTempDirectory : IDisposable
     {
@@ -31,11 +30,21 @@ namespace LtInfo.Common
         private bool _isDisposed;
 
         public DisposableTempDirectory()
+            : this(Path.GetTempFileName())
         {
-            var newTempDirectoryName = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            _directoryInfo = new DirectoryInfo(newTempDirectoryName);
-            Check.Assert(!_directoryInfo.Exists, string.Format("Directory {0} already exists", newTempDirectoryName));
-            _directoryInfo.Create();
+        }
+
+        public DisposableTempDirectory(string tempFileName)
+        {
+            _directoryInfo = new DirectoryInfo(tempFileName);
+        }
+
+        public static DisposableTempDirectory MakeDisposableTempDirectoryEndingIn(string directoryEnding)
+        {
+            var tempFileName = Path.GetTempFileName();
+            File.Delete(tempFileName); // we need to delete this right away once we get the path; Path.GetTempFileName() creates a zero byte file on disk
+            var tempPath = tempFileName + directoryEnding;
+            return new DisposableTempDirectory(tempPath);
         }
 
         public DirectoryInfo DirectoryInfo
@@ -53,10 +62,10 @@ namespace LtInfo.Common
             {
                 if (_directoryInfo != null)
                 {
-                    var directoryFullName = _directoryInfo.FullName;
-                    if (Directory.Exists(directoryFullName))
+                    var fileFullName = _directoryInfo.FullName;
+                    if (Directory.Exists(fileFullName))
                     {
-                        Directory.Delete(directoryFullName, true);
+                        Directory.Delete(fileFullName, true);
                     }
                     _directoryInfo = null;
                 }

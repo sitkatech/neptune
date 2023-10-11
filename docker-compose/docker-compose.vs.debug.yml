@@ -59,6 +59,19 @@ services:
     volumes:
       - ~/.aspnet/https:/https:ro
 
+  neptune.gdalapi:
+    image: neptune/gdalapi
+    hostname: gdalapi
+    labels:
+      - "com.microsoft.visualstudio.targetoperatingsystem=linux"
+    build:
+      args:
+        source: ${DOCKER_BUILD_SOURCE}
+    ports:
+      - "8231:80"
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+
 
 secrets:
   GeoserverSqlServerPassword.txt:

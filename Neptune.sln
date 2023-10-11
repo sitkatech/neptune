@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptune.Common", "Neptune.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptune.Tests", "Neptune.Tests\Neptune.Tests.csproj", "{16074F6E-EEE4-40AC-932D-E557552E1DEC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neptune.GDALAPI", "Neptune.GDALAPI\Neptune.GDALAPI.csproj", "{D7F95B96-AC4F-47C6-896A-562DACCB307D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{08A79878-7C33-4006-BF72-F0862B30A916}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08A79878-7C33-4006-BF72-F0862B30A916}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08A79878-7C33-4006-BF72-F0862B30A916}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7F95B96-AC4F-47C6-896A-562DACCB307D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7F95B96-AC4F-47C6-896A-562DACCB307D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7F95B96-AC4F-47C6-896A-562DACCB307D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7F95B96-AC4F-47C6-896A-562DACCB307D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

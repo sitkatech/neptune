@@ -18,5 +18,6 @@ namespace Neptune.API.Services
         public string OCTAPrioritizationServiceUrl { get; set; }
         public string PrecipitationZoneServiceUrl { get; set; }
         public string RegionalSubbasinServiceUrl { get; set; }
+        public string GDALAPIBaseUrl { get; set; }
     }
 }

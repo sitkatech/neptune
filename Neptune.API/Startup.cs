@@ -32,6 +32,7 @@ using Hangfire;
 using Hangfire.SqlServer;
 using Neptune.API.Hangfire;
 using Neptune.API.Services.Filter;
+using Neptune.Common.Services.GDAL;
 
 namespace Neptune.API
 {
@@ -141,6 +142,20 @@ namespace Neptune.API
                 httpClientHandler.ClientCertificateOptions = ClientCertificateOption.Manual;
                 httpClientHandler.ServerCertificateCustomValidationCallback =
                     (_, _, _, _) => true;
+
+                return httpClientHandler;
+            });
+
+            services.AddHttpClient<GDALAPIService>(c =>
+            {
+                c.BaseAddress = new Uri(configuration.GDALAPIBaseUrl);
+                c.Timeout = TimeSpan.FromDays(1);
+            }).ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                var httpClientHandler = new HttpClientHandler();
+                httpClientHandler.ClientCertificateOptions = ClientCertificateOption.Manual;
+                httpClientHandler.ServerCertificateCustomValidationCallback =
+                    (httpRequestMessage, cert, cetChain, policyErrors) => true;
 
                 return httpClientHandler;
             });

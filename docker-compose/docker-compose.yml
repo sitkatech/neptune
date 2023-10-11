@@ -12,3 +12,9 @@ services:
     build:
       context: ..
       dockerfile: Neptune.API/Dockerfile
+      
+  neptune.gdalapi:
+    image: neptune/gdalapi
+    build:
+      context: ..
+      dockerfile: Neptune.GDALAPI/Dockerfile
