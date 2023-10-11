@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Neptune.API.Hangfire;
+namespace Neptune.Common.Services;
 
 public class EsriQueryResponse
 {

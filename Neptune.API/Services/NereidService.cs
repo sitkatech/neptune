@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
+using Neptune.Common.Services;
 using Neptune.EFModels.Entities;
 using Neptune.EFModels.Nereid;
 
@@ -17,8 +18,11 @@ namespace Neptune.API.Services;
 
 public class NereidService : BaseAPIService<NereidService>
 {
-    public NereidService(HttpClient httpClient, ILogger<NereidService> logger, IOptions<NeptuneConfiguration> neptuneConfigurationOptions) : base(httpClient, logger, neptuneConfigurationOptions, "Nereid Service")
+    private readonly NeptuneConfiguration _neptuneConfiguration;
+
+    public NereidService(HttpClient httpClient, ILogger<NereidService> logger, IOptions<NeptuneConfiguration> neptuneConfigurationOptions) : base(httpClient, logger, "Nereid Service")
     {
+        _neptuneConfiguration = neptuneConfigurationOptions.Value;
     }
 
     public async Task<object> HealthCheck()

@@ -102,12 +102,5 @@ namespace Neptune.WebMvc.Views.ParcelLayerUpload
 
             return errors;
         }
-
-        public void UpdateModel(Person currentPerson)
-        {
-            // todo: hangfire
-            //BackgroundJob.Schedule(() =>
-            //    ScheduledBackgroundJobLaunchHelper.RunParcelLayerUploadBackgroundJob(currentPerson.PersonID), TimeSpan.FromSeconds(30));
-        }
     }
 }

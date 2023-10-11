@@ -1,22 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Neptune.API.Hangfire;
 using Neptune.Common.GeoSpatial;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 
-namespace Neptune.API.Services;
+namespace Neptune.Common.Services;
 
 public class OCGISService : BaseAPIService<OCGISService>
 {
-    public OCGISService(HttpClient httpClient, ILogger<OCGISService> logger, IOptions<NeptuneConfiguration> neptuneConfigurationOptions) : base(httpClient, logger, neptuneConfigurationOptions, "OCGIS Service")
+    public OCGISService(HttpClient httpClient, ILogger<OCGISService> logger) : base(httpClient, logger, "OCGIS Service")
     {
     }
 
@@ -53,6 +47,21 @@ public class OCGISService : BaseAPIService<OCGISService>
         var featureCollection = await RetrieveFeatureCollectionFromArcServer("Environmental_Resources/RegionalSubbasins/MapServer/0/query", serviceName);
         var result = GeoJsonSerializer.DeserializeFromFeatureCollection<RegionalSubbasinFromEsri>(featureCollection);
         ThrowIfNotUnique(result.GroupBy(x => x.OCSurveyCatchmentID), serviceName);
+
+        // check if downstream is invalid
+        var ocSurveyCatchmentIDs = result.Select(x => x.OCSurveyCatchmentID).ToList();
+        var stagedRegionalSubbasinsWithBrokenDownstreamRel = result.Where(x =>
+                x.OCSurveyDownstreamCatchmentID.HasValue &&
+                x.OCSurveyDownstreamCatchmentID != 0 &&
+                !ocSurveyCatchmentIDs.Contains(x.OCSurveyDownstreamCatchmentID.Value))
+            .ToList();
+
+        if (stagedRegionalSubbasinsWithBrokenDownstreamRel.Any())
+        {
+            throw new RemoteServiceException(
+                $"The {serviceName} service returned an invalid collection. The catchments with the following IDs have invalid downstream catchment IDs:\n{string.Join(", ", stagedRegionalSubbasinsWithBrokenDownstreamRel.Select(x => x.OCSurveyCatchmentID))}");
+        }
+
         return result;
     }
 

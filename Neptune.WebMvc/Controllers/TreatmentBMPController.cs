@@ -25,6 +25,7 @@ using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.Shared;
 using Neptune.WebMvc.Views.TreatmentBMP;
 using System.Globalization;
+using Hangfire;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -33,6 +34,7 @@ using Microsoft.Extensions.Options;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
 using Neptune.Common.Mvc;
+using Neptune.Common.Services;
 using Neptune.EFModels;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
@@ -50,16 +52,17 @@ using EditOtherDesignAttributes = Neptune.WebMvc.Views.TreatmentBMP.EditOtherDes
 using EditViewData = Neptune.WebMvc.Views.TreatmentBMP.EditViewData;
 using EditViewModel = Neptune.WebMvc.Views.TreatmentBMP.EditViewModel;
 using TreatmentBMPAssessmentSummary = Neptune.EFModels.Entities.TreatmentBMPAssessmentSummary;
-using DocumentFormat.OpenXml.InkML;
 using Neptune.EFModels.Nereid;
-using NetTopologySuite.Geometries;
 
 namespace Neptune.WebMvc.Controllers
 {
     public class TreatmentBMPController : NeptuneBaseController<TreatmentBMPController>
     {
-        public TreatmentBMPController(NeptuneDbContext dbContext, ILogger<TreatmentBMPController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
+        private readonly OCGISService _ocgisService;
+
+        public TreatmentBMPController(NeptuneDbContext dbContext, ILogger<TreatmentBMPController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, OCGISService ocgisService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
+            _ocgisService = ocgisService;
         }
 
         [HttpGet]
@@ -973,9 +976,27 @@ namespace Neptune.WebMvc.Controllers
                 return ViewRefreshModelBasinsFromOCSurvey(viewModel);
             }
 
-            //todo: BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunModelBasinRefreshBackgroundJob(CurrentPerson.PersonID));
+            BackgroundJob.Enqueue(() => RefreshModelBasinsFromOCSurveyImpl());
             SetMessageForDisplay("Model Basins refresh will run in the background.");
             return new ModalDialogFormJsonResult();
+        }
+
+        private async Task RefreshModelBasinsFromOCSurveyImpl()
+        {
+            _dbContext.Database.SetCommandTimeout(30000);
+            await _dbContext.ModelBasinStagings.ExecuteDeleteAsync();
+            var modelBasinFromEsris = await _ocgisService.RetrieveModelBasins();
+            var modelBasinStagings = modelBasinFromEsris.Select(x => new ModelBasinStaging()
+            {
+                ModelBasinGeometry = x.Geometry,
+                ModelBasinKey = x.ModelBasinKey,
+                ModelBasinState = x.ModelBasinState,
+                ModelBasinRegion = x.ModelBasinRegion
+            }).ToList();
+            await _dbContext.ModelBasinStagings.AddRangeAsync(modelBasinStagings);
+            await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pModelBasinUpdateFromStaging");
+            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdateModelBasin");
         }
 
         private PartialViewResult ViewRefreshModelBasinsFromOCSurvey(ConfirmDialogFormViewModel viewModel)
@@ -1001,9 +1022,27 @@ namespace Neptune.WebMvc.Controllers
                 return ViewRefreshPrecipitationZonesFromOCSurvey(viewModel);
             }
 
-            //todo: BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunPrecipitationZoneRefreshBackgroundJob(CurrentPerson.PersonID));
+            BackgroundJob.Enqueue(() => RefreshPrecipitationZonesFromOCSurveyImpl());
             SetMessageForDisplay("Precipitation Zones refresh will run in the background.");
             return new ModalDialogFormJsonResult();
+        }
+
+        private async Task RefreshPrecipitationZonesFromOCSurveyImpl()
+        {
+            _dbContext.Database.SetCommandTimeout(30000);
+            await _dbContext.PrecipitationZoneStagings.ExecuteDeleteAsync();
+            var precipitationZoneFromEsris = await _ocgisService.RetrievePrecipitationZones();
+            var precipitationZoneStagings = precipitationZoneFromEsris.Select(feature => new PrecipitationZoneStaging()
+                {
+                    PrecipitationZoneGeometry = feature.Geometry,
+                    PrecipitationZoneKey = feature.PrecipitationZoneKey,
+                    DesignStormwaterDepthInInches = feature.DesignStormwaterDepthInInches
+                })
+                .ToList();
+            await _dbContext.PrecipitationZoneStagings.AddRangeAsync(precipitationZoneStagings);
+            await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pPrecipitationZoneUpdateFromStaging");
+            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdatePrecipitationZone");
         }
 
         private PartialViewResult ViewRefreshPrecipitationZonesFromOCSurvey(ConfirmDialogFormViewModel viewModel)
@@ -1029,9 +1068,43 @@ namespace Neptune.WebMvc.Controllers
                 return ViewRefreshOCTAPrioritizationLayerFromOCSurvey(viewModel);
             }
 
-            //todo: BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunOCTAPrioritizationRefreshBackgroundJob(CurrentPerson.PersonID));
+            BackgroundJob.Enqueue(() => RefreshOCTAPrioritizationLayerFromOCSurveyImpl());
             SetMessageForDisplay("OCTA Prioritization refresh will run in the background.");
             return new ModalDialogFormJsonResult();
+        }
+
+        private async Task RefreshOCTAPrioritizationLayerFromOCSurveyImpl()
+        {
+            _dbContext.Database.SetCommandTimeout(30000);
+            await _dbContext.OCTAPrioritizationStagings.ExecuteDeleteAsync();
+            var octaPrioritizationFromEsris = await _ocgisService.RetrieveOCTAPrioritizations();
+            var octaPrioritizationStagings = octaPrioritizationFromEsris.Select(x => new OCTAPrioritizationStaging()
+            {
+                OCTAPrioritizationGeometry = x.Geometry,
+                OCTAPrioritizationKey = x.OCTAPrioritizationKey,
+                Watershed = x.Watershed,
+                CatchIDN = x.CatchIDN,
+                TPI = x.TPI,
+                WQNLU = x.WQNLU,
+                WQNMON = x.WQNMON,
+                IMPAIR = x.IMPAIR,
+                MON = x.MON,
+                SEA = x.SEA,
+                SEA_PCTL = x.SEA_PCTL,
+                PC_VOL_PCT = x.PC_VOL_PCT,
+                PC_NUT_PCT = x.PC_NUT_PCT,
+                PC_BAC_PCT = x.PC_BAC_PCT,
+                PC_MET_PCT = x.PC_MET_PCT,
+                PC_TSS_PCT = x.PC_TSS_PCT
+            }).ToList();
+            await _dbContext.OCTAPrioritizationStagings.AddRangeAsync(octaPrioritizationStagings);
+            await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pOCTAPrioritizationUpdateFromStaging");
+            foreach (var octaPrioritization in _dbContext.OCTAPrioritizations)
+            {
+                octaPrioritization.OCTAPrioritizationGeometry4326 = octaPrioritization.OCTAPrioritizationGeometry.ProjectTo4326();
+            }
+            await _dbContext.SaveChangesAsync();
         }
 
         private PartialViewResult ViewRefreshOCTAPrioritizationLayerFromOCSurvey(ConfirmDialogFormViewModel viewModel)

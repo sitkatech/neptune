@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Neptune.API.Services;
 using Neptune.Common.Email;
 using Neptune.Common.GeoSpatial;
+using Neptune.Common.Services;
 using Neptune.EFModels.Entities;
 
 namespace Neptune.API.Hangfire
@@ -32,32 +33,32 @@ namespace Neptune.API.Hangfire
 
         protected override async void RunJobImplementation()
         {
-            await RunRefresh(DbContext, QueueLGURefresh);
+            await RunRefresh(DbContext);
         }
 
         public override List<RunEnvironment> RunEnvironments => new() { RunEnvironment.Development, RunEnvironment.Staging, RunEnvironment.Production };
     
-        public async Task RunRefresh(NeptuneDbContext dbContext, bool queueLguRefresh)
+        public async Task RunRefresh(NeptuneDbContext dbContext)
         {
             dbContext.Database.SetCommandTimeout(30000);
             await dbContext.RegionalSubbasinStagings.ExecuteDeleteAsync();
             var regionalSubbasinFromEsris = await _ocgisService.RetrieveRegionalSubbasins();
-            ThrowIfDownstreamInvalid(regionalSubbasinFromEsris);
             await SaveToStagingTable(regionalSubbasinFromEsris);
             await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
             await MergeAndProjectTo4326(dbContext);
             await RefreshCentralizedDelineations(dbContext);
-
             await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDelineationMarkThoseThatHaveDiscrepancies");
 
-            if (queueLguRefresh)
-            {
-                // Instead, just queue a total LGU update
-                BackgroundJob.Enqueue<LoadGeneratingUnitRefreshScheduledBackgroundJob>(x => x.RunJob(null));
+            UpdateLoadGeneratingUnits();
+        }
 
-                // And follow it up with an HRU update
-                BackgroundJob.Enqueue<HRURefreshBackgroundJob>(x => x.RunJob(null));
-            }
+        private static void UpdateLoadGeneratingUnits()
+        {
+            // Instead, just queue a total LGU update
+            BackgroundJob.Enqueue<LoadGeneratingUnitRefreshScheduledBackgroundJob>(x => x.RunJob(null));
+
+            // And follow it up with an HRU update
+            BackgroundJob.Enqueue<HRURefreshBackgroundJob>(x => x.RunJob(null));
         }
 
         private async Task SaveToStagingTable(IEnumerable<OCGISService.RegionalSubbasinFromEsri> regionalSubbasinFromEsris)
@@ -108,22 +109,6 @@ namespace Neptune.API.Hangfire
             await dbContext.SaveChangesAsync();
             await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdateWatershed");
             await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pUpdateRegionalSubbasinIntersectionCache");
-        }
-
-        private static void ThrowIfDownstreamInvalid(List<OCGISService.RegionalSubbasinFromEsri> regionalSubbasinStagings)
-        {
-            var ocSurveyCatchmentIDs = regionalSubbasinStagings.Select(x => x.OCSurveyCatchmentID).ToList();
-            var stagedRegionalSubbasinsWithBrokenDownstreamRel = regionalSubbasinStagings.Where(x =>
-                    x.OCSurveyDownstreamCatchmentID.HasValue &&
-                    x.OCSurveyDownstreamCatchmentID != 0 &&
-                    !ocSurveyCatchmentIDs.Contains(x.OCSurveyDownstreamCatchmentID.Value))
-                .ToList();
-
-            if (stagedRegionalSubbasinsWithBrokenDownstreamRel.Any())
-            {
-                throw new RemoteServiceException(
-                    $"The Regional Subbasin service returned an invalid collection. The catchments with the following IDs have invalid downstream catchment IDs:\n{string.Join(", ", stagedRegionalSubbasinsWithBrokenDownstreamRel.Select(x => x.OCSurveyCatchmentID))}");
-            }
         }
     }
 }

@@ -32,6 +32,7 @@ using Hangfire;
 using Hangfire.SqlServer;
 using Neptune.API.Hangfire;
 using Neptune.API.Services.Filter;
+using Neptune.Common.Services;
 using Neptune.Common.Services.GDAL;
 
 namespace Neptune.API

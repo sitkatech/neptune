@@ -1,26 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
-namespace Neptune.API.Services;
+namespace Neptune.Common.Services;
 
 public abstract class BaseAPIService<T>
 {
     protected readonly HttpClient HttpClient;
     protected readonly ILogger<T> Logger;
-    protected readonly NeptuneConfiguration NeptuneConfiguration;
     protected readonly string ServiceName;
 
-    protected BaseAPIService(HttpClient httpClient, ILogger<T> logger, IOptions<NeptuneConfiguration> neptuneConfigurationOptions, string serviceName)
+    protected BaseAPIService(HttpClient httpClient, ILogger<T> logger, string serviceName)
     {
         HttpClient = httpClient;
         Logger = logger;
         ServiceName = serviceName;
-        NeptuneConfiguration = neptuneConfigurationOptions.Value;
     }
 
     protected async Task<TV> GetJsonImpl<TV>(string uri, JsonSerializerOptions jsonSerializerOptions)

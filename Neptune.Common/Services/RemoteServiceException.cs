@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Neptune.API.Hangfire;
+﻿namespace Neptune.Common.Services;
 
 public class RemoteServiceException : Exception
 {

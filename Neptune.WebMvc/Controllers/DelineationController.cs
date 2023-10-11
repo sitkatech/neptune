@@ -373,7 +373,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewCheckForDiscrepancies(viewModel);
             }
 
-            BackgroundJob.Schedule(() => _dbContext.Database.ExecuteSqlRaw("EXEC dbo.pDelineationMarkThoseThatHaveDiscrepancies"), TimeSpan.FromSeconds(1));
+            BackgroundJob.Enqueue(() => _dbContext.Database.ExecuteSqlRaw("EXEC dbo.pDelineationMarkThoseThatHaveDiscrepancies"));
             SetMessageForDisplay("The job to check BMP delineation discrepancies and overlaps has been queued. Please check back in a few minutes to see the new results.");
             return new ModalDialogFormJsonResult();
         }

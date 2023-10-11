@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Neptune.API.Hangfire;
 using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
-using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.EFModels.Nereid;
 
@@ -29,40 +30,40 @@ namespace Neptune.API.Controllers
             _nereidService = nereidService;
         }
 
-        ///// <summary>
-        ///// Manually fire a re-calculation of the LGU layer.
-        ///// Available only to Sitka Admins
-        ///// </summary>
-        ///// <returns></returns>
-        //[HttpGet]
-        //[SitkaAdminFeature]
-        //public ContentResult TriggerLGURun()
-        //{
-        //    BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(null));
-        //    return Content("LGU refresh will run in the background");
-        //}
+        /// <summary>
+        /// Manually fire a re-calculation of the LGU layer.
+        /// Available only to Sitka Admins
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [SitkaAdminFeature]
+        public ContentResult TriggerLGURun()
+        {
+            BackgroundJob.Enqueue<LoadGeneratingUnitRefreshScheduledBackgroundJob>(x => x.RunJob(null));
+            return Content("LGU refresh will run in the background");
+        }
 
-        ///// <summary>
-        ///// Manually fire a run of the HRU statistics job.
-        ///// This does not recalculate the LGU layer or discard existing HRU statistics.
-        ///// Available only to Sitka Admins
-        ///// </summary>
-        ///// <returns></returns>
-        //[HttpGet]
-        //[SitkaAdminFeature]
-        //public ContentResult TriggerHRURun()
-        //{
-        //    BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunHRURefreshJob());
-        //    return Content("HRU refresh will run in the background");
-        //}
+        /// <summary>
+        /// Manually fire a run of the HRU statistics job.
+        /// This does not recalculate the LGU layer or discard existing HRU statistics.
+        /// Available only to Sitka Admins
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [SitkaAdminFeature]
+        public ContentResult TriggerHRURun()
+        {
+            BackgroundJob.Enqueue<HRURefreshBackgroundJob>(x => x.RunJob(null));
+            return Content("HRU refresh will run in the background");
+        }
 
-        //[HttpGet]
-        //[SitkaAdminFeature]
-        //public IActionResult DeltaSolve()
-        //{
-        //    BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunDeltaSolve());
-        //    return Ok("En-queued");
-        //}
+        [HttpGet]
+        [SitkaAdminFeature]
+        public IActionResult DeltaSolve()
+        {
+            BackgroundJob.Enqueue<DeltaSolveJob>(x => x.RunJob(null));
+            return Ok("En-queued");
+        }
 
         [HttpGet("nereid/health")]
         public async Task<IActionResult> HealthCheck()
