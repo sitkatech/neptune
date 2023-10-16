@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.Extensions.Options;
 using Neptune.Common.DesignByContract;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;

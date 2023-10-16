@@ -29,6 +29,13 @@ public abstract class BaseAPIService<T>
         return postResponse;
     }
 
+    protected async Task<HttpResponseMessage> PostFormContent(string uri, List<KeyValuePair<string, string>> nameValueCollection)
+    {
+        var postResponse = await HttpClient.PostAsync(uri, new FormUrlEncodedContent(nameValueCollection));
+        postResponse.EnsureSuccessStatusCode();
+        return postResponse;
+    }
+
     protected async Task<List<TV>> GetIEnumerableImpl<TV>(string uri, JsonSerializerOptions jsonSerializerOptions)
     {
         using var response = await HttpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);

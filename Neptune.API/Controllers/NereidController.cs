@@ -13,6 +13,8 @@ using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.EFModels.Nereid;
+using Neptune.Jobs.Hangfire;
+using Neptune.Jobs.Services;
 
 namespace Neptune.API.Controllers
 {

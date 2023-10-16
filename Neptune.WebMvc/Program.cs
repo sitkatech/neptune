@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common.Email;
 using Neptune.Common.JsonConverters;
+using Neptune.Common.Services.GDAL;
+using Neptune.Common.Services;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.OpenID;
@@ -12,6 +14,9 @@ using SendGrid.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Hangfire;
+using Hangfire.SqlServer;
+using Neptune.Jobs.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -78,9 +83,57 @@ var builder = WebApplication.CreateBuilder(args);
         });
     });
 
+    services.AddHttpClient<OCGISService>(c =>
+    {
+        c.BaseAddress = new Uri(configuration.OCGISBaseUrl);
+        c.Timeout = TimeSpan.FromDays(1);
+    }).ConfigurePrimaryHttpMessageHandler(() =>
+    {
+        var httpClientHandler = new HttpClientHandler();
+        httpClientHandler.ClientCertificateOptions = ClientCertificateOption.Manual;
+        httpClientHandler.ServerCertificateCustomValidationCallback =
+            (_, _, _, _) => true;
+
+        return httpClientHandler;
+    });
+
+    services.AddHttpClient<GDALAPIService>(c =>
+    {
+        c.BaseAddress = new Uri(configuration.GDALAPIBaseUrl);
+        c.Timeout = TimeSpan.FromDays(1);
+    }).ConfigurePrimaryHttpMessageHandler(() =>
+    {
+        var httpClientHandler = new HttpClientHandler();
+        httpClientHandler.ClientCertificateOptions = ClientCertificateOption.Manual;
+        httpClientHandler.ServerCertificateCustomValidationCallback =
+            (_, _, _, _) => true;
+
+        return httpClientHandler;
+    });
+
     services.AddAuthorizationPolicies();
     services.AddSendGrid(options => { options.ApiKey = configuration.SendGridApiKey; });
     services.AddSingleton<SitkaSmtpClientService>();
+
+    #region Hangfire
+    services.AddHangfire(x => x
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(configuration.DatabaseConnectionString, new SqlServerStorageOptions
+        {
+            CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+            SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+            QueuePollInterval = TimeSpan.Zero,
+            UseRecommendedIsolationLevel = true,
+            DisableGlobalLocks = true
+        }));
+
+    services.AddHangfireServer(x =>
+    {
+        x.WorkerCount = 1;
+    });
+    #endregion
 
     JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
     services.AddAuthentication(options =>

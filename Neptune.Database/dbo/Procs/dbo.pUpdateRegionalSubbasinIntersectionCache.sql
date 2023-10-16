@@ -38,4 +38,19 @@ set tbmp.RegionalSubbasinID = rsb.RegionalSubbasinID
 from dbo.TreatmentBMP tbmp join dbo.RegionalSubbasin rsb
 	on tbmp.LocationPoint.STWithin(rsb.CatchmentGeometry) = 1
 
+-- refresh the centralized delineations
+update d
+set d.DelineationGeometry4326 = vg.UpstreamCatchmentGeometry4326
+from dbo.Delineation d
+join dbo.TreatmentBMP tb on d.TreatmentBMPID = tb.TreatmentBMPID
+join dbo.vRegionalSubbasinUpstreamCatchmentGeometry4326 vg on tb.RegionalSubbasinID = vg.PrimaryKey
+where d.DelineationTypeID = 1 -- centralized
+
+update d
+set d.DelineationGeometry = vg.UpstreamCatchmentGeometry
+from dbo.Delineation d
+join dbo.TreatmentBMP tb on d.TreatmentBMPID = tb.TreatmentBMPID
+join dbo.vRegionalSubbasinUpstreamCatchmentGeometry vg on tb.RegionalSubbasinID = vg.PrimaryKey
+where d.DelineationTypeID = 1 -- centralized
+
 go

@@ -18,7 +18,9 @@
     <PackageReference Include="ApprovalTests" Version="5.9.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.18.0" />
     <PackageReference Include="ClosedXML" Version="0.102.1" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.5" />
     <PackageReference Include="Hangfire.Core" Version="1.8.5" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.8.5" />
     <PackageReference Include="IdentityServer4" Version="4.1.2" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.21" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
@@ -42,6 +44,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Neptune.Common\Neptune.Common.csproj" />
     <ProjectReference Include="..\Neptune.EFModels\Neptune.EFModels.csproj" />
+    <ProjectReference Include="..\Neptune.Jobs\Neptune.Jobs.csproj" />
   </ItemGroup>
 
   <ItemGroup>

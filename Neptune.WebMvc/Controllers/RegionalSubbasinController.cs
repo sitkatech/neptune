@@ -6,11 +6,9 @@ using Neptune.WebMvc.Views.RegionalSubbasin;
 using Neptune.WebMvc.Views.Shared;
 using Neptune.WebMvc.Views.Shared.HRUCharacteristics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Neptune.Common.GeoSpatial;
-using Neptune.Common.Services;
 using Neptune.EFModels.Entities;
+using Neptune.Jobs.Services;
 using Neptune.Models.DataTransferObjects;
 using Neptune.WebMvc.Common.MvcResults;
 using Neptune.WebMvc.Services.Filters;
@@ -46,7 +44,7 @@ namespace Neptune.WebMvc.Controllers
         public JsonResult UpstreamCatchments([FromRoute] RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
         {
             var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
-            return Json(new {regionalSubbasinIDs = regionalSubbasin.TraceUpstreamCatchmentsReturnIDList(_dbContext) });
+            return Json(new {regionalSubbasinIDs = vRegionalSubbasinUpstreams.ListUpstreamRegionalBasinIDs(_dbContext, regionalSubbasin) });
         }
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
@@ -96,87 +94,9 @@ namespace Neptune.WebMvc.Controllers
                 return ViewRefreshFromOCSurvey(viewModel);
             }
 
-            BackgroundJob.Enqueue(() => RefreshFromOCSurveyImpl());
+            BackgroundJob.Enqueue<OCGISService>(x => x.RefreshSubbasins());
             SetMessageForDisplay("Regional Subbasins refresh will run in the background.");
             return new ModalDialogFormJsonResult();
-        }
-
-        /// <summary>
-        /// this is the same code in RegionalSubbasinRefreshScheduledBackgroundJob.RunRefresh except it doesn't queue a LGURefresh
-        /// for now duplicating it since don't have a better way of sharing it
-        /// </summary>
-        public async Task RefreshFromOCSurveyImpl()
-        {
-            _dbContext.Database.SetCommandTimeout(30000);
-            await _dbContext.RegionalSubbasinStagings.ExecuteDeleteAsync();
-            var regionalSubbasinFromEsris = await _ocgisService.RetrieveRegionalSubbasins();
-            await SaveToStagingTable(regionalSubbasinFromEsris);
-            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
-            await MergeAndProjectTo4326(_dbContext);
-            await RefreshCentralizedDelineations(_dbContext);
-            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDelineationMarkThoseThatHaveDiscrepancies");
-        }
-
-        /// <summary>
-        /// this is the same code in RegionalSubbasinRefreshScheduledBackgroundJob.SaveToStagingTable
-        /// for now duplicating it since don't have a better way of sharing it
-        /// </summary>
-        private async Task SaveToStagingTable(IEnumerable<OCGISService.RegionalSubbasinFromEsri> regionalSubbasinFromEsris)
-        {
-            var regionalSubbasinStagings = regionalSubbasinFromEsris.Select(feature => new RegionalSubbasinStaging()
-            {
-                CatchmentGeometry = feature.Geometry,
-                Watershed = feature.Watershed,
-                OCSurveyCatchmentID = feature.OCSurveyCatchmentID,
-                OCSurveyDownstreamCatchmentID = feature.OCSurveyDownstreamCatchmentID,
-                DrainID = feature.DrainID
-            })
-                .ToList();
-            await _dbContext.RegionalSubbasinStagings.AddRangeAsync(regionalSubbasinStagings);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        /// <summary>
-        /// this is the same code in RegionalSubbasinRefreshScheduledBackgroundJob.RefreshCentralizedDelineations
-        /// for now duplicating it since don't have a better way of sharing it
-        /// </summary>
-        private static async Task RefreshCentralizedDelineations(NeptuneDbContext dbContext)
-        {
-            foreach (var delineation in dbContext.Delineations.Where(x => x.DelineationTypeID == DelineationType.Centralized.DelineationTypeID))
-            {
-                var centralizedDelineationGeometry2771 = delineation.TreatmentBMP.GetCentralizedDelineationGeometry2771(dbContext);
-                var centralizedDelineationGeometry4326 = delineation.TreatmentBMP.GetCentralizedDelineationGeometry4326(dbContext);
-
-                delineation.DelineationGeometry = centralizedDelineationGeometry2771;
-                delineation.DelineationGeometry4326 = centralizedDelineationGeometry4326;
-                delineation.DateLastModified = DateTime.Now;
-            }
-
-            await dbContext.SaveChangesAsync();
-        }
-
-        /// <summary>
-        /// this is the same code in RegionalSubbasinRefreshScheduledBackgroundJob.MergeAndProjectTo4326
-        /// for now duplicating it since don't have a better way of sharing it
-        /// </summary>
-        private static async Task MergeAndProjectTo4326(NeptuneDbContext dbContext)
-        {
-            await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pUpdateRegionalSubbasinLiveFromStaging");
-            await dbContext.RegionalSubbasins.LoadAsync();
-            await dbContext.Watersheds.LoadAsync();
-            foreach (var regionalSubbasin in dbContext.RegionalSubbasins)
-            {
-                regionalSubbasin.CatchmentGeometry4326 = regionalSubbasin.CatchmentGeometry.ProjectTo4326();
-            }
-
-            // Watershed table is made up from the dissolves/ aggregation of the Regional Subbasins feature layer, so we need to update it when Regional Subbasins are updated
-            foreach (var watershed in dbContext.Watersheds)
-            {
-                watershed.WatershedGeometry4326 = watershed.WatershedGeometry.ProjectTo4326();
-            }
-            await dbContext.SaveChangesAsync();
-            await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdateWatershed");
-            await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pUpdateRegionalSubbasinIntersectionCache");
         }
 
         private PartialViewResult ViewRefreshFromOCSurvey(ConfirmDialogFormViewModel viewModel)

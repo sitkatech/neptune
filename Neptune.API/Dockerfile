@@ -4,6 +4,7 @@ WORKDIR /src
 COPY ./Neptune.Common ./Neptune.Common
 COPY ./Neptune.Models ./Neptune.Models
 COPY ./Neptune.EFModels ./Neptune.EFModels
+COPY ./Neptune.Jobs ./Neptune.Jobs
 COPY ./Neptune.API ./Neptune.API
 
 RUN dotnet publish ./Neptune.API/Neptune.API.csproj -c Release -o /app

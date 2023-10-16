@@ -81,3 +81,6 @@ Source/Neptune.GeoServer/data_dir/logs/
 /Neptune.GDALAPI/bin/Debug/net6.0
 /Neptune.GDALAPI/obj/Debug/net6.0
 /Neptune.GDALAPI/obj
+/Neptune.Jobs/obj/Debug/net6.0
+/Neptune.Jobs/obj
+/Neptune.Jobs/bin/Debug/net6.0/Neptune.Jobs.deps.json

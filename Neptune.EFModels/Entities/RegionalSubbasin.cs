@@ -1,31 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Neptune.EFModels.Entities
 {
     public partial class RegionalSubbasin
     {
-        public List<RegionalSubbasin> GetRegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment(
-            NeptuneDbContext dbContext)
+        //public static HtmlString GetDisplayNameAsUrl(this RegionalSubbasin regionalSubbasin)
+        //{
+
+        //    return new HtmlString($"<a href='{DetailUrlTemplate.ParameterReplace(regionalSubbasin.RegionalSubbasinID)}'>{regionalSubbasin.Watershed} - {regionalSubbasin.DrainID}: {regionalSubbasin.RegionalSubbasinID}</a>"); 
+        //}
+
+        public IEnumerable<TreatmentBMP> GetTreatmentBMPs(NeptuneDbContext dbContext)
         {
-            return dbContext.RegionalSubbasins
-                .Where(x => x.OCSurveyDownstreamCatchmentID == OCSurveyCatchmentID).ToList();
+            return TreatmentBMPs.GetNonPlanningModuleBMPs(dbContext)
+                .Where(x => CatchmentGeometry.Contains(x.LocationPoint));
         }
 
-        public List<int> TraceUpstreamCatchmentsReturnIDList(NeptuneDbContext dbContext)
+        public IEnumerable<HRUCharacteristic> GetHRUCharacteristics(NeptuneDbContext dbContext)
         {
-            var idList = new List<int>();
-
-            var lookingAt = GetRegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment(dbContext);
-            while (lookingAt.Any())
-            {
-                var ints = lookingAt.Select(x => x.RegionalSubbasinID);
-                idList.AddRange(ints);
-                lookingAt = lookingAt.SelectMany(x =>
-                    x.GetRegionalSubbasinsWhereYouAreTheOCSurveyDownstreamCatchment(dbContext)).ToList();
-            }
-
-            return idList;
+            return dbContext.HRUCharacteristics
+                .Include(x => x.LoadGeneratingUnit)
+                .AsNoTracking()
+                .Where(x => x.LoadGeneratingUnit.RegionalSubbasinID == RegionalSubbasinID);
         }
     }
 }

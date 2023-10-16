@@ -25,15 +25,13 @@ services:
       - MapServiceLayerNameRegionalSubbasin=${MapServiceLayerNameRegionalSubbasin}
       - AutoDelineateServiceUrl=${AutoDelineateServiceUrl}
       - HRUServiceBaseUrl=${HRUServiceBaseUrl}
-      - RegionalSubbasinServiceUrl=${RegionalSubbasinServiceUrl}
-      - ModelBasinServiceUrl=${ModelBasinServiceUrl}
-      - PrecipitationZoneServiceUrl=${PrecipitationZoneServiceUrl}
-      - OCTAPrioritizationServiceUrl=${OCTAPrioritizationServiceUrl}
+      - GDALAPIBaseUrl=${GDALAPIBaseUrl}
+      - OCGISBaseUrl=${OCGISBaseUrl}
       - PathToPyqgisTestScript=${PathToPyqgisTestScript}
       - PyqgisWorkingDirectory=${PyqgisWorkingDirectory}
       - PathToPyqgisLauncher=${PathToPyqgisLauncher}
       - PathToPyqgisProjData=${PathToPyqgisProjData}
-      - PlanningModuleUrl=${PlanningModuleUrl}
+      - PlanningModuleBaseUrl=${PlanningModuleUrl}
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
 
   neptune.api:
@@ -42,7 +40,9 @@ services:
       - SECRET_PATH=${NeptuneAPISecretPath}
       - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
       - SitkaEmailRedirect=${SitkaEmailRedirect}
+      - SitkaSupportEmail=${SitkaSupportEmail}
       - DoNotReplyEmail=${DoNotReplyEmail}
+      - MailLogBcc=${MailLogBcc}
       - KeystoneRedirectUrl=${KeystoneRedirectUrl}
       - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
       - OcStormwaterToolsBaseUrl=${OcStormwaterToolsBaseUrl}

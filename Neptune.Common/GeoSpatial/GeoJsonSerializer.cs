@@ -18,6 +18,11 @@ public static class GeoJsonSerializer
         return JsonSerializer.Deserialize<T>(json, DefaultSerializerOptions);
     }
 
+    public static async Task<T> DeserializeAsync<T>(Stream stream)
+    {
+        return await JsonSerializer.DeserializeAsync<T>(stream, DefaultSerializerOptions);
+    }
+
     public static string Serialize(object value)
     {
         return JsonSerializer.Serialize(value, DefaultSerializerOptions);
@@ -90,18 +95,19 @@ public static class GeoJsonSerializer
 
     public static JsonSerializerOptions CreateGeoJSONSerializerOptions()
     {
-        var jsonSerializerOptions = CreateDefaultJSONSerializerOptions(7);
-        var scale = Math.Pow(10, 3);
-        var geometryFactory = new GeometryFactory(new PrecisionModel(scale), 4326);
-        jsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));
-        return jsonSerializerOptions;
+        return CreateGeoJSONSerializerOptions(3, 7);
     }
 
-    public static JsonSerializerOptions CreateGeoJSONSerializerOptions(int coordinateSystemID, int coordinatePrecision, int numberOfSignificantDigits)
+    public static JsonSerializerOptions CreateGeoJSONSerializerOptions(int numberOfSignificantDigits)
+    {
+        return CreateGeoJSONSerializerOptions(3, numberOfSignificantDigits);
+    }
+
+    public static JsonSerializerOptions CreateGeoJSONSerializerOptions(int coordinatePrecision, int numberOfSignificantDigits)
     {
         var jsonSerializerOptions = CreateDefaultJSONSerializerOptions(numberOfSignificantDigits);
         var scale = Math.Pow(10, coordinatePrecision);
-        var geometryFactory = new GeometryFactory(new PrecisionModel(scale), coordinateSystemID);
+        var geometryFactory = new GeometryFactory(new PrecisionModel(scale));
         jsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));
         return jsonSerializerOptions;
     }
@@ -115,7 +121,7 @@ public static class GeoJsonSerializer
             WriteIndented = true,
             NumberHandling = JsonNumberHandling.AllowReadingFromString,
             PropertyNameCaseInsensitive = false,
-            PropertyNamingPolicy = null
+            PropertyNamingPolicy = null,
         };
         jsonSerializerOptions.Converters.Add(new DateTimeConverter());
         jsonSerializerOptions.Converters.Add(new DoubleConverter(numberOfSignificantDigits));

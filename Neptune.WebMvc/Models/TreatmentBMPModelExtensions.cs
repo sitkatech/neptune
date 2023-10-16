@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
-using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Controllers;
@@ -238,11 +237,23 @@ namespace Neptune.WebMvc.Models
         public static void UpdateUpstreamBMPReferencesIfNecessary(this TreatmentBMP treatmentBMP, NeptuneDbContext dbContext)
         {
             //If this BMP has an Upstream BMP, after the location change, can that Upstream BMP still fulfill its duty?
-            if (treatmentBMP.UpstreamBMPID != null && !treatmentBMP.GetRegionalSubbasin(dbContext).GetTreatmentBMPs(dbContext).Contains(treatmentBMP.UpstreamBMP))
+            if (treatmentBMP.UpstreamBMPID != null)
             {
-                //Do we need to check ahead of time and warn them this will happen?
-                //Do we need to return a message indicating that this has changed?
-                treatmentBMP.UpstreamBMPID = null;
+                var regionalSubbasin = treatmentBMP.GetRegionalSubbasin(dbContext);
+                if (regionalSubbasin != null)
+                {
+                    if (!regionalSubbasin.GetTreatmentBMPs(dbContext).Select(x => x.TreatmentBMPID)
+                            .Contains(treatmentBMP.UpstreamBMPID.Value))
+                    {
+                        //Do we need to check ahead of time and warn them this will happen?
+                        //Do we need to return a message indicating that this has changed?
+                        treatmentBMP.UpstreamBMPID = null;
+                    }
+                }
+                else
+                {
+                    treatmentBMP.UpstreamBMPID = null;
+                }
             }
 
             //todo: need to load inverse upstream bmps
@@ -251,7 +262,15 @@ namespace Neptune.WebMvc.Models
             {
                 treatmentBMP.InverseUpstreamBMP.ToList().ForEach(x =>
                 {
-                    if (!x.GetRegionalSubbasin(dbContext).CatchmentGeometry.Contains(treatmentBMP.LocationPoint))
+                    var regionalSubbasin = x.GetRegionalSubbasin(dbContext);
+                    if (regionalSubbasin != null)
+                    {
+                        if (!regionalSubbasin.CatchmentGeometry.Contains(treatmentBMP.LocationPoint))
+                        {
+                            x.UpstreamBMPID = null;
+                        }
+                    }
+                    else
                     {
                         x.UpstreamBMPID = null;
                     }
@@ -319,20 +338,24 @@ namespace Neptune.WebMvc.Models
 
             if (delineation.DelineationType == DelineationType.Centralized && !treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID.HasValue)
             {
-                var catchmentRegionalSubbasins = treatmentBMP.GetRegionalSubbasin(dbContext).TraceUpstreamCatchmentsReturnIDList(dbContext);
-
-                catchmentRegionalSubbasins.Add(treatmentBMP.RegionalSubbasinID.GetValueOrDefault());
-
-                return dbContext.HRUCharacteristics.Where(x =>
+                if (!treatmentBMP.RegionalSubbasinID.HasValue)
+                {
+                    return Enumerable.Empty<HRUCharacteristic>();
+                }
+                var catchmentRegionalSubbasins = vRegionalSubbasinUpstreams.ListUpstreamRegionalBasinIDs(dbContext, treatmentBMP.RegionalSubbasinID.Value);
+                    
+                return dbContext.HRUCharacteristics.Include(x => x.LoadGeneratingUnit).AsNoTracking().Where(x =>
                     x.LoadGeneratingUnit.RegionalSubbasinID != null &&
                     catchmentRegionalSubbasins.Contains(x.LoadGeneratingUnit.RegionalSubbasinID.Value));
             }
 
-            else
-            {
-                return dbContext.HRUCharacteristics.Where(x =>
-                    x.LoadGeneratingUnit.Delineation != null && x.LoadGeneratingUnit.Delineation.TreatmentBMPID == treatmentBMP.TreatmentBMPID);
-            }
+            return dbContext.HRUCharacteristics
+                .Include(x => x.LoadGeneratingUnit)
+                .ThenInclude(x => x.Delineation)
+                .AsNoTracking()
+                .Where(x =>
+                    x.LoadGeneratingUnit.Delineation != null && x.LoadGeneratingUnit.Delineation.TreatmentBMPID ==
+                    treatmentBMP.TreatmentBMPID);
         }
 
         public static TreatmentBMPTypeAssessmentObservationType GetTreatmentBMPTypeObservationType(this TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)

@@ -82,7 +82,7 @@ namespace Neptune.WebMvc.Views
             LegalUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, x => x.Legal());
 
             MakeNeptuneMenu(currentPerson);
-            NeptuneNavBarViewData = new NeptuneNavBarViewData(linkGenerator, currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl, neptuneArea, isHomePage, webConfiguration.PlanningModuleUrl);
+            NeptuneNavBarViewData = new NeptuneNavBarViewData(linkGenerator, currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl, neptuneArea, isHomePage, webConfiguration.PlanningModuleBaseUrl);
 
             ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(linkGenerator, neptunePage, currentPerson) : null;
         }

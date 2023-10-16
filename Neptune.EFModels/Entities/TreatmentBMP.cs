@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities
 {
@@ -138,34 +139,74 @@ namespace Neptune.EFModels.Entities
 
             if (Delineation.DelineationTypeID == (int)DelineationTypeEnum.Centralized && TreatmentBMPType.TreatmentBMPModelingTypeID != null)
             {
-                var catchmentRegionalSubbasins = GetRegionalSubbasin(dbContext).TraceUpstreamCatchmentsReturnIDList(dbContext);
-
-                catchmentRegionalSubbasins.Add(RegionalSubbasinID.GetValueOrDefault());
+                var regionalSubbasin = GetRegionalSubbasin(dbContext);
+                if (regionalSubbasin == null)
+                {
+                    return Enumerable.Empty<ProjectHRUCharacteristic>();
+                }
+                var catchmentRegionalSubbasins = vRegionalSubbasinUpstreams.ListUpstreamRegionalBasinIDs(dbContext, regionalSubbasin);
 
                 return dbContext.ProjectHRUCharacteristics
-                    .Include(x => x.ProjectLoadGeneratingUnit)
+                    .Include(x => x.ProjectLoadGeneratingUnit).AsNoTracking()
                     .Where(x =>
                         x.ProjectID == ProjectID &&
                         x.ProjectLoadGeneratingUnit.RegionalSubbasinID != null &&
                         catchmentRegionalSubbasins.Contains(x.ProjectLoadGeneratingUnit.RegionalSubbasinID.Value));
             }
 
-            else
-            {
-                return dbContext.ProjectHRUCharacteristics
-                    .Include(x => x.ProjectLoadGeneratingUnit)
-                    .ThenInclude(x => x.Delineation)
-                    .Where(x =>
-                        x.ProjectID == ProjectID &&
-                        x.ProjectLoadGeneratingUnit.Delineation != null &&
-                        x.ProjectLoadGeneratingUnit.Delineation.TreatmentBMPID == TreatmentBMPID);
-            }
+            return dbContext.ProjectHRUCharacteristics
+                .Include(x => x.ProjectLoadGeneratingUnit)
+                .ThenInclude(x => x.Delineation).AsNoTracking()
+                .Where(x =>
+                    x.ProjectID == ProjectID &&
+                    x.ProjectLoadGeneratingUnit.Delineation != null &&
+                    x.ProjectLoadGeneratingUnit.Delineation.TreatmentBMPID == TreatmentBMPID);
         }
 
-        public RegionalSubbasin GetRegionalSubbasin(NeptuneDbContext dbContext)
+        public RegionalSubbasin? GetRegionalSubbasin(NeptuneDbContext dbContext)
         {
-            return dbContext.RegionalSubbasins.SingleOrDefault(x =>
+            return dbContext.RegionalSubbasins.AsNoTracking().SingleOrDefault(x =>
                 x.CatchmentGeometry.Contains(LocationPoint));
+        }
+
+        /// <summary>
+        /// Performs the RSB trace for a given Treatment BMP using the EPSG 4326 representation of the regional subbasin geometries
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <returns></returns>
+        public Geometry? GetCentralizedDelineationGeometry4326(NeptuneDbContext dbContext)
+        {
+            var regionalSubbasin = GetRegionalSubbasin(dbContext);
+
+            if (regionalSubbasin == null)
+            {
+                return null;
+            }
+
+            var unionOfUpstreamRegionalSubbasins = dbContext.vRegionalSubbasinUpstreamCatchmentGeometry4326s.AsNoTracking()
+                .SingleOrDefault(x => x.PrimaryKey == regionalSubbasin.RegionalSubbasinID);
+
+            return unionOfUpstreamRegionalSubbasins?.UpstreamCatchmentGeometry4326;
+        }
+
+        /// <summary>
+        /// Performs the RSB trace for a given Treatment BMP using the EPSG 2771 representation of the regional subbasin geometries
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <returns></returns>
+        public Geometry? GetCentralizedDelineationGeometry2771(NeptuneDbContext dbContext)
+        {
+            var regionalSubbasin = GetRegionalSubbasin(dbContext);
+
+            if (regionalSubbasin == null)
+            {
+                return null;
+            }
+
+            var unionOfUpstreamRegionalSubbasins = dbContext.vRegionalSubbasinUpstreamCatchmentGeometries.AsNoTracking()
+                .SingleOrDefault(x => x.PrimaryKey == regionalSubbasin.RegionalSubbasinID);
+
+            return unionOfUpstreamRegionalSubbasins?.UpstreamCatchmentGeometry;
         }
     }
 }

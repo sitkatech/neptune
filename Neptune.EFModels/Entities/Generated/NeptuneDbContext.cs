@@ -243,6 +243,8 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<vRegionalSubbasinUpstream> vRegionalSubbasinUpstreams { get; set; }
 
+    public virtual DbSet<vRegionalSubbasinUpstreamCatchmentGeometry> vRegionalSubbasinUpstreamCatchmentGeometries { get; set; }
+
     public virtual DbSet<vRegionalSubbasinUpstreamCatchmentGeometry4326> vRegionalSubbasinUpstreamCatchmentGeometry4326s { get; set; }
 
     public virtual DbSet<vTrashGeneratingUnitLoadStatistic> vTrashGeneratingUnitLoadStatistics { get; set; }
@@ -1149,6 +1151,11 @@ public partial class NeptuneDbContext : DbContext
         modelBuilder.Entity<vRegionalSubbasinUpstream>(entity =>
         {
             entity.ToView("vRegionalSubbasinUpstream");
+        });
+
+        modelBuilder.Entity<vRegionalSubbasinUpstreamCatchmentGeometry>(entity =>
+        {
+            entity.ToView("vRegionalSubbasinUpstreamCatchmentGeometry");
         });
 
         modelBuilder.Entity<vRegionalSubbasinUpstreamCatchmentGeometry4326>(entity =>

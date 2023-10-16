@@ -34,6 +34,8 @@ using Neptune.API.Hangfire;
 using Neptune.API.Services.Filter;
 using Neptune.Common.Services;
 using Neptune.Common.Services.GDAL;
+using Neptune.Jobs.Hangfire;
+using Neptune.Jobs.Services;
 
 namespace Neptune.API
 {
