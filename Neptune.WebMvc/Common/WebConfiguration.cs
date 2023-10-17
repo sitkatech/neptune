@@ -16,23 +16,11 @@ public class WebConfiguration : NeptuneJobConfiguration
     public string KeystoneOpenIDClientID { get; set; }
     public string KeystoneOpenIDUrl { get; set; }
     public string KeystoneOpenIDClientSecret { get; set; }
-    public string ParcelMapServiceUrl { get; set; }
-    public string MapServiceLayerNameParcel { get; set; }
-    public string MapServiceLayerNameLandUseBlock { get; set; }
-    public string MapServiceLayerNameRegionalSubbasin { get; set; }
+    public string MapServiceUrl { get; set; }
 
     public string AutoDelineateServiceUrl { get; set; }
-    public string HRUServiceBaseUrl { get; set; }
     public string GDALAPIBaseUrl { get; set; }
     public string OCGISBaseUrl { get; set; }
-
-    public string PathToPyqgisTestScript { get; set; }
-    public string PyqgisWorkingDirectory { get; set; }
-    public string PathToPyqgisLauncher { get; set; }
-    public string PathToPyqgisProjData { get; set; }
-
-    public string PyqgisUsername { get; set; }
-    public string PyqgisPassword { get; set; }
 
     public string PathToFieldVisitUploadTemplate { get; set; }
     public string AzureBlobStorageConnectionString { get; set; }

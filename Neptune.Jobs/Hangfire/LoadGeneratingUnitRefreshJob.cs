@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Neptune.API.Hangfire;
 using Neptune.Common.Email;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
+using Neptune.Jobs.PyQgis;
 using NetTopologySuite.Features;
 
 namespace Neptune.Jobs.Hangfire
@@ -66,25 +69,24 @@ namespace Neptune.Jobs.Hangfire
                 });
             }
 
-            //todo: pyqgis
             // a PyQGIS script computes the LGU layer and saves it as a shapefile
-            //var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{_neptuneJobConfiguration.PyqgisWorkingDirectory}ModelingOverlayAnalysis.py", _neptuneJobConfiguration.PyqgisWorkingDirectory, additionalCommandLineArguments);
+            var processUtilityResult = QgisRunner.ExecutePyqgisScript($"PyQgis/ModelingOverlayAnalysis.py", additionalCommandLineArguments, _neptuneJobConfiguration.DatabaseServerName, _neptuneJobConfiguration.DatabaseName, _neptuneJobConfiguration.PyqgisUsername, _neptuneJobConfiguration.PyqgisPassword, _neptuneJobConfiguration.PathToPyqgisProjData, _neptuneJobConfiguration.PathToPyqgisLauncher, _logger);
 
-            //if (processUtilityResult.ReturnCode > 0)
-            //{
-            //    _logger.LogError("LGU Geoprocessing failed. Output:");
-            //    _logger.LogError(processUtilityResult.StdOutAndStdErr);
-            //    throw new GeoprocessingException(processUtilityResult.StdOutAndStdErr);
-            //}
+            if (processUtilityResult.ReturnCode > 0)
+            {
+                _logger.LogError("LGU Geoprocessing failed. Output:");
+                _logger.LogError(processUtilityResult.StdOutAndStdErr);
+                throw new GeoprocessingException(processUtilityResult.StdOutAndStdErr);
+            }
 
-            //if (loadGeneratingUnitRefreshAreaID != null)
-            //{
-            //    await _dbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToDeltaRefresh @LoadGeneratingUnitRefreshAreaID = {loadGeneratingUnitRefreshAreaID}");
-            //}
-            //else
-            //{
-            //    await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
-            //}
+            if (loadGeneratingUnitRefreshAreaID != null)
+            {
+                await _dbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToDeltaRefresh @LoadGeneratingUnitRefreshAreaID = {loadGeneratingUnitRefreshAreaID}");
+            }
+            else
+            {
+                await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
+            }
 
             var jsonSerializerOptions = GeoJsonSerializer.DefaultSerializerOptions;
             await using (var openStream = File.OpenRead(outputLayerPath))

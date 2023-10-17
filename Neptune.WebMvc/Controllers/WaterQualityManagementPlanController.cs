@@ -524,7 +524,7 @@ namespace Neptune.WebMvc.Controllers
             var wqmpJurisdiction = waterQualityManagementPlan.StormwaterJurisdiction;
             var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, new List<LayerGeoJson>(), wqmpParcelGeometries.Any() ?
                     new BoundingBoxDto(wqmpParcelGeometries) : new BoundingBoxDto(wqmpJurisdiction.StormwaterJurisdictionGeometry?.Geometry4326));
-            var viewData = new EditParcelsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, waterQualityManagementPlan, mapInitJson, _webConfiguration.ParcelMapServiceUrl, _webConfiguration.MapServiceLayerNameParcel, waterQualityManagementPlanParcels);
+            var viewData = new EditParcelsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, waterQualityManagementPlan, mapInitJson, _webConfiguration.MapServiceUrl, Constants.MapServiceLayerNameParcel, waterQualityManagementPlanParcels);
             return RazorView<EditParcels, EditParcelsViewData, EditParcelsViewModel>(viewData, viewModel);
         }
 
@@ -539,7 +539,7 @@ namespace Neptune.WebMvc.Controllers
             var boundingBoxDto = new BoundingBoxDto(geometry4326);
             var mapInitJson = new MapInitJson("EditWQMPBoundaryMap", 10, new List<LayerGeoJson>(), boundingBoxDto);
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.EditWQMPBoundary);
-            var viewData = new RefineAreaViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, waterQualityManagementPlan, mapInitJson, _webConfiguration.ParcelMapServiceUrl, featureCollection);
+            var viewData = new RefineAreaViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, waterQualityManagementPlan, mapInitJson, _webConfiguration.MapServiceUrl, featureCollection);
             return RazorView<RefineArea, RefineAreaViewData, RefineAreaViewModel>(viewData, viewModel);
         }
 

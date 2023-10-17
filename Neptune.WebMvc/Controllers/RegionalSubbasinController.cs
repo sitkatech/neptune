@@ -6,6 +6,7 @@ using Neptune.WebMvc.Views.Shared;
 using Neptune.WebMvc.Views.Shared.HRUCharacteristics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Neptune.Common;
 using Neptune.EFModels.Entities;
 using Neptune.Jobs.Services;
 using Neptune.Models.DataTransferObjects;
@@ -30,8 +31,8 @@ namespace Neptune.WebMvc.Controllers
         [NeptuneAdminFeature]
         public ViewResult Index()
         {
-            var geoServerUrl = _webConfiguration.ParcelMapServiceUrl;
-            var regionalSubbasinLayerName = _webConfiguration.MapServiceLayerNameRegionalSubbasin;
+            var geoServerUrl = _webConfiguration.MapServiceUrl;
+            var regionalSubbasinLayerName = Constants.MapServiceLayerNameRegionalSubbasin;
 
             var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, new RegionalSubbasinMapInitJson("regionalSubbasinMap"), geoServerUrl, regionalSubbasinLayerName);
             return RazorView<Index, IndexViewData>(viewData);

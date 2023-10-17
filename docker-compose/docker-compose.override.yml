@@ -11,45 +11,47 @@ services:
       - SitkaSupportEmail=${SitkaSupportEmail}
       - DoNotReplyEmail=${DoNotReplyEmail}
       - MailLogBcc=${MailLogBcc}
-      - RecaptchaPublicKey=${RecaptchaPublicKey}
-      - RecaptchaPrivateKey=${RecaptchaPrivateKey}
-      - RecaptchaValidatorUrl=${RecaptchaValidatorUrl}
-      - Ogr2OgrExecutable=${Ogr2OgrExecutable}
-      - OgrInfoExecutable=${OgrInfoExecutable}
-      - LogFileFolder=${LogFileFolder}
       - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
       - KeystoneOpenIDClientID=${KeystoneOpenIDClientID}
-      - ParcelMapServiceUrl=${ParcelMapServiceUrl}
-      - MapServiceLayerNameParcel=${MapServiceLayerNameParcel}
-      - MapServiceLayerNameLandUseBlock=${MapServiceLayerNameLandUseBlock}
-      - MapServiceLayerNameRegionalSubbasin=${MapServiceLayerNameRegionalSubbasin}
+      - MapServiceUrl=${MapServiceUrl}
       - AutoDelineateServiceUrl=${AutoDelineateServiceUrl}
       - HRUServiceBaseUrl=${HRUServiceBaseUrl}
       - GDALAPIBaseUrl=${GDALAPIBaseUrl}
       - OCGISBaseUrl=${OCGISBaseUrl}
+      - PlanningModuleBaseUrl=${PlanningModuleBaseUrl}
+      - DatabaseServerName=${DatabaseServerName}
+      - DatabaseName=${DatabaseName}
       - PathToPyqgisTestScript=${PathToPyqgisTestScript}
       - PyqgisWorkingDirectory=${PyqgisWorkingDirectory}
       - PathToPyqgisLauncher=${PathToPyqgisLauncher}
       - PathToPyqgisProjData=${PathToPyqgisProjData}
-      - PlanningModuleBaseUrl=${PlanningModuleUrl}
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
+      - RecaptchaPublicKey=${RecaptchaPublicKey}
+      - RecaptchaPrivateKey=${RecaptchaPrivateKey}
+      - RecaptchaValidatorUrl=${RecaptchaValidatorUrl}
 
   neptune.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - SECRET_PATH=${NeptuneAPISecretPath}
-      - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
+      - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
       - SitkaEmailRedirect=${SitkaEmailRedirect}
       - SitkaSupportEmail=${SitkaSupportEmail}
       - DoNotReplyEmail=${DoNotReplyEmail}
       - MailLogBcc=${MailLogBcc}
+      - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
       - KeystoneRedirectUrl=${KeystoneRedirectUrl}
-      - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
       - OcStormwaterToolsBaseUrl=${OcStormwaterToolsBaseUrl}
       - NereidUrl=${NereidUrl}
       - GDALAPIBaseUrl=${GDALAPIBaseUrl}
       - OCGISBaseUrl=${OCGISBaseUrl}
-      - PlanningModuleBaseUrl=${PlanningModuleUrl}
+      - PlanningModuleBaseUrl=${PlanningModuleBaseUrl}
+      - DatabaseServerName=${DatabaseServerName}
+      - DatabaseName=${DatabaseName}
+      - PathToPyqgisTestScript=${PathToPyqgisTestScript}
+      - PyqgisWorkingDirectory=${PyqgisWorkingDirectory}
+      - PathToPyqgisLauncher=${PathToPyqgisLauncher}
+      - PathToPyqgisProjData=${PathToPyqgisProjData}
 
   neptune.gdalapi:
     environment:

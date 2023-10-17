@@ -84,3 +84,6 @@ Source/Neptune.GeoServer/data_dir/logs/
 /Neptune.Jobs/obj/Debug/net6.0
 /Neptune.Jobs/obj
 /Neptune.Jobs/bin/Debug/net6.0/Neptune.Jobs.deps.json
+/Neptune.QGISAPI/bin/Debug/net6.0
+/Neptune.QGISAPI/obj/Debug/net6.0
+/Neptune.QGISAPI/obj

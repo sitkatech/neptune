@@ -181,7 +181,7 @@ namespace Neptune.WebMvc.Controllers
         {
             var treatmentBMP = TreatmentBMPs.GetByID(_dbContext, treatmentBMPPrimaryKey);
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMP.TreatmentBMPTypeID);
-            var mapServiceUrl = _webConfiguration.ParcelMapServiceUrl;
+            var mapServiceUrl = _webConfiguration.MapServiceUrl;
             var mapInitJson = new TreatmentBMPDetailMapInitJson("StormwaterDetailMap", treatmentBMP.LocationPoint4326, _dbContext);
             mapInitJson.Layers.Add(
                 StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] {treatmentBMP}, false, true, _linkGenerator));

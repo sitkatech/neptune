@@ -25,7 +25,7 @@ namespace Neptune.WebMvc.Controllers
             var neptunePageHome = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.ParcelList);
             var findParcelByAddressUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(_linkGenerator, x => x.FindByAddress(null));
             var findParcelByAPNUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(_linkGenerator, x => x.FindByAPN(null));
-            var parcelMapServiceUrl = _webConfiguration.ParcelMapServiceUrl;
+            var parcelMapServiceUrl = _webConfiguration.MapServiceUrl;
             var parcelSummaryForMapUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(_linkGenerator, x => x.SummaryForMap(null));
             var parcelLayerUploadUrl =
                 SitkaRoute<ParcelLayerUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateParcelLayerGeometry(null));
