@@ -35,7 +35,7 @@ namespace Neptune.Jobs.Hangfire
         private static void UpdateLoadGeneratingUnits()
         {
             // Instead, just queue a total LGU update
-            BackgroundJob.Enqueue<LoadGeneratingUnitRefreshScheduledBackgroundJob>(x => x.RunJob(null));
+            BackgroundJob.Enqueue<LoadGeneratingUnitRefreshJob>(x => x.RunJob(null));
 
             // And follow it up with an HRU update
             BackgroundJob.Enqueue<HRURefreshBackgroundJob>(x => x.RunJob(null));

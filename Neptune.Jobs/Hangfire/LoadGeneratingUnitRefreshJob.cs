@@ -5,22 +5,20 @@ using Microsoft.Extensions.Options;
 using Neptune.Common.Email;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
-using Neptune.Jobs.Services;
 using NetTopologySuite.Features;
 
 namespace Neptune.Jobs.Hangfire
 {
-    public class LoadGeneratingUnitRefreshScheduledBackgroundJob
+    public class LoadGeneratingUnitRefreshJob
     {
-        public const string JobName = "LGU Refresh";
-        private readonly ILogger<LoadGeneratingUnitRefreshScheduledBackgroundJob> _logger;
+        private readonly ILogger<LoadGeneratingUnitRefreshJob> _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly NeptuneDbContext _dbContext;
         private readonly NeptuneJobConfiguration _neptuneJobConfiguration;
         private readonly SitkaSmtpClientService _sitkaSmtpClient;
 
 
-        public LoadGeneratingUnitRefreshScheduledBackgroundJob(ILogger<LoadGeneratingUnitRefreshScheduledBackgroundJob> logger,
+        public LoadGeneratingUnitRefreshJob(ILogger<LoadGeneratingUnitRefreshJob> logger,
             IWebHostEnvironment webHostEnvironment, NeptuneDbContext dbContext,
             IOptions<NeptuneJobConfiguration> neptuneJobConfiguration, SitkaSmtpClientService sitkaSmtpClientService)
         {
