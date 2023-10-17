@@ -16,6 +16,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Hangfire;
 using Hangfire.SqlServer;
+using Neptune.Jobs;
 using Neptune.Jobs.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,6 +73,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Configuration.AddJsonFile(builder.Configuration["SECRET_PATH"], optional: false, reloadOnChange: true);
 
     services.Configure<WebConfiguration>(builder.Configuration);
+    services.Configure<NeptuneJobConfiguration>(builder.Configuration);
     var configuration = builder.Configuration.Get<WebConfiguration>();
 
     services.AddDbContext<NeptuneDbContext>(c =>

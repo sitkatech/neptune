@@ -6,11 +6,11 @@ namespace Neptune.WebMvc.Views.Shared.HRUCharacteristics
     {
         public List<HRUCharacteristicsSummaryDto> HRUCharacteristicsSummaries { get; }
 
-        public HRUCharacteristicsViewData(List<HRUCharacteristic> hruCharacteristics)
+        public HRUCharacteristicsViewData(List<vHRUCharacteristic> hruCharacteristics)
         {
             HRUCharacteristicsSummaries = hruCharacteristics
-                .GroupBy(x => x.HRUCharacteristicLandUseCode).Select(x => new HRUCharacteristicsSummaryDto()
-                    { Area = x.Sum(y => y.Area).ToString("N2"), ImperviousCover = x.Sum(y => y.ImperviousAcres).ToString("N2"), LandUse = x.Key.HRUCharacteristicLandUseCodeDisplayName })
+                .GroupBy(x => x.HRUCharacteristicLandUseCodeDisplayName).Select(x => new HRUCharacteristicsSummaryDto()
+                    { Area = x.Sum(y => y.Area).ToString("N2"), ImperviousCover = x.Sum(y => y.ImperviousAcres).ToString("N2"), LandUse = x.Key })
                 .ToList();
 
             HRUCharacteristicsTotal = new HRUCharacteristicsSummaryDto

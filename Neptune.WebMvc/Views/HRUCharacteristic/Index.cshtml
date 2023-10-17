@@ -18,12 +18,11 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@using LtInfo.Common.BootstrapWrappers
-@using Neptune.Web.Views
-@using Neptune.Web.Views.Shared
-@using LtInfo.Common.DhtmlWrappers
-@using LtInfo.Common.ModalDialog
-@inherits Neptune.Web.Areas.Modeling.Views.HRUCharacteristic.Index
+@using Neptune.WebMvc.Common.BootstrapWrappers
+@using Neptune.WebMvc.Common.DhtmlWrappers
+@using Neptune.WebMvc.Common.ModalDialog
+@using Neptune.WebMvc.Views.Shared
+@inherits Neptune.WebMvc.Views.HRUCharacteristic.Index
 @section JavascriptAndStylesContent
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
@@ -34,7 +33,7 @@
 {
     @if (ViewDataTyped.HasAdminPermissions)
     {
-        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} Refresh HRU Characteristics", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")), ViewDataTyped.RefreshUrl, "Refresh HRU Characteristics from OC Survey", 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune"}, null, null)
+        @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")} Refresh HRU Characteristics", ViewDataTyped.RefreshUrl, "Refresh HRU Characteristics from OC Survey", 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune"}, null, null)
     }
 }
 

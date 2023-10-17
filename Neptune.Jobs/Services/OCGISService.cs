@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Neptune.Common.GeoSpatial;
 using Neptune.Common.Services;
 using Neptune.EFModels.Entities;
+using Neptune.Jobs.EsriAsynchronousJob;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 
@@ -204,6 +205,92 @@ public class OCGISService : BaseAPIService<OCGISService>
         ThrowIfNotUnique(result.GroupBy(x => x.PrecipitationZoneKey), serviceName);
         return result;
     }
+
+    public async Task<List<HRUResponseFeature>> RetrieveHRUResponseFeatures(List<HRURequestFeature> featuresForHRURequest)
+    {
+        var postUrl = "Environmental_Resources/HRUSummary/GPServer/HRUSummary";
+        var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(HttpClient, postUrl, "output_table");
+
+        var hruRequest = GetGPRecordSetLayer(featuresForHRURequest);
+
+        var serializeObject = new
+        {
+            input_fc = GeoJsonSerializer.Serialize(hruRequest),
+            returnZ = false,
+            returnM = false,
+            returnTrueCurves = false,
+            f = "pjson"
+        };
+
+        var newHRUCharacteristics = new List<HRUResponseFeature>();
+        var rawResponse = string.Empty;
+        try
+        {
+            var esriGPRecordSetLayer = (await esriAsynchronousJobRunner
+            .RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(
+                // ReSharper disable once UnusedVariable
+                serializeObject)).Value;
+
+            newHRUCharacteristics.AddRange(
+                esriGPRecordSetLayer
+                    .Features.Where(x => x.Attributes.ImperviousAcres != null));
+
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning(ex.Message, ex);
+            Logger.LogWarning($"Skipped entities (ProjectLGUs if Project modeling, otherwise LGUs) with these IDs: {string.Join(", ", featuresForHRURequest.Select(x => x.Attributes.QueryFeatureID.ToString()))}");
+            Logger.LogWarning(rawResponse);
+        }
+
+        return newHRUCharacteristics;
+    }
+
+    public static EsriGPRecordSetLayer<HRURequestFeature> GetGPRecordSetLayer(
+        List<HRURequestFeature> features)
+    {
+        return new EsriGPRecordSetLayer<HRURequestFeature>
+        {
+            Features = features,
+            DisplayFieldName = "",
+            GeometryType = "esriGeometryPolygon",
+            ExceededTransferLimit = "false",
+            SpatialReference = new EsriSpatialReference { wkid = 102646, latestWkid = 2230 },
+            Fields = new List<EsriField>
+                {
+                    new()
+                    {
+                        Name = "OBJECTID",
+                        Type = "esriFieldTypeOID",
+                        Alias = "OBJECTID"
+
+                    },
+
+                    new()
+                    {
+                        Name = "QueryFeatureID",
+                        Type = "esriFieldTypeString",
+                        Alias = "QueryFeatureID",
+                        Length = 255
+                    },
+
+                    new()
+                    {
+                        Name = "Shape_Length",
+                        Type = "esriFieldTypeDouble",
+                        Alias = "Shape_Length"
+                    },
+
+                    new()
+                    {
+                        Name = "Shape_Area",
+                        Type = "esriFieldTypeDouble",
+                        Alias = "Shape_Area"
+                    }
+                }
+        };
+    }
+
 
     private static void ThrowIfNotUnique<T>(IEnumerable<IGrouping<int, T>> groupBy, string serviceName)
     {

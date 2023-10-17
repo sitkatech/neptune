@@ -399,6 +399,7 @@
     <Build Include="dbo\Views\dbo.vTreatmentBMPObservationPassFail.sql" />
     <Build Include="dbo\Views\dbo.vTreatmentBMPObservation.sql" />
     <Build Include="dbo\Views\dbo.vRegionalSubbasinUpstreamCatchmentGeometry.sql" />
+    <Build Include="dbo\Views\dbo.vHRUCharacteristic.sql" />
   </ItemGroup>
   <UsingTask TaskName="ScriptDeploymentGenerator" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>

@@ -28,7 +28,6 @@ using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.MvcResults;
-using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Services.Filters;
 using Neptune.WebMvc.Views.TreatmentBMP;
 using Detail = Neptune.WebMvc.Views.Jurisdiction.Detail;

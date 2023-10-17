@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Neptune.API.Hangfire;
 using Neptune.Common.Email;
 using Neptune.EFModels.Entities;
 using Neptune.Jobs.EsriAsynchronousJob;
@@ -15,23 +14,25 @@ namespace Neptune.Jobs.Hangfire
 {
     public class HRURefreshBackgroundJob : ScheduledBackgroundJobBase<HRURefreshBackgroundJob>
     {
+        private readonly OCGISService _ocgisService;
         public const string JobName = "HRU Refresh";
 
         public HRURefreshBackgroundJob(ILogger<HRURefreshBackgroundJob> logger,
             IWebHostEnvironment webHostEnvironment, NeptuneDbContext neptuneDbContext,
-            IOptions<NeptuneJobConfiguration> neptuneJobConfiguration, SitkaSmtpClientService sitkaSmtpClientService) : base(JobName, logger, webHostEnvironment,
+            IOptions<NeptuneJobConfiguration> neptuneJobConfiguration, SitkaSmtpClientService sitkaSmtpClientService, OCGISService ocgisService) : base(JobName, logger, webHostEnvironment,
             neptuneDbContext, neptuneJobConfiguration, sitkaSmtpClientService)
         {
+            _ocgisService = ocgisService;
         }
 
-        public override List<RunEnvironment> RunEnvironments => new() { RunEnvironment.Staging, RunEnvironment.Production };
+        public override List<RunEnvironment> RunEnvironments => new() { RunEnvironment.Development, RunEnvironment.Staging, RunEnvironment.Production };
 
-        protected override void RunJobImplementation()
+        protected override async void RunJobImplementation()
         {
-            HRURefreshImpl();
+            await HRURefreshImpl();
         }
 
-        private void HRURefreshImpl()
+        private async Task HRURefreshImpl()
         {
             // this job assumes the LGUs are already correct but that for whatever reason, some are missing their HRUs
             
@@ -46,19 +47,19 @@ namespace Neptune.Jobs.Hangfire
 
             if (!loadGeneratingUnitsToUpdate.Any())
             {
-                var lgusWithEmptyResponseCount = DbContext.LoadGeneratingUnits.Count(x=>x.IsEmptyResponseFromHRUService == true);
+                var lgusWithEmptyResponseCount = DbContext.LoadGeneratingUnits.Count(x=> x.IsEmptyResponseFromHRUService == true);
                 if (lgusWithEmptyResponseCount > 100)
                 {
                     foreach (var loadGeneratingUnit in DbContext.LoadGeneratingUnits.Where(x => x.IsEmptyResponseFromHRUService == true))
                     {
                         loadGeneratingUnit.IsEmptyResponseFromHRUService = false;
                     }
-                    DbContext.SaveChanges();
+                    await DbContext.SaveChangesAsync();
                     loadGeneratingUnitsToUpdate = GetLoadGeneratingUnitsToUpdate(DbContext).ToList();
                 }
             }
 
-            var loadGeneratingUnitsToUpdateGroupedByModelBasin = loadGeneratingUnitsToUpdate.GroupBy(x=>x.ModelBasin);
+            var loadGeneratingUnitsToUpdateGroupedByModelBasin = loadGeneratingUnitsToUpdate.GroupBy(x=> x.ModelBasinID);
 
             foreach (var group in loadGeneratingUnitsToUpdateGroupedByModelBasin)
             {
@@ -69,9 +70,10 @@ namespace Neptune.Jobs.Hangfire
                     try
                     {
                         var loadGeneratingUnits = batch.ToList();
-                        var batchHRUCharacteristics = HRUUtilities.RetrieveHRUResponseFeatures(loadGeneratingUnits.GetHRURequestFeatures().ToList(), Logger).ToList();
+                        var hruRequestFeatures = HruRequestFeatureHelpers.GetHRURequestFeatures(loadGeneratingUnits.ToDictionary(x => x.LoadGeneratingUnitID, x => x.LoadGeneratingUnitGeometry), false);
+                        var hruResponseFeatures = await _ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList());
 
-                        if (!batchHRUCharacteristics.Any())
+                        if (!hruResponseFeatures.Any())
                         {
                             foreach (var loadGeneratingUnit in loadGeneratingUnits)
                             {
@@ -81,12 +83,27 @@ namespace Neptune.Jobs.Hangfire
                             Logger.LogWarning($"No data for LGUs with these IDs: {string.Join(", ", loadGeneratingUnits.Select(x => x.LoadGeneratingUnitID.ToString()))}");
                         }
 
-                        DbContext.HRUCharacteristics.AddRange(batchHRUCharacteristics.Select(x =>
+                        var hruCharacteristics = hruResponseFeatures.Select(x =>
                         {
-                            var hruCharacteristic = x.ToHRUCharacteristic();
+                            var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y => string.Equals(y.HRUCharacteristicLandUseCodeName, x.Attributes.ModelBasinLandUseDescription, StringComparison.CurrentCultureIgnoreCase));
+                            var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y => string.Equals(y.HRUCharacteristicLandUseCodeName, x.Attributes.BaselineLandUseDescription, StringComparison.CurrentCultureIgnoreCase));
+
+                            var hruCharacteristic = new HRUCharacteristic
+                            {
+                                LoadGeneratingUnitID = x.Attributes.QueryFeatureID,
+                                HydrologicSoilGroup = x.Attributes.HydrologicSoilGroup,
+                                SlopePercentage = x.Attributes.SlopePercentage.GetValueOrDefault(),
+                                ImperviousAcres = x.Attributes.ImperviousAcres.GetValueOrDefault(),
+                                LastUpdated = DateTime.Now,
+                                Area = x.Attributes.Acres.GetValueOrDefault(),
+                                HRUCharacteristicLandUseCodeID = hruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID,
+                                BaselineImperviousAcres = x.Attributes.BaselineImperviousAcres.GetValueOrDefault(),
+                                BaselineHRUCharacteristicLandUseCodeID = baselineHruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID
+                            };
                             return hruCharacteristic;
-                        }));
-                        DbContext.SaveChanges();
+                        });
+                        await DbContext.HRUCharacteristics.AddRangeAsync(hruCharacteristics);
+                        await DbContext.SaveChangesAsync();
                     }
                     catch (Exception ex)
                     {
@@ -113,10 +130,10 @@ namespace Neptune.Jobs.Hangfire
 
         private void ExecuteModelIfNeeded(bool wereAnyLoadGeneratingUnitsToUpdate)
         {
-            var updatedRegionalSubbasins = DbContext.RegionalSubbasins.Where(x=>x.LastUpdate != null).ToList();
-            var lastRegionalSubbasinUpdateDate = updatedRegionalSubbasins.Any() ? updatedRegionalSubbasins.Max(x=>x.LastUpdate.Value) : DateTime.MinValue;
+            var updatedRegionalSubbasins = DbContext.RegionalSubbasins.Where(x=> x.LastUpdate != null).ToList();
+            var lastRegionalSubbasinUpdateDate = updatedRegionalSubbasins.Any() ? updatedRegionalSubbasins.Max(x=> x.LastUpdate.Value) : DateTime.MinValue;
             var updatedNereidResults = DbContext.NereidResults.Where(x=>x.LastUpdate != null).ToList();
-            var lastNereidResultUpdateDate = updatedNereidResults.Any() ? updatedNereidResults.Max(x=>x.LastUpdate.Value) : DateTime.MinValue;
+            var lastNereidResultUpdateDate = updatedNereidResults.Any() ? updatedNereidResults.Max(x=> x.LastUpdate.Value) : DateTime.MinValue;
             
             if (wereAnyLoadGeneratingUnitsToUpdate)
             {
@@ -146,7 +163,7 @@ namespace Neptune.Jobs.Hangfire
                 {
                     BackgroundJob.Enqueue<TotalNetworkSolveJob>(x => x.RunJob(null));
                 }
-                else if (DbContext.DirtyModelNodes.Any())
+                else if (DbContext.DirtyModelNodes.AsNoTracking().Any())
                 {
                     BackgroundJob.Enqueue<DeltaSolveJob>(x => x.RunJob(null));
                 }
@@ -155,11 +172,13 @@ namespace Neptune.Jobs.Hangfire
 
         private static IQueryable<LoadGeneratingUnit> GetLoadGeneratingUnitsToUpdate(NeptuneDbContext dbContext)
         {
-            return dbContext.LoadGeneratingUnits.Where(x =>
-                x.RegionalSubbasin != null &&
-                x.ModelBasinID == x.RegionalSubbasin.ModelBasinID.Value &&
-                !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null ||
-                  x.IsEmptyResponseFromHRUService == true) && x.LoadGeneratingUnitGeometry.Area >= 10);
+            return dbContext.LoadGeneratingUnits.Include(x => x.RegionalSubbasin)
+                .Include(x => x.HRUCharacteristics)
+                .Where(x =>
+                    x.RegionalSubbasin != null &&
+                    x.ModelBasinID == x.RegionalSubbasin.ModelBasinID.Value &&
+                    !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null ||
+                      x.IsEmptyResponseFromHRUService == true) && x.LoadGeneratingUnitGeometry.Area >= 10);
         }
     }
 }

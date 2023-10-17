@@ -1,6 +1,5 @@
 ﻿using Hangfire;
 using Neptune.WebMvc.Common;
-using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.RegionalSubbasin;
 using Neptune.WebMvc.Views.Shared;
@@ -71,7 +70,7 @@ namespace Neptune.WebMvc.Controllers
             var layerGeoJson = new LayerGeoJson("Catchment Boundary", featureCollection,"#000000", 1, LayerInitialVisibility.Show, false );
             var stormwaterMapInitJson = new StormwaterMapInitJson("map", MapInitJson.DefaultZoomLevel, new List<LayerGeoJson>{layerGeoJson}, new BoundingBoxDto(regionalSubbasinCatchmentGeometry4326));
 
-            var hruCharacteristics = regionalSubbasin.GetHRUCharacteristics(_dbContext).ToList();
+            var hruCharacteristics = vHRUCharacteristics.ListByRegionalSubbasinID(_dbContext, regionalSubbasin.RegionalSubbasinID).ToList();
             var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
             var ocSurveyDownstreamCatchment = regionalSubbasin.OCSurveyDownstreamCatchmentID != null ? RegionalSubbasins.GetByOCSurveyCatchmentID(_dbContext, regionalSubbasin.OCSurveyDownstreamCatchmentID.Value) : null;
             var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, regionalSubbasin, hruCharacteristicsViewData, stormwaterMapInitJson, hruCharacteristics.Any(), ocSurveyDownstreamCatchment);

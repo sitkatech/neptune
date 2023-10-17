@@ -5,5 +5,6 @@ namespace Neptune.Jobs
     public class NeptuneJobConfiguration : SendGridConfiguration
     {
         public string PlanningModuleBaseUrl { get; set; }
+        public string PyqgisWorkingDirectory { get; set; }
     }
 }

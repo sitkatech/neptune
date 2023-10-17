@@ -19,6 +19,7 @@ namespace Neptune.Jobs.Hangfire
         public const string JobName = "Nereid Planned Project Network Solve";
 
         private readonly NereidService _nereidService;
+        private readonly OCGISService _ocgisService;
         private readonly ILogger<ProjectNetworkSolveJob> _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly NeptuneDbContext _dbContext;
@@ -26,9 +27,10 @@ namespace Neptune.Jobs.Hangfire
         private readonly SitkaSmtpClientService _sitkaSmtpClient;
 
         public ProjectNetworkSolveJob(ILogger<ProjectNetworkSolveJob> logger, IWebHostEnvironment webHostEnvironment, NeptuneDbContext dbContext,
-            IOptions<NeptuneJobConfiguration> neptuneJobConfiguration, SitkaSmtpClientService sitkaSmtpClientService, NereidService nereidService)
+            IOptions<NeptuneJobConfiguration> neptuneJobConfiguration, SitkaSmtpClientService sitkaSmtpClientService, NereidService nereidService, OCGISService ocgisService)
         {
             _nereidService = nereidService;
+            _ocgisService = ocgisService;
             _logger = logger;
             _webHostEnvironment = webHostEnvironment;
             _dbContext = dbContext;
@@ -54,7 +56,7 @@ namespace Neptune.Jobs.Hangfire
                 //Get our LGUs
                 LoadGeneratingUnitRefreshImpl(regionalSubbasinIDs, projectID);
                 //Get our HRUs
-                HRURefreshImpl(projectID);
+                await HRURefreshImpl(projectID);
                 await _nereidService.ProjectNetworkSolve(_dbContext, false, projectID, regionalSubbasinIDs, projectDistributedDelineationIDs);
                 projectNetworkSolveHistory.ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded;
                 projectNetworkSolveHistory.LastUpdated = DateTime.UtcNow;
@@ -179,7 +181,7 @@ You can view the results or trigger another network solve <a href='{planningURL}
             }
         }
 
-        private void HRURefreshImpl(int projectID)
+        private async Task HRURefreshImpl(int projectID)
         {
             // collect the load generating units that require updates, which will be all for the Project
             // group them by Model basin so requests to the HRU service are spatially bounded. It is possible that a number of these won't have a model basin, but if the system is used in a logical manner any of these that don't have model basins will be in an rsb that is in North OC, so technically will still be spatially bounded
@@ -189,7 +191,7 @@ You can view the results or trigger another network solve <a href='{planningURL}
             stopwatch.Start();
 
             var loadGeneratingUnitsToUpdate = _dbContext.ProjectLoadGeneratingUnits.Where(x => x.ProjectID == projectID && x.ProjectLoadGeneratingUnitGeometry.Area >= 10).ToList();
-            var loadGeneratingUnitsToUpdateGroupedByModelBasin = loadGeneratingUnitsToUpdate.GroupBy(x => x.ModelBasin);
+            var loadGeneratingUnitsToUpdateGroupedByModelBasin = loadGeneratingUnitsToUpdate.GroupBy(x => x.ModelBasinID);
 
             foreach (var group in loadGeneratingUnitsToUpdateGroupedByModelBasin)
             {
@@ -200,9 +202,10 @@ You can view the results or trigger another network solve <a href='{planningURL}
                     try
                     {
                         var projectLoadGeneratingUnits = batch.ToList();
-                        var batchHRUResponseFeatures = HRUUtilities.RetrieveHRUResponseFeatures(projectLoadGeneratingUnits.GetHRURequestFeatures().ToList(), _logger).ToList();
+                        var hruRequestFeatures = HruRequestFeatureHelpers.GetHRURequestFeatures(projectLoadGeneratingUnits.ToDictionary(x => x.ProjectLoadGeneratingUnitID, x => x.ProjectLoadGeneratingUnitGeometry), true);
+                        var hruResponseFeatures = await _ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList());
 
-                        if (!batchHRUResponseFeatures.Any())
+                        if (!hruResponseFeatures.Any())
                         {
                             foreach (var loadGeneratingUnit in projectLoadGeneratingUnits)
                             {
@@ -211,13 +214,28 @@ You can view the results or trigger another network solve <a href='{planningURL}
                             _logger.LogWarning($"No data for ProjectLGUs with these IDs: {string.Join(", ", projectLoadGeneratingUnits.Select(x => x.ProjectLoadGeneratingUnitID.ToString()))}");
                         }
 
-                        var projectHruCharacteristics = batchHRUResponseFeatures.Select(x =>
+                        var projectHruCharacteristics = hruResponseFeatures.Select(x =>
                         {
-                            var hruCharacteristic = x.ToProjectHRUCharacteristic(projectID);
-                            return hruCharacteristic;
+                            var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y => y.HRUCharacteristicLandUseCodeName == x.Attributes.ModelBasinLandUseDescription);
+                            var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y => y.HRUCharacteristicLandUseCodeName == x.Attributes.BaselineLandUseDescription);
+
+                            var projectHRUCharacteristic = new ProjectHRUCharacteristic
+                            {
+                                ProjectLoadGeneratingUnitID = x.Attributes.QueryFeatureID,
+                                ProjectID = projectID,
+                                HydrologicSoilGroup = x.Attributes.HydrologicSoilGroup,
+                                SlopePercentage = x.Attributes.SlopePercentage.GetValueOrDefault(),
+                                ImperviousAcres = x.Attributes.ImperviousAcres.GetValueOrDefault(),
+                                LastUpdated = DateTime.Now,
+                                Area = x.Attributes.Acres.GetValueOrDefault(),
+                                HRUCharacteristicLandUseCodeID = hruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID,
+                                BaselineImperviousAcres = x.Attributes.BaselineImperviousAcres.GetValueOrDefault(),
+                                BaselineHRUCharacteristicLandUseCodeID = baselineHruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID
+                            };
+                            return projectHRUCharacteristic;
                         }).ToList();
-                        _dbContext.ProjectHRUCharacteristics.AddRange(projectHruCharacteristics);
-                        _dbContext.SaveChanges();
+                        await _dbContext.ProjectHRUCharacteristics.AddRangeAsync(projectHruCharacteristics);
+                        await _dbContext.SaveChangesAsync();
                     }
                     catch (Exception ex)
                     {

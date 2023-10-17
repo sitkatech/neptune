@@ -1,38 +1,37 @@
-﻿using System.Text.Json;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Neptune.API.Hangfire;
 using Neptune.Common.Email;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
+using Neptune.Jobs.Services;
 using NetTopologySuite.Features;
 
 namespace Neptune.Jobs.Hangfire
 {
-    public class LoadGeneratingUnitRefreshScheduledBackgroundJob : ScheduledBackgroundJobBase<LandUseBlockUploadBackgroundJob>
+    public class LoadGeneratingUnitRefreshScheduledBackgroundJob
     {
-        public int? LoadGeneratingUnitRefreshAreaID { get; }
-
-        public LoadGeneratingUnitRefreshScheduledBackgroundJob(ILogger<LandUseBlockUploadBackgroundJob> logger,
-            IWebHostEnvironment webHostEnvironment, NeptuneDbContext neptuneDbContext,
-            IOptions<NeptuneJobConfiguration> neptuneJobConfiguration, SitkaSmtpClientService sitkaSmtpClientService, int personID) : base(JobName, logger, webHostEnvironment,
-            neptuneDbContext, neptuneJobConfiguration, sitkaSmtpClientService)
-        {
-            LoadGeneratingUnitRefreshAreaID = personID;
-        }
-
         public const string JobName = "LGU Refresh";
+        private readonly ILogger<LoadGeneratingUnitRefreshScheduledBackgroundJob> _logger;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly NeptuneDbContext _dbContext;
+        private readonly NeptuneJobConfiguration _neptuneJobConfiguration;
+        private readonly SitkaSmtpClientService _sitkaSmtpClient;
 
-        public override List<RunEnvironment> RunEnvironments => new() { RunEnvironment.Staging, RunEnvironment.Production };
 
-        protected override void RunJobImplementation()
+        public LoadGeneratingUnitRefreshScheduledBackgroundJob(ILogger<LoadGeneratingUnitRefreshScheduledBackgroundJob> logger,
+            IWebHostEnvironment webHostEnvironment, NeptuneDbContext dbContext,
+            IOptions<NeptuneJobConfiguration> neptuneJobConfiguration, SitkaSmtpClientService sitkaSmtpClientService)
         {
-            LoadGeneratingUnitRefreshImpl(LoadGeneratingUnitRefreshAreaID);
+            _logger = logger;
+            _webHostEnvironment = webHostEnvironment;
+            _dbContext = dbContext;
+            _neptuneJobConfiguration = neptuneJobConfiguration.Value;
+            _sitkaSmtpClient = sitkaSmtpClientService;
         }
 
-        private void LoadGeneratingUnitRefreshImpl(int? loadGeneratingUnitRefreshAreaID)
+        public async Task RunJob(int? loadGeneratingUnitRefreshAreaID)
         {
             var outputLayerName = $"LGU{DateTime.Now.Ticks}";
             var outputFolder = Path.GetTempPath();
@@ -45,8 +44,8 @@ namespace Neptune.Jobs.Hangfire
 
             if (loadGeneratingUnitRefreshAreaID != null)
             {
-                loadGeneratingUnitRefreshArea = DbContext.LoadGeneratingUnitRefreshAreas.Find(loadGeneratingUnitRefreshAreaID);
-                var lguInputClipFeatures = DbContext.LoadGeneratingUnits
+                loadGeneratingUnitRefreshArea = await _dbContext.LoadGeneratingUnitRefreshAreas.FindAsync(loadGeneratingUnitRefreshAreaID.Value);
+                var lguInputClipFeatures = _dbContext.LoadGeneratingUnits
                     .Where(x => x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshArea
                         .LoadGeneratingUnitRefreshAreaGeometry)).ToList().Select(x => 
                         new Feature(x.LoadGeneratingUnitGeometry, new AttributesTable())).ToList();
@@ -63,36 +62,36 @@ namespace Neptune.Jobs.Hangfire
                 //var lguInputClipGeoJson = DbGeometryToGeoJsonHelper.FromDbGeometryWithNoReproject(dbGeometry);
                 var lguInputClipGeoJsonString = GeoJsonSerializer.Serialize(lguInputClipFeatureCollection);
 
-                File.WriteAllText(clipLayerPath, lguInputClipGeoJsonString);
+                await File.WriteAllTextAsync(clipLayerPath, lguInputClipGeoJsonString);
                 additionalCommandLineArguments.AddRange(new List<string>{
                     "--clip", clipLayerPath
                 });
             }
 
             //todo: pyqgis
-            //// a PyQGIS script computes the LGU layer and saves it as a shapefile
-            //var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{neptuneJobConfiguration.PyqgisWorkingDirectory}ModelingOverlayAnalysis.py", neptuneJobConfiguration.PyqgisWorkingDirectory, additionalCommandLineArguments);
+            // a PyQGIS script computes the LGU layer and saves it as a shapefile
+            //var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{_neptuneJobConfiguration.PyqgisWorkingDirectory}ModelingOverlayAnalysis.py", _neptuneJobConfiguration.PyqgisWorkingDirectory, additionalCommandLineArguments);
 
             //if (processUtilityResult.ReturnCode > 0)
             //{
-            //    Logger.LogError("LGU Geoprocessing failed. Output:");
-            //    Logger.LogError(processUtilityResult.StdOutAndStdErr);
+            //    _logger.LogError("LGU Geoprocessing failed. Output:");
+            //    _logger.LogError(processUtilityResult.StdOutAndStdErr);
             //    throw new GeoprocessingException(processUtilityResult.StdOutAndStdErr);
             //}
 
             //if (loadGeneratingUnitRefreshAreaID != null)
             //{
-            //    DbContext.Database.ExecuteSqlRaw($"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToDeltaRefresh @LoadGeneratingUnitRefreshAreaID = {loadGeneratingUnitRefreshAreaID}");
+            //    await _dbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToDeltaRefresh @LoadGeneratingUnitRefreshAreaID = {loadGeneratingUnitRefreshAreaID}");
             //}
             //else
             //{
-            //    DbContext.Database.ExecuteSqlRaw("EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
+            //    await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
             //}
 
             var jsonSerializerOptions = GeoJsonSerializer.DefaultSerializerOptions;
-            using (var openStream = File.OpenRead(outputLayerPath))
+            await using (var openStream = File.OpenRead(outputLayerPath))
             {
-                var featureCollection = JsonSerializer.DeserializeAsync<FeatureCollection>(openStream, jsonSerializerOptions).Result;
+                var featureCollection = await GeoJsonSerializer.GetFeatureCollectionFromGeoJsonStream(openStream, jsonSerializerOptions);
                 var features = featureCollection.Where(x => x.Geometry != null).ToList();
                 var loadGeneratingUnits = new List<LoadGeneratingUnit>();
 
@@ -118,14 +117,14 @@ namespace Neptune.Jobs.Hangfire
 
                 if (loadGeneratingUnits.Any())
                 {
-                    DbContext.LoadGeneratingUnits.AddRange(loadGeneratingUnits);
-                    DbContext.SaveChanges();
+                    await _dbContext.LoadGeneratingUnits.AddRangeAsync(loadGeneratingUnits);
+                    await _dbContext.SaveChangesAsync();
                 }
 
                 if (loadGeneratingUnitRefreshArea != null)
                 {
                     loadGeneratingUnitRefreshArea.ProcessDate = DateTime.Now;
-                    DbContext.SaveChanges();
+                    await _dbContext.SaveChangesAsync();
                 }
             }
 

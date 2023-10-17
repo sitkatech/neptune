@@ -202,7 +202,7 @@ namespace Neptune.WebMvc.Controllers
 
             var modelingResultsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.GetModelResults(treatmentBMP));
             var modeledBMPPerformanceViewData = new ModeledPerformanceViewData(_linkGenerator, modelingResultsUrl, "To BMP");
-            var hruCharacteristics = (upstreamestBMP ?? treatmentBMP).GetHRUCharacteristics(_dbContext, delineation).ToList();
+            var hruCharacteristics = vHRUCharacteristics.ListByTreatmentBMP(_dbContext, upstreamestBMP ?? treatmentBMP, delineation);
             var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
             var otherTreatmentBmpsExistInSubbasin = treatmentBMP.GetRegionalSubbasin(_dbContext)?.GetTreatmentBMPs(_dbContext).Any(x => x.TreatmentBMPID != treatmentBMP.TreatmentBMPID) ?? false;
             var customAttributes = CustomAttributes.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);

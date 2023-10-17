@@ -329,35 +329,6 @@ namespace Neptune.WebMvc.Models
             treatmentBMP.InventoryLastChangedDate = DateTime.Now;
         }
 
-        public static IEnumerable<HRUCharacteristic> GetHRUCharacteristics(this TreatmentBMP treatmentBMP, NeptuneDbContext dbContext, Delineation? delineation)
-        {
-            if (delineation == null)
-            {
-                return new List<HRUCharacteristic>();
-            }
-
-            if (delineation.DelineationType == DelineationType.Centralized && !treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID.HasValue)
-            {
-                if (!treatmentBMP.RegionalSubbasinID.HasValue)
-                {
-                    return Enumerable.Empty<HRUCharacteristic>();
-                }
-                var catchmentRegionalSubbasins = vRegionalSubbasinUpstreams.ListUpstreamRegionalBasinIDs(dbContext, treatmentBMP.RegionalSubbasinID.Value);
-                    
-                return dbContext.HRUCharacteristics.Include(x => x.LoadGeneratingUnit).AsNoTracking().Where(x =>
-                    x.LoadGeneratingUnit.RegionalSubbasinID != null &&
-                    catchmentRegionalSubbasins.Contains(x.LoadGeneratingUnit.RegionalSubbasinID.Value));
-            }
-
-            return dbContext.HRUCharacteristics
-                .Include(x => x.LoadGeneratingUnit)
-                .ThenInclude(x => x.Delineation)
-                .AsNoTracking()
-                .Where(x =>
-                    x.LoadGeneratingUnit.Delineation != null && x.LoadGeneratingUnit.Delineation.TreatmentBMPID ==
-                    treatmentBMP.TreatmentBMPID);
-        }
-
         public static TreatmentBMPTypeAssessmentObservationType GetTreatmentBMPTypeObservationType(this TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
             var treatmentBMPTypeAssessmentObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationTypeOrDefault(treatmentBMPAssessmentObservationType);

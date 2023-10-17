@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
-using Neptune.EFModels;
 using Neptune.EFModels.Entities;
 using Neptune.EFModels.Nereid;
 using Neptune.Models.DataTransferObjects;
@@ -175,7 +174,7 @@ namespace Neptune.WebMvc.Controllers
 
             var waterQualityManagementPlanModelingApproaches = WaterQualityManagementPlanModelingApproach.All;
 
-            var hruCharacteristics = waterQualityManagementPlan.GetHRUCharacteristics(_dbContext).ToList();
+            var hruCharacteristics = vHRUCharacteristics.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
             var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
             var sourceControlBMPs = SourceControlBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID)
                 .Where(x => x.SourceControlBMPNote != null || (x.IsPresent == true))

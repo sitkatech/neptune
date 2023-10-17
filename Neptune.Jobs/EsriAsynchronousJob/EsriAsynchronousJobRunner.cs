@@ -1,14 +1,14 @@
 ﻿using System.Net;
 using System.Text.Json.Serialization;
-using Newtonsoft.Json;
+using Neptune.Common.GeoSpatial;
 
 namespace Neptune.Jobs.EsriAsynchronousJob
 {
-    public class EsriAsynchronousJobRunner: IDisposable
+    public class EsriAsynchronousJobRunner
     {
+        private readonly HttpClient _httpClient;
         private static readonly int MAX_RETRIES = 3;
         private static readonly int DEFAULT_MILLISECONDS_TIMEOUT = 5000;
-        public static HttpClient HttpClient { get; }
         public string BaseUrl { get; set; }
         public string ResultEndpoint { get; }
 
@@ -17,24 +17,20 @@ namespace Neptune.Jobs.EsriAsynchronousJob
         public string JobStatusUrl => $"{BaseUrl}/jobs/{JobID}/?f=pjson";
         public string JobResultUrl => $"{BaseUrl}/jobs/{JobID}/results/{ResultEndpoint}/?f=pjson";
 
-        static EsriAsynchronousJobRunner()
+        public EsriAsynchronousJobRunner(HttpClient httpClient, string baseUrl, string resultEndpoint)
         {
-            HttpClient = new HttpClient();
-        }
-
-        public EsriAsynchronousJobRunner(string baseUrl, string resultEndpoint)
-        {
+            _httpClient = httpClient;
             BaseUrl = !baseUrl.EndsWith("/") ? baseUrl : baseUrl.Replace("/", "");
             ResultEndpoint = resultEndpoint;
         }
 
-        public T RunJob<T>(object requestObject, out string responseRaw)
+        public async Task<T> RunJob<T>(object requestObject)
         {
-            responseRaw = RunJobRaw(requestObject);
-            return JsonConvert.DeserializeObject<T>(responseRaw);
+            var responseRaw = await RunJobRaw(requestObject);
+            return System.Text.Json.JsonSerializer.Deserialize<T>(responseRaw);
         }
 
-        public string RunJobRaw(Object requestObject)
+        public async Task<string> RunJobRaw(object requestObject)
         {
             var requestFormData = new Dictionary<string, string>();//todo:requestObject.ToKeyValue();
             //var requestContent = new FormUrlEncodedContent(requestFormData);
@@ -48,7 +44,7 @@ namespace Neptune.Jobs.EsriAsynchronousJob
             EsriJobStatusResponse jobStatusResponse = null;
             while (retry && attempts < MAX_RETRIES)
             {
-                jobStatusResponse = SubmitJob(requestFormData);
+                jobStatusResponse = await SubmitJob(requestFormData);
                 JobID = jobStatusResponse.jobId;
                 int timeout;
                 // wait 5 seconds before checking for process on first attempt, 30 on second, and 90 on third
@@ -67,7 +63,7 @@ namespace Neptune.Jobs.EsriAsynchronousJob
                         timeout = 5000;
                         break;
                 }
-                retry = CheckShouldRetry(timeout);
+                retry = await CheckShouldRetry(timeout);
                 attempts++;
             }
 
@@ -81,17 +77,15 @@ namespace Neptune.Jobs.EsriAsynchronousJob
             while (isExecuting)
             {
                 Thread.Sleep(DEFAULT_MILLISECONDS_TIMEOUT);
-                var jobStatusHttpResponseMessage = HttpClient.GetAsync(JobStatusUrl).Result;
-                jobStatusResponse =
-                    JsonConvert.DeserializeObject<EsriJobStatusResponse>(jobStatusHttpResponseMessage.Content
-                        .ReadAsStringAsync().Result);
+                var jobStatusHttpResponseMessage = await _httpClient.GetAsync(JobStatusUrl);
+                jobStatusResponse = await GeoJsonSerializer.DeserializeAsync<EsriJobStatusResponse>(await jobStatusHttpResponseMessage.Content.ReadAsStreamAsync());
                 isExecuting = jobStatusResponse.IsExecuting();
             }
 
             switch (jobStatusResponse.jobStatus)
             {
                 case EsriJobStatus.esriJobSucceeded:
-                    var resultContent = HttpClient.GetAsync(JobResultUrl).Result.Content.ReadAsStringAsync().Result;
+                    var resultContent = await (await _httpClient.GetAsync(JobResultUrl)).Content.ReadAsStringAsync();
                     return resultContent;
                 case EsriJobStatus.esriJobCancelling:
                 case EsriJobStatus.esriJobCancelled:
@@ -105,13 +99,13 @@ namespace Neptune.Jobs.EsriAsynchronousJob
             }
         }
 
-        private bool CheckShouldRetry(int millisecondsTimeout)
+        private async Task<bool> CheckShouldRetry(int millisecondsTimeout)
         {
             Thread.Sleep(millisecondsTimeout);
-            var jobStatusHttpResponseMessage = HttpClient.GetAsync(JobStatusUrl).Result;
-            var jobStatusResponse =
-                JsonConvert.DeserializeObject<EsriJobStatusResponse>(jobStatusHttpResponseMessage.Content
-                    .ReadAsStringAsync().Result);
+            var jobStatusHttpResponseMessage = await _httpClient.GetAsync(JobStatusUrl);
+            var jobStatusResponse = await
+                GeoJsonSerializer.DeserializeAsync<EsriJobStatusResponse>(await jobStatusHttpResponseMessage.Content
+                    .ReadAsStreamAsync());
 
             // if we don't have any messages on the status response,
             // this request ended up in a bad state and we should just abandon it and try again.
@@ -120,23 +114,17 @@ namespace Neptune.Jobs.EsriAsynchronousJob
             return jobStatusResponse.messages.Count == 0;
         }
 
-        private EsriJobStatusResponse SubmitJob(IDictionary<string, string> requestFormData)
+        private async Task<EsriJobStatusResponse> SubmitJob(IDictionary<string, string> requestFormData)
         {
             var encodedItems = requestFormData.Select(i => WebUtility.UrlEncode(i.Key) + "=" + WebUtility.UrlEncode(i.Value));
             var encodedContent = new StringContent(String.Join("&", encodedItems), null, "application/x-www-form-urlencoded");
 
-            var httpResponseMessage = HttpClient.PostAsync(PostUrl, encodedContent).Result;
-            var responseContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
-            var jobStatusResponse = JsonConvert.DeserializeObject<EsriJobStatusResponse>(responseContent);
+            var httpResponseMessage = await _httpClient.PostAsync(PostUrl, encodedContent);
+            var jobStatusResponse = await GeoJsonSerializer.DeserializeAsync<EsriJobStatusResponse>(await httpResponseMessage.Content.ReadAsStreamAsync());
             return jobStatusResponse;
         }
 
         public string JobID { get; set;  }
-
-        public void Dispose()
-        {
-            HttpClient.Dispose();
-        }
     }
 
     public class EsriAsynchronousJobUnknownErrorException : Exception

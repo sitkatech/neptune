@@ -34,6 +34,7 @@ using Neptune.API.Hangfire;
 using Neptune.API.Services.Filter;
 using Neptune.Common.Services;
 using Neptune.Common.Services.GDAL;
+using Neptune.Jobs;
 using Neptune.Jobs.Hangfire;
 using Neptune.Jobs.Services;
 
@@ -91,6 +92,7 @@ namespace Neptune.API
             });
 
             services.Configure<NeptuneConfiguration>(Configuration);
+            services.Configure<NeptuneJobConfiguration>(Configuration);
             var configuration = Configuration.Get<NeptuneConfiguration>();
 
             var keystoneHost = configuration.KeystoneOpenIDUrl;
@@ -118,12 +120,6 @@ namespace Neptune.API
                     });
                     options.TokenValidationParameters.NameClaimType = "name";
                     options.TokenValidationParameters.RoleClaimType = "role";
-                });
-
-            services.AddHttpClient("NeptuneClient")
-                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler()
-                {
-                    ServerCertificateCustomValidationCallback = _environment.IsDevelopment() ? HttpClientHandler.DangerousAcceptAnyServerCertificateValidator : null
                 });
 
             services.AddDbContext<NeptuneDbContext>(c =>
@@ -177,7 +173,6 @@ namespace Neptune.API
                 return httpClientHandler;
             });
 
-            services.AddSingleton(Configuration);
             services.AddSingleton<ITelemetryInitializer, CloudRoleNameTelemetryInitializer>();
             services.AddSingleton<ITelemetryInitializer, UserInfoTelemetryInitializer>();
 

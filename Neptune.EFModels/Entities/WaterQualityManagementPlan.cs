@@ -47,24 +47,6 @@ namespace Neptune.EFModels.Entities
             return WaterQualityManagementPlanBoundary?.GeometryNative;
         }
 
-        public IEnumerable<HRUCharacteristic> GetHRUCharacteristics(NeptuneDbContext dbContext)
-        {
-            if (WaterQualityManagementPlanModelingApproachID == WaterQualityManagementPlanModelingApproach.Simplified
-                    .WaterQualityManagementPlanModelingApproachID)
-            {
-                return dbContext.HRUCharacteristics.Include(x => x.LoadGeneratingUnit).AsNoTracking().Where(x =>
-                    x.LoadGeneratingUnit.WaterQualityManagementPlanID == WaterQualityManagementPlanID);
-            }
-
-            var delineationIDs = Delineations
-                .ListByTreatmentBMPIDList(dbContext, TreatmentBMPs.Select(x => x.TreatmentBMPID))
-                .Select(x => x.DelineationID).ToList();
-
-            return dbContext.HRUCharacteristics.Include(x => x.LoadGeneratingUnit).AsNoTracking().Where(x =>
-                x.LoadGeneratingUnit.DelineationID.HasValue &&
-                delineationIDs.Contains(x.LoadGeneratingUnit.DelineationID.Value));
-        }
-
         public void DeleteFull(NeptuneDbContext dbContext)
         {
             throw new NotImplementedException();

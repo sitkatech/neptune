@@ -49,6 +49,7 @@ services:
       - NereidUrl=${NereidUrl}
       - GDALAPIBaseUrl=${GDALAPIBaseUrl}
       - OCGISBaseUrl=${OCGISBaseUrl}
+      - PlanningModuleBaseUrl=${PlanningModuleUrl}
 
   neptune.gdalapi:
     environment:

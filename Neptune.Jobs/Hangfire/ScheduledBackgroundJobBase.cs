@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Neptune.API.Hangfire;
 using Neptune.Common.Email;
 using Neptune.EFModels.Entities;
 
@@ -75,12 +74,13 @@ namespace Neptune.Jobs.Hangfire
                     Logger.LogError(ex.Message);
                     var mailMessage = new MailMessage
                     {
-                        Subject = $"Qanat Hangfire Job Failed: Job {_jobName}",
+                        Subject = $"Neptune Hangfire Job Failed: Job {_jobName}",
                         Body = $"Details: <br /><br />{ex.Message}",
                         IsBodyHtml = true
                     };
 
                     mailMessage.To.Add(new MailAddress(NeptuneJobConfiguration.SitkaSupportEmail));
+                    
                     _sitkaSmtpClient.Send(mailMessage);
                     throw new ScheduledBackgroundJobException(_jobName, ex);
                 }
