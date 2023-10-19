@@ -18,3 +18,9 @@ services:
     build:
       context: ..
       dockerfile: Neptune.GDALAPI/Dockerfile
+
+  neptune.qgisapi:
+    image: neptune/qgisapi
+    build:
+      context: ..
+      dockerfile: Neptune.QGISAPI/Dockerfile

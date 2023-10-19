@@ -89,13 +89,13 @@ public static class GeometryHelper
         return new FeatureCollection() { new Feature(potentialMultiPolygon, new AttributesTable())};
     }
 
-    public static IEnumerable<Geometry> GeometryToDbGeometryAndMakeValidAndExplodeIfNeeded(Geometry geometry)
+    public static IEnumerable<Geometry> MakeValidAndExplodeIfNeeded(Geometry geometry)
     {
         var geometries = new List<Geometry>();
         if (!geometry.IsValid)
         {
             var validGeometry = geometry.MakeValid();
-            for (var i = 1; i <= validGeometry.NumGeometries; i++)
+            for (var i = 0; i < validGeometry.NumGeometries; i++)
             {
                 var geometryPart = validGeometry.GetGeometryN(i);
                 if (geometryPart.GeometryType.ToUpper() == "POLYGON")

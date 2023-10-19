@@ -2,22 +2,22 @@
 
 namespace Neptune.QGISAPI.Services
 {
-    public class QgisService : IRun
+    public class QgisService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<QgisService> _logger;
 
-        public QgisService(ILogger logger)
+        public QgisService(ILogger<QgisService> logger)
         {
             _logger = logger;
         }
 
-        public ProcessUtilityResult Run(List<string> arguments)
+        public ProcessUtilityResult Run(Dictionary<string, bool> arguments)
         {
-            var exeFileName = "ogr2ogr";
+            var exeFileName = "python3";
             var processUtilityResult = ProcessUtility.ShellAndWaitImpl(null, exeFileName, arguments, true, 250000000, new Dictionary<string, string>(), _logger);
             if (processUtilityResult.ReturnCode != 0)
             {
-                var argumentsAsString = string.Join(" ", arguments.Select(ProcessUtility.EncodeArgumentForCommandLine).ToList());
+                var argumentsAsString = ProcessUtility.ConjoinAndMaskCommandLineArguments(arguments);
                 var fullProcessAndArguments =
                     $"{ProcessUtility.EncodeArgumentForCommandLine(exeFileName)} {argumentsAsString}";
                 var errorMessage =

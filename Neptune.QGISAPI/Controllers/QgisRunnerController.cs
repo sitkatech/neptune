@@ -1,9 +1,11 @@
-using Neptune.Common;
 using Neptune.QGISAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Neptune.Common.DesignByContract;
 using Neptune.Common.Services.GDAL;
-using System.IO.Compression;
+using Microsoft.EntityFrameworkCore;
+using Neptune.Common.GeoSpatial;
+using Neptune.EFModels.Entities;
+using NetTopologySuite.Features;
+using NetTopologySuite.Geometries;
 
 namespace Neptune.QGISAPI.Controllers;
 
@@ -11,13 +13,15 @@ namespace Neptune.QGISAPI.Controllers;
 public class QgisRunnerController : ControllerBase
 {
     private readonly ILogger<QgisRunnerController> _logger;
+    private readonly NeptuneDbContext _dbContext;
     private readonly QgisService _qgisService;
     private readonly IAzureStorage _azureStorage;
 
-    public QgisRunnerController(ILogger<QgisRunnerController> logger, QgisService qgisService,
+    public QgisRunnerController(ILogger<QgisRunnerController> logger, NeptuneDbContext dbContext, QgisService qgisService,
         IAzureStorage azureStorage)
     {
         _logger = logger;
+        _dbContext = dbContext;
         _qgisService = qgisService;
         _azureStorage = azureStorage;
     }
@@ -28,225 +32,216 @@ public class QgisRunnerController : ControllerBase
         return Ok("Hello from the QGIS API!");
     }
 
-    [HttpPost("ogr2ogr/upsert-gdb-as-zip")]
-    [RequestSizeLimit(10_000_000_000)]
-    [RequestFormLimits(MultipartBodyLengthLimit = 10_000_000_000)]
-    public async Task<FileStreamResult> UpsertGdbAndReturnAsZip([FromForm] GdbInputsToGdbRequestDto requestDto)
+    [HttpPost("qgis/generate-plgus")]
+    public async Task<IActionResult> GenerateProjectLoadGeneratingUnits([FromForm] GenerateProjectLoadGeneratingUnitRequestDto requestDto)
     {
-        using var disposableTempGdbFile = DisposableTempDirectory.MakeDisposableTempDirectoryEndingIn(".gdb");
-        var gdbFileFolder = disposableTempGdbFile.DirectoryInfo;
+        var projectID = requestDto.ProjectID;
+        var project = _dbContext.Projects.AsNoTracking().SingleOrDefault(x => x.ProjectID == projectID);
+        if (project == null)
+        {
+            return NotFound($"Project with ID {projectID} does not exist!");
+        }
 
-        await GdbInputsToGdb(requestDto, gdbFileFolder.FullName);
+        var projectRegionalSubbasinIDs = _dbContext.TreatmentBMPs.AsNoTracking().Where(x => x.ProjectID == projectID).Select(x => x.RegionalSubbasinID).Distinct().ToList();
 
-        using var disposableTempGdbZipFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".gdb.zip");
-        GdbFolderToZipFile(gdbFileFolder, requestDto.GdbName, disposableTempGdbZipFile);
+        var regionalSubbasinIDs = _dbContext.vRegionalSubbasinUpstreams.AsNoTracking()
+            .Where(x => projectRegionalSubbasinIDs.Contains(x.PrimaryKey) && x.RegionalSubbasinID.HasValue).Select(x => x.RegionalSubbasinID.Value).ToList();
 
-        var stream = new StreamContent(disposableTempGdbZipFile.FileInfo.OpenRead());
-        return new FileStreamResult(await stream.ReadAsStreamAsync(), "application/zip");
+        var regionalSubbasinInputFeatures = _dbContext.vPyQgisRegionalSubbasinLGUInputs.AsNoTracking()
+            .Where(x => regionalSubbasinIDs.Contains(x.RSBID)).Select(x =>
+                new Feature(x.CatchmentGeometry, new AttributesTable { { "RSBID", x.RSBID }, { "ModelID", x.ModelID } }))
+            .ToList();
+        var lguInputs = _dbContext.vPyQgisProjectDelineationLGUInputs.AsNoTracking()
+            .Where(x => x.ProjectID == null || x.ProjectID == projectID).Select(x =>
+                new Feature(x.DelineationGeometry, new AttributesTable { { "DelinID", x.DelinID } })).ToList();
+        var outputFolder = Path.GetTempPath();
+        var outputLayerPrefix = $"{"PLGU"}{DateTime.Now.Ticks}";
+        var featureCollection = await GenerateLgUsImpl(regionalSubbasinInputFeatures, lguInputs, outputFolder, outputLayerPrefix, regionalSubbasinIDs, null);
+        var projectLoadGeneratingUnits = new List<ProjectLoadGeneratingUnit>();
+
+        foreach (var feature in featureCollection.Where(x => x.Geometry != null).ToList())
+        {
+            var loadGeneratingUnitResult = GeoJsonSerializer.DeserializeFromFeature<LoadGeneratingUnitResult>(feature, GeoJsonSerializer.DefaultSerializerOptions);
+
+            // we should only get Polygons from the Pyqgis rodeo overlay, but when we convert geojson to Geometry, they can result in invalid geometries
+            // however, when we run makevalid, it can potentially change the geometry type from Polygon to a MultiPolygon or GeometryCollection
+            // so we need to explode them if that happens since we are only expecting polygons for LGUs
+            var geometries = GeometryHelper.MakeValidAndExplodeIfNeeded(loadGeneratingUnitResult.Geometry);
+
+            projectLoadGeneratingUnits.AddRange(geometries.Select(dbGeometry =>
+                new ProjectLoadGeneratingUnit
+                {
+                    ProjectLoadGeneratingUnitGeometry = dbGeometry,
+                    ProjectID = projectID,
+                    DelineationID = loadGeneratingUnitResult.DelineationID,
+                    WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
+                    ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
+                    RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
+                }));
+        }
+
+        await _dbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pDeleteProjectLoadGeneratingUnitsPriorToRefreshForProject @ProjectID = {projectID}");
+
+        if (projectLoadGeneratingUnits.Any())
+        {
+            await _dbContext.ProjectLoadGeneratingUnits.AddRangeAsync(projectLoadGeneratingUnits);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        DeleteTempFiles(outputFolder, outputLayerPrefix);
+        return Ok();
     }
 
-    private async Task GdbInputsToGdb(GdbInputsToGdbRequestDto requestDto, string gdbOutputPath)
+    [HttpPost("qgis/generate-lgus")]
+    public async Task<IActionResult> GenerateLoadGeneratingUnits([FromForm] GenerateLoadGeneratingUnitRequestDto requestDto)
     {
-        for (var i = 0; i < requestDto.GdbInputs.Count; i++)
-        {
-            var update = i != 0;
-            var gdbInput = requestDto.GdbInputs[i];
-            await GdbInputToGdb(gdbOutputPath, gdbInput, update);
-        }
-    }
+        var outputFolder = Path.GetTempPath();
+        var outputLayerPrefix = $"LGU{DateTime.Now.Ticks}";
+        var lguInputFeatures = _dbContext.vPyQgisDelineationLGUInputs.AsNoTracking().Select(x =>
+            new Feature(x.DelineationGeometry, new AttributesTable { { "DelinID", x.DelinID } })).ToList();
+        var regionalSubbasinInputFeatures = _dbContext.vPyQgisRegionalSubbasinLGUInputs.AsNoTracking().Select(x =>
+            new Feature(x.CatchmentGeometry, new AttributesTable { { "RSBID", x.RSBID }, { "ModelID", x.ModelID } })).ToList();
+        var clipLayerPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}_inputClip.json";
+        var loadGeneratingUnitRefreshArea = await CreateLoadGeneratingUnitRefreshAreaIfProvided(requestDto, clipLayerPath);
+        var featureCollection = await GenerateLgUsImpl(regionalSubbasinInputFeatures, lguInputFeatures, outputFolder, outputLayerPrefix, new List<int>(), clipLayerPath);
 
-    private async Task GdbInputToGdb(string gdbOutputPath, GdbInput gdbInput, bool update)
-    {
-        if (gdbInput.File == null && string.IsNullOrWhiteSpace(gdbInput.CanonicalName))
-        {
-            _logger.LogWarning($"Received an input that doesn't have a file or canonical name.");
-            return;
-        }
 
-        var isCsv = gdbInput.GdbInputFileType == GdbInputFileTypeEnum.CSV;
-        using var disposableJsonTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(isCsv ? ".csv" : ".json");
-        if (gdbInput.File != null) // if there is a file uploaded, use that file
+        if (loadGeneratingUnitRefreshArea != null)
         {
-            _logger.LogInformation($"Beginning processing of uploaded file {gdbInput.LayerName}");
-            await using var fileStream = new FileStream(disposableJsonTempFile.FileInfo.FullName, FileMode.Create);
-            await gdbInput.File.CopyToAsync(fileStream);
-        }
-        else // otherwise download from the blobcontainer the file with the canonical name
-        {
-            _logger.LogInformation($"Beginning processing of {gdbInput.CanonicalName}");
-            await _azureStorage.DownloadToAsync(gdbInput.BlobContainer, gdbInput.CanonicalName,
-                disposableJsonTempFile.FileInfo.FullName);
-        }
-
-        List<string> args;
-        if (isCsv)
-        {
-            args = BuildCommandLineArgumentsForCsvToFileGdb(disposableJsonTempFile.FileInfo.FullName,
-                gdbOutputPath, gdbInput.LayerName, update);
+            await _dbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToDeltaRefresh @LoadGeneratingUnitRefreshAreaID = {loadGeneratingUnitRefreshArea}");
         }
         else
         {
-            args = BuildCommandLineArgumentsForGeoJsonToFileGdb(disposableJsonTempFile.FileInfo.FullName,
-                gdbInput.CoordinateSystemID, gdbOutputPath, gdbInput.LayerName, update,
-                gdbInput.GeometryTypeName);
+            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
         }
 
-        _qgisService.Run(args);
-    }
+        var loadGeneratingUnits = new List<LoadGeneratingUnit>();
 
-    [HttpPost("ogr2ogr/gdb-geojson")]
-    [RequestSizeLimit(10_000_000_000)]
-    [RequestFormLimits(MultipartBodyLengthLimit = 10_000_000_000)]
-    public async Task<ActionResult<string>> GdbToGeoJson([FromForm] GdbToGeoJsonRequestDto requestDto)
-    {
-        if (requestDto.GdbLayerOutputs.Count != 1)
+        foreach (var feature in featureCollection.Where(x => x.Geometry != null).ToList())
         {
-            return BadRequest(
-                "Expecting to process only one layer for this gdb.  If you need to process more than one please use the ogr2ogr/gdb-geojsons end point!");
-        }
+            var loadGeneratingUnitResult = GeoJsonSerializer.DeserializeFromFeature<LoadGeneratingUnitResult>(feature, GeoJsonSerializer.DefaultSerializerOptions);
 
-        using var disposableTempGdbZip = DisposableTempFile.MakeDisposableTempFileEndingIn(".gdb.zip");
-        await RetrieveGdbFromFileOrBlobStorage(requestDto, disposableTempGdbZip);
-        var layerOutput = requestDto.GdbLayerOutputs.Single();
-        var geoJson = ExtractGeoJsonFromGdb(disposableTempGdbZip, layerOutput);
-        return Ok(geoJson);
-    }
+            // we should only get Polygons from the Pyqgis rodeo overlay, but when we convert geojson to Geometry, they can result in invalid geometries
+            // however, when we run makevalid, it can potentially change the geometry type from Polygon to a MultiPolygon or GeometryCollection
+            // so we need to explode them if that happens since we are only expecting polygons for LGUs
+            var geometries = GeometryHelper.MakeValidAndExplodeIfNeeded(loadGeneratingUnitResult.Geometry);
 
-    private string ExtractGeoJsonFromGdb(DisposableTempFile disposableTempGdbZip, GdbLayerOutput layerOutput)
-    {
-        var args = BuildCommandLineArgumentsForFileGdbToGeoJson(disposableTempGdbZip.FileInfo.FullName,
-            layerOutput.FeatureLayerName,
-            layerOutput.FeatureLayerName,
-            layerOutput.Columns,
-            layerOutput.Filter,
-            layerOutput.CoordinateSystemID,
-            false,
-            layerOutput.NumberOfSignificantDigits,
-            layerOutput.Extent);
-        var geoJson = _qgisService.Run(args);
-        return geoJson.StdOut;
-    }
-
-    private async Task RetrieveGdbFromFileOrBlobStorage(GdbToGeoJsonRequestDto requestDto,
-        DisposableTempFile disposableTempGdbZip)
-    {
-        if (requestDto.File != null) // if there is a file uploaded, use that file
-        {
-            _logger.LogInformation($"Using GDB File Uploaded {requestDto.File.FileName}");
-            await using var fileStream = new FileStream(disposableTempGdbZip.FileInfo.FullName, FileMode.Create);
-            await requestDto.File.CopyToAsync(fileStream);
-        }
-        else // otherwise download from the blobcontainer the file with the canonical name
-        {
-            _logger.LogInformation($"Retrieving GDB File from blob storage: {requestDto.CanonicalName}");
-            await _azureStorage.DownloadToAsync(requestDto.BlobContainer, requestDto.CanonicalName,
-                disposableTempGdbZip.FileInfo.FullName);
-        }
-    }
-
-    private static void GdbFolderToZipFile(DirectoryInfo folderToZip, string desiredName, DisposableTempFile zipDestination)
-    {
-        var directoryInfo = new DirectoryInfo(folderToZip.FullName);
-        var gdbDirectoryFullPath = $"{directoryInfo.Parent}/{desiredName}";
-        if (directoryInfo.FullName != gdbDirectoryFullPath)
-        {
-            directoryInfo.MoveTo(gdbDirectoryFullPath);
-        }
-
-        ZipFile.CreateFromDirectory(gdbDirectoryFullPath, zipDestination.FileInfo.FullName, CompressionLevel.Optimal, true);
-        Directory.Delete(gdbDirectoryFullPath, true);
-    }
-
-    private static List<string> BuildCommandLineArgumentsForGeoJsonToFileGdb(string pathToSourceGeoJsonFile, int coordinateSystemId, string outputPath, string outputLayerName, bool update, string geometryType)
-    {
-        var commandLineArguments = new List<string>
+            loadGeneratingUnits.AddRange(geometries.Select(dbGeometry => new LoadGeneratingUnit()
             {
-                update ? "-update" : null,
-                "-s_srs",
-                GetMapProjection(coordinateSystemId),
-                "-a_srs",
-                GetMapProjection(coordinateSystemId),
-                "-f",
-                "OpenFileGDB",
-                outputPath,
-                pathToSourceGeoJsonFile,
-                "-nln",
-                outputLayerName,
-                "-nlt",
-                geometryType,
-                "-append",
-            };
-
-        return commandLineArguments.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-    }
-
-    private static List<string> BuildCommandLineArgumentsForCsvToFileGdb(string pathToSourceGeoJsonFile, string outputPath, string outputLayerName, bool update)
-    {
-        var commandLineArguments = new List<string>
-            {
-                update ? "-update" : null,
-                "-f",
-                "OpenFileGDB",
-                outputPath,
-                pathToSourceGeoJsonFile,
-                "-nln",
-                outputLayerName,
-                "-append",
-            };
-
-        return commandLineArguments.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-    }
-
-    private static List<string> BuildCommandLineArgumentsForFileGdbToGeoJson(string inputGdbFilePath, string sourceLayerName, string targetTableName,
-        List<string> columnNameList, string filter, int coordinateSystemId, bool explodeCollections,
-        int? significantDigits, GdbExtent? extent)
-    {
-        var reservedFields = new[] { "Ogr_Fid", "Ogr_Geometry" };
-        var filteredColumnNameList = columnNameList.Where(x => reservedFields.All(y => !String.Equals(x, y, StringComparison.InvariantCultureIgnoreCase))).ToList();
-        const string ogr2OgrColumnListSeparator = ",";
-        Check.Require(filteredColumnNameList.All(x => !x.Contains(ogr2OgrColumnListSeparator)),
-            $"Found column names with separator character \"{ogr2OgrColumnListSeparator}\", can't continue. Columns:{String.Join("\r\n", filteredColumnNameList)}");
-
-        var columnNames = filteredColumnNameList.Any() ? string.Join(ogr2OgrColumnListSeparator + " ", filteredColumnNameList) : "*";
-        var selectStatement = $"select {columnNames} from {sourceLayerName} {filter}";
-
-        var commandLineArguments = new List<string>
-            {
-                "-sql",
-                selectStatement,
-                "-t_srs",
-                GetMapProjection(coordinateSystemId),
-                explodeCollections ? "-explodecollections" : null,
-                "-f",
-                "GeoJSON",
-                "/dev/stdout",
-                inputGdbFilePath,
-                "-nln",
-                targetTableName
-            };
-
-        if (extent != null)
-        {
-            commandLineArguments.Add("-clipsrc");
-            commandLineArguments.Add(extent.MinX.ToString());
-            commandLineArguments.Add(extent.MinY.ToString());
-            commandLineArguments.Add(extent.MaxX.ToString());
-            commandLineArguments.Add(extent.MaxY.ToString());
+                LoadGeneratingUnitGeometry = dbGeometry,
+                DelineationID = loadGeneratingUnitResult.DelineationID,
+                WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
+                ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
+                RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
+            }));
         }
 
-        // layer creation options: see https://gdal.org/drivers/vector/geojson.html
-        var layerCreationOptions = new List<string>()
-            {
-                "-lco",
-                "COORDINATE_PRECISION=3",
-                significantDigits.HasValue ? "SIGNIFICANT_FIGURES=" + significantDigits : null
-            };
+        if (loadGeneratingUnits.Any())
+        {
+            await _dbContext.LoadGeneratingUnits.AddRangeAsync(loadGeneratingUnits);
+            await _dbContext.SaveChangesAsync();
+        }
 
-        return commandLineArguments.Where(x => x != null).Union(layerCreationOptions.Where(x => !string.IsNullOrWhiteSpace(x))).ToList();
+        if (loadGeneratingUnitRefreshArea != null)
+        {
+            loadGeneratingUnitRefreshArea.ProcessDate = DateTime.Now;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        DeleteTempFiles(outputFolder, outputLayerPrefix);
+        return Ok();
     }
 
-    public static string GetMapProjection(int coordinateSystemId)
+    private async Task<FeatureCollection> GenerateLgUsImpl(IEnumerable<Feature> regionalSubbasinInputFeatures, IEnumerable<Feature> lguInputFeatures, string outputFolder, string outputLayerPrefix, List<int> regionalSubbasinIDs, string? clipLayerPath)
     {
-        return $"EPSG:{coordinateSystemId}";
+        var outputLayerPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}.geojson";
+        var lguInputPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}delineationLayer.geojson";
+        var modelBasinInputPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}modelBasinLayer.geojson";
+        var regionalSubbasinInputPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}regionalSubbasinLayer.geojson";
+        var wqmpInputPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}wqmpLayer.geojson";
+        var additionalCommandLineArguments = new List<string>
+        {
+            "ModelingOverlayAnalysis.py", outputLayerPrefix, lguInputPath, modelBasinInputPath, regionalSubbasinInputPath
+        };
+        if (regionalSubbasinIDs.Any())
+        {
+            additionalCommandLineArguments.AddRange(new List<string> { "--rsb_ids", string.Join(", ", regionalSubbasinIDs) });
+        }
+        if (!string.IsNullOrWhiteSpace(clipLayerPath))
+        {
+            additionalCommandLineArguments.AddRange(new List<string> { "--clip", clipLayerPath });
+        }
+
+        await WriteFeaturesToGeoJsonFile(lguInputPath, lguInputFeatures);
+
+        var modelBasinInputFeatures = _dbContext.vPyQgisModelBasinLGUInputs.AsNoTracking().Select(x =>
+            new Feature(x.ModelBasinGeometry, new AttributesTable { { "ModelID", x.ModelID } })).ToList();
+        await WriteFeaturesToGeoJsonFile(modelBasinInputPath, modelBasinInputFeatures);
+
+        await WriteFeaturesToGeoJsonFile(regionalSubbasinInputPath, regionalSubbasinInputFeatures);
+
+        var wqmpInputFeatures = _dbContext.vPyQgisWaterQualityManagementPlanLGUInputs.AsNoTracking().Select(x =>
+            new Feature(x.WaterQualityManagementPlanBoundary, new AttributesTable { { "WQMPID", x.WQMPID } })).ToList();
+        await WriteFeaturesToGeoJsonFile(wqmpInputPath, wqmpInputFeatures);
+
+        _qgisService.Run(additionalCommandLineArguments.ToDictionary(x => x, x => false));
+
+        await using var openStream = System.IO.File.OpenRead(outputLayerPath);
+        var featureCollection =
+            await GeoJsonSerializer.GetFeatureCollectionFromGeoJsonStream(openStream,
+                GeoJsonSerializer.DefaultSerializerOptions);
+        return featureCollection;
+    }
+
+    private async Task<LoadGeneratingUnitRefreshArea?> CreateLoadGeneratingUnitRefreshAreaIfProvided(GenerateLoadGeneratingUnitRequestDto requestDto,
+        string clipLayerPath)
+    {
+        LoadGeneratingUnitRefreshArea? loadGeneratingUnitRefreshArea = null;
+        var loadGeneratingUnitRefreshAreaID = requestDto.LoadGeneratingUnitRefreshAreaID;
+        if (loadGeneratingUnitRefreshAreaID != null)
+        {
+            loadGeneratingUnitRefreshArea =
+                await _dbContext.LoadGeneratingUnitRefreshAreas.FindAsync(loadGeneratingUnitRefreshAreaID.Value);
+            var loadGeneratingUnitRefreshAreaGeometry = loadGeneratingUnitRefreshArea
+                .LoadGeneratingUnitRefreshAreaGeometry;
+            var lguInputClipFeatures = _dbContext.LoadGeneratingUnits
+                .Where(x => x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshAreaGeometry)).ToList()
+                .Select(x => new Feature(x.LoadGeneratingUnitGeometry, new AttributesTable())).ToList();
+
+            await WriteFeaturesToGeoJsonFile(clipLayerPath, lguInputClipFeatures, loadGeneratingUnitRefreshAreaGeometry);
+        }
+
+        return loadGeneratingUnitRefreshArea;
+    }
+
+    private static async Task WriteFeaturesToGeoJsonFile(string outputFilePath, IEnumerable<Feature> features)
+    {
+        await WriteFeaturesToGeoJsonFile(outputFilePath, features, null);
+    }
+
+    private static async Task WriteFeaturesToGeoJsonFile(string outputFilePath, IEnumerable<Feature> features, Geometry? extraGeometryToAppend)
+    {
+        var featureCollection = new FeatureCollection();
+        foreach (var feature in features)
+        {
+            featureCollection.Add(feature);
+        }
+
+        if (extraGeometryToAppend != null)
+        {
+            featureCollection.Add(new Feature(extraGeometryToAppend, new AttributesTable()));
+        }
+
+        var geoJsonString = GeoJsonSerializer.Serialize(featureCollection);
+        await System.IO.File.WriteAllTextAsync(outputFilePath, geoJsonString);
+    }
+
+    private static void DeleteTempFiles(string outputFolder, string outputLayerPrefix)
+    {
+        // clean up temp files if not running in a local environment
+        foreach (var fileToDelete in Directory.EnumerateFiles(outputFolder, outputLayerPrefix + "*"))
+        {
+            System.IO.File.Delete(fileToDelete);
+        }
     }
 }

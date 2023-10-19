@@ -4,9 +4,9 @@ namespace Neptune.GDALAPI.Services
 {
     public class Ogr2OgrService : IRun
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<Ogr2OgrService> _logger;
 
-        public Ogr2OgrService(ILogger logger)
+        public Ogr2OgrService(ILogger<Ogr2OgrService> logger)
         {
             _logger = logger;
         }

@@ -12,15 +12,15 @@ namespace Neptune.Jobs.Hangfire
         {
             var recurringJobIds = new List<string>();
 
-            AddRecurringJob<TrashGeneratingUnitRefreshScheduledBackgroundJob>(TrashGeneratingUnitRefreshScheduledBackgroundJob.JobName, x => x.RunJob(null), MakeDailyUtcCronJobStringFromLocalTime(22, 30), recurringJobIds);
+            //AddRecurringJob<TrashGeneratingUnitRefreshScheduledBackgroundJob>(TrashGeneratingUnitRefreshScheduledBackgroundJob.JobName, x => x.RunJob(null), MakeDailyUtcCronJobStringFromLocalTime(22, 30), recurringJobIds);
 
-            AddRecurringJob<RegionalSubbasinRefreshScheduledBackgroundJob>("Refresh RSBs",
-                x => x.RunJob(null),
-                MakeWeeklyUtcCronJobStringFromLocalTime(1, 30, DayOfWeek.Saturday), recurringJobIds);
+            //AddRecurringJob<RegionalSubbasinRefreshScheduledBackgroundJob>("Refresh RSBs",
+            //    x => x.RunJob(null),
+            //    MakeWeeklyUtcCronJobStringFromLocalTime(1, 30, DayOfWeek.Saturday), recurringJobIds);
 
-            AddRecurringJob<HRURefreshBackgroundJob>(HRURefreshBackgroundJob.JobName, x => x.RunJob(null), "0 * * * *", recurringJobIds);
+            //AddRecurringJob<HRURefreshBackgroundJob>(HRURefreshBackgroundJob.JobName, x => x.RunJob(null), "0 * * * *", recurringJobIds);
 
-            AddRecurringJob<TotalNetworkSolveJob>(TotalNetworkSolveJob.JobName, x => x.RunJob(null), MakeDailyUtcCronJobStringFromLocalTime(1, 0), recurringJobIds);
+            //AddRecurringJob<TotalNetworkSolveJob>(TotalNetworkSolveJob.JobName, x => x.RunJob(null), MakeDailyUtcCronJobStringFromLocalTime(1, 0), recurringJobIds);
 
             // Remove any jobs we haven't explicitly scheduled
             RemoveExtraneousJobs(recurringJobIds);

@@ -19,12 +19,6 @@ services:
       - GDALAPIBaseUrl=${GDALAPIBaseUrl}
       - OCGISBaseUrl=${OCGISBaseUrl}
       - PlanningModuleBaseUrl=${PlanningModuleBaseUrl}
-      - DatabaseServerName=${DatabaseServerName}
-      - DatabaseName=${DatabaseName}
-      - PathToPyqgisTestScript=${PathToPyqgisTestScript}
-      - PyqgisWorkingDirectory=${PyqgisWorkingDirectory}
-      - PathToPyqgisLauncher=${PathToPyqgisLauncher}
-      - PathToPyqgisProjData=${PathToPyqgisProjData}
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
       - RecaptchaPublicKey=${RecaptchaPublicKey}
       - RecaptchaPrivateKey=${RecaptchaPrivateKey}
@@ -46,13 +40,13 @@ services:
       - GDALAPIBaseUrl=${GDALAPIBaseUrl}
       - OCGISBaseUrl=${OCGISBaseUrl}
       - PlanningModuleBaseUrl=${PlanningModuleBaseUrl}
-      - DatabaseServerName=${DatabaseServerName}
-      - DatabaseName=${DatabaseName}
-      - PathToPyqgisTestScript=${PathToPyqgisTestScript}
-      - PyqgisWorkingDirectory=${PyqgisWorkingDirectory}
-      - PathToPyqgisLauncher=${PathToPyqgisLauncher}
-      - PathToPyqgisProjData=${PathToPyqgisProjData}
 
   neptune.gdalapi:
     environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - AzureBlobStorageConnectionString=${AzureBlobStorageConnectionString}
+
+  neptune.qgisapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - SECRET_PATH=${QGISAPISecretPath}

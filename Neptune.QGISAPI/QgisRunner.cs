@@ -1,7 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using Neptune.Common;
+﻿using Neptune.Common;
 
-namespace Neptune.Jobs.PyQgis
+namespace Neptune.QGISAPI
 {
     public class QgisRunner
     {

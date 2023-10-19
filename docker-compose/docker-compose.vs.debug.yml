@@ -72,6 +72,19 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:80
 
+  neptune.qgisapi:
+    image: neptune/qgisapi
+    hostname: qgisapi
+    labels:
+      - "com.microsoft.visualstudio.targetoperatingsystem=linux"
+    build:
+      args:
+        source: ${DOCKER_BUILD_SOURCE}
+    ports:
+      - "8232:80"
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+
 
 secrets:
   GeoserverSqlServerPassword.txt:

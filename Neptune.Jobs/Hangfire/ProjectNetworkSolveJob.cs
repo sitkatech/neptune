@@ -116,69 +116,7 @@ You can view the results or trigger another network solve <a href='{planningURL}
 
         private void LoadGeneratingUnitRefreshImpl(List<int> regionalSubbasinIDs, int projectID)
         {
-            _logger.LogInformation($"Processing '{JobName}'-LoadGeneratingUnitRefresh for {projectID}");
-            var outputLayerName = $"PLGU{DateTime.Now.Ticks}";
-            var outputFolder = Path.GetTempPath();
-            var outputLayerPath = $"{Path.Combine(outputFolder, outputLayerName)}.geojson";
-
-            var additionalCommandLineArguments = new List<string> { outputFolder, outputLayerName, "--planned_project_id", projectID.ToString(), "--rsb_ids", String.Join(", ", regionalSubbasinIDs) };
-
-            //todo: pyqgis
-            //// a PyQGIS script computes the LGU layer and saves it as a shapefile
-            //var processUtilityResult = QgisRunner.ExecutePyqgisScript($"{neptuneJobConfiguration.PyqgisWorkingDirectory}ModelingOverlayAnalysis.py", neptuneJobConfiguration.PyqgisWorkingDirectory, additionalCommandLineArguments);
-
-            //if (processUtilityResult.ReturnCode != 0)
-            //{
-            //    Logger.LogError("LGU Geoprocessing failed. Output:");
-            //    Logger.LogError(processUtilityResult.StdOutAndStdErr);
-            //    throw new GeoprocessingException(processUtilityResult.StdOutAndStdErr);
-            //}
-
-            _dbContext.Database.ExecuteSqlRaw(
-                $"EXEC dbo.pDeleteProjectLoadGeneratingUnitsPriorToRefreshForProject @ProjectID = {projectID}");
-
-            var jsonSerializerOptions = GeoJsonSerializer.DefaultSerializerOptions;
-            using(var openStream = File.OpenRead(outputLayerPath))
-            {
-                var featureCollection = JsonSerializer.DeserializeAsync<NetTopologySuite.Features.FeatureCollection>(openStream, jsonSerializerOptions).Result;
-                var features = featureCollection.Where(x => x.Geometry != null).ToList();
-                var projectLoadGeneratingUnits = new List<ProjectLoadGeneratingUnit>();
-
-                foreach (var feature in features)
-                {
-                    var loadGeneratingUnitResult = GeoJsonSerializer.DeserializeFromFeature<LoadGeneratingUnitResult>(feature, jsonSerializerOptions);
-
-                    // we should only get Polygons from the Pyqgis rodeo overlay
-                    // when we convert geojson to dbgeometry, they can result in invalid geometries
-                    // however, when we run makevalid, it can potentially change the geometry type 
-                    // from Polygon to a MultiPolygon or GeometryCollection
-                    // so we need to explode them if that happens since we are only expecting polygons for LGUs
-                    var geometries = GeometryHelper.GeometryToDbGeometryAndMakeValidAndExplodeIfNeeded(loadGeneratingUnitResult.Geometry);
-
-                    projectLoadGeneratingUnits.AddRange(geometries.Select(dbGeometry =>
-                        new ProjectLoadGeneratingUnit
-                        {
-                            ProjectLoadGeneratingUnitGeometry = dbGeometry,
-                            ProjectID = projectID,
-                            DelineationID = loadGeneratingUnitResult.DelineationID,
-                            WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
-                            ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
-                            RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
-                        }));
-                }
-
-                if (projectLoadGeneratingUnits.Any())
-                {
-                    _dbContext.ProjectLoadGeneratingUnits.AddRange(projectLoadGeneratingUnits);
-                    _dbContext.SaveChanges();
-                }
-            }
-
-            // clean up temp files if not running in a local environment
-            if (!_webHostEnvironment.IsDevelopment())
-            {
-                File.Delete(outputLayerPath);
-            }
+            //todo: call qgis api
         }
 
         private async Task HRURefreshImpl(int projectID)

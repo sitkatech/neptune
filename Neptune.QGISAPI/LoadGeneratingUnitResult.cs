@@ -2,7 +2,7 @@
 using Neptune.Common.GeoSpatial;
 using NetTopologySuite.Geometries;
 
-namespace Neptune.Jobs.Hangfire;
+namespace Neptune.QGISAPI;
 
 public class LoadGeneratingUnitResult : IHasGeometry
 {

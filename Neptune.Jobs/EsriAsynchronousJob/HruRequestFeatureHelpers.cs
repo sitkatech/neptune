@@ -18,7 +18,7 @@ public static class HruRequestFeatureHelpers
             };
             var catchmentGeometry = loadGeneratingUnit.Value.ProjectTo2230();
                
-            for (var i = 1; i <= catchmentGeometry.NumGeometries; i++)
+            for (var i = 0; i < catchmentGeometry.NumGeometries; i++)
             {
                 if (catchmentGeometry.GetGeometryN(i).GeometryType.ToUpper() == "POLYGON")
                 {
