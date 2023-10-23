@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.Common.Email;
 using Neptune.Common.GeoSpatial;
+using Neptune.Common.Services;
+using Neptune.Common.Services.GDAL;
 using Neptune.EFModels.Entities;
 using Neptune.Jobs.EsriAsynchronousJob;
 using Neptune.Jobs.Services;
@@ -20,6 +22,7 @@ namespace Neptune.Jobs.Hangfire
 
         private readonly NereidService _nereidService;
         private readonly OCGISService _ocgisService;
+        private readonly QGISAPIService _qgisApiService;
         private readonly ILogger<ProjectNetworkSolveJob> _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly NeptuneDbContext _dbContext;
@@ -27,10 +30,11 @@ namespace Neptune.Jobs.Hangfire
         private readonly SitkaSmtpClientService _sitkaSmtpClient;
 
         public ProjectNetworkSolveJob(ILogger<ProjectNetworkSolveJob> logger, IWebHostEnvironment webHostEnvironment, NeptuneDbContext dbContext,
-            IOptions<NeptuneJobConfiguration> neptuneJobConfiguration, SitkaSmtpClientService sitkaSmtpClientService, NereidService nereidService, OCGISService ocgisService)
+            IOptions<NeptuneJobConfiguration> neptuneJobConfiguration, SitkaSmtpClientService sitkaSmtpClientService, NereidService nereidService, OCGISService ocgisService, QGISAPIService qgisApiService)
         {
             _nereidService = nereidService;
             _ocgisService = ocgisService;
+            _qgisApiService = qgisApiService;
             _logger = logger;
             _webHostEnvironment = webHostEnvironment;
             _dbContext = dbContext;
@@ -54,7 +58,7 @@ namespace Neptune.Jobs.Hangfire
             try
             {
                 //Get our LGUs
-                LoadGeneratingUnitRefreshImpl(regionalSubbasinIDs, projectID);
+                await LoadGeneratingUnitRefreshImpl(projectID, regionalSubbasinIDs);
                 //Get our HRUs
                 await HRURefreshImpl(projectID);
                 await _nereidService.ProjectNetworkSolve(_dbContext, false, projectID, regionalSubbasinIDs, projectDistributedDelineationIDs);
@@ -114,9 +118,9 @@ You can view the results or trigger another network solve <a href='{planningURL}
             await _sitkaSmtpClient.Send(mailMessage);
         }
 
-        private void LoadGeneratingUnitRefreshImpl(List<int> regionalSubbasinIDs, int projectID)
+        private async Task LoadGeneratingUnitRefreshImpl(int projectID, List<int> regionalSubbasinIDs)
         {
-            //todo: call qgis api
+            await _qgisApiService.GeneratePLGUs(new GenerateProjectLoadGeneratingUnitRequestDto() { ProjectID = projectID, RegionalSubbasinIDs = regionalSubbasinIDs });
         }
 
         private async Task HRURefreshImpl(int projectID)

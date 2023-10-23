@@ -8,5 +8,5 @@ public class GenerateProjectLoadGeneratingUnitRequestDto
     public int ProjectID { get; set; }
 
     [Required] 
-    public int ProjectNetworkSolveHistoryID { get; set; }
+    public List<int> RegionalSubbasinIDs { get; set; }
 }

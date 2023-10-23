@@ -24,12 +24,12 @@ namespace Neptune.Jobs.Hangfire
 
         public override List<RunEnvironment> RunEnvironments => new() { RunEnvironment.Staging, RunEnvironment.Production };
 
-        protected override async void RunJobImplementation()
+        protected override void RunJobImplementation()
         {
             // clear out all dirty nodes since the whole network is being run.
-            await DbContext.DirtyModelNodes.ExecuteDeleteAsync();
-            await _nereidService.TotalNetworkSolve(DbContext, true);
-            await _nereidService.TotalNetworkSolve(DbContext, false);
+            DbContext.DirtyModelNodes.ExecuteDelete();
+            _nereidService.TotalNetworkSolve(DbContext, true);
+            _nereidService.TotalNetworkSolve(DbContext, false);
 
         }
     }

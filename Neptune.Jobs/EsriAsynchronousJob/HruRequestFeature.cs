@@ -26,7 +26,7 @@ namespace Neptune.Jobs.EsriAsynchronousJob
 
             rings.Add(exteriorRingCoordinates);
 
-            for (var j = 1; j <= catchmentGeometry.InteriorRings.Length; j++)
+            for (var j = 0; j < catchmentGeometry.InteriorRings.Length; j++)
             {
                 var interiorRing = catchmentGeometry.GetInteriorRingN(j);
                 var interiorRingCoordinates = GetRingCoordinates(interiorRing);
@@ -50,7 +50,7 @@ namespace Neptune.Jobs.EsriAsynchronousJob
         private static List<double[]> GetRingCoordinates(LineString catchmentGeometryExteriorRing)
         {
             var coordinates = new List<double[]>();
-            for (var j = 1; j <= catchmentGeometryExteriorRing.NumPoints; j++)
+            for (var j = 0; j < catchmentGeometryExteriorRing.NumPoints; j++)
             {
                 var point = catchmentGeometryExteriorRing.GetPointN(j);
                 var lon = point.X;

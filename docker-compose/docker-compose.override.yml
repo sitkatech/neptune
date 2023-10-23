@@ -17,6 +17,7 @@ services:
       - AutoDelineateServiceUrl=${AutoDelineateServiceUrl}
       - HRUServiceBaseUrl=${HRUServiceBaseUrl}
       - GDALAPIBaseUrl=${GDALAPIBaseUrl}
+      - QGISAPIBaseUrl=${QGISAPIBaseUrl}
       - OCGISBaseUrl=${OCGISBaseUrl}
       - PlanningModuleBaseUrl=${PlanningModuleBaseUrl}
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
@@ -38,6 +39,7 @@ services:
       - OcStormwaterToolsBaseUrl=${OcStormwaterToolsBaseUrl}
       - NereidUrl=${NereidUrl}
       - GDALAPIBaseUrl=${GDALAPIBaseUrl}
+      - QGISAPIBaseUrl=${QGISAPIBaseUrl}
       - OCGISBaseUrl=${OCGISBaseUrl}
       - PlanningModuleBaseUrl=${PlanningModuleBaseUrl}
 

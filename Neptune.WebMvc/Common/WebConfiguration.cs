@@ -20,6 +20,7 @@ public class WebConfiguration : NeptuneJobConfiguration
 
     public string AutoDelineateServiceUrl { get; set; }
     public string GDALAPIBaseUrl { get; set; }
+    public string QGISAPIBaseUrl { get; set; }
     public string OCGISBaseUrl { get; set; }
 
     public string PathToFieldVisitUploadTemplate { get; set; }

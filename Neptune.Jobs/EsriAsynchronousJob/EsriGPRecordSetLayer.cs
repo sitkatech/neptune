@@ -10,7 +10,7 @@ namespace Neptune.Jobs.EsriAsynchronousJob
         [JsonPropertyName("geometryType")]
         public string GeometryType { get; set; }
         [JsonPropertyName("exceededTransferLimit")]
-        public string ExceededTransferLimit { get; set; }
+        public bool ExceededTransferLimit { get; set; }
         [JsonPropertyName("fields")]
         public List<EsriField> Fields { get; set; }
         [JsonPropertyName("spatialReference")]

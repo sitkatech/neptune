@@ -27,12 +27,12 @@ namespace Neptune.Jobs.Hangfire
 
         public override List<RunEnvironment> RunEnvironments => new() { RunEnvironment.Development, RunEnvironment.Staging, RunEnvironment.Production };
 
-        protected override async void RunJobImplementation()
+        protected override void RunJobImplementation()
         {
-            await HRURefreshImpl();
+            HRURefreshImpl();
         }
 
-        private async Task HRURefreshImpl()
+        public void HRURefreshImpl()
         {
             // this job assumes the LGUs are already correct but that for whatever reason, some are missing their HRUs
             
@@ -43,23 +43,8 @@ namespace Neptune.Jobs.Hangfire
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var loadGeneratingUnitsToUpdate = GetLoadGeneratingUnitsToUpdate(DbContext).ToList();
-
-            if (!loadGeneratingUnitsToUpdate.Any())
-            {
-                var lgusWithEmptyResponseCount = DbContext.LoadGeneratingUnits.Count(x=> x.IsEmptyResponseFromHRUService == true);
-                if (lgusWithEmptyResponseCount > 100)
-                {
-                    foreach (var loadGeneratingUnit in DbContext.LoadGeneratingUnits.Where(x => x.IsEmptyResponseFromHRUService == true))
-                    {
-                        loadGeneratingUnit.IsEmptyResponseFromHRUService = false;
-                    }
-                    await DbContext.SaveChangesAsync();
-                    loadGeneratingUnitsToUpdate = GetLoadGeneratingUnitsToUpdate(DbContext).ToList();
-                }
-            }
-
-            var loadGeneratingUnitsToUpdateGroupedByModelBasin = loadGeneratingUnitsToUpdate.GroupBy(x=> x.ModelBasinID);
+            var lguUpdateCandidates = LoadGeneratingUnits.ListUpdateCandidates(DbContext);
+            var loadGeneratingUnitsToUpdateGroupedByModelBasin = lguUpdateCandidates.GroupBy(x=> x.ModelBasinID);
 
             foreach (var group in loadGeneratingUnitsToUpdateGroupedByModelBasin)
             {
@@ -71,7 +56,7 @@ namespace Neptune.Jobs.Hangfire
                     {
                         var loadGeneratingUnits = batch.ToList();
                         var hruRequestFeatures = HruRequestFeatureHelpers.GetHRURequestFeatures(loadGeneratingUnits.ToDictionary(x => x.LoadGeneratingUnitID, x => x.LoadGeneratingUnitGeometry), false);
-                        var hruResponseFeatures = await _ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList());
+                        var hruResponseFeatures = _ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList()).Result;
 
                         if (!hruResponseFeatures.Any())
                         {
@@ -102,8 +87,8 @@ namespace Neptune.Jobs.Hangfire
                             };
                             return hruCharacteristic;
                         });
-                        await DbContext.HRUCharacteristics.AddRangeAsync(hruCharacteristics);
-                        await DbContext.SaveChangesAsync();
+                        DbContext.HRUCharacteristics.AddRange(hruCharacteristics);
+                        DbContext.SaveChanges();
                     }
                     catch (Exception ex)
                     {
@@ -111,74 +96,38 @@ namespace Neptune.Jobs.Hangfire
                         Logger.LogWarning(ex.Message);
                     }
 
-                    if (stopwatch.Elapsed.Minutes > 20)
+                    if (stopwatch.Elapsed.Minutes > 50)
                     {
                         break;
                     }
                 }
 
-                if (stopwatch.Elapsed.Minutes > 20)
+                if (stopwatch.Elapsed.Minutes > 50)
                 {
                     break;
                 }
             }
 
-            ExecuteModelIfNeeded(loadGeneratingUnitsToUpdate.Any());
+            ExecuteNetworkSolveJobIfNeeded();
 
             stopwatch.Stop();
         }
 
-        private void ExecuteModelIfNeeded(bool wereAnyLoadGeneratingUnitsToUpdate)
+        private void ExecuteNetworkSolveJobIfNeeded()
         {
-            var updatedRegionalSubbasins = DbContext.RegionalSubbasins.Where(x=> x.LastUpdate != null).ToList();
+            var updatedRegionalSubbasins = DbContext.RegionalSubbasins.AsNoTracking().Where(x=> x.LastUpdate != null).ToList();
             var lastRegionalSubbasinUpdateDate = updatedRegionalSubbasins.Any() ? updatedRegionalSubbasins.Max(x=> x.LastUpdate.Value) : DateTime.MinValue;
-            var updatedNereidResults = DbContext.NereidResults.Where(x=>x.LastUpdate != null).ToList();
+            var updatedNereidResults = DbContext.NereidResults.AsNoTracking().Where(x=>x.LastUpdate != null).ToList();
             var lastNereidResultUpdateDate = updatedNereidResults.Any() ? updatedNereidResults.Max(x=> x.LastUpdate.Value) : DateTime.MinValue;
-            
-            if (wereAnyLoadGeneratingUnitsToUpdate)
+
+            if (lastRegionalSubbasinUpdateDate > lastNereidResultUpdateDate)
             {
-                // if there was any work done, check if all the HRUs are populated and if so blast off with a new solve.
-                DbContext.LoadGeneratingUnits.Load();
-
-                // don't die if it takes longer than 30 seconds for this next query to come back
-                DbContext.Database.SetCommandTimeout(600);
-                var loadGeneratingUnitsMissingHrus = GetLoadGeneratingUnitsToUpdate(DbContext).Any();
-
-                if (!loadGeneratingUnitsMissingHrus)
-                {
-                    if (lastRegionalSubbasinUpdateDate > lastNereidResultUpdateDate)
-                    {
-                        BackgroundJob.Enqueue<TotalNetworkSolveJob>(x => x.RunJob(null));
-                    }
-                    else if(DbContext.DirtyModelNodes.Any())
-                    {
-                        BackgroundJob.Enqueue<DeltaSolveJob>(x => x.RunJob(null));
-                    }
-                }
+                BackgroundJob.Enqueue<TotalNetworkSolveJob>(x => x.RunJob(null));
             }
-            else
+            else if (DbContext.DirtyModelNodes.AsNoTracking().Any())
             {
-                // if the job woke up and went immediately to sleep, then all HRUs are populated.
-                if (lastRegionalSubbasinUpdateDate > lastNereidResultUpdateDate)
-                {
-                    BackgroundJob.Enqueue<TotalNetworkSolveJob>(x => x.RunJob(null));
-                }
-                else if (DbContext.DirtyModelNodes.AsNoTracking().Any())
-                {
-                    BackgroundJob.Enqueue<DeltaSolveJob>(x => x.RunJob(null));
-                }
+                BackgroundJob.Enqueue<DeltaSolveJob>(x => x.RunJob(null));
             }
-        }
-
-        private static IQueryable<LoadGeneratingUnit> GetLoadGeneratingUnitsToUpdate(NeptuneDbContext dbContext)
-        {
-            return dbContext.LoadGeneratingUnits.Include(x => x.RegionalSubbasin)
-                .Include(x => x.HRUCharacteristics)
-                .Where(x =>
-                    x.RegionalSubbasin != null &&
-                    x.ModelBasinID == x.RegionalSubbasin.ModelBasinID.Value &&
-                    !(x.HRUCharacteristics.Any() || x.RegionalSubbasinID == null ||
-                      x.IsEmptyResponseFromHRUService == true) && x.LoadGeneratingUnitGeometry.Area >= 10);
         }
     }
 }

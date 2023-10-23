@@ -10,5 +10,10 @@ namespace Neptune.Jobs.EsriAsynchronousJob
         public EsriJobStatus jobStatus { get; set; }
 
         public List<EsriJobMessage> messages { get; set; }
+
+        public bool IsExecuting()
+        {
+            return jobStatus is EsriJobStatus.esriJobExecuting or EsriJobStatus.esriJobWaiting or EsriJobStatus.esriJobSubmitted;
+        }
     }
 }

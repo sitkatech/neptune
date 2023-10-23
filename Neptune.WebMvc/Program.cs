@@ -113,6 +113,20 @@ var builder = WebApplication.CreateBuilder(args);
         return httpClientHandler;
     });
 
+    services.AddHttpClient<QGISAPIService>(c =>
+    {
+        c.BaseAddress = new Uri(configuration.QGISAPIBaseUrl);
+        c.Timeout = TimeSpan.FromDays(1);
+    }).ConfigurePrimaryHttpMessageHandler(() =>
+    {
+        var httpClientHandler = new HttpClientHandler();
+        httpClientHandler.ClientCertificateOptions = ClientCertificateOption.Manual;
+        httpClientHandler.ServerCertificateCustomValidationCallback =
+            (_, _, _, _) => true;
+
+        return httpClientHandler;
+    });
+
     services.AddAuthorizationPolicies();
     services.AddSendGrid(options => { options.ApiKey = configuration.SendGridApiKey; });
     services.AddSingleton<SitkaSmtpClientService>();

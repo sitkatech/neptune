@@ -54,12 +54,12 @@ RSB_IDs = None
 
 def parseArguments():
     parser = argparse.ArgumentParser(description='Test PyQGIS connections to MSSQL')
-    parser.add_argument('output_folder', metavar='d', type=str, help='The folder to write the final output to.')
-    parser.add_argument('output_file_prefix', metavar='d', type=str, help='The filename prefix to write the final output to.')
-    parser.add_argument('lgu_input_path', metavar='d', type=str, help='the path to the lgu input.')
-    parser.add_argument('model_basin_input_path', metavar='d', type=str, help='The path to the model basin input.')
-    parser.add_argument('regional_subbain_input_path', metavar='d', type=str, help='the path to the wqmp input.')
-    parser.add_argument('wqmp_input_path', metavar='d', type=str, help='The filename prefix to write the final output to.')
+    parser.add_argument('output_folder', type=str, help='The folder to write the final output to.')
+    parser.add_argument('output_file_prefix', type=str, help='The filename prefix to write the final output to.')
+    parser.add_argument('lgu_input_path', type=str, help='the path to the lgu input.')
+    parser.add_argument('model_basin_input_path', type=str, help='The path to the model basin input.')
+    parser.add_argument('regional_subbain_input_path', type=str, help='the path to the wqmp input.')
+    parser.add_argument('wqmp_input_path', type=str, help='The filename prefix to write the final output to.')
     parser.add_argument('--rsb_ids', type=str, help='If present, filters the rsb layer down to only rsbs whose id is present in the list. Should be numbers separated by commas')
     parser.add_argument('--clip', type=str, help='The path to a geojson file containing the shape to clip inputs to')
     args = parser.parse_args()

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Net.Http.Json;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Neptune.Common.GeoSpatial;
@@ -12,6 +13,9 @@ namespace Neptune.Jobs.Services;
 
 public class OCGISService : BaseAPIService<OCGISService>
 {
+    private const int MAX_RETRIES = 3;
+    private const string HRUServiceEndPoint = "Environmental_Resources/HRUSummary/GPServer/HRUSummary";
+
     private readonly NeptuneDbContext _dbContext;
 
     public OCGISService(HttpClient httpClient, ILogger<OCGISService> logger, NeptuneDbContext dbContext) : base(httpClient, logger, "OCGIS Service")
@@ -154,7 +158,6 @@ public class OCGISService : BaseAPIService<OCGISService>
         await _dbContext.SaveChangesAsync();
     }
 
-
     public async Task<List<OCTAPrioritizationFromEsri>> RetrieveOCTAPrioritizations()
     {
         const string serviceName = "OCTA Prioritization";
@@ -206,47 +209,116 @@ public class OCGISService : BaseAPIService<OCGISService>
         return result;
     }
 
-    public async Task<List<HRUResponseFeature>> RetrieveHRUResponseFeatures(List<HRURequestFeature> featuresForHRURequest)
+
+    public async Task<List<HRUResponseFeature>> RetrieveHRUResponseFeatures(List<HRURequestFeature> hruRequestFeatures)
     {
-        var postUrl = "Environmental_Resources/HRUSummary/GPServer/HRUSummary";
-        var esriAsynchronousJobRunner = new EsriAsynchronousJobRunner(HttpClient, postUrl, "output_table");
-
-        var hruRequest = GetGPRecordSetLayer(featuresForHRURequest);
-
-        var serializeObject = new
-        {
-            input_fc = GeoJsonSerializer.Serialize(hruRequest),
-            returnZ = false,
-            returnM = false,
-            returnTrueCurves = false,
-            f = "pjson"
-        };
-
         var newHRUCharacteristics = new List<HRUResponseFeature>();
         var rawResponse = string.Empty;
         try
         {
-            var esriGPRecordSetLayer = (await esriAsynchronousJobRunner
-            .RunJob<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(
-                // ReSharper disable once UnusedVariable
-                serializeObject)).Value;
-
-            newHRUCharacteristics.AddRange(
-                esriGPRecordSetLayer
-                    .Features.Where(x => x.Attributes.ImperviousAcres != null));
-
+            var esriGPRecordSetLayer = (await SubmitHRURequestJobAndRetrieveResults(hruRequestFeatures)).Value;
+            newHRUCharacteristics.AddRange(esriGPRecordSetLayer.Features.Where(x => x.Attributes.ImperviousAcres != null));
         }
         catch (Exception ex)
         {
             Logger.LogWarning(ex.Message, ex);
-            Logger.LogWarning($"Skipped entities (ProjectLGUs if Project modeling, otherwise LGUs) with these IDs: {string.Join(", ", featuresForHRURequest.Select(x => x.Attributes.QueryFeatureID.ToString()))}");
+            Logger.LogWarning($"Skipped entities (ProjectLGUs if Project modeling, otherwise LGUs) with these IDs: {string.Join(", ", hruRequestFeatures.Select(x => x.Attributes.QueryFeatureID.ToString()))}");
             Logger.LogWarning(rawResponse);
         }
 
         return newHRUCharacteristics;
     }
 
-    public static EsriGPRecordSetLayer<HRURequestFeature> GetGPRecordSetLayer(
+    private async Task<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>
+        SubmitHRURequestJobAndRetrieveResults(List<HRURequestFeature> featuresForHRURequest)
+    {
+        var requestObject = GetGPRecordSetLayer(featuresForHRURequest);
+        var keyValuePairs = new List<KeyValuePair<string, string>>
+        {
+            new("input_fc", GeoJsonSerializer.Serialize(requestObject)),
+            new("returnZ", "false"),
+            new("returnM", "false"),
+            new("returnTrueCurves", "false"),
+            new("f", "json"),
+            new("env:outSR", ""),
+            new("env:processSR", ""),
+            new("context", ""),
+        };
+
+        var jobID = "";
+        var retry = true;
+        var attempts = 0;
+        EsriJobStatusResponse? jobStatusResponse = null;
+        while (retry && attempts < MAX_RETRIES)
+        {
+            var httpResponseMessage = await HttpClient.PostAsync($"{HRUServiceEndPoint}/submitJob", new FormUrlEncodedContent(keyValuePairs));
+            httpResponseMessage.EnsureSuccessStatusCode();
+
+            jobStatusResponse = await GeoJsonSerializer.DeserializeAsync<EsriJobStatusResponse>(await httpResponseMessage.Content.ReadAsStreamAsync());
+            jobID = jobStatusResponse.jobId;
+            // wait 5 seconds before checking for process on first attempt, 30 on second, and 90 on third
+            var timeout = attempts switch
+            {
+                0 => 5000,
+                1 => 30000,
+                2 => 90000,
+                _ => 5000
+            };
+
+            retry = await CheckShouldRetry(jobID, timeout);
+            attempts++;
+        }
+
+        if (retry && attempts >= MAX_RETRIES)
+        {
+            throw new TimeoutException("Remote service failed to respond within the timeout.");
+        }
+
+        var isExecuting = jobStatusResponse.IsExecuting();
+
+        while (isExecuting)
+        {
+            jobStatusResponse = await CheckEsriJobStatus(jobID, 5000);
+            isExecuting = jobStatusResponse.IsExecuting();
+        }
+
+        switch (jobStatusResponse.jobStatus)
+        {
+            case EsriJobStatus.esriJobSucceeded:
+                var resultContent = await HttpClient.GetFromJsonAsync<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>($"{HRUServiceEndPoint}/jobs/{jobID}/results/output_table/?f=json", GeoJsonSerializer.DefaultSerializerOptions);
+                return resultContent;
+            case EsriJobStatus.esriJobCancelling:
+            case EsriJobStatus.esriJobCancelled:
+                throw new EsriAsynchronousJobCancelledException(jobStatusResponse.jobId);
+            case EsriJobStatus.esriJobFailed:
+                throw new EsriAsynchronousJobFailedException(jobStatusResponse, requestObject.ToString());
+            default:
+                // ReSharper disable once NotResolvedInText
+                throw new ArgumentOutOfRangeException("jobStatusResponse.jobStatus",
+                    $"Unexpected job status from HRU job {jobStatusResponse.jobId}. Last message: {jobStatusResponse.messages.Last().description}");
+        }
+    }
+
+    private async Task<bool> CheckShouldRetry(string jobID, int millisecondsTimeout)
+    {
+        var jobStatusResponse = await CheckEsriJobStatus(jobID, millisecondsTimeout);
+
+        // if we don't have any messages on the status response,
+        // this request ended up in a bad state and we should just abandon it and try again.
+        // A little rude of us to send two requests for the same data, but the server should
+        // respond correctly the first time if it doesn't want us to keep asking.
+        return jobStatusResponse.messages.Count == 0;
+    }
+
+    private async Task<EsriJobStatusResponse?> CheckEsriJobStatus(string jobID, int millisecondsTimeout)
+    {
+        Thread.Sleep(millisecondsTimeout);
+        var jobStatusResponse = await HttpClient.GetFromJsonAsync<EsriJobStatusResponse>($"{HRUServiceEndPoint}/jobs/{jobID}/?f=json");
+        return jobStatusResponse;
+    }
+
+
+    private static EsriGPRecordSetLayer<HRURequestFeature> GetGPRecordSetLayer(
         List<HRURequestFeature> features)
     {
         return new EsriGPRecordSetLayer<HRURequestFeature>
@@ -254,7 +326,7 @@ public class OCGISService : BaseAPIService<OCGISService>
             Features = features,
             DisplayFieldName = "",
             GeometryType = "esriGeometryPolygon",
-            ExceededTransferLimit = "false",
+            ExceededTransferLimit = false,
             SpatialReference = new EsriSpatialReference { wkid = 102646, latestWkid = 2230 },
             Fields = new List<EsriField>
                 {
@@ -290,7 +362,6 @@ public class OCGISService : BaseAPIService<OCGISService>
                 }
         };
     }
-
 
     private static void ThrowIfNotUnique<T>(IEnumerable<IGrouping<int, T>> groupBy, string serviceName)
     {

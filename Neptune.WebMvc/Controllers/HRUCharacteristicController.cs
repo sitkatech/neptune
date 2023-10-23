@@ -1,6 +1,8 @@
 ﻿using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Neptune.Common.Services;
+using Neptune.Common.Services.GDAL;
 using Neptune.EFModels.Entities;
 using Neptune.Jobs.Hangfire;
 using Neptune.WebMvc.Common;
@@ -52,8 +54,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewRefreshHRUCharacteristics(viewModel);
             }
 
-            //BackgroundJob.Enqueue<LoadGeneratingUnitRefreshScheduledBackgroundJob>(x => x.RunJob(null));
-            BackgroundJob.Enqueue<HRURefreshBackgroundJob>(x => x.RunJob(null));
+            BackgroundJob.Enqueue<LoadGeneratingUnitRefreshJob>(x => x.RunJob(null, true));
 
             SetMessageForDisplay("HRU Characteristic refresh will run in the background.");
             return new ModalDialogFormJsonResult();

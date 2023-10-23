@@ -29,7 +29,7 @@ namespace Neptune.Jobs.Hangfire
             TrashGeneratingUnitRefreshImpl();
         }
 
-        protected virtual void TrashGeneratingUnitRefreshImpl()
+        protected virtual async Task TrashGeneratingUnitRefreshImpl()
         {
             var outputLayerName = $"TGU{DateTime.Now.Ticks}";
             var outputFolder = Path.GetTempPath();
@@ -50,7 +50,7 @@ namespace Neptune.Jobs.Hangfire
             //Logger.LogInformation("QGIS output:");
             //Logger.LogInformation(processUtilityResult.StdOutAndStdErr);
 
-            SaveTrashGeneratingUnits(outputLayerPath, DbContext);
+            await SaveTrashGeneratingUnits(outputLayerPath, DbContext);
 
             // clean up temp files if not running in a local environment
             if (!_webHostEnvironment.IsDevelopment())
@@ -59,14 +59,13 @@ namespace Neptune.Jobs.Hangfire
             }
         }
 
-        public static void SaveTrashGeneratingUnits(string outputLayerPath, NeptuneDbContext dbContext)
+        public static async Task SaveTrashGeneratingUnits(string outputLayerPath, NeptuneDbContext dbContext)
         {
             // kill the old TGUs
-            dbContext.Database.ExecuteSqlRaw("TRUNCATE TABLE dbo.TrashGeneratingUnit");
+            await dbContext.Database.ExecuteSqlRawAsync("TRUNCATE TABLE dbo.TrashGeneratingUnit");
             var jsonSerializerOptions = GeoJsonSerializer.DefaultSerializerOptions;
-            using var openStream = File.OpenRead(outputLayerPath);
-            var featureCollection = JsonSerializer.DeserializeAsync<FeatureCollection>(openStream, jsonSerializerOptions)
-                .Result;
+            await using var openStream = File.OpenRead(outputLayerPath);
+            var featureCollection = await JsonSerializer.DeserializeAsync<FeatureCollection>(openStream, jsonSerializerOptions);
             var features = featureCollection.Where(x =>
                 x.Geometry != null && x.Attributes["LUBID"] != null && x.Attributes["SJID"] != null).ToList();
             var trashGeneratingUnits = new List<TrashGeneratingUnit>();
@@ -108,20 +107,20 @@ namespace Neptune.Jobs.Hangfire
 
             if (trashGeneratingUnits.Any())
             {
-                dbContext.TrashGeneratingUnits.AddRange(trashGeneratingUnits);
-                dbContext.SaveChanges();
+                await dbContext.TrashGeneratingUnits.AddRangeAsync(trashGeneratingUnits);
+                await dbContext.SaveChangesAsync();
             }
 
             // repeat but with 4326
-            dbContext.Database.ExecuteSqlRaw("TRUNCATE TABLE dbo.TrashGeneratingUnit4326");
+            await dbContext.Database.ExecuteSqlRawAsync("TRUNCATE TABLE dbo.TrashGeneratingUnit4326");
             if (trashGeneratingUnit4326s.Any())
             {
-                dbContext.TrashGeneratingUnit4326s.AddRange(trashGeneratingUnit4326s);
-                dbContext.SaveChanges();
+                await dbContext.TrashGeneratingUnit4326s.AddRangeAsync(trashGeneratingUnit4326s);
+                await dbContext.SaveChangesAsync();
             }
 
             // we get invalid geometries from qgis so we need to make them valid
-            dbContext.Database.ExecuteSqlRaw("EXEC dbo.pTrashGeneratingUnitsMakeValid");
+            await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTrashGeneratingUnitsMakeValid");
         }
     }
 }

@@ -8,9 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Neptune.API.Hangfire;
 using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
+using Neptune.Common.Services;
+using Neptune.Common.Services.GDAL;
 using Neptune.EFModels.Entities;
 using Neptune.EFModels.Nereid;
 using Neptune.Jobs.Hangfire;
@@ -41,7 +42,7 @@ namespace Neptune.API.Controllers
         [SitkaAdminFeature]
         public ContentResult TriggerLGURun()
         {
-            BackgroundJob.Enqueue<LoadGeneratingUnitRefreshJob>(x => x.RunJob(null));
+            BackgroundJob.Enqueue<LoadGeneratingUnitRefreshJob>(x => x.RunJob(null, false));
             return Content("LGU refresh will run in the background");
         }
 

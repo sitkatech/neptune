@@ -2,5 +2,5 @@
 
 public class GenerateLoadGeneratingUnitRequestDto
 {
-    public int? LoadGeneratingUnitRefreshAreaID { get; }
+    public int? LoadGeneratingUnitRefreshAreaID { get; set; }
 }

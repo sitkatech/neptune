@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Neptune.API.Hangfire;
 using Neptune.Common.Email;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
@@ -219,8 +218,7 @@ namespace Neptune.Jobs.Hangfire
                     DbContext.LandUseBlocks.AddRange(landUseBlocksToUpload);
                     DbContext.SaveChanges();
 
-                    var body =
-                        "Your Land Use Block Upload has been processed. The updated Land Use Blocks are now in the Orange County Stormwater Tools system. It may take up to 24 hours for updated Trash Results to appear in the system.";
+                    var body = "Your Land Use Block Upload has been processed. The updated Land Use Blocks are now in the Orange County Stormwater Tools system. It may take up to 24 hours for updated Trash Results to appear in the system.";
 
                     var mailMessage = new MailMessage
                     {

@@ -11,11 +11,6 @@ namespace Neptune.Jobs.Hangfire
 {
     public abstract class ScheduledBackgroundJobBase<T>
     {
-        /// <summary>
-        /// A safety guard to ensure only one job is running at a time, some jobs seem like they would collide if allowed to run concurrently or possibly drag the server down.
-        /// </summary>
-        public static readonly object ScheduledBackgroundJobLock = new();
-
         private readonly string _jobName;
         protected readonly ILogger<T> Logger;
         protected readonly IWebHostEnvironment _webHostEnvironment;
@@ -44,46 +39,45 @@ namespace Neptune.Jobs.Hangfire
         /// </summary>
         public void RunJob(IJobCancellationToken token)
         {
-            lock (ScheduledBackgroundJobLock)
+            // No-Op if we're not running in an allowed environment
+            if (_webHostEnvironment.IsDevelopment() && !RunEnvironments.Contains(RunEnvironment.Development))
             {
-                // No-Op if we're not running in an allowed environment
-                if (_webHostEnvironment.IsDevelopment() && !RunEnvironments.Contains(RunEnvironment.Development))
-                {
-                    return;
-                }
-                if (_webHostEnvironment.IsStaging() && !RunEnvironments.Contains(RunEnvironment.Staging))
-                {
-                    return;
-                }
-                if (_webHostEnvironment.IsProduction() && !RunEnvironments.Contains(RunEnvironment.Production))
-                {
-                    return;
-                }
+                return;
+            }
 
-                token.ThrowIfCancellationRequested();
+            if (_webHostEnvironment.IsStaging() && !RunEnvironments.Contains(RunEnvironment.Staging))
+            {
+                return;
+            }
 
-                try
-                {
-                    Logger.LogInformation($"Begin Job {_jobName}");
-                    RunJobImplementation();
-                    Logger.LogInformation($"End Job {_jobName}");
-                }
-                catch (Exception ex)
-                {
-                    // Wrap and rethrow with the information about which job encountered the problem
-                    Logger.LogError(ex.Message);
-                    var mailMessage = new MailMessage
-                    {
-                        Subject = $"Neptune Hangfire Job Failed: Job {_jobName}",
-                        Body = $"Details: <br /><br />{ex.Message}",
-                        IsBodyHtml = true
-                    };
+            if (_webHostEnvironment.IsProduction() && !RunEnvironments.Contains(RunEnvironment.Production))
+            {
+                return;
+            }
 
-                    mailMessage.To.Add(new MailAddress(NeptuneJobConfiguration.SitkaSupportEmail));
-                    
-                    _sitkaSmtpClient.Send(mailMessage);
-                    throw new ScheduledBackgroundJobException(_jobName, ex);
-                }
+            token.ThrowIfCancellationRequested();
+
+            try
+            {
+                Logger.LogInformation($"Begin Job {_jobName}");
+                RunJobImplementation();
+                Logger.LogInformation($"End Job {_jobName}");
+            }
+            catch (Exception ex)
+            {
+                // Wrap and rethrow with the information about which job encountered the problem
+                Logger.LogError(ex.Message);
+                var mailMessage = new MailMessage
+                {
+                    Subject = $"Neptune Hangfire Job Failed: Job {_jobName}",
+                    Body = $"Details: <br /><br />{ex.Message}",
+                    IsBodyHtml = true
+                };
+
+                mailMessage.To.Add(new MailAddress(NeptuneJobConfiguration.SitkaSupportEmail));
+
+                _sitkaSmtpClient.Send(mailMessage);
+                throw new ScheduledBackgroundJobException(_jobName, ex);
             }
         }
 

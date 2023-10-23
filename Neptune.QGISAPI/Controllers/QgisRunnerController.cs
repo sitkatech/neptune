@@ -42,11 +42,7 @@ public class QgisRunnerController : ControllerBase
             return NotFound($"Project with ID {projectID} does not exist!");
         }
 
-        var projectRegionalSubbasinIDs = _dbContext.TreatmentBMPs.AsNoTracking().Where(x => x.ProjectID == projectID).Select(x => x.RegionalSubbasinID).Distinct().ToList();
-
-        var regionalSubbasinIDs = _dbContext.vRegionalSubbasinUpstreams.AsNoTracking()
-            .Where(x => projectRegionalSubbasinIDs.Contains(x.PrimaryKey) && x.RegionalSubbasinID.HasValue).Select(x => x.RegionalSubbasinID.Value).ToList();
-
+        var regionalSubbasinIDs = requestDto.RegionalSubbasinIDs;
         var regionalSubbasinInputFeatures = _dbContext.vPyQgisRegionalSubbasinLGUInputs.AsNoTracking()
             .Where(x => regionalSubbasinIDs.Contains(x.RSBID)).Select(x =>
                 new Feature(x.CatchmentGeometry, new AttributesTable { { "RSBID", x.RSBID }, { "ModelID", x.ModelID } }))
@@ -56,7 +52,7 @@ public class QgisRunnerController : ControllerBase
                 new Feature(x.DelineationGeometry, new AttributesTable { { "DelinID", x.DelinID } })).ToList();
         var outputFolder = Path.GetTempPath();
         var outputLayerPrefix = $"{"PLGU"}{DateTime.Now.Ticks}";
-        var featureCollection = await GenerateLgUsImpl(regionalSubbasinInputFeatures, lguInputs, outputFolder, outputLayerPrefix, regionalSubbasinIDs, null);
+        var featureCollection = await GenerateLGUsImpl(regionalSubbasinInputFeatures, lguInputs, outputFolder, outputLayerPrefix, regionalSubbasinIDs, null);
         var projectLoadGeneratingUnits = new List<ProjectLoadGeneratingUnit>();
 
         foreach (var feature in featureCollection.Where(x => x.Geometry != null).ToList())
@@ -68,16 +64,19 @@ public class QgisRunnerController : ControllerBase
             // so we need to explode them if that happens since we are only expecting polygons for LGUs
             var geometries = GeometryHelper.MakeValidAndExplodeIfNeeded(loadGeneratingUnitResult.Geometry);
 
-            projectLoadGeneratingUnits.AddRange(geometries.Select(dbGeometry =>
-                new ProjectLoadGeneratingUnit
+            projectLoadGeneratingUnits.AddRange(geometries.Select(geometry =>
+            {
+                geometry.SRID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID;
+                return new ProjectLoadGeneratingUnit
                 {
-                    ProjectLoadGeneratingUnitGeometry = dbGeometry,
+                    ProjectLoadGeneratingUnitGeometry = geometry,
                     ProjectID = projectID,
                     DelineationID = loadGeneratingUnitResult.DelineationID,
                     WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
                     ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
                     RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
-                }));
+                };
+            }));
         }
 
         await _dbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pDeleteProjectLoadGeneratingUnitsPriorToRefreshForProject @ProjectID = {projectID}");
@@ -103,8 +102,7 @@ public class QgisRunnerController : ControllerBase
             new Feature(x.CatchmentGeometry, new AttributesTable { { "RSBID", x.RSBID }, { "ModelID", x.ModelID } })).ToList();
         var clipLayerPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}_inputClip.json";
         var loadGeneratingUnitRefreshArea = await CreateLoadGeneratingUnitRefreshAreaIfProvided(requestDto, clipLayerPath);
-        var featureCollection = await GenerateLgUsImpl(regionalSubbasinInputFeatures, lguInputFeatures, outputFolder, outputLayerPrefix, new List<int>(), clipLayerPath);
-
+        var featureCollection = await GenerateLGUsImpl(regionalSubbasinInputFeatures, lguInputFeatures, outputFolder, outputLayerPrefix, new List<int>(), loadGeneratingUnitRefreshArea != null ? clipLayerPath : null);
 
         if (loadGeneratingUnitRefreshArea != null)
         {
@@ -126,13 +124,17 @@ public class QgisRunnerController : ControllerBase
             // so we need to explode them if that happens since we are only expecting polygons for LGUs
             var geometries = GeometryHelper.MakeValidAndExplodeIfNeeded(loadGeneratingUnitResult.Geometry);
 
-            loadGeneratingUnits.AddRange(geometries.Select(dbGeometry => new LoadGeneratingUnit()
+            loadGeneratingUnits.AddRange(geometries.Select(geometry =>
             {
-                LoadGeneratingUnitGeometry = dbGeometry,
-                DelineationID = loadGeneratingUnitResult.DelineationID,
-                WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
-                ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
-                RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
+                geometry.SRID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID;
+                return new LoadGeneratingUnit()
+                {
+                    LoadGeneratingUnitGeometry = geometry,
+                    DelineationID = loadGeneratingUnitResult.DelineationID,
+                    WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
+                    ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
+                    RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
+                };
             }));
         }
 
@@ -152,24 +154,24 @@ public class QgisRunnerController : ControllerBase
         return Ok();
     }
 
-    private async Task<FeatureCollection> GenerateLgUsImpl(IEnumerable<Feature> regionalSubbasinInputFeatures, IEnumerable<Feature> lguInputFeatures, string outputFolder, string outputLayerPrefix, List<int> regionalSubbasinIDs, string? clipLayerPath)
+    private async Task<FeatureCollection> GenerateLGUsImpl(IEnumerable<Feature> regionalSubbasinInputFeatures, IEnumerable<Feature> lguInputFeatures, string outputFolder, string outputLayerPrefix, List<int> regionalSubbasinIDs, string? clipLayerPath)
     {
         var outputLayerPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}.geojson";
         var lguInputPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}delineationLayer.geojson";
         var modelBasinInputPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}modelBasinLayer.geojson";
         var regionalSubbasinInputPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}regionalSubbasinLayer.geojson";
         var wqmpInputPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}wqmpLayer.geojson";
-        var additionalCommandLineArguments = new List<string>
+        var commandLineArguments = new List<string>
         {
-            "ModelingOverlayAnalysis.py", outputLayerPrefix, lguInputPath, modelBasinInputPath, regionalSubbasinInputPath
+            "ModelingOverlayAnalysis.py", outputFolder, outputLayerPrefix, lguInputPath, modelBasinInputPath, regionalSubbasinInputPath, wqmpInputPath
         };
         if (regionalSubbasinIDs.Any())
         {
-            additionalCommandLineArguments.AddRange(new List<string> { "--rsb_ids", string.Join(", ", regionalSubbasinIDs) });
+            commandLineArguments.AddRange(new List<string> { "--rsb_ids", string.Join(", ", regionalSubbasinIDs) });
         }
         if (!string.IsNullOrWhiteSpace(clipLayerPath))
         {
-            additionalCommandLineArguments.AddRange(new List<string> { "--clip", clipLayerPath });
+            commandLineArguments.AddRange(new List<string> { "--clip", clipLayerPath });
         }
 
         await WriteFeaturesToGeoJsonFile(lguInputPath, lguInputFeatures);
@@ -184,7 +186,7 @@ public class QgisRunnerController : ControllerBase
             new Feature(x.WaterQualityManagementPlanBoundary, new AttributesTable { { "WQMPID", x.WQMPID } })).ToList();
         await WriteFeaturesToGeoJsonFile(wqmpInputPath, wqmpInputFeatures);
 
-        _qgisService.Run(additionalCommandLineArguments.ToDictionary(x => x, x => false));
+        _qgisService.Run(commandLineArguments.ToDictionary(x => x, x => false));
 
         await using var openStream = System.IO.File.OpenRead(outputLayerPath);
         var featureCollection =

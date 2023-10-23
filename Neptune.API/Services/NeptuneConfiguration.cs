@@ -11,9 +11,8 @@ namespace Neptune.API.Services
         public string OcStormwaterToolsBaseUrl { get; set; }
         public string NereidUrl { get; set; }
 
-        public string PyqgisWorkingDirectory { get; set; }
-
         public string GDALAPIBaseUrl { get; set; }
+        public string QGISAPIBaseUrl { get; set; }
         public string OCGISBaseUrl { get; set; }
     }
 }
