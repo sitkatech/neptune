@@ -361,7 +361,6 @@
     <Build Include="dbo\Procs\dbo.pPrecipitationZoneUpdateFromStaging.sql" />
     <Build Include="dbo\Procs\dbo.pProjectGrantScoreUpdate.sql" />
     <Build Include="dbo\Procs\dbo.pRebuildWaterQualityManagementPlanParcel.sql" />
-    <Build Include="dbo\Procs\dbo.pTrashGeneratingUnitsMakeValid.sql" />
     <Build Include="dbo\Procs\dbo.pTreatmentBMPUpdateModelBasin.sql" />
     <Build Include="dbo\Procs\dbo.pTreatmentBMPUpdatePrecipitationZone.sql" />
     <Build Include="dbo\Procs\dbo.pTreatmentBMPUpdateTreatmentBMPType.sql" />
@@ -400,6 +399,7 @@
     <Build Include="dbo\Views\dbo.vTreatmentBMPObservation.sql" />
     <Build Include="dbo\Views\dbo.vRegionalSubbasinUpstreamCatchmentGeometry.sql" />
     <Build Include="dbo\Views\dbo.vHRUCharacteristic.sql" />
+    <Build Include="dbo\Procs\dbo.pTrashGeneratingUnitDelete.sql" />
   </ItemGroup>
   <UsingTask TaskName="ScriptDeploymentGenerator" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>

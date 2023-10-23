@@ -25,11 +25,6 @@ from qgis.core import (
 from qgis.analysis import QgsNativeAlgorithms
 
 print ("imported Qgis")
-# See https://gis.stackexchange.com/a/155852/4972 for details about the prefix 
-QgsApplication.setPrefixPath('C:\\Program Files\\QGIS 3.22.13\\apps\\qgis-ltr', True)
-
-# Append the path where processing plugin can be found
-sys.path.append('C:\\Program Files\\QGIS 3.22.13\\apps\\qgis-ltr\\python\\plugins')
 
 import processing
 from processing.tools import dataobjects
@@ -53,40 +48,40 @@ from pyqgis_utils import (
 )
 
 JOIN_PREFIX = "Joined_"
-DATABASE_SERVER_NAME = "DATABASE SERVER NAME ERROR"
-DATABASE_NAME = "DATABASE NAME ERROR"
-DATABASE_USER_NAME = "DATABASE USER NAME ERROR"
-DATABASE_PASSWORD = "DATABASE PASSWORD ERROR"
 OUTPUT_FOLDER = "OUTPUT FOLDER ERROR"
 OUTPUT_FILE_PREFIX = "OUTPUT FILE PREFIX ERROR"
+TGU_INPUT_PATH = "TGU_INPUT_PATH ERROR"
+OVTA_INPUT_PATH = "OVTA_INPUT_PATH ERROR"
+WQMP_INPUT_PATH = "WQMP_INPUT_PATH ERROR"
+LAND_USE_BLOCK_INPUT_PATH = "LAND_USE_BLOCK_INPUT_PATH ERROR"
 
 
 def parseArguments():
     parser = argparse.ArgumentParser(description='Test PyQGIS connections to MSSQL')
-    parser.add_argument('database_server_name', metavar='s', type=str, help='The name of the server where the database is located.')
-    parser.add_argument('database_name', metavar='s', type=str, help='The name of the database to connect to.')
-    parser.add_argument('database_username', metavar='s', type=str, help='The user name to use to connect to the database.')
-    parser.add_argument('database_password', metavar='s', type=str, help='The password to use to connect to the database.')
     parser.add_argument('output_folder', metavar='d', type=str, help='The folder to write the final output to.')
     parser.add_argument('output_file_prefix', metavar='d', type=str, help='The filename prefix to write the final output to.')
+    parser.add_argument('tgu_input_path', type=str, help='the path to the TGU input.')
+    parser.add_argument('ovta_input_path', type=str, help='the path to the OVTA input.')
+    parser.add_argument('wqmp_input_path', type=str, help='The path to the WQMP input.')
+    parser.add_argument('land_use_block_input_path', type=str, help='The path to the Land Use Block input.')
 
     args = parser.parse_args()
 
     # this is easier to write than anything sane
-    global DATABASE_SERVER_NAME
-    global DATABASE_NAME
-    global DATABASE_USER_NAME
-    global DATABASE_PASSWORD
     global OUTPUT_FOLDER
     global OUTPUT_FILE_PREFIX
     global OUTPUT_FOLDER_AND_FILE_PREFIX
-    DATABASE_SERVER_NAME = args.database_server_name
-    DATABASE_NAME = args.database_name
-    DATABASE_USER_NAME = args.database_username
-    DATABASE_PASSWORD = args.database_password
+    global TGU_INPUT_PATH
+    global OVTA_INPUT_PATH
+    global WQMP_INPUT_PATH
+    global LAND_USE_BLOCK_INPUT_PATH
     OUTPUT_FOLDER = args.output_folder
     OUTPUT_FILE_PREFIX = args.output_file_prefix
-    OUTPUT_FOLDER_AND_FILE_PREFIX = OUTPUT_FOLDER + '\\' + OUTPUT_FILE_PREFIX
+    OUTPUT_FOLDER_AND_FILE_PREFIX = os.path.join(OUTPUT_FOLDER, OUTPUT_FILE_PREFIX)
+    TGU_INPUT_PATH = args.tgu_input_path
+    OVTA_INPUT_PATH = args.ovta_input_path
+    WQMP_INPUT_PATH = args.wqmp_input_path
+    LAND_USE_BLOCK_INPUT_PATH = args.land_use_block_input_path
 
 def assignFieldsToLayerFromSourceLayer(target, source):
     target_layer_data = target.dataProvider()
@@ -341,8 +336,7 @@ class Flatten:
 if __name__ == '__main__':
     parseArguments()
     
-    #qgs = QgsApplication([], False, "")
-    qgs = QgsApplication([], False, 'C:\\Sitka\\Neptune\\QGis', "server")
+    qgs = QgsApplication([], False, "")
 
     qgs.initQgis()
         
@@ -352,12 +346,6 @@ if __name__ == '__main__':
     # must set processing framework to skip invalid geometries as it defaults to halt-and-catch-fire
     PROCESSING_CONTEXT = dataobjects.createContext()
     PROCESSING_CONTEXT.setInvalidGeometryCheck(QgsFeatureRequest.GeometrySkipInvalid)
-
-    neptuneDataSource = QgsDataSourceUri()
-    neptuneDataSource.setConnection(DATABASE_SERVER_NAME, "1433", DATABASE_NAME, DATABASE_USER_NAME, DATABASE_PASSWORD)
-
-    def fetchLayer(spatialTableName, geometryColumnName):
-        return fetchLayerFromDatabase(neptuneDataSource, spatialTableName, geometryColumnName)
 
     # Set the decision functions for delineations
     def compareDelineationsViaJoinedLayer(feat):
@@ -372,14 +360,14 @@ if __name__ == '__main__':
         return left_feat["AssessDate"] <= right_feat["AssessDate"]
     
     #Do note that the views here have all input filters built into them
-    delineation_layer = fetchLayer("vPyQgisDelineationTGUInput", "DelineationGeometry")
+    delineation_layer = fetchLayerFromFileSystem(TGU_INPUT_PATH, "DelineationLayer")
     delineation_layer = bufferZero(delineation_layer, 'bufferdelineations', PROCESSING_CONTEXT)
     print("Flattening Delineations...\n")
     flatten_delineations = Flatten(delineation_layer, "DelinID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers, "TCEffect")
     flatten_delineations.run()
     print("\n\n")
 
-    ovta_layer = fetchLayer("vPyQgisOnlandVisualTrashAssessmentAreaDated", "OnlandVisualTrashAssessmentAreaGeometry")
+    ovta_layer = fetchLayerFromFileSystem(OVTA_INPUT_PATH, "OVTALayer")
     ovta_layer = bufferZero(ovta_layer, 'bufferovta', PROCESSING_CONTEXT)
     print("Flattening OVTAs...\n")
     flatten_ovtas = Flatten(ovta_layer, "OVTAID", compareAssessmentAreasViaJoinedLayer, compareAssessmentAreasViaSeparateLayers, "AssessDate")
@@ -391,7 +379,7 @@ if __name__ == '__main__':
     ovta_delineation_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'ovta_delineation_layer.geojson'
     ovta_delineation_layer = unionAndFix(flatten_ovtas.working_layer, flatten_delineations.working_layer, ovta_flattened_layer_path, delineation_flattened_layer_path, ovta_delineation_layer_path, PROCESSING_CONTEXT)
 
-    wqmp_layer = fetchLayer("vPyQgisWaterQualityManagementPlanTGUInput", "WaterQualityManagementPlanBoundary")
+    wqmp_layer = fetchLayerFromFileSystem(WQMP_INPUT_PATH, "WQMPLayer")
     wqmp_layer = bufferZero(wqmp_layer, 'bufferwqmps', PROCESSING_CONTEXT)
     print("Flattening WQMPs...\n")
     flatten_wqmps = Flatten(wqmp_layer, "WQMPID", compareDelineationsViaJoinedLayer, compareDelineationsViaSeparateLayers, "TCEffect")
@@ -403,17 +391,13 @@ if __name__ == '__main__':
     odw_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'odw_layer.geojson'
     odw_layer = unionAndFix(ovta_delineation_layer_path, flatten_wqmps.working_layer, ovta_delineation_layer_unionedandfixed_path, wqmp_flattened_layer_path, odw_layer_path, PROCESSING_CONTEXT)
 
-    land_use_block_layer = fetchLayer("vPyQgisLandUseBlockTGUInput", "LandUseBlockGeometry")
-    land_use_block_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'land_use_block_layer.geojson'
-    writeVectorLayerToDisk(land_use_block_layer, land_use_block_layer_path, "GeoJSON")
-
     finalOutputPath = OUTPUT_FOLDER_AND_FILE_PREFIX + '.geojson'
     print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + finalOutputPath)
 
     # The union will include false TGUs, where there is no land use block ID. The GDAL query will remove those.
     land_use_block_layer_unionandfixed_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'land_use_block_layer_unionedandfixed.geojson'
     odw_layer_unionandfixed_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'odw_layer_unionedandfixed.geojson'
-    unionAndFix(land_use_block_layer_path, odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, finalOutputPath, PROCESSING_CONTEXT)
+    unionAndFix(LAND_USE_BLOCK_INPUT_PATH, odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, finalOutputPath, PROCESSING_CONTEXT)
 
     # we are getting line strings back from the union. let's try and remove the bad geometries
     #tgu_layer = fetchLayerFromFileSystem(finalOutputPath, "TGUsNoLines")

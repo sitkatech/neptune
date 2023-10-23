@@ -19,6 +19,16 @@ public class QGISAPIService
         _httpClient = httpClient;
     }
 
+    public async Task GenerateTGUs(GenerateTrashGeneratingUnitRequestDto generateLoadGeneratingUnitRequestDto)
+    {
+        _logger.LogInformation("Sending request to QGIS API");
+        var response = await _httpClient.PostAsJsonAsync("/qgis/generate-tgus", generateLoadGeneratingUnitRequestDto);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception("Failed");
+        }
+    }
+
     public async Task GenerateLGUs(GenerateLoadGeneratingUnitRequestDto generateLoadGeneratingUnitRequestDto)
     {
         _logger.LogInformation("Sending request to QGIS API");

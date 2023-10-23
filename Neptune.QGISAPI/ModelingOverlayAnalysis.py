@@ -43,12 +43,12 @@ from pyqgis_utils import (
 )
 
 JOIN_PREFIX = "Joined_"
+OUTPUT_FOLDER = "OUTPUT FOLDER ERROR"
+OUTPUT_FILE_PREFIX = "OUTPUT FILE PREFIX ERROR"
 LGU_INPUT_PATH = "LGU_INPUT_PATH ERROR"
 MODEL_BASIN_INPUT_PATH = "MODEL_BASIN_INPUT_PATH ERROR"
 REGIONAL_SUBBASIN_INPUT_PATH = "REGIONAL_SUBBASIN_INPUT_PATH ERROR"
 WQMP_INPUT_PATH = "WQMP_INPUT_PATH ERROR"
-OUTPUT_FOLDER = "OUTPUT FOLDER ERROR"
-OUTPUT_FILE_PREFIX = "OUTPUT FILE PREFIX ERROR"
 CLIP_PATH = None
 RSB_IDs = None
 
@@ -58,8 +58,8 @@ def parseArguments():
     parser.add_argument('output_file_prefix', type=str, help='The filename prefix to write the final output to.')
     parser.add_argument('lgu_input_path', type=str, help='the path to the lgu input.')
     parser.add_argument('model_basin_input_path', type=str, help='The path to the model basin input.')
-    parser.add_argument('regional_subbain_input_path', type=str, help='the path to the wqmp input.')
-    parser.add_argument('wqmp_input_path', type=str, help='The filename prefix to write the final output to.')
+    parser.add_argument('regional_subbain_input_path', type=str, help='the path to the RSB input.')
+    parser.add_argument('wqmp_input_path', type=str, help='The path to the WQMP input.')
     parser.add_argument('--rsb_ids', type=str, help='If present, filters the rsb layer down to only rsbs whose id is present in the list. Should be numbers separated by commas')
     parser.add_argument('--clip', type=str, help='The path to a geojson file containing the shape to clip inputs to')
     args = parser.parse_args()
@@ -73,13 +73,13 @@ def parseArguments():
     global OUTPUT_FILE_PREFIX
     global OUTPUT_FOLDER_AND_FILE_PREFIX
     global CLIP_PATH
+    OUTPUT_FOLDER = args.output_folder
+    OUTPUT_FILE_PREFIX = args.output_file_prefix
+    OUTPUT_FOLDER_AND_FILE_PREFIX = os.path.join(OUTPUT_FOLDER, OUTPUT_FILE_PREFIX)
     LGU_INPUT_PATH = args.lgu_input_path
     MODEL_BASIN_INPUT_PATH = args.model_basin_input_path
     REGIONAL_SUBBASIN_INPUT_PATH = args.regional_subbain_input_path
     WQMP_INPUT_PATH = args.wqmp_input_path
-    OUTPUT_FOLDER = args.output_folder
-    OUTPUT_FILE_PREFIX = args.output_file_prefix
-    OUTPUT_FOLDER_AND_FILE_PREFIX = os.path.join(OUTPUT_FOLDER, OUTPUT_FILE_PREFIX)
 
     if args.clip:
         CLIP_PATH = args.clip

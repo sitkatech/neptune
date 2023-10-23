@@ -43,6 +43,25 @@ namespace Neptune.Common
             existingList.MergeDelete(updatedList, matchCriteria, allInDatabase);
         }
 
+        /// <summary>
+        /// Like Merge but without deleting. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="existingList"></param>
+        /// <param name="updatedList"></param>
+        /// <param name="allInDatabase"></param>
+        /// <param name="matchCriteria"></param>
+        /// <param name="updateFunction"></param>
+        public static void MergeUpsert<T>(this ICollection<T> existingList, ICollection<T> updatedList, DbSet<T> allInDatabase, Match<T> matchCriteria, UpdateFunction<T> updateFunction) where T : class
+        {
+            existingList.MergeNew(updatedList, allInDatabase, matchCriteria);
+            if (updateFunction != null)
+            {
+                existingList.MergeUpdate(updatedList, matchCriteria, updateFunction);
+            }
+        }
+
+
         public static void MergeNew<T>(this ICollection<T> existingList, IEnumerable<T> updatedList,
             DbSet<T> allInDatabase, Match<T> matchCriteria) where T : class
         {

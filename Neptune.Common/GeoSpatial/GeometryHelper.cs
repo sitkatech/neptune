@@ -89,7 +89,7 @@ public static class GeometryHelper
         return new FeatureCollection() { new Feature(potentialMultiPolygon, new AttributesTable())};
     }
 
-    public static IEnumerable<Geometry> MakeValidAndExplodeIfNeeded(Geometry geometry)
+    public static List<Geometry> MakeValidAndExplodeIfNeeded(Geometry geometry)
     {
         var geometries = new List<Geometry>();
         if (!geometry.IsValid)

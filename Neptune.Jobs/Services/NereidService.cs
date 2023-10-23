@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Nodes;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
@@ -83,20 +84,18 @@ public class NereidService : BaseAPIService<NereidService>
 
         var networkSolveResult = await NetworkSolveImpl(deltaSubgraph, dbContext, true, isBaselineCondition);
 
-        var allNereidResults = dbContext.NereidResults.Local;
         var scenarioNereidResults =
             dbContext.NereidResults.Where(x => x.IsBaselineCondition == isBaselineCondition).ToList();
 
-        //todo: merge upsert for nereid
-        //scenarioNereidResults.MergeUpsert(deltaNereidResults, allNereidResults, (old, novel) =>
-        //    old.NodeID == novel.NodeID
-        //, (old, novel) =>
-        //{
-        //    old.FullResponse = novel.FullResponse;
-        //    old.LastUpdate = novel.LastUpdate;
-        //});
+        scenarioNereidResults.MergeUpsert(networkSolveResult.NereidResults.ToList(), dbContext.NereidResults, (old, novel) =>
+            old.NodeID == novel.NodeID
+        , (old, novel) =>
+        {
+            old.FullResponse = novel.FullResponse;
+            old.LastUpdate = novel.LastUpdate;
+        });
 
-        //await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
 
         return networkSolveResult;
     }
