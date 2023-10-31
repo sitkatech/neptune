@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Net.Mail;
-using Hangfire;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Security;
 using Microsoft.AspNetCore.Mvc;
@@ -10,24 +9,27 @@ using Neptune.Common.Email;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Views.ParcelLayerUpload;
+using Neptune.Common.Services.GDAL;
 
 namespace Neptune.WebMvc.Controllers
 {
     public class ParcelLayerUploadController : NeptuneBaseController<ParcelLayerUploadController>
     {
         private readonly SitkaSmtpClientService _sitkaSmtpClient;
+        private readonly GDALAPIService _gdalApiService;
         private const int ToleranceInSquareMeters = 200;
 
-        public ParcelLayerUploadController(NeptuneDbContext dbContext, ILogger<ParcelLayerUploadController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService) : base(dbContext, logger, linkGenerator, webConfiguration)
+        public ParcelLayerUploadController(NeptuneDbContext dbContext, ILogger<ParcelLayerUploadController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService, GDALAPIService gdalApiService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
             _sitkaSmtpClient = sitkaSmtpClientService;
+            _gdalApiService = gdalApiService;
         }
 
         [HttpGet]
         [NeptuneAdminFeature]
         public ViewResult UpdateParcelLayerGeometry()
         {
-            var viewModel = new UploadParcelLayerViewModel { PersonID = CurrentPerson.PersonID };
+            var viewModel = new UploadParcelLayerViewModel();
             return ViewUpdateParcelLayerGeometry(viewModel);
         }
 
@@ -35,28 +37,70 @@ namespace Neptune.WebMvc.Controllers
         [NeptuneAdminFeature]
         public async Task<IActionResult> UpdateParcelLayerGeometry(UploadParcelLayerViewModel viewModel)
         {
+            var file = viewModel.FileResourceData;
+            await _dbContext.Database.ExecuteSqlRawAsync("dbo.pParcelStagingDelete");
+            var featureClassNames = await _gdalApiService.OgrInfoGdbToFeatureClassInfo(file);
+
+            if (featureClassNames.Count == 0)
+            {
+                ModelState.AddModelError("FileResourceData",
+                    "The file geodatabase contained no feature class. Please upload a file geodatabase containing exactly one feature class.");
+            }
+            else if (featureClassNames.Count > 1)
+            {
+                ModelState.AddModelError("FileResourceData",
+                    "The file geodatabase contained more than one feature class. Please upload a file geodatabase containing exactly one feature class.");
+            }
             if (!ModelState.IsValid)
             {
                 return ViewUpdateParcelLayerGeometry(viewModel);
             }
 
-            BackgroundJob.Enqueue(() => RunJobImplementation());
-            await _dbContext.SaveChangesAsync();
-            SetMessageForDisplay("Parcels were successfully added to the staging area. The staged Parcels will be processed and added to the system. You will receive an email notification when this process completes or if errors in the upload are discovered during processing.");
+            try
+            {
+                var columns = new List<string>
+                {
+                    "AssessmentNo as ParcelNumber",
+                    "SiteAddress as ParcelAddress",
+                    "Shape_Area as ParcelStagingAreaSquareFeet",
+                    "Shape as ParcelStagingGeometry",
+                    $"{CurrentPerson.PersonID} as UploadedByPersonID"
+                };
 
-            return Redirect(SitkaRoute<ParcelController>.BuildUrlFromExpression(_linkGenerator, c => c.Index()));
-        }
+                var apiRequest = new GdbToGeoJsonRequestDto()
+                {
+                    File = file,
+                    GdbLayerOutputs = new List<GdbLayerOutput>
+                    {
+                        new()
+                        {
+                            Columns = columns,
+                            FeatureLayerName = featureClassNames.Single().LayerName,
+                            NumberOfSignificantDigits = 4,
+                            Filter = "WHERE AssessmentNo is not null",
+                            CoordinateSystemID = Proj4NetHelper.WEB_MERCATOR,
+                        }
+                    }
+                };
+                var geoJson = await _gdalApiService.Ogr2OgrGdbToGeoJson(apiRequest);
+                // todo: save to ParcelStaging table
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Contains("Unrecognized field name",
+                        StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ModelState.AddModelError("FileResourceData",
+                        "The columns in the uploaded file did not match the Parcel schema. The file is invalid and cannot be uploaded.");
+                }
+                else
+                {
+                    ModelState.AddModelError("FileResourceData",
+                        $"There was a problem processing the Feature Class \"{featureClassNames[0]}\". The file may be corrupted or invalid.");
+                }
+                return ViewUpdateParcelLayerGeometry(viewModel);
+            }
 
-        private ViewResult ViewUpdateParcelLayerGeometry(UploadParcelLayerViewModel viewModel)
-        {
-            var newGisUploadUrl = SitkaRoute<ParcelLayerUploadController>.BuildUrlFromExpression(_linkGenerator, c => c.UpdateParcelLayerGeometry());
-
-            var viewData = new UploadParcelLayerViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, newGisUploadUrl);
-            return RazorView<UploadParcelLayer, UploadParcelLayerViewData, UploadParcelLayerViewModel>(viewData, viewModel);
-        }
-
-        protected async Task RunJobImplementation()
-        {
             try
             {
                 var parcelStagingsCount = _dbContext.ParcelStagings.Count();
@@ -134,7 +178,18 @@ namespace Neptune.WebMvc.Controllers
 
                 throw;
             }
+
+            SetMessageForDisplay("Parcels were successfully added to the staging area. The staged Parcels will be processed and added to the system. You will receive an email notification when this process completes or if errors in the upload are discovered during processing.");
+
+            return Redirect(SitkaRoute<ParcelController>.BuildUrlFromExpression(_linkGenerator, c => c.Index()));
         }
 
+        private ViewResult ViewUpdateParcelLayerGeometry(UploadParcelLayerViewModel viewModel)
+        {
+            var newGisUploadUrl = SitkaRoute<ParcelLayerUploadController>.BuildUrlFromExpression(_linkGenerator, c => c.UpdateParcelLayerGeometry());
+
+            var viewData = new UploadParcelLayerViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, newGisUploadUrl);
+            return RazorView<UploadParcelLayer, UploadParcelLayerViewData, UploadParcelLayerViewModel>(viewData, viewModel);
+        }
     }
 }

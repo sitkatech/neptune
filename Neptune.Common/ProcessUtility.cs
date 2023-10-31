@@ -35,26 +35,14 @@ namespace Neptune.Common
             return string.Join(" ", commandLineArguments.Select(EncodeArgumentForCommandLine).ToList());
         }
 
-        public static string ConjoinAndMaskCommandLineArguments(Dictionary<string, bool> commandLineArguments)
-        {
-            return string.Join(" ", commandLineArguments.Select(x => x.Value ? "*hidden*" : EncodeArgumentForCommandLine(x.Key)).ToList());
-        }
-
         public static string ConjoinEnvironmentVariables(Dictionary<string, string> environmentVariables)
         {
             return string.Join("\r\n\t", environmentVariables.Select(x => $"{x.Key}: {x.Value}").ToList());
         }
 
-        public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName,
-            List<string> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs,
-            Dictionary<string, string> environmentVariables, ILogger logger)
+        public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName, List<string> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs, Dictionary<string, string> environmentVariables, ILogger Logger)
         {
-            return ShellAndWaitImpl(workingDirectory, exeFileName, commandLineArguments.ToDictionary(x => x, x => false), redirectStdErrAndStdOut, maxTimeoutMs, environmentVariables, logger);
-        }
-
-        public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName, Dictionary<string, bool> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs, Dictionary<string, string> environmentVariables, ILogger Logger)
-        {
-            var argumentsAsString = ConjoinCommandLineArguments(commandLineArguments.Select(x => x.Key).ToList());
+            var argumentsAsString = ConjoinCommandLineArguments(commandLineArguments);
             var stdErrAndStdOut = string.Empty;
 
             // Start the indicated program and wait for it
@@ -84,7 +72,7 @@ namespace Neptune.Common
                 objProc.ErrorDataReceived += streamReader.ReceiveStdErr;
             }
 
-            var processDebugInfo = $"Process Details:\r\n\"{exeFileName}\" {ConjoinAndMaskCommandLineArguments(commandLineArguments)}\r\nWorking Directory: {workingDirectory}\r\nEnvironment Variables: {ConjoinEnvironmentVariables(environmentVariables)}";
+            var processDebugInfo = $"Process Details:\r\n\"{exeFileName}\" {ConjoinCommandLineArguments(commandLineArguments)}\r\nWorking Directory: {workingDirectory}\r\nEnvironment Variables: {ConjoinEnvironmentVariables(environmentVariables)}";
             Logger.LogInformation($"Starting Process: {processDebugInfo}");
             try
             {

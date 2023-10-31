@@ -7,24 +7,20 @@ namespace Neptune.QGISAPI
         public static ProcessUtilityResult ExecutePyqgisScript(string pathToPyqgisScript, 
             List<string> additionalArguments, string databaseServerName, string databaseName, string pyqgisUsername, string pyqgisPassword, string pathToPyqgisProjData, string pathToPyqgisLauncher, ILogger logger)
         {
-            var commandLineArguments = new Dictionary<string, bool>
+            var commandLineArguments = new List<string>
             {
-                {pathToPyqgisScript, false},
-                {databaseServerName, false},
-                {databaseName, false},
-                {pyqgisUsername, false},
-                {pyqgisPassword, true}
+                pathToPyqgisScript,
+                databaseServerName,
+                databaseName,
+                pyqgisUsername,
+                pyqgisPassword
             };
-
-            foreach (var additionalArgument in additionalArguments)
-            {
-                commandLineArguments.Add(additionalArgument, false);
-            }
+            commandLineArguments.AddRange(additionalArguments);
 
             return ExecutePyqgisScriptImpl(commandLineArguments, pathToPyqgisProjData, pathToPyqgisLauncher, logger);
         }
 
-        private static ProcessUtilityResult ExecutePyqgisScriptImpl(Dictionary<string, bool> commandLineArguments, string pathToPyqgisProjData, string pathToPyqgisLauncher, ILogger logger)
+        private static ProcessUtilityResult ExecutePyqgisScriptImpl(List<string> commandLineArguments, string pathToPyqgisProjData, string pathToPyqgisLauncher, ILogger logger)
         {
             var environmentVariables = new Dictionary<string, string>{
                 {"PROJ_DATA", $"{pathToPyqgisProjData}"},

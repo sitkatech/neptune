@@ -28,18 +28,18 @@ namespace Neptune.GDALAPI.Controllers
         }
         
         [HttpPost("ogr2ogr/upsert-gdb")]
-        [RequestSizeLimit(10_000_000_000)]
-        [RequestFormLimits(MultipartBodyLengthLimit = 10_000_000_000)]
+        [RequestSizeLimit(100_000_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<IActionResult> UpsertGdb([FromForm] GdbInputToGdbRequestDto requestDto)
         {
             using var disposableTempGdbZipFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".gdb.zip");
             using var disposableTempGdbFile = DisposableTempDirectory.MakeDisposableTempDirectoryEndingIn(".gdb");
             var gdbFileFolder = disposableTempGdbFile.DirectoryInfo;
 
-            var exists = await _azureStorage.ExistsAsync(requestDto.BlobContainer, requestDto.GdbName);
+            var exists = await _azureStorage.ExistsAsync(requestDto.GdbInput.BlobContainer, requestDto.GdbName);
             if (exists)
             {
-                await _azureStorage.DownloadToAsync(requestDto.BlobContainer, requestDto.GdbName, disposableTempGdbZipFile.FileInfo.FullName);
+                await _azureStorage.DownloadToAsync(requestDto.GdbInput.BlobContainer, requestDto.GdbName, disposableTempGdbZipFile.FileInfo.FullName);
 
                 ZipFile.ExtractToDirectory(disposableTempGdbZipFile.FileInfo.FullName, gdbFileFolder.FullName);
                 gdbFileFolder = gdbFileFolder.GetDirectories().First();
@@ -51,14 +51,14 @@ namespace Neptune.GDALAPI.Controllers
             GdbFolderToZipFile(gdbFileFolder, requestDto.GdbName, disposableTempGdbZipFile2);
 
             var stream = new StreamContent(disposableTempGdbZipFile2.FileInfo.OpenRead());
-            await _azureStorage.UploadAsync(requestDto.BlobContainer, requestDto.GdbName, stream);
+            await _azureStorage.UploadAsync(requestDto.GdbInput.BlobContainer, requestDto.GdbName, stream);
 
             return Ok(true);
         }
 
         [HttpPost("ogr2ogr/upsert-gdb-as-zip")]
-        [RequestSizeLimit(10_000_000_000)]
-        [RequestFormLimits(MultipartBodyLengthLimit = 10_000_000_000)]
+        [RequestSizeLimit(100_000_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<FileStreamResult> UpsertGdbAndReturnAsZip([FromForm] GdbInputsToGdbRequestDto requestDto)
         {
             using var disposableTempGdbFile = DisposableTempDirectory.MakeDisposableTempDirectoryEndingIn(".gdb");
@@ -91,8 +91,7 @@ namespace Neptune.GDALAPI.Controllers
                 return;
             }
 
-            var isCsv = gdbInput.GdbInputFileType == GdbInputFileTypeEnum.CSV;
-            using var disposableJsonTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(isCsv ? ".csv" : ".json");
+            using var disposableJsonTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".json");
             if (gdbInput.File != null) // if there is a file uploaded, use that file
             {
                 _logger.LogInformation($"Beginning processing of uploaded file {gdbInput.LayerName}");
@@ -106,42 +105,27 @@ namespace Neptune.GDALAPI.Controllers
                     disposableJsonTempFile.FileInfo.FullName);
             }
 
-            List<string> args;
-            if (isCsv)
-            {
-                args = BuildCommandLineArgumentsForCsvToFileGdb(disposableJsonTempFile.FileInfo.FullName,
-                    gdbOutputPath, gdbInput.LayerName, update);
-            }
-            else
-            {
-                args = BuildCommandLineArgumentsForGeoJsonToFileGdb(disposableJsonTempFile.FileInfo.FullName,
-                    gdbInput.CoordinateSystemID, gdbOutputPath, gdbInput.LayerName, update,
-                    gdbInput.GeometryTypeName);
-            }
+            var args = BuildCommandLineArgumentsForGeoJsonToFileGdb(disposableJsonTempFile.FileInfo.FullName,
+                gdbInput.CoordinateSystemID, gdbOutputPath, gdbInput.LayerName, update,
+                gdbInput.GeometryTypeName);
 
             _ogr2OgrService.Run(args);
         }
 
         [HttpPost("ogr2ogr/gdb-geojson-list")]
-        [RequestSizeLimit(10_000_000_000)]
-        [RequestFormLimits(MultipartBodyLengthLimit = 10_000_000_000)]
+        [RequestSizeLimit(100_000_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<ActionResult<List<string>>> GdbToGeoJsonList([FromForm] GdbToGeoJsonRequestDto requestDto)
         {
             using var disposableTempGdbZip = DisposableTempFile.MakeDisposableTempFileEndingIn(".gdb.zip");
             await RetrieveGdbFromFileOrBlobStorage(requestDto, disposableTempGdbZip);
-
-            var result = new List<string>();
-            foreach (var layerOutput in requestDto.GdbLayerOutputs)
-            {
-                var geoJson = ExtractGeoJsonFromGdb(disposableTempGdbZip, layerOutput);
-                result.Add(geoJson);
-            }
+            var result = requestDto.GdbLayerOutputs.Select(layerOutput => ExtractGeoJsonFromGdb(disposableTempGdbZip, layerOutput)).ToList();
             return Ok(result);
         }
 
         [HttpPost("ogr2ogr/gdb-geojson")]
-        [RequestSizeLimit(10_000_000_000)]
-        [RequestFormLimits(MultipartBodyLengthLimit = 10_000_000_000)]
+        [RequestSizeLimit(100_000_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<ActionResult<string>> GdbToGeoJson([FromForm] GdbToGeoJsonRequestDto requestDto)
         {
             if (requestDto.GdbLayerOutputs.Count != 1)
@@ -192,7 +176,7 @@ namespace Neptune.GDALAPI.Controllers
         private static void GdbFolderToZipFile(DirectoryInfo folderToZip, string desiredName, DisposableTempFile zipDestination)
         {
             var directoryInfo = new DirectoryInfo(folderToZip.FullName);
-            var gdbDirectoryFullPath = $"{directoryInfo.Parent}/{desiredName}";
+            var gdbDirectoryFullPath = $"{directoryInfo.Parent}/{desiredName}.gdb";
             if (directoryInfo.FullName != gdbDirectoryFullPath)
             {
                 directoryInfo.MoveTo(gdbDirectoryFullPath);
@@ -216,7 +200,7 @@ namespace Neptune.GDALAPI.Controllers
                 outputPath,
                 pathToSourceGeoJsonFile,
                 "-nln",
-                outputLayerName,
+                SanitizeStringForGdb(outputLayerName),
                 "-nlt",
                 geometryType,
                 "-append",
@@ -235,7 +219,7 @@ namespace Neptune.GDALAPI.Controllers
                 outputPath,
                 pathToSourceGeoJsonFile,
                 "-nln",
-                outputLayerName,
+                SanitizeStringForGdb(outputLayerName),
                 "-append",
             };
 
@@ -294,5 +278,12 @@ namespace Neptune.GDALAPI.Controllers
         {
             return $"EPSG:{coordinateSystemId}";
         }
+
+        public static string SanitizeStringForGdb(string str)
+        {
+            var arr = str.Where(c => char.IsLetterOrDigit(c) || char.IsWhiteSpace(c)).ToArray();
+            return new string(arr).Replace(" ", "_");
+        }
+
     }
 }

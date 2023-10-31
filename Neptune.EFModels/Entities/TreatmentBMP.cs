@@ -76,9 +76,10 @@ namespace Neptune.EFModels.Entities
                 if (customAttribute != null)
                 {
                     var measurementUnit = "";
-                    if (customAttribute.CustomAttributeType.MeasurementUnitTypeID.HasValue)
+                    var customAttributeType = treatmentBMPTypeCustomAttributeType.CustomAttributeType;
+                    if (customAttributeType.MeasurementUnitTypeID.HasValue)
                     {
-                        measurementUnit = $" {customAttribute.CustomAttributeType.MeasurementUnitType.LegendDisplayName}";
+                        measurementUnit = $" {customAttributeType.MeasurementUnitType.LegendDisplayName}";
                     }
 
                     var value = string.Join(", ", customAttribute.CustomAttributeValues.OrderBy(x => x.AttributeValue).Select(x => x.AttributeValue));

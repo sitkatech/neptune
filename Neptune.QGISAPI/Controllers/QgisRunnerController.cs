@@ -185,7 +185,7 @@ public class QgisRunnerController : ControllerBase
         {
             "ComputeTrashGeneratingUnits.py", outputFolder, outputLayerPrefix, tguInputPath, ovtaInputPath, wqmpInputPath, landUseBlockInputPath
         };
-        _qgisService.Run(commandLineArguments.ToDictionary(x => x, x => false));
+        _qgisService.Run(commandLineArguments);
 
         FeatureCollection featureCollection;
         await using (var openStream = System.IO.File.OpenRead(outputLayerPath))
@@ -289,7 +289,7 @@ public class QgisRunnerController : ControllerBase
             new Feature(x.WaterQualityManagementPlanBoundary, new AttributesTable { { "WQMPID", x.WQMPID } })).ToList();
         await WriteFeaturesToGeoJsonFile(wqmpInputPath, wqmpInputFeatures);
 
-        _qgisService.Run(commandLineArguments.ToDictionary(x => x, x => false));
+        _qgisService.Run(commandLineArguments);
 
         await using var openStream = System.IO.File.OpenRead(outputLayerPath);
         var featureCollection =

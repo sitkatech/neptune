@@ -10,8 +10,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
-using Neptune.Common.Services;
-using Neptune.Common.Services.GDAL;
 using Neptune.EFModels.Entities;
 using Neptune.EFModels.Nereid;
 using Neptune.Jobs.Hangfire;
@@ -19,7 +17,6 @@ using Neptune.Jobs.Services;
 
 namespace Neptune.API.Controllers
 {
-    //todo: turn SitkaAdminFeature back on for nereid endpoints when done testing
     public class NereidController : SitkaController<NereidController>
     {
         private readonly NereidService _nereidService;
@@ -83,7 +80,7 @@ namespace Neptune.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("nereid/validate")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public async Task<IActionResult> ValidateNetworkGraph()
         {
             var networkValidatorUrl = "api/v1/network/validate";
@@ -120,7 +117,7 @@ namespace Neptune.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("nereid/subgraph")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public async Task<IActionResult> Subgraph()
         {
             var subgraphUrl = "api/v1/network/subgraph";
@@ -159,7 +156,7 @@ namespace Neptune.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("nereid/solution-sequence")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public async Task<IActionResult> SolutionSequence()
         {
             var solutionSequenceUrl = "api/v1/network/solution_sequence?min_branch_size=12";
@@ -197,7 +194,7 @@ namespace Neptune.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("nereid/land-surface-loading")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public async Task<IActionResult> Loading()
         {
             var landSurfaceLoadingUrl = "api/v1/land_surface/loading?details=true&state=ca&region=oc";
@@ -229,7 +226,7 @@ namespace Neptune.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("nereid/land-surface-loading-baseline")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public async Task<IActionResult> BaselineLoading()
         {
             var landSurfaceLoadingUrl = "api/v1/land_surface/loading?details=true&state=ca&region=oc";
@@ -262,7 +259,7 @@ namespace Neptune.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("nereid/treatment-facility-validate")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public async Task<IActionResult> TreatmentFacility()
         {
             var modelingTreatmentBMPs = TreatmentBMPs.ListModelingTreatmentBMPs(_dbContext);
@@ -295,7 +292,7 @@ namespace Neptune.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("nereid/treatment-facility-validate/{treatmentBMPID}")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public async Task<IActionResult> ValidateTreatmentFacility([FromRoute] int treatmentBMPID)
         {
             var treatmentFacilityUrl = "api/v1/treatment_facility/validate?state=ca&region=oc";
@@ -326,7 +323,7 @@ namespace Neptune.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("nereid/no-treatment-facility-validate")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public async Task<IActionResult> NoTreatmentFacility()
         {
             var treatmentFacilityUrl = "api/v1/treatment_facility/validate?state=ca&region=oc";
@@ -365,7 +362,7 @@ namespace Neptune.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("nereid/treatment-sites")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public IActionResult TreatmentSiteTable()
         {
             var waterQualityManagementPlanNodes = _nereidService.GetWaterQualityManagementPlanNodes(_dbContext);
@@ -392,7 +389,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpGet("nereid/treatment-facilities")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public IActionResult TreatmentFacilityTable()
         {
             var treatmentFacilities = TreatmentBMPs.ListModelingTreatmentBMPs(_dbContext)
@@ -405,7 +402,7 @@ namespace Neptune.API.Controllers
 
 
         [HttpGet("nereid/land-surface-table")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public IActionResult LandSurfaceTable()
         {
             var vNereidLoadingInputs = _dbContext.vNereidLoadingInputs.ToList();
@@ -414,7 +411,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpGet("nereid/total-network-graph")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public IActionResult NetworkTable()
         {
             var graph = _nereidService.BuildTotalNetworkGraph(_dbContext);
@@ -430,7 +427,7 @@ namespace Neptune.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("nereid/solution-test-case")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public async Task<IActionResult> SolutionTestCase()
         {
             var stopwatch = new Stopwatch();
@@ -461,7 +458,7 @@ namespace Neptune.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("nereid/solve-oc")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public async Task<IActionResult> SolveOC()
         {
             try
@@ -498,7 +495,7 @@ namespace Neptune.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("nereid/delta-solve-test")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public async Task<IActionResult> DeltaSolveTest()
         {
             var dirtyModelNodes = _dbContext.DirtyModelNodes.ToList();

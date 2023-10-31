@@ -13,7 +13,7 @@ namespace Neptune.GDALAPI.Services
 
         public ProcessUtilityResult Run(List<string> arguments)
         {
-            var exeFileName = "ogr2ogr";
+            const string exeFileName = "ogr2ogr";
             var processUtilityResult = ProcessUtility.ShellAndWaitImpl(null, exeFileName, arguments, true, 250000000, new Dictionary<string, string>(), _logger);
             if (processUtilityResult.ReturnCode != 0)
             {
@@ -25,28 +25,6 @@ namespace Neptune.GDALAPI.Services
                 throw new ApplicationException(errorMessage);
             }
             return processUtilityResult;
-
-            //_logger.LogInformation($"Running ogr2ogr with the following arguments [{arguments}]");
-            //var process = new Process
-            //{
-            //    StartInfo = new ProcessStartInfo
-            //    {
-            //        FileName = exeFileName,
-            //        Arguments = arguments,
-            //        RedirectStandardOutput = true,
-            //        RedirectStandardError = true,
-            //        UseShellExecute = false,
-            //        CreateNoWindow = true
-            //    }
-            //};
-            //process.Start();
-            //var stdOutString = await process.StandardOutput.ReadToEndAsync();
-            //var errorString = await process.StandardError.ReadToEndAsync();
-            //LogOutput(stdOutString, false);
-            //LogOutput(errorString, true);
-            //await process.WaitForExitAsync();
-            
-            //return stdOutString;
         }
 
         private void LogOutput(string output, bool isError)

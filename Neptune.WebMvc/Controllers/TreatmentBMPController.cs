@@ -34,6 +34,7 @@ using Microsoft.Extensions.Options;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
 using Neptune.Common.Mvc;
+using Neptune.Common.Services.GDAL;
 using Neptune.EFModels;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
@@ -58,11 +59,11 @@ namespace Neptune.WebMvc.Controllers
 {
     public class TreatmentBMPController : NeptuneBaseController<TreatmentBMPController>
     {
-  //      private readonly OCGISService _ocgisReferenceLayerUpdaterService;
+        private readonly GDALAPIService _gdalApiService;
 
-        public TreatmentBMPController(NeptuneDbContext dbContext, ILogger<TreatmentBMPController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
+        public TreatmentBMPController(NeptuneDbContext dbContext, ILogger<TreatmentBMPController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, GDALAPIService gdalApiService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
-//            _ocgisReferenceLayerUpdaterService = ocgisReferenceLayerUpdaterService;
+            _gdalApiService = gdalApiService;
         }
 
         [HttpGet]
@@ -1060,58 +1061,56 @@ namespace Neptune.WebMvc.Controllers
             return Content($"<dl>{string.Join("", properties.Select(x => $"<dt>{x.Key}</dt><dd>{x.Value}</dd>").ToList())}</dl>");
         }
 
-        //todo: use gdalservice
-        //[HttpGet]
-        //[NeptuneViewFeature]
-        //public FileResult BMPInventoryExport()
-        //{
-        //    var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable,
-        //        Ogr2OgrCommandLineRunner.DefaultCoordinateSystemId,
-        //        NeptuneWebConfiguration.HttpRuntimeExecutionTimeout.TotalMilliseconds);
-        //    var treatmentBmps = _dbContext.TreatmentBMPs
-        //        .Include(x => x.TreatmentBMPType).Include(x => x.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes)
-        //        .Include(x => x.TreatmentBMPAssessments).Include(x => x.WaterQualityManagementPlan)
-        //        .Include(x => x.CustomAttributes)
-        //        .ToList().Where(x => x.CanView(CurrentPerson)).ToList();
+        [HttpGet]
+        [NeptuneViewFeature]
+        public async Task<FileResult> BMPInventoryExport()
+        {
+            var treatmentBMPs = _dbContext.TreatmentBMPs
+                .Include(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
+                .Include(x => x.TreatmentBMPType)
+                .ThenInclude(x => x.TreatmentBMPTypeCustomAttributeTypes)
+                .ThenInclude(x => x.CustomAttributeType)
+                .Include(x => x.TreatmentBMPAssessments)
+                .ThenInclude(x => x.FieldVisit)
+                .Include(x => x.WaterQualityManagementPlan)
+                .Include(x => x.CustomAttributes)
+                .ThenInclude(x => x.CustomAttributeValues)
+                .Include(x => x.OwnerOrganization)
+                .AsNoTracking()
+                .ToList().Where(x => x.CanView(CurrentPerson)).ToList();
 
-        //    using (var workingDirectory = new DisposableTempDirectory())
-        //    {
-        //        FeatureCollection allTreatmentBMPsFeatureCollection = treatmentBmps.ToExportGeoJsonFeatureCollection();
-        //        var outputPath = Path.Combine(workingDirectory.DirectoryInfo.FullName, "AllTreatmentBMPs");
-        //        CreateEsriShapefileFromFeatureCollection(allTreatmentBMPsFeatureCollection, ogr2OgrCommandLineRunner,
-        //            "AllTreatmentBMPs", outputPath, false);
+            var allTreatmentBMPsFeatureCollection = treatmentBMPs.ToExportGeoJsonFeatureCollection();
+            var outputLayerName = $"TreatmentBMPs_Export_{DateTime.Now:yyyyMMdd}";
 
-        //        foreach (var grouping in treatmentBmps.GroupBy(x => x.TreatmentBMPType))
-        //        {
-        //            string outputLayerName =
-        //                Ogr2OgrCommandLineRunner.SanitizeStringForGdb(grouping.Key.TreatmentBMPTypeName);
-        //            var outputPathForLayer =
-        //                Path.Combine(workingDirectory.DirectoryInfo.FullName, outputLayerName);
-        //            var subsetTreatmentBMPsFeatureCollection = grouping.ToExportGeoJsonFeatureCollection(grouping.Key);
-        //            CreateEsriShapefileFromFeatureCollection(subsetTreatmentBMPsFeatureCollection,
-        //                ogr2OgrCommandLineRunner, outputLayerName, outputPathForLayer, false);
-        //        }
+            var jsonSerializerOptions = GeoJsonSerializer.DefaultSerializerOptions;
+            var apiRequest = new GdbInputsToGdbRequestDto
+            {
+                GdbName = outputLayerName
+            };
+            var gdbInputs = new List<GdbInput>
+            {
+                new()
+                {
+                    FileContents = GeoJsonSerializer.SerializeToByteArray(allTreatmentBMPsFeatureCollection, jsonSerializerOptions),
+                    LayerName = "AllTreatmentBMPs",
+                    CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
+                    GeometryTypeName = "POINT"
+                }
+            };
+            gdbInputs.AddRange(treatmentBMPs.GroupBy(x => x.TreatmentBMPType, new HavePrimaryKeyComparer<TreatmentBMPType>())
+            .Select(grouping => new GdbInput()
+            {
+                FileContents = GeoJsonSerializer.SerializeToByteArray(grouping.ToExportGeoJsonFeatureCollection(grouping.Key), jsonSerializerOptions),
+                LayerName = grouping.Key.TreatmentBMPTypeName,
+                CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
+                GeometryTypeName = "POINT"
+            }));
+            apiRequest.GdbInputs = gdbInputs;
 
-        //        using (var zipFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".zip"))
-        //        {
-        //            ZipFile.CreateFromDirectory(workingDirectory.DirectoryInfo.FullName, zipFile.FileInfo.FullName);
-        //            var fileStream = zipFile.FileInfo.OpenRead();
-        //            var bytes = fileStream.ReadFully();
-        //            fileStream.Close();
-        //            fileStream.Dispose();
-        //            return File(bytes, "application/zip");
-        //        }
-        //    }
-        //}
-
-        //private static void CreateEsriShapefileFromFeatureCollection(FeatureCollection featureCollection,
-        //    Ogr2OgrCommandLineRunner ogr2OgrCommandLineRunner, string outputShapefileName, string outputPath,
-        //    bool update)
-        //{
-        //    ogr2OgrCommandLineRunner.ImportGeoJsonToFileGdb(JsonConvert.SerializeObject(featureCollection), outputPath,
-        //        outputShapefileName, update, false);
-        //}
-
+            var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(apiRequest);
+            return File(bytes, "application/zip", $"{outputLayerName}.zip");
+        }
 
         [HttpGet]
         [NeptuneAdminFeature]

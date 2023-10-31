@@ -6,14 +6,12 @@ public class GdbInputsToGdbRequestDto
 {
     public IList<GdbInput> GdbInputs { get; set; }
     public string GdbName { get; set; }
-    public string BlobContainer { get; set; }
 
     public MultipartFormDataContent ToMultipartFormDataContent()
     {
         var multiPartFormDataContent = new MultipartFormDataContent();
 
         multiPartFormDataContent.Add(new StringContent(GdbName), "GdbName");
-        multiPartFormDataContent.Add(new StringContent(BlobContainer), "BlobContainer");
 
         if (GdbInputs.Any())
         {
@@ -23,21 +21,9 @@ public class GdbInputsToGdbRequestDto
                 var gdbInput = GdbInputs[i];
                 if (gdbInput.FileContents != null)
                 {
-                    string fileExtension;
                     var byteContent = new ByteArrayContent(gdbInput.FileContents);
-                    switch (gdbInput.GdbInputFileType)
-                    {
-                        case GdbInputFileTypeEnum.CSV:
-                            byteContent.Headers.ContentType = new MediaTypeHeaderValue("text/csv");
-                            fileExtension = "csv";
-                            break;
-                        case GdbInputFileTypeEnum.GeoJson:
-                        default:
-                            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                            fileExtension = "json";
-                            break;
-                    }
-                    multiPartFormDataContent.Add(byteContent, $"GdbInputs[{i}].File", $"{gdbInput.LayerName}.{fileExtension}");
+                    byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    multiPartFormDataContent.Add(byteContent, $"GdbInputs[{i}].File", $"{gdbInput.LayerName}.json");
                 }
                 else // otherwise canonical name will do
                 {
@@ -58,7 +44,6 @@ public class GdbInputsToGdbRequestDto
                 }
 
                 multiPartFormDataContent.Add(new StringContent(gdbInput.CoordinateSystemID.ToString()), $"GdbInputs[{i}].CoordinateSystemID");
-                multiPartFormDataContent.Add(new StringContent(gdbInput.GdbInputFileType.ToString()), $"GdbInputs[{i}].GdbInputFileType");
             }
         }
 

@@ -181,7 +181,7 @@ namespace Neptune.WebMvc.Models
             foreach (var treatmentBMP in treatmentBMPs)
             {
                 var attributesTable = AddAllCommonPropertiesToTreatmentBMPFeature(treatmentBMP);
-                var feature = new Feature(treatmentBMP.LocationPoint4326, attributesTable);
+                var feature = new Feature(treatmentBMP.LocationPoint, attributesTable);
                 featureCollection.Add(feature);
             }
             return featureCollection;
@@ -195,15 +195,16 @@ namespace Neptune.WebMvc.Models
         /// <returns></returns>
         public static FeatureCollection ToExportGeoJsonFeatureCollection(this IEnumerable<TreatmentBMP> treatmentBMPs, TreatmentBMPType treatmentBMPType)
         {
+            var treatmentBMPTypeCustomAttributeTypes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes;
             var featureCollection = new FeatureCollection();
             foreach (var treatmentBMP in treatmentBMPs)
             {
                 var attributesTable = AddAllCommonPropertiesToTreatmentBMPFeature(treatmentBMP);
-                foreach (var ca in treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.OrderBy(x => x.SortOrder))
+                foreach (var treatmentBMPTypeCustomAttributeType in treatmentBMPTypeCustomAttributeTypes.OrderBy(x => x.SortOrder))
                 {
-                    attributesTable.Add(ca.CustomAttributeType.CustomAttributeTypeName.SanitizeStringForGdb(), treatmentBMP.GetCustomAttributeValueWithUnits(ca, treatmentBMP.CustomAttributes));
+                    attributesTable.Add(treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeName.SanitizeStringForGdb(), treatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeCustomAttributeType, treatmentBMP.CustomAttributes));
                 }
-                var feature = new Feature(treatmentBMP.LocationPoint4326, attributesTable);
+                var feature = new Feature(treatmentBMP.LocationPoint, attributesTable);
                 featureCollection.Add(feature);
             }
             return featureCollection;

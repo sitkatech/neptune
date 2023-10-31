@@ -40,7 +40,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             BulkBMPUploadUrl = bulkBMPUploadUrl;
             HasEditPermissions = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             HasAdminPermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
-            DownloadBMPInventoryUrl = "";//todo:SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.BMPInventoryExport());
+            DownloadBMPInventoryUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.BMPInventoryExport());
             RefreshModelBasinsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshModelBasinsFromOCSurvey());
             RefreshPrecipitationZonesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshPrecipitationZonesFromOCSurvey());
             RefreshOCTAPrioritizationLayerUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshOCTAPrioritizationLayerFromOCSurvey());

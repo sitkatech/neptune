@@ -1,8 +1,6 @@
 ﻿using Neptune.WebMvc.Common;
-using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.RegionalSubbasinRevisionRequest;
-using System.IO.Compression;
 using System.Net.Mail;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,16 +16,19 @@ using Neptune.WebMvc.Services.Filters;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using Neptune.Common.Email;
+using Neptune.Common.Services.GDAL;
 
 namespace Neptune.WebMvc.Controllers
 {
     public class RegionalSubbasinRevisionRequestController : NeptuneBaseController<RegionalSubbasinRevisionRequestController>
     {
         private readonly SitkaSmtpClientService _sitkaSmtpClientService;
+        private readonly GDALAPIService _gdalApiService;
 
-        public RegionalSubbasinRevisionRequestController(NeptuneDbContext dbContext, ILogger<RegionalSubbasinRevisionRequestController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService) : base(dbContext, logger, linkGenerator, webConfiguration)
+        public RegionalSubbasinRevisionRequestController(NeptuneDbContext dbContext, ILogger<RegionalSubbasinRevisionRequestController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService, GDALAPIService gdalApiService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
             _sitkaSmtpClientService = sitkaSmtpClientService;
+            _gdalApiService = gdalApiService;
         }
 
         [HttpGet]
@@ -180,45 +181,35 @@ namespace Neptune.WebMvc.Controllers
         [HttpGet("{regionalSubbasinRevisionRequestPrimaryKey}")]
         [RegionalSubbasinRevisionRequestDownloadFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("regionalSubbasinRevisionRequestPrimaryKey")]
-        public FileResult Download([FromRoute] RegionalSubbasinRevisionRequestPrimaryKey regionalSubbasinRevisionRequestPrimaryKey)
+        public async Task<FileResult> Download([FromRoute] RegionalSubbasinRevisionRequestPrimaryKey regionalSubbasinRevisionRequestPrimaryKey)
         {
             var regionalSubbasinRevisionRequest =  RegionalSubbasinRevisionRequests.GetByID(_dbContext, regionalSubbasinRevisionRequestPrimaryKey);
             var geometry = regionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestGeometry;
 
             var reprojectedGeometry = geometry.ProjectTo2230();
-            var geoJson = new Feature(reprojectedGeometry, new AttributesTable());
-            var serializedGeoJson = GeoJsonSerializer.Serialize(geoJson);
+            var feature = new Feature(reprojectedGeometry, new AttributesTable());
+            var serializedGeoJson = GeoJsonSerializer.WriteFeaturesToByteArray(new []{feature}, GeoJsonSerializer.DefaultSerializerOptions);
 
             var outputLayerName = $"BMP_{regionalSubbasinRevisionRequest.TreatmentBMP.TreatmentBMPID}_RevisionRequest";
 
-            //todo: ogr
-            return File(Stream.Null, "application/zip", $"{outputLayerName}.zip");
+            var apiRequest = new GdbInputsToGdbRequestDto
+            {
+                GdbName = outputLayerName,
+                GdbInputs = new List<GdbInput>
+                {
+                    new()
+                    {
+                        FileContents = serializedGeoJson,
+                        LayerName = outputLayerName,
+                        CoordinateSystemID = Proj4NetHelper.NAD_83_CA_ZONE_VI_SRID,
+                        GeometryTypeName = geometry.GeometryType
+                    }
+                }
+            };
 
-            //using (var workingDirectory = new DisposableTempDirectory())
-            //{
-            //    var outputPathForLayer =
-            //        Path.Combine(workingDirectory.DirectoryInfo.FullName, outputLayerName);
-
-
-            //    var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(_webConfiguration.Ogr2OgrExecutable,
-            //        CoordinateSystemHelper.NAD_83_CA_ZONE_VI_SRID,
-            //        _webConfiguration.HttpRuntimeExecutionTimeout.TotalMilliseconds);
-
-            //    ogr2OgrCommandLineRunner.ImportGeoJsonToFileGdb(serializedGeoJson, outputPathForLayer,
-            //        outputLayerName, false, true);
-
-            //    using (var zipFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".zip"))
-            //    {
-            //        ZipFile.CreateFromDirectory(workingDirectory.DirectoryInfo.FullName, zipFile.FileInfo.FullName);
-            //        var fileStream = zipFile.FileInfo.OpenRead();
-            //        var bytes = fileStream.ReadFully();
-            //        fileStream.Close();
-            //        fileStream.Dispose();
-            //        return File(bytes, "application/zip", $"{outputLayerName}.zip");
-            //    }
-            //}
+            var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(apiRequest);
+            return File(bytes, "application/zip", $"{outputLayerName}.zip");
         }
-
 
         private async Task SendRSBRevisionRequestSubmittedEmail(Person requestPerson,
             TreatmentBMP requestBMP, RegionalSubbasinRevisionRequest request)

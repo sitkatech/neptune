@@ -184,7 +184,7 @@ public static class GeoJsonSerializer
         return SerializeToByteArray(featureCollection, jsonSerializerOptions);
     }
 
-    private static byte[] SerializeToByteArray<T>(T objectToSerialize, JsonSerializerOptions jsonSerializerOptions)
+    public static byte[] SerializeToByteArray<T>(T objectToSerialize, JsonSerializerOptions jsonSerializerOptions)
     {
         return JsonSerializer.SerializeToUtf8Bytes(objectToSerialize, jsonSerializerOptions);
     }

@@ -356,7 +356,7 @@
     <Build Include="dbo\Procs\dbo.pLandUseBlockStagingDeleteByPersonID.sql" />
     <Build Include="dbo\Procs\dbo.pModelBasinUpdateFromStaging.sql" />
     <Build Include="dbo\Procs\dbo.pOCTAPrioritizationUpdateFromStaging.sql" />
-    <Build Include="dbo\Procs\dbo.pParcelStagingDeleteByPersonID.sql" />
+    <Build Include="dbo\Procs\dbo.pParcelStagingDelete.sql" />
     <Build Include="dbo\Procs\dbo.pParcelUpdateFromStaging.sql" />
     <Build Include="dbo\Procs\dbo.pPrecipitationZoneUpdateFromStaging.sql" />
     <Build Include="dbo\Procs\dbo.pProjectGrantScoreUpdate.sql" />
