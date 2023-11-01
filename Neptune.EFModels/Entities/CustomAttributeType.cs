@@ -1,4 +1,5 @@
-﻿using Neptune.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using Neptune.Common;
 using Neptune.Common.GeoSpatial;
 
 namespace Neptune.EFModels.Entities
@@ -33,8 +34,16 @@ namespace Neptune.EFModels.Entities
 
         public void DeleteFull(NeptuneDbContext dbContext)
         {
-            //todo: deletefull
-            throw new NotImplementedException("Deleting of Custom Attribute Type not implemented yet!");
+            foreach (var customAttribute in dbContext.CustomAttributes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ToList())
+            {
+                customAttribute.DeleteFull(dbContext);
+            }
+            foreach (var maintenanceRecordObservation in dbContext.MaintenanceRecordObservations.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ToList())
+            {
+                maintenanceRecordObservation.DeleteFull(dbContext);
+            }
+            dbContext.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ExecuteDelete();
+            dbContext.CustomAttributeTypes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ExecuteDelete();
         }
     }
 }

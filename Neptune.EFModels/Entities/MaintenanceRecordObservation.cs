@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Neptune.EFModels.Entities
 {
     public partial class MaintenanceRecordObservation
@@ -12,6 +14,14 @@ namespace Neptune.EFModels.Entities
         {
             return !MaintenanceRecordObservationValues.All(y =>
                 string.IsNullOrWhiteSpace(y.ObservationValue));
+        }
+
+        public void DeleteFull(NeptuneDbContext dbContext)
+        {
+            dbContext.MaintenanceRecordObservationValues.Where(x =>
+                x.MaintenanceRecordObservationID == MaintenanceRecordObservationID).ExecuteDelete();
+            dbContext.MaintenanceRecordObservations.Where(x => x.MaintenanceRecordObservationID == MaintenanceRecordObservationID)
+                .ExecuteDelete();
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿namespace Neptune.EFModels.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Neptune.EFModels.Entities;
 
 public partial class CustomAttribute
 {
     public void DeleteFull(NeptuneDbContext dbContext)
     {
-        // todo: deletefull
-        throw new NotImplementedException("Deleting of Custom Attribute not implemented yet!");
+        dbContext.CustomAttributeValues.Where(x => x.CustomAttributeID == CustomAttributeID).ExecuteDelete();
+        dbContext.CustomAttributes.Where(x => x.CustomAttributeID == CustomAttributeID).ExecuteDelete();
     }
 }
