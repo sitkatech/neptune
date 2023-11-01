@@ -3,9 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
-using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.API.Services
 {
@@ -33,7 +31,6 @@ namespace Neptune.API.Services
                 FileResourceGUID = Guid.NewGuid(),
                 CreatePersonID = personDto.PersonID,
                 CreateDate = DateTime.Now,
-                InBlobStorage = true,
                 ContentLength = bytes.Length
             };
             await dbContext.FileResources.AddAsync(fileResource);

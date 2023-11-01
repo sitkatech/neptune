@@ -30,7 +30,6 @@ public class FileResourceService
             FileResourceGUID = Guid.NewGuid(),
             CreatePersonID = currentPerson.PersonID,
             CreateDate = DateTime.Now,
-            InBlobStorage = true,
             ContentLength = fileResourceData.LongLength
         };
         await _dbContext.FileResources.AddAsync(fileResource);

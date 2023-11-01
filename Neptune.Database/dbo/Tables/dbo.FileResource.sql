@@ -6,6 +6,5 @@ CREATE TABLE [dbo].[FileResource](
 	[FileResourceGUID] [uniqueidentifier] NOT NULL CONSTRAINT [AK_FileResource_FileResourceGUID] UNIQUE,
 	[CreatePersonID] [int] NOT NULL CONSTRAINT [FK_FileResource_Person_CreatePersonID_PersonID] FOREIGN KEY REFERENCES [dbo].[Person] ([PersonID]),
 	[CreateDate] [datetime] NOT NULL,
-	[InBlobStorage] [bit] NOT NULL default(0),
-	[ContentLength] [bigint] null
+	[ContentLength] [bigint] not null
 )

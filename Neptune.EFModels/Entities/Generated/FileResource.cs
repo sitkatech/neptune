@@ -30,9 +30,7 @@ public partial class FileResource
     [Column(TypeName = "datetime")]
     public DateTime CreateDate { get; set; }
 
-    public bool InBlobStorage { get; set; }
-
-    public long? ContentLength { get; set; }
+    public long ContentLength { get; set; }
 
     [ForeignKey("CreatePersonID")]
     [InverseProperty("FileResources")]
