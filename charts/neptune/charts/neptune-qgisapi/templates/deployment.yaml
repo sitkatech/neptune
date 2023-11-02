@@ -46,7 +46,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           envFrom:
           - configMapRef:
-              name: {{ include "qgisapi.fullname" . }}-{{ .Values.global.env.name }}-configmap
+              name: {{ include "qgisapi.fullname" . }}-configmap
           volumeMounts:
           - name: secrets
             mountPath: /app/secrets

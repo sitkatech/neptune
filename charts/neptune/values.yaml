@@ -12,8 +12,8 @@ global:
     webmvc: "neptune.aks-qa.sitkatech.com"
     geoserver: "geoserver-neptune.aks-qa.sitkatech.com"
     nereid: "neptune-nereid"
-    gdalApi: "neptune-gdal-api"
-    qgisApi: "neptune-qgis-api"
+    gdalApi: "neptune-gdalapi"
+    qgisApi: "neptune-qgisapi"
   secrets:
     geoserverSqlServerPassword: "passwordhere"
     geoserverAdminPassword: "geomaster"
