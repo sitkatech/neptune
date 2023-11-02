@@ -32,7 +32,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.global.env.containerBuildTag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.global.env.name }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
