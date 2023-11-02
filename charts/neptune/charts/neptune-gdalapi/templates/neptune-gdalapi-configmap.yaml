@@ -3,4 +3,5 @@ kind: ConfigMap
 metadata:
   name: {{ include "gdalapi.fullname" . }}-configmap
 data:
+  ASPNETCORE_URLS: "http://+:80"
   AzureBlobStorageConnectionString: "DefaultEndpointsProtocol=https;AccountName={{ .Values.global.secrets.applicationStorageAccountName }};AccountKey={{ .Values.global.secrets.applicationStorageAccountKey }};EndpointSuffix=core.usgovcloudapi.net"
