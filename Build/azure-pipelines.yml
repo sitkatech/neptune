@@ -590,7 +590,7 @@ stages:
   condition: |
     and
     (
-      in(dependencies.DeployNereid.result, 'Succeeded', 'SucceededWithIssues'),
+      in(dependencies.DeployNereid.result, 'Succeeded', 'SucceededWithIssues', 'Skipped'),
       in(dependencies.DeployGeoServer.result, 'Succeeded', 'SucceededWithIssues'),
       in(dependencies.DeployDB.result, 'Succeeded', 'SucceededWithIssues'),
       in(dependencies.DeployTerraform.result, 'Succeeded', 'SucceededWithIssues'),
