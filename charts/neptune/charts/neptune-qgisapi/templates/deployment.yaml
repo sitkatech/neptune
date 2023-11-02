@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "gdalapi.fullname" . }}
+  name: {{ include "qgisapi.fullname" . }}
   labels:
-    {{- include "gdalapi.labels" . | nindent 4 }}
+    {{- include "qgisapi.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "gdalapi.selectorLabels" . | nindent 6 }}
+      {{- include "qgisapi.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -19,13 +19,17 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "gdalapi.selectorLabels" . | nindent 8 }}
+        {{- include "qgisapi.selectorLabels" . | nindent 8 }}
     spec:
+      volumes:
+      - name: secrets
+        secret:
+          secretName: neptune-qgisapi-secrets
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "gdalapi.serviceAccountName" . }}
+      serviceAccountName: {{ include "qgisapi.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -42,7 +46,14 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           envFrom:
           - configMapRef:
-              name: {{ include "gdalapi.fullname" . }}-configmap
+              name: {{ include "qgisapi.fullname" . }}-configmap
+          volumeMounts:
+          - name: secrets
+            mountPath: /app/secrets
+            readOnly: true
+          # - name: certs
+          #   mountPath: /https
+          #   readOnly: true
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

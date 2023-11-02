@@ -385,7 +385,6 @@
     <Build Include="dbo\Views\dbo.vGeoServerTreatmentBMPDelineation.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerTreatmentBMPPointLocation.sql" />
     <Build Include="dbo\Views\dbo.vWaterQualityManagementPlanDetailed.sql" />
-    <None Include="Scripts\ReleaseScripts\0001 - Add DataLength value to FileResource table.sql" />
     <Build Include="dbo\Views\dbo.vLoadReducingResult.sql" />
     <Build Include="dbo\Views\dbo.vLoadGeneratingResult.sql" />
     <Build Include="dbo\Views\dbo.vTreatmentBMPUpstream.sql" />

@@ -16,8 +16,7 @@ namespace Neptune.Models.DataTransferObjects
         public Guid FileResourceGUID { get; set; }
         public PersonDto CreatePerson { get; set; }
         public DateTime CreateDate { get; set; }
-        public bool InBlobStorage { get; set; }
-        public long? ContentLength { get; set; }
+        public long ContentLength { get; set; }
     }
 
     public partial class FileResourceSimpleDto
@@ -29,8 +28,7 @@ namespace Neptune.Models.DataTransferObjects
         public Guid FileResourceGUID { get; set; }
         public System.Int32 CreatePersonID { get; set; }
         public DateTime CreateDate { get; set; }
-        public bool InBlobStorage { get; set; }
-        public long? ContentLength { get; set; }
+        public long ContentLength { get; set; }
     }
 
 }

@@ -434,29 +434,6 @@ output "hangfire_password" {
 }
 ### END Hangfire password ###
 
-### BEGIN Pyqgis password ###
-resource "random_password" "pyqgisPassword" {
-  length           = 16
-  special          = true
-  override_special = "!*-_"
-  min_special      = 1
-  min_lower        = 1
-  min_upper        = 1
-  min_numeric      = 1
-  keepers = {
-    amd_id = var.amd_id
-  }
-}
-
-output "pyqgis_password" {
-  sensitive = true
-  value = random_password.pyqgisPassword.result
-  depends_on = [
-    random_password.pyqgisPassword
-  ]
-}
-### END Hangfire password ###
-
 resource "azurerm_application_insights" "web" {
 	name                         = var.appInsightsName
 	resource_group_name          = azurerm_resource_group.web.name
@@ -524,15 +501,7 @@ resource "azurerm_key_vault_secret" "appInsightsInstrumentationKey" {
   tags                         = local.tags
 }
  
-resource "azurerm_key_vault_secret" "pyqgisPassword" {
-  name                         = "pyqgisPassword"
-  value                        = random_password.pyqgisPassword.result
-  key_vault_id                 = azurerm_key_vault.web.id
-
-  tags                         = local.tags
-}
-
- resource "azurerm_key_vault_secret" "sqlApiUsername" {
+resource "azurerm_key_vault_secret" "sqlApiUsername" {
    name                         = "sqlApiUsername"
    value                        = var.sqlApiUsername
    key_vault_id                 = azurerm_key_vault.web.id

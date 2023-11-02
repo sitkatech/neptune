@@ -20,7 +20,6 @@ namespace Neptune.EFModels.Entities
                 FileResourceGUID = fileResource.FileResourceGUID,
                 CreatePerson = fileResource.CreatePerson.AsDto(),
                 CreateDate = fileResource.CreateDate,
-                InBlobStorage = fileResource.InBlobStorage,
                 ContentLength = fileResource.ContentLength
             };
             DoCustomMappings(fileResource, fileResourceDto);
@@ -40,7 +39,6 @@ namespace Neptune.EFModels.Entities
                 FileResourceGUID = fileResource.FileResourceGUID,
                 CreatePersonID = fileResource.CreatePersonID,
                 CreateDate = fileResource.CreateDate,
-                InBlobStorage = fileResource.InBlobStorage,
                 ContentLength = fileResource.ContentLength
             };
             DoCustomSimpleDtoMappings(fileResource, fileResourceSimpleDto);

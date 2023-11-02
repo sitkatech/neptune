@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Net.Http.Json;
+using System.Text.Json.Nodes;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
@@ -25,25 +25,51 @@ public class NereidService : BaseAPIService<NereidService>
 
     public async Task<NereidResult<TResp>> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl)
     {
-        var serializedRequest = GeoJsonSerializer.Serialize(nereidRequestObject);
-        var requestStringContent = new StringContent(serializedRequest, System.Text.Encoding.UTF8, "application/json");
-        Logger.LogInformation($"Executing Nereid request: {nereidRequestUrl}");
         //todo: log nereid requests for troubleshooting?
+        //var serializedRequest = GeoJsonSerializer.Serialize(nereidRequestObject);
+        //var requestStringContent = new StringContent(serializedRequest, System.Text.Encoding.UTF8, "application/json");
+        //Logger.LogInformation($"Executing Nereid request: {nereidRequestUrl}");
         //var requestLogFile = Path.Combine(_neptuneConfiguration.NereidLogFileFolder, $"NereidRequest_{DateTime.Now:yyyyMMddHHmmss}.json");
         //await File.WriteAllTextAsync(requestLogFile, serializedRequest);
-        var httpResponseMessage = await PostJsonImpl<TReq>(nereidRequestUrl, nereidRequestObject, GeoJsonSerializer.DefaultSerializerOptions);
-            var postResultContentAsStringResult = await httpResponseMessage.Content.ReadAsStringAsync();
+        var httpResponseMessage = await PostJsonImpl(nereidRequestUrl, nereidRequestObject, GeoJsonSerializer.DefaultSerializerOptions);
+        var postResultContentAsStringResult = await httpResponseMessage.Content.ReadAsStringAsync();
         //todo: log nereid responses for troubleshooting?
         //var responseLogFile = Path.Combine(_neptuneConfiguration.NereidLogFileFolder, $"NereidResponse_{DateTime.Now:yyyyMMddHHmmss}.json");
         //await File.WriteAllTextAsync(responseLogFile, postResultContentAsStringResult);
 
-        NereidResult<TResp> nereidResultResponse = null;
-        nereidResultResponse = GeoJsonSerializer.Deserialize<NereidResult<TResp>>(postResultContentAsStringResult);
+        var nereidResultResponse = GeoJsonSerializer.Deserialize<NereidResult<TResp>>(postResultContentAsStringResult);
         if (nereidResultResponse.Detail != null)
         {
             throw new Exception(nereidResultResponse.Detail.ToString());
         }
 
+        var resultRoute = nereidResultResponse.ResultRoute;
+        var executing = true;
+
+        while (executing)
+        {
+            //MP 3/18/22 This is a temporary necessity because Nereid won't return urls with the proper protocol
+            //Austin is looking into it but for now this will let the environments work properly
+            if (resultRoute != null && resultRoute.StartsWith("http:"))
+            {
+                resultRoute = resultRoute.Replace("http:", "https:");
+            }
+            nereidResultResponse = await HttpClient.GetFromJsonAsync<NereidResult<TResp>>($"{resultRoute}");
+
+            if (nereidResultResponse.Detail != null)
+            {
+                throw new Exception(nereidResultResponse.Detail.ToString());
+            }
+
+            if (nereidResultResponse.Status != NereidJobStatus.STARTED && nereidResultResponse.Status != NereidJobStatus.PENDING)
+            {
+                executing = false;
+            }
+            else
+            {
+                Thread.Sleep(1000);
+            }
+        }
         return nereidResultResponse;
     }
 
@@ -64,7 +90,7 @@ public class NereidService : BaseAPIService<NereidService>
                                                          .Contains(x.WaterQualityManagementPlan?
                                                              .WaterQualityManagementPlanID)).ToList();
 
-        var subgraphUrl = "api/v1/network/subgraph";
+        const string subgraphUrl = "api/v1/network/subgraph";
 
         var subgraphRequestObject = new NereidSubgraphRequestObject(graph, dirtyGraphNodes);
 
@@ -102,7 +128,7 @@ public class NereidService : BaseAPIService<NereidService>
 
     private async Task<NetworkSolveResult> NetworkSolveImpl(Graph graph, NeptuneDbContext dbContext, bool sendPreviousResults, bool isBaselineCondition, int? projectID = null, List<int> projectRegionalSubbasinIDs = null, List<int> projectDistributedDelineationIDs = null)
     {
-        var solutionSequenceUrl = "api/v1/network/solution_sequence?min_branch_size=12";
+        const string solutionSequenceUrl = "api/v1/network/solution_sequence?min_branch_size=12";
 
         var allLoadingInputs = projectID != null ? dbContext.vNereidProjectLoadingInputs.AsNoTracking().Where(x => x.ProjectID == projectID).ToList().Select(x =>
             new vNereidLoadingInput()
@@ -293,7 +319,7 @@ public class NereidService : BaseAPIService<NereidService>
 
         //ValidateForTesting(subgraph, landSurfaces, treatmentFacilities, treatmentSites);
 
-        var solveUrl = "api/v1/watershed/solve?state=ca&region=oc";
+        const string solveUrl = "api/v1/watershed/solve?state=ca&region=oc";
 
         // get the list of leaf nodes for this subgraph
         var targetNodeIDs = subgraph.Edges.Select(x => x.TargetID);

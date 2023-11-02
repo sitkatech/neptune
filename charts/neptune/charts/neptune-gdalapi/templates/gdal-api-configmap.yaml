@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "gdal-api.fullname" . }}-configmap
-data:
-  AzureBlobStorageConnectionString: "DefaultEndpointsProtocol=https;AccountName={{ .Values.global.secrets.applicationStorageAccountName }};AccountKey={{ .Values.global.secrets.applicationStorageAccountKey }};EndpointSuffix=core.usgovcloudapi.net"
-  ASPNETCORE_URLS: "http://+:80"

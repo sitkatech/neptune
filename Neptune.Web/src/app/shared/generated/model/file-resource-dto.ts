@@ -20,7 +20,6 @@ export class FileResourceDto {
     FileResourceGUID?: string;
     CreatePerson?: PersonDto;
     CreateDate?: string;
-    InBlobStorage?: boolean;
     ContentLength?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);

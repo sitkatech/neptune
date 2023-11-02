@@ -2417,13 +2417,9 @@
             "type": "string",
             "format": "date-time"
           },
-          "InBlobStorage": {
-            "type": "boolean"
-          },
           "ContentLength": {
             "type": "integer",
-            "format": "int64",
-            "nullable": true
+            "format": "int64"
           }
         },
         "additionalProperties": false
@@ -2489,13 +2485,9 @@
             "type": "string",
             "format": "date-time"
           },
-          "InBlobStorage": {
-            "type": "boolean"
-          },
           "ContentLength": {
             "type": "integer",
-            "format": "int64",
-            "nullable": true
+            "format": "int64"
           }
         },
         "additionalProperties": false
