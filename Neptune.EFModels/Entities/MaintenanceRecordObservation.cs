@@ -16,12 +16,12 @@ namespace Neptune.EFModels.Entities
                 string.IsNullOrWhiteSpace(y.ObservationValue));
         }
 
-        public void DeleteFull(NeptuneDbContext dbContext)
+        public async Task DeleteFull(NeptuneDbContext dbContext)
         {
-            dbContext.MaintenanceRecordObservationValues.Where(x =>
-                x.MaintenanceRecordObservationID == MaintenanceRecordObservationID).ExecuteDelete();
-            dbContext.MaintenanceRecordObservations.Where(x => x.MaintenanceRecordObservationID == MaintenanceRecordObservationID)
-                .ExecuteDelete();
+           await dbContext.MaintenanceRecordObservationValues.Where(x =>
+                x.MaintenanceRecordObservationID == MaintenanceRecordObservationID).ExecuteDeleteAsync();
+           await dbContext.MaintenanceRecordObservations.Where(x => x.MaintenanceRecordObservationID == MaintenanceRecordObservationID)
+                .ExecuteDeleteAsync();
         }
     }
 }

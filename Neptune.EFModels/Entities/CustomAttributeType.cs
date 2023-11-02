@@ -32,18 +32,18 @@ namespace Neptune.EFModels.Entities
             return customAttribute.CustomAttributeValues.Any(x => !string.IsNullOrWhiteSpace(x.AttributeValue));
         }
 
-        public void DeleteFull(NeptuneDbContext dbContext)
+        public async Task DeleteFull(NeptuneDbContext dbContext)
         {
             foreach (var customAttribute in dbContext.CustomAttributes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ToList())
             {
-                customAttribute.DeleteFull(dbContext);
+                await customAttribute.DeleteFull(dbContext);
             }
             foreach (var maintenanceRecordObservation in dbContext.MaintenanceRecordObservations.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ToList())
             {
-                maintenanceRecordObservation.DeleteFull(dbContext);
+                await maintenanceRecordObservation.DeleteFull(dbContext);
             }
-            dbContext.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ExecuteDelete();
-            dbContext.CustomAttributeTypes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ExecuteDelete();
+            await dbContext.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ExecuteDeleteAsync();
+            await dbContext.CustomAttributeTypes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ExecuteDeleteAsync();
         }
     }
 }

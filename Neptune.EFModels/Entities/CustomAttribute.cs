@@ -4,9 +4,9 @@ namespace Neptune.EFModels.Entities;
 
 public partial class CustomAttribute
 {
-    public void DeleteFull(NeptuneDbContext dbContext)
+    public async Task DeleteFull(NeptuneDbContext dbContext)
     {
-        dbContext.CustomAttributeValues.Where(x => x.CustomAttributeID == CustomAttributeID).ExecuteDelete();
-        dbContext.CustomAttributes.Where(x => x.CustomAttributeID == CustomAttributeID).ExecuteDelete();
+        await dbContext.CustomAttributeValues.Where(x => x.CustomAttributeID == CustomAttributeID).ExecuteDeleteAsync();
+        await dbContext.CustomAttributes.Where(x => x.CustomAttributeID == CustomAttributeID).ExecuteDeleteAsync();
     }
 }
