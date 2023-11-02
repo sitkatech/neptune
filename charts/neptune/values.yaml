@@ -13,6 +13,7 @@ global:
     geoserver: "geoserver-neptune.aks-qa.sitkatech.com"
     nereid: "neptune-nereid"
     gdalApi: "neptune-gdal-api"
+    qgisApi: "neptune-qgis-api"
   secrets:
     geoserverSqlServerPassword: "passwordhere"
     geoserverAdminPassword: "geomaster"
@@ -21,7 +22,6 @@ global:
     apiSqlPassword: "passwordhere"
     sendGridApiKey: "sendgridapikeyhere"
     hangfirePassword: "passwordhere"
-    pyqgisPassword: "passwordhere"
     keystoneOpenIDClientSecret: "secrethere"
 
 api:
@@ -245,10 +245,54 @@ geoserver:
   tolerations: []
   affinity: {}
 
-gdal-api:
+gdalapi:
   replicaCount: 1
   image:
     repository: esasitkagovcr.azurecr.us/neptune/gdalapi
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+    # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+qgisapi:
+  replicaCount: 1
+  image:
+    repository: esasitkagovcr.azurecr.us/neptune/qgisapi
     pullPolicy: Always
   nameOverride: ""
   fullnameOverride: ""
