@@ -302,7 +302,7 @@ namespace Neptune.WebMvc.Models
                 }
                 else
                 {
-                    delineation.DeleteDelineation(dbContext);
+                    delineation.DeleteFull(dbContext);
                 }
             }
         }

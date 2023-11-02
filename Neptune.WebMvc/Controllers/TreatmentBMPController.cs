@@ -352,7 +352,7 @@ namespace Neptune.WebMvc.Controllers
             var delineation = Delineations.GetByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPID);
             if (delineation != null)
             {
-                await delineation.DeleteDelineation(_dbContext);
+                await delineation.DeleteFull(_dbContext);
             }
 
             SetMessageForDisplay("Upstream BMP successfully updated");
@@ -562,7 +562,7 @@ namespace Neptune.WebMvc.Controllers
             // todo: The code-generated DeleteFull is brittle since it touches the LGU system.
             // We should write a more finely-grained delete that deletes delineations via the
             // pattern established in DelineationController
-            treatmentBMP.DeleteFull(_dbContext);
+            await treatmentBMP.DeleteFull(_dbContext);
             await _dbContext.SaveChangesAsync();
             
             // queue an LGU refresh for the area no longer governed by this BMP

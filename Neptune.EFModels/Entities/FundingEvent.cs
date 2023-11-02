@@ -1,11 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Neptune.EFModels.Entities
 {
     public partial class FundingEvent
     {
-        public void DeleteFull(NeptuneDbContext dbContext)
+        public async Task DeleteFull(NeptuneDbContext dbContext)
         {
-            // todo: deletefull
-            throw new NotImplementedException("Deleting of Funding Event not implemented yet!");
+            await dbContext.FundingEventFundingSources.Where(x => x.FundingEventID == FundingEventID).ExecuteDeleteAsync();
+            await dbContext.FundingEvents.Where(x => x.FundingEventID == FundingEventID).ExecuteDeleteAsync();
         }
 
         public string GetDisplayName()

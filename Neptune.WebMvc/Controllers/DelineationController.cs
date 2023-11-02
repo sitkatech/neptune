@@ -196,7 +196,7 @@ namespace Neptune.WebMvc.Controllers
                 }
                 else
                 {
-                    await treatmentBMPDelineation.DeleteDelineation(_dbContext);
+                    await treatmentBMPDelineation.DeleteFull(_dbContext);
                 }
             }
             else
@@ -295,7 +295,7 @@ namespace Neptune.WebMvc.Controllers
                     $"No delineation found for Treatment BMP {treatmentBMPPrimaryKey}");
             }
 
-            await delineation.DeleteDelineation(_dbContext);
+            await delineation.DeleteFull(_dbContext);
 
             if (isDelineationDistributed)
             {
@@ -332,7 +332,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewDeleteDelineation(delineation, viewModel);
             }
 
-            await delineation.DeleteDelineation(_dbContext);
+            await delineation.DeleteFull(_dbContext);
 
             SetMessageForDisplay("The Delineation was successfully deleted.");
 

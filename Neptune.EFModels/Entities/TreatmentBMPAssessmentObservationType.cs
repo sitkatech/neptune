@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
@@ -325,7 +326,15 @@ namespace Neptune.EFModels.Entities
 
         public void DeleteFull(NeptuneDbContext dbContext)
         {
-            throw new NotImplementedException();
+            dbContext.TreatmentBMPBenchmarkAndThresholds.Where(x =>
+                x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID).ExecuteDelete();
+            dbContext.TreatmentBMPObservations
+                .Where(x => x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID)
+                .ExecuteDelete();
+            dbContext.TreatmentBMPTypeAssessmentObservationTypes.Where(x =>
+                x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID).ExecuteDelete();
+            dbContext.TreatmentBMPAssessmentObservationTypes.Where(x =>
+                x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID).ExecuteDelete();
         }
     }
 

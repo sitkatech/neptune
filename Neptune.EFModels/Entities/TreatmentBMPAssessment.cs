@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.EntityFrameworkCore;
 using Neptune.Common;
 
 namespace Neptune.EFModels.Entities
@@ -87,9 +88,13 @@ namespace Neptune.EFModels.Entities
             return TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID)?.FormattedObservationValueWithoutUnits(treatmentBMPAssessmentObservationType) ?? "not provided";
         }
 
-        public void DeleteFull(NeptuneDbContext dbContext)
+        public async Task DeleteFull(NeptuneDbContext dbContext)
         {
-            throw new NotImplementedException();
+            await dbContext.TreatmentBMPAssessmentPhotos.Where(x => x.TreatmentBMPAssessmentID == TreatmentBMPAssessmentID)
+                .ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPObservations.Where(x => x.TreatmentBMPAssessmentID == TreatmentBMPAssessmentID).ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPAssessments.Where(x => x.TreatmentBMPAssessmentID == TreatmentBMPAssessmentID)
+                .ExecuteDeleteAsync();
         }
     }
 }

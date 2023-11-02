@@ -1,10 +1,12 @@
-﻿namespace Neptune.EFModels.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Neptune.EFModels.Entities;
 
 public partial class TreatmentBMPBenchmarkAndThreshold
 {
-    public void DeleteFull(NeptuneDbContext dbContext)
+    public async Task DeleteFull(NeptuneDbContext dbContext)
     {
-        // todo: deletefull
-        throw new NotImplementedException("Deleting of Treatment BMP Benchmark and Threshold not implemented yet!");
+        await dbContext.TreatmentBMPBenchmarkAndThresholds
+            .Where(x => x.TreatmentBMPBenchmarkAndThresholdID == TreatmentBMPBenchmarkAndThresholdID).ExecuteDeleteAsync();
     }
 }

@@ -313,7 +313,7 @@ namespace Neptune.WebMvc.Controllers
 
             await NereidUtilities.MarkDownstreamNodeDirty(waterQualityManagementPlan, _dbContext);
 
-            waterQualityManagementPlan.DeleteFull(_dbContext);
+            await waterQualityManagementPlan.DeleteFull(_dbContext);
             await _dbContext.SaveChangesAsync();
 
             SetMessageForDisplay($"Successfully delete \"{waterQualityManagementPlan.WaterQualityManagementPlanName}\".");
