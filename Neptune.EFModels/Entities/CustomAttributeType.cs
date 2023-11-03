@@ -34,14 +34,15 @@ namespace Neptune.EFModels.Entities
 
         public async Task DeleteFull(NeptuneDbContext dbContext)
         {
-            foreach (var customAttribute in dbContext.CustomAttributes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ToList())
-            {
-                await customAttribute.DeleteFull(dbContext);
-            }
-            foreach (var maintenanceRecordObservation in dbContext.MaintenanceRecordObservations.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ToList())
-            {
-                await maintenanceRecordObservation.DeleteFull(dbContext);
-            }
+            await dbContext.CustomAttributeValues.Include(x => x.CustomAttribute)
+                .Where(x => x.CustomAttribute.CustomAttributeTypeID == CustomAttributeTypeID)
+                .ExecuteDeleteAsync();
+            await dbContext.CustomAttributes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID)
+                .ExecuteDeleteAsync();
+            await dbContext.MaintenanceRecordObservationValues.Include(x => x.MaintenanceRecordObservation).Where(x =>
+                    x.MaintenanceRecordObservation.CustomAttributeTypeID == CustomAttributeTypeID).ExecuteDeleteAsync();
+            await dbContext.MaintenanceRecordObservations.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID)
+                .ExecuteDeleteAsync();
             await dbContext.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ExecuteDeleteAsync();
             await dbContext.CustomAttributeTypes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ExecuteDeleteAsync();
         }
