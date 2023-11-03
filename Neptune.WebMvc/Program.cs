@@ -18,6 +18,7 @@ using Hangfire;
 using Hangfire.SqlServer;
 using Neptune.Jobs;
 using Neptune.Jobs.Services;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -74,6 +75,7 @@ var builder = WebApplication.CreateBuilder(args);
 
     services.Configure<WebConfiguration>(builder.Configuration);
     services.Configure<NeptuneJobConfiguration>(builder.Configuration);
+    services.Configure<SendGridConfiguration>(builder.Configuration);
     var configuration = builder.Configuration.Get<WebConfiguration>();
 
     services.AddDbContext<NeptuneDbContext>(c =>

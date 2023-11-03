@@ -30,7 +30,6 @@ using SendGrid.Extensions.DependencyInjection;
 using Serilog.Sinks.ApplicationInsights.TelemetryConverters;
 using Hangfire;
 using Hangfire.SqlServer;
-using Neptune.API.Hangfire;
 using Neptune.API.Services.Filter;
 using Neptune.Common.Services;
 using Neptune.Common.Services.GDAL;
@@ -93,6 +92,7 @@ namespace Neptune.API
 
             services.Configure<NeptuneConfiguration>(Configuration);
             services.Configure<NeptuneJobConfiguration>(Configuration);
+            services.Configure<SendGridConfiguration>(Configuration);
             var configuration = Configuration.Get<NeptuneConfiguration>();
 
             var keystoneHost = configuration.KeystoneOpenIDUrl;
