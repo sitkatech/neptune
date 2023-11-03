@@ -35,11 +35,14 @@ namespace Neptune.EFModels.Entities
         {
             await dbContext.DelineationOverlaps.Where(x => x.DelineationID == DelineationID).ExecuteDeleteAsync();
             await dbContext.DirtyModelNodes.Where(x => x.DelineationID == DelineationID).ExecuteDeleteAsync();
-            foreach (var loadGeneratingUnit in dbContext.LoadGeneratingUnits.Where(x => x.DelineationID == DelineationID).ToList())
-            {
-                await loadGeneratingUnit.DeleteFull(dbContext);
-            }
+            await dbContext.HRUCharacteristics.Include(x => x.LoadGeneratingUnit).Where(x => x.LoadGeneratingUnit.DelineationID == DelineationID)
+                .ExecuteDeleteAsync();
+            await dbContext.LoadGeneratingUnits.Where(x => x.DelineationID == DelineationID)
+                .ExecuteDeleteAsync();
             await dbContext.NereidResults.Where(x => x.DelineationID == DelineationID).ExecuteDeleteAsync();
+            await dbContext.ProjectHRUCharacteristics
+                .Include(x => x.ProjectLoadGeneratingUnit)
+                .Where(x => x.ProjectLoadGeneratingUnit.DelineationID == DelineationID).ExecuteDeleteAsync();
             await dbContext.ProjectLoadGeneratingUnits.Where(x => x.DelineationID == DelineationID)
                 .ExecuteDeleteAsync();
             await dbContext.ProjectNereidResults.Where(x => x.DelineationID == DelineationID).ExecuteDeleteAsync();
