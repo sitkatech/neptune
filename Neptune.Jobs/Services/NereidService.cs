@@ -28,7 +28,8 @@ public class NereidService : BaseAPIService<NereidService>
     {
         //todo: log nereid requests for troubleshooting?
         //var serializedRequest = GeoJsonSerializer.Serialize(nereidRequestObject);
-        //var requestStringContent = new StringContent(serializedRequest, System.Text.Encoding.UTF8, "application/json");
+        //Logger.LogInformation(serializedRequest);
+		//var requestStringContent = new StringContent(serializedRequest, System.Text.Encoding.UTF8, "application/json");
         //Logger.LogInformation($"Executing Nereid request: {nereidRequestUrl}");
         //var requestLogFile = Path.Combine(_neptuneConfiguration.NereidLogFileFolder, $"NereidRequest_{DateTime.Now:yyyyMMddHHmmss}.json");
         //await File.WriteAllTextAsync(requestLogFile, serializedRequest);
@@ -182,6 +183,8 @@ public class NereidService : BaseAPIService<NereidService>
             }
         }
 
+        var modelBasins = dbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
+        var precipitationZones = dbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
         var missingNodeIDs = new List<string>();
         foreach (var parallel in solutionSequenceResult.Data.SolutionSequence.Parallel)
         {
@@ -191,7 +194,7 @@ public class NereidService : BaseAPIService<NereidService>
                 var subgraph = MakeSubgraphFromParentGraphAndNodes(graph, seriesNodes);
 
                 var notFoundNodes = await SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWQMPNodes,
-                    allModelingQuickBMPs, isBaselineCondition, projectDistributedDelineationIDs);
+                    allModelingQuickBMPs, isBaselineCondition, modelBasins, precipitationZones, projectDistributedDelineationIDs);
                 missingNodeIDs.AddRange(notFoundNodes);
             }
         }
@@ -260,9 +263,10 @@ public class NereidService : BaseAPIService<NereidService>
 
 
     public async Task<List<string>> SolveSubgraph(Graph subgraph,
-    List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs,
-    List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes,
-    List<QuickBMP> allModelingQuickBMPs, bool isBaselineCondition, List<int> projectDelineationIDs = null)
+        List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs,
+        List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes,
+        List<QuickBMP> allModelingQuickBMPs, bool isBaselineCondition, Dictionary<int, int> modelBasins,
+        Dictionary<int, double> precipitationZones, List<int> projectDelineationIDs = null)
     {
         var notFoundNodes = new List<string>();
 
@@ -289,7 +293,7 @@ public class NereidService : BaseAPIService<NereidService>
             .Where(x => treatmentBMPToIncludeIDs.Contains(x.TreatmentBMPID) &&
                         // Don't create TreatmentFacilities for BMPs belonging to a Simple WQMP
                         x.WaterQualityManagementPlan?.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
-            .Select(x => x.ToTreatmentFacility(isBaselineCondition)).ToList();
+            .Select(x => x.ToTreatmentFacility(isBaselineCondition, modelBasins, precipitationZones)).ToList();
 
         var filteredQuickBMPs = allModelingQuickBMPs
             .Where(x => waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID) &&

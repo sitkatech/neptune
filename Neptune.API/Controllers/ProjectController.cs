@@ -300,7 +300,7 @@ namespace Neptune.API.Controllers
             await _dbContext.SaveChangesAsync();
 
             BackgroundJob.Enqueue<ProjectNetworkSolveJob>(x => x.RunNetworkSolveForProject(projectID, projectNetworkSolveHistoryEntity.ProjectNetworkSolveHistoryID));
-            return Ok($"Network solve for Project with ID:{projectID} has begun.");
+            return Ok();
         }
 
         [HttpGet("projects/{projectID}/delineations")]

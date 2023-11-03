@@ -1,6 +1,5 @@
-﻿using Neptune.Models.DataTransferObjects;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
@@ -9,10 +8,10 @@ namespace Neptune.EFModels.Entities
         public static List<ProjectLoadReducingResultDto> ListByProjectIDAsDto(
             NeptuneDbContext dbContext, int projectID)
         {
-            var treatmentBMPIDs = dbContext.TreatmentBMPs.Where(x => x.ProjectID == projectID)
+            var treatmentBMPIDs = dbContext.TreatmentBMPs.AsNoTracking().Where(x => x.ProjectID == projectID)
                 .Select(x => x.TreatmentBMPID).ToList();
 
-            return dbContext.vProjectLoadReducingResults
+            return dbContext.vProjectLoadReducingResults.AsNoTracking()
                 .Where(x => x.ProjectID == projectID && treatmentBMPIDs.Contains(x.TreatmentBMPID)
                 )
                 .Select(x => x.AsDto())
@@ -21,7 +20,7 @@ namespace Neptune.EFModels.Entities
 
         public static List<vProjectLoadReducingResult> ListByProjectIDs(NeptuneDbContext dbContext, List<int> projectIDs)
         {
-            return dbContext.vProjectLoadReducingResults
+            return dbContext.vProjectLoadReducingResults.AsNoTracking()
                 .Where(x => projectIDs.Contains(x.ProjectID)).ToList();
         }
     }
