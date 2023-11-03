@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -374,7 +375,7 @@ public class NereidService : BaseAPIService<NereidService>
                 var previousResults = new JsonObject();
                 foreach (var key in previousResultsKeys)
                 {
-                    var value = dataLeafResult[key];
+                    var value = JsonSerializer.SerializeToNode(dataLeafResult[key], GeoJsonSerializer.DefaultSerializerOptions);
                     previousResults.Add(key, value);
                 }
 
