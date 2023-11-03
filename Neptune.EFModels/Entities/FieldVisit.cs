@@ -1,4 +1,6 @@
-﻿namespace Neptune.EFModels.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Neptune.EFModels.Entities;
 
 public partial class FieldVisit
 {
@@ -17,9 +19,23 @@ public partial class FieldVisit
         return GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance);
     }
 
-    public void DeleteFull(NeptuneDbContext dbContext)
+    public async Task DeleteFull(NeptuneDbContext dbContext)
     {
-        // todo: deletefull
-        throw new NotImplementedException("Deleting of Field Visit not implemented yet!");
+        await dbContext.MaintenanceRecordObservations
+            .Include(x => x.MaintenanceRecord)
+            .Where(x => x.MaintenanceRecord.FieldVisitID == FieldVisitID).ExecuteDeleteAsync();
+        await dbContext.MaintenanceRecords.Where(x => x.FieldVisitID == FieldVisitID).ExecuteDeleteAsync();
+        await dbContext.TreatmentBMPAssessmentPhotos
+            .Include(x => x.TreatmentBMPAssessment)
+            .Where(x => x.TreatmentBMPAssessment.FieldVisitID == FieldVisitID)
+            .ExecuteDeleteAsync();
+        await dbContext.TreatmentBMPObservations
+            .Include(x => x.TreatmentBMPAssessment)
+            .Where(x => x.TreatmentBMPAssessment.FieldVisitID == FieldVisitID)
+            .ExecuteDeleteAsync();
+        await dbContext.TreatmentBMPAssessments
+            .Where(x => x.FieldVisitID == FieldVisitID)
+            .ExecuteDeleteAsync();
+        await dbContext.FieldVisits.Where(x => x.FieldVisitID == FieldVisitID).ExecuteDeleteAsync();
     }
 }
