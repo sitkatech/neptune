@@ -38,8 +38,8 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 # copy the python scripts
-COPY --from=publish /src/pyqgis_utils.py .
-COPY --from=publish /src/ComputeTrashGeneratingUnits.py .
-COPY --from=publish /src/ModelingOverlayAnalysis.py .
+COPY --from=publish /src/Neptune.QGISAPI/pyqgis_utils.py .
+COPY --from=publish /src/Neptune.QGISAPI/ComputeTrashGeneratingUnits.py .
+COPY --from=publish /src/Neptune.QGISAPI/ModelingOverlayAnalysis.py .
 
 ENTRYPOINT ["dotnet", "Neptune.QGISAPI.dll"]
