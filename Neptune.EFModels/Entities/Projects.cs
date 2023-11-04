@@ -75,7 +75,7 @@ namespace Neptune.EFModels.Entities
                 .ToList();
         }
 
-        public static ProjectSimpleDto CreateNew(NeptuneDbContext dbContext, ProjectUpsertDto projectUpsertDto, PersonDto personDto)
+        public static async Task<ProjectSimpleDto> CreateNew(NeptuneDbContext dbContext, ProjectUpsertDto projectUpsertDto, PersonDto personDto)
         {
             var project = new Project()
             {
@@ -92,13 +92,13 @@ namespace Neptune.EFModels.Entities
                 CalculateOCTAM2Tier2Scores = projectUpsertDto.CalculateOCTAM2Tier2Scores,
                 ShareOCTAM2Tier2Scores = false
             };
-            dbContext.Add(project);
-            dbContext.SaveChanges();
-            dbContext.Entry(project).Reload();
+            await dbContext.Projects.AddAsync(project);
+            await dbContext.SaveChangesAsync();
+            await dbContext.Entry(project).ReloadAsync();
             return GetByIDAsSimpleDto(dbContext, project.ProjectID);
         }
 
-        public static void Update(NeptuneDbContext dbContext, Project project, ProjectUpsertDto projectUpsertDto, int personID)
+        public static async Task Update(NeptuneDbContext dbContext, Project project, ProjectUpsertDto projectUpsertDto, int personID)
         {
             project.ProjectName = projectUpsertDto.ProjectName;
             project.OrganizationID = projectUpsertDto.OrganizationID.Value;
@@ -122,31 +122,25 @@ namespace Neptune.EFModels.Entities
                 TreatmentBMPs.MergeProjectTreatmentBMPs(dbContext, new List<TreatmentBMPUpsertDto>(), dbContext.TreatmentBMPs.Where(x => x.ProjectID == project.ProjectID).ToList(), project);
             }
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
 
-        public static void Delete(NeptuneDbContext dbContext, int projectID)
+        public static async Task Delete(NeptuneDbContext dbContext, int projectID)
         {
-            var project = dbContext.Projects.Include(x => x.TreatmentBMPs).Where(x => x.ProjectID == projectID).First();
-            var treatmentBMPIDs = project.TreatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
-            var delineationIDs = dbContext.Delineations.Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).Select(x => x.DelineationID).ToList();
-
-            dbContext.ProjectHRUCharacteristics.RemoveRange(dbContext.ProjectHRUCharacteristics.Where(x => x.ProjectID == projectID).ToList());
-            dbContext.ProjectLoadGeneratingUnits.RemoveRange(dbContext.ProjectLoadGeneratingUnits.Where(x => x.ProjectID == projectID).ToList());
-            dbContext.ProjectNereidResults.RemoveRange(dbContext.ProjectNereidResults.Where(x => x.ProjectID == projectID).ToList());
-            dbContext.ProjectNetworkSolveHistories.RemoveRange(dbContext.ProjectNetworkSolveHistories.Where(x => x.ProjectID == projectID).ToList());
-            dbContext.DelineationOverlaps.RemoveRange(dbContext.DelineationOverlaps.Where(x => delineationIDs.Contains(x.DelineationID)).ToList());
-            dbContext.Delineations.RemoveRange(dbContext.Delineations.Where(x => delineationIDs.Contains(x.DelineationID)).ToList());
-            dbContext.TreatmentBMPModelingAttributes.RemoveRange(dbContext.TreatmentBMPModelingAttributes.Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).ToList());
-            dbContext.TreatmentBMPs.RemoveRange(project.TreatmentBMPs.ToList());
-            dbContext.Projects.Remove(project);
-            dbContext.SaveChanges();
+            await dbContext.ProjectHRUCharacteristics.Where(x => x.ProjectID == projectID).ExecuteDeleteAsync();
+            await dbContext.ProjectLoadGeneratingUnits.Where(x => x.ProjectID == projectID).ExecuteDeleteAsync();
+            await dbContext.ProjectNereidResults.Where(x => x.ProjectID == projectID).ExecuteDeleteAsync();
+            await dbContext.ProjectNetworkSolveHistories.Where(x => x.ProjectID == projectID).ExecuteDeleteAsync();
+            await dbContext.DelineationOverlaps.Include(x => x.Delineation).ThenInclude(x => x.TreatmentBMP).Where(x => x.Delineation.TreatmentBMP.ProjectID == projectID).ExecuteDeleteAsync();
+            await dbContext.Delineations.Include(x => x.TreatmentBMP).Where(x => x.TreatmentBMP.ProjectID == projectID).ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPModelingAttributes.Include(x => x.TreatmentBMP).Where(x => x.TreatmentBMP.ProjectID == projectID).ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPs.Where(x => x.ProjectID == projectID).ExecuteDeleteAsync();
+            await dbContext.Projects.Where(x => x.ProjectID == projectID).ExecuteDeleteAsync();
         }
 
-        public static void DeleteProjectNereidResultsAndGrantScores(NeptuneDbContext dbContext, int projectID)
+        public static async Task DeleteProjectNereidResultsAndGrantScores(NeptuneDbContext dbContext, int projectID)
         {
-            var projectNereidResults = dbContext.ProjectNereidResults.Where(x => x.ProjectID == projectID).ToList();
-            dbContext.ProjectNereidResults.RemoveRange(projectNereidResults);
+            await dbContext.ProjectNereidResults.Where(x => x.ProjectID == projectID).ExecuteDeleteAsync();
 
             var project = dbContext.Projects.Single(x => x.ProjectID == projectID);
             project.OCTAWatersheds = null;
@@ -160,10 +154,10 @@ namespace Neptune.EFModels.Entities
             project.DryWeatherWQLRI = null;
             project.WetWeatherWQLRI = null;
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
 
-        public static Project CreateCopy(NeptuneDbContext dbContext, Project projectToCopy, int createPersonID)
+        public static async Task<Project> CreateCopy(NeptuneDbContext dbContext, Project projectToCopy, int createPersonID)
         {
             var dateCreated = DateTime.UtcNow;
             
@@ -183,8 +177,8 @@ namespace Neptune.EFModels.Entities
                 ShareOCTAM2Tier2Scores = false
             };
 
-            dbContext.Projects.Add(newProject);
-            dbContext.SaveChanges();
+            await dbContext.Projects.AddAsync(newProject);
+            await dbContext.SaveChangesAsync();
 
             var treatmentBMPsToCopy = dbContext.TreatmentBMPs.Where(x => x.ProjectID == projectToCopy.ProjectID).ToList();
 
@@ -203,8 +197,8 @@ namespace Neptune.EFModels.Entities
                 SizingBasisTypeID = x.SizingBasisTypeID
             }).ToList();
 
-            dbContext.TreatmentBMPs.AddRange(newTreatmentBMPs);
-            dbContext.SaveChanges();
+            await dbContext.TreatmentBMPs.AddRangeAsync(newTreatmentBMPs);
+            await dbContext.SaveChangesAsync();
 
             var newTreatmentBMPIDsByCopiedTreatmentBMPIDs = treatmentBMPsToCopy
                 .Select(x => new 
@@ -251,7 +245,7 @@ namespace Neptune.EFModels.Entities
                     DryWeatherFlowOverrideID = x.DryWeatherFlowOverrideID
                 });
             
-            dbContext.TreatmentBMPModelingAttributes.AddRange(newModelingAttributes);
+            await dbContext.TreatmentBMPModelingAttributes.AddRangeAsync(newModelingAttributes);
 
             var newDelineations = dbContext.Delineations
                 .Where(x => treatmentBMPIDsToCopy.Contains(x.TreatmentBMPID)).AsEnumerable()
@@ -268,8 +262,8 @@ namespace Neptune.EFModels.Entities
                     HasDiscrepancies = x.HasDiscrepancies
                 }).ToList();
                 
-            dbContext.Delineations.AddRange(newDelineations);
-            dbContext.SaveChanges();
+            await dbContext.Delineations.AddRangeAsync(newDelineations);
+            await dbContext.SaveChangesAsync();
 
             return newProject;
         }

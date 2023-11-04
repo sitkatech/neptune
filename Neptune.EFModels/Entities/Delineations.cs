@@ -148,7 +148,7 @@ namespace Neptune.EFModels.Entities
             return treatmentBMPDisplayDtos;
         }
 
-        public static void MergeDelineations(NeptuneDbContext dbContext, List<DelineationUpsertDto> delineationUpsertDtos, Project project)
+        public static async Task MergeDelineations(NeptuneDbContext dbContext, List<DelineationUpsertDto> delineationUpsertDtos, Project project)
         {
             var existingProjectDelineations = dbContext.Delineations.Include(x => x.TreatmentBMP).Where(x => x.TreatmentBMP.ProjectID == project.ProjectID).ToList();
 
@@ -156,12 +156,12 @@ namespace Neptune.EFModels.Entities
 
             // merge new Delineations
             var newDelineations = delineationUpsertDtos
-                .Select(x => DelineationFromUpsertDto(x)).ToList();
+                .Select(DelineationFromUpsertDto).ToList();
 
             existingProjectDelineations.MergeNew(newDelineations, allDelineationsInDatabase,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID);
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             // update upsert dtos with new DelineationIDs
             foreach (var delineationUpsertDto in delineationUpsertDtos)
@@ -179,19 +179,26 @@ namespace Neptune.EFModels.Entities
                     x.DelineationGeometry4326 = y.DelineationGeometry4326;
                     x.DateLastModified = y.DateLastModified;
                 });
+            await dbContext.SaveChangesAsync();
 
             var delineationsToBeDeletedIDs = existingProjectDelineations.Where(x => newDelineations.Any(y => y.DelineationID == x.DelineationID)).Select(x => x.DelineationID).ToList();
             // delete all the Delineation related entities
-            dbContext.ProjectHRUCharacteristics.RemoveRange(dbContext.ProjectHRUCharacteristics.Include(x => x.ProjectLoadGeneratingUnit).Where(x => x.ProjectLoadGeneratingUnit.DelineationID.HasValue && delineationsToBeDeletedIDs.Contains(x.ProjectLoadGeneratingUnit.DelineationID.Value)).ToList());
-            dbContext.ProjectLoadGeneratingUnits.RemoveRange(dbContext.ProjectLoadGeneratingUnits.Where(x => x.DelineationID.HasValue && delineationsToBeDeletedIDs.Contains(x.DelineationID.Value)).ToList());
-            dbContext.DelineationOverlaps.RemoveRange(dbContext.DelineationOverlaps.Where(x => delineationsToBeDeletedIDs.Contains(x.DelineationID) || delineationsToBeDeletedIDs.Contains(x.DelineationOverlapID)).ToList());
+            await dbContext.ProjectHRUCharacteristics.Include(x => x.ProjectLoadGeneratingUnit).Where(x =>
+                    x.ProjectLoadGeneratingUnit.DelineationID.HasValue &&
+                    delineationsToBeDeletedIDs.Contains(x.ProjectLoadGeneratingUnit.DelineationID.Value))
+                .ExecuteDeleteAsync();
+            await dbContext.ProjectLoadGeneratingUnits
+                .Where(x => x.DelineationID.HasValue && delineationsToBeDeletedIDs.Contains(x.DelineationID.Value))
+                .ExecuteDeleteAsync();
+            await dbContext.DelineationOverlaps.Where(x =>
+                delineationsToBeDeletedIDs.Contains(x.DelineationID) ||
+                delineationsToBeDeletedIDs.Contains(x.DelineationOverlapID)).ExecuteDeleteAsync();
 
             existingProjectDelineations.MergeDelete(newDelineations,
                 (x, y) => x.DelineationID == y.DelineationID,
                 allDelineationsInDatabase);
 
-
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
 
         public static Delineation DelineationFromUpsertDto(DelineationUpsertDto delineationUpsertDto)
@@ -200,7 +207,7 @@ namespace Neptune.EFModels.Entities
             var delineation = new Delineation()
             {
                 DelineationTypeID = delineationUpsertDto.DelineationTypeID,
-                DelineationGeometry4326 = delineationGeometry != null ? delineationGeometry.Geometry : null,
+                DelineationGeometry4326 = delineationGeometry?.Geometry,
                 DelineationGeometry = delineationGeometry != null ? delineationGeometry.Geometry.ProjectTo2771() : null,
                 DateLastModified = DateTime.Now,
                 TreatmentBMPID = delineationUpsertDto.TreatmentBMPID
