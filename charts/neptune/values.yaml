@@ -14,7 +14,7 @@ global:
     nereid: "neptune-nereid"
     gdalApi: "neptune-gdalapi"
     qgisApi: "neptune-qgisapi"
-    nereidRedis: "neptune-nereid-redis:6379"
+    nereidRedis: "neptune-nereid-redis"
   secrets:
     geoserverSqlServerPassword: "passwordhere"
     geoserverAdminPassword: "geomaster"
