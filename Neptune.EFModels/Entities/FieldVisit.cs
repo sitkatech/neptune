@@ -21,6 +21,11 @@ public partial class FieldVisit
 
     public async Task DeleteFull(NeptuneDbContext dbContext)
     {
+        await dbContext.MaintenanceRecordObservationValues
+            .Include(x => x.MaintenanceRecordObservation)
+            .ThenInclude(x => x.MaintenanceRecord)
+            .Where(x => x.MaintenanceRecordObservation.MaintenanceRecord.FieldVisitID == FieldVisitID)
+            .ExecuteDeleteAsync();
         await dbContext.MaintenanceRecordObservations
             .Include(x => x.MaintenanceRecord)
             .Where(x => x.MaintenanceRecord.FieldVisitID == FieldVisitID).ExecuteDeleteAsync();
