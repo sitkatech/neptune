@@ -15,13 +15,5 @@ namespace Neptune.EFModels.Entities
             return !MaintenanceRecordObservationValues.All(y =>
                 string.IsNullOrWhiteSpace(y.ObservationValue));
         }
-
-        public async Task DeleteFull(NeptuneDbContext dbContext)
-        {
-           await dbContext.MaintenanceRecordObservationValues.Where(x =>
-                x.MaintenanceRecordObservationID == MaintenanceRecordObservationID).ExecuteDeleteAsync();
-           await dbContext.MaintenanceRecordObservations.Where(x => x.MaintenanceRecordObservationID == MaintenanceRecordObservationID)
-                .ExecuteDeleteAsync();
-        }
     }
 }
