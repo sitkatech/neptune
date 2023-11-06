@@ -1,4 +1,6 @@
-﻿namespace Neptune.EFModels.Entities
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Neptune.EFModels.Entities
 {
     public partial class NeptuneHomePageImage
     {
@@ -28,5 +30,11 @@
         }
 
         public List<string> GetAdditionalCssClasses() => new();
+
+        public async Task DeleteFull(NeptuneDbContext dbContext)
+        {
+            await dbContext.NeptuneHomePageImages.Where(x => x.NeptuneHomePageImageID == NeptuneHomePageImageID)
+                .ExecuteDeleteAsync();
+        }
     }
 }
