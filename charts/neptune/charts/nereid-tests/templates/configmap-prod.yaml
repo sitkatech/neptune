@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: {{ include "nereid-tests.fullname" . }}-prod-configmap
 data:
-  CELERY_BROKER_URL: "redis://neptune-nereid-redis:6379/0"
-  CELERY_RESULT_BACKEND: "redis://neptune-nereid-redis:6379/0"
+  CELERY_BROKER_URL: "redis://{{ .Values.global.domains.nereidRedis }}/0"
+  CELERY_RESULT_BACKEND: "redis://{{ .Values.global.domains.nereidRedis }}/0"
   NEREID_ASYNC_MODE: "replace"

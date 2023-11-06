@@ -14,6 +14,7 @@ global:
     nereid: "neptune-nereid"
     gdalApi: "neptune-gdalapi"
     qgisApi: "neptune-qgisapi"
+    nereidRedis: "neptune-nereid-redis:6379"
   secrets:
     geoserverSqlServerPassword: "passwordhere"
     geoserverAdminPassword: "geomaster"
@@ -419,7 +420,7 @@ nereid-redis:
   securityContext: {}
   service:
     type: ClusterIP
-    port: 80
+    port: 6379
   ingress:
     enabled: false
     className: ""
@@ -453,7 +454,7 @@ nereid-flower:
   securityContext: {}
   service:
     type: ClusterIP
-    port: 80
+    port: 5555
   ingress:
     enabled: false
     className: ""
