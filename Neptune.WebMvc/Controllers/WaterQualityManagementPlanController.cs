@@ -314,7 +314,6 @@ namespace Neptune.WebMvc.Controllers
             await NereidUtilities.MarkDownstreamNodeDirty(waterQualityManagementPlan, _dbContext);
 
             await waterQualityManagementPlan.DeleteFull(_dbContext);
-            await _dbContext.SaveChangesAsync();
 
             SetMessageForDisplay($"Successfully delete \"{waterQualityManagementPlan.WaterQualityManagementPlanName}\".");
 
@@ -738,8 +737,7 @@ namespace Neptune.WebMvc.Controllers
 
             var lastEditedDate = waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString();
 
-            waterQualityManagementPlanVerify.DeleteFull(_dbContext);
-            await _dbContext.SaveChangesAsync();
+            await waterQualityManagementPlanVerify.DeleteFull(_dbContext);
 
             SetMessageForDisplay($"Successfully deleted \"{lastEditedDate}\".");
 

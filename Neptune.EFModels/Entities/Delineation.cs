@@ -34,6 +34,7 @@ namespace Neptune.EFModels.Entities
         public async Task DeleteFull(NeptuneDbContext dbContext)
         {
             await dbContext.DelineationOverlaps.Where(x => x.DelineationID == DelineationID).ExecuteDeleteAsync();
+            await dbContext.DelineationOverlaps.Where(x => x.OverlappingDelineationID == DelineationID).ExecuteDeleteAsync();
             await dbContext.DirtyModelNodes.Where(x => x.DelineationID == DelineationID).ExecuteDeleteAsync();
             await dbContext.HRUCharacteristics.Include(x => x.LoadGeneratingUnit).Where(x => x.LoadGeneratingUnit.DelineationID == DelineationID)
                 .ExecuteDeleteAsync();

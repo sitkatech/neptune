@@ -18,11 +18,13 @@ namespace Neptune.WebMvc.Security
         public PermissionCheckResult HasPermission(Person person, FieldVisit contextModelObject,
             NeptuneDbContext dbContext)
         {
-            var isAssignedToStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(contextModelObject.TreatmentBMP.StormwaterJurisdictionID);
+            var treatmentBMP =
+                TreatmentBMPs.GetByIDForFeatureContextCheck(dbContext, contextModelObject.TreatmentBMPID);
+            var isAssignedToStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
             if (!isAssignedToStormwaterJurisdiction)
             {
                 return new PermissionCheckResult(
-                    $"You aren't assigned to edit Field Visit data for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                    $"You aren't assigned to edit Field Visit data for Jurisdiction {treatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
             return new PermissionCheckResult();

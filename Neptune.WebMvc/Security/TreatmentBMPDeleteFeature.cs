@@ -17,15 +17,18 @@ namespace Neptune.WebMvc.Security
         public PermissionCheckResult HasPermission(Person person, TreatmentBMP contextModelObject,
             NeptuneDbContext dbContext)
         {
-            var canManageStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(contextModelObject.StormwaterJurisdictionID);
+            var treatmentBMP =
+                TreatmentBMPs.GetByIDForFeatureContextCheck(dbContext, contextModelObject.TreatmentBMPID);
+            var canManageStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
+            var stormwaterJurisdiction = treatmentBMP.StormwaterJurisdiction;
             if (!canManageStormwaterJurisdiction)
             {
-                return new PermissionCheckResult($"You aren't assigned to manage Treatment BMPs for Jurisdiction {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult($"You aren't assigned to manage Treatment BMPs for Jurisdiction {stormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
             if (!(person.IsAdministrator() || person.Role == Role.JurisdictionManager))
             {
-                return new PermissionCheckResult($"You do not have permission to delete Treatment BMPs for Jurisdiction {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult($"You do not have permission to delete Treatment BMPs for Jurisdiction {stormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
             return new PermissionCheckResult();

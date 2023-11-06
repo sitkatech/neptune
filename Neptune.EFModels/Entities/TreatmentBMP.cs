@@ -132,7 +132,8 @@ namespace Neptune.EFModels.Entities
             await dbContext.CustomAttributes.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.DelineationOverlaps
                 .Include(x => x.Delineation)
-                .Where(x => x.Delineation.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+                .Include(x => x.OverlappingDelineation)
+                .Where(x => x.Delineation.TreatmentBMPID == TreatmentBMPID || x.OverlappingDelineation.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.HRUCharacteristics
                 .Include(x => x.LoadGeneratingUnit)
                 .ThenInclude(x => x.Delineation)
