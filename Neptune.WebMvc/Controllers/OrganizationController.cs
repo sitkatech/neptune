@@ -185,7 +185,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewDeleteOrganization(organization, viewModel);
             }
 
-            await Organizations.Delete(_dbContext, organization);
+            await organization.DeleteFull(_dbContext);
             return new ModalDialogFormJsonResult();
         }
 

@@ -95,10 +95,8 @@ public static class Organizations
             .ToDictionary(x => x.Key, x => x.Count);
     }
 
-    public static async Task Delete(NeptuneDbContext dbContext, Organization organization)
+    public static int GetUnknownOrganizationID(NeptuneDbContext dbContext)
     {
-        await dbContext.Projects.Where(x => x.OrganizationID == organization.OrganizationID).ExecuteDeleteAsync();
-        await dbContext.FundingSources.Where(x => x.OrganizationID == organization.OrganizationID).ExecuteDeleteAsync();
-        await dbContext.Organizations.Where(x => x.OrganizationID == organization.OrganizationID).ExecuteDeleteAsync();
+        return dbContext.Organizations.Single(x => x.OrganizationName == Organization.OrganizationUnknown).OrganizationID;
     }
 }
