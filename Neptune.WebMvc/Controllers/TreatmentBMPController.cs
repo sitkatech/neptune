@@ -461,12 +461,12 @@ namespace Neptune.WebMvc.Controllers
             // delete any field visit, assessment, benchmark, and maintenance records
             foreach (var fieldVisit in _dbContext.FieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToList())
             {
-                fieldVisit.DeleteFull(_dbContext);
+                await fieldVisit.DeleteFull(_dbContext);
             }
 
             foreach (var treatmentBMPBenchmarkAndThreshold in treatmentBMP.TreatmentBMPBenchmarkAndThresholds.ToList())
             {
-                treatmentBMPBenchmarkAndThreshold.DeleteFull(_dbContext);
+                await treatmentBMPBenchmarkAndThreshold.DeleteFull(_dbContext);
             }
 
             treatmentBMP.TreatmentBMPBenchmarkAndThresholds = null;

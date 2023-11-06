@@ -32,9 +32,10 @@ namespace Neptune.EFModels.Entities
             return canManageStormwaterJurisdiction;
         }
 
-        public bool CanDelete(Person currentPerson)
+        public bool CanDelete(Person currentPerson, NeptuneDbContext dbContext)
         {
-            var canManageStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdictionID);
+            var treatmentBMP = TreatmentBMPs.GetByTreatmentBMPID(dbContext, TreatmentBMPID);
+            var canManageStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
             return canManageStormwaterJurisdiction;
         }
 

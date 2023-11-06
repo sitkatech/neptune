@@ -324,17 +324,17 @@ namespace Neptune.EFModels.Entities
             return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits}{benchmarkOptionalSpace}{BenchmarkMeasurementUnitType().LegendDisplayName})";
         }
 
-        public void DeleteFull(NeptuneDbContext dbContext)
+        public async Task DeleteFull(NeptuneDbContext dbContext)
         {
-            dbContext.TreatmentBMPBenchmarkAndThresholds.Where(x =>
-                x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID).ExecuteDelete();
-            dbContext.TreatmentBMPObservations
+            await dbContext.TreatmentBMPBenchmarkAndThresholds.Where(x =>
+                x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID).ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPObservations
                 .Where(x => x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID)
-                .ExecuteDelete();
-            dbContext.TreatmentBMPTypeAssessmentObservationTypes.Where(x =>
-                x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID).ExecuteDelete();
-            dbContext.TreatmentBMPAssessmentObservationTypes.Where(x =>
-                x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID).ExecuteDelete();
+                .ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPTypeAssessmentObservationTypes.Where(x =>
+                x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID).ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPAssessmentObservationTypes.Where(x =>
+                x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID).ExecuteDeleteAsync();
         }
     }
 
