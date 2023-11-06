@@ -148,8 +148,7 @@ namespace Neptune.WebMvc.Controllers
             {
                 return ViewDelete(person, viewModel);
             }
-//            _dbContext.People.DeletePerson(person);
-            await _dbContext.SaveChangesAsync();
+            await person.DeleteFull(_dbContext);
             return new ModalDialogFormJsonResult();
         }
 
