@@ -14,7 +14,7 @@ global:
     nereid: "neptune-nereid"
     gdalApi: "neptune-gdalapi"
     qgisApi: "neptune-qgisapi"
-    nereidRedis: "redis:6379"
+    nereidRedis: "neptune-redis:6379"
   secrets:
     geoserverSqlServerPassword: "passwordhere"
     geoserverAdminPassword: "geomaster"
@@ -471,6 +471,7 @@ nereid-celeryworker:
   affinity: {}
 
 redis:
+  fullnameOverride: "neptune-redis"
   architecture: standalone
   commonConfiguration: |-
     appendonly no
