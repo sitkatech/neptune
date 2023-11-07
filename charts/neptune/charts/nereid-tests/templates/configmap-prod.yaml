@@ -5,5 +5,4 @@ metadata:
 data:
   CELERY_BROKER_URL: "redis://{{ .Values.global.domains.nereidRedis }}/0"
   CELERY_RESULT_BACKEND: "redis://{{ .Values.global.domains.nereidRedis }}/0"
-  CELERY_BROKER_CONNECTION_RETRY: "true"
   NEREID_ASYNC_MODE: "replace"
