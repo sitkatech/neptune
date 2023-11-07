@@ -67,6 +67,9 @@ namespace Neptune.EFModels.Entities
                 .ExecuteDeleteAsync();
             await dbContext.ProjectNereidResults.Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID)
                 .ExecuteDeleteAsync();
+            await dbContext.WaterQualityManagementPlanVerifyQuickBMPs
+                .Include(x => x.QuickBMP)
+                .Where(x => x.QuickBMP.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
             await dbContext.QuickBMPs.Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID)
                 .ExecuteDeleteAsync();
             await dbContext.SourceControlBMPs.Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID)
@@ -85,9 +88,6 @@ namespace Neptune.EFModels.Entities
             await dbContext.WaterQualityManagementPlanParcels
                 .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
             await dbContext.WaterQualityManagementPlanVerifyPhotos
-                .Include(x => x.WaterQualityManagementPlanVerify)
-                .Where(x => x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
-            await dbContext.WaterQualityManagementPlanVerifyQuickBMPs
                 .Include(x => x.WaterQualityManagementPlanVerify)
                 .Where(x => x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
             await dbContext.WaterQualityManagementPlanVerifySourceControlBMPs

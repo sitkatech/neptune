@@ -26,11 +26,14 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
     public class BulkDeleteTreatmentBMPsViewData : NeptuneUserControlViewData
     {
         public List<EFModels.Entities.TreatmentBMP> TreatmentBMPs { get; }
+        public string PostUrl { get; }
         public string TreatmentBMPLabel { get; }
 
-        public BulkDeleteTreatmentBMPsViewData(List<EFModels.Entities.TreatmentBMP> treatmentBMPs)
+        public BulkDeleteTreatmentBMPsViewData(List<EFModels.Entities.TreatmentBMP> treatmentBMPs,
+            string postUrl)
         {
             TreatmentBMPs = treatmentBMPs;
+            PostUrl = postUrl;
             TreatmentBMPLabel = $"Treatment BMP" + (TreatmentBMPs.Count > 1 ? "s" : String.Empty);
 
         }

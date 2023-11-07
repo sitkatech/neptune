@@ -55,23 +55,14 @@ namespace Neptune.EFModels.Entities
                 .ExecuteDeleteAsync();
             await dbContext.MaintenanceRecords.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID)
                 .ExecuteDeleteAsync();
+            await dbContext.WaterQualityManagementPlanVerifyQuickBMPs
+                .Include(x => x.QuickBMP)
+                .Where(x => x.QuickBMP.TreatmentBMPTypeID == TreatmentBMPTypeID).ExecuteDeleteAsync();
             await dbContext.QuickBMPs.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID).ExecuteDeleteAsync();
             foreach (var treatmentBMP in dbContext.TreatmentBMPs.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID).ToList())
             {
                 await treatmentBMP.DeleteFull(dbContext);
             }
-            await dbContext.TreatmentBMPAssessmentPhotos
-                .Include(x => x.TreatmentBMPAssessment)
-                .Where(x => x.TreatmentBMPAssessment.TreatmentBMPTypeID == TreatmentBMPTypeID)
-                .ExecuteDeleteAsync();
-            await dbContext.TreatmentBMPObservations
-                .Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID).ExecuteDeleteAsync();
-            await dbContext.TreatmentBMPAssessments
-                .Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID)
-                .ExecuteDeleteAsync();
-            await dbContext.TreatmentBMPBenchmarkAndThresholds
-                .Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID).ExecuteDeleteAsync();
-            await dbContext.TreatmentBMPObservations.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID).ExecuteDeleteAsync();
             await dbContext.TreatmentBMPTypeAssessmentObservationTypes.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID)
                 .ExecuteDeleteAsync();
             await dbContext.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID). ExecuteDeleteAsync();

@@ -598,7 +598,10 @@ namespace Neptune.WebMvc.Controllers
             {
                 treatmentBMPs = TreatmentBMPs.ListByTreatmentBMPIDList(_dbContext, viewModel.TreatmentBMPIDList).ToList();
             }
-            var viewData = new BulkDeleteTreatmentBMPsViewData(treatmentBMPs);
+
+            var viewData = new BulkDeleteTreatmentBMPsViewData(treatmentBMPs,
+                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator,
+                    x => x.BulkDeleteTreatmentBMPsModal(null)));
             return RazorPartialView<BulkDeleteTreatmentBMPs, BulkDeleteTreatmentBMPsViewData, BulkDeleteTreatmentBMPsViewModel>(viewData, viewModel);
         }
 
