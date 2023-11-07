@@ -472,6 +472,7 @@ nereid-celeryworker:
 
 redis:
   architecture: standalone
+  namespace: h2o
   auth:
     enabled: false
   commonConfiguration: |-
