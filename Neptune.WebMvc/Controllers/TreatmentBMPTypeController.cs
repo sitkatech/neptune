@@ -223,7 +223,7 @@ namespace Neptune.WebMvc.Controllers
         [HttpPost("{treatmentBMPTypePrimaryKey}")]
         [NeptuneAdminFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPTypePrimaryKey")]
-        public ActionResult Delete([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey, ConfirmDialogFormViewModel viewModel)
+        public async Task<IActionResult> Delete([FromRoute] TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -232,7 +232,7 @@ namespace Neptune.WebMvc.Controllers
             }
 
             var message = $"{FieldDefinitionType.TreatmentBMPType.GetFieldDefinitionLabel()} '{treatmentBMPType.TreatmentBMPTypeName}' successfully deleted!";
-            treatmentBMPType.DeleteFull(_dbContext);
+            await treatmentBMPType.DeleteFull(_dbContext);
             SetMessageForDisplay(message);
             return new ModalDialogFormJsonResult();
         }

@@ -504,7 +504,7 @@ namespace Neptune.WebMvc.Controllers
             // delete any custom attributes that are not valid for the new treatment bmp type
             foreach (var customAttribute in treatmentBMP.CustomAttributes.ToList())
             {
-                customAttribute.DeleteFull(_dbContext);
+                await customAttribute.DeleteFull(_dbContext);
             }
             // force a save changes to clear out fk references when we switch the bmp type
             await _dbContext.SaveChangesAsync();
@@ -559,11 +559,7 @@ namespace Neptune.WebMvc.Controllers
             }
             await _dbContext.SaveChangesAsync();
             
-            // todo: The code-generated DeleteFull is brittle since it touches the LGU system.
-            // We should write a more finely-grained delete that deletes delineations via the
-            // pattern established in DelineationController
             await treatmentBMP.DeleteFull(_dbContext);
-            await _dbContext.SaveChangesAsync();
             
             // queue an LGU refresh for the area no longer governed by this BMP
             if (isDelineationDistributed && delineationGeometry != null)
@@ -642,11 +638,7 @@ namespace Neptune.WebMvc.Controllers
                     }
                     await _dbContext.SaveChangesAsync();
 
-                    // todo: The code-generated DeleteFull is brittle since it touches the LGU system.
-                    // We should write a more finely-grained delete that deletes delineations via the
-                    // pattern established in DelineationController
-                    treatmentBMP.DeleteFull(_dbContext);
-                    await _dbContext.SaveChangesAsync();
+                    await treatmentBMP.DeleteFull(_dbContext);
 
                     // queue an LGU refresh for the area no longer governed by this BMP
                     if (isDelineationDistributed && delineation?.DelineationGeometry != null)
