@@ -37,9 +37,11 @@ namespace Neptune.EFModels.Entities
             return $"{FirstName} {LastName}";
         }
 
-        public string GetFullNameFirstLastAndOrg()
+        public string GetFullNameFirstLastAndOrg(NeptuneDbContext dbContext)
         {
-            return $"{FirstName} {LastName} - {Organization.GetDisplayName()}";
+            var organizationDisplayName =
+                dbContext.Organizations.Single(x => x.OrganizationID == OrganizationID).GetDisplayName();
+            return $"{FirstName} {LastName} - {organizationDisplayName}";
         }
 
         public string GetFullNameFirstLastAndOrgShortName()
@@ -110,6 +112,11 @@ namespace Neptune.EFModels.Entities
         public bool IsAnonymousOrUnassigned()
         {
             return IsAnonymousUser() || Role == Role.Unassigned;
+        }
+
+        public bool CanDelete(Person currentPerson)
+        {
+            return currentPerson.RoleID is (int)RoleEnum.Admin or (int)RoleEnum.SitkaAdmin;
         }
 
 

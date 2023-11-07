@@ -183,17 +183,6 @@ namespace Neptune.EFModels.Entities
                 .Include(x => x.FundingEvent)
                 .Where(x => x.FundingEvent.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.FundingEvents.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
-            await dbContext.MaintenanceRecordObservationValues
-                .Include(x => x.MaintenanceRecordObservation)
-                .ThenInclude(x => x.MaintenanceRecord)
-                .Where(x => x.MaintenanceRecordObservation.MaintenanceRecord.TreatmentBMPID == TreatmentBMPID)
-                .ExecuteDeleteAsync();
-            await dbContext.MaintenanceRecordObservations
-                .Include(x => x.MaintenanceRecord)
-                .Where(x => x.MaintenanceRecord.TreatmentBMPID == TreatmentBMPID)
-                .ExecuteDeleteAsync();
-            await dbContext.MaintenanceRecords.Where(x => x.TreatmentBMPID == TreatmentBMPID)
-                .ExecuteDeleteAsync();
             await dbContext.NereidResults.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.ProjectNereidResults.Where(x => x.TreatmentBMPID == TreatmentBMPID). ExecuteDeleteAsync();
             await dbContext.RegionalSubbasinRevisionRequests.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();

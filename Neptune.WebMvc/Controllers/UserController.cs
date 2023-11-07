@@ -126,9 +126,9 @@ namespace Neptune.WebMvc.Controllers
         private PartialViewResult ViewDelete(Person person, ConfirmDialogFormViewModel viewModel)
         {
             //todo: var canDelete = !person.HasDependentObjects() && person != CurrentPerson;
-            var canDelete = false;
+            var canDelete = person.CanDelete(CurrentPerson);
             var confirmMessage = canDelete
-                ? $"Are you sure you want to delete {person.GetFullNameFirstLastAndOrg()}?"
+                ? $"Are you sure you want to delete {person.GetFullNameFirstLastAndOrg(_dbContext)}?"
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Person",
                     UrlTemplate.MakeHrefString(
                         SitkaRoute<UserController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(person.PersonID)),
