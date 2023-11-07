@@ -27,9 +27,9 @@ public class NereidService : BaseAPIService<NereidService>
     public async Task<NereidResult<TResp>> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl)
     {
         //todo: log nereid requests for troubleshooting?
-        //var serializedRequest = GeoJsonSerializer.Serialize(nereidRequestObject);
-        //Logger.LogInformation(serializedRequest);
-		//var requestStringContent = new StringContent(serializedRequest, System.Text.Encoding.UTF8, "application/json");
+        var serializedRequest = GeoJsonSerializer.Serialize(nereidRequestObject);
+        Logger.LogInformation(serializedRequest);
+        //var requestStringContent = new StringContent(serializedRequest, System.Text.Encoding.UTF8, "application/json");
         //Logger.LogInformation($"Executing Nereid request: {nereidRequestUrl}");
         //var requestLogFile = Path.Combine(_neptuneConfiguration.NereidLogFileFolder, $"NereidRequest_{DateTime.Now:yyyyMMddHHmmss}.json");
         //await File.WriteAllTextAsync(requestLogFile, serializedRequest);
@@ -50,12 +50,7 @@ public class NereidService : BaseAPIService<NereidService>
 
         while (executing)
         {
-            //MP 3/18/22 This is a temporary necessity because Nereid won't return urls with the proper protocol
-            //Austin is looking into it but for now this will let the environments work properly
-            if (resultRoute != null && resultRoute.StartsWith("http:"))
-            {
-                resultRoute = resultRoute.Replace("http:", "https:");
-            }
+            Logger.LogInformation(resultRoute);
             nereidResultResponse = await HttpClient.GetFromJsonAsync<NereidResult<TResp>>($"{resultRoute}");
 
             if (nereidResultResponse.Detail != null)
