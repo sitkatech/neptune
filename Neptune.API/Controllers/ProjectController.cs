@@ -65,7 +65,7 @@ namespace Neptune.API.Controllers
 
         [HttpPost("projects/new")]
         [JurisdictionEditFeature]
-        public ActionResult<ProjectSimpleDto> New([FromBody] ProjectUpsertDto projectCreateDto)
+        public async Task<ActionResult<ProjectSimpleDto>> New([FromBody] ProjectUpsertDto projectCreateDto)
         {
             if (!ModelState.IsValid)
             {
@@ -83,13 +83,13 @@ namespace Neptune.API.Controllers
                 ModelState.AddModelError("ProjectName", $"A project with the name {projectCreateDto.ProjectName} already exists");
                 return BadRequest(ModelState);
             }
-            var project = Projects.CreateNew(_dbContext, projectCreateDto, personDto);
+            var project = await Projects.CreateNew(_dbContext, projectCreateDto, personDto);
             return Ok(project);
         }
 
         [HttpPost("projects/{projectID}/update")]
         [JurisdictionEditFeature]
-        public IActionResult Update([FromRoute] int projectID, [FromBody] ProjectUpsertDto projectCreateDto)
+        public async Task<IActionResult> Update([FromRoute] int projectID, [FromBody] ProjectUpsertDto projectCreateDto)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var project = Projects.GetByIDWithChangeTracking(_dbContext, projectID);
@@ -101,7 +101,7 @@ namespace Neptune.API.Controllers
             {
                 return Forbid();
             }
-            Projects.Update(_dbContext, project, projectCreateDto, personDto.PersonID);
+            await Projects.Update(_dbContext, project, projectCreateDto, personDto.PersonID);
             return Ok();
         }
 
