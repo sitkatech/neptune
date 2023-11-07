@@ -213,7 +213,8 @@ namespace Neptune.WebMvc.Controllers
             var hasMissingModelingAttributes = treatmentBMPType.HasMissingModelingAttributes(treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP);
             var regionalSubbasinRevisionRequest = RegionalSubbasinRevisionRequests.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID).SingleOrDefault(x =>
                 x.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Open);
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, treatmentBMPType, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl, hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, otherTreatmentBmpsExistInSubbasin, hasMissingModelingAttributes, customAttributes, fundingEvents, treatmentBMPBenchmarkAndThresholds, treatmentBMPDocuments, delineation, delineationOverlapDelineations, upstreamestBMP, regionalSubbasinRevisionRequest);
+            var watershed = treatmentBMP.WatershedID.HasValue ? _dbContext.Watersheds.AsNoTracking().Single(x => x.WatershedID == treatmentBMP.WatershedID.Value) : null;
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, treatmentBMPType, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl, hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, otherTreatmentBmpsExistInSubbasin, hasMissingModelingAttributes, customAttributes, fundingEvents, treatmentBMPBenchmarkAndThresholds, treatmentBMPDocuments, delineation, delineationOverlapDelineations, upstreamestBMP, regionalSubbasinRevisionRequest, watershed);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

@@ -141,6 +141,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public List<EFModels.Entities.TreatmentBMPDocument> TreatmentBMPDocuments { get; }
         public EFModels.Entities.Delineation? Delineation { get; }
         public EFModels.Entities.TreatmentBMP? UpstreamestBMP { get; }
+        public Watershed? Watershed { get; }
 
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
@@ -149,7 +150,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
             string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl,
             ModeledPerformanceViewData modeledPerformanceViewData, bool otherTreatmentBmpsExistInSubbasin,
-            bool hasMissingModelingAttributes, List<CustomAttribute> customAttributes, List<EFModels.Entities.FundingEvent> fundingEvents, List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, List<EFModels.Entities.TreatmentBMPDocument> treatmentBMPDocuments, EFModels.Entities.Delineation? delineation, ICollection<DelineationOverlap>? delineationOverlapDelineations, EFModels.Entities.TreatmentBMP? upstreamestBMP, EFModels.Entities.RegionalSubbasinRevisionRequest? regionalSubbasinRevisionRequest)
+            bool hasMissingModelingAttributes, List<CustomAttribute> customAttributes, List<EFModels.Entities.FundingEvent> fundingEvents, List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, List<EFModels.Entities.TreatmentBMPDocument> treatmentBMPDocuments, EFModels.Entities.Delineation? delineation, ICollection<DelineationOverlap>? delineationOverlapDelineations, EFModels.Entities.TreatmentBMP? upstreamestBMP, EFModels.Entities.RegionalSubbasinRevisionRequest? regionalSubbasinRevisionRequest, Watershed? watershed)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             TreatmentBMP = treatmentBMP;
@@ -229,7 +230,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
 
             ChangeTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.ConvertTreatmentBMPType(treatmentBMP));
             
-            HasModelingAttributes = TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP != null;
+            HasModelingAttributes = treatmentBMPType.TreatmentBMPModelingTypeID != null;
 
             FieldDefinitionForAverageDivertedFlowrate = FieldDefinitionType.AverageDivertedFlowrate;
             FieldDefinitionForAverageTreatmentFlowrate = FieldDefinitionType.AverageTreatmentFlowrate;
@@ -264,6 +265,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverride;
 
             OpenRevisionRequest = regionalSubbasinRevisionRequest;
+            Watershed = watershed;
             OpenRevisionRequestDetailUrl = regionalSubbasinRevisionRequest == null
                 ? string.Empty
                 : SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(linkGenerator,

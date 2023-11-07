@@ -294,7 +294,7 @@ if (ViewDataTyped.OpenRevisionRequest != null)
                                     <td>
                                         @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForWatershed)
                                     </td>
-                                    <td class="text-right">@(ViewDataTyped.TreatmentBMP.Watershed != null ? ViewDataTyped.TreatmentBMP.Watershed.WatershedName : string.Empty)</td>
+                                    <td class="text-right">@(ViewDataTyped.Watershed != null ? ViewDataTyped.Watershed.WatershedName : string.Empty)</td>
                                 </tr>
                                 @switch (ViewDataTyped.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
                                 {
