@@ -472,6 +472,8 @@ nereid-celeryworker:
 
 redis:
   architecture: standalone
+  auth:
+    enabled: false
   commonConfiguration: |-
     appendonly no
     save "" 
