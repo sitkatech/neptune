@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,8 @@ public class NereidService : BaseAPIService<NereidService>
     public async Task<NereidResult<TResp>> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl)
     {
         //todo: log nereid requests for troubleshooting?
-        //var serializedRequest = GeoJsonSerializer.Serialize(nereidRequestObject);
+        var serializedRequest = GeoJsonSerializer.Serialize(nereidRequestObject);
+        Logger.LogInformation(serializedRequest);
         //var requestStringContent = new StringContent(serializedRequest, System.Text.Encoding.UTF8, "application/json");
         //Logger.LogInformation($"Executing Nereid request: {nereidRequestUrl}");
         //var requestLogFile = Path.Combine(_neptuneConfiguration.NereidLogFileFolder, $"NereidRequest_{DateTime.Now:yyyyMMddHHmmss}.json");
@@ -48,12 +50,7 @@ public class NereidService : BaseAPIService<NereidService>
 
         while (executing)
         {
-            //MP 3/18/22 This is a temporary necessity because Nereid won't return urls with the proper protocol
-            //Austin is looking into it but for now this will let the environments work properly
-            if (resultRoute != null && resultRoute.StartsWith("http:"))
-            {
-                resultRoute = resultRoute.Replace("http:", "https:");
-            }
+            Logger.LogInformation(resultRoute);
             nereidResultResponse = await HttpClient.GetFromJsonAsync<NereidResult<TResp>>($"{resultRoute}");
 
             if (nereidResultResponse.Detail != null)
@@ -181,6 +178,8 @@ public class NereidService : BaseAPIService<NereidService>
             }
         }
 
+        var modelBasins = dbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
+        var precipitationZones = dbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
         var missingNodeIDs = new List<string>();
         foreach (var parallel in solutionSequenceResult.Data.SolutionSequence.Parallel)
         {
@@ -190,7 +189,7 @@ public class NereidService : BaseAPIService<NereidService>
                 var subgraph = MakeSubgraphFromParentGraphAndNodes(graph, seriesNodes);
 
                 var notFoundNodes = await SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWQMPNodes,
-                    allModelingQuickBMPs, isBaselineCondition, projectDistributedDelineationIDs);
+                    allModelingQuickBMPs, isBaselineCondition, modelBasins, precipitationZones, projectDistributedDelineationIDs);
                 missingNodeIDs.AddRange(notFoundNodes);
             }
         }
@@ -259,9 +258,10 @@ public class NereidService : BaseAPIService<NereidService>
 
 
     public async Task<List<string>> SolveSubgraph(Graph subgraph,
-    List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs,
-    List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes,
-    List<QuickBMP> allModelingQuickBMPs, bool isBaselineCondition, List<int> projectDelineationIDs = null)
+        List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs,
+        List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes,
+        List<QuickBMP> allModelingQuickBMPs, bool isBaselineCondition, Dictionary<int, int> modelBasins,
+        Dictionary<int, double> precipitationZones, List<int> projectDelineationIDs = null)
     {
         var notFoundNodes = new List<string>();
 
@@ -288,7 +288,7 @@ public class NereidService : BaseAPIService<NereidService>
             .Where(x => treatmentBMPToIncludeIDs.Contains(x.TreatmentBMPID) &&
                         // Don't create TreatmentFacilities for BMPs belonging to a Simple WQMP
                         x.WaterQualityManagementPlan?.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
-            .Select(x => x.ToTreatmentFacility(isBaselineCondition)).ToList();
+            .Select(x => x.ToTreatmentFacility(isBaselineCondition, modelBasins, precipitationZones)).ToList();
 
         var filteredQuickBMPs = allModelingQuickBMPs
             .Where(x => waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID) &&
@@ -374,7 +374,7 @@ public class NereidService : BaseAPIService<NereidService>
                 var previousResults = new JsonObject();
                 foreach (var key in previousResultsKeys)
                 {
-                    var value = dataLeafResult[key];
+                    var value = JsonSerializer.SerializeToNode(dataLeafResult[key], GeoJsonSerializer.DefaultSerializerOptions);
                     previousResults.Add(key, value);
                 }
 

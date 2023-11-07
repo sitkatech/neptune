@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: {{ include "nereid-celeryworker.fullname" . }}-prod-configmap
 data:
-  CELERY_BROKER_URL: "redis://nereid-redis:6379/0"
-  CELERY_RESULT_BACKEND: "redis://nereid-redis:6379/0"
+  CELERY_BROKER_URL: "redis://{{ .Values.global.domains.nereidRedis }}/0"
+  CELERY_RESULT_BACKEND: "redis://{{ .Values.global.domains.nereidRedis }}/0"

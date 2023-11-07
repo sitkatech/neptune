@@ -1,13 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Net.Mail;
-using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.Common.Email;
-using Neptune.Common.GeoSpatial;
 using Neptune.Common.Services;
 using Neptune.Common.Services.GDAL;
 using Neptune.EFModels.Entities;
@@ -42,14 +39,14 @@ namespace Neptune.Jobs.Hangfire
             _sitkaSmtpClient = sitkaSmtpClientService;
         }
 
-        public async void RunNetworkSolveForProject(int projectID, int projectNetworkSolveHistoryID)
+        public async Task RunNetworkSolveForProject(int projectID, int projectNetworkSolveHistoryID)
         {
-            var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
+            var project = _dbContext.Projects.AsNoTracking().SingleOrDefault(x => x.ProjectID == projectID);
             if (project == null)
             {
                 throw new NullReferenceException($"Project with ID {projectID} does not exist!");
             }
-            var projectNetworkSolveHistory = _dbContext.ProjectNetworkSolveHistories.Include(x => x.RequestedByPerson).AsNoTracking().First(x => x.ProjectNetworkSolveHistoryID == projectNetworkSolveHistoryID);
+            var projectNetworkSolveHistory = _dbContext.ProjectNetworkSolveHistories.Include(x => x.RequestedByPerson).First(x => x.ProjectNetworkSolveHistoryID == projectNetworkSolveHistoryID);
             var projectRegionalSubbasinIDs = _dbContext.TreatmentBMPs.AsNoTracking().Where(x => x.ProjectID == projectID).Select(x => x.RegionalSubbasinID).Distinct().ToList();
 
             var regionalSubbasinIDs = _dbContext.vRegionalSubbasinUpstreams.AsNoTracking()

@@ -33,7 +33,7 @@ public class QgisRunnerController : ControllerBase
     }
 
     [HttpPost("qgis/generate-plgus")]
-    public async Task<IActionResult> GenerateProjectLoadGeneratingUnits([FromForm] GenerateProjectLoadGeneratingUnitRequestDto requestDto)
+    public async Task<IActionResult> GenerateProjectLoadGeneratingUnits([FromBody] GenerateProjectLoadGeneratingUnitRequestDto requestDto)
     {
         var projectID = requestDto.ProjectID;
         var project = _dbContext.Projects.AsNoTracking().SingleOrDefault(x => x.ProjectID == projectID);
@@ -92,7 +92,7 @@ public class QgisRunnerController : ControllerBase
     }
 
     [HttpPost("qgis/generate-lgus")]
-    public async Task<IActionResult> GenerateLoadGeneratingUnits([FromForm] GenerateLoadGeneratingUnitRequestDto requestDto)
+    public async Task<IActionResult> GenerateLoadGeneratingUnits([FromBody] GenerateLoadGeneratingUnitRequestDto requestDto)
     {
         var outputFolder = Path.GetTempPath();
         var outputLayerPrefix = $"LGU{DateTime.Now.Ticks}";
@@ -155,7 +155,7 @@ public class QgisRunnerController : ControllerBase
     }
 
     [HttpPost("qgis/generate-tgus")]
-    public async Task<IActionResult> GenerateTrashGeneratingUnits([FromForm] GenerateTrashGeneratingUnitRequestDto requestDto)
+    public async Task<IActionResult> GenerateTrashGeneratingUnits([FromBody] GenerateTrashGeneratingUnitRequestDto requestDto)
     {
         var outputFolder = Path.GetTempPath();
         var outputLayerPrefix = $"TGU{DateTime.Now.Ticks}";

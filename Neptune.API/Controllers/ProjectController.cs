@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Neptune.API.Hangfire;
 using Neptune.Jobs.Hangfire;
 using DelineationSimpleDto = Neptune.Models.DataTransferObjects.DelineationSimpleDto;
 using ProjectDocumentSimpleDto = Neptune.Models.DataTransferObjects.ProjectDocumentSimpleDto;
@@ -199,10 +198,10 @@ namespace Neptune.API.Controllers
 
         [HttpDelete("projects/{projectID}/delete")]
         [JurisdictionEditFeature]
-        public IActionResult Delete([FromRoute] int projectID)
+        public async Task<IActionResult> Delete([FromRoute] int projectID)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var project = Projects.GetByIDWithChangeTracking(_dbContext, projectID);
+            var project = Projects.GetByID(_dbContext, projectID);
             if (ThrowNotFound(project, "Project", projectID, out var actionResult))
             {
                 return actionResult;
@@ -211,7 +210,7 @@ namespace Neptune.API.Controllers
             {
                 return Forbid();
             }
-            Projects.Delete(_dbContext, projectID);
+            await Projects.Delete(_dbContext, projectID);
             return Ok();
         }
 
@@ -300,20 +299,20 @@ namespace Neptune.API.Controllers
             await _dbContext.SaveChangesAsync();
 
             BackgroundJob.Enqueue<ProjectNetworkSolveJob>(x => x.RunNetworkSolveForProject(projectID, projectNetworkSolveHistoryEntity.ProjectNetworkSolveHistoryID));
-            return Ok($"Network solve for Project with ID:{projectID} has begun.");
+            return Ok();
         }
 
         [HttpGet("projects/{projectID}/delineations")]
         [UserViewFeature]
         public ActionResult<List<DelineationUpsertDto>> GetDelineationsByProjectID([FromRoute] int projectID)
         {
-            var DelineationUpsertDtos = Delineations.ListByProjectIDAsUpsertDto(_dbContext, projectID);
-            return Ok(DelineationUpsertDtos);
+            var delineationUpsertDtos = Delineations.ListByProjectIDAsUpsertDto(_dbContext, projectID);
+            return Ok(delineationUpsertDtos);
         }
 
         [HttpPut("projects/{projectID}/delineations")]
         [JurisdictionEditFeature]
-        public ActionResult MergeDelineationsForProject(List<DelineationUpsertDto> delineationUpsertDtos, [FromRoute] int projectID)
+        public async Task<IActionResult> MergeDelineationsForProject([FromRoute] int projectID, List<DelineationUpsertDto> delineationUpsertDtos)
         {
             // project validation here
             var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
@@ -322,8 +321,8 @@ namespace Neptune.API.Controllers
                 return BadRequest();
             }
 
-            Projects.DeleteProjectNereidResultsAndGrantScores(_dbContext, projectID);
-            Delineations.MergeDelineations(_dbContext, delineationUpsertDtos, project);
+            await Projects.DeleteProjectNereidResultsAndGrantScores(_dbContext, projectID);
+            await Delineations.MergeDelineations(_dbContext, delineationUpsertDtos, project);
 
             var personID = UserContext.GetUserFromHttpContext(_dbContext, HttpContext).PersonID;
             Projects.SetUpdatePersonAndDate(_dbContext, projectID, personID);
@@ -333,7 +332,7 @@ namespace Neptune.API.Controllers
 
         [HttpPost("projects/{projectID}/copy")]
         [JurisdictionEditFeature]
-        public ActionResult<int> CreateProjectCopy([FromRoute] int projectID)
+        public async Task<ActionResult<int>> CreateProjectCopy([FromRoute] int projectID)
         {
             var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var project = Projects.GetByIDWithChangeTracking(_dbContext, projectID);
@@ -342,7 +341,7 @@ namespace Neptune.API.Controllers
                 return Forbid();
             }
 
-            var newProject = Projects.CreateCopy(_dbContext, project, person.PersonID);
+            var newProject = await Projects.CreateCopy(_dbContext, project, person.PersonID);
             return Ok(newProject.ProjectID);
         }
 

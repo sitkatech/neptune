@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Neptune.Models.DataTransferObjects;
 using Neptune.Models.DataTransferObjects;
 using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
-using Neptune.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using ProjNet.CoordinateSystems;
 
 namespace Neptune.API.Controllers
 {

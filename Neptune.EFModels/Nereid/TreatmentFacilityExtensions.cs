@@ -5,15 +5,17 @@ namespace Neptune.EFModels.Nereid;
 
 public static class TreatmentFacilityExtensions
 {
-    public static TreatmentFacility ToTreatmentFacility(this TreatmentBMP treatmentBMP, bool isBaselineCondition)
+    public static TreatmentFacility ToTreatmentFacility(this TreatmentBMP treatmentBMP, bool isBaselineCondition,
+        Dictionary<int, int> modelBasins, Dictionary<int, double> precipitationZones)
     {
         var treatmentBMPNodeID = NereidUtilities.TreatmentBMPNodeID(treatmentBMP.TreatmentBMPID);
-        var modelBasinKey = treatmentBMP.ModelBasin?.ModelBasinKey.ToString();
+        var modelBasinKey = treatmentBMP.ModelBasinID.HasValue && modelBasins.TryGetValue(treatmentBMP.ModelBasinID.Value, out var modelBasinID) ? modelBasinID.ToString() : null;
         var isFullyParameterized = treatmentBMP.IsFullyParameterized(treatmentBMP.Delineation);
         double? treatmentRate = null;
         var modelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
 
         // in the baseline condition, anything built after 2003 is treated as if it doesn't exist.
+        var designStormwaterDepth =  treatmentBMP.PrecipitationZoneID.HasValue && precipitationZones.TryGetValue(treatmentBMP.PrecipitationZoneID.Value, out var designStormwaterDepthInInches) ? designStormwaterDepthInInches : (double?)null;
         if (!isFullyParameterized || 
             (isBaselineCondition && treatmentBMP.YearBuilt.HasValue && treatmentBMP.YearBuilt.Value > Constants.NEREID_BASELINE_CUTOFF_YEAR))
         {
@@ -22,7 +24,7 @@ public static class TreatmentFacilityExtensions
                 NodeID = treatmentBMPNodeID,
                 FacilityType = "NoTreatment",
                 ReferenceDataKey = modelBasinKey,
-                DesignStormwaterDepth = treatmentBMP.PrecipitationZone?.DesignStormwaterDepthInInches ?? .8,
+                DesignStormwaterDepth = designStormwaterDepth ?? .8,
                 EliminateAllDryWeatherFlowOverride = modelingAttribute?.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
             };
         }
@@ -96,7 +98,7 @@ public static class TreatmentFacilityExtensions
             NodeID = treatmentBMPNodeID,
             FacilityType = treatmentBMP.TreatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeName,
             ReferenceDataKey = modelBasinKey,
-            DesignStormwaterDepth = treatmentBMP.PrecipitationZone?.DesignStormwaterDepthInInches,
+            DesignStormwaterDepth = designStormwaterDepth,
             DesignCapacity = designCapacity,
             DesignMediaFiltrationRate = modelingAttribute.DesignMediaFiltrationRate,
             //convert Days to Hours for this field.

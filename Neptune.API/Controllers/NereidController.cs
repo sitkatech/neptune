@@ -265,9 +265,12 @@ namespace Neptune.API.Controllers
             var modelingTreatmentBMPs = TreatmentBMPs.ListModelingTreatmentBMPs(_dbContext);
             var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionaryForTreatmentBMPIDList(_dbContext, modelingTreatmentBMPs.Select(x => x.TreatmentBMPID).ToList());
 
+            var modelBasins = _dbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
+            var precipitationZones = _dbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
+
             var treatmentFacilities = modelingTreatmentBMPs
                 .Where(x => x.IsFullyParameterized(delineations[x.TreatmentBMPID]))
-                .Select(x => x.ToTreatmentFacility(false)).ToList();
+                .Select(x => x.ToTreatmentFacility(false, modelBasins, precipitationZones)).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities };
 
@@ -295,9 +298,11 @@ namespace Neptune.API.Controllers
         [SitkaAdminFeature]
         public async Task<IActionResult> ValidateTreatmentFacility([FromRoute] int treatmentBMPID)
         {
-            var treatmentFacilityUrl = "api/v1/treatment_facility/validate?state=ca&region=oc";
+            const string treatmentFacilityUrl = "api/v1/treatment_facility/validate?state=ca&region=oc";
+            var modelBasins = _dbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
+            var precipitationZones = _dbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
 
-            var treatmentFacility = TreatmentBMPs.GetByID(_dbContext, treatmentBMPID).ToTreatmentFacility(true);
+            var treatmentFacility = TreatmentBMPs.GetByID(_dbContext, treatmentBMPID).ToTreatmentFacility(true, modelBasins, precipitationZones);
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = new List<TreatmentFacility> {treatmentFacility} };
 
@@ -326,9 +331,11 @@ namespace Neptune.API.Controllers
         [SitkaAdminFeature]
         public async Task<IActionResult> NoTreatmentFacility()
         {
-            var treatmentFacilityUrl = "api/v1/treatment_facility/validate?state=ca&region=oc";
+            const string treatmentFacilityUrl = "api/v1/treatment_facility/validate?state=ca&region=oc";
+            var modelBasins = _dbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
+            var precipitationZones = _dbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
             var treatmentFacilities = _dbContext.TreatmentBMPs
-                .Where(x => x.TreatmentBMPID == 9974).ToList().Select(x => x.ToTreatmentFacility(true)).ToList();
+                .Where(x => x.TreatmentBMPID == 9974).ToList().Select(x => x.ToTreatmentFacility(true,modelBasins, precipitationZones)).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities };
             try
@@ -392,9 +399,11 @@ namespace Neptune.API.Controllers
         [SitkaAdminFeature]
         public IActionResult TreatmentFacilityTable()
         {
+            var modelBasins = _dbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
+            var precipitationZones = _dbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
             var treatmentFacilities = TreatmentBMPs.ListModelingTreatmentBMPs(_dbContext)
                 .ToList()
-                .Select(x => x.ToTreatmentFacility(false)).ToList();
+                .Select(x => x.ToTreatmentFacility(false, modelBasins, precipitationZones)).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities };
             return Ok(treatmentFacilityTable);
@@ -445,7 +454,10 @@ namespace Neptune.API.Controllers
             var allModelingQuickBMPs = _dbContext.QuickBMPs.AsNoTracking().Include(x => x.TreatmentBMPType)
                 .Where(x => x.PercentOfSiteTreated != null && x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList();
 
-            var responseContent = await _nereidService.SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWQMPNodes, allModelingQuickBMPs, true);
+            var modelBasins = _dbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
+            var precipitationZones = _dbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
+
+            var responseContent = await _nereidService.SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWQMPNodes, allModelingQuickBMPs, true, modelBasins, precipitationZones);
 
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
             stopwatch.Stop();

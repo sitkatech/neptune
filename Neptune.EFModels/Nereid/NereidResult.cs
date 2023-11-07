@@ -8,6 +8,7 @@ namespace Neptune.EFModels.Nereid
         [JsonPropertyName("task_id")]
         public string TaskID { get; set; }
         [JsonPropertyName("status")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public NereidJobStatus Status { get; set; }
         [JsonPropertyName("data")]
         public T Data { get; set; }

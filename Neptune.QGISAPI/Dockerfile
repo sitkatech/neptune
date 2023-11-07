@@ -37,4 +37,9 @@ RUN dotnet publish "Neptune.QGISAPI.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+# copy the python scripts
+COPY --from=publish /src/Neptune.QGISAPI/pyqgis_utils.py .
+COPY --from=publish /src/Neptune.QGISAPI/ComputeTrashGeneratingUnits.py .
+COPY --from=publish /src/Neptune.QGISAPI/ModelingOverlayAnalysis.py .
+
 ENTRYPOINT ["dotnet", "Neptune.QGISAPI.dll"]
