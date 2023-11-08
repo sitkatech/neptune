@@ -141,13 +141,13 @@ namespace Neptune.API.Controllers
                     x.DesignLowFlowDiversionCapacity = y.DesignLowFlowDiversionCapacity;
                     x.DesignMediaFiltrationRate = y.DesignMediaFiltrationRate;
                     x.DiversionRate = y.DiversionRate;
-                    x.DrawdownTimeforWQDetentionVolume = y.DrawdownTimeforWQDetentionVolume;
+                    x.DrawdownTimeForWQDetentionVolume = y.DrawdownTimeForWQDetentionVolume;
                     x.EffectiveFootprint = y.EffectiveFootprint;
                     x.EffectiveRetentionDepth = y.EffectiveRetentionDepth;
                     x.InfiltrationDischargeRate = y.InfiltrationDischargeRate;
                     x.InfiltrationSurfaceArea = y.InfiltrationSurfaceArea;
                     x.MediaBedFootprint = y.MediaBedFootprint;
-                    x.PermanentPoolorWetlandVolume = y.PermanentPoolorWetlandVolume;
+                    x.PermanentPoolOrWetlandVolume = y.PermanentPoolOrWetlandVolume;
                     x.RoutingConfigurationID = y.RoutingConfigurationID;
                     x.StorageVolumeBelowLowestOutletElevation = y.StorageVolumeBelowLowestOutletElevation;
                     x.SummerHarvestedWaterDemand = y.SummerHarvestedWaterDemand;

@@ -38,13 +38,13 @@ public static partial class TreatmentBMPExtensionMethods
             DesignLowFlowDiversionCapacity = treatmentBMPModelingAttribute?.DesignLowFlowDiversionCapacity,
             DesignMediaFiltrationRate = treatmentBMPModelingAttribute?.DesignMediaFiltrationRate,
             DiversionRate = treatmentBMPModelingAttribute?.DiversionRate,
-            DrawdownTimeforWQDetentionVolume = treatmentBMPModelingAttribute?.DrawdownTimeforWQDetentionVolume,
+            DrawdownTimeForWQDetentionVolume = treatmentBMPModelingAttribute?.DrawdownTimeForWQDetentionVolume,
             EffectiveFootprint = treatmentBMPModelingAttribute?.EffectiveFootprint,
             EffectiveRetentionDepth = treatmentBMPModelingAttribute?.EffectiveRetentionDepth,
             InfiltrationDischargeRate = treatmentBMPModelingAttribute?.InfiltrationDischargeRate,
             InfiltrationSurfaceArea = treatmentBMPModelingAttribute?.InfiltrationSurfaceArea,
             MediaBedFootprint = treatmentBMPModelingAttribute?.MediaBedFootprint,
-            PermanentPoolorWetlandVolume = treatmentBMPModelingAttribute?.PermanentPoolorWetlandVolume,
+            PermanentPoolOrWetlandVolume = treatmentBMPModelingAttribute?.PermanentPoolOrWetlandVolume,
             RoutingConfigurationID = treatmentBMPModelingAttribute?.RoutingConfigurationID,
             StorageVolumeBelowLowestOutletElevation = treatmentBMPModelingAttribute?.StorageVolumeBelowLowestOutletElevation,
             SummerHarvestedWaterDemand = treatmentBMPModelingAttribute?.SummerHarvestedWaterDemand,
@@ -142,7 +142,7 @@ public static partial class TreatmentBMPExtensionMethods
                      (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
                       (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
                        !bmpModelingAttributes.DiversionRate.HasValue) ||
-                      !bmpModelingAttributes.PermanentPoolorWetlandVolume.HasValue ||
+                      !bmpModelingAttributes.PermanentPoolOrWetlandVolume.HasValue ||
                       !bmpModelingAttributes.WaterQualityDetentionVolume.HasValue))
             {
                 return false;
@@ -153,7 +153,7 @@ public static partial class TreatmentBMPExtensionMethods
                      (!bmpModelingAttributes.RoutingConfigurationID.HasValue ||
                       (bmpModelingAttributes.RoutingConfigurationID == (int)RoutingConfigurationEnum.Offline &&
                        !bmpModelingAttributes.DiversionRate.HasValue) ||
-                      !bmpModelingAttributes.DrawdownTimeforWQDetentionVolume.HasValue ||
+                      !bmpModelingAttributes.DrawdownTimeForWQDetentionVolume.HasValue ||
                       !bmpModelingAttributes.StorageVolumeBelowLowestOutletElevation.HasValue ||
                       !bmpModelingAttributes.EffectiveFootprint.HasValue))
             {

@@ -4021,7 +4021,7 @@
             "format": "double",
             "nullable": true
           },
-          "DrawdownTimeforWQDetentionVolume": {
+          "DrawdownTimeForWQDetentionVolume": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -4051,7 +4051,7 @@
             "format": "double",
             "nullable": true
           },
-          "PermanentPoolorWetlandVolume": {
+          "PermanentPoolOrWetlandVolume": {
             "type": "number",
             "format": "double",
             "nullable": true

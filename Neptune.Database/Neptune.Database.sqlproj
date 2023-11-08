@@ -74,6 +74,7 @@
     <None Include="Neptune.Database.publish.xml" />
     <None Include="Scripts\PreReleaseScripts\README.md" />
     <None Include="Scripts\ReleaseScripts\README.md" />
+    <None Include="Scripts\ReleaseScripts\001-rename fields on ModelingAttribute table.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\LookupTables\Script.PostDeployment.LookupTables.sql" />

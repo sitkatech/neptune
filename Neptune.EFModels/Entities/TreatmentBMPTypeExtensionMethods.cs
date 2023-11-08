@@ -57,7 +57,7 @@ public static partial class TreatmentBMPTypeExtensionMethods
                 case TreatmentBMPModelingTypeEnum.ConstructedWetland:
                 case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
                     return hasNoRoutingConfigurationAndOffline ||
-                           !treatmentBMPModelingAttribute.PermanentPoolorWetlandVolume.HasValue ||
+                           !treatmentBMPModelingAttribute.PermanentPoolOrWetlandVolume.HasValue ||
                            !treatmentBMPModelingAttribute.WaterQualityDetentionVolume.HasValue;
                 case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
                 case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
@@ -66,7 +66,7 @@ public static partial class TreatmentBMPTypeExtensionMethods
                            !treatmentBMPModelingAttribute.TotalEffectiveBMPVolume.HasValue ||
                            !treatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation.HasValue ||
                            !treatmentBMPModelingAttribute.EffectiveFootprint.HasValue ||
-                           !treatmentBMPModelingAttribute.DrawdownTimeforWQDetentionVolume.HasValue;
+                           !treatmentBMPModelingAttribute.DrawdownTimeForWQDetentionVolume.HasValue;
                 case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
                     return !treatmentBMPModelingAttribute.DesignDryWeatherTreatmentCapacity.HasValue &&
                            !treatmentBMPModelingAttribute.AverageTreatmentFlowrate.HasValue;

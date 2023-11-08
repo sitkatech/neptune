@@ -122,12 +122,12 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
       ],
     [TreatmentBMPModelingTypeEnum.ConstructedWetland]:
       [
-        'PermanentPoolorWetlandVolume', 'WaterQualityDetentionVolume'
+        'PermanentPoolOrWetlandVolume', 'WaterQualityDetentionVolume'
       ],
     [TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin]:
       [
         'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
-        'EffectiveFootprint', 'DrawdownTimeforWQDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
+        'EffectiveFootprint', 'DrawdownTimeForWQDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
       ],
     [TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems]:
       ['DesignDryWeatherTreatmentCapacity', 'AverageTreatmentFlowrate', 'MonthsOfOperationID'],
@@ -136,12 +136,12 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     [TreatmentBMPModelingTypeEnum.FlowDurationControlBasin]:
       [
         'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
-        'EffectiveFootprint', 'DrawdownTimeforWQDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
+        'EffectiveFootprint', 'DrawdownTimeForWQDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
       ],
     [TreatmentBMPModelingTypeEnum.FlowDurationControlTank]:
       [
         'TotalEffectiveBMPVolume', 'StorageVolumeBelowLowestOutletElevation',
-        'EffectiveFootprint', 'DrawdownTimeforWQDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
+        'EffectiveFootprint', 'DrawdownTimeForWQDetentionVolume', 'UnderlyingHydrologicSoilGroupID'
       ],
     [TreatmentBMPModelingTypeEnum.HydrodynamicSeparator]:
       ['TreatmentRate', 'TimeOfConcentrationID'],
@@ -184,7 +184,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
       ],
     [TreatmentBMPModelingTypeEnum.WetDetentionBasin]:
       [
-        'PermanentPoolorWetlandVolume', 'WaterQualityDetentionVolume'
+        'PermanentPoolOrWetlandVolume', 'WaterQualityDetentionVolume'
       ]
   };
 
@@ -196,13 +196,13 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     DesignMediaFiltrationRate: 'in/hr',
     DiversionRate: 'cfs',
     DrawdownTimeForDetentionVolume: 'hrs',
-    DrawdownTimeforWQDetentionVolume: 'hrs',
+    DrawdownTimeForWQDetentionVolume: 'hrs',
     EffectiveFootprint: 'sq ft',
     EffectiveRetentionDepth: 'ft',
     InfiltrationDischargeRate: 'cfs',
     InfiltrationSurfaceArea: 'sq ft',
     MediaBedFootprint: 'sq ft',
-    PermanentPoolorWetlandVolume: 'cu ft',
+    PermanentPoolOrWetlandVolume: 'cu ft',
     StorageVolumeBelowLowestOutletElevation: 'cu ft',
     SummerHarvestedWaterDemand: 'gpd',
     TotalEffectiveBMPVolume: 'cu ft',

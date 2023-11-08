@@ -211,7 +211,7 @@ public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<TreatmentBMPDeta
             case TreatmentBMPModelingTypeEnum.ConstructedWetland:
             case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
                 Add(FieldDefinitionType.PermanentPoolOrWetlandVolume.ToGridHeaderString("Permanent Pool Or Wetland Volume (cu ft)"),
-                    x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.PermanentPoolorWetlandVolume, 100);
+                    x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.PermanentPoolOrWetlandVolume, 100);
                 Add(FieldDefinitionType.WaterQualityDetentionVolume.ToGridHeaderString("Extended Detention Surcharge Volume (cu ft)"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.WaterQualityDetentionVolume, 100);
                 break;
@@ -225,7 +225,7 @@ public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<TreatmentBMPDeta
                 Add(FieldDefinitionType.EffectiveFootprint.ToGridHeaderString("Effective Footprint (sq ft)"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.EffectiveFootprint, 100);
                 Add(FieldDefinitionType.DrawdownTimeForWQDetentionVolume.ToGridHeaderString("Drawdown Time For WQ Detention Volume (hours)"),
-                    x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.DrawdownTimeforWQDetentionVolume, 100);
+                    x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.DrawdownTimeForWQDetentionVolume, 100);
                 Add(FieldDefinitionType.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString("Underlying Hydrologic Soil Group"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.UnderlyingHydrologicSoilGroup?
                         .UnderlyingHydrologicSoilGroupDisplayName, 100);

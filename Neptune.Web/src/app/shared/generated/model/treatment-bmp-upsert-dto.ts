@@ -26,15 +26,15 @@ export class TreatmentBMPUpsertDto {
     DesignDryWeatherTreatmentCapacity?: number;
     DesignLowFlowDiversionCapacity?: number;
     DesignMediaFiltrationRate?: number;
-    DesignResidenceTimeforPermanentPool?: number;
+    DesignResidenceTimeForPermanentPool?: number;
     DiversionRate?: number;
-    DrawdownTimeforWQDetentionVolume?: number;
+    DrawdownTimeForWQDetentionVolume?: number;
     EffectiveFootprint?: number;
     EffectiveRetentionDepth?: number;
     InfiltrationDischargeRate?: number;
     InfiltrationSurfaceArea?: number;
     MediaBedFootprint?: number;
-    PermanentPoolorWetlandVolume?: number;
+    PermanentPoolOrWetlandVolume?: number;
     StorageVolumeBelowLowestOutletElevation?: number;
     SummerHarvestedWaterDemand?: number;
     DrawdownTimeForDetentionVolume?: number;

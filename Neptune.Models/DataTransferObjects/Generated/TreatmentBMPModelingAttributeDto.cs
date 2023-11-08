@@ -18,13 +18,13 @@ namespace Neptune.Models.DataTransferObjects
         public double? DesignLowFlowDiversionCapacity { get; set; }
         public double? DesignMediaFiltrationRate { get; set; }
         public double? DiversionRate { get; set; }
-        public double? DrawdownTimeforWQDetentionVolume { get; set; }
+        public double? DrawdownTimeForWQDetentionVolume { get; set; }
         public double? EffectiveFootprint { get; set; }
         public double? EffectiveRetentionDepth { get; set; }
         public double? InfiltrationDischargeRate { get; set; }
         public double? InfiltrationSurfaceArea { get; set; }
         public double? MediaBedFootprint { get; set; }
-        public double? PermanentPoolorWetlandVolume { get; set; }
+        public double? PermanentPoolOrWetlandVolume { get; set; }
         public RoutingConfigurationDto RoutingConfiguration { get; set; }
         public double? StorageVolumeBelowLowestOutletElevation { get; set; }
         public double? SummerHarvestedWaterDemand { get; set; }
@@ -53,13 +53,13 @@ namespace Neptune.Models.DataTransferObjects
         public double? DesignLowFlowDiversionCapacity { get; set; }
         public double? DesignMediaFiltrationRate { get; set; }
         public double? DiversionRate { get; set; }
-        public double? DrawdownTimeforWQDetentionVolume { get; set; }
+        public double? DrawdownTimeForWQDetentionVolume { get; set; }
         public double? EffectiveFootprint { get; set; }
         public double? EffectiveRetentionDepth { get; set; }
         public double? InfiltrationDischargeRate { get; set; }
         public double? InfiltrationSurfaceArea { get; set; }
         public double? MediaBedFootprint { get; set; }
-        public double? PermanentPoolorWetlandVolume { get; set; }
+        public double? PermanentPoolOrWetlandVolume { get; set; }
         public System.Int32? RoutingConfigurationID { get; set; }
         public double? StorageVolumeBelowLowestOutletElevation { get; set; }
         public double? SummerHarvestedWaterDemand { get; set; }
