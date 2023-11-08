@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Neptune.Models.DataTransferObjects;
 using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Neptune.Common;
 
 namespace Neptune.API.Controllers
 {
@@ -67,7 +70,7 @@ namespace Neptune.API.Controllers
 
         [HttpPut("treatmentBMPs/{projectID}")]
         [JurisdictionEditFeature]
-        public ActionResult MergeTreatmentBMPs(List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, [FromRoute] int projectID)
+        public async Task<ActionResult> MergeTreatmentBMPs(List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, [FromRoute] int projectID)
         {
             var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
             if (project == null)
@@ -75,7 +78,7 @@ namespace Neptune.API.Controllers
                 return BadRequest();
             }
 
-            var existingTreatmentBMPs = _dbContext.TreatmentBMPs.ToList();
+            var existingTreatmentBMPs = _dbContext.TreatmentBMPs.AsNoTracking().ToList();
             foreach (var treatmentBMPUpsertDto in treatmentBMPUpsertDtos)
             {
                 var namingConflicts = existingTreatmentBMPs
@@ -93,9 +96,100 @@ namespace Neptune.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            Projects.DeleteProjectNereidResultsAndGrantScores(_dbContext, projectID);
-            TreatmentBMPs.MergeProjectTreatmentBMPs(_dbContext, treatmentBMPUpsertDtos, existingTreatmentBMPs, project);
-            _dbContext.SaveChanges();
+            await Projects.DeleteProjectNereidResultsAndGrantScores(_dbContext, projectID);
+            var existingProjectTreatmentBMPs = _dbContext.TreatmentBMPs.Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP).Where(x => x.ProjectID == project.ProjectID).ToList();
+            var existingProjectTreatmentBMPModelingAttributes = existingProjectTreatmentBMPs.Select(x => x.TreatmentBMPModelingAttributeTreatmentBMP).ToList();
+
+            var allTreatmentBMPModelingAttributesInDatabase = _dbContext.TreatmentBMPModelingAttributes;
+
+            var updatedTreatmentBMPs = treatmentBMPUpsertDtos.Select(x => TreatmentBMPs.TreatmentBMPFromUpsertDtoAndProject(_dbContext, x, project)).ToList();
+
+            await _dbContext.TreatmentBMPs.AddRangeAsync(updatedTreatmentBMPs.Where(x => x.TreatmentBMPID == 0));
+            await _dbContext.SaveChangesAsync();
+
+            // update upsert dtos with new TreatmentBMPIDs
+            foreach (var treatmentBMPUpsertDto in treatmentBMPUpsertDtos.Where(x => x.TreatmentBMPID == 0))
+            {
+                treatmentBMPUpsertDto.TreatmentBMPID = existingProjectTreatmentBMPs
+                    .Single(x => x.TreatmentBMPName == treatmentBMPUpsertDto.TreatmentBMPName).TreatmentBMPID;
+            }
+
+            // update TreatmentBMP and TreatmentBMPModelingAttribute records
+            existingProjectTreatmentBMPs.MergeUpdate(updatedTreatmentBMPs,
+                (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
+                (x, y) =>
+                {
+                    x.TreatmentBMPName = y.TreatmentBMPName;
+                    x.LocationPoint4326 = y.LocationPoint4326;
+                    x.LocationPoint = y.LocationPoint;
+                    x.WatershedID = y.WatershedID;
+                    x.ModelBasinID = y.ModelBasinID;
+                    x.PrecipitationZoneID = y.PrecipitationZoneID;
+                    x.RegionalSubbasinID = y.RegionalSubbasinID;
+                    x.Notes = y.Notes;
+                });
+
+            // merge TreatmentBMPModelingAttributeIDs
+            var updatedTreatmentBMPModelingAttributes = treatmentBMPUpsertDtos.Select(TreatmentBMPs.TreatmentBMPModelingAttributeFromUpsertDto).ToList();
+            existingProjectTreatmentBMPModelingAttributes.Merge(updatedTreatmentBMPModelingAttributes, allTreatmentBMPModelingAttributesInDatabase,
+                (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
+                (x, y) =>
+                {
+                    x.AverageDivertedFlowrate = y.AverageDivertedFlowrate;
+                    x.AverageTreatmentFlowrate = y.AverageTreatmentFlowrate;
+                    x.DesignDryWeatherTreatmentCapacity = y.DesignDryWeatherTreatmentCapacity;
+                    x.DesignLowFlowDiversionCapacity = y.DesignLowFlowDiversionCapacity;
+                    x.DesignMediaFiltrationRate = y.DesignMediaFiltrationRate;
+                    x.DiversionRate = y.DiversionRate;
+                    x.DrawdownTimeforWQDetentionVolume = y.DrawdownTimeforWQDetentionVolume;
+                    x.EffectiveFootprint = y.EffectiveFootprint;
+                    x.EffectiveRetentionDepth = y.EffectiveRetentionDepth;
+                    x.InfiltrationDischargeRate = y.InfiltrationDischargeRate;
+                    x.InfiltrationSurfaceArea = y.InfiltrationSurfaceArea;
+                    x.MediaBedFootprint = y.MediaBedFootprint;
+                    x.PermanentPoolorWetlandVolume = y.PermanentPoolorWetlandVolume;
+                    x.RoutingConfigurationID = y.RoutingConfigurationID;
+                    x.StorageVolumeBelowLowestOutletElevation = y.StorageVolumeBelowLowestOutletElevation;
+                    x.SummerHarvestedWaterDemand = y.SummerHarvestedWaterDemand;
+                    x.TimeOfConcentrationID = y.TimeOfConcentrationID;
+                    x.DrawdownTimeForDetentionVolume = y.DrawdownTimeForDetentionVolume;
+                    x.TotalEffectiveBMPVolume = y.TotalEffectiveBMPVolume;
+                    x.TotalEffectiveDrywellBMPVolume = y.TotalEffectiveDrywellBMPVolume;
+                    x.TreatmentRate = y.TreatmentRate;
+                    x.UnderlyingHydrologicSoilGroupID = y.UnderlyingHydrologicSoilGroupID;
+                    x.UnderlyingInfiltrationRate = y.UnderlyingInfiltrationRate;
+                    x.WaterQualityDetentionVolume = y.WaterQualityDetentionVolume;
+                    x.WettedFootprint = y.WettedFootprint;
+                    x.WinterHarvestedWaterDemand = y.WinterHarvestedWaterDemand;
+                    x.MonthsOfOperationID = y.MonthsOfOperationID;
+                    x.DryWeatherFlowOverrideID = y.DryWeatherFlowOverrideID;
+                });
+
+            var treatmentBMPIDsWhoAreBeingDeleted = existingProjectTreatmentBMPs.Where(x => updatedTreatmentBMPs.All(y => x.TreatmentBMPID != y.TreatmentBMPID)).Select(x => x.TreatmentBMPID).ToList();
+            // delete all the Delineation related entities
+            await _dbContext.ProjectHRUCharacteristics.Include(x => x.ProjectLoadGeneratingUnit).ThenInclude(x => x.Delineation).Where(x =>
+                    x.ProjectLoadGeneratingUnit.DelineationID.HasValue &&
+                    treatmentBMPIDsWhoAreBeingDeleted.Contains(x.ProjectLoadGeneratingUnit.Delineation.TreatmentBMPID))
+                .ExecuteDeleteAsync();
+            await _dbContext.ProjectLoadGeneratingUnits.Include(x => x.Delineation)
+                .Where(x => x.DelineationID.HasValue && treatmentBMPIDsWhoAreBeingDeleted.Contains(x.Delineation.TreatmentBMPID))
+                .ExecuteDeleteAsync();
+            await _dbContext.DelineationOverlaps
+                .Include(x => x.Delineation).Include(x => x.OverlappingDelineation).Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.Delineation.TreatmentBMPID) ||
+                treatmentBMPIDsWhoAreBeingDeleted.Contains(x.OverlappingDelineation.TreatmentBMPID)).ExecuteDeleteAsync();
+            await _dbContext.Delineations.Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID))
+                .ExecuteDeleteAsync();
+            await _dbContext.TreatmentBMPs.Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID))
+                .ExecuteDeleteAsync();
+
+            var treatmentBMPsWhoseLocationChanged = existingProjectTreatmentBMPs.Where(x => updatedTreatmentBMPs.Any(y => x.TreatmentBMPID == y.TreatmentBMPID && (!x.LocationPoint4326.Equals(y.LocationPoint4326)))).Select(x => x.TreatmentBMPID).ToList();
+
+            if (treatmentBMPsWhoseLocationChanged.Any())
+            {
+                await _dbContext.Delineations.Where(x => x.DelineationTypeID == (int)DelineationTypeEnum.Centralized && treatmentBMPsWhoseLocationChanged.Contains(x.TreatmentBMPID)).ExecuteDeleteAsync();
+            }
+
+            await _dbContext.SaveChangesAsync();
 
             return Ok();
         }

@@ -119,7 +119,11 @@ namespace Neptune.EFModels.Entities
             //If we opt to not include treatmentBMPs, ensure we get rid of our pre-existing treatment bmps
             if (project.DoesNotIncludeTreatmentBMPs)
             {
-                TreatmentBMPs.MergeProjectTreatmentBMPs(dbContext, new List<TreatmentBMPUpsertDto>(), dbContext.TreatmentBMPs.Where(x => x.ProjectID == project.ProjectID).ToList(), project);
+                foreach (var treatmentBMP in dbContext.TreatmentBMPs.Where(x => x.ProjectID == project.ProjectID)
+                             .ToList())
+                {
+                    await treatmentBMP.DeleteFull(dbContext);
+                }
             }
 
             await dbContext.SaveChangesAsync();
