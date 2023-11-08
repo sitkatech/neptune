@@ -23,6 +23,7 @@ using System.Globalization;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.User;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.Common.DesignByContract;
 using Neptune.Common.Mvc;
@@ -118,17 +119,16 @@ namespace Neptune.WebMvc.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]
         public PartialViewResult Delete([FromRoute] PersonPrimaryKey personPrimaryKey)
         {
-            var person = personPrimaryKey.EntityObject;
+            var person = People.GetByID(_dbContext, personPrimaryKey.PrimaryKeyValue);
             var viewModel = new ConfirmDialogFormViewModel(person.PersonID);
             return ViewDelete(person, viewModel);
         }
 
         private PartialViewResult ViewDelete(Person person, ConfirmDialogFormViewModel viewModel)
         {
-            //todo: var canDelete = !person.HasDependentObjects() && person != CurrentPerson;
-            var canDelete = person.CanDelete(CurrentPerson);
+            var canDelete = person.PersonID != CurrentPerson.PersonID;
             var confirmMessage = canDelete
-                ? $"Are you sure you want to delete {person.GetFullNameFirstLastAndOrg(_dbContext)}?"
+                ? $"Are you sure you want to delete {person.GetFullNameFirstLastAndOrg()}?"
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Person",
                     UrlTemplate.MakeHrefString(
                         SitkaRoute<UserController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(person.PersonID)),

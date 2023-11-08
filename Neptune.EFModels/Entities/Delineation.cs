@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common.GeoSpatial;
 using NetTopologySuite.Features;
-using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities
 {
@@ -17,11 +16,6 @@ namespace Neptune.EFModels.Entities
 
             var feature = new Feature(DelineationGeometry4326, attributesTable);
             return GeoJsonSerializer.Serialize(feature);
-        }
-
-        public bool CanDelete(Person currentPerson)
-        {
-            return currentPerson.IsAssignedToStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdictionID);
         }
 
         public void MarkAsVerified(Person currentPerson)

@@ -149,11 +149,10 @@ public static class AuthenticationHelper
         else
         {
             var unknownOrganization = Organizations.GetUnknownOrganization(dbContext);
-            person.OrganizationID = unknownOrganization.OrganizationID;
+            person.Organization = unknownOrganization;
         }
 
         person.LastActivityDate = DateTime.Now;
-        // databaseEntities.SaveChanges(person); // TODO: Need to enable this for audit logging
         await dbContext.SaveChangesAsync();
 
         if (sendNewUserNotification)
@@ -172,7 +171,7 @@ public static class AuthenticationHelper
 
     public static async Task SendNewUserCreatedMessage(NeptuneDbContext dbContext, WebConfiguration configuration, Person person, string loginName, SitkaSmtpClientService sitkaSmtpClientService)
     {
-        var subject = $"User added: {person.GetFullNameFirstLastAndOrg(dbContext)}";
+        var subject = $"User added: {person.GetFullNameFirstLastAndOrg()}";
         var message = $@"
 <div style='font-size: 12px; font-family: Arial'>
     <strong>User added:</strong> {person.GetFullNameFirstLast()}<br />
