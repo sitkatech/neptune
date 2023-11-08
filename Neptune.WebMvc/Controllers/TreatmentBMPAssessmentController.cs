@@ -54,7 +54,7 @@ namespace Neptune.WebMvc.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentPrimaryKey")]
         public PartialViewResult Delete([FromRoute] TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
         {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
+            var treatmentBMPAssessment = TreatmentBMPAssessments.GetByID(_dbContext, treatmentBMPAssessmentPrimaryKey);
             var viewModel = new ConfirmDialogFormViewModel(treatmentBMPAssessment.TreatmentBMPAssessmentID);
             return ViewDeleteTreatmentBMPAssessment(treatmentBMPAssessment, viewModel);
         }
@@ -64,7 +64,7 @@ namespace Neptune.WebMvc.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentPrimaryKey")]
         public async Task<IActionResult> Delete([FromRoute] TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
+            var treatmentBMPAssessment = TreatmentBMPAssessments.GetByID(_dbContext, treatmentBMPAssessmentPrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewDeleteTreatmentBMPAssessment(treatmentBMPAssessment, viewModel);
@@ -76,7 +76,7 @@ namespace Neptune.WebMvc.Controllers
 
         private PartialViewResult ViewDeleteTreatmentBMPAssessment(TreatmentBMPAssessment treatmentBMPAssessment, ConfirmDialogFormViewModel viewModel)
         {
-            var confirmMessage = $"Are you sure you want to delete the assessment dated {treatmentBMPAssessment.GetAssessmentDate(_dbContext).ToStringDate()}?";
+            var confirmMessage = $"Are you sure you want to delete the assessment dated {treatmentBMPAssessment.GetAssessmentDate().ToStringDate()}?";
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);

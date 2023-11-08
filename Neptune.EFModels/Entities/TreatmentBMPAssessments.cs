@@ -77,7 +77,6 @@ public static class TreatmentBMPAssessments
             .Include(x => x.TreatmentBMP)
             .ThenInclude(x => x.StormwaterJurisdiction)
             .ThenInclude(x => x.Organization)
-            .Include(x => x.FieldVisit)
             .AsNoTracking()
             .SingleOrDefault(x => x.TreatmentBMPAssessmentID == treatmentBMPAssessmentID);
         Check.RequireNotNull(treatmentBMPAssessment, $"TreatmentBMPAssessment with ID {treatmentBMPAssessmentID} not found!");

@@ -4,11 +4,11 @@ namespace Neptune.EFModels.Entities
 {
     public partial class WaterQualityManagementPlanDocument
     {
-        public void DeleteFull(NeptuneDbContext dbContext)
+        public async Task DeleteFull(NeptuneDbContext dbContext)
         {
-            dbContext.WaterQualityManagementPlanDocuments
+            await dbContext.WaterQualityManagementPlanDocuments
                 .Where(x => x.WaterQualityManagementPlanDocumentID == WaterQualityManagementPlanDocumentID)
-                .ExecuteDelete();
+                .ExecuteDeleteAsync();
         }
     }
 }

@@ -72,13 +72,6 @@ namespace Neptune.EFModels.Entities
             return FieldVisit.VisitDate;
         }
 
-        public DateTime GetAssessmentDate(NeptuneDbContext dbContext)
-        {
-            var treatmentBMPAssessment =
-                TreatmentBMPAssessments.GetByIDForFeatureContextCheck(dbContext, TreatmentBMPAssessmentID);
-            return treatmentBMPAssessment.FieldVisit.VisitDate;
-        }
-
         public string CalculateObservationValueForObservationType(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
             if (treatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.All(x => x.TreatmentBMPTypeID != TreatmentBMPTypeID))

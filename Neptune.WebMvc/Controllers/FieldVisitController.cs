@@ -952,7 +952,6 @@ namespace Neptune.WebMvc.Controllers
                 return ViewDeleteFieldVisit(fieldVisit, viewModel);
             }
             await fieldVisit.DeleteFull(_dbContext);
-            await _dbContext.SaveChangesAsync();
             SetMessageForDisplay("Successfully deleted the field visit.");
             return new ModalDialogFormJsonResult(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
         }

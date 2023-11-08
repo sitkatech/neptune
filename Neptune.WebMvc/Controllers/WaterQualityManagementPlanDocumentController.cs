@@ -112,8 +112,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewDelete(waterQualityManagementPlanDocument, viewModel);
             }
             
-            waterQualityManagementPlanDocument.DeleteFull(_dbContext);
-            await _dbContext.SaveChangesAsync();
+            await waterQualityManagementPlanDocument.DeleteFull(_dbContext);
             SetMessageForDisplay($"Successfully deleted \"{waterQualityManagementPlanDocument.DisplayName}\".");
 
             return new ModalDialogFormJsonResult();

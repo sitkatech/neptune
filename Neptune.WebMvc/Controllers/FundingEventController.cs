@@ -129,7 +129,6 @@ namespace Neptune.WebMvc.Controllers
             }
 
             await fundingEvent.DeleteFull(_dbContext);
-            await _dbContext.SaveChangesAsync();
 
             SetMessageForDisplay($"{FieldDefinitionType.FundingEvent.GetFieldDefinitionLabel()} successfully deleted");
             return new ModalDialogFormJsonResult();
