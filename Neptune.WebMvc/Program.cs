@@ -87,6 +87,20 @@ var builder = WebApplication.CreateBuilder(args);
         });
     });
 
+    services.AddHttpClient<NereidService>(c =>
+    {
+        c.BaseAddress = new Uri(configuration.NereidUrl);
+        c.Timeout = TimeSpan.FromDays(1);
+    }).ConfigurePrimaryHttpMessageHandler(() =>
+    {
+        var httpClientHandler = new HttpClientHandler();
+        httpClientHandler.ClientCertificateOptions = ClientCertificateOption.Manual;
+        httpClientHandler.ServerCertificateCustomValidationCallback =
+            (_, _, _, _) => true;
+
+        return httpClientHandler;
+    });
+
     services.AddHttpClient<OCGISService>(c =>
     {
         c.BaseAddress = new Uri(configuration.OCGISBaseUrl);

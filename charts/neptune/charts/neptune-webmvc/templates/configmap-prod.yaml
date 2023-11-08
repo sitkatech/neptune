@@ -17,7 +17,7 @@ data:
   KeystoneOpenIDClientID: "Neptune"
   MapServiceUrl: "https://{{ .Values.global.domains.geoserver }}/geoserver/OCStormwater/ows"
   AutoDelineateServiceUrl: "https://www.ocgis.com/arcpub/rest/services/Flood/GlobalStormwaterDelineation/GPServer/Global%20Stormwater%20Delineation/"
-  HRUServiceBaseUrl: "https://www.ocgis.com/arcpub/rest/services/Environmental_Resources/HRUSummary/GPServer/HRUSummary"
+  NereidUrl: "http://{{ .Values.global.domains.nereid }}"
   GDALAPIBaseUrl: "http://{{ .Values.global.domains.gdalApi }}"
   QGISAPIBaseUrl: "http://{{ .Values.global.domains.qgisApi }}"
   OCGISBaseUrl: "https://ocgis.com/arcpub/rest/services/"

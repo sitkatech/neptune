@@ -15,7 +15,7 @@ services:
       - KeystoneOpenIDClientID=${KeystoneOpenIDClientID}
       - MapServiceUrl=${MapServiceUrl}
       - AutoDelineateServiceUrl=${AutoDelineateServiceUrl}
-      - HRUServiceBaseUrl=${HRUServiceBaseUrl}
+      - NereidUrl=${NereidUrl}
       - GDALAPIBaseUrl=${GDALAPIBaseUrl}
       - QGISAPIBaseUrl=${QGISAPIBaseUrl}
       - OCGISBaseUrl=${OCGISBaseUrl}
