@@ -30,7 +30,6 @@ When not matched by Target
 		CatchmentGeometry,
 		OCSurveyCatchmentID,
 		OCSurveyDownstreamCatchmentID,
-		CatchmentGeometry4326,
 		LastUpdate,
 		IsWaitingForLGURefresh
 	)
@@ -43,7 +42,6 @@ When not matched by Target
 			when s.OCSurveyDownstreamCatchmentID = 0 then null
 			else s.OCSurveyDownstreamCatchmentID
 		end,
-		null,
 		GetDate(),
 		1
 	)
@@ -57,7 +55,7 @@ update dbo.TreatmentBMP
 set WatershedID = null
 
 
-select Watershed as WatershedName, geometry::UnionAggregate(CatchmentGeometry) as WatershedGeometry, geometry::UnionAggregate(CatchmentGeometry4326) as WatershedGeometry4326
+select Watershed as WatershedName, geometry::UnionAggregate(CatchmentGeometry) as WatershedGeometry
 into #WatershedStaging
 from dbo.RegionalSubbasin rs
 group by Watershed
