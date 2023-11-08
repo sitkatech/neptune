@@ -83,14 +83,11 @@ namespace Neptune.EFModels.Entities
             {
                 project.OrganizationID = unknownOrganizationID;
             }
-            foreach (var stormwaterJurisdiction in dbContext.StormwaterJurisdictions.Where(x => x.OrganizationID == OrganizationID).ToList())
-            {
-                stormwaterJurisdiction.OrganizationID = unknownOrganizationID;
-            }
             foreach (var treatmentBMP in dbContext.TreatmentBMPs.Where(x => x.OwnerOrganizationID == OrganizationID).ToList())
             {
                 treatmentBMP.OwnerOrganizationID = unknownOrganizationID;
             }
+            await dbContext.StormwaterJurisdictions.Where(x => x.OrganizationID == OrganizationID).ExecuteDeleteAsync();
             await dbContext.SaveChangesAsync();
             await dbContext.Organizations.Where(x => x.OrganizationID == OrganizationID).ExecuteDeleteAsync();
         }
