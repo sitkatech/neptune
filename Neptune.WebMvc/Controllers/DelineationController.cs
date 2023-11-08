@@ -196,7 +196,7 @@ namespace Neptune.WebMvc.Controllers
                 }
                 else
                 {
-                    await treatmentBMPDelineation.DeleteDelineation(_dbContext);
+                    await treatmentBMPDelineation.DeleteFull(_dbContext);
                 }
             }
             else
@@ -295,7 +295,7 @@ namespace Neptune.WebMvc.Controllers
                     $"No delineation found for Treatment BMP {treatmentBMPPrimaryKey}");
             }
 
-            await delineation.DeleteDelineation(_dbContext);
+            await delineation.DeleteFull(_dbContext);
 
             if (isDelineationDistributed)
             {
@@ -314,7 +314,7 @@ namespace Neptune.WebMvc.Controllers
         {
             var delineation = delineationPrimaryKey.EntityObject;
             var viewModel = new ConfirmDialogFormViewModel(delineation.DelineationID);
-            return ViewDeleteDelineation(delineation, viewModel);
+            return ViewDeleteDelineation(delineation, viewModel, _dbContext);
         }
 
         [HttpPost("{delineationPrimaryKey}")]
@@ -329,10 +329,10 @@ namespace Neptune.WebMvc.Controllers
 
             if (!ModelState.IsValid)
             {
-                return ViewDeleteDelineation(delineation, viewModel);
+                return ViewDeleteDelineation(delineation, viewModel, _dbContext);
             }
 
-            await delineation.DeleteDelineation(_dbContext);
+            await delineation.DeleteFull(_dbContext);
 
             SetMessageForDisplay("The Delineation was successfully deleted.");
 
@@ -345,10 +345,13 @@ namespace Neptune.WebMvc.Controllers
                 SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
         }
 
-        private PartialViewResult ViewDeleteDelineation(Delineation delineation, ConfirmDialogFormViewModel viewModel)
+        private PartialViewResult ViewDeleteDelineation(Delineation delineation, ConfirmDialogFormViewModel viewModel,
+            NeptuneDbContext dbContext)
         {
+            var treatmentBMPName = dbContext.TreatmentBMPs.Include(x => x.TreatmentBMPType)
+                .Single(x => x.TreatmentBMPID == delineation.TreatmentBMPID).AsDisplayDto().DisplayName;
             var confirmMessage =
-                $"Are you sure you want to delete the delineation for '{delineation.TreatmentBMP.TreatmentBMPName}'?";
+                $"Are you sure you want to delete the delineation for '{treatmentBMPName}'?";
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData,

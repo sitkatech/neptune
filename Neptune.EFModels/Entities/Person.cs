@@ -19,6 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Neptune.EFModels.Entities
 {
     public partial class Person //, IKeystoneUser
@@ -35,9 +37,11 @@ namespace Neptune.EFModels.Entities
             return $"{FirstName} {LastName}";
         }
 
-        public string GetFullNameFirstLastAndOrg()
+        public string GetFullNameFirstLastAndOrg(NeptuneDbContext dbContext)
         {
-            return $"{FirstName} {LastName} - {Organization.GetDisplayName()}";
+            var organizationDisplayName =
+                dbContext.Organizations.Single(x => x.OrganizationID == OrganizationID).GetDisplayName();
+            return $"{FirstName} {LastName} - {organizationDisplayName}";
         }
 
         public string GetFullNameFirstLastAndOrgShortName()
@@ -110,11 +114,107 @@ namespace Neptune.EFModels.Entities
             return IsAnonymousUser() || Role == Role.Unassigned;
         }
 
+        public bool CanDelete(Person currentPerson)
+        {
+            return currentPerson.RoleID is (int)RoleEnum.Admin or (int)RoleEnum.SitkaAdmin;
+        }
+
 
         public string GetFullNameFirstLastAndOrgAbbreviation()
         {
             var abbreviationIfAvailable = Organization.GetAbbreviationIfAvailable();
             return $"{FirstName} {LastName} ({abbreviationIfAvailable})";
+        }
+
+        public async Task DeleteFull(NeptuneDbContext dbContext)
+        {
+            foreach (var delineation in dbContext.Delineations.Where(x => x.VerifiedByPersonID == PersonID).ToList())
+            {
+                delineation.VerifiedByPersonID = AnonymousPersonID;
+            }
+
+            foreach (var fieldVisit in dbContext.FieldVisits.Where(x => x.PerformedByPersonID == PersonID).ToList())
+            {
+                fieldVisit.PerformedByPersonID = AnonymousPersonID;
+            }
+
+            foreach (var fileResource in dbContext.FileResources.Where(x => x.CreatePersonID == PersonID).ToList())
+            {
+                fileResource.CreatePersonID = AnonymousPersonID;
+            }
+
+            await dbContext.Notifications.Where(x => x.PersonID == PersonID).ExecuteDeleteAsync();
+
+            foreach (var onlandVisualTrashAssessment in dbContext.OnlandVisualTrashAssessments.Where(x => x.CreatedByPersonID == PersonID).ToList())
+            {
+                onlandVisualTrashAssessment.CreatedByPersonID = AnonymousPersonID;
+            }
+            
+            foreach (var parcelStaging in dbContext.ParcelStagings.Where(x => x.UploadedByPersonID == PersonID).ToList())
+            {
+                parcelStaging.UploadedByPersonID = AnonymousPersonID;
+            }
+            foreach (var project in dbContext.Projects.Where(x => x.CreatePersonID == PersonID 
+                                                                  || x.PrimaryContactPersonID == PersonID 
+                                                                  || x.UpdatePersonID == PersonID).ToList())
+            {
+                if (project.CreatePersonID == PersonID)
+                {
+                    project.CreatePersonID = AnonymousPersonID;
+                }
+
+                if (project.PrimaryContactPersonID == PersonID)
+                {
+                    project.PrimaryContactPersonID = AnonymousPersonID;
+                }
+
+                if (project.UpdatePersonID == PersonID)
+                {
+                    project.UpdatePersonID = AnonymousPersonID;
+                }
+            }
+
+
+            foreach (var projectNetworkSolveHistory in dbContext.ProjectNetworkSolveHistories.Where(x => x.RequestedByPersonID == PersonID).ToList())
+            {
+                projectNetworkSolveHistory.RequestedByPersonID = AnonymousPersonID;
+            }
+
+            foreach (var regionalSubbasinRevisionRequest in dbContext.RegionalSubbasinRevisionRequests
+                         .Where(x => x.ClosedByPersonID == PersonID || x.RequestPersonID == PersonID).ToList())
+            {
+                if (regionalSubbasinRevisionRequest.ClosedByPersonID == PersonID)
+                {
+                    regionalSubbasinRevisionRequest.ClosedByPersonID = AnonymousPersonID;
+                }
+
+                if (regionalSubbasinRevisionRequest.RequestPersonID == PersonID)
+                {
+                    regionalSubbasinRevisionRequest.RequestPersonID = AnonymousPersonID;
+                }
+            }
+
+            await dbContext.StormwaterJurisdictionPeople.Where(x => x.PersonID == PersonID).ExecuteDeleteAsync();
+
+            foreach (var supportRequestLog in dbContext.SupportRequestLogs.Where(x => x.RequestPersonID == PersonID).ToList())
+            {
+                supportRequestLog.RequestPersonID = AnonymousPersonID;
+            }
+
+            foreach (var trashGeneratingUnitAdjustment in dbContext.TrashGeneratingUnitAdjustments.Where(x => x.AdjustedByPersonID == PersonID).ToList())
+            {
+                trashGeneratingUnitAdjustment.AdjustedByPersonID = AnonymousPersonID;
+            }
+            foreach (var treatmentBMP in dbContext.TreatmentBMPs.Where(x => x.InventoryVerifiedByPersonID == PersonID).ToList())
+            {
+                treatmentBMP.InventoryVerifiedByPersonID = AnonymousPersonID;
+            }
+
+            foreach (var waterQualityManagementPlanVerify in dbContext.WaterQualityManagementPlanVerifies.Where(x => x.LastEditedByPersonID == PersonID).ToList())
+            {
+                waterQualityManagementPlanVerify.LastEditedByPersonID = AnonymousPersonID;
+            }
+            await dbContext.People.Where(x => x.PersonID == PersonID).ExecuteDeleteAsync();
         }
     }
 }

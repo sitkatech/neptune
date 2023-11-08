@@ -1,4 +1,5 @@
-﻿using Neptune.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using Neptune.Common;
 using Neptune.Common.GeoSpatial;
 
 namespace Neptune.EFModels.Entities
@@ -31,10 +32,19 @@ namespace Neptune.EFModels.Entities
             return customAttribute.CustomAttributeValues.Any(x => !string.IsNullOrWhiteSpace(x.AttributeValue));
         }
 
-        public void DeleteFull(NeptuneDbContext dbContext)
+        public async Task DeleteFull(NeptuneDbContext dbContext)
         {
-            //todo: deletefull
-            throw new NotImplementedException("Deleting of Custom Attribute Type not implemented yet!");
+            await dbContext.CustomAttributeValues.Include(x => x.CustomAttribute)
+                .Where(x => x.CustomAttribute.CustomAttributeTypeID == CustomAttributeTypeID)
+                .ExecuteDeleteAsync();
+            await dbContext.CustomAttributes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID)
+                .ExecuteDeleteAsync();
+            await dbContext.MaintenanceRecordObservationValues.Include(x => x.MaintenanceRecordObservation).Where(x =>
+                    x.MaintenanceRecordObservation.CustomAttributeTypeID == CustomAttributeTypeID).ExecuteDeleteAsync();
+            await dbContext.MaintenanceRecordObservations.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID)
+                .ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ExecuteDeleteAsync();
+            await dbContext.CustomAttributeTypes.Where(x => x.CustomAttributeTypeID == CustomAttributeTypeID).ExecuteDeleteAsync();
         }
     }
 }

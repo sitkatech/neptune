@@ -132,8 +132,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewDeleteNeptuneHomePageImage(neptuneHomePageImage, viewModel);
             }
 
-            _dbContext.NeptuneHomePageImages.Remove(neptuneHomePageImage);
-            await _dbContext.SaveChangesAsync(); 
+            await neptuneHomePageImage.DeleteFull(_dbContext);
             return new ModalDialogFormJsonResult();
         }
     }

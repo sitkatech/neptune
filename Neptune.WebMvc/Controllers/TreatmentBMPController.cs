@@ -353,7 +353,7 @@ namespace Neptune.WebMvc.Controllers
             var delineation = Delineations.GetByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPID);
             if (delineation != null)
             {
-                await delineation.DeleteDelineation(_dbContext);
+                await delineation.DeleteFull(_dbContext);
             }
 
             SetMessageForDisplay("Upstream BMP successfully updated");
@@ -462,12 +462,12 @@ namespace Neptune.WebMvc.Controllers
             // delete any field visit, assessment, benchmark, and maintenance records
             foreach (var fieldVisit in _dbContext.FieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToList())
             {
-                fieldVisit.DeleteFull(_dbContext);
+                await fieldVisit.DeleteFull(_dbContext);
             }
 
             foreach (var treatmentBMPBenchmarkAndThreshold in treatmentBMP.TreatmentBMPBenchmarkAndThresholds.ToList())
             {
-                treatmentBMPBenchmarkAndThreshold.DeleteFull(_dbContext);
+                await treatmentBMPBenchmarkAndThreshold.DeleteFull(_dbContext);
             }
 
             treatmentBMP.TreatmentBMPBenchmarkAndThresholds = null;
@@ -505,7 +505,7 @@ namespace Neptune.WebMvc.Controllers
             // delete any custom attributes that are not valid for the new treatment bmp type
             foreach (var customAttribute in treatmentBMP.CustomAttributes.ToList())
             {
-                customAttribute.DeleteFull(_dbContext);
+                await customAttribute.DeleteFull(_dbContext);
             }
             // force a save changes to clear out fk references when we switch the bmp type
             await _dbContext.SaveChangesAsync();
@@ -560,11 +560,7 @@ namespace Neptune.WebMvc.Controllers
             }
             await _dbContext.SaveChangesAsync();
             
-            // todo: The code-generated DeleteFull is brittle since it touches the LGU system.
-            // We should write a more finely-grained delete that deletes delineations via the
-            // pattern established in DelineationController
-            treatmentBMP.DeleteFull(_dbContext);
-            await _dbContext.SaveChangesAsync();
+            await treatmentBMP.DeleteFull(_dbContext);
             
             // queue an LGU refresh for the area no longer governed by this BMP
             if (isDelineationDistributed && delineationGeometry != null)
@@ -603,7 +599,10 @@ namespace Neptune.WebMvc.Controllers
             {
                 treatmentBMPs = TreatmentBMPs.ListByTreatmentBMPIDList(_dbContext, viewModel.TreatmentBMPIDList).ToList();
             }
-            var viewData = new BulkDeleteTreatmentBMPsViewData(treatmentBMPs);
+
+            var viewData = new BulkDeleteTreatmentBMPsViewData(treatmentBMPs,
+                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator,
+                    x => x.BulkDeleteTreatmentBMPsModal(null)));
             return RazorPartialView<BulkDeleteTreatmentBMPs, BulkDeleteTreatmentBMPsViewData, BulkDeleteTreatmentBMPsViewModel>(viewData, viewModel);
         }
 
@@ -643,11 +642,7 @@ namespace Neptune.WebMvc.Controllers
                     }
                     await _dbContext.SaveChangesAsync();
 
-                    // todo: The code-generated DeleteFull is brittle since it touches the LGU system.
-                    // We should write a more finely-grained delete that deletes delineations via the
-                    // pattern established in DelineationController
-                    treatmentBMP.DeleteFull(_dbContext);
-                    await _dbContext.SaveChangesAsync();
+                    await treatmentBMP.DeleteFull(_dbContext);
 
                     // queue an LGU refresh for the area no longer governed by this BMP
                     if (isDelineationDistributed && delineation?.DelineationGeometry != null)

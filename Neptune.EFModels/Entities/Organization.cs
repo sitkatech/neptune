@@ -19,6 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Neptune.EFModels.Entities
 {
     public partial class Organization
@@ -63,6 +65,34 @@ namespace Neptune.EFModels.Entities
         public string GetAbbreviationIfAvailable()
         {
             return OrganizationShortName ?? OrganizationName;
+        }
+
+        public async Task DeleteFull(NeptuneDbContext dbContext)
+        {
+            var unknownOrganizationID = Organizations.GetUnknownOrganizationID(dbContext);
+            // we don't want to delete any information related to an organization. So we're going to set the org id to unknown
+            foreach (var fundingSource in dbContext.FundingSources.Where(x => x.OrganizationID == OrganizationID).ToList())
+            {
+                fundingSource.OrganizationID = unknownOrganizationID;
+            }
+            foreach (var person in dbContext.People.Where(x => x.OrganizationID == OrganizationID).ToList())
+            {
+                person.OrganizationID = unknownOrganizationID;
+            }
+            foreach (var project in dbContext.Projects.Where(x => x.OrganizationID == OrganizationID).ToList())
+            {
+                project.OrganizationID = unknownOrganizationID;
+            }
+            foreach (var stormwaterJurisdiction in dbContext.StormwaterJurisdictions.Where(x => x.OrganizationID == OrganizationID).ToList())
+            {
+                stormwaterJurisdiction.OrganizationID = unknownOrganizationID;
+            }
+            foreach (var treatmentBMP in dbContext.TreatmentBMPs.Where(x => x.OwnerOrganizationID == OrganizationID).ToList())
+            {
+                treatmentBMP.OwnerOrganizationID = unknownOrganizationID;
+            }
+            await dbContext.SaveChangesAsync();
+            await dbContext.Organizations.Where(x => x.OrganizationID == OrganizationID).ExecuteDeleteAsync();
         }
     }
 }

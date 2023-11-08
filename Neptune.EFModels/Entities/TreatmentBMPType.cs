@@ -19,6 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Neptune.EFModels.Entities
 {
     public partial class TreatmentBMPType
@@ -39,9 +41,32 @@ namespace Neptune.EFModels.Entities
                 x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName).ToList();
         }
 
-        public void DeleteFull(NeptuneDbContext dbContext)
+        public async Task DeleteFull(NeptuneDbContext dbContext)
         {
-            throw new NotImplementedException();
+            await dbContext.CustomAttributeValues
+                .Include(x => x.CustomAttribute)
+                .Where(x => x.CustomAttribute.TreatmentBMPTypeID == TreatmentBMPTypeID).ExecuteDeleteAsync();
+            await dbContext.CustomAttributes.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID).ExecuteDeleteAsync();
+            await dbContext.MaintenanceRecordObservationValues
+                .Include(x => x.MaintenanceRecordObservation)
+                .Where(x => x.MaintenanceRecordObservation.TreatmentBMPTypeID == TreatmentBMPTypeID)
+                .ExecuteDeleteAsync();
+            await dbContext.MaintenanceRecordObservations.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID)
+                .ExecuteDeleteAsync();
+            await dbContext.MaintenanceRecords.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID)
+                .ExecuteDeleteAsync();
+            await dbContext.WaterQualityManagementPlanVerifyQuickBMPs
+                .Include(x => x.QuickBMP)
+                .Where(x => x.QuickBMP.TreatmentBMPTypeID == TreatmentBMPTypeID).ExecuteDeleteAsync();
+            await dbContext.QuickBMPs.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID).ExecuteDeleteAsync();
+            foreach (var treatmentBMP in dbContext.TreatmentBMPs.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID).ToList())
+            {
+                await treatmentBMP.DeleteFull(dbContext);
+            }
+            await dbContext.TreatmentBMPTypeAssessmentObservationTypes.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID)
+                .ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID). ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPTypes.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID).ExecuteDeleteAsync();
         }
     }
 }

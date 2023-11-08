@@ -196,8 +196,7 @@ namespace Neptune.WebMvc.Controllers
             }
 
             var message = $"{FieldDefinitionType.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()} '{treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName}' successfully deleted!";
-            treatmentBMPAssessmentObservationType.DeleteFull(_dbContext);
-            await _dbContext.SaveChangesAsync();
+            await treatmentBMPAssessmentObservationType.DeleteFull(_dbContext);
             SetMessageForDisplay(message);
             return new ModalDialogFormJsonResult();
         }

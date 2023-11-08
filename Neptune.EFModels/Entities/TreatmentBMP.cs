@@ -125,10 +125,92 @@ namespace Neptune.EFModels.Entities
             InventoryVerifiedByPersonID = currentPerson.PersonID;
         }
 
-        public void DeleteFull(NeptuneDbContext dbContext)
+        public async Task DeleteFull(NeptuneDbContext dbContext)
         {
-            //todo: delete full
-            throw new NotImplementedException("Deleting of Treatment BMP not implemented yet!");
+            await dbContext.CustomAttributeValues.Include(x => x.CustomAttribute)
+                .Where(x => x.CustomAttribute.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.CustomAttributes.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.DelineationOverlaps
+                .Include(x => x.Delineation)
+                .Include(x => x.OverlappingDelineation)
+                .Where(x => x.Delineation.TreatmentBMPID == TreatmentBMPID || x.OverlappingDelineation.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.HRUCharacteristics
+                .Include(x => x.LoadGeneratingUnit)
+                .ThenInclude(x => x.Delineation)
+                .Where(x => x.LoadGeneratingUnit.Delineation != null && x.LoadGeneratingUnit.Delineation.TreatmentBMPID == TreatmentBMPID)
+                .ExecuteDeleteAsync();
+            await dbContext.LoadGeneratingUnits
+                .Include(x => x.Delineation)
+                .Where(x => x.Delineation != null && x.Delineation.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.NereidResults.Include(x => x.Delineation)
+                .Where(x => x.Delineation != null && x.Delineation.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.ProjectHRUCharacteristics
+                .Include(x => x.ProjectLoadGeneratingUnit)
+                .ThenInclude(x => x.Delineation)
+                .Where(x => x.ProjectLoadGeneratingUnit.Delineation != null && x.ProjectLoadGeneratingUnit.Delineation.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.ProjectLoadGeneratingUnits
+                .Include(x => x.Delineation)
+                .Where(x => x.Delineation != null && x.Delineation.TreatmentBMPID == TreatmentBMPID)
+                .ExecuteDeleteAsync();
+            await dbContext.ProjectNereidResults
+                .Include(x => x.Delineation)
+                .Where(x => x.Delineation != null && x.Delineation.TreatmentBMPID == TreatmentBMPID)
+                .ExecuteDeleteAsync();
+            await dbContext.Delineations.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.DirtyModelNodes.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.MaintenanceRecordObservationValues
+                .Include(x => x.MaintenanceRecordObservation)
+                .ThenInclude(x => x.MaintenanceRecord)
+                .Where(x => x.MaintenanceRecordObservation.MaintenanceRecord.TreatmentBMPID == TreatmentBMPID)
+                .ExecuteDeleteAsync();
+            await dbContext.MaintenanceRecordObservations
+                .Include(x => x.MaintenanceRecord)
+                .Where(x => x.MaintenanceRecord.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.MaintenanceRecords.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPAssessmentPhotos
+                .Include(x => x.TreatmentBMPAssessment)
+                .Where(x => x.TreatmentBMPAssessment.TreatmentBMPID == TreatmentBMPID)
+                .ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPObservations
+                .Include(x => x.TreatmentBMPAssessment)
+                .Where(x => x.TreatmentBMPAssessment.TreatmentBMPID == TreatmentBMPID)
+                .ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPAssessments
+                .Where(x => x.TreatmentBMPID == TreatmentBMPID)
+                .ExecuteDeleteAsync();
+            await dbContext.FieldVisits.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.FundingEventFundingSources
+                .Include(x => x.FundingEvent)
+                .Where(x => x.FundingEvent.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.FundingEvents.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.NereidResults.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.ProjectNereidResults.Where(x => x.TreatmentBMPID == TreatmentBMPID). ExecuteDeleteAsync();
+            await dbContext.RegionalSubbasinRevisionRequests.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPAssessmentPhotos
+                .Include(x => x.TreatmentBMPAssessment)
+                .Where(x => x.TreatmentBMPAssessment.TreatmentBMPID == TreatmentBMPID)
+                .ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPObservations
+                .Include(x => x.TreatmentBMPAssessment)
+                .Where(x => x.TreatmentBMPAssessment.TreatmentBMPID == TreatmentBMPID)
+                .ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPAssessments.Where(x => x.TreatmentBMPID == TreatmentBMPID)
+                .ExecuteDeleteAsync();
+
+            await dbContext.TreatmentBMPBenchmarkAndThresholds
+                .Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPDocuments.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPImages.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPModelingAttributes.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            var treatmentBMPs = dbContext.TreatmentBMPs.Where(x => x.UpstreamBMPID == TreatmentBMPID).AsEnumerable();
+            foreach (var treatmentBMP in treatmentBMPs)
+            {
+                treatmentBMP.UpstreamBMPID = null;
+            }
+
+            await dbContext.SaveChangesAsync();
+            await dbContext.TreatmentBMPs.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
         }
 
         public IEnumerable<ProjectHRUCharacteristic> GetHRUCharacteristics(NeptuneDbContext dbContext)

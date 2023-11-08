@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Neptune.EFModels.Entities
 {
     public partial class MaintenanceRecord
@@ -46,9 +48,16 @@ namespace Neptune.EFModels.Entities
             return maintenanceRecordObservation?.GetObservationValueWithoutUnits() ?? "not provided";
         }
 
-        public void DeleteFull(NeptuneDbContext dbContext)
+        public async Task DeleteFull(NeptuneDbContext dbContext)
         {
-            throw new NotImplementedException();
+            await dbContext.MaintenanceRecordObservationValues
+                .Include(x => x.MaintenanceRecordObservation)
+                .Where(x => x.MaintenanceRecordObservation.MaintenanceRecordID == MaintenanceRecordID)
+                .ExecuteDeleteAsync();
+            await dbContext.MaintenanceRecordObservations.Where(x => x.MaintenanceRecordID == MaintenanceRecordID)
+                .ExecuteDeleteAsync();
+            await dbContext.MaintenanceRecords.Where(x => x.MaintenanceRecordID == MaintenanceRecordID)
+                .ExecuteDeleteAsync();
         }
     }
 }

@@ -47,9 +47,60 @@ namespace Neptune.EFModels.Entities
             return WaterQualityManagementPlanBoundary?.GeometryNative;
         }
 
-        public void DeleteFull(NeptuneDbContext dbContext)
+        public async Task DeleteFull(NeptuneDbContext dbContext)
         {
-            throw new NotImplementedException();
+            await dbContext.DirtyModelNodes.Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID)
+                .ExecuteDeleteAsync();
+            await dbContext.HRUCharacteristics
+                .Include(x => x.LoadGeneratingUnit)
+                .Where(x => x.LoadGeneratingUnit.WaterQualityManagementPlanID == WaterQualityManagementPlanID)
+                .ExecuteDeleteAsync();
+            await dbContext.LoadGeneratingUnits
+                .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID)
+                .ExecuteDeleteAsync();
+            await dbContext.NereidResults.Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
+            await dbContext.ProjectHRUCharacteristics
+                .Include(x => x.ProjectLoadGeneratingUnit)
+                .Where(x => x.ProjectLoadGeneratingUnit.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
+            await dbContext.ProjectLoadGeneratingUnits
+                .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID)
+                .ExecuteDeleteAsync();
+            await dbContext.ProjectNereidResults.Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID)
+                .ExecuteDeleteAsync();
+            await dbContext.WaterQualityManagementPlanVerifyQuickBMPs
+                .Include(x => x.QuickBMP)
+                .Where(x => x.QuickBMP.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
+            await dbContext.QuickBMPs.Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID)
+                .ExecuteDeleteAsync();
+            await dbContext.SourceControlBMPs.Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID)
+                .ExecuteDeleteAsync();
+            await dbContext.TrashGeneratingUnit4326s
+                .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
+            foreach (var treatmentBMP in dbContext.TreatmentBMPs.Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ToList())
+            {
+                await treatmentBMP.DeleteFull(dbContext);
+            }
+            await dbContext.WaterQualityManagementPlanBoundaries
+                .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
+            await dbContext.WaterQualityManagementPlanDocuments
+                .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID)
+                .ExecuteDeleteAsync();
+            await dbContext.WaterQualityManagementPlanParcels
+                .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
+            await dbContext.WaterQualityManagementPlanVerifyPhotos
+                .Include(x => x.WaterQualityManagementPlanVerify)
+                .Where(x => x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
+            await dbContext.WaterQualityManagementPlanVerifySourceControlBMPs
+                .Include(x => x.WaterQualityManagementPlanVerify)
+                .Where(x => x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
+            await dbContext.WaterQualityManagementPlanVerifyTreatmentBMPs
+                .Include(x => x.WaterQualityManagementPlanVerify)
+                .Where(x => x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
+            await dbContext.WaterQualityManagementPlanVerifies
+                .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
+            
+            await dbContext.WaterQualityManagementPlans
+                .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
         }
     }
 }

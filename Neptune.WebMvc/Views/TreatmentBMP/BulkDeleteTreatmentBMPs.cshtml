@@ -39,8 +39,7 @@
 }
 else
 {
-    using (Html.BeginForm())
-    {
+    <form action="@ViewDataTyped.PostUrl" method="post">
         <div style="min-height: 150px; max-height: 350px; overflow-y: auto; overflow-x: hidden">
             <div style="margin: 5px 0">Delete @Model.TreatmentBMPIDList.Count @ViewDataTyped.TreatmentBMPLabel?</div>
             <table class="table">
@@ -65,9 +64,9 @@ else
             <p><em>Warning: </em>This action cannot be undone</p>
         </div>
 
-        foreach (var treatmentBMPID in Model.TreatmentBMPIDList)
+        @foreach (var treatmentBMPID in Model.TreatmentBMPIDList)
         {
             <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPIDList)" value="@treatmentBMPID" />
         }
-    }
+    </form>
 }

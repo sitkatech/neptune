@@ -57,8 +57,7 @@ namespace Neptune.WebMvc.Controllers
             {
                 return ViewDelete(viewModel);
             }
-            maintenanceRecord.DeleteFull(_dbContext);
-            await _dbContext.SaveChangesAsync();
+            await maintenanceRecord.DeleteFull(_dbContext);
 
             SetMessageForDisplay($"{FieldDefinitionType.MaintenanceRecord.GetFieldDefinitionLabel()} successfully deleted");
             return new ModalDialogFormJsonResult();

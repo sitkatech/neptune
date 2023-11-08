@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.EntityFrameworkCore;
 using Neptune.Common;
 
 namespace Neptune.EFModels.Entities
@@ -31,9 +32,10 @@ namespace Neptune.EFModels.Entities
             return canManageStormwaterJurisdiction;
         }
 
-        public bool CanDelete(Person currentPerson)
+        public bool CanDelete(Person currentPerson, NeptuneDbContext dbContext)
         {
-            var canManageStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdictionID);
+            var treatmentBMP = TreatmentBMPs.GetByTreatmentBMPID(dbContext, TreatmentBMPID);
+            var canManageStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
             return canManageStormwaterJurisdiction;
         }
 
@@ -77,6 +79,13 @@ namespace Neptune.EFModels.Entities
             return FieldVisit.VisitDate;
         }
 
+        public DateTime GetAssessmentDate(NeptuneDbContext dbContext)
+        {
+            var treatmentBMPAssessment =
+                TreatmentBMPAssessments.GetByIDForFeatureContextCheck(dbContext, TreatmentBMPAssessmentID);
+            return treatmentBMPAssessment.FieldVisit.VisitDate;
+        }
+
         public string CalculateObservationValueForObservationType(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
             if (treatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.All(x => x.TreatmentBMPTypeID != TreatmentBMPTypeID))
@@ -87,9 +96,13 @@ namespace Neptune.EFModels.Entities
             return TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID)?.FormattedObservationValueWithoutUnits(treatmentBMPAssessmentObservationType) ?? "not provided";
         }
 
-        public void DeleteFull(NeptuneDbContext dbContext)
+        public async Task DeleteFull(NeptuneDbContext dbContext)
         {
-            throw new NotImplementedException();
+            await dbContext.TreatmentBMPAssessmentPhotos.Where(x => x.TreatmentBMPAssessmentID == TreatmentBMPAssessmentID)
+                .ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPObservations.Where(x => x.TreatmentBMPAssessmentID == TreatmentBMPAssessmentID).ExecuteDeleteAsync();
+            await dbContext.TreatmentBMPAssessments.Where(x => x.TreatmentBMPAssessmentID == TreatmentBMPAssessmentID)
+                .ExecuteDeleteAsync();
         }
     }
 }

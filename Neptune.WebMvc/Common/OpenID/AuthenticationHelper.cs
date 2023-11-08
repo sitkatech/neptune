@@ -172,7 +172,7 @@ public static class AuthenticationHelper
 
     public static async Task SendNewUserCreatedMessage(NeptuneDbContext dbContext, WebConfiguration configuration, Person person, string loginName, SitkaSmtpClientService sitkaSmtpClientService)
     {
-        var subject = $"User added: {person.GetFullNameFirstLastAndOrg()}";
+        var subject = $"User added: {person.GetFullNameFirstLastAndOrg(dbContext)}";
         var message = $@"
 <div style='font-size: 12px; font-family: Arial'>
     <strong>User added:</strong> {person.GetFullNameFirstLast()}<br />

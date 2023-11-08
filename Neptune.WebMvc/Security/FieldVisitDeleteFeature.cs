@@ -1,4 +1,5 @@
-﻿using Neptune.EFModels.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Neptune.EFModels.Entities;
 
 namespace Neptune.WebMvc.Security
 {
@@ -17,15 +18,17 @@ namespace Neptune.WebMvc.Security
         public PermissionCheckResult HasPermission(Person person, FieldVisit contextModelObject,
             NeptuneDbContext dbContext)
         {
-            var canManageStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(contextModelObject.TreatmentBMP.StormwaterJurisdictionID);
+            var treatmentBMP =
+                TreatmentBMPs.GetByIDForFeatureContextCheck(dbContext, contextModelObject.TreatmentBMPID);
+            var canManageStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID);
             if (!canManageStormwaterJurisdiction)
             {
-                return new PermissionCheckResult($"You aren't assigned to manage Treatment BMPs for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult($"You aren't assigned to manage Treatment BMPs for Jurisdiction {treatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
             if (!(person.IsAdministrator() || person.Role == Role.JurisdictionManager))
             {
-                return new PermissionCheckResult($"You do not have permission to delete Treatment BMPs for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult($"You do not have permission to delete Treatment BMPs for Jurisdiction {treatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
             return new PermissionCheckResult();

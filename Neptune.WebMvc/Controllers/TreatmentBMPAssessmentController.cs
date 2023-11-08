@@ -69,17 +69,16 @@ namespace Neptune.WebMvc.Controllers
             {
                 return ViewDeleteTreatmentBMPAssessment(treatmentBMPAssessment, viewModel);
             }
-            treatmentBMPAssessment.DeleteFull(_dbContext);
-            await _dbContext.SaveChangesAsync();
+            await treatmentBMPAssessment.DeleteFull(_dbContext);
             SetMessageForDisplay("BMP Assessment successfully deleted.");
             return new ModalDialogFormJsonResult();
         }
 
         private PartialViewResult ViewDeleteTreatmentBMPAssessment(TreatmentBMPAssessment treatmentBMPAssessment, ConfirmDialogFormViewModel viewModel)
         {
-            var canDelete = treatmentBMPAssessment.CanDelete(CurrentPerson);
+            var canDelete = treatmentBMPAssessment.CanDelete(CurrentPerson, _dbContext);
             var confirmMessage = canDelete
-                ? $"Are you sure you want to delete the assessment dated {treatmentBMPAssessment.GetAssessmentDate().ToStringDate()}?"
+                ? $"Are you sure you want to delete the assessment dated {treatmentBMPAssessment.GetAssessmentDate(_dbContext).ToStringDate()}?"
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Treatment BMP", UrlTemplate.MakeHrefString(SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression( _linkGenerator, x => x.Detail(treatmentBMPAssessment)), "here").ToString());
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
