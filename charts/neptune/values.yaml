@@ -418,6 +418,9 @@ nereid-redis:
   podAnnotations: {}
   podSecurityContext: {}
   securityContext: {}
+  service:
+    type: ClusterIP
+    port: 6379
   autoscaling:
     enabled: false
     minReplicas: 1
