@@ -55,7 +55,7 @@ update dbo.TreatmentBMP
 set WatershedID = null
 
 
-select Watershed as WatershedName, geometry::UnionAggregate(CatchmentGeometry) as WatershedGeometry
+select Watershed as WatershedName, (geometry::UnionAggregate(CatchmentGeometry)).MakeValid() as WatershedGeometry
 into #WatershedStaging
 from dbo.RegionalSubbasin rs
 group by Watershed

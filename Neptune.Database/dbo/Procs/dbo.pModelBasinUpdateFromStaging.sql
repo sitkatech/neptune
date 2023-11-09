@@ -27,7 +27,7 @@ When not matched by Target
 When Not Matched by Source
 	Then Delete;
 
-update dbo.ModelBasinStaging
+update dbo.ModelBasin
 set ModelBasinGeometry = ModelBasinGeometry.MakeValid()
 where ModelBasinGeometry.STIsValid() = 0
 

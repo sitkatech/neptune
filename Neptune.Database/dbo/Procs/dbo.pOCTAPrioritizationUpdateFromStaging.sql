@@ -64,7 +64,7 @@ When not matched by Target
 When Not Matched by Source
 	Then Delete;
 
-update dbo.OCTAPrioritizationStaging
+update dbo.OCTAPrioritization
 set OCTAPrioritizationGeometry = OCTAPrioritizationGeometry.MakeValid()
 where OCTAPrioritizationGeometry.STIsValid() = 0
 

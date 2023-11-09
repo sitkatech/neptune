@@ -24,7 +24,7 @@ When not matched by Target
 When Not Matched by Source
 	Then Delete;
 
-update dbo.PrecipitationZoneStaging
+update dbo.PrecipitationZone
 set PrecipitationZoneGeometry = PrecipitationZoneGeometry.MakeValid()
 where PrecipitationZoneGeometry.STIsValid() = 0
 
