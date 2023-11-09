@@ -405,7 +405,7 @@ nereid-tests:
 nereid-redis:
   replicaCount: 1
   image:
-    repository: esacontainers.azurecr.io/neptune/nereid_redis
+    repository: esacontainers.azurecr.io/neptune/redis
     tag: "v0.7.0"
     pullPolicy: Always
   nameOverride: ""
@@ -420,8 +420,7 @@ nereid-redis:
   securityContext: {}
   service:
     type: ClusterIP
-    ports:
-      redis: 6379
+    port: 6379
   ingress:
     enabled: false
     className: ""
@@ -440,7 +439,7 @@ nereid-redis:
 nereid-flower:
   replicaCount: 1
   image:
-    repository: esacontainers.azurecr.io/neptune/nereid_flower
+    repository: esacontainers.azurecr.io/neptune/flower
     tag: "v0.7.0"
     pullPolicy: Always
   nameOverride: ""
@@ -474,7 +473,7 @@ nereid-flower:
 nereid-celeryworker:
   replicaCount: 1
   image:
-    repository: esacontainers.azurecr.io/neptune/nereid_celeryworker
+    repository: esacontainers.azurecr.io/neptune/celeryworker
     tag: "v0.7.0"
     pullPolicy: Always
   nameOverride: ""
