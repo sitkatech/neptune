@@ -284,7 +284,7 @@ namespace Neptune.WebMvc.Controllers
         public async Task<IActionResult> MapDelete([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, MapDeleteViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var delineation = treatmentBMP.Delineation;
+            var delineation = Delineations.GetByTreatmentBMPID(_dbContext, treatmentBMPPrimaryKey.PrimaryKeyValue);
             var isDelineationDistributed = delineation?.DelineationType == DelineationType.Distributed;
             var geometry = delineation?.DelineationGeometry;
 
