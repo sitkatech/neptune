@@ -143,6 +143,8 @@ stages:
         azureSubscriptionEndpoint: '$(azureSubscription)'
         azureContainerRegistry: '$(containerRegistry)'
         dockerComposeFile: docker-compose.build.yml
+        additionalDockerComposeFiles: |
+          docker-compose.image.yml
         dockerComposeFileArgs: |
           NEREID_ARTIFACT_REGISTRY_PATH=$(containerRegistry)/neptune/
         action: Build services
@@ -161,6 +163,8 @@ stages:
         azureSubscriptionEndpoint: '$(azureSubscription)'
         azureContainerRegistry: '$(containerRegistry)'
         dockerComposeFile: docker-compose.build.yml
+        additionalDockerComposeFiles: |
+          docker-compose.image.yml
         dockerComposeFileArgs: |
           NEREID_ARTIFACT_REGISTRY_PATH=$(containerRegistry)/neptune/
         action: Push services
