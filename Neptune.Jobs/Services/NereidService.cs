@@ -20,6 +20,12 @@ public class NereidService : BaseAPIService<NereidService>
 
     public async Task<object> HealthCheck()
     {
+        return await GetJsonImpl<object>("/", GeoJsonSerializer.DefaultSerializerOptions);
+
+    }
+
+    public async Task<object> ConfigCheck()
+    {
         return await GetJsonImpl<object>("config", GeoJsonSerializer.DefaultSerializerOptions);
 
     }

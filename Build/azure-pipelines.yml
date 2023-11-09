@@ -142,17 +142,7 @@ stages:
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
         azureContainerRegistry: '$(containerRegistry)'
-        dockerComposeFile: docker-compose.shared.depends.yml
-        additionalDockerComposeFiles: |
-          docker-compose.shared.env.yml
-          docker-compose.shared.volumes.yml
-          docker-compose.shared.ports.yml
-          docker-compose.shared.build.yml
-          docker-compose.deploy.images.yml
-        dockerComposeFileArgs: |
-          ACR_SERVER=$(containerRegistry)
-          ACR_REPOSITORY=neptune
-
+        dockerComposeFile: docker-compose.build.yml
         action: Build services
         additionalImageTags: >-
           $(Build.BuildNumber)-$(environment)
@@ -160,7 +150,6 @@ stages:
           $(environment)
 
           $(nereidTag)
-        includeSourceTags: true
         includeLatestTag: true
 
     - task: DockerCompose@0
@@ -169,16 +158,7 @@ stages:
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
         azureContainerRegistry: '$(containerRegistry)'
-        dockerComposeFile: docker-compose.shared.depends.yml
-        additionalDockerComposeFiles: |
-          docker-compose.shared.env.yml
-          docker-compose.shared.volumes.yml
-          docker-compose.shared.ports.yml
-          docker-compose.shared.build.yml
-          docker-compose.deploy.images.yml
-        dockerComposeFileArgs: |
-          ACR_SERVER=$(containerRegistry)
-          ACR_REPOSITORY=neptune
+        dockerComposeFile: docker-compose.build.yml
         action: Push services
         additionalImageTags: >-
           $(Build.BuildNumber)-$(environment)
@@ -186,7 +166,6 @@ stages:
           $(environment)
 
           $(nereidTag)
-        includeSourceTags: true
         includeLatestTag: true
 
 - stage: BuildTerraform

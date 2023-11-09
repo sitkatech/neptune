@@ -14,7 +14,7 @@ global:
     nereid: "neptune-nereid"
     gdalApi: "neptune-gdalapi"
     qgisApi: "neptune-qgisapi"
-    nereidRedis: "neptune-redis-master:6379"
+    nereidRedis: "neptune-redis:6379"
   secrets:
     geoserverSqlServerPassword: "passwordhere"
     geoserverAdminPassword: "geomaster"
@@ -402,6 +402,41 @@ nereid-tests:
   tolerations: []
   affinity: {}
 
+nereid-redis:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/neptune/nereid_redis
+    tag: "v0.7.0"
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    type: ClusterIP
+    ports:
+      redis: 6379
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
 nereid-flower:
   replicaCount: 1
   image:
@@ -469,15 +504,3 @@ nereid-celeryworker:
     agentpool: appnodepool
   tolerations: []
   affinity: {}
-
-redis:
-  architecture: standalone
-  namespace: h2o
-  auth:
-    enabled: false
-  commonConfiguration: |-
-    appendonly no
-    save "" 
-    maxmemory-policy allkeys-lru
-  #Enable AOF https://redis.io/topics/persistence#append-only-file
-  #Disable RDB persistence, AOF persistence already enabled.

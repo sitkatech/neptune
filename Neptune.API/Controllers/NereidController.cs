@@ -72,6 +72,13 @@ namespace Neptune.API.Controllers
             return Ok(healthCheck);
         }
 
+        [HttpGet("nereid/config")]
+        public async Task<IActionResult> ConfigCheck()
+        {
+            var configCheck = await _nereidService.ConfigCheck();
+            return Ok(configCheck);
+        }
+
         /// <summary>
         /// Build the entire Network Graph and send it to the Nereid network/validate endpoint.
         /// Can be used to diagnose issues in the network data, the network builder, or the Nereid validator.

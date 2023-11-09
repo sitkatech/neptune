@@ -309,6 +309,18 @@
         }
       }
     },
+    "/nereid/config": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/nereid/validate": {
       "get": {
         "tags": [
