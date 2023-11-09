@@ -66,7 +66,7 @@ as return
     projectGeometries(ProjectID, ProjectGeometry)
     as
     (
-        select plg.ProjectID, geometry::UnionAggregate(plg.ProjectLoadGeneratingUnitGeometry)
+        select plg.ProjectID, (geometry::UnionAggregate(plg.ProjectLoadGeneratingUnitGeometry)).MakeValid()
         from  projectGeometryUnits plg
         group by ProjectID
     ),
