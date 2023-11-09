@@ -400,6 +400,10 @@
     <Build Include="dbo\Views\dbo.vRegionalSubbasinUpstreamCatchmentGeometry.sql" />
     <Build Include="dbo\Views\dbo.vHRUCharacteristic.sql" />
     <Build Include="dbo\Procs\dbo.pTrashGeneratingUnitDelete.sql" />
+    <Build Include="dbo\Procs\dbo.pProjectLoadGeneratingUnitMakeValid.sql" />
+    <Build Include="dbo\Procs\dbo.pLoadGeneratingUnitMakeValid.sql" />
+    <Build Include="dbo\Procs\dbo.pTrashGeneratingUnitMakeValid.sql" />
+    <Build Include="dbo\Procs\dbo.pTrashGeneratingUnit4326MakeValid.sql" />
   </ItemGroup>
   <UsingTask TaskName="ScriptDeploymentGenerator" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>

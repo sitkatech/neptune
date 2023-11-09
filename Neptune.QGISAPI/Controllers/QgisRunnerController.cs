@@ -85,6 +85,7 @@ public class QgisRunnerController : ControllerBase
         {
             await _dbContext.ProjectLoadGeneratingUnits.AddRangeAsync(projectLoadGeneratingUnits);
             await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pProjectLoadGeneratingUnitMakeValid");
         }
 
         DeleteTempFiles(outputFolder, outputLayerPrefix);
@@ -142,6 +143,7 @@ public class QgisRunnerController : ControllerBase
         {
             await _dbContext.LoadGeneratingUnits.AddRangeAsync(loadGeneratingUnits);
             await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pLoadGeneratingUnitMakeValid");
         }
 
         if (loadGeneratingUnitRefreshArea != null)
@@ -245,12 +247,14 @@ public class QgisRunnerController : ControllerBase
         {
             await _dbContext.TrashGeneratingUnits.AddRangeAsync(trashGeneratingUnits);
             await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTrashGeneratingUnitMakeValid");
         }
 
         if (trashGeneratingUnit4326s.Any())
         {
             await _dbContext.TrashGeneratingUnit4326s.AddRangeAsync(trashGeneratingUnit4326s);
             await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTrashGeneratingUnit4326MakeValid");
         }
 
         DeleteTempFiles(outputFolder, outputLayerPrefix);
