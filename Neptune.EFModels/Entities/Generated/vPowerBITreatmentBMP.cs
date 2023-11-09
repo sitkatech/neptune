@@ -11,6 +11,8 @@ public partial class vPowerBITreatmentBMP
 {
     public int PrimaryKey { get; set; }
 
+    public int TreatmentBMPID { get; set; }
+
     [StringLength(200)]
     [Unicode(false)]
     public string? TreatmentBMPName { get; set; }
@@ -31,7 +33,7 @@ public partial class vPowerBITreatmentBMP
     [Unicode(false)]
     public string? Watershed { get; set; }
 
-    public int? UpstreamBMPID { get; set; }
+    public int? UpstreamTreatmentBMPID { get; set; }
 
     [StringLength(100)]
     [Unicode(false)]
@@ -40,10 +42,6 @@ public partial class vPowerBITreatmentBMP
     public int? WaterQualityManagementPlanID { get; set; }
 
     public int? TreatmentBMPModelingAttributeID { get; set; }
-
-    public int? TreatmentBMPID { get; set; }
-
-    public int? UpstreamTreatmentBMPID { get; set; }
 
     public double? AverageDivertedFlowrate { get; set; }
 
