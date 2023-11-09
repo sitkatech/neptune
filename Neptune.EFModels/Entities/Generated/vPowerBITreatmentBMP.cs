@@ -55,7 +55,7 @@ public partial class vPowerBITreatmentBMP
 
     public double? DiversionRate { get; set; }
 
-    public double? DrawdownTimeforWQDetentionVolume { get; set; }
+    public double? DrawdownTimeForWQDetentionVolume { get; set; }
 
     public double? EffectiveFootprint { get; set; }
 
@@ -67,7 +67,7 @@ public partial class vPowerBITreatmentBMP
 
     public double? MediaBedFootprint { get; set; }
 
-    public double? PermanentPoolorWetlandVolume { get; set; }
+    public double? PermanentPoolOrWetlandVolume { get; set; }
 
     public int? RoutingConfigurationID { get; set; }
 
