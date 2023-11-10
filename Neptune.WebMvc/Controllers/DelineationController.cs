@@ -283,7 +283,6 @@ namespace Neptune.WebMvc.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> MapDelete([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, MapDeleteViewModel viewModel)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var delineation = Delineations.GetByTreatmentBMPID(_dbContext, treatmentBMPPrimaryKey.PrimaryKeyValue);
             var isDelineationDistributed = delineation?.DelineationType == DelineationType.Distributed;
             var geometry = delineation?.DelineationGeometry;
