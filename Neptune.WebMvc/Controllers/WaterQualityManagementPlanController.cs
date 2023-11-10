@@ -436,6 +436,17 @@ namespace Neptune.WebMvc.Controllers
             else
             {
                 sourceControlBMPUpsertDtos = sourceControlBMPs.Select(x => x.AsUpsertDto()).ToList();
+                foreach (var sourceControlBmpAttributeCategoryID in SourceControlBMPAttributeCategory.All.Select(x => x.SourceControlBMPAttributeCategoryID))
+                {
+                    if (!sourceControlBMPUpsertDtos.Select(x => x.SourceControlBMPAttributeCategoryID).ToList()
+                            .Contains(sourceControlBmpAttributeCategoryID))
+                    {
+                        sourceControlBMPUpsertDtos.AddRange(sourceControlBMPAttributes
+                            .Where(x => x.SourceControlBMPAttributeCategoryID ==
+                                        sourceControlBmpAttributeCategoryID)
+                            .Select(x => x.AsUpsertDto()));
+                    }
+                }
             }
             var viewModel = new EditSourceControlBMPsViewModel(sourceControlBMPUpsertDtos);
             return ViewEditSourceControlBMPs(waterQualityManagementPlan, viewModel);

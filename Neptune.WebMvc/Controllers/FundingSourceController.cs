@@ -130,8 +130,9 @@ namespace Neptune.WebMvc.Controllers
         private PartialViewResult ViewDeleteFundingSource(FundingSource fundingSource, ConfirmDialogFormViewModel viewModel)
         {
             var canDelete = true;
-            var count = fundingSource.FundingEventFundingSources.Count;
-            var totalAmount = fundingSource.FundingEventFundingSources.Sum(x => x.Amount).ToStringCurrency();
+            var fundingEventFundingSource = _dbContext.FundingEventFundingSources.Where(x => x.FundingEventID == fundingSource.FundingSourceID).ToList();
+            var count = fundingEventFundingSource.Count();
+            var totalAmount = fundingEventFundingSource.Sum(x => x.Amount).ToStringCurrency();
             var confirmMessage = canDelete
                 ? $"Are you sure you want to delete this {FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()} '{fundingSource.FundingSourceName}'? Deleting this funding source will remove {count} Treatment BMP Funding Event records from the system, totaling {totalAmount}."
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage($"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()}",  UrlTemplate.MakeHrefString(SitkaRoute<FundingSourceController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(fundingSource)), "here").ToString());
@@ -151,8 +152,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewDeleteFundingSource(fundingSource, viewModel);
             }
 
-            _dbContext.FundingSources.Remove(fundingSource);
-            await _dbContext.SaveChangesAsync();
+            await fundingSource.DeleteFull(_dbContext);
             return new ModalDialogFormJsonResult();
         }
     }
