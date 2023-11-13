@@ -14,17 +14,30 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessmentArea](
 )
 GO
 
-CREATE SPATIAL INDEX [SPATIAL_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaGeometry] ON [dbo].[OnlandVisualTrashAssessmentArea]
+create spatial index [SPATIAL_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaGeometry] on [dbo].[OnlandVisualTrashAssessmentArea]
 (
 	[OnlandVisualTrashAssessmentAreaGeometry]
-)USING  GEOMETRY_AUTO_GRID 
-WITH (BOUNDING_BOX =(-118, 33, -117, 34), 
-CELLS_PER_OBJECT = 8, PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+)
+with (BOUNDING_BOX=(1.8348e+006, 644073, 1.87062e+006, 690279))
 GO
 
-CREATE SPATIAL INDEX [SPATIAL_OnlandVisualTrashAssessmentArea_TransectLine] ON [dbo].[OnlandVisualTrashAssessmentArea]
+create spatial index [SPATIAL_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaGeometry4326] on [dbo].[OnlandVisualTrashAssessmentArea]
+(
+	[OnlandVisualTrashAssessmentAreaGeometry4326]
+)
+with (BOUNDING_BOX=(-119, 33, -117, 34))
+GO
+
+create spatial index [SPATIAL_OnlandVisualTrashAssessmentArea_TransectLine] on [dbo].[OnlandVisualTrashAssessmentArea]
 (
 	[TransectLine]
-)USING  GEOMETRY_AUTO_GRID 
-WITH (BOUNDING_BOX =(-119, 33, -117, 34), 
-CELLS_PER_OBJECT = 8, PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+)
+with (BOUNDING_BOX=(1.83482e+006, 644249, 1.87056e+006, 690269))
+GO
+
+create spatial index [SPATIAL_OnlandVisualTrashAssessmentArea_TransectLine4326] on [dbo].[OnlandVisualTrashAssessmentArea]
+(
+	[TransectLine4326]
+)
+with (BOUNDING_BOX=(-119, 33, -117, 34))
+GO

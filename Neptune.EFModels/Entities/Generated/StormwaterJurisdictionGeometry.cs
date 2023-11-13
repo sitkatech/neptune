@@ -9,6 +9,7 @@ namespace Neptune.EFModels.Entities;
 
 [Table("StormwaterJurisdictionGeometry")]
 [Index("StormwaterJurisdictionID", Name = "AK_StormwaterJurisdictionGeometry_StormwaterJurisdictionID", IsUnique = true)]
+[Index("Geometry4326", Name = "SPATIAL_StormwaterJurisdictionGeometry_Geometry4326")]
 [Index("GeometryNative", Name = "SPATIAL_StormwaterJurisdictionGeometry_GeometryNative")]
 public partial class StormwaterJurisdictionGeometry
 {

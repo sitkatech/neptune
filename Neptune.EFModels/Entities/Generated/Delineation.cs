@@ -10,6 +10,7 @@ namespace Neptune.EFModels.Entities;
 [Table("Delineation")]
 [Index("TreatmentBMPID", Name = "AK_Delineation_TreatmentBMPID", IsUnique = true)]
 [Index("DelineationGeometry", Name = "SPATIAL_Delineation_DelineationGeometry")]
+[Index("DelineationGeometry", Name = "SPATIAL_Delineation_DelineationGeometry4326")]
 public partial class Delineation
 {
     [Key]

@@ -9,6 +9,7 @@ namespace Neptune.EFModels.Entities;
 
 [Table("ModelBasinStaging")]
 [Index("ModelBasinKey", Name = "AK_ModelBasinStaging_ModelBasinKey", IsUnique = true)]
+[Index("ModelBasinGeometry", Name = "SPATIAL_ModelBasinStaging_ModelBasinGeometry")]
 public partial class ModelBasinStaging
 {
     [Key]

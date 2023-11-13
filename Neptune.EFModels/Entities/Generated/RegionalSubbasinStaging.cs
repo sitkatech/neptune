@@ -8,6 +8,7 @@ using NetTopologySuite.Geometries;
 namespace Neptune.EFModels.Entities;
 
 [Table("RegionalSubbasinStaging")]
+[Index("CatchmentGeometry", Name = "SPATIAL_RegionalSubbasinStaging_CatchmentGeometry")]
 public partial class RegionalSubbasinStaging
 {
     [Key]

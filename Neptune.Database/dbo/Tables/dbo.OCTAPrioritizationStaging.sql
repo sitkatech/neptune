@@ -17,3 +17,10 @@ CREATE TABLE [dbo].[OCTAPrioritizationStaging](
 	[PC_MET_PCT] [float] NOT NULL,
 	[PC_TSS_PCT] [float] NOT NULL
 )
+GO
+
+create spatial index [SPATIAL_OCTAPrioritizationStaging_OCTAPrioritizationGeometry] on [dbo].[OCTAPrioritizationStaging]
+(
+	[OCTAPrioritizationGeometry]
+)
+with (BOUNDING_BOX=(1.82653e+006, 636160, 1.89215e+006, 699354))

@@ -68,6 +68,7 @@ public class OCGISService : BaseAPIService<OCGISService>
             watershed.WatershedGeometry4326 = watershed.WatershedGeometry.ProjectTo4326();
         }
         await _dbContext.SaveChangesAsync();
+        await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pWatershedMakeValid");
         await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdateWatershed");
         await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pUpdateRegionalSubbasinIntersectionCache");
         await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDelineationMarkThoseThatHaveDiscrepancies");

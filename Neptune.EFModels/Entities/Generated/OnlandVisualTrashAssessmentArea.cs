@@ -11,7 +11,9 @@ namespace Neptune.EFModels.Entities;
 [Index("OnlandVisualTrashAssessmentAreaID", "StormwaterJurisdictionID", Name = "AK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID_StormwaterJurisdictionID", IsUnique = true)]
 [Index("OnlandVisualTrashAssessmentAreaName", "StormwaterJurisdictionID", Name = "AK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaName_StormwaterJurisdictionID", IsUnique = true)]
 [Index("OnlandVisualTrashAssessmentAreaGeometry", Name = "SPATIAL_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaGeometry")]
+[Index("OnlandVisualTrashAssessmentAreaGeometry4326", Name = "SPATIAL_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaGeometry4326")]
 [Index("TransectLine", Name = "SPATIAL_OnlandVisualTrashAssessmentArea_TransectLine")]
+[Index("TransectLine4326", Name = "SPATIAL_OnlandVisualTrashAssessmentArea_TransectLine4326")]
 public partial class OnlandVisualTrashAssessmentArea
 {
     [Key]

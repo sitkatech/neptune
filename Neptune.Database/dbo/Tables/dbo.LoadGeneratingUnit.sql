@@ -7,3 +7,10 @@ CREATE TABLE [dbo].[LoadGeneratingUnit](
 	[WaterQualityManagementPlanID] [int] NULL CONSTRAINT [FK_LoadGeneratingUnit_WaterQualityManagementPlan_WaterQualityManagementPlanID] FOREIGN KEY REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID]),
 	[IsEmptyResponseFromHRUService] [bit] NULL
 )
+GO
+
+create spatial index [SPATIAL_LoadGeneratingUnit_LoadGeneratingUnitGeometry] on [dbo].[LoadGeneratingUnit]
+(
+	[LoadGeneratingUnitGeometry]
+)
+with (BOUNDING_BOX=(1.82653e+006, 636162, 1.89215e+006, 699352))

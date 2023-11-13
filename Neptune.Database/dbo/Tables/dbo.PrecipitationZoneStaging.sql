@@ -4,3 +4,10 @@ CREATE TABLE [dbo].[PrecipitationZoneStaging](
 	[DesignStormwaterDepthInInches] [float] NOT NULL,
 	[PrecipitationZoneGeometry] [geometry] NOT NULL
 )
+GO
+
+create spatial index [SPATIAL_PrecipitationZoneStaging_PrecipitationZoneGeometry] on [dbo].[PrecipitationZoneStaging]
+(
+	[PrecipitationZoneGeometry]
+)
+with (BOUNDING_BOX=(1.82669e+006, 636092, 1.89215e+006, 698762))

@@ -10,3 +10,10 @@ CREATE TABLE [dbo].[DelineationStaging](
 		[UploadedByPersonID] ASC
 	)
 )
+GO
+
+create spatial index [SPATIAL_DelineationStaging_DelineationStagingGeometry] on [dbo].[DelineationStaging]
+(
+	[DelineationStagingGeometry]
+)
+with (BOUNDING_BOX=(1.83062e+006, 652938, 1.87529e+006, 689351))

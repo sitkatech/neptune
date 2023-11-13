@@ -5,3 +5,10 @@ CREATE TABLE [dbo].[PrecipitationZone](
 	[PrecipitationZoneGeometry] [geometry] NOT NULL,
 	[LastUpdate] [datetime] NOT NULL
 )
+GO
+
+create spatial index [SPATIAL_PrecipitationZone_PrecipitationZoneGeometry] on [dbo].[PrecipitationZone]
+(
+	[PrecipitationZoneGeometry]
+)
+with (BOUNDING_BOX=(1.82669e+006, 636092, 1.89215e+006, 698762))

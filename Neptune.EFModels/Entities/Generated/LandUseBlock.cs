@@ -9,6 +9,7 @@ namespace Neptune.EFModels.Entities;
 
 [Table("LandUseBlock")]
 [Index("LandUseBlockGeometry", Name = "SPATIAL_LandUseBlock_LandUseBlockGeometry")]
+[Index("LandUseBlockGeometry4326", Name = "SPATIAL_LandUseBlock_LandUseBlockGeometry4326")]
 public partial class LandUseBlock
 {
     [Key]

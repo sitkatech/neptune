@@ -9,6 +9,7 @@ namespace Neptune.EFModels.Entities;
 
 [Table("OCTAPrioritizationStaging")]
 [Index("OCTAPrioritizationKey", Name = "AK_OCTAPrioritizationStaging_OCTAPrioritizationKey", IsUnique = true)]
+[Index("OCTAPrioritizationGeometry", Name = "SPATIAL_OCTAPrioritizationStaging_OCTAPrioritizationGeometry")]
 public partial class OCTAPrioritizationStaging
 {
     [Key]

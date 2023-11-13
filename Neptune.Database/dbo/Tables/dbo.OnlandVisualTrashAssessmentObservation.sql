@@ -8,9 +8,15 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessmentObservation](
 )	
 GO
 
-CREATE SPATIAL INDEX [SPATIAL_OnlandVisualTrashAssessmentObservation_LocationPoint] ON [dbo].[OnlandVisualTrashAssessmentObservation]
+create spatial index [SPATIAL_OnlandVisualTrashAssessmentObservation_LocationPoint] on [dbo].[OnlandVisualTrashAssessmentObservation]
 (
 	[LocationPoint]
-)USING  GEOMETRY_AUTO_GRID 
-WITH (BOUNDING_BOX =(-118, 33, -117, 34), 
-CELLS_PER_OBJECT = 8, PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+)
+with (BOUNDING_BOX=(1.83482e+006, 645096, 1.87056e+006, 690276))
+GO
+
+create spatial index [SPATIAL_OnlandVisualTrashAssessmentObservation_LocationPoint4326] on [dbo].[OnlandVisualTrashAssessmentObservation]
+(
+	[LocationPoint4326]
+)
+with (BOUNDING_BOX=(-119, 33, -117, 34))

@@ -8,6 +8,7 @@ using NetTopologySuite.Geometries;
 namespace Neptune.EFModels.Entities;
 
 [Table("DelineationOverlap")]
+[Index("OverlappingGeometry", Name = "SPATIAL_DelineationOverlap_OverlappingGeometry")]
 public partial class DelineationOverlap
 {
     [Key]

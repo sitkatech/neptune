@@ -9,6 +9,7 @@ namespace Neptune.EFModels.Entities;
 
 [Table("OnlandVisualTrashAssessmentObservation")]
 [Index("LocationPoint", Name = "SPATIAL_OnlandVisualTrashAssessmentObservation_LocationPoint")]
+[Index("LocationPoint4326", Name = "SPATIAL_OnlandVisualTrashAssessmentObservation_LocationPoint4326")]
 public partial class OnlandVisualTrashAssessmentObservation
 {
     [Key]

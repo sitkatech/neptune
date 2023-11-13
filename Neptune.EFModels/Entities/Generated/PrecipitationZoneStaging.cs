@@ -9,6 +9,7 @@ namespace Neptune.EFModels.Entities;
 
 [Table("PrecipitationZoneStaging")]
 [Index("PrecipitationZoneKey", Name = "AK_PrecipitationZoneStaging_PrecipitationZoneKey", IsUnique = true)]
+[Index("PrecipitationZoneGeometry", Name = "SPATIAL_PrecipitationZoneStaging_PrecipitationZoneGeometry")]
 public partial class PrecipitationZoneStaging
 {
     [Key]

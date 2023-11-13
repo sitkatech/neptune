@@ -8,6 +8,7 @@ using NetTopologySuite.Geometries;
 namespace Neptune.EFModels.Entities;
 
 [Table("RegionalSubbasinRevisionRequest")]
+[Index("RegionalSubbasinRevisionRequestGeometry", Name = "SPATIAL_RegionalSubbasinRevisionRequest_RegionalSubbasinRevisionRequestGeometry")]
 public partial class RegionalSubbasinRevisionRequest
 {
     [Key]

@@ -8,6 +8,7 @@ using NetTopologySuite.Geometries;
 namespace Neptune.EFModels.Entities;
 
 [Table("LoadGeneratingUnit")]
+[Index("LoadGeneratingUnitGeometry", Name = "SPATIAL_LoadGeneratingUnit_LoadGeneratingUnitGeometry")]
 public partial class LoadGeneratingUnit
 {
     [Key]

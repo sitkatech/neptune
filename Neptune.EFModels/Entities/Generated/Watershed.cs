@@ -8,6 +8,8 @@ using NetTopologySuite.Geometries;
 namespace Neptune.EFModels.Entities;
 
 [Table("Watershed")]
+[Index("WatershedGeometry", Name = "SPATIAL_Watershed_WatershedGeometry")]
+[Index("WatershedGeometry4326", Name = "SPATIAL_Watershed_WatershedGeometry4326")]
 public partial class Watershed
 {
     [Key]

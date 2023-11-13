@@ -11,3 +11,11 @@ CREATE TABLE [dbo].[RegionalSubbasinRevisionRequest](
 	[CloseNotes] [varchar](max) NULL,
 	CONSTRAINT [CK_RegionalSubbasinRevisionRequest_ClosedReqMustHaveCloseDate] CHECK  ((NOT ([RegionalSubbasinRevisionRequestStatusID]=(2) AND [ClosedDate] IS NULL)))
 )
+GO
+
+CREATE SPATIAL INDEX [SPATIAL_RegionalSubbasinRevisionRequest_RegionalSubbasinRevisionRequestGeometry] ON [dbo].[RegionalSubbasinRevisionRequest]
+(
+	[RegionalSubbasinRevisionRequestGeometry]
+)USING  GEOMETRY_AUTO_GRID 
+WITH (BOUNDING_BOX =(-119, 33, -117, 34), 
+CELLS_PER_OBJECT = 8, PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)

@@ -11,6 +11,7 @@ namespace Neptune.EFModels.Entities;
 [Index("OCSurveyCatchmentID", Name = "AK_RegionalSubbasin_OCSurveyCatchmentID", IsUnique = true)]
 [Index("OCSurveyDownstreamCatchmentID", Name = "IX_RegionalSubbasin_OCSurveyDownstreamCatchmentID")]
 [Index("CatchmentGeometry", Name = "SPATIAL_RegionalSubbasin_CatchmentGeometry")]
+[Index("CatchmentGeometry4326", Name = "SPATIAL_RegionalSubbasin_CatchmentGeometry4326")]
 public partial class RegionalSubbasin
 {
     [Key]
