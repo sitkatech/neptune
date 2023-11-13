@@ -33,7 +33,7 @@ namespace Neptune.API.Controllers
         public ActionResult<List<TreatmentBMPDisplayDto>> ListByPersonID()
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var treatmentBMPDisplayDtos = TreatmentBMPs.ListByPersonIDAsDisplayDto(_dbContext, personDto.PersonID);
+            var treatmentBMPDisplayDtos = TreatmentBMPs.ListByPersonIDAsDisplayDto(_dbContext, personDto);
             return Ok(treatmentBMPDisplayDtos);
         }
 

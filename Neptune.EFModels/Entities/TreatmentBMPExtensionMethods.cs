@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Neptune.Common.GeoSpatial;
-using Neptune.Models.DataTransferObjects;
-using NetTopologySuite.Geometries;
+﻿using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities;
 
@@ -13,7 +10,12 @@ public static partial class TreatmentBMPExtensionMethods
         {
             TreatmentBMPID = treatmentBMP.TreatmentBMPID,
             DisplayName = treatmentBMP.TreatmentBMPName,
-            TreatmentBMPTypeName = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName
+            TreatmentBMPTypeName = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName,
+            ProjectID = treatmentBMP.ProjectID,
+            InventoryIsVerified = treatmentBMP.InventoryIsVerified,
+            Longitude = treatmentBMP.LocationPoint4326.Coordinate.X,
+            Latitude = treatmentBMP.LocationPoint4326.Coordinate.Y,
+            TreatmentBMPName = treatmentBMP.TreatmentBMPName
         };
         return treatmentBMPSimpleDto;
     }

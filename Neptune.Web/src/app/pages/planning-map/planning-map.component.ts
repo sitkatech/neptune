@@ -174,13 +174,6 @@ export class PlanningMapComponent implements OnInit {
     }, this.tileLayers);
 
 
-    let regionalSubbasinsWMSOptions = ({
-      layers: "OCStormwater:RegionalSubbasins",
-      transparent: true,
-      format: "image/png",
-      tiled: true
-    } as L.WMSOptions);
-
     let jurisdictionsWMSOptions = ({
       layers: "OCStormwater:Jurisdictions",
       transparent: true,
