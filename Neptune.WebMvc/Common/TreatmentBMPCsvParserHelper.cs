@@ -701,7 +701,7 @@ namespace Neptune.WebMvc.Common
         public static string GetAppropriateModelingAttributeColumnName(string fieldDefinition)
         {
             string returnVal;
-            if (fieldDefinition == FieldDefinitionType.UnderlyingHydrologicSoilGroupHSG.FieldDefinitionTypeDisplayName)
+            if (fieldDefinition == FieldDefinitionType.UnderlyingHydrologicSoilGroupID.FieldDefinitionTypeDisplayName)
             {
                 returnVal = "UnderlyingHydrologicSoilGroupID";
             }
@@ -713,7 +713,7 @@ namespace Neptune.WebMvc.Common
             {
                 returnVal = "PermanentPoolorWetlandVolume";
             }
-            else if (fieldDefinition == FieldDefinitionType.TimeOfConcentration.FieldDefinitionTypeDisplayName)
+            else if (fieldDefinition == FieldDefinitionType.TimeOfConcentrationID.FieldDefinitionTypeDisplayName)
             {
                 returnVal = "TimeOfConcentrationID";
             }
@@ -721,7 +721,7 @@ namespace Neptune.WebMvc.Common
             {
                 returnVal = "RoutingConfigurationID";
             }
-            else if (fieldDefinition == FieldDefinitionType.MonthsOperational.FieldDefinitionTypeDisplayName)
+            else if (fieldDefinition == FieldDefinitionType.MonthsOfOperationID.FieldDefinitionTypeDisplayName)
             {
                 returnVal = "MonthsOfOperationID";
             }
@@ -740,7 +740,7 @@ namespace Neptune.WebMvc.Common
             var modelingType = treatmentBMPType.TreatmentBMPModelingType;
             if (modelingType != null)
             {
-                returnList.Add(FieldDefinitionType.TimeOfConcentration.FieldDefinitionTypeDisplayName);
+                returnList.Add(FieldDefinitionType.TimeOfConcentrationID.FieldDefinitionTypeDisplayName);
 
                 switch (modelingType.ToEnum)
                 {
@@ -753,7 +753,7 @@ namespace Neptune.WebMvc.Common
                             FieldDefinitionType.StorageVolumeBelowLowestOutletElevation.FieldDefinitionTypeDisplayName,
                             FieldDefinitionType.MediaBedFootprint.FieldDefinitionTypeDisplayName,
                             FieldDefinitionType.DesignMediaFiltrationRate.FieldDefinitionTypeDisplayName,
-                            FieldDefinitionType.UnderlyingHydrologicSoilGroupHSG.FieldDefinitionTypeDisplayName
+                            FieldDefinitionType.UnderlyingHydrologicSoilGroupID.FieldDefinitionTypeDisplayName
                         });
                         break;
                     case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
@@ -812,7 +812,7 @@ namespace Neptune.WebMvc.Common
                             FieldDefinitionType.StorageVolumeBelowLowestOutletElevation.FieldDefinitionTypeDisplayName,
                             FieldDefinitionType.EffectiveFootprint.FieldDefinitionTypeDisplayName,
                             FieldDefinitionType.DrawdownTimeForWQDetentionVolume.FieldDefinitionTypeDisplayName,
-                            FieldDefinitionType.UnderlyingHydrologicSoilGroupHSG.FieldDefinitionTypeDisplayName
+                            FieldDefinitionType.UnderlyingHydrologicSoilGroupID.FieldDefinitionTypeDisplayName
                         });
                         break;
                     case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
@@ -820,7 +820,7 @@ namespace Neptune.WebMvc.Common
                         {
                             FieldDefinitionType.DesignDryWeatherTreatmentCapacity.FieldDefinitionTypeDisplayName,
                             FieldDefinitionType.AverageTreatmentFlowrate.FieldDefinitionTypeDisplayName,
-                            FieldDefinitionType.MonthsOperational.FieldDefinitionTypeDisplayName
+                            FieldDefinitionType.MonthsOfOperationID.FieldDefinitionTypeDisplayName
                         });
                         break;
                     case TreatmentBMPModelingTypeEnum.Drywell:
@@ -845,7 +845,7 @@ namespace Neptune.WebMvc.Common
                         {
                             FieldDefinitionType.DesignLowFlowDiversionCapacity.FieldDefinitionTypeDisplayName,
                             FieldDefinitionType.AverageDivertedFlowrate.FieldDefinitionTypeDisplayName,
-                            FieldDefinitionType.MonthsOperational.FieldDefinitionTypeDisplayName
+                            FieldDefinitionType.MonthsOfOperationID.FieldDefinitionTypeDisplayName
                         });
                         break;
                     case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
@@ -857,7 +857,7 @@ namespace Neptune.WebMvc.Common
                             FieldDefinitionType.TreatmentRate.FieldDefinitionTypeDisplayName,
                             FieldDefinitionType.WettedFootprint.FieldDefinitionTypeDisplayName,
                             FieldDefinitionType.EffectiveRetentionDepth.FieldDefinitionTypeDisplayName,
-                            FieldDefinitionType.UnderlyingHydrologicSoilGroupHSG.FieldDefinitionTypeDisplayName
+                            FieldDefinitionType.UnderlyingHydrologicSoilGroupID.FieldDefinitionTypeDisplayName
                         });
                         break;
                 }

@@ -244,17 +244,17 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             FieldDefinitionForInfiltrationDischargeRate = FieldDefinitionType.InfiltrationDischargeRate;
             FieldDefinitionForInfiltrationSurfaceArea = FieldDefinitionType.InfiltrationSurfaceArea;
             FieldDefinitionForMediaBedFootprint = FieldDefinitionType.MediaBedFootprint;
-            FieldDefinitionForMonthsofOperation = FieldDefinitionType.MonthsOperational;
+            FieldDefinitionForMonthsofOperation = FieldDefinitionType.MonthsOfOperationID;
             FieldDefinitionForPermanentPoolorWetlandVolume = FieldDefinitionType.PermanentPoolOrWetlandVolume;
             FieldDefinitionForRoutingConfiguration = FieldDefinitionType.RoutingConfiguration;
             FieldDefinitionForStorageVolumeBelowLowestOutletElevation = FieldDefinitionType.StorageVolumeBelowLowestOutletElevation;
             FieldDefinitionForSummerHarvestedWaterDemand = FieldDefinitionType.SummerHarvestedWaterDemand;
-            FieldDefinitionForTimeofConcentration = FieldDefinitionType.TimeOfConcentration;
+            FieldDefinitionForTimeofConcentration = FieldDefinitionType.TimeOfConcentrationID;
             FieldDefinitionForDrawdownTimeForDetentionVolume = FieldDefinitionType.DrawdownTimeForDetentionVolume;
             FieldDefinitionForTotalEffectiveBMPVolume = FieldDefinitionType.TotalEffectiveBMPVolume;
             FieldDefinitionForTotalEffectiveDrywellBMPVolume = FieldDefinitionType.TotalEffectiveDrywellBMPVolume;
             FieldDefinitionForTreatmentRate = FieldDefinitionType.TreatmentRate;
-            FieldDefinitionForUnderlyingHydrologicSoilGroupHSG = FieldDefinitionType.UnderlyingHydrologicSoilGroupHSG;
+            FieldDefinitionForUnderlyingHydrologicSoilGroupHSG = FieldDefinitionType.UnderlyingHydrologicSoilGroupID;
             FieldDefinitionForUnderlyingInfiltrationRate = FieldDefinitionType.UnderlyingInfiltrationRate;
             FieldDefinitionForUpstreamBMP = FieldDefinitionType.UpstreamBMP;
             FieldDefinitionForWaterQualityDetentionVolume = FieldDefinitionType.WaterQualityDetentionVolume;
@@ -262,7 +262,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             FieldDefinitionForWinterHarvestedWaterDemand = FieldDefinitionType.WinterHarvestedWaterDemand;
             FieldDefinitionForWatershed = FieldDefinitionType.Watershed;
             FieldDefinitionForDesignStormwaterDepth = FieldDefinitionType.DesignStormwaterDepth;
-            FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverride;
+            FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverrideID;
 
             OpenRevisionRequest = regionalSubbasinRevisionRequest;
             Watershed = watershed;

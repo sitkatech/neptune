@@ -76,7 +76,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.SummerHarvestedWaterDemand)]
         public double? SummerHarvestedWaterDemand { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.TimeOfConcentration)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.TimeOfConcentrationID)]
         public int? TimeOfConcentrationID { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DrawdownTimeForDetentionVolume)]
@@ -91,7 +91,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.TreatmentRate)]
         public double? TreatmentRate { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.UnderlyingHydrologicSoilGroupHSG)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.UnderlyingHydrologicSoilGroupID)]
         public int? UnderlyingHydrologicSoilGroupID { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.UnderlyingInfiltrationRate)]
@@ -106,10 +106,10 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.WinterHarvestedWaterDemand)]
         public double? WinterHarvestedWaterDemand { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.MonthsOperational)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.MonthsOfOperationID)]
         public int? MonthsOfOperationID { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DryWeatherFlowOverride)]
+        [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DryWeatherFlowOverrideID)]
         public int? DryWeatherFlowOverrideID { get; set; }
 
         public int? TreatmentBMPModelingTypeID { get; set; }

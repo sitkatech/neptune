@@ -98,7 +98,7 @@ namespace Neptune.API.Controllers
 
             await Projects.DeleteProjectNereidResultsAndGrantScores(_dbContext, projectID);
             var existingProjectTreatmentBMPs = _dbContext.TreatmentBMPs.Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP).Where(x => x.ProjectID == project.ProjectID).ToList();
-            var existingProjectTreatmentBMPModelingAttributes = existingProjectTreatmentBMPs.Select(x => x.TreatmentBMPModelingAttributeTreatmentBMP).ToList();
+            var existingProjectTreatmentBMPModelingAttributes = existingProjectTreatmentBMPs.Where(x => x.TreatmentBMPModelingAttributeTreatmentBMP != null).Select(x => x.TreatmentBMPModelingAttributeTreatmentBMP).ToList();
 
             var allTreatmentBMPModelingAttributesInDatabase = _dbContext.TreatmentBMPModelingAttributes;
 
@@ -130,7 +130,7 @@ namespace Neptune.API.Controllers
                 });
 
             // merge TreatmentBMPModelingAttributeIDs
-            var updatedTreatmentBMPModelingAttributes = treatmentBMPUpsertDtos.Select(TreatmentBMPs.TreatmentBMPModelingAttributeFromUpsertDto).ToList();
+            var updatedTreatmentBMPModelingAttributes = updatedTreatmentBMPs.Select(x => x.TreatmentBMPModelingAttributeTreatmentBMP).ToList();
             existingProjectTreatmentBMPModelingAttributes.Merge(updatedTreatmentBMPModelingAttributes, allTreatmentBMPModelingAttributesInDatabase,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
                 (x, y) =>

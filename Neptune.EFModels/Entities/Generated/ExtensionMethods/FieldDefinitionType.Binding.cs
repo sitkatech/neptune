@@ -103,17 +103,17 @@ namespace Neptune.EFModels.Entities
         public static readonly FieldDefinitionTypeInfiltrationDischargeRate InfiltrationDischargeRate = Neptune.EFModels.Entities.FieldDefinitionTypeInfiltrationDischargeRate.Instance;
         public static readonly FieldDefinitionTypeInfiltrationSurfaceArea InfiltrationSurfaceArea = Neptune.EFModels.Entities.FieldDefinitionTypeInfiltrationSurfaceArea.Instance;
         public static readonly FieldDefinitionTypeMediaBedFootprint MediaBedFootprint = Neptune.EFModels.Entities.FieldDefinitionTypeMediaBedFootprint.Instance;
-        public static readonly FieldDefinitionTypeMonthsOperational MonthsOperational = Neptune.EFModels.Entities.FieldDefinitionTypeMonthsOperational.Instance;
+        public static readonly FieldDefinitionTypeMonthsOfOperationID MonthsOfOperationID = Neptune.EFModels.Entities.FieldDefinitionTypeMonthsOfOperationID.Instance;
         public static readonly FieldDefinitionTypePermanentPoolOrWetlandVolume PermanentPoolOrWetlandVolume = Neptune.EFModels.Entities.FieldDefinitionTypePermanentPoolOrWetlandVolume.Instance;
         public static readonly FieldDefinitionTypeRoutingConfiguration RoutingConfiguration = Neptune.EFModels.Entities.FieldDefinitionTypeRoutingConfiguration.Instance;
         public static readonly FieldDefinitionTypeStorageVolumeBelowLowestOutletElevation StorageVolumeBelowLowestOutletElevation = Neptune.EFModels.Entities.FieldDefinitionTypeStorageVolumeBelowLowestOutletElevation.Instance;
         public static readonly FieldDefinitionTypeSummerHarvestedWaterDemand SummerHarvestedWaterDemand = Neptune.EFModels.Entities.FieldDefinitionTypeSummerHarvestedWaterDemand.Instance;
-        public static readonly FieldDefinitionTypeTimeOfConcentration TimeOfConcentration = Neptune.EFModels.Entities.FieldDefinitionTypeTimeOfConcentration.Instance;
+        public static readonly FieldDefinitionTypeTimeOfConcentrationID TimeOfConcentrationID = Neptune.EFModels.Entities.FieldDefinitionTypeTimeOfConcentrationID.Instance;
         public static readonly FieldDefinitionTypeDrawdownTimeForDetentionVolume DrawdownTimeForDetentionVolume = Neptune.EFModels.Entities.FieldDefinitionTypeDrawdownTimeForDetentionVolume.Instance;
         public static readonly FieldDefinitionTypeTotalEffectiveBMPVolume TotalEffectiveBMPVolume = Neptune.EFModels.Entities.FieldDefinitionTypeTotalEffectiveBMPVolume.Instance;
         public static readonly FieldDefinitionTypeTotalEffectiveDrywellBMPVolume TotalEffectiveDrywellBMPVolume = Neptune.EFModels.Entities.FieldDefinitionTypeTotalEffectiveDrywellBMPVolume.Instance;
         public static readonly FieldDefinitionTypeTreatmentRate TreatmentRate = Neptune.EFModels.Entities.FieldDefinitionTypeTreatmentRate.Instance;
-        public static readonly FieldDefinitionTypeUnderlyingHydrologicSoilGroupHSG UnderlyingHydrologicSoilGroupHSG = Neptune.EFModels.Entities.FieldDefinitionTypeUnderlyingHydrologicSoilGroupHSG.Instance;
+        public static readonly FieldDefinitionTypeUnderlyingHydrologicSoilGroupID UnderlyingHydrologicSoilGroupID = Neptune.EFModels.Entities.FieldDefinitionTypeUnderlyingHydrologicSoilGroupID.Instance;
         public static readonly FieldDefinitionTypeUnderlyingInfiltrationRate UnderlyingInfiltrationRate = Neptune.EFModels.Entities.FieldDefinitionTypeUnderlyingInfiltrationRate.Instance;
         public static readonly FieldDefinitionTypeUpstreamBMP UpstreamBMP = Neptune.EFModels.Entities.FieldDefinitionTypeUpstreamBMP.Instance;
         public static readonly FieldDefinitionTypeWaterQualityDetentionVolume WaterQualityDetentionVolume = Neptune.EFModels.Entities.FieldDefinitionTypeWaterQualityDetentionVolume.Instance;
@@ -128,7 +128,7 @@ namespace Neptune.EFModels.Entities
         public static readonly FieldDefinitionTypeFullyParameterized FullyParameterized = Neptune.EFModels.Entities.FieldDefinitionTypeFullyParameterized.Instance;
         public static readonly FieldDefinitionTypeHydromodificationApplies HydromodificationApplies = Neptune.EFModels.Entities.FieldDefinitionTypeHydromodificationApplies.Instance;
         public static readonly FieldDefinitionTypeDelineationStatus DelineationStatus = Neptune.EFModels.Entities.FieldDefinitionTypeDelineationStatus.Instance;
-        public static readonly FieldDefinitionTypeDryWeatherFlowOverride DryWeatherFlowOverride = Neptune.EFModels.Entities.FieldDefinitionTypeDryWeatherFlowOverride.Instance;
+        public static readonly FieldDefinitionTypeDryWeatherFlowOverrideID DryWeatherFlowOverrideID = Neptune.EFModels.Entities.FieldDefinitionTypeDryWeatherFlowOverrideID.Instance;
         public static readonly FieldDefinitionTypeModeledPerformance ModeledPerformance = Neptune.EFModels.Entities.FieldDefinitionTypeModeledPerformance.Instance;
         public static readonly FieldDefinitionTypeOCTAM2Tier2GrantProgram OCTAM2Tier2GrantProgram = Neptune.EFModels.Entities.FieldDefinitionTypeOCTAM2Tier2GrantProgram.Instance;
         public static readonly FieldDefinitionTypeSEAScore SEAScore = Neptune.EFModels.Entities.FieldDefinitionTypeSEAScore.Instance;
@@ -163,8 +163,8 @@ namespace Neptune.EFModels.Entities
         /// </summary>
         static FieldDefinitionType()
         {
-            All = new List<FieldDefinitionType> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction, LoadingRate, LandUse, Area, ImperviousArea, GrossArea, LandUseStatistics, RegionalSubbasin, AverageDivertedFlowrate, AverageTreatmentFlowrate, DesignDryWeatherTreatmentCapacity, DesignLowFlowDiversionCapacity, DesignMediaFiltrationRate, DesignResidenceTimeForPermanentPool, DiversionRate, DrawdownTimeForWQDetentionVolume, EffectiveFootprint, EffectiveRetentionDepth, InfiltrationDischargeRate, InfiltrationSurfaceArea, MediaBedFootprint, MonthsOperational, PermanentPoolOrWetlandVolume, RoutingConfiguration, StorageVolumeBelowLowestOutletElevation, SummerHarvestedWaterDemand, TimeOfConcentration, DrawdownTimeForDetentionVolume, TotalEffectiveBMPVolume, TotalEffectiveDrywellBMPVolume, TreatmentRate, UnderlyingHydrologicSoilGroupHSG, UnderlyingInfiltrationRate, UpstreamBMP, WaterQualityDetentionVolume, WettedFootprint, WinterHarvestedWaterDemand, PercentOfSiteTreated, PercentCaptured, PercentRetained, AreaWithinWQMP, Watershed, DesignStormwaterDepth, FullyParameterized, HydromodificationApplies, DelineationStatus, DryWeatherFlowOverride, ModeledPerformance, OCTAM2Tier2GrantProgram, SEAScore, TPIScore, WQLRI, PollutantContributiontoSEA, SiteRunoff, TreatedAndDischarged, RetainedOrRecycled, UntreatedBypassOrOverflow, TotalSuspendedSolids, TotalNitrogen, TotalPhosphorous, FecalColiform, TotalCopper, TotalLead, TotalZinc, OCTAWatershed, EffectiveAreaAcres, DesignStormDepth85thPercentile, DesignVolume85thPercentile, LandUseBasedWaterQualityScore, ReceivingWaterScore };
-            AllAsDto = new List<FieldDefinitionTypeDto> { IsPrimaryContactOrganization.AsDto(), Organization.AsDto(), Password.AsDto(), MeasurementUnit.AsDto(), PhotoCaption.AsDto(), PhotoCredit.AsDto(), PhotoTiming.AsDto(), PrimaryContact.AsDto(), OrganizationType.AsDto(), Username.AsDto(), ExternalLinks.AsDto(), RoleName.AsDto(), ChartLastUpdatedDate.AsDto(), TreatmentBMPType.AsDto(), ConveyanceFunctionsAsIntended.AsDto(), AssessmentScoreWeight.AsDto(), ObservationScore.AsDto(), AlternativeScore.AsDto(), AssessmentForInternalUseOnly.AsDto(), TreatmentBMPDesignDepth.AsDto(), ReceivesSystemCommunications.AsDto(), Jurisdiction.AsDto(), Delineation.AsDto(), TreatmentBMP.AsDto(), TreatmentBMPAssessmentObservationType.AsDto(), ObservationCollectionMethod.AsDto(), ObservationThresholdType.AsDto(), ObservationTargetType.AsDto(), MeasurementUnitLabel.AsDto(), PropertiesToObserve.AsDto(), MinimumNumberOfObservations.AsDto(), MaximumNumberOfObservations.AsDto(), MinimumValueOfEachObservation.AsDto(), MaximumValueOfEachObservation.AsDto(), DefaultThresholdValue.AsDto(), DefaultBenchmarkValue.AsDto(), AssessmentFailsIfObservationFails.AsDto(), CustomAttributeType.AsDto(), CustomAttributeDataType.AsDto(), MaintenanceRecordType.AsDto(), MaintenanceRecord.AsDto(), AttributeTypePurpose.AsDto(), FundingSource.AsDto(), IsPostMaintenanceAssessment.AsDto(), FundingEvent.AsDto(), FieldVisit.AsDto(), FieldVisitStatus.AsDto(), WaterQualityManagementPlan.AsDto(), Parcel.AsDto(), RequiredLifespanOfInstallation.AsDto(), RequiredFieldVisitsPerYear.AsDto(), RequiredPostStormFieldVisitsPerYear.AsDto(), WaterQualityManagementPlanDocumentType.AsDto(), HasAllRequiredDocuments.AsDto(), DateOfLastInventoryChange.AsDto(), TrashCaptureStatus.AsDto(), OnlandVisualTrashAssessment.AsDto(), OnlandVisualTrashAssessmentNotes.AsDto(), DelineationType.AsDto(), BaselineScore.AsDto(), SizingBasis.AsDto(), ProgressScore.AsDto(), AssessmentScore.AsDto(), ViaFullCapture.AsDto(), ViaPartialCapture.AsDto(), ViaOVTAScore.AsDto(), TotalAchieved.AsDto(), TargetLoadReduction.AsDto(), LoadingRate.AsDto(), LandUse.AsDto(), Area.AsDto(), ImperviousArea.AsDto(), GrossArea.AsDto(), LandUseStatistics.AsDto(), RegionalSubbasin.AsDto(), AverageDivertedFlowrate.AsDto(), AverageTreatmentFlowrate.AsDto(), DesignDryWeatherTreatmentCapacity.AsDto(), DesignLowFlowDiversionCapacity.AsDto(), DesignMediaFiltrationRate.AsDto(), DesignResidenceTimeForPermanentPool.AsDto(), DiversionRate.AsDto(), DrawdownTimeForWQDetentionVolume.AsDto(), EffectiveFootprint.AsDto(), EffectiveRetentionDepth.AsDto(), InfiltrationDischargeRate.AsDto(), InfiltrationSurfaceArea.AsDto(), MediaBedFootprint.AsDto(), MonthsOperational.AsDto(), PermanentPoolOrWetlandVolume.AsDto(), RoutingConfiguration.AsDto(), StorageVolumeBelowLowestOutletElevation.AsDto(), SummerHarvestedWaterDemand.AsDto(), TimeOfConcentration.AsDto(), DrawdownTimeForDetentionVolume.AsDto(), TotalEffectiveBMPVolume.AsDto(), TotalEffectiveDrywellBMPVolume.AsDto(), TreatmentRate.AsDto(), UnderlyingHydrologicSoilGroupHSG.AsDto(), UnderlyingInfiltrationRate.AsDto(), UpstreamBMP.AsDto(), WaterQualityDetentionVolume.AsDto(), WettedFootprint.AsDto(), WinterHarvestedWaterDemand.AsDto(), PercentOfSiteTreated.AsDto(), PercentCaptured.AsDto(), PercentRetained.AsDto(), AreaWithinWQMP.AsDto(), Watershed.AsDto(), DesignStormwaterDepth.AsDto(), FullyParameterized.AsDto(), HydromodificationApplies.AsDto(), DelineationStatus.AsDto(), DryWeatherFlowOverride.AsDto(), ModeledPerformance.AsDto(), OCTAM2Tier2GrantProgram.AsDto(), SEAScore.AsDto(), TPIScore.AsDto(), WQLRI.AsDto(), PollutantContributiontoSEA.AsDto(), SiteRunoff.AsDto(), TreatedAndDischarged.AsDto(), RetainedOrRecycled.AsDto(), UntreatedBypassOrOverflow.AsDto(), TotalSuspendedSolids.AsDto(), TotalNitrogen.AsDto(), TotalPhosphorous.AsDto(), FecalColiform.AsDto(), TotalCopper.AsDto(), TotalLead.AsDto(), TotalZinc.AsDto(), OCTAWatershed.AsDto(), EffectiveAreaAcres.AsDto(), DesignStormDepth85thPercentile.AsDto(), DesignVolume85thPercentile.AsDto(), LandUseBasedWaterQualityScore.AsDto(), ReceivingWaterScore.AsDto() };
+            All = new List<FieldDefinitionType> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, Delineation, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore, AssessmentScore, ViaFullCapture, ViaPartialCapture, ViaOVTAScore, TotalAchieved, TargetLoadReduction, LoadingRate, LandUse, Area, ImperviousArea, GrossArea, LandUseStatistics, RegionalSubbasin, AverageDivertedFlowrate, AverageTreatmentFlowrate, DesignDryWeatherTreatmentCapacity, DesignLowFlowDiversionCapacity, DesignMediaFiltrationRate, DesignResidenceTimeForPermanentPool, DiversionRate, DrawdownTimeForWQDetentionVolume, EffectiveFootprint, EffectiveRetentionDepth, InfiltrationDischargeRate, InfiltrationSurfaceArea, MediaBedFootprint, MonthsOfOperationID, PermanentPoolOrWetlandVolume, RoutingConfiguration, StorageVolumeBelowLowestOutletElevation, SummerHarvestedWaterDemand, TimeOfConcentrationID, DrawdownTimeForDetentionVolume, TotalEffectiveBMPVolume, TotalEffectiveDrywellBMPVolume, TreatmentRate, UnderlyingHydrologicSoilGroupID, UnderlyingInfiltrationRate, UpstreamBMP, WaterQualityDetentionVolume, WettedFootprint, WinterHarvestedWaterDemand, PercentOfSiteTreated, PercentCaptured, PercentRetained, AreaWithinWQMP, Watershed, DesignStormwaterDepth, FullyParameterized, HydromodificationApplies, DelineationStatus, DryWeatherFlowOverrideID, ModeledPerformance, OCTAM2Tier2GrantProgram, SEAScore, TPIScore, WQLRI, PollutantContributiontoSEA, SiteRunoff, TreatedAndDischarged, RetainedOrRecycled, UntreatedBypassOrOverflow, TotalSuspendedSolids, TotalNitrogen, TotalPhosphorous, FecalColiform, TotalCopper, TotalLead, TotalZinc, OCTAWatershed, EffectiveAreaAcres, DesignStormDepth85thPercentile, DesignVolume85thPercentile, LandUseBasedWaterQualityScore, ReceivingWaterScore };
+            AllAsDto = new List<FieldDefinitionTypeDto> { IsPrimaryContactOrganization.AsDto(), Organization.AsDto(), Password.AsDto(), MeasurementUnit.AsDto(), PhotoCaption.AsDto(), PhotoCredit.AsDto(), PhotoTiming.AsDto(), PrimaryContact.AsDto(), OrganizationType.AsDto(), Username.AsDto(), ExternalLinks.AsDto(), RoleName.AsDto(), ChartLastUpdatedDate.AsDto(), TreatmentBMPType.AsDto(), ConveyanceFunctionsAsIntended.AsDto(), AssessmentScoreWeight.AsDto(), ObservationScore.AsDto(), AlternativeScore.AsDto(), AssessmentForInternalUseOnly.AsDto(), TreatmentBMPDesignDepth.AsDto(), ReceivesSystemCommunications.AsDto(), Jurisdiction.AsDto(), Delineation.AsDto(), TreatmentBMP.AsDto(), TreatmentBMPAssessmentObservationType.AsDto(), ObservationCollectionMethod.AsDto(), ObservationThresholdType.AsDto(), ObservationTargetType.AsDto(), MeasurementUnitLabel.AsDto(), PropertiesToObserve.AsDto(), MinimumNumberOfObservations.AsDto(), MaximumNumberOfObservations.AsDto(), MinimumValueOfEachObservation.AsDto(), MaximumValueOfEachObservation.AsDto(), DefaultThresholdValue.AsDto(), DefaultBenchmarkValue.AsDto(), AssessmentFailsIfObservationFails.AsDto(), CustomAttributeType.AsDto(), CustomAttributeDataType.AsDto(), MaintenanceRecordType.AsDto(), MaintenanceRecord.AsDto(), AttributeTypePurpose.AsDto(), FundingSource.AsDto(), IsPostMaintenanceAssessment.AsDto(), FundingEvent.AsDto(), FieldVisit.AsDto(), FieldVisitStatus.AsDto(), WaterQualityManagementPlan.AsDto(), Parcel.AsDto(), RequiredLifespanOfInstallation.AsDto(), RequiredFieldVisitsPerYear.AsDto(), RequiredPostStormFieldVisitsPerYear.AsDto(), WaterQualityManagementPlanDocumentType.AsDto(), HasAllRequiredDocuments.AsDto(), DateOfLastInventoryChange.AsDto(), TrashCaptureStatus.AsDto(), OnlandVisualTrashAssessment.AsDto(), OnlandVisualTrashAssessmentNotes.AsDto(), DelineationType.AsDto(), BaselineScore.AsDto(), SizingBasis.AsDto(), ProgressScore.AsDto(), AssessmentScore.AsDto(), ViaFullCapture.AsDto(), ViaPartialCapture.AsDto(), ViaOVTAScore.AsDto(), TotalAchieved.AsDto(), TargetLoadReduction.AsDto(), LoadingRate.AsDto(), LandUse.AsDto(), Area.AsDto(), ImperviousArea.AsDto(), GrossArea.AsDto(), LandUseStatistics.AsDto(), RegionalSubbasin.AsDto(), AverageDivertedFlowrate.AsDto(), AverageTreatmentFlowrate.AsDto(), DesignDryWeatherTreatmentCapacity.AsDto(), DesignLowFlowDiversionCapacity.AsDto(), DesignMediaFiltrationRate.AsDto(), DesignResidenceTimeForPermanentPool.AsDto(), DiversionRate.AsDto(), DrawdownTimeForWQDetentionVolume.AsDto(), EffectiveFootprint.AsDto(), EffectiveRetentionDepth.AsDto(), InfiltrationDischargeRate.AsDto(), InfiltrationSurfaceArea.AsDto(), MediaBedFootprint.AsDto(), MonthsOfOperationID.AsDto(), PermanentPoolOrWetlandVolume.AsDto(), RoutingConfiguration.AsDto(), StorageVolumeBelowLowestOutletElevation.AsDto(), SummerHarvestedWaterDemand.AsDto(), TimeOfConcentrationID.AsDto(), DrawdownTimeForDetentionVolume.AsDto(), TotalEffectiveBMPVolume.AsDto(), TotalEffectiveDrywellBMPVolume.AsDto(), TreatmentRate.AsDto(), UnderlyingHydrologicSoilGroupID.AsDto(), UnderlyingInfiltrationRate.AsDto(), UpstreamBMP.AsDto(), WaterQualityDetentionVolume.AsDto(), WettedFootprint.AsDto(), WinterHarvestedWaterDemand.AsDto(), PercentOfSiteTreated.AsDto(), PercentCaptured.AsDto(), PercentRetained.AsDto(), AreaWithinWQMP.AsDto(), Watershed.AsDto(), DesignStormwaterDepth.AsDto(), FullyParameterized.AsDto(), HydromodificationApplies.AsDto(), DelineationStatus.AsDto(), DryWeatherFlowOverrideID.AsDto(), ModeledPerformance.AsDto(), OCTAM2Tier2GrantProgram.AsDto(), SEAScore.AsDto(), TPIScore.AsDto(), WQLRI.AsDto(), PollutantContributiontoSEA.AsDto(), SiteRunoff.AsDto(), TreatedAndDischarged.AsDto(), RetainedOrRecycled.AsDto(), UntreatedBypassOrOverflow.AsDto(), TotalSuspendedSolids.AsDto(), TotalNitrogen.AsDto(), TotalPhosphorous.AsDto(), FecalColiform.AsDto(), TotalCopper.AsDto(), TotalLead.AsDto(), TotalZinc.AsDto(), OCTAWatershed.AsDto(), EffectiveAreaAcres.AsDto(), DesignStormDepth85thPercentile.AsDto(), DesignVolume85thPercentile.AsDto(), LandUseBasedWaterQualityScore.AsDto(), ReceivingWaterScore.AsDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinitionType>(All.ToDictionary(x => x.FieldDefinitionTypeID));
             AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, FieldDefinitionTypeDto>(AllAsDto.ToDictionary(x => x.FieldDefinitionTypeID));
         }
@@ -297,8 +297,8 @@ namespace Neptune.EFModels.Entities
                     return DrawdownTimeForDetentionVolume;
                 case FieldDefinitionTypeEnum.DrawdownTimeForWQDetentionVolume:
                     return DrawdownTimeForWQDetentionVolume;
-                case FieldDefinitionTypeEnum.DryWeatherFlowOverride:
-                    return DryWeatherFlowOverride;
+                case FieldDefinitionTypeEnum.DryWeatherFlowOverrideID:
+                    return DryWeatherFlowOverrideID;
                 case FieldDefinitionTypeEnum.EffectiveAreaAcres:
                     return EffectiveAreaAcres;
                 case FieldDefinitionTypeEnum.EffectiveFootprint:
@@ -365,8 +365,8 @@ namespace Neptune.EFModels.Entities
                     return MinimumValueOfEachObservation;
                 case FieldDefinitionTypeEnum.ModeledPerformance:
                     return ModeledPerformance;
-                case FieldDefinitionTypeEnum.MonthsOperational:
-                    return MonthsOperational;
+                case FieldDefinitionTypeEnum.MonthsOfOperationID:
+                    return MonthsOfOperationID;
                 case FieldDefinitionTypeEnum.ObservationCollectionMethod:
                     return ObservationCollectionMethod;
                 case FieldDefinitionTypeEnum.ObservationScore:
@@ -443,8 +443,8 @@ namespace Neptune.EFModels.Entities
                     return SummerHarvestedWaterDemand;
                 case FieldDefinitionTypeEnum.TargetLoadReduction:
                     return TargetLoadReduction;
-                case FieldDefinitionTypeEnum.TimeOfConcentration:
-                    return TimeOfConcentration;
+                case FieldDefinitionTypeEnum.TimeOfConcentrationID:
+                    return TimeOfConcentrationID;
                 case FieldDefinitionTypeEnum.TotalAchieved:
                     return TotalAchieved;
                 case FieldDefinitionTypeEnum.TotalCopper:
@@ -479,8 +479,8 @@ namespace Neptune.EFModels.Entities
                     return TreatmentBMPType;
                 case FieldDefinitionTypeEnum.TreatmentRate:
                     return TreatmentRate;
-                case FieldDefinitionTypeEnum.UnderlyingHydrologicSoilGroupHSG:
-                    return UnderlyingHydrologicSoilGroupHSG;
+                case FieldDefinitionTypeEnum.UnderlyingHydrologicSoilGroupID:
+                    return UnderlyingHydrologicSoilGroupID;
                 case FieldDefinitionTypeEnum.UnderlyingInfiltrationRate:
                     return UnderlyingInfiltrationRate;
                 case FieldDefinitionTypeEnum.UntreatedBypassOrOverflow:
@@ -605,17 +605,17 @@ namespace Neptune.EFModels.Entities
         InfiltrationDischargeRate = 87,
         InfiltrationSurfaceArea = 88,
         MediaBedFootprint = 89,
-        MonthsOperational = 90,
+        MonthsOfOperationID = 90,
         PermanentPoolOrWetlandVolume = 91,
         RoutingConfiguration = 92,
         StorageVolumeBelowLowestOutletElevation = 93,
         SummerHarvestedWaterDemand = 94,
-        TimeOfConcentration = 95,
+        TimeOfConcentrationID = 95,
         DrawdownTimeForDetentionVolume = 96,
         TotalEffectiveBMPVolume = 97,
         TotalEffectiveDrywellBMPVolume = 98,
         TreatmentRate = 99,
-        UnderlyingHydrologicSoilGroupHSG = 100,
+        UnderlyingHydrologicSoilGroupID = 100,
         UnderlyingInfiltrationRate = 101,
         UpstreamBMP = 102,
         WaterQualityDetentionVolume = 103,
@@ -630,7 +630,7 @@ namespace Neptune.EFModels.Entities
         FullyParameterized = 112,
         HydromodificationApplies = 113,
         DelineationStatus = 114,
-        DryWeatherFlowOverride = 115,
+        DryWeatherFlowOverrideID = 115,
         ModeledPerformance = 116,
         OCTAM2Tier2GrantProgram = 117,
         SEAScore = 118,
@@ -1184,10 +1184,10 @@ namespace Neptune.EFModels.Entities
         public static readonly FieldDefinitionTypeMediaBedFootprint Instance = new FieldDefinitionTypeMediaBedFootprint(89, @"MediaBedFootprint", @"Media Bed Footprint");
     }
 
-    public partial class FieldDefinitionTypeMonthsOperational : FieldDefinitionType
+    public partial class FieldDefinitionTypeMonthsOfOperationID : FieldDefinitionType
     {
-        private FieldDefinitionTypeMonthsOperational(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
-        public static readonly FieldDefinitionTypeMonthsOperational Instance = new FieldDefinitionTypeMonthsOperational(90, @"MonthsOperational", @"Months Operational");
+        private FieldDefinitionTypeMonthsOfOperationID(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeMonthsOfOperationID Instance = new FieldDefinitionTypeMonthsOfOperationID(90, @"MonthsOfOperationID", @"Months Operational");
     }
 
     public partial class FieldDefinitionTypePermanentPoolOrWetlandVolume : FieldDefinitionType
@@ -1214,10 +1214,10 @@ namespace Neptune.EFModels.Entities
         public static readonly FieldDefinitionTypeSummerHarvestedWaterDemand Instance = new FieldDefinitionTypeSummerHarvestedWaterDemand(94, @"SummerHarvestedWaterDemand", @"Summer Harvested Water Demand");
     }
 
-    public partial class FieldDefinitionTypeTimeOfConcentration : FieldDefinitionType
+    public partial class FieldDefinitionTypeTimeOfConcentrationID : FieldDefinitionType
     {
-        private FieldDefinitionTypeTimeOfConcentration(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
-        public static readonly FieldDefinitionTypeTimeOfConcentration Instance = new FieldDefinitionTypeTimeOfConcentration(95, @"TimeOfConcentration", @"Time of Concentration");
+        private FieldDefinitionTypeTimeOfConcentrationID(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeTimeOfConcentrationID Instance = new FieldDefinitionTypeTimeOfConcentrationID(95, @"TimeOfConcentrationID", @"Time of Concentration");
     }
 
     public partial class FieldDefinitionTypeDrawdownTimeForDetentionVolume : FieldDefinitionType
@@ -1244,10 +1244,10 @@ namespace Neptune.EFModels.Entities
         public static readonly FieldDefinitionTypeTreatmentRate Instance = new FieldDefinitionTypeTreatmentRate(99, @"TreatmentRate", @"Treatment Rate");
     }
 
-    public partial class FieldDefinitionTypeUnderlyingHydrologicSoilGroupHSG : FieldDefinitionType
+    public partial class FieldDefinitionTypeUnderlyingHydrologicSoilGroupID : FieldDefinitionType
     {
-        private FieldDefinitionTypeUnderlyingHydrologicSoilGroupHSG(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
-        public static readonly FieldDefinitionTypeUnderlyingHydrologicSoilGroupHSG Instance = new FieldDefinitionTypeUnderlyingHydrologicSoilGroupHSG(100, @"UnderlyingHydrologicSoilGroupHSG", @"Underlying Hydrologic Soil Group (HSG)");
+        private FieldDefinitionTypeUnderlyingHydrologicSoilGroupID(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeUnderlyingHydrologicSoilGroupID Instance = new FieldDefinitionTypeUnderlyingHydrologicSoilGroupID(100, @"UnderlyingHydrologicSoilGroupID", @"Underlying Hydrologic Soil Group (HSG)");
     }
 
     public partial class FieldDefinitionTypeUnderlyingInfiltrationRate : FieldDefinitionType
@@ -1334,10 +1334,10 @@ namespace Neptune.EFModels.Entities
         public static readonly FieldDefinitionTypeDelineationStatus Instance = new FieldDefinitionTypeDelineationStatus(114, @"DelineationStatus", @"Delineation Status");
     }
 
-    public partial class FieldDefinitionTypeDryWeatherFlowOverride : FieldDefinitionType
+    public partial class FieldDefinitionTypeDryWeatherFlowOverrideID : FieldDefinitionType
     {
-        private FieldDefinitionTypeDryWeatherFlowOverride(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
-        public static readonly FieldDefinitionTypeDryWeatherFlowOverride Instance = new FieldDefinitionTypeDryWeatherFlowOverride(115, @"DryWeatherFlowOverride", @"Dry Weather Flow Override?");
+        private FieldDefinitionTypeDryWeatherFlowOverrideID(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
+        public static readonly FieldDefinitionTypeDryWeatherFlowOverrideID Instance = new FieldDefinitionTypeDryWeatherFlowOverrideID(115, @"DryWeatherFlowOverrideID", @"Dry Weather Flow Override?");
     }
 
     public partial class FieldDefinitionTypeModeledPerformance : FieldDefinitionType

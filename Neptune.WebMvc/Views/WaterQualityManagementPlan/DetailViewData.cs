@@ -176,7 +176,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             FieldDefinitionForPercentRetained = FieldDefinitionType.PercentRetained;
             FieldDefinitionForFullyParameterized = FieldDefinitionType.FullyParameterized;
             FieldDefinitionForDelineationStatus = FieldDefinitionType.DelineationStatus;
-            FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverride;
+            FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverrideID;
 
             UsesDetailedModelingApproach = WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
                                            WaterQualityManagementPlanModelingApproach.Detailed

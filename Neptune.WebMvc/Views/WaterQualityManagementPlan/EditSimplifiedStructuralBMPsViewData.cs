@@ -29,7 +29,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             FieldDefinitionForPercentOfSiteTreated = FieldDefinitionType.PercentOfSiteTreated;
             FieldDefinitionForPercentCaptured = FieldDefinitionType.PercentCaptured;
             FieldDefinitionForPercentRetained = FieldDefinitionType.PercentRetained;
-            FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverride;
+            FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverrideID;
 
             ViewDataForAngular = new EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(treatmentBMPTypes, dryWeatherFlowOverrides, dryWeatherFlowOverrideDefaultID, dryWeatherFlowOverrideYesID);
 

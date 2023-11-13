@@ -301,11 +301,6 @@ namespace Neptune.EFModels.Entities
                 treatmentBMP.TreatmentBMPID = treatmentBMPUpsertDto.TreatmentBMPID;
             }
 
-            return treatmentBMP;
-        }
-
-        public static TreatmentBMPModelingAttribute TreatmentBMPModelingAttributeFromUpsertDto(TreatmentBMPUpsertDto treatmentBMPUpsertDto)
-        {
             var treatmentBMPModelingAttribute = new TreatmentBMPModelingAttribute()
             {
                 TreatmentBMPID = treatmentBMPUpsertDto.TreatmentBMPID,
@@ -343,16 +338,16 @@ namespace Neptune.EFModels.Entities
                 (int)TreatmentBMPModelingTypeEnum.LowFlowDiversions, (int)TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems
             };
 
-            if (!treatmentBMPUpsertDto.TreatmentBMPModelingTypeID.HasValue || modelingTypeIDsWithoutAdditionalFields.Contains(treatmentBMPUpsertDto.TreatmentBMPModelingTypeID.Value))
+            if (treatmentBMPUpsertDto.TreatmentBMPModelingTypeID.HasValue && !modelingTypeIDsWithoutAdditionalFields.Contains(treatmentBMPUpsertDto.TreatmentBMPModelingTypeID.Value))
             {
-                return treatmentBMPModelingAttribute;
+                treatmentBMPModelingAttribute.RoutingConfigurationID = (int)RoutingConfigurationEnum.Online;
+                treatmentBMPModelingAttribute.TimeOfConcentrationID = treatmentBMPUpsertDto.TimeOfConcentrationID;
+                treatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroupID = treatmentBMPUpsertDto.UnderlyingHydrologicSoilGroupID;
             }
 
-            treatmentBMPModelingAttribute.RoutingConfigurationID = (int)RoutingConfigurationEnum.Online;
-            treatmentBMPModelingAttribute.TimeOfConcentrationID = treatmentBMPUpsertDto.TimeOfConcentrationID;
-            treatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroupID = treatmentBMPUpsertDto.UnderlyingHydrologicSoilGroupID;
+            treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP = treatmentBMPModelingAttribute;
 
-            return treatmentBMPModelingAttribute;
+            return treatmentBMP;
         }
 
         public static List<TreatmentBMPDisplayDto> ListVerifiedTreatmentBMPs(NeptuneDbContext dbContext)

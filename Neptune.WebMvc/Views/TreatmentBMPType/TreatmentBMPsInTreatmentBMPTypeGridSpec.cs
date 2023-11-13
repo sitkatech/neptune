@@ -175,7 +175,7 @@ public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<TreatmentBMPDeta
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.MediaBedFootprint, 100);
                 Add(FieldDefinitionType.DesignMediaFiltrationRate.ToGridHeaderString("Design Media Filtration Rate (in/hr)"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.DesignMediaFiltrationRate, 100);
-                Add(FieldDefinitionType.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString("Underlying Hydrologic Soil Group"),
+                Add(FieldDefinitionType.UnderlyingHydrologicSoilGroupID.ToGridHeaderString("Underlying Hydrologic Soil Group"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.UnderlyingHydrologicSoilGroup?
                         .UnderlyingHydrologicSoilGroupDisplayName, 100);
                 break;
@@ -226,7 +226,7 @@ public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<TreatmentBMPDeta
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.EffectiveFootprint, 100);
                 Add(FieldDefinitionType.DrawdownTimeForWQDetentionVolume.ToGridHeaderString("Drawdown Time For WQ Detention Volume (hours)"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.DrawdownTimeForWQDetentionVolume, 100);
-                Add(FieldDefinitionType.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString("Underlying Hydrologic Soil Group"),
+                Add(FieldDefinitionType.UnderlyingHydrologicSoilGroupID.ToGridHeaderString("Underlying Hydrologic Soil Group"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.UnderlyingHydrologicSoilGroup?
                         .UnderlyingHydrologicSoilGroupDisplayName, 100);
                 break;
@@ -235,7 +235,7 @@ public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<TreatmentBMPDeta
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.DesignDryWeatherTreatmentCapacity, 100);
                 Add(FieldDefinitionType.AverageTreatmentFlowrate.ToGridHeaderString("Average Treatment Flow Rate (cfs)"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.AverageTreatmentFlowrate, 100);
-                Add(FieldDefinitionType.MonthsOperational.ToGridHeaderString("Months Operational"),
+                Add(FieldDefinitionType.MonthsOfOperationID.ToGridHeaderString("Months Operational"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.MonthsOfOperation?
                         .MonthsOfOperationDisplayName, 100);
                 break;
@@ -250,7 +250,7 @@ public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<TreatmentBMPDeta
             case TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl:
                 Add(FieldDefinitionType.TreatmentRate.ToGridHeaderString("Treatment Rate (cfs)"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.TreatmentRate, 100);
-                Add(FieldDefinitionType.TimeOfConcentration.ToGridHeaderString("Time Of Concentration (mins)"),
+                Add(FieldDefinitionType.TimeOfConcentrationID.ToGridHeaderString("Time Of Concentration (mins)"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.TimeOfConcentration?
                         .TimeOfConcentrationDisplayName, 100);
                 break;
@@ -259,13 +259,13 @@ public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<TreatmentBMPDeta
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.DesignLowFlowDiversionCapacity, 100);
                 Add(FieldDefinitionType.AverageDivertedFlowrate.ToGridHeaderString("Average Diverted Flow Rate (gpd)"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.AverageDivertedFlowrate, 100);
-                Add(FieldDefinitionType.MonthsOperational.ToGridHeaderString("Months Operational"),
+                Add(FieldDefinitionType.MonthsOfOperationID.ToGridHeaderString("Months Operational"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.MonthsOfOperation?
                         .MonthsOfOperationDisplayName, 100);
                 break;
             case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
             case TreatmentBMPModelingTypeEnum.VegetatedSwale:
-                Add(FieldDefinitionType.TimeOfConcentration.ToGridHeaderString("Time Of Concentration (mins)"),
+                Add(FieldDefinitionType.TimeOfConcentrationID.ToGridHeaderString("Time Of Concentration (mins)"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.TimeOfConcentration?
                         .TimeOfConcentrationDisplayName, 100);
                 Add(FieldDefinitionType.TreatmentRate.ToGridHeaderString("Treatment Rate (cfs)"),
@@ -274,13 +274,13 @@ public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<TreatmentBMPDeta
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.WettedFootprint, 100);
                 Add(FieldDefinitionType.EffectiveRetentionDepth.ToGridHeaderString("Effective Retention Depth (ft)"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.EffectiveRetentionDepth, 100);
-                Add(FieldDefinitionType.UnderlyingHydrologicSoilGroupHSG.ToGridHeaderString("Underlying Hydrologic Soil Group"),
+                Add(FieldDefinitionType.UnderlyingHydrologicSoilGroupID.ToGridHeaderString("Underlying Hydrologic Soil Group"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.UnderlyingHydrologicSoilGroup?
                         .UnderlyingHydrologicSoilGroupDisplayName, 100);
                 break;
         }
 
-        Add(FieldDefinitionType.DryWeatherFlowOverride.ToGridHeaderString("Dry Weather Flow Override"),
+        Add(FieldDefinitionType.DryWeatherFlowOverrideID.ToGridHeaderString("Dry Weather Flow Override"),
             x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName, 100);
     }
 
