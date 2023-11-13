@@ -111,7 +111,7 @@ namespace Neptune.WebMvc.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("fundingEventPrimaryKey")]
         public ActionResult Delete([FromRoute] FundingEventPrimaryKey fundingEventPrimaryKey)
         {
-            var fundingEvent = fundingEventPrimaryKey.EntityObject;
+            var fundingEvent = FundingEvents.GetByID(_dbContext, fundingEventPrimaryKey);
             var viewModel = new ConfirmDialogFormViewModel(fundingEventPrimaryKey.PrimaryKeyValue);
             return ViewDelete(viewModel, fundingEvent);
         }
@@ -122,7 +122,7 @@ namespace Neptune.WebMvc.Controllers
         public async Task<IActionResult> Delete([FromRoute] FundingEventPrimaryKey fundingEventPrimaryKey,
             ConfirmDialogFormViewModel viewModel)
         {
-            var fundingEvent = fundingEventPrimaryKey.EntityObject;
+            var fundingEvent = FundingEvents.GetByIDWithChangeTracking(_dbContext, fundingEventPrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewDelete(viewModel, fundingEvent);

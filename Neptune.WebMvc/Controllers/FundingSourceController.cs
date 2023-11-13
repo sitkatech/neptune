@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
@@ -122,7 +123,7 @@ namespace Neptune.WebMvc.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("fundingSourcePrimaryKey")]
         public PartialViewResult Delete([FromRoute] FundingSourcePrimaryKey fundingSourcePrimaryKey)
         {
-            var fundingSource = fundingSourcePrimaryKey.EntityObject;
+            var fundingSource = FundingSources.GetByID(_dbContext, fundingSourcePrimaryKey);
             var viewModel = new ConfirmDialogFormViewModel(fundingSource.FundingSourceID);
             return ViewDeleteFundingSource(fundingSource, viewModel);
         }
@@ -130,11 +131,8 @@ namespace Neptune.WebMvc.Controllers
         private PartialViewResult ViewDeleteFundingSource(FundingSource fundingSource, ConfirmDialogFormViewModel viewModel)
         {
             var canDelete = true;
-            var fundingEventFundingSource = _dbContext.FundingEventFundingSources.Where(x => x.FundingEventID == fundingSource.FundingSourceID).ToList();
-            var count = fundingEventFundingSource.Count();
-            var totalAmount = fundingEventFundingSource.Sum(x => x.Amount).ToStringCurrency();
             var confirmMessage = canDelete
-                ? $"Are you sure you want to delete this {FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()} '{fundingSource.FundingSourceName}'? Deleting this funding source will remove {count} Treatment BMP Funding Event records from the system, totaling {totalAmount}."
+                ? $"Are you sure you want to delete this {FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()} '{fundingSource.FundingSourceName}'? Deleting this funding source will remove {fundingSource.FundingEventFundingSources.Count} Treatment BMP Funding Event records from the system, totaling {fundingSource.FundingEventFundingSources.Sum(x => x.Amount).ToStringCurrency()}."
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage($"{FieldDefinitionType.FundingSource.GetFieldDefinitionLabel()}",  UrlTemplate.MakeHrefString(SitkaRoute<FundingSourceController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(fundingSource)), "here").ToString());
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
@@ -146,7 +144,7 @@ namespace Neptune.WebMvc.Controllers
         [ValidateEntityExistsAndPopulateParameterFilter("fundingSourcePrimaryKey")]
         public async Task<IActionResult> Delete([FromRoute] FundingSourcePrimaryKey fundingSourcePrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
-            var fundingSource = fundingSourcePrimaryKey.EntityObject;
+            var fundingSource = FundingSources.GetByIDWithChangeTracking(_dbContext, fundingSourcePrimaryKey);
             if (!ModelState.IsValid)
             {
                 return ViewDeleteFundingSource(fundingSource, viewModel);
