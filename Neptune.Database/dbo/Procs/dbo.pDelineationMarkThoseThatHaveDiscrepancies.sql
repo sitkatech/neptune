@@ -49,7 +49,7 @@ join (
 where d.DelineationTypeID = 1 and d.DelineationGeometry.STSymDifference(a.RegionalSubbasinsIntesectedByDelineationGeometry).STArea() > @toleranceInSquareMeters
 
 
-truncate table dbo.DelineationOverlap;
+delete from dbo.DelineationOverlap;
 
 with distributedBMPs (DelineationID, DelineationGeometry, ProjectID)
 as
