@@ -4,7 +4,7 @@ using Neptune.Common.DesignByContract;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class Projects
+    public static class Projects
     {
         private static IQueryable<Project> GetImpl(NeptuneDbContext dbContext)
         {
@@ -13,13 +13,12 @@ namespace Neptune.EFModels.Entities
                 .Include(x => x.StormwaterJurisdiction)
                 .ThenInclude(x => x.Organization)
                 .Include(x => x.CreatePerson)
-                .Include(x => x.PrimaryContactPerson)
-                .AsNoTracking();
+                .Include(x => x.PrimaryContactPerson);
         }
 
         public static List<ProjectSimpleDto> ListAsSimpleDto(NeptuneDbContext dbContext)
         {
-            return GetImpl(dbContext).OrderByDescending(x => x.ProjectID).Select(x => x.AsSimpleDto()).ToList();
+            return GetImpl(dbContext).AsNoTracking().OrderByDescending(x => x.ProjectID).Select(x => x.AsSimpleDto()).ToList();
         }
 
         public static Project GetByIDWithChangeTracking(NeptuneDbContext dbContext, int projectID)
@@ -68,7 +67,7 @@ namespace Neptune.EFModels.Entities
 
             var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
 
-            return GetImpl(dbContext)
+            return GetImpl(dbContext).AsNoTracking()
                 .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
                 .OrderByDescending(x => x.ProjectID)
                 .Select(x => x.AsSimpleDto())
@@ -108,7 +107,8 @@ namespace Neptune.EFModels.Entities
             project.AdditionalContactInformation = projectUpsertDto.AdditionalContactInformation;
             project.DoesNotIncludeTreatmentBMPs = projectUpsertDto.DoesNotIncludeTreatmentBMPs;
             project.CalculateOCTAM2Tier2Scores = projectUpsertDto.CalculateOCTAM2Tier2Scores;
-            SetUpdatePersonAndDate(dbContext, project.ProjectID, personID);
+            project.UpdatePersonID = personID;
+            project.DateUpdated = DateTime.UtcNow;
 
             if (projectUpsertDto.ShareOCTAM2Tier2Scores && !project.ShareOCTAM2Tier2Scores)
             {
@@ -305,7 +305,7 @@ namespace Neptune.EFModels.Entities
 
         public static IEnumerable<Project> ListOCTAM2Tier2Projects(NeptuneDbContext dbContext)
         {
-            return GetImpl(dbContext).Where(x => x.ShareOCTAM2Tier2Scores).ToList();
+            return GetImpl(dbContext).AsNoTracking().Where(x => x.ShareOCTAM2Tier2Scores).ToList();
         }
 
         public static List<int> ListOCTAM2Tier2ProjectIDs(NeptuneDbContext dbContext)
