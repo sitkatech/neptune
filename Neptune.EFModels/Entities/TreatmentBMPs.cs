@@ -170,7 +170,7 @@ namespace Neptune.EFModels.Entities
                 .ThenInclude(x => x.Organization)
                 .Include(x => x.OwnerOrganization)
                 .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
-                .AsNoTracking().OrderBy(x => x.TreatmentBMPName).ToList();
+                .AsNoTracking().Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule).OrderBy(x => x.TreatmentBMPName).ToList();
         }
 
         public static Dictionary<int, int> ListCountByTreatmentBMPType(NeptuneDbContext dbContext)
