@@ -1,19 +1,18 @@
 ﻿using System;
-using System.IO;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
+using Serilog;
 
 namespace Neptune.API.Services
 {
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-
-        public ExceptionMiddleware(RequestDelegate next)
+        private readonly ILogger _logger;
+        public ExceptionMiddleware(RequestDelegate next, ILogger logger)
         {
+            _logger = logger;
             _next = next;
         }
 
@@ -25,16 +24,35 @@ namespace Neptune.API.Services
             }
             catch (Exception ex)
             {
-                HandleExceptionAsync(httpContext, ex);
+                _logger.Error($"Something went wrong: {ex}");
+                await HandleExceptionAsync(httpContext, ex);
             }
         }
 
-        private static void HandleExceptionAsync(HttpContext context, Exception exception)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            if (exception is BadHttpRequestException badRequestException && badRequestException.StatusCode == StatusCodes.Status413PayloadTooLarge)
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            string message;
+            switch (exception)
             {
-                context.Response.StatusCode = badRequestException.StatusCode;
+                case BadHttpRequestException badRequestException:
+                    if (badRequestException.StatusCode == StatusCodes.Status413PayloadTooLarge)
+                    {
+                        context.Response.StatusCode = badRequestException.StatusCode;
+                        message = "Bad Request. Payload too large.";
+                    }
+                    else
+                    {
+                        message = "Bad Request.";
+                    }
+                    break;
+                default:
+                    message = "Oops!  Something went wrong with your request.  Please try your request again.  If the problem persists, please email h2o.team@esassoc.com";
+                    break;
             }
+
+            await context.Response.WriteAsync(message);
         }
     }
 }
