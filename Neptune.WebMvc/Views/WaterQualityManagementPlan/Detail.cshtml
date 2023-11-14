@@ -1,5 +1,4 @@
 ﻿@using Neptune.WebMvc.Views.Shared
-@using Neptune.WebMvc.Views.Shared.HRUCharacteristics
 @using Neptune.WebMvc.Views.Shared.ModeledPerformance
 @using Neptune.WebMvc.Views.WaterQualityManagementPlan
 @using Neptune.WebMvc.Common.ModalDialog
@@ -11,10 +10,6 @@
 @using HRUCharacteristics = Neptune.WebMvc.Views.Shared.HRUCharacteristics.HRUCharacteristics
 
 @inherits Detail
-
-@functions {
-    private ICollection<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments;
-}
 
 @section JavascriptAndStylesContent
 {
@@ -610,8 +605,7 @@
 
                 @foreach (var waterQualityManagementPlanDocumentType in WaterQualityManagementPlanDocumentType.All)
                 {
-                    WaterQualityManagementPlanDocuments = ViewDataTyped.WaterQualityManagementPlanDocuments;
-                    var waterQualityManagementPlanDocuments = WaterQualityManagementPlanDocuments.ToList().Where(x => x.WaterQualityManagementPlanDocumentType == waterQualityManagementPlanDocumentType).OrderBy(x => x.DisplayName).ToList();
+                    var waterQualityManagementPlanDocuments = ViewDataTyped.WaterQualityManagementPlanDocuments.ToList().Where(x => x.WaterQualityManagementPlanDocumentType == waterQualityManagementPlanDocumentType).OrderBy(x => x.DisplayName).ToList();
 
                     <h4>@waterQualityManagementPlanDocumentType.WaterQualityManagementPlanDocumentTypeDisplayName</h4>
 

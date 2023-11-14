@@ -13,9 +13,7 @@ public static class vHRUCharacteristics
         int waterQualityManagementPlanID)
     {
         var waterQualityManagementPlan = WaterQualityManagementPlans.GetByID(dbContext, waterQualityManagementPlanID);
-        if (waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
-            WaterQualityManagementPlanModelingApproach.Simplified
-                .WaterQualityManagementPlanModelingApproachID)
+        if (waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID == (int) WaterQualityManagementPlanModelingApproachEnum.Simplified)
         {
             return dbContext.vHRUCharacteristics.AsNoTracking().Where(x =>
                 x.WaterQualityManagementPlanID == waterQualityManagementPlanID).ToList();
