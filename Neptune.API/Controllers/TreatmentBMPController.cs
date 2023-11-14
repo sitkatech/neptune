@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Neptune.Models.DataTransferObjects;
@@ -165,33 +166,50 @@ namespace Neptune.API.Controllers
                     x.DryWeatherFlowOverrideID = y.DryWeatherFlowOverrideID;
                 });
 
-            var treatmentBMPIDsWhoAreBeingDeleted = existingProjectTreatmentBMPs.Where(x => updatedTreatmentBMPs.All(y => x.TreatmentBMPID != y.TreatmentBMPID)).Select(x => x.TreatmentBMPID).ToList();
+            await MergeDeleteTreatmentBMPs(existingProjectTreatmentBMPs, updatedTreatmentBMPs);
+
+            return Ok();
+        }
+
+        private async Task MergeDeleteTreatmentBMPs(List<TreatmentBMP> existingProjectTreatmentBMPs, List<TreatmentBMP> updatedTreatmentBMPs)
+        {
+            var treatmentBMPIDsWhoAreBeingDeleted = existingProjectTreatmentBMPs.Select(x => x.TreatmentBMPID)
+                .Where(x => updatedTreatmentBMPs.All(y => x != y.TreatmentBMPID)).ToList();
             // delete all the Delineation related entities
-            await _dbContext.ProjectHRUCharacteristics.Include(x => x.ProjectLoadGeneratingUnit).ThenInclude(x => x.Delineation).Where(x =>
+            await _dbContext.ProjectHRUCharacteristics.Include(x => x.ProjectLoadGeneratingUnit)
+                .ThenInclude(x => x.Delineation).Where(x =>
                     x.ProjectLoadGeneratingUnit.DelineationID.HasValue &&
-                    treatmentBMPIDsWhoAreBeingDeleted.Contains(x.ProjectLoadGeneratingUnit.Delineation.TreatmentBMPID))
+                    treatmentBMPIDsWhoAreBeingDeleted.Contains(x.ProjectLoadGeneratingUnit.Delineation
+                        .TreatmentBMPID))
                 .ExecuteDeleteAsync();
             await _dbContext.ProjectLoadGeneratingUnits.Include(x => x.Delineation)
-                .Where(x => x.DelineationID.HasValue && treatmentBMPIDsWhoAreBeingDeleted.Contains(x.Delineation.TreatmentBMPID))
+                .Where(x => x.DelineationID.HasValue &&
+                            treatmentBMPIDsWhoAreBeingDeleted.Contains(x.Delineation.TreatmentBMPID))
                 .ExecuteDeleteAsync();
             await _dbContext.DelineationOverlaps
-                .Include(x => x.Delineation).Include(x => x.OverlappingDelineation).Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.Delineation.TreatmentBMPID) ||
-                treatmentBMPIDsWhoAreBeingDeleted.Contains(x.OverlappingDelineation.TreatmentBMPID)).ExecuteDeleteAsync();
+                .Include(x => x.Delineation).Include(x => x.OverlappingDelineation).Where(x =>
+                    treatmentBMPIDsWhoAreBeingDeleted.Contains(x.Delineation.TreatmentBMPID) ||
+                    treatmentBMPIDsWhoAreBeingDeleted.Contains(x.OverlappingDelineation.TreatmentBMPID))
+                .ExecuteDeleteAsync();
             await _dbContext.Delineations.Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID))
+                .ExecuteDeleteAsync();
+            await _dbContext.TreatmentBMPModelingAttributes
+                .Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID))
                 .ExecuteDeleteAsync();
             await _dbContext.TreatmentBMPs.Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID))
                 .ExecuteDeleteAsync();
 
-            var treatmentBMPsWhoseLocationChanged = existingProjectTreatmentBMPs.Where(x => updatedTreatmentBMPs.Any(y => x.TreatmentBMPID == y.TreatmentBMPID && (!x.LocationPoint4326.Equals(y.LocationPoint4326)))).Select(x => x.TreatmentBMPID).ToList();
+            var treatmentBMPsWhoseLocationChanged = existingProjectTreatmentBMPs
+                .Where(x => updatedTreatmentBMPs.Any(y =>
+                    x.TreatmentBMPID == y.TreatmentBMPID && (!x.LocationPoint4326.Equals(y.LocationPoint4326))))
+                .Select(x => x.TreatmentBMPID).ToList();
 
             if (treatmentBMPsWhoseLocationChanged.Any())
             {
-                await _dbContext.Delineations.Where(x => x.DelineationTypeID == (int)DelineationTypeEnum.Centralized && treatmentBMPsWhoseLocationChanged.Contains(x.TreatmentBMPID)).ExecuteDeleteAsync();
+                await _dbContext.Delineations
+                    .Where(x => x.DelineationTypeID == (int)DelineationTypeEnum.Centralized &&
+                                treatmentBMPsWhoseLocationChanged.Contains(x.TreatmentBMPID)).ExecuteDeleteAsync();
             }
-
-            await _dbContext.SaveChangesAsync();
-
-            return Ok();
         }
 
         [HttpGet("treatmentBMPs/{treatmentBMPID}/upstreamRSBCatchmentGeoJSON")]
