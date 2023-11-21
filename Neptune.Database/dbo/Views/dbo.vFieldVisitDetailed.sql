@@ -9,6 +9,7 @@ select	fv.FieldVisitID as PrimaryKey,
 		, tbasInit.TreatmentBMPAssessmentID as TreatmentBMPAssessmentIDInitial, isnull(tbasInit.IsAssessmentComplete, 0) as IsAssessmentCompleteInitial, tbasInit.AssessmentScore as AssessmentScoreInitial
 		, tbasPM.TreatmentBMPAssessmentID as TreatmentBMPAssessmentIDPM, isnull(tbasPM.IsAssessmentComplete, 0) as IsAssessmentCompletePM, tbasPM.AssessmentScore as AssessmentScorePM
 		, mr.MaintenanceRecordID
+		, isnull(wqmp2.WaterQualityManagementPlanID, 0) as WaterQualityManagementPlanID, isnull(wqmp2.WaterQualityManagementPlanName, '') as WaterQualityManagementPlanName
 from dbo.FieldVisit fv
 join dbo.TreatmentBMP tb on fv.TreatmentBMPID = tb.TreatmentBMPID
 join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
@@ -36,6 +37,13 @@ left join
 left join dbo.TreatmentBMPAssessment tbasInit on fv.FieldVisitID = tbasInit.FieldVisitID and tbasInit.TreatmentBMPAssessmentTypeID = 1 -- Initial
 left join dbo.TreatmentBMPAssessment tbasPM on fv.FieldVisitID = tbasPM.FieldVisitID and tbasPM.TreatmentBMPAssessmentTypeID = 2 -- Post-Maintenance
 left join dbo.MaintenanceRecord mr on fv.FieldVisitID = mr.FieldVisitID
+left join
+(
+	SELECT wqmp.WaterQualityManagementPlanID, wqmp.WaterQualityManagementPlanName, wqmpvtbmp.TreatmentBMPID
+	from dbo.WaterQualityManagementPlan wqmp
+	join dbo.WaterQualityManagementPlanVerify wqmpv on wqmp.WaterQualityManagementPlanID = wqmpv.WaterQualityManagementPlanID
+	join dbo.WaterQualityManagementPlanVerifyTreatmentBMP wqmpvtbmp on wqmpvtbmp.WaterQualityManagementPlanVerifyID = wqmpv.WaterQualityManagementPlanVerifyID
+) wqmp2 on fv.TreatmentBMPID = wqmp2.TreatmentBMPID
 
 
 GO
