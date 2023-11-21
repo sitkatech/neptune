@@ -79,6 +79,12 @@ Source code is available upon request via <support@sitkatech.com>.
                 <div class="row">
                     <div class="col-xs-12">@Html.LabelWithSugarFor(FieldDefinitionType.Jurisdiction, "Jurisdiction"): <a href="@ViewDataTyped.StormwaterJurisdictionDetailUrl">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()</a></div>
                 </div>
+                @if (ViewDataTyped.TreatmentBMP.WaterQualityManagementPlanID != null)
+                {
+                    <div class="row">
+                        <div class="col-xs-12">@Html.LabelWithSugarFor(FieldDefinitionType.WaterQualityManagementPlan, "Water Quality Management Plan"): <a href="@ViewDataTyped.WaterQualityManagementPlanDetailUrl">@ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan?.WaterQualityManagementPlanName</a></div>
+                    </div>
+                }
                 <div class="row">
                     <div class="col-xs-12"><strong>Notes:</strong> @ViewDataTyped.TreatmentBMP.Notes</div>
                 </div>

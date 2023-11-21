@@ -35,6 +35,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public bool UserHasFieldVisitPermissions { get; }
         public string TreatmentBMPDetailUrl { get; }
         public string StormwaterJurisdictionDetailUrl { get; }
+        public string WaterQualityManagementPlanDetailUrl { get; }
 
         public SummaryForMapViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.TreatmentBMP treatmentBMP, EFModels.Entities.TreatmentBMPImage? keyPhoto) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
@@ -45,6 +46,13 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             StormwaterJurisdictionDetailUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP.StormwaterJurisdictionID));
             FieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(LinkGenerator, x => x.New(TreatmentBMP));
             UserHasFieldVisitPermissions = new FieldVisitCreateFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
+            if (treatmentBMP.WaterQualityManagementPlanID != null)
+            {
+                WaterQualityManagementPlanDetailUrl =
+                    SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator,
+                        x => x.Detail(treatmentBMP.WaterQualityManagementPlanID));
+            }
+
         }
     }
 }
