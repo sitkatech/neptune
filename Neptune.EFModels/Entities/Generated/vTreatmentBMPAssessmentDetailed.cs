@@ -53,4 +53,10 @@ public partial class vTreatmentBMPAssessmentDetailed
     public string? StormwaterJurisdictionName { get; set; }
 
     public int StormwaterJurisdictionPublicWQMPVisibilityTypeID { get; set; }
+
+    public int WaterQualityManagementPlanID { get; set; }
+
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? WaterQualityManagementPlanName { get; set; }
 }

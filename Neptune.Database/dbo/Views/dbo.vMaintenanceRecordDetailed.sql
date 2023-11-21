@@ -16,6 +16,7 @@ select  mr.MaintenanceRecordID, mr.MaintenanceRecordDescription, mr.MaintenanceR
         bmp.TreatmentBMPID, bmp.TreatmentBMPTypeID, bmp.TreatmentBMPName, fv.VisitDate,
         fv.FieldVisitID, fv.PerformedByPersonID, fvp.FirstName + ' ' + fvp.LastName as PerformedByPersonName,
         sj.StormwaterJurisdictionID, o.OrganizationName as StormwaterJurisdictionName, sj.StormwaterJurisdictionPublicWQMPVisibilityTypeID,
+        wqmp.WaterQualityManagementPlanID, wqmp.WaterQualityManagementPlanName,
         isnull(cat78.ObservationValues, 'n/a') as [Structural Repair Conducted],
         isnull(cat79.ObservationValues, 'n/a') as [Mechanical Repair Conducted],
         isnull(cat80.ObservationValues, 'n/a') as [Infiltration Surface Restored],
@@ -38,6 +39,7 @@ join dbo.FieldVisit fv on mr.FieldVisitID = fv.FieldVisitID
 join dbo.Person fvp on fv.PerformedByPersonID = fvp.PersonID
 join dbo.StormwaterJurisdiction sj on bmp.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
 join dbo.Organization o on sj.OrganizationID = o.OrganizationID
+join dbo.WaterQualityManagementPlan wqmp on bmp.TreatmentBMPID = wqmp.WaterQualityManagementPlanID
 left join mrovs cat78 on mr.MaintenanceRecordID = cat78.MaintenanceRecordID and cat78.CustomAttributeTypeID = 78
 left join mrovs cat79 on mr.MaintenanceRecordID = cat79.MaintenanceRecordID and cat79.CustomAttributeTypeID = 79
 left join mrovs cat80 on mr.MaintenanceRecordID = cat80.MaintenanceRecordID and cat80.CustomAttributeTypeID = 80

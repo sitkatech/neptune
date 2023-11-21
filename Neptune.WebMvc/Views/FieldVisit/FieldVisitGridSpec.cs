@@ -84,7 +84,7 @@ namespace Neptune.WebMvc.Views.FieldVisit
 
             if (!detailPage)
             {
-                Add("WQMP Name",
+                Add(FieldDefinitionType.WaterQualityManagementPlan.ToGridHeaderString(),
                     x => UrlTemplate.MakeHrefString(
                         waterQualityManagementPlanDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID),
                         x.WaterQualityManagementPlanName), 105,
