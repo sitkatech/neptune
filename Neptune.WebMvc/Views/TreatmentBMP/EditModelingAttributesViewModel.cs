@@ -26,7 +26,7 @@ using Neptune.WebMvc.Common.Models;
 
 namespace Neptune.WebMvc.Views.TreatmentBMP
 {
-    public class EditModelingAttributesViewModel : FormViewModel, IValidatableObject
+    public class EditModelingAttributesViewModel : FormViewModel//, IValidatableObject
     {
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.AverageDivertedFlowrate)]
         public double? AverageDivertedFlowrate { get; set; }
@@ -194,7 +194,106 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             treatmentBMPModelingAttribute.DryWeatherFlowOverrideID = DryWeatherFlowOverrideID;
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public List<string> CheckForRequiredFields()
+        {
+            var missingRequiredFields = new List<string>();
+            if (TreatmentBMPModelingTypeID.HasValue)
+            {
+                var treatmentBMPModelingTypeEnum = TreatmentBMPModelingType
+                    .AllLookupDictionary[TreatmentBMPModelingTypeID.Value].ToEnum;
+                switch (treatmentBMPModelingTypeEnum)
+                {
+                    case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
+                        CheckFieldIsRequired(missingRequiredFields, "Total Effective BMP Volume",
+                            TotalEffectiveBMPVolume);
+                        CheckFieldIsRequired(missingRequiredFields, "Storage Volume Below Lowest Outlet Elevation",
+                            StorageVolumeBelowLowestOutletElevation);
+                        CheckFieldIsRequired(missingRequiredFields, "Media Bed Footprint", MediaBedFootprint);
+                        CheckFieldIsRequired(missingRequiredFields, "Design Media Filtration Rate",
+                            DesignMediaFiltrationRate);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
+                    case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
+                    case TreatmentBMPModelingTypeEnum.InfiltrationTrench:
+                    case TreatmentBMPModelingTypeEnum.PermeablePavement:
+                    case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
+                        CheckFieldIsRequired(missingRequiredFields, "Total Effective BMP Volume",
+                            TotalEffectiveBMPVolume);
+                        CheckFieldIsRequired(missingRequiredFields, "Infiltration Surface Area",
+                            InfiltrationSurfaceArea);
+                        CheckFieldIsRequired(missingRequiredFields, "Underlying Infiltration Rate",
+                            UnderlyingInfiltrationRate);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
+                    case TreatmentBMPModelingTypeEnum.SandFilters:
+                        CheckFieldIsRequired(missingRequiredFields, "Total Effective BMP Volume",
+                            TotalEffectiveBMPVolume);
+                        CheckFieldIsRequired(missingRequiredFields, "Media Bed Footprint", MediaBedFootprint);
+                        CheckFieldIsRequired(missingRequiredFields, "Design Media Filtration Rate",
+                            DesignMediaFiltrationRate);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
+                        CheckFieldIsRequired(missingRequiredFields, "Total Effective BMP Volume",
+                            TotalEffectiveBMPVolume);
+                        CheckFieldIsRequired(missingRequiredFields, "Winter Harvested Water Demand",
+                            WinterHarvestedWaterDemand);
+                        CheckFieldIsRequired(missingRequiredFields, "Summer Harvested Water Demand",
+                            SummerHarvestedWaterDemand);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.ConstructedWetland:
+                    case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
+                        CheckFieldIsRequired(missingRequiredFields, "Permanent Pool or Wetland Volume",
+                            PermanentPoolorWetlandVolume);
+                        CheckFieldIsRequired(missingRequiredFields, "Extended Detention Surcharge Volume",
+                            WaterQualityDetentionVolume);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
+                    case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
+                    case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
+                        CheckFieldIsRequired(missingRequiredFields, "Total Effective BMP Volume",
+                            TotalEffectiveBMPVolume);
+                        CheckFieldIsRequired(missingRequiredFields, "Storage Volume Below Lowest Outlet Elevation",
+                            StorageVolumeBelowLowestOutletElevation);
+                        CheckFieldIsRequired(missingRequiredFields, "Effective Footprint", EffectiveFootprint);
+                        CheckFieldIsRequired(missingRequiredFields, "Extended Detention Surcharge Volume", DrawdownTimeforWQDetentionVolume);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
+                        if (!DesignDryWeatherTreatmentCapacity.HasValue && !AverageTreatmentFlowrate.HasValue)
+                        {
+                            missingRequiredFields.Add("At least one of either Design Dry Weather Treatment Capacity or Average Treatment Flowrate is required");
+                        }
+                        break;
+                    case TreatmentBMPModelingTypeEnum.Drywell:
+                        CheckFieldIsRequired(missingRequiredFields, "Total Effective Drywell BMP Volume",
+                            TotalEffectiveDrywellBMPVolume);
+                        CheckFieldIsRequired(missingRequiredFields, "InfiltrationDischargeRate",
+                            InfiltrationDischargeRate);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
+                    case TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:
+                    case TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl:
+                        CheckFieldIsRequired(missingRequiredFields, "Treatment Rate", TreatmentRate);
+                        break;
+                    case TreatmentBMPModelingTypeEnum.LowFlowDiversions:
+                        if (!DesignLowFlowDiversionCapacity.HasValue && !AverageDivertedFlowrate.HasValue)
+                        {
+                            missingRequiredFields.Add("At least one of either Design Low Flow Diversion Capacity or Average Diverted Flowrate is required");
+                        }
+                        break;
+                    case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
+                    case TreatmentBMPModelingTypeEnum.VegetatedSwale:
+                        CheckFieldIsRequired(missingRequiredFields, "Treatment Rate", TreatmentRate);
+                        CheckFieldIsRequired(missingRequiredFields, "Wetted Footprint", WettedFootprint);
+                        CheckFieldIsRequired(missingRequiredFields, "Effective Retention Depth",
+                            EffectiveRetentionDepth);
+                        break;
+                }
+            }
+
+            return missingRequiredFields;
+        }
+
+        /*public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
 
@@ -292,13 +391,21 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             }
 
             return validationResults;
-        }
+        }*/
 
         private static void ValidateFieldIsRequired(List<ValidationResult> validationResults, string fieldName, object valueToCheck)
         {
             if (valueToCheck == null)
             {
                 validationResults.Add(new ValidationResult($"{fieldName} is required"));
+            }
+        }
+
+        private static void CheckFieldIsRequired(List<string> validationResults, string fieldName, object valueToCheck)
+        {
+            if (valueToCheck == null)
+            {
+                validationResults.Add(fieldName);
             }
         }
     }

@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.AspNetCore.Html;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.DhtmlWrappers;
@@ -38,12 +39,18 @@ namespace Neptune.WebMvc.Views.MaintenanceRecord
             var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
             var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            var waterQualityManagementPlanDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
 
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.MaintenanceRecordID),currentPerson.IsManagerOrAdmin()), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.MaintenanceRecordID), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
             Add("BMP Name", x => UrlTemplate.MakeHrefString(treatmentBMPDetailUrlTemplate.ParameterReplace(x.TreatmentBMPID), x.TreatmentBMPName), 120, DhtmlxGridColumnFilterType.Html);
             Add("Date", x => x.VisitDate, 150, DhtmlxGridColumnFormatType.Date);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.StormwaterJurisdictionName), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add(FieldDefinitionType.WaterQualityManagementPlan.ToGridHeaderString(),
+                x => x.WaterQualityManagementPlanID.HasValue ? UrlTemplate.MakeHrefString(
+                    waterQualityManagementPlanDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID.Value),
+                    x.WaterQualityManagementPlanName) : new HtmlString("No WQMP"), 105,
+                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Performed By", x => UrlTemplate.MakeHrefString(userDetailUrlTemplate.ParameterReplace(x.PerformedByPersonID), x.PerformedByPersonName), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(FieldDefinitionType.MaintenanceRecordType.ToGridHeaderString("Type"),
                 x => x.MaintenanceRecordTypeDisplayName ?? "Not set", 100,

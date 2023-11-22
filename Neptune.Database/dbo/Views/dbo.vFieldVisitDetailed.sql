@@ -9,6 +9,7 @@ select	fv.FieldVisitID as PrimaryKey,
 		, tbasInit.TreatmentBMPAssessmentID as TreatmentBMPAssessmentIDInitial, isnull(tbasInit.IsAssessmentComplete, 0) as IsAssessmentCompleteInitial, tbasInit.AssessmentScore as AssessmentScoreInitial
 		, tbasPM.TreatmentBMPAssessmentID as TreatmentBMPAssessmentIDPM, isnull(tbasPM.IsAssessmentComplete, 0) as IsAssessmentCompletePM, tbasPM.AssessmentScore as AssessmentScorePM
 		, mr.MaintenanceRecordID
+		, wqmp.WaterQualityManagementPlanID, wqmp.WaterQualityManagementPlanName
 from dbo.FieldVisit fv
 join dbo.TreatmentBMP tb on fv.TreatmentBMPID = tb.TreatmentBMPID
 join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
@@ -17,6 +18,7 @@ join dbo.Organization o on sj.OrganizationID = o.OrganizationID
 join dbo.FieldVisitStatus fvs on fv.FieldVisitStatusID = fvs.FieldVisitStatusID
 join dbo.FieldVisitType fvt on fv.FieldVisitTypeID = fvt.FieldVisitTypeID
 join dbo.Person p on fv.PerformedByPersonID = p.PersonID
+left join dbo.WaterQualityManagementPlan wqmp on tb.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
 left join 
 (
 	select tbtcat.TreatmentBMPTypeID, count(cat.CustomAttributeTypeID) as NumberOfRequiredAttributes

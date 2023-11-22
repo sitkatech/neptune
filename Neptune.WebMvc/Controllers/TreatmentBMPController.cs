@@ -839,9 +839,12 @@ namespace Neptune.WebMvc.Controllers
                 };
                 _dbContext.TreatmentBMPModelingAttributes.Add(treatmentBMPModelingAttribute);
             }
-            viewModel.UpdateModel(treatmentBMPModelingAttribute, CurrentPerson);
-            SetMessageForDisplay("Modeling Attributes successfully saved.");
 
+            viewModel.UpdateModel(treatmentBMPModelingAttribute, CurrentPerson);
+            var missingAttributes = viewModel.CheckForRequiredFields();
+            SetMessageForDisplay(missingAttributes.Count > 0
+                ? "This Treatment BMP is missing required modeling attributes. Modeling Attributes successfully saved."
+                : "Modeling Attributes successfully saved.");
             // need to re-execute the model at this node since it was re-parameterized
             await NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, _dbContext);
 

@@ -38,6 +38,7 @@ namespace Neptune.WebMvc.Views.FieldVisit
             var treatmentBMPAssessmentDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var maintenanceRecordDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            var waterQualityManagementPlanDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var editUrlTemplate = new UrlTemplate<int>(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Inventory(UrlTemplate.Parameter1Int)));
             var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
 
@@ -79,6 +80,11 @@ namespace Neptune.WebMvc.Views.FieldVisit
             if (!detailPage)
             {
                 Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+                Add(FieldDefinitionType.WaterQualityManagementPlan.ToGridHeaderString(),
+                    x => x.WaterQualityManagementPlanID.HasValue ? UrlTemplate.MakeHrefString(
+                        waterQualityManagementPlanDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID.Value),
+                        x.WaterQualityManagementPlanName) : new HtmlString("No WQMP"), 105,
+                    DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             }
 
             if (!isAnonymousOrUnassigned)

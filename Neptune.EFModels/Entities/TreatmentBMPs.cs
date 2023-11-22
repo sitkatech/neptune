@@ -55,6 +55,7 @@ namespace Neptune.EFModels.Entities
                 .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
                 .Include(x => x.UpstreamBMP)
                 .Include(x => x.InventoryVerifiedByPerson)
+                .Include(x => x.WaterQualityManagementPlan)
                 ;
         }
 

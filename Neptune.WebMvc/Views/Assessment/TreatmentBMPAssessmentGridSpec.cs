@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.AspNetCore.Html;
 using Neptune.Common;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
@@ -38,6 +39,8 @@ namespace Neptune.WebMvc.Views.Assessment
             var detailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
             var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            var waterQualityManagementPlanDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+
 
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.TreatmentBMPAssessment.TreatmentBMPAssessmentID), currentPerson.IsManagerOrAdmin()), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.TreatmentBMPAssessment.TreatmentBMPAssessmentID), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
@@ -47,6 +50,11 @@ namespace Neptune.WebMvc.Views.Assessment
             Add("Water Year", x => x.TreatmentBMPAssessment.VisitDate.GetFiscalYear().ToString("0000"), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x =>
                 UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.TreatmentBMPAssessment.StormwaterJurisdictionID), x.TreatmentBMPAssessment.StormwaterJurisdictionName), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add(FieldDefinitionType.WaterQualityManagementPlan.ToGridHeaderString(),
+                x => x.TreatmentBMPAssessment.WaterQualityManagementPlanID.HasValue ? UrlTemplate.MakeHrefString(
+                    waterQualityManagementPlanDetailUrlTemplate.ParameterReplace(x.TreatmentBMPAssessment.WaterQualityManagementPlanID.Value),
+                    x.TreatmentBMPAssessment.WaterQualityManagementPlanName) : new HtmlString("No WQMP"), 105,
+                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Performed By", x => UrlTemplate.MakeHrefString(userDetailUrlTemplate.ParameterReplace(x.TreatmentBMPAssessment.PerformedByPersonID), x.TreatmentBMPAssessment.PerformedByPersonName), 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Field Visit Type", x => x.TreatmentBMPAssessment.FieldVisitTypeDisplayName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Assessment Type", x => x.TreatmentBMPAssessment.TreatmentBMPAssessmentTypeDisplayName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);

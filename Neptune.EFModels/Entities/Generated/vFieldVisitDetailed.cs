@@ -73,4 +73,10 @@ public partial class vFieldVisitDetailed
     public double? AssessmentScorePM { get; set; }
 
     public int? MaintenanceRecordID { get; set; }
+
+    public int? WaterQualityManagementPlanID { get; set; }
+
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? WaterQualityManagementPlanName { get; set; }
 }
