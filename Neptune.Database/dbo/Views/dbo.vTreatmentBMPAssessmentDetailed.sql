@@ -47,7 +47,7 @@ select  tba.TreatmentBMPAssessmentID, tbat.TreatmentBMPAssessmentTypeDisplayName
         fv.FieldVisitID, fvt.FieldVisitTypeDisplayName, fv.VisitDate,
         fv.PerformedByPersonID, fvp.FirstName + ' ' + fvp.LastName as PerformedByPersonName,
         sj.StormwaterJurisdictionID, o.OrganizationName as StormwaterJurisdictionName, sj.StormwaterJurisdictionPublicWQMPVisibilityTypeID,
-        wqmp.WaterQualityManagementPlanID, wqmp.WaterQualityManagementPlanName
+        isnull(wqmp.WaterQualityManagementPlanID, 0) as WaterQualityManagementPlanID, isnull(wqmp.WaterQualityManagementPlanName,'') as WaterQualityManagementPlanName
         --,
         --isnull(tbo20.ObservationValues, 'n/a') as [Inlet Condition],
         --isnull(tbo23.ObservationValues, 'n/a') as [Outlet Condition],
@@ -78,7 +78,7 @@ join dbo.FieldVisitType fvt on fv.FieldVisitTypeID = fvt.FieldVisitTypeID
 join dbo.Person fvp on fv.PerformedByPersonID = fvp.PersonID
 join dbo.StormwaterJurisdiction sj on bmp.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
 join dbo.Organization o on sj.OrganizationID = o.OrganizationID
-join dbo.WaterQualityManagementPlan wqmp on bmp.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
+left join dbo.WaterQualityManagementPlan wqmp on bmp.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
 --left join tbopf tbo20 on tba.TreatmentBMPAssessmentID = tbo20.TreatmentBMPAssessmentID and tbo20.TreatmentBMPAssessmentObservationTypeID = 20
 --left join tbopf tbo23 on tba.TreatmentBMPAssessmentID = tbo23.TreatmentBMPAssessmentID and tbo23.TreatmentBMPAssessmentObservationTypeID = 23
 --left join tbopf tbo24 on tba.TreatmentBMPAssessmentID = tbo24.TreatmentBMPAssessmentID and tbo24.TreatmentBMPAssessmentObservationTypeID = 24

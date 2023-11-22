@@ -80,10 +80,6 @@ namespace Neptune.WebMvc.Views.FieldVisit
             if (!detailPage)
             {
                 Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            }
-
-            if (!detailPage)
-            {
                 Add(FieldDefinitionType.WaterQualityManagementPlan.ToGridHeaderString(),
                     x => UrlTemplate.MakeHrefString(
                         waterQualityManagementPlanDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID),

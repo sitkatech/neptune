@@ -52,7 +52,7 @@ public partial class vMaintenanceRecordDetailed
 
     [StringLength(100)]
     [Unicode(false)]
-    public string? WaterQualityManagementPlanName { get; set; }
+    public string WaterQualityManagementPlanName { get; set; } = null!;
 
     [Column("Structural Repair Conducted")]
     [StringLength(8000)]
