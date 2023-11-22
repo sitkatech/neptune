@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.AspNetCore.Html;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.DhtmlWrappers;
@@ -46,9 +47,9 @@ namespace Neptune.WebMvc.Views.MaintenanceRecord
             Add("Date", x => x.VisitDate, 150, DhtmlxGridColumnFormatType.Date);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.StormwaterJurisdictionName), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(FieldDefinitionType.WaterQualityManagementPlan.ToGridHeaderString(),
-                x => UrlTemplate.MakeHrefString(
-                    waterQualityManagementPlanDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID),
-                    x.WaterQualityManagementPlanName), 105,
+                x => x.WaterQualityManagementPlanID.HasValue ? UrlTemplate.MakeHrefString(
+                    waterQualityManagementPlanDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID.Value),
+                    x.WaterQualityManagementPlanName) : new HtmlString("No WQMP"), 105,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Performed By", x => UrlTemplate.MakeHrefString(userDetailUrlTemplate.ParameterReplace(x.PerformedByPersonID), x.PerformedByPersonName), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(FieldDefinitionType.MaintenanceRecordType.ToGridHeaderString("Type"),

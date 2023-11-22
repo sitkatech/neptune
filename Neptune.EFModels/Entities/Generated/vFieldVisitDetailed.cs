@@ -74,9 +74,9 @@ public partial class vFieldVisitDetailed
 
     public int? MaintenanceRecordID { get; set; }
 
-    public int WaterQualityManagementPlanID { get; set; }
+    public int? WaterQualityManagementPlanID { get; set; }
 
     [StringLength(100)]
     [Unicode(false)]
-    public string WaterQualityManagementPlanName { get; set; } = null!;
+    public string? WaterQualityManagementPlanName { get; set; }
 }

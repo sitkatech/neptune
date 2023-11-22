@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.AspNetCore.Html;
 using Neptune.Common;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
@@ -50,9 +51,9 @@ namespace Neptune.WebMvc.Views.Assessment
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x =>
                 UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.TreatmentBMPAssessment.StormwaterJurisdictionID), x.TreatmentBMPAssessment.StormwaterJurisdictionName), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(FieldDefinitionType.WaterQualityManagementPlan.ToGridHeaderString(),
-                x => UrlTemplate.MakeHrefString(
-                    waterQualityManagementPlanDetailUrlTemplate.ParameterReplace(x.TreatmentBMPAssessment.WaterQualityManagementPlanID),
-                    x.TreatmentBMPAssessment.WaterQualityManagementPlanName), 105,
+                x => x.TreatmentBMPAssessment.WaterQualityManagementPlanID.HasValue ? UrlTemplate.MakeHrefString(
+                    waterQualityManagementPlanDetailUrlTemplate.ParameterReplace(x.TreatmentBMPAssessment.WaterQualityManagementPlanID.Value),
+                    x.TreatmentBMPAssessment.WaterQualityManagementPlanName) : new HtmlString("No WQMP"), 105,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Performed By", x => UrlTemplate.MakeHrefString(userDetailUrlTemplate.ParameterReplace(x.TreatmentBMPAssessment.PerformedByPersonID), x.TreatmentBMPAssessment.PerformedByPersonName), 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Field Visit Type", x => x.TreatmentBMPAssessment.FieldVisitTypeDisplayName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);

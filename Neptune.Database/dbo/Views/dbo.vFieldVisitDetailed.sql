@@ -9,7 +9,7 @@ select	fv.FieldVisitID as PrimaryKey,
 		, tbasInit.TreatmentBMPAssessmentID as TreatmentBMPAssessmentIDInitial, isnull(tbasInit.IsAssessmentComplete, 0) as IsAssessmentCompleteInitial, tbasInit.AssessmentScore as AssessmentScoreInitial
 		, tbasPM.TreatmentBMPAssessmentID as TreatmentBMPAssessmentIDPM, isnull(tbasPM.IsAssessmentComplete, 0) as IsAssessmentCompletePM, tbasPM.AssessmentScore as AssessmentScorePM
 		, mr.MaintenanceRecordID
-		, isnull(wqmp.WaterQualityManagementPlanID, 0) as WaterQualityManagementPlanID, isnull(wqmp.WaterQualityManagementPlanName, '') as WaterQualityManagementPlanName
+		, wqmp.WaterQualityManagementPlanID, wqmp.WaterQualityManagementPlanName
 from dbo.FieldVisit fv
 join dbo.TreatmentBMP tb on fv.TreatmentBMPID = tb.TreatmentBMPID
 join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID

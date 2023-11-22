@@ -16,7 +16,7 @@ select  mr.MaintenanceRecordID, mr.MaintenanceRecordDescription, mr.MaintenanceR
         bmp.TreatmentBMPID, bmp.TreatmentBMPTypeID, bmp.TreatmentBMPName, fv.VisitDate,
         fv.FieldVisitID, fv.PerformedByPersonID, fvp.FirstName + ' ' + fvp.LastName as PerformedByPersonName,
         sj.StormwaterJurisdictionID, o.OrganizationName as StormwaterJurisdictionName, sj.StormwaterJurisdictionPublicWQMPVisibilityTypeID,
-        isnull(wqmp.WaterQualityManagementPlanID, 0) as WaterQualityManagementPlanID, isnull(wqmp.WaterQualityManagementPlanName, '') as WaterQualityManagementPlanName,
+        wqmp.WaterQualityManagementPlanID, wqmp.WaterQualityManagementPlanName,
         isnull(cat78.ObservationValues, 'n/a') as [Structural Repair Conducted],
         isnull(cat79.ObservationValues, 'n/a') as [Mechanical Repair Conducted],
         isnull(cat80.ObservationValues, 'n/a') as [Infiltration Surface Restored],

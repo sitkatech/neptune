@@ -48,11 +48,11 @@ public partial class vMaintenanceRecordDetailed
 
     public int StormwaterJurisdictionPublicWQMPVisibilityTypeID { get; set; }
 
-    public int WaterQualityManagementPlanID { get; set; }
+    public int? WaterQualityManagementPlanID { get; set; }
 
     [StringLength(100)]
     [Unicode(false)]
-    public string WaterQualityManagementPlanName { get; set; } = null!;
+    public string? WaterQualityManagementPlanName { get; set; }
 
     [Column("Structural Repair Conducted")]
     [StringLength(8000)]

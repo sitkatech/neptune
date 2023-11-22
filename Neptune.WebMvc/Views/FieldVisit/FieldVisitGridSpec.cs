@@ -81,9 +81,9 @@ namespace Neptune.WebMvc.Views.FieldVisit
             {
                 Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
                 Add(FieldDefinitionType.WaterQualityManagementPlan.ToGridHeaderString(),
-                    x => UrlTemplate.MakeHrefString(
-                        waterQualityManagementPlanDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID),
-                        x.WaterQualityManagementPlanName), 105,
+                    x => x.WaterQualityManagementPlanID.HasValue ? UrlTemplate.MakeHrefString(
+                        waterQualityManagementPlanDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID.Value),
+                        x.WaterQualityManagementPlanName) : new HtmlString("No WQMP"), 105,
                     DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             }
 

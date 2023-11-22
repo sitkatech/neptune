@@ -47,7 +47,7 @@ select  tba.TreatmentBMPAssessmentID, tbat.TreatmentBMPAssessmentTypeDisplayName
         fv.FieldVisitID, fvt.FieldVisitTypeDisplayName, fv.VisitDate,
         fv.PerformedByPersonID, fvp.FirstName + ' ' + fvp.LastName as PerformedByPersonName,
         sj.StormwaterJurisdictionID, o.OrganizationName as StormwaterJurisdictionName, sj.StormwaterJurisdictionPublicWQMPVisibilityTypeID,
-        isnull(wqmp.WaterQualityManagementPlanID, 0) as WaterQualityManagementPlanID, isnull(wqmp.WaterQualityManagementPlanName,'') as WaterQualityManagementPlanName
+        wqmp.WaterQualityManagementPlanID, wqmp.WaterQualityManagementPlanName
         --,
         --isnull(tbo20.ObservationValues, 'n/a') as [Inlet Condition],
         --isnull(tbo23.ObservationValues, 'n/a') as [Outlet Condition],
