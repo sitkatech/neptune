@@ -95,12 +95,12 @@ public static class GeoJsonSerializer
 
     public static JsonSerializerOptions CreateGeoJSONSerializerOptions()
     {
-        return CreateGeoJSONSerializerOptions(3, 7);
+        return CreateGeoJSONSerializerOptions(6, 7);
     }
 
     public static JsonSerializerOptions CreateGeoJSONSerializerOptions(int numberOfSignificantDigits)
     {
-        return CreateGeoJSONSerializerOptions(3, numberOfSignificantDigits);
+        return CreateGeoJSONSerializerOptions(6, numberOfSignificantDigits);
     }
 
     public static JsonSerializerOptions CreateGeoJSONSerializerOptions(int coordinatePrecision, int numberOfSignificantDigits)

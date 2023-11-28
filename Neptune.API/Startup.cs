@@ -76,7 +76,7 @@ namespace Neptune.API
                 })
                 .AddJsonOptions(options =>
             {
-                var scale = Math.Pow(10, 3);
+                var scale = Math.Pow(10, 6);
                 var geometryFactory = new GeometryFactory(new PrecisionModel(scale), 4326);
                 options.JsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));
                 options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
