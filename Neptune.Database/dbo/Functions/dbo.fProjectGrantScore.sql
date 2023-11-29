@@ -237,18 +237,18 @@ as return
     left join 
     (
         select lg.ProjectID,
-            new.DryWeatherRetained / (lg.DryWeatherVolumeGenerated - exist.DryWeatherRetained) as PercentReducedVolume,
-            new.DryWeatherTSSReduced / (lg.DryWeatherTSSGenerated - exist.DryWeatherTSSReduced) as PercentReducedTSS,
-            new.DryWeatherFCReduced / (lg.DryWeatherFCGenerated - exist.DryWeatherFCReduced) as PercentReducedBacteria,
+            case when (lg.DryWeatherVolumeGenerated - exist.DryWeatherRetained) = 0 then 0 else new.DryWeatherRetained / (lg.DryWeatherVolumeGenerated - exist.DryWeatherRetained) end as PercentReducedVolume,
+            case when (lg.DryWeatherTSSGenerated - exist.DryWeatherTSSReduced) = 0 then 0 else new.DryWeatherTSSReduced / (lg.DryWeatherTSSGenerated - exist.DryWeatherTSSReduced) end as PercentReducedTSS,
+            case when (lg.DryWeatherFCGenerated - exist.DryWeatherFCReduced) = 0 then 0 else new.DryWeatherFCReduced / (lg.DryWeatherFCGenerated - exist.DryWeatherFCReduced) end as PercentReducedBacteria,
 
-            new.DryWeatherTNReduced / (lg.DryWeatherTNGenerated - exist.DryWeatherTNReduced) as PercentReducedTN,
-            new.DryWeatherTPReduced / (lg.DryWeatherTPGenerated - exist.DryWeatherTPReduced) as PercentReducedTP,
-            (((new.DryWeatherTNReduced / (lg.DryWeatherTNGenerated - exist.DryWeatherTNReduced)) + (new.DryWeatherTPReduced / (lg.DryWeatherTPGenerated - exist.DryWeatherTPReduced))) / 2.0) as PercentReducedNutrients,
+            case when (lg.DryWeatherTNGenerated - exist.DryWeatherTNReduced) = 0 then 0 else new.DryWeatherTNReduced / (lg.DryWeatherTNGenerated - exist.DryWeatherTNReduced) end as PercentReducedTN,
+            case when (lg.DryWeatherTPGenerated - exist.DryWeatherTPReduced) = 0 then 0 else new.DryWeatherTPReduced / (lg.DryWeatherTPGenerated - exist.DryWeatherTPReduced) end as PercentReducedTP,
+            (((case when (lg.DryWeatherTNGenerated - exist.DryWeatherTNReduced) = 0 then 0 else new.DryWeatherTNReduced / (lg.DryWeatherTNGenerated - exist.DryWeatherTNReduced) end) + (case when (lg.DryWeatherTPGenerated - exist.DryWeatherTPReduced) = 0 then 0 else new.DryWeatherTPReduced / (lg.DryWeatherTPGenerated - exist.DryWeatherTPReduced) end)) / 2.0) as PercentReducedNutrients,
 
-            new.DryWeatherTPbReduced / (lg.DryWeatherTPbGenerated - exist.DryWeatherTPbReduced) as PercentReducedTPb,
-            new.DryWeatherTCuReduced / (lg.DryWeatherTCuGenerated - exist.DryWeatherTCuReduced) as PercentReducedTCu,
-            new.DryWeatherTZnReduced / (lg.DryWeatherTZnGenerated - exist.DryWeatherTZnReduced) as PercentReducedTZn,
-            (((new.DryWeatherTPbReduced / (lg.DryWeatherTPbGenerated - exist.DryWeatherTPbReduced)) + (new.DryWeatherTCuReduced / (lg.DryWeatherTCuGenerated - exist.DryWeatherTCuReduced)) + (new.DryWeatherTZnReduced / (lg.DryWeatherTZnGenerated - exist.DryWeatherTZnReduced))) / 3.0) as PercentReducedMetals
+            case when (lg.DryWeatherTPbGenerated - exist.DryWeatherTPbReduced) = 0 then 0 else new.DryWeatherTPbReduced / (lg.DryWeatherTPbGenerated - exist.DryWeatherTPbReduced) end as PercentReducedTPb,
+            case when (lg.DryWeatherTCuGenerated - exist.DryWeatherTCuReduced) = 0 then 0 else new.DryWeatherTCuReduced / (lg.DryWeatherTCuGenerated - exist.DryWeatherTCuReduced) end as PercentReducedTCu,
+            case when (lg.DryWeatherTZnGenerated - exist.DryWeatherTZnReduced) = 0 then 0 else new.DryWeatherTZnReduced / (lg.DryWeatherTZnGenerated - exist.DryWeatherTZnReduced) end as PercentReducedTZn,
+            (((case when (lg.DryWeatherTPbGenerated - exist.DryWeatherTPbReduced) = 0 then 0 else new.DryWeatherTPbReduced / (lg.DryWeatherTPbGenerated - exist.DryWeatherTPbReduced) end) + (case when (lg.DryWeatherTCuGenerated - exist.DryWeatherTCuReduced) = 0 then 0 else new.DryWeatherTCuReduced / (lg.DryWeatherTCuGenerated - exist.DryWeatherTCuReduced) end) + (case when (lg.DryWeatherTZnGenerated - exist.DryWeatherTZnReduced) = 0 then 0 else new.DryWeatherTZnReduced / (lg.DryWeatherTZnGenerated - exist.DryWeatherTZnReduced) end)) / 3.0) as PercentReducedMetals
 
             from
             (
@@ -299,18 +299,18 @@ as return
     left join 
     (
         select lg.ProjectID,
-            new.WetWeatherRetained / (lg.WetWeatherVolumeGenerated - exist.WetWeatherRetained) as PercentReducedVolume,
-            new.WetWeatherTSSReduced / (lg.WetWeatherTSSGenerated - exist.WetWeatherTSSReduced) as PercentReducedTSS,
-            new.WetWeatherFCReduced / (lg.WetWeatherFCGenerated - exist.WetWeatherFCReduced) as PercentReducedBacteria,
+            case when (lg.WetWeatherVolumeGenerated - exist.WetWeatherRetained) = 0 then 0 else new.WetWeatherRetained / (lg.WetWeatherVolumeGenerated - exist.WetWeatherRetained) end as PercentReducedVolume,
+            case when (lg.WetWeatherTSSGenerated - exist.WetWeatherTSSReduced) = 0 then 0 else new.WetWeatherTSSReduced / (lg.WetWeatherTSSGenerated - exist.WetWeatherTSSReduced) end as PercentReducedTSS,
+            case when (lg.WetWeatherFCGenerated - exist.WetWeatherFCReduced) = 0 then 0 else new.WetWeatherFCReduced / (lg.WetWeatherFCGenerated - exist.WetWeatherFCReduced) end as PercentReducedBacteria,
 
-            new.WetWeatherTNReduced / (lg.WetWeatherTNGenerated - exist.WetWeatherTNReduced) as PercentReducedTN,
-            new.WetWeatherTPReduced / (lg.WetWeatherTPGenerated - exist.WetWeatherTPReduced) as PercentReducedTP,
-            (((new.WetWeatherTNReduced / (lg.WetWeatherTNGenerated - exist.WetWeatherTNReduced)) + (new.WetWeatherTPReduced / (lg.WetWeatherTPGenerated - exist.WetWeatherTPReduced))) / 2.0) as PercentReducedNutrients,
+            case when (lg.WetWeatherTNGenerated - exist.WetWeatherTNReduced) = 0 then 0 else new.WetWeatherTNReduced / (lg.WetWeatherTNGenerated - exist.WetWeatherTNReduced) end as PercentReducedTN,
+            case when (lg.WetWeatherTPGenerated - exist.WetWeatherTPReduced) = 0 then 0 else new.WetWeatherTPReduced / (lg.WetWeatherTPGenerated - exist.WetWeatherTPReduced) end as PercentReducedTP,
+            (((case when (lg.WetWeatherTNGenerated - exist.WetWeatherTNReduced) = 0 then 0 else new.WetWeatherTNReduced / (lg.WetWeatherTNGenerated - exist.WetWeatherTNReduced) end) + (case when (lg.WetWeatherTPGenerated - exist.WetWeatherTPReduced) = 0 then 0 else new.WetWeatherTPReduced / (lg.WetWeatherTPGenerated - exist.WetWeatherTPReduced) end)) / 2.0) as PercentReducedNutrients,
 
-            new.WetWeatherTPbReduced / (lg.WetWeatherTPbGenerated - exist.WetWeatherTPbReduced) as PercentReducedTPb,
-            new.WetWeatherTCuReduced / (lg.WetWeatherTCuGenerated - exist.WetWeatherTCuReduced) as PercentReducedTCu,
-            new.WetWeatherTZnReduced / (lg.WetWeatherTZnGenerated - exist.WetWeatherTZnReduced) as PercentReducedTZn,
-            (((new.WetWeatherTPbReduced / (lg.WetWeatherTPbGenerated - exist.WetWeatherTPbReduced)) + (new.WetWeatherTCuReduced / (lg.WetWeatherTCuGenerated - exist.WetWeatherTCuReduced)) + (new.WetWeatherTZnReduced / (lg.WetWeatherTZnGenerated - exist.WetWeatherTZnReduced))) / 3.0) as PercentReducedMetals
+            case when (lg.WetWeatherTPbGenerated - exist.WetWeatherTPbReduced) = 0 then 0 else new.WetWeatherTPbReduced / (lg.WetWeatherTPbGenerated - exist.WetWeatherTPbReduced) end as PercentReducedTPb,
+            case when (lg.WetWeatherTCuGenerated - exist.WetWeatherTCuReduced) = 0 then 0 else new.WetWeatherTCuReduced / (lg.WetWeatherTCuGenerated - exist.WetWeatherTCuReduced) end as PercentReducedTCu,
+            case when (lg.WetWeatherTZnGenerated - exist.WetWeatherTZnReduced) = 0 then 0 else new.WetWeatherTZnReduced / (lg.WetWeatherTZnGenerated - exist.WetWeatherTZnReduced) end as PercentReducedTZn,
+            (((case when (lg.WetWeatherTPbGenerated - exist.WetWeatherTPbReduced) = 0 then 0 else new.WetWeatherTPbReduced / (lg.WetWeatherTPbGenerated - exist.WetWeatherTPbReduced) end) + (case when (lg.WetWeatherTCuGenerated - exist.WetWeatherTCuReduced) = 0 then 0 else new.WetWeatherTCuReduced / (lg.WetWeatherTCuGenerated - exist.WetWeatherTCuReduced) end) + (case when (lg.WetWeatherTZnGenerated - exist.WetWeatherTZnReduced) = 0 then 0 else new.WetWeatherTZnReduced / (lg.WetWeatherTZnGenerated - exist.WetWeatherTZnReduced) end)) / 3.0) as PercentReducedMetals
 
             from
             (
