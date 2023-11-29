@@ -85,6 +85,51 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:80
 
+  neptune.celeryworker:
+    container_name: nereid_celeryworker
+    image: esacontainers.azurecr.io/neptune/celeryworker:v0.10.0rc2
+    environment:
+      CELERY_BROKER_URL: redis://nereid_redis:6379/0
+      CELERY_RESULT_BACKEND: redis://nereid_redis:6379/0
+    volumes:
+      - c:/Sitka/Neptune/nereid_data:/nereid/nereid/data/project_data
+    ports:
+      - "8233:5555"
+
+  neptune.flower:
+    container_name: nereid_flower
+    image: esacontainers.azurecr.io/neptune/flower:v0.10.0rc2
+    environment:
+      CELERY_BROKER_URL: redis://nereid_redis:6379/0
+      CELERY_RESULT_BACKEND: redis://nereid_redis:6379/0
+
+  neptune.nereid:
+    container_name: nereid
+    image: esacontainers.azurecr.io/neptune/nereid:v0.10.0rc2
+    hostname: nereid
+    command: bash /start-reload.sh
+    volumes:
+      - c:/Sitka/Neptune/nereid_data:/nereid/nereid/data/project_data
+    ports:
+      - "8234:80"
+    environment:
+      CELERY_BROKER_URL: redis://nereid_redis:6379/0
+      CELERY_RESULT_BACKEND: redis://nereid_redis:6379/0
+      NEREID_ASYNC_MODE: replace
+
+  neptune.nereid-tests:
+    container_name: nereid_tests
+    image: esacontainers.azurecr.io/neptune/nereid-tests:v0.10.0rc2
+    environment:
+      CELERY_BROKER_URL: redis://nereid_redis:6379/0
+      CELERY_RESULT_BACKEND: redis://nereid_redis:6379/0
+      NEREID_ASYNC_MODE: replace
+    volumes:
+      - c:/Sitka/Neptune/nereid_data:/nereid/nereid/data/project_data
+
+  neptune.redis:
+    container_name: nereid_redis
+    image: esacontainers.azurecr.io/neptune/redis:v0.10.0rc2
 
 secrets:
   GeoserverSqlServerPassword.txt:
