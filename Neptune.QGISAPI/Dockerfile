@@ -9,9 +9,21 @@ ENV XDG_RUNTIME_DIR=/tmp/runtime-root
 WORKDIR /app
 EXPOSE 80
 
+RUN apt-get update && \
+    apt-get install -y wget
+
+# Download Microsoft signing key and repository
+RUN wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+
+# Install Microsoft signing key and repository
+RUN dpkg -i packages-microsoft-prod.deb
+
+# Clean up
+RUN rm packages-microsoft-prod.deb
+
 # Install the .NET runtime
 RUN apt-get update && \
-    apt-get install -y aspnetcore-runtime-6.0
+    apt-get install -y aspnetcore-runtime-8.0
 
 # install sql server odbc
 #RUN apt install libqt5sql5-odbc
@@ -23,7 +35,7 @@ RUN apt-get update && \
 #RUN ACCEPT_EULA=Y apt-get install -y mssql-tools18
 #RUN echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["Neptune.QGISAPI/Neptune.QGISAPI.csproj", "Neptune.QGISAPI/"]
 RUN dotnet restore "Neptune.QGISAPI/Neptune.QGISAPI.csproj"

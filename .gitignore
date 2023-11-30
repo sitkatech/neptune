@@ -74,7 +74,6 @@ Source/Neptune.GeoServer/data_dir/logs/
 /Neptune.GeoServer/data_dir/security
 /Neptune.API/appsecrets.json
 /*.user
-/Hippocamp.Web/obj/Debug/net6.0
 /Neptune.Web/obj/Debug/net6.0
 /docker-compose/obj/Docker
 /Neptune.Web/.vscode
@@ -91,3 +90,15 @@ Source/Neptune.GeoServer/data_dir/logs/
 /Neptune.QGISAPI/__pycache__
 /Neptune.Jobs/bin/Debug/net6.0
 /Build/temp
+/Neptune.Tests/bin/Debug/net8.0
+/Neptune.Jobs/bin/Debug/net8.0
+/Neptune.Models/bin/Debug/net8.0
+/Neptune.QGISAPI/bin/Debug/net8.0
+/Neptune.Common/bin/Debug/net8.0
+/Neptune.API/bin/Debug/net8.0
+/Neptune.EFModels/bin/Debug/net8.0
+/Neptune.GDALAPI/bin/Debug/net8.0
+/Neptune.WebMvc/bin/Debug/net8.0
+/Neptune.Web/bin/Debug/net8.0
+/Neptune.Web/obj/Debug/net8.0
+/Neptune.Web/obj

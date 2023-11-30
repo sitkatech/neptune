@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /src
 
 COPY ./Neptune.Common ./Neptune.Common
@@ -9,7 +9,7 @@ COPY ./Neptune.API ./Neptune.API
 
 RUN dotnet publish ./Neptune.API/Neptune.API.csproj -c Release -o /app
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build-env /app /app
 EXPOSE 80
