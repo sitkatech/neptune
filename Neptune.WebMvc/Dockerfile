@@ -13,7 +13,7 @@ COPY ["Neptune.WebMvc/Neptune.WebMvc.csproj", "Neptune.WebMvc/"]
 
 RUN dotnet restore "./Neptune.WebMvc/./Neptune.WebMvc.csproj"
 COPY . .
-WORKDIR "/src/Neptune.API"
+WORKDIR "/src/Neptune.WebMvc"
 RUN dotnet build "./Neptune.WebMvc.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
