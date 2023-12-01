@@ -1,16 +1,26 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
-WORKDIR /src
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-COPY ./Neptune.Common ./Neptune.Common
-COPY ./Neptune.Models ./Neptune.Models
-COPY ./Neptune.EFModels ./Neptune.EFModels
-COPY ./Neptune.Jobs ./Neptune.Jobs
-COPY ./Neptune.API ./Neptune.API
-
-RUN dotnet publish ./Neptune.API/Neptune.API.csproj -c Release -o /app
-
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER app
 WORKDIR /app
-COPY --from=build-env /app /app
-EXPOSE 80
-ENTRYPOINT ["dotnet", "Neptune.API.dll"]
+EXPOSE 8080
+EXPOSE 8081
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["Neptune.API/Neptune.API.csproj" , "Neptune.API/"]
+
+RUN dotnet restore "./Neptune.API/./Neptune.API.csproj"
+COPY . .
+WORKDIR "/src/Neptune.API"
+RUN dotnet build "./Neptune.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./Neptune.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Neptune.API.dll"]	
