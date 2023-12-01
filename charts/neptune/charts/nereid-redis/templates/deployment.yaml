@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "nereid-redis.labels" . | nindent 4 }}
 spec:
+  revisionHistoryLimit: 1 # Default to 10 if not specified
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
