@@ -11,14 +11,14 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Neptune.WebMvc/Neptune.WebMvc.csproj", "Neptune.WebMvc/"]
 
-RUN dotnet restore "./Neptune.WebMvc/./Neptune.WebMvc.csproj"
+RUN dotnet restore "Neptune.WebMvc/Neptune.WebMvc.csproj"
 COPY . .
 WORKDIR "/src/Neptune.WebMvc"
-RUN dotnet build "./Neptune.WebMvc.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "Neptune.WebMvc.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Neptune.WebMvc.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Neptune.WebMvc.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
