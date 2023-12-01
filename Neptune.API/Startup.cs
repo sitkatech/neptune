@@ -231,7 +231,7 @@ namespace Neptune.API
             });
             #endregion
 
-            services.AddHealthChecks();
+            services.AddHealthChecks().AddDbContextCheck<NeptuneDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
