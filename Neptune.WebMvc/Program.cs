@@ -18,7 +18,6 @@ using Hangfire;
 using Hangfire.SqlServer;
 using Neptune.Jobs;
 using Neptune.Jobs.Services;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -210,7 +209,6 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddHttpContextAccessor();
     services.AddScoped<AzureBlobStorageService>();
     services.AddScoped<FileResourceService>();
-    services.AddHealthChecks().AddDbContextCheck<NeptuneDbContext>();
 }
 
 
