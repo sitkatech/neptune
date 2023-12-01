@@ -2,6 +2,8 @@ version: '3.4'
 
 services:
   neptune.webmvc:
+    build:
+        context: ..
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
@@ -33,6 +35,8 @@ services:
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
 
   neptune.api:
+    build:
+        context: ..
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
@@ -58,6 +62,8 @@ services:
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
 
   neptune.gdalapi:
+    build:
+        context: ..
     hostname: gdalapi
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -67,6 +73,8 @@ services:
       - "8231:80"
 
   neptune.qgisapi:
+    build:
+        context: ..
     hostname: qgisapi
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
