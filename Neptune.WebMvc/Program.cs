@@ -209,6 +209,7 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddHttpContextAccessor();
     services.AddScoped<AzureBlobStorageService>();
     services.AddScoped<FileResourceService>();
+    services.AddHealthChecks();
 }
 
 

@@ -230,6 +230,8 @@ namespace Neptune.API
                 // extra options here if you wanted
             });
             #endregion
+
+            services.AddHealthChecks();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
