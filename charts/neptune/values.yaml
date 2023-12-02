@@ -56,7 +56,7 @@ api:
     # runAsUser: 1000
   service:
     type: ClusterIP
-    port: 8080
+    port: 80
   ingress:
     enabled: true
     className: ""
@@ -166,7 +166,7 @@ webmvc:
     # runAsUser: 1000
   service:
     type: ClusterIP
-    port: 8080
+    port: 80
   ingress:
     enabled: true
     className: ""

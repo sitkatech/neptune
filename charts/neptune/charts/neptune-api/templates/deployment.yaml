@@ -47,7 +47,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
           # this startup probe checks the app every 10 seconds to see if it's ready to receive traffic
           # it gives a very generous 5 minutes for the container to startup. As soon as it is successful
