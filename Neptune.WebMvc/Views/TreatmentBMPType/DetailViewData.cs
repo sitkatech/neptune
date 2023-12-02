@@ -37,6 +37,8 @@ namespace Neptune.WebMvc.Views.TreatmentBMPType
         public string GridName { get; }
         public string GridDataUrl { get; }
         public string EditUrl { get; set; }
+        public UrlTemplate<int> CustomAttributeTypeDetailUrlTemplate { get; set; }
+        public UrlTemplate<int> TreatmentBMPAssessmentObservationTypeDetailUrlTemplate { get; set; }
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.TreatmentBMPType treatmentBMPType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
@@ -57,6 +59,8 @@ namespace Neptune.WebMvc.Views.TreatmentBMPType
             EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
 
             ObservationTypeSortOrderUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.EditObservationTypesSortOrder(TreatmentBMPType));
+            CustomAttributeTypeDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            TreatmentBMPAssessmentObservationTypeDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
 
         }
 

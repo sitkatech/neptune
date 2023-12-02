@@ -187,9 +187,8 @@ namespace Neptune.WebMvc.Controllers
                     .Include(x => x.WaterQualityManagementPlan)
                     .Include(x => x.CustomAttributes)
                     .ThenInclude(x => x.CustomAttributeValues)
-                    .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
                     .Include(x => x.Watershed)
-                    .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID) && x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID)
+                    .Where(x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID && stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID))
                     .ToList()
                     .Join(_dbContext.vTreatmentBMPDetaileds,
                         x => x.TreatmentBMPID,

@@ -104,52 +104,47 @@ public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<TreatmentBMPDeta
                 : new HtmlString(x.TreatmentBMPDetailed.DelineationTypeDisplayName), 130,
             DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
 
-        foreach (var purpose in CustomAttributeTypePurpose.All)
+        foreach (var purpose in CustomAttributeTypePurpose.All.Except(CustomAttributeTypePurpose.Maintenance))
         {
-            if (purpose == CustomAttributeTypePurpose.Maintenance)
-            {
-                continue;
-            }
-
-            var attributes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x =>
+            var treatmentBMPTypeCustomAttributeTypes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x =>
                 x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID ==
                 purpose.CustomAttributeTypePurposeID).ToList();
 
-            if (!attributes.Any())
+            if (!treatmentBMPTypeCustomAttributeTypes.Any())
             {
                 continue;
             }
 
-            foreach (var customAttributeType in attributes.SortByOrderThenName())
+            foreach (var treatmentBMPTypeCustomAttributeType in treatmentBMPTypeCustomAttributeTypes.SortByOrderThenName())
             {
-                switch (customAttributeType.CustomAttributeType.CustomAttributeDataTypeID)
+                switch (treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeDataTypeID)
                 {
                     case (int)CustomAttributeDataTypeEnum.Decimal:
-                        Add(customAttributeType.GetDisplayNameWithUnits(),
-                            x => decimal.TryParse(GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, customAttributeType),  out var decimalResult) ? decimalResult : null , 130,
+                        Add(treatmentBMPTypeCustomAttributeType.GetDisplayNameWithUnits(),
+                            x => decimal.TryParse(GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, treatmentBMPTypeCustomAttributeType),  out var decimalResult) ? decimalResult : null , 130,
                             DhtmlxGridColumnFormatType.Decimal);
                         break;
                     case (int)CustomAttributeDataTypeEnum.Integer:
-                        Add(customAttributeType.GetDisplayNameWithUnits(),
-                            x => int.TryParse(GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, customAttributeType), out var intResult) ? intResult : (int?)null, 130);
+                        Add(treatmentBMPTypeCustomAttributeType.GetDisplayNameWithUnits(),
+                            x => int.TryParse(GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, treatmentBMPTypeCustomAttributeType), out var intResult) ? intResult : null, 130);
                         break;
                     case (int)CustomAttributeDataTypeEnum.DateTime:
-                        Add(customAttributeType.GetDisplayNameWithUnits(),
-                            x => DateTime.TryParse(GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, customAttributeType), out var dateResult) ? dateResult : null, 130);
+                        Add(treatmentBMPTypeCustomAttributeType.GetDisplayNameWithUnits(),
+                            x => DateTime.TryParse(GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, treatmentBMPTypeCustomAttributeType), out var dateResult) ? dateResult : null, 130);
                         break;
                     case (int)CustomAttributeDataTypeEnum.MultiSelect:
-                        Add(customAttributeType.GetDisplayNameWithUnits(),
-                            x => GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, customAttributeType), 130,
+                        Add(treatmentBMPTypeCustomAttributeType.GetDisplayNameWithUnits(),
+                            x => GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, treatmentBMPTypeCustomAttributeType), 130,
                             DhtmlxGridColumnFilterType.SelectFilterStrict);
                         break;
                     case (int)CustomAttributeDataTypeEnum.PickFromList:
-                        Add(customAttributeType.GetDisplayNameWithUnits(),
-                            x => GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, customAttributeType), 130,
+                        Add(treatmentBMPTypeCustomAttributeType.GetDisplayNameWithUnits(),
+                            x => GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, treatmentBMPTypeCustomAttributeType), 130,
                             DhtmlxGridColumnFilterType.SelectFilterStrict);
                         break;
                     case (int)CustomAttributeDataTypeEnum.String:
-                        Add(customAttributeType.GetDisplayNameWithUnits(),
-                            x => GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, customAttributeType), 130,
+                        Add(treatmentBMPTypeCustomAttributeType.GetDisplayNameWithUnits(),
+                            x => GetCustomAttributeValue(x.TreatmentBMP.CustomAttributes, treatmentBMPTypeCustomAttributeType), 130,
                             DhtmlxGridColumnFilterType.Text);
                         break;
                 }

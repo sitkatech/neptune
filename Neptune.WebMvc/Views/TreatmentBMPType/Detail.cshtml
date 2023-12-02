@@ -98,8 +98,9 @@
                                         <td class="text-left">
                                             @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
                                             {
-                                                @treatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName
-                                                @*todo:@treatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()*@
+                                                <a href="@ViewDataTyped.TreatmentBMPAssessmentObservationTypeDetailUrlTemplate.ParameterReplace(treatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID)">
+                                                    @treatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName
+                                                </a>
                                             }
                                             else
                                             {
@@ -156,8 +157,9 @@
                                                 <td class="text-left">
                                                     @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
                                                     {
-                                                        @treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName
-                                                        @*todo:@treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl()*@
+                                                        <a href="@ViewDataTyped.CustomAttributeTypeDetailUrlTemplate.ParameterReplace(treatmentBMPTypeAttributeType.CustomAttributeTypeID)">
+                                                            @treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName
+                                                        </a>
                                                     }
                                                     else
                                                     {
