@@ -32,7 +32,6 @@ services:
       - "6211:8080"
       - "6212:8081"
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
 
   neptune.api:
