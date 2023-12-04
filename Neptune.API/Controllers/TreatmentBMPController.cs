@@ -62,7 +62,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpGet("treatmentBMPs/modelingAttributeDropdownItems")]
-        [JurisdictionEditFeature]
+        [UserViewFeature]
         public ActionResult<List<TreatmentBMPModelingAttributeDropdownItemDto>> GetModelingAttributeDropdownItems()
         {
             var treatmentBMPModelingAttributeDropdownItemDtos = TreatmentBMPs.GetModelingAttributeDropdownItemsAsDto(_dbContext);
