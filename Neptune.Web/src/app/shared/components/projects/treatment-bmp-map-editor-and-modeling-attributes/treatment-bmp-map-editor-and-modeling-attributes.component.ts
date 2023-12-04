@@ -276,7 +276,6 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
       }),
     }, this.tileLayers);
 
-
     let regionalSubbasinsWMSOptions = ({
       layers: "OCStormwater:RegionalSubbasins",
       transparent: true,
@@ -309,36 +308,12 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
 
 
     this.overlayLayers = Object.assign({
+      "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", regionalSubbasinsWMSOptions),
       "<span>Stormwater Network <br/> <img src='./assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({ url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/" }),
       "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions),
       "<img src='./assets/main/map-legend-images/wqmpBoundary.png' style='height:12px; margin-bottom:4px'> WQMPs": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", WQMPsWMSOptions),
       "<span>Delineations (Verified) </br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
     }, this.overlayLayers);
-
-    this.wfsService.getRegionalSubbasins().subscribe(response => {
-      let layer = L.geoJson(response, {
-          pointToLayer: function (feature, latlng) {
-              return L.circleMarker(latlng, {});
-          },
-          style: function (feature) {
-              return {
-                  stroke: true,
-                  color: "#000",
-                  radius: 5,
-                  weight: 1,
-                  opacity: 1,
-                  fillOpacity: 0.0
-              }
-          },
-          onEachFeature: (feature, layer) => {
-            var popupContent = `RSB ID: <a href = "${this.ocstBaseUrl()}/RegionalSubbasin/Detail/${feature.properties.RegionalSubbasinID.toString()}">${feature.properties.RegionalSubbasinID}</a>`
-            layer.bindPopup(popupContent);
-              
-          }
-      })
-
-      this.layerControl?.addOverlay(layer, "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins")
-  });
 
     this.compileService.configure(this.appRef);
   }
