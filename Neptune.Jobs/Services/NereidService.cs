@@ -156,7 +156,7 @@ public class NereidService : BaseAPIService<NereidService>
         var allWQMPNodes =
             GetWaterQualityManagementPlanNodes(dbContext, projectID, projectRegionalSubbasinIDs).ToList();
         //This will get taken care of inside of SolveSubgraph based on the WQMP nodes above, so no need to filter it here
-        var allModelingQuickBMPs = dbContext.QuickBMPs.AsNoTracking().Include(x => x.TreatmentBMPType).Where(x =>
+        var allModelingQuickBMPs = dbContext.QuickBMPs.AsNoTracking().Include(x => x.TreatmentBMPType).Include(x => x.WaterQualityManagementPlan).Where(x =>
                 x.PercentOfSiteTreated != null && x.PercentCaptured != null && x.PercentRetained != null &&
                 x.TreatmentBMPType.IsAnalyzedInModelingModule)
             .ToList();
@@ -299,7 +299,7 @@ public class NereidService : BaseAPIService<NereidService>
         var filteredQuickBMPs = allModelingQuickBMPs
             .Where(x => waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID) &&
                         // Don't create TreatmentSites for QuickBMPs belonging to a Detailed WQMP
-                        x.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID).ToList();
+                        x.WaterQualityManagementPlan?.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID).ToList();
         var filteredWQMPNodes = allWaterqualityManagementPlanNodes.Where(y =>
                 waterQualityManagementPlanToIncludeIDs.Contains(y.WaterQualityManagementPlanID) &&
                 regionalSubbasinToIncludeIDs.Contains(y.RegionalSubbasinID) // ignore parts that live in RSBs outside our solve area.

@@ -95,7 +95,7 @@ public static class GeoJsonSerializer
 
     public static JsonSerializerOptions CreateGeoJSONSerializerOptions()
     {
-        return CreateGeoJSONSerializerOptions(6, 7);
+        return CreateGeoJSONSerializerOptions(6, 10);
     }
 
     public static JsonSerializerOptions CreateGeoJSONSerializerOptions(int numberOfSignificantDigits)

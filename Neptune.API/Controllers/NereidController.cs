@@ -458,7 +458,7 @@ namespace Neptune.API.Controllers
             var allLoadingInputs = _dbContext.vNereidLoadingInputs.ToList();
             var allModelingBMPs = TreatmentBMPs.ListModelingTreatmentBMPs(_dbContext).ToList();
             var allWQMPNodes = _nereidService.GetWaterQualityManagementPlanNodes(_dbContext).ToList();
-            var allModelingQuickBMPs = _dbContext.QuickBMPs.AsNoTracking().Include(x => x.TreatmentBMPType)
+            var allModelingQuickBMPs = _dbContext.QuickBMPs.AsNoTracking().Include(x => x.TreatmentBMPType).Include(x => x.WaterQualityManagementPlan)
                 .Where(x => x.PercentOfSiteTreated != null && x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList();
 
             var modelBasins = _dbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);

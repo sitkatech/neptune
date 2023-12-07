@@ -837,10 +837,12 @@ namespace Neptune.WebMvc.Controllers
                 {
                     TreatmentBMP = treatmentBMP
                 };
-                _dbContext.TreatmentBMPModelingAttributes.Add(treatmentBMPModelingAttribute);
+                await _dbContext.TreatmentBMPModelingAttributes.AddAsync(treatmentBMPModelingAttribute);
             }
 
             viewModel.UpdateModel(treatmentBMPModelingAttribute, CurrentPerson);
+            await _dbContext.SaveChangesAsync();
+
             var missingAttributes = viewModel.CheckForRequiredFields();
             SetMessageForDisplay(missingAttributes.Count > 0
                 ? "This Treatment BMP is missing required modeling attributes. Modeling Attributes successfully saved."
@@ -848,7 +850,6 @@ namespace Neptune.WebMvc.Controllers
             // need to re-execute the model at this node since it was re-parameterized
             await NereidUtilities.MarkTreatmentBMPDirty(treatmentBMP, _dbContext);
 
-            await _dbContext.SaveChangesAsync();
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.Detail(treatmentBMP.PrimaryKey)));
         }
 

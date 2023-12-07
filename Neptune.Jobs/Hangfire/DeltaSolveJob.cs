@@ -27,12 +27,12 @@ public class DeltaSolveJob : ScheduledBackgroundJobBase<DeltaSolveJob>
     protected override void RunJobImplementation()
     {
         var dirtyModelNodes = DbContext.DirtyModelNodes.ToList();
-            
-        _nereidService.DeltaSolve(DbContext, dirtyModelNodes, true);
-        _nereidService.DeltaSolve(DbContext, dirtyModelNodes, false);
+
+        var networkSolveResultBaseline = _nereidService.DeltaSolve(DbContext, dirtyModelNodes, true).Result;
+        var networkSolveResult = _nereidService.DeltaSolve(DbContext, dirtyModelNodes, false).Result;
 
         DbContext.DirtyModelNodes.RemoveRange(dirtyModelNodes);
         DbContext.Database.SetCommandTimeout(600);
-        DbContext.SaveChangesAsync();
+        DbContext.SaveChanges();
     }
 }
