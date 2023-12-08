@@ -198,7 +198,11 @@ namespace Neptune.EFModels.Entities
                 InventoryIsVerified = x.InventoryIsVerified,
                 LocationPoint4326 = x.LocationPoint4326,
                 TrashCaptureStatusTypeID = x.TrashCaptureStatusTypeID,
-                SizingBasisTypeID = x.SizingBasisTypeID
+                SizingBasisTypeID = x.SizingBasisTypeID,
+                WatershedID = x.WatershedID,
+                ModelBasinID = x.ModelBasinID,
+                PrecipitationZoneID = x.PrecipitationZoneID,
+                RegionalSubbasinID = x.RegionalSubbasinID
             }).ToList();
 
             await dbContext.TreatmentBMPs.AddRangeAsync(newTreatmentBMPs);
