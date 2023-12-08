@@ -47,6 +47,7 @@ public partial class RegionalSubbasin
     [InverseProperty("RegionalSubbasin")]
     public virtual ICollection<DirtyModelNode> DirtyModelNodes { get; set; } = new List<DirtyModelNode>();
 
+    [InverseProperty("OCSurveyDownstreamCatchment")]
     public virtual ICollection<RegionalSubbasin> InverseOCSurveyDownstreamCatchment { get; set; } = new List<RegionalSubbasin>();
 
     [InverseProperty("RegionalSubbasin")]
@@ -59,6 +60,8 @@ public partial class RegionalSubbasin
     [InverseProperty("RegionalSubbasin")]
     public virtual ICollection<NereidResult> NereidResults { get; set; } = new List<NereidResult>();
 
+    [ForeignKey("OCSurveyDownstreamCatchmentID")]
+    [InverseProperty("InverseOCSurveyDownstreamCatchment")]
     public virtual RegionalSubbasin? OCSurveyDownstreamCatchment { get; set; }
 
     [InverseProperty("RegionalSubbasin")]

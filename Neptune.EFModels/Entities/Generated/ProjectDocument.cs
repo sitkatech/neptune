@@ -20,8 +20,7 @@ public partial class ProjectDocument
     [Unicode(false)]
     public string? DisplayName { get; set; }
 
-    [Column(TypeName = "date")]
-    public DateTime UploadDate { get; set; }
+    public DateOnly UploadDate { get; set; }
 
     [StringLength(500)]
     [Unicode(false)]

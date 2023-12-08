@@ -13,7 +13,7 @@ namespace Neptune.Models.DataTransferObjects
         public FileResourceDto FileResource { get; set; }
         public TreatmentBMPDto TreatmentBMP { get; set; }
         public string Caption { get; set; }
-        public DateTime UploadDate { get; set; }
+        public DateOnly UploadDate { get; set; }
     }
 
     public partial class TreatmentBMPImageSimpleDto
@@ -22,7 +22,7 @@ namespace Neptune.Models.DataTransferObjects
         public System.Int32 FileResourceID { get; set; }
         public System.Int32 TreatmentBMPID { get; set; }
         public string Caption { get; set; }
-        public DateTime UploadDate { get; set; }
+        public DateOnly UploadDate { get; set; }
     }
 
 }

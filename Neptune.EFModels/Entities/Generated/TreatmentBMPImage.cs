@@ -21,8 +21,7 @@ public partial class TreatmentBMPImage
     [Unicode(false)]
     public string? Caption { get; set; }
 
-    [Column(TypeName = "date")]
-    public DateTime UploadDate { get; set; }
+    public DateOnly UploadDate { get; set; }
 
     [ForeignKey("FileResourceID")]
     [InverseProperty("TreatmentBMPImages")]

@@ -2896,7 +2896,7 @@
           },
           "UploadDate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date"
           },
           "DocumentDescription": {
             "type": "string",

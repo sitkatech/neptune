@@ -13,7 +13,7 @@ namespace Neptune.Models.DataTransferObjects
         public FileResourceDto FileResource { get; set; }
         public ProjectDto Project { get; set; }
         public string DisplayName { get; set; }
-        public DateTime UploadDate { get; set; }
+        public DateOnly UploadDate { get; set; }
         public string DocumentDescription { get; set; }
     }
 
@@ -23,7 +23,7 @@ namespace Neptune.Models.DataTransferObjects
         public System.Int32 FileResourceID { get; set; }
         public System.Int32 ProjectID { get; set; }
         public string DisplayName { get; set; }
-        public DateTime UploadDate { get; set; }
+        public DateOnly UploadDate { get; set; }
         public string DocumentDescription { get; set; }
     }
 

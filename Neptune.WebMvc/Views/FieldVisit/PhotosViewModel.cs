@@ -49,7 +49,7 @@ namespace Neptune.WebMvc.Views.FieldVisit
                     x.FlagForDeletion // Exclude from list to update if flagged for deletion
                         ? null
                         : new EFModels.Entities.TreatmentBMPImage{
-                            UploadDate = DateTime.Now,
+                            UploadDate = DateOnly.FromDateTime(DateTime.Now),
                             Caption = x.Caption,
                             TreatmentBMPImageID = x.PrimaryKey
                         })
@@ -69,7 +69,7 @@ namespace Neptune.WebMvc.Views.FieldVisit
                     {
                         FileResource = fileResource,
                         TreatmentBMP = treatmentBMP,
-                        UploadDate = DateTime.Now,
+                        UploadDate = DateOnly.FromDateTime(DateTime.Now),
                         Caption = Caption
                     });
             }
