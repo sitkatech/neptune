@@ -271,12 +271,6 @@ namespace Neptune.EFModels.Entities
 
             var locationPointGeometry4326 = CreateLocationPoint4326FromLatLong(treatmentBMPUpsertDto.Latitude.Value, treatmentBMPUpsertDto.Longitude.Value);
             var locationPoint = locationPointGeometry4326.ProjectTo2771();
-
-            var watershed = dbContext.Watersheds.AsNoTracking().FirstOrDefault(x => x.WatershedGeometry.Contains(locationPoint));
-            var modelBasin = dbContext.ModelBasins.AsNoTracking().FirstOrDefault(x => x.ModelBasinGeometry.Contains(locationPoint));
-            var precipitationZone = dbContext.PrecipitationZones.AsNoTracking().FirstOrDefault(x => x.PrecipitationZoneGeometry.Contains(locationPoint));
-            var regionalSubbasin = dbContext.RegionalSubbasins.AsNoTracking().FirstOrDefault(x => x.CatchmentGeometry.Contains(locationPoint));
-
             var treatmentBMP = new TreatmentBMP()
             {
                 TreatmentBMPName = treatmentBMPUpsertDto.TreatmentBMPName,
@@ -286,15 +280,13 @@ namespace Neptune.EFModels.Entities
                 OwnerOrganizationID = project.OrganizationID,
                 LocationPoint4326 = locationPointGeometry4326,
                 LocationPoint = locationPoint,
-                WatershedID = watershed?.WatershedID,
-                ModelBasinID = modelBasin?.ModelBasinID,
-                PrecipitationZoneID = precipitationZone?.PrecipitationZoneID,
-                RegionalSubbasinID = regionalSubbasin?.RegionalSubbasinID,
                 Notes = treatmentBMPUpsertDto.Notes,
                 InventoryIsVerified = false,
                 TrashCaptureStatusTypeID = (int)TrashCaptureStatusTypeEnum.NotProvided,
                 SizingBasisTypeID = (int)SizingBasisTypeEnum.NotProvided
             };
+
+            treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(locationPoint, dbContext);
 
             if (treatmentBMPUpsertDto.TreatmentBMPID > 0)
             {

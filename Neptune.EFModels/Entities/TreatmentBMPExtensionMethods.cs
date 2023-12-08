@@ -1,4 +1,6 @@
-﻿using Neptune.Models.DataTransferObjects;
+﻿using Microsoft.EntityFrameworkCore;
+using Neptune.Models.DataTransferObjects;
+using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities;
 
@@ -236,5 +238,18 @@ public static partial class TreatmentBMPExtensionMethods
         }
 
         return treatmentBMP.AreAllModelingAttributesComplete(bmpModelingAttributes);
+    }
+
+    public static void SetTreatmentBMPPointInPolygonDataByLocationPoint(this TreatmentBMP treatmentBMP,
+        Geometry locationPoint, NeptuneDbContext dbContext)
+    {
+        treatmentBMP.WatershedID = dbContext.Watersheds.AsNoTracking()
+            .FirstOrDefault(x => locationPoint.Intersects(x.WatershedGeometry))?.WatershedID;
+        treatmentBMP.ModelBasinID = dbContext.ModelBasins.AsNoTracking()
+            .FirstOrDefault(x => locationPoint.Intersects(x.ModelBasinGeometry))?.ModelBasinID;
+        treatmentBMP.PrecipitationZoneID = dbContext.PrecipitationZones.AsNoTracking()
+            .FirstOrDefault(x => locationPoint.Intersects(x.PrecipitationZoneGeometry))?.PrecipitationZoneID;
+        treatmentBMP.RegionalSubbasinID = dbContext.RegionalSubbasins.AsNoTracking()
+            .FirstOrDefault(x => locationPoint.Intersects(x.CatchmentGeometry))?.RegionalSubbasinID;
     }
 }
