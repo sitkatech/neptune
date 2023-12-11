@@ -1,4 +1,4 @@
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { Injectable } from '@angular/core';
@@ -8,7 +8,7 @@ import { RoleEnum } from '../../generated/enum/role-enum';
 @Injectable({
   providedIn: 'root'
 })
-export class ManagerOnlyGuard implements CanActivate {
+export class ManagerOnlyGuard  {
   constructor(
     private router: Router,
     private alertService: AlertService, 

@@ -1,4 +1,4 @@
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { Injectable } from '@angular/core';
@@ -8,7 +8,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 @Injectable({
   providedIn: 'root'
 })
-export class OCTAGrantReviewerOnlyGuard implements CanActivate {
+export class OCTAGrantReviewerOnlyGuard  {
   constructor(
     private router: Router,
     private alertService: AlertService, 

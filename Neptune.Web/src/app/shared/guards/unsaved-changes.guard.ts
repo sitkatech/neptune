@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRouteSnapshot, CanDeactivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ConfirmService } from '../services/confirm.service';
 
@@ -11,7 +11,7 @@ export interface IDeactivateComponent {
 @Injectable({
   providedIn: 'root'
 })
-export class UnsavedChangesGuard implements CanDeactivate<IDeactivateComponent> {
+export class UnsavedChangesGuard  {
 
   constructor(private confirmService: ConfirmService,
     private location: Location,

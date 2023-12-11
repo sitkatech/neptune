@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CookieStorageService } from '../../services/cookies/cookie-storage.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -7,7 +7,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 @Injectable({
   providedIn: 'root'
 })
-export class UnauthenticatedAccessGuard implements CanActivate {
+export class UnauthenticatedAccessGuard  {
   
   constructor(
     private cookieStorageService: CookieStorageService, 

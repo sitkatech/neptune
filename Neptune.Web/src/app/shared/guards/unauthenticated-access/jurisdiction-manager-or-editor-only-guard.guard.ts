@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from "rxjs/operators";
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -9,7 +9,7 @@ import { RoleEnum } from '../../generated/enum/role-enum';
 @Injectable({
   providedIn: 'root'
 })
-export class JurisdictionManagerOrEditorOnlyGuard implements CanActivate {
+export class JurisdictionManagerOrEditorOnlyGuard  {
   constructor(
     private router: Router,
     private alertService: AlertService, 
