@@ -157,7 +157,6 @@
       }
     }
   },
-  "defaultProject": "Neptune.Web",
   "cli": {
     "analytics": false
   }
