@@ -106,9 +106,9 @@ public static class GeoJsonSerializer
     public static JsonSerializerOptions CreateGeoJSONSerializerOptions(int coordinatePrecision, int numberOfSignificantDigits)
     {
         var jsonSerializerOptions = CreateDefaultJSONSerializerOptions(numberOfSignificantDigits);
-        var scale = Math.Pow(10, coordinatePrecision);
-        var geometryFactory = new GeometryFactory(new PrecisionModel(scale));
-        jsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));
+        //var scale = Math.Pow(10, coordinatePrecision);
+        //var geometryFactory = new GeometryFactory(new PrecisionModel(scale));
+        jsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(false));
         return jsonSerializerOptions;
     }
 

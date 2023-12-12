@@ -99,7 +99,7 @@ namespace Neptune.WebMvc.Models
         public double TotalTPbInflow { get; set; }
         public double TotalTZnInflow { get; set; }
 
-        public string LastUpdated { get; set; }
+        public DateTime LastUpdated { get; set; }
 
         public bool Outdated { get; set; }
 
@@ -168,7 +168,7 @@ namespace Neptune.WebMvc.Models
             // ReSharper disable once PossibleInvalidOperationException
             var nereidResultLastUpdate = nereidResults.Select(x => x.LastUpdate).Max().Value;
 
-            LastUpdated = $"{nereidResultLastUpdate.ToShortDateString()} {nereidResultLastUpdate.ToShortTimeString()}";
+            LastUpdated = nereidResultLastUpdate;
 
             Outdated = lastDeltaQueue != null && lastDeltaQueue.Value > nereidResultLastUpdate;
 

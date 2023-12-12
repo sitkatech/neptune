@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.Data.SqlClient;
@@ -209,7 +210,7 @@ public class NereidService : BaseAPIService<NereidService>
             NodeID = x.ID,
             RegionalSubbasinID = x.RegionalSubbasinID,
             WaterQualityManagementPlanID = x.WaterQualityManagementPlan?.WaterQualityManagementPlanID,
-            LastUpdate = DateTime.Now
+            LastUpdate = DateTime.UtcNow
         }).ToList();
 
         return new NetworkSolveResult(nereidResults, graph, missingNodeIDs);
