@@ -13,6 +13,7 @@ public static class TreatmentFacilityExtensions
         var isFullyParameterized = treatmentBMP.IsFullyParameterized(treatmentBMP.Delineation);
         double? treatmentRate = null;
         double? area = null;
+        double? designCapacity = null;
 
         var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
 
@@ -31,10 +32,11 @@ public static class TreatmentFacilityExtensions
             };
         }
 
-        if (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID.HasValue)
+        if (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID.HasValue && treatmentBMPModelingAttribute != null)
         {
             // treatment rate is an alias for four different fields: InfiltrationDischargeRate, TreatmentRate, AverageTreatmentFlowrate, AverageDivertedFlowrate 
-            // area is an alias for four different fields: EffectiveFootprint, MediaBedFootprint, InfiltrationSurfaceArea, WettedFootprint 
+            // area is an alias for four different fields: EffectiveFootprint, MediaBedFootprint, InfiltrationSurfaceArea, WettedFootprint
+            // designCapacity is an alias for two different fields: DesignDryWeatherTreatmentCapacity, DesignLowFlowDiversionCapacity
 
             switch (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID.Value)
             {
@@ -62,10 +64,13 @@ public static class TreatmentFacilityExtensions
                     break;
                 case (int) TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
                     treatmentRate = treatmentBMPModelingAttribute.AverageTreatmentFlowrate;
+                    designCapacity = treatmentBMPModelingAttribute.DesignDryWeatherTreatmentCapacity;
                     break;
                 case (int) TreatmentBMPModelingTypeEnum.LowFlowDiversions:
                     // AverageDivertedFlowrate is collected in gallons per day instead of CFS, but we need to send CFS to Nereid.
                     treatmentRate = treatmentBMPModelingAttribute.AverageDivertedFlowrate * Constants.GPD_TO_CFS;
+                    // DesignLowFlowDiversionCapacity is collected in GPD, so convert to CFS
+                    designCapacity = treatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity * Constants.GPD_TO_CFS;
                     break;
                 case (int) TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
                 case (int) TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:
@@ -78,18 +83,6 @@ public static class TreatmentFacilityExtensions
                     area = treatmentBMPModelingAttribute.WettedFootprint;
                     break;
             }
-        }
-
-        double? designCapacity = null;
-
-        if (treatmentBMPModelingAttribute.DesignDryWeatherTreatmentCapacity != null)
-        {
-            designCapacity = treatmentBMPModelingAttribute.DesignDryWeatherTreatmentCapacity;
-        }
-        else if (treatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity != null)
-        {
-            // DesignLowFlowDiversionCapacity is collected in GPD, so convert to CFS
-            designCapacity = treatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity * Constants.GPD_TO_CFS;
         }
 
         if (designCapacity == null)
