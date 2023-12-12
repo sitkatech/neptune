@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class RegionalSubbasinRevisionRequestStatusExtensionMethods
     {
-
         public static RegionalSubbasinRevisionRequestStatusSimpleDto AsSimpleDto(this RegionalSubbasinRevisionRequestStatus regionalSubbasinRevisionRequestStatus)
         {
-            var regionalSubbasinRevisionRequestStatusSimpleDto = new RegionalSubbasinRevisionRequestStatusSimpleDto()
+            var dto = new RegionalSubbasinRevisionRequestStatusSimpleDto()
             {
                 RegionalSubbasinRevisionRequestStatusID = regionalSubbasinRevisionRequestStatus.RegionalSubbasinRevisionRequestStatusID,
                 RegionalSubbasinRevisionRequestStatusName = regionalSubbasinRevisionRequestStatus.RegionalSubbasinRevisionRequestStatusName,
                 RegionalSubbasinRevisionRequestStatusDisplayName = regionalSubbasinRevisionRequestStatus.RegionalSubbasinRevisionRequestStatusDisplayName
             };
-            DoCustomSimpleDtoMappings(regionalSubbasinRevisionRequestStatus, regionalSubbasinRevisionRequestStatusSimpleDto);
-            return regionalSubbasinRevisionRequestStatusSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(RegionalSubbasinRevisionRequestStatus regionalSubbasinRevisionRequestStatus, RegionalSubbasinRevisionRequestStatusSimpleDto regionalSubbasinRevisionRequestStatusSimpleDto);
     }
 }

@@ -9,20 +9,16 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class PriorityLandUseTypeExtensionMethods
     {
-
         public static PriorityLandUseTypeSimpleDto AsSimpleDto(this PriorityLandUseType priorityLandUseType)
         {
-            var priorityLandUseTypeSimpleDto = new PriorityLandUseTypeSimpleDto()
+            var dto = new PriorityLandUseTypeSimpleDto()
             {
                 PriorityLandUseTypeID = priorityLandUseType.PriorityLandUseTypeID,
                 PriorityLandUseTypeName = priorityLandUseType.PriorityLandUseTypeName,
                 PriorityLandUseTypeDisplayName = priorityLandUseType.PriorityLandUseTypeDisplayName,
                 MapColorHexCode = priorityLandUseType.MapColorHexCode
             };
-            DoCustomSimpleDtoMappings(priorityLandUseType, priorityLandUseTypeSimpleDto);
-            return priorityLandUseTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(PriorityLandUseType priorityLandUseType, PriorityLandUseTypeSimpleDto priorityLandUseTypeSimpleDto);
     }
 }

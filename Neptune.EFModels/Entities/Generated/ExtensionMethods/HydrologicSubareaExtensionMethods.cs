@@ -9,18 +9,14 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class HydrologicSubareaExtensionMethods
     {
-
         public static HydrologicSubareaSimpleDto AsSimpleDto(this HydrologicSubarea hydrologicSubarea)
         {
-            var hydrologicSubareaSimpleDto = new HydrologicSubareaSimpleDto()
+            var dto = new HydrologicSubareaSimpleDto()
             {
                 HydrologicSubareaID = hydrologicSubarea.HydrologicSubareaID,
                 HydrologicSubareaName = hydrologicSubarea.HydrologicSubareaName
             };
-            DoCustomSimpleDtoMappings(hydrologicSubarea, hydrologicSubareaSimpleDto);
-            return hydrologicSubareaSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(HydrologicSubarea hydrologicSubarea, HydrologicSubareaSimpleDto hydrologicSubareaSimpleDto);
     }
 }

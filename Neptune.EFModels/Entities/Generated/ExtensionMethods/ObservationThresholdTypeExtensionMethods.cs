@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ObservationThresholdTypeExtensionMethods
     {
-
         public static ObservationThresholdTypeSimpleDto AsSimpleDto(this ObservationThresholdType observationThresholdType)
         {
-            var observationThresholdTypeSimpleDto = new ObservationThresholdTypeSimpleDto()
+            var dto = new ObservationThresholdTypeSimpleDto()
             {
                 ObservationThresholdTypeID = observationThresholdType.ObservationThresholdTypeID,
                 ObservationThresholdTypeName = observationThresholdType.ObservationThresholdTypeName,
                 ObservationThresholdTypeDisplayName = observationThresholdType.ObservationThresholdTypeDisplayName
             };
-            DoCustomSimpleDtoMappings(observationThresholdType, observationThresholdTypeSimpleDto);
-            return observationThresholdTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(ObservationThresholdType observationThresholdType, ObservationThresholdTypeSimpleDto observationThresholdTypeSimpleDto);
     }
 }

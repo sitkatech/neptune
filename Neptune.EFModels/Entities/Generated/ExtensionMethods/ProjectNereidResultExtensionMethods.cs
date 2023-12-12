@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ProjectNereidResultExtensionMethods
     {
-
         public static ProjectNereidResultSimpleDto AsSimpleDto(this ProjectNereidResult projectNereidResult)
         {
-            var projectNereidResultSimpleDto = new ProjectNereidResultSimpleDto()
+            var dto = new ProjectNereidResultSimpleDto()
             {
                 ProjectNereidResultID = projectNereidResult.ProjectNereidResultID,
                 ProjectID = projectNereidResult.ProjectID,
@@ -25,10 +24,7 @@ namespace Neptune.EFModels.Entities
                 FullResponse = projectNereidResult.FullResponse,
                 LastUpdate = projectNereidResult.LastUpdate
             };
-            DoCustomSimpleDtoMappings(projectNereidResult, projectNereidResultSimpleDto);
-            return projectNereidResultSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(ProjectNereidResult projectNereidResult, ProjectNereidResultSimpleDto projectNereidResultSimpleDto);
     }
 }

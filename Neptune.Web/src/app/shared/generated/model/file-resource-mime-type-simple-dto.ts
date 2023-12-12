@@ -10,11 +10,13 @@
  * Do not edit the class manually.
  */
 
-export class RoleDto { 
-    RoleID?: number;
-    RoleName?: string;
-    RoleDisplayName?: string;
-    RoleDescription?: string;
+export class FileResourceMimeTypeSimpleDto { 
+    FileResourceMimeTypeID?: number;
+    FileResourceMimeTypeName?: string;
+    FileResourceMimeTypeDisplayName?: string;
+    FileResourceMimeTypeContentTypeName?: string;
+    FileResourceMimeTypeIconSmallFilename?: string;
+    FileResourceMimeTypeIconNormalFilename?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

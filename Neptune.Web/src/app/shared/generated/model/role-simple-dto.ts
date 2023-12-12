@@ -10,12 +10,12 @@
  * Do not edit the class manually.
  */
 
-export class OrganizationTypeDto { 
-    OrganizationTypeID?: number;
-    OrganizationTypeName?: string;
-    OrganizationTypeAbbreviation?: string;
-    LegendColor?: string;
-    IsDefaultOrganizationType?: boolean;
+export class RoleSimpleDto { 
+    RoleID?: number;
+    RoleName?: string;
+    RoleDisplayName?: string;
+    RoleDescription?: string;
+    PeopleWithRoleCount?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

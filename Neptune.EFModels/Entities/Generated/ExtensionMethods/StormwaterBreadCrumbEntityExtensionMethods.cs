@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class StormwaterBreadCrumbEntityExtensionMethods
     {
-
         public static StormwaterBreadCrumbEntitySimpleDto AsSimpleDto(this StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity)
         {
-            var stormwaterBreadCrumbEntitySimpleDto = new StormwaterBreadCrumbEntitySimpleDto()
+            var dto = new StormwaterBreadCrumbEntitySimpleDto()
             {
                 StormwaterBreadCrumbEntityID = stormwaterBreadCrumbEntity.StormwaterBreadCrumbEntityID,
                 StormwaterBreadCrumbEntityName = stormwaterBreadCrumbEntity.StormwaterBreadCrumbEntityName,
@@ -20,10 +19,7 @@ namespace Neptune.EFModels.Entities
                 GlyphIconClass = stormwaterBreadCrumbEntity.GlyphIconClass,
                 ColorClass = stormwaterBreadCrumbEntity.ColorClass
             };
-            DoCustomSimpleDtoMappings(stormwaterBreadCrumbEntity, stormwaterBreadCrumbEntitySimpleDto);
-            return stormwaterBreadCrumbEntitySimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity, StormwaterBreadCrumbEntitySimpleDto stormwaterBreadCrumbEntitySimpleDto);
     }
 }

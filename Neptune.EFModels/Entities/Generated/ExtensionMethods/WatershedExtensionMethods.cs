@@ -9,18 +9,14 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class WatershedExtensionMethods
     {
-
         public static WatershedSimpleDto AsSimpleDto(this Watershed watershed)
         {
-            var watershedSimpleDto = new WatershedSimpleDto()
+            var dto = new WatershedSimpleDto()
             {
                 WatershedID = watershed.WatershedID,
                 WatershedName = watershed.WatershedName
             };
-            DoCustomSimpleDtoMappings(watershed, watershedSimpleDto);
-            return watershedSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(Watershed watershed, WatershedSimpleDto watershedSimpleDto);
     }
 }

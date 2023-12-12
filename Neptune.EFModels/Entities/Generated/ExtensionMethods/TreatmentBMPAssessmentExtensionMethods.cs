@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TreatmentBMPAssessmentExtensionMethods
     {
-
         public static TreatmentBMPAssessmentSimpleDto AsSimpleDto(this TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            var treatmentBMPAssessmentSimpleDto = new TreatmentBMPAssessmentSimpleDto()
+            var dto = new TreatmentBMPAssessmentSimpleDto()
             {
                 TreatmentBMPAssessmentID = treatmentBMPAssessment.TreatmentBMPAssessmentID,
                 TreatmentBMPID = treatmentBMPAssessment.TreatmentBMPID,
@@ -23,10 +22,7 @@ namespace Neptune.EFModels.Entities
                 AssessmentScore = treatmentBMPAssessment.AssessmentScore,
                 IsAssessmentComplete = treatmentBMPAssessment.IsAssessmentComplete
             };
-            DoCustomSimpleDtoMappings(treatmentBMPAssessment, treatmentBMPAssessmentSimpleDto);
-            return treatmentBMPAssessmentSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentSimpleDto treatmentBMPAssessmentSimpleDto);
     }
 }

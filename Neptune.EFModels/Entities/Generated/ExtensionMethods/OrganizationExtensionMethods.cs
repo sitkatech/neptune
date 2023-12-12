@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class OrganizationExtensionMethods
     {
-
         public static OrganizationSimpleDto AsSimpleDto(this Organization organization)
         {
-            var organizationSimpleDto = new OrganizationSimpleDto()
+            var dto = new OrganizationSimpleDto()
             {
                 OrganizationID = organization.OrganizationID,
                 OrganizationGuid = organization.OrganizationGuid,
@@ -24,10 +23,7 @@ namespace Neptune.EFModels.Entities
                 LogoFileResourceID = organization.LogoFileResourceID,
                 OrganizationTypeID = organization.OrganizationTypeID
             };
-            DoCustomSimpleDtoMappings(organization, organizationSimpleDto);
-            return organizationSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(Organization organization, OrganizationSimpleDto organizationSimpleDto);
     }
 }

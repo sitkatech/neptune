@@ -9,20 +9,16 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class MonthsOfOperationExtensionMethods
     {
-
         public static MonthsOfOperationSimpleDto AsSimpleDto(this MonthsOfOperation monthsOfOperation)
         {
-            var monthsOfOperationSimpleDto = new MonthsOfOperationSimpleDto()
+            var dto = new MonthsOfOperationSimpleDto()
             {
                 MonthsOfOperationID = monthsOfOperation.MonthsOfOperationID,
                 MonthsOfOperationName = monthsOfOperation.MonthsOfOperationName,
                 MonthsOfOperationDisplayName = monthsOfOperation.MonthsOfOperationDisplayName,
                 MonthsOfOperationNereidAlias = monthsOfOperation.MonthsOfOperationNereidAlias
             };
-            DoCustomSimpleDtoMappings(monthsOfOperation, monthsOfOperationSimpleDto);
-            return monthsOfOperationSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(MonthsOfOperation monthsOfOperation, MonthsOfOperationSimpleDto monthsOfOperationSimpleDto);
     }
 }

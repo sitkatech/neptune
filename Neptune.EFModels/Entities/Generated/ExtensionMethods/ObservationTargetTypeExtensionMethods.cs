@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ObservationTargetTypeExtensionMethods
     {
-
         public static ObservationTargetTypeSimpleDto AsSimpleDto(this ObservationTargetType observationTargetType)
         {
-            var observationTargetTypeSimpleDto = new ObservationTargetTypeSimpleDto()
+            var dto = new ObservationTargetTypeSimpleDto()
             {
                 ObservationTargetTypeID = observationTargetType.ObservationTargetTypeID,
                 ObservationTargetTypeName = observationTargetType.ObservationTargetTypeName,
                 ObservationTargetTypeDisplayName = observationTargetType.ObservationTargetTypeDisplayName
             };
-            DoCustomSimpleDtoMappings(observationTargetType, observationTargetTypeSimpleDto);
-            return observationTargetTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(ObservationTargetType observationTargetType, ObservationTargetTypeSimpleDto observationTargetTypeSimpleDto);
     }
 }

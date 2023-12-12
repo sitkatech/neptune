@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class NereidResultExtensionMethods
     {
-
         public static NereidResultSimpleDto AsSimpleDto(this NereidResult nereidResult)
         {
-            var nereidResultSimpleDto = new NereidResultSimpleDto()
+            var dto = new NereidResultSimpleDto()
             {
                 NereidResultID = nereidResult.NereidResultID,
                 TreatmentBMPID = nereidResult.TreatmentBMPID,
@@ -24,10 +23,7 @@ namespace Neptune.EFModels.Entities
                 LastUpdate = nereidResult.LastUpdate,
                 IsBaselineCondition = nereidResult.IsBaselineCondition
             };
-            DoCustomSimpleDtoMappings(nereidResult, nereidResultSimpleDto);
-            return nereidResultSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(NereidResult nereidResult, NereidResultSimpleDto nereidResultSimpleDto);
     }
 }

@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TreatmentBMPDocumentExtensionMethods
     {
-
         public static TreatmentBMPDocumentSimpleDto AsSimpleDto(this TreatmentBMPDocument treatmentBMPDocument)
         {
-            var treatmentBMPDocumentSimpleDto = new TreatmentBMPDocumentSimpleDto()
+            var dto = new TreatmentBMPDocumentSimpleDto()
             {
                 TreatmentBMPDocumentID = treatmentBMPDocument.TreatmentBMPDocumentID,
                 FileResourceID = treatmentBMPDocument.FileResourceID,
@@ -21,10 +20,7 @@ namespace Neptune.EFModels.Entities
                 UploadDate = treatmentBMPDocument.UploadDate,
                 DocumentDescription = treatmentBMPDocument.DocumentDescription
             };
-            DoCustomSimpleDtoMappings(treatmentBMPDocument, treatmentBMPDocumentSimpleDto);
-            return treatmentBMPDocumentSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(TreatmentBMPDocument treatmentBMPDocument, TreatmentBMPDocumentSimpleDto treatmentBMPDocumentSimpleDto);
     }
 }

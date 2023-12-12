@@ -19,7 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { BoundingBoxDto } from '../model/bounding-box-dto';
-import { StormwaterJurisdictionSimpleDto } from '../model/stormwater-jurisdiction-simple-dto';
+import { StormwaterJurisdictionDto } from '../model/stormwater-jurisdiction-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -107,9 +107,9 @@ export class StormwaterJurisdictionService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public jurisdictionsPersonIDGet(personID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<StormwaterJurisdictionSimpleDto>>;
-    public jurisdictionsPersonIDGet(personID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<StormwaterJurisdictionSimpleDto>>>;
-    public jurisdictionsPersonIDGet(personID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<StormwaterJurisdictionSimpleDto>>>;
+    public jurisdictionsPersonIDGet(personID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<StormwaterJurisdictionDto>>;
+    public jurisdictionsPersonIDGet(personID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<StormwaterJurisdictionDto>>>;
+    public jurisdictionsPersonIDGet(personID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<StormwaterJurisdictionDto>>>;
     public jurisdictionsPersonIDGet(personID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (personID === null || personID === undefined) {
@@ -133,7 +133,7 @@ export class StormwaterJurisdictionService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<StormwaterJurisdictionSimpleDto>>(`${this.basePath}/jurisdictions/${encodeURIComponent(String(personID))}`,
+        return this.httpClient.get<Array<StormwaterJurisdictionDto>>(`${this.basePath}/jurisdictions/${encodeURIComponent(String(personID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

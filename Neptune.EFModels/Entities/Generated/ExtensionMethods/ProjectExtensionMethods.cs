@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ProjectExtensionMethods
     {
-
         public static ProjectSimpleDto AsSimpleDto(this Project project)
         {
-            var projectSimpleDto = new ProjectSimpleDto()
+            var dto = new ProjectSimpleDto()
             {
                 ProjectID = project.ProjectID,
                 ProjectName = project.ProjectName,
@@ -43,10 +42,7 @@ namespace Neptune.EFModels.Entities
                 UpdatePersonID = project.UpdatePersonID,
                 DateUpdated = project.DateUpdated
             };
-            DoCustomSimpleDtoMappings(project, projectSimpleDto);
-            return projectSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(Project project, ProjectSimpleDto projectSimpleDto);
     }
 }

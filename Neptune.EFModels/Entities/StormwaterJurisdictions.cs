@@ -11,12 +11,12 @@ public static class StormwaterJurisdictions
         return GetImpl(dbContext).AsNoTracking().OrderBy(ht => ht.Organization.OrganizationName).ToList();
     }
 
-    public static List<StormwaterJurisdictionSimpleDto> ListByIDsAsSimpleDto(NeptuneDbContext dbContext, List<int> stormwaterJurisdictionIDs)
+    public static List<StormwaterJurisdictionDto> ListByIDsAsDto(NeptuneDbContext dbContext, List<int> stormwaterJurisdictionIDs)
     {
         return GetImpl(dbContext)
             .Where(x => stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdictionID))
             .OrderBy(x => x.Organization.OrganizationName)
-            .Select(x => x.AsSimpleDto())
+            .Select(x => x.AsDto())
             .ToList();
     }
 

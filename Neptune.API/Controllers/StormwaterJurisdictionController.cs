@@ -18,10 +18,10 @@ namespace Neptune.API.Controllers
 
         [HttpGet("jurisdictions/{personID}")]
         [JurisdictionEditFeature]
-        public ActionResult<List<StormwaterJurisdictionSimpleDto>> ListByPersonID([FromRoute] int personID)
+        public ActionResult<List<StormwaterJurisdictionDto>> ListByPersonID([FromRoute] int personID)
         {
             var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(_dbContext, personID);
-            var stormwaterJurisdictionSimpleDtos = StormwaterJurisdictions.ListByIDsAsSimpleDto(_dbContext, stormwaterJurisdictionIDs);
+            var stormwaterJurisdictionSimpleDtos = StormwaterJurisdictions.ListByIDsAsDto(_dbContext, stormwaterJurisdictionIDs);
             return Ok(stormwaterJurisdictionSimpleDtos);
         }
 

@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class SourceControlBMPAttributeExtensionMethods
     {
-
         public static SourceControlBMPAttributeSimpleDto AsSimpleDto(this SourceControlBMPAttribute sourceControlBMPAttribute)
         {
-            var sourceControlBMPAttributeSimpleDto = new SourceControlBMPAttributeSimpleDto()
+            var dto = new SourceControlBMPAttributeSimpleDto()
             {
                 SourceControlBMPAttributeID = sourceControlBMPAttribute.SourceControlBMPAttributeID,
                 SourceControlBMPAttributeCategoryID = sourceControlBMPAttribute.SourceControlBMPAttributeCategoryID,
                 SourceControlBMPAttributeName = sourceControlBMPAttribute.SourceControlBMPAttributeName
             };
-            DoCustomSimpleDtoMappings(sourceControlBMPAttribute, sourceControlBMPAttributeSimpleDto);
-            return sourceControlBMPAttributeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(SourceControlBMPAttribute sourceControlBMPAttribute, SourceControlBMPAttributeSimpleDto sourceControlBMPAttributeSimpleDto);
     }
 }

@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ProjectStatusExtensionMethods
     {
-
         public static ProjectStatusSimpleDto AsSimpleDto(this ProjectStatus projectStatus)
         {
-            var projectStatusSimpleDto = new ProjectStatusSimpleDto()
+            var dto = new ProjectStatusSimpleDto()
             {
                 ProjectStatusID = projectStatus.ProjectStatusID,
                 ProjectStatusName = projectStatus.ProjectStatusName,
                 ProjectStatusDisplayName = projectStatus.ProjectStatusDisplayName
             };
-            DoCustomSimpleDtoMappings(projectStatus, projectStatusSimpleDto);
-            return projectStatusSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(ProjectStatus projectStatus, ProjectStatusSimpleDto projectStatusSimpleDto);
     }
 }

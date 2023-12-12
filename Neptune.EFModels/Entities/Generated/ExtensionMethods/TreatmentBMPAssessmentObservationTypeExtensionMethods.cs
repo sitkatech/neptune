@@ -9,20 +9,16 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TreatmentBMPAssessmentObservationTypeExtensionMethods
     {
-
         public static TreatmentBMPAssessmentObservationTypeSimpleDto AsSimpleDto(this TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            var treatmentBMPAssessmentObservationTypeSimpleDto = new TreatmentBMPAssessmentObservationTypeSimpleDto()
+            var dto = new TreatmentBMPAssessmentObservationTypeSimpleDto()
             {
                 TreatmentBMPAssessmentObservationTypeID = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID,
                 TreatmentBMPAssessmentObservationTypeName = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName,
                 ObservationTypeSpecificationID = treatmentBMPAssessmentObservationType.ObservationTypeSpecificationID,
                 TreatmentBMPAssessmentObservationTypeSchema = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema
             };
-            DoCustomSimpleDtoMappings(treatmentBMPAssessmentObservationType, treatmentBMPAssessmentObservationTypeSimpleDto);
-            return treatmentBMPAssessmentObservationTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, TreatmentBMPAssessmentObservationTypeSimpleDto treatmentBMPAssessmentObservationTypeSimpleDto);
     }
 }

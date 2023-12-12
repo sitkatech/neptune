@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class StateProvinceExtensionMethods
     {
-
         public static StateProvinceSimpleDto AsSimpleDto(this StateProvince stateProvince)
         {
-            var stateProvinceSimpleDto = new StateProvinceSimpleDto()
+            var dto = new StateProvinceSimpleDto()
             {
                 StateProvinceID = stateProvince.StateProvinceID,
                 StateProvinceName = stateProvince.StateProvinceName,
                 StateProvinceAbbreviation = stateProvince.StateProvinceAbbreviation
             };
-            DoCustomSimpleDtoMappings(stateProvince, stateProvinceSimpleDto);
-            return stateProvinceSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(StateProvince stateProvince, StateProvinceSimpleDto stateProvinceSimpleDto);
     }
 }

@@ -1,16 +1,14 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { ProjectDocumentUpsertDto } from 'src/app/shared/models/project-document-upsert-dto';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
-import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
-import { ProjectDocumentUpdateDto } from 'src/app/shared/generated/model/project-document-update-dto';
+import { PersonDto, ProjectDocumentDto, ProjectDocumentUpdateDto } from 'src/app/shared/generated/model/models';
 
 @Component({
   selector: 'hippocamp-project-attachments',
@@ -27,7 +25,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
 
   public projectID: number;
   public model: ProjectDocumentUpsertDto;
-  public attachments: Array<ProjectDocumentSimpleDto>;
+  public attachments: Array<ProjectDocumentDto>;
 
   public isLoadingSubmit: boolean = false;
   public requiredFileIsUploaded: boolean = false;
@@ -119,7 +117,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     return this.invalidFields.indexOf(fieldName) > -1;
   }
 
-  private mapProjectDocumentSimpleDtoToUpdate(projectDocumentSimpleDto: ProjectDocumentSimpleDto): ProjectDocumentUpdateDto {
+  private mapProjectDocumentSimpleDtoToUpdate(projectDocumentSimpleDto: ProjectDocumentDto): ProjectDocumentUpdateDto {
     let projectDocumentUpdateDto = new ProjectDocumentUpdateDto()
 
     projectDocumentUpdateDto.DisplayName = projectDocumentSimpleDto.DisplayName;
@@ -138,7 +136,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
       });
   }
 
-  public launchEditModal(modalContent: any, attachment: ProjectDocumentSimpleDto): void {
+  public launchEditModal(modalContent: any, attachment: ProjectDocumentDto): void {
     this.editAttachmentID = attachment.ProjectDocumentID;
     this.editModel = this.mapProjectDocumentSimpleDtoToUpdate(attachment);
 

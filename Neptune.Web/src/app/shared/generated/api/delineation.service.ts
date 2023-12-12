@@ -18,7 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { DelineationSimpleDto } from '../model/delineation-simple-dto';
+import { DelineationDto } from '../model/delineation-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -67,9 +67,9 @@ export class DelineationService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public delineationsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<DelineationSimpleDto>>;
-    public delineationsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<DelineationSimpleDto>>>;
-    public delineationsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<DelineationSimpleDto>>>;
+    public delineationsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<DelineationDto>>;
+    public delineationsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<DelineationDto>>>;
+    public delineationsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<DelineationDto>>>;
     public delineationsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -89,7 +89,7 @@ export class DelineationService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<DelineationSimpleDto>>(`${this.basePath}/delineations`,
+        return this.httpClient.get<Array<DelineationDto>>(`${this.basePath}/delineations`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

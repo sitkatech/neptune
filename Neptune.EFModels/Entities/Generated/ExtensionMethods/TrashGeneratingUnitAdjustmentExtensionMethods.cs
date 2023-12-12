@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TrashGeneratingUnitAdjustmentExtensionMethods
     {
-
         public static TrashGeneratingUnitAdjustmentSimpleDto AsSimpleDto(this TrashGeneratingUnitAdjustment trashGeneratingUnitAdjustment)
         {
-            var trashGeneratingUnitAdjustmentSimpleDto = new TrashGeneratingUnitAdjustmentSimpleDto()
+            var dto = new TrashGeneratingUnitAdjustmentSimpleDto()
             {
                 TrashGeneratingUnitAdjustmentID = trashGeneratingUnitAdjustment.TrashGeneratingUnitAdjustmentID,
                 AdjustedDelineationID = trashGeneratingUnitAdjustment.AdjustedDelineationID,
@@ -22,10 +21,7 @@ namespace Neptune.EFModels.Entities
                 IsProcessed = trashGeneratingUnitAdjustment.IsProcessed,
                 ProcessedDate = trashGeneratingUnitAdjustment.ProcessedDate
             };
-            DoCustomSimpleDtoMappings(trashGeneratingUnitAdjustment, trashGeneratingUnitAdjustmentSimpleDto);
-            return trashGeneratingUnitAdjustmentSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(TrashGeneratingUnitAdjustment trashGeneratingUnitAdjustment, TrashGeneratingUnitAdjustmentSimpleDto trashGeneratingUnitAdjustmentSimpleDto);
     }
 }

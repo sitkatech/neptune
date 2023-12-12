@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TreatmentBMPModelingAttributeExtensionMethods
     {
-
         public static TreatmentBMPModelingAttributeSimpleDto AsSimpleDto(this TreatmentBMPModelingAttribute treatmentBMPModelingAttribute)
         {
-            var treatmentBMPModelingAttributeSimpleDto = new TreatmentBMPModelingAttributeSimpleDto()
+            var dto = new TreatmentBMPModelingAttributeSimpleDto()
             {
                 TreatmentBMPModelingAttributeID = treatmentBMPModelingAttribute.TreatmentBMPModelingAttributeID,
                 TreatmentBMPID = treatmentBMPModelingAttribute.TreatmentBMPID,
@@ -46,10 +45,7 @@ namespace Neptune.EFModels.Entities
                 MonthsOfOperationID = treatmentBMPModelingAttribute.MonthsOfOperationID,
                 DryWeatherFlowOverrideID = treatmentBMPModelingAttribute.DryWeatherFlowOverrideID
             };
-            DoCustomSimpleDtoMappings(treatmentBMPModelingAttribute, treatmentBMPModelingAttributeSimpleDto);
-            return treatmentBMPModelingAttributeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(TreatmentBMPModelingAttribute treatmentBMPModelingAttribute, TreatmentBMPModelingAttributeSimpleDto treatmentBMPModelingAttributeSimpleDto);
     }
 }

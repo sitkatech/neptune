@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class RegionalSubbasinExtensionMethods
     {
-
         public static RegionalSubbasinSimpleDto AsSimpleDto(this RegionalSubbasin regionalSubbasin)
         {
-            var regionalSubbasinSimpleDto = new RegionalSubbasinSimpleDto()
+            var dto = new RegionalSubbasinSimpleDto()
             {
                 RegionalSubbasinID = regionalSubbasin.RegionalSubbasinID,
                 DrainID = regionalSubbasin.DrainID,
@@ -24,10 +23,7 @@ namespace Neptune.EFModels.Entities
                 IsInModelBasin = regionalSubbasin.IsInModelBasin,
                 ModelBasinID = regionalSubbasin.ModelBasinID
             };
-            DoCustomSimpleDtoMappings(regionalSubbasin, regionalSubbasinSimpleDto);
-            return regionalSubbasinSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(RegionalSubbasin regionalSubbasin, RegionalSubbasinSimpleDto regionalSubbasinSimpleDto);
     }
 }

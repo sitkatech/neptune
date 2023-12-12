@@ -10,11 +10,11 @@
  * Do not edit the class manually.
  */
 import { PersonDto } from '././person-dto';
-import { FileResourceMimeTypeDto } from '././file-resource-mime-type-dto';
+import { FileResourceMimeTypeSimpleDto } from '././file-resource-mime-type-simple-dto';
 
 export class FileResourceDto { 
     FileResourceID?: number;
-    FileResourceMimeType?: FileResourceMimeTypeDto;
+    FileResourceMimeType?: FileResourceMimeTypeSimpleDto;
     OriginalBaseFilename?: string;
     OriginalFileExtension?: string;
     FileResourceGUID?: string;

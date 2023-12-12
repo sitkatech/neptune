@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TreatmentBMPTypeAssessmentObservationTypeExtensionMethods
     {
-
         public static TreatmentBMPTypeAssessmentObservationTypeSimpleDto AsSimpleDto(this TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType)
         {
-            var treatmentBMPTypeAssessmentObservationTypeSimpleDto = new TreatmentBMPTypeAssessmentObservationTypeSimpleDto()
+            var dto = new TreatmentBMPTypeAssessmentObservationTypeSimpleDto()
             {
                 TreatmentBMPTypeAssessmentObservationTypeID = treatmentBMPTypeAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypeID,
                 TreatmentBMPTypeID = treatmentBMPTypeAssessmentObservationType.TreatmentBMPTypeID,
@@ -23,10 +22,7 @@ namespace Neptune.EFModels.Entities
                 OverrideAssessmentScoreIfFailing = treatmentBMPTypeAssessmentObservationType.OverrideAssessmentScoreIfFailing,
                 SortOrder = treatmentBMPTypeAssessmentObservationType.SortOrder
             };
-            DoCustomSimpleDtoMappings(treatmentBMPTypeAssessmentObservationType, treatmentBMPTypeAssessmentObservationTypeSimpleDto);
-            return treatmentBMPTypeAssessmentObservationTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPTypeAssessmentObservationTypeSimpleDto treatmentBMPTypeAssessmentObservationTypeSimpleDto);
     }
 }

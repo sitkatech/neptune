@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class FieldVisitStatusExtensionMethods
     {
-
         public static FieldVisitStatusSimpleDto AsSimpleDto(this FieldVisitStatus fieldVisitStatus)
         {
-            var fieldVisitStatusSimpleDto = new FieldVisitStatusSimpleDto()
+            var dto = new FieldVisitStatusSimpleDto()
             {
                 FieldVisitStatusID = fieldVisitStatus.FieldVisitStatusID,
                 FieldVisitStatusName = fieldVisitStatus.FieldVisitStatusName,
                 FieldVisitStatusDisplayName = fieldVisitStatus.FieldVisitStatusDisplayName
             };
-            DoCustomSimpleDtoMappings(fieldVisitStatus, fieldVisitStatusSimpleDto);
-            return fieldVisitStatusSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(FieldVisitStatus fieldVisitStatus, FieldVisitStatusSimpleDto fieldVisitStatusSimpleDto);
     }
 }

@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class DelineationTypeExtensionMethods
     {
-
         public static DelineationTypeSimpleDto AsSimpleDto(this DelineationType delineationType)
         {
-            var delineationTypeSimpleDto = new DelineationTypeSimpleDto()
+            var dto = new DelineationTypeSimpleDto()
             {
                 DelineationTypeID = delineationType.DelineationTypeID,
                 DelineationTypeName = delineationType.DelineationTypeName,
                 DelineationTypeDisplayName = delineationType.DelineationTypeDisplayName
             };
-            DoCustomSimpleDtoMappings(delineationType, delineationTypeSimpleDto);
-            return delineationTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(DelineationType delineationType, DelineationTypeSimpleDto delineationTypeSimpleDto);
     }
 }

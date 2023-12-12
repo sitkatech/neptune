@@ -5,17 +5,14 @@ import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { OrganizationSimpleDto } from 'src/app/shared/generated/model/organization-simple-dto';
-import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { ProjectUpsertDto } from 'src/app/shared/generated/model/project-upsert-dto';
-import { StormwaterJurisdictionSimpleDto } from 'src/app/shared/generated/model/stormwater-jurisdiction-simple-dto';
 import { AlertService } from 'src/app/shared/services/alert.service';
-import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
-import { PersonSimpleDto } from 'src/app/shared/generated/model/person-simple-dto';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { OrganizationService } from 'src/app/shared/generated/api/organization.service';
 import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stormwater-jurisdiction.service';
 import { UserService } from 'src/app/shared/generated/api/user.service';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
+import { PersonDto, ProjectDto, StormwaterJurisdictionDto } from 'src/app/shared/generated/model/models';
 
 @Component({
   selector: 'hippocamp-project-basics',
@@ -28,8 +25,8 @@ export class ProjectBasicsComponent implements OnInit {
   public projectID: number;
   public projectModel: ProjectUpsertDto;
   public organizations: Array<OrganizationSimpleDto>;
-  public users: Array<PersonSimpleDto>;
-  public stormwaterJurisdictions: Array<StormwaterJurisdictionSimpleDto>;
+  public users: Array<PersonDto>;
+  public stormwaterJurisdictions: Array<StormwaterJurisdictionDto>;
   public invalidFields: Array<string> = [];
   public isLoadingSubmit = false;
   public customRichTextTypeID : number = NeptunePageTypeEnum.HippocampProjectBasics;
@@ -95,7 +92,7 @@ export class ProjectBasicsComponent implements OnInit {
     this.cdr.detach();
   }
 
-  private mapProjectSimpleDtoToProjectModel(project: ProjectSimpleDto) {
+  private mapProjectSimpleDtoToProjectModel(project: ProjectDto) {
     this.projectModel.ProjectName = project.ProjectName;
     this.projectModel.OrganizationID = project.OrganizationID;
     this.projectModel.StormwaterJurisdictionID = project.StormwaterJurisdictionID;

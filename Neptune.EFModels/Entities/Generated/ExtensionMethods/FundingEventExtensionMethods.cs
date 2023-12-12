@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class FundingEventExtensionMethods
     {
-
         public static FundingEventSimpleDto AsSimpleDto(this FundingEvent fundingEvent)
         {
-            var fundingEventSimpleDto = new FundingEventSimpleDto()
+            var dto = new FundingEventSimpleDto()
             {
                 FundingEventID = fundingEvent.FundingEventID,
                 TreatmentBMPID = fundingEvent.TreatmentBMPID,
@@ -20,10 +19,7 @@ namespace Neptune.EFModels.Entities
                 Year = fundingEvent.Year,
                 Description = fundingEvent.Description
             };
-            DoCustomSimpleDtoMappings(fundingEvent, fundingEventSimpleDto);
-            return fundingEventSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(FundingEvent fundingEvent, FundingEventSimpleDto fundingEventSimpleDto);
     }
 }

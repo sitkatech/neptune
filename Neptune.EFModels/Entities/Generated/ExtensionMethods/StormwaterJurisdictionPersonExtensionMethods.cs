@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class StormwaterJurisdictionPersonExtensionMethods
     {
-
         public static StormwaterJurisdictionPersonSimpleDto AsSimpleDto(this StormwaterJurisdictionPerson stormwaterJurisdictionPerson)
         {
-            var stormwaterJurisdictionPersonSimpleDto = new StormwaterJurisdictionPersonSimpleDto()
+            var dto = new StormwaterJurisdictionPersonSimpleDto()
             {
                 StormwaterJurisdictionPersonID = stormwaterJurisdictionPerson.StormwaterJurisdictionPersonID,
                 StormwaterJurisdictionID = stormwaterJurisdictionPerson.StormwaterJurisdictionID,
                 PersonID = stormwaterJurisdictionPerson.PersonID
             };
-            DoCustomSimpleDtoMappings(stormwaterJurisdictionPerson, stormwaterJurisdictionPersonSimpleDto);
-            return stormwaterJurisdictionPersonSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(StormwaterJurisdictionPerson stormwaterJurisdictionPerson, StormwaterJurisdictionPersonSimpleDto stormwaterJurisdictionPersonSimpleDto);
     }
 }

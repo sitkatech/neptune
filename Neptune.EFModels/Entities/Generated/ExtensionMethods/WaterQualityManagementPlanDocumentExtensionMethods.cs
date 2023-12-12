@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class WaterQualityManagementPlanDocumentExtensionMethods
     {
-
         public static WaterQualityManagementPlanDocumentSimpleDto AsSimpleDto(this WaterQualityManagementPlanDocument waterQualityManagementPlanDocument)
         {
-            var waterQualityManagementPlanDocumentSimpleDto = new WaterQualityManagementPlanDocumentSimpleDto()
+            var dto = new WaterQualityManagementPlanDocumentSimpleDto()
             {
                 WaterQualityManagementPlanDocumentID = waterQualityManagementPlanDocument.WaterQualityManagementPlanDocumentID,
                 WaterQualityManagementPlanID = waterQualityManagementPlanDocument.WaterQualityManagementPlanID,
@@ -22,10 +21,7 @@ namespace Neptune.EFModels.Entities
                 UploadDate = waterQualityManagementPlanDocument.UploadDate,
                 WaterQualityManagementPlanDocumentTypeID = waterQualityManagementPlanDocument.WaterQualityManagementPlanDocumentTypeID
             };
-            DoCustomSimpleDtoMappings(waterQualityManagementPlanDocument, waterQualityManagementPlanDocumentSimpleDto);
-            return waterQualityManagementPlanDocumentSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(WaterQualityManagementPlanDocument waterQualityManagementPlanDocument, WaterQualityManagementPlanDocumentSimpleDto waterQualityManagementPlanDocumentSimpleDto);
     }
 }

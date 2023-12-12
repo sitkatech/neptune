@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TreatmentBMPAssessmentTypeExtensionMethods
     {
-
         public static TreatmentBMPAssessmentTypeSimpleDto AsSimpleDto(this TreatmentBMPAssessmentType treatmentBMPAssessmentType)
         {
-            var treatmentBMPAssessmentTypeSimpleDto = new TreatmentBMPAssessmentTypeSimpleDto()
+            var dto = new TreatmentBMPAssessmentTypeSimpleDto()
             {
                 TreatmentBMPAssessmentTypeID = treatmentBMPAssessmentType.TreatmentBMPAssessmentTypeID,
                 TreatmentBMPAssessmentTypeName = treatmentBMPAssessmentType.TreatmentBMPAssessmentTypeName,
                 TreatmentBMPAssessmentTypeDisplayName = treatmentBMPAssessmentType.TreatmentBMPAssessmentTypeDisplayName
             };
-            DoCustomSimpleDtoMappings(treatmentBMPAssessmentType, treatmentBMPAssessmentTypeSimpleDto);
-            return treatmentBMPAssessmentTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(TreatmentBMPAssessmentType treatmentBMPAssessmentType, TreatmentBMPAssessmentTypeSimpleDto treatmentBMPAssessmentTypeSimpleDto);
     }
 }

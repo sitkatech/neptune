@@ -1,7 +1,7 @@
 import { ApplicationRef, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { BoundingBoxDto, DelineationUpsertDto, PersonDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPUpsertDto, ProjectSimpleDto } from 'src/app/shared/generated/model/models';
+import { BoundingBoxDto, DelineationUpsertDto, PersonDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPUpsertDto, ProjectDto } from 'src/app/shared/generated/model/models';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
@@ -59,7 +59,7 @@ export class ModeledPerformanceComponent implements OnInit {
   }
 
   public projectID: number;
-  public project: ProjectSimpleDto;
+  public project: ProjectDto;
   public customRichTextTypeID = NeptunePageTypeEnum.HippocampModeledPerformance;
 
   constructor(

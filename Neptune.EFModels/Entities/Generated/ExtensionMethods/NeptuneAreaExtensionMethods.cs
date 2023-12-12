@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class NeptuneAreaExtensionMethods
     {
-
         public static NeptuneAreaSimpleDto AsSimpleDto(this NeptuneArea neptuneArea)
         {
-            var neptuneAreaSimpleDto = new NeptuneAreaSimpleDto()
+            var dto = new NeptuneAreaSimpleDto()
             {
                 NeptuneAreaID = neptuneArea.NeptuneAreaID,
                 NeptuneAreaName = neptuneArea.NeptuneAreaName,
@@ -20,10 +19,7 @@ namespace Neptune.EFModels.Entities
                 SortOrder = neptuneArea.SortOrder,
                 ShowOnPrimaryNavigation = neptuneArea.ShowOnPrimaryNavigation
             };
-            DoCustomSimpleDtoMappings(neptuneArea, neptuneAreaSimpleDto);
-            return neptuneAreaSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(NeptuneArea neptuneArea, NeptuneAreaSimpleDto neptuneAreaSimpleDto);
     }
 }

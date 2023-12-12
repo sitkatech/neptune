@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class OVTASectionExtensionMethods
     {
-
         public static OVTASectionSimpleDto AsSimpleDto(this OVTASection oVTASection)
         {
-            var oVTASectionSimpleDto = new OVTASectionSimpleDto()
+            var dto = new OVTASectionSimpleDto()
             {
                 OVTASectionID = oVTASection.OVTASectionID,
                 OVTASectionName = oVTASection.OVTASectionName,
@@ -21,10 +20,7 @@ namespace Neptune.EFModels.Entities
                 SortOrder = oVTASection.SortOrder,
                 HasCompletionStatus = oVTASection.HasCompletionStatus
             };
-            DoCustomSimpleDtoMappings(oVTASection, oVTASectionSimpleDto);
-            return oVTASectionSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(OVTASection oVTASection, OVTASectionSimpleDto oVTASectionSimpleDto);
     }
 }

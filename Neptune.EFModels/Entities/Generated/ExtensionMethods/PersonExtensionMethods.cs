@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class PersonExtensionMethods
     {
-
         public static PersonSimpleDto AsSimpleDto(this Person person)
         {
-            var personSimpleDto = new PersonSimpleDto()
+            var dto = new PersonSimpleDto()
             {
                 PersonID = person.PersonID,
                 PersonGuid = person.PersonGuid,
@@ -32,10 +31,7 @@ namespace Neptune.EFModels.Entities
                 WebServiceAccessToken = person.WebServiceAccessToken,
                 IsOCTAGrantReviewer = person.IsOCTAGrantReviewer
             };
-            DoCustomSimpleDtoMappings(person, personSimpleDto);
-            return personSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(Person person, PersonSimpleDto personSimpleDto);
     }
 }

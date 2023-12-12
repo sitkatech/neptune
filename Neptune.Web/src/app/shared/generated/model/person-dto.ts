@@ -9,7 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { RoleDto } from '././role-dto';
+import { RoleSimpleDto } from '././role-simple-dto';
 import { OrganizationDto } from '././organization-dto';
 
 export class PersonDto { 
@@ -19,7 +19,7 @@ export class PersonDto {
     LastName?: string;
     Email?: string;
     Phone?: string;
-    Role?: RoleDto;
+    Role?: RoleSimpleDto;
     CreateDate?: string;
     UpdateDate?: string;
     LastActivityDate?: string;

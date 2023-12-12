@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class SourceControlBMPExtensionMethods
     {
-
         public static SourceControlBMPSimpleDto AsSimpleDto(this SourceControlBMP sourceControlBMP)
         {
-            var sourceControlBMPSimpleDto = new SourceControlBMPSimpleDto()
+            var dto = new SourceControlBMPSimpleDto()
             {
                 SourceControlBMPID = sourceControlBMP.SourceControlBMPID,
                 WaterQualityManagementPlanID = sourceControlBMP.WaterQualityManagementPlanID,
@@ -20,10 +19,7 @@ namespace Neptune.EFModels.Entities
                 IsPresent = sourceControlBMP.IsPresent,
                 SourceControlBMPNote = sourceControlBMP.SourceControlBMPNote
             };
-            DoCustomSimpleDtoMappings(sourceControlBMP, sourceControlBMPSimpleDto);
-            return sourceControlBMPSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(SourceControlBMP sourceControlBMP, SourceControlBMPSimpleDto sourceControlBMPSimpleDto);
     }
 }

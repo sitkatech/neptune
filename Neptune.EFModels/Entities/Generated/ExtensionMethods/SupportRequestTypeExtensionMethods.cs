@@ -9,20 +9,16 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class SupportRequestTypeExtensionMethods
     {
-
         public static SupportRequestTypeSimpleDto AsSimpleDto(this SupportRequestType supportRequestType)
         {
-            var supportRequestTypeSimpleDto = new SupportRequestTypeSimpleDto()
+            var dto = new SupportRequestTypeSimpleDto()
             {
                 SupportRequestTypeID = supportRequestType.SupportRequestTypeID,
                 SupportRequestTypeName = supportRequestType.SupportRequestTypeName,
                 SupportRequestTypeDisplayName = supportRequestType.SupportRequestTypeDisplayName,
                 SupportRequestTypeSortOrder = supportRequestType.SupportRequestTypeSortOrder
             };
-            DoCustomSimpleDtoMappings(supportRequestType, supportRequestTypeSimpleDto);
-            return supportRequestTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(SupportRequestType supportRequestType, SupportRequestTypeSimpleDto supportRequestTypeSimpleDto);
     }
 }

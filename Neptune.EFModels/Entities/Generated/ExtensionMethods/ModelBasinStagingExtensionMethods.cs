@@ -9,20 +9,16 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ModelBasinStagingExtensionMethods
     {
-
         public static ModelBasinStagingSimpleDto AsSimpleDto(this ModelBasinStaging modelBasinStaging)
         {
-            var modelBasinStagingSimpleDto = new ModelBasinStagingSimpleDto()
+            var dto = new ModelBasinStagingSimpleDto()
             {
                 ModelBasinStagingID = modelBasinStaging.ModelBasinStagingID,
                 ModelBasinKey = modelBasinStaging.ModelBasinKey,
                 ModelBasinState = modelBasinStaging.ModelBasinState,
                 ModelBasinRegion = modelBasinStaging.ModelBasinRegion
             };
-            DoCustomSimpleDtoMappings(modelBasinStaging, modelBasinStagingSimpleDto);
-            return modelBasinStagingSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(ModelBasinStaging modelBasinStaging, ModelBasinStagingSimpleDto modelBasinStagingSimpleDto);
     }
 }

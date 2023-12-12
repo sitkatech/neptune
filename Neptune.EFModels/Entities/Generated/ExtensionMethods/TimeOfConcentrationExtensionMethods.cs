@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TimeOfConcentrationExtensionMethods
     {
-
         public static TimeOfConcentrationSimpleDto AsSimpleDto(this TimeOfConcentration timeOfConcentration)
         {
-            var timeOfConcentrationSimpleDto = new TimeOfConcentrationSimpleDto()
+            var dto = new TimeOfConcentrationSimpleDto()
             {
                 TimeOfConcentrationID = timeOfConcentration.TimeOfConcentrationID,
                 TimeOfConcentrationName = timeOfConcentration.TimeOfConcentrationName,
                 TimeOfConcentrationDisplayName = timeOfConcentration.TimeOfConcentrationDisplayName
             };
-            DoCustomSimpleDtoMappings(timeOfConcentration, timeOfConcentrationSimpleDto);
-            return timeOfConcentrationSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(TimeOfConcentration timeOfConcentration, TimeOfConcentrationSimpleDto timeOfConcentrationSimpleDto);
     }
 }

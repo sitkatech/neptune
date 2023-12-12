@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class FundingSourceExtensionMethods
     {
-
         public static FundingSourceSimpleDto AsSimpleDto(this FundingSource fundingSource)
         {
-            var fundingSourceSimpleDto = new FundingSourceSimpleDto()
+            var dto = new FundingSourceSimpleDto()
             {
                 FundingSourceID = fundingSource.FundingSourceID,
                 OrganizationID = fundingSource.OrganizationID,
@@ -20,10 +19,7 @@ namespace Neptune.EFModels.Entities
                 IsActive = fundingSource.IsActive,
                 FundingSourceDescription = fundingSource.FundingSourceDescription
             };
-            DoCustomSimpleDtoMappings(fundingSource, fundingSourceSimpleDto);
-            return fundingSourceSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(FundingSource fundingSource, FundingSourceSimpleDto fundingSourceSimpleDto);
     }
 }

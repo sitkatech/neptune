@@ -15,9 +15,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.Jobs.Hangfire;
-using DelineationSimpleDto = Neptune.Models.DataTransferObjects.DelineationSimpleDto;
-using ProjectDocumentSimpleDto = Neptune.Models.DataTransferObjects.ProjectDocumentSimpleDto;
-using ProjectSimpleDto = Neptune.Models.DataTransferObjects.ProjectSimpleDto;
 
 namespace Neptune.API.Controllers
 {
@@ -41,31 +38,31 @@ namespace Neptune.API.Controllers
         public ActionResult<ProjectSimpleDto> GetByID([FromRoute] int projectID)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var projectSimpleDto = Projects.GetByIDAsSimpleDto(_dbContext, projectID);
+            var projectDto = Projects.GetByIDAsDto(_dbContext, projectID);
 
-            if (personDto.IsOCTAGrantReviewer && projectSimpleDto.ShareOCTAM2Tier2Scores)
+            if (personDto.IsOCTAGrantReviewer && projectDto.ShareOCTAM2Tier2Scores)
             {
-                return Ok(projectSimpleDto);
+                return Ok(projectDto);
             }
-            if (UserCanEditJurisdiction(personDto, projectSimpleDto.StormwaterJurisdictionID))
+            if (UserCanEditJurisdiction(personDto, projectDto.StormwaterJurisdictionID))
             {
-                return Ok(projectSimpleDto);
+                return Ok(projectDto);
             }
             return Forbid();
         }
 
         [HttpGet("projects")]
         [JurisdictionEditFeature]
-        public ActionResult<List<ProjectSimpleDto>> ListByPersonID()
+        public ActionResult<List<ProjectDto>> ListByPersonID()
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var projectSimpleDtos = Projects.ListByPersonIDAsSimpleDto(_dbContext, personDto.PersonID);
-            return Ok(projectSimpleDtos);
+            var projectDtos = Projects.ListByPersonIDAsDto(_dbContext, personDto.PersonID);
+            return Ok(projectDtos);
         }
 
         [HttpPost("projects/new")]
         [JurisdictionEditFeature]
-        public async Task<ActionResult<ProjectSimpleDto>> New([FromBody] ProjectUpsertDto projectCreateDto)
+        public async Task<ActionResult<ProjectDto>> New([FromBody] ProjectUpsertDto projectCreateDto)
         {
             if (!ModelState.IsValid)
             {
@@ -107,30 +104,30 @@ namespace Neptune.API.Controllers
 
         [HttpGet("projects/{projectID}/attachments")]
         [UserViewFeature]
-        public ActionResult<List<ProjectDocumentSimpleDto>> ListAttachmentsByProjectID([FromRoute] int projectID)
+        public ActionResult<List<ProjectDocumentDto>> ListAttachmentsByProjectID([FromRoute] int projectID)
         {
             var project = Projects.GetByID(_dbContext, projectID);
             if (ThrowNotFound(project, "Project", projectID, out var actionResult))
             {
                 return actionResult;
             }
-            var projectDocuments = ProjectDocuments.ListByProjectIDAsSimpleDto(_dbContext, projectID);
+            var projectDocuments = ProjectDocuments.ListByProjectIDAsDto(_dbContext, projectID);
             return Ok(projectDocuments);
         }
 
         [HttpGet("projects/attachments/{attachmentID}")]
         [JurisdictionEditFeature]
-        public ActionResult<ProjectDocumentSimpleDto> GetAttachmentByID([FromRoute] int attachmentID)
+        public ActionResult<ProjectDocumentDto> GetAttachmentByID([FromRoute] int attachmentID)
         {
             var projectDocument = ProjectDocuments.GetByID(_dbContext, attachmentID);
-            return Ok(projectDocument.AsSimpleDto());
+            return Ok(projectDocument.AsDto());
         }
 
         [HttpPost("projects/{projectID}/attachments")]
         [RequestSizeLimit(30 * 1024 * 1024)]
         [RequestFormLimits(MultipartBodyLengthLimit = 30 * 1024 * 1024), ProducesResponseType(StatusCodes.Status413RequestEntityTooLarge)]
         [JurisdictionEditFeature]
-        public async Task<ActionResult<ProjectDocumentSimpleDto>> AddAttachment([FromRoute] int projectID, [FromForm] ProjectDocumentUpsertDto projectDocumentUpsertDto)
+        public async Task<ActionResult<ProjectDocumentDto>> AddAttachment([FromRoute] int projectID, [FromForm] ProjectDocumentUpsertDto projectDocumentUpsertDto)
         {
             var project = Projects.GetByIDWithChangeTracking(_dbContext, projectID);
             if (ThrowNotFound(project, "Project", projectID, out var actionResult))
@@ -155,12 +152,12 @@ namespace Neptune.API.Controllers
             await _dbContext.SaveChangesAsync();
             await _dbContext.Entry(projectDocument).ReloadAsync();
 
-            return Ok(projectDocument.AsSimpleDto());
+            return Ok(projectDocument.AsDto());
         }
 
         [HttpPut("projects/attachments/{attachmentID}")]
         [JurisdictionEditFeature]
-        public ActionResult<ProjectDocumentSimpleDto> UpdateAttachment([FromRoute] int attachmentID, [FromBody] ProjectDocumentUpdateDto projectDocumentUpdateDto)
+        public ActionResult<ProjectDocumentDto> UpdateAttachment([FromRoute] int attachmentID, [FromBody] ProjectDocumentUpdateDto projectDocumentUpdateDto)
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var projectDocument = ProjectDocuments.GetByIDWithTracking(_dbContext, attachmentID);
@@ -175,7 +172,7 @@ namespace Neptune.API.Controllers
 
             var updatedProjectDocument = ProjectDocuments.Update(_dbContext, projectDocument, projectDocumentUpdateDto);
 
-            return Ok(updatedProjectDocument.AsSimpleDto());
+            return Ok(updatedProjectDocument.AsDto());
         }
 
         [HttpDelete("projects/attachments/{attachmentID}")]
@@ -405,7 +402,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("projects/OCTAM2Tier2GrantProgram")]
         [UserViewFeature]
-        public ActionResult<List<ProjectSimpleDto>> GetProjectsSharedWithOCTAM2Tier2GrantProgram()
+        public ActionResult<List<ProjectDto>> GetProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
             var currentUser = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             if (!currentUser.IsOCTAGrantReviewer)
@@ -414,7 +411,7 @@ namespace Neptune.API.Controllers
             }
 
             var projectHruCharacteristicsSummaryDtos = Projects.ListOCTAM2Tier2Projects(_dbContext)
-                .Select(x => x.AsSimpleDto()).ToList();
+                .Select(x => x.AsDto()).ToList();
             return Ok(projectHruCharacteristicsSummaryDtos);
         }
 
@@ -478,15 +475,15 @@ namespace Neptune.API.Controllers
 
         [HttpGet("projects/delineations")]
         [UserViewFeature]
-        public ActionResult<List<DelineationSimpleDto>> List()
+        public ActionResult<List<DelineationDto>> List()
         {
             var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             if (!personDto.IsOCTAGrantReviewer)
             {
                 return Forbid();
             }
-            var delineationsSimpleDtos = Delineations.ListProjectDelineationsAsSimpleDto(_dbContext);
-            return Ok(delineationsSimpleDtos);
+            var dtos = Delineations.ListProjectDelineationsAsDto(_dbContext);
+            return Ok(dtos);
         }
 
     }

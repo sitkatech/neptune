@@ -9,20 +9,16 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class RoleExtensionMethods
     {
-
         public static RoleSimpleDto AsSimpleDto(this Role role)
         {
-            var roleSimpleDto = new RoleSimpleDto()
+            var dto = new RoleSimpleDto()
             {
                 RoleID = role.RoleID,
                 RoleName = role.RoleName,
                 RoleDisplayName = role.RoleDisplayName,
                 RoleDescription = role.RoleDescription
             };
-            DoCustomSimpleDtoMappings(role, roleSimpleDto);
-            return roleSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(Role role, RoleSimpleDto roleSimpleDto);
     }
 }

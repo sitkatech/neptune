@@ -9,10 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { OrganizationSimpleDto } from '././organization-simple-dto';
-import { ProjectStatusSimpleDto } from '././project-status-simple-dto';
-import { PersonSimpleDto } from '././person-simple-dto';
-import { StormwaterJurisdictionSimpleDto } from '././stormwater-jurisdiction-simple-dto';
 
 export class ProjectSimpleDto { 
     ProjectID?: number;
@@ -43,12 +39,6 @@ export class ProjectSimpleDto {
     ImperviousAreaTreatedAcres?: number;
     UpdatePersonID?: number;
     DateUpdated?: string;
-    Organization?: OrganizationSimpleDto;
-    StormwaterJurisdiction?: StormwaterJurisdictionSimpleDto;
-    ProjectStatus?: ProjectStatusSimpleDto;
-    PrimaryContactPerson?: PersonSimpleDto;
-    CreatePerson?: PersonSimpleDto;
-    HasModeledResults?: boolean;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

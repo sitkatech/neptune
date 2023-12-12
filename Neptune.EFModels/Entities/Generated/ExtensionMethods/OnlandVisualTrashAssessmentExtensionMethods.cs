@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class OnlandVisualTrashAssessmentExtensionMethods
     {
-
         public static OnlandVisualTrashAssessmentSimpleDto AsSimpleDto(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
-            var onlandVisualTrashAssessmentSimpleDto = new OnlandVisualTrashAssessmentSimpleDto()
+            var dto = new OnlandVisualTrashAssessmentSimpleDto()
             {
                 OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
                 CreatedByPersonID = onlandVisualTrashAssessment.CreatedByPersonID,
@@ -30,10 +29,7 @@ namespace Neptune.EFModels.Entities
                 IsTransectBackingAssessment = onlandVisualTrashAssessment.IsTransectBackingAssessment,
                 IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment
             };
-            DoCustomSimpleDtoMappings(onlandVisualTrashAssessment, onlandVisualTrashAssessmentSimpleDto);
-            return onlandVisualTrashAssessmentSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(OnlandVisualTrashAssessment onlandVisualTrashAssessment, OnlandVisualTrashAssessmentSimpleDto onlandVisualTrashAssessmentSimpleDto);
     }
 }

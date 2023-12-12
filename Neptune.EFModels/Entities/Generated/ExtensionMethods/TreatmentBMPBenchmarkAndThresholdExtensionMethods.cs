@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TreatmentBMPBenchmarkAndThresholdExtensionMethods
     {
-
         public static TreatmentBMPBenchmarkAndThresholdSimpleDto AsSimpleDto(this TreatmentBMPBenchmarkAndThreshold treatmentBMPBenchmarkAndThreshold)
         {
-            var treatmentBMPBenchmarkAndThresholdSimpleDto = new TreatmentBMPBenchmarkAndThresholdSimpleDto()
+            var dto = new TreatmentBMPBenchmarkAndThresholdSimpleDto()
             {
                 TreatmentBMPBenchmarkAndThresholdID = treatmentBMPBenchmarkAndThreshold.TreatmentBMPBenchmarkAndThresholdID,
                 TreatmentBMPID = treatmentBMPBenchmarkAndThreshold.TreatmentBMPID,
@@ -22,10 +21,7 @@ namespace Neptune.EFModels.Entities
                 BenchmarkValue = treatmentBMPBenchmarkAndThreshold.BenchmarkValue,
                 ThresholdValue = treatmentBMPBenchmarkAndThreshold.ThresholdValue
             };
-            DoCustomSimpleDtoMappings(treatmentBMPBenchmarkAndThreshold, treatmentBMPBenchmarkAndThresholdSimpleDto);
-            return treatmentBMPBenchmarkAndThresholdSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(TreatmentBMPBenchmarkAndThreshold treatmentBMPBenchmarkAndThreshold, TreatmentBMPBenchmarkAndThresholdSimpleDto treatmentBMPBenchmarkAndThresholdSimpleDto);
     }
 }

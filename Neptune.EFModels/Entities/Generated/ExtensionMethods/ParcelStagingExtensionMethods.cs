@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ParcelStagingExtensionMethods
     {
-
         public static ParcelStagingSimpleDto AsSimpleDto(this ParcelStaging parcelStaging)
         {
-            var parcelStagingSimpleDto = new ParcelStagingSimpleDto()
+            var dto = new ParcelStagingSimpleDto()
             {
                 ParcelStagingID = parcelStaging.ParcelStagingID,
                 ParcelNumber = parcelStaging.ParcelNumber,
@@ -26,10 +25,7 @@ namespace Neptune.EFModels.Entities
                 SquareFeetLot = parcelStaging.SquareFeetLot,
                 UploadedByPersonID = parcelStaging.UploadedByPersonID
             };
-            DoCustomSimpleDtoMappings(parcelStaging, parcelStagingSimpleDto);
-            return parcelStagingSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(ParcelStaging parcelStaging, ParcelStagingSimpleDto parcelStagingSimpleDto);
     }
 }

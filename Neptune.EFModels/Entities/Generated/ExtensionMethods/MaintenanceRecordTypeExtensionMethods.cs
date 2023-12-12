@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class MaintenanceRecordTypeExtensionMethods
     {
-
         public static MaintenanceRecordTypeSimpleDto AsSimpleDto(this MaintenanceRecordType maintenanceRecordType)
         {
-            var maintenanceRecordTypeSimpleDto = new MaintenanceRecordTypeSimpleDto()
+            var dto = new MaintenanceRecordTypeSimpleDto()
             {
                 MaintenanceRecordTypeID = maintenanceRecordType.MaintenanceRecordTypeID,
                 MaintenanceRecordTypeName = maintenanceRecordType.MaintenanceRecordTypeName,
                 MaintenanceRecordTypeDisplayName = maintenanceRecordType.MaintenanceRecordTypeDisplayName
             };
-            DoCustomSimpleDtoMappings(maintenanceRecordType, maintenanceRecordTypeSimpleDto);
-            return maintenanceRecordTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(MaintenanceRecordType maintenanceRecordType, MaintenanceRecordTypeSimpleDto maintenanceRecordTypeSimpleDto);
     }
 }

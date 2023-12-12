@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class WaterQualityManagementPlanParcelExtensionMethods
     {
-
         public static WaterQualityManagementPlanParcelSimpleDto AsSimpleDto(this WaterQualityManagementPlanParcel waterQualityManagementPlanParcel)
         {
-            var waterQualityManagementPlanParcelSimpleDto = new WaterQualityManagementPlanParcelSimpleDto()
+            var dto = new WaterQualityManagementPlanParcelSimpleDto()
             {
                 WaterQualityManagementPlanParcelID = waterQualityManagementPlanParcel.WaterQualityManagementPlanParcelID,
                 WaterQualityManagementPlanID = waterQualityManagementPlanParcel.WaterQualityManagementPlanID,
                 ParcelID = waterQualityManagementPlanParcel.ParcelID
             };
-            DoCustomSimpleDtoMappings(waterQualityManagementPlanParcel, waterQualityManagementPlanParcelSimpleDto);
-            return waterQualityManagementPlanParcelSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(WaterQualityManagementPlanParcel waterQualityManagementPlanParcel, WaterQualityManagementPlanParcelSimpleDto waterQualityManagementPlanParcelSimpleDto);
     }
 }

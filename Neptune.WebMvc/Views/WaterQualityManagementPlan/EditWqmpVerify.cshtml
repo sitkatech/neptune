@@ -140,7 +140,7 @@
                                 <h5>  Structural Treatment and Hydromodification BMPs</h5>
                             </div>
                             <div style="padding: 21px 15px">
-                                @if (Model.WaterQualityManagementPlanVerifyQuickBMPSimples.Any() || Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples.Any())
+                                @if (Model.WaterQualityManagementPlanVerifyQuickBMPs.Any() || Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples.Any())
                                 {
                                     <table class="table table-condensed table-striped" id="WaterQualityManagementPlanVerifyBmpTable">
                                         <thead>
@@ -153,23 +153,23 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @for (var i = 0; i < Model.WaterQualityManagementPlanVerifyQuickBMPSimples.Count; i++)
+                                        @for (var i = 0; i < Model.WaterQualityManagementPlanVerifyQuickBMPs.Count; i++)
                                         {
-                                            var waterQualityManagementPlanVerifyQuickBMP = Model.WaterQualityManagementPlanVerifyQuickBMPSimples[i];
+                                            var waterQualityManagementPlanVerifyQuickBMP = Model.WaterQualityManagementPlanVerifyQuickBMPs[i];
                                             <tr>
                                                 <td class="table-padding"> @waterQualityManagementPlanVerifyQuickBMP.QuickBMPName</td>
                                                 <td class="table-padding"> @waterQualityManagementPlanVerifyQuickBMP.TreatmentBMPType</td>
                                                 <td class="table-padding">
-                                                    <label>@Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].IsAdequate, true) Yes</label>
-                                                    <label> @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].IsAdequate, false) No </label>
+                                                    <label>@Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyQuickBMPs[i].IsAdequate, true) Yes</label>
+                                                    <label> @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyQuickBMPs[i].IsAdequate, false) No </label>
                                                 </td>
-                                                <td class="table-padding">  @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].WaterQualityManagementPlanVerifyQuickBMPNote, new { @class = "form-control" })</td>
+                                                <td class="table-padding">  @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyQuickBMPs[i].WaterQualityManagementPlanVerifyQuickBMPNote, new { @class = "form-control" })</td>
                                                 <td class="table-padding"> No</td>
                                             </tr>
                                             <tr style="display: none;">
                                                 <td>
-                                                    @Html.HiddenFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].QuickBMPName)
-                                                    @Html.HiddenFor(x => x.WaterQualityManagementPlanVerifyQuickBMPSimples[i].QuickBMPID)
+                                                    @Html.HiddenFor(m => m.WaterQualityManagementPlanVerifyQuickBMPs[i].QuickBMPName)
+                                                    @Html.HiddenFor(x => x.WaterQualityManagementPlanVerifyQuickBMPs[i].QuickBMPID)
                                                 </td>
                                             </tr>
                                         }

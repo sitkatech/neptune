@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class CustomAttributeValueExtensionMethods
     {
-
         public static CustomAttributeValueSimpleDto AsSimpleDto(this CustomAttributeValue customAttributeValue)
         {
-            var customAttributeValueSimpleDto = new CustomAttributeValueSimpleDto()
+            var dto = new CustomAttributeValueSimpleDto()
             {
                 CustomAttributeValueID = customAttributeValue.CustomAttributeValueID,
                 CustomAttributeID = customAttributeValue.CustomAttributeID,
                 AttributeValue = customAttributeValue.AttributeValue
             };
-            DoCustomSimpleDtoMappings(customAttributeValue, customAttributeValueSimpleDto);
-            return customAttributeValueSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(CustomAttributeValue customAttributeValue, CustomAttributeValueSimpleDto customAttributeValueSimpleDto);
     }
 }

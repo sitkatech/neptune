@@ -9,20 +9,16 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ObservationTypeCollectionMethodExtensionMethods
     {
-
         public static ObservationTypeCollectionMethodSimpleDto AsSimpleDto(this ObservationTypeCollectionMethod observationTypeCollectionMethod)
         {
-            var observationTypeCollectionMethodSimpleDto = new ObservationTypeCollectionMethodSimpleDto()
+            var dto = new ObservationTypeCollectionMethodSimpleDto()
             {
                 ObservationTypeCollectionMethodID = observationTypeCollectionMethod.ObservationTypeCollectionMethodID,
                 ObservationTypeCollectionMethodName = observationTypeCollectionMethod.ObservationTypeCollectionMethodName,
                 ObservationTypeCollectionMethodDisplayName = observationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName,
                 ObservationTypeCollectionMethodDescription = observationTypeCollectionMethod.ObservationTypeCollectionMethodDescription
             };
-            DoCustomSimpleDtoMappings(observationTypeCollectionMethod, observationTypeCollectionMethodSimpleDto);
-            return observationTypeCollectionMethodSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(ObservationTypeCollectionMethod observationTypeCollectionMethod, ObservationTypeCollectionMethodSimpleDto observationTypeCollectionMethodSimpleDto);
     }
 }

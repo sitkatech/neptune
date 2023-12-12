@@ -9,20 +9,16 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class PrecipitationZoneExtensionMethods
     {
-
         public static PrecipitationZoneSimpleDto AsSimpleDto(this PrecipitationZone precipitationZone)
         {
-            var precipitationZoneSimpleDto = new PrecipitationZoneSimpleDto()
+            var dto = new PrecipitationZoneSimpleDto()
             {
                 PrecipitationZoneID = precipitationZone.PrecipitationZoneID,
                 PrecipitationZoneKey = precipitationZone.PrecipitationZoneKey,
                 DesignStormwaterDepthInInches = precipitationZone.DesignStormwaterDepthInInches,
                 LastUpdate = precipitationZone.LastUpdate
             };
-            DoCustomSimpleDtoMappings(precipitationZone, precipitationZoneSimpleDto);
-            return precipitationZoneSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(PrecipitationZone precipitationZone, PrecipitationZoneSimpleDto precipitationZoneSimpleDto);
     }
 }

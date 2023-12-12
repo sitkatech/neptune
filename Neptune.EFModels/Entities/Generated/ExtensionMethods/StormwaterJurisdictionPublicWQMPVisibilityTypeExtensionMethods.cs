@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class StormwaterJurisdictionPublicWQMPVisibilityTypeExtensionMethods
     {
-
         public static StormwaterJurisdictionPublicWQMPVisibilityTypeSimpleDto AsSimpleDto(this StormwaterJurisdictionPublicWQMPVisibilityType stormwaterJurisdictionPublicWQMPVisibilityType)
         {
-            var stormwaterJurisdictionPublicWQMPVisibilityTypeSimpleDto = new StormwaterJurisdictionPublicWQMPVisibilityTypeSimpleDto()
+            var dto = new StormwaterJurisdictionPublicWQMPVisibilityTypeSimpleDto()
             {
                 StormwaterJurisdictionPublicWQMPVisibilityTypeID = stormwaterJurisdictionPublicWQMPVisibilityType.StormwaterJurisdictionPublicWQMPVisibilityTypeID,
                 StormwaterJurisdictionPublicWQMPVisibilityTypeName = stormwaterJurisdictionPublicWQMPVisibilityType.StormwaterJurisdictionPublicWQMPVisibilityTypeName,
                 StormwaterJurisdictionPublicWQMPVisibilityTypeDisplayName = stormwaterJurisdictionPublicWQMPVisibilityType.StormwaterJurisdictionPublicWQMPVisibilityTypeDisplayName
             };
-            DoCustomSimpleDtoMappings(stormwaterJurisdictionPublicWQMPVisibilityType, stormwaterJurisdictionPublicWQMPVisibilityTypeSimpleDto);
-            return stormwaterJurisdictionPublicWQMPVisibilityTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(StormwaterJurisdictionPublicWQMPVisibilityType stormwaterJurisdictionPublicWQMPVisibilityType, StormwaterJurisdictionPublicWQMPVisibilityTypeSimpleDto stormwaterJurisdictionPublicWQMPVisibilityTypeSimpleDto);
     }
 }

@@ -9,20 +9,16 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeExtensionMethods
     {
-
         public static OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto AsSimpleDto(this OnlandVisualTrashAssessmentPreliminarySourceIdentificationType onlandVisualTrashAssessmentPreliminarySourceIdentificationType)
         {
-            var onlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto = new OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto()
+            var dto = new OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto()
             {
                 OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeID = onlandVisualTrashAssessmentPreliminarySourceIdentificationType.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeID,
                 OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentPreliminarySourceIdentificationType.OnlandVisualTrashAssessmentID,
                 PreliminarySourceIdentificationTypeID = onlandVisualTrashAssessmentPreliminarySourceIdentificationType.PreliminarySourceIdentificationTypeID,
                 ExplanationIfTypeIsOther = onlandVisualTrashAssessmentPreliminarySourceIdentificationType.ExplanationIfTypeIsOther
             };
-            DoCustomSimpleDtoMappings(onlandVisualTrashAssessmentPreliminarySourceIdentificationType, onlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto);
-            return onlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(OnlandVisualTrashAssessmentPreliminarySourceIdentificationType onlandVisualTrashAssessmentPreliminarySourceIdentificationType, OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto onlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto);
     }
 }

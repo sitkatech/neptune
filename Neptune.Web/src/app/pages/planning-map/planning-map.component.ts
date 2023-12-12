@@ -8,12 +8,10 @@ import 'leaflet-loading';
 import 'leaflet.markercluster';
 import * as esri from 'esri-leaflet';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { BoundingBoxDto, DelineationSimpleDto, TreatmentBMPDisplayDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto } from 'src/app/shared/generated/model/models';
-import { PersonDto } from 'src/app/shared/generated/model/person-dto';
+import { BoundingBoxDto, DelineationDto, PersonDto, ProjectDto, TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/models';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
 import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
-import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { PrioritizationMetric } from 'src/app/shared/models/prioritization-metric';
 import { WfsService } from 'src/app/shared/services/wfs.service';
 import { OctaPrioritizationDetailPopupComponent } from 'src/app/shared/components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component';
@@ -41,13 +39,13 @@ export class PlanningMapComponent implements OnInit {
   private currentUser: PersonDto;
   public richTextTypeID = NeptunePageTypeEnum.HippocampPlanningMap;
 
-  public projects: Array<ProjectSimpleDto>;
+  public projects: Array<ProjectDto>;
   private treatmentBMPs: Array<TreatmentBMPDisplayDto>;
-  private delineations: Array<DelineationSimpleDto>;
+  private delineations: Array<DelineationDto>;
   public selectedTreatmentBMP: TreatmentBMPDisplayDto;
   public relatedTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
-  public selectedDelineation: DelineationSimpleDto;
-  public selectedProject: ProjectSimpleDto;
+  public selectedDelineation: DelineationDto;
+  public selectedProject: ProjectDto;
 
   public mapID: string = 'planningMap';
   public mapHeight = (window.innerHeight - (window.innerHeight * 0.2)) + "px";
@@ -379,7 +377,7 @@ export class PlanningMapComponent implements OnInit {
     };
   }
 
-  private mapDelineationsToGeoJson(delineations: DelineationSimpleDto[]) {
+  private mapDelineationsToGeoJson(delineations: DelineationDto[]) {
     return delineations.map(x => JSON.parse(x.Geometry));
   }
 

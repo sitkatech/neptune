@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class MeasurementUnitTypeExtensionMethods
     {
-
         public static MeasurementUnitTypeSimpleDto AsSimpleDto(this MeasurementUnitType measurementUnitType)
         {
-            var measurementUnitTypeSimpleDto = new MeasurementUnitTypeSimpleDto()
+            var dto = new MeasurementUnitTypeSimpleDto()
             {
                 MeasurementUnitTypeID = measurementUnitType.MeasurementUnitTypeID,
                 MeasurementUnitTypeName = measurementUnitType.MeasurementUnitTypeName,
@@ -22,10 +21,7 @@ namespace Neptune.EFModels.Entities
                 NumberOfSignificantDigits = measurementUnitType.NumberOfSignificantDigits,
                 IncludeSpaceBeforeLegendLabel = measurementUnitType.IncludeSpaceBeforeLegendLabel
             };
-            DoCustomSimpleDtoMappings(measurementUnitType, measurementUnitTypeSimpleDto);
-            return measurementUnitTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(MeasurementUnitType measurementUnitType, MeasurementUnitTypeSimpleDto measurementUnitTypeSimpleDto);
     }
 }

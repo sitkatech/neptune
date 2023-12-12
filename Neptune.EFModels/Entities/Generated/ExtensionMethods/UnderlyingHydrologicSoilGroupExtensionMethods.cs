@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class UnderlyingHydrologicSoilGroupExtensionMethods
     {
-
         public static UnderlyingHydrologicSoilGroupSimpleDto AsSimpleDto(this UnderlyingHydrologicSoilGroup underlyingHydrologicSoilGroup)
         {
-            var underlyingHydrologicSoilGroupSimpleDto = new UnderlyingHydrologicSoilGroupSimpleDto()
+            var dto = new UnderlyingHydrologicSoilGroupSimpleDto()
             {
                 UnderlyingHydrologicSoilGroupID = underlyingHydrologicSoilGroup.UnderlyingHydrologicSoilGroupID,
                 UnderlyingHydrologicSoilGroupName = underlyingHydrologicSoilGroup.UnderlyingHydrologicSoilGroupName,
                 UnderlyingHydrologicSoilGroupDisplayName = underlyingHydrologicSoilGroup.UnderlyingHydrologicSoilGroupDisplayName
             };
-            DoCustomSimpleDtoMappings(underlyingHydrologicSoilGroup, underlyingHydrologicSoilGroupSimpleDto);
-            return underlyingHydrologicSoilGroupSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(UnderlyingHydrologicSoilGroup underlyingHydrologicSoilGroup, UnderlyingHydrologicSoilGroupSimpleDto underlyingHydrologicSoilGroupSimpleDto);
     }
 }

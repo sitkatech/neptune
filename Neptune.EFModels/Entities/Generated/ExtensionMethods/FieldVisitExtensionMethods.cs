@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class FieldVisitExtensionMethods
     {
-
         public static FieldVisitSimpleDto AsSimpleDto(this FieldVisit fieldVisit)
         {
-            var fieldVisitSimpleDto = new FieldVisitSimpleDto()
+            var dto = new FieldVisitSimpleDto()
             {
                 FieldVisitID = fieldVisit.FieldVisitID,
                 TreatmentBMPID = fieldVisit.TreatmentBMPID,
@@ -23,10 +22,7 @@ namespace Neptune.EFModels.Entities
                 FieldVisitTypeID = fieldVisit.FieldVisitTypeID,
                 IsFieldVisitVerified = fieldVisit.IsFieldVisitVerified
             };
-            DoCustomSimpleDtoMappings(fieldVisit, fieldVisitSimpleDto);
-            return fieldVisitSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(FieldVisit fieldVisit, FieldVisitSimpleDto fieldVisitSimpleDto);
     }
 }

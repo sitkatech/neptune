@@ -32,11 +32,11 @@ namespace Neptune.EFModels.Entities
                 .SingleOrDefault(x => x.ProjectDocumentID == projectDocumentID);
         }
 
-        public static List<ProjectDocumentSimpleDto> ListByProjectIDAsSimpleDto(NeptuneDbContext dbContext, int projectID)
+        public static List<ProjectDocumentDto> ListByProjectIDAsDto(NeptuneDbContext dbContext, int projectID)
         {
             return GetProjectDocumentsImplNoTracking(dbContext)
                 .Where(x => x.ProjectID == projectID)
-                .Select(x => x.AsSimpleDto())
+                .Select(x => x.AsDto())
                 .ToList();
         }
 

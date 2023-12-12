@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ProjectDocumentExtensionMethods
     {
-
         public static ProjectDocumentSimpleDto AsSimpleDto(this ProjectDocument projectDocument)
         {
-            var projectDocumentSimpleDto = new ProjectDocumentSimpleDto()
+            var dto = new ProjectDocumentSimpleDto()
             {
                 ProjectDocumentID = projectDocument.ProjectDocumentID,
                 FileResourceID = projectDocument.FileResourceID,
@@ -21,10 +20,7 @@ namespace Neptune.EFModels.Entities
                 UploadDate = projectDocument.UploadDate,
                 DocumentDescription = projectDocument.DocumentDescription
             };
-            DoCustomSimpleDtoMappings(projectDocument, projectDocumentSimpleDto);
-            return projectDocumentSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(ProjectDocument projectDocument, ProjectDocumentSimpleDto projectDocumentSimpleDto);
     }
 }

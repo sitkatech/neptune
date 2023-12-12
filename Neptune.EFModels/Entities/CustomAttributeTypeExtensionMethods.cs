@@ -4,12 +4,23 @@ namespace Neptune.EFModels.Entities;
 
 public static partial class CustomAttributeTypeExtensionMethods
 {
-    static partial void DoCustomSimpleDtoMappings(CustomAttributeType customAttributeType,
-        CustomAttributeTypeSimpleDto customAttributeTypeSimpleDto)
+    public static CustomAttributeTypeDto AsDto(this CustomAttributeType customAttributeType)
     {
-        customAttributeTypeSimpleDto.DataTypeDisplayName = customAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName;
-        customAttributeTypeSimpleDto.MeasurementUnitDisplayName = customAttributeType.GetMeasurementUnitDisplayName();
-        customAttributeTypeSimpleDto.Purpose = customAttributeType.CustomAttributeTypePurpose
-            .CustomAttributeTypePurposeDisplayName;
+        var dto = new CustomAttributeTypeDto
+        {
+            CustomAttributeTypeID = customAttributeType.CustomAttributeTypeID,
+            CustomAttributeTypeName = customAttributeType.CustomAttributeTypeName,
+            CustomAttributeDataTypeID = customAttributeType.CustomAttributeDataTypeID,
+            MeasurementUnitTypeID = customAttributeType.MeasurementUnitTypeID,
+            IsRequired = customAttributeType.IsRequired,
+            CustomAttributeTypeDescription = customAttributeType.CustomAttributeTypeDescription,
+            CustomAttributeTypePurposeID = customAttributeType.CustomAttributeTypePurposeID,
+            CustomAttributeTypeOptionsSchema = customAttributeType.CustomAttributeTypeOptionsSchema,
+            DataTypeDisplayName = customAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName,
+            MeasurementUnitDisplayName = customAttributeType.GetMeasurementUnitDisplayName(),
+            Purpose = customAttributeType.CustomAttributeTypePurpose
+                .CustomAttributeTypePurposeDisplayName
+        };
+        return dto;
     }
 }

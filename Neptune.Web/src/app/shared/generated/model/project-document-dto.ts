@@ -11,7 +11,7 @@
  */
 import { FileResourceSimpleDto } from '././file-resource-simple-dto';
 
-export class ProjectDocumentSimpleDto { 
+export class ProjectDocumentDto { 
     ProjectDocumentID?: number;
     FileResourceID?: number;
     ProjectID?: number;

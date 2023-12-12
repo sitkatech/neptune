@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
+import { ProjectDocumentDto } from 'src/app/shared/generated/model/project-document-dto';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -9,18 +9,18 @@ import { environment } from 'src/environments/environment';
 })
 export class AttachmentsDisplayComponent implements OnInit {
 
-  @Input('attachments') attachments: Array<ProjectDocumentSimpleDto>;
+  @Input('attachments') attachments: Array<ProjectDocumentDto>;
   @Input('readOnly') readOnly: boolean = true;
 
   @Output('onDeleteTriggered') onDeleteTriggered = new EventEmitter<number>();
-  @Output('onEditTriggered') onEditTriggered = new EventEmitter<ProjectDocumentSimpleDto>();
+  @Output('onEditTriggered') onEditTriggered = new EventEmitter<ProjectDocumentDto>();
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  public getFileLinkValue(attachment: ProjectDocumentSimpleDto): string {
+  public getFileLinkValue(attachment: ProjectDocumentDto): string {
     return `${environment.mainAppApiUrl}/FileResource/${attachment.FileResource.FileResourceGUID}`;
   }
 
@@ -28,7 +28,7 @@ export class AttachmentsDisplayComponent implements OnInit {
     this.onDeleteTriggered.emit(attachmentIDToDelete);
   }
 
-  emitEditAttachmentTriggered(attachmentToEdit: ProjectDocumentSimpleDto) {
+  emitEditAttachmentTriggered(attachmentToEdit: ProjectDocumentDto) {
     this.onEditTriggered.emit(attachmentToEdit);
   }
 

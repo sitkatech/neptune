@@ -9,11 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { FieldDefinitionTypeDto } from '././field-definition-type-dto';
+import { FieldDefinitionTypeSimpleDto } from '././field-definition-type-simple-dto';
 
 export class FieldDefinitionDto { 
     FieldDefinitionID?: number;
-    FieldDefinitionType?: FieldDefinitionTypeDto;
+    FieldDefinitionType?: FieldDefinitionTypeSimpleDto;
     FieldDefinitionValue?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);

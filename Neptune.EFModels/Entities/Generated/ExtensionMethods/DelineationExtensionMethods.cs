@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class DelineationExtensionMethods
     {
-
         public static DelineationSimpleDto AsSimpleDto(this Delineation delineation)
         {
-            var delineationSimpleDto = new DelineationSimpleDto()
+            var dto = new DelineationSimpleDto()
             {
                 DelineationID = delineation.DelineationID,
                 DelineationTypeID = delineation.DelineationTypeID,
@@ -23,10 +22,7 @@ namespace Neptune.EFModels.Entities
                 DateLastModified = delineation.DateLastModified,
                 HasDiscrepancies = delineation.HasDiscrepancies
             };
-            DoCustomSimpleDtoMappings(delineation, delineationSimpleDto);
-            return delineationSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(Delineation delineation, DelineationSimpleDto delineationSimpleDto);
     }
 }

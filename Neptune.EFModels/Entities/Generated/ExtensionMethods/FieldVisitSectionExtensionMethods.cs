@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class FieldVisitSectionExtensionMethods
     {
-
         public static FieldVisitSectionSimpleDto AsSimpleDto(this FieldVisitSection fieldVisitSection)
         {
-            var fieldVisitSectionSimpleDto = new FieldVisitSectionSimpleDto()
+            var dto = new FieldVisitSectionSimpleDto()
             {
                 FieldVisitSectionID = fieldVisitSection.FieldVisitSectionID,
                 FieldVisitSectionName = fieldVisitSection.FieldVisitSectionName,
@@ -20,10 +19,7 @@ namespace Neptune.EFModels.Entities
                 SectionHeader = fieldVisitSection.SectionHeader,
                 SortOrder = fieldVisitSection.SortOrder
             };
-            DoCustomSimpleDtoMappings(fieldVisitSection, fieldVisitSectionSimpleDto);
-            return fieldVisitSectionSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(FieldVisitSection fieldVisitSection, FieldVisitSectionSimpleDto fieldVisitSectionSimpleDto);
     }
 }

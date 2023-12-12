@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class RoutingConfigurationExtensionMethods
     {
-
         public static RoutingConfigurationSimpleDto AsSimpleDto(this RoutingConfiguration routingConfiguration)
         {
-            var routingConfigurationSimpleDto = new RoutingConfigurationSimpleDto()
+            var dto = new RoutingConfigurationSimpleDto()
             {
                 RoutingConfigurationID = routingConfiguration.RoutingConfigurationID,
                 RoutingConfigurationName = routingConfiguration.RoutingConfigurationName,
                 RoutingConfigurationDisplayName = routingConfiguration.RoutingConfigurationDisplayName
             };
-            DoCustomSimpleDtoMappings(routingConfiguration, routingConfigurationSimpleDto);
-            return routingConfigurationSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(RoutingConfiguration routingConfiguration, RoutingConfigurationSimpleDto routingConfigurationSimpleDto);
     }
 }

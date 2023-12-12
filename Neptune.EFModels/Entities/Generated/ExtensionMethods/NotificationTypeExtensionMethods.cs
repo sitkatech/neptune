@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class NotificationTypeExtensionMethods
     {
-
         public static NotificationTypeSimpleDto AsSimpleDto(this NotificationType notificationType)
         {
-            var notificationTypeSimpleDto = new NotificationTypeSimpleDto()
+            var dto = new NotificationTypeSimpleDto()
             {
                 NotificationTypeID = notificationType.NotificationTypeID,
                 NotificationTypeName = notificationType.NotificationTypeName,
                 NotificationTypeDisplayName = notificationType.NotificationTypeDisplayName
             };
-            DoCustomSimpleDtoMappings(notificationType, notificationTypeSimpleDto);
-            return notificationTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(NotificationType notificationType, NotificationTypeSimpleDto notificationTypeSimpleDto);
     }
 }

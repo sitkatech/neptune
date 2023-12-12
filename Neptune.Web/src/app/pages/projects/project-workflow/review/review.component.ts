@@ -7,9 +7,7 @@ import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
-import { ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/project-document-simple-dto';
-import { ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/model/project-network-solve-history-simple-dto';
-import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
+import { ProjectDocumentDto, ProjectDto, ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/model/models';
 import { ProjectUpsertDto } from 'src/app/shared/generated/model/project-upsert-dto';
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
 import { Alert } from 'src/app/shared/models/alert';
@@ -25,11 +23,11 @@ import { ConfirmService } from 'src/app/shared/services/confirm.service';
 export class ReviewComponent implements OnInit {
 
   private projectID: number;
-  public project: ProjectSimpleDto;
+  public project: ProjectDto;
   public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
   public delineations: Array<DelineationUpsertDto>;
   public projectNetworkSolveHistories: Array<ProjectNetworkSolveHistorySimpleDto>;
-  public attachments: Array<ProjectDocumentSimpleDto>;
+  public attachments: Array<ProjectDocumentDto>;
   public customRichTextTypeID = NeptunePageTypeEnum.HippocampReview;
 
   public isLoadingSubmit = false;

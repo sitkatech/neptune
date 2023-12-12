@@ -9,14 +9,15 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { OrganizationSimpleDto } from '././organization-simple-dto';
 
-export class FileResourceMimeTypeDto { 
-    FileResourceMimeTypeID?: number;
-    FileResourceMimeTypeName?: string;
-    FileResourceMimeTypeDisplayName?: string;
-    FileResourceMimeTypeContentTypeName?: string;
-    FileResourceMimeTypeIconSmallFilename?: string;
-    FileResourceMimeTypeIconNormalFilename?: string;
+export class StormwaterJurisdictionDto { 
+    StormwaterJurisdictionID?: number;
+    OrganizationID?: number;
+    StateProvinceID?: number;
+    StormwaterJurisdictionPublicBMPVisibilityTypeID?: number;
+    StormwaterJurisdictionPublicWQMPVisibilityTypeID?: number;
+    Organization?: OrganizationSimpleDto;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

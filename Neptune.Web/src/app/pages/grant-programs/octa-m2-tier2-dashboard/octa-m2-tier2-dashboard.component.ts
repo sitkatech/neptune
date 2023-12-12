@@ -7,8 +7,7 @@ import 'leaflet.marker.highlight';
 import 'leaflet-loading';
 import * as esri from 'esri-leaflet';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { BoundingBoxDto, DelineationSimpleDto, ProjectSimpleDto, TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/models';
-import { PersonDto } from 'src/app/shared/generated/model/person-dto';
+import { BoundingBoxDto, DelineationDto, PersonDto, ProjectDto, TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/models';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
 import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
@@ -41,15 +40,15 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   private currentUser: PersonDto;
   public richTextTypeID = NeptunePageTypeEnum.OCTAM2Tier2GrantProgramDashboard;
 
-  public projects: Array<ProjectSimpleDto>;
+  public projects: Array<ProjectDto>;
   private treatmentBMPs: Array<TreatmentBMPDisplayDto>;
   private verifiedTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
-  private delineations: Array<DelineationSimpleDto>;
+  private delineations: Array<DelineationDto>;
   public selectedTreatmentBMP: TreatmentBMPDisplayDto;
   public relatedTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
   public relateedTreatmentBMPsToDisplay: Array<TreatmentBMPDisplayDto>;
-  public selectedDelineation: DelineationSimpleDto;
-  public selectedProject: ProjectSimpleDto;
+  public selectedDelineation: DelineationDto;
+  public selectedProject: ProjectDto;
 
   public mapID: string = 'planningMap';
   public mapHeight = (window.innerHeight - (window.innerHeight * 0.2)) + "px";
@@ -361,7 +360,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     };
   }
 
-  private mapDelineationsToGeoJson(delineations: DelineationSimpleDto[]) {
+  private mapDelineationsToGeoJson(delineations: DelineationDto[]) {
     return delineations.map(x => JSON.parse(x.Geometry));
   }
 

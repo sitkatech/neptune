@@ -61,7 +61,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMPType
     public class ViewDataForAngular
     {
         public List<TreatmentBMPAssessmentObservationTypeDetailedDto> TreatmentBMPAssessmentObservationTypes { get; }
-        public List<CustomAttributeTypeSimpleDto> CustomAttributeTypes { get; }
+        public List<CustomAttributeTypeDto> CustomAttributeTypes { get; }
 
 
         public ViewDataForAngular(IEnumerable<TreatmentBMPTypeAssessmentObservationType> observationTypes,
@@ -78,7 +78,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMPType
 
             CustomAttributeTypes = allCustomAttributeTypes.Select(x =>
                 {
-                    var customAttributeTypeSimpleDto = x.AsSimpleDto();
+                    var customAttributeTypeSimpleDto = x.AsDto();
                     customAttributeTypeSimpleDto.CustomAttributeTypeSortOrder = customAttributeTypes
                         .SingleOrDefault(y => y.CustomAttributeTypeID == x.CustomAttributeTypeID)?.SortOrder;
                     return customAttributeTypeSimpleDto;

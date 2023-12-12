@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class OnlandVisualTrashAssessmentAreaExtensionMethods
     {
-
         public static OnlandVisualTrashAssessmentAreaSimpleDto AsSimpleDto(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
-            var onlandVisualTrashAssessmentAreaSimpleDto = new OnlandVisualTrashAssessmentAreaSimpleDto()
+            var dto = new OnlandVisualTrashAssessmentAreaSimpleDto()
             {
                 OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID,
                 OnlandVisualTrashAssessmentAreaName = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName,
@@ -21,10 +20,7 @@ namespace Neptune.EFModels.Entities
                 AssessmentAreaDescription = onlandVisualTrashAssessmentArea.AssessmentAreaDescription,
                 OnlandVisualTrashAssessmentProgressScoreID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID
             };
-            DoCustomSimpleDtoMappings(onlandVisualTrashAssessmentArea, onlandVisualTrashAssessmentAreaSimpleDto);
-            return onlandVisualTrashAssessmentAreaSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, OnlandVisualTrashAssessmentAreaSimpleDto onlandVisualTrashAssessmentAreaSimpleDto);
     }
 }

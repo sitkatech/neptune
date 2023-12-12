@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TrashCaptureStatusTypeExtensionMethods
     {
-
         public static TrashCaptureStatusTypeSimpleDto AsSimpleDto(this TrashCaptureStatusType trashCaptureStatusType)
         {
-            var trashCaptureStatusTypeSimpleDto = new TrashCaptureStatusTypeSimpleDto()
+            var dto = new TrashCaptureStatusTypeSimpleDto()
             {
                 TrashCaptureStatusTypeID = trashCaptureStatusType.TrashCaptureStatusTypeID,
                 TrashCaptureStatusTypeName = trashCaptureStatusType.TrashCaptureStatusTypeName,
@@ -21,10 +20,7 @@ namespace Neptune.EFModels.Entities
                 TrashCaptureStatusTypePriority = trashCaptureStatusType.TrashCaptureStatusTypePriority,
                 TrashCaptureStatusTypeColorCode = trashCaptureStatusType.TrashCaptureStatusTypeColorCode
             };
-            DoCustomSimpleDtoMappings(trashCaptureStatusType, trashCaptureStatusTypeSimpleDto);
-            return trashCaptureStatusTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(TrashCaptureStatusType trashCaptureStatusType, TrashCaptureStatusTypeSimpleDto trashCaptureStatusTypeSimpleDto);
     }
 }

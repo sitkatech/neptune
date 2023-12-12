@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class HRUCharacteristicExtensionMethods
     {
-
         public static HRUCharacteristicSimpleDto AsSimpleDto(this HRUCharacteristic hRUCharacteristic)
         {
-            var hRUCharacteristicSimpleDto = new HRUCharacteristicSimpleDto()
+            var dto = new HRUCharacteristicSimpleDto()
             {
                 HRUCharacteristicID = hRUCharacteristic.HRUCharacteristicID,
                 HydrologicSoilGroup = hRUCharacteristic.HydrologicSoilGroup,
@@ -25,10 +24,7 @@ namespace Neptune.EFModels.Entities
                 BaselineImperviousAcres = hRUCharacteristic.BaselineImperviousAcres,
                 BaselineHRUCharacteristicLandUseCodeID = hRUCharacteristic.BaselineHRUCharacteristicLandUseCodeID
             };
-            DoCustomSimpleDtoMappings(hRUCharacteristic, hRUCharacteristicSimpleDto);
-            return hRUCharacteristicSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(HRUCharacteristic hRUCharacteristic, HRUCharacteristicSimpleDto hRUCharacteristicSimpleDto);
     }
 }

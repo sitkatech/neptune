@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class FieldDefinitionTypeExtensionMethods
     {
-
         public static FieldDefinitionTypeSimpleDto AsSimpleDto(this FieldDefinitionType fieldDefinitionType)
         {
-            var fieldDefinitionTypeSimpleDto = new FieldDefinitionTypeSimpleDto()
+            var dto = new FieldDefinitionTypeSimpleDto()
             {
                 FieldDefinitionTypeID = fieldDefinitionType.FieldDefinitionTypeID,
                 FieldDefinitionTypeName = fieldDefinitionType.FieldDefinitionTypeName,
                 FieldDefinitionTypeDisplayName = fieldDefinitionType.FieldDefinitionTypeDisplayName
             };
-            DoCustomSimpleDtoMappings(fieldDefinitionType, fieldDefinitionTypeSimpleDto);
-            return fieldDefinitionTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(FieldDefinitionType fieldDefinitionType, FieldDefinitionTypeSimpleDto fieldDefinitionTypeSimpleDto);
     }
 }

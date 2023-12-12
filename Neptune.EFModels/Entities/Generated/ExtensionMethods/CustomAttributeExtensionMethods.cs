@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class CustomAttributeExtensionMethods
     {
-
         public static CustomAttributeSimpleDto AsSimpleDto(this CustomAttribute customAttribute)
         {
-            var customAttributeSimpleDto = new CustomAttributeSimpleDto()
+            var dto = new CustomAttributeSimpleDto()
             {
                 CustomAttributeID = customAttribute.CustomAttributeID,
                 TreatmentBMPID = customAttribute.TreatmentBMPID,
@@ -20,10 +19,7 @@ namespace Neptune.EFModels.Entities
                 TreatmentBMPTypeID = customAttribute.TreatmentBMPTypeID,
                 CustomAttributeTypeID = customAttribute.CustomAttributeTypeID
             };
-            DoCustomSimpleDtoMappings(customAttribute, customAttributeSimpleDto);
-            return customAttributeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(CustomAttribute customAttribute, CustomAttributeSimpleDto customAttributeSimpleDto);
     }
 }

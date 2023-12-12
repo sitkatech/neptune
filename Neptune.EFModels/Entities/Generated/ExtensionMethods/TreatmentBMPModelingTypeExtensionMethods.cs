@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TreatmentBMPModelingTypeExtensionMethods
     {
-
         public static TreatmentBMPModelingTypeSimpleDto AsSimpleDto(this TreatmentBMPModelingType treatmentBMPModelingType)
         {
-            var treatmentBMPModelingTypeSimpleDto = new TreatmentBMPModelingTypeSimpleDto()
+            var dto = new TreatmentBMPModelingTypeSimpleDto()
             {
                 TreatmentBMPModelingTypeID = treatmentBMPModelingType.TreatmentBMPModelingTypeID,
                 TreatmentBMPModelingTypeName = treatmentBMPModelingType.TreatmentBMPModelingTypeName,
                 TreatmentBMPModelingTypeDisplayName = treatmentBMPModelingType.TreatmentBMPModelingTypeDisplayName
             };
-            DoCustomSimpleDtoMappings(treatmentBMPModelingType, treatmentBMPModelingTypeSimpleDto);
-            return treatmentBMPModelingTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(TreatmentBMPModelingType treatmentBMPModelingType, TreatmentBMPModelingTypeSimpleDto treatmentBMPModelingTypeSimpleDto);
     }
 }

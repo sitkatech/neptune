@@ -5,9 +5,8 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
-import { PersonDto, ProjectDocumentSimpleDto } from 'src/app/shared/generated/model/models';
+import { PersonDto, ProjectDto, ProjectDocumentDto } from 'src/app/shared/generated/model/models';
 import { ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/model/project-network-solve-history-simple-dto';
-import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
@@ -24,11 +23,11 @@ export class ProjectDetailComponent implements OnInit {
   private projectID: number;
   private currentUser: PersonDto;
 
-  public project: ProjectSimpleDto;
+  public project: ProjectDto;
   public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
   public delineations: Array<DelineationUpsertDto>;
   public projectNetworkSolveHistories: Array<ProjectNetworkSolveHistorySimpleDto>;
-  public attachments: Array<ProjectDocumentSimpleDto>;
+  public attachments: Array<ProjectDocumentDto>;
   public isReadOnly: boolean;
   public isCopyingProject = false;
 

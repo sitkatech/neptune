@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using Neptune.Common;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
-using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.Models;
 using Neptune.WebMvc.Common.Mvc;
 using Neptune.WebMvc.Services;
@@ -32,7 +31,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         public string EnforcementOrFollowupActions { get; set; }
         public string SourceControlCondition { get; set; }
 
-        public List<WaterQualityManagementPlanVerifyQuickBMPSimpleDto> WaterQualityManagementPlanVerifyQuickBMPSimples { get; set; }
+        public List<WaterQualityManagementPlanVerifyQuickBMPDto> WaterQualityManagementPlanVerifyQuickBMPs { get; set; }
         public List<WaterQualityManagementPlanVerifyTreatmentBMPSimpleDto> WaterQualityManagementPlanVerifyTreatmentBMPSimples { get; set; }
 
         public bool HiddenIsFinalizeVerificationInput { get; set; }
@@ -53,8 +52,8 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             EnforcementOrFollowupActions = waterQualityManagementPlanVerify.EnforcementOrFollowupActions;
             SourceControlCondition = waterQualityManagementPlanVerify.SourceControlCondition;
 
-            WaterQualityManagementPlanVerifyQuickBMPSimples = quickBMPs.Select(x => 
-                x.AsWaterQualityManagementPlanVerifyQuickBMPSimpleDto()).OrderBy(x => x.QuickBMPName).ToList();
+            WaterQualityManagementPlanVerifyQuickBMPs = quickBMPs.Select(x => 
+                x.AsWaterQualityManagementPlanVerifyQuickBMPDto()).OrderBy(x => x.QuickBMPName).ToList();
             WaterQualityManagementPlanVerifyTreatmentBMPSimples = treatmentBMPs.Select(x => x.AsWaterQualityManagementPlanVerifyTreatmentBMPSimpleDto()).OrderBy(x => x.TreatmentBMPName).ToList();
         }
 
@@ -83,7 +82,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             waterQualityManagementPlanVerify.VerificationDate = VerificationDate;
 
             var allWaterQualityManagementPlanVerifyQuickBMPsInDatabase = dbContext.WaterQualityManagementPlanVerifyQuickBMPs;
-            var waterQualityManagementPlanVerifyQuickBMPsToUpdate = WaterQualityManagementPlanVerifyQuickBMPSimples
+            var waterQualityManagementPlanVerifyQuickBMPsToUpdate = WaterQualityManagementPlanVerifyQuickBMPs
                 ?.Select(x => new WaterQualityManagementPlanVerifyQuickBMP
                     {
                         WaterQualityManagementPlanVerifyID =
@@ -133,12 +132,12 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             var sourceControlConditionMaxLength = WaterQualityManagementPlanVerify.FieldLengths.SourceControlCondition;
             var enforcementOrFollowupActionsMaxLength = WaterQualityManagementPlanVerify.FieldLengths.EnforcementOrFollowupActions;
 
-            foreach (var waterQualityManagementPlanVerifyQuickBMPSimple in WaterQualityManagementPlanVerifyQuickBMPSimples?? new List<WaterQualityManagementPlanVerifyQuickBMPSimpleDto>())
+            foreach (var waterQualityManagementPlanVerifyQuickBMPDto in WaterQualityManagementPlanVerifyQuickBMPs?? new List<WaterQualityManagementPlanVerifyQuickBMPDto>())
             {
-                var waterQualityManagementPlanVerifyQuickBMPSimpleNoteLength = waterQualityManagementPlanVerifyQuickBMPSimple.WaterQualityManagementPlanVerifyQuickBMPNote?.Length;
+                var waterQualityManagementPlanVerifyQuickBMPSimpleNoteLength = waterQualityManagementPlanVerifyQuickBMPDto.WaterQualityManagementPlanVerifyQuickBMPNote?.Length;
                 if (waterQualityManagementPlanVerifyQuickBMPSimpleNoteLength != null && waterQualityManagementPlanVerifyQuickBMPSimpleNoteLength > waterQualityManagementPlanVerifyQuickBMPNoteMaxLength)
                 {
-                    validationResults.Add(new ValidationResult($"\"{waterQualityManagementPlanVerifyQuickBMPSimple.QuickBMPName}\"'s note is too long. Notes have a maximum of {waterQualityManagementPlanVerifyQuickBMPNoteMaxLength} characters and is {waterQualityManagementPlanVerifyQuickBMPSimpleNoteLength - waterQualityManagementPlanVerifyQuickBMPNoteMaxLength} over the limit."));
+                    validationResults.Add(new ValidationResult($"\"{waterQualityManagementPlanVerifyQuickBMPDto.QuickBMPName}\"'s note is too long. Notes have a maximum of {waterQualityManagementPlanVerifyQuickBMPNoteMaxLength} characters and is {waterQualityManagementPlanVerifyQuickBMPSimpleNoteLength - waterQualityManagementPlanVerifyQuickBMPNoteMaxLength} over the limit."));
 
                 }
             }

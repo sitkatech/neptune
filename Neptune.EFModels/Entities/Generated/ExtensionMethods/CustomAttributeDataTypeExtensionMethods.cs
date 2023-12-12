@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class CustomAttributeDataTypeExtensionMethods
     {
-
         public static CustomAttributeDataTypeSimpleDto AsSimpleDto(this CustomAttributeDataType customAttributeDataType)
         {
-            var customAttributeDataTypeSimpleDto = new CustomAttributeDataTypeSimpleDto()
+            var dto = new CustomAttributeDataTypeSimpleDto()
             {
                 CustomAttributeDataTypeID = customAttributeDataType.CustomAttributeDataTypeID,
                 CustomAttributeDataTypeName = customAttributeDataType.CustomAttributeDataTypeName,
@@ -20,10 +19,7 @@ namespace Neptune.EFModels.Entities
                 HasOptions = customAttributeDataType.HasOptions,
                 HasMeasurementUnit = customAttributeDataType.HasMeasurementUnit
             };
-            DoCustomSimpleDtoMappings(customAttributeDataType, customAttributeDataTypeSimpleDto);
-            return customAttributeDataTypeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(CustomAttributeDataType customAttributeDataType, CustomAttributeDataTypeSimpleDto customAttributeDataTypeSimpleDto);
     }
 }

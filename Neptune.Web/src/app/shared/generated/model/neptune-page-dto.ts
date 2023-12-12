@@ -9,11 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { NeptunePageTypeDto } from '././neptune-page-type-dto';
+import { NeptunePageTypeSimpleDto } from '././neptune-page-type-simple-dto';
 
 export class NeptunePageDto { 
     NeptunePageID?: number;
-    NeptunePageType?: NeptunePageTypeDto;
+    NeptunePageType?: NeptunePageTypeSimpleDto;
     NeptunePageContent?: string;
     IsEmptyContent?: boolean;
     constructor(obj?: any) {

@@ -18,11 +18,12 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { DelineationSimpleDto } from '../model/delineation-simple-dto';
+import { DelineationDto } from '../model/delineation-dto';
 import { DelineationUpsertDto } from '../model/delineation-upsert-dto';
 import { ProblemDetails } from '../model/problem-details';
-import { ProjectDocumentSimpleDto } from '../model/project-document-simple-dto';
+import { ProjectDocumentDto } from '../model/project-document-dto';
 import { ProjectDocumentUpdateDto } from '../model/project-document-update-dto';
+import { ProjectDto } from '../model/project-dto';
 import { ProjectLoadGeneratingResultDto } from '../model/project-load-generating-result-dto';
 import { ProjectLoadReducingResultDto } from '../model/project-load-reducing-result-dto';
 import { ProjectNetworkSolveHistorySimpleDto } from '../model/project-network-solve-history-simple-dto';
@@ -119,9 +120,9 @@ export class ProjectService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectsAttachmentsAttachmentIDGet(attachmentID: number, observe?: 'body', reportProgress?: boolean): Observable<ProjectDocumentSimpleDto>;
-    public projectsAttachmentsAttachmentIDGet(attachmentID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectDocumentSimpleDto>>;
-    public projectsAttachmentsAttachmentIDGet(attachmentID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectDocumentSimpleDto>>;
+    public projectsAttachmentsAttachmentIDGet(attachmentID: number, observe?: 'body', reportProgress?: boolean): Observable<ProjectDocumentDto>;
+    public projectsAttachmentsAttachmentIDGet(attachmentID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectDocumentDto>>;
+    public projectsAttachmentsAttachmentIDGet(attachmentID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectDocumentDto>>;
     public projectsAttachmentsAttachmentIDGet(attachmentID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (attachmentID === null || attachmentID === undefined) {
@@ -145,7 +146,7 @@ export class ProjectService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ProjectDocumentSimpleDto>(`${this.basePath}/projects/attachments/${encodeURIComponent(String(attachmentID))}`,
+        return this.httpClient.get<ProjectDocumentDto>(`${this.basePath}/projects/attachments/${encodeURIComponent(String(attachmentID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -163,9 +164,9 @@ export class ProjectService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectsAttachmentsAttachmentIDPut(attachmentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'body', reportProgress?: boolean): Observable<ProjectDocumentSimpleDto>;
-    public projectsAttachmentsAttachmentIDPut(attachmentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectDocumentSimpleDto>>;
-    public projectsAttachmentsAttachmentIDPut(attachmentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectDocumentSimpleDto>>;
+    public projectsAttachmentsAttachmentIDPut(attachmentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'body', reportProgress?: boolean): Observable<ProjectDocumentDto>;
+    public projectsAttachmentsAttachmentIDPut(attachmentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectDocumentDto>>;
+    public projectsAttachmentsAttachmentIDPut(attachmentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectDocumentDto>>;
     public projectsAttachmentsAttachmentIDPut(attachmentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (attachmentID === null || attachmentID === undefined) {
@@ -197,7 +198,7 @@ export class ProjectService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.put<ProjectDocumentSimpleDto>(`${this.basePath}/projects/attachments/${encodeURIComponent(String(attachmentID))}`,
+        return this.httpClient.put<ProjectDocumentDto>(`${this.basePath}/projects/attachments/${encodeURIComponent(String(attachmentID))}`,
             projectDocumentUpdateDto,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -214,9 +215,9 @@ export class ProjectService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectsDelineationsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<DelineationSimpleDto>>;
-    public projectsDelineationsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<DelineationSimpleDto>>>;
-    public projectsDelineationsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<DelineationSimpleDto>>>;
+    public projectsDelineationsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<DelineationDto>>;
+    public projectsDelineationsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<DelineationDto>>>;
+    public projectsDelineationsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<DelineationDto>>>;
     public projectsDelineationsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -236,7 +237,7 @@ export class ProjectService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<DelineationSimpleDto>>(`${this.basePath}/projects/delineations`,
+        return this.httpClient.get<Array<DelineationDto>>(`${this.basePath}/projects/delineations`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -289,9 +290,9 @@ export class ProjectService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<ProjectSimpleDto>>;
-    public projectsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ProjectSimpleDto>>>;
-    public projectsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ProjectSimpleDto>>>;
+    public projectsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<ProjectDto>>;
+    public projectsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ProjectDto>>>;
+    public projectsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ProjectDto>>>;
     public projectsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -311,7 +312,7 @@ export class ProjectService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<ProjectSimpleDto>>(`${this.basePath}/projects`,
+        return this.httpClient.get<Array<ProjectDto>>(`${this.basePath}/projects`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -328,9 +329,9 @@ export class ProjectService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'body', reportProgress?: boolean): Observable<ProjectSimpleDto>;
-    public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectSimpleDto>>;
-    public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectSimpleDto>>;
+    public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'body', reportProgress?: boolean): Observable<ProjectDto>;
+    public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectDto>>;
+    public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectDto>>;
     public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
@@ -358,7 +359,7 @@ export class ProjectService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<ProjectSimpleDto>(`${this.basePath}/projects/new`,
+        return this.httpClient.post<ProjectDto>(`${this.basePath}/projects/new`,
             projectUpsertDto,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -412,9 +413,9 @@ export class ProjectService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectsOCTAM2Tier2GrantProgramGet(observe?: 'body', reportProgress?: boolean): Observable<Array<ProjectSimpleDto>>;
-    public projectsOCTAM2Tier2GrantProgramGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ProjectSimpleDto>>>;
-    public projectsOCTAM2Tier2GrantProgramGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ProjectSimpleDto>>>;
+    public projectsOCTAM2Tier2GrantProgramGet(observe?: 'body', reportProgress?: boolean): Observable<Array<ProjectDto>>;
+    public projectsOCTAM2Tier2GrantProgramGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ProjectDto>>>;
+    public projectsOCTAM2Tier2GrantProgramGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ProjectDto>>>;
     public projectsOCTAM2Tier2GrantProgramGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -434,7 +435,7 @@ export class ProjectService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<ProjectSimpleDto>>(`${this.basePath}/projects/OCTAM2Tier2GrantProgram`,
+        return this.httpClient.get<Array<ProjectDto>>(`${this.basePath}/projects/OCTAM2Tier2GrantProgram`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -526,9 +527,9 @@ export class ProjectService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectsProjectIDAttachmentsGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<ProjectDocumentSimpleDto>>;
-    public projectsProjectIDAttachmentsGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ProjectDocumentSimpleDto>>>;
-    public projectsProjectIDAttachmentsGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ProjectDocumentSimpleDto>>>;
+    public projectsProjectIDAttachmentsGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<ProjectDocumentDto>>;
+    public projectsProjectIDAttachmentsGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ProjectDocumentDto>>>;
+    public projectsProjectIDAttachmentsGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ProjectDocumentDto>>>;
     public projectsProjectIDAttachmentsGet(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (projectID === null || projectID === undefined) {
@@ -552,7 +553,7 @@ export class ProjectService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<ProjectDocumentSimpleDto>>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/attachments`,
+        return this.httpClient.get<Array<ProjectDocumentDto>>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/attachments`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

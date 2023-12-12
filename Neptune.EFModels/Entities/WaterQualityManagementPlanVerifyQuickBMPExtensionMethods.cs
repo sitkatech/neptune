@@ -4,11 +4,18 @@ namespace Neptune.EFModels.Entities;
 
 public static partial class WaterQualityManagementPlanVerifyQuickBMPExtensionMethods
 {
-    static partial void DoCustomSimpleDtoMappings(WaterQualityManagementPlanVerifyQuickBMP waterQualityManagementPlanVerifyQuickBMP,
-        WaterQualityManagementPlanVerifyQuickBMPSimpleDto waterQualityManagementPlanVerifyQuickBMPSimpleDto)
+    public static WaterQualityManagementPlanVerifyQuickBMPDto AsDto(this WaterQualityManagementPlanVerifyQuickBMP waterQualityManagementPlanVerifyQuickBMP)
     {
-        waterQualityManagementPlanVerifyQuickBMPSimpleDto.QuickBMPName = waterQualityManagementPlanVerifyQuickBMP.QuickBMP.QuickBMPName;
-        waterQualityManagementPlanVerifyQuickBMPSimpleDto.TreatmentBMPType = waterQualityManagementPlanVerifyQuickBMP.QuickBMP.TreatmentBMPType.TreatmentBMPTypeName;
-
+        var dto = new WaterQualityManagementPlanVerifyQuickBMPDto()
+        {
+            WaterQualityManagementPlanVerifyQuickBMPID = waterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerifyQuickBMPID,
+            WaterQualityManagementPlanVerifyID = waterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerifyID,
+            QuickBMPID = waterQualityManagementPlanVerifyQuickBMP.QuickBMPID,
+            IsAdequate = waterQualityManagementPlanVerifyQuickBMP.IsAdequate,
+            WaterQualityManagementPlanVerifyQuickBMPNote = waterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerifyQuickBMPNote,
+            QuickBMPName = waterQualityManagementPlanVerifyQuickBMP.QuickBMP.QuickBMPName,
+            TreatmentBMPType = waterQualityManagementPlanVerifyQuickBMP.QuickBMP.TreatmentBMPType.TreatmentBMPTypeName
+        };
+        return dto;
     }
 }

@@ -2,13 +2,11 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { OrganizationSimpleDto } from 'src/app/shared/generated/model/organization-simple-dto';
-import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { ProjectUpsertDto } from 'src/app/shared/generated/model/project-upsert-dto';
-import { StormwaterJurisdictionSimpleDto } from 'src/app/shared/generated/model/stormwater-jurisdiction-simple-dto';
-import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
 import { ProjectWorkflowService } from 'src/app/services/project-workflow.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
+import { PersonDto, ProjectDto, StormwaterJurisdictionDto } from 'src/app/shared/generated/model/models';
 
 @Component({
   selector: 'hippocamp-project-workflow-outlet',
@@ -25,7 +23,7 @@ export class ProjectWorkflowOutletComponent implements OnInit {
   public projectID: number;
   public projectModel: ProjectUpsertDto;
   public organizations: Array<OrganizationSimpleDto>;
-  public stormwaterJurisdictions: Array<StormwaterJurisdictionSimpleDto>;
+  public stormwaterJurisdictions: Array<StormwaterJurisdictionDto>;
   public isLoadingSubmit = false;
 
   constructor(
@@ -66,7 +64,7 @@ export class ProjectWorkflowOutletComponent implements OnInit {
       }
   }
 
-  private mapProjectSimpleDtoToProjectModel(project: ProjectSimpleDto) {
+  private mapProjectSimpleDtoToProjectModel(project: ProjectDto) {
     this.projectModel.ProjectName = project.ProjectName;
     this.projectModel.OrganizationID = project.OrganizationID;
     this.projectModel.StormwaterJurisdictionID = project.StormwaterJurisdictionID;

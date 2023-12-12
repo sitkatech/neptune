@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class HRUCharacteristicLandUseCodeExtensionMethods
     {
-
         public static HRUCharacteristicLandUseCodeSimpleDto AsSimpleDto(this HRUCharacteristicLandUseCode hRUCharacteristicLandUseCode)
         {
-            var hRUCharacteristicLandUseCodeSimpleDto = new HRUCharacteristicLandUseCodeSimpleDto()
+            var dto = new HRUCharacteristicLandUseCodeSimpleDto()
             {
                 HRUCharacteristicLandUseCodeID = hRUCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID,
                 HRUCharacteristicLandUseCodeName = hRUCharacteristicLandUseCode.HRUCharacteristicLandUseCodeName,
                 HRUCharacteristicLandUseCodeDisplayName = hRUCharacteristicLandUseCode.HRUCharacteristicLandUseCodeDisplayName
             };
-            DoCustomSimpleDtoMappings(hRUCharacteristicLandUseCode, hRUCharacteristicLandUseCodeSimpleDto);
-            return hRUCharacteristicLandUseCodeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(HRUCharacteristicLandUseCode hRUCharacteristicLandUseCode, HRUCharacteristicLandUseCodeSimpleDto hRUCharacteristicLandUseCodeSimpleDto);
     }
 }

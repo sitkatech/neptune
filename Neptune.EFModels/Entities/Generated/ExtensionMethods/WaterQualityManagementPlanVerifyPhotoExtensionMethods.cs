@@ -9,19 +9,15 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class WaterQualityManagementPlanVerifyPhotoExtensionMethods
     {
-
         public static WaterQualityManagementPlanVerifyPhotoSimpleDto AsSimpleDto(this WaterQualityManagementPlanVerifyPhoto waterQualityManagementPlanVerifyPhoto)
         {
-            var waterQualityManagementPlanVerifyPhotoSimpleDto = new WaterQualityManagementPlanVerifyPhotoSimpleDto()
+            var dto = new WaterQualityManagementPlanVerifyPhotoSimpleDto()
             {
                 WaterQualityManagementPlanVerifyPhotoID = waterQualityManagementPlanVerifyPhoto.WaterQualityManagementPlanVerifyPhotoID,
                 WaterQualityManagementPlanVerifyID = waterQualityManagementPlanVerifyPhoto.WaterQualityManagementPlanVerifyID,
                 WaterQualityManagementPlanPhotoID = waterQualityManagementPlanVerifyPhoto.WaterQualityManagementPlanPhotoID
             };
-            DoCustomSimpleDtoMappings(waterQualityManagementPlanVerifyPhoto, waterQualityManagementPlanVerifyPhotoSimpleDto);
-            return waterQualityManagementPlanVerifyPhotoSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(WaterQualityManagementPlanVerifyPhoto waterQualityManagementPlanVerifyPhoto, WaterQualityManagementPlanVerifyPhotoSimpleDto waterQualityManagementPlanVerifyPhotoSimpleDto);
     }
 }

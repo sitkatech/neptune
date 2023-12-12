@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class OCTAPrioritizationStagingExtensionMethods
     {
-
         public static OCTAPrioritizationStagingSimpleDto AsSimpleDto(this OCTAPrioritizationStaging oCTAPrioritizationStaging)
         {
-            var oCTAPrioritizationStagingSimpleDto = new OCTAPrioritizationStagingSimpleDto()
+            var dto = new OCTAPrioritizationStagingSimpleDto()
             {
                 OCTAPrioritizationStagingID = oCTAPrioritizationStaging.OCTAPrioritizationStagingID,
                 OCTAPrioritizationKey = oCTAPrioritizationStaging.OCTAPrioritizationKey,
@@ -31,10 +30,7 @@ namespace Neptune.EFModels.Entities
                 PC_MET_PCT = oCTAPrioritizationStaging.PC_MET_PCT,
                 PC_TSS_PCT = oCTAPrioritizationStaging.PC_TSS_PCT
             };
-            DoCustomSimpleDtoMappings(oCTAPrioritizationStaging, oCTAPrioritizationStagingSimpleDto);
-            return oCTAPrioritizationStagingSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(OCTAPrioritizationStaging oCTAPrioritizationStaging, OCTAPrioritizationStagingSimpleDto oCTAPrioritizationStagingSimpleDto);
     }
 }

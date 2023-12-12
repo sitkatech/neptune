@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class MaintenanceRecordObservationExtensionMethods
     {
-
         public static MaintenanceRecordObservationSimpleDto AsSimpleDto(this MaintenanceRecordObservation maintenanceRecordObservation)
         {
-            var maintenanceRecordObservationSimpleDto = new MaintenanceRecordObservationSimpleDto()
+            var dto = new MaintenanceRecordObservationSimpleDto()
             {
                 MaintenanceRecordObservationID = maintenanceRecordObservation.MaintenanceRecordObservationID,
                 MaintenanceRecordID = maintenanceRecordObservation.MaintenanceRecordID,
@@ -20,10 +19,7 @@ namespace Neptune.EFModels.Entities
                 TreatmentBMPTypeID = maintenanceRecordObservation.TreatmentBMPTypeID,
                 CustomAttributeTypeID = maintenanceRecordObservation.CustomAttributeTypeID
             };
-            DoCustomSimpleDtoMappings(maintenanceRecordObservation, maintenanceRecordObservationSimpleDto);
-            return maintenanceRecordObservationSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(MaintenanceRecordObservation maintenanceRecordObservation, MaintenanceRecordObservationSimpleDto maintenanceRecordObservationSimpleDto);
     }
 }

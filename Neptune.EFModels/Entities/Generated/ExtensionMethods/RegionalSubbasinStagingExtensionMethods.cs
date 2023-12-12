@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class RegionalSubbasinStagingExtensionMethods
     {
-
         public static RegionalSubbasinStagingSimpleDto AsSimpleDto(this RegionalSubbasinStaging regionalSubbasinStaging)
         {
-            var regionalSubbasinStagingSimpleDto = new RegionalSubbasinStagingSimpleDto()
+            var dto = new RegionalSubbasinStagingSimpleDto()
             {
                 RegionalSubbasinStagingID = regionalSubbasinStaging.RegionalSubbasinStagingID,
                 DrainID = regionalSubbasinStaging.DrainID,
@@ -20,10 +19,7 @@ namespace Neptune.EFModels.Entities
                 OCSurveyCatchmentID = regionalSubbasinStaging.OCSurveyCatchmentID,
                 OCSurveyDownstreamCatchmentID = regionalSubbasinStaging.OCSurveyDownstreamCatchmentID
             };
-            DoCustomSimpleDtoMappings(regionalSubbasinStaging, regionalSubbasinStagingSimpleDto);
-            return regionalSubbasinStagingSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(RegionalSubbasinStaging regionalSubbasinStaging, RegionalSubbasinStagingSimpleDto regionalSubbasinStagingSimpleDto);
     }
 }

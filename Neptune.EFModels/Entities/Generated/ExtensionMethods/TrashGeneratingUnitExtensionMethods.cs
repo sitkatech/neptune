@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TrashGeneratingUnitExtensionMethods
     {
-
         public static TrashGeneratingUnitSimpleDto AsSimpleDto(this TrashGeneratingUnit trashGeneratingUnit)
         {
-            var trashGeneratingUnitSimpleDto = new TrashGeneratingUnitSimpleDto()
+            var dto = new TrashGeneratingUnitSimpleDto()
             {
                 TrashGeneratingUnitID = trashGeneratingUnit.TrashGeneratingUnitID,
                 StormwaterJurisdictionID = trashGeneratingUnit.StormwaterJurisdictionID,
@@ -22,10 +21,7 @@ namespace Neptune.EFModels.Entities
                 DelineationID = trashGeneratingUnit.DelineationID,
                 WaterQualityManagementPlanID = trashGeneratingUnit.WaterQualityManagementPlanID
             };
-            DoCustomSimpleDtoMappings(trashGeneratingUnit, trashGeneratingUnitSimpleDto);
-            return trashGeneratingUnitSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(TrashGeneratingUnit trashGeneratingUnit, TrashGeneratingUnitSimpleDto trashGeneratingUnitSimpleDto);
     }
 }

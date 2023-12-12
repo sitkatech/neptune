@@ -10,18 +10,12 @@
  * Do not edit the class manually.
  */
 
-export class DelineationSimpleDto { 
-    Geometry?: string;
-    DelineationArea?: number;
-    DelineationTypeName?: string;
-    DelineationID?: number;
-    DelineationTypeID?: number;
-    IsVerified?: boolean;
-    DateLastVerified?: string;
-    VerifiedByPersonID?: number;
-    TreatmentBMPID?: number;
-    DateLastModified?: string;
-    HasDiscrepancies?: boolean;
+export class OrganizationTypeSimpleDto { 
+    OrganizationTypeID?: number;
+    OrganizationTypeName?: string;
+    OrganizationTypeAbbreviation?: string;
+    LegendColor?: string;
+    IsDefaultOrganizationType?: boolean;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

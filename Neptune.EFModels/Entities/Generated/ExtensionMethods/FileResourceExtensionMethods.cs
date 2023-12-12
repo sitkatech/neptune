@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class FileResourceExtensionMethods
     {
-
         public static FileResourceSimpleDto AsSimpleDto(this FileResource fileResource)
         {
-            var fileResourceSimpleDto = new FileResourceSimpleDto()
+            var dto = new FileResourceSimpleDto()
             {
                 FileResourceID = fileResource.FileResourceID,
                 FileResourceMimeTypeID = fileResource.FileResourceMimeTypeID,
@@ -23,10 +22,7 @@ namespace Neptune.EFModels.Entities
                 CreateDate = fileResource.CreateDate,
                 ContentLength = fileResource.ContentLength
             };
-            DoCustomSimpleDtoMappings(fileResource, fileResourceSimpleDto);
-            return fileResourceSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(FileResource fileResource, FileResourceSimpleDto fileResourceSimpleDto);
     }
 }

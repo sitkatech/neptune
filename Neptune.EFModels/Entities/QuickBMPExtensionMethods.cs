@@ -4,10 +4,10 @@ namespace Neptune.EFModels.Entities;
 
 public static partial class QuickBMPExtensionMethods
 {
-    public static WaterQualityManagementPlanVerifyQuickBMPSimpleDto AsWaterQualityManagementPlanVerifyQuickBMPSimpleDto(
+    public static WaterQualityManagementPlanVerifyQuickBMPDto AsWaterQualityManagementPlanVerifyQuickBMPDto(
         this QuickBMP quickBMP)
     {
-        var waterQualityManagementPlanVerifyQuickBMPSimpleDto = new WaterQualityManagementPlanVerifyQuickBMPSimpleDto()
+        var dto = new WaterQualityManagementPlanVerifyQuickBMPDto()
         {
             QuickBMPName = quickBMP.QuickBMPName,
             QuickBMPID = quickBMP.QuickBMPID,
@@ -15,13 +15,13 @@ public static partial class QuickBMPExtensionMethods
             WaterQualityManagementPlanVerifyQuickBMPNote = null,
             TreatmentBMPType = quickBMP.TreatmentBMPType.TreatmentBMPTypeName
         };
-        return waterQualityManagementPlanVerifyQuickBMPSimpleDto;
+        return dto;
     }
 
     public static QuickBMPUpsertDto AsUpsertDto(
         this QuickBMP quickBMP)
     {
-        var quickBMPUpsertDto = new QuickBMPUpsertDto()
+        var dto = new QuickBMPUpsertDto()
         {
             TreatmentBMPTypeID = quickBMP.TreatmentBMPTypeID,
             QuickBMPName = quickBMP.QuickBMPName,
@@ -31,6 +31,6 @@ public static partial class QuickBMPExtensionMethods
             PercentRetained = quickBMP.PercentRetained,
             DryWeatherFlowOverrideID = quickBMP.DryWeatherFlowOverrideID
         };
-        return quickBMPUpsertDto;
+        return dto;
     }
 }

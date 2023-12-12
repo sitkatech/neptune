@@ -18,7 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { RoleDto } from '../model/role-dto';
+import { RoleSimpleDto } from '../model/role-simple-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -67,9 +67,9 @@ export class RoleService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public rolesGet(observe?: 'body', reportProgress?: boolean): Observable<Array<RoleDto>>;
-    public rolesGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RoleDto>>>;
-    public rolesGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RoleDto>>>;
+    public rolesGet(observe?: 'body', reportProgress?: boolean): Observable<Array<RoleSimpleDto>>;
+    public rolesGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RoleSimpleDto>>>;
+    public rolesGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RoleSimpleDto>>>;
     public rolesGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -89,7 +89,7 @@ export class RoleService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<RoleDto>>(`${this.basePath}/roles`,
+        return this.httpClient.get<Array<RoleSimpleDto>>(`${this.basePath}/roles`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

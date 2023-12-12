@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class SupportRequestLogExtensionMethods
     {
-
         public static SupportRequestLogSimpleDto AsSimpleDto(this SupportRequestLog supportRequestLog)
         {
-            var supportRequestLogSimpleDto = new SupportRequestLogSimpleDto()
+            var dto = new SupportRequestLogSimpleDto()
             {
                 SupportRequestLogID = supportRequestLog.SupportRequestLogID,
                 RequestDate = supportRequestLog.RequestDate,
@@ -24,10 +23,7 @@ namespace Neptune.EFModels.Entities
                 RequestPersonOrganization = supportRequestLog.RequestPersonOrganization,
                 RequestPersonPhone = supportRequestLog.RequestPersonPhone
             };
-            DoCustomSimpleDtoMappings(supportRequestLog, supportRequestLogSimpleDto);
-            return supportRequestLogSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(SupportRequestLog supportRequestLog, SupportRequestLogSimpleDto supportRequestLogSimpleDto);
     }
 }

@@ -61,13 +61,13 @@ namespace Neptune.EFModels.Entities
                 .ToList();
         }
 
-        public static List<DelineationSimpleDto> ListProjectDelineationsAsSimpleDto(NeptuneDbContext dbContext)
+        public static List<DelineationDto> ListProjectDelineationsAsDto(NeptuneDbContext dbContext)
         {
-            var treatmentBMPDisplayDtos = GetImpl(dbContext).Where(x => x.TreatmentBMP.ProjectID != null)
-                .Select(x => x.AsSimpleDto())
+            var dtos = GetImpl(dbContext).Where(x => x.TreatmentBMP.ProjectID != null)
+                .Select(x => x.AsDto())
                 .ToList();
 
-            return treatmentBMPDisplayDtos;
+            return dtos;
         }
 
         public static Delineation GetByID(NeptuneDbContext dbContext, int delineationID)
@@ -130,22 +130,22 @@ namespace Neptune.EFModels.Entities
                 .OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
         }
 
-        public static List<DelineationSimpleDto> ListByPersonIDAsSimpleDto(NeptuneDbContext dbContext, int personID)
+        public static List<DelineationDto> ListByPersonIDAsDto(NeptuneDbContext dbContext, int personID)
         {
             var person = People.GetByID(dbContext, personID);
             if (person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin)
             {
-                return ListProjectDelineationsAsSimpleDto(dbContext);
+                return ListProjectDelineationsAsDto(dbContext);
             }
 
             var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
 
-            var treatmentBMPDisplayDtos = GetImpl(dbContext)
+            var dtos = GetImpl(dbContext)
                 .Where(x => jurisdictionIDs.Contains(x.TreatmentBMP.StormwaterJurisdictionID))
-                .Select(x => x.AsSimpleDto())
+                .Select(x => x.AsDto())
                 .ToList();
 
-            return treatmentBMPDisplayDtos;
+            return dtos;
         }
 
         public static async Task MergeDelineations(NeptuneDbContext dbContext, List<DelineationUpsertDto> delineationUpsertDtos, Project project)

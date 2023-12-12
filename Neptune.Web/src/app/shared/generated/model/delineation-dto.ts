@@ -9,15 +9,19 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { OrganizationSimpleDto } from '././organization-simple-dto';
 
-export class StormwaterJurisdictionSimpleDto { 
-    StormwaterJurisdictionID?: number;
-    OrganizationID?: number;
-    StateProvinceID?: number;
-    StormwaterJurisdictionPublicBMPVisibilityTypeID?: number;
-    StormwaterJurisdictionPublicWQMPVisibilityTypeID?: number;
-    Organization?: OrganizationSimpleDto;
+export class DelineationDto { 
+    DelineationID?: number;
+    DelineationTypeID?: number;
+    IsVerified?: boolean;
+    DateLastVerified?: string;
+    VerifiedByPersonID?: number;
+    TreatmentBMPID?: number;
+    DateLastModified?: string;
+    HasDiscrepancies?: boolean;
+    Geometry?: string;
+    DelineationArea?: number;
+    DelineationTypeName?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

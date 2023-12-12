@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-export class FieldDefinitionTypeDto { 
+export class FieldDefinitionTypeSimpleDto { 
     FieldDefinitionTypeID?: number;
     FieldDefinitionTypeName?: string;
     FieldDefinitionTypeDisplayName?: string;

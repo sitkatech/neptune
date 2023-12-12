@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class LandUseBlockExtensionMethods
     {
-
         public static LandUseBlockSimpleDto AsSimpleDto(this LandUseBlock landUseBlock)
         {
-            var landUseBlockSimpleDto = new LandUseBlockSimpleDto()
+            var dto = new LandUseBlockSimpleDto()
             {
                 LandUseBlockID = landUseBlock.LandUseBlockID,
                 PriorityLandUseTypeID = landUseBlock.PriorityLandUseTypeID,
@@ -24,10 +23,7 @@ namespace Neptune.EFModels.Entities
                 StormwaterJurisdictionID = landUseBlock.StormwaterJurisdictionID,
                 PermitTypeID = landUseBlock.PermitTypeID
             };
-            DoCustomSimpleDtoMappings(landUseBlock, landUseBlockSimpleDto);
-            return landUseBlockSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(LandUseBlock landUseBlock, LandUseBlockSimpleDto landUseBlockSimpleDto);
     }
 }

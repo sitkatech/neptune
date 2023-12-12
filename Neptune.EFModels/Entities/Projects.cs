@@ -16,9 +16,9 @@ namespace Neptune.EFModels.Entities
                 .Include(x => x.PrimaryContactPerson);
         }
 
-        public static List<ProjectSimpleDto> ListAsSimpleDto(NeptuneDbContext dbContext)
+        public static List<ProjectDto> ListAsDto(NeptuneDbContext dbContext)
         {
-            return GetImpl(dbContext).AsNoTracking().OrderByDescending(x => x.ProjectID).Select(x => x.AsSimpleDto()).ToList();
+            return GetImpl(dbContext).AsNoTracking().OrderByDescending(x => x.ProjectID).Select(x => x.AsDto()).ToList();
         }
 
         public static Project GetByIDWithChangeTracking(NeptuneDbContext dbContext, int projectID)
@@ -47,9 +47,9 @@ namespace Neptune.EFModels.Entities
             return GetByID(dbContext, projectPrimaryKey.PrimaryKeyValue);
         }
 
-        public static ProjectSimpleDto GetByIDAsSimpleDto(NeptuneDbContext dbContext, int projectID)
+        public static ProjectDto GetByIDAsDto(NeptuneDbContext dbContext, int projectID)
         {
-            return GetByID(dbContext, projectID).AsSimpleDto();
+            return GetByID(dbContext, projectID).AsDto();
         }
 
         public static List<int> ListProjectIDs(NeptuneDbContext dbContext)
@@ -57,12 +57,12 @@ namespace Neptune.EFModels.Entities
             return dbContext.Projects.AsNoTracking().Select(x => x.ProjectID).ToList();
         }
 
-        public static List<ProjectSimpleDto> ListByPersonIDAsSimpleDto(NeptuneDbContext dbContext, int personID)
+        public static List<ProjectDto> ListByPersonIDAsDto(NeptuneDbContext dbContext, int personID)
         {
             var person = People.GetByID(dbContext, personID);
             if (person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin)
             {
-                return ListAsSimpleDto(dbContext);
+                return ListAsDto(dbContext);
             }
 
             var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
@@ -70,11 +70,11 @@ namespace Neptune.EFModels.Entities
             return GetImpl(dbContext).AsNoTracking()
                 .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
                 .OrderByDescending(x => x.ProjectID)
-                .Select(x => x.AsSimpleDto())
+                .Select(x => x.AsDto())
                 .ToList();
         }
 
-        public static async Task<ProjectSimpleDto> CreateNew(NeptuneDbContext dbContext, ProjectUpsertDto projectUpsertDto, PersonDto personDto)
+        public static async Task<ProjectDto> CreateNew(NeptuneDbContext dbContext, ProjectUpsertDto projectUpsertDto, PersonDto personDto)
         {
             var project = new Project()
             {
@@ -94,7 +94,7 @@ namespace Neptune.EFModels.Entities
             await dbContext.Projects.AddAsync(project);
             await dbContext.SaveChangesAsync();
             await dbContext.Entry(project).ReloadAsync();
-            return GetByIDAsSimpleDto(dbContext, project.ProjectID);
+            return GetByIDAsDto(dbContext, project.ProjectID);
         }
 
         public static async Task Update(NeptuneDbContext dbContext, Project project, ProjectUpsertDto projectUpsertDto, int personID)

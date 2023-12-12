@@ -9,10 +9,9 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class DirtyModelNodeExtensionMethods
     {
-
         public static DirtyModelNodeSimpleDto AsSimpleDto(this DirtyModelNode dirtyModelNode)
         {
-            var dirtyModelNodeSimpleDto = new DirtyModelNodeSimpleDto()
+            var dto = new DirtyModelNodeSimpleDto()
             {
                 DirtyModelNodeID = dirtyModelNode.DirtyModelNodeID,
                 TreatmentBMPID = dirtyModelNode.TreatmentBMPID,
@@ -21,10 +20,7 @@ namespace Neptune.EFModels.Entities
                 DelineationID = dirtyModelNode.DelineationID,
                 CreateDate = dirtyModelNode.CreateDate
             };
-            DoCustomSimpleDtoMappings(dirtyModelNode, dirtyModelNodeSimpleDto);
-            return dirtyModelNodeSimpleDto;
+            return dto;
         }
-
-        static partial void DoCustomSimpleDtoMappings(DirtyModelNode dirtyModelNode, DirtyModelNodeSimpleDto dirtyModelNodeSimpleDto);
     }
 }

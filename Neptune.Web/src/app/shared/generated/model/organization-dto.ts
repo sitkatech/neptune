@@ -11,7 +11,7 @@
  */
 import { PersonDto } from '././person-dto';
 import { FileResourceDto } from '././file-resource-dto';
-import { OrganizationTypeDto } from '././organization-type-dto';
+import { OrganizationTypeSimpleDto } from '././organization-type-simple-dto';
 
 export class OrganizationDto { 
     OrganizationID?: number;
@@ -22,7 +22,7 @@ export class OrganizationDto {
     IsActive?: boolean;
     OrganizationUrl?: string;
     LogoFileResource?: FileResourceDto;
-    OrganizationType?: OrganizationTypeDto;
+    OrganizationType?: OrganizationTypeSimpleDto;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
