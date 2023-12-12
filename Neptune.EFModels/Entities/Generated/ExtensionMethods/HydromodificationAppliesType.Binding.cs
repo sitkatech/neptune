@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[HydromodificationAppliesType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,13 +12,13 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class HydromodificationAppliesType : IHavePrimaryKey
     {
-        public static readonly HydromodificationAppliesTypeApplicable Applicable = Neptune.EFModels.Entities.HydromodificationAppliesTypeApplicable.Instance;
-        public static readonly HydromodificationAppliesTypeExempt Exempt = Neptune.EFModels.Entities.HydromodificationAppliesTypeExempt.Instance;
+        public static readonly HydromodificationAppliesTypeApplicable Applicable = HydromodificationAppliesTypeApplicable.Instance;
+        public static readonly HydromodificationAppliesTypeExempt Exempt = HydromodificationAppliesTypeExempt.Instance;
 
         public static readonly List<HydromodificationAppliesType> All;
-        public static readonly List<HydromodificationAppliesTypeDto> AllAsDto;
+        public static readonly List<HydromodificationAppliesTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, HydromodificationAppliesType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, HydromodificationAppliesTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, HydromodificationAppliesTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +26,9 @@ namespace Neptune.EFModels.Entities
         static HydromodificationAppliesType()
         {
             All = new List<HydromodificationAppliesType> { Applicable, Exempt };
-            AllAsDto = new List<HydromodificationAppliesTypeDto> { Applicable.AsDto(), Exempt.AsDto() };
+            AllAsSimpleDto = new List<HydromodificationAppliesTypeSimpleDto> { Applicable.AsSimpleDto(), Exempt.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, HydromodificationAppliesType>(All.ToDictionary(x => x.HydromodificationAppliesTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, HydromodificationAppliesTypeDto>(AllAsDto.ToDictionary(x => x.HydromodificationAppliesTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, HydromodificationAppliesTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.HydromodificationAppliesTypeID));
         }
 
         /// <summary>

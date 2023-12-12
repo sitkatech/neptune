@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[ObservationThresholdType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,14 +12,14 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class ObservationThresholdType : IHavePrimaryKey
     {
-        public static readonly ObservationThresholdTypeSpecificValue SpecificValue = Neptune.EFModels.Entities.ObservationThresholdTypeSpecificValue.Instance;
-        public static readonly ObservationThresholdTypeRelativeToBenchmark RelativeToBenchmark = Neptune.EFModels.Entities.ObservationThresholdTypeRelativeToBenchmark.Instance;
-        public static readonly ObservationThresholdTypeNone None = Neptune.EFModels.Entities.ObservationThresholdTypeNone.Instance;
+        public static readonly ObservationThresholdTypeSpecificValue SpecificValue = ObservationThresholdTypeSpecificValue.Instance;
+        public static readonly ObservationThresholdTypeRelativeToBenchmark RelativeToBenchmark = ObservationThresholdTypeRelativeToBenchmark.Instance;
+        public static readonly ObservationThresholdTypeNone None = ObservationThresholdTypeNone.Instance;
 
         public static readonly List<ObservationThresholdType> All;
-        public static readonly List<ObservationThresholdTypeDto> AllAsDto;
+        public static readonly List<ObservationThresholdTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, ObservationThresholdType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, ObservationThresholdTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, ObservationThresholdTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -30,9 +27,9 @@ namespace Neptune.EFModels.Entities
         static ObservationThresholdType()
         {
             All = new List<ObservationThresholdType> { SpecificValue, RelativeToBenchmark, None };
-            AllAsDto = new List<ObservationThresholdTypeDto> { SpecificValue.AsDto(), RelativeToBenchmark.AsDto(), None.AsDto() };
+            AllAsSimpleDto = new List<ObservationThresholdTypeSimpleDto> { SpecificValue.AsSimpleDto(), RelativeToBenchmark.AsSimpleDto(), None.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, ObservationThresholdType>(All.ToDictionary(x => x.ObservationThresholdTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, ObservationThresholdTypeDto>(AllAsDto.ToDictionary(x => x.ObservationThresholdTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, ObservationThresholdTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.ObservationThresholdTypeID));
         }
 
         /// <summary>

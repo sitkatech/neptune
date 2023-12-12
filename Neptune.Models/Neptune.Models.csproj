@@ -9,6 +9,7 @@
     <PackageReference Include="System.Text.Json" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DataTransferObjects\Generated\" />
     <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>

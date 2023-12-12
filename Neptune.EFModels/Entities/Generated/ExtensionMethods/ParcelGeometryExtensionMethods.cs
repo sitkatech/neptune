@@ -9,18 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ParcelGeometryExtensionMethods
     {
-        public static ParcelGeometryDto AsDto(this ParcelGeometry parcelGeometry)
-        {
-            var parcelGeometryDto = new ParcelGeometryDto()
-            {
-                ParcelGeometryID = parcelGeometry.ParcelGeometryID,
-                Parcel = parcelGeometry.Parcel.AsDto()
-            };
-            DoCustomMappings(parcelGeometry, parcelGeometryDto);
-            return parcelGeometryDto;
-        }
-
-        static partial void DoCustomMappings(ParcelGeometry parcelGeometry, ParcelGeometryDto parcelGeometryDto);
 
         public static ParcelGeometrySimpleDto AsSimpleDto(this ParcelGeometry parcelGeometry)
         {

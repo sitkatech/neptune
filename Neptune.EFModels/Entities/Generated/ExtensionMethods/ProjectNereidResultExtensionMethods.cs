@@ -9,26 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ProjectNereidResultExtensionMethods
     {
-        public static ProjectNereidResultDto AsDto(this ProjectNereidResult projectNereidResult)
-        {
-            var projectNereidResultDto = new ProjectNereidResultDto()
-            {
-                ProjectNereidResultID = projectNereidResult.ProjectNereidResultID,
-                Project = projectNereidResult.Project.AsDto(),
-                IsBaselineCondition = projectNereidResult.IsBaselineCondition,
-                TreatmentBMP = projectNereidResult.TreatmentBMP?.AsDto(),
-                WaterQualityManagementPlan = projectNereidResult.WaterQualityManagementPlan?.AsDto(),
-                RegionalSubbasin = projectNereidResult.RegionalSubbasin?.AsDto(),
-                Delineation = projectNereidResult.Delineation?.AsDto(),
-                NodeID = projectNereidResult.NodeID,
-                FullResponse = projectNereidResult.FullResponse,
-                LastUpdate = projectNereidResult.LastUpdate
-            };
-            DoCustomMappings(projectNereidResult, projectNereidResultDto);
-            return projectNereidResultDto;
-        }
-
-        static partial void DoCustomMappings(ProjectNereidResult projectNereidResult, ProjectNereidResultDto projectNereidResultDto);
 
         public static ProjectNereidResultSimpleDto AsSimpleDto(this ProjectNereidResult projectNereidResult)
         {

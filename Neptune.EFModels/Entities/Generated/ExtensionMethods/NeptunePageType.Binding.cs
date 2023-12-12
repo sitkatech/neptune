@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[NeptunePageType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,76 +12,76 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class NeptunePageType : IHavePrimaryKey
     {
-        public static readonly NeptunePageTypeHomePage HomePage = Neptune.EFModels.Entities.NeptunePageTypeHomePage.Instance;
-        public static readonly NeptunePageTypeAbout About = Neptune.EFModels.Entities.NeptunePageTypeAbout.Instance;
-        public static readonly NeptunePageTypeOrganizationsList OrganizationsList = Neptune.EFModels.Entities.NeptunePageTypeOrganizationsList.Instance;
-        public static readonly NeptunePageTypeHomeMapInfo HomeMapInfo = Neptune.EFModels.Entities.NeptunePageTypeHomeMapInfo.Instance;
-        public static readonly NeptunePageTypeHomeAdditionalInfo HomeAdditionalInfo = Neptune.EFModels.Entities.NeptunePageTypeHomeAdditionalInfo.Instance;
-        public static readonly NeptunePageTypeTreatmentBMP TreatmentBMP = Neptune.EFModels.Entities.NeptunePageTypeTreatmentBMP.Instance;
-        public static readonly NeptunePageTypeTreatmentBMPType TreatmentBMPType = Neptune.EFModels.Entities.NeptunePageTypeTreatmentBMPType.Instance;
-        public static readonly NeptunePageTypeJurisdiction Jurisdiction = Neptune.EFModels.Entities.NeptunePageTypeJurisdiction.Instance;
-        public static readonly NeptunePageTypeAssessment Assessment = Neptune.EFModels.Entities.NeptunePageTypeAssessment.Instance;
-        public static readonly NeptunePageTypeManageObservationTypesList ManageObservationTypesList = Neptune.EFModels.Entities.NeptunePageTypeManageObservationTypesList.Instance;
-        public static readonly NeptunePageTypeManageTreatmentBMPTypesList ManageTreatmentBMPTypesList = Neptune.EFModels.Entities.NeptunePageTypeManageTreatmentBMPTypesList.Instance;
-        public static readonly NeptunePageTypeManageObservationTypeInstructions ManageObservationTypeInstructions = Neptune.EFModels.Entities.NeptunePageTypeManageObservationTypeInstructions.Instance;
-        public static readonly NeptunePageTypeManageObservationTypeObservationInstructions ManageObservationTypeObservationInstructions = Neptune.EFModels.Entities.NeptunePageTypeManageObservationTypeObservationInstructions.Instance;
-        public static readonly NeptunePageTypeManageObservationTypeLabelsAndUnitsInstructions ManageObservationTypeLabelsAndUnitsInstructions = Neptune.EFModels.Entities.NeptunePageTypeManageObservationTypeLabelsAndUnitsInstructions.Instance;
-        public static readonly NeptunePageTypeManageTreatmentBMPTypeInstructions ManageTreatmentBMPTypeInstructions = Neptune.EFModels.Entities.NeptunePageTypeManageTreatmentBMPTypeInstructions.Instance;
-        public static readonly NeptunePageTypeManageCustomAttributeTypeInstructions ManageCustomAttributeTypeInstructions = Neptune.EFModels.Entities.NeptunePageTypeManageCustomAttributeTypeInstructions.Instance;
-        public static readonly NeptunePageTypeManageCustomAttributeInstructions ManageCustomAttributeInstructions = Neptune.EFModels.Entities.NeptunePageTypeManageCustomAttributeInstructions.Instance;
-        public static readonly NeptunePageTypeManageCustomAttributeTypesList ManageCustomAttributeTypesList = Neptune.EFModels.Entities.NeptunePageTypeManageCustomAttributeTypesList.Instance;
-        public static readonly NeptunePageTypeLegal Legal = Neptune.EFModels.Entities.NeptunePageTypeLegal.Instance;
-        public static readonly NeptunePageTypeFundingSourcesList FundingSourcesList = Neptune.EFModels.Entities.NeptunePageTypeFundingSourcesList.Instance;
-        public static readonly NeptunePageTypeFindABMP FindABMP = Neptune.EFModels.Entities.NeptunePageTypeFindABMP.Instance;
-        public static readonly NeptunePageTypeLaunchPad LaunchPad = Neptune.EFModels.Entities.NeptunePageTypeLaunchPad.Instance;
-        public static readonly NeptunePageTypeFieldRecords FieldRecords = Neptune.EFModels.Entities.NeptunePageTypeFieldRecords.Instance;
-        public static readonly NeptunePageTypeRequestSupport RequestSupport = Neptune.EFModels.Entities.NeptunePageTypeRequestSupport.Instance;
-        public static readonly NeptunePageTypeInviteUser InviteUser = Neptune.EFModels.Entities.NeptunePageTypeInviteUser.Instance;
-        public static readonly NeptunePageTypeWaterQualityMaintenancePlan WaterQualityMaintenancePlan = Neptune.EFModels.Entities.NeptunePageTypeWaterQualityMaintenancePlan.Instance;
-        public static readonly NeptunePageTypeParcelList ParcelList = Neptune.EFModels.Entities.NeptunePageTypeParcelList.Instance;
-        public static readonly NeptunePageTypeTraining Training = Neptune.EFModels.Entities.NeptunePageTypeTraining.Instance;
-        public static readonly NeptunePageTypeManagerDashboard ManagerDashboard = Neptune.EFModels.Entities.NeptunePageTypeManagerDashboard.Instance;
-        public static readonly NeptunePageTypeWaterQualityMaintenancePlanOandMVerifications WaterQualityMaintenancePlanOandMVerifications = Neptune.EFModels.Entities.NeptunePageTypeWaterQualityMaintenancePlanOandMVerifications.Instance;
-        public static readonly NeptunePageTypeModelingHomePage ModelingHomePage = Neptune.EFModels.Entities.NeptunePageTypeModelingHomePage.Instance;
-        public static readonly NeptunePageTypeTrashHomePage TrashHomePage = Neptune.EFModels.Entities.NeptunePageTypeTrashHomePage.Instance;
-        public static readonly NeptunePageTypeOVTAInstructions OVTAInstructions = Neptune.EFModels.Entities.NeptunePageTypeOVTAInstructions.Instance;
-        public static readonly NeptunePageTypeOVTAIndex OVTAIndex = Neptune.EFModels.Entities.NeptunePageTypeOVTAIndex.Instance;
-        public static readonly NeptunePageTypeTrashModuleProgramOverview TrashModuleProgramOverview = Neptune.EFModels.Entities.NeptunePageTypeTrashModuleProgramOverview.Instance;
-        public static readonly NeptunePageTypeDelineationMap DelineationMap = Neptune.EFModels.Entities.NeptunePageTypeDelineationMap.Instance;
-        public static readonly NeptunePageTypeBulkUploadRequest BulkUploadRequest = Neptune.EFModels.Entities.NeptunePageTypeBulkUploadRequest.Instance;
-        public static readonly NeptunePageTypeTreatmentBMPAssessment TreatmentBMPAssessment = Neptune.EFModels.Entities.NeptunePageTypeTreatmentBMPAssessment.Instance;
-        public static readonly NeptunePageTypeEditOVTAArea EditOVTAArea = Neptune.EFModels.Entities.NeptunePageTypeEditOVTAArea.Instance;
-        public static readonly NeptunePageTypeLandUseBlock LandUseBlock = Neptune.EFModels.Entities.NeptunePageTypeLandUseBlock.Instance;
-        public static readonly NeptunePageTypeExportAssessmentGeospatialData ExportAssessmentGeospatialData = Neptune.EFModels.Entities.NeptunePageTypeExportAssessmentGeospatialData.Instance;
-        public static readonly NeptunePageTypeHRUCharacteristics HRUCharacteristics = Neptune.EFModels.Entities.NeptunePageTypeHRUCharacteristics.Instance;
-        public static readonly NeptunePageTypeRegionalSubbasins RegionalSubbasins = Neptune.EFModels.Entities.NeptunePageTypeRegionalSubbasins.Instance;
-        public static readonly NeptunePageTypeDelineationReconciliationReport DelineationReconciliationReport = Neptune.EFModels.Entities.NeptunePageTypeDelineationReconciliationReport.Instance;
-        public static readonly NeptunePageTypeViewTreatmentBMPModelingAttributes ViewTreatmentBMPModelingAttributes = Neptune.EFModels.Entities.NeptunePageTypeViewTreatmentBMPModelingAttributes.Instance;
-        public static readonly NeptunePageTypeUploadTreatmentBMPs UploadTreatmentBMPs = Neptune.EFModels.Entities.NeptunePageTypeUploadTreatmentBMPs.Instance;
-        public static readonly NeptunePageTypeAboutModelingBMPPerformance AboutModelingBMPPerformance = Neptune.EFModels.Entities.NeptunePageTypeAboutModelingBMPPerformance.Instance;
-        public static readonly NeptunePageTypeBulkUploadFieldVisits BulkUploadFieldVisits = Neptune.EFModels.Entities.NeptunePageTypeBulkUploadFieldVisits.Instance;
-        public static readonly NeptunePageTypeHippocampHomePage HippocampHomePage = Neptune.EFModels.Entities.NeptunePageTypeHippocampHomePage.Instance;
-        public static readonly NeptunePageTypeHippocampTraining HippocampTraining = Neptune.EFModels.Entities.NeptunePageTypeHippocampTraining.Instance;
-        public static readonly NeptunePageTypeHippocampLabelsAndDefinitionsList HippocampLabelsAndDefinitionsList = Neptune.EFModels.Entities.NeptunePageTypeHippocampLabelsAndDefinitionsList.Instance;
-        public static readonly NeptunePageTypeHippocampAbout HippocampAbout = Neptune.EFModels.Entities.NeptunePageTypeHippocampAbout.Instance;
-        public static readonly NeptunePageTypeHippocampProjectsList HippocampProjectsList = Neptune.EFModels.Entities.NeptunePageTypeHippocampProjectsList.Instance;
-        public static readonly NeptunePageTypeHippocampProjectInstructions HippocampProjectInstructions = Neptune.EFModels.Entities.NeptunePageTypeHippocampProjectInstructions.Instance;
-        public static readonly NeptunePageTypeHippocampProjectBasics HippocampProjectBasics = Neptune.EFModels.Entities.NeptunePageTypeHippocampProjectBasics.Instance;
-        public static readonly NeptunePageTypeHippocampProjectAttachments HippocampProjectAttachments = Neptune.EFModels.Entities.NeptunePageTypeHippocampProjectAttachments.Instance;
-        public static readonly NeptunePageTypeHippocampTreatmentBMPs HippocampTreatmentBMPs = Neptune.EFModels.Entities.NeptunePageTypeHippocampTreatmentBMPs.Instance;
-        public static readonly NeptunePageTypeHippocampDelineations HippocampDelineations = Neptune.EFModels.Entities.NeptunePageTypeHippocampDelineations.Instance;
-        public static readonly NeptunePageTypeHippocampModeledPerformance HippocampModeledPerformance = Neptune.EFModels.Entities.NeptunePageTypeHippocampModeledPerformance.Instance;
-        public static readonly NeptunePageTypeHippocampReview HippocampReview = Neptune.EFModels.Entities.NeptunePageTypeHippocampReview.Instance;
-        public static readonly NeptunePageTypeHippocampPlanningMap HippocampPlanningMap = Neptune.EFModels.Entities.NeptunePageTypeHippocampPlanningMap.Instance;
-        public static readonly NeptunePageTypeOCTAM2Tier2GrantProgramMetrics OCTAM2Tier2GrantProgramMetrics = Neptune.EFModels.Entities.NeptunePageTypeOCTAM2Tier2GrantProgramMetrics.Instance;
-        public static readonly NeptunePageTypeOCTAM2Tier2GrantProgramDashboard OCTAM2Tier2GrantProgramDashboard = Neptune.EFModels.Entities.NeptunePageTypeOCTAM2Tier2GrantProgramDashboard.Instance;
-        public static readonly NeptunePageTypeEditWQMPBoundary EditWQMPBoundary = Neptune.EFModels.Entities.NeptunePageTypeEditWQMPBoundary.Instance;
-        public static readonly NeptunePageTypeUploadWQMPs UploadWQMPs = Neptune.EFModels.Entities.NeptunePageTypeUploadWQMPs.Instance;
+        public static readonly NeptunePageTypeHomePage HomePage = NeptunePageTypeHomePage.Instance;
+        public static readonly NeptunePageTypeAbout About = NeptunePageTypeAbout.Instance;
+        public static readonly NeptunePageTypeOrganizationsList OrganizationsList = NeptunePageTypeOrganizationsList.Instance;
+        public static readonly NeptunePageTypeHomeMapInfo HomeMapInfo = NeptunePageTypeHomeMapInfo.Instance;
+        public static readonly NeptunePageTypeHomeAdditionalInfo HomeAdditionalInfo = NeptunePageTypeHomeAdditionalInfo.Instance;
+        public static readonly NeptunePageTypeTreatmentBMP TreatmentBMP = NeptunePageTypeTreatmentBMP.Instance;
+        public static readonly NeptunePageTypeTreatmentBMPType TreatmentBMPType = NeptunePageTypeTreatmentBMPType.Instance;
+        public static readonly NeptunePageTypeJurisdiction Jurisdiction = NeptunePageTypeJurisdiction.Instance;
+        public static readonly NeptunePageTypeAssessment Assessment = NeptunePageTypeAssessment.Instance;
+        public static readonly NeptunePageTypeManageObservationTypesList ManageObservationTypesList = NeptunePageTypeManageObservationTypesList.Instance;
+        public static readonly NeptunePageTypeManageTreatmentBMPTypesList ManageTreatmentBMPTypesList = NeptunePageTypeManageTreatmentBMPTypesList.Instance;
+        public static readonly NeptunePageTypeManageObservationTypeInstructions ManageObservationTypeInstructions = NeptunePageTypeManageObservationTypeInstructions.Instance;
+        public static readonly NeptunePageTypeManageObservationTypeObservationInstructions ManageObservationTypeObservationInstructions = NeptunePageTypeManageObservationTypeObservationInstructions.Instance;
+        public static readonly NeptunePageTypeManageObservationTypeLabelsAndUnitsInstructions ManageObservationTypeLabelsAndUnitsInstructions = NeptunePageTypeManageObservationTypeLabelsAndUnitsInstructions.Instance;
+        public static readonly NeptunePageTypeManageTreatmentBMPTypeInstructions ManageTreatmentBMPTypeInstructions = NeptunePageTypeManageTreatmentBMPTypeInstructions.Instance;
+        public static readonly NeptunePageTypeManageCustomAttributeTypeInstructions ManageCustomAttributeTypeInstructions = NeptunePageTypeManageCustomAttributeTypeInstructions.Instance;
+        public static readonly NeptunePageTypeManageCustomAttributeInstructions ManageCustomAttributeInstructions = NeptunePageTypeManageCustomAttributeInstructions.Instance;
+        public static readonly NeptunePageTypeManageCustomAttributeTypesList ManageCustomAttributeTypesList = NeptunePageTypeManageCustomAttributeTypesList.Instance;
+        public static readonly NeptunePageTypeLegal Legal = NeptunePageTypeLegal.Instance;
+        public static readonly NeptunePageTypeFundingSourcesList FundingSourcesList = NeptunePageTypeFundingSourcesList.Instance;
+        public static readonly NeptunePageTypeFindABMP FindABMP = NeptunePageTypeFindABMP.Instance;
+        public static readonly NeptunePageTypeLaunchPad LaunchPad = NeptunePageTypeLaunchPad.Instance;
+        public static readonly NeptunePageTypeFieldRecords FieldRecords = NeptunePageTypeFieldRecords.Instance;
+        public static readonly NeptunePageTypeRequestSupport RequestSupport = NeptunePageTypeRequestSupport.Instance;
+        public static readonly NeptunePageTypeInviteUser InviteUser = NeptunePageTypeInviteUser.Instance;
+        public static readonly NeptunePageTypeWaterQualityMaintenancePlan WaterQualityMaintenancePlan = NeptunePageTypeWaterQualityMaintenancePlan.Instance;
+        public static readonly NeptunePageTypeParcelList ParcelList = NeptunePageTypeParcelList.Instance;
+        public static readonly NeptunePageTypeTraining Training = NeptunePageTypeTraining.Instance;
+        public static readonly NeptunePageTypeManagerDashboard ManagerDashboard = NeptunePageTypeManagerDashboard.Instance;
+        public static readonly NeptunePageTypeWaterQualityMaintenancePlanOandMVerifications WaterQualityMaintenancePlanOandMVerifications = NeptunePageTypeWaterQualityMaintenancePlanOandMVerifications.Instance;
+        public static readonly NeptunePageTypeModelingHomePage ModelingHomePage = NeptunePageTypeModelingHomePage.Instance;
+        public static readonly NeptunePageTypeTrashHomePage TrashHomePage = NeptunePageTypeTrashHomePage.Instance;
+        public static readonly NeptunePageTypeOVTAInstructions OVTAInstructions = NeptunePageTypeOVTAInstructions.Instance;
+        public static readonly NeptunePageTypeOVTAIndex OVTAIndex = NeptunePageTypeOVTAIndex.Instance;
+        public static readonly NeptunePageTypeTrashModuleProgramOverview TrashModuleProgramOverview = NeptunePageTypeTrashModuleProgramOverview.Instance;
+        public static readonly NeptunePageTypeDelineationMap DelineationMap = NeptunePageTypeDelineationMap.Instance;
+        public static readonly NeptunePageTypeBulkUploadRequest BulkUploadRequest = NeptunePageTypeBulkUploadRequest.Instance;
+        public static readonly NeptunePageTypeTreatmentBMPAssessment TreatmentBMPAssessment = NeptunePageTypeTreatmentBMPAssessment.Instance;
+        public static readonly NeptunePageTypeEditOVTAArea EditOVTAArea = NeptunePageTypeEditOVTAArea.Instance;
+        public static readonly NeptunePageTypeLandUseBlock LandUseBlock = NeptunePageTypeLandUseBlock.Instance;
+        public static readonly NeptunePageTypeExportAssessmentGeospatialData ExportAssessmentGeospatialData = NeptunePageTypeExportAssessmentGeospatialData.Instance;
+        public static readonly NeptunePageTypeHRUCharacteristics HRUCharacteristics = NeptunePageTypeHRUCharacteristics.Instance;
+        public static readonly NeptunePageTypeRegionalSubbasins RegionalSubbasins = NeptunePageTypeRegionalSubbasins.Instance;
+        public static readonly NeptunePageTypeDelineationReconciliationReport DelineationReconciliationReport = NeptunePageTypeDelineationReconciliationReport.Instance;
+        public static readonly NeptunePageTypeViewTreatmentBMPModelingAttributes ViewTreatmentBMPModelingAttributes = NeptunePageTypeViewTreatmentBMPModelingAttributes.Instance;
+        public static readonly NeptunePageTypeUploadTreatmentBMPs UploadTreatmentBMPs = NeptunePageTypeUploadTreatmentBMPs.Instance;
+        public static readonly NeptunePageTypeAboutModelingBMPPerformance AboutModelingBMPPerformance = NeptunePageTypeAboutModelingBMPPerformance.Instance;
+        public static readonly NeptunePageTypeBulkUploadFieldVisits BulkUploadFieldVisits = NeptunePageTypeBulkUploadFieldVisits.Instance;
+        public static readonly NeptunePageTypeHippocampHomePage HippocampHomePage = NeptunePageTypeHippocampHomePage.Instance;
+        public static readonly NeptunePageTypeHippocampTraining HippocampTraining = NeptunePageTypeHippocampTraining.Instance;
+        public static readonly NeptunePageTypeHippocampLabelsAndDefinitionsList HippocampLabelsAndDefinitionsList = NeptunePageTypeHippocampLabelsAndDefinitionsList.Instance;
+        public static readonly NeptunePageTypeHippocampAbout HippocampAbout = NeptunePageTypeHippocampAbout.Instance;
+        public static readonly NeptunePageTypeHippocampProjectsList HippocampProjectsList = NeptunePageTypeHippocampProjectsList.Instance;
+        public static readonly NeptunePageTypeHippocampProjectInstructions HippocampProjectInstructions = NeptunePageTypeHippocampProjectInstructions.Instance;
+        public static readonly NeptunePageTypeHippocampProjectBasics HippocampProjectBasics = NeptunePageTypeHippocampProjectBasics.Instance;
+        public static readonly NeptunePageTypeHippocampProjectAttachments HippocampProjectAttachments = NeptunePageTypeHippocampProjectAttachments.Instance;
+        public static readonly NeptunePageTypeHippocampTreatmentBMPs HippocampTreatmentBMPs = NeptunePageTypeHippocampTreatmentBMPs.Instance;
+        public static readonly NeptunePageTypeHippocampDelineations HippocampDelineations = NeptunePageTypeHippocampDelineations.Instance;
+        public static readonly NeptunePageTypeHippocampModeledPerformance HippocampModeledPerformance = NeptunePageTypeHippocampModeledPerformance.Instance;
+        public static readonly NeptunePageTypeHippocampReview HippocampReview = NeptunePageTypeHippocampReview.Instance;
+        public static readonly NeptunePageTypeHippocampPlanningMap HippocampPlanningMap = NeptunePageTypeHippocampPlanningMap.Instance;
+        public static readonly NeptunePageTypeOCTAM2Tier2GrantProgramMetrics OCTAM2Tier2GrantProgramMetrics = NeptunePageTypeOCTAM2Tier2GrantProgramMetrics.Instance;
+        public static readonly NeptunePageTypeOCTAM2Tier2GrantProgramDashboard OCTAM2Tier2GrantProgramDashboard = NeptunePageTypeOCTAM2Tier2GrantProgramDashboard.Instance;
+        public static readonly NeptunePageTypeEditWQMPBoundary EditWQMPBoundary = NeptunePageTypeEditWQMPBoundary.Instance;
+        public static readonly NeptunePageTypeUploadWQMPs UploadWQMPs = NeptunePageTypeUploadWQMPs.Instance;
 
         public static readonly List<NeptunePageType> All;
-        public static readonly List<NeptunePageTypeDto> AllAsDto;
+        public static readonly List<NeptunePageTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, NeptunePageTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, NeptunePageTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -92,9 +89,9 @@ namespace Neptune.EFModels.Entities
         static NeptunePageType()
         {
             All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics, RegionalSubbasins, DelineationReconciliationReport, ViewTreatmentBMPModelingAttributes, UploadTreatmentBMPs, AboutModelingBMPPerformance, BulkUploadFieldVisits, HippocampHomePage, HippocampTraining, HippocampLabelsAndDefinitionsList, HippocampAbout, HippocampProjectsList, HippocampProjectInstructions, HippocampProjectBasics, HippocampProjectAttachments, HippocampTreatmentBMPs, HippocampDelineations, HippocampModeledPerformance, HippocampReview, HippocampPlanningMap, OCTAM2Tier2GrantProgramMetrics, OCTAM2Tier2GrantProgramDashboard, EditWQMPBoundary, UploadWQMPs };
-            AllAsDto = new List<NeptunePageTypeDto> { HomePage.AsDto(), About.AsDto(), OrganizationsList.AsDto(), HomeMapInfo.AsDto(), HomeAdditionalInfo.AsDto(), TreatmentBMP.AsDto(), TreatmentBMPType.AsDto(), Jurisdiction.AsDto(), Assessment.AsDto(), ManageObservationTypesList.AsDto(), ManageTreatmentBMPTypesList.AsDto(), ManageObservationTypeInstructions.AsDto(), ManageObservationTypeObservationInstructions.AsDto(), ManageObservationTypeLabelsAndUnitsInstructions.AsDto(), ManageTreatmentBMPTypeInstructions.AsDto(), ManageCustomAttributeTypeInstructions.AsDto(), ManageCustomAttributeInstructions.AsDto(), ManageCustomAttributeTypesList.AsDto(), Legal.AsDto(), FundingSourcesList.AsDto(), FindABMP.AsDto(), LaunchPad.AsDto(), FieldRecords.AsDto(), RequestSupport.AsDto(), InviteUser.AsDto(), WaterQualityMaintenancePlan.AsDto(), ParcelList.AsDto(), Training.AsDto(), ManagerDashboard.AsDto(), WaterQualityMaintenancePlanOandMVerifications.AsDto(), ModelingHomePage.AsDto(), TrashHomePage.AsDto(), OVTAInstructions.AsDto(), OVTAIndex.AsDto(), TrashModuleProgramOverview.AsDto(), DelineationMap.AsDto(), BulkUploadRequest.AsDto(), TreatmentBMPAssessment.AsDto(), EditOVTAArea.AsDto(), LandUseBlock.AsDto(), ExportAssessmentGeospatialData.AsDto(), HRUCharacteristics.AsDto(), RegionalSubbasins.AsDto(), DelineationReconciliationReport.AsDto(), ViewTreatmentBMPModelingAttributes.AsDto(), UploadTreatmentBMPs.AsDto(), AboutModelingBMPPerformance.AsDto(), BulkUploadFieldVisits.AsDto(), HippocampHomePage.AsDto(), HippocampTraining.AsDto(), HippocampLabelsAndDefinitionsList.AsDto(), HippocampAbout.AsDto(), HippocampProjectsList.AsDto(), HippocampProjectInstructions.AsDto(), HippocampProjectBasics.AsDto(), HippocampProjectAttachments.AsDto(), HippocampTreatmentBMPs.AsDto(), HippocampDelineations.AsDto(), HippocampModeledPerformance.AsDto(), HippocampReview.AsDto(), HippocampPlanningMap.AsDto(), OCTAM2Tier2GrantProgramMetrics.AsDto(), OCTAM2Tier2GrantProgramDashboard.AsDto(), EditWQMPBoundary.AsDto(), UploadWQMPs.AsDto() };
+            AllAsSimpleDto = new List<NeptunePageTypeSimpleDto> { HomePage.AsSimpleDto(), About.AsSimpleDto(), OrganizationsList.AsSimpleDto(), HomeMapInfo.AsSimpleDto(), HomeAdditionalInfo.AsSimpleDto(), TreatmentBMP.AsSimpleDto(), TreatmentBMPType.AsSimpleDto(), Jurisdiction.AsSimpleDto(), Assessment.AsSimpleDto(), ManageObservationTypesList.AsSimpleDto(), ManageTreatmentBMPTypesList.AsSimpleDto(), ManageObservationTypeInstructions.AsSimpleDto(), ManageObservationTypeObservationInstructions.AsSimpleDto(), ManageObservationTypeLabelsAndUnitsInstructions.AsSimpleDto(), ManageTreatmentBMPTypeInstructions.AsSimpleDto(), ManageCustomAttributeTypeInstructions.AsSimpleDto(), ManageCustomAttributeInstructions.AsSimpleDto(), ManageCustomAttributeTypesList.AsSimpleDto(), Legal.AsSimpleDto(), FundingSourcesList.AsSimpleDto(), FindABMP.AsSimpleDto(), LaunchPad.AsSimpleDto(), FieldRecords.AsSimpleDto(), RequestSupport.AsSimpleDto(), InviteUser.AsSimpleDto(), WaterQualityMaintenancePlan.AsSimpleDto(), ParcelList.AsSimpleDto(), Training.AsSimpleDto(), ManagerDashboard.AsSimpleDto(), WaterQualityMaintenancePlanOandMVerifications.AsSimpleDto(), ModelingHomePage.AsSimpleDto(), TrashHomePage.AsSimpleDto(), OVTAInstructions.AsSimpleDto(), OVTAIndex.AsSimpleDto(), TrashModuleProgramOverview.AsSimpleDto(), DelineationMap.AsSimpleDto(), BulkUploadRequest.AsSimpleDto(), TreatmentBMPAssessment.AsSimpleDto(), EditOVTAArea.AsSimpleDto(), LandUseBlock.AsSimpleDto(), ExportAssessmentGeospatialData.AsSimpleDto(), HRUCharacteristics.AsSimpleDto(), RegionalSubbasins.AsSimpleDto(), DelineationReconciliationReport.AsSimpleDto(), ViewTreatmentBMPModelingAttributes.AsSimpleDto(), UploadTreatmentBMPs.AsSimpleDto(), AboutModelingBMPPerformance.AsSimpleDto(), BulkUploadFieldVisits.AsSimpleDto(), HippocampHomePage.AsSimpleDto(), HippocampTraining.AsSimpleDto(), HippocampLabelsAndDefinitionsList.AsSimpleDto(), HippocampAbout.AsSimpleDto(), HippocampProjectsList.AsSimpleDto(), HippocampProjectInstructions.AsSimpleDto(), HippocampProjectBasics.AsSimpleDto(), HippocampProjectAttachments.AsSimpleDto(), HippocampTreatmentBMPs.AsSimpleDto(), HippocampDelineations.AsSimpleDto(), HippocampModeledPerformance.AsSimpleDto(), HippocampReview.AsSimpleDto(), HippocampPlanningMap.AsSimpleDto(), OCTAM2Tier2GrantProgramMetrics.AsSimpleDto(), OCTAM2Tier2GrantProgramDashboard.AsSimpleDto(), EditWQMPBoundary.AsSimpleDto(), UploadWQMPs.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, NeptunePageTypeDto>(AllAsDto.ToDictionary(x => x.NeptunePageTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, NeptunePageTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.NeptunePageTypeID));
         }
 
         /// <summary>

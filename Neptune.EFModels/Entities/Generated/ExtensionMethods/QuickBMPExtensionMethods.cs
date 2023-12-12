@@ -9,25 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class QuickBMPExtensionMethods
     {
-        public static QuickBMPDto AsDto(this QuickBMP quickBMP)
-        {
-            var quickBMPDto = new QuickBMPDto()
-            {
-                QuickBMPID = quickBMP.QuickBMPID,
-                WaterQualityManagementPlan = quickBMP.WaterQualityManagementPlan.AsDto(),
-                TreatmentBMPType = quickBMP.TreatmentBMPType.AsDto(),
-                QuickBMPName = quickBMP.QuickBMPName,
-                QuickBMPNote = quickBMP.QuickBMPNote,
-                PercentOfSiteTreated = quickBMP.PercentOfSiteTreated,
-                PercentCaptured = quickBMP.PercentCaptured,
-                PercentRetained = quickBMP.PercentRetained,
-                DryWeatherFlowOverride = quickBMP.DryWeatherFlowOverride?.AsDto()
-            };
-            DoCustomMappings(quickBMP, quickBMPDto);
-            return quickBMPDto;
-        }
-
-        static partial void DoCustomMappings(QuickBMP quickBMP, QuickBMPDto quickBMPDto);
 
         public static QuickBMPSimpleDto AsSimpleDto(this QuickBMP quickBMP)
         {

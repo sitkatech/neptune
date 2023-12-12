@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[FundingEventType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,16 +12,16 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class FundingEventType : IHavePrimaryKey
     {
-        public static readonly FundingEventTypePlanningAndDesign PlanningAndDesign = Neptune.EFModels.Entities.FundingEventTypePlanningAndDesign.Instance;
-        public static readonly FundingEventTypeCapitalConstruction CapitalConstruction = Neptune.EFModels.Entities.FundingEventTypeCapitalConstruction.Instance;
-        public static readonly FundingEventTypeRoutineMaintenance RoutineMaintenance = Neptune.EFModels.Entities.FundingEventTypeRoutineMaintenance.Instance;
-        public static readonly FundingEventTypeRehabilitativeMaintenance RehabilitativeMaintenance = Neptune.EFModels.Entities.FundingEventTypeRehabilitativeMaintenance.Instance;
-        public static readonly FundingEventTypeRetrofit Retrofit = Neptune.EFModels.Entities.FundingEventTypeRetrofit.Instance;
+        public static readonly FundingEventTypePlanningAndDesign PlanningAndDesign = FundingEventTypePlanningAndDesign.Instance;
+        public static readonly FundingEventTypeCapitalConstruction CapitalConstruction = FundingEventTypeCapitalConstruction.Instance;
+        public static readonly FundingEventTypeRoutineMaintenance RoutineMaintenance = FundingEventTypeRoutineMaintenance.Instance;
+        public static readonly FundingEventTypeRehabilitativeMaintenance RehabilitativeMaintenance = FundingEventTypeRehabilitativeMaintenance.Instance;
+        public static readonly FundingEventTypeRetrofit Retrofit = FundingEventTypeRetrofit.Instance;
 
         public static readonly List<FundingEventType> All;
-        public static readonly List<FundingEventTypeDto> AllAsDto;
+        public static readonly List<FundingEventTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, FundingEventType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, FundingEventTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, FundingEventTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -32,9 +29,9 @@ namespace Neptune.EFModels.Entities
         static FundingEventType()
         {
             All = new List<FundingEventType> { PlanningAndDesign, CapitalConstruction, RoutineMaintenance, RehabilitativeMaintenance, Retrofit };
-            AllAsDto = new List<FundingEventTypeDto> { PlanningAndDesign.AsDto(), CapitalConstruction.AsDto(), RoutineMaintenance.AsDto(), RehabilitativeMaintenance.AsDto(), Retrofit.AsDto() };
+            AllAsSimpleDto = new List<FundingEventTypeSimpleDto> { PlanningAndDesign.AsSimpleDto(), CapitalConstruction.AsSimpleDto(), RoutineMaintenance.AsSimpleDto(), RehabilitativeMaintenance.AsSimpleDto(), Retrofit.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, FundingEventType>(All.ToDictionary(x => x.FundingEventTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, FundingEventTypeDto>(AllAsDto.ToDictionary(x => x.FundingEventTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, FundingEventTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.FundingEventTypeID));
         }
 
         /// <summary>

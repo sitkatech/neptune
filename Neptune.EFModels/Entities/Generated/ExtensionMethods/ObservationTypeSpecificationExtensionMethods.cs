@@ -9,22 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ObservationTypeSpecificationExtensionMethods
     {
-        public static ObservationTypeSpecificationDto AsDto(this ObservationTypeSpecification observationTypeSpecification)
-        {
-            var observationTypeSpecificationDto = new ObservationTypeSpecificationDto()
-            {
-                ObservationTypeSpecificationID = observationTypeSpecification.ObservationTypeSpecificationID,
-                ObservationTypeSpecificationName = observationTypeSpecification.ObservationTypeSpecificationName,
-                ObservationTypeSpecificationDisplayName = observationTypeSpecification.ObservationTypeSpecificationDisplayName,
-                ObservationTypeCollectionMethod = observationTypeSpecification.ObservationTypeCollectionMethod.AsDto(),
-                ObservationTargetType = observationTypeSpecification.ObservationTargetType.AsDto(),
-                ObservationThresholdType = observationTypeSpecification.ObservationThresholdType.AsDto()
-            };
-            DoCustomMappings(observationTypeSpecification, observationTypeSpecificationDto);
-            return observationTypeSpecificationDto;
-        }
-
-        static partial void DoCustomMappings(ObservationTypeSpecification observationTypeSpecification, ObservationTypeSpecificationDto observationTypeSpecificationDto);
 
         public static ObservationTypeSpecificationSimpleDto AsSimpleDto(this ObservationTypeSpecification observationTypeSpecification)
         {

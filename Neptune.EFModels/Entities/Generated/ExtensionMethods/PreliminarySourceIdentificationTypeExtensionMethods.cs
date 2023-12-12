@@ -9,20 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class PreliminarySourceIdentificationTypeExtensionMethods
     {
-        public static PreliminarySourceIdentificationTypeDto AsDto(this PreliminarySourceIdentificationType preliminarySourceIdentificationType)
-        {
-            var preliminarySourceIdentificationTypeDto = new PreliminarySourceIdentificationTypeDto()
-            {
-                PreliminarySourceIdentificationTypeID = preliminarySourceIdentificationType.PreliminarySourceIdentificationTypeID,
-                PreliminarySourceIdentificationTypeName = preliminarySourceIdentificationType.PreliminarySourceIdentificationTypeName,
-                PreliminarySourceIdentificationTypeDisplayName = preliminarySourceIdentificationType.PreliminarySourceIdentificationTypeDisplayName,
-                PreliminarySourceIdentificationCategory = preliminarySourceIdentificationType.PreliminarySourceIdentificationCategory.AsDto()
-            };
-            DoCustomMappings(preliminarySourceIdentificationType, preliminarySourceIdentificationTypeDto);
-            return preliminarySourceIdentificationTypeDto;
-        }
-
-        static partial void DoCustomMappings(PreliminarySourceIdentificationType preliminarySourceIdentificationType, PreliminarySourceIdentificationTypeDto preliminarySourceIdentificationTypeDto);
 
         public static PreliminarySourceIdentificationTypeSimpleDto AsSimpleDto(this PreliminarySourceIdentificationType preliminarySourceIdentificationType)
         {

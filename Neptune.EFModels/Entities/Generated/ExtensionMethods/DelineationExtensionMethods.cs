@@ -9,24 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class DelineationExtensionMethods
     {
-        public static DelineationDto AsDto(this Delineation delineation)
-        {
-            var delineationDto = new DelineationDto()
-            {
-                DelineationID = delineation.DelineationID,
-                DelineationType = delineation.DelineationType.AsDto(),
-                IsVerified = delineation.IsVerified,
-                DateLastVerified = delineation.DateLastVerified,
-                VerifiedByPerson = delineation.VerifiedByPerson?.AsDto(),
-                TreatmentBMP = delineation.TreatmentBMP.AsDto(),
-                DateLastModified = delineation.DateLastModified,
-                HasDiscrepancies = delineation.HasDiscrepancies
-            };
-            DoCustomMappings(delineation, delineationDto);
-            return delineationDto;
-        }
-
-        static partial void DoCustomMappings(Delineation delineation, DelineationDto delineationDto);
 
         public static DelineationSimpleDto AsSimpleDto(this Delineation delineation)
         {

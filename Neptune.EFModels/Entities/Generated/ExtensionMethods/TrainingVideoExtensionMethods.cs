@@ -9,20 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TrainingVideoExtensionMethods
     {
-        public static TrainingVideoDto AsDto(this TrainingVideo trainingVideo)
-        {
-            var trainingVideoDto = new TrainingVideoDto()
-            {
-                TrainingVideoID = trainingVideo.TrainingVideoID,
-                VideoName = trainingVideo.VideoName,
-                VideoDescription = trainingVideo.VideoDescription,
-                VideoURL = trainingVideo.VideoURL
-            };
-            DoCustomMappings(trainingVideo, trainingVideoDto);
-            return trainingVideoDto;
-        }
-
-        static partial void DoCustomMappings(TrainingVideo trainingVideo, TrainingVideoDto trainingVideoDto);
 
         public static TrainingVideoSimpleDto AsSimpleDto(this TrainingVideo trainingVideo)
         {

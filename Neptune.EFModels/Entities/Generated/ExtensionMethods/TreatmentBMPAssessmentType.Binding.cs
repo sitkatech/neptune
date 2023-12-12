@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[TreatmentBMPAssessmentType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,13 +12,13 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class TreatmentBMPAssessmentType : IHavePrimaryKey
     {
-        public static readonly TreatmentBMPAssessmentTypeInitial Initial = Neptune.EFModels.Entities.TreatmentBMPAssessmentTypeInitial.Instance;
-        public static readonly TreatmentBMPAssessmentTypePostMaintenance PostMaintenance = Neptune.EFModels.Entities.TreatmentBMPAssessmentTypePostMaintenance.Instance;
+        public static readonly TreatmentBMPAssessmentTypeInitial Initial = TreatmentBMPAssessmentTypeInitial.Instance;
+        public static readonly TreatmentBMPAssessmentTypePostMaintenance PostMaintenance = TreatmentBMPAssessmentTypePostMaintenance.Instance;
 
         public static readonly List<TreatmentBMPAssessmentType> All;
-        public static readonly List<TreatmentBMPAssessmentTypeDto> AllAsDto;
+        public static readonly List<TreatmentBMPAssessmentTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, TreatmentBMPAssessmentType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, TreatmentBMPAssessmentTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, TreatmentBMPAssessmentTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +26,9 @@ namespace Neptune.EFModels.Entities
         static TreatmentBMPAssessmentType()
         {
             All = new List<TreatmentBMPAssessmentType> { Initial, PostMaintenance };
-            AllAsDto = new List<TreatmentBMPAssessmentTypeDto> { Initial.AsDto(), PostMaintenance.AsDto() };
+            AllAsSimpleDto = new List<TreatmentBMPAssessmentTypeSimpleDto> { Initial.AsSimpleDto(), PostMaintenance.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPAssessmentType>(All.ToDictionary(x => x.TreatmentBMPAssessmentTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPAssessmentTypeDto>(AllAsDto.ToDictionary(x => x.TreatmentBMPAssessmentTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPAssessmentTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.TreatmentBMPAssessmentTypeID));
         }
 
         /// <summary>

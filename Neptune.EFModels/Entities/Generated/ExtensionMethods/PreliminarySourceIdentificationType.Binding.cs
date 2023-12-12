@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[PreliminarySourceIdentificationType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,27 +12,27 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class PreliminarySourceIdentificationType : IHavePrimaryKey
     {
-        public static readonly PreliminarySourceIdentificationTypeMovingVehicles MovingVehicles = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeMovingVehicles.Instance;
-        public static readonly PreliminarySourceIdentificationTypeParkedCars ParkedCars = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeParkedCars.Instance;
-        public static readonly PreliminarySourceIdentificationTypeUncoveredLoads UncoveredLoads = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeUncoveredLoads.Instance;
-        public static readonly PreliminarySourceIdentificationTypeVehiclesOther VehiclesOther = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeVehiclesOther.Instance;
-        public static readonly PreliminarySourceIdentificationTypeOverflowingReceptacles OverflowingReceptacles = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeOverflowingReceptacles.Instance;
-        public static readonly PreliminarySourceIdentificationTypeTrashDispersal TrashDispersal = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeTrashDispersal.Instance;
-        public static readonly PreliminarySourceIdentificationTypeInadequateWasteContainerManagementOther InadequateWasteContainerManagementOther = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeInadequateWasteContainerManagementOther.Instance;
-        public static readonly PreliminarySourceIdentificationTypeRestaurants Restaurants = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeRestaurants.Instance;
-        public static readonly PreliminarySourceIdentificationTypeConvenienceStores ConvenienceStores = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeConvenienceStores.Instance;
-        public static readonly PreliminarySourceIdentificationTypeLiquorStores LiquorStores = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeLiquorStores.Instance;
-        public static readonly PreliminarySourceIdentificationTypeBusStops BusStops = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeBusStops.Instance;
-        public static readonly PreliminarySourceIdentificationTypeSpecialEvents SpecialEvents = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeSpecialEvents.Instance;
-        public static readonly PreliminarySourceIdentificationTypePedestrianLitterOther PedestrianLitterOther = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypePedestrianLitterOther.Instance;
-        public static readonly PreliminarySourceIdentificationTypeIllegalDumpingOnLand IllegalDumpingOnLand = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeIllegalDumpingOnLand.Instance;
-        public static readonly PreliminarySourceIdentificationTypeHomelessencampments Homelessencampments = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeHomelessencampments.Instance;
-        public static readonly PreliminarySourceIdentificationTypeIllegalDumpingOther IllegalDumpingOther = Neptune.EFModels.Entities.PreliminarySourceIdentificationTypeIllegalDumpingOther.Instance;
+        public static readonly PreliminarySourceIdentificationTypeMovingVehicles MovingVehicles = PreliminarySourceIdentificationTypeMovingVehicles.Instance;
+        public static readonly PreliminarySourceIdentificationTypeParkedCars ParkedCars = PreliminarySourceIdentificationTypeParkedCars.Instance;
+        public static readonly PreliminarySourceIdentificationTypeUncoveredLoads UncoveredLoads = PreliminarySourceIdentificationTypeUncoveredLoads.Instance;
+        public static readonly PreliminarySourceIdentificationTypeVehiclesOther VehiclesOther = PreliminarySourceIdentificationTypeVehiclesOther.Instance;
+        public static readonly PreliminarySourceIdentificationTypeOverflowingReceptacles OverflowingReceptacles = PreliminarySourceIdentificationTypeOverflowingReceptacles.Instance;
+        public static readonly PreliminarySourceIdentificationTypeTrashDispersal TrashDispersal = PreliminarySourceIdentificationTypeTrashDispersal.Instance;
+        public static readonly PreliminarySourceIdentificationTypeInadequateWasteContainerManagementOther InadequateWasteContainerManagementOther = PreliminarySourceIdentificationTypeInadequateWasteContainerManagementOther.Instance;
+        public static readonly PreliminarySourceIdentificationTypeRestaurants Restaurants = PreliminarySourceIdentificationTypeRestaurants.Instance;
+        public static readonly PreliminarySourceIdentificationTypeConvenienceStores ConvenienceStores = PreliminarySourceIdentificationTypeConvenienceStores.Instance;
+        public static readonly PreliminarySourceIdentificationTypeLiquorStores LiquorStores = PreliminarySourceIdentificationTypeLiquorStores.Instance;
+        public static readonly PreliminarySourceIdentificationTypeBusStops BusStops = PreliminarySourceIdentificationTypeBusStops.Instance;
+        public static readonly PreliminarySourceIdentificationTypeSpecialEvents SpecialEvents = PreliminarySourceIdentificationTypeSpecialEvents.Instance;
+        public static readonly PreliminarySourceIdentificationTypePedestrianLitterOther PedestrianLitterOther = PreliminarySourceIdentificationTypePedestrianLitterOther.Instance;
+        public static readonly PreliminarySourceIdentificationTypeIllegalDumpingOnLand IllegalDumpingOnLand = PreliminarySourceIdentificationTypeIllegalDumpingOnLand.Instance;
+        public static readonly PreliminarySourceIdentificationTypeHomelessencampments Homelessencampments = PreliminarySourceIdentificationTypeHomelessencampments.Instance;
+        public static readonly PreliminarySourceIdentificationTypeIllegalDumpingOther IllegalDumpingOther = PreliminarySourceIdentificationTypeIllegalDumpingOther.Instance;
 
         public static readonly List<PreliminarySourceIdentificationType> All;
-        public static readonly List<PreliminarySourceIdentificationTypeDto> AllAsDto;
+        public static readonly List<PreliminarySourceIdentificationTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, PreliminarySourceIdentificationType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, PreliminarySourceIdentificationTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, PreliminarySourceIdentificationTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -43,9 +40,9 @@ namespace Neptune.EFModels.Entities
         static PreliminarySourceIdentificationType()
         {
             All = new List<PreliminarySourceIdentificationType> { MovingVehicles, ParkedCars, UncoveredLoads, VehiclesOther, OverflowingReceptacles, TrashDispersal, InadequateWasteContainerManagementOther, Restaurants, ConvenienceStores, LiquorStores, BusStops, SpecialEvents, PedestrianLitterOther, IllegalDumpingOnLand, Homelessencampments, IllegalDumpingOther };
-            AllAsDto = new List<PreliminarySourceIdentificationTypeDto> { MovingVehicles.AsDto(), ParkedCars.AsDto(), UncoveredLoads.AsDto(), VehiclesOther.AsDto(), OverflowingReceptacles.AsDto(), TrashDispersal.AsDto(), InadequateWasteContainerManagementOther.AsDto(), Restaurants.AsDto(), ConvenienceStores.AsDto(), LiquorStores.AsDto(), BusStops.AsDto(), SpecialEvents.AsDto(), PedestrianLitterOther.AsDto(), IllegalDumpingOnLand.AsDto(), Homelessencampments.AsDto(), IllegalDumpingOther.AsDto() };
+            AllAsSimpleDto = new List<PreliminarySourceIdentificationTypeSimpleDto> { MovingVehicles.AsSimpleDto(), ParkedCars.AsSimpleDto(), UncoveredLoads.AsSimpleDto(), VehiclesOther.AsSimpleDto(), OverflowingReceptacles.AsSimpleDto(), TrashDispersal.AsSimpleDto(), InadequateWasteContainerManagementOther.AsSimpleDto(), Restaurants.AsSimpleDto(), ConvenienceStores.AsSimpleDto(), LiquorStores.AsSimpleDto(), BusStops.AsSimpleDto(), SpecialEvents.AsSimpleDto(), PedestrianLitterOther.AsSimpleDto(), IllegalDumpingOnLand.AsSimpleDto(), Homelessencampments.AsSimpleDto(), IllegalDumpingOther.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, PreliminarySourceIdentificationType>(All.ToDictionary(x => x.PreliminarySourceIdentificationTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, PreliminarySourceIdentificationTypeDto>(AllAsDto.ToDictionary(x => x.PreliminarySourceIdentificationTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, PreliminarySourceIdentificationTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.PreliminarySourceIdentificationTypeID));
         }
 
         /// <summary>

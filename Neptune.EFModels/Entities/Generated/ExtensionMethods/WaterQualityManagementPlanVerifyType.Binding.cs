@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[WaterQualityManagementPlanVerifyType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,13 +12,13 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class WaterQualityManagementPlanVerifyType : IHavePrimaryKey
     {
-        public static readonly WaterQualityManagementPlanVerifyTypeJurisdictionPerformed JurisdictionPerformed = Neptune.EFModels.Entities.WaterQualityManagementPlanVerifyTypeJurisdictionPerformed.Instance;
-        public static readonly WaterQualityManagementPlanVerifyTypeSelfCertification SelfCertification = Neptune.EFModels.Entities.WaterQualityManagementPlanVerifyTypeSelfCertification.Instance;
+        public static readonly WaterQualityManagementPlanVerifyTypeJurisdictionPerformed JurisdictionPerformed = WaterQualityManagementPlanVerifyTypeJurisdictionPerformed.Instance;
+        public static readonly WaterQualityManagementPlanVerifyTypeSelfCertification SelfCertification = WaterQualityManagementPlanVerifyTypeSelfCertification.Instance;
 
         public static readonly List<WaterQualityManagementPlanVerifyType> All;
-        public static readonly List<WaterQualityManagementPlanVerifyTypeDto> AllAsDto;
+        public static readonly List<WaterQualityManagementPlanVerifyTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanVerifyType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanVerifyTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanVerifyTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +26,9 @@ namespace Neptune.EFModels.Entities
         static WaterQualityManagementPlanVerifyType()
         {
             All = new List<WaterQualityManagementPlanVerifyType> { JurisdictionPerformed, SelfCertification };
-            AllAsDto = new List<WaterQualityManagementPlanVerifyTypeDto> { JurisdictionPerformed.AsDto(), SelfCertification.AsDto() };
+            AllAsSimpleDto = new List<WaterQualityManagementPlanVerifyTypeSimpleDto> { JurisdictionPerformed.AsSimpleDto(), SelfCertification.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanVerifyType>(All.ToDictionary(x => x.WaterQualityManagementPlanVerifyTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanVerifyTypeDto>(AllAsDto.ToDictionary(x => x.WaterQualityManagementPlanVerifyTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanVerifyTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.WaterQualityManagementPlanVerifyTypeID));
         }
 
         /// <summary>

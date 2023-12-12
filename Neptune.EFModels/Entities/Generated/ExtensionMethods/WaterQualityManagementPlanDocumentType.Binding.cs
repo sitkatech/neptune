@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[WaterQualityManagementPlanDocumentType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,15 +12,15 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class WaterQualityManagementPlanDocumentType : IHavePrimaryKey
     {
-        public static readonly WaterQualityManagementPlanDocumentTypeFinalWQMP FinalWQMP = Neptune.EFModels.Entities.WaterQualityManagementPlanDocumentTypeFinalWQMP.Instance;
-        public static readonly WaterQualityManagementPlanDocumentTypeAsBuiltDrawings AsBuiltDrawings = Neptune.EFModels.Entities.WaterQualityManagementPlanDocumentTypeAsBuiltDrawings.Instance;
-        public static readonly WaterQualityManagementPlanDocumentTypeOMPlan OMPlan = Neptune.EFModels.Entities.WaterQualityManagementPlanDocumentTypeOMPlan.Instance;
-        public static readonly WaterQualityManagementPlanDocumentTypeOther Other = Neptune.EFModels.Entities.WaterQualityManagementPlanDocumentTypeOther.Instance;
+        public static readonly WaterQualityManagementPlanDocumentTypeFinalWQMP FinalWQMP = WaterQualityManagementPlanDocumentTypeFinalWQMP.Instance;
+        public static readonly WaterQualityManagementPlanDocumentTypeAsBuiltDrawings AsBuiltDrawings = WaterQualityManagementPlanDocumentTypeAsBuiltDrawings.Instance;
+        public static readonly WaterQualityManagementPlanDocumentTypeOMPlan OMPlan = WaterQualityManagementPlanDocumentTypeOMPlan.Instance;
+        public static readonly WaterQualityManagementPlanDocumentTypeOther Other = WaterQualityManagementPlanDocumentTypeOther.Instance;
 
         public static readonly List<WaterQualityManagementPlanDocumentType> All;
-        public static readonly List<WaterQualityManagementPlanDocumentTypeDto> AllAsDto;
+        public static readonly List<WaterQualityManagementPlanDocumentTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanDocumentType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanDocumentTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanDocumentTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -31,9 +28,9 @@ namespace Neptune.EFModels.Entities
         static WaterQualityManagementPlanDocumentType()
         {
             All = new List<WaterQualityManagementPlanDocumentType> { FinalWQMP, AsBuiltDrawings, OMPlan, Other };
-            AllAsDto = new List<WaterQualityManagementPlanDocumentTypeDto> { FinalWQMP.AsDto(), AsBuiltDrawings.AsDto(), OMPlan.AsDto(), Other.AsDto() };
+            AllAsSimpleDto = new List<WaterQualityManagementPlanDocumentTypeSimpleDto> { FinalWQMP.AsSimpleDto(), AsBuiltDrawings.AsSimpleDto(), OMPlan.AsSimpleDto(), Other.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanDocumentType>(All.ToDictionary(x => x.WaterQualityManagementPlanDocumentTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanDocumentTypeDto>(AllAsDto.ToDictionary(x => x.WaterQualityManagementPlanDocumentTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanDocumentTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.WaterQualityManagementPlanDocumentTypeID));
         }
 
         /// <summary>

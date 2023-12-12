@@ -9,28 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class WaterQualityManagementPlanVerifyExtensionMethods
     {
-        public static WaterQualityManagementPlanVerifyDto AsDto(this WaterQualityManagementPlanVerify waterQualityManagementPlanVerify)
-        {
-            var waterQualityManagementPlanVerifyDto = new WaterQualityManagementPlanVerifyDto()
-            {
-                WaterQualityManagementPlanVerifyID = waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID,
-                WaterQualityManagementPlan = waterQualityManagementPlanVerify.WaterQualityManagementPlan.AsDto(),
-                WaterQualityManagementPlanVerifyType = waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType.AsDto(),
-                WaterQualityManagementPlanVisitStatus = waterQualityManagementPlanVerify.WaterQualityManagementPlanVisitStatus.AsDto(),
-                FileResource = waterQualityManagementPlanVerify.FileResource?.AsDto(),
-                WaterQualityManagementPlanVerifyStatus = waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus?.AsDto(),
-                LastEditedByPerson = waterQualityManagementPlanVerify.LastEditedByPerson.AsDto(),
-                SourceControlCondition = waterQualityManagementPlanVerify.SourceControlCondition,
-                EnforcementOrFollowupActions = waterQualityManagementPlanVerify.EnforcementOrFollowupActions,
-                LastEditedDate = waterQualityManagementPlanVerify.LastEditedDate,
-                IsDraft = waterQualityManagementPlanVerify.IsDraft,
-                VerificationDate = waterQualityManagementPlanVerify.VerificationDate
-            };
-            DoCustomMappings(waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyDto);
-            return waterQualityManagementPlanVerifyDto;
-        }
-
-        static partial void DoCustomMappings(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, WaterQualityManagementPlanVerifyDto waterQualityManagementPlanVerifyDto);
 
         public static WaterQualityManagementPlanVerifySimpleDto AsSimpleDto(this WaterQualityManagementPlanVerify waterQualityManagementPlanVerify)
         {

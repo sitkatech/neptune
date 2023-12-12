@@ -9,19 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class HydromodificationAppliesTypeExtensionMethods
     {
-        public static HydromodificationAppliesTypeDto AsDto(this HydromodificationAppliesType hydromodificationAppliesType)
-        {
-            var hydromodificationAppliesTypeDto = new HydromodificationAppliesTypeDto()
-            {
-                HydromodificationAppliesTypeID = hydromodificationAppliesType.HydromodificationAppliesTypeID,
-                HydromodificationAppliesTypeName = hydromodificationAppliesType.HydromodificationAppliesTypeName,
-                HydromodificationAppliesTypeDisplayName = hydromodificationAppliesType.HydromodificationAppliesTypeDisplayName
-            };
-            DoCustomMappings(hydromodificationAppliesType, hydromodificationAppliesTypeDto);
-            return hydromodificationAppliesTypeDto;
-        }
-
-        static partial void DoCustomMappings(HydromodificationAppliesType hydromodificationAppliesType, HydromodificationAppliesTypeDto hydromodificationAppliesTypeDto);
 
         public static HydromodificationAppliesTypeSimpleDto AsSimpleDto(this HydromodificationAppliesType hydromodificationAppliesType)
         {

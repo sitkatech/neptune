@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[RoutingConfiguration]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,13 +12,13 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class RoutingConfiguration : IHavePrimaryKey
     {
-        public static readonly RoutingConfigurationOnline Online = Neptune.EFModels.Entities.RoutingConfigurationOnline.Instance;
-        public static readonly RoutingConfigurationOffline Offline = Neptune.EFModels.Entities.RoutingConfigurationOffline.Instance;
+        public static readonly RoutingConfigurationOnline Online = RoutingConfigurationOnline.Instance;
+        public static readonly RoutingConfigurationOffline Offline = RoutingConfigurationOffline.Instance;
 
         public static readonly List<RoutingConfiguration> All;
-        public static readonly List<RoutingConfigurationDto> AllAsDto;
+        public static readonly List<RoutingConfigurationSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, RoutingConfiguration> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, RoutingConfigurationDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, RoutingConfigurationSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +26,9 @@ namespace Neptune.EFModels.Entities
         static RoutingConfiguration()
         {
             All = new List<RoutingConfiguration> { Online, Offline };
-            AllAsDto = new List<RoutingConfigurationDto> { Online.AsDto(), Offline.AsDto() };
+            AllAsSimpleDto = new List<RoutingConfigurationSimpleDto> { Online.AsSimpleDto(), Offline.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, RoutingConfiguration>(All.ToDictionary(x => x.RoutingConfigurationID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, RoutingConfigurationDto>(AllAsDto.ToDictionary(x => x.RoutingConfigurationID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, RoutingConfigurationSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.RoutingConfigurationID));
         }
 
         /// <summary>

@@ -9,22 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class OVTASectionExtensionMethods
     {
-        public static OVTASectionDto AsDto(this OVTASection oVTASection)
-        {
-            var oVTASectionDto = new OVTASectionDto()
-            {
-                OVTASectionID = oVTASection.OVTASectionID,
-                OVTASectionName = oVTASection.OVTASectionName,
-                OVTASectionDisplayName = oVTASection.OVTASectionDisplayName,
-                SectionHeader = oVTASection.SectionHeader,
-                SortOrder = oVTASection.SortOrder,
-                HasCompletionStatus = oVTASection.HasCompletionStatus
-            };
-            DoCustomMappings(oVTASection, oVTASectionDto);
-            return oVTASectionDto;
-        }
-
-        static partial void DoCustomMappings(OVTASection oVTASection, OVTASectionDto oVTASectionDto);
 
         public static OVTASectionSimpleDto AsSimpleDto(this OVTASection oVTASection)
         {

@@ -9,31 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class OnlandVisualTrashAssessmentExtensionMethods
     {
-        public static OnlandVisualTrashAssessmentDto AsDto(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
-        {
-            var onlandVisualTrashAssessmentDto = new OnlandVisualTrashAssessmentDto()
-            {
-                OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
-                CreatedByPerson = onlandVisualTrashAssessment.CreatedByPerson.AsDto(),
-                CreatedDate = onlandVisualTrashAssessment.CreatedDate,
-                OnlandVisualTrashAssessmentArea = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.AsDto(),
-                Notes = onlandVisualTrashAssessment.Notes,
-                StormwaterJurisdiction = onlandVisualTrashAssessment.StormwaterJurisdiction.AsDto(),
-                AssessingNewArea = onlandVisualTrashAssessment.AssessingNewArea,
-                OnlandVisualTrashAssessmentStatus = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus.AsDto(),
-                IsDraftGeometryManuallyRefined = onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined,
-                OnlandVisualTrashAssessmentScore = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScore?.AsDto(),
-                CompletedDate = onlandVisualTrashAssessment.CompletedDate,
-                DraftAreaName = onlandVisualTrashAssessment.DraftAreaName,
-                DraftAreaDescription = onlandVisualTrashAssessment.DraftAreaDescription,
-                IsTransectBackingAssessment = onlandVisualTrashAssessment.IsTransectBackingAssessment,
-                IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment
-            };
-            DoCustomMappings(onlandVisualTrashAssessment, onlandVisualTrashAssessmentDto);
-            return onlandVisualTrashAssessmentDto;
-        }
-
-        static partial void DoCustomMappings(OnlandVisualTrashAssessment onlandVisualTrashAssessment, OnlandVisualTrashAssessmentDto onlandVisualTrashAssessmentDto);
 
         public static OnlandVisualTrashAssessmentSimpleDto AsSimpleDto(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {

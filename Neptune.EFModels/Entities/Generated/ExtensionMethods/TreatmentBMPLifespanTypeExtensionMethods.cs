@@ -9,19 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TreatmentBMPLifespanTypeExtensionMethods
     {
-        public static TreatmentBMPLifespanTypeDto AsDto(this TreatmentBMPLifespanType treatmentBMPLifespanType)
-        {
-            var treatmentBMPLifespanTypeDto = new TreatmentBMPLifespanTypeDto()
-            {
-                TreatmentBMPLifespanTypeID = treatmentBMPLifespanType.TreatmentBMPLifespanTypeID,
-                TreatmentBMPLifespanTypeName = treatmentBMPLifespanType.TreatmentBMPLifespanTypeName,
-                TreatmentBMPLifespanTypeDisplayName = treatmentBMPLifespanType.TreatmentBMPLifespanTypeDisplayName
-            };
-            DoCustomMappings(treatmentBMPLifespanType, treatmentBMPLifespanTypeDto);
-            return treatmentBMPLifespanTypeDto;
-        }
-
-        static partial void DoCustomMappings(TreatmentBMPLifespanType treatmentBMPLifespanType, TreatmentBMPLifespanTypeDto treatmentBMPLifespanTypeDto);
 
         public static TreatmentBMPLifespanTypeSimpleDto AsSimpleDto(this TreatmentBMPLifespanType treatmentBMPLifespanType)
         {

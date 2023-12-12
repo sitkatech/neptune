@@ -9,21 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class OrganizationTypeExtensionMethods
     {
-        public static OrganizationTypeDto AsDto(this OrganizationType organizationType)
-        {
-            var organizationTypeDto = new OrganizationTypeDto()
-            {
-                OrganizationTypeID = organizationType.OrganizationTypeID,
-                OrganizationTypeName = organizationType.OrganizationTypeName,
-                OrganizationTypeAbbreviation = organizationType.OrganizationTypeAbbreviation,
-                LegendColor = organizationType.LegendColor,
-                IsDefaultOrganizationType = organizationType.IsDefaultOrganizationType
-            };
-            DoCustomMappings(organizationType, organizationTypeDto);
-            return organizationTypeDto;
-        }
-
-        static partial void DoCustomMappings(OrganizationType organizationType, OrganizationTypeDto organizationTypeDto);
 
         public static OrganizationTypeSimpleDto AsSimpleDto(this OrganizationType organizationType)
         {

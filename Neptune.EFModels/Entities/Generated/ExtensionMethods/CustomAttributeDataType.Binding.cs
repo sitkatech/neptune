@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[CustomAttributeDataType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,17 +12,17 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class CustomAttributeDataType : IHavePrimaryKey
     {
-        public static readonly CustomAttributeDataTypeString String = Neptune.EFModels.Entities.CustomAttributeDataTypeString.Instance;
-        public static readonly CustomAttributeDataTypeInteger Integer = Neptune.EFModels.Entities.CustomAttributeDataTypeInteger.Instance;
-        public static readonly CustomAttributeDataTypeDecimal Decimal = Neptune.EFModels.Entities.CustomAttributeDataTypeDecimal.Instance;
-        public static readonly CustomAttributeDataTypeDateTime DateTime = Neptune.EFModels.Entities.CustomAttributeDataTypeDateTime.Instance;
-        public static readonly CustomAttributeDataTypePickFromList PickFromList = Neptune.EFModels.Entities.CustomAttributeDataTypePickFromList.Instance;
-        public static readonly CustomAttributeDataTypeMultiSelect MultiSelect = Neptune.EFModels.Entities.CustomAttributeDataTypeMultiSelect.Instance;
+        public static readonly CustomAttributeDataTypeString String = CustomAttributeDataTypeString.Instance;
+        public static readonly CustomAttributeDataTypeInteger Integer = CustomAttributeDataTypeInteger.Instance;
+        public static readonly CustomAttributeDataTypeDecimal Decimal = CustomAttributeDataTypeDecimal.Instance;
+        public static readonly CustomAttributeDataTypeDateTime DateTime = CustomAttributeDataTypeDateTime.Instance;
+        public static readonly CustomAttributeDataTypePickFromList PickFromList = CustomAttributeDataTypePickFromList.Instance;
+        public static readonly CustomAttributeDataTypeMultiSelect MultiSelect = CustomAttributeDataTypeMultiSelect.Instance;
 
         public static readonly List<CustomAttributeDataType> All;
-        public static readonly List<CustomAttributeDataTypeDto> AllAsDto;
+        public static readonly List<CustomAttributeDataTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, CustomAttributeDataType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, CustomAttributeDataTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, CustomAttributeDataTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -33,9 +30,9 @@ namespace Neptune.EFModels.Entities
         static CustomAttributeDataType()
         {
             All = new List<CustomAttributeDataType> { String, Integer, Decimal, DateTime, PickFromList, MultiSelect };
-            AllAsDto = new List<CustomAttributeDataTypeDto> { String.AsDto(), Integer.AsDto(), Decimal.AsDto(), DateTime.AsDto(), PickFromList.AsDto(), MultiSelect.AsDto() };
+            AllAsSimpleDto = new List<CustomAttributeDataTypeSimpleDto> { String.AsSimpleDto(), Integer.AsSimpleDto(), Decimal.AsSimpleDto(), DateTime.AsSimpleDto(), PickFromList.AsSimpleDto(), MultiSelect.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, CustomAttributeDataType>(All.ToDictionary(x => x.CustomAttributeDataTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, CustomAttributeDataTypeDto>(AllAsDto.ToDictionary(x => x.CustomAttributeDataTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, CustomAttributeDataTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.CustomAttributeDataTypeID));
         }
 
         /// <summary>

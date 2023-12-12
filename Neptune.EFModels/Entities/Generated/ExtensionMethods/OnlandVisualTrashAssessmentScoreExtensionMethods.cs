@@ -9,21 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class OnlandVisualTrashAssessmentScoreExtensionMethods
     {
-        public static OnlandVisualTrashAssessmentScoreDto AsDto(this OnlandVisualTrashAssessmentScore onlandVisualTrashAssessmentScore)
-        {
-            var onlandVisualTrashAssessmentScoreDto = new OnlandVisualTrashAssessmentScoreDto()
-            {
-                OnlandVisualTrashAssessmentScoreID = onlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentScoreID,
-                OnlandVisualTrashAssessmentScoreName = onlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentScoreName,
-                OnlandVisualTrashAssessmentScoreDisplayName = onlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentScoreDisplayName,
-                NumericValue = onlandVisualTrashAssessmentScore.NumericValue,
-                TrashGenerationRate = onlandVisualTrashAssessmentScore.TrashGenerationRate
-            };
-            DoCustomMappings(onlandVisualTrashAssessmentScore, onlandVisualTrashAssessmentScoreDto);
-            return onlandVisualTrashAssessmentScoreDto;
-        }
-
-        static partial void DoCustomMappings(OnlandVisualTrashAssessmentScore onlandVisualTrashAssessmentScore, OnlandVisualTrashAssessmentScoreDto onlandVisualTrashAssessmentScoreDto);
 
         public static OnlandVisualTrashAssessmentScoreSimpleDto AsSimpleDto(this OnlandVisualTrashAssessmentScore onlandVisualTrashAssessmentScore)
         {

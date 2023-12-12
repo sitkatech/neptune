@@ -3,10 +3,16 @@
 namespace Neptune.EFModels.Entities
 {
     public static partial class NeptunePageExtensionMethods
-    { 
-        static partial void DoCustomMappings(NeptunePage neptunePage, NeptunePageDto neptunePageDto)
+    {
+        public static NeptunePageDto AsDto(this NeptunePage neptunePage)
         {
-            neptunePageDto.IsEmptyContent = string.IsNullOrWhiteSpace(neptunePage.NeptunePageContent);
+            var neptunePageDto = new NeptunePageDto()
+            {
+                NeptunePageID = neptunePage.NeptunePageID,
+                NeptunePageType = neptunePage.NeptunePageType.AsSimpleDto(),
+                NeptunePageContent = neptunePage.NeptunePageContent
+            };
+            return neptunePageDto;
         }
     }
 }

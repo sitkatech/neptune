@@ -9,22 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class OnlandVisualTrashAssessmentAreaExtensionMethods
     {
-        public static OnlandVisualTrashAssessmentAreaDto AsDto(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
-        {
-            var onlandVisualTrashAssessmentAreaDto = new OnlandVisualTrashAssessmentAreaDto()
-            {
-                OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID,
-                OnlandVisualTrashAssessmentAreaName = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName,
-                StormwaterJurisdiction = onlandVisualTrashAssessmentArea.StormwaterJurisdiction.AsDto(),
-                OnlandVisualTrashAssessmentBaselineScore = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore?.AsDto(),
-                AssessmentAreaDescription = onlandVisualTrashAssessmentArea.AssessmentAreaDescription,
-                OnlandVisualTrashAssessmentProgressScore = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScore?.AsDto()
-            };
-            DoCustomMappings(onlandVisualTrashAssessmentArea, onlandVisualTrashAssessmentAreaDto);
-            return onlandVisualTrashAssessmentAreaDto;
-        }
-
-        static partial void DoCustomMappings(OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, OnlandVisualTrashAssessmentAreaDto onlandVisualTrashAssessmentAreaDto);
 
         public static OnlandVisualTrashAssessmentAreaSimpleDto AsSimpleDto(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {

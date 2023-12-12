@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[UnderlyingHydrologicSoilGroup]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,16 +12,16 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class UnderlyingHydrologicSoilGroup : IHavePrimaryKey
     {
-        public static readonly UnderlyingHydrologicSoilGroupA A = Neptune.EFModels.Entities.UnderlyingHydrologicSoilGroupA.Instance;
-        public static readonly UnderlyingHydrologicSoilGroupB B = Neptune.EFModels.Entities.UnderlyingHydrologicSoilGroupB.Instance;
-        public static readonly UnderlyingHydrologicSoilGroupC C = Neptune.EFModels.Entities.UnderlyingHydrologicSoilGroupC.Instance;
-        public static readonly UnderlyingHydrologicSoilGroupD D = Neptune.EFModels.Entities.UnderlyingHydrologicSoilGroupD.Instance;
-        public static readonly UnderlyingHydrologicSoilGroupLiner Liner = Neptune.EFModels.Entities.UnderlyingHydrologicSoilGroupLiner.Instance;
+        public static readonly UnderlyingHydrologicSoilGroupA A = UnderlyingHydrologicSoilGroupA.Instance;
+        public static readonly UnderlyingHydrologicSoilGroupB B = UnderlyingHydrologicSoilGroupB.Instance;
+        public static readonly UnderlyingHydrologicSoilGroupC C = UnderlyingHydrologicSoilGroupC.Instance;
+        public static readonly UnderlyingHydrologicSoilGroupD D = UnderlyingHydrologicSoilGroupD.Instance;
+        public static readonly UnderlyingHydrologicSoilGroupLiner Liner = UnderlyingHydrologicSoilGroupLiner.Instance;
 
         public static readonly List<UnderlyingHydrologicSoilGroup> All;
-        public static readonly List<UnderlyingHydrologicSoilGroupDto> AllAsDto;
+        public static readonly List<UnderlyingHydrologicSoilGroupSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, UnderlyingHydrologicSoilGroup> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, UnderlyingHydrologicSoilGroupDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, UnderlyingHydrologicSoilGroupSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -32,9 +29,9 @@ namespace Neptune.EFModels.Entities
         static UnderlyingHydrologicSoilGroup()
         {
             All = new List<UnderlyingHydrologicSoilGroup> { A, B, C, D, Liner };
-            AllAsDto = new List<UnderlyingHydrologicSoilGroupDto> { A.AsDto(), B.AsDto(), C.AsDto(), D.AsDto(), Liner.AsDto() };
+            AllAsSimpleDto = new List<UnderlyingHydrologicSoilGroupSimpleDto> { A.AsSimpleDto(), B.AsSimpleDto(), C.AsSimpleDto(), D.AsSimpleDto(), Liner.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, UnderlyingHydrologicSoilGroup>(All.ToDictionary(x => x.UnderlyingHydrologicSoilGroupID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, UnderlyingHydrologicSoilGroupDto>(AllAsDto.ToDictionary(x => x.UnderlyingHydrologicSoilGroupID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, UnderlyingHydrologicSoilGroupSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.UnderlyingHydrologicSoilGroupID));
         }
 
         /// <summary>

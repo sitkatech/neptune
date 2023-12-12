@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[Role]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,16 +12,16 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class Role : IHavePrimaryKey
     {
-        public static readonly RoleAdmin Admin = Neptune.EFModels.Entities.RoleAdmin.Instance;
-        public static readonly RoleUnassigned Unassigned = Neptune.EFModels.Entities.RoleUnassigned.Instance;
-        public static readonly RoleSitkaAdmin SitkaAdmin = Neptune.EFModels.Entities.RoleSitkaAdmin.Instance;
-        public static readonly RoleJurisdictionManager JurisdictionManager = Neptune.EFModels.Entities.RoleJurisdictionManager.Instance;
-        public static readonly RoleJurisdictionEditor JurisdictionEditor = Neptune.EFModels.Entities.RoleJurisdictionEditor.Instance;
+        public static readonly RoleAdmin Admin = RoleAdmin.Instance;
+        public static readonly RoleUnassigned Unassigned = RoleUnassigned.Instance;
+        public static readonly RoleSitkaAdmin SitkaAdmin = RoleSitkaAdmin.Instance;
+        public static readonly RoleJurisdictionManager JurisdictionManager = RoleJurisdictionManager.Instance;
+        public static readonly RoleJurisdictionEditor JurisdictionEditor = RoleJurisdictionEditor.Instance;
 
         public static readonly List<Role> All;
-        public static readonly List<RoleDto> AllAsDto;
+        public static readonly List<RoleSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, Role> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, RoleDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, RoleSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -32,9 +29,9 @@ namespace Neptune.EFModels.Entities
         static Role()
         {
             All = new List<Role> { Admin, Unassigned, SitkaAdmin, JurisdictionManager, JurisdictionEditor };
-            AllAsDto = new List<RoleDto> { Admin.AsDto(), Unassigned.AsDto(), SitkaAdmin.AsDto(), JurisdictionManager.AsDto(), JurisdictionEditor.AsDto() };
+            AllAsSimpleDto = new List<RoleSimpleDto> { Admin.AsSimpleDto(), Unassigned.AsSimpleDto(), SitkaAdmin.AsSimpleDto(), JurisdictionManager.AsSimpleDto(), JurisdictionEditor.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, Role>(All.ToDictionary(x => x.RoleID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, RoleDto>(AllAsDto.ToDictionary(x => x.RoleID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, RoleSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.RoleID));
         }
 
         /// <summary>

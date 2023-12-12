@@ -5,19 +5,9 @@ namespace Neptune.EFModels.Entities
 {
     public partial class Watershed
     {
-        public static List<WatershedDto> List(NeptuneDbContext dbContext)
+        public static List<WatershedSimpleDto> List(NeptuneDbContext dbContext)
         {
-            return GetWatershedsImpl(dbContext).Select(x => x.AsDto()).ToList();
-        }
-
-        public static WatershedDto GetByWatershedID(NeptuneDbContext dbContext, int watershedID)
-        {
-            return GetWatershedsImpl(dbContext).SingleOrDefault(x => x.WatershedID == watershedID)?.AsDto();
-        }
-
-        public static List<WatershedDto> GetByWatershedID(NeptuneDbContext dbContext, List<int> watershedIDs)
-        {
-            return GetWatershedsImpl(dbContext).Where(x => watershedIDs.Contains(x.WatershedID)).Select(x => x.AsDto()).ToList();
+            return GetWatershedsImpl(dbContext).Select(x => x.AsSimpleDto()).ToList();
         }
 
         private static IQueryable<Watershed> GetWatershedsImpl(NeptuneDbContext dbContext)

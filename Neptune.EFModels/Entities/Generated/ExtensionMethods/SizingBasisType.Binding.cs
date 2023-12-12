@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[SizingBasisType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,15 +12,15 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class SizingBasisType : IHavePrimaryKey
     {
-        public static readonly SizingBasisTypeFullTrashCapture FullTrashCapture = Neptune.EFModels.Entities.SizingBasisTypeFullTrashCapture.Instance;
-        public static readonly SizingBasisTypeWaterQuality WaterQuality = Neptune.EFModels.Entities.SizingBasisTypeWaterQuality.Instance;
-        public static readonly SizingBasisTypeOther Other = Neptune.EFModels.Entities.SizingBasisTypeOther.Instance;
-        public static readonly SizingBasisTypeNotProvided NotProvided = Neptune.EFModels.Entities.SizingBasisTypeNotProvided.Instance;
+        public static readonly SizingBasisTypeFullTrashCapture FullTrashCapture = SizingBasisTypeFullTrashCapture.Instance;
+        public static readonly SizingBasisTypeWaterQuality WaterQuality = SizingBasisTypeWaterQuality.Instance;
+        public static readonly SizingBasisTypeOther Other = SizingBasisTypeOther.Instance;
+        public static readonly SizingBasisTypeNotProvided NotProvided = SizingBasisTypeNotProvided.Instance;
 
         public static readonly List<SizingBasisType> All;
-        public static readonly List<SizingBasisTypeDto> AllAsDto;
+        public static readonly List<SizingBasisTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, SizingBasisType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, SizingBasisTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, SizingBasisTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -31,9 +28,9 @@ namespace Neptune.EFModels.Entities
         static SizingBasisType()
         {
             All = new List<SizingBasisType> { FullTrashCapture, WaterQuality, Other, NotProvided };
-            AllAsDto = new List<SizingBasisTypeDto> { FullTrashCapture.AsDto(), WaterQuality.AsDto(), Other.AsDto(), NotProvided.AsDto() };
+            AllAsSimpleDto = new List<SizingBasisTypeSimpleDto> { FullTrashCapture.AsSimpleDto(), WaterQuality.AsSimpleDto(), Other.AsSimpleDto(), NotProvided.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, SizingBasisType>(All.ToDictionary(x => x.SizingBasisTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, SizingBasisTypeDto>(AllAsDto.ToDictionary(x => x.SizingBasisTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, SizingBasisTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.SizingBasisTypeID));
         }
 
         /// <summary>

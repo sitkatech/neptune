@@ -9,20 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class DelineationStagingExtensionMethods
     {
-        public static DelineationStagingDto AsDto(this DelineationStaging delineationStaging)
-        {
-            var delineationStagingDto = new DelineationStagingDto()
-            {
-                DelineationStagingID = delineationStaging.DelineationStagingID,
-                UploadedByPerson = delineationStaging.UploadedByPerson.AsDto(),
-                TreatmentBMPName = delineationStaging.TreatmentBMPName,
-                StormwaterJurisdiction = delineationStaging.StormwaterJurisdiction.AsDto()
-            };
-            DoCustomMappings(delineationStaging, delineationStagingDto);
-            return delineationStagingDto;
-        }
-
-        static partial void DoCustomMappings(DelineationStaging delineationStaging, DelineationStagingDto delineationStagingDto);
 
         public static DelineationStagingSimpleDto AsSimpleDto(this DelineationStaging delineationStaging)
         {

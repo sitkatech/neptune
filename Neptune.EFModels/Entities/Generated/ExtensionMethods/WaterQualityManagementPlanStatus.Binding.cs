@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[WaterQualityManagementPlanStatus]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,13 +12,13 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class WaterQualityManagementPlanStatus : IHavePrimaryKey
     {
-        public static readonly WaterQualityManagementPlanStatusActive Active = Neptune.EFModels.Entities.WaterQualityManagementPlanStatusActive.Instance;
-        public static readonly WaterQualityManagementPlanStatusInactive Inactive = Neptune.EFModels.Entities.WaterQualityManagementPlanStatusInactive.Instance;
+        public static readonly WaterQualityManagementPlanStatusActive Active = WaterQualityManagementPlanStatusActive.Instance;
+        public static readonly WaterQualityManagementPlanStatusInactive Inactive = WaterQualityManagementPlanStatusInactive.Instance;
 
         public static readonly List<WaterQualityManagementPlanStatus> All;
-        public static readonly List<WaterQualityManagementPlanStatusDto> AllAsDto;
+        public static readonly List<WaterQualityManagementPlanStatusSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanStatus> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanStatusDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanStatusSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +26,9 @@ namespace Neptune.EFModels.Entities
         static WaterQualityManagementPlanStatus()
         {
             All = new List<WaterQualityManagementPlanStatus> { Active, Inactive };
-            AllAsDto = new List<WaterQualityManagementPlanStatusDto> { Active.AsDto(), Inactive.AsDto() };
+            AllAsSimpleDto = new List<WaterQualityManagementPlanStatusSimpleDto> { Active.AsSimpleDto(), Inactive.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanStatus>(All.ToDictionary(x => x.WaterQualityManagementPlanStatusID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanStatusDto>(AllAsDto.ToDictionary(x => x.WaterQualityManagementPlanStatusID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanStatusSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.WaterQualityManagementPlanStatusID));
         }
 
         /// <summary>

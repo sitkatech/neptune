@@ -9,21 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class MaintenanceRecordObservationExtensionMethods
     {
-        public static MaintenanceRecordObservationDto AsDto(this MaintenanceRecordObservation maintenanceRecordObservation)
-        {
-            var maintenanceRecordObservationDto = new MaintenanceRecordObservationDto()
-            {
-                MaintenanceRecordObservationID = maintenanceRecordObservation.MaintenanceRecordObservationID,
-                MaintenanceRecord = maintenanceRecordObservation.MaintenanceRecord.AsDto(),
-                TreatmentBMPTypeCustomAttributeType = maintenanceRecordObservation.TreatmentBMPTypeCustomAttributeType.AsDto(),
-                TreatmentBMPType = maintenanceRecordObservation.TreatmentBMPType.AsDto(),
-                CustomAttributeType = maintenanceRecordObservation.CustomAttributeType.AsDto()
-            };
-            DoCustomMappings(maintenanceRecordObservation, maintenanceRecordObservationDto);
-            return maintenanceRecordObservationDto;
-        }
-
-        static partial void DoCustomMappings(MaintenanceRecordObservation maintenanceRecordObservation, MaintenanceRecordObservationDto maintenanceRecordObservationDto);
 
         public static MaintenanceRecordObservationSimpleDto AsSimpleDto(this MaintenanceRecordObservation maintenanceRecordObservation)
         {

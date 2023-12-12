@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[PriorityLandUseType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,18 +12,18 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class PriorityLandUseType : IHavePrimaryKey
     {
-        public static readonly PriorityLandUseTypeCommercial Commercial = Neptune.EFModels.Entities.PriorityLandUseTypeCommercial.Instance;
-        public static readonly PriorityLandUseTypeHighDensityResidential HighDensityResidential = Neptune.EFModels.Entities.PriorityLandUseTypeHighDensityResidential.Instance;
-        public static readonly PriorityLandUseTypeIndustrial Industrial = Neptune.EFModels.Entities.PriorityLandUseTypeIndustrial.Instance;
-        public static readonly PriorityLandUseTypeMixedUrban MixedUrban = Neptune.EFModels.Entities.PriorityLandUseTypeMixedUrban.Instance;
-        public static readonly PriorityLandUseTypeCommercialRetail CommercialRetail = Neptune.EFModels.Entities.PriorityLandUseTypeCommercialRetail.Instance;
-        public static readonly PriorityLandUseTypePublicTransportationStations PublicTransportationStations = Neptune.EFModels.Entities.PriorityLandUseTypePublicTransportationStations.Instance;
-        public static readonly PriorityLandUseTypeALU ALU = Neptune.EFModels.Entities.PriorityLandUseTypeALU.Instance;
+        public static readonly PriorityLandUseTypeCommercial Commercial = PriorityLandUseTypeCommercial.Instance;
+        public static readonly PriorityLandUseTypeHighDensityResidential HighDensityResidential = PriorityLandUseTypeHighDensityResidential.Instance;
+        public static readonly PriorityLandUseTypeIndustrial Industrial = PriorityLandUseTypeIndustrial.Instance;
+        public static readonly PriorityLandUseTypeMixedUrban MixedUrban = PriorityLandUseTypeMixedUrban.Instance;
+        public static readonly PriorityLandUseTypeCommercialRetail CommercialRetail = PriorityLandUseTypeCommercialRetail.Instance;
+        public static readonly PriorityLandUseTypePublicTransportationStations PublicTransportationStations = PriorityLandUseTypePublicTransportationStations.Instance;
+        public static readonly PriorityLandUseTypeALU ALU = PriorityLandUseTypeALU.Instance;
 
         public static readonly List<PriorityLandUseType> All;
-        public static readonly List<PriorityLandUseTypeDto> AllAsDto;
+        public static readonly List<PriorityLandUseTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, PriorityLandUseType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, PriorityLandUseTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, PriorityLandUseTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -34,9 +31,9 @@ namespace Neptune.EFModels.Entities
         static PriorityLandUseType()
         {
             All = new List<PriorityLandUseType> { Commercial, HighDensityResidential, Industrial, MixedUrban, CommercialRetail, PublicTransportationStations, ALU };
-            AllAsDto = new List<PriorityLandUseTypeDto> { Commercial.AsDto(), HighDensityResidential.AsDto(), Industrial.AsDto(), MixedUrban.AsDto(), CommercialRetail.AsDto(), PublicTransportationStations.AsDto(), ALU.AsDto() };
+            AllAsSimpleDto = new List<PriorityLandUseTypeSimpleDto> { Commercial.AsSimpleDto(), HighDensityResidential.AsSimpleDto(), Industrial.AsSimpleDto(), MixedUrban.AsSimpleDto(), CommercialRetail.AsSimpleDto(), PublicTransportationStations.AsSimpleDto(), ALU.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, PriorityLandUseType>(All.ToDictionary(x => x.PriorityLandUseTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, PriorityLandUseTypeDto>(AllAsDto.ToDictionary(x => x.PriorityLandUseTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, PriorityLandUseTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.PriorityLandUseTypeID));
         }
 
         /// <summary>

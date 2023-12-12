@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[DryWeatherFlowOverride]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,13 +12,13 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class DryWeatherFlowOverride : IHavePrimaryKey
     {
-        public static readonly DryWeatherFlowOverrideNo No = Neptune.EFModels.Entities.DryWeatherFlowOverrideNo.Instance;
-        public static readonly DryWeatherFlowOverrideYes Yes = Neptune.EFModels.Entities.DryWeatherFlowOverrideYes.Instance;
+        public static readonly DryWeatherFlowOverrideNo No = DryWeatherFlowOverrideNo.Instance;
+        public static readonly DryWeatherFlowOverrideYes Yes = DryWeatherFlowOverrideYes.Instance;
 
         public static readonly List<DryWeatherFlowOverride> All;
-        public static readonly List<DryWeatherFlowOverrideDto> AllAsDto;
+        public static readonly List<DryWeatherFlowOverrideSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, DryWeatherFlowOverride> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, DryWeatherFlowOverrideDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, DryWeatherFlowOverrideSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +26,9 @@ namespace Neptune.EFModels.Entities
         static DryWeatherFlowOverride()
         {
             All = new List<DryWeatherFlowOverride> { No, Yes };
-            AllAsDto = new List<DryWeatherFlowOverrideDto> { No.AsDto(), Yes.AsDto() };
+            AllAsSimpleDto = new List<DryWeatherFlowOverrideSimpleDto> { No.AsSimpleDto(), Yes.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, DryWeatherFlowOverride>(All.ToDictionary(x => x.DryWeatherFlowOverrideID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, DryWeatherFlowOverrideDto>(AllAsDto.ToDictionary(x => x.DryWeatherFlowOverrideID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, DryWeatherFlowOverrideSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.DryWeatherFlowOverrideID));
         }
 
         /// <summary>

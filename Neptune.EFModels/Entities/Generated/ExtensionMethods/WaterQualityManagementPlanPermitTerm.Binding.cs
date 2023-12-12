@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[WaterQualityManagementPlanPermitTerm]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,20 +12,20 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class WaterQualityManagementPlanPermitTerm : IHavePrimaryKey
     {
-        public static readonly WaterQualityManagementPlanPermitTermNorthOCFirstTerm1990 NorthOCFirstTerm1990 = Neptune.EFModels.Entities.WaterQualityManagementPlanPermitTermNorthOCFirstTerm1990.Instance;
-        public static readonly WaterQualityManagementPlanPermitTermNorthOCSecondTerm1996 NorthOCSecondTerm1996 = Neptune.EFModels.Entities.WaterQualityManagementPlanPermitTermNorthOCSecondTerm1996.Instance;
-        public static readonly WaterQualityManagementPlanPermitTermNorthOCThirdTerm2002 NorthOCThirdTerm2002 = Neptune.EFModels.Entities.WaterQualityManagementPlanPermitTermNorthOCThirdTerm2002.Instance;
-        public static readonly WaterQualityManagementPlanPermitTermNorthOCFourthTerm2009 NorthOCFourthTerm2009 = Neptune.EFModels.Entities.WaterQualityManagementPlanPermitTermNorthOCFourthTerm2009.Instance;
-        public static readonly WaterQualityManagementPlanPermitTermSouthOCFirstTerm1990 SouthOCFirstTerm1990 = Neptune.EFModels.Entities.WaterQualityManagementPlanPermitTermSouthOCFirstTerm1990.Instance;
-        public static readonly WaterQualityManagementPlanPermitTermSouthOCSecondTerm1996 SouthOCSecondTerm1996 = Neptune.EFModels.Entities.WaterQualityManagementPlanPermitTermSouthOCSecondTerm1996.Instance;
-        public static readonly WaterQualityManagementPlanPermitTermSouthOCThirdTerm2002 SouthOCThirdTerm2002 = Neptune.EFModels.Entities.WaterQualityManagementPlanPermitTermSouthOCThirdTerm2002.Instance;
-        public static readonly WaterQualityManagementPlanPermitTermSouthOCFourthTerm2009 SouthOCFourthTerm2009 = Neptune.EFModels.Entities.WaterQualityManagementPlanPermitTermSouthOCFourthTerm2009.Instance;
-        public static readonly WaterQualityManagementPlanPermitTermSouthOCFithTerm2015 SouthOCFithTerm2015 = Neptune.EFModels.Entities.WaterQualityManagementPlanPermitTermSouthOCFithTerm2015.Instance;
+        public static readonly WaterQualityManagementPlanPermitTermNorthOCFirstTerm1990 NorthOCFirstTerm1990 = WaterQualityManagementPlanPermitTermNorthOCFirstTerm1990.Instance;
+        public static readonly WaterQualityManagementPlanPermitTermNorthOCSecondTerm1996 NorthOCSecondTerm1996 = WaterQualityManagementPlanPermitTermNorthOCSecondTerm1996.Instance;
+        public static readonly WaterQualityManagementPlanPermitTermNorthOCThirdTerm2002 NorthOCThirdTerm2002 = WaterQualityManagementPlanPermitTermNorthOCThirdTerm2002.Instance;
+        public static readonly WaterQualityManagementPlanPermitTermNorthOCFourthTerm2009 NorthOCFourthTerm2009 = WaterQualityManagementPlanPermitTermNorthOCFourthTerm2009.Instance;
+        public static readonly WaterQualityManagementPlanPermitTermSouthOCFirstTerm1990 SouthOCFirstTerm1990 = WaterQualityManagementPlanPermitTermSouthOCFirstTerm1990.Instance;
+        public static readonly WaterQualityManagementPlanPermitTermSouthOCSecondTerm1996 SouthOCSecondTerm1996 = WaterQualityManagementPlanPermitTermSouthOCSecondTerm1996.Instance;
+        public static readonly WaterQualityManagementPlanPermitTermSouthOCThirdTerm2002 SouthOCThirdTerm2002 = WaterQualityManagementPlanPermitTermSouthOCThirdTerm2002.Instance;
+        public static readonly WaterQualityManagementPlanPermitTermSouthOCFourthTerm2009 SouthOCFourthTerm2009 = WaterQualityManagementPlanPermitTermSouthOCFourthTerm2009.Instance;
+        public static readonly WaterQualityManagementPlanPermitTermSouthOCFithTerm2015 SouthOCFithTerm2015 = WaterQualityManagementPlanPermitTermSouthOCFithTerm2015.Instance;
 
         public static readonly List<WaterQualityManagementPlanPermitTerm> All;
-        public static readonly List<WaterQualityManagementPlanPermitTermDto> AllAsDto;
+        public static readonly List<WaterQualityManagementPlanPermitTermSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanPermitTerm> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanPermitTermDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanPermitTermSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -36,9 +33,9 @@ namespace Neptune.EFModels.Entities
         static WaterQualityManagementPlanPermitTerm()
         {
             All = new List<WaterQualityManagementPlanPermitTerm> { NorthOCFirstTerm1990, NorthOCSecondTerm1996, NorthOCThirdTerm2002, NorthOCFourthTerm2009, SouthOCFirstTerm1990, SouthOCSecondTerm1996, SouthOCThirdTerm2002, SouthOCFourthTerm2009, SouthOCFithTerm2015 };
-            AllAsDto = new List<WaterQualityManagementPlanPermitTermDto> { NorthOCFirstTerm1990.AsDto(), NorthOCSecondTerm1996.AsDto(), NorthOCThirdTerm2002.AsDto(), NorthOCFourthTerm2009.AsDto(), SouthOCFirstTerm1990.AsDto(), SouthOCSecondTerm1996.AsDto(), SouthOCThirdTerm2002.AsDto(), SouthOCFourthTerm2009.AsDto(), SouthOCFithTerm2015.AsDto() };
+            AllAsSimpleDto = new List<WaterQualityManagementPlanPermitTermSimpleDto> { NorthOCFirstTerm1990.AsSimpleDto(), NorthOCSecondTerm1996.AsSimpleDto(), NorthOCThirdTerm2002.AsSimpleDto(), NorthOCFourthTerm2009.AsSimpleDto(), SouthOCFirstTerm1990.AsSimpleDto(), SouthOCSecondTerm1996.AsSimpleDto(), SouthOCThirdTerm2002.AsSimpleDto(), SouthOCFourthTerm2009.AsSimpleDto(), SouthOCFithTerm2015.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanPermitTerm>(All.ToDictionary(x => x.WaterQualityManagementPlanPermitTermID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanPermitTermDto>(AllAsDto.ToDictionary(x => x.WaterQualityManagementPlanPermitTermID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanPermitTermSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.WaterQualityManagementPlanPermitTermID));
         }
 
         /// <summary>

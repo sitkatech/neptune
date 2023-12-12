@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[TimeOfConcentration]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,18 +12,18 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class TimeOfConcentration : IHavePrimaryKey
     {
-        public static readonly TimeOfConcentrationFiveMinutes FiveMinutes = Neptune.EFModels.Entities.TimeOfConcentrationFiveMinutes.Instance;
-        public static readonly TimeOfConcentrationTenMinutes TenMinutes = Neptune.EFModels.Entities.TimeOfConcentrationTenMinutes.Instance;
-        public static readonly TimeOfConcentrationFifteenMinutes FifteenMinutes = Neptune.EFModels.Entities.TimeOfConcentrationFifteenMinutes.Instance;
-        public static readonly TimeOfConcentrationTwentyMinutes TwentyMinutes = Neptune.EFModels.Entities.TimeOfConcentrationTwentyMinutes.Instance;
-        public static readonly TimeOfConcentrationThirtyMinutes ThirtyMinutes = Neptune.EFModels.Entities.TimeOfConcentrationThirtyMinutes.Instance;
-        public static readonly TimeOfConcentrationFortyFiveMinutes FortyFiveMinutes = Neptune.EFModels.Entities.TimeOfConcentrationFortyFiveMinutes.Instance;
-        public static readonly TimeOfConcentrationSixtyMinutes SixtyMinutes = Neptune.EFModels.Entities.TimeOfConcentrationSixtyMinutes.Instance;
+        public static readonly TimeOfConcentrationFiveMinutes FiveMinutes = TimeOfConcentrationFiveMinutes.Instance;
+        public static readonly TimeOfConcentrationTenMinutes TenMinutes = TimeOfConcentrationTenMinutes.Instance;
+        public static readonly TimeOfConcentrationFifteenMinutes FifteenMinutes = TimeOfConcentrationFifteenMinutes.Instance;
+        public static readonly TimeOfConcentrationTwentyMinutes TwentyMinutes = TimeOfConcentrationTwentyMinutes.Instance;
+        public static readonly TimeOfConcentrationThirtyMinutes ThirtyMinutes = TimeOfConcentrationThirtyMinutes.Instance;
+        public static readonly TimeOfConcentrationFortyFiveMinutes FortyFiveMinutes = TimeOfConcentrationFortyFiveMinutes.Instance;
+        public static readonly TimeOfConcentrationSixtyMinutes SixtyMinutes = TimeOfConcentrationSixtyMinutes.Instance;
 
         public static readonly List<TimeOfConcentration> All;
-        public static readonly List<TimeOfConcentrationDto> AllAsDto;
+        public static readonly List<TimeOfConcentrationSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, TimeOfConcentration> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, TimeOfConcentrationDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, TimeOfConcentrationSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -34,9 +31,9 @@ namespace Neptune.EFModels.Entities
         static TimeOfConcentration()
         {
             All = new List<TimeOfConcentration> { FiveMinutes, TenMinutes, FifteenMinutes, TwentyMinutes, ThirtyMinutes, FortyFiveMinutes, SixtyMinutes };
-            AllAsDto = new List<TimeOfConcentrationDto> { FiveMinutes.AsDto(), TenMinutes.AsDto(), FifteenMinutes.AsDto(), TwentyMinutes.AsDto(), ThirtyMinutes.AsDto(), FortyFiveMinutes.AsDto(), SixtyMinutes.AsDto() };
+            AllAsSimpleDto = new List<TimeOfConcentrationSimpleDto> { FiveMinutes.AsSimpleDto(), TenMinutes.AsSimpleDto(), FifteenMinutes.AsSimpleDto(), TwentyMinutes.AsSimpleDto(), ThirtyMinutes.AsSimpleDto(), FortyFiveMinutes.AsSimpleDto(), SixtyMinutes.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, TimeOfConcentration>(All.ToDictionary(x => x.TimeOfConcentrationID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, TimeOfConcentrationDto>(AllAsDto.ToDictionary(x => x.TimeOfConcentrationID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, TimeOfConcentrationSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.TimeOfConcentrationID));
         }
 
         /// <summary>

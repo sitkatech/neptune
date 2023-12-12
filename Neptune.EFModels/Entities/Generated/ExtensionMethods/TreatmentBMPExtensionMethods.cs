@@ -9,42 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TreatmentBMPExtensionMethods
     {
-        public static TreatmentBMPDto AsDto(this TreatmentBMP treatmentBMP)
-        {
-            var treatmentBMPDto = new TreatmentBMPDto()
-            {
-                TreatmentBMPID = treatmentBMP.TreatmentBMPID,
-                TreatmentBMPName = treatmentBMP.TreatmentBMPName,
-                TreatmentBMPType = treatmentBMP.TreatmentBMPType.AsDto(),
-                StormwaterJurisdiction = treatmentBMP.StormwaterJurisdiction.AsDto(),
-                Notes = treatmentBMP.Notes,
-                SystemOfRecordID = treatmentBMP.SystemOfRecordID,
-                YearBuilt = treatmentBMP.YearBuilt,
-                OwnerOrganization = treatmentBMP.OwnerOrganization.AsDto(),
-                WaterQualityManagementPlan = treatmentBMP.WaterQualityManagementPlan?.AsDto(),
-                TreatmentBMPLifespanType = treatmentBMP.TreatmentBMPLifespanType?.AsDto(),
-                TreatmentBMPLifespanEndDate = treatmentBMP.TreatmentBMPLifespanEndDate,
-                RequiredFieldVisitsPerYear = treatmentBMP.RequiredFieldVisitsPerYear,
-                RequiredPostStormFieldVisitsPerYear = treatmentBMP.RequiredPostStormFieldVisitsPerYear,
-                InventoryIsVerified = treatmentBMP.InventoryIsVerified,
-                DateOfLastInventoryVerification = treatmentBMP.DateOfLastInventoryVerification,
-                InventoryVerifiedByPerson = treatmentBMP.InventoryVerifiedByPerson?.AsDto(),
-                InventoryLastChangedDate = treatmentBMP.InventoryLastChangedDate,
-                TrashCaptureStatusType = treatmentBMP.TrashCaptureStatusType.AsDto(),
-                SizingBasisType = treatmentBMP.SizingBasisType.AsDto(),
-                TrashCaptureEffectiveness = treatmentBMP.TrashCaptureEffectiveness,
-                Watershed = treatmentBMP.Watershed?.AsDto(),
-                ModelBasin = treatmentBMP.ModelBasin?.AsDto(),
-                PrecipitationZone = treatmentBMP.PrecipitationZone?.AsDto(),
-                UpstreamBMPID = treatmentBMP.UpstreamBMPID,
-                RegionalSubbasinID = treatmentBMP.RegionalSubbasinID,
-                Project = treatmentBMP.Project?.AsDto()
-            };
-            DoCustomMappings(treatmentBMP, treatmentBMPDto);
-            return treatmentBMPDto;
-        }
-
-        static partial void DoCustomMappings(TreatmentBMP treatmentBMP, TreatmentBMPDto treatmentBMPDto);
 
         public static TreatmentBMPSimpleDto AsSimpleDto(this TreatmentBMP treatmentBMP)
         {

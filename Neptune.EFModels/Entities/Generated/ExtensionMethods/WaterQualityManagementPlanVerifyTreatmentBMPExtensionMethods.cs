@@ -9,21 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class WaterQualityManagementPlanVerifyTreatmentBMPExtensionMethods
     {
-        public static WaterQualityManagementPlanVerifyTreatmentBMPDto AsDto(this WaterQualityManagementPlanVerifyTreatmentBMP waterQualityManagementPlanVerifyTreatmentBMP)
-        {
-            var waterQualityManagementPlanVerifyTreatmentBMPDto = new WaterQualityManagementPlanVerifyTreatmentBMPDto()
-            {
-                WaterQualityManagementPlanVerifyTreatmentBMPID = waterQualityManagementPlanVerifyTreatmentBMP.WaterQualityManagementPlanVerifyTreatmentBMPID,
-                WaterQualityManagementPlanVerify = waterQualityManagementPlanVerifyTreatmentBMP.WaterQualityManagementPlanVerify.AsDto(),
-                TreatmentBMP = waterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMP.AsDto(),
-                IsAdequate = waterQualityManagementPlanVerifyTreatmentBMP.IsAdequate,
-                WaterQualityManagementPlanVerifyTreatmentBMPNote = waterQualityManagementPlanVerifyTreatmentBMP.WaterQualityManagementPlanVerifyTreatmentBMPNote
-            };
-            DoCustomMappings(waterQualityManagementPlanVerifyTreatmentBMP, waterQualityManagementPlanVerifyTreatmentBMPDto);
-            return waterQualityManagementPlanVerifyTreatmentBMPDto;
-        }
-
-        static partial void DoCustomMappings(WaterQualityManagementPlanVerifyTreatmentBMP waterQualityManagementPlanVerifyTreatmentBMP, WaterQualityManagementPlanVerifyTreatmentBMPDto waterQualityManagementPlanVerifyTreatmentBMPDto);
 
         public static WaterQualityManagementPlanVerifyTreatmentBMPSimpleDto AsSimpleDto(this WaterQualityManagementPlanVerifyTreatmentBMP waterQualityManagementPlanVerifyTreatmentBMP)
         {

@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[OVTASection]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,17 +12,17 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class OVTASection : IHavePrimaryKey
     {
-        public static readonly OVTASectionInstructions Instructions = Neptune.EFModels.Entities.OVTASectionInstructions.Instance;
-        public static readonly OVTASectionInitiateOVTA InitiateOVTA = Neptune.EFModels.Entities.OVTASectionInitiateOVTA.Instance;
-        public static readonly OVTASectionRecordObservations RecordObservations = Neptune.EFModels.Entities.OVTASectionRecordObservations.Instance;
-        public static readonly OVTASectionAddOrRemoveParcels AddOrRemoveParcels = Neptune.EFModels.Entities.OVTASectionAddOrRemoveParcels.Instance;
-        public static readonly OVTASectionRefineAssessmentArea RefineAssessmentArea = Neptune.EFModels.Entities.OVTASectionRefineAssessmentArea.Instance;
-        public static readonly OVTASectionFinalizeOVTA FinalizeOVTA = Neptune.EFModels.Entities.OVTASectionFinalizeOVTA.Instance;
+        public static readonly OVTASectionInstructions Instructions = OVTASectionInstructions.Instance;
+        public static readonly OVTASectionInitiateOVTA InitiateOVTA = OVTASectionInitiateOVTA.Instance;
+        public static readonly OVTASectionRecordObservations RecordObservations = OVTASectionRecordObservations.Instance;
+        public static readonly OVTASectionAddOrRemoveParcels AddOrRemoveParcels = OVTASectionAddOrRemoveParcels.Instance;
+        public static readonly OVTASectionRefineAssessmentArea RefineAssessmentArea = OVTASectionRefineAssessmentArea.Instance;
+        public static readonly OVTASectionFinalizeOVTA FinalizeOVTA = OVTASectionFinalizeOVTA.Instance;
 
         public static readonly List<OVTASection> All;
-        public static readonly List<OVTASectionDto> AllAsDto;
+        public static readonly List<OVTASectionSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, OVTASection> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, OVTASectionDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, OVTASectionSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -33,9 +30,9 @@ namespace Neptune.EFModels.Entities
         static OVTASection()
         {
             All = new List<OVTASection> { Instructions, InitiateOVTA, RecordObservations, AddOrRemoveParcels, RefineAssessmentArea, FinalizeOVTA };
-            AllAsDto = new List<OVTASectionDto> { Instructions.AsDto(), InitiateOVTA.AsDto(), RecordObservations.AsDto(), AddOrRemoveParcels.AsDto(), RefineAssessmentArea.AsDto(), FinalizeOVTA.AsDto() };
+            AllAsSimpleDto = new List<OVTASectionSimpleDto> { Instructions.AsSimpleDto(), InitiateOVTA.AsSimpleDto(), RecordObservations.AsSimpleDto(), AddOrRemoveParcels.AsSimpleDto(), RefineAssessmentArea.AsSimpleDto(), FinalizeOVTA.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, OVTASection>(All.ToDictionary(x => x.OVTASectionID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, OVTASectionDto>(AllAsDto.ToDictionary(x => x.OVTASectionID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, OVTASectionSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.OVTASectionID));
         }
 
         /// <summary>

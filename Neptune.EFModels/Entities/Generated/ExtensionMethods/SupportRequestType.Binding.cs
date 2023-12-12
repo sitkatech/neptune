@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[SupportRequestType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,18 +12,18 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class SupportRequestType : IHavePrimaryKey
     {
-        public static readonly SupportRequestTypeReportBug ReportBug = Neptune.EFModels.Entities.SupportRequestTypeReportBug.Instance;
-        public static readonly SupportRequestTypeForgotLoginInfo ForgotLoginInfo = Neptune.EFModels.Entities.SupportRequestTypeForgotLoginInfo.Instance;
-        public static readonly SupportRequestTypeNewOrganization NewOrganization = Neptune.EFModels.Entities.SupportRequestTypeNewOrganization.Instance;
-        public static readonly SupportRequestTypeProvideFeedback ProvideFeedback = Neptune.EFModels.Entities.SupportRequestTypeProvideFeedback.Instance;
-        public static readonly SupportRequestTypeRequestOrganizationNameChange RequestOrganizationNameChange = Neptune.EFModels.Entities.SupportRequestTypeRequestOrganizationNameChange.Instance;
-        public static readonly SupportRequestTypeOther Other = Neptune.EFModels.Entities.SupportRequestTypeOther.Instance;
-        public static readonly SupportRequestTypeRequestToChangeUserAccountPrivileges RequestToChangeUserAccountPrivileges = Neptune.EFModels.Entities.SupportRequestTypeRequestToChangeUserAccountPrivileges.Instance;
+        public static readonly SupportRequestTypeReportBug ReportBug = SupportRequestTypeReportBug.Instance;
+        public static readonly SupportRequestTypeForgotLoginInfo ForgotLoginInfo = SupportRequestTypeForgotLoginInfo.Instance;
+        public static readonly SupportRequestTypeNewOrganization NewOrganization = SupportRequestTypeNewOrganization.Instance;
+        public static readonly SupportRequestTypeProvideFeedback ProvideFeedback = SupportRequestTypeProvideFeedback.Instance;
+        public static readonly SupportRequestTypeRequestOrganizationNameChange RequestOrganizationNameChange = SupportRequestTypeRequestOrganizationNameChange.Instance;
+        public static readonly SupportRequestTypeOther Other = SupportRequestTypeOther.Instance;
+        public static readonly SupportRequestTypeRequestToChangeUserAccountPrivileges RequestToChangeUserAccountPrivileges = SupportRequestTypeRequestToChangeUserAccountPrivileges.Instance;
 
         public static readonly List<SupportRequestType> All;
-        public static readonly List<SupportRequestTypeDto> AllAsDto;
+        public static readonly List<SupportRequestTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, SupportRequestType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, SupportRequestTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, SupportRequestTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -34,9 +31,9 @@ namespace Neptune.EFModels.Entities
         static SupportRequestType()
         {
             All = new List<SupportRequestType> { ReportBug, ForgotLoginInfo, NewOrganization, ProvideFeedback, RequestOrganizationNameChange, Other, RequestToChangeUserAccountPrivileges };
-            AllAsDto = new List<SupportRequestTypeDto> { ReportBug.AsDto(), ForgotLoginInfo.AsDto(), NewOrganization.AsDto(), ProvideFeedback.AsDto(), RequestOrganizationNameChange.AsDto(), Other.AsDto(), RequestToChangeUserAccountPrivileges.AsDto() };
+            AllAsSimpleDto = new List<SupportRequestTypeSimpleDto> { ReportBug.AsSimpleDto(), ForgotLoginInfo.AsSimpleDto(), NewOrganization.AsSimpleDto(), ProvideFeedback.AsSimpleDto(), RequestOrganizationNameChange.AsSimpleDto(), Other.AsSimpleDto(), RequestToChangeUserAccountPrivileges.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, SupportRequestType>(All.ToDictionary(x => x.SupportRequestTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, SupportRequestTypeDto>(AllAsDto.ToDictionary(x => x.SupportRequestTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, SupportRequestTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.SupportRequestTypeID));
         }
 
         /// <summary>

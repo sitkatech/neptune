@@ -9,23 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ProjectLoadGeneratingUnitExtensionMethods
     {
-        public static ProjectLoadGeneratingUnitDto AsDto(this ProjectLoadGeneratingUnit projectLoadGeneratingUnit)
-        {
-            var projectLoadGeneratingUnitDto = new ProjectLoadGeneratingUnitDto()
-            {
-                ProjectLoadGeneratingUnitID = projectLoadGeneratingUnit.ProjectLoadGeneratingUnitID,
-                Project = projectLoadGeneratingUnit.Project.AsDto(),
-                ModelBasin = projectLoadGeneratingUnit.ModelBasin?.AsDto(),
-                RegionalSubbasin = projectLoadGeneratingUnit.RegionalSubbasin?.AsDto(),
-                Delineation = projectLoadGeneratingUnit.Delineation?.AsDto(),
-                WaterQualityManagementPlan = projectLoadGeneratingUnit.WaterQualityManagementPlan?.AsDto(),
-                IsEmptyResponseFromHRUService = projectLoadGeneratingUnit.IsEmptyResponseFromHRUService
-            };
-            DoCustomMappings(projectLoadGeneratingUnit, projectLoadGeneratingUnitDto);
-            return projectLoadGeneratingUnitDto;
-        }
-
-        static partial void DoCustomMappings(ProjectLoadGeneratingUnit projectLoadGeneratingUnit, ProjectLoadGeneratingUnitDto projectLoadGeneratingUnitDto);
 
         public static ProjectLoadGeneratingUnitSimpleDto AsSimpleDto(this ProjectLoadGeneratingUnit projectLoadGeneratingUnit)
         {

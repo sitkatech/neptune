@@ -9,19 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class OnlandVisualTrashAssessmentObservationPhotoStagingExtensionMethods
     {
-        public static OnlandVisualTrashAssessmentObservationPhotoStagingDto AsDto(this OnlandVisualTrashAssessmentObservationPhotoStaging onlandVisualTrashAssessmentObservationPhotoStaging)
-        {
-            var onlandVisualTrashAssessmentObservationPhotoStagingDto = new OnlandVisualTrashAssessmentObservationPhotoStagingDto()
-            {
-                OnlandVisualTrashAssessmentObservationPhotoStagingID = onlandVisualTrashAssessmentObservationPhotoStaging.OnlandVisualTrashAssessmentObservationPhotoStagingID,
-                FileResource = onlandVisualTrashAssessmentObservationPhotoStaging.FileResource.AsDto(),
-                OnlandVisualTrashAssessment = onlandVisualTrashAssessmentObservationPhotoStaging.OnlandVisualTrashAssessment.AsDto()
-            };
-            DoCustomMappings(onlandVisualTrashAssessmentObservationPhotoStaging, onlandVisualTrashAssessmentObservationPhotoStagingDto);
-            return onlandVisualTrashAssessmentObservationPhotoStagingDto;
-        }
-
-        static partial void DoCustomMappings(OnlandVisualTrashAssessmentObservationPhotoStaging onlandVisualTrashAssessmentObservationPhotoStaging, OnlandVisualTrashAssessmentObservationPhotoStagingDto onlandVisualTrashAssessmentObservationPhotoStagingDto);
 
         public static OnlandVisualTrashAssessmentObservationPhotoStagingSimpleDto AsSimpleDto(this OnlandVisualTrashAssessmentObservationPhotoStaging onlandVisualTrashAssessmentObservationPhotoStaging)
         {

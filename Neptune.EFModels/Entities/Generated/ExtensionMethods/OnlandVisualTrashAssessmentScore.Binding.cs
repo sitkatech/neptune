@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[OnlandVisualTrashAssessmentScore]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,15 +12,15 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class OnlandVisualTrashAssessmentScore : IHavePrimaryKey
     {
-        public static readonly OnlandVisualTrashAssessmentScoreA A = Neptune.EFModels.Entities.OnlandVisualTrashAssessmentScoreA.Instance;
-        public static readonly OnlandVisualTrashAssessmentScoreB B = Neptune.EFModels.Entities.OnlandVisualTrashAssessmentScoreB.Instance;
-        public static readonly OnlandVisualTrashAssessmentScoreC C = Neptune.EFModels.Entities.OnlandVisualTrashAssessmentScoreC.Instance;
-        public static readonly OnlandVisualTrashAssessmentScoreD D = Neptune.EFModels.Entities.OnlandVisualTrashAssessmentScoreD.Instance;
+        public static readonly OnlandVisualTrashAssessmentScoreA A = OnlandVisualTrashAssessmentScoreA.Instance;
+        public static readonly OnlandVisualTrashAssessmentScoreB B = OnlandVisualTrashAssessmentScoreB.Instance;
+        public static readonly OnlandVisualTrashAssessmentScoreC C = OnlandVisualTrashAssessmentScoreC.Instance;
+        public static readonly OnlandVisualTrashAssessmentScoreD D = OnlandVisualTrashAssessmentScoreD.Instance;
 
         public static readonly List<OnlandVisualTrashAssessmentScore> All;
-        public static readonly List<OnlandVisualTrashAssessmentScoreDto> AllAsDto;
+        public static readonly List<OnlandVisualTrashAssessmentScoreSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, OnlandVisualTrashAssessmentScore> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, OnlandVisualTrashAssessmentScoreDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, OnlandVisualTrashAssessmentScoreSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -31,9 +28,9 @@ namespace Neptune.EFModels.Entities
         static OnlandVisualTrashAssessmentScore()
         {
             All = new List<OnlandVisualTrashAssessmentScore> { A, B, C, D };
-            AllAsDto = new List<OnlandVisualTrashAssessmentScoreDto> { A.AsDto(), B.AsDto(), C.AsDto(), D.AsDto() };
+            AllAsSimpleDto = new List<OnlandVisualTrashAssessmentScoreSimpleDto> { A.AsSimpleDto(), B.AsSimpleDto(), C.AsSimpleDto(), D.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, OnlandVisualTrashAssessmentScore>(All.ToDictionary(x => x.OnlandVisualTrashAssessmentScoreID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, OnlandVisualTrashAssessmentScoreDto>(AllAsDto.ToDictionary(x => x.OnlandVisualTrashAssessmentScoreID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, OnlandVisualTrashAssessmentScoreSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.OnlandVisualTrashAssessmentScoreID));
         }
 
         /// <summary>

@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[FileResourceMimeType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,28 +12,28 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class FileResourceMimeType : IHavePrimaryKey
     {
-        public static readonly FileResourceMimeTypePDF PDF = Neptune.EFModels.Entities.FileResourceMimeTypePDF.Instance;
-        public static readonly FileResourceMimeTypeWordDOCX WordDOCX = Neptune.EFModels.Entities.FileResourceMimeTypeWordDOCX.Instance;
-        public static readonly FileResourceMimeTypeExcelXLSX ExcelXLSX = Neptune.EFModels.Entities.FileResourceMimeTypeExcelXLSX.Instance;
-        public static readonly FileResourceMimeTypeXPNG XPNG = Neptune.EFModels.Entities.FileResourceMimeTypeXPNG.Instance;
-        public static readonly FileResourceMimeTypePNG PNG = Neptune.EFModels.Entities.FileResourceMimeTypePNG.Instance;
-        public static readonly FileResourceMimeTypeTIFF TIFF = Neptune.EFModels.Entities.FileResourceMimeTypeTIFF.Instance;
-        public static readonly FileResourceMimeTypeBMP BMP = Neptune.EFModels.Entities.FileResourceMimeTypeBMP.Instance;
-        public static readonly FileResourceMimeTypeGIF GIF = Neptune.EFModels.Entities.FileResourceMimeTypeGIF.Instance;
-        public static readonly FileResourceMimeTypeJPEG JPEG = Neptune.EFModels.Entities.FileResourceMimeTypeJPEG.Instance;
-        public static readonly FileResourceMimeTypePJPEG PJPEG = Neptune.EFModels.Entities.FileResourceMimeTypePJPEG.Instance;
-        public static readonly FileResourceMimeTypePowerpointPPTX PowerpointPPTX = Neptune.EFModels.Entities.FileResourceMimeTypePowerpointPPTX.Instance;
-        public static readonly FileResourceMimeTypePowerpointPPT PowerpointPPT = Neptune.EFModels.Entities.FileResourceMimeTypePowerpointPPT.Instance;
-        public static readonly FileResourceMimeTypeExcelXLS ExcelXLS = Neptune.EFModels.Entities.FileResourceMimeTypeExcelXLS.Instance;
-        public static readonly FileResourceMimeTypeWordDOC WordDOC = Neptune.EFModels.Entities.FileResourceMimeTypeWordDOC.Instance;
-        public static readonly FileResourceMimeTypexExcelXLSX xExcelXLSX = Neptune.EFModels.Entities.FileResourceMimeTypexExcelXLSX.Instance;
-        public static readonly FileResourceMimeTypeCSS CSS = Neptune.EFModels.Entities.FileResourceMimeTypeCSS.Instance;
-        public static readonly FileResourceMimeTypeZIP ZIP = Neptune.EFModels.Entities.FileResourceMimeTypeZIP.Instance;
+        public static readonly FileResourceMimeTypePDF PDF = FileResourceMimeTypePDF.Instance;
+        public static readonly FileResourceMimeTypeWordDOCX WordDOCX = FileResourceMimeTypeWordDOCX.Instance;
+        public static readonly FileResourceMimeTypeExcelXLSX ExcelXLSX = FileResourceMimeTypeExcelXLSX.Instance;
+        public static readonly FileResourceMimeTypeXPNG XPNG = FileResourceMimeTypeXPNG.Instance;
+        public static readonly FileResourceMimeTypePNG PNG = FileResourceMimeTypePNG.Instance;
+        public static readonly FileResourceMimeTypeTIFF TIFF = FileResourceMimeTypeTIFF.Instance;
+        public static readonly FileResourceMimeTypeBMP BMP = FileResourceMimeTypeBMP.Instance;
+        public static readonly FileResourceMimeTypeGIF GIF = FileResourceMimeTypeGIF.Instance;
+        public static readonly FileResourceMimeTypeJPEG JPEG = FileResourceMimeTypeJPEG.Instance;
+        public static readonly FileResourceMimeTypePJPEG PJPEG = FileResourceMimeTypePJPEG.Instance;
+        public static readonly FileResourceMimeTypePowerpointPPTX PowerpointPPTX = FileResourceMimeTypePowerpointPPTX.Instance;
+        public static readonly FileResourceMimeTypePowerpointPPT PowerpointPPT = FileResourceMimeTypePowerpointPPT.Instance;
+        public static readonly FileResourceMimeTypeExcelXLS ExcelXLS = FileResourceMimeTypeExcelXLS.Instance;
+        public static readonly FileResourceMimeTypeWordDOC WordDOC = FileResourceMimeTypeWordDOC.Instance;
+        public static readonly FileResourceMimeTypexExcelXLSX xExcelXLSX = FileResourceMimeTypexExcelXLSX.Instance;
+        public static readonly FileResourceMimeTypeCSS CSS = FileResourceMimeTypeCSS.Instance;
+        public static readonly FileResourceMimeTypeZIP ZIP = FileResourceMimeTypeZIP.Instance;
 
         public static readonly List<FileResourceMimeType> All;
-        public static readonly List<FileResourceMimeTypeDto> AllAsDto;
+        public static readonly List<FileResourceMimeTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, FileResourceMimeType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, FileResourceMimeTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, FileResourceMimeTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -44,9 +41,9 @@ namespace Neptune.EFModels.Entities
         static FileResourceMimeType()
         {
             All = new List<FileResourceMimeType> { PDF, WordDOCX, ExcelXLSX, XPNG, PNG, TIFF, BMP, GIF, JPEG, PJPEG, PowerpointPPTX, PowerpointPPT, ExcelXLS, WordDOC, xExcelXLSX, CSS, ZIP };
-            AllAsDto = new List<FileResourceMimeTypeDto> { PDF.AsDto(), WordDOCX.AsDto(), ExcelXLSX.AsDto(), XPNG.AsDto(), PNG.AsDto(), TIFF.AsDto(), BMP.AsDto(), GIF.AsDto(), JPEG.AsDto(), PJPEG.AsDto(), PowerpointPPTX.AsDto(), PowerpointPPT.AsDto(), ExcelXLS.AsDto(), WordDOC.AsDto(), xExcelXLSX.AsDto(), CSS.AsDto(), ZIP.AsDto() };
+            AllAsSimpleDto = new List<FileResourceMimeTypeSimpleDto> { PDF.AsSimpleDto(), WordDOCX.AsSimpleDto(), ExcelXLSX.AsSimpleDto(), XPNG.AsSimpleDto(), PNG.AsSimpleDto(), TIFF.AsSimpleDto(), BMP.AsSimpleDto(), GIF.AsSimpleDto(), JPEG.AsSimpleDto(), PJPEG.AsSimpleDto(), PowerpointPPTX.AsSimpleDto(), PowerpointPPT.AsSimpleDto(), ExcelXLS.AsSimpleDto(), WordDOC.AsSimpleDto(), xExcelXLSX.AsSimpleDto(), CSS.AsSimpleDto(), ZIP.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, FileResourceMimeType>(All.ToDictionary(x => x.FileResourceMimeTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, FileResourceMimeTypeDto>(AllAsDto.ToDictionary(x => x.FileResourceMimeTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, FileResourceMimeTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.FileResourceMimeTypeID));
         }
 
         /// <summary>

@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[TreatmentBMPLifespanType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,14 +12,14 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class TreatmentBMPLifespanType : IHavePrimaryKey
     {
-        public static readonly TreatmentBMPLifespanTypeUnspecified Unspecified = Neptune.EFModels.Entities.TreatmentBMPLifespanTypeUnspecified.Instance;
-        public static readonly TreatmentBMPLifespanTypePerpetuity Perpetuity = Neptune.EFModels.Entities.TreatmentBMPLifespanTypePerpetuity.Instance;
-        public static readonly TreatmentBMPLifespanTypeFixedEndDate FixedEndDate = Neptune.EFModels.Entities.TreatmentBMPLifespanTypeFixedEndDate.Instance;
+        public static readonly TreatmentBMPLifespanTypeUnspecified Unspecified = TreatmentBMPLifespanTypeUnspecified.Instance;
+        public static readonly TreatmentBMPLifespanTypePerpetuity Perpetuity = TreatmentBMPLifespanTypePerpetuity.Instance;
+        public static readonly TreatmentBMPLifespanTypeFixedEndDate FixedEndDate = TreatmentBMPLifespanTypeFixedEndDate.Instance;
 
         public static readonly List<TreatmentBMPLifespanType> All;
-        public static readonly List<TreatmentBMPLifespanTypeDto> AllAsDto;
+        public static readonly List<TreatmentBMPLifespanTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, TreatmentBMPLifespanType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, TreatmentBMPLifespanTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, TreatmentBMPLifespanTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -30,9 +27,9 @@ namespace Neptune.EFModels.Entities
         static TreatmentBMPLifespanType()
         {
             All = new List<TreatmentBMPLifespanType> { Unspecified, Perpetuity, FixedEndDate };
-            AllAsDto = new List<TreatmentBMPLifespanTypeDto> { Unspecified.AsDto(), Perpetuity.AsDto(), FixedEndDate.AsDto() };
+            AllAsSimpleDto = new List<TreatmentBMPLifespanTypeSimpleDto> { Unspecified.AsSimpleDto(), Perpetuity.AsSimpleDto(), FixedEndDate.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPLifespanType>(All.ToDictionary(x => x.TreatmentBMPLifespanTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPLifespanTypeDto>(AllAsDto.ToDictionary(x => x.TreatmentBMPLifespanTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPLifespanTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.TreatmentBMPLifespanTypeID));
         }
 
         /// <summary>

@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[HRUCharacteristicLandUseCode]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,30 +12,30 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class HRUCharacteristicLandUseCode : IHavePrimaryKey
     {
-        public static readonly HRUCharacteristicLandUseCodeCOMM COMM = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeCOMM.Instance;
-        public static readonly HRUCharacteristicLandUseCodeEDU EDU = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeEDU.Instance;
-        public static readonly HRUCharacteristicLandUseCodeIND IND = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeIND.Instance;
-        public static readonly HRUCharacteristicLandUseCodeUTIL UTIL = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeUTIL.Instance;
-        public static readonly HRUCharacteristicLandUseCodeRESSFH RESSFH = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeRESSFH.Instance;
-        public static readonly HRUCharacteristicLandUseCodeRESSFL RESSFL = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeRESSFL.Instance;
-        public static readonly HRUCharacteristicLandUseCodeRESMF RESMF = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeRESMF.Instance;
-        public static readonly HRUCharacteristicLandUseCodeTRFWY TRFWY = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeTRFWY.Instance;
-        public static readonly HRUCharacteristicLandUseCodeTRANS TRANS = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeTRANS.Instance;
-        public static readonly HRUCharacteristicLandUseCodeTROTH TROTH = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeTROTH.Instance;
-        public static readonly HRUCharacteristicLandUseCodeOSAGIR OSAGIR = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeOSAGIR.Instance;
-        public static readonly HRUCharacteristicLandUseCodeOSAGNI OSAGNI = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeOSAGNI.Instance;
-        public static readonly HRUCharacteristicLandUseCodeOSDEV OSDEV = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeOSDEV.Instance;
-        public static readonly HRUCharacteristicLandUseCodeOSIRR OSIRR = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeOSIRR.Instance;
-        public static readonly HRUCharacteristicLandUseCodeOSLOW OSLOW = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeOSLOW.Instance;
-        public static readonly HRUCharacteristicLandUseCodeOSFOR OSFOR = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeOSFOR.Instance;
-        public static readonly HRUCharacteristicLandUseCodeOSWET OSWET = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeOSWET.Instance;
-        public static readonly HRUCharacteristicLandUseCodeOSVAC OSVAC = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeOSVAC.Instance;
-        public static readonly HRUCharacteristicLandUseCodeWATER WATER = Neptune.EFModels.Entities.HRUCharacteristicLandUseCodeWATER.Instance;
+        public static readonly HRUCharacteristicLandUseCodeCOMM COMM = HRUCharacteristicLandUseCodeCOMM.Instance;
+        public static readonly HRUCharacteristicLandUseCodeEDU EDU = HRUCharacteristicLandUseCodeEDU.Instance;
+        public static readonly HRUCharacteristicLandUseCodeIND IND = HRUCharacteristicLandUseCodeIND.Instance;
+        public static readonly HRUCharacteristicLandUseCodeUTIL UTIL = HRUCharacteristicLandUseCodeUTIL.Instance;
+        public static readonly HRUCharacteristicLandUseCodeRESSFH RESSFH = HRUCharacteristicLandUseCodeRESSFH.Instance;
+        public static readonly HRUCharacteristicLandUseCodeRESSFL RESSFL = HRUCharacteristicLandUseCodeRESSFL.Instance;
+        public static readonly HRUCharacteristicLandUseCodeRESMF RESMF = HRUCharacteristicLandUseCodeRESMF.Instance;
+        public static readonly HRUCharacteristicLandUseCodeTRFWY TRFWY = HRUCharacteristicLandUseCodeTRFWY.Instance;
+        public static readonly HRUCharacteristicLandUseCodeTRANS TRANS = HRUCharacteristicLandUseCodeTRANS.Instance;
+        public static readonly HRUCharacteristicLandUseCodeTROTH TROTH = HRUCharacteristicLandUseCodeTROTH.Instance;
+        public static readonly HRUCharacteristicLandUseCodeOSAGIR OSAGIR = HRUCharacteristicLandUseCodeOSAGIR.Instance;
+        public static readonly HRUCharacteristicLandUseCodeOSAGNI OSAGNI = HRUCharacteristicLandUseCodeOSAGNI.Instance;
+        public static readonly HRUCharacteristicLandUseCodeOSDEV OSDEV = HRUCharacteristicLandUseCodeOSDEV.Instance;
+        public static readonly HRUCharacteristicLandUseCodeOSIRR OSIRR = HRUCharacteristicLandUseCodeOSIRR.Instance;
+        public static readonly HRUCharacteristicLandUseCodeOSLOW OSLOW = HRUCharacteristicLandUseCodeOSLOW.Instance;
+        public static readonly HRUCharacteristicLandUseCodeOSFOR OSFOR = HRUCharacteristicLandUseCodeOSFOR.Instance;
+        public static readonly HRUCharacteristicLandUseCodeOSWET OSWET = HRUCharacteristicLandUseCodeOSWET.Instance;
+        public static readonly HRUCharacteristicLandUseCodeOSVAC OSVAC = HRUCharacteristicLandUseCodeOSVAC.Instance;
+        public static readonly HRUCharacteristicLandUseCodeWATER WATER = HRUCharacteristicLandUseCodeWATER.Instance;
 
         public static readonly List<HRUCharacteristicLandUseCode> All;
-        public static readonly List<HRUCharacteristicLandUseCodeDto> AllAsDto;
+        public static readonly List<HRUCharacteristicLandUseCodeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, HRUCharacteristicLandUseCode> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, HRUCharacteristicLandUseCodeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, HRUCharacteristicLandUseCodeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -46,9 +43,9 @@ namespace Neptune.EFModels.Entities
         static HRUCharacteristicLandUseCode()
         {
             All = new List<HRUCharacteristicLandUseCode> { COMM, EDU, IND, UTIL, RESSFH, RESSFL, RESMF, TRFWY, TRANS, TROTH, OSAGIR, OSAGNI, OSDEV, OSIRR, OSLOW, OSFOR, OSWET, OSVAC, WATER };
-            AllAsDto = new List<HRUCharacteristicLandUseCodeDto> { COMM.AsDto(), EDU.AsDto(), IND.AsDto(), UTIL.AsDto(), RESSFH.AsDto(), RESSFL.AsDto(), RESMF.AsDto(), TRFWY.AsDto(), TRANS.AsDto(), TROTH.AsDto(), OSAGIR.AsDto(), OSAGNI.AsDto(), OSDEV.AsDto(), OSIRR.AsDto(), OSLOW.AsDto(), OSFOR.AsDto(), OSWET.AsDto(), OSVAC.AsDto(), WATER.AsDto() };
+            AllAsSimpleDto = new List<HRUCharacteristicLandUseCodeSimpleDto> { COMM.AsSimpleDto(), EDU.AsSimpleDto(), IND.AsSimpleDto(), UTIL.AsSimpleDto(), RESSFH.AsSimpleDto(), RESSFL.AsSimpleDto(), RESMF.AsSimpleDto(), TRFWY.AsSimpleDto(), TRANS.AsSimpleDto(), TROTH.AsSimpleDto(), OSAGIR.AsSimpleDto(), OSAGNI.AsSimpleDto(), OSDEV.AsSimpleDto(), OSIRR.AsSimpleDto(), OSLOW.AsSimpleDto(), OSFOR.AsSimpleDto(), OSWET.AsSimpleDto(), OSVAC.AsSimpleDto(), WATER.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, HRUCharacteristicLandUseCode>(All.ToDictionary(x => x.HRUCharacteristicLandUseCodeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, HRUCharacteristicLandUseCodeDto>(AllAsDto.ToDictionary(x => x.HRUCharacteristicLandUseCodeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, HRUCharacteristicLandUseCodeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.HRUCharacteristicLandUseCodeID));
         }
 
         /// <summary>

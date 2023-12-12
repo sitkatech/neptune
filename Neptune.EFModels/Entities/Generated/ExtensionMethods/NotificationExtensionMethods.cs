@@ -9,20 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class NotificationExtensionMethods
     {
-        public static NotificationDto AsDto(this Notification notification)
-        {
-            var notificationDto = new NotificationDto()
-            {
-                NotificationID = notification.NotificationID,
-                NotificationType = notification.NotificationType.AsDto(),
-                Person = notification.Person.AsDto(),
-                NotificationDate = notification.NotificationDate
-            };
-            DoCustomMappings(notification, notificationDto);
-            return notificationDto;
-        }
-
-        static partial void DoCustomMappings(Notification notification, NotificationDto notificationDto);
 
         public static NotificationSimpleDto AsSimpleDto(this Notification notification)
         {

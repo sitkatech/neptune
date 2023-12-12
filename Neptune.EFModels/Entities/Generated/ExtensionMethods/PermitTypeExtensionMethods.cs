@@ -9,19 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class PermitTypeExtensionMethods
     {
-        public static PermitTypeDto AsDto(this PermitType permitType)
-        {
-            var permitTypeDto = new PermitTypeDto()
-            {
-                PermitTypeID = permitType.PermitTypeID,
-                PermitTypeName = permitType.PermitTypeName,
-                PermitTypeDisplayName = permitType.PermitTypeDisplayName
-            };
-            DoCustomMappings(permitType, permitTypeDto);
-            return permitTypeDto;
-        }
-
-        static partial void DoCustomMappings(PermitType permitType, PermitTypeDto permitTypeDto);
 
         public static PermitTypeSimpleDto AsSimpleDto(this PermitType permitType)
         {

@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[PermitType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,17 +12,17 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class PermitType : IHavePrimaryKey
     {
-        public static readonly PermitTypePhaseIMS4 PhaseIMS4 = Neptune.EFModels.Entities.PermitTypePhaseIMS4.Instance;
-        public static readonly PermitTypePhaseIIMS4 PhaseIIMS4 = Neptune.EFModels.Entities.PermitTypePhaseIIMS4.Instance;
-        public static readonly PermitTypeIGP IGP = Neptune.EFModels.Entities.PermitTypeIGP.Instance;
-        public static readonly PermitTypeIndividualPermit IndividualPermit = Neptune.EFModels.Entities.PermitTypeIndividualPermit.Instance;
-        public static readonly PermitTypeCalTransMS4 CalTransMS4 = Neptune.EFModels.Entities.PermitTypeCalTransMS4.Instance;
-        public static readonly PermitTypeOther Other = Neptune.EFModels.Entities.PermitTypeOther.Instance;
+        public static readonly PermitTypePhaseIMS4 PhaseIMS4 = PermitTypePhaseIMS4.Instance;
+        public static readonly PermitTypePhaseIIMS4 PhaseIIMS4 = PermitTypePhaseIIMS4.Instance;
+        public static readonly PermitTypeIGP IGP = PermitTypeIGP.Instance;
+        public static readonly PermitTypeIndividualPermit IndividualPermit = PermitTypeIndividualPermit.Instance;
+        public static readonly PermitTypeCalTransMS4 CalTransMS4 = PermitTypeCalTransMS4.Instance;
+        public static readonly PermitTypeOther Other = PermitTypeOther.Instance;
 
         public static readonly List<PermitType> All;
-        public static readonly List<PermitTypeDto> AllAsDto;
+        public static readonly List<PermitTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, PermitType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, PermitTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, PermitTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -33,9 +30,9 @@ namespace Neptune.EFModels.Entities
         static PermitType()
         {
             All = new List<PermitType> { PhaseIMS4, PhaseIIMS4, IGP, IndividualPermit, CalTransMS4, Other };
-            AllAsDto = new List<PermitTypeDto> { PhaseIMS4.AsDto(), PhaseIIMS4.AsDto(), IGP.AsDto(), IndividualPermit.AsDto(), CalTransMS4.AsDto(), Other.AsDto() };
+            AllAsSimpleDto = new List<PermitTypeSimpleDto> { PhaseIMS4.AsSimpleDto(), PhaseIIMS4.AsSimpleDto(), IGP.AsSimpleDto(), IndividualPermit.AsSimpleDto(), CalTransMS4.AsSimpleDto(), Other.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, PermitType>(All.ToDictionary(x => x.PermitTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, PermitTypeDto>(AllAsDto.ToDictionary(x => x.PermitTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, PermitTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.PermitTypeID));
         }
 
         /// <summary>

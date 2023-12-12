@@ -9,23 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TrashGeneratingUnit4326ExtensionMethods
     {
-        public static TrashGeneratingUnit4326Dto AsDto(this TrashGeneratingUnit4326 trashGeneratingUnit4326)
-        {
-            var trashGeneratingUnit4326Dto = new TrashGeneratingUnit4326Dto()
-            {
-                TrashGeneratingUnit4326ID = trashGeneratingUnit4326.TrashGeneratingUnit4326ID,
-                StormwaterJurisdiction = trashGeneratingUnit4326.StormwaterJurisdiction.AsDto(),
-                OnlandVisualTrashAssessmentArea = trashGeneratingUnit4326.OnlandVisualTrashAssessmentArea?.AsDto(),
-                LandUseBlock = trashGeneratingUnit4326.LandUseBlock?.AsDto(),
-                LastUpdateDate = trashGeneratingUnit4326.LastUpdateDate,
-                DelineationID = trashGeneratingUnit4326.DelineationID,
-                WaterQualityManagementPlan = trashGeneratingUnit4326.WaterQualityManagementPlan?.AsDto()
-            };
-            DoCustomMappings(trashGeneratingUnit4326, trashGeneratingUnit4326Dto);
-            return trashGeneratingUnit4326Dto;
-        }
-
-        static partial void DoCustomMappings(TrashGeneratingUnit4326 trashGeneratingUnit4326, TrashGeneratingUnit4326Dto trashGeneratingUnit4326Dto);
 
         public static TrashGeneratingUnit4326SimpleDto AsSimpleDto(this TrashGeneratingUnit4326 trashGeneratingUnit4326)
         {

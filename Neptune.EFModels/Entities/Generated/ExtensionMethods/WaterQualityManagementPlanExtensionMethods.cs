@@ -9,41 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class WaterQualityManagementPlanExtensionMethods
     {
-        public static WaterQualityManagementPlanDto AsDto(this WaterQualityManagementPlan waterQualityManagementPlan)
-        {
-            var waterQualityManagementPlanDto = new WaterQualityManagementPlanDto()
-            {
-                WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID,
-                StormwaterJurisdiction = waterQualityManagementPlan.StormwaterJurisdiction.AsDto(),
-                WaterQualityManagementPlanLandUse = waterQualityManagementPlan.WaterQualityManagementPlanLandUse?.AsDto(),
-                WaterQualityManagementPlanPriority = waterQualityManagementPlan.WaterQualityManagementPlanPriority?.AsDto(),
-                WaterQualityManagementPlanStatus = waterQualityManagementPlan.WaterQualityManagementPlanStatus?.AsDto(),
-                WaterQualityManagementPlanDevelopmentType = waterQualityManagementPlan.WaterQualityManagementPlanDevelopmentType?.AsDto(),
-                WaterQualityManagementPlanName = waterQualityManagementPlan.WaterQualityManagementPlanName,
-                ApprovalDate = waterQualityManagementPlan.ApprovalDate,
-                MaintenanceContactName = waterQualityManagementPlan.MaintenanceContactName,
-                MaintenanceContactOrganization = waterQualityManagementPlan.MaintenanceContactOrganization,
-                MaintenanceContactPhone = waterQualityManagementPlan.MaintenanceContactPhone,
-                MaintenanceContactAddress1 = waterQualityManagementPlan.MaintenanceContactAddress1,
-                MaintenanceContactAddress2 = waterQualityManagementPlan.MaintenanceContactAddress2,
-                MaintenanceContactCity = waterQualityManagementPlan.MaintenanceContactCity,
-                MaintenanceContactState = waterQualityManagementPlan.MaintenanceContactState,
-                MaintenanceContactZip = waterQualityManagementPlan.MaintenanceContactZip,
-                WaterQualityManagementPlanPermitTerm = waterQualityManagementPlan.WaterQualityManagementPlanPermitTerm?.AsDto(),
-                HydromodificationAppliesType = waterQualityManagementPlan.HydromodificationAppliesType?.AsDto(),
-                DateOfContruction = waterQualityManagementPlan.DateOfContruction,
-                HydrologicSubarea = waterQualityManagementPlan.HydrologicSubarea?.AsDto(),
-                RecordNumber = waterQualityManagementPlan.RecordNumber,
-                RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres,
-                TrashCaptureStatusType = waterQualityManagementPlan.TrashCaptureStatusType.AsDto(),
-                TrashCaptureEffectiveness = waterQualityManagementPlan.TrashCaptureEffectiveness,
-                WaterQualityManagementPlanModelingApproach = waterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.AsDto()
-            };
-            DoCustomMappings(waterQualityManagementPlan, waterQualityManagementPlanDto);
-            return waterQualityManagementPlanDto;
-        }
-
-        static partial void DoCustomMappings(WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanDto waterQualityManagementPlanDto);
 
         public static WaterQualityManagementPlanSimpleDto AsSimpleDto(this WaterQualityManagementPlan waterQualityManagementPlan)
         {

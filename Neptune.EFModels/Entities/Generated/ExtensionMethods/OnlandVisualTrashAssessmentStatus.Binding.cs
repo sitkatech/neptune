@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[OnlandVisualTrashAssessmentStatus]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,13 +12,13 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class OnlandVisualTrashAssessmentStatus : IHavePrimaryKey
     {
-        public static readonly OnlandVisualTrashAssessmentStatusInProgress InProgress = Neptune.EFModels.Entities.OnlandVisualTrashAssessmentStatusInProgress.Instance;
-        public static readonly OnlandVisualTrashAssessmentStatusComplete Complete = Neptune.EFModels.Entities.OnlandVisualTrashAssessmentStatusComplete.Instance;
+        public static readonly OnlandVisualTrashAssessmentStatusInProgress InProgress = OnlandVisualTrashAssessmentStatusInProgress.Instance;
+        public static readonly OnlandVisualTrashAssessmentStatusComplete Complete = OnlandVisualTrashAssessmentStatusComplete.Instance;
 
         public static readonly List<OnlandVisualTrashAssessmentStatus> All;
-        public static readonly List<OnlandVisualTrashAssessmentStatusDto> AllAsDto;
+        public static readonly List<OnlandVisualTrashAssessmentStatusSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, OnlandVisualTrashAssessmentStatus> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, OnlandVisualTrashAssessmentStatusDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, OnlandVisualTrashAssessmentStatusSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +26,9 @@ namespace Neptune.EFModels.Entities
         static OnlandVisualTrashAssessmentStatus()
         {
             All = new List<OnlandVisualTrashAssessmentStatus> { InProgress, Complete };
-            AllAsDto = new List<OnlandVisualTrashAssessmentStatusDto> { InProgress.AsDto(), Complete.AsDto() };
+            AllAsSimpleDto = new List<OnlandVisualTrashAssessmentStatusSimpleDto> { InProgress.AsSimpleDto(), Complete.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, OnlandVisualTrashAssessmentStatus>(All.ToDictionary(x => x.OnlandVisualTrashAssessmentStatusID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, OnlandVisualTrashAssessmentStatusDto>(AllAsDto.ToDictionary(x => x.OnlandVisualTrashAssessmentStatusID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, OnlandVisualTrashAssessmentStatusSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.OnlandVisualTrashAssessmentStatusID));
         }
 
         /// <summary>

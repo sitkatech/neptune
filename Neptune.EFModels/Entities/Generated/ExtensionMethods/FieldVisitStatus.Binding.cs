@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[FieldVisitStatus]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,15 +12,15 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class FieldVisitStatus : IHavePrimaryKey
     {
-        public static readonly FieldVisitStatusInProgress InProgress = Neptune.EFModels.Entities.FieldVisitStatusInProgress.Instance;
-        public static readonly FieldVisitStatusComplete Complete = Neptune.EFModels.Entities.FieldVisitStatusComplete.Instance;
-        public static readonly FieldVisitStatusUnresolved Unresolved = Neptune.EFModels.Entities.FieldVisitStatusUnresolved.Instance;
-        public static readonly FieldVisitStatusReturnedToEdit ReturnedToEdit = Neptune.EFModels.Entities.FieldVisitStatusReturnedToEdit.Instance;
+        public static readonly FieldVisitStatusInProgress InProgress = FieldVisitStatusInProgress.Instance;
+        public static readonly FieldVisitStatusComplete Complete = FieldVisitStatusComplete.Instance;
+        public static readonly FieldVisitStatusUnresolved Unresolved = FieldVisitStatusUnresolved.Instance;
+        public static readonly FieldVisitStatusReturnedToEdit ReturnedToEdit = FieldVisitStatusReturnedToEdit.Instance;
 
         public static readonly List<FieldVisitStatus> All;
-        public static readonly List<FieldVisitStatusDto> AllAsDto;
+        public static readonly List<FieldVisitStatusSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, FieldVisitStatus> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, FieldVisitStatusDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, FieldVisitStatusSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -31,9 +28,9 @@ namespace Neptune.EFModels.Entities
         static FieldVisitStatus()
         {
             All = new List<FieldVisitStatus> { InProgress, Complete, Unresolved, ReturnedToEdit };
-            AllAsDto = new List<FieldVisitStatusDto> { InProgress.AsDto(), Complete.AsDto(), Unresolved.AsDto(), ReturnedToEdit.AsDto() };
+            AllAsSimpleDto = new List<FieldVisitStatusSimpleDto> { InProgress.AsSimpleDto(), Complete.AsSimpleDto(), Unresolved.AsSimpleDto(), ReturnedToEdit.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldVisitStatus>(All.ToDictionary(x => x.FieldVisitStatusID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, FieldVisitStatusDto>(AllAsDto.ToDictionary(x => x.FieldVisitStatusID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, FieldVisitStatusSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.FieldVisitStatusID));
         }
 
         /// <summary>

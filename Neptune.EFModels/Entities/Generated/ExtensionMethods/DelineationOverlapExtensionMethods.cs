@@ -9,19 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class DelineationOverlapExtensionMethods
     {
-        public static DelineationOverlapDto AsDto(this DelineationOverlap delineationOverlap)
-        {
-            var delineationOverlapDto = new DelineationOverlapDto()
-            {
-                DelineationOverlapID = delineationOverlap.DelineationOverlapID,
-                Delineation = delineationOverlap.Delineation.AsDto(),
-                OverlappingDelineation = delineationOverlap.OverlappingDelineation.AsDto()
-            };
-            DoCustomMappings(delineationOverlap, delineationOverlapDto);
-            return delineationOverlapDto;
-        }
-
-        static partial void DoCustomMappings(DelineationOverlap delineationOverlap, DelineationOverlapDto delineationOverlapDto);
 
         public static DelineationOverlapSimpleDto AsSimpleDto(this DelineationOverlap delineationOverlap)
         {

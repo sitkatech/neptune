@@ -9,21 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class WaterQualityManagementPlanVerifyQuickBMPExtensionMethods
     {
-        public static WaterQualityManagementPlanVerifyQuickBMPDto AsDto(this WaterQualityManagementPlanVerifyQuickBMP waterQualityManagementPlanVerifyQuickBMP)
-        {
-            var waterQualityManagementPlanVerifyQuickBMPDto = new WaterQualityManagementPlanVerifyQuickBMPDto()
-            {
-                WaterQualityManagementPlanVerifyQuickBMPID = waterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerifyQuickBMPID,
-                WaterQualityManagementPlanVerify = waterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerify.AsDto(),
-                QuickBMP = waterQualityManagementPlanVerifyQuickBMP.QuickBMP.AsDto(),
-                IsAdequate = waterQualityManagementPlanVerifyQuickBMP.IsAdequate,
-                WaterQualityManagementPlanVerifyQuickBMPNote = waterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerifyQuickBMPNote
-            };
-            DoCustomMappings(waterQualityManagementPlanVerifyQuickBMP, waterQualityManagementPlanVerifyQuickBMPDto);
-            return waterQualityManagementPlanVerifyQuickBMPDto;
-        }
-
-        static partial void DoCustomMappings(WaterQualityManagementPlanVerifyQuickBMP waterQualityManagementPlanVerifyQuickBMP, WaterQualityManagementPlanVerifyQuickBMPDto waterQualityManagementPlanVerifyQuickBMPDto);
 
         public static WaterQualityManagementPlanVerifyQuickBMPSimpleDto AsSimpleDto(this WaterQualityManagementPlanVerifyQuickBMP waterQualityManagementPlanVerifyQuickBMP)
         {

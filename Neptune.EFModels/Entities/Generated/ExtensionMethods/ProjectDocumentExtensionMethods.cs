@@ -9,22 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ProjectDocumentExtensionMethods
     {
-        public static ProjectDocumentDto AsDto(this ProjectDocument projectDocument)
-        {
-            var projectDocumentDto = new ProjectDocumentDto()
-            {
-                ProjectDocumentID = projectDocument.ProjectDocumentID,
-                FileResource = projectDocument.FileResource.AsDto(),
-                Project = projectDocument.Project.AsDto(),
-                DisplayName = projectDocument.DisplayName,
-                UploadDate = projectDocument.UploadDate,
-                DocumentDescription = projectDocument.DocumentDescription
-            };
-            DoCustomMappings(projectDocument, projectDocumentDto);
-            return projectDocumentDto;
-        }
-
-        static partial void DoCustomMappings(ProjectDocument projectDocument, ProjectDocumentDto projectDocumentDto);
 
         public static ProjectDocumentSimpleDto AsSimpleDto(this ProjectDocument projectDocument)
         {

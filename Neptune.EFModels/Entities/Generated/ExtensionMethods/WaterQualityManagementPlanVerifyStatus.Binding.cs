@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[WaterQualityManagementPlanVerifyStatus]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,13 +12,13 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class WaterQualityManagementPlanVerifyStatus : IHavePrimaryKey
     {
-        public static readonly WaterQualityManagementPlanVerifyStatusVerifyAdequateOAndMofWQMP VerifyAdequateOAndMofWQMP = Neptune.EFModels.Entities.WaterQualityManagementPlanVerifyStatusVerifyAdequateOAndMofWQMP.Instance;
-        public static readonly WaterQualityManagementPlanVerifyStatusDeficienciesarePresentandFollowupisRequired DeficienciesarePresentandFollowupisRequired = Neptune.EFModels.Entities.WaterQualityManagementPlanVerifyStatusDeficienciesarePresentandFollowupisRequired.Instance;
+        public static readonly WaterQualityManagementPlanVerifyStatusVerifyAdequateOAndMofWQMP VerifyAdequateOAndMofWQMP = WaterQualityManagementPlanVerifyStatusVerifyAdequateOAndMofWQMP.Instance;
+        public static readonly WaterQualityManagementPlanVerifyStatusDeficienciesarePresentandFollowupisRequired DeficienciesarePresentandFollowupisRequired = WaterQualityManagementPlanVerifyStatusDeficienciesarePresentandFollowupisRequired.Instance;
 
         public static readonly List<WaterQualityManagementPlanVerifyStatus> All;
-        public static readonly List<WaterQualityManagementPlanVerifyStatusDto> AllAsDto;
+        public static readonly List<WaterQualityManagementPlanVerifyStatusSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanVerifyStatus> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanVerifyStatusDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanVerifyStatusSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +26,9 @@ namespace Neptune.EFModels.Entities
         static WaterQualityManagementPlanVerifyStatus()
         {
             All = new List<WaterQualityManagementPlanVerifyStatus> { VerifyAdequateOAndMofWQMP, DeficienciesarePresentandFollowupisRequired };
-            AllAsDto = new List<WaterQualityManagementPlanVerifyStatusDto> { VerifyAdequateOAndMofWQMP.AsDto(), DeficienciesarePresentandFollowupisRequired.AsDto() };
+            AllAsSimpleDto = new List<WaterQualityManagementPlanVerifyStatusSimpleDto> { VerifyAdequateOAndMofWQMP.AsSimpleDto(), DeficienciesarePresentandFollowupisRequired.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanVerifyStatus>(All.ToDictionary(x => x.WaterQualityManagementPlanVerifyStatusID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanVerifyStatusDto>(AllAsDto.ToDictionary(x => x.WaterQualityManagementPlanVerifyStatusID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanVerifyStatusSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.WaterQualityManagementPlanVerifyStatusID));
         }
 
         /// <summary>

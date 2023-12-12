@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[WaterQualityManagementPlanLandUse]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,20 +12,20 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class WaterQualityManagementPlanLandUse : IHavePrimaryKey
     {
-        public static readonly WaterQualityManagementPlanLandUseResidential Residential = Neptune.EFModels.Entities.WaterQualityManagementPlanLandUseResidential.Instance;
-        public static readonly WaterQualityManagementPlanLandUseCommercial Commercial = Neptune.EFModels.Entities.WaterQualityManagementPlanLandUseCommercial.Instance;
-        public static readonly WaterQualityManagementPlanLandUseIndustrial Industrial = Neptune.EFModels.Entities.WaterQualityManagementPlanLandUseIndustrial.Instance;
-        public static readonly WaterQualityManagementPlanLandUseOther Other = Neptune.EFModels.Entities.WaterQualityManagementPlanLandUseOther.Instance;
-        public static readonly WaterQualityManagementPlanLandUseRoad Road = Neptune.EFModels.Entities.WaterQualityManagementPlanLandUseRoad.Instance;
-        public static readonly WaterQualityManagementPlanLandUseFlood Flood = Neptune.EFModels.Entities.WaterQualityManagementPlanLandUseFlood.Instance;
-        public static readonly WaterQualityManagementPlanLandUseMunicipal Municipal = Neptune.EFModels.Entities.WaterQualityManagementPlanLandUseMunicipal.Instance;
-        public static readonly WaterQualityManagementPlanLandUsePark Park = Neptune.EFModels.Entities.WaterQualityManagementPlanLandUsePark.Instance;
-        public static readonly WaterQualityManagementPlanLandUseMixed Mixed = Neptune.EFModels.Entities.WaterQualityManagementPlanLandUseMixed.Instance;
+        public static readonly WaterQualityManagementPlanLandUseResidential Residential = WaterQualityManagementPlanLandUseResidential.Instance;
+        public static readonly WaterQualityManagementPlanLandUseCommercial Commercial = WaterQualityManagementPlanLandUseCommercial.Instance;
+        public static readonly WaterQualityManagementPlanLandUseIndustrial Industrial = WaterQualityManagementPlanLandUseIndustrial.Instance;
+        public static readonly WaterQualityManagementPlanLandUseOther Other = WaterQualityManagementPlanLandUseOther.Instance;
+        public static readonly WaterQualityManagementPlanLandUseRoad Road = WaterQualityManagementPlanLandUseRoad.Instance;
+        public static readonly WaterQualityManagementPlanLandUseFlood Flood = WaterQualityManagementPlanLandUseFlood.Instance;
+        public static readonly WaterQualityManagementPlanLandUseMunicipal Municipal = WaterQualityManagementPlanLandUseMunicipal.Instance;
+        public static readonly WaterQualityManagementPlanLandUsePark Park = WaterQualityManagementPlanLandUsePark.Instance;
+        public static readonly WaterQualityManagementPlanLandUseMixed Mixed = WaterQualityManagementPlanLandUseMixed.Instance;
 
         public static readonly List<WaterQualityManagementPlanLandUse> All;
-        public static readonly List<WaterQualityManagementPlanLandUseDto> AllAsDto;
+        public static readonly List<WaterQualityManagementPlanLandUseSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanLandUse> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanLandUseDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanLandUseSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -36,9 +33,9 @@ namespace Neptune.EFModels.Entities
         static WaterQualityManagementPlanLandUse()
         {
             All = new List<WaterQualityManagementPlanLandUse> { Residential, Commercial, Industrial, Other, Road, Flood, Municipal, Park, Mixed };
-            AllAsDto = new List<WaterQualityManagementPlanLandUseDto> { Residential.AsDto(), Commercial.AsDto(), Industrial.AsDto(), Other.AsDto(), Road.AsDto(), Flood.AsDto(), Municipal.AsDto(), Park.AsDto(), Mixed.AsDto() };
+            AllAsSimpleDto = new List<WaterQualityManagementPlanLandUseSimpleDto> { Residential.AsSimpleDto(), Commercial.AsSimpleDto(), Industrial.AsSimpleDto(), Other.AsSimpleDto(), Road.AsSimpleDto(), Flood.AsSimpleDto(), Municipal.AsSimpleDto(), Park.AsSimpleDto(), Mixed.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanLandUse>(All.ToDictionary(x => x.WaterQualityManagementPlanLandUseID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanLandUseDto>(AllAsDto.ToDictionary(x => x.WaterQualityManagementPlanLandUseID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanLandUseSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.WaterQualityManagementPlanLandUseID));
         }
 
         /// <summary>

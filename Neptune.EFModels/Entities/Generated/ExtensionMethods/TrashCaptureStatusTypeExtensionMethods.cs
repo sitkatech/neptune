@@ -9,22 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TrashCaptureStatusTypeExtensionMethods
     {
-        public static TrashCaptureStatusTypeDto AsDto(this TrashCaptureStatusType trashCaptureStatusType)
-        {
-            var trashCaptureStatusTypeDto = new TrashCaptureStatusTypeDto()
-            {
-                TrashCaptureStatusTypeID = trashCaptureStatusType.TrashCaptureStatusTypeID,
-                TrashCaptureStatusTypeName = trashCaptureStatusType.TrashCaptureStatusTypeName,
-                TrashCaptureStatusTypeDisplayName = trashCaptureStatusType.TrashCaptureStatusTypeDisplayName,
-                TrashCaptureStatusTypeSortOrder = trashCaptureStatusType.TrashCaptureStatusTypeSortOrder,
-                TrashCaptureStatusTypePriority = trashCaptureStatusType.TrashCaptureStatusTypePriority,
-                TrashCaptureStatusTypeColorCode = trashCaptureStatusType.TrashCaptureStatusTypeColorCode
-            };
-            DoCustomMappings(trashCaptureStatusType, trashCaptureStatusTypeDto);
-            return trashCaptureStatusTypeDto;
-        }
-
-        static partial void DoCustomMappings(TrashCaptureStatusType trashCaptureStatusType, TrashCaptureStatusTypeDto trashCaptureStatusTypeDto);
 
         public static TrashCaptureStatusTypeSimpleDto AsSimpleDto(this TrashCaptureStatusType trashCaptureStatusType)
         {

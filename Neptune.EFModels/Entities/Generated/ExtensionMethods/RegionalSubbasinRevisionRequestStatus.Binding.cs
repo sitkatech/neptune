@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[RegionalSubbasinRevisionRequestStatus]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,13 +12,13 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class RegionalSubbasinRevisionRequestStatus : IHavePrimaryKey
     {
-        public static readonly RegionalSubbasinRevisionRequestStatusOpen Open = Neptune.EFModels.Entities.RegionalSubbasinRevisionRequestStatusOpen.Instance;
-        public static readonly RegionalSubbasinRevisionRequestStatusClosed Closed = Neptune.EFModels.Entities.RegionalSubbasinRevisionRequestStatusClosed.Instance;
+        public static readonly RegionalSubbasinRevisionRequestStatusOpen Open = RegionalSubbasinRevisionRequestStatusOpen.Instance;
+        public static readonly RegionalSubbasinRevisionRequestStatusClosed Closed = RegionalSubbasinRevisionRequestStatusClosed.Instance;
 
         public static readonly List<RegionalSubbasinRevisionRequestStatus> All;
-        public static readonly List<RegionalSubbasinRevisionRequestStatusDto> AllAsDto;
+        public static readonly List<RegionalSubbasinRevisionRequestStatusSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, RegionalSubbasinRevisionRequestStatus> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, RegionalSubbasinRevisionRequestStatusDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, RegionalSubbasinRevisionRequestStatusSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +26,9 @@ namespace Neptune.EFModels.Entities
         static RegionalSubbasinRevisionRequestStatus()
         {
             All = new List<RegionalSubbasinRevisionRequestStatus> { Open, Closed };
-            AllAsDto = new List<RegionalSubbasinRevisionRequestStatusDto> { Open.AsDto(), Closed.AsDto() };
+            AllAsSimpleDto = new List<RegionalSubbasinRevisionRequestStatusSimpleDto> { Open.AsSimpleDto(), Closed.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, RegionalSubbasinRevisionRequestStatus>(All.ToDictionary(x => x.RegionalSubbasinRevisionRequestStatusID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, RegionalSubbasinRevisionRequestStatusDto>(AllAsDto.ToDictionary(x => x.RegionalSubbasinRevisionRequestStatusID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, RegionalSubbasinRevisionRequestStatusSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.RegionalSubbasinRevisionRequestStatusID));
         }
 
         /// <summary>

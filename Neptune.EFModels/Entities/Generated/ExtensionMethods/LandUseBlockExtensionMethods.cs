@@ -9,25 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class LandUseBlockExtensionMethods
     {
-        public static LandUseBlockDto AsDto(this LandUseBlock landUseBlock)
-        {
-            var landUseBlockDto = new LandUseBlockDto()
-            {
-                LandUseBlockID = landUseBlock.LandUseBlockID,
-                PriorityLandUseType = landUseBlock.PriorityLandUseType?.AsDto(),
-                LandUseDescription = landUseBlock.LandUseDescription,
-                TrashGenerationRate = landUseBlock.TrashGenerationRate,
-                LandUseForTGR = landUseBlock.LandUseForTGR,
-                MedianHouseholdIncomeResidential = landUseBlock.MedianHouseholdIncomeResidential,
-                MedianHouseholdIncomeRetail = landUseBlock.MedianHouseholdIncomeRetail,
-                StormwaterJurisdiction = landUseBlock.StormwaterJurisdiction.AsDto(),
-                PermitType = landUseBlock.PermitType.AsDto()
-            };
-            DoCustomMappings(landUseBlock, landUseBlockDto);
-            return landUseBlockDto;
-        }
-
-        static partial void DoCustomMappings(LandUseBlock landUseBlock, LandUseBlockDto landUseBlockDto);
 
         public static LandUseBlockSimpleDto AsSimpleDto(this LandUseBlock landUseBlock)
         {

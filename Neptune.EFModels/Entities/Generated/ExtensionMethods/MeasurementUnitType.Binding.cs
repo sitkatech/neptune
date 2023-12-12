@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[MeasurementUnitType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,33 +12,33 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class MeasurementUnitType : IHavePrimaryKey
     {
-        public static readonly MeasurementUnitTypeAcres Acres = Neptune.EFModels.Entities.MeasurementUnitTypeAcres.Instance;
-        public static readonly MeasurementUnitTypeSquareFeet SquareFeet = Neptune.EFModels.Entities.MeasurementUnitTypeSquareFeet.Instance;
-        public static readonly MeasurementUnitTypeKilogram Kilogram = Neptune.EFModels.Entities.MeasurementUnitTypeKilogram.Instance;
-        public static readonly MeasurementUnitTypeCount Count = Neptune.EFModels.Entities.MeasurementUnitTypeCount.Instance;
-        public static readonly MeasurementUnitTypePercent Percent = Neptune.EFModels.Entities.MeasurementUnitTypePercent.Instance;
-        public static readonly MeasurementUnitTypeMilligamsPerLiter MilligamsPerLiter = Neptune.EFModels.Entities.MeasurementUnitTypeMilligamsPerLiter.Instance;
-        public static readonly MeasurementUnitTypeMeters Meters = Neptune.EFModels.Entities.MeasurementUnitTypeMeters.Instance;
-        public static readonly MeasurementUnitTypeFeet Feet = Neptune.EFModels.Entities.MeasurementUnitTypeFeet.Instance;
-        public static readonly MeasurementUnitTypeInches Inches = Neptune.EFModels.Entities.MeasurementUnitTypeInches.Instance;
-        public static readonly MeasurementUnitTypeInchesPerHour InchesPerHour = Neptune.EFModels.Entities.MeasurementUnitTypeInchesPerHour.Instance;
-        public static readonly MeasurementUnitTypeSeconds Seconds = Neptune.EFModels.Entities.MeasurementUnitTypeSeconds.Instance;
-        public static readonly MeasurementUnitTypePercentDecline PercentDecline = Neptune.EFModels.Entities.MeasurementUnitTypePercentDecline.Instance;
-        public static readonly MeasurementUnitTypePercentIncrease PercentIncrease = Neptune.EFModels.Entities.MeasurementUnitTypePercentIncrease.Instance;
-        public static readonly MeasurementUnitTypePercentDeviation PercentDeviation = Neptune.EFModels.Entities.MeasurementUnitTypePercentDeviation.Instance;
-        public static readonly MeasurementUnitTypeCubicFeet CubicFeet = Neptune.EFModels.Entities.MeasurementUnitTypeCubicFeet.Instance;
-        public static readonly MeasurementUnitTypeGallons Gallons = Neptune.EFModels.Entities.MeasurementUnitTypeGallons.Instance;
-        public static readonly MeasurementUnitTypeMinutes Minutes = Neptune.EFModels.Entities.MeasurementUnitTypeMinutes.Instance;
-        public static readonly MeasurementUnitTypeCubicFeetPerSecond CubicFeetPerSecond = Neptune.EFModels.Entities.MeasurementUnitTypeCubicFeetPerSecond.Instance;
-        public static readonly MeasurementUnitTypeGallonsPerDay GallonsPerDay = Neptune.EFModels.Entities.MeasurementUnitTypeGallonsPerDay.Instance;
-        public static readonly MeasurementUnitTypePounds Pounds = Neptune.EFModels.Entities.MeasurementUnitTypePounds.Instance;
-        public static readonly MeasurementUnitTypeTons Tons = Neptune.EFModels.Entities.MeasurementUnitTypeTons.Instance;
-        public static readonly MeasurementUnitTypeCubicYards CubicYards = Neptune.EFModels.Entities.MeasurementUnitTypeCubicYards.Instance;
+        public static readonly MeasurementUnitTypeAcres Acres = MeasurementUnitTypeAcres.Instance;
+        public static readonly MeasurementUnitTypeSquareFeet SquareFeet = MeasurementUnitTypeSquareFeet.Instance;
+        public static readonly MeasurementUnitTypeKilogram Kilogram = MeasurementUnitTypeKilogram.Instance;
+        public static readonly MeasurementUnitTypeCount Count = MeasurementUnitTypeCount.Instance;
+        public static readonly MeasurementUnitTypePercent Percent = MeasurementUnitTypePercent.Instance;
+        public static readonly MeasurementUnitTypeMilligamsPerLiter MilligamsPerLiter = MeasurementUnitTypeMilligamsPerLiter.Instance;
+        public static readonly MeasurementUnitTypeMeters Meters = MeasurementUnitTypeMeters.Instance;
+        public static readonly MeasurementUnitTypeFeet Feet = MeasurementUnitTypeFeet.Instance;
+        public static readonly MeasurementUnitTypeInches Inches = MeasurementUnitTypeInches.Instance;
+        public static readonly MeasurementUnitTypeInchesPerHour InchesPerHour = MeasurementUnitTypeInchesPerHour.Instance;
+        public static readonly MeasurementUnitTypeSeconds Seconds = MeasurementUnitTypeSeconds.Instance;
+        public static readonly MeasurementUnitTypePercentDecline PercentDecline = MeasurementUnitTypePercentDecline.Instance;
+        public static readonly MeasurementUnitTypePercentIncrease PercentIncrease = MeasurementUnitTypePercentIncrease.Instance;
+        public static readonly MeasurementUnitTypePercentDeviation PercentDeviation = MeasurementUnitTypePercentDeviation.Instance;
+        public static readonly MeasurementUnitTypeCubicFeet CubicFeet = MeasurementUnitTypeCubicFeet.Instance;
+        public static readonly MeasurementUnitTypeGallons Gallons = MeasurementUnitTypeGallons.Instance;
+        public static readonly MeasurementUnitTypeMinutes Minutes = MeasurementUnitTypeMinutes.Instance;
+        public static readonly MeasurementUnitTypeCubicFeetPerSecond CubicFeetPerSecond = MeasurementUnitTypeCubicFeetPerSecond.Instance;
+        public static readonly MeasurementUnitTypeGallonsPerDay GallonsPerDay = MeasurementUnitTypeGallonsPerDay.Instance;
+        public static readonly MeasurementUnitTypePounds Pounds = MeasurementUnitTypePounds.Instance;
+        public static readonly MeasurementUnitTypeTons Tons = MeasurementUnitTypeTons.Instance;
+        public static readonly MeasurementUnitTypeCubicYards CubicYards = MeasurementUnitTypeCubicYards.Instance;
 
         public static readonly List<MeasurementUnitType> All;
-        public static readonly List<MeasurementUnitTypeDto> AllAsDto;
+        public static readonly List<MeasurementUnitTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, MeasurementUnitType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, MeasurementUnitTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, MeasurementUnitTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -49,9 +46,9 @@ namespace Neptune.EFModels.Entities
         static MeasurementUnitType()
         {
             All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Count, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds, PercentDecline, PercentIncrease, PercentDeviation, CubicFeet, Gallons, Minutes, CubicFeetPerSecond, GallonsPerDay, Pounds, Tons, CubicYards };
-            AllAsDto = new List<MeasurementUnitTypeDto> { Acres.AsDto(), SquareFeet.AsDto(), Kilogram.AsDto(), Count.AsDto(), Percent.AsDto(), MilligamsPerLiter.AsDto(), Meters.AsDto(), Feet.AsDto(), Inches.AsDto(), InchesPerHour.AsDto(), Seconds.AsDto(), PercentDecline.AsDto(), PercentIncrease.AsDto(), PercentDeviation.AsDto(), CubicFeet.AsDto(), Gallons.AsDto(), Minutes.AsDto(), CubicFeetPerSecond.AsDto(), GallonsPerDay.AsDto(), Pounds.AsDto(), Tons.AsDto(), CubicYards.AsDto() };
+            AllAsSimpleDto = new List<MeasurementUnitTypeSimpleDto> { Acres.AsSimpleDto(), SquareFeet.AsSimpleDto(), Kilogram.AsSimpleDto(), Count.AsSimpleDto(), Percent.AsSimpleDto(), MilligamsPerLiter.AsSimpleDto(), Meters.AsSimpleDto(), Feet.AsSimpleDto(), Inches.AsSimpleDto(), InchesPerHour.AsSimpleDto(), Seconds.AsSimpleDto(), PercentDecline.AsSimpleDto(), PercentIncrease.AsSimpleDto(), PercentDeviation.AsSimpleDto(), CubicFeet.AsSimpleDto(), Gallons.AsSimpleDto(), Minutes.AsSimpleDto(), CubicFeetPerSecond.AsSimpleDto(), GallonsPerDay.AsSimpleDto(), Pounds.AsSimpleDto(), Tons.AsSimpleDto(), CubicYards.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, MeasurementUnitType>(All.ToDictionary(x => x.MeasurementUnitTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, MeasurementUnitTypeDto>(AllAsDto.ToDictionary(x => x.MeasurementUnitTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, MeasurementUnitTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.MeasurementUnitTypeID));
         }
 
         /// <summary>

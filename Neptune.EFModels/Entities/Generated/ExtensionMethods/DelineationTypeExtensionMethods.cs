@@ -9,19 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class DelineationTypeExtensionMethods
     {
-        public static DelineationTypeDto AsDto(this DelineationType delineationType)
-        {
-            var delineationTypeDto = new DelineationTypeDto()
-            {
-                DelineationTypeID = delineationType.DelineationTypeID,
-                DelineationTypeName = delineationType.DelineationTypeName,
-                DelineationTypeDisplayName = delineationType.DelineationTypeDisplayName
-            };
-            DoCustomMappings(delineationType, delineationTypeDto);
-            return delineationTypeDto;
-        }
-
-        static partial void DoCustomMappings(DelineationType delineationType, DelineationTypeDto delineationTypeDto);
 
         public static DelineationTypeSimpleDto AsSimpleDto(this DelineationType delineationType)
         {

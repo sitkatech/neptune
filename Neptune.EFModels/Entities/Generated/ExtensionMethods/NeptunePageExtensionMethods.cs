@@ -9,19 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class NeptunePageExtensionMethods
     {
-        public static NeptunePageDto AsDto(this NeptunePage neptunePage)
-        {
-            var neptunePageDto = new NeptunePageDto()
-            {
-                NeptunePageID = neptunePage.NeptunePageID,
-                NeptunePageType = neptunePage.NeptunePageType.AsDto(),
-                NeptunePageContent = neptunePage.NeptunePageContent
-            };
-            DoCustomMappings(neptunePage, neptunePageDto);
-            return neptunePageDto;
-        }
-
-        static partial void DoCustomMappings(NeptunePage neptunePage, NeptunePageDto neptunePageDto);
 
         public static NeptunePageSimpleDto AsSimpleDto(this NeptunePage neptunePage)
         {

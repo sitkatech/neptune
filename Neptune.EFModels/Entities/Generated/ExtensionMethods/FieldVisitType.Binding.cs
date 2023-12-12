@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[FieldVisitType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,14 +12,14 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class FieldVisitType : IHavePrimaryKey
     {
-        public static readonly FieldVisitTypeDryWeather DryWeather = Neptune.EFModels.Entities.FieldVisitTypeDryWeather.Instance;
-        public static readonly FieldVisitTypeWetWeather WetWeather = Neptune.EFModels.Entities.FieldVisitTypeWetWeather.Instance;
-        public static readonly FieldVisitTypePostStormAssessment PostStormAssessment = Neptune.EFModels.Entities.FieldVisitTypePostStormAssessment.Instance;
+        public static readonly FieldVisitTypeDryWeather DryWeather = FieldVisitTypeDryWeather.Instance;
+        public static readonly FieldVisitTypeWetWeather WetWeather = FieldVisitTypeWetWeather.Instance;
+        public static readonly FieldVisitTypePostStormAssessment PostStormAssessment = FieldVisitTypePostStormAssessment.Instance;
 
         public static readonly List<FieldVisitType> All;
-        public static readonly List<FieldVisitTypeDto> AllAsDto;
+        public static readonly List<FieldVisitTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, FieldVisitType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, FieldVisitTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, FieldVisitTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -30,9 +27,9 @@ namespace Neptune.EFModels.Entities
         static FieldVisitType()
         {
             All = new List<FieldVisitType> { DryWeather, WetWeather, PostStormAssessment };
-            AllAsDto = new List<FieldVisitTypeDto> { DryWeather.AsDto(), WetWeather.AsDto(), PostStormAssessment.AsDto() };
+            AllAsSimpleDto = new List<FieldVisitTypeSimpleDto> { DryWeather.AsSimpleDto(), WetWeather.AsSimpleDto(), PostStormAssessment.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldVisitType>(All.ToDictionary(x => x.FieldVisitTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, FieldVisitTypeDto>(AllAsDto.ToDictionary(x => x.FieldVisitTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, FieldVisitTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.FieldVisitTypeID));
         }
 
         /// <summary>

@@ -9,19 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class DryWeatherFlowOverrideExtensionMethods
     {
-        public static DryWeatherFlowOverrideDto AsDto(this DryWeatherFlowOverride dryWeatherFlowOverride)
-        {
-            var dryWeatherFlowOverrideDto = new DryWeatherFlowOverrideDto()
-            {
-                DryWeatherFlowOverrideID = dryWeatherFlowOverride.DryWeatherFlowOverrideID,
-                DryWeatherFlowOverrideName = dryWeatherFlowOverride.DryWeatherFlowOverrideName,
-                DryWeatherFlowOverrideDisplayName = dryWeatherFlowOverride.DryWeatherFlowOverrideDisplayName
-            };
-            DoCustomMappings(dryWeatherFlowOverride, dryWeatherFlowOverrideDto);
-            return dryWeatherFlowOverrideDto;
-        }
-
-        static partial void DoCustomMappings(DryWeatherFlowOverride dryWeatherFlowOverride, DryWeatherFlowOverrideDto dryWeatherFlowOverrideDto);
 
         public static DryWeatherFlowOverrideSimpleDto AsSimpleDto(this DryWeatherFlowOverride dryWeatherFlowOverride)
         {

@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[SourceControlBMPAttributeCategory]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,14 +12,14 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class SourceControlBMPAttributeCategory : IHavePrimaryKey
     {
-        public static readonly SourceControlBMPAttributeCategoryHydrologicSourceControlandSiteDesignBMPs HydrologicSourceControlandSiteDesignBMPs = Neptune.EFModels.Entities.SourceControlBMPAttributeCategoryHydrologicSourceControlandSiteDesignBMPs.Instance;
-        public static readonly SourceControlBMPAttributeCategoryApplicableRoutineNonStructuralSourceControlBMPs ApplicableRoutineNonStructuralSourceControlBMPs = Neptune.EFModels.Entities.SourceControlBMPAttributeCategoryApplicableRoutineNonStructuralSourceControlBMPs.Instance;
-        public static readonly SourceControlBMPAttributeCategoryApplicableRoutineStructuralSourceControlBMPs ApplicableRoutineStructuralSourceControlBMPs = Neptune.EFModels.Entities.SourceControlBMPAttributeCategoryApplicableRoutineStructuralSourceControlBMPs.Instance;
+        public static readonly SourceControlBMPAttributeCategoryHydrologicSourceControlandSiteDesignBMPs HydrologicSourceControlandSiteDesignBMPs = SourceControlBMPAttributeCategoryHydrologicSourceControlandSiteDesignBMPs.Instance;
+        public static readonly SourceControlBMPAttributeCategoryApplicableRoutineNonStructuralSourceControlBMPs ApplicableRoutineNonStructuralSourceControlBMPs = SourceControlBMPAttributeCategoryApplicableRoutineNonStructuralSourceControlBMPs.Instance;
+        public static readonly SourceControlBMPAttributeCategoryApplicableRoutineStructuralSourceControlBMPs ApplicableRoutineStructuralSourceControlBMPs = SourceControlBMPAttributeCategoryApplicableRoutineStructuralSourceControlBMPs.Instance;
 
         public static readonly List<SourceControlBMPAttributeCategory> All;
-        public static readonly List<SourceControlBMPAttributeCategoryDto> AllAsDto;
+        public static readonly List<SourceControlBMPAttributeCategorySimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, SourceControlBMPAttributeCategory> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, SourceControlBMPAttributeCategoryDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, SourceControlBMPAttributeCategorySimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -30,9 +27,9 @@ namespace Neptune.EFModels.Entities
         static SourceControlBMPAttributeCategory()
         {
             All = new List<SourceControlBMPAttributeCategory> { HydrologicSourceControlandSiteDesignBMPs, ApplicableRoutineNonStructuralSourceControlBMPs, ApplicableRoutineStructuralSourceControlBMPs };
-            AllAsDto = new List<SourceControlBMPAttributeCategoryDto> { HydrologicSourceControlandSiteDesignBMPs.AsDto(), ApplicableRoutineNonStructuralSourceControlBMPs.AsDto(), ApplicableRoutineStructuralSourceControlBMPs.AsDto() };
+            AllAsSimpleDto = new List<SourceControlBMPAttributeCategorySimpleDto> { HydrologicSourceControlandSiteDesignBMPs.AsSimpleDto(), ApplicableRoutineNonStructuralSourceControlBMPs.AsSimpleDto(), ApplicableRoutineStructuralSourceControlBMPs.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, SourceControlBMPAttributeCategory>(All.ToDictionary(x => x.SourceControlBMPAttributeCategoryID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, SourceControlBMPAttributeCategoryDto>(AllAsDto.ToDictionary(x => x.SourceControlBMPAttributeCategoryID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, SourceControlBMPAttributeCategorySimpleDto>(AllAsSimpleDto.ToDictionary(x => x.SourceControlBMPAttributeCategoryID));
         }
 
         /// <summary>

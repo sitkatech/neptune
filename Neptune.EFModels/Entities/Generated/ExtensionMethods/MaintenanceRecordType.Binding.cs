@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[MaintenanceRecordType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,13 +12,13 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class MaintenanceRecordType : IHavePrimaryKey
     {
-        public static readonly MaintenanceRecordTypeRoutine Routine = Neptune.EFModels.Entities.MaintenanceRecordTypeRoutine.Instance;
-        public static readonly MaintenanceRecordTypeCorrective Corrective = Neptune.EFModels.Entities.MaintenanceRecordTypeCorrective.Instance;
+        public static readonly MaintenanceRecordTypeRoutine Routine = MaintenanceRecordTypeRoutine.Instance;
+        public static readonly MaintenanceRecordTypeCorrective Corrective = MaintenanceRecordTypeCorrective.Instance;
 
         public static readonly List<MaintenanceRecordType> All;
-        public static readonly List<MaintenanceRecordTypeDto> AllAsDto;
+        public static readonly List<MaintenanceRecordTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, MaintenanceRecordType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, MaintenanceRecordTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, MaintenanceRecordTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +26,9 @@ namespace Neptune.EFModels.Entities
         static MaintenanceRecordType()
         {
             All = new List<MaintenanceRecordType> { Routine, Corrective };
-            AllAsDto = new List<MaintenanceRecordTypeDto> { Routine.AsDto(), Corrective.AsDto() };
+            AllAsSimpleDto = new List<MaintenanceRecordTypeSimpleDto> { Routine.AsSimpleDto(), Corrective.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, MaintenanceRecordType>(All.ToDictionary(x => x.MaintenanceRecordTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, MaintenanceRecordTypeDto>(AllAsDto.ToDictionary(x => x.MaintenanceRecordTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, MaintenanceRecordTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.MaintenanceRecordTypeID));
         }
 
         /// <summary>

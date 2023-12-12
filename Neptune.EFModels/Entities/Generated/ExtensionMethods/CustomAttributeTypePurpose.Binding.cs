@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[CustomAttributeTypePurpose]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,13 +12,13 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class CustomAttributeTypePurpose : IHavePrimaryKey
     {
-        public static readonly CustomAttributeTypePurposeOtherDesignAttributes OtherDesignAttributes = Neptune.EFModels.Entities.CustomAttributeTypePurposeOtherDesignAttributes.Instance;
-        public static readonly CustomAttributeTypePurposeMaintenance Maintenance = Neptune.EFModels.Entities.CustomAttributeTypePurposeMaintenance.Instance;
+        public static readonly CustomAttributeTypePurposeOtherDesignAttributes OtherDesignAttributes = CustomAttributeTypePurposeOtherDesignAttributes.Instance;
+        public static readonly CustomAttributeTypePurposeMaintenance Maintenance = CustomAttributeTypePurposeMaintenance.Instance;
 
         public static readonly List<CustomAttributeTypePurpose> All;
-        public static readonly List<CustomAttributeTypePurposeDto> AllAsDto;
+        public static readonly List<CustomAttributeTypePurposeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, CustomAttributeTypePurpose> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, CustomAttributeTypePurposeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, CustomAttributeTypePurposeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +26,9 @@ namespace Neptune.EFModels.Entities
         static CustomAttributeTypePurpose()
         {
             All = new List<CustomAttributeTypePurpose> { OtherDesignAttributes, Maintenance };
-            AllAsDto = new List<CustomAttributeTypePurposeDto> { OtherDesignAttributes.AsDto(), Maintenance.AsDto() };
+            AllAsSimpleDto = new List<CustomAttributeTypePurposeSimpleDto> { OtherDesignAttributes.AsSimpleDto(), Maintenance.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, CustomAttributeTypePurpose>(All.ToDictionary(x => x.CustomAttributeTypePurposeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, CustomAttributeTypePurposeDto>(AllAsDto.ToDictionary(x => x.CustomAttributeTypePurposeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, CustomAttributeTypePurposeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.CustomAttributeTypePurposeID));
         }
 
         /// <summary>

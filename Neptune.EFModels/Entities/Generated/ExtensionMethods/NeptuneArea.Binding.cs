@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[NeptuneArea]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,15 +12,15 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class NeptuneArea : IHavePrimaryKey
     {
-        public static readonly NeptuneAreaTrash Trash = Neptune.EFModels.Entities.NeptuneAreaTrash.Instance;
-        public static readonly NeptuneAreaOCStormwaterTools OCStormwaterTools = Neptune.EFModels.Entities.NeptuneAreaOCStormwaterTools.Instance;
-        public static readonly NeptuneAreaModeling Modeling = Neptune.EFModels.Entities.NeptuneAreaModeling.Instance;
-        public static readonly NeptuneAreaPlanning Planning = Neptune.EFModels.Entities.NeptuneAreaPlanning.Instance;
+        public static readonly NeptuneAreaTrash Trash = NeptuneAreaTrash.Instance;
+        public static readonly NeptuneAreaOCStormwaterTools OCStormwaterTools = NeptuneAreaOCStormwaterTools.Instance;
+        public static readonly NeptuneAreaModeling Modeling = NeptuneAreaModeling.Instance;
+        public static readonly NeptuneAreaPlanning Planning = NeptuneAreaPlanning.Instance;
 
         public static readonly List<NeptuneArea> All;
-        public static readonly List<NeptuneAreaDto> AllAsDto;
+        public static readonly List<NeptuneAreaSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, NeptuneArea> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, NeptuneAreaDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, NeptuneAreaSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -31,9 +28,9 @@ namespace Neptune.EFModels.Entities
         static NeptuneArea()
         {
             All = new List<NeptuneArea> { Trash, OCStormwaterTools, Modeling, Planning };
-            AllAsDto = new List<NeptuneAreaDto> { Trash.AsDto(), OCStormwaterTools.AsDto(), Modeling.AsDto(), Planning.AsDto() };
+            AllAsSimpleDto = new List<NeptuneAreaSimpleDto> { Trash.AsSimpleDto(), OCStormwaterTools.AsSimpleDto(), Modeling.AsSimpleDto(), Planning.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptuneArea>(All.ToDictionary(x => x.NeptuneAreaID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, NeptuneAreaDto>(AllAsDto.ToDictionary(x => x.NeptuneAreaID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, NeptuneAreaSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.NeptuneAreaID));
         }
 
         /// <summary>

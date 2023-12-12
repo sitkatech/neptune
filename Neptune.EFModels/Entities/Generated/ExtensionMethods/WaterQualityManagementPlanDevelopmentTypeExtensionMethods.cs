@@ -9,19 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class WaterQualityManagementPlanDevelopmentTypeExtensionMethods
     {
-        public static WaterQualityManagementPlanDevelopmentTypeDto AsDto(this WaterQualityManagementPlanDevelopmentType waterQualityManagementPlanDevelopmentType)
-        {
-            var waterQualityManagementPlanDevelopmentTypeDto = new WaterQualityManagementPlanDevelopmentTypeDto()
-            {
-                WaterQualityManagementPlanDevelopmentTypeID = waterQualityManagementPlanDevelopmentType.WaterQualityManagementPlanDevelopmentTypeID,
-                WaterQualityManagementPlanDevelopmentTypeName = waterQualityManagementPlanDevelopmentType.WaterQualityManagementPlanDevelopmentTypeName,
-                WaterQualityManagementPlanDevelopmentTypeDisplayName = waterQualityManagementPlanDevelopmentType.WaterQualityManagementPlanDevelopmentTypeDisplayName
-            };
-            DoCustomMappings(waterQualityManagementPlanDevelopmentType, waterQualityManagementPlanDevelopmentTypeDto);
-            return waterQualityManagementPlanDevelopmentTypeDto;
-        }
-
-        static partial void DoCustomMappings(WaterQualityManagementPlanDevelopmentType waterQualityManagementPlanDevelopmentType, WaterQualityManagementPlanDevelopmentTypeDto waterQualityManagementPlanDevelopmentTypeDto);
 
         public static WaterQualityManagementPlanDevelopmentTypeSimpleDto AsSimpleDto(this WaterQualityManagementPlanDevelopmentType waterQualityManagementPlanDevelopmentType)
         {

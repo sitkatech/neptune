@@ -9,18 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class StormwaterJurisdictionGeometryExtensionMethods
     {
-        public static StormwaterJurisdictionGeometryDto AsDto(this StormwaterJurisdictionGeometry stormwaterJurisdictionGeometry)
-        {
-            var stormwaterJurisdictionGeometryDto = new StormwaterJurisdictionGeometryDto()
-            {
-                StormwaterJurisdictionGeometryID = stormwaterJurisdictionGeometry.StormwaterJurisdictionGeometryID,
-                StormwaterJurisdiction = stormwaterJurisdictionGeometry.StormwaterJurisdiction.AsDto()
-            };
-            DoCustomMappings(stormwaterJurisdictionGeometry, stormwaterJurisdictionGeometryDto);
-            return stormwaterJurisdictionGeometryDto;
-        }
-
-        static partial void DoCustomMappings(StormwaterJurisdictionGeometry stormwaterJurisdictionGeometry, StormwaterJurisdictionGeometryDto stormwaterJurisdictionGeometryDto);
 
         public static StormwaterJurisdictionGeometrySimpleDto AsSimpleDto(this StormwaterJurisdictionGeometry stormwaterJurisdictionGeometry)
         {

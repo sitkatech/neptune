@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[ProjectStatus]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,12 +12,12 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class ProjectStatus : IHavePrimaryKey
     {
-        public static readonly ProjectStatusDraft Draft = Neptune.EFModels.Entities.ProjectStatusDraft.Instance;
+        public static readonly ProjectStatusDraft Draft = ProjectStatusDraft.Instance;
 
         public static readonly List<ProjectStatus> All;
-        public static readonly List<ProjectStatusDto> AllAsDto;
+        public static readonly List<ProjectStatusSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, ProjectStatus> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, ProjectStatusDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, ProjectStatusSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -28,9 +25,9 @@ namespace Neptune.EFModels.Entities
         static ProjectStatus()
         {
             All = new List<ProjectStatus> { Draft };
-            AllAsDto = new List<ProjectStatusDto> { Draft.AsDto() };
+            AllAsSimpleDto = new List<ProjectStatusSimpleDto> { Draft.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, ProjectStatus>(All.ToDictionary(x => x.ProjectStatusID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, ProjectStatusDto>(AllAsDto.ToDictionary(x => x.ProjectStatusID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, ProjectStatusSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.ProjectStatusID));
         }
 
         /// <summary>

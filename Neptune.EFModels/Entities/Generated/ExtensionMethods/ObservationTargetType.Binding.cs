@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[ObservationTargetType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,15 +12,15 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class ObservationTargetType : IHavePrimaryKey
     {
-        public static readonly ObservationTargetTypePassFail PassFail = Neptune.EFModels.Entities.ObservationTargetTypePassFail.Instance;
-        public static readonly ObservationTargetTypeHigh High = Neptune.EFModels.Entities.ObservationTargetTypeHigh.Instance;
-        public static readonly ObservationTargetTypeLow Low = Neptune.EFModels.Entities.ObservationTargetTypeLow.Instance;
-        public static readonly ObservationTargetTypeSpecificValue SpecificValue = Neptune.EFModels.Entities.ObservationTargetTypeSpecificValue.Instance;
+        public static readonly ObservationTargetTypePassFail PassFail = ObservationTargetTypePassFail.Instance;
+        public static readonly ObservationTargetTypeHigh High = ObservationTargetTypeHigh.Instance;
+        public static readonly ObservationTargetTypeLow Low = ObservationTargetTypeLow.Instance;
+        public static readonly ObservationTargetTypeSpecificValue SpecificValue = ObservationTargetTypeSpecificValue.Instance;
 
         public static readonly List<ObservationTargetType> All;
-        public static readonly List<ObservationTargetTypeDto> AllAsDto;
+        public static readonly List<ObservationTargetTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, ObservationTargetType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, ObservationTargetTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, ObservationTargetTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -31,9 +28,9 @@ namespace Neptune.EFModels.Entities
         static ObservationTargetType()
         {
             All = new List<ObservationTargetType> { PassFail, High, Low, SpecificValue };
-            AllAsDto = new List<ObservationTargetTypeDto> { PassFail.AsDto(), High.AsDto(), Low.AsDto(), SpecificValue.AsDto() };
+            AllAsSimpleDto = new List<ObservationTargetTypeSimpleDto> { PassFail.AsSimpleDto(), High.AsSimpleDto(), Low.AsSimpleDto(), SpecificValue.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, ObservationTargetType>(All.ToDictionary(x => x.ObservationTargetTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, ObservationTargetTypeDto>(AllAsDto.ToDictionary(x => x.ObservationTargetTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, ObservationTargetTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.ObservationTargetTypeID));
         }
 
         /// <summary>

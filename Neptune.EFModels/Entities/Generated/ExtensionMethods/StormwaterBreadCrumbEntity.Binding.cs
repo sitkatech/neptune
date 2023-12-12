@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[StormwaterBreadCrumbEntity]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,20 +12,20 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class StormwaterBreadCrumbEntity : IHavePrimaryKey
     {
-        public static readonly StormwaterBreadCrumbEntityTreatmentBMP TreatmentBMP = Neptune.EFModels.Entities.StormwaterBreadCrumbEntityTreatmentBMP.Instance;
-        public static readonly StormwaterBreadCrumbEntityJurisdiction Jurisdiction = Neptune.EFModels.Entities.StormwaterBreadCrumbEntityJurisdiction.Instance;
-        public static readonly StormwaterBreadCrumbEntityUsers Users = Neptune.EFModels.Entities.StormwaterBreadCrumbEntityUsers.Instance;
-        public static readonly StormwaterBreadCrumbEntityAssessments Assessments = Neptune.EFModels.Entities.StormwaterBreadCrumbEntityAssessments.Instance;
-        public static readonly StormwaterBreadCrumbEntityFieldVisits FieldVisits = Neptune.EFModels.Entities.StormwaterBreadCrumbEntityFieldVisits.Instance;
-        public static readonly StormwaterBreadCrumbEntityFieldRecords FieldRecords = Neptune.EFModels.Entities.StormwaterBreadCrumbEntityFieldRecords.Instance;
-        public static readonly StormwaterBreadCrumbEntityWaterQualityManagementPlan WaterQualityManagementPlan = Neptune.EFModels.Entities.StormwaterBreadCrumbEntityWaterQualityManagementPlan.Instance;
-        public static readonly StormwaterBreadCrumbEntityParcel Parcel = Neptune.EFModels.Entities.StormwaterBreadCrumbEntityParcel.Instance;
-        public static readonly StormwaterBreadCrumbEntityOnlandVisualTrashAssessment OnlandVisualTrashAssessment = Neptune.EFModels.Entities.StormwaterBreadCrumbEntityOnlandVisualTrashAssessment.Instance;
+        public static readonly StormwaterBreadCrumbEntityTreatmentBMP TreatmentBMP = StormwaterBreadCrumbEntityTreatmentBMP.Instance;
+        public static readonly StormwaterBreadCrumbEntityJurisdiction Jurisdiction = StormwaterBreadCrumbEntityJurisdiction.Instance;
+        public static readonly StormwaterBreadCrumbEntityUsers Users = StormwaterBreadCrumbEntityUsers.Instance;
+        public static readonly StormwaterBreadCrumbEntityAssessments Assessments = StormwaterBreadCrumbEntityAssessments.Instance;
+        public static readonly StormwaterBreadCrumbEntityFieldVisits FieldVisits = StormwaterBreadCrumbEntityFieldVisits.Instance;
+        public static readonly StormwaterBreadCrumbEntityFieldRecords FieldRecords = StormwaterBreadCrumbEntityFieldRecords.Instance;
+        public static readonly StormwaterBreadCrumbEntityWaterQualityManagementPlan WaterQualityManagementPlan = StormwaterBreadCrumbEntityWaterQualityManagementPlan.Instance;
+        public static readonly StormwaterBreadCrumbEntityParcel Parcel = StormwaterBreadCrumbEntityParcel.Instance;
+        public static readonly StormwaterBreadCrumbEntityOnlandVisualTrashAssessment OnlandVisualTrashAssessment = StormwaterBreadCrumbEntityOnlandVisualTrashAssessment.Instance;
 
         public static readonly List<StormwaterBreadCrumbEntity> All;
-        public static readonly List<StormwaterBreadCrumbEntityDto> AllAsDto;
+        public static readonly List<StormwaterBreadCrumbEntitySimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, StormwaterBreadCrumbEntity> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, StormwaterBreadCrumbEntityDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, StormwaterBreadCrumbEntitySimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -36,9 +33,9 @@ namespace Neptune.EFModels.Entities
         static StormwaterBreadCrumbEntity()
         {
             All = new List<StormwaterBreadCrumbEntity> { TreatmentBMP, Jurisdiction, Users, Assessments, FieldVisits, FieldRecords, WaterQualityManagementPlan, Parcel, OnlandVisualTrashAssessment };
-            AllAsDto = new List<StormwaterBreadCrumbEntityDto> { TreatmentBMP.AsDto(), Jurisdiction.AsDto(), Users.AsDto(), Assessments.AsDto(), FieldVisits.AsDto(), FieldRecords.AsDto(), WaterQualityManagementPlan.AsDto(), Parcel.AsDto(), OnlandVisualTrashAssessment.AsDto() };
+            AllAsSimpleDto = new List<StormwaterBreadCrumbEntitySimpleDto> { TreatmentBMP.AsSimpleDto(), Jurisdiction.AsSimpleDto(), Users.AsSimpleDto(), Assessments.AsSimpleDto(), FieldVisits.AsSimpleDto(), FieldRecords.AsSimpleDto(), WaterQualityManagementPlan.AsSimpleDto(), Parcel.AsSimpleDto(), OnlandVisualTrashAssessment.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, StormwaterBreadCrumbEntity>(All.ToDictionary(x => x.StormwaterBreadCrumbEntityID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, StormwaterBreadCrumbEntityDto>(AllAsDto.ToDictionary(x => x.StormwaterBreadCrumbEntityID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, StormwaterBreadCrumbEntitySimpleDto>(AllAsSimpleDto.ToDictionary(x => x.StormwaterBreadCrumbEntityID));
         }
 
         /// <summary>

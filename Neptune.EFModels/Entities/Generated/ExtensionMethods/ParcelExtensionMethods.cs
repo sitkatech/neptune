@@ -9,26 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ParcelExtensionMethods
     {
-        public static ParcelDto AsDto(this Parcel parcel)
-        {
-            var parcelDto = new ParcelDto()
-            {
-                ParcelID = parcel.ParcelID,
-                ParcelNumber = parcel.ParcelNumber,
-                OwnerName = parcel.OwnerName,
-                ParcelStreetNumber = parcel.ParcelStreetNumber,
-                ParcelAddress = parcel.ParcelAddress,
-                ParcelZipCode = parcel.ParcelZipCode,
-                LandUse = parcel.LandUse,
-                SquareFeetHome = parcel.SquareFeetHome,
-                SquareFeetLot = parcel.SquareFeetLot,
-                ParcelAreaInAcres = parcel.ParcelAreaInAcres
-            };
-            DoCustomMappings(parcel, parcelDto);
-            return parcelDto;
-        }
-
-        static partial void DoCustomMappings(Parcel parcel, ParcelDto parcelDto);
 
         public static ParcelSimpleDto AsSimpleDto(this Parcel parcel)
         {

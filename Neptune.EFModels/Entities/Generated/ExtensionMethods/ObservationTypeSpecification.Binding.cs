@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[ObservationTypeSpecification]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,24 +12,24 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class ObservationTypeSpecification : IHavePrimaryKey
     {
-        public static readonly ObservationTypeSpecificationPassFail_PassFail_None PassFail_PassFail_None = Neptune.EFModels.Entities.ObservationTypeSpecificationPassFail_PassFail_None.Instance;
-        public static readonly ObservationTypeSpecificationDiscreteValues_HighTargetValue_DiscreteThresholdValue DiscreteValues_HighTargetValue_DiscreteThresholdValue = Neptune.EFModels.Entities.ObservationTypeSpecificationDiscreteValues_HighTargetValue_DiscreteThresholdValue.Instance;
-        public static readonly ObservationTypeSpecificationDiscreteValues_HighTargetValue_PercentFromBenchmark DiscreteValues_HighTargetValue_PercentFromBenchmark = Neptune.EFModels.Entities.ObservationTypeSpecificationDiscreteValues_HighTargetValue_PercentFromBenchmark.Instance;
-        public static readonly ObservationTypeSpecificationDiscreteValues_LowTargetValue_DiscreteThresholdValue DiscreteValues_LowTargetValue_DiscreteThresholdValue = Neptune.EFModels.Entities.ObservationTypeSpecificationDiscreteValues_LowTargetValue_DiscreteThresholdValue.Instance;
-        public static readonly ObservationTypeSpecificationDiscreteValues_LowTargetValue_PercentFromBenchmark DiscreteValues_LowTargetValue_PercentFromBenchmark = Neptune.EFModels.Entities.ObservationTypeSpecificationDiscreteValues_LowTargetValue_PercentFromBenchmark.Instance;
-        public static readonly ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_DiscreteThresholdValue DiscreteValues_SpecificTargetValue_DiscreteThresholdValue = Neptune.EFModels.Entities.ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_DiscreteThresholdValue.Instance;
-        public static readonly ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_PercentFromBenchmark DiscreteValues_SpecificTargetValue_PercentFromBenchmark = Neptune.EFModels.Entities.ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_PercentFromBenchmark.Instance;
-        public static readonly ObservationTypeSpecificationPercentValue_HighTargetValue_DiscreteThresholdValue PercentValue_HighTargetValue_DiscreteThresholdValue = Neptune.EFModels.Entities.ObservationTypeSpecificationPercentValue_HighTargetValue_DiscreteThresholdValue.Instance;
-        public static readonly ObservationTypeSpecificationPercentValue_HighTargetValue_PercentFromBenchmark PercentValue_HighTargetValue_PercentFromBenchmark = Neptune.EFModels.Entities.ObservationTypeSpecificationPercentValue_HighTargetValue_PercentFromBenchmark.Instance;
-        public static readonly ObservationTypeSpecificationPercentValue_LowTargetValue_DiscreteThresholdValue PercentValue_LowTargetValue_DiscreteThresholdValue = Neptune.EFModels.Entities.ObservationTypeSpecificationPercentValue_LowTargetValue_DiscreteThresholdValue.Instance;
-        public static readonly ObservationTypeSpecificationPercentValue_LowTargetValue_PercentFromBenchmark PercentValue_LowTargetValue_PercentFromBenchmark = Neptune.EFModels.Entities.ObservationTypeSpecificationPercentValue_LowTargetValue_PercentFromBenchmark.Instance;
-        public static readonly ObservationTypeSpecificationPercentValue_SpecificTargetValue_DiscreteThresholdValue PercentValue_SpecificTargetValue_DiscreteThresholdValue = Neptune.EFModels.Entities.ObservationTypeSpecificationPercentValue_SpecificTargetValue_DiscreteThresholdValue.Instance;
-        public static readonly ObservationTypeSpecificationPercentValue_SpecificTargetValue_PercentFromBenchmark PercentValue_SpecificTargetValue_PercentFromBenchmark = Neptune.EFModels.Entities.ObservationTypeSpecificationPercentValue_SpecificTargetValue_PercentFromBenchmark.Instance;
+        public static readonly ObservationTypeSpecificationPassFail_PassFail_None PassFail_PassFail_None = ObservationTypeSpecificationPassFail_PassFail_None.Instance;
+        public static readonly ObservationTypeSpecificationDiscreteValues_HighTargetValue_DiscreteThresholdValue DiscreteValues_HighTargetValue_DiscreteThresholdValue = ObservationTypeSpecificationDiscreteValues_HighTargetValue_DiscreteThresholdValue.Instance;
+        public static readonly ObservationTypeSpecificationDiscreteValues_HighTargetValue_PercentFromBenchmark DiscreteValues_HighTargetValue_PercentFromBenchmark = ObservationTypeSpecificationDiscreteValues_HighTargetValue_PercentFromBenchmark.Instance;
+        public static readonly ObservationTypeSpecificationDiscreteValues_LowTargetValue_DiscreteThresholdValue DiscreteValues_LowTargetValue_DiscreteThresholdValue = ObservationTypeSpecificationDiscreteValues_LowTargetValue_DiscreteThresholdValue.Instance;
+        public static readonly ObservationTypeSpecificationDiscreteValues_LowTargetValue_PercentFromBenchmark DiscreteValues_LowTargetValue_PercentFromBenchmark = ObservationTypeSpecificationDiscreteValues_LowTargetValue_PercentFromBenchmark.Instance;
+        public static readonly ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_DiscreteThresholdValue DiscreteValues_SpecificTargetValue_DiscreteThresholdValue = ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_DiscreteThresholdValue.Instance;
+        public static readonly ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_PercentFromBenchmark DiscreteValues_SpecificTargetValue_PercentFromBenchmark = ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_PercentFromBenchmark.Instance;
+        public static readonly ObservationTypeSpecificationPercentValue_HighTargetValue_DiscreteThresholdValue PercentValue_HighTargetValue_DiscreteThresholdValue = ObservationTypeSpecificationPercentValue_HighTargetValue_DiscreteThresholdValue.Instance;
+        public static readonly ObservationTypeSpecificationPercentValue_HighTargetValue_PercentFromBenchmark PercentValue_HighTargetValue_PercentFromBenchmark = ObservationTypeSpecificationPercentValue_HighTargetValue_PercentFromBenchmark.Instance;
+        public static readonly ObservationTypeSpecificationPercentValue_LowTargetValue_DiscreteThresholdValue PercentValue_LowTargetValue_DiscreteThresholdValue = ObservationTypeSpecificationPercentValue_LowTargetValue_DiscreteThresholdValue.Instance;
+        public static readonly ObservationTypeSpecificationPercentValue_LowTargetValue_PercentFromBenchmark PercentValue_LowTargetValue_PercentFromBenchmark = ObservationTypeSpecificationPercentValue_LowTargetValue_PercentFromBenchmark.Instance;
+        public static readonly ObservationTypeSpecificationPercentValue_SpecificTargetValue_DiscreteThresholdValue PercentValue_SpecificTargetValue_DiscreteThresholdValue = ObservationTypeSpecificationPercentValue_SpecificTargetValue_DiscreteThresholdValue.Instance;
+        public static readonly ObservationTypeSpecificationPercentValue_SpecificTargetValue_PercentFromBenchmark PercentValue_SpecificTargetValue_PercentFromBenchmark = ObservationTypeSpecificationPercentValue_SpecificTargetValue_PercentFromBenchmark.Instance;
 
         public static readonly List<ObservationTypeSpecification> All;
-        public static readonly List<ObservationTypeSpecificationDto> AllAsDto;
+        public static readonly List<ObservationTypeSpecificationSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, ObservationTypeSpecification> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, ObservationTypeSpecificationDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, ObservationTypeSpecificationSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -40,9 +37,9 @@ namespace Neptune.EFModels.Entities
         static ObservationTypeSpecification()
         {
             All = new List<ObservationTypeSpecification> { PassFail_PassFail_None, DiscreteValues_HighTargetValue_DiscreteThresholdValue, DiscreteValues_HighTargetValue_PercentFromBenchmark, DiscreteValues_LowTargetValue_DiscreteThresholdValue, DiscreteValues_LowTargetValue_PercentFromBenchmark, DiscreteValues_SpecificTargetValue_DiscreteThresholdValue, DiscreteValues_SpecificTargetValue_PercentFromBenchmark, PercentValue_HighTargetValue_DiscreteThresholdValue, PercentValue_HighTargetValue_PercentFromBenchmark, PercentValue_LowTargetValue_DiscreteThresholdValue, PercentValue_LowTargetValue_PercentFromBenchmark, PercentValue_SpecificTargetValue_DiscreteThresholdValue, PercentValue_SpecificTargetValue_PercentFromBenchmark };
-            AllAsDto = new List<ObservationTypeSpecificationDto> { PassFail_PassFail_None.AsDto(), DiscreteValues_HighTargetValue_DiscreteThresholdValue.AsDto(), DiscreteValues_HighTargetValue_PercentFromBenchmark.AsDto(), DiscreteValues_LowTargetValue_DiscreteThresholdValue.AsDto(), DiscreteValues_LowTargetValue_PercentFromBenchmark.AsDto(), DiscreteValues_SpecificTargetValue_DiscreteThresholdValue.AsDto(), DiscreteValues_SpecificTargetValue_PercentFromBenchmark.AsDto(), PercentValue_HighTargetValue_DiscreteThresholdValue.AsDto(), PercentValue_HighTargetValue_PercentFromBenchmark.AsDto(), PercentValue_LowTargetValue_DiscreteThresholdValue.AsDto(), PercentValue_LowTargetValue_PercentFromBenchmark.AsDto(), PercentValue_SpecificTargetValue_DiscreteThresholdValue.AsDto(), PercentValue_SpecificTargetValue_PercentFromBenchmark.AsDto() };
+            AllAsSimpleDto = new List<ObservationTypeSpecificationSimpleDto> { PassFail_PassFail_None.AsSimpleDto(), DiscreteValues_HighTargetValue_DiscreteThresholdValue.AsSimpleDto(), DiscreteValues_HighTargetValue_PercentFromBenchmark.AsSimpleDto(), DiscreteValues_LowTargetValue_DiscreteThresholdValue.AsSimpleDto(), DiscreteValues_LowTargetValue_PercentFromBenchmark.AsSimpleDto(), DiscreteValues_SpecificTargetValue_DiscreteThresholdValue.AsSimpleDto(), DiscreteValues_SpecificTargetValue_PercentFromBenchmark.AsSimpleDto(), PercentValue_HighTargetValue_DiscreteThresholdValue.AsSimpleDto(), PercentValue_HighTargetValue_PercentFromBenchmark.AsSimpleDto(), PercentValue_LowTargetValue_DiscreteThresholdValue.AsSimpleDto(), PercentValue_LowTargetValue_PercentFromBenchmark.AsSimpleDto(), PercentValue_SpecificTargetValue_DiscreteThresholdValue.AsSimpleDto(), PercentValue_SpecificTargetValue_PercentFromBenchmark.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, ObservationTypeSpecification>(All.ToDictionary(x => x.ObservationTypeSpecificationID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, ObservationTypeSpecificationDto>(AllAsDto.ToDictionary(x => x.ObservationTypeSpecificationID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, ObservationTypeSpecificationSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.ObservationTypeSpecificationID));
         }
 
         /// <summary>

@@ -1561,7 +1561,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RoleDto"
+                    "$ref": "#/components/schemas/RoleSimpleDto"
                   }
                 }
               },
@@ -1569,7 +1569,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RoleDto"
+                    "$ref": "#/components/schemas/RoleSimpleDto"
                   }
                 }
               },
@@ -1577,7 +1577,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RoleDto"
+                    "$ref": "#/components/schemas/RoleSimpleDto"
                   }
                 }
               }
@@ -2354,7 +2354,7 @@
             "format": "int32"
           },
           "FieldDefinitionType": {
-            "$ref": "#/components/schemas/FieldDefinitionTypeDto"
+            "$ref": "#/components/schemas/FieldDefinitionTypeSimpleDto"
           },
           "FieldDefinitionValue": {
             "type": "string",
@@ -2363,7 +2363,7 @@
         },
         "additionalProperties": false
       },
-      "FieldDefinitionTypeDto": {
+      "FieldDefinitionTypeSimpleDto": {
         "type": "object",
         "properties": {
           "FieldDefinitionTypeID": {
@@ -2389,7 +2389,7 @@
             "format": "int32"
           },
           "FileResourceMimeType": {
-            "$ref": "#/components/schemas/FileResourceMimeTypeDto"
+            "$ref": "#/components/schemas/FileResourceMimeTypeSimpleDto"
           },
           "OriginalBaseFilename": {
             "type": "string",
@@ -2417,7 +2417,7 @@
         },
         "additionalProperties": false
       },
-      "FileResourceMimeTypeDto": {
+      "FileResourceMimeTypeSimpleDto": {
         "type": "object",
         "properties": {
           "FileResourceMimeTypeID": {
@@ -2507,7 +2507,7 @@
             "format": "int32"
           },
           "NeptunePageType": {
-            "$ref": "#/components/schemas/NeptunePageTypeDto"
+            "$ref": "#/components/schemas/NeptunePageTypeSimpleDto"
           },
           "NeptunePageContent": {
             "type": "string",
@@ -2519,7 +2519,7 @@
         },
         "additionalProperties": false
       },
-      "NeptunePageTypeDto": {
+      "NeptunePageTypeSimpleDto": {
         "type": "object",
         "properties": {
           "NeptunePageTypeID": {
@@ -2571,7 +2571,7 @@
             "$ref": "#/components/schemas/FileResourceDto"
           },
           "OrganizationType": {
-            "$ref": "#/components/schemas/OrganizationTypeDto"
+            "$ref": "#/components/schemas/OrganizationTypeSimpleDto"
           }
         },
         "additionalProperties": false
@@ -2620,7 +2620,7 @@
         },
         "additionalProperties": false
       },
-      "OrganizationTypeDto": {
+      "OrganizationTypeSimpleDto": {
         "type": "object",
         "properties": {
           "OrganizationTypeID": {
@@ -2710,7 +2710,7 @@
             "nullable": true
           },
           "Role": {
-            "$ref": "#/components/schemas/RoleDto"
+            "$ref": "#/components/schemas/RoleSimpleDto"
           },
           "CreateDate": {
             "type": "string",
@@ -3739,7 +3739,7 @@
         },
         "additionalProperties": false
       },
-      "RoleDto": {
+      "RoleSimpleDto": {
         "type": "object",
         "properties": {
           "RoleID": {
@@ -3757,6 +3757,10 @@
           "RoleDescription": {
             "type": "string",
             "nullable": true
+          },
+          "PeopleWithRoleCount": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

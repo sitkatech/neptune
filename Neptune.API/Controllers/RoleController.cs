@@ -18,9 +18,9 @@ namespace Neptune.API.Controllers
 
         [HttpGet("roles")]
         [AdminFeature]
-        public ActionResult<List<RoleDto>> GetAllRoles()
+        public ActionResult<List<RoleSimpleDto>> GetAllRoles()
         {
-            var roleDtos = Role.AllAsDto;
+            var roleDtos = Role.AllAsSimpleDto;
             return Ok(roleDtos);
         }
     }

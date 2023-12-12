@@ -9,22 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class DirtyModelNodeExtensionMethods
     {
-        public static DirtyModelNodeDto AsDto(this DirtyModelNode dirtyModelNode)
-        {
-            var dirtyModelNodeDto = new DirtyModelNodeDto()
-            {
-                DirtyModelNodeID = dirtyModelNode.DirtyModelNodeID,
-                TreatmentBMP = dirtyModelNode.TreatmentBMP?.AsDto(),
-                WaterQualityManagementPlan = dirtyModelNode.WaterQualityManagementPlan?.AsDto(),
-                RegionalSubbasin = dirtyModelNode.RegionalSubbasin?.AsDto(),
-                Delineation = dirtyModelNode.Delineation?.AsDto(),
-                CreateDate = dirtyModelNode.CreateDate
-            };
-            DoCustomMappings(dirtyModelNode, dirtyModelNodeDto);
-            return dirtyModelNodeDto;
-        }
-
-        static partial void DoCustomMappings(DirtyModelNode dirtyModelNode, DirtyModelNodeDto dirtyModelNodeDto);
 
         public static DirtyModelNodeSimpleDto AsSimpleDto(this DirtyModelNode dirtyModelNode)
         {

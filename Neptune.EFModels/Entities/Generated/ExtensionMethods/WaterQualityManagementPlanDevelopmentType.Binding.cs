@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[WaterQualityManagementPlanDevelopmentType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,13 +12,13 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class WaterQualityManagementPlanDevelopmentType : IHavePrimaryKey
     {
-        public static readonly WaterQualityManagementPlanDevelopmentTypeNewDevelopment NewDevelopment = Neptune.EFModels.Entities.WaterQualityManagementPlanDevelopmentTypeNewDevelopment.Instance;
-        public static readonly WaterQualityManagementPlanDevelopmentTypeRedevelopment Redevelopment = Neptune.EFModels.Entities.WaterQualityManagementPlanDevelopmentTypeRedevelopment.Instance;
+        public static readonly WaterQualityManagementPlanDevelopmentTypeNewDevelopment NewDevelopment = WaterQualityManagementPlanDevelopmentTypeNewDevelopment.Instance;
+        public static readonly WaterQualityManagementPlanDevelopmentTypeRedevelopment Redevelopment = WaterQualityManagementPlanDevelopmentTypeRedevelopment.Instance;
 
         public static readonly List<WaterQualityManagementPlanDevelopmentType> All;
-        public static readonly List<WaterQualityManagementPlanDevelopmentTypeDto> AllAsDto;
+        public static readonly List<WaterQualityManagementPlanDevelopmentTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanDevelopmentType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanDevelopmentTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanDevelopmentTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +26,9 @@ namespace Neptune.EFModels.Entities
         static WaterQualityManagementPlanDevelopmentType()
         {
             All = new List<WaterQualityManagementPlanDevelopmentType> { NewDevelopment, Redevelopment };
-            AllAsDto = new List<WaterQualityManagementPlanDevelopmentTypeDto> { NewDevelopment.AsDto(), Redevelopment.AsDto() };
+            AllAsSimpleDto = new List<WaterQualityManagementPlanDevelopmentTypeSimpleDto> { NewDevelopment.AsSimpleDto(), Redevelopment.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanDevelopmentType>(All.ToDictionary(x => x.WaterQualityManagementPlanDevelopmentTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanDevelopmentTypeDto>(AllAsDto.ToDictionary(x => x.WaterQualityManagementPlanDevelopmentTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanDevelopmentTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.WaterQualityManagementPlanDevelopmentTypeID));
         }
 
         /// <summary>

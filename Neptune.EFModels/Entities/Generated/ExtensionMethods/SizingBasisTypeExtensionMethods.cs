@@ -9,19 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class SizingBasisTypeExtensionMethods
     {
-        public static SizingBasisTypeDto AsDto(this SizingBasisType sizingBasisType)
-        {
-            var sizingBasisTypeDto = new SizingBasisTypeDto()
-            {
-                SizingBasisTypeID = sizingBasisType.SizingBasisTypeID,
-                SizingBasisTypeName = sizingBasisType.SizingBasisTypeName,
-                SizingBasisTypeDisplayName = sizingBasisType.SizingBasisTypeDisplayName
-            };
-            DoCustomMappings(sizingBasisType, sizingBasisTypeDto);
-            return sizingBasisTypeDto;
-        }
-
-        static partial void DoCustomMappings(SizingBasisType sizingBasisType, SizingBasisTypeDto sizingBasisTypeDto);
 
         public static SizingBasisTypeSimpleDto AsSimpleDto(this SizingBasisType sizingBasisType)
         {

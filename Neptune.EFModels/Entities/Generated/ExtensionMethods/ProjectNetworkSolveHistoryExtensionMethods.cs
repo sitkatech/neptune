@@ -9,22 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class ProjectNetworkSolveHistoryExtensionMethods
     {
-        public static ProjectNetworkSolveHistoryDto AsDto(this ProjectNetworkSolveHistory projectNetworkSolveHistory)
-        {
-            var projectNetworkSolveHistoryDto = new ProjectNetworkSolveHistoryDto()
-            {
-                ProjectNetworkSolveHistoryID = projectNetworkSolveHistory.ProjectNetworkSolveHistoryID,
-                Project = projectNetworkSolveHistory.Project.AsDto(),
-                RequestedByPerson = projectNetworkSolveHistory.RequestedByPerson.AsDto(),
-                ProjectNetworkSolveHistoryStatusType = projectNetworkSolveHistory.ProjectNetworkSolveHistoryStatusType.AsDto(),
-                LastUpdated = projectNetworkSolveHistory.LastUpdated,
-                ErrorMessage = projectNetworkSolveHistory.ErrorMessage
-            };
-            DoCustomMappings(projectNetworkSolveHistory, projectNetworkSolveHistoryDto);
-            return projectNetworkSolveHistoryDto;
-        }
-
-        static partial void DoCustomMappings(ProjectNetworkSolveHistory projectNetworkSolveHistory, ProjectNetworkSolveHistoryDto projectNetworkSolveHistoryDto);
 
         public static ProjectNetworkSolveHistorySimpleDto AsSimpleDto(this ProjectNetworkSolveHistory projectNetworkSolveHistory)
         {

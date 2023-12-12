@@ -9,23 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class TrashGeneratingUnitAdjustmentExtensionMethods
     {
-        public static TrashGeneratingUnitAdjustmentDto AsDto(this TrashGeneratingUnitAdjustment trashGeneratingUnitAdjustment)
-        {
-            var trashGeneratingUnitAdjustmentDto = new TrashGeneratingUnitAdjustmentDto()
-            {
-                TrashGeneratingUnitAdjustmentID = trashGeneratingUnitAdjustment.TrashGeneratingUnitAdjustmentID,
-                AdjustedDelineationID = trashGeneratingUnitAdjustment.AdjustedDelineationID,
-                AdjustedOnlandVisualTrashAssessmentAreaID = trashGeneratingUnitAdjustment.AdjustedOnlandVisualTrashAssessmentAreaID,
-                AdjustmentDate = trashGeneratingUnitAdjustment.AdjustmentDate,
-                AdjustedByPerson = trashGeneratingUnitAdjustment.AdjustedByPerson.AsDto(),
-                IsProcessed = trashGeneratingUnitAdjustment.IsProcessed,
-                ProcessedDate = trashGeneratingUnitAdjustment.ProcessedDate
-            };
-            DoCustomMappings(trashGeneratingUnitAdjustment, trashGeneratingUnitAdjustmentDto);
-            return trashGeneratingUnitAdjustmentDto;
-        }
-
-        static partial void DoCustomMappings(TrashGeneratingUnitAdjustment trashGeneratingUnitAdjustment, TrashGeneratingUnitAdjustmentDto trashGeneratingUnitAdjustmentDto);
 
         public static TrashGeneratingUnitAdjustmentSimpleDto AsSimpleDto(this TrashGeneratingUnitAdjustment trashGeneratingUnitAdjustment)
         {

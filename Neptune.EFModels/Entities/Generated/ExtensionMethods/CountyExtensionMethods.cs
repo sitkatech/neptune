@@ -9,19 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class CountyExtensionMethods
     {
-        public static CountyDto AsDto(this County county)
-        {
-            var countyDto = new CountyDto()
-            {
-                CountyID = county.CountyID,
-                CountyName = county.CountyName,
-                StateProvince = county.StateProvince.AsDto()
-            };
-            DoCustomMappings(county, countyDto);
-            return countyDto;
-        }
-
-        static partial void DoCustomMappings(County county, CountyDto countyDto);
 
         public static CountySimpleDto AsSimpleDto(this County county)
         {

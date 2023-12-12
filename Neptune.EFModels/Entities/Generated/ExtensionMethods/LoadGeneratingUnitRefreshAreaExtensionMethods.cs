@@ -9,18 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class LoadGeneratingUnitRefreshAreaExtensionMethods
     {
-        public static LoadGeneratingUnitRefreshAreaDto AsDto(this LoadGeneratingUnitRefreshArea loadGeneratingUnitRefreshArea)
-        {
-            var loadGeneratingUnitRefreshAreaDto = new LoadGeneratingUnitRefreshAreaDto()
-            {
-                LoadGeneratingUnitRefreshAreaID = loadGeneratingUnitRefreshArea.LoadGeneratingUnitRefreshAreaID,
-                ProcessDate = loadGeneratingUnitRefreshArea.ProcessDate
-            };
-            DoCustomMappings(loadGeneratingUnitRefreshArea, loadGeneratingUnitRefreshAreaDto);
-            return loadGeneratingUnitRefreshAreaDto;
-        }
-
-        static partial void DoCustomMappings(LoadGeneratingUnitRefreshArea loadGeneratingUnitRefreshArea, LoadGeneratingUnitRefreshAreaDto loadGeneratingUnitRefreshAreaDto);
 
         public static LoadGeneratingUnitRefreshAreaSimpleDto AsSimpleDto(this LoadGeneratingUnitRefreshArea loadGeneratingUnitRefreshArea)
         {

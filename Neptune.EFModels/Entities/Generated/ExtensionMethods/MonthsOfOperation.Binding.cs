@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[MonthsOfOperation]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,14 +12,14 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class MonthsOfOperation : IHavePrimaryKey
     {
-        public static readonly MonthsOfOperationSummer Summer = Neptune.EFModels.Entities.MonthsOfOperationSummer.Instance;
-        public static readonly MonthsOfOperationWinter Winter = Neptune.EFModels.Entities.MonthsOfOperationWinter.Instance;
-        public static readonly MonthsOfOperationBoth Both = Neptune.EFModels.Entities.MonthsOfOperationBoth.Instance;
+        public static readonly MonthsOfOperationSummer Summer = MonthsOfOperationSummer.Instance;
+        public static readonly MonthsOfOperationWinter Winter = MonthsOfOperationWinter.Instance;
+        public static readonly MonthsOfOperationBoth Both = MonthsOfOperationBoth.Instance;
 
         public static readonly List<MonthsOfOperation> All;
-        public static readonly List<MonthsOfOperationDto> AllAsDto;
+        public static readonly List<MonthsOfOperationSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, MonthsOfOperation> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, MonthsOfOperationDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, MonthsOfOperationSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -30,9 +27,9 @@ namespace Neptune.EFModels.Entities
         static MonthsOfOperation()
         {
             All = new List<MonthsOfOperation> { Summer, Winter, Both };
-            AllAsDto = new List<MonthsOfOperationDto> { Summer.AsDto(), Winter.AsDto(), Both.AsDto() };
+            AllAsSimpleDto = new List<MonthsOfOperationSimpleDto> { Summer.AsSimpleDto(), Winter.AsSimpleDto(), Both.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, MonthsOfOperation>(All.ToDictionary(x => x.MonthsOfOperationID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, MonthsOfOperationDto>(AllAsDto.ToDictionary(x => x.MonthsOfOperationID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, MonthsOfOperationSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.MonthsOfOperationID));
         }
 
         /// <summary>

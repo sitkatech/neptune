@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[NotificationType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,12 +12,12 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class NotificationType : IHavePrimaryKey
     {
-        public static readonly NotificationTypeCustom Custom = Neptune.EFModels.Entities.NotificationTypeCustom.Instance;
+        public static readonly NotificationTypeCustom Custom = NotificationTypeCustom.Instance;
 
         public static readonly List<NotificationType> All;
-        public static readonly List<NotificationTypeDto> AllAsDto;
+        public static readonly List<NotificationTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, NotificationType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, NotificationTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, NotificationTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -28,9 +25,9 @@ namespace Neptune.EFModels.Entities
         static NotificationType()
         {
             All = new List<NotificationType> { Custom };
-            AllAsDto = new List<NotificationTypeDto> { Custom.AsDto() };
+            AllAsSimpleDto = new List<NotificationTypeSimpleDto> { Custom.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, NotificationType>(All.ToDictionary(x => x.NotificationTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, NotificationTypeDto>(AllAsDto.ToDictionary(x => x.NotificationTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, NotificationTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.NotificationTypeID));
         }
 
         /// <summary>

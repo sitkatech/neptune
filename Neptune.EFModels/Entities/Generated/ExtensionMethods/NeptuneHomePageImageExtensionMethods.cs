@@ -9,20 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class NeptuneHomePageImageExtensionMethods
     {
-        public static NeptuneHomePageImageDto AsDto(this NeptuneHomePageImage neptuneHomePageImage)
-        {
-            var neptuneHomePageImageDto = new NeptuneHomePageImageDto()
-            {
-                NeptuneHomePageImageID = neptuneHomePageImage.NeptuneHomePageImageID,
-                FileResource = neptuneHomePageImage.FileResource.AsDto(),
-                Caption = neptuneHomePageImage.Caption,
-                SortOrder = neptuneHomePageImage.SortOrder
-            };
-            DoCustomMappings(neptuneHomePageImage, neptuneHomePageImageDto);
-            return neptuneHomePageImageDto;
-        }
-
-        static partial void DoCustomMappings(NeptuneHomePageImage neptuneHomePageImage, NeptuneHomePageImageDto neptuneHomePageImageDto);
 
         public static NeptuneHomePageImageSimpleDto AsSimpleDto(this NeptuneHomePageImage neptuneHomePageImage)
         {

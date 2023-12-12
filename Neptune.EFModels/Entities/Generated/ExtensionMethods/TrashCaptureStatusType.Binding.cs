@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[TrashCaptureStatusType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,15 +12,15 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class TrashCaptureStatusType : IHavePrimaryKey
     {
-        public static readonly TrashCaptureStatusTypeFull Full = Neptune.EFModels.Entities.TrashCaptureStatusTypeFull.Instance;
-        public static readonly TrashCaptureStatusTypePartial Partial = Neptune.EFModels.Entities.TrashCaptureStatusTypePartial.Instance;
-        public static readonly TrashCaptureStatusTypeNone None = Neptune.EFModels.Entities.TrashCaptureStatusTypeNone.Instance;
-        public static readonly TrashCaptureStatusTypeNotProvided NotProvided = Neptune.EFModels.Entities.TrashCaptureStatusTypeNotProvided.Instance;
+        public static readonly TrashCaptureStatusTypeFull Full = TrashCaptureStatusTypeFull.Instance;
+        public static readonly TrashCaptureStatusTypePartial Partial = TrashCaptureStatusTypePartial.Instance;
+        public static readonly TrashCaptureStatusTypeNone None = TrashCaptureStatusTypeNone.Instance;
+        public static readonly TrashCaptureStatusTypeNotProvided NotProvided = TrashCaptureStatusTypeNotProvided.Instance;
 
         public static readonly List<TrashCaptureStatusType> All;
-        public static readonly List<TrashCaptureStatusTypeDto> AllAsDto;
+        public static readonly List<TrashCaptureStatusTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, TrashCaptureStatusType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, TrashCaptureStatusTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, TrashCaptureStatusTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -31,9 +28,9 @@ namespace Neptune.EFModels.Entities
         static TrashCaptureStatusType()
         {
             All = new List<TrashCaptureStatusType> { Full, Partial, None, NotProvided };
-            AllAsDto = new List<TrashCaptureStatusTypeDto> { Full.AsDto(), Partial.AsDto(), None.AsDto(), NotProvided.AsDto() };
+            AllAsSimpleDto = new List<TrashCaptureStatusTypeSimpleDto> { Full.AsSimpleDto(), Partial.AsSimpleDto(), None.AsSimpleDto(), NotProvided.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, TrashCaptureStatusType>(All.ToDictionary(x => x.TrashCaptureStatusTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, TrashCaptureStatusTypeDto>(AllAsDto.ToDictionary(x => x.TrashCaptureStatusTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, TrashCaptureStatusTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.TrashCaptureStatusTypeID));
         }
 
         /// <summary>

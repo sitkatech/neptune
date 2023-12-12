@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[FieldVisitSection]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,16 +12,16 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class FieldVisitSection : IHavePrimaryKey
     {
-        public static readonly FieldVisitSectionInventory Inventory = Neptune.EFModels.Entities.FieldVisitSectionInventory.Instance;
-        public static readonly FieldVisitSectionAssessment Assessment = Neptune.EFModels.Entities.FieldVisitSectionAssessment.Instance;
-        public static readonly FieldVisitSectionMaintenance Maintenance = Neptune.EFModels.Entities.FieldVisitSectionMaintenance.Instance;
-        public static readonly FieldVisitSectionPostMaintenanceAssessment PostMaintenanceAssessment = Neptune.EFModels.Entities.FieldVisitSectionPostMaintenanceAssessment.Instance;
-        public static readonly FieldVisitSectionVisitSummary VisitSummary = Neptune.EFModels.Entities.FieldVisitSectionVisitSummary.Instance;
+        public static readonly FieldVisitSectionInventory Inventory = FieldVisitSectionInventory.Instance;
+        public static readonly FieldVisitSectionAssessment Assessment = FieldVisitSectionAssessment.Instance;
+        public static readonly FieldVisitSectionMaintenance Maintenance = FieldVisitSectionMaintenance.Instance;
+        public static readonly FieldVisitSectionPostMaintenanceAssessment PostMaintenanceAssessment = FieldVisitSectionPostMaintenanceAssessment.Instance;
+        public static readonly FieldVisitSectionVisitSummary VisitSummary = FieldVisitSectionVisitSummary.Instance;
 
         public static readonly List<FieldVisitSection> All;
-        public static readonly List<FieldVisitSectionDto> AllAsDto;
+        public static readonly List<FieldVisitSectionSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, FieldVisitSection> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, FieldVisitSectionDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, FieldVisitSectionSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -32,9 +29,9 @@ namespace Neptune.EFModels.Entities
         static FieldVisitSection()
         {
             All = new List<FieldVisitSection> { Inventory, Assessment, Maintenance, PostMaintenanceAssessment, VisitSummary };
-            AllAsDto = new List<FieldVisitSectionDto> { Inventory.AsDto(), Assessment.AsDto(), Maintenance.AsDto(), PostMaintenanceAssessment.AsDto(), VisitSummary.AsDto() };
+            AllAsSimpleDto = new List<FieldVisitSectionSimpleDto> { Inventory.AsSimpleDto(), Assessment.AsSimpleDto(), Maintenance.AsSimpleDto(), PostMaintenanceAssessment.AsSimpleDto(), VisitSummary.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldVisitSection>(All.ToDictionary(x => x.FieldVisitSectionID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, FieldVisitSectionDto>(AllAsDto.ToDictionary(x => x.FieldVisitSectionID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, FieldVisitSectionSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.FieldVisitSectionID));
         }
 
         /// <summary>

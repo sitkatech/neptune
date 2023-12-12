@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[DelineationType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,13 +12,13 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class DelineationType : IHavePrimaryKey
     {
-        public static readonly DelineationTypeCentralized Centralized = Neptune.EFModels.Entities.DelineationTypeCentralized.Instance;
-        public static readonly DelineationTypeDistributed Distributed = Neptune.EFModels.Entities.DelineationTypeDistributed.Instance;
+        public static readonly DelineationTypeCentralized Centralized = DelineationTypeCentralized.Instance;
+        public static readonly DelineationTypeDistributed Distributed = DelineationTypeDistributed.Instance;
 
         public static readonly List<DelineationType> All;
-        public static readonly List<DelineationTypeDto> AllAsDto;
+        public static readonly List<DelineationTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, DelineationType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, DelineationTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, DelineationTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +26,9 @@ namespace Neptune.EFModels.Entities
         static DelineationType()
         {
             All = new List<DelineationType> { Centralized, Distributed };
-            AllAsDto = new List<DelineationTypeDto> { Centralized.AsDto(), Distributed.AsDto() };
+            AllAsSimpleDto = new List<DelineationTypeSimpleDto> { Centralized.AsSimpleDto(), Distributed.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, DelineationType>(All.ToDictionary(x => x.DelineationTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, DelineationTypeDto>(AllAsDto.ToDictionary(x => x.DelineationTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, DelineationTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.DelineationTypeID));
         }
 
         /// <summary>

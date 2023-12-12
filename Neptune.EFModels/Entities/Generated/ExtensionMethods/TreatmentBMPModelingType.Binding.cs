@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[TreatmentBMPModelingType]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,33 +12,33 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class TreatmentBMPModelingType : IHavePrimaryKey
     {
-        public static readonly TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain BioinfiltrationBioretentionWithRaisedUnderdrain = Neptune.EFModels.Entities.TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain.Instance;
-        public static readonly TreatmentBMPModelingTypeBioretentionWithNoUnderdrain BioretentionWithNoUnderdrain = Neptune.EFModels.Entities.TreatmentBMPModelingTypeBioretentionWithNoUnderdrain.Instance;
-        public static readonly TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner BioretentionWithUnderdrainAndImperviousLiner = Neptune.EFModels.Entities.TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner.Instance;
-        public static readonly TreatmentBMPModelingTypeCisternsForHarvestAndUse CisternsForHarvestAndUse = Neptune.EFModels.Entities.TreatmentBMPModelingTypeCisternsForHarvestAndUse.Instance;
-        public static readonly TreatmentBMPModelingTypeConstructedWetland ConstructedWetland = Neptune.EFModels.Entities.TreatmentBMPModelingTypeConstructedWetland.Instance;
-        public static readonly TreatmentBMPModelingTypeDryExtendedDetentionBasin DryExtendedDetentionBasin = Neptune.EFModels.Entities.TreatmentBMPModelingTypeDryExtendedDetentionBasin.Instance;
-        public static readonly TreatmentBMPModelingTypeDryWeatherTreatmentSystems DryWeatherTreatmentSystems = Neptune.EFModels.Entities.TreatmentBMPModelingTypeDryWeatherTreatmentSystems.Instance;
-        public static readonly TreatmentBMPModelingTypeDrywell Drywell = Neptune.EFModels.Entities.TreatmentBMPModelingTypeDrywell.Instance;
-        public static readonly TreatmentBMPModelingTypeFlowDurationControlBasin FlowDurationControlBasin = Neptune.EFModels.Entities.TreatmentBMPModelingTypeFlowDurationControlBasin.Instance;
-        public static readonly TreatmentBMPModelingTypeFlowDurationControlTank FlowDurationControlTank = Neptune.EFModels.Entities.TreatmentBMPModelingTypeFlowDurationControlTank.Instance;
-        public static readonly TreatmentBMPModelingTypeHydrodynamicSeparator HydrodynamicSeparator = Neptune.EFModels.Entities.TreatmentBMPModelingTypeHydrodynamicSeparator.Instance;
-        public static readonly TreatmentBMPModelingTypeInfiltrationBasin InfiltrationBasin = Neptune.EFModels.Entities.TreatmentBMPModelingTypeInfiltrationBasin.Instance;
-        public static readonly TreatmentBMPModelingTypeInfiltrationTrench InfiltrationTrench = Neptune.EFModels.Entities.TreatmentBMPModelingTypeInfiltrationTrench.Instance;
-        public static readonly TreatmentBMPModelingTypeLowFlowDiversions LowFlowDiversions = Neptune.EFModels.Entities.TreatmentBMPModelingTypeLowFlowDiversions.Instance;
-        public static readonly TreatmentBMPModelingTypePermeablePavement PermeablePavement = Neptune.EFModels.Entities.TreatmentBMPModelingTypePermeablePavement.Instance;
-        public static readonly TreatmentBMPModelingTypeProprietaryBiotreatment ProprietaryBiotreatment = Neptune.EFModels.Entities.TreatmentBMPModelingTypeProprietaryBiotreatment.Instance;
-        public static readonly TreatmentBMPModelingTypeProprietaryTreatmentControl ProprietaryTreatmentControl = Neptune.EFModels.Entities.TreatmentBMPModelingTypeProprietaryTreatmentControl.Instance;
-        public static readonly TreatmentBMPModelingTypeSandFilters SandFilters = Neptune.EFModels.Entities.TreatmentBMPModelingTypeSandFilters.Instance;
-        public static readonly TreatmentBMPModelingTypeUndergroundInfiltration UndergroundInfiltration = Neptune.EFModels.Entities.TreatmentBMPModelingTypeUndergroundInfiltration.Instance;
-        public static readonly TreatmentBMPModelingTypeVegetatedFilterStrip VegetatedFilterStrip = Neptune.EFModels.Entities.TreatmentBMPModelingTypeVegetatedFilterStrip.Instance;
-        public static readonly TreatmentBMPModelingTypeVegetatedSwale VegetatedSwale = Neptune.EFModels.Entities.TreatmentBMPModelingTypeVegetatedSwale.Instance;
-        public static readonly TreatmentBMPModelingTypeWetDetentionBasin WetDetentionBasin = Neptune.EFModels.Entities.TreatmentBMPModelingTypeWetDetentionBasin.Instance;
+        public static readonly TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain BioinfiltrationBioretentionWithRaisedUnderdrain = TreatmentBMPModelingTypeBioinfiltrationBioretentionWithRaisedUnderdrain.Instance;
+        public static readonly TreatmentBMPModelingTypeBioretentionWithNoUnderdrain BioretentionWithNoUnderdrain = TreatmentBMPModelingTypeBioretentionWithNoUnderdrain.Instance;
+        public static readonly TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner BioretentionWithUnderdrainAndImperviousLiner = TreatmentBMPModelingTypeBioretentionWithUnderdrainAndImperviousLiner.Instance;
+        public static readonly TreatmentBMPModelingTypeCisternsForHarvestAndUse CisternsForHarvestAndUse = TreatmentBMPModelingTypeCisternsForHarvestAndUse.Instance;
+        public static readonly TreatmentBMPModelingTypeConstructedWetland ConstructedWetland = TreatmentBMPModelingTypeConstructedWetland.Instance;
+        public static readonly TreatmentBMPModelingTypeDryExtendedDetentionBasin DryExtendedDetentionBasin = TreatmentBMPModelingTypeDryExtendedDetentionBasin.Instance;
+        public static readonly TreatmentBMPModelingTypeDryWeatherTreatmentSystems DryWeatherTreatmentSystems = TreatmentBMPModelingTypeDryWeatherTreatmentSystems.Instance;
+        public static readonly TreatmentBMPModelingTypeDrywell Drywell = TreatmentBMPModelingTypeDrywell.Instance;
+        public static readonly TreatmentBMPModelingTypeFlowDurationControlBasin FlowDurationControlBasin = TreatmentBMPModelingTypeFlowDurationControlBasin.Instance;
+        public static readonly TreatmentBMPModelingTypeFlowDurationControlTank FlowDurationControlTank = TreatmentBMPModelingTypeFlowDurationControlTank.Instance;
+        public static readonly TreatmentBMPModelingTypeHydrodynamicSeparator HydrodynamicSeparator = TreatmentBMPModelingTypeHydrodynamicSeparator.Instance;
+        public static readonly TreatmentBMPModelingTypeInfiltrationBasin InfiltrationBasin = TreatmentBMPModelingTypeInfiltrationBasin.Instance;
+        public static readonly TreatmentBMPModelingTypeInfiltrationTrench InfiltrationTrench = TreatmentBMPModelingTypeInfiltrationTrench.Instance;
+        public static readonly TreatmentBMPModelingTypeLowFlowDiversions LowFlowDiversions = TreatmentBMPModelingTypeLowFlowDiversions.Instance;
+        public static readonly TreatmentBMPModelingTypePermeablePavement PermeablePavement = TreatmentBMPModelingTypePermeablePavement.Instance;
+        public static readonly TreatmentBMPModelingTypeProprietaryBiotreatment ProprietaryBiotreatment = TreatmentBMPModelingTypeProprietaryBiotreatment.Instance;
+        public static readonly TreatmentBMPModelingTypeProprietaryTreatmentControl ProprietaryTreatmentControl = TreatmentBMPModelingTypeProprietaryTreatmentControl.Instance;
+        public static readonly TreatmentBMPModelingTypeSandFilters SandFilters = TreatmentBMPModelingTypeSandFilters.Instance;
+        public static readonly TreatmentBMPModelingTypeUndergroundInfiltration UndergroundInfiltration = TreatmentBMPModelingTypeUndergroundInfiltration.Instance;
+        public static readonly TreatmentBMPModelingTypeVegetatedFilterStrip VegetatedFilterStrip = TreatmentBMPModelingTypeVegetatedFilterStrip.Instance;
+        public static readonly TreatmentBMPModelingTypeVegetatedSwale VegetatedSwale = TreatmentBMPModelingTypeVegetatedSwale.Instance;
+        public static readonly TreatmentBMPModelingTypeWetDetentionBasin WetDetentionBasin = TreatmentBMPModelingTypeWetDetentionBasin.Instance;
 
         public static readonly List<TreatmentBMPModelingType> All;
-        public static readonly List<TreatmentBMPModelingTypeDto> AllAsDto;
+        public static readonly List<TreatmentBMPModelingTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, TreatmentBMPModelingType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, TreatmentBMPModelingTypeDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, TreatmentBMPModelingTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -49,9 +46,9 @@ namespace Neptune.EFModels.Entities
         static TreatmentBMPModelingType()
         {
             All = new List<TreatmentBMPModelingType> { BioinfiltrationBioretentionWithRaisedUnderdrain, BioretentionWithNoUnderdrain, BioretentionWithUnderdrainAndImperviousLiner, CisternsForHarvestAndUse, ConstructedWetland, DryExtendedDetentionBasin, DryWeatherTreatmentSystems, Drywell, FlowDurationControlBasin, FlowDurationControlTank, HydrodynamicSeparator, InfiltrationBasin, InfiltrationTrench, LowFlowDiversions, PermeablePavement, ProprietaryBiotreatment, ProprietaryTreatmentControl, SandFilters, UndergroundInfiltration, VegetatedFilterStrip, VegetatedSwale, WetDetentionBasin };
-            AllAsDto = new List<TreatmentBMPModelingTypeDto> { BioinfiltrationBioretentionWithRaisedUnderdrain.AsDto(), BioretentionWithNoUnderdrain.AsDto(), BioretentionWithUnderdrainAndImperviousLiner.AsDto(), CisternsForHarvestAndUse.AsDto(), ConstructedWetland.AsDto(), DryExtendedDetentionBasin.AsDto(), DryWeatherTreatmentSystems.AsDto(), Drywell.AsDto(), FlowDurationControlBasin.AsDto(), FlowDurationControlTank.AsDto(), HydrodynamicSeparator.AsDto(), InfiltrationBasin.AsDto(), InfiltrationTrench.AsDto(), LowFlowDiversions.AsDto(), PermeablePavement.AsDto(), ProprietaryBiotreatment.AsDto(), ProprietaryTreatmentControl.AsDto(), SandFilters.AsDto(), UndergroundInfiltration.AsDto(), VegetatedFilterStrip.AsDto(), VegetatedSwale.AsDto(), WetDetentionBasin.AsDto() };
+            AllAsSimpleDto = new List<TreatmentBMPModelingTypeSimpleDto> { BioinfiltrationBioretentionWithRaisedUnderdrain.AsSimpleDto(), BioretentionWithNoUnderdrain.AsSimpleDto(), BioretentionWithUnderdrainAndImperviousLiner.AsSimpleDto(), CisternsForHarvestAndUse.AsSimpleDto(), ConstructedWetland.AsSimpleDto(), DryExtendedDetentionBasin.AsSimpleDto(), DryWeatherTreatmentSystems.AsSimpleDto(), Drywell.AsSimpleDto(), FlowDurationControlBasin.AsSimpleDto(), FlowDurationControlTank.AsSimpleDto(), HydrodynamicSeparator.AsSimpleDto(), InfiltrationBasin.AsSimpleDto(), InfiltrationTrench.AsSimpleDto(), LowFlowDiversions.AsSimpleDto(), PermeablePavement.AsSimpleDto(), ProprietaryBiotreatment.AsSimpleDto(), ProprietaryTreatmentControl.AsSimpleDto(), SandFilters.AsSimpleDto(), UndergroundInfiltration.AsSimpleDto(), VegetatedFilterStrip.AsSimpleDto(), VegetatedSwale.AsSimpleDto(), WetDetentionBasin.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPModelingType>(All.ToDictionary(x => x.TreatmentBMPModelingTypeID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPModelingTypeDto>(AllAsDto.ToDictionary(x => x.TreatmentBMPModelingTypeID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPModelingTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.TreatmentBMPModelingTypeID));
         }
 
         /// <summary>

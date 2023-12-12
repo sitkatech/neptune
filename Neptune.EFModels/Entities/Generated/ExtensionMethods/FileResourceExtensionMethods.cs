@@ -9,24 +9,6 @@ namespace Neptune.EFModels.Entities
 {
     public static partial class FileResourceExtensionMethods
     {
-        public static FileResourceDto AsDto(this FileResource fileResource)
-        {
-            var fileResourceDto = new FileResourceDto()
-            {
-                FileResourceID = fileResource.FileResourceID,
-                FileResourceMimeType = fileResource.FileResourceMimeType.AsDto(),
-                OriginalBaseFilename = fileResource.OriginalBaseFilename,
-                OriginalFileExtension = fileResource.OriginalFileExtension,
-                FileResourceGUID = fileResource.FileResourceGUID,
-                CreatePerson = fileResource.CreatePerson.AsDto(),
-                CreateDate = fileResource.CreateDate,
-                ContentLength = fileResource.ContentLength
-            };
-            DoCustomMappings(fileResource, fileResourceDto);
-            return fileResourceDto;
-        }
-
-        static partial void DoCustomMappings(FileResource fileResource, FileResourceDto fileResourceDto);
 
         public static FileResourceSimpleDto AsSimpleDto(this FileResource fileResource)
         {

@@ -2,12 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[PreliminarySourceIdentificationCategory]
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Neptune.Models.DataTransferObjects;
 
 
@@ -15,15 +12,15 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class PreliminarySourceIdentificationCategory : IHavePrimaryKey
     {
-        public static readonly PreliminarySourceIdentificationCategoryVehicles Vehicles = Neptune.EFModels.Entities.PreliminarySourceIdentificationCategoryVehicles.Instance;
-        public static readonly PreliminarySourceIdentificationCategoryInadequateWasteContainerManagement InadequateWasteContainerManagement = Neptune.EFModels.Entities.PreliminarySourceIdentificationCategoryInadequateWasteContainerManagement.Instance;
-        public static readonly PreliminarySourceIdentificationCategoryPedestrianLitter PedestrianLitter = Neptune.EFModels.Entities.PreliminarySourceIdentificationCategoryPedestrianLitter.Instance;
-        public static readonly PreliminarySourceIdentificationCategoryIllegalDumping IllegalDumping = Neptune.EFModels.Entities.PreliminarySourceIdentificationCategoryIllegalDumping.Instance;
+        public static readonly PreliminarySourceIdentificationCategoryVehicles Vehicles = PreliminarySourceIdentificationCategoryVehicles.Instance;
+        public static readonly PreliminarySourceIdentificationCategoryInadequateWasteContainerManagement InadequateWasteContainerManagement = PreliminarySourceIdentificationCategoryInadequateWasteContainerManagement.Instance;
+        public static readonly PreliminarySourceIdentificationCategoryPedestrianLitter PedestrianLitter = PreliminarySourceIdentificationCategoryPedestrianLitter.Instance;
+        public static readonly PreliminarySourceIdentificationCategoryIllegalDumping IllegalDumping = PreliminarySourceIdentificationCategoryIllegalDumping.Instance;
 
         public static readonly List<PreliminarySourceIdentificationCategory> All;
-        public static readonly List<PreliminarySourceIdentificationCategoryDto> AllAsDto;
+        public static readonly List<PreliminarySourceIdentificationCategorySimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, PreliminarySourceIdentificationCategory> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, PreliminarySourceIdentificationCategoryDto> AllAsDtoLookupDictionary;
+        public static readonly ReadOnlyDictionary<int, PreliminarySourceIdentificationCategorySimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -31,9 +28,9 @@ namespace Neptune.EFModels.Entities
         static PreliminarySourceIdentificationCategory()
         {
             All = new List<PreliminarySourceIdentificationCategory> { Vehicles, InadequateWasteContainerManagement, PedestrianLitter, IllegalDumping };
-            AllAsDto = new List<PreliminarySourceIdentificationCategoryDto> { Vehicles.AsDto(), InadequateWasteContainerManagement.AsDto(), PedestrianLitter.AsDto(), IllegalDumping.AsDto() };
+            AllAsSimpleDto = new List<PreliminarySourceIdentificationCategorySimpleDto> { Vehicles.AsSimpleDto(), InadequateWasteContainerManagement.AsSimpleDto(), PedestrianLitter.AsSimpleDto(), IllegalDumping.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, PreliminarySourceIdentificationCategory>(All.ToDictionary(x => x.PreliminarySourceIdentificationCategoryID));
-            AllAsDtoLookupDictionary = new ReadOnlyDictionary<int, PreliminarySourceIdentificationCategoryDto>(AllAsDto.ToDictionary(x => x.PreliminarySourceIdentificationCategoryID));
+            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, PreliminarySourceIdentificationCategorySimpleDto>(AllAsSimpleDto.ToDictionary(x => x.PreliminarySourceIdentificationCategoryID));
         }
 
         /// <summary>
