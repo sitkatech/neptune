@@ -1,4 +1,8 @@
-﻿using Neptune.Models.DataTransferObjects;
+﻿using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
+using NetTopologySuite.Algorithm;
+using Newtonsoft.Json.Linq;
+using System;
 
 namespace Neptune.EFModels.Entities;
 
@@ -14,7 +18,7 @@ public static partial class TreatmentBMPTypeExtensionMethods
         return treatmentBMPTypeDisplayDto;
     }
 
-    public static bool HasMissingModelingAttributes(this TreatmentBMPType treatmentBMPType, TreatmentBMPModelingAttribute? treatmentBMPModelingAttribute)
+    public static bool HasMissingModelingAttributes(this TreatmentBMPType treatmentBMPType, ITreatmentBMPModelingAttribute? treatmentBMPModelingAttribute)
     {
         if (!treatmentBMPType.IsAnalyzedInModelingModule)
         {
@@ -94,5 +98,103 @@ public static partial class TreatmentBMPTypeExtensionMethods
         }
 
         return true;
+    }
+
+    public static List<TreatmentBMPModelingAttributeDefinitionDto> GetModelingAttributes(this TreatmentBMPType treatmentBMPType)
+    {
+        var modelingAttributes = new List<TreatmentBMPModelingAttributeDefinitionDto>();
+        if (!treatmentBMPType.IsAnalyzedInModelingModule)
+        {
+            return modelingAttributes;
+        }
+
+        var treatmentBMPModelingTypeEnum = treatmentBMPType.TreatmentBMPModelingType.ToEnum;
+        switch (treatmentBMPModelingTypeEnum)
+        {
+            case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("TotalEffectiveBMPVolume", "cu ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("StorageVolumeBelowLowestOutletElevation", "cu ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("MediaBedFootprint", "sq ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DesignMediaFiltrationRate", "in/hr"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("UnderlyingHydrologicSoilGroupID", null));
+//                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DryWeatherFlowOverrideID", null));
+                break;
+            case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
+            case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
+            case TreatmentBMPModelingTypeEnum.InfiltrationTrench:
+            case TreatmentBMPModelingTypeEnum.PermeablePavement:
+            case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("TotalEffectiveBMPVolume", "cu ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("InfiltrationSurfaceArea", "sq ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("UnderlyingInfiltrationRate", "in/hr"));
+//                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DryWeatherFlowOverrideID", null));
+                break;
+            case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
+            case TreatmentBMPModelingTypeEnum.SandFilters:
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("TotalEffectiveBMPVolume", "cu ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("MediaBedFootprint", "sq ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DesignMediaFiltrationRate", "in/hr"));
+//                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DryWeatherFlowOverrideID", null));
+                break;
+            case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("TotalEffectiveBMPVolume", "cu ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("WinterHarvestedWaterDemand", "gpd"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("SummerHarvestedWaterDemand", "gpd"));
+//                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DryWeatherFlowOverrideID", null));
+                break;
+            case TreatmentBMPModelingTypeEnum.ConstructedWetland:
+            case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("PermanentPoolOrWetlandVolume", "cu ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("WaterQualityDetentionVolume", "cu ft"));
+//                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DryWeatherFlowOverrideID", null));
+                break;
+            case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
+            case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
+            case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("TotalEffectiveBMPVolume", "cu ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("StorageVolumeBelowLowestOutletElevation", "cu ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("EffectiveFootprint", "sq ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DrawdownTimeForWQDetentionVolume", "hours"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("UnderlyingHydrologicSoilGroupID", null));
+//                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DryWeatherFlowOverrideID", null));
+                break;
+            case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DesignDryWeatherTreatmentCapacity", "cfs"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("AverageTreatmentFlowrate", "cfs"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("MonthsOfOperationID", null));
+//                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DryWeatherFlowOverrideID", null));
+                break;
+            case TreatmentBMPModelingTypeEnum.Drywell:
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("TotalEffectiveDrywellBMPVolume", "cu ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("InfiltrationDischargeRate", "cfs"));
+//                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DryWeatherFlowOverrideID", null));
+                break;
+            case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
+            case TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:
+            case TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl:
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("TreatmentRate", "cfs"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("TimeOfConcentrationID", null));
+//                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DryWeatherFlowOverrideID", null));
+                break;
+            case TreatmentBMPModelingTypeEnum.LowFlowDiversions:
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DesignLowFlowDiversionCapacity", "gpd"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("AverageDivertedFlowrate", "gpd"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("MonthsOfOperationID", null));
+//                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DryWeatherFlowOverrideID", null));
+                break;
+            case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
+            case TreatmentBMPModelingTypeEnum.VegetatedSwale:
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("TimeOfConcentrationID", null));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("TreatmentRate", "cfs"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("WettedFootprint", "sq ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("EffectiveRetentionDepth", "ft"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("UnderlyingHydrologicSoilGroupID", null));
+//                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DryWeatherFlowOverrideID", null));
+                break;
+            default:
+                throw new ArgumentOutOfRangeException($"Unknown TreatmentBMPModelingTypeEnum + {treatmentBMPModelingTypeEnum}");
+        }
+
+        return modelingAttributes;
     }
 }

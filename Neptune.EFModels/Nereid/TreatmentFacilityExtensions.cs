@@ -12,7 +12,9 @@ public static class TreatmentFacilityExtensions
         var modelBasinKey = treatmentBMP.ModelBasinID.HasValue && modelBasins.TryGetValue(treatmentBMP.ModelBasinID.Value, out var modelBasinID) ? modelBasinID.ToString() : null;
         var isFullyParameterized = treatmentBMP.IsFullyParameterized(treatmentBMP.Delineation);
         double? treatmentRate = null;
-        var modelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
+        double? area = null;
+
+        var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
 
         // in the baseline condition, anything built after 2003 is treated as if it doesn't exist.
         var designStormwaterDepth =  treatmentBMP.PrecipitationZoneID.HasValue && precipitationZones.TryGetValue(treatmentBMP.PrecipitationZoneID.Value, out var designStormwaterDepthInInches) ? designStormwaterDepthInInches : (double?)null;
@@ -25,59 +27,69 @@ public static class TreatmentFacilityExtensions
                 FacilityType = "NoTreatment",
                 ReferenceDataKey = modelBasinKey,
                 DesignStormwaterDepth = designStormwaterDepth ?? .8,
-                EliminateAllDryWeatherFlowOverride = modelingAttribute?.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
+                EliminateAllDryWeatherFlowOverride = treatmentBMPModelingAttribute?.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
             };
         }
-            
-        // treatment rate is an alias for four different fields, so we need to pick the one that's not null
-        if (modelingAttribute.InfiltrationDischargeRate != null)
-        {
-            treatmentRate = modelingAttribute.InfiltrationDischargeRate;
-        }
-        else if (modelingAttribute.TreatmentRate != null)
-        {
-            treatmentRate = modelingAttribute.TreatmentRate;
-        }
-        else if (modelingAttribute.AverageDivertedFlowrate != null)
-        {
-            // AverageDivertedFlowrate is collected in gallons per day instead of CFS, but we need to send CFS to Nereid.
-            treatmentRate = modelingAttribute.AverageDivertedFlowrate * Constants.GPD_TO_CFS;
-        }
-        else if (modelingAttribute.AverageTreatmentFlowrate != null)
-        {
-            treatmentRate = modelingAttribute.AverageTreatmentFlowrate;
-        }
 
-        double? area = null;
+        if (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID.HasValue)
+        {
+            // treatment rate is an alias for four different fields: InfiltrationDischargeRate, TreatmentRate, AverageTreatmentFlowrate, AverageDivertedFlowrate 
+            // area is an alias for four different fields: EffectiveFootprint, MediaBedFootprint, InfiltrationSurfaceArea, WettedFootprint 
 
-        // area_sqft is an alias for four different fields, so we need to take the one that's not null
-        if (modelingAttribute.EffectiveFootprint != null)
-        {
-            area = modelingAttribute.EffectiveFootprint;
-        }
-        else if (modelingAttribute.InfiltrationSurfaceArea != null)
-        {
-            area = modelingAttribute.InfiltrationSurfaceArea;
-        }
-        else if (modelingAttribute.MediaBedFootprint != null)
-        {
-            area = modelingAttribute.MediaBedFootprint;
-        }
-        else if (modelingAttribute.WettedFootprint != null)
-        {
-            area = modelingAttribute.WettedFootprint;
+            switch (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID.Value)
+            {
+                case (int)TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
+                case (int)TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
+                case (int)TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
+                    area = treatmentBMPModelingAttribute.EffectiveFootprint;
+                    break;
+                case (int)TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
+                    area = treatmentBMPModelingAttribute.MediaBedFootprint;
+                    break;
+                case (int) TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
+                case (int) TreatmentBMPModelingTypeEnum.InfiltrationBasin:
+                case (int) TreatmentBMPModelingTypeEnum.InfiltrationTrench:
+                case (int) TreatmentBMPModelingTypeEnum.PermeablePavement:
+                case (int) TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
+                    area = treatmentBMPModelingAttribute.InfiltrationSurfaceArea;
+                    break;
+                case (int) TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
+                case (int) TreatmentBMPModelingTypeEnum.SandFilters:
+                    area = treatmentBMPModelingAttribute.MediaBedFootprint;
+                    break;
+                case (int) TreatmentBMPModelingTypeEnum.Drywell:
+                    treatmentRate = treatmentBMPModelingAttribute.InfiltrationDischargeRate;
+                    break;
+                case (int) TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
+                    treatmentRate = treatmentBMPModelingAttribute.AverageTreatmentFlowrate;
+                    break;
+                case (int) TreatmentBMPModelingTypeEnum.LowFlowDiversions:
+                    // AverageDivertedFlowrate is collected in gallons per day instead of CFS, but we need to send CFS to Nereid.
+                    treatmentRate = treatmentBMPModelingAttribute.AverageDivertedFlowrate * Constants.GPD_TO_CFS;
+                    break;
+                case (int) TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
+                case (int) TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:
+                case (int) TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl:
+                    treatmentRate = treatmentBMPModelingAttribute.TreatmentRate;
+                    break;
+                case (int) TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
+                case (int) TreatmentBMPModelingTypeEnum.VegetatedSwale:
+                    treatmentRate = treatmentBMPModelingAttribute.TreatmentRate;
+                    area = treatmentBMPModelingAttribute.WettedFootprint;
+                    break;
+            }
         }
 
         double? designCapacity = null;
 
-        if (modelingAttribute.DesignDryWeatherTreatmentCapacity != null)
+        if (treatmentBMPModelingAttribute.DesignDryWeatherTreatmentCapacity != null)
         {
-            designCapacity = modelingAttribute.DesignDryWeatherTreatmentCapacity;
+            designCapacity = treatmentBMPModelingAttribute.DesignDryWeatherTreatmentCapacity;
         }
-        else if (modelingAttribute.DesignLowFlowDiversionCapacity != null)
+        else if (treatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity != null)
         {
             // DesignLowFlowDiversionCapacity is collected in GPD, so convert to CFS
-            designCapacity = modelingAttribute.DesignLowFlowDiversionCapacity * Constants.GPD_TO_CFS;
+            designCapacity = treatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity * Constants.GPD_TO_CFS;
         }
 
         if (designCapacity == null)
@@ -100,29 +112,29 @@ public static class TreatmentFacilityExtensions
             ReferenceDataKey = modelBasinKey,
             DesignStormwaterDepth = designStormwaterDepth,
             DesignCapacity = designCapacity,
-            DesignMediaFiltrationRate = modelingAttribute.DesignMediaFiltrationRate,
+            DesignMediaFiltrationRate = treatmentBMPModelingAttribute.DesignMediaFiltrationRate,
             //convert Days to Hours for this field.
-            DiversionRate = modelingAttribute.DiversionRate,
-            DrawdownTimeforWQDetentionVolume = modelingAttribute.DrawdownTimeForWQDetentionVolume,
+            DiversionRate = treatmentBMPModelingAttribute.DiversionRate,
+            DrawdownTimeforWQDetentionVolume = treatmentBMPModelingAttribute.DrawdownTimeForWQDetentionVolume,
             Area = area,
-            EffectiveRetentionDepth = modelingAttribute.EffectiveRetentionDepth,
-            MonthsOfOperation = modelingAttribute.MonthsOfOperation?.MonthsOfOperationNereidAlias ?? MonthsOfOperation.Both.MonthsOfOperationNereidAlias,
-            PermanentPoolorWetlandVolume = modelingAttribute.PermanentPoolOrWetlandVolume,
-            RoutingConfiguration = modelingAttribute.RoutingConfigurationID == RoutingConfiguration.Online.RoutingConfigurationID,
-            StorageVolumeBelowLowestOutletElevation = modelingAttribute.StorageVolumeBelowLowestOutletElevation,
+            EffectiveRetentionDepth = treatmentBMPModelingAttribute.EffectiveRetentionDepth,
+            MonthsOfOperation = treatmentBMPModelingAttribute.MonthsOfOperation?.MonthsOfOperationNereidAlias ?? MonthsOfOperation.Both.MonthsOfOperationNereidAlias,
+            PermanentPoolorWetlandVolume = treatmentBMPModelingAttribute.PermanentPoolOrWetlandVolume,
+            RoutingConfiguration = treatmentBMPModelingAttribute.RoutingConfigurationID == RoutingConfiguration.Online.RoutingConfigurationID,
+            StorageVolumeBelowLowestOutletElevation = treatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation,
             // SummerHarvestedWaterDemand is collected in GPD, so convert to CFS
-            SummerHarvestedWaterDemand = modelingAttribute.SummerHarvestedWaterDemand  * Constants.GPD_TO_CFS,
-            TimeOfConcentration = modelingAttribute.TimeOfConcentration?.TimeOfConcentrationDisplayName ?? TimeOfConcentration.FiveMinutes.TimeOfConcentrationDisplayName,
-            TotalDrawdownTime = modelingAttribute.DrawdownTimeForWQDetentionVolume,
-            TotalEffectiveBMPVolume = modelingAttribute.TotalEffectiveBMPVolume,
+            SummerHarvestedWaterDemand = treatmentBMPModelingAttribute.SummerHarvestedWaterDemand  * Constants.GPD_TO_CFS,
+            TimeOfConcentration = treatmentBMPModelingAttribute.TimeOfConcentration?.TimeOfConcentrationDisplayName ?? TimeOfConcentration.FiveMinutes.TimeOfConcentrationDisplayName,
+            TotalDrawdownTime = treatmentBMPModelingAttribute.DrawdownTimeForWQDetentionVolume,
+            TotalEffectiveBMPVolume = treatmentBMPModelingAttribute.TotalEffectiveBMPVolume,
             TreatmentRate = treatmentRate,
-            UnderlyingHydrologicSoilGroup = modelingAttribute.UnderlyingHydrologicSoilGroup?.UnderlyingHydrologicSoilGroupDisplayName.ToLower() ?? UnderlyingHydrologicSoilGroup.D.UnderlyingHydrologicSoilGroupDisplayName.ToLower(),
-            UnderlyingInfiltrationRate = modelingAttribute.UnderlyingInfiltrationRate,
-            UpstreamBMP = modelingAttribute.UpstreamTreatmentBMPID.HasValue ? NereidUtilities.TreatmentBMPNodeID(modelingAttribute.UpstreamTreatmentBMPID.Value) : null,
-            WaterQualityDetentionVolume = modelingAttribute.WaterQualityDetentionVolume,
+            UnderlyingHydrologicSoilGroup = treatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup?.UnderlyingHydrologicSoilGroupDisplayName.ToLower() ?? UnderlyingHydrologicSoilGroup.D.UnderlyingHydrologicSoilGroupDisplayName.ToLower(),
+            UnderlyingInfiltrationRate = treatmentBMPModelingAttribute.UnderlyingInfiltrationRate,
+            UpstreamBMP = treatmentBMPModelingAttribute.UpstreamTreatmentBMPID.HasValue ? NereidUtilities.TreatmentBMPNodeID(treatmentBMPModelingAttribute.UpstreamTreatmentBMPID.Value) : null,
+            WaterQualityDetentionVolume = treatmentBMPModelingAttribute.WaterQualityDetentionVolume,
             // WinterHarvestedWaterDemand is collected in GPD, so convert to CFS
-            WinterHarvestedWaterDemand = modelingAttribute.WinterHarvestedWaterDemand * Constants.GPD_TO_CFS,
-            EliminateAllDryWeatherFlowOverride = modelingAttribute.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
+            WinterHarvestedWaterDemand = treatmentBMPModelingAttribute.WinterHarvestedWaterDemand * Constants.GPD_TO_CFS,
+            EliminateAllDryWeatherFlowOverride = treatmentBMPModelingAttribute.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
         };
         return treatmentFacility;
     }

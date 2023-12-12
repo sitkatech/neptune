@@ -19,14 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.ComponentModel.DataAnnotations;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.Models;
 
 namespace Neptune.WebMvc.Views.TreatmentBMP
 {
-    public class EditModelingAttributesViewModel : FormViewModel//, IValidatableObject
+    public class EditModelingAttributesViewModel : FormViewModel, ITreatmentBMPModelingAttribute //, IValidatableObject
     {
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.AverageDivertedFlowrate)]
         public double? AverageDivertedFlowrate { get; set; }
@@ -47,7 +46,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public double? DiversionRate { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.DrawdownTimeForWQDetentionVolume)]
-        public double? DrawdownTimeforWQDetentionVolume { get; set; }
+        public double? DrawdownTimeForWQDetentionVolume { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.EffectiveFootprint)]
         public double? EffectiveFootprint { get; set; }
@@ -65,7 +64,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public double? MediaBedFootprint { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.PermanentPoolOrWetlandVolume)]
-        public double? PermanentPoolorWetlandVolume { get; set; }
+        public double? PermanentPoolOrWetlandVolume { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.RoutingConfiguration)]
         public int? RoutingConfigurationID { get; set; }
@@ -133,13 +132,13 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
                 DesignLowFlowDiversionCapacity = treatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity;
                 DesignMediaFiltrationRate = treatmentBMPModelingAttribute.DesignMediaFiltrationRate;
                 DiversionRate = treatmentBMPModelingAttribute.DiversionRate;
-                DrawdownTimeforWQDetentionVolume = treatmentBMPModelingAttribute.DrawdownTimeForWQDetentionVolume;
+                DrawdownTimeForWQDetentionVolume = treatmentBMPModelingAttribute.DrawdownTimeForWQDetentionVolume;
                 EffectiveFootprint = treatmentBMPModelingAttribute.EffectiveFootprint;
                 EffectiveRetentionDepth = treatmentBMPModelingAttribute.EffectiveRetentionDepth;
                 InfiltrationDischargeRate = treatmentBMPModelingAttribute.InfiltrationDischargeRate;
                 InfiltrationSurfaceArea = treatmentBMPModelingAttribute.InfiltrationSurfaceArea;
                 MediaBedFootprint = treatmentBMPModelingAttribute.MediaBedFootprint;
-                PermanentPoolorWetlandVolume = treatmentBMPModelingAttribute.PermanentPoolOrWetlandVolume;
+                PermanentPoolOrWetlandVolume = treatmentBMPModelingAttribute.PermanentPoolOrWetlandVolume;
                 RoutingConfigurationID = treatmentBMPModelingAttribute.RoutingConfigurationID;
                 StorageVolumeBelowLowestOutletElevation = treatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation;
                 SummerHarvestedWaterDemand = treatmentBMPModelingAttribute.SummerHarvestedWaterDemand;
@@ -169,13 +168,13 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             treatmentBMPModelingAttribute.DesignLowFlowDiversionCapacity = DesignLowFlowDiversionCapacity;
             treatmentBMPModelingAttribute.DesignMediaFiltrationRate = DesignMediaFiltrationRate;
             treatmentBMPModelingAttribute.DiversionRate = null;
-            treatmentBMPModelingAttribute.DrawdownTimeForWQDetentionVolume = DrawdownTimeforWQDetentionVolume;
+            treatmentBMPModelingAttribute.DrawdownTimeForWQDetentionVolume = DrawdownTimeForWQDetentionVolume;
             treatmentBMPModelingAttribute.EffectiveFootprint = EffectiveFootprint;
             treatmentBMPModelingAttribute.EffectiveRetentionDepth = EffectiveRetentionDepth;
             treatmentBMPModelingAttribute.InfiltrationDischargeRate = InfiltrationDischargeRate;
             treatmentBMPModelingAttribute.InfiltrationSurfaceArea = InfiltrationSurfaceArea;
             treatmentBMPModelingAttribute.MediaBedFootprint = MediaBedFootprint;
-            treatmentBMPModelingAttribute.PermanentPoolOrWetlandVolume = PermanentPoolorWetlandVolume;
+            treatmentBMPModelingAttribute.PermanentPoolOrWetlandVolume = PermanentPoolOrWetlandVolume;
             treatmentBMPModelingAttribute.RoutingConfigurationID = (int) RoutingConfigurationEnum.Online;
             treatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation = StorageVolumeBelowLowestOutletElevation;
             treatmentBMPModelingAttribute.SummerHarvestedWaterDemand = SummerHarvestedWaterDemand;
@@ -243,7 +242,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
                     case TreatmentBMPModelingTypeEnum.ConstructedWetland:
                     case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
                         CheckFieldIsRequired(missingRequiredFields, "Permanent Pool or Wetland Volume",
-                            PermanentPoolorWetlandVolume);
+                            PermanentPoolOrWetlandVolume);
                         CheckFieldIsRequired(missingRequiredFields, "Extended Detention Surcharge Volume",
                             WaterQualityDetentionVolume);
                         break;
@@ -255,7 +254,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
                         CheckFieldIsRequired(missingRequiredFields, "Storage Volume Below Lowest Outlet Elevation",
                             StorageVolumeBelowLowestOutletElevation);
                         CheckFieldIsRequired(missingRequiredFields, "Effective Footprint", EffectiveFootprint);
-                        CheckFieldIsRequired(missingRequiredFields, "Extended Detention Surcharge Volume", DrawdownTimeforWQDetentionVolume);
+                        CheckFieldIsRequired(missingRequiredFields, "Extended Detention Surcharge Volume", DrawdownTimeForWQDetentionVolume);
                         break;
                     case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
                         if (!DesignDryWeatherTreatmentCapacity.HasValue && !AverageTreatmentFlowrate.HasValue)
@@ -291,114 +290,6 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             }
 
             return missingRequiredFields;
-        }
-
-        /*public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var validationResults = new List<ValidationResult>();
-
-            if (TreatmentBMPModelingTypeID.HasValue)
-            {
-                var treatmentBMPModelingTypeEnum = TreatmentBMPModelingType
-                    .AllLookupDictionary[TreatmentBMPModelingTypeID.Value].ToEnum;
-                switch (treatmentBMPModelingTypeEnum)
-                {
-                    case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
-                        ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
-                            TotalEffectiveBMPVolume);
-                        ValidateFieldIsRequired(validationResults, "Storage Volume Below Lowest Outlet Elevation",
-                            StorageVolumeBelowLowestOutletElevation);
-                        ValidateFieldIsRequired(validationResults, "Media Bed Footprint", MediaBedFootprint);
-                        ValidateFieldIsRequired(validationResults, "Design Media Filtration Rate",
-                            DesignMediaFiltrationRate);
-                        break;
-                    case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
-                    case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
-                    case TreatmentBMPModelingTypeEnum.InfiltrationTrench:
-                    case TreatmentBMPModelingTypeEnum.PermeablePavement:
-                    case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
-                        ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
-                            TotalEffectiveBMPVolume);
-                        ValidateFieldIsRequired(validationResults, "Infiltration Surface Area",
-                            InfiltrationSurfaceArea);
-                        ValidateFieldIsRequired(validationResults, "Underlying Infiltration Rate",
-                            UnderlyingInfiltrationRate);
-                        break;
-                    case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
-                    case TreatmentBMPModelingTypeEnum.SandFilters:
-                        ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
-                            TotalEffectiveBMPVolume);
-                        ValidateFieldIsRequired(validationResults, "Media Bed Footprint", MediaBedFootprint);
-                        ValidateFieldIsRequired(validationResults, "Design Media Filtration Rate",
-                            DesignMediaFiltrationRate);
-                        break;
-                    case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
-                        ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
-                            TotalEffectiveBMPVolume);
-                        ValidateFieldIsRequired(validationResults, "Winter Harvested Water Demand",
-                            WinterHarvestedWaterDemand);
-                        ValidateFieldIsRequired(validationResults, "Summer Harvested Water Demand",
-                            SummerHarvestedWaterDemand);
-                        break;
-                    case TreatmentBMPModelingTypeEnum.ConstructedWetland:
-                    case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
-                        ValidateFieldIsRequired(validationResults, "Permanent Pool or Wetland Volume",
-                            PermanentPoolorWetlandVolume);
-                        ValidateFieldIsRequired(validationResults, "Extended Detention Surcharge Volume",
-                            WaterQualityDetentionVolume);
-                        break;
-                    case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
-                    case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
-                    case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
-                        ValidateFieldIsRequired(validationResults, "Total Effective BMP Volume",
-                            TotalEffectiveBMPVolume);
-                        ValidateFieldIsRequired(validationResults, "Storage Volume Below Lowest Outlet Elevation",
-                            StorageVolumeBelowLowestOutletElevation);
-                        ValidateFieldIsRequired(validationResults, "Effective Footprint", EffectiveFootprint);
-                        ValidateFieldIsRequired(validationResults, "Extended Detention Surcharge Volume", DrawdownTimeforWQDetentionVolume);
-                        break;
-                    case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
-                        if (!DesignDryWeatherTreatmentCapacity.HasValue && !AverageTreatmentFlowrate.HasValue)
-                        {
-                            validationResults.Add(new ValidationResult("At least one of either Design Dry Weather Treatment Capacity or Average Treatment Flowrate is required"));
-                        }
-                        break;
-                    case TreatmentBMPModelingTypeEnum.Drywell:
-                        ValidateFieldIsRequired(validationResults, "Total Effective Drywell BMP Volume",
-                            TotalEffectiveDrywellBMPVolume);
-                        ValidateFieldIsRequired(validationResults, "InfiltrationDischargeRate",
-                            InfiltrationDischargeRate);
-                        break;
-                    case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
-                    case TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:
-                    case TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl:
-                        ValidateFieldIsRequired(validationResults, "Treatment Rate", TreatmentRate);
-                        break;
-                    case TreatmentBMPModelingTypeEnum.LowFlowDiversions:
-                        if (!DesignLowFlowDiversionCapacity.HasValue && !AverageDivertedFlowrate.HasValue)
-                        {
-                            validationResults.Add(new ValidationResult("At least one of either Design Low Flow Diversion Capacity or Average Diverted Flowrate is required"));
-                        }
-                        break;
-                    case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
-                    case TreatmentBMPModelingTypeEnum.VegetatedSwale:
-                        ValidateFieldIsRequired(validationResults, "Treatment Rate", TreatmentRate);
-                        ValidateFieldIsRequired(validationResults, "Wetted Footprint", WettedFootprint);
-                        ValidateFieldIsRequired(validationResults, "Effective Retention Depth",
-                            EffectiveRetentionDepth);
-                        break;
-                }
-            }
-
-            return validationResults;
-        }*/
-
-        private static void ValidateFieldIsRequired(List<ValidationResult> validationResults, string fieldName, object valueToCheck)
-        {
-            if (valueToCheck == null)
-            {
-                validationResults.Add(new ValidationResult($"{fieldName} is required"));
-            }
         }
 
         private static void CheckFieldIsRequired(List<string> validationResults, string fieldName, object valueToCheck)

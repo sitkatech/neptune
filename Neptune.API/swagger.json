@@ -1820,7 +1820,7 @@
         }
       }
     },
-    "/treatmentBMPs/types": {
+    "/treatmentBMPTypes": {
       "get": {
         "tags": [
           "TreatmentBMP"
@@ -1833,7 +1833,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
+                    "$ref": "#/components/schemas/TreatmentBMPTypeWithModelingAttributesDto"
                   }
                 }
               },
@@ -1841,7 +1841,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
+                    "$ref": "#/components/schemas/TreatmentBMPTypeWithModelingAttributesDto"
                   }
                 }
               },
@@ -1849,7 +1849,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPTypeSimpleDto"
+                    "$ref": "#/components/schemas/TreatmentBMPTypeWithModelingAttributesDto"
                   }
                 }
               }
@@ -1883,25 +1883,6 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Success",
@@ -1929,7 +1910,7 @@
         }
       }
     },
-    "/treatmentBMPs/modelingAttributeDropdownItems": {
+    "/treatmentBMPModelingAttributeDropdownItems": {
       "get": {
         "tags": [
           "TreatmentBMP"
@@ -3904,6 +3885,20 @@
         },
         "additionalProperties": false
       },
+      "TreatmentBMPModelingAttributeDefinitionDto": {
+        "type": "object",
+        "properties": {
+          "ModelingAttributeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Units": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "TreatmentBMPModelingAttributeDropdownItemDto": {
         "type": "object",
         "properties": {
@@ -3922,7 +3917,7 @@
         },
         "additionalProperties": false
       },
-      "TreatmentBMPTypeSimpleDto": {
+      "TreatmentBMPTypeWithModelingAttributesDto": {
         "type": "object",
         "properties": {
           "TreatmentBMPTypeID": {
@@ -3933,16 +3928,16 @@
             "type": "string",
             "nullable": true
           },
-          "TreatmentBMPTypeDescription": {
-            "type": "string",
-            "nullable": true
-          },
-          "IsAnalyzedInModelingModule": {
-            "type": "boolean"
-          },
           "TreatmentBMPModelingTypeID": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "TreatmentBMPModelingAttributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDefinitionDto"
+            },
             "nullable": true
           }
         },

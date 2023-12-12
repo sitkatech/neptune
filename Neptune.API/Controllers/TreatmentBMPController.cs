@@ -38,17 +38,17 @@ namespace Neptune.API.Controllers
             return Ok(treatmentBMPDisplayDtos);
         }
 
-        [HttpGet("treatmentBMPs/types")]
+        [HttpGet("treatmentBMPTypes")]
         [UserViewFeature]
-        public ActionResult<List<TreatmentBMPTypeSimpleDto>> ListTypes()
+        public ActionResult<List<TreatmentBMPTypeWithModelingAttributesDto>> ListTypes()
         {
-            var treatmentBMPTypeSimpleDtos = TreatmentBMPs.ListTypesAsSimpleDto(_dbContext);
-            return Ok(treatmentBMPTypeSimpleDtos);
+            var treatmentBMPTypeWithModelingAttributesDtos = TreatmentBMPs.ListWithModelingAttributesAsDto(_dbContext);
+            return Ok(treatmentBMPTypeWithModelingAttributesDtos);
         }
 
         [HttpPut("treatmentBMPs/{treatmentBMPID}/treatmentBMPType/{treatmentBMPTypeID}")]
         [UserViewFeature]
-        public ActionResult<int> ChangeTreatmentBMPType([FromRoute] int treatmentBMPID, int treatmentBMPTypeID, [FromBody] TreatmentBMPUpsertDto treatmentBMP)
+        public ActionResult<int> ChangeTreatmentBMPType([FromRoute] int treatmentBMPID, int treatmentBMPTypeID)
         {
             var updatedTreatmentBMPModelingTypeID = TreatmentBMPs.ChangeTreatmentBMPType(_dbContext, treatmentBMPID, treatmentBMPTypeID);
             var personID = UserContext.GetUserFromHttpContext(_dbContext, HttpContext).PersonID;
@@ -61,7 +61,7 @@ namespace Neptune.API.Controllers
             return Ok(updatedTreatmentBMPModelingTypeID);
         }
 
-        [HttpGet("treatmentBMPs/modelingAttributeDropdownItems")]
+        [HttpGet("treatmentBMPModelingAttributeDropdownItems")]
         [UserViewFeature]
         public ActionResult<List<TreatmentBMPModelingAttributeDropdownItemDto>> GetModelingAttributeDropdownItems()
         {
@@ -130,6 +130,8 @@ namespace Neptune.API.Controllers
                     x.Notes = y.Notes;
                 });
 
+            await _dbContext.SaveChangesAsync();
+
             // merge TreatmentBMPModelingAttributeIDs
             var updatedTreatmentBMPModelingAttributes = updatedTreatmentBMPs.Select(x => x.TreatmentBMPModelingAttributeTreatmentBMP).ToList();
             existingProjectTreatmentBMPModelingAttributes.Merge(updatedTreatmentBMPModelingAttributes, allTreatmentBMPModelingAttributesInDatabase,
@@ -165,6 +167,7 @@ namespace Neptune.API.Controllers
                     x.MonthsOfOperationID = y.MonthsOfOperationID;
                     x.DryWeatherFlowOverrideID = y.DryWeatherFlowOverrideID;
                 });
+            await _dbContext.SaveChangesAsync();
 
             await MergeDeleteTreatmentBMPs(existingProjectTreatmentBMPs, updatedTreatmentBMPs);
 

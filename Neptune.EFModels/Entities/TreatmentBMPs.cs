@@ -131,13 +131,21 @@ namespace Neptune.EFModels.Entities
             return treatmentBMPDisplayDtos;
         }
 
-        public static List<TreatmentBMPTypeSimpleDto> ListTypesAsSimpleDto(NeptuneDbContext dbContext)
+        public static List<TreatmentBMPTypeWithModelingAttributesDto> ListWithModelingAttributesAsDto(NeptuneDbContext dbContext)
         {
-            var treatmentBMPTypeSimpleDtos = dbContext.TreatmentBMPTypes
+            var treatmentBMPTypeWithModelingAttributesDtos = dbContext.TreatmentBMPTypes.AsNoTracking()
                 .OrderBy(x => x.TreatmentBMPTypeName)
-                .Select(x => x.AsSimpleDto())
+                .Select(x => 
+                    new TreatmentBMPTypeWithModelingAttributesDto()
+                    {
+                        TreatmentBMPTypeID = x.TreatmentBMPTypeID,
+                        TreatmentBMPTypeName = x.TreatmentBMPTypeName,
+                        TreatmentBMPModelingTypeID = x.TreatmentBMPModelingTypeID,
+                        TreatmentBMPModelingAttributes = x.GetModelingAttributes()
+                    }
+                    )
                 .ToList();
-            return treatmentBMPTypeSimpleDtos;
+            return treatmentBMPTypeWithModelingAttributesDtos;
         }
 
         public static TreatmentBMP GetByIDWithChangeTracking(NeptuneDbContext dbContext, TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
