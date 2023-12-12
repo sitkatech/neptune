@@ -6,7 +6,6 @@ import { NotFoundComponent } from './pages';
 import { HeaderNavComponent } from './components';
 import { UnauthenticatedComponent } from './pages/unauthenticated/unauthenticated.component';
 import { SubscriptionInsufficientComponent } from './pages/subscription-insufficient/subscription-insufficient.component';
-import { NgProgressModule } from 'ngx-progressbar';
 import { RouterModule } from '@angular/router';
 import { LinkRendererComponent } from './components/ag-grid/link-renderer/link-renderer.component';
 import { FontAwesomeIconLinkRendererComponent } from './components/ag-grid/fontawesome-icon-link-renderer/fontawesome-icon-link-renderer.component';
@@ -36,10 +35,12 @@ import { AttachmentsDisplayComponent } from './components/projects/attachments-d
 import { OctaPrioritizationDetailPopupComponent } from './components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component';
 import { GrantScoresComponent } from './components/projects/grant-scores/grant-scores.component';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from "@tinymce/tinymce-angular";
+import { AlertComponent } from './components/alert/alert.component';
 
 @NgModule({
     declarations: [
         AlertDisplayComponent,
+        AlertComponent,
         HeaderNavComponent,
         NotFoundComponent,
         UnauthenticatedComponent,
@@ -77,7 +78,6 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from "@tinymce/tinymce-angular";
         CommonModule,
         FormsModule,
         HttpClientModule,
-        NgProgressModule,
         RouterModule,
         NgbModule,
         DragDropModule,

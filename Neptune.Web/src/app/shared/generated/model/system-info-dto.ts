@@ -10,15 +10,14 @@
  * Do not edit the class manually.
  */
 
-export class FileResourceSimpleDto { 
-    FileResourceID?: number;
-    FileResourceMimeTypeID?: number;
-    OriginalBaseFilename?: string;
-    OriginalFileExtension?: string;
-    FileResourceGUID?: string;
-    CreatePersonID?: number;
-    CreateDate?: string;
-    ContentLength?: number;
+export class SystemInfoDto { 
+    Environment?: string;
+    CurrentTimeUTC?: string;
+    readonly Application?: string;
+    FullInformationalVersion?: string;
+    PodName?: string;
+    Version?: string;
+    CompilationDateTime?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

@@ -13,11 +13,8 @@ import { RouterModule } from '@angular/router';
 import { UserDetailComponent } from './pages/user-detail/user-detail.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
-import { LinkRendererComponent } from './shared/components/ag-grid/link-renderer/link-renderer.component';
 import { FormsModule } from '@angular/forms';
-import { FontAwesomeIconLinkRendererComponent } from './shared/components/ag-grid/fontawesome-icon-link-renderer/fontawesome-icon-link-renderer.component';
 import { LoginCallbackComponent } from './pages/login-callback/login-callback.component';
-import { MultiLinkRendererComponent } from './shared/components/ag-grid/multi-link-renderer/multi-link-renderer.component';
 import { CreateUserCallbackComponent } from './pages/create-user-callback/create-user-callback.component';
 import { AppInitService } from './app.init';
 import { FieldDefinitionListComponent } from './pages/field-definition-list/field-definition-list.component';
@@ -89,7 +86,7 @@ export function init_app(appLoadService: AppInitService, appInsightsService:  Ap
         SharedModule.forRoot(),
         FormsModule,
         BrowserAnimationsModule,
-        AgGridModule.withComponents([]),
+        AgGridModule,
         DragDropModule,
         NgSelectModule,
         ApiModule.forRoot(() => {

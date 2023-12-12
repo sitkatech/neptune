@@ -5,10 +5,13 @@
     <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 </div>
 
-<ngb-alert *ngIf="project?.ShareOCTAM2Tier2Scores" [type]="'warning'" [dismissible]="false">
-    This project has been shared with the OCTA M2 Tier 2 Grant Program. 
-    If you would like to edit this project, you must first revoke sharing for all grant programs.
-</ngb-alert>
+<div *ngIf="project?.ShareOCTAM2Tier2Scores" class="alert alert-warning">
+    <div class="alert-content">
+        <i class="fa fa-warning"></i>
+        This project has been shared with the OCTA M2 Tier 2 Grant Program. 
+        If you would like to edit this project, you must first revoke sharing for all grant programs.
+    </div>
+</div>
 
 <ng-container *ngIf="project">
     <div class="row mt-3 mb-3">

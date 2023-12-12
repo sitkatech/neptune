@@ -121,27 +121,27 @@
                     </div>
                 </div>
                 <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeID; else noTypeSelected">
-                    <ng-container *ngIf="getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPModelingTypeID).length > 0; else modelingTypesNotApplicable">
-                        <div class="row p-2" *ngFor="let fieldName of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPModelingTypeID)">
+                    <ng-container *ngIf="getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID).length > 0; else modelingTypesNotApplicable">
+                        <div class="row p-2" *ngFor="let treatmentBMPModelingAttributeDefinitionDto of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID)">
                             <div class="col-sm-4 control-label font-weight-bold text-sm-right">
-                                <field-definition [fieldDefinitionType]="fieldName"></field-definition>
+                                <field-definition [fieldDefinitionType]="treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName"></field-definition>
                             </div>
-                            <div class="col-sm-6" *ngIf="isFieldWithDropdown(fieldName); else numericModelingAttributeField">
-                                <select class="form-control" *ngIf="!readOnly; else readOnlyDropdownDisplay" [(ngModel)]="selectedTreatmentBMP[fieldName]" [name]="fieldName">
-                                    <option *ngFor="let dropdownItem of getModelingAttributeDropdownItemsByFieldName(fieldName)" [value]="dropdownItem.ItemID">
+                            <div class="col-sm-6" *ngIf="isFieldWithDropdown(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName); else numericModelingAttributeField">
+                                <select class="form-control" *ngIf="!readOnly; else readOnlyDropdownDisplay" [(ngModel)]="selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]" [name]="treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName">
+                                    <option *ngFor="let dropdownItem of getModelingAttributeDropdownItemsByFieldName(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName)" [value]="dropdownItem.ItemID">
                                         {{dropdownItem.ItemName}}
                                     </option>
                                 </select>
                                 <ng-template #readOnlyDropdownDisplay>
-                                    {{getDropdownItemNameByFieldNameAndItemID(fieldName, selectedTreatmentBMP[fieldName])}}
+                                    {{getDropdownItemNameByFieldNameAndItemID(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName, selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName])}}
                                 </ng-template>
                             </div>
                             <ng-template #numericModelingAttributeField>
                                 <div class="col-sm-4">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" [(ngModel)]="selectedTreatmentBMP[fieldName]" [name]="fieldName" [readOnly]="readOnly">
+                                        <input type="text" class="form-control" [(ngModel)]="selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]" [name]="treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName" [readOnly]="readOnly">
                                         <div class="input-group-append">
-                                        <span class="input-group-text">{{getModelingAttributeDisplayUnitsByField(fieldName)}}</span>
+                                        <span class="input-group-text">{{treatmentBMPModelingAttributeDefinitionDto.Units}}</span>
                                         </div>
                                     </div>
                                 </div>

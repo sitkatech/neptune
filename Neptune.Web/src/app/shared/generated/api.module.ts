@@ -7,11 +7,12 @@ import { CustomRichTextService } from './api/custom-rich-text.service';
 import { DelineationService } from './api/delineation.service';
 import { FieldDefinitionService } from './api/field-definition.service';
 import { FileResourceService } from './api/file-resource.service';
-import { HealthService } from './api/health.service';
+import { NereidService } from './api/nereid.service';
 import { OrganizationService } from './api/organization.service';
 import { ProjectService } from './api/project.service';
 import { RoleService } from './api/role.service';
 import { StormwaterJurisdictionService } from './api/stormwater-jurisdiction.service';
+import { SystemInfoService } from './api/system-info.service';
 import { TreatmentBMPService } from './api/treatment-bmp.service';
 import { UserService } from './api/user.service';
 
@@ -24,11 +25,12 @@ import { UserService } from './api/user.service';
     DelineationService,
     FieldDefinitionService,
     FileResourceService,
-    HealthService,
+    NereidService,
     OrganizationService,
     ProjectService,
     RoleService,
     StormwaterJurisdictionService,
+    SystemInfoService,
     TreatmentBMPService,
     UserService,
      ]

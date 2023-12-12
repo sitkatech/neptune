@@ -63,7 +63,7 @@ export class HeaderNavComponent implements OnInit, OnDestroy {
     }
 
     public getUserName() {
-        return this.currentUser ? this.currentUser.FullName
+        return this.currentUser ? this.currentUser.FirstName + " " + this.currentUser.LastName
             : null;
     }
 

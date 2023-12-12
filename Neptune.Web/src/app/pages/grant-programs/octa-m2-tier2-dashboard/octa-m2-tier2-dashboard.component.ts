@@ -121,7 +121,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         {
           headerName: 'Project Name', valueGetter: (params: any) => {
             return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectName };
-          }, cellRendererFramework: LinkRendererComponent,
+          }, cellRenderer: LinkRendererComponent,
           cellRendererParams: { inRouterLink: "/projects/" },
           filterValueGetter: (params: any) => {
             return params.data.ProjectID;
@@ -130,12 +130,12 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         },
         { headerName: 'Project Description', field: 'ProjectDescription' },
         { 
-          headerComponentFramework: FieldDefinitionGridHeaderComponent,
+          headerComponent: FieldDefinitionGridHeaderComponent,
           headerComponentParams: { fieldDefinitionType: 'Organization' },
           field: 'Organization.OrganizationName' 
         },
         { 
-          headerComponentFramework: FieldDefinitionGridHeaderComponent,
+          headerComponent: FieldDefinitionGridHeaderComponent,
           headerComponentParams: { fieldDefinitionType: 'Jurisdiction'},
           field: 'StormwaterJurisdiction.Organization.OrganizationName' 
         },

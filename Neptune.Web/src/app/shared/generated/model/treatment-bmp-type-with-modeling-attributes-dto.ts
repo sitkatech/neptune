@@ -9,16 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { TreatmentBMPModelingAttributeDefinitionDto } from '././treatment-bmp-modeling-attribute-definition-dto';
 
-export class FileResourceSimpleDto { 
-    FileResourceID?: number;
-    FileResourceMimeTypeID?: number;
-    OriginalBaseFilename?: string;
-    OriginalFileExtension?: string;
-    FileResourceGUID?: string;
-    CreatePersonID?: number;
-    CreateDate?: string;
-    ContentLength?: number;
+export class TreatmentBMPTypeWithModelingAttributesDto { 
+    TreatmentBMPTypeID?: number;
+    TreatmentBMPTypeName?: string;
+    TreatmentBMPModelingTypeID?: number;
+    TreatmentBMPModelingAttributes?: Array<TreatmentBMPModelingAttributeDefinitionDto>;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

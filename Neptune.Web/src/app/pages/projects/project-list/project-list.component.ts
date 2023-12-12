@@ -75,26 +75,26 @@ export class ProjectListComponent implements OnInit {
     this.projectColumnDefs = [
       {
         valueGetter: params => params.data.ProjectID + (params.data.ShareOCTAM2Tier2Scores ? '/review-and-share' : ''),
-        cellRendererFramework: FontAwesomeIconLinkRendererComponent,
+        cellRenderer: FontAwesomeIconLinkRendererComponent,
         cellRendererParams: { inRouterLink: '/projects/edit/', fontawesomeIconName: 'edit', CssClasses: 'text-primary' },
         width: 40, sortable: false, filter: false
       },
       {
-        cellRendererFramework: FontAwesomeIconLinkRendererComponent,
+        cellRenderer: FontAwesomeIconLinkRendererComponent,
         cellRendererParams: { isSpan: true, fontawesomeIconName: 'trash', CssClasses: 'text-danger' },
         width: 40, sortable: false, filter: false
       },
       {
         valueGetter: (params: any) => {
           return { LinkValue: params.data.ProjectID, LinkDisplay: "View", CssClasses: "btn btn-hippocamp btn-sm" };
-        }, cellRendererFramework: LinkRendererComponent,
+        }, cellRenderer: LinkRendererComponent,
         cellRendererParams: { inRouterLink: "/projects/", },
         width: 57, sortable: false, filter: false
       },
       {
         headerName: 'Project ID', valueGetter: (params: any) => {
           return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectID };
-        }, cellRendererFramework: LinkRendererComponent,
+        }, cellRenderer: LinkRendererComponent,
         cellRendererParams: { inRouterLink: "/projects/" },
         filterValueGetter: (params: any) => {
           return params.data.ProjectID;
@@ -104,7 +104,7 @@ export class ProjectListComponent implements OnInit {
       {
         headerName: 'Project Name', valueGetter: (params: any) => {
           return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectName };
-        }, cellRendererFramework: LinkRendererComponent,
+        }, cellRenderer: LinkRendererComponent,
         cellRendererParams: { inRouterLink: "/projects/" },
         filterValueGetter: (params: any) => {
           return params.data.ProjectID;
@@ -112,12 +112,12 @@ export class ProjectListComponent implements OnInit {
         comparator: this.utilityFunctionsService.linkRendererComparator
       },
       { 
-        headerComponentFramework: FieldDefinitionGridHeaderComponent,
+        headerComponent: FieldDefinitionGridHeaderComponent,
         headerComponentParams: { fieldDefinitionType: 'Organization' },
         field: 'Organization.OrganizationName' 
       },
       { 
-        headerComponentFramework: FieldDefinitionGridHeaderComponent,
+        headerComponent: FieldDefinitionGridHeaderComponent,
         headerComponentParams: { fieldDefinitionType: 'Jurisdiction'},
         field: 'StormwaterJurisdiction.Organization.OrganizationName' 
       },
@@ -126,7 +126,7 @@ export class ProjectListComponent implements OnInit {
       { 
         headerName: 'Shared with OCTA M2 Tier 2 Grant Program', 
         valueGetter: params => params.data.ShareOCTAM2Tier2Scores ? 'Yes' : 'No',
-        filterFramework: CustomDropdownFilterComponent,
+        filter: CustomDropdownFilterComponent,
         filterParams: { field: 'ShareOCTAM2Tier2Scores'}
       },
       this.utilityFunctionsService.createDateColumnDef('Last Shared with OCTA M2 Tier 2 Grant Program', 'OCTAM2Tier2ScoresLastSharedDate', 'short')

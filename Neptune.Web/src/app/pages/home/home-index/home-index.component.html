@@ -5,22 +5,24 @@
 </div>
 
 <div class="container mt-4">
-
-    <ngb-alert *ngIf="userIsUnassigned()" [type]="'info'" [dismissible]="false">
-        <span *ngIf="userIsOCTAGrantReviewer(); else unassignedUserMessage">
-            Welcome {{currentUser.FullName}}. You have successfully logged in to the OCST Planning Module, 
-            and an administrator has granted you read-only access to Review Grant Programs. 
-            You may <a href="{{requestSupportUrl()}}">Request Support</a> to contact the Administrators with any questions or comments.
-        </span>
-        <ng-template #unassignedUserMessage>
-            <span>
-                Welcome {{currentUser.FullName}}. You have successfully logged in to the OCST Planning Module,
-                but your account is not yet configured. You will receive an email from the Administrators when your account is ready to
-                use. You may <a href="{{requestSupportUrl()}}">Request Support</a> to contact the Administrators with any questions or
-                comments.
+    <div *ngIf="userIsUnassigned()" class="alert alert-info">
+        <div class="alert-content">
+            <i class="fa fa-info"></i>
+            <span *ngIf="userIsOCTAGrantReviewer(); else unassignedUserMessage">
+                Welcome {{currentUser.FullName}}. You have successfully logged in to the OCST Planning Module, 
+                and an administrator has granted you read-only access to Review Grant Programs. 
+                You may <a href="{{requestSupportUrl()}}">Request Support</a> to contact the Administrators with any questions or comments.
             </span>
-        </ng-template>
-    </ngb-alert>
+            <ng-template #unassignedUserMessage>
+                <span>
+                    Welcome {{currentUser.FullName}}. You have successfully logged in to the OCST Planning Module,
+                    but your account is not yet configured. You will receive an email from the Administrators when your account is ready to
+                    use. You may <a href="{{requestSupportUrl()}}">Request Support</a> to contact the Administrators with any questions or
+                    comments.
+                </span>
+            </ng-template>
+        </div>
+    </div>
 
     <app-alert-display></app-alert-display>
     <h1 class="text-primary mb-4">OCST Planning Module</h1>

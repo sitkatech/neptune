@@ -1,4 +1,4 @@
-@import "~src/scss/_variables.scss";
+@use "/src/scss/_variables.scss";
 
 .sidebar-header {
     background: $muted;

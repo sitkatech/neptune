@@ -124,7 +124,7 @@ export class PlanningMapComponent implements OnInit {
         {
           headerName: 'Project ID', valueGetter: (params: any) => {
             return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectID };
-          }, cellRendererFramework: LinkRendererComponent,
+          }, cellRenderer: LinkRendererComponent,
           cellRendererParams: { inRouterLink: "/projects/" },
           filterValueGetter: (params: any) => {
             return params.data.ProjectID;
@@ -134,7 +134,7 @@ export class PlanningMapComponent implements OnInit {
         {
           headerName: 'Project Name', valueGetter: (params: any) => {
             return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectName };
-          }, cellRendererFramework: LinkRendererComponent,
+          }, cellRenderer: LinkRendererComponent,
           cellRendererParams: { inRouterLink: "/projects/" },
           filterValueGetter: (params: any) => {
             return params.data.ProjectID;
@@ -142,12 +142,12 @@ export class PlanningMapComponent implements OnInit {
           comparator: this.utilityFunctionsService.linkRendererComparator
         },
         { 
-          headerComponentFramework: FieldDefinitionGridHeaderComponent,
+          headerComponent: FieldDefinitionGridHeaderComponent,
           headerComponentParams: { fieldDefinitionType: 'Organization' },
           field: 'Organization.OrganizationName' 
         },
         { 
-          headerComponentFramework: FieldDefinitionGridHeaderComponent,
+          headerComponent: FieldDefinitionGridHeaderComponent,
           headerComponentParams: { fieldDefinitionType: 'Jurisdiction'},
           field: 'StormwaterJurisdiction.Organization.OrganizationName' 
         },

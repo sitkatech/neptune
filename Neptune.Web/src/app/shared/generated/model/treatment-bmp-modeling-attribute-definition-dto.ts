@@ -10,12 +10,9 @@
  * Do not edit the class manually.
  */
 
-export class TreatmentBMPTypeSimpleDto { 
-    TreatmentBMPTypeID?: number;
-    TreatmentBMPTypeName?: string;
-    TreatmentBMPTypeDescription?: string;
-    IsAnalyzedInModelingModule?: boolean;
-    TreatmentBMPModelingTypeID?: number;
+export class TreatmentBMPModelingAttributeDefinitionDto { 
+    ModelingAttributeName?: string;
+    Units?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

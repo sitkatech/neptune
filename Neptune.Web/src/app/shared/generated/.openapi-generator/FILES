@@ -4,11 +4,12 @@ api/custom-rich-text.service.ts
 api/delineation.service.ts
 api/field-definition.service.ts
 api/file-resource.service.ts
-api/health.service.ts
+api/nereid.service.ts
 api/organization.service.ts
 api/project.service.ts
 api/role.service.ts
 api/stormwater-jurisdiction.service.ts
+api/system-info.service.ts
 api/treatment-bmp.service.ts
 api/user.service.ts
 configuration.ts
@@ -42,9 +43,11 @@ model/project-status-simple-dto.ts
 model/project-upsert-dto.ts
 model/role-dto.ts
 model/stormwater-jurisdiction-simple-dto.ts
+model/system-info-dto.ts
 model/treatment-bmp-display-dto.ts
+model/treatment-bmp-modeling-attribute-definition-dto.ts
 model/treatment-bmp-modeling-attribute-dropdown-item-dto.ts
-model/treatment-bmp-type-simple-dto.ts
+model/treatment-bmp-type-with-modeling-attributes-dto.ts
 model/treatment-bmp-upsert-dto.ts
 model/treatment-bmphru-characteristics-summary-simple-dto.ts
 variables.ts

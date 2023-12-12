@@ -26,7 +26,7 @@ export class TreatmentBMPUpsertDto {
     DesignDryWeatherTreatmentCapacity?: number;
     DesignLowFlowDiversionCapacity?: number;
     DesignMediaFiltrationRate?: number;
-    DesignResidenceTimeForPermanentPool?: number;
+    DesignResidenceTimeforPermanentPool?: number;
     DiversionRate?: number;
     DrawdownTimeForWQDetentionVolume?: number;
     EffectiveFootprint?: number;

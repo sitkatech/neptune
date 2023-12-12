@@ -7,11 +7,13 @@
     <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 </div>
 <div class="row m-1 mb-3">
-    <ngb-alert *ngIf="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)" [type]="'info'"
-        [dismissible]="false">
-        Results for this project are currently being calculated. Triggering a new calculation will be disabled until the
-        current calculation completes.
-    </ngb-alert>
+    <div *ngIf="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)" class="alert alert-info">
+        <div class="alert-content">
+            <i class="fa fa-info"></i>
+            Results for this project are currently being calculated. Triggering a new calculation will be disabled until the
+            current calculation completes.
+        </div>
+    </div>
     <div class="col-4 col-md-2">
         <button class="btn btn-hippocamp" (click)="triggerModelRunForProject()"
             [disabled]="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued) || delineations?.length == 0">
