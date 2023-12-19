@@ -27,7 +27,7 @@ public partial class vFieldVisitDetailed
 
     [StringLength(200)]
     [Unicode(false)]
-    public string? OrganizationName { get; set; }
+    public string OrganizationName { get; set; } = null!;
 
     public int FieldVisitID { get; set; }
 

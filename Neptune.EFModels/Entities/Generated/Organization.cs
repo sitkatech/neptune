@@ -16,7 +16,7 @@ public partial class Organization
 
     [StringLength(200)]
     [Unicode(false)]
-    public string? OrganizationName { get; set; }
+    public string OrganizationName { get; set; } = null!;
 
     [StringLength(50)]
     [Unicode(false)]

@@ -117,6 +117,9 @@ public partial class WaterQualityManagementPlan
     public virtual ICollection<TrashGeneratingUnit4326> TrashGeneratingUnit4326s { get; set; } = new List<TrashGeneratingUnit4326>();
 
     [InverseProperty("WaterQualityManagementPlan")]
+    public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; } = new List<TrashGeneratingUnit>();
+
+    [InverseProperty("WaterQualityManagementPlan")]
     public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; } = new List<TreatmentBMP>();
 
     [InverseProperty("WaterQualityManagementPlan")]

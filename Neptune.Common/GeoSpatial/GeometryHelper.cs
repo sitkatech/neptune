@@ -18,7 +18,7 @@ public static class GeometryHelper
         return new Point(longitude, latitude) { SRID = 4326 };
     }
 
-    public static Geometry UnionListGeometries(this IList<Geometry> inputGeometries)
+    public static Geometry? UnionListGeometries(this IList<Geometry> inputGeometries)
     {
         if (inputGeometries.Count == 0)
         {
@@ -61,7 +61,7 @@ public static class GeometryHelper
         if (string.IsNullOrWhiteSpace(wkt))
             return null;
 
-        var geoReader = new WKTReader(new GeometryFactory(new PrecisionModel(Math.Pow(10, 3)), srid));
+        var geoReader = new WKTReader();
         var geometry = geoReader.Read(wkt);
         geometry.SRID = srid;
         return geometry;

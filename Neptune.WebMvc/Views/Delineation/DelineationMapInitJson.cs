@@ -34,5 +34,10 @@ namespace Neptune.WebMvc.Views.Delineation
                     }
                 }, false);
         }
+
+        // needed by serializer
+        public DelineationMapInitJson()
+        {
+        }
     }
 }

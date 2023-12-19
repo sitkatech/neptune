@@ -83,7 +83,13 @@ namespace Neptune.WebMvc.Controllers
                     }
                 };
                 var geoJson = await _gdalApiService.Ogr2OgrGdbToGeoJson(apiRequest);
-                // todo: save to ParcelStaging table
+                var parcelStagings = await GeoJsonSerializer.DeserializeFromFeatureCollection<ParcelStaging>(geoJson,
+                    GeoJsonSerializer.DefaultSerializerOptions);
+                if (parcelStagings.Any())
+                {
+                    await _dbContext.ParcelStagings.AddRangeAsync(parcelStagings);
+                    await _dbContext.SaveChangesAsync();
+                }
             }
             catch (Exception e)
             {
@@ -108,10 +114,6 @@ namespace Neptune.WebMvc.Controllers
                 if (parcelStagingsCount > 0)
                 {
                     // first wipe the dependent WQMPParcel table, then wipe the old parcels
-                    await _dbContext.Database.ExecuteSqlRawAsync("ALTER TABLE dbo.WaterQualityManagementPlanParcel drop constraint FK_WaterQualityManagementPlanParcel_Parcel_ParcelID");
-                    await _dbContext.Database.ExecuteSqlRawAsync("TRUNCATE TABLE dbo.WaterQualityManagementPlanParcel");
-                    await _dbContext.Database.ExecuteSqlRawAsync("TRUNCATE TABLE dbo.Parcel");
-                    await _dbContext.Database.ExecuteSqlRawAsync("ALTER TABLE dbo.WaterQualityManagementPlanParcel add constraint FK_WaterQualityManagementPlanParcel_Parcel_ParcelID foreign key (ParcelID) references dbo.Parcel(ParcelID)");
                     await _dbContext.Database.ExecuteSqlRawAsync("EXECUTE dbo.pParcelUpdateFromStaging");
 
                     // we need to get the 4326 representation of the geometry; unfortunately can't do it in sql

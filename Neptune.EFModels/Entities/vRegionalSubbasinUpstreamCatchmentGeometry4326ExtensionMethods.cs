@@ -1,5 +1,5 @@
-﻿using Neptune.Common.GeoSpatial;
-using Neptune.EFModels.Util;
+﻿using Neptune.Common;
+using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities;
@@ -13,7 +13,7 @@ public static class vRegionalSubbasinUpstreamCatchmentGeometry4326ExtensionMetho
         return new GeometryGeoJSONAndAreaDto()
         {
             GeometryGeoJSON = regionalSubbasinUpstreamCatchmentGeometry4326.GetUpstreamCatchGeometry4326GeoJson(treatmentBMPID, delineationID),
-            Area = Math.Round(regionalSubbasinUpstreamCatchmentGeometry4326.UpstreamCatchmentGeometry4326.ProjectTo2771().Area * DbSpatialHelper.SquareMetersToAcres, 2)
+            Area = Math.Round(regionalSubbasinUpstreamCatchmentGeometry4326.UpstreamCatchmentGeometry4326.ProjectTo2771().Area * Constants.SquareMetersToAcres, 2)
         };
     }
 }

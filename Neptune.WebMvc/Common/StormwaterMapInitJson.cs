@@ -30,6 +30,11 @@ namespace Neptune.WebMvc.Common
 {
     public class StormwaterMapInitJson : MapInitJson
     {
+        // needed by serializer
+        public StormwaterMapInitJson()
+        {
+        }
+
         public StormwaterMapInitJson(string mapDivID, NeptuneDbContext dbContext) : base(mapDivID, DefaultZoomLevel,
             MapInitJsonHelpers.GetJurisdictionMapLayers(dbContext).ToList(), new BoundingBoxDto())
         {

@@ -20,6 +20,12 @@ public partial class vTrashGeneratingUnitLoadStatistic
     [Unicode(false)]
     public string? TreatmentBMPName { get; set; }
 
+    public int? TrashCaptureEffectivenessBMP { get; set; }
+
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? TrashCaptureStatusBMP { get; set; }
+
     [Column(TypeName = "geometry")]
     public Geometry TrashGeneratingUnitGeometry { get; set; } = null!;
 
@@ -27,11 +33,11 @@ public partial class vTrashGeneratingUnitLoadStatistic
 
     public int StormwaterJurisdictionID { get; set; }
 
-    public int? OrganizationID { get; set; }
+    public int OrganizationID { get; set; }
 
     [StringLength(200)]
     [Unicode(false)]
-    public string? OrganizationName { get; set; }
+    public string OrganizationName { get; set; } = null!;
 
     [Column(TypeName = "decimal(4, 1)")]
     public decimal BaselineLoadingRate { get; set; }
@@ -69,16 +75,47 @@ public partial class vTrashGeneratingUnitLoadStatistic
 
     public int? OnlandVisualTrashAssessmentAreaID { get; set; }
 
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? OnlandVisualTrashAssessmentAreaName { get; set; }
+
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? OnlandVisualTrashAssessmentAreaBaselineScore { get; set; }
+
     public int? WaterQualityManagementPlanID { get; set; }
 
     [StringLength(100)]
     [Unicode(false)]
     public string? WaterQualityManagementPlanName { get; set; }
 
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? TrashCaptureStatusWQMP { get; set; }
+
+    public int? TrashCaptureEffectivenessWQMP { get; set; }
+
     public int? LandUseBlockID { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? LastUpdateDate { get; set; }
+
+    [Column(TypeName = "numeric(18, 0)")]
+    public decimal? MedianHouseholdIncomeResidential { get; set; }
+
+    [Column(TypeName = "numeric(18, 0)")]
+    public decimal? MedianHouseholdIncomeRetail { get; set; }
+
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? PermitClass { get; set; }
+
+    [StringLength(80)]
+    [Unicode(false)]
+    public string? LandUseForTGR { get; set; }
+
+    [Column(TypeName = "decimal(4, 1)")]
+    public decimal? TrashGenerationRate { get; set; }
 
     public double Area { get; set; }
 

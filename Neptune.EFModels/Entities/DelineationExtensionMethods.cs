@@ -1,4 +1,4 @@
-﻿using Neptune.EFModels.Util;
+﻿using Neptune.Common;
 using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
@@ -43,7 +43,7 @@ namespace Neptune.EFModels.Entities
         public static double? GetDelineationArea(this Delineation delineation)
         {
             return delineation?.DelineationGeometry.Area != null
-                ? Math.Round(delineation.DelineationGeometry.Area * DbSpatialHelper.SquareMetersToAcres, 2)
+                ? Math.Round(delineation.DelineationGeometry.Area * Constants.SquareMetersToAcres, 2)
                 : null;
         }
     }

@@ -1,7 +1,7 @@
 CREATE TABLE [dbo].[Organization](
 	[OrganizationID] [int] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Organization_OrganizationID] PRIMARY KEY,
 	[OrganizationGuid] [uniqueidentifier] NULL,
-	[OrganizationName] [varchar](200),
+	[OrganizationName] [varchar](200) not null,
 	[OrganizationShortName] [varchar](50) NULL,
 	[PrimaryContactPersonID] [int] NULL CONSTRAINT [FK_Organization_Person_PrimaryContactPersonID_PersonID] FOREIGN KEY REFERENCES [dbo].[Person] ([PersonID]),
 	[IsActive] [bit] NOT NULL,

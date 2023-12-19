@@ -23,7 +23,7 @@ public partial class vPowerBITreatmentBMP
 
     [StringLength(200)]
     [Unicode(false)]
-    public string? Jurisdiction { get; set; }
+    public string Jurisdiction { get; set; } = null!;
 
     public double? LocationLon { get; set; }
 

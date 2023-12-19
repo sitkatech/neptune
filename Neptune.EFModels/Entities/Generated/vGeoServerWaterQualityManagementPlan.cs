@@ -21,7 +21,7 @@ public partial class vGeoServerWaterQualityManagementPlan
 
     [StringLength(200)]
     [Unicode(false)]
-    public string? OrganizationName { get; set; }
+    public string OrganizationName { get; set; } = null!;
 
     public int TrashCaptureEffectiveness { get; set; }
 

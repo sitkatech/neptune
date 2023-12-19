@@ -1,12 +1,13 @@
 CREATE TABLE [dbo].[TrashGeneratingUnit](
 	[TrashGeneratingUnitID] [int] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_TrashGeneratingUnit_TrashGeneratingUnitID] PRIMARY KEY,
 	[StormwaterJurisdictionID] [int] NOT NULL CONSTRAINT [FK_TrashGeneratingUnit_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID]),
-	[OnlandVisualTrashAssessmentAreaID] [int] NULL,
+	[OnlandVisualTrashAssessmentAreaID] [int] NULL CONSTRAINT [FK_TrashGeneratingUnit_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID] FOREIGN KEY REFERENCES [dbo].[OnlandVisualTrashAssessmentArea] ([OnlandVisualTrashAssessmentAreaID]),
 	[LandUseBlockID] [int] NULL CONSTRAINT [FK_TrashGeneratingUnit_LandUseBlock_LandUseBlockID] FOREIGN KEY REFERENCES [dbo].[LandUseBlock] ([LandUseBlockID]),
 	[TrashGeneratingUnitGeometry] [geometry] NOT NULL,
 	[LastUpdateDate] [datetime] NULL CONSTRAINT [DF_TrashGeneratingUnit_LastUpdateDate]  DEFAULT (getdate()),
-	[DelineationID] [int] NULL,
-	[WaterQualityManagementPlanID] [int] NULL,
+	[DelineationID] [int] NULL CONSTRAINT [FK_TrashGeneratingUnit_Delineation_DelineationID] FOREIGN KEY REFERENCES [dbo].[Delineation] ([DelineationID]),
+	[WaterQualityManagementPlanID] [int] NULL CONSTRAINT [FK_TrashGeneratingUnit_WaterQualityManagementPlan_WaterQualityManagementPlanID] FOREIGN KEY REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID]),
+
 )
 GO
 

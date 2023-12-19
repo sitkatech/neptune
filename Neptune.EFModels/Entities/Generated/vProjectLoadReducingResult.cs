@@ -21,11 +21,11 @@ public partial class vProjectLoadReducingResult
 
     [StringLength(200)]
     [Unicode(false)]
-    public string? OrganizationName { get; set; }
+    public string OrganizationName { get; set; } = null!;
 
     [StringLength(200)]
     [Unicode(false)]
-    public string? JurisdictionName { get; set; }
+    public string JurisdictionName { get; set; } = null!;
 
     public bool IsBaselineCondition { get; set; }
 

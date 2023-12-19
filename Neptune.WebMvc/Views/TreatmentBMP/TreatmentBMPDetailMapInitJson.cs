@@ -20,5 +20,10 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public TreatmentBMPDetailMapInitJson(string mapDivID, int zoomLevel, List<LayerGeoJson> layers, BoundingBoxDto boundingBox) : base(mapDivID, zoomLevel, layers, boundingBox)
         {
         }
+
+        // needed by serializer
+        public TreatmentBMPDetailMapInitJson()
+        {
+        }
     }
 }

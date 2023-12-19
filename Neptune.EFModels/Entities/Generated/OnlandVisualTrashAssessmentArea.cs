@@ -54,4 +54,7 @@ public partial class OnlandVisualTrashAssessmentArea
 
     [InverseProperty("OnlandVisualTrashAssessmentArea")]
     public virtual ICollection<TrashGeneratingUnit4326> TrashGeneratingUnit4326s { get; set; } = new List<TrashGeneratingUnit4326>();
+
+    [InverseProperty("OnlandVisualTrashAssessmentArea")]
+    public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; } = new List<TrashGeneratingUnit>();
 }

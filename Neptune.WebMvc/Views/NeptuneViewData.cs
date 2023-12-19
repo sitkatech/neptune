@@ -20,11 +20,15 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels.Entities;
+using Neptune.WebMvc.Areas.Trash.Controllers;
 using Neptune.WebMvc.Views.Shared;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Controllers;
 using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
+using HomeController = Neptune.WebMvc.Controllers.HomeController;
+using ParcelController = Neptune.WebMvc.Controllers.ParcelController;
+using TreatmentBMPController = Neptune.WebMvc.Controllers.TreatmentBMPController;
 
 namespace Neptune.WebMvc.Views
 {
@@ -185,8 +189,8 @@ namespace Neptune.WebMvc.Views
             }
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<CustomAttributeTypeController>(LinkGenerator, x => x.Manage()), currentPerson, "Custom Attributes", "Group2"));
 
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TrashGeneratingUnitController>(LinkGenerator, x => x.Index()), currentPerson, "Trash Generating Units", "Group3"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LandUseBlockController>(LinkGenerator, x => x.Index()), currentPerson, "Land Use Blocks", "Group3"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TrashGeneratingUnitController>(LinkGenerator, x => x.Index()), currentPerson, "Trash Generating Units", "Group3"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LandUseBlockController>(LinkGenerator, x => x.Index()), currentPerson, "Land Use Blocks", "Group3"));
 
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HRUCharacteristicController>(LinkGenerator, x => x.Index()), currentPerson, "HRU Characteristics", "Group4"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinController>(LinkGenerator, x => x.Index()), currentPerson, "Regional Subbasins", "Group4"));

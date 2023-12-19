@@ -1,0 +1,68 @@
+﻿@using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Common.BootstrapWrappers
+@using Neptune.WebMvc.Common.ModalDialog
+@using Neptune.WebMvc.Models
+@inherits Neptune.WebMvc.Areas.Trash.Views.OnlandVisualTrashAssessment.RefineAssessmentArea
+@model Neptune.WebMvc.Views.WaterQualityManagementPlan.RefineAreaViewModel
+@{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
+
+@section JavascriptAndStylesContent
+{
+    <script src=@("https://npmcdn.com/@turf/turf/turf.min.js")></script>
+    <script src="@Url.Content("~/Content/angular-controllers/Trash/RefineAssessmentArea.js")"></script>
+}
+
+@if (!ViewDataTyped.OVTASection.IsSectionEnabled(ViewDataTyped.OVTA))
+{
+    <p class="systemText">@ViewDataTyped.OVTASection.GetSectionDisabledMessage()</p>
+}
+else
+{
+
+    <p>You may click or tap the edit button (<span class="glyphicon glyphicon-edit"></span>) on the map below to adjust the Assessment Area's vertices. You may drag vertices to move them, or click or tap vertices to delete them. Note that it may be necessary to zoom the map to see individual vertices that are close together (e.g. there may be many closely-placed vertices along curves). You may click the "Reset Map Zoom" button to zoom back out to the entire Assessment Area.</p>
+
+    <p class="systemText">Note that the Assessment Area's edges must not intersect each other. If the Assessment Area contains any edges that intersect each other, you will not be able to save the Assessment Area.</p>
+
+    <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 450px; margin: 0"></div>
+
+    using (Html.BeginForm())
+    {
+        <div id="@ViewDataTyped.MapFormID">
+
+        </div>
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-xs-12" style="margin-bottom: 5px;">
+                <p class="text-danger" id="kinkDanger" style="display: none;">The Assessment Area contains edges that intersect each other. Please correct it before submitting.</p>
+            </div>
+            <div class="col-xs-12">
+                <button type="button" class="btn btn-neptune" onclick="resetZoom()">Reset Map Zoom</button>
+            </div>
+        </div>
+
+        <hr />
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+            </div>
+
+            <div class="col-xs-12 col-sm-9" style="text-align: right">
+                <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
+                <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
+            </div>
+        </div>
+    }
+
+    <script type="text/javascript">
+        var mapInitJson = @Html.Raw(ViewDataTyped.MapInitJson.ToJsonHtmlString());
+        var editableFeatureJsonObject = @Html.Raw(ViewDataTyped.MapInitJson.AssessmentAreaLayerGeoJson.ToJsonHtmlString());
+        var saveButtonID = "@ModalDialogFormHelper.SaveButtonID";
+
+        var updateFeatureCollectionJson = createUpdateFeatureCollectionJsonFunctionAsClosure(
+            "@Html.NameFor(m=>m.WktAndAnnotations[0].Wkt)",
+            "@Html.NameFor(m => m.WktAndAnnotations[0].Annotation)",
+            "@ViewDataTyped.MapFormID");
+
+        var geoServerUrl = "@ViewDataTyped.GeoServerUrl";
+        buildMapOnDocumentReady(mapInitJson, editableFeatureJsonObject, saveButtonID,geoServerUrl);
+    </script>
+}

@@ -50,7 +50,7 @@ public partial class vTreatmentBMPAssessmentDetailed
 
     [StringLength(200)]
     [Unicode(false)]
-    public string? StormwaterJurisdictionName { get; set; }
+    public string StormwaterJurisdictionName { get; set; } = null!;
 
     public int StormwaterJurisdictionPublicWQMPVisibilityTypeID { get; set; }
 

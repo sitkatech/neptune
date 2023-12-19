@@ -2690,7 +2690,7 @@
         }
       };
     };
-    const missingOrderError = (eventName, tuples) => Result.error(['The event (' + eventName + ') has more than one behaviour that listens to it.\nWhen this occurs, you must ' + 'specify an event ordering for the behaviours in your spec (e.g. [ "listing", "toggling" ]).\nThe behaviours that ' + 'can trigger it are: ' + JSON.stringify(map$2(tuples, c => c.name), null, 2)]);
+    const missingOrderError = (eventName, tuples) => Result.error(['The event (' + eventName + ') has more than one behaviour that listens to it.\nWhen this occurs, you must ' + 'specify an event ordering for the behaviours in your spec (e.g. [ "listing", "toggling" ]).\nThe behaviours that ' + 'can trigger it are: ' + JSON.stringify(map$2(tuples, x => x.name), null, 2)]);
     const fuse = (tuples, eventOrder, eventName) => {
       const order = eventOrder[eventName];
       if (!order) {
@@ -10571,7 +10571,7 @@
     const getDefaultBackgroundColor = option$1('color_default_background');
 
     const defaultBackgroundColor = 'rgba(0, 0, 0, 0)';
-    const isValidBackgroundColor = value => fromString(value).exists(c => c.alpha !== 0);
+    const isValidBackgroundColor = value => fromString(value).exists(x => x.alpha !== 0);
     const getClosestCssBackgroundColorValue = scope => {
       return closest$4(scope, node => {
         if (isElement$1(node)) {

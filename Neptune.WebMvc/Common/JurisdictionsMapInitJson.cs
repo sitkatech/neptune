@@ -25,6 +25,7 @@ namespace Neptune.WebMvc.Common
 {
     public class JurisdictionsMapInitJson : MapInitJson
     {
+        // Needed by serializer
         public JurisdictionsMapInitJson()
         {
         }

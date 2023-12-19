@@ -22,10 +22,14 @@ public static class StormwaterJurisdictions
 
     public static BoundingBoxDto GetBoundingBoxDtoByJurisdictionID(NeptuneDbContext dbContext, int stormwaterJurisdictionID)
     {
-        var stormwaterJurisdictionGeometry = dbContext.StormwaterJurisdictionGeometries
-            .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID)
-            .Select(x => x.Geometry4326);
+        return GetBoundingBoxDtoByJurisdictionIDList(dbContext, new List<int>{stormwaterJurisdictionID});
+    }
 
+    public static BoundingBoxDto GetBoundingBoxDtoByJurisdictionIDList(NeptuneDbContext dbContext, IEnumerable<int> stormwaterJurisdictionIDList)
+    {
+        var stormwaterJurisdictionGeometry = dbContext.StormwaterJurisdictionGeometries
+            .Where(x => stormwaterJurisdictionIDList.Contains(x.StormwaterJurisdictionID))
+            .Select(x => x.Geometry4326);
         return new BoundingBoxDto(stormwaterJurisdictionGeometry);
     }
 
@@ -36,7 +40,8 @@ public static class StormwaterJurisdictions
         if (person.RoleID != (int)RoleEnum.Admin || person.RoleID != (int)RoleEnum.SitkaAdmin)
         {
             var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
-            jurisdictions.Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID));
+            return new BoundingBoxDto(jurisdictions.Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
+                .Select(x => x.Geometry4326).ToList());
         }
         return new BoundingBoxDto(jurisdictions.Select(x => x.Geometry4326).ToList());
     }

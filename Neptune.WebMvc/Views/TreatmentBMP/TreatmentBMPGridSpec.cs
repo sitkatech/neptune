@@ -27,12 +27,11 @@ using Neptune.WebMvc.Controllers;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.DhtmlWrappers;
 using Neptune.WebMvc.Common.HtmlHelperExtensions;
-using Microsoft.AspNetCore.Routing;
 
 
 namespace Neptune.WebMvc.Views.TreatmentBMP
 {
-    public class TreatmentBMPGridSpec : GridSpec<EFModels.Entities.vTreatmentBMPDetailed>
+    public class TreatmentBMPGridSpec : GridSpec<vTreatmentBMPDetailed>
     {
         public TreatmentBMPGridSpec(Person currentPerson, bool showDelete, bool showEdit, LinkGenerator linkGenerator)
         {

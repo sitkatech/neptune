@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Irony.Parsing;
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
 using Neptune.EFModels.Entities;
@@ -26,6 +27,7 @@ using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Controllers;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
+using ParcelController = Neptune.WebMvc.Areas.Trash.Controllers.ParcelController;
 
 namespace Neptune.WebMvc.Models
 {
@@ -109,8 +111,9 @@ namespace Neptune.WebMvc.Models
             return featureCollection;
         }
 
-        public static FeatureCollection ToGeoJsonFeatureCollectionForTrashMap(this IEnumerable<TreatmentBMP> treatmentBMPs)
+        public static FeatureCollection ToGeoJsonFeatureCollectionForTrashMap(this IEnumerable<TreatmentBMP> treatmentBMPs, LinkGenerator linkGenerator)
         {
+            UrlTemplate<int> trashMapAssetUrlTemplate = new(SitkaRoute<Areas.Trash.Controllers.TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.TrashMapAssetPanel(UrlTemplate.Parameter1Int)));
             var featureCollection = new FeatureCollection();
             foreach (var treatmentBMP in treatmentBMPs)
             {
@@ -121,7 +124,7 @@ namespace Neptune.WebMvc.Models
                     { "FeatureColor", trashCaptureStatusType.FeatureColorOnTrashModuleMap() },
                     { "FeatureGlyph", "water" },
                     { "Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
-                    //todo: { "MapSummaryUrl", treatmentBMP.GetTrashMapAssetUrl() },
+                    { "MapSummaryUrl", trashMapAssetUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID) },
                     { "TreatmentBMPID", treatmentBMP.TreatmentBMPID },
                     { "TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID },
                     { "TrashCaptureStatusTypeID", trashCaptureStatusType.TrashCaptureStatusTypeID },

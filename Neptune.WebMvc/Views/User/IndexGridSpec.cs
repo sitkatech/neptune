@@ -43,20 +43,20 @@ namespace Neptune.WebMvc.Views.User
                     x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.PersonID), hasDeletePermission, true),
                     30, DhtmlxGridColumnFilterType.None);
             }
-            Add("Last Name", a => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(a.PersonID), a.LastName), 100, DhtmlxGridColumnFilterType.Html);
-            Add("First Name", a => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(a.PersonID), a.FirstName), 100, DhtmlxGridColumnFilterType.Html);
-            Add("Email", a => a.Email, 200);
-            Add($"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()}", a =>
-                UrlTemplate.MakeHrefString(organizationDetailUrlTemplate.ParameterReplace(a.OrganizationID), a.Organization.GetOrganizationShortNameIfAvailable()), 200);
-            Add("Phone", a => a.Phone.ToPhoneNumberString(), 100);
-            Add("Username", a => a.LoginName.ToString(), 200);
-            Add("Last Activity", a => a.LastActivityDate, 120);
-            Add("Role", a => UrlTemplate.MakeHrefString(roleDetailUrlTemplate.ParameterReplace(a.RoleID), a.Role.RoleDisplayName), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Active?", a => a.IsActive.ToYesNo(), 75, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Receives Support Emails?", a => a.ReceiveSupportEmails.ToYesNo(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add($"{FieldDefinitionType.PrimaryContact.GetFieldDefinitionLabel()} for Organizations", a =>
-                countByPrimaryContactPerson.TryGetValue(a.PersonID, out var value) ? value : 0, 120);
-            Add($"Assigned {FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabelPluralized()}", a => a.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList().Count, 120);
+            Add("Last Name", x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.PersonID), x.LastName), 100, DhtmlxGridColumnFilterType.Html);
+            Add("First Name", x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.PersonID), x.FirstName), 100, DhtmlxGridColumnFilterType.Html);
+            Add("Email", x => x.Email, 200);
+            Add($"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()}", x =>
+                UrlTemplate.MakeHrefString(organizationDetailUrlTemplate.ParameterReplace(x.OrganizationID), x.Organization.GetOrganizationShortNameIfAvailable()), 200);
+            Add("Phone", x => x.Phone.ToPhoneNumberString(), 100);
+            Add("Username", x => x.LoginName.ToString(), 200);
+            Add("Last Activity", x => x.LastActivityDate, 120);
+            Add("Role", x => UrlTemplate.MakeHrefString(roleDetailUrlTemplate.ParameterReplace(x.RoleID), x.Role.RoleDisplayName), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Active?", x => x.IsActive.ToYesNo(), 75, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Receives Support Emails?", x => x.ReceiveSupportEmails.ToYesNo(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add($"{FieldDefinitionType.PrimaryContact.GetFieldDefinitionLabel()} for Organizations", x =>
+                countByPrimaryContactPerson.TryGetValue(x.PersonID, out var value) ? value : 0, 120);
+            Add($"Assigned {FieldDefinitionType.Jurisdiction.GetFieldDefinitionLabelPluralized()}", x => x.StormwaterJurisdictionPeople.Select(y => y.StormwaterJurisdiction).ToList().Count, 120);
         }
     }
 }

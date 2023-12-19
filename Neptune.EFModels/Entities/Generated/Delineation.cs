@@ -59,6 +59,9 @@ public partial class Delineation
     [InverseProperty("Delineation")]
     public virtual ICollection<ProjectNereidResult> ProjectNereidResults { get; set; } = new List<ProjectNereidResult>();
 
+    [InverseProperty("Delineation")]
+    public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; } = new List<TrashGeneratingUnit>();
+
     [ForeignKey("TreatmentBMPID")]
     [InverseProperty("Delineation")]
     public virtual TreatmentBMP TreatmentBMP { get; set; } = null!;

@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.WebMvc.Common;
 using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
+using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentExport;
 using Neptune.WebMvc.Controllers;
 using NetTopologySuite.Features;
 
@@ -72,47 +73,45 @@ namespace Neptune.WebMvc.Models
         {
             var attributesTable = new AttributesTable
             {
-                { "State", stormwaterJurisdiction.StateProvince.StateProvinceAbbreviation },
                 { "County/City", stormwaterJurisdiction.Organization.OrganizationName },
                 { "StormwaterJurisdictionID", stormwaterJurisdiction.StormwaterJurisdictionID }
             };
             return new Feature(stormwaterJurisdiction.StormwaterJurisdictionGeometry.Geometry4326, attributesTable);
         }
 
+        public static string GetGeoserverRequestUrl(this StormwaterJurisdiction stormwaterJurisdiction,
+            OnlandVisualTrashAssessmentExportTypeEnum exportType, string mapServiceUrl)
+        {
+            string typeName;
 
-        //public static string GetGeoserverRequestUrl(this StormwaterJurisdiction stormwaterJurisdiction,
-        //    OnlandVisualTrashAssessmentExportTypeEnum exportType)
-        //{
-        //    string typeName;
+            switch (exportType)
+            {
+                case OnlandVisualTrashAssessmentExportTypeEnum.ExportAreas:
+                    typeName = "OCStormwater:AssessmentAreaExport";
+                    break;
+                case OnlandVisualTrashAssessmentExportTypeEnum.ExportTransects:
+                    typeName = "OCStormwater:TransectLineExport";
+                    break;
+                case OnlandVisualTrashAssessmentExportTypeEnum.ExportObservationPoints:
+                    typeName = "OCStormwater:ObservationPointExport";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(exportType), exportType, null);
+            }
 
-        //    switch (exportType)
-        //    {
-        //        case OnlandVisualTrashAssessmentExportTypeEnum.ExportAreas:
-        //            typeName = "OCStormwater:AssessmentAreaExport";
-        //            break;
-        //        case OnlandVisualTrashAssessmentExportTypeEnum.ExportTransects:
-        //            typeName = "OCStormwater:TransectLineExport";
-        //            break;
-        //        case OnlandVisualTrashAssessmentExportTypeEnum.ExportObservationPoints:
-        //            typeName = "OCStormwater:ObservationPointExport";
-        //            break;
-        //        default:
-        //            throw new ArgumentOutOfRangeException(nameof(exportType), exportType, null);
-        //    }
+            var cqlFilter = $"JurisID={stormwaterJurisdiction.StormwaterJurisdictionID}";
 
-        //    var cqlFilter = $"JurisID={stormwaterJurisdiction.StormwaterJurisdictionID}";
+            var parameters = new
+            {
+                service = "WFS",
+                version = "1.0.0",
+                request = "GetFeature",
+                typeName,
+                outputFormat = "shape-zip",
+                cql_filter = cqlFilter
+            };
 
-        //    var parameters = new
-        //    {
-        //        service = "WFS",
-        //        version = "1.0.0",
-        //        request = "GetFeature",
-        //        typeName,
-        //        outputFormat = "shape-zip",
-        //        cql_filter = cqlFilter
-        //    };
-
-        //    return $"{NeptuneWebConfiguration.ParcelMapServiceUrl}?{NeptuneHelpers.GetQueryString(parameters)}";
-        //}
+            return $"{mapServiceUrl}?{NeptuneHelpers.GetQueryString(parameters)}";
+        }
     }
 }

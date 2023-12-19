@@ -17,7 +17,8 @@ namespace Neptune.WebMvc.Security
         public PermissionCheckResult HasPermission(Person person, TreatmentBMP contextModelObject,
             NeptuneDbContext dbContext)
         {
-            return HasPermission(person, contextModelObject);
+            var treatmentBMP = TreatmentBMPs.GetByIDForFeatureContextCheck(dbContext, contextModelObject.TreatmentBMPID);
+            return HasPermission(person, treatmentBMP);
         }
 
         public PermissionCheckResult HasPermission(Person person, TreatmentBMP contextModelObject)

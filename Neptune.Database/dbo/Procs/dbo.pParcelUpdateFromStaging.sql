@@ -1,6 +1,12 @@
 create procedure dbo.pParcelUpdateFromStaging
+with execute as owner
 as
 begin
+
+
+    delete from dbo.WaterQualityManagementPlanParcel
+    TRUNCATE TABLE dbo.Parcel
+    DBCC CHECKIDENT ('dbo.WaterQualityManagementPlanParcel', RESEED, 0);
 
     update dbo.ParcelStaging set ParcelStagingGeometry = ParcelStagingGeometry.MakeValid() where ParcelStagingGeometry.STIsValid() = 0
 

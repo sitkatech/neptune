@@ -30,11 +30,23 @@ public partial class TrashGeneratingUnit
 
     public int? WaterQualityManagementPlanID { get; set; }
 
+    [ForeignKey("DelineationID")]
+    [InverseProperty("TrashGeneratingUnits")]
+    public virtual Delineation? Delineation { get; set; }
+
     [ForeignKey("LandUseBlockID")]
     [InverseProperty("TrashGeneratingUnits")]
     public virtual LandUseBlock? LandUseBlock { get; set; }
 
+    [ForeignKey("OnlandVisualTrashAssessmentAreaID")]
+    [InverseProperty("TrashGeneratingUnits")]
+    public virtual OnlandVisualTrashAssessmentArea? OnlandVisualTrashAssessmentArea { get; set; }
+
     [ForeignKey("StormwaterJurisdictionID")]
     [InverseProperty("TrashGeneratingUnits")]
     public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; } = null!;
+
+    [ForeignKey("WaterQualityManagementPlanID")]
+    [InverseProperty("TrashGeneratingUnits")]
+    public virtual WaterQualityManagementPlan? WaterQualityManagementPlan { get; set; }
 }

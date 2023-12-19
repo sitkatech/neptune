@@ -19,13 +19,13 @@ public partial class vMostRecentTreatmentBMPAssessment
 
     [StringLength(200)]
     [Unicode(false)]
-    public string? StormwaterJurisdictionName { get; set; }
+    public string StormwaterJurisdictionName { get; set; } = null!;
 
     public int StormwaterJurisdictionID { get; set; }
 
     [StringLength(200)]
     [Unicode(false)]
-    public string? OwnerOrganizationName { get; set; }
+    public string OwnerOrganizationName { get; set; } = null!;
 
     public int OwnerOrganizationID { get; set; }
 

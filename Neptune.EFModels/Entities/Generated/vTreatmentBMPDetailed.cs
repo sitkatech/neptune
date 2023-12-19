@@ -27,7 +27,7 @@ public partial class vTreatmentBMPDetailed
 
     [StringLength(200)]
     [Unicode(false)]
-    public string? OrganizationName { get; set; }
+    public string OrganizationName { get; set; } = null!;
 
     public int? RequiredFieldVisitsPerYear { get; set; }
 
@@ -46,7 +46,7 @@ public partial class vTreatmentBMPDetailed
 
     [StringLength(200)]
     [Unicode(false)]
-    public string? OwnerOrganizationName { get; set; }
+    public string OwnerOrganizationName { get; set; } = null!;
 
     public int? TreatmentBMPLifespanTypeID { get; set; }
 

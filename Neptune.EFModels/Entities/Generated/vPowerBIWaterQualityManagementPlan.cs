@@ -19,7 +19,7 @@ public partial class vPowerBIWaterQualityManagementPlan
 
     [StringLength(200)]
     [Unicode(false)]
-    public string? OrganizationName { get; set; }
+    public string OrganizationName { get; set; } = null!;
 
     [StringLength(100)]
     [Unicode(false)]

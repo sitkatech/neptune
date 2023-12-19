@@ -96,7 +96,9 @@ namespace Neptune.WebMvc.Views.Shared
                 case NeptuneAreaEnum.Planning:
                     return PlanningModuleUrl;
                 case NeptuneAreaEnum.Trash:
+                    return SitkaRoute<Areas.Trash.Controllers.HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
                 case NeptuneAreaEnum.OCStormwaterTools:
+                    return SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()) + "#welcome";
                 case NeptuneAreaEnum.Modeling:
                     return neptuneArea.NeptuneAreaName;
                 default:

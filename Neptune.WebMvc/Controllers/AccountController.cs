@@ -35,14 +35,6 @@ namespace Neptune.WebMvc.Controllers
         {
         }
 
-        protected string LoginUrl
-        {
-            get
-            {
-                return SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(_linkGenerator, "", x => x.Login());
-            }
-        }
-
         protected string HomeUrl
         {
             get { return SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()); }

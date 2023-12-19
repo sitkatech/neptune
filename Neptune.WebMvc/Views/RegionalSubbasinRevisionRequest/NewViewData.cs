@@ -46,5 +46,12 @@ namespace Neptune.WebMvc.Views.RegionalSubbasinRevisionRequest
         {
             CentralizedDelineationLayerGeoJson = centralizedDelineationLayerGeoJson;
         }
+
+
+        // needed by serializer
+        public RegionalSubbasinRevisionRequestMapInitJson()
+        {
+        }
+
     }
 }
