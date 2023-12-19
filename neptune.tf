@@ -91,6 +91,14 @@ variable "domainGeoserver" {
   type = string
 }
 
+variable "projectNumber" {
+  type = string
+}
+
+variable "team" {
+  type = string
+}
+
 // this variable is used for the keepers for the random resources https://registry.terraform.io/providers/hashicorp/random/latest/docs
 variable "amd_id" {
   type = string
@@ -145,6 +153,8 @@ locals {
     "environment" = var.aspNetEnvironment
     "application" = "Neptune"
     "client"      = "OCPW"
+    "team" = var.team
+    "projectNumber" = var.projectNumber
   }
 }
 
@@ -613,7 +623,7 @@ resource "datadog_synthetics_test" "test_webmvc" {
   }
   name    = "${var.environment} - ${var.domainWebMvc} Web MVC test"
   message = "Notify @rlee@esassoc.com @sgordon@esassoc.com"
-  tags    = ["env:${var.environment}", "managed:terraformed", "team:h2o"]
+  tags    = ["env:${var.environment}", "managed:terraformed", "team:${var.team}"]
 
   status = "live"
 }
@@ -648,7 +658,7 @@ resource "datadog_synthetics_test" "test_api" {
   }
   name    = "${var.environment} - ${var.domainApi} API test"
   message = "Notify @rlee@esassoc.com @sgordon@esassoc.com"
-  tags    = ["env:${var.environment}", "managed:terraformed", "team:h2o"]
+  tags    = ["env:${var.environment}", "managed:terraformed", "team:${var.team}"]
 
   status = "live"
 }
@@ -683,7 +693,7 @@ resource "datadog_synthetics_test" "test_web" {
   }
   name    = "${var.environment} - ${var.domainWeb} Web test"
   message = "Notify @rlee@esassoc.com @sgordon@esassoc.com"
-  tags    = ["env:${var.environment}", "managed:terraformed", "team:h2o"]
+  tags    = ["env:${var.environment}", "managed:terraformed", "team:${var.team}"]
 
   status = "live"
 }
