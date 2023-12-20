@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
-using Neptune.WebMvc.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.WebMvc.Common;
+using Neptune.WebMvc.Views.OnlandVisualTrashAssessment;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 

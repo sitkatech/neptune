@@ -1,0 +1,113 @@
+﻿@*-----------------------------------------------------------------------
+    <copyright file="Edit.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
+
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Common.BootstrapWrappers
+@using Neptune.WebMvc.Common.ModalDialog
+@using Neptune.WebMvc.Views.Shared
+@inherits Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea.EditLocation
+@model Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea.EditLocationViewModel
+
+@{ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);}
+
+@section JavascriptAndStylesContent
+{
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
+    <script src=@("https://npmcdn.com/@turf/turf/turf.min.js")></script>
+    <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.TrashAssessmentMap.js")"></script>
+    <script src="@Url.Content("~/Content/angular-controllers/Trash/EditAssessmentAreaLocation.js")"></script>
+}
+
+<div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 450px; margin: 0"></div>
+<div class="formPage">
+
+    @using (Html.BeginForm())
+    {
+        <div id="@ViewDataTyped.MapFormID">
+
+        </div>
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-xs-12" style="margin-bottom: 5px;">
+                <p class="text-danger" id="kinkDanger" style="display: none;">The Assessment Area contains edges that intersect each other. Please correct it before submitting.</p>
+            </div>
+            <div class="col-xs-6">
+                <button type="button" class="btn btn-neptune" onclick="resetZoom()">Reset Map Zoom</button>
+            </div>
+            <div class="col-xs-6 text-right">
+                <button type="button" id="pickParcelsButton" class="btn btn-neptune" onclick="pickParcels()">Pick Parcels</button>
+            </div>
+        </div>
+
+        <hr />
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+            </div>
+
+            <div class="col-xs-12 col-sm-9" style="text-align: right">
+                <button type="submit" class="btn btn-neptune" value="false" id="saveButton">Save</button>
+                <a class="btn btn-neptune" href="@ViewDataTyped.DetailUrl">Cancel</a>
+            </div>
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+    var mapInitJson = @Html.Raw(ViewDataTyped.MapInitJson.ToJsonHtmlString());
+    var editableFeatureJsonObject =
+        @Html.Raw(ViewDataTyped.MapInitJson.AssessmentAreaLayerGeoJson.ToJsonHtmlString());
+    var saveButtonID = "@ModalDialogFormHelper.SaveButtonID";
+
+    var geoServerUrl = "@ViewDataTyped.GeoServerUrl";
+
+    var assessmentAreaMap;
+
+    var assessmentAreaMapOptions = {
+        AssessmentAreaID: @ViewDataTyped.OnlandVisualTrashAssessmentAreaID,
+        ParcelUnionUrl: "@ViewDataTyped.ParcelUnionUrl",
+        ParcelsViaTransectUrlTemplate: "@ViewDataTyped.ParcelsViaTransectUrlTemplate"
+    }
+
+    jQuery(document).ready(function () {
+        assessmentAreaMap = new NeptuneMaps.AssessmentAreaMap(mapInitJson, "Terrain", geoServerUrl, editableFeatureJsonObject, assessmentAreaMapOptions);
+        assessmentAreaMap.createUpdateFeatureCollectionJsonFunctionAsClosure(
+            "@Html.NameFor(m=>m.WktAndAnnotations[0].Wkt)",
+            "@Html.NameFor(m => m.WktAndAnnotations[0].Annotation)",
+            "@ViewDataTyped.MapFormID");
+        assessmentAreaMap.updateFeatureCollectionJson();
+    });
+
+    var resetZoom = function() {
+        assessmentAreaMap.map.fitBounds(assessmentAreaMap.editableFeatureGroup.getBounds());
+    };
+
+    var pickParcels = function () {
+        if (!assessmentAreaMap.parcelPickerModeActive) {
+            assessmentAreaMap.getParcelsAndPick();
+            jQuery("#pickParcelsButton").html("Accept and Refine");
+        } else {
+            assessmentAreaMap.acceptParcelsAndRefine();
+            jQuery("#pickParcelsButton").html("Pick Parcels");
+        }
+    };
+
+    HookupCheckIfFormIsDirtyNoDisable(undefined);
+
+</script>

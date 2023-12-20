@@ -8,7 +8,6 @@ using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.OpenID;
 using Neptune.WebMvc.Services;
-using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Converters;
 using SendGrid.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,7 +17,6 @@ using Hangfire;
 using Hangfire.SqlServer;
 using Neptune.Jobs;
 using Neptune.Jobs.Services;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 {

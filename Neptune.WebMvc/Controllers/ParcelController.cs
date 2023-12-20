@@ -8,7 +8,9 @@ using Neptune.Models.DataTransferObjects;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
+using Neptune.WebMvc.Services.Filters;
 using Neptune.WebMvc.Views.Parcel;
+using NetTopologySuite.Features;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -125,6 +127,32 @@ namespace Neptune.WebMvc.Controllers
             var parcel = Parcels.GetParcelByParcelNumber(_dbContext, parcelNumber);
             var viewData = new SummaryForMapViewData(CurrentPerson, parcel);
             return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
+        }
+
+        [HttpGet("{parcelPrimaryKey}")]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("parcelPrimaryKey")]
+        public PartialViewResult TrashMapAssetPanel([FromRoute] ParcelPrimaryKey parcelPrimaryKey)
+        {
+            var parcel = parcelPrimaryKey.EntityObject;
+            var viewData = new TrashMapAssetPanelViewData(parcel);
+            return RazorPartialView<TrashMapAssetPanel, TrashMapAssetPanelViewData>(viewData);
+        }
+
+        [HttpGet]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
+        public ContentResult Union()
+        {
+            return Content("");
+        }
+
+        [HttpPost]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
+        public FeatureCollection Union(UnionOfParcelsViewModel viewModel)
+        {
+            var unionOfParcels = ParcelGeometries.UnionAggregateByParcelIDs(_dbContext, viewModel.ParcelIDs);
+            var featureCollection = unionOfParcels.MultiPolygonToFeatureCollection();
+            return featureCollection;
         }
     }
 }

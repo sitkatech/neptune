@@ -39,7 +39,7 @@ namespace Neptune.WebMvc.Views.Shared
         public readonly string HomeUrl;
 
         public NeptuneArea NeptuneArea { get; }
-        private LinkGenerator _linkGenerator { get; }
+        private LinkGenerator LinkGenerator { get; }
         public bool ShowLinkToArea { get; }
 
         public NeptuneNavBarViewData(LinkGenerator linkGenerator, Person currentPerson, string logInUrl,
@@ -47,7 +47,7 @@ namespace Neptune.WebMvc.Views.Shared
             NeptuneArea neptuneArea, bool isHomePage, string planningModuleUrl)
         {
             CurrentPerson = currentPerson;
-            _linkGenerator = linkGenerator;
+            LinkGenerator = linkGenerator;
 
             CurrentPersonDetailUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(currentPerson.PersonID));
             HomeUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, hc => hc.Index());
@@ -72,10 +72,10 @@ namespace Neptune.WebMvc.Views.Shared
             helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem("Request Support",
                 $@"<a href='{RequestSupportUrl}' target='_blank'>Request Support<span class='glyphicon glyphicon-new-window'></span></a>", "ToolHelp"));
 
-            helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(_linkGenerator, x => x.Training()), currentPerson, "Training", "ToolHelp"));
+            helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(LinkGenerator, x => x.Training()), currentPerson, "Training", "ToolHelp"));
             if (!currentPerson.IsAnonymousUser())
             {
-                helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HelpController>(_linkGenerator, x => x.BulkUploadRequest()),
+                helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HelpController>(LinkGenerator, x => x.BulkUploadRequest()),
                     currentPerson, "Bulk Upload Request", "ToolHelp"));
             }
 
@@ -96,9 +96,9 @@ namespace Neptune.WebMvc.Views.Shared
                 case NeptuneAreaEnum.Planning:
                     return PlanningModuleUrl;
                 case NeptuneAreaEnum.Trash:
-                    return SitkaRoute<Areas.Trash.Controllers.HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
+                    return SitkaRoute<TrashHomeController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
                 case NeptuneAreaEnum.OCStormwaterTools:
-                    return SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()) + "#welcome";
+                    return SitkaRoute<HomeController>.BuildUrlFromExpression(LinkGenerator, x => x.Index()) + "#welcome";
                 case NeptuneAreaEnum.Modeling:
                     return neptuneArea.NeptuneAreaName;
                 default:

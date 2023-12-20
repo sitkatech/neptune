@@ -1,6 +1,6 @@
 ﻿using Neptune.EFModels.Entities;
-using Neptune.WebMvc.Areas.Trash.Controllers;
 using Neptune.WebMvc.Common;
+using Neptune.WebMvc.Controllers;
 using NetTopologySuite.Features;
 
 namespace Neptune.WebMvc.Models

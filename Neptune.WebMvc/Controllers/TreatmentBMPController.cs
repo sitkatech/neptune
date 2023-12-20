@@ -1174,5 +1174,16 @@ namespace Neptune.WebMvc.Controllers
             return RazorView<UploadTreatmentBMPs, UploadTreatmentBMPsViewData, UploadTreatmentBMPsViewModel>(viewData,
                 viewModel);
         }
+
+        [HttpGet("{treatmentBMPPrimaryKey}")]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
+        public PartialViewResult TrashMapAssetPanel([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var viewData = new TrashMapAssetPanelViewData(_linkGenerator, treatmentBMP);
+            return RazorPartialView<TrashMapAssetPanel, TrashMapAssetPanelViewData>(viewData);
+        }
+
     }
 }

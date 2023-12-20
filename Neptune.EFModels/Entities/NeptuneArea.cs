@@ -3,7 +3,6 @@ namespace Neptune.EFModels.Entities
     public abstract partial class NeptuneArea
     {
         public abstract IRole GetRole(int roleID);
-//        public abstract string GetHomeUrl();
         public abstract bool IsAreaVisibleToPerson(Person person);
         public abstract string GetIconUrl();
 
@@ -28,11 +27,6 @@ namespace Neptune.EFModels.Entities
             return Role.AllLookupDictionary[roleID];
         }
 
-        //public override string GetHomeUrl()
-        //{
-        //    return SitkaRoute<Areas.Trash.Controllers.HomeController>.BuildUrlFromExpression(hc => hc.Index());
-        //}
-
         public override bool IsAreaVisibleToPerson(Person person)
         {
             return true;
@@ -55,11 +49,6 @@ namespace Neptune.EFModels.Entities
         {
             return Role.AllLookupDictionary[roleID];
         }
-
-        //public override string GetHomeUrl()
-        //{
-        //    return SitkaRoute<Controllers.HomeController>.BuildUrlFromExpression(hc => hc.Index()) + "#welcome";
-        //}
 
         public override bool IsAreaVisibleToPerson(Person person)
         {
@@ -84,11 +73,6 @@ namespace Neptune.EFModels.Entities
             return Role.AllLookupDictionary[roleID];
         }
 
-        //public override string GetHomeUrl()
-        //{
-        //    return SitkaRoute<Areas.Modeling.Controllers.HomeController>.BuildUrlFromExpression(hc => hc.Index());
-        //}
-
         public override bool IsAreaVisibleToPerson(Person person)
         {
             return true;
@@ -111,11 +95,6 @@ namespace Neptune.EFModels.Entities
         {
             return Role.AllLookupDictionary[roleID];
         }
-
-        //public override string GetHomeUrl()
-        //{
-        //    return NeptuneWebConfiguration.CanonicalHostNamePlanning;
-        //}
 
         public override bool IsAreaVisibleToPerson(Person person)
         {

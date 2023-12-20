@@ -77,6 +77,13 @@ namespace Neptune.WebMvc.Common
             LayerType = LayerGeoJsonType.Wms;
         }
 
+        /// <summary>
+        /// Needed by Serializer
+        /// </summary>
+        public LayerGeoJson()
+        {
+        }
+
         private static string GetColorString(string colorName)
         {
             var color = Color.FromName(colorName);

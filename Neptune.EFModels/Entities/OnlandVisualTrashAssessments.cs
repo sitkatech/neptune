@@ -12,6 +12,7 @@ public static class OnlandVisualTrashAssessments
                 .ThenInclude(x => x.Organization)
                 .Include(x => x.OnlandVisualTrashAssessmentArea)
                 .Include(x => x.OnlandVisualTrashAssessmentObservations)
+                .Include(x => x.CreatedByPerson)
             ;
     }
 
@@ -43,7 +44,9 @@ public static class OnlandVisualTrashAssessments
 
     public static List<OnlandVisualTrashAssessment> List(NeptuneDbContext dbContext)
     {
-        return GetImpl(dbContext).AsNoTracking().OrderByDescending(x => x.CompletedDate).ToList();
+        return GetImpl(dbContext).AsNoTracking().ToList().OrderByDescending(x => x.CompletedDate).ThenBy(x => x.OnlandVisualTrashAssessmentArea == null)
+            .ThenBy(x => x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName).ToList();
+
     }
 
     public static OnlandVisualTrashAssessment GetByIDForFeatureContextCheck(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID)
@@ -59,6 +62,12 @@ public static class OnlandVisualTrashAssessments
     public static List<OnlandVisualTrashAssessment> ListByOnlandVisualTrashAssessmentAreaID(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentAreaID)
     {
         return GetImpl(dbContext).AsNoTracking().Where(x => x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentAreaID).OrderByDescending(x => x.CompletedDate).ToList();
+    }
+
+    public static List<OnlandVisualTrashAssessment> ListByStormwaterJurisdictionIDList(NeptuneDbContext dbContext, IEnumerable<int> stormwaterJurisdictionIDList)
+    {
+        return GetImpl(dbContext).AsNoTracking().Where(x => stormwaterJurisdictionIDList.Contains(x.StormwaterJurisdictionID)).ToList().OrderByDescending(x => x.CompletedDate).ThenBy(x => x.OnlandVisualTrashAssessmentArea == null)
+            .ThenBy(x => x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName).ToList();
     }
 
     public static OnlandVisualTrashAssessment? GetTransectBackingAssessment(NeptuneDbContext dbContext, int? onlandVisualTrashAssessmentAreaID)

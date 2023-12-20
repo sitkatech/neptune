@@ -19,72 +19,16 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Irony.Parsing;
-using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Controllers;
 using NetTopologySuite.Features;
-using NetTopologySuite.Geometries;
-using ParcelController = Neptune.WebMvc.Areas.Trash.Controllers.ParcelController;
 
 namespace Neptune.WebMvc.Models
 {
     public static class TreatmentBMPModelExtensions
     {
-        //public static string GetDetailUrl(this vMostRecentTreatmentBMPAssessment vMostRecentTreatmentBMPAssessment)
-        //{
-        //    if (vMostRecentTreatmentBMPAssessment == null) { return ""; }
-        //    return DetailUrlTemplate.ParameterReplace(vMostRecentTreatmentBMPAssessment.TreatmentBMPID);
-        //}
-
-        //public static readonly UrlTemplate<int> DetailJurisdictionUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
-        //public static string GetJurisdictionSummaryUrl(this TreatmentBMP treatmentBMP)
-        //{
-        //    if (treatmentBMP == null) { return ""; }
-        //    return DetailJurisdictionUrlTemplate.ParameterReplace(treatmentBMP.StormwaterJurisdictionID);
-        //}
-
-        //public static string GetJurisdictionSummaryUrl(this vMostRecentTreatmentBMPAssessment vMostRecentTreatmentBMPAssessment)
-        //{
-        //    if (vMostRecentTreatmentBMPAssessment == null) { return ""; }
-        //    return DetailJurisdictionUrlTemplate.ParameterReplace(vMostRecentTreatmentBMPAssessment.StormwaterJurisdictionID);
-        //}
-
-        //public static readonly UrlTemplate<int> DetailOrganizationUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
-        //public static string GetOwnerOrganizationSummaryUrl(
-        //    this vMostRecentTreatmentBMPAssessment vMostRecentTreatmentBMPAssessment)
-        //{
-        //    if (vMostRecentTreatmentBMPAssessment == null) { return ""; }
-
-        //    return DetailOrganizationUrlTemplate.ParameterReplace(vMostRecentTreatmentBMPAssessment
-        //        .OwnerOrganizationID);
-        //}
-
-        //public static readonly UrlTemplate<int> TrashMapSummaryUrlTemplate = new UrlTemplate<int>(SitkaRoute<Areas.Trash.Controllers.TreatmentBMPController>.BuildUrlFromExpression(t => t.TrashMapAssetPanel(UrlTemplate.Parameter1Int)));
-        //public static string GetTrashMapAssetUrl(this TreatmentBMP treatmentBMP)
-        //{
-        //    return TrashMapSummaryUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
-        //}
-
-        //public static readonly UrlTemplate<int> EditBenchmarkAndThresholdsUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(t => t.Instructions(UrlTemplate.Parameter1Int)));
-        //public static string GetEditBenchmarkAndThresholdsUrl(this TreatmentBMP treatmentBMP)
-        //{
-        //    return EditBenchmarkAndThresholdsUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
-        //}
-
-        //public static readonly UrlTemplate<int> DelineationUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(t => t.ForTreatmentBMP(UrlTemplate.Parameter1Int)));
-        //public static string GetDelineationUrl(this TreatmentBMP treatmentBMP)
-        //{
-        //    return DelineationUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
-        //}
-
-        //public static HtmlString GetDisplayNameAsUrl(this TreatmentBMP treatmentBMP)
-        //{
-        //    return treatmentBMP == null ? new HtmlString(String.Empty) : UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID), treatmentBMP.TreatmentBMPName);
-        //}
-
         public static FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<TreatmentBMP> treatmentBMPs,
             LinkGenerator linkGenerator)
         {
@@ -113,7 +57,7 @@ namespace Neptune.WebMvc.Models
 
         public static FeatureCollection ToGeoJsonFeatureCollectionForTrashMap(this IEnumerable<TreatmentBMP> treatmentBMPs, LinkGenerator linkGenerator)
         {
-            UrlTemplate<int> trashMapAssetUrlTemplate = new(SitkaRoute<Areas.Trash.Controllers.TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.TrashMapAssetPanel(UrlTemplate.Parameter1Int)));
+            UrlTemplate<int> trashMapAssetUrlTemplate = new(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.TrashMapAssetPanel(UrlTemplate.Parameter1Int)));
             var featureCollection = new FeatureCollection();
             foreach (var treatmentBMP in treatmentBMPs)
             {
@@ -124,7 +68,7 @@ namespace Neptune.WebMvc.Models
                     { "FeatureColor", trashCaptureStatusType.FeatureColorOnTrashModuleMap() },
                     { "FeatureGlyph", "water" },
                     { "Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
-                    { "MapSummaryUrl", trashMapAssetUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID) },
+                    //{ "MapSummaryUrl", trashMapAssetUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID) },
                     { "TreatmentBMPID", treatmentBMP.TreatmentBMPID },
                     { "TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID },
                     { "TrashCaptureStatusTypeID", trashCaptureStatusType.TrashCaptureStatusTypeID },

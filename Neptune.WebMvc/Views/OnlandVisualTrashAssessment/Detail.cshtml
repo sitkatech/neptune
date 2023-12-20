@@ -1,0 +1,175 @@
+﻿@using Neptune.EFModels.Entities
+@using Neptune.WebMvc.Common.HtmlHelperExtensions
+@using Neptune.WebMvc.Common.ModalDialog
+@using Neptune.WebMvc.Views.OnlandVisualTrashAssessment
+@using Neptune.WebMvc.Views.Shared
+@inherits Neptune.WebMvc.Views.OnlandVisualTrashAssessment.Detail
+@section JavascriptAndStylesContent
+{
+
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
+    <script type="text/javascript" src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.TrashAssessmentMap.js")"></script>
+
+    <style>
+        .glyphicon-edit {
+            color: white;
+        }
+    </style>
+
+}
+
+
+@section RightOfPageTitle
+{
+    @if (ViewDataTyped.UserHasReturnToEditPermission)
+    {
+        @ModalDialogFormHelper.ModalDialogFormLink("Return to Edit", ViewDataTyped.ReturnToEditUrl, $"Return to Edit On-land Visual Trash Assessment for {ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}", 500, "Continue", "Cancel", new List<string> { "btn btn-neptune" }, null, null)
+    }
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Assessment Summary
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12 form-horizontal">
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-12 control-label">
+                                <label>Assessment Area</label>
+                            </div>
+                            <div class="col-sm-6 col-xs-12">
+                                @if (ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null)
+                                {
+                                    if (!ViewDataTyped.HasViewAssessmentAreaPermission)
+                                    {
+                                        @ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName
+                                    }
+                                    <a href="@ViewDataTyped.OnlandVisualTrashAssessmentAreaDetailUrl" alt="@ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName" title="@ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName">@ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName</a>
+                                }
+                                else
+                                {
+                                    @:Not Set
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-12 control-label">
+                                <label>Assessment Date</label>
+                            </div>
+                            <div class="col-sm-6 col-xs-12">
+                                @* ReSharper disable once PossibleInvalidOperationException *@
+                                @ViewDataTyped.OnlandVisualTrashAssessment.CompletedDate.Value.ToShortDateString()
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-12 control-label">
+                                <label> Assessment Type</label>
+                            </div>
+                            <div class="col-sm-6 col-xs-12">
+                                @ViewDataTyped.IsProgressAssessment
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-12 control-label">
+                                @Html.LabelWithSugarFor(FieldDefinitionType.AssessmentScore)
+                            </div>
+                            <div class="col-sm-6 col-xs-12">
+                                @ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentScoreDisplayName
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6 col-xs-12 form-horizontal">
+                        <div class="row">
+                            <div class="col-sm-3 col-xs-12 control-label">
+                                <label>Jurisdiction</label>
+                            </div>
+                            <div class="col-sm-9 col-xs-12">
+                                <a href="@ViewDataTyped.StormwaterJurisdictionDetailUrl">@ViewDataTyped.OnlandVisualTrashAssessment.StormwaterJurisdiction.Organization.GetDisplayName()</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 col-xs-12 control-label">
+                                <label>Notes</label>
+                            </div>
+                            <div class="col-sm-9 col-xs-12">
+                                <p>
+                                    @ViewDataTyped.OnlandVisualTrashAssessment.Notes
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Preliminary Source Identification
+            </div>
+            <div class="panel-body">
+                @{
+                    var br = true;
+                    foreach (var categoryRow in PreliminarySourceIdentificationCategory.All.Chunk(2))
+                    {
+                        <div class="row">
+                            @foreach (var category in categoryRow)
+                            {
+                                <div class="col-sm-6 col-xs-12">
+                                    <label>@category.PreliminarySourceIdentificationCategoryDisplayName</label><br />
+
+                                    @if (ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Any(x => x.PreliminarySourceIdentificationType.PreliminarySourceIdentificationCategory == category))
+                                    {
+                                        <ul style="list-style: none; margin-left: 0; padding-left: 0;">
+                                            @foreach (var type in category.PreliminarySourceIdentificationTypes)
+                                            {
+
+                                                var preliminarySourceIdentificationSimple = ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.SingleOrDefault(x => x.PreliminarySourceIdentificationTypeID == type.PreliminarySourceIdentificationTypeID);
+                                                if (preliminarySourceIdentificationSimple != null)
+                                                {
+                                                    <li style="margin-left:0">
+                                                        <label style="font-weight: normal;">
+                                                            @preliminarySourceIdentificationSimple.GetDisplay()
+                                                        </label>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <p class="systemText">No Preliminary Sources identified for @category.PreliminarySourceIdentificationCategoryDisplayName</p>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        if (br)
+                        {
+                            <br />
+                            br = false;
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Observations
+            </div>
+            <div class="panel-body">
+
+                @{ TrashAssessmentSummaryMap.RenderPartialView(Html, ViewDataTyped.TrashAssessmentSummaryMapViewData); }
+            </div>
+        </div>
+    </div>
+</div>

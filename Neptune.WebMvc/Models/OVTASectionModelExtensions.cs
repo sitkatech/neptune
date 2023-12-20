@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Html;
 using Neptune.EFModels.Entities;
-using Neptune.WebMvc.Areas.Trash.Controllers;
-using Neptune.WebMvc.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.WebMvc.Common;
+using Neptune.WebMvc.Common.Models;
+using Neptune.WebMvc.Controllers;
+using Neptune.WebMvc.Views.OnlandVisualTrashAssessment;
 using OVTASection = Neptune.EFModels.Entities.OVTASection;
 
 namespace Neptune.WebMvc.Models
@@ -14,9 +15,9 @@ namespace Neptune.WebMvc.Models
             switch (ovtaSection.ToEnum)
             {
                 case OVTASectionEnum.Instructions:
-                    return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Instructions(ovta.OnlandVisualTrashAssessmentID));
+                    return ovta == null ? SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Instructions(ModelObjectHelpers.NotYetAssignedID)) : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Instructions(ovta));
                 case OVTASectionEnum.InitiateOVTA:
-                    return ovta == null ? SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.InitiateOVTA(null)) : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.InitiateOVTA(ovta.OnlandVisualTrashAssessmentID));
+                    return ovta == null ? SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.InitiateOVTA(ModelObjectHelpers.NotYetAssignedID)) : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.InitiateOVTA(ovta));
                 case OVTASectionEnum.RecordObservations:
                     return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.RecordObservations(ovta));
                 case OVTASectionEnum.AddOrRemoveParcels:

@@ -22,8 +22,8 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.WebMvc.Common;
 using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
-using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentExport;
 using Neptune.WebMvc.Controllers;
+using Neptune.WebMvc.Views.OnlandVisualTrashAssessmentExport;
 using NetTopologySuite.Features;
 
 namespace Neptune.WebMvc.Models

@@ -1,0 +1,166 @@
+﻿@using Neptune.EFModels.Entities
+@using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Common.BootstrapWrappers
+@using Neptune.WebMvc.Common.DhtmlWrappers
+@using Neptune.WebMvc.Common.HtmlHelperExtensions
+@using Neptune.WebMvc.Common.ModalDialog
+@using Neptune.WebMvc.Views.Shared
+@inherits Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea.Detail
+
+@section JavascriptAndStylesContent
+{
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+
+}
+
+@section RightOfPageTitle
+{
+    @if (ViewDataTyped.UserHasAssessmentAreaManagePermission)
+    {
+        @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")} Begin OVTA", ViewDataTyped.NewUrl, "Begin OVTA", 500, "Begin", "Cancel", new List<string> { "btn btn-neptune" }, null, null)
+    }
+}
+
+<div class="row">
+    <div class="col-sm-6 col-xs-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Details
+                @if (ViewDataTyped.UserHasAssessmentAreaManagePermission)
+                {
+                    <span class="pull-right">
+                        @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")}", ViewDataTyped.EditDetailsUrl, "Edit Details", 800, "Save", "Cancel", new List<string>(), null, null)
+                    </span>
+                }
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-5 text-right"><label>Assessment Area Name</label></div>
+                    <div class="col-sm-7">@ViewDataTyped.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5 text-right"><label>Jurisdiction</label></div>
+                    <div class="col-sm-7">
+                        <a href="@ViewDataTyped.StormwaterJurisdictionDetailUrl">@ViewDataTyped.OnlandVisualTrashAssessmentArea.StormwaterJurisdiction.Organization.GetDisplayName()</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5 text-right"><label>Last Assessment Date</label></div>
+                    <div class="col-sm-7">@ViewDataTyped.LastAssessmentDateHtmlString</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5 text-right">@Html.LabelWithSugarFor(FieldDefinitionType.BaselineScore)</div>
+                    <div class="col-sm-7">@ViewDataTyped.BaselineScoreHtmlString</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5 text-right">@Html.LabelWithSugarFor(FieldDefinitionType.ProgressScore)</div>
+                    <div class="col-sm-7">@ViewDataTyped.ProgressScoreHtmlString</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5 text-right"><label>Assessment Area Description</label></div>
+                    <div class="col-sm-7">@ViewDataTyped.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xs-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Location
+
+                @if (ViewDataTyped.UserHasEditLocationPermission)
+                {
+                    @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")}", ViewDataTyped.ConfirmEditLocationUrl, "Edit Location", 500, "OK", "Cancel", new List<string> { "pull-right" }, null, null)
+                }
+            </div>
+            <div class="panel-body">
+                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px;"></div>
+                <p class="systemText" style="margin-top: 10px; margin-bottom: 0;">The transect line from the original assessment of this area is shown, if available, along with the observations from that assessment.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Assessments
+            </div>
+            <div class="panel-body">
+                @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:400px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var summaryMap;
+    var lastSelected;
+    var observationsLayer;
+    jQuery(function() {
+        var mapInitJson = @Html.Raw(ViewDataTyped.MapInitJson.ToJsonHtmlString());
+        window.mapInitJson = mapInitJson;
+        summaryMap = new NeptuneMaps.Map(mapInitJson, "Terrain", "@ViewDataTyped.GeoServerUrl");
+        var assessmentAreaLayer = L.geoJson(mapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection, {
+            style: function (feature) {
+                return {
+                    fillColor: NeptuneMaps.Constants.defaultPolyColor,
+                    fill: true,
+                    fillOpacity: 0.5,
+                    color: NeptuneMaps.Constants.defaultPolyColor,
+                    weight: 2,
+                    stroke: true
+                };
+            }
+        });
+
+        window.summaryMap = summaryMap;
+
+        assessmentAreaLayer.addTo(summaryMap.map);
+        summaryMap.layerControl.addOverlay(assessmentAreaLayer, "<span><img src='/Content/img/legendImages/workflowAssessmentArea.png' height='12px' /> Assessment Area</span>");
+
+
+        if (mapInitJson.TransectLineLayerGeoJson) {
+
+            var transectLineLayer = L.geoJson(mapInitJson.TransectLineLayerGeoJson.GeoJsonFeatureCollection, {
+                style: function (feature) {
+                    return {
+                        fillOpacity: 0.5,
+                        color: "#FF00FF",
+                        weight: 2,
+                        stroke: true
+                    };
+                }
+            });
+
+            transectLineLayer.addTo(summaryMap.map);
+
+            summaryMap.layerControl.addOverlay(transectLineLayer, "<span><img src='/Content/img/legendImages/transectLine.png' height='12px' /> Transect</span>");
+        }
+
+        if (mapInitJson.ObservationsLayerGeoJson) {
+            var observationsLayer = L.geoJSON(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
+                {
+                    pointToLayer: function(feature, latlng) {
+                        var icon = L.MakiMarkers.icon({
+                            icon: feature.properties.FeatureGlyph,
+                            color: feature.properties.FeatureColor,
+                            size: "m"
+                        });
+
+                        return L.marker(latlng,
+                            {
+                                icon: icon,
+                                title: feature.properties.Name,
+                                alt: feature.properties.Name
+                            });
+                    }
+                }
+            );
+            observationsLayer.addTo(summaryMap.map);
+            summaryMap.layerControl.addOverlay(observationsLayer, "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+FF00FF@2x.png' height='30px' /> Observations</span>");
+        }
+        summaryMap.map.fitBounds(assessmentAreaLayer.getBounds());
+    });
+</script>

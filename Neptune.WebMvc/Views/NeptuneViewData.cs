@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Neptune.EFModels.Entities;
-using Neptune.WebMvc.Areas.Trash.Controllers;
 using Neptune.WebMvc.Views.Shared;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Controllers;
