@@ -19,20 +19,17 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-
-
 using ImageMagick;
 
 namespace Neptune.Common
 {
     public class ImageHelper
     {
-
         public static async Task<byte[]> ScaleImage(byte[] imageData, int maxWidth, int maxHeight)
         {
             using var image = new MagickImage(imageData);
             image.Format = MagickFormat.Png;
-            image.Resize(maxWidth,maxHeight);
+            image.Resize(maxWidth, maxHeight);
             using var ms = new MemoryStream();
             await image.WriteAsync(ms);
             return image.ToByteArray();

@@ -20,7 +20,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
         public TrashAssessmentSummaryMapViewData TrashAssessmentSummaryMapViewData { get; }
         public IEnumerable<PreliminarySourceIdentificationType> PreliminarySourceIdentificationTypeOthers { get; }
 
-        public FinalizeOVTAViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, WebConfiguration webConfiguration, EFModels.Entities.OnlandVisualTrashAssessment ovta, OVTASummaryMapInitJson ovtaSummaryMapInitJson, IEnumerable<SelectListItem> scores, string geoServerUrl)
+        public FinalizeOVTAViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, WebConfiguration webConfiguration, EFModels.Entities.OnlandVisualTrashAssessment ovta, OVTASummaryMapInitJson ovtaSummaryMapInitJson, IEnumerable<SelectListItem> scores, string geoServerUrl, ICollection<OnlandVisualTrashAssessmentObservation> onlandVisualTrashAssessmentObservations)
             : base(httpContext, linkGenerator, currentPerson, webConfiguration, EFModels.Entities.OVTASection.FinalizeOVTA, ovta)
         {
             Scores = scores;
@@ -35,7 +35,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
 
             PreliminarySourceIdentificationTypeOthers = PreliminarySourceIdentificationType.All.Where(x => x.IsOther());
 
-            TrashAssessmentSummaryMapViewData = new TrashAssessmentSummaryMapViewData(ovtaSummaryMapInitJson, ovta.OnlandVisualTrashAssessmentObservations, geoServerUrl);
+            TrashAssessmentSummaryMapViewData = new TrashAssessmentSummaryMapViewData(ovtaSummaryMapInitJson, onlandVisualTrashAssessmentObservations, geoServerUrl);
         }
     }
 }

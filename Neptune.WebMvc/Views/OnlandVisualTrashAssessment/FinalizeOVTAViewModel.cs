@@ -93,8 +93,9 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
                         OnlandVisualTrashAssessmentAreaGeometry = onlandVisualTrashAssessmentAreaGeometry2771,
                         OnlandVisualTrashAssessmentAreaGeometry4326 = onlandVisualTrashAssessmentAreaGeometry2771.ProjectTo4326()
                     };
-
+                    await dbContext.OnlandVisualTrashAssessmentAreas.AddAsync(onlandVisualTrashAssessmentArea);
                     await dbContext.SaveChangesAsync();
+                    await dbContext.Entry(onlandVisualTrashAssessmentArea).ReloadAsync();
 
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
                         onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
@@ -144,6 +145,10 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
                 onlandVisualTrashAssessment.DraftAreaDescription = AssessmentAreaDescription;
             }
 
+            await dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Where(x =>
+                    x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)
+                .ExecuteDeleteAsync();
+
             var onlandVisualTrashAssessmentPreliminarySourceIdentificationTypesToUpdate =
                 PreliminarySourceIdentifications.Where(x => x.Has).Select(x =>
                     new OnlandVisualTrashAssessmentPreliminarySourceIdentificationType
@@ -154,16 +159,13 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
                         ExplanationIfTypeIsOther = x.ExplanationIfTypeIsOther
                     }).ToList();
 
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Merge(onlandVisualTrashAssessmentPreliminarySourceIdentificationTypesToUpdate,
-                allOnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes,
-                (z,w)=>z.OnlandVisualTrashAssessmentID == w.OnlandVisualTrashAssessmentID && z.PreliminarySourceIdentificationTypeID == w.PreliminarySourceIdentificationTypeID,
-                (z,w) => z.ExplanationIfTypeIsOther = w.ExplanationIfTypeIsOther
-                );
+            await dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.AddRangeAsync(onlandVisualTrashAssessmentPreliminarySourceIdentificationTypesToUpdate);
 
             // bug?: why are we nulling these unconditionally?
             onlandVisualTrashAssessment.DraftAreaDescription = null;
             onlandVisualTrashAssessment.DraftAreaName = null;
             onlandVisualTrashAssessment.DraftGeometry = null;
+            await dbContext.SaveChangesAsync();
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Humanizer;
+using Microsoft.EntityFrameworkCore;
 using Neptune.Common;
+using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
+using Neptune.WebMvc.Common.Models;
 
 namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
 {
@@ -25,43 +28,66 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
         public async Task UpdateModel(NeptuneDbContext dbContext, Neptune.EFModels.Entities.OnlandVisualTrashAssessment ovta,
             DbSet<OnlandVisualTrashAssessmentObservation> allOnlandVisualTrashAssessmentObservations)
         {
-            // this is a dict instead of the usual list so that we can permanentize the staged photos later.
-            var updatedDict =
-                Observations?.Select(x =>
-                        new KeyValuePair<OnlandVisualTrashAssessmentObservationSimple,
-                            OnlandVisualTrashAssessmentObservation>(x, x.ToOnlandVisualTrashAssessmentObservation()))
-                    .ToList().ToDictionary(x => x.Key, x => x.Value) ??
-                new Dictionary<OnlandVisualTrashAssessmentObservationSimple, OnlandVisualTrashAssessmentObservation>();
+            var observations = Observations ?? new List<OnlandVisualTrashAssessmentObservationSimple>();
 
-            ovta.OnlandVisualTrashAssessmentObservations.Merge(updatedDict.Values, allOnlandVisualTrashAssessmentObservations,
-                (x, y) => x.OnlandVisualTrashAssessmentObservationID == y.OnlandVisualTrashAssessmentObservationID,
-                (x, y) =>
-                {
-                    x.Note = y.Note;
-                    x.LocationPoint = y.LocationPoint;
-                    x.LocationPoint4326 = y.LocationPoint4326;
-                });
+            //delete
+            await dbContext.OnlandVisualTrashAssessmentObservationPhotos.Include(x => x.OnlandVisualTrashAssessmentObservation).Where(x => x.OnlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentID == ovta.OnlandVisualTrashAssessmentID && !observations.Select(y => y.OnlandVisualTrashAssessmentObservationID).Contains(x.OnlandVisualTrashAssessmentObservationID)).ExecuteDeleteAsync();
+            await dbContext.OnlandVisualTrashAssessmentObservations.Where(x => x.OnlandVisualTrashAssessmentID == ovta.OnlandVisualTrashAssessmentID && !observations.Select(y => y.OnlandVisualTrashAssessmentObservationID).Contains(x.OnlandVisualTrashAssessmentObservationID)).ExecuteDeleteAsync();
 
-            foreach (var x in updatedDict)
+            //add
+            foreach (var onlandVisualTrashAssessmentObservationSimple in observations.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.OnlandVisualTrashAssessmentObservationID)))
             {
-                var dto = x.Key;
-                // have to do this weird lookup otherwise line 63 will create a brand new ovtao
-                var entityID = x.Value.OnlandVisualTrashAssessmentObservationID;
-                var actualEntity = await dbContext.OnlandVisualTrashAssessmentObservations.FindAsync(entityID);
-                if (!dto.PhotoStagingID.HasValue)
+                var locationPoint4326 = GeometryHelper.CreateLocationPoint4326FromLatLong(onlandVisualTrashAssessmentObservationSimple.LocationY.GetValueOrDefault(), onlandVisualTrashAssessmentObservationSimple.LocationX.GetValueOrDefault());
+
+                var locationPoint2771 = locationPoint4326.ProjectTo2771();
+
+                var onlandVisualTrashAssessmentObservation = new OnlandVisualTrashAssessmentObservation
+                {
+                    OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentObservationSimple.OnlandVisualTrashAssessmentID, 
+                    LocationPoint = locationPoint2771,
+                    LocationPoint4326 = locationPoint4326,
+                    Note = onlandVisualTrashAssessmentObservationSimple.Note, 
+                    ObservationDatetime = onlandVisualTrashAssessmentObservationSimple.ObservationDateTime
+                };
+                var photoStaging = await dbContext.OnlandVisualTrashAssessmentObservationPhotoStagings.FindAsync(onlandVisualTrashAssessmentObservationSimple.PhotoStagingID.Value);
+
+                var onlandVisualTrashAssessmentObservationPhoto = new OnlandVisualTrashAssessmentObservationPhoto
+                {
+                    FileResourceID = photoStaging.FileResourceID,
+                    OnlandVisualTrashAssessmentObservation = onlandVisualTrashAssessmentObservation
+                };
+                await dbContext.OnlandVisualTrashAssessmentObservations.AddAsync(
+                    onlandVisualTrashAssessmentObservation);
+                await dbContext.OnlandVisualTrashAssessmentObservationPhotos.AddAsync(onlandVisualTrashAssessmentObservationPhoto);
+            }
+
+            //update
+            foreach (var onlandVisualTrashAssessmentObservationSimple in observations.Where(x =>
+                         ModelObjectHelpers.IsRealPrimaryKeyValue(x.OnlandVisualTrashAssessmentObservationID)))
+            {
+                var onlandVisualTrashAssessmentObservation = await dbContext.OnlandVisualTrashAssessmentObservations.FindAsync(onlandVisualTrashAssessmentObservationSimple.OnlandVisualTrashAssessmentObservationID);
+                var locationPoint4326 = GeometryHelper.CreateLocationPoint4326FromLatLong(onlandVisualTrashAssessmentObservationSimple.LocationY.GetValueOrDefault(),
+                    onlandVisualTrashAssessmentObservationSimple.LocationX.GetValueOrDefault());
+
+                var locationPoint2771 = locationPoint4326.ProjectTo2771();
+                onlandVisualTrashAssessmentObservation.LocationPoint = locationPoint2771;
+                onlandVisualTrashAssessmentObservation.Note = onlandVisualTrashAssessmentObservationSimple.Note;
+                onlandVisualTrashAssessmentObservation.ObservationDatetime = onlandVisualTrashAssessmentObservationSimple.ObservationDateTime;
+                onlandVisualTrashAssessmentObservation.LocationPoint4326 = locationPoint4326;
+
+                if (!onlandVisualTrashAssessmentObservationSimple.PhotoStagingID.HasValue)
                 {
                     return; // no one cares
                 }
 
-                var photoStaging = ((OnlandVisualTrashAssessmentObservationPhotoStagingPrimaryKey)dto.PhotoStagingID.Value).EntityObject;
-
-
+                var photoStaging = await dbContext.OnlandVisualTrashAssessmentObservationPhotoStagings.FindAsync(onlandVisualTrashAssessmentObservationSimple.PhotoStagingID.Value);
                 // ReSharper disable once ObjectCreationAsStatement
-                new OnlandVisualTrashAssessmentObservationPhoto
+                var onlandVisualTrashAssessmentObservationPhoto = new OnlandVisualTrashAssessmentObservationPhoto
                 {
-                    FileResource = photoStaging.FileResource,
-                    OnlandVisualTrashAssessmentObservation = actualEntity
+                    FileResourceID = photoStaging.FileResourceID,
+                    OnlandVisualTrashAssessmentObservationID = onlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentObservationID
                 };
+                await dbContext.OnlandVisualTrashAssessmentObservationPhotos.AddAsync(onlandVisualTrashAssessmentObservationPhoto);
             }
 
             await dbContext.SaveChangesAsync();

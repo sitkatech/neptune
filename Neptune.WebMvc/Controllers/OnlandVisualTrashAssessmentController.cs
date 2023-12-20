@@ -40,7 +40,8 @@ namespace Neptune.WebMvc.Controllers
             var onlandVisualTrashAssessment = OnlandVisualTrashAssessments.GetByID(_dbContext, onlandVisualTrashAssessmentPrimaryKey);
             Check.Assert(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus == OnlandVisualTrashAssessmentStatus.Complete, "No details are available for this assessment because it has not been completed.");
 
-            var observationsLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
+            var onlandVisualTrashAssessmentObservations = OnlandVisualTrashAssessmentObservations.ListByOnlandVisualTrashAssessmentID(_dbContext, onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID);
+            var observationsLayerGeoJson = onlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
             var assessmentAreaLayerGeoJson = onlandVisualTrashAssessment.GetAssessmentAreaLayerGeoJson(false);
 
             var transectLineLayerGeoJson = onlandVisualTrashAssessment.GetTransectLineLayerGeoJson();
@@ -51,7 +52,7 @@ namespace Neptune.WebMvc.Controllers
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(_linkGenerator, x =>
                     x.EditStatusToAllowEdit(onlandVisualTrashAssessment));
             var userHasPermissionToReturnToEdit = new OnlandVisualTrashAssessmentEditStatusFeature().HasPermission(CurrentPerson, onlandVisualTrashAssessment).HasPermission;
-            var trashAssessmentSummaryMapViewData = new TrashAssessmentSummaryMapViewData(ovtaSummaryMapInitJson, onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations, _webConfiguration.MapServiceUrl);
+            var trashAssessmentSummaryMapViewData = new TrashAssessmentSummaryMapViewData(ovtaSummaryMapInitJson, onlandVisualTrashAssessmentObservations, _webConfiguration.MapServiceUrl);
             var viewData = new DetailViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, onlandVisualTrashAssessment, trashAssessmentSummaryMapViewData, returnToEditUrl, userHasPermissionToReturnToEdit, new OnlandVisualTrashAssessmentAreaViewFeature()
                 .HasPermission(CurrentPerson, onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea)
                 .HasPermission);
@@ -174,6 +175,7 @@ namespace Neptune.WebMvc.Controllers
                 };
                 _dbContext.OnlandVisualTrashAssessments.Add(onlandVisualTrashAssessment);
             }
+
 
             viewModel.UpdateModel(_dbContext, onlandVisualTrashAssessment);
             await _dbContext.SaveChangesAsync();
@@ -367,7 +369,8 @@ namespace Neptune.WebMvc.Controllers
         private ViewResult ViewFinalizeOVTA(OnlandVisualTrashAssessment onlandVisualTrashAssessment,
             FinalizeOVTAViewModel viewModel)
         {
-            var observationsLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
+            var onlandVisualTrashAssessmentObservations = OnlandVisualTrashAssessmentObservations.ListByOnlandVisualTrashAssessmentID(_dbContext, onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID);
+            var observationsLayerGeoJson = onlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
             var assessmentAreaLayerGeoJson = onlandVisualTrashAssessment.GetAssessmentAreaLayerGeoJson(false);
             var transectLineLayerGeoJson = onlandVisualTrashAssessment.GetTransectLineLayerGeoJson();
             var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext).ToList();
@@ -377,7 +380,7 @@ namespace Neptune.WebMvc.Controllers
             var scoresSelectList = OnlandVisualTrashAssessmentScore.All.ToSelectListWithDisabledEmptyFirstRow(x => x.OnlandVisualTrashAssessmentScoreID.ToString(CultureInfo.InvariantCulture), x => x.OnlandVisualTrashAssessmentScoreDisplayName.ToString(CultureInfo.InvariantCulture),
                 "Choose a score");
             var viewData = new FinalizeOVTAViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration,
-                onlandVisualTrashAssessment, ovtaSummaryMapInitJson, scoresSelectList, _webConfiguration.MapServiceUrl);
+                onlandVisualTrashAssessment, ovtaSummaryMapInitJson, scoresSelectList, _webConfiguration.MapServiceUrl, onlandVisualTrashAssessmentObservations);
             return RazorView<FinalizeOVTA, FinalizeOVTAViewData, FinalizeOVTAViewModel>(viewData, viewModel);
         }
 
@@ -395,7 +398,6 @@ namespace Neptune.WebMvc.Controllers
 
             await _dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.LoadAsync();
             await viewModel.UpdateModel(_dbContext, onlandVisualTrashAssessment, _dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes);
-            await _dbContext.SaveChangesAsync();
             SetMessageForDisplay("The OVTA was successfully finalized");
 
 

@@ -55,7 +55,6 @@ namespace Neptune.EFModels.Entities
 
             var onlandVisualTrashAssessmentObservation = new OnlandVisualTrashAssessmentObservation
             {
-                OnlandVisualTrashAssessmentObservationID = OnlandVisualTrashAssessmentObservationID,
                 OnlandVisualTrashAssessmentID = OnlandVisualTrashAssessmentID, LocationPoint = locationPoint2771,
                 Note = Note, ObservationDatetime = ObservationDateTime, LocationPoint4326 = locationPoint4326
             };

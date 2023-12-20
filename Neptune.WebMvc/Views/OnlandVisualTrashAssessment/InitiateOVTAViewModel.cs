@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Neptune.Common;
-using Neptune.Common.DesignByContract;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.WebMvc.Common;
-using Neptune.WebMvc.Common.Models;
 
 namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
 {

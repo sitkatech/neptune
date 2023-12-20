@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -6,6 +7,7 @@ using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.Mvc;
 using Neptune.WebMvc.Security;
+using Neptune.WebMvc.Services;
 using Neptune.WebMvc.Services.Filters;
 
 namespace Neptune.WebMvc.Controllers
@@ -14,8 +16,11 @@ namespace Neptune.WebMvc.Controllers
     //[Route("[area]/[controller]/[action]", Name = "[area]_[controller]_[action]")]
     public class OnlandVisualTrashAssessmentPhotoController : NeptuneBaseController<OnlandVisualTrashAssessmentPhotoController>
     {
-        public OnlandVisualTrashAssessmentPhotoController(NeptuneDbContext dbContext, ILogger<OnlandVisualTrashAssessmentPhotoController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
+        private readonly FileResourceService _fileResourceService;
+
+        public OnlandVisualTrashAssessmentPhotoController(NeptuneDbContext dbContext, ILogger<OnlandVisualTrashAssessmentPhotoController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
+            _fileResourceService = fileResourceService;
         }
         // photo handling
         // these endpoints are more API-like than we usually do--they support AJAX manipulation of OVTA Photos from the OVTA workflow.
@@ -36,45 +41,32 @@ namespace Neptune.WebMvc.Controllers
             OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
             ObservationPhotoStagingSimple observationPhotoStagingSimple)
         {
-            // todo: ovta photos
-            //if (!ModelState.IsValid)
-            //{
-            //    Response.StatusCode = (int) HttpStatusCode.BadRequest;
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
-            //    // This endpoint can error out in a completely client-dependent way where the user's only recourse
-            //    // is to try again until it works. We've never seen a server-side error from this endpoint that we
-            //    // would be able to fix per-se, so just cancel the logging so we don't get bothered by it.
-            //    SitkaGlobalBase.CancelErrorLoggingFromApplicationEnd();
+                return Json(new
+                {
+                    Error =
+                        "There was an error uploading the image. Please try again."
+                });
+            }
 
-            //    return Json(new
-            //    {
-            //        Error =
-            //            "There was an error uploading the image. Please try again."
-            //    });
-            //}
+            var fileResource = await _fileResourceService.CreateNewFromIFormFile(observationPhotoStagingSimple.Photo, CurrentPerson);
 
-            //// for now, setting arbitrary-ish (750) max height and width that roughly corresponds with the largest rendered size on the detail page
-            //var resizedImage =
-            //    ImageHelper.ScaleImage(
-            //        FileResource.ConvertHttpPostedFileToByteArray(observationPhotoStagingSimple.Photo), 750, 750);
-            
-            //var resizedImageBytes = ImageHelper.ImageToByteArrayAndCompress(resizedImage);
+            var onlandVisualTrashAssessmentObservationPhotoStaging = new OnlandVisualTrashAssessmentObservationPhotoStaging
+            {
+                FileResource = fileResource,
+                OnlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject
+            };
+            await _dbContext.OnlandVisualTrashAssessmentObservationPhotoStagings.AddAsync(onlandVisualTrashAssessmentObservationPhotoStaging);
+            await _dbContext.SaveChangesAsync();
 
-            //var fileResource = FileResource.CreateNewResizedImageFileResource(observationPhotoStagingSimple.Photo, resizedImageBytes, CurrentPerson);
-
-            //var staging = new OnlandVisualTrashAssessmentObservationPhotoStaging
-            //{
-            //    FileResource = fileResource,
-            //    OnlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject
-            //};
-            //await _dbContext.SaveChangesAsync();
-
-            //return Json(new
-            //{
-            //    PhotoStagingID = staging.OnlandVisualTrashAssessmentObservationPhotoStagingID,
-            //    PhotoStagingUrl = staging.FileResource.GetFileResourceUrl()
-            //});
-            return Ok();
+            return Json(new
+            {
+                PhotoStagingID = onlandVisualTrashAssessmentObservationPhotoStaging.OnlandVisualTrashAssessmentObservationPhotoStagingID,
+                PhotoStagingUrl = onlandVisualTrashAssessmentObservationPhotoStaging.FileResource.GetFileResourceUrl()
+            });
         }
 
         [HttpGet]

@@ -12,6 +12,7 @@ public static class OnlandVisualTrashAssessments
                 .ThenInclude(x => x.Organization)
                 .Include(x => x.OnlandVisualTrashAssessmentArea)
                 .Include(x => x.OnlandVisualTrashAssessmentObservations)
+                .Include(x => x.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes)
                 .Include(x => x.CreatedByPerson)
             ;
     }
