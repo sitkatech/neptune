@@ -18,9 +18,9 @@ namespace Neptune.WebMvc.Views.TrashHome
     public class IndexViewData : TrashModuleViewData
     {
         public ViewDataForAngularClass ViewDataForAngular { get; }
-        public MapInitJson OVTABasedMapInitJson { get; }
-        public MapInitJson AreaBasedMapInitJson { get; }
-        public MapInitJson LoadBasedMapInitJson { get; }
+        public TrashModuleMapInitJson OVTABasedMapInitJson { get; }
+        public StormwaterMapInitJson AreaBasedMapInitJson { get; }
+        public StormwaterMapInitJson LoadBasedMapInitJson { get; }
 
         public string AllOVTAsUrl { get; }
         public string FindBMPUrl { get; }
@@ -34,8 +34,8 @@ namespace Neptune.WebMvc.Views.TrashHome
 
         public IEnumerable<SelectListItem> JurisdictionSelectList { get; }
 
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, WebConfiguration webConfiguration, EFModels.Entities.NeptunePage neptunePage, MapInitJson ovtaBasedMapInitJson,
-            MapInitJson areaBasedMapInitJson, MapInitJson loadBasedMapInitJson,
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, WebConfiguration webConfiguration, EFModels.Entities.NeptunePage neptunePage, TrashModuleMapInitJson ovtaBasedMapInitJson,
+            StormwaterMapInitJson areaBasedMapInitJson, StormwaterMapInitJson loadBasedMapInitJson,
             IEnumerable<Neptune.EFModels.Entities.TreatmentBMP> treatmentBMPs, List<TrashCaptureStatusType> trashCaptureStatusTypes,
             List<Neptune.EFModels.Entities.Parcel> parcels, List<StormwaterJurisdiction> stormwaterJurisdictions,
             FeatureCollection geoJsonForJurisdictions, EFModels.Entities.NeptunePage neptunePageTrashModuleProgramOverview) : base(httpContext, linkGenerator, currentPerson, webConfiguration, neptunePage)
@@ -74,11 +74,11 @@ namespace Neptune.WebMvc.Views.TrashHome
         public class ViewDataForAngularClass : TrashModuleMapViewDataForAngularBaseClass
         {
 
-            public MapInitJson MapInitJson { get; }
+            public TrashModuleMapInitJson MapInitJson { get; }
 
-            public MapInitJson OVTABasedMapInitJson { get; }
-            public MapInitJson AreaBasedMapInitJson { get; }
-            public MapInitJson LoadBasedMapInitJson { get; }
+            public TrashModuleMapInitJson OVTABasedMapInitJson { get; }
+            public StormwaterMapInitJson AreaBasedMapInitJson { get; }
+            public StormwaterMapInitJson LoadBasedMapInitJson { get; }
 
             public string AreaBasedCalculationsUrlTemplate { get; }
 
@@ -102,9 +102,9 @@ namespace Neptune.WebMvc.Views.TrashHome
             public bool CurrentUserIsAnonymousOrUnassigned { get; set; }
 
 
-            public ViewDataForAngularClass(LinkGenerator linkGenerator, MapInitJson ovtaBasedMapInitJson,
-                MapInitJson areaBasedMapInitJson,
-                MapInitJson loadBasedMapInitJson, IEnumerable<EFModels.Entities.TreatmentBMP> treatmentBMPs,
+            public ViewDataForAngularClass(LinkGenerator linkGenerator, TrashModuleMapInitJson ovtaBasedMapInitJson,
+                StormwaterMapInitJson areaBasedMapInitJson,
+                StormwaterMapInitJson loadBasedMapInitJson, IEnumerable<EFModels.Entities.TreatmentBMP> treatmentBMPs,
                 List<TrashCaptureStatusType> trashCaptureStatusTypeSimples, List<EFModels.Entities.Parcel> parcels,
                 string stormwaterJurisdictionCqlFilter, bool showDropdown,
                 string negativeStormwaterJurisdictionCqlFilter, FeatureCollection jurisdictionsGeoJson,

@@ -68,7 +68,7 @@ namespace Neptune.WebMvc.Models
                     { "FeatureColor", trashCaptureStatusType.FeatureColorOnTrashModuleMap() },
                     { "FeatureGlyph", "water" },
                     { "Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
-                    //{ "MapSummaryUrl", trashMapAssetUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID) },
+                    { "MapSummaryUrl", trashMapAssetUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID) },
                     { "TreatmentBMPID", treatmentBMP.TreatmentBMPID },
                     { "TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID },
                     { "TrashCaptureStatusTypeID", trashCaptureStatusType.TrashCaptureStatusTypeID },
