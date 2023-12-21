@@ -29,7 +29,8 @@ namespace Neptune.Jobs.Hangfire
 
         protected override void RunJobImplementation()
         {
-            HRURefreshImpl();
+            // todo: turn it back on before release
+            //HRURefreshImpl();
         }
 
         public void HRURefreshImpl()
