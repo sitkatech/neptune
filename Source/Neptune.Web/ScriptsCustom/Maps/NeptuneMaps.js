@@ -472,7 +472,7 @@ NeptuneMaps.Map.prototype.setSelectedFeature = function (feature, callback) {
     this.lastSelected = L.geoJson(feature,
         {
             pointToLayer: function (feature, latlng) {
-                var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png');
+                var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png');
                 
                 self.lastSelectedMarker = L.marker(latlng,
                     {
@@ -624,19 +624,6 @@ NeptuneMaps.Constants = {
     defaultPolyColor: "#4242ff",
     defaultSelectedFeatureColor: "#ffff00",
     spatialReference: 4326
-};
-
-NeptuneMaps.DefaultOptions = {
-    pointToLayer: function(feature, latlng) {
-        var icon = this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png');
-
-        return L.marker(latlng,
-            {
-                icon: icon,
-                title: feature.properties.Name,
-                alt: feature.properties.Name
-            });
-    }
 };
 
 L.Control.Watermark = L.Control.extend({

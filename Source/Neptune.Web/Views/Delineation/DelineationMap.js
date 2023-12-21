@@ -130,10 +130,20 @@ NeptuneMaps.DelineationMap.prototype.cacheBustDelineationWmsLayers = function ()
 
 NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = function () {
     var mapInitJson = this.mapInitJson;
+    var self = this;
     this.treatmentBMPLayer = L.geoJson(
         mapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
         {
-            pointToLayer: NeptuneMaps.DefaultOptions.pointToLayer,
+            pointToLayer: function (feature, latlng) {
+                var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png');
+
+                return L.marker(latlng,
+                    {
+                        icon: icon,
+                        title: feature.properties.Name,
+                        alt: feature.properties.Name
+                    });
+            },
             onEachFeature: function (feature, layer) {
                 this.treatmentBMPLayerLookup.set(feature.properties["TreatmentBMPID"], layer);
             }.bind(this)
