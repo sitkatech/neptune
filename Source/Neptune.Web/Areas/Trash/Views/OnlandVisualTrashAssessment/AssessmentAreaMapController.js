@@ -34,12 +34,7 @@
             $scope.lastSelectedLayer = L.geoJson(featureLayer,
                 {
                     pointToLayer: function (feature, latlng) {
-                        var icon = L.MakiMarkers.icon({
-                            icon: "marker",
-                            color: "#FFFF00",
-                            size: "m"
-                        });
-
+                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png');
                         return L.marker(latlng,
                             {
                                 icon: icon,

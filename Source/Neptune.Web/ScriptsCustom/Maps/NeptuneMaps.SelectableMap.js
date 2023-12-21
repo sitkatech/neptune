@@ -33,17 +33,13 @@ NeptuneMaps.SelectableMap.prototype.setLayerSelected = function(layer) {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {
         this.map.removeLayer(this.lastSelected);
     }
-
+    var self = this;
     this.lastSelected = L.geoJson(layer.toGeoJSON(),
         {
             pointToLayer: function(feature, latlng) {
                 return L.marker(latlng,
                     {
-                        icon: L.MakiMarkers.icon({
-                            icon: "marker",
-                            color: "#ff0",
-                            size: "m"
-                        }),
+                        icon: self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png'),
                         riseOnHover: true
                     });
             },

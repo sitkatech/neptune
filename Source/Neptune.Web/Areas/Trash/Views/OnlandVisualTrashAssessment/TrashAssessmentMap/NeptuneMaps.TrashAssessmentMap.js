@@ -43,7 +43,7 @@ NeptuneMaps.TrashAssessmentMap.prototype.CreateObservationsLayer = function(geoJ
 
     if (this.options.showObservationsOnLegend) {
         this.layerControl.addOverlay(this.observationsLayer,
-            "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+FF00FF@2x.png' height='30px' /> Observations</span>");
+            "<span><img src='/Content/leaflet/images/marker-icon-2x-violet.png' height='30px' /> Observations</span>");
     }
     return this.observationsLayer;
 };
@@ -76,11 +76,7 @@ NeptuneMaps.TrashAssessmentMap.TransectLineLayerDefaultOptions = {
 
 NeptuneMaps.TrashAssessmentMap.ObservationLayerDefaultOptions = {
     pointToLayer: function(feature, latlng) {
-        var icon = L.MakiMarkers.icon({
-            icon: feature.properties.FeatureGlyph,
-            color: feature.properties.FeatureColor,
-            size: "m"
-        });
+        var icon = this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-blue.png');
 
         return L.marker(latlng,
             {

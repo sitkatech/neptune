@@ -89,11 +89,7 @@
                             feature.properties.StormwaterJurisdictionID.toString());
                     },
                     pointToLayer: function (feature, latlng) {
-                        var icon = L.MakiMarkers.icon({
-                            icon: feature.properties.FeatureGlyph,
-                            color: feature.properties.FeatureColor,
-                            size: "m"
-                        });
+                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-blue.png');
 
                         return L.marker(latlng,
                             {
@@ -136,7 +132,7 @@
 
 
           
-            var legendSpan = "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+935F59@2x.png' height='30px' /> Treatment BMPs</span>";
+            var legendSpan = "<span><img src='/Content/leaflet/images/marker-icon-2x-blue.png' height='30px' /> Treatment BMPs</span>";
             $scope.neptuneMap.layerControl.addOverlay($scope.markerClusterGroup, legendSpan);
         };
 
@@ -244,11 +240,7 @@
             $scope.lastSelected = L.geoJson(layer.toGeoJSON(),
                 {
                     pointToLayer: function(feature, latlng) {
-                        var icon = L.MakiMarkers.icon({
-                            icon: "marker",
-                            color: "#FFFF00",
-                            size: "m"
-                        });
+                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png');
 
                         return L.marker(latlng,
                             {

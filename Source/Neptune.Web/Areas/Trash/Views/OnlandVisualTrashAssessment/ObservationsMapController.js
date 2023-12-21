@@ -172,11 +172,7 @@
 
                     return L.marker(latlng,
                         {
-                            icon: L.MakiMarkers.icon({
-                                icon: "marker",
-                                color: "#FF00FF",
-                                size: "m"
-                            })
+                            icon: $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-violet.png')
                         });
                 }
             });
@@ -214,11 +210,7 @@
                         {
                             zIndexOffset: -300,
 
-                            icon: L.MakiMarkers.icon({
-                                icon: "marker",
-                                color: "#919191",
-                                size: "m"
-                            })
+                            icon: $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-black.png')
                         });
 
                     return $scope.userLocationMarker;
@@ -226,7 +218,7 @@
             });
 
             $scope.neptuneMap.layerControl.addOverlay($scope.userLocationLayer,
-                "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+919191@2x.png' height='30px' /> Current Location</span>");
+                "<span><img src='/Content/leaflet/images/marker-icon-black.png' height='30px' /> Current Location</span>");
             $scope.userLocationLayer.addTo($scope.neptuneMap.map);
         }
 
@@ -244,11 +236,7 @@
             $scope.lastSelected = L.geoJson(feature,
                 {
                     pointToLayer: function (feature, latlng) {
-                        var icon = L.MakiMarkers.icon({
-                            icon: "marker",
-                            color: "#FFFF00",
-                            size: "m"
-                        });
+                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png');
 
                         return L.marker(latlng,
                             {
@@ -310,111 +298,62 @@
         // photo handling
         $scope.photoFileTypeError = false;
 
-        $scope.resizePhoto = function (file, maxWidth, maxHeight, callback) {
-            var reader = new FileReader();
-
-            reader.onload = function (event) {
-                var image = new Image();
-                image.src = event.target.result;
-
-                image.onload = function () {
-                    var width = image.width;
-                    var height = image.height;
-
-                    if (width > maxWidth || height > maxHeight) {
-                        if (width / maxWidth > height / maxHeight) {
-                            width = maxWidth;
-                            height = (maxWidth * image.height) / image.width;
-                        } else {
-                            height = maxHeight;
-                            width = (maxHeight * image.width) / image.height;
-                        }
-                    }
-
-                    var canvas = document.createElement('canvas');
-                    var ctx = canvas.getContext('2d');
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(image, 0, 0, width, height);
-                    canvas.toBlob(function (blob) {
-                        var resizedImage = new File([blob], file.name, {
-                            type: file.type,
-                            lastModified: file.lastModified,
-                        });
-
-                        callback(resizedImage);
-                    }, file.type);
-                };
-            };
-
-            reader.readAsDataURL(file);
-        }
-
         $scope.stagePhoto = function () {
+            var file = jQuery("#photoUpload")[0].files[0];
+            //if (!file.name.trim()) {
+            //    var blob = file.slice(0, file.size, file.type);
+            //    var newFile = new File([blob], 'image.jpg', { type: file.type });
+            //    file = newFile;
+            //}
 
-            var fileInput = jQuery("#photoUpload")[0];
+            var blob = file.slice(0, file.size, file.type);
 
-            var file = fileInput.files[0];
+            var filename;
+            if (file.name.trim()) {
+                filename = file.name.trim();
 
-            if (file) {
-                $scope.resizePhoto(file,800,600, function (resizedBlob)  {
-                    //if (!file.name.trim()) {
-                    //    var blob = file.slice(0, file.size, file.type);
-                    //    var newFile = new File([blob], 'image.jpg', { type: file.type });
-                    //    file = newFile;
-                    //}
-                    var blob = resizedBlob;
-
-                    var filename;
-                    if (file.name.trim()) {
-                        filename = file.name.trim();
-
-                    } else {
-                        filename = "image.jpg";
-                    }
-
-                    var formData = new FormData();
-                    formData.append("Photo", blob, filename);
-                    //formData.boundary = "----------opu" + new Date().getTime();
-
-                    //if (file.type.split('/')[0] !== "image") {
-                    //    $scope.photoFileTypeError = true;
-                    //    $scope.$apply();
-                    //    jQuery("#photoUpload").fileinput('reset');
-                    //    return;
-                    //}
-
-                    $.ajax({
-                        url: "/OnlandVisualTrashAssessmentPhoto/StageObservationPhoto/" + $scope.AngularViewData.ovtaID,
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        type: 'POST',
-                        beforeSend: function (request) {
-                            request.setRequestHeader("Connection", "keep-alive");
-                        },
-                        success: function (data) {
-                            $scope.photoFileTypeError = false;
-
-                            if (data.Error) {
-                                window.alert(data.Error);
-                                return;
-                            }
-
-                            $scope.currentSelectedMarkerModel.PhotoUrl = data.PhotoStagingUrl;
-                            $scope.currentSelectedMarkerModel.PhotoStagingID = data.PhotoStagingID;
-                            $scope.$apply();
-                            jQuery("#photoUpload").fileinput('reset');
-                        },
-                        error: function (jq, ts, et) {
-                            window.alert(
-                                "There was an error uploading the image. Please try again. If you are using Safari, please switch to Google Chrome as Safari does not support key features of this page.");
-                        }
-                    });
-                });
+            } else {
+                filename = "image.jpg";
             }
 
-            
+            var formData = new FormData();
+            formData.append("Photo", blob, filename);
+            //formData.boundary = "----------opu" + new Date().getTime();
+
+            //if (file.type.split('/')[0] !== "image") {
+            //    $scope.photoFileTypeError = true;
+            //    $scope.$apply();
+            //    jQuery("#photoUpload").fileinput('reset');
+            //    return;
+            //}
+
+            $.ajax({
+                url: "/OnlandVisualTrashAssessmentPhoto/StageObservationPhoto/" + $scope.AngularViewData.ovtaID,
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                beforeSend: function (request) {
+                    request.setRequestHeader("Connection", "keep-alive");
+                },
+                success: function (data) {
+                    $scope.photoFileTypeError = false;
+
+                    if (data.Error) {
+                        window.alert(data.Error);
+                        return;
+                    }
+
+                    $scope.currentSelectedMarkerModel.PhotoUrl = data.PhotoStagingUrl;
+                    $scope.currentSelectedMarkerModel.PhotoStagingID = data.PhotoStagingID;
+                    $scope.$apply();
+                    jQuery("#photoUpload").fileinput('reset');
+                },
+                error: function (jq, ts, et) {
+                    window.alert(
+                        "There was an error uploading the image. Please try again. If you are using Safari, please switch to Google Chrome as Safari does not support key features of this page.");
+                }
+            });
         };
 
         jQuery("#photoUpload").on("change", $scope.stagePhoto);
