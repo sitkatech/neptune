@@ -472,7 +472,7 @@ NeptuneMaps.Map.prototype.setSelectedFeature = function (feature, callback) {
     this.lastSelected = L.geoJson(feature,
         {
             pointToLayer: function (feature, latlng) {
-                var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png');
+                var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png');
                 
                 self.lastSelectedMarker = L.marker(latlng,
                     {
