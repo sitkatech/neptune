@@ -12,8 +12,7 @@ public static class OnlandVisualTrashAssessmentObservationModelExtensions
             var attributesTable = new AttributesTable
             {
                 { "ObservationID", observation.OnlandVisualTrashAssessmentObservationID },
-                { "FeatureColor", "#FF00FF" },
-                { "FeatureGlyph", "water" }
+                { "FeatureColor", "#FF00FF" }
             };
             var feature = new Feature(observation.LocationPoint4326, attributesTable);
             featureCollection.Add(feature);

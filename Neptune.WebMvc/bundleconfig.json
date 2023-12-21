@@ -40,5 +40,23 @@
     "inputFiles": [
       "wwwroot/Content/angular-controllers/DelineationMapControls.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/ScriptsCustom/Maps/NeptuneMaps.SelectableMap.min.js",
+    "inputFiles": [
+      "wwwroot/ScriptsCustom/Maps/NeptuneMaps.SelectableMap.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/ScriptsCustom/Maps/NeptuneMaps.Stormwater.min.js",
+    "inputFiles": [
+      "wwwroot/ScriptsCustom/Maps/NeptuneMaps.Stormwater.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/ScriptsCustom/Maps/NeptuneMaps.StormwaterSearch.min.js",
+    "inputFiles": [
+      "wwwroot/ScriptsCustom/Maps/NeptuneMaps.StormwaterSearch.js"
+    ]
   }
 ]

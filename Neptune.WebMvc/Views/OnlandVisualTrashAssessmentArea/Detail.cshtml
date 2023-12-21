@@ -143,11 +143,7 @@
             var observationsLayer = L.geoJSON(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
                 {
                     pointToLayer: function(feature, latlng) {
-                        var icon = L.MakiMarkers.icon({
-                            icon: feature.properties.FeatureGlyph,
-                            color: feature.properties.FeatureColor,
-                            size: "m"
-                        });
+                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-blue.png');
 
                         return L.marker(latlng,
                             {
@@ -158,8 +154,9 @@
                     }
                 }
             );
-            observationsLayer.addTo(summaryMap.map);
-            summaryMap.layerControl.addOverlay(observationsLayer, "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+FF00FF@2x.png' height='30px' /> Observations</span>");
+            observationsLayer.addTo(summaryMap.map); 
+            var legendSpan = "<span><img src='/Content/leaflet/images/marker-icon-2x-blue.png' height='30px' /> Observations</span>";
+            summaryMap.layerControl.addOverlay(observationsLayer, legendSpan);
         }
         summaryMap.map.fitBounds(assessmentAreaLayer.getBounds());
     });

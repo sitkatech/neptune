@@ -115,7 +115,8 @@ Source code is available upon request via <support@sitkatech.com>.
             pointToLayer: function(feature, latlng)
             {
                 var legendColor = _.result(_.find(markerColorTable, function(legendItem) { return legendItem.LegendID == feature.properties[self.mapCustomizationObject.ColorByPropertyName]; }), 'LegendColor');
-                var marker = L.marker(latlng, { icon: L.MakiMarkers.icon({ icon: "marker", color: legendColor, size: "s" }) });
+                var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-' + legendColor + '.png');
+                var marker = L.marker(latlng, { icon: icon, size: "s" }) });
                 self.bindPopupToFeature(marker, feature);
                 return marker;
             },
@@ -158,8 +159,8 @@ Source code is available upon request via <support@sitkatech.com>.
         var allLegendsHtml = "";
         for (var i = 0; i < markerColorTable.length; ++i)
         {
-            var currentLegendIcon = L.MakiMarkers.icon({ icon: "marker", color: markerColorTable[i].LegendColor, size: "m" }),
-                currentLegendAsHtml = currentLegendIcon.options.iconUrl;
+            var currentLegendIcon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-' + markerColorTable[i].LegendColor + '.png');
+            var currentLegendAsHtml = currentLegendIcon.options.iconUrl;
             allLegendsHtml += "<div class=\"mapLegendElement\">" + "<img class='mapLegendIcon' src= '" + currentLegendAsHtml  + "'></img>" + markerColorTable[i].LegendText + "</div>";
         }
         return allLegendsHtml;

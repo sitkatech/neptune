@@ -172,11 +172,7 @@
 
                     return L.marker(latlng,
                         {
-                            icon: L.MakiMarkers.icon({
-                                icon: "marker",
-                                color: "#FF00FF",
-                                size: "m"
-                            })
+                            icon: $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-violet.png')
                         });
                 }
             });
@@ -214,11 +210,7 @@
                         {
                             zIndexOffset: -300,
 
-                            icon: L.MakiMarkers.icon({
-                                icon: "marker",
-                                color: "#919191",
-                                size: "m"
-                            })
+                            icon: $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-black.png')
                         });
 
                     return $scope.userLocationMarker;
@@ -226,7 +218,7 @@
             });
 
             $scope.neptuneMap.layerControl.addOverlay($scope.userLocationLayer,
-                "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+919191@2x.png' height='30px' /> Current Location</span>");
+                "<span><img src='/Content/leaflet/images/marker-icon-black.png' height='30px' /> Current Location</span>");
             $scope.userLocationLayer.addTo($scope.neptuneMap.map);
         }
 
@@ -244,11 +236,7 @@
             $scope.lastSelected = L.geoJson(feature,
                 {
                     pointToLayer: function (feature, latlng) {
-                        var icon = L.MakiMarkers.icon({
-                            icon: "marker",
-                            color: "#FFFF00",
-                            size: "m"
-                        });
+                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png');
 
                         return L.marker(latlng,
                             {

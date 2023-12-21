@@ -10,7 +10,7 @@ namespace Neptune.EFModels.Entities
 
         public string MapboxMarkerUrlForLegend()
         {
-            return $"https://api.tiles.mapbox.com/v3/marker/pin-m-water+{TrashCaptureStatusTypeColorCode}.png";
+            return $"/Content/leaflet/images/marker-icon-2x-{TrashCaptureStatusTypeColorCode}.png";
         }
 
         public string SquareImageUrlForLegend()

@@ -154,13 +154,33 @@ NeptuneMaps.Map = function(mapInitJson, initialBaseLayerShown, geoserverUrl, cus
     this.map.on('zoomend', NeptuneMaps.disableAppropriateControls);
 };
 
+//Function assumes there is a retina version of your image under the same name just with "-2x" appended
+NeptuneMaps.Map.prototype.buildDefaultLeafletMarkerFromMarkerPath = function (iconUrl) {
+    var retinaUrl = iconUrl.replace("marker-icon", "marker-icon-2x");
+    return this.buildDefaultLeafletMarker(iconUrl, retinaUrl);
+};
+
+NeptuneMaps.Map.prototype.buildDefaultLeafletMarker = function (iconUrl, iconRetinaUrl) {
+    let shadowUrl = '/Content/leaflet/images/marker-shadow.png';
+    return L.icon({
+        iconRetinaUrl,
+        iconUrl,
+        shadowUrl,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        tooltipAnchor: [16, -28],
+        shadowSize: [41, 41]
+    });
+};
+
 NeptuneMaps.Map.prototype.addVectorLayer = function (currentLayer, overlayLayers) {
     var self = this;
     var layerGroup = new L.LayerGroup();
     var layerGeoJson = L.geoJson(currentLayer.GeoJsonFeatureCollection, {
         pointToLayer: function (feature, latlng) {
             var featureColor = feature.properties.FeatureColor == null ? currentLayer.LayerColor : feature.properties.FeatureColor;
-            var marker = L.marker(latlng, { icon: L.MakiMarkers.icon({ icon: "marker", color: featureColor, size: "s" }) });
+            var marker = L.marker(latlng, { icon: self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-' + featureColor  + '.png') });
             return marker;
         },
         style: function (feature) {
@@ -452,11 +472,7 @@ NeptuneMaps.Map.prototype.setSelectedFeature = function (feature, callback) {
     this.lastSelected = L.geoJson(feature,
         {
             pointToLayer: function (feature, latlng) {
-                var icon = L.MakiMarkers.icon({
-                    icon: "marker",
-                    color: "#FFFF00",
-                    size: "m"
-                });
+                var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png');
                 
                 self.lastSelectedMarker = L.marker(latlng,
                     {
@@ -612,11 +628,7 @@ NeptuneMaps.Constants = {
 
 NeptuneMaps.DefaultOptions = {
     pointToLayer: function(feature, latlng) {
-        var icon = L.MakiMarkers.icon({
-            icon: feature.properties.FeatureGlyph,
-            color: feature.properties.FeatureColor,
-            size: "m"
-        });
+        var icon = this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-blue.png');
 
         return L.marker(latlng,
             {

@@ -144,7 +144,7 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
 
     this.markerClusterGroup = this.makeMarkerClusterGroup(this.treatmentBMPLayer);
 
-    var legendSpan = "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+935F59@2x.png' height='30px' /> Treatment BMPs</span>";
+    var legendSpan = "<span><img src='/Content/leaflet/images/marker-icon-2x-blue.png' height='30px' /> Treatment BMPs</span>";
     this.layerControl.addOverlay(this.markerClusterGroup, legendSpan);
 };
 

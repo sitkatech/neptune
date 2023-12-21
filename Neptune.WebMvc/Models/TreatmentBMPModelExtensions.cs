@@ -41,7 +41,6 @@ namespace Neptune.WebMvc.Models
                 {
                     { "Name", treatmentBMP.TreatmentBMPName },
                     { "FeatureColor", "#935F59" },
-                    { "FeatureGlyph", "water" }, // TODO: Need to be able to customize this per Treatment BMP Type
                     { "Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
                     { "MapSummaryUrl", mapSummaryUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID) },
                     { "TreatmentBMPID", treatmentBMP.TreatmentBMPID },
@@ -66,7 +65,6 @@ namespace Neptune.WebMvc.Models
                 {
                     { "Name", treatmentBMP.TreatmentBMPName },
                     { "FeatureColor", trashCaptureStatusType.FeatureColorOnTrashModuleMap() },
-                    { "FeatureGlyph", "water" },
                     { "Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
                     { "MapSummaryUrl", trashMapAssetUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID) },
                     { "TreatmentBMPID", treatmentBMP.TreatmentBMPID },
@@ -108,7 +106,6 @@ namespace Neptune.WebMvc.Models
                 {
                     { "Name", treatmentBMP.TreatmentBMPName },
                     { "FeatureColor", "#935F59" },
-                    { "FeatureGlyph", "water" }, // TODO: Need to be able to customize this per Treatment BMP Type
                     { "Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
                     { "TreatmentBMPID", treatmentBMP.TreatmentBMPID },
                     { "TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID },
