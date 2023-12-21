@@ -131,7 +131,7 @@
 
 
           
-            var legendSpan = "<span><img src='/Content/leaflet/images/marker-icon-2x-blue.png' height='30px' /> Treatment BMPs</span>";
+            var legendSpan = "<span><img src='/Content/leaflet/images/marker-icon-2x-orange.png' height='30px' /> Treatment BMPs</span>";
             $scope.neptuneMap.layerControl.addOverlay($scope.markerClusterGroup, legendSpan);
         };
 
