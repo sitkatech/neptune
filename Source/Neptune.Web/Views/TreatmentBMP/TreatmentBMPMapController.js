@@ -89,7 +89,7 @@
                             feature.properties.StormwaterJurisdictionID.toString());
                     },
                     pointToLayer: function (feature, latlng) {
-                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-blue.png');
+                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png');
 
                         return L.marker(latlng,
                             {

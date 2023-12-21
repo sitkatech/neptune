@@ -76,7 +76,7 @@ NeptuneMaps.TrashAssessmentMap.TransectLineLayerDefaultOptions = {
 
 NeptuneMaps.TrashAssessmentMap.ObservationLayerDefaultOptions = {
     pointToLayer: function(feature, latlng) {
-        var icon = this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-blue.png');
+        var icon = this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-violet.png');
 
         return L.marker(latlng,
             {

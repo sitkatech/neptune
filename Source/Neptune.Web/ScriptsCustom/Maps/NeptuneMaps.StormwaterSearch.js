@@ -29,7 +29,7 @@ NeptuneMaps.StormwaterSearch = function (stormwaterMapInitJson)
     {
         pointToLayer: function(feature, latlng)
         {
-            var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-blue.png');
+            var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png');
 
             return L.marker(latlng,
             {

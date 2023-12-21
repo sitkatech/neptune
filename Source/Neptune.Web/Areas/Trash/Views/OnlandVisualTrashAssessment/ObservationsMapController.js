@@ -210,7 +210,7 @@
                         {
                             zIndexOffset: -300,
 
-                            icon: $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-black.png')
+                            icon: $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-violet.png')
                         });
 
                     return $scope.userLocationMarker;
@@ -218,7 +218,7 @@
             });
 
             $scope.neptuneMap.layerControl.addOverlay($scope.userLocationLayer,
-                "<span><img src='/Content/leaflet/images/marker-icon-black.png' height='30px' /> Current Location</span>");
+                "<span><img src='/Content/leaflet/images/marker-icon-violet.png' height='30px' /> Current Location</span>");
             $scope.userLocationLayer.addTo($scope.neptuneMap.map);
         }
 

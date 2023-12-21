@@ -146,7 +146,7 @@
             var observationsLayer = L.geoJSON(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
                 {
                     pointToLayer: function(feature, latlng) {
-                        var icon = this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-blue.png');
+                        var icon = this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-violet.png');
 
                         return L.marker(latlng,
                             {
@@ -158,7 +158,7 @@
                 }
             );
             observationsLayer.addTo(summaryMap.map);
-            summaryMap.layerControl.addOverlay(observationsLayer, "<span><img src='/Content/leaflet/images/marker-icon-2x-blue.png' height='30px' /> Observations</span>");
+            summaryMap.layerControl.addOverlay(observationsLayer, "<span><img src='/Content/leaflet/images/marker-icon-2x-violet.png' height='30px' /> Observations</span>");
         }
         summaryMap.map.fitBounds(assessmentAreaLayer.getBounds());
     });

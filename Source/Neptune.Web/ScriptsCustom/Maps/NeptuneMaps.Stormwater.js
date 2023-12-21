@@ -35,7 +35,7 @@ NeptuneMaps.Stormwater.prototype.addClusteredLayer = function(clusteredLayerGeoJ
     {
         pointToLayer: function(feature, latlng)
         {
-            var icon = this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-blue.png');
+            var icon = this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png');
 
             return L.marker(latlng,
             {
