@@ -626,19 +626,6 @@ NeptuneMaps.Constants = {
     spatialReference: 4326
 };
 
-NeptuneMaps.DefaultOptions = {
-    pointToLayer: function(feature, latlng) {
-        var icon = this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png');
-
-        return L.marker(latlng,
-            {
-                icon: icon,
-                title: feature.properties.Name,
-                alt: feature.properties.Name
-            });
-    }
-};
-
 L.Control.Watermark = L.Control.extend({
     onAdd: function (map) {
 
