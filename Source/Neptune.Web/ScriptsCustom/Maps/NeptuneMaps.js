@@ -197,7 +197,7 @@ NeptuneMaps.Map.prototype.addVectorLayer = function (currentLayer, overlayLayers
         }
     }).addTo(layerGroup);
 
-    if (currentLayer.LayerInitialVisibility === "Show") {
+    if (currentLayer.LayerInitialVisibility === 1) {
         layerGroup.addTo(this.map);
     }
 
@@ -218,7 +218,7 @@ NeptuneMaps.Map.prototype.addVectorLayer = function (currentLayer, overlayLayers
 //    var wmsParams = L.Util.extend(this.wmsParams, { layers: currentLayer.MapServerLayerName });
 //    var wmsLayer = L.tileLayer.wms(currentLayer.MapServerUrl, wmsParams).addTo(layerGroup);
 
-//    if (currentLayer.LayerInitialVisibility === "Show") {
+//    if (currentLayer.LayerInitialVisibility === 1) {
 //        layerGroup.addTo(this.map);
 //    }
 
@@ -380,8 +380,8 @@ NeptuneMaps.Map.prototype.addLayersToMapLayersControl = function(baseLayers, ove
 
 NeptuneMaps.Map.prototype.setMapBounds = function(mapInitJson) {
     this.map.fitBounds([
-        [mapInitJson.BoundingBox.Bottom, mapInitJson.BoundingBox.Left],
-        [mapInitJson.BoundingBox.Top, mapInitJson.BoundingBox.Right]
+        [mapInitJson.BoundingBox.Northeast.Latitude, mapInitJson.BoundingBox.Northeast.Longitude],
+        [mapInitJson.BoundingBox.Southwest.Latitude, mapInitJson.BoundingBox.Southwest.Longitude]
     ]);
 };
 
