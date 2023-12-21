@@ -180,7 +180,7 @@ NeptuneMaps.Map.prototype.addVectorLayer = function (currentLayer, overlayLayers
     var layerGeoJson = L.geoJson(currentLayer.GeoJsonFeatureCollection, {
         pointToLayer: function (feature, latlng) {
             var featureColor = feature.properties.FeatureColor == null ? currentLayer.LayerColor : feature.properties.FeatureColor;
-            var marker = L.marker(latlng, { icon: self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-' + featureColor  + '.png') });
+            var marker = L.marker(latlng, { icon: self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png') });
             return marker;
         },
         style: function (feature) {
@@ -628,7 +628,7 @@ NeptuneMaps.Constants = {
 
 NeptuneMaps.DefaultOptions = {
     pointToLayer: function(feature, latlng) {
-        var icon = this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-blue.png');
+        var icon = this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png');
 
         return L.marker(latlng,
             {
