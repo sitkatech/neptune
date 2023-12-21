@@ -29,11 +29,7 @@ NeptuneMaps.StormwaterSearch = function (stormwaterMapInitJson)
     {
         pointToLayer: function(feature, latlng)
         {
-            var icon = L.MakiMarkers.icon({
-                icon: feature.properties.FeatureGlyph,
-                color: feature.properties.FeatureColor,
-                size: "m"
-            });
+            var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png');
 
             return L.marker(latlng,
             {
@@ -127,15 +123,12 @@ NeptuneMaps.StormwaterSearch.prototype.setSelectedMarker = function(layer)
         this.map.removeLayer(this.lastSelected);
     }
 
+    var self = this;
     this.lastSelected = L.geoJson(layer.toGeoJSON(),
     {
         pointToLayer: function(feature, latlng)
         {
-            var icon = L.MakiMarkers.icon({
-                icon: "marker",
-                color: "#FFFF00",
-                size: "m",
-            });
+            var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png');
 
             return L.marker(latlng,
             {

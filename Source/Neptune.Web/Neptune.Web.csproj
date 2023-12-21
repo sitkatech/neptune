@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\NuGetPackages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -3045,10 +3045,6 @@
       <DependentUpon>leaflet.draw.css</DependentUpon>
     </Content>
     <Content Include="Content\leaflet\leaflet.js" />
-    <Content Include="Content\leaflet\leaflet.MakiMarkers\Leaflet.MakiMarkers.js" />
-    <Content Include="Content\leaflet\leaflet.MakiMarkers\Leaflet.MakiMarkers.min.js">
-      <DependentUpon>Leaflet.MakiMarkers.js</DependentUpon>
-    </Content>
     <Content Include="Content\leaflet\leaflet.markercluster\leaflet.markercluster-src.js" />
     <Content Include="Content\leaflet\leaflet.markercluster\leaflet.markercluster.js" />
     <Content Include="Content\leaflet\leaflet.markercluster\MarkerCluster.css" />
@@ -3089,9 +3085,6 @@
     <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-social-regular.eot" />
     <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-social-regular.ttf" />
     <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-social-regular.woff" />
-    <Content Include="Content\leaflet\leaflet.MakiMarkers\Leaflet.MakiMarkers.min.js.map">
-      <DependentUpon>Leaflet.MakiMarkers.min.js</DependentUpon>
-    </Content>
     <Content Include="Content\leaflet\Bing.min.js.map">
       <DependentUpon>Bing.min.js</DependentUpon>
     </Content>

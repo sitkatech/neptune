@@ -130,10 +130,20 @@ NeptuneMaps.DelineationMap.prototype.cacheBustDelineationWmsLayers = function ()
 
 NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = function () {
     var mapInitJson = this.mapInitJson;
+    var self = this;
     this.treatmentBMPLayer = L.geoJson(
         mapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
         {
-            pointToLayer: NeptuneMaps.DefaultOptions.pointToLayer,
+            pointToLayer: function (feature, latlng) {
+                var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png');
+
+                return L.marker(latlng,
+                    {
+                        icon: icon,
+                        title: feature.properties.Name,
+                        alt: feature.properties.Name
+                    });
+            },
             onEachFeature: function (feature, layer) {
                 this.treatmentBMPLayerLookup.set(feature.properties["TreatmentBMPID"], layer);
             }.bind(this)
@@ -144,7 +154,7 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
 
     this.markerClusterGroup = this.makeMarkerClusterGroup(this.treatmentBMPLayer);
 
-    var legendSpan = "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+935F59@2x.png' height='30px' /> Treatment BMPs</span>";
+    var legendSpan = "<span><img src='/Content/leaflet/images/marker-icon-2x-orange.png' height='30px' /> Treatment BMPs</span>";
     this.layerControl.addOverlay(this.markerClusterGroup, legendSpan);
 };
 

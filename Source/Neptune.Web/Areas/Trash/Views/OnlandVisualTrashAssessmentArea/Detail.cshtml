@@ -146,11 +146,7 @@
             var observationsLayer = L.geoJSON(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
                 {
                     pointToLayer: function(feature, latlng) {
-                        var icon = L.MakiMarkers.icon({
-                            icon: feature.properties.FeatureGlyph,
-                            color: feature.properties.FeatureColor,
-                            size: "m"
-                        });
+                        var icon = this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-violet.png');
 
                         return L.marker(latlng,
                             {
@@ -162,7 +158,7 @@
                 }
             );
             observationsLayer.addTo(summaryMap.map);
-            summaryMap.layerControl.addOverlay(observationsLayer, "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+FF00FF@2x.png' height='30px' /> Observations</span>");
+            summaryMap.layerControl.addOverlay(observationsLayer, "<span><img src='/Content/leaflet/images/marker-icon-2x-violet.png' height='30px' /> Observations</span>");
         }
         summaryMap.map.fitBounds(assessmentAreaLayer.getBounds());
     });

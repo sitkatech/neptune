@@ -76,8 +76,7 @@
     // we are extending Neptune Maps to handle the edit project locations functinality
     NeptuneMaps.Map.prototype.changeMarkerOnMap = function(self, e) {
         self.removeLayerFromMap(self.currentMarker);
-        self.currentMarker =
-            L.marker(e.latlng, { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
+        self.currentMarker = L.marker(e.latlng, { icon: neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png') });
         self.currentMarker.addTo(self.map);
         self.treatmentBMPPointYField.val(e.latlng.lat.toFixed(4));
         self.treatmentBMPPointXField.val(e.latlng.lng.toFixed(4));
@@ -91,7 +90,7 @@
             var latLng = new L.LatLng(this.treatmentBMPPointYField.val(),
                 this.treatmentBMPPointXField.val());
             this.currentMarker = L.marker(latLng,
-                { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
+                { icon: this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png') });
             this.currentMarker.addTo(this.map);
             this.updateLocationInformationOnMap(this.treatmentBMPInformationContainer, latLng);
         } else {
@@ -163,7 +162,7 @@
                 if (!Sitka.Methods.isUndefinedNullOrEmpty(x) && !Sitka.Methods.isUndefinedNullOrEmpty(y)) {
                     var latlng = L.latLng(Number.parseFloat(y), Number.parseFloat(x));
                     neptuneMap.currentMarker = L.marker(latlng,
-                        { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
+                        { icon: neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png') });
                     neptuneMap.currentMarker.addTo(neptuneMap.map);
 
                     neptuneMap.updateLocationInformationOnMap(neptuneMap.treatmentBMPInformationContainer, latlng);
@@ -185,7 +184,7 @@
 
             neptuneMap.removeLayerFromMap(neptuneMap.currentMarker);
             neptuneMap.currentMarker = L.marker(e.latlng,
-                { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
+                { icon: neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png') });
             neptuneMap.currentMarker.addTo(neptuneMap.map);
         }
 

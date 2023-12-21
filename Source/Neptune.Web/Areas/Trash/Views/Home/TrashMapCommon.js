@@ -141,11 +141,7 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
                             return feature.properties.TrashCaptureStatusTypeID === tcs.TrashCaptureStatusTypeID && ($scope.stormwaterJurisdictionID === null || $scope.stormwaterJurisdictionID === undefined || feature.properties.StormwaterJurisdictionID.toString() === $scope.stormwaterJurisdictionID);
                         },
                         pointToLayer: function (feature, latlng) {
-                            var icon = L.MakiMarkers.icon({
-                                icon: feature.properties.FeatureGlyph,
-                                color: feature.properties.FeatureColor,
-                                size: "m"
-                            });
+                            var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png');
 
                             return L.marker(latlng,
                                 {
@@ -267,11 +263,7 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
         $scope.lastSelected = L.geoJson(layer.toGeoJSON(),
             {
                 pointToLayer: function (feature, latlng) {
-                    var icon = L.MakiMarkers.icon({
-                        icon: "marker",
-                        color: "#FFFF00",
-                        size: "m"
-                    });
+                    var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png');
 
                     return L.marker(latlng,
                         {
