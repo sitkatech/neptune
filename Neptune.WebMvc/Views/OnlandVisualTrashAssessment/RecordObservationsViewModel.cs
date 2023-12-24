@@ -1,6 +1,4 @@
-﻿using Humanizer;
-using Microsoft.EntityFrameworkCore;
-using Neptune.Common;
+﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common.Models;
@@ -19,9 +17,9 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
 
         }
 
-        public RecordObservationsViewModel(Neptune.EFModels.Entities.OnlandVisualTrashAssessment onlandVisualTrashAssessment) : base(onlandVisualTrashAssessment)
+        public RecordObservationsViewModel(Neptune.EFModels.Entities.OnlandVisualTrashAssessment onlandVisualTrashAssessment, IEnumerable<OnlandVisualTrashAssessmentObservation> onlandVisualTrashAssessmentObservations) : base(onlandVisualTrashAssessment)
         {
-            Observations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations
+            Observations = onlandVisualTrashAssessmentObservations
                 .Select(x => new OnlandVisualTrashAssessmentObservationSimple(x)).ToList();
         }
 
@@ -49,16 +47,22 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
                     Note = onlandVisualTrashAssessmentObservationSimple.Note, 
                     ObservationDatetime = onlandVisualTrashAssessmentObservationSimple.ObservationDateTime
                 };
-                var photoStaging = await dbContext.OnlandVisualTrashAssessmentObservationPhotoStagings.FindAsync(onlandVisualTrashAssessmentObservationSimple.PhotoStagingID.Value);
-
-                var onlandVisualTrashAssessmentObservationPhoto = new OnlandVisualTrashAssessmentObservationPhoto
+                if (onlandVisualTrashAssessmentObservationSimple.PhotoStagingID.HasValue)
                 {
-                    FileResourceID = photoStaging.FileResourceID,
-                    OnlandVisualTrashAssessmentObservation = onlandVisualTrashAssessmentObservation
-                };
+                    var photoStaging =
+                        await dbContext.OnlandVisualTrashAssessmentObservationPhotoStagings.FindAsync(
+                            onlandVisualTrashAssessmentObservationSimple.PhotoStagingID.Value);
+
+                    var onlandVisualTrashAssessmentObservationPhoto = new OnlandVisualTrashAssessmentObservationPhoto
+                    {
+                        FileResourceID = photoStaging.FileResourceID,
+                        OnlandVisualTrashAssessmentObservation = onlandVisualTrashAssessmentObservation
+                    };
+                    await dbContext.OnlandVisualTrashAssessmentObservationPhotos.AddAsync(onlandVisualTrashAssessmentObservationPhoto);
+                }
+
                 await dbContext.OnlandVisualTrashAssessmentObservations.AddAsync(
                     onlandVisualTrashAssessmentObservation);
-                await dbContext.OnlandVisualTrashAssessmentObservationPhotos.AddAsync(onlandVisualTrashAssessmentObservationPhoto);
             }
 
             //update
@@ -75,19 +79,20 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
                 onlandVisualTrashAssessmentObservation.ObservationDatetime = onlandVisualTrashAssessmentObservationSimple.ObservationDateTime;
                 onlandVisualTrashAssessmentObservation.LocationPoint4326 = locationPoint4326;
 
-                if (!onlandVisualTrashAssessmentObservationSimple.PhotoStagingID.HasValue)
+                if (onlandVisualTrashAssessmentObservationSimple.PhotoStagingID.HasValue)
                 {
-                    return; // no one cares
-                }
 
-                var photoStaging = await dbContext.OnlandVisualTrashAssessmentObservationPhotoStagings.FindAsync(onlandVisualTrashAssessmentObservationSimple.PhotoStagingID.Value);
-                // ReSharper disable once ObjectCreationAsStatement
-                var onlandVisualTrashAssessmentObservationPhoto = new OnlandVisualTrashAssessmentObservationPhoto
-                {
-                    FileResourceID = photoStaging.FileResourceID,
-                    OnlandVisualTrashAssessmentObservationID = onlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentObservationID
-                };
-                await dbContext.OnlandVisualTrashAssessmentObservationPhotos.AddAsync(onlandVisualTrashAssessmentObservationPhoto);
+                    var photoStaging = await dbContext.OnlandVisualTrashAssessmentObservationPhotoStagings.FindAsync(onlandVisualTrashAssessmentObservationSimple.PhotoStagingID.Value);
+                    // ReSharper disable once ObjectCreationAsStatement
+                    var onlandVisualTrashAssessmentObservationPhoto = new OnlandVisualTrashAssessmentObservationPhoto
+                    {
+                        FileResourceID = photoStaging.FileResourceID,
+                        OnlandVisualTrashAssessmentObservationID = onlandVisualTrashAssessmentObservation
+                            .OnlandVisualTrashAssessmentObservationID
+                    };
+                    await dbContext.OnlandVisualTrashAssessmentObservationPhotos.AddAsync(
+                        onlandVisualTrashAssessmentObservationPhoto);
+                }
             }
 
             await dbContext.SaveChangesAsync();

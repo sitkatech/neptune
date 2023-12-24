@@ -213,7 +213,8 @@ namespace Neptune.WebMvc.Controllers
             OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
             var onlandVisualTrashAssessment = OnlandVisualTrashAssessments.GetByID(_dbContext, onlandVisualTrashAssessmentPrimaryKey);
-            var viewModel = new RecordObservationsViewModel(onlandVisualTrashAssessment);
+            var onlandVisualTrashAssessmentObservations = OnlandVisualTrashAssessmentObservations.ListByOnlandVisualTrashAssessmentID(_dbContext, onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID);
+            var viewModel = new RecordObservationsViewModel(onlandVisualTrashAssessment, onlandVisualTrashAssessmentObservations);
             return ViewRecordObservations(onlandVisualTrashAssessment, viewModel);
         }
 
