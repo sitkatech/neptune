@@ -34,8 +34,22 @@ NeptuneMaps.TrashAssessmentMap.prototype.BuildTrashAssessmentMapLegend = functio
 
 };
 
-NeptuneMaps.TrashAssessmentMap.prototype.CreateObservationsLayer = function(geoJsonFeatureCollection, options) {
-    var layerOptions = jQuery.extend({}, NeptuneMaps.TrashAssessmentMap.ObservationLayerDefaultOptions);
+NeptuneMaps.TrashAssessmentMap.prototype.CreateObservationsLayer = function (geoJsonFeatureCollection, options) {
+    var self = this;
+    var layerOptions =
+    {
+        pointToLayer: function (feature, latlng) {
+            var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-violet.png');
+
+            return L.marker(latlng,
+                {
+                    icon: icon,
+                    title: feature.properties.Name,
+                    alt: feature.properties.Name
+                });
+        }
+    };
+
     L.Util.extend(layerOptions, options);
 
     this.observationsLayer = L.geoJson(geoJsonFeatureCollection, layerOptions);
@@ -73,19 +87,6 @@ NeptuneMaps.TrashAssessmentMap.TransectLineLayerDefaultOptions = {
         };
     }
 }
-
-NeptuneMaps.TrashAssessmentMap.ObservationLayerDefaultOptions = {
-    pointToLayer: function(feature, latlng) {
-        var icon = this.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-violet.png');
-
-        return L.marker(latlng,
-            {
-                icon: icon,
-                title: feature.properties.Name,
-                alt: feature.properties.Name
-            });
-    }
-};
 
 NeptuneMaps.TrashAssessmentMap.prototype.SetActiveObservationByID = function (observationID) {
     if (!this.observationsLayer) {
