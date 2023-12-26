@@ -39,7 +39,7 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
 
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
-    $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];
+    $scope.selectedTrashCaptureStatusIDsForWQMPLayer = [1, 2];
     $scope.treatmentBMPLayerLookup = new Map();
 
     $scope.neptuneMap = new NeptuneMaps.Map(mapInitJson,
@@ -132,7 +132,7 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
                 }
 
                 var layer = L.geoJson(
-                    $scope.AngularViewData.OVTABasedMapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
+                    $scope.AngularViewData.OVTABasedMapInitJson.TreatmentBMPGeoJson,
                     {
                         filter: function (feature, layer) {
                             return feature.properties.TrashCaptureStatusTypeID === tcs.TrashCaptureStatusTypeID && ($scope.stormwaterJurisdictionID === null || $scope.stormwaterJurisdictionID === undefined || feature.properties.StormwaterJurisdictionID.toString() === $scope.stormwaterJurisdictionID);
@@ -333,11 +333,11 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
 
     // final map init
     $scope.bmpTrashCaptureStatusTypesOn = [];
-    $scope.parcelTrashCaptureStatusTypesOn = [];
+    $scope.wqmpTrashCaptureStatusTypesOn = [];
     _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
         function (tcs) {
             $scope.bmpTrashCaptureStatusTypesOn.push(false);
-            $scope.parcelTrashCaptureStatusTypesOn.push(false);
+            $scope.wqmpTrashCaptureStatusTypesOn.push(false);
             $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, false, true);
         });
     $scope.rebuildMarkerClusterGroup();

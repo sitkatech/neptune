@@ -352,10 +352,10 @@
                             </div>
                         </label>
                     </div>
-                    <div id="parcelLegend" style="display: none;">
+                    <div id="wqmpLegend" style="display: none;">
                         <label>
                             <div>
-                                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), parcelTrashCaptureStatusTypeOn[@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)])" ng-model="parcelTrashCaptureStatusTypeOn[@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)]">
+                                <input type="checkbox" ng-change="filterWQMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), wqmpTrashCaptureStatusTypeOn[@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)])" ng-model="wqmpTrashCaptureStatusTypeOn[@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.Full.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;" /> WQMP (Full Trash Capture)
                                 </span>
@@ -363,7 +363,7 @@
                         </label>
                         <label>
                             <div>
-                                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), parcelTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)])" ng-model="parcelTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)]">
+                                <input type="checkbox" ng-change="filterWQMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), wqmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)])" ng-model="wqmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.Partial.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;" /> WQMP (Partial Trash Capture)
                                 </span>
@@ -371,7 +371,7 @@
                         </label>
                         <label>
                             <div>
-                                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID), parcelTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID)])" ng-model="parcelTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID)]">
+                                <input type="checkbox" ng-change="filterWQMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID), wqmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID)])" ng-model="wqmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.None.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;" /> WQMP (No Trash Capture)
                                 </span>
@@ -379,7 +379,7 @@
                         </label>
                         <label>
                             <div>
-                                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID), parcelTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID)])" ng-model="parcelTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID)]">
+                                <input type="checkbox" ng-change="filterWQMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID), wqmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID)])" ng-model="wqmpTrashCaptureStatusTypesOn[@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID)]">
                                 <span>
                                     <img src="@TrashCaptureStatusType.NotProvided.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;" /> WQMP (Not Provided)
                                 </span>
@@ -623,7 +623,7 @@
 <script>
     jQuery(document).ready(function () {
         jQuery("#treatmentBMPLegend").appendTo("#ovtaResults .leaflet-control-layers-list").toggle();
-        jQuery("#parcelLegend").appendTo("#ovtaResults .leaflet-control-layers-list").toggle();
+        jQuery("#wqmpLegend").appendTo("#ovtaResults .leaflet-control-layers-list").toggle();
         jQuery("#treatmentBMPLegendLoadBased").appendTo("#loadResults .leaflet-control-layers-list").toggle();
         jQuery("#treatmentBMPLegendAreaBased").appendTo("#areaResults .leaflet-control-layers-list").toggle();
 

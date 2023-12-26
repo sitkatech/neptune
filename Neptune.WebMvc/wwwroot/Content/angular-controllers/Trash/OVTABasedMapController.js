@@ -57,15 +57,15 @@
             });
         };
 
-        $scope.initializeParcelLayer = function () {
-            if ($scope.parcelLayerGeoJson) {
-                $scope.neptuneMap.map.removeLayer($scope.parcelLayerGeoJson);
+        $scope.initializeWQMPLayer = function () {
+            if ($scope.wqmpLayerGeoJson) {
+                $scope.neptuneMap.map.removeLayer($scope.wqmpLayerGeoJson);
             }
-            $scope.parcelLayerGeoJson = L.geoJson(
-                $scope.AngularViewData.OVTABasedMapInitJson.ParcelLayerGeoJson.GeoJsonFeatureCollection,
+            $scope.wqmpLayerGeoJson = L.geoJson(
+                $scope.AngularViewData.OVTABasedMapInitJson.WQMPGeoJson,
                 {
                     filter: function (feature, layer) {
-                        return _.includes($scope.selectedTrashCaptureStatusIDsForParcelLayer,
+                        return _.includes($scope.selectedTrashCaptureStatusIDsForWQMPLayer,
                             feature.properties.TrashCaptureStatusTypeID);
                     },
                     style: function (feature) {
@@ -78,18 +78,18 @@
                     }
                 });
 
-            $scope.parcelLayerGeoJson.addTo($scope.neptuneMap.map);
-            $scope.parcelLayerGeoJson.on('click',
+            $scope.wqmpLayerGeoJson.addTo($scope.neptuneMap.map);
+            $scope.wqmpLayerGeoJson.on('click',
                 function (e) {
-                    $scope.setActiveParcelByID(e.layer.feature.properties.ParcelID);
+                    $scope.setActiveWQMPByID(e.layer.feature.properties.WaterQualityManagementPlanID);
                     $scope.$apply();
                 });
         };
-        $scope.initializeParcelLayer();
+        $scope.initializeWQMPLayer();
 
-        $scope.setActiveParcelByID = function (parcelID) {
-            var layer = _.find($scope.parcelLayerGeoJson._layers,
-                function (layer) { return parcelID === layer.feature.properties.ParcelID; });
+        $scope.setActiveWQMPByID = function (waterQualityManagementPlanID) {
+            var layer = _.find($scope.wqmpLayerGeoJson._layers,
+                function (layer) { return waterQualityManagementPlanID === layer.feature.properties.WaterQualityManagementPlanID; });
             setActiveImpl(layer, true);
         };
 
@@ -106,21 +106,21 @@
             $scope.setSelectedMarker(layer);
         }
 
-        $scope.filterParcelsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn) {
+        $scope.filterWQMPsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn) {
 
             // if the trash capture status is selected, be sure to display on the map. else, be sure it's not displayed
             if (isOn) {
-                if (!_.includes($scope.selectedTrashCaptureStatusIDsForParcelLayer, trashCaptureStatusTypeID)) {
-                    $scope.selectedTrashCaptureStatusIDsForParcelLayer.push(trashCaptureStatusTypeID);
+                if (!_.includes($scope.selectedTrashCaptureStatusIDsForWQMPLayer, trashCaptureStatusTypeID)) {
+                    $scope.selectedTrashCaptureStatusIDsForWQMPLayer.push(trashCaptureStatusTypeID);
                 }
             } else {
 
-                if (_.includes($scope.selectedTrashCaptureStatusIDsForParcelLayer, trashCaptureStatusTypeID)) {
-                    Sitka.Methods.removeFromJsonArray($scope.selectedTrashCaptureStatusIDsForParcelLayer,
+                if (_.includes($scope.selectedTrashCaptureStatusIDsForWQMPLayer, trashCaptureStatusTypeID)) {
+                    Sitka.Methods.removeFromJsonArray($scope.selectedTrashCaptureStatusIDsForWQMPLayer,
                         trashCaptureStatusTypeID);
                 }
             }
-            $scope.initializeParcelLayer();
+            $scope.initializeWQMPLayer();
         };
 
         $scope.neptuneMap.map.on("click",

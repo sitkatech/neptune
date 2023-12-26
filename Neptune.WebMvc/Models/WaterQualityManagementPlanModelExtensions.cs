@@ -1,19 +1,26 @@
 ﻿using Neptune.EFModels.Entities;
+using NetTopologySuite.Features;
 
 namespace Neptune.WebMvc.Models
 {
     public static class WaterQualityManagementPlanModelExtensions
     {
-        // technically this isn't "fully" parameteried, it's just "parameterized enough to have results", which is basically the same damn thing.
-        public static bool IsFullyParameterized(this WaterQualityManagementPlan waterQualityManagementPlan)
+        public static FeatureCollection ToGeoJsonFeatureCollectionForTrashMap(this IEnumerable<WaterQualityManagementPlan> waterQualityManagementPlans)
         {
-            if (waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
-                WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
+            var featureCollection = new FeatureCollection();
+            foreach (var waterQualityManagementPlan in waterQualityManagementPlans.Where(x => x.WaterQualityManagementPlanBoundary != null))
             {
-                return waterQualityManagementPlan.TreatmentBMPs.Any(x => x.IsFullyParameterized(x.Delineation));
+                var attributesTable = new AttributesTable
+                {
+                    { "FeatureColor", waterQualityManagementPlan.TrashCaptureStatusType.FeatureColorOnTrashModuleMap() },
+                    { "TrashCaptureStatusTypeID", waterQualityManagementPlan.TrashCaptureStatusTypeID },
+                    { "WaterQualityManagementPlanID", waterQualityManagementPlan.WaterQualityManagementPlanID },
+                };
+                var feature = new Feature(waterQualityManagementPlan.WaterQualityManagementPlanBoundary.Geometry4326, attributesTable);
+                featureCollection.Add(feature);
             }
-
-            return waterQualityManagementPlan.QuickBMPs.Any(x => x.IsFullyParameterized());
+            return featureCollection;
         }
+
     }
 }
