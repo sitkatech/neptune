@@ -85,8 +85,7 @@
         var summaryMap;
         var observationsLayer;
         jQuery(function() {
-            var mapInitJson =
-                @Html.Raw(ViewDataTyped.OVTASummaryMapInitJson).ToJsonHtmlString());
+            var mapInitJson = @Html.Raw(ViewDataTyped.OVTASummaryMapInitJson.ToJsonHtmlString());
             summaryMap = new NeptuneMaps.TrashAssessmentMap(mapInitJson, "Terrain", "@ViewDataTyped.GeoServerUrl");
 
             observationsLayer =

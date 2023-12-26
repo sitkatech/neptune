@@ -24,10 +24,11 @@
 
     var organizationDisplayName = jurisdiction.GetOrganizationDisplayName();
 
-    var showAreas = jurisdiction.OnlandVisualTrashAssessmentAreas.Any();
-    var showTransects = jurisdiction.OnlandVisualTrashAssessmentAreas.Any(x=>x.TransectLine!= null);
-    var showObservationPoints = jurisdiction.OnlandVisualTrashAssessments.Any(x=>x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID);
-    
+    var onlandVisualTrashAssessmentAreas = ViewDataTyped.OnlandVisualTrashAssessmentAreas[jurisdiction.StormwaterJurisdictionID].ToList();
+    var showAreas = onlandVisualTrashAssessmentAreas.Any();
+    var showTransects = onlandVisualTrashAssessmentAreas.Any(x=>x.TransectLine != null);
+    var onlandVisualTrashAssessments = ViewDataTyped.OnlandVisualTrashAssessments[jurisdiction.StormwaterJurisdictionID].ToList();
+    var showObservationPoints = onlandVisualTrashAssessments.Any(x=> x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID);
 
     <div class="row">
         <div class="col-xs-12 col-sm-12">

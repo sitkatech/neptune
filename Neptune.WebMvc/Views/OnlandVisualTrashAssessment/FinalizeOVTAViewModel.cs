@@ -127,6 +127,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
                 {
                     var transect = onlandVisualTrashAssessment.GetTransect();
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine = transect;
+                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine4326 = transect.ProjectTo4326();
                     onlandVisualTrashAssessment.IsTransectBackingAssessment = true;
 
                     var transectBackingAssessment = 

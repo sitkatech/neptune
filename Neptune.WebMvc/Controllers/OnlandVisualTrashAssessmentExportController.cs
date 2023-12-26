@@ -21,7 +21,13 @@ namespace Neptune.WebMvc.Controllers
         {
             var stormwaterJurisdictions = StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson);
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.ExportAssessmentGeospatialData);
-            var viewData = new ExportAssessmentGeospatialDataViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, neptunePage, stormwaterJurisdictions, _webConfiguration.MapServiceUrl);
+            var stormwaterJurisdictionIDList = stormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID).ToList();
+            var onlandVisualTrashAssessmentAreas = OnlandVisualTrashAssessmentAreas.ListByStormwaterJurisdictionIDList(_dbContext,
+                stormwaterJurisdictionIDList).ToLookup(x => x.StormwaterJurisdictionID);
+            var onlandVisualTrashAssessments = OnlandVisualTrashAssessments
+                .ListByStormwaterJurisdictionIDList(_dbContext, stormwaterJurisdictionIDList)
+                .ToLookup(x => x.StormwaterJurisdictionID);
+            var viewData = new ExportAssessmentGeospatialDataViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, neptunePage, stormwaterJurisdictions, _webConfiguration.MapServiceUrl, onlandVisualTrashAssessmentAreas, onlandVisualTrashAssessments);
             return RazorView<ExportAssessmentGeospatialData, ExportAssessmentGeospatialDataViewData>(
                 viewData);
         }

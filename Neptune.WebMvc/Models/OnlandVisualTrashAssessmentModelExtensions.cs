@@ -33,6 +33,24 @@ namespace Neptune.WebMvc.Models
             return null;
         }
 
+        public static Geometry GetTransect4326(this OnlandVisualTrashAssessment ovta)
+        {
+            if (ovta.OnlandVisualTrashAssessmentObservations.Count > 1)
+            {
+                var points = string.Join(",",
+                    ovta.OnlandVisualTrashAssessmentObservations.Where(x => x.LocationPoint4326 != null).OrderBy(x => x.ObservationDatetime)
+                        .Select(x => x.LocationPoint4326).ToList().Select(x => $"{x.Coordinate.X} {x.Coordinate.Y}")
+                        .ToList());
+
+                var linestring = $"LINESTRING ({points})";
+
+                // the transect is going to be in 2771 because it was generated from points in 2771
+                return GeometryHelper.FromWKT(linestring, Proj4NetHelper.WEB_MERCATOR);
+            }
+
+            return null;
+        }
+
         public static IQueryable<ParcelGeometry> GetParcelsViaTransect(this OnlandVisualTrashAssessment ovta,
             NeptuneDbContext dbContext)
         {
@@ -92,7 +110,7 @@ namespace Neptune.WebMvc.Models
         {
             LayerGeoJson transectLineLayerGeoJson;
 
-            if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.TransectLine != null)
+            if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.TransectLine4326 != null)
             {
                 transectLineLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea
                     .GetTransectLineLayerGeoJson();
@@ -100,7 +118,7 @@ namespace Neptune.WebMvc.Models
             else
             {
                 var featureCollection = new FeatureCollection();
-                var geometry = onlandVisualTrashAssessment.GetTransect();
+                var geometry = onlandVisualTrashAssessment.GetTransect4326();
                 if (geometry == null)
                 {
                     return null;

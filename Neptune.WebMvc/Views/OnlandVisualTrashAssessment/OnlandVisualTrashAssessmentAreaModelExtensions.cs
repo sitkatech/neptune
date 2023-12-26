@@ -46,10 +46,10 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
 
         public static LayerGeoJson? GetTransectLineLayerGeoJson(this EFModels.Entities.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
-            if (onlandVisualTrashAssessmentArea.TransectLine != null)
+            if (onlandVisualTrashAssessmentArea.TransectLine4326 != null)
             {
                 var featureCollection = new FeatureCollection();
-                var feature = new Feature(onlandVisualTrashAssessmentArea.TransectLine, new AttributesTable());
+                var feature = new Feature(onlandVisualTrashAssessmentArea.TransectLine4326, new AttributesTable());
                 featureCollection.Add(feature);
                 var transectLineLayerGeoJson = new LayerGeoJson("transectLine", featureCollection, "#000000", 1, LayerInitialVisibility.Show);
                 return transectLineLayerGeoJson;

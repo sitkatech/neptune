@@ -467,11 +467,13 @@ namespace Neptune.WebMvc.Controllers
             {
                 onlandVisualTrashAssessment.IsTransectBackingAssessment = false;
                 onlandVisualTrashAssessmentArea.TransectLine = null;
+                onlandVisualTrashAssessmentArea.TransectLine4326 = null;
 
                 await _dbContext.SaveChangesAsync();
 
-                onlandVisualTrashAssessmentArea.TransectLine = OnlandVisualTrashAssessmentAreaModelExtensions.RecomputeTransectLine(onlandVisualTrashAssessments, out var transectBackingAssessment);
-
+                var transectLine = OnlandVisualTrashAssessmentAreaModelExtensions.RecomputeTransectLine(onlandVisualTrashAssessments, out var transectBackingAssessment);
+                onlandVisualTrashAssessmentArea.TransectLine = transectLine;
+                onlandVisualTrashAssessmentArea.TransectLine4326 = transectLine.ProjectTo4326();
 
                 if (transectBackingAssessment != null)
                 {
