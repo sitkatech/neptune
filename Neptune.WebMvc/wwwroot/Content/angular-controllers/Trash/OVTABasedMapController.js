@@ -62,7 +62,7 @@
                 $scope.neptuneMap.map.removeLayer($scope.parcelLayerGeoJson);
             }
             $scope.parcelLayerGeoJson = L.geoJson(
-                $scope.AngularViewData.MapInitJson.ParcelLayerGeoJson.GeoJsonFeatureCollection,
+                $scope.AngularViewData.OVTABasedMapInitJson.ParcelLayerGeoJson.GeoJsonFeatureCollection,
                 {
                     filter: function (feature, layer) {
                         return _.includes($scope.selectedTrashCaptureStatusIDsForParcelLayer,
