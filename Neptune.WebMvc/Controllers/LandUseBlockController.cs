@@ -54,7 +54,7 @@ namespace Neptune.WebMvc.Controllers
         {
             var gridSpec = new LandUseBlockGridSpec(_linkGenerator);
             var stormwaterJurisdictionsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson);
-            var treatmentBMPs = _dbContext.LandUseBlocks.Include(x => x.TrashGeneratingUnits).AsNoTracking()
+            var treatmentBMPs = _dbContext.LandUseBlocks.Include(x => x.TrashGeneratingUnits).Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization).AsNoTracking()
                 .Where(x => stormwaterJurisdictionsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             return new GridJsonNetJObjectResult<LandUseBlock>(treatmentBMPs, gridSpec);
         }
