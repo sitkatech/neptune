@@ -135,7 +135,7 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
         mapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
         {
             pointToLayer: function(feature, latlng) {
-                var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png');
+                var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-935F59.png');
 
                 return L.marker(latlng,
                     {
@@ -155,7 +155,7 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
 
     this.markerClusterGroup = this.makeMarkerClusterGroup(this.treatmentBMPLayer);
 
-    var legendSpan = "<span><img src='/Content/leaflet/images/marker-icon-2x-orange.png' height='30px' /> Treatment BMPs</span>";
+    var legendSpan = "<span><img src='/Content/leaflet/images/marker-icon-2x-935F59.png' height='30px' /> Treatment BMPs</span>";
     this.layerControl.addOverlay(this.markerClusterGroup, legendSpan);
 };
 

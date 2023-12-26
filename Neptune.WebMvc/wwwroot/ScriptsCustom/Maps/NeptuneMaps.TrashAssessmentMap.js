@@ -39,7 +39,7 @@ NeptuneMaps.TrashAssessmentMap.prototype.CreateObservationsLayer = function (geo
     var layerOptions =
     {
         pointToLayer: function (feature, latlng) {
-            var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-violet.png');
+            var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-ff00ff.png');
 
             return L.marker(latlng,
                 {
@@ -57,7 +57,7 @@ NeptuneMaps.TrashAssessmentMap.prototype.CreateObservationsLayer = function (geo
 
     if (this.options.showObservationsOnLegend) {
         this.layerControl.addOverlay(this.observationsLayer,
-            "<span><img src='/Content/leaflet/images/marker-icon-2x-violet.png' height='30px' /> Observations</span>");
+            "<span><img src='/Content/leaflet/images/marker-icon-2x-ff00ff.png' height='30px' /> Observations</span>");
     }
     return this.observationsLayer;
 };

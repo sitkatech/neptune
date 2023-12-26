@@ -143,7 +143,7 @@
             var observationsLayer = L.geoJSON(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
                 {
                     pointToLayer: function(feature, latlng) {
-                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-violet.png');
+                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-ff00ff.png');
 
                         return L.marker(latlng,
                             {
@@ -155,7 +155,7 @@
                 }
             );
             observationsLayer.addTo(summaryMap.map); 
-            var legendSpan = "<span><img src='/Content/leaflet/images/marker-icon-2x-violet.png' height='30px' /> Observations</span>";
+            var legendSpan = "<span><img src='/Content/leaflet/images/marker-icon-2x-ff00ff.png' height='30px' /> Observations</span>";
             summaryMap.layerControl.addOverlay(observationsLayer, legendSpan);
         }
         summaryMap.map.fitBounds(assessmentAreaLayer.getBounds());

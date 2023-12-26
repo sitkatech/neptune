@@ -39,7 +39,7 @@ NeptuneMaps.SelectableMap.prototype.setLayerSelected = function(layer) {
             pointToLayer: function(feature, latlng) {
                 return L.marker(latlng,
                     {
-                        icon: self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png'),
+                        icon: self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-ffff00.png'),
                         riseOnHover: true
                     });
             },

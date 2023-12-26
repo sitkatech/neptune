@@ -162,6 +162,15 @@ NeptuneMaps.Map.prototype.buildDefaultLeafletMarkerFromMarkerPath = function (ic
 
 NeptuneMaps.Map.prototype.buildDefaultLeafletMarker = function (iconUrl, iconRetinaUrl) {
     let shadowUrl = '/Content/leaflet/images/marker-shadow.png';
+    //todo: check into using L.divIcon in the future and not have to use images
+//    return L.divIcon({
+//        className: 'map-marker-icon',
+//        html: "<div style='background-color:#c30b82;' class='map-marker-icon'></div><i class='glyphicon glyphicon-map-marker' style='font-size:36px; color: #935F59'></i>",
+//        iconSize: [25, 41],
+//        iconAnchor: [12, 41],
+//        popupAnchor: [1, -34],
+//        tooltipAnchor: [16, -28],
+//    });
     return L.icon({
         iconRetinaUrl,
         iconUrl,
@@ -180,7 +189,7 @@ NeptuneMaps.Map.prototype.addVectorLayer = function (currentLayer, overlayLayers
     var layerGeoJson = L.geoJson(currentLayer.GeoJsonFeatureCollection, {
         pointToLayer: function (feature, latlng) {
             var featureColor = feature.properties.FeatureColor == null ? currentLayer.LayerColor : feature.properties.FeatureColor;
-            var marker = L.marker(latlng, { icon: self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png') });
+            var marker = L.marker(latlng, { icon: self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-935F59.png') });
             return marker;
         },
         style: function (feature) {
@@ -472,7 +481,7 @@ NeptuneMaps.Map.prototype.setSelectedFeature = function (feature, callback) {
     this.lastSelected = L.geoJson(feature,
         {
             pointToLayer: function (feature, latlng) {
-                var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png');
+                var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-ffff00.png');
                 
                 self.lastSelectedMarker = L.marker(latlng,
                     {

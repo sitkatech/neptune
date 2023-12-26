@@ -88,7 +88,7 @@
                             feature.properties.StormwaterJurisdictionID.toString());
                     },
                     pointToLayer: function (feature, latlng) {
-                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-orange.png');
+                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-935F59.png');
 
                         return L.marker(latlng,
                             {
@@ -131,7 +131,7 @@
 
 
           
-            var legendSpan = "<span><img src='/Content/leaflet/images/marker-icon-2x-orange.png' height='30px' /> Treatment BMPs</span>";
+            var legendSpan = "<span><img src='/Content/leaflet/images/marker-icon-2x-935F59.png' height='30px' /> Treatment BMPs</span>";
             $scope.neptuneMap.layerControl.addOverlay($scope.markerClusterGroup, legendSpan);
         };
 
@@ -239,7 +239,7 @@
             $scope.lastSelected = L.geoJson(layer.toGeoJSON(),
                 {
                     pointToLayer: function(feature, latlng) {
-                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png');
+                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-ffff00.png');
 
                         return L.marker(latlng,
                             {

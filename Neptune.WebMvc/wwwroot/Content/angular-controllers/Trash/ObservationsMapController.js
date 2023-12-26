@@ -172,7 +172,7 @@
 
                     return L.marker(latlng,
                         {
-                            icon: $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-violet.png')
+                            icon: $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-ff00ff.png')
                         });
                 }
             });
@@ -210,7 +210,7 @@
                         {
                             zIndexOffset: -300,
 
-                            icon: $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-violet.png')
+                            icon: $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-ff00ff.png')
                         });
 
                     return $scope.userLocationMarker;
@@ -218,7 +218,7 @@
             });
 
             $scope.neptuneMap.layerControl.addOverlay($scope.userLocationLayer,
-                "<span><img src='/Content/leaflet/images/marker-icon-violet.png' height='30px' /> Current Location</span>");
+                "<span><img src='/Content/leaflet/images/marker-icon-ff00ff.png' height='30px' /> Current Location</span>");
             $scope.userLocationLayer.addTo($scope.neptuneMap.map);
         }
 
@@ -236,7 +236,7 @@
             $scope.lastSelected = L.geoJson(feature,
                 {
                     pointToLayer: function (feature, latlng) {
-                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-selected.png');
+                        var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-ffff00.png');
 
                         return L.marker(latlng,
                             {
