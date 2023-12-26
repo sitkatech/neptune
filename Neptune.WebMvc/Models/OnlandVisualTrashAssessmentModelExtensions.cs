@@ -143,7 +143,7 @@ namespace Neptune.WebMvc.Models
             }
             else if (onlandVisualTrashAssessment.DraftGeometry != null)
             {
-                var draftGeometry = onlandVisualTrashAssessment.DraftGeometry;
+                var draftGeometry = onlandVisualTrashAssessment.DraftGeometry.ProjectTo4326();
                 geoJsonFeatureCollection = draftGeometry.MultiPolygonToFeatureCollection();
             }
             else

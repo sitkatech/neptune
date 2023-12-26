@@ -73,7 +73,7 @@ namespace Neptune.WebMvc.Models
                 case OVTASectionEnum.RecordObservations:
                     return ovta?.OnlandVisualTrashAssessmentObservations.Any() ?? false;
                 case OVTASectionEnum.AddOrRemoveParcels:
-                    return ovta?.DraftGeometry != null || (ovta != null && ovta.AssessingNewArea.HasValue && !ovta.AssessingNewArea.Value);
+                    return ovta.DraftGeometry != null || (ovta.AssessingNewArea.HasValue && !ovta.AssessingNewArea.Value);
                 case OVTASectionEnum.RefineAssessmentArea:
                     throw new InvalidOperationException("RefineAssessmentArea does not have a completeness status; cannot check completeness");
                 case OVTASectionEnum.FinalizeOVTA:

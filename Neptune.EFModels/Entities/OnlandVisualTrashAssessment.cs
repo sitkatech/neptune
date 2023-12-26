@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Neptune.Common.GeoSpatial;
 using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities;
@@ -14,6 +15,6 @@ public partial class OnlandVisualTrashAssessment
 
     public Geometry? GetOnlandVisualTrashAssessmentGeometry()
     {
-        return OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaGeometry4326 ?? DraftGeometry;
+        return OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaGeometry4326 ?? DraftGeometry?.ProjectTo4326();
     }
 }
