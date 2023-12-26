@@ -141,7 +141,7 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
                             return feature.properties.TrashCaptureStatusTypeID === tcs.TrashCaptureStatusTypeID && ($scope.stormwaterJurisdictionID === null || $scope.stormwaterJurisdictionID === undefined || feature.properties.StormwaterJurisdictionID.toString() === $scope.stormwaterJurisdictionID);
                         },
                         pointToLayer: function (feature, latlng) {
-                            var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-935F59.png');
+                            var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-' + feature.properties.FeatureColor.replace("#", "") + '.png');
 
                             return L.marker(latlng,
                                 {
