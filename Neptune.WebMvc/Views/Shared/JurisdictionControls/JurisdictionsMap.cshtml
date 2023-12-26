@@ -116,7 +116,7 @@ Source code is available upon request via <support@sitkatech.com>.
             {
                 var legendColor = _.result(_.find(markerColorTable, function(legendItem) { return legendItem.LegendID == feature.properties[self.mapCustomizationObject.ColorByPropertyName]; }), 'LegendColor');
                 var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-' + legendColor + '.png');
-                var marker = L.marker(latlng, { icon: icon, size: "s" }) });
+                var marker = L.marker(latlng, { icon: icon, size: "s" });
                 self.bindPopupToFeature(marker, feature);
                 return marker;
             },
