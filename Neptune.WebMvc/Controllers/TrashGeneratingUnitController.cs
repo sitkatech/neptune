@@ -47,7 +47,7 @@ namespace Neptune.WebMvc.Controllers
         public JsonResult AcreBasedCalculations([FromRoute] StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
-            var trashGeneratingUnits = _dbContext.TrashGeneratingUnits.Include(x => x.LandUseBlock).Where(x=>x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID && x.LandUseBlock != null).ToList();
+            var trashGeneratingUnits = GetRelevantTrashGeneratingUnitsForCalculations(jurisdiction);
 
             var fullTrashCapture = trashGeneratingUnits.FullTrashCaptureAcreage();
 
@@ -55,8 +55,8 @@ namespace Neptune.WebMvc.Controllers
 
             var totalAcresCaptured = fullTrashCapture + equivalentArea;
 
-            var totalPLUAcres = jurisdiction.LandUseBlocks
-                .Where(x => x.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID && x.PermitTypeID == PermitType.PhaseIMS4.PermitTypeID).Sum(x =>
+            var totalPLUAcres = _dbContext.LandUseBlocks.AsNoTracking()
+                .Where(x => x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&  x.PriorityLandUseTypeID != (int) PriorityLandUseTypeEnum.ALU && x.PermitTypeID == (int) PermitTypeEnum.PhaseIMS4).Sum(x =>
                     x.LandUseBlockGeometry.Area * Constants.SquareMetersToAcres);
 
             var percentTreated = totalPLUAcres != 0 ? totalAcresCaptured / totalPLUAcres : 0;
@@ -71,13 +71,27 @@ namespace Neptune.WebMvc.Controllers
             });
         }
 
+        private List<TrashGeneratingUnit> GetRelevantTrashGeneratingUnitsForCalculations(StormwaterJurisdiction jurisdiction)
+        {
+            var trashGeneratingUnits = _dbContext.TrashGeneratingUnits
+                .Include(x => x.LandUseBlock)
+                .Include(x => x.OnlandVisualTrashAssessmentArea)
+                .Include(x => x.Delineation)
+                .ThenInclude(x => x.TreatmentBMP)
+                .Include(x => x.WaterQualityManagementPlan)
+                .AsNoTracking()
+                .Where(x => x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID && x.LandUseBlock != null)
+                .ToList();
+            return trashGeneratingUnits;
+        }
+
         [HttpGet("{jurisdictionPrimaryKey}")]
         [AnonymousUnclassifiedFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("jurisdictionPrimaryKey")]
         public JsonResult OVTABasedResultsCalculations([FromRoute] StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
-            var trashGeneratingUnits = _dbContext.TrashGeneratingUnits.Include(x => x.LandUseBlock).Where(x=>x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID && x.LandUseBlock != null).ToList();
+            var trashGeneratingUnits = GetRelevantTrashGeneratingUnitsForCalculations(jurisdiction);
 
             var sumPLUAcresWhereOVTAIsA = trashGeneratingUnits.PriorityOVTAScoreAAcreage();
 
