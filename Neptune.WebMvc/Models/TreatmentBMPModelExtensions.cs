@@ -60,17 +60,13 @@ namespace Neptune.WebMvc.Models
             var featureCollection = new FeatureCollection();
             foreach (var treatmentBMP in treatmentBMPs)
             {
-                var trashCaptureStatusType = treatmentBMP.TrashCaptureStatusType;
                 var attributesTable = new AttributesTable
                 {
                     { "Name", treatmentBMP.TreatmentBMPName },
-                    { "FeatureColor", trashCaptureStatusType.FeatureColorOnTrashModuleMap() },
-                    { "Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
+                    { "FeatureColor", treatmentBMP.TrashCaptureStatusType.FeatureColorOnTrashModuleMap() },
                     { "MapSummaryUrl", trashMapAssetUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID) },
                     { "TreatmentBMPID", treatmentBMP.TreatmentBMPID },
-                    { "TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID },
-                    { "TrashCaptureStatusTypeID", trashCaptureStatusType.TrashCaptureStatusTypeID },
-                    { "TrashCaptureStatus", trashCaptureStatusType.TrashCaptureStatusTypeName },
+                    { "TrashCaptureStatusTypeID", treatmentBMP.TrashCaptureStatusTypeID },
                     { "StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdictionID }
                 };
                 var feature = new Feature(treatmentBMP.LocationPoint4326, attributesTable);
@@ -109,7 +105,7 @@ namespace Neptune.WebMvc.Models
                     { "Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
                     { "TreatmentBMPID", treatmentBMP.TreatmentBMPID },
                     { "TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID },
-                    { "StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdiction.StormwaterJurisdictionID }
+                    { "StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdictionID }
                 };
                 var feature = new Feature(treatmentBMP.LocationPoint4326, attributesTable);
                 onEachFeature?.Invoke(feature, treatmentBMP);

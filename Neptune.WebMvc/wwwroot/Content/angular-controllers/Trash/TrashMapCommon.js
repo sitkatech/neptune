@@ -289,10 +289,6 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
     };
 
     $scope.setActiveBMPByID = function (treatmentBMPID) {
-        var treatmentBMP = _.find($scope.AngularViewData.TreatmentBMPs,
-            function (t) {
-                return t.TreatmentBMPID == treatmentBMPID;
-            });
         var layer = $scope.treatmentBMPLayerLookup.get(treatmentBMPID);
         setActiveImpl(layer, true);
     };

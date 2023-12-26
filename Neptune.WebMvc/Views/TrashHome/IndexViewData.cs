@@ -58,8 +58,6 @@ namespace Neptune.WebMvc.Views.TrashHome
 
             public string OVTABasedResultsUrlTemplate { get; }
 
-            public List<TreatmentBMPDisplayDto> TreatmentBMPs { get; }
-            public List<ParcelDisplayDto> Parcels { get; }
             public List<TrashCaptureStatusType> TrashCaptureStatusTypes { get; }
             public string StormwaterJurisdictionCqlFilter { get; }
             public string NegativeStormwaterJurisdictionCqlFilter { get; }
@@ -78,8 +76,8 @@ namespace Neptune.WebMvc.Views.TrashHome
 
             public ViewDataForAngularClass(LinkGenerator linkGenerator, TrashModuleMapInitJson ovtaBasedMapInitJson,
                 StormwaterMapInitJson areaBasedMapInitJson,
-                StormwaterMapInitJson loadBasedMapInitJson, IEnumerable<EFModels.Entities.TreatmentBMP> treatmentBMPs,
-                List<TrashCaptureStatusType> trashCaptureStatusTypeSimples, List<EFModels.Entities.Parcel> parcels,
+                StormwaterMapInitJson loadBasedMapInitJson,
+                List<TrashCaptureStatusType> trashCaptureStatusTypeSimples,
                 string stormwaterJurisdictionCqlFilter, bool showDropdown,
                 string negativeStormwaterJurisdictionCqlFilter, FeatureCollection jurisdictionsGeoJson,
                 bool currentUserIsAnonymousOrUnassigned, string geoServerUrl) : base(geoServerUrl)
@@ -88,8 +86,6 @@ namespace Neptune.WebMvc.Views.TrashHome
                 AreaBasedMapInitJson = areaBasedMapInitJson;
                 LoadBasedMapInitJson = loadBasedMapInitJson;
 
-                TreatmentBMPs = treatmentBMPs.Select(x => x.AsDisplayDto()).ToList();
-                Parcels = parcels.Select(x => x.AsDisplayDto()).ToList();
                 TrashCaptureStatusTypes = trashCaptureStatusTypeSimples;
                 StormwaterJurisdictionCqlFilter = stormwaterJurisdictionCqlFilter;
                 ShowDropdown = showDropdown;
@@ -108,7 +104,6 @@ namespace Neptune.WebMvc.Views.TrashHome
                 LoadBasedResultsUrlTemplate =
                     new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(linkGenerator, x =>
                         x.LoadBasedResultsCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
-                //LoadBasedCurrentOrNetChangeTemplate = new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(_linkGenerator, x => x.LoadBasedCurrentOrNetChange(UrlTemplate.Parameter1Int))).UrlTemplateString;
 
                 // Templates for links in detail pop-up
                 OrganizationUrlTemplate =

@@ -88,10 +88,6 @@
         $scope.initializeParcelLayer();
 
         $scope.setActiveParcelByID = function (parcelID) {
-            var parcel = _.find($scope.AngularViewData.Parcels,
-                function (t) {
-                    return t.ParcelID == parcelID;
-                });
             var layer = _.find($scope.parcelLayerGeoJson._layers,
                 function (layer) { return parcelID === layer.feature.properties.ParcelID; });
             setActiveImpl(layer, true);

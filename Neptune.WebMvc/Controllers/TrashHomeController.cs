@@ -30,20 +30,10 @@ namespace Neptune.WebMvc.Controllers
             }
 
             var stormwaterJurisdictionIDsPersonCanView = stormwaterJurisdictionsPersonCanView.Select(x => x.StormwaterJurisdictionID).ToList();
-            var treatmentBmps = TreatmentBMPs.ListByStormwaterJurisdictionIDList(_dbContext, stormwaterJurisdictionIDsPersonCanView.ToList());
-            var treatmentBMPLayerGeoJson = new LayerGeoJson("Treatment BMPs", treatmentBmps.ToGeoJsonFeatureCollectionForTrashMap(_linkGenerator), "blue", 1, LayerInitialVisibility.Show) {EnablePopups = false};
-
-            var parcels = _dbContext.Parcels
-                .Include(x => x.ParcelGeometry)
-                .Include(x => x.WaterQualityManagementPlanParcels).ThenInclude(x => x.WaterQualityManagementPlan)
-                .AsNoTracking()
-                .Where(x => x.WaterQualityManagementPlanParcels.Any()).ToList();
-
-            var parcelLayerGeoJson = new LayerGeoJson("Parcels", parcels.ToGeoJsonFeatureCollectionForTrashMap(), "blue", 1, LayerInitialVisibility.Show) {EnablePopups = false};
-
             var boundingBox = StormwaterJurisdictions.GetBoundingBoxDtoByJurisdictionIDList(_dbContext, stormwaterJurisdictionIDsPersonCanView);
-
             var geoJsonForJurisdictions = GetGeoJsonForJurisdictions(stormwaterJurisdictionIDsPersonCanView);
+            var treatmentBMPLayerGeoJson = GetTreatmentBMPLayerGeoJson(stormwaterJurisdictionIDsPersonCanView);
+            var parcelLayerGeoJson = GetParcelLayerGeoJson();
             var ovtaBasedMapInitJson = new TrashModuleMapInitJson("ovtaBasedResultsMap", treatmentBMPLayerGeoJson, parcelLayerGeoJson, boundingBox, new List<LayerGeoJson>()) {LayerControlClass = "ovta-based-map-layer-control"};
             var areaBasedMapInitJson = new StormwaterMapInitJson("areaBasedResultsMap", boundingBox, new List<LayerGeoJson>()) { LayerControlClass = "area-based-map-layer-control" };
             var loadBasedMapInitJson= new StormwaterMapInitJson("loadBasedResultsMap", boundingBox, new List<LayerGeoJson>()) { LayerControlClass = "load-based-map-layer-control" };
@@ -54,13 +44,34 @@ namespace Neptune.WebMvc.Controllers
             var stormwaterJurisdictionCqlFilter = CurrentPerson.GetStormwaterJurisdictionCqlFilter(stormwaterJurisdictionIDsPersonCanView);
             var negativeStormwaterJurisdictionCqlFilter = CurrentPerson.GetNegativeStormwaterJurisdictionCqlFilter(stormwaterJurisdictionIDsPersonCanView);
 
-            var viewDataForAngularClass = new IndexViewData.ViewDataForAngularClass(_linkGenerator, ovtaBasedMapInitJson, areaBasedMapInitJson,
-                loadBasedMapInitJson,
-                treatmentBmps, TrashCaptureStatusType.All, parcels, stormwaterJurisdictionCqlFilter, showDropdown,
-                negativeStormwaterJurisdictionCqlFilter, geoJsonForJurisdictions, currentUserIsAnonymousOrUnassigned, _webConfiguration.MapServiceUrl);
+            var viewDataForAngularClass = new IndexViewData.ViewDataForAngularClass(_linkGenerator, ovtaBasedMapInitJson, areaBasedMapInitJson, loadBasedMapInitJson, TrashCaptureStatusType.All, stormwaterJurisdictionCqlFilter, showDropdown, negativeStormwaterJurisdictionCqlFilter, geoJsonForJurisdictions, currentUserIsAnonymousOrUnassigned, _webConfiguration.MapServiceUrl);
             var viewData = new IndexViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, neptunePage, stormwaterJurisdictionsPersonCanView, neptunePageTrashModuleProgramOverview, viewDataForAngularClass);
 
             return RazorView<Index, IndexViewData>(viewData);
+        }
+
+        private LayerGeoJson GetTreatmentBMPLayerGeoJson(List<int> stormwaterJurisdictionIDsPersonCanView)
+        {
+            var treatmentBmps =
+                TreatmentBMPs.ListByStormwaterJurisdictionIDList(_dbContext, stormwaterJurisdictionIDsPersonCanView.ToList());
+            var treatmentBMPLayerGeoJson = new LayerGeoJson("Treatment BMPs",
+                    treatmentBmps.ToGeoJsonFeatureCollectionForTrashMap(_linkGenerator), "blue", 1, LayerInitialVisibility.Show)
+                { EnablePopups = false };
+            return treatmentBMPLayerGeoJson;
+        }
+
+        private LayerGeoJson GetParcelLayerGeoJson()
+        {
+            var parcels = _dbContext.Parcels
+                .Include(x => x.ParcelGeometry)
+                .Include(x => x.WaterQualityManagementPlanParcels).ThenInclude(x => x.WaterQualityManagementPlan)
+                .AsNoTracking()
+                .Where(x => x.WaterQualityManagementPlanParcels.Any()).ToList();
+
+            var parcelLayerGeoJson =
+                new LayerGeoJson("Parcels", parcels.ToGeoJsonFeatureCollectionForTrashMap(), "blue", 1,
+                    LayerInitialVisibility.Show) { EnablePopups = false };
+            return parcelLayerGeoJson;
         }
 
         private FeatureCollection GetGeoJsonForJurisdictions(List<int> stormwaterJurisdictionIDsPersonCanView)
