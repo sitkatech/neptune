@@ -548,7 +548,7 @@ namespace Neptune.EFModels.Entities
     public partial class NeptunePageTypeModelingHomePage : NeptunePageType
     {
         private NeptunePageTypeModelingHomePage(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
-        public static readonly NeptunePageTypeModelingHomePage Instance = new NeptunePageTypeModelingHomePage(32, @"ModelingHomePage", @"Modeling Home Page");
+        public static readonly NeptunePageTypeModelingHomePage Instance = new NeptunePageTypeModelingHomePage(32, @"ModelingHomePage", @"Modeling Module");
     }
 
     public partial class NeptunePageTypeTrashHomePage : NeptunePageType

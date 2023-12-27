@@ -30,7 +30,7 @@ USING (VALUES
 (29, 'Training', 'Training'),
 (30, 'ManagerDashboard', 'Manager Dashboard'),
 (31, 'WaterQualityMaintenancePlanOandMVerifications', 'Water Quality Maintenance Plan O&M Verifications'),
-(32, 'ModelingHomePage', 'Modeling Home Page'),
+(32, 'ModelingHomePage', 'Modeling Module'),
 (33, 'TrashHomePage', 'Trash Module Home Page'),
 (34, 'OVTAInstructions', 'OVTA Instructions'),
 (35, 'OVTAIndex', 'OVTA Index'),

@@ -100,7 +100,7 @@ namespace Neptune.WebMvc.Views.Shared
                 case NeptuneAreaEnum.OCStormwaterTools:
                     return SitkaRoute<HomeController>.BuildUrlFromExpression(LinkGenerator, x => x.Index()) + "#welcome";
                 case NeptuneAreaEnum.Modeling:
-                    return neptuneArea.NeptuneAreaName;
+                    return SitkaRoute<HomeController>.BuildUrlFromExpression(LinkGenerator, x => x.Modeling());
                 default:
                     throw new ArgumentOutOfRangeException();
             }

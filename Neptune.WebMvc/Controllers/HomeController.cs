@@ -158,6 +158,14 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
+        public ViewResult Modeling()
+        {
+            var con = new HomeController(_dbContext, _logger, _webConfigurationOptions, _linkGenerator) { ControllerContext = ControllerContext };
+            return con.ViewPageContent(NeptunePageTypeEnum.ModelingHomePage);
+        }
+
+
+        [HttpGet]
         [NeptuneAdminFeature]
         public ViewResult ManageHomePageImages()
         {
