@@ -696,20 +696,24 @@ stages:
               chartPath: '$(Pipeline.Workspace)/ChartArtifacts/chart'
               releaseName: 'neptune'
               overrideValues: |
-                global.env.appInsightsInstrumentationKey="$(INSTRUMENTATION_KEY)"
                 global.domains.api="$(domainApi)"
                 global.domains.web="$(domainWeb)"
                 global.domains.webMvc="$(domainWebMvc)"
                 global.domains.geoserver="$(domainGeoserver)"
+                global.env.appInsightsInstrumentationKey="$(INSTRUMENTATION_KEY)"
                 global.env.name="$(Environment)"
-                global.secrets.geoserverSqlServerPassword="$(SQL_GEOSERVER_PASSWORD)"
-                global.secrets.geoserverAdminPassword="$(GEOSERVER_ADMIN_PASSWORD)"
-                global.secrets.applicationStorageAccountName="$(storageAccountApplicationName)"
-                global.secrets.applicationStorageAccountKey="$(APPLICATION_STORAGE_ACCOUNT_KEY)"
                 global.env.dbServer=$(dbServer)
                 global.env.databaseName=$(databaseName)
                 global.env.sqlUsername=$(sqlApiUsername)
                 global.env.sqlGeoserverUsername=$(sqlGeoserverUsername)
+                global.secrets.geoserverSqlServerPassword="$(SQL_GEOSERVER_PASSWORD)"
+                global.secrets.geoserverAdminPassword="$(GEOSERVER_ADMIN_PASSWORD)"
+                global.secrets.applicationStorageAccountName="$(storageAccountApplicationName)"
+                global.secrets.applicationStorageAccountKey="$(APPLICATION_STORAGE_ACCOUNT_KEY)"
+                global.secrets.hangfirePassword="$(HANGFIRE_PASSWORD)"
+                global.secrets.keystoneOpenIDClientSecret="$(keystoneOpenIDClientSecret)"
+                global.secrets.recaptchaV3SiteKey="$(recaptchaV3SiteKey)"
+                global.secrets.recaptchaV3SecretKey="$(recaptchaV3SecretKey)"
                 global.secrets.apiSqlPassword=$(SQL_API_PASSWORD)
                 global.secrets.sendGridApiKey="$(SendGridApiKey)"
                 api.image.tag="$(Build.BuildNumber)-$(environment)"
@@ -732,8 +736,4 @@ stages:
                 nereid-flower.image.tag="$(nereidTag)"
                 nereid-celeryworker.image.repository="$(containerRegistry)/neptune/celeryworker"
                 nereid-celeryworker.image.tag="$(nereidTag)"
-                global.secrets.hangfirePassword="$(HANGFIRE_PASSWORD)"
-                global.secrets.keystoneOpenIDClientSecret="$(keystoneOpenIDClientSecret)"
-                global.secrets.recaptchaV3SiteKey="$(recaptchaV3SiteKey)"
-                global.secrets.recaptchaV3SecretKey="$(recaptchaV3SecretKey)"
               force: false
