@@ -32,6 +32,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.Common;
+using Neptune.Common.DesignByContract;
 using Neptune.Common.GeoSpatial;
 using Neptune.Common.Mvc;
 using Neptune.Common.Services.GDAL;
@@ -54,6 +55,7 @@ using EditViewModel = Neptune.WebMvc.Views.TreatmentBMP.EditViewModel;
 using TreatmentBMPAssessmentSummary = Neptune.EFModels.Entities.TreatmentBMPAssessmentSummary;
 using Neptune.EFModels.Nereid;
 using Neptune.Jobs.Services;
+using DocumentFormat.OpenXml.InkML;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -460,25 +462,50 @@ namespace Neptune.WebMvc.Controllers
             }
 
             // delete any field visit, assessment, benchmark, and maintenance records
-            foreach (var fieldVisit in _dbContext.FieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToList())
-            {
-                await fieldVisit.DeleteFull(_dbContext);
-            }
+            await _dbContext.MaintenanceRecordObservationValues
+                .Include(x => x.MaintenanceRecordObservation)
+                .ThenInclude(x => x.MaintenanceRecord)
+                .Where(x => x.MaintenanceRecordObservation.MaintenanceRecord.TreatmentBMPID ==
+                            treatmentBMP.TreatmentBMPID)
+                .ExecuteDeleteAsync();
+            await _dbContext.MaintenanceRecordObservations
+                .Include(x => x.MaintenanceRecord)
+                .Where(x => x.MaintenanceRecord.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ExecuteDeleteAsync();
+            await _dbContext.MaintenanceRecords.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
+                .ExecuteDeleteAsync();
+            await _dbContext.TreatmentBMPAssessmentPhotos
+                .Include(x => x.TreatmentBMPAssessment)
+                .Where(x => x.TreatmentBMPAssessment.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
+                .ExecuteDeleteAsync();
+            await _dbContext.TreatmentBMPObservations
+                .Include(x => x.TreatmentBMPAssessment)
+                .Where(x => x.TreatmentBMPAssessment.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
+                .ExecuteDeleteAsync();
+            await _dbContext.TreatmentBMPAssessments
+                .Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
+                .ExecuteDeleteAsync();
+            await _dbContext.TreatmentBMPBenchmarkAndThresholds
+                .Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ExecuteDeleteAsync();
+            await _dbContext.FieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
+                .ExecuteDeleteAsync();
 
-            foreach (var treatmentBMPBenchmarkAndThreshold in treatmentBMP.TreatmentBMPBenchmarkAndThresholds.ToList())
-            {
-                await treatmentBMPBenchmarkAndThreshold.DeleteFull(_dbContext);
-            }
-
-            treatmentBMP.TreatmentBMPBenchmarkAndThresholds = null;
 
             var newTreatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, viewModel.TreatmentBMPTypeID);
             var validCustomAttributeTypes = newTreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.ToList();
 
             // we need to clone the attributes instead of simply changing the bmp type and treatmentbmptypecustomattributetype ids
+            var currentCustomAttributes = CustomAttributes.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
+
+            // delete any custom attributes that are not valid for the new treatment bmp type
+            await _dbContext.CustomAttributeValues.Include(x => x.CustomAttribute)
+                .Where(x => x.CustomAttribute.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ExecuteDeleteAsync();
+            await _dbContext.CustomAttributes.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
+                .ExecuteDeleteAsync();
+
+            // now add the cloned custom attributes to the db context
             var customAttributesCloned = new List<CustomAttribute>();
-            foreach (var customAttribute in treatmentBMP.CustomAttributes.Where(z => validCustomAttributeTypes.Select(y => y.CustomAttributeTypeID).Contains(z.CustomAttributeTypeID))
-                .ToList())
+            foreach (var customAttribute in currentCustomAttributes.Where(x => validCustomAttributeTypes.Select(y => y.CustomAttributeTypeID).Contains(x.CustomAttributeTypeID))
+                         .ToList())
             {
                 var treatmentBMPTypeCustomAttributeType = newTreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Single(x => x.CustomAttributeTypeID == customAttribute.CustomAttributeTypeID);
                 var customAttributeCloned = new CustomAttribute()
@@ -498,20 +525,9 @@ namespace Neptune.WebMvc.Controllers
                         CustomAttribute = customAttributeCloned,
                         AttributeValue = value.AttributeValue
                     };
-
                 }
             }
-
-            // delete any custom attributes that are not valid for the new treatment bmp type
-            foreach (var customAttribute in treatmentBMP.CustomAttributes.ToList())
-            {
-                await customAttribute.DeleteFull(_dbContext);
-            }
-            // force a save changes to clear out fk references when we switch the bmp type
-            await _dbContext.SaveChangesAsync();
-
-            // now add the cloned custom attributes to the db context
-            _dbContext.CustomAttributes.AddRange(customAttributesCloned);
+            await _dbContext.CustomAttributes.AddRangeAsync(customAttributesCloned);
             treatmentBMP.TreatmentBMPTypeID = viewModel.TreatmentBMPTypeID.GetValueOrDefault();
             await _dbContext.SaveChangesAsync();
             return new ModalDialogFormJsonResult();
