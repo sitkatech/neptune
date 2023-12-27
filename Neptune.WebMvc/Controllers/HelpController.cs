@@ -84,10 +84,10 @@ namespace Neptune.WebMvc.Controllers
                 viewModel.RequestPersonPhone = CurrentPerson.Phone;
             }
             viewModel.RequestDescription = optionalPrepopulatedDescription;
-            return ViewSupportImpl(viewModel, string.Empty);
+            return ViewSupportImpl(viewModel);
         }
 
-        private ViewResult ViewSupportImpl(SupportFormViewModel viewModel, string successMessage)
+        private ViewResult ViewSupportImpl(SupportFormViewModel viewModel)
         {
             var allSupportRequestTypes = SupportRequestType.All.OrderBy(x => x.SupportRequestTypeSortOrder).ToList();
 
@@ -96,7 +96,7 @@ namespace Neptune.WebMvc.Controllers
                     .ToSelectListWithEmptyFirstRow(x => x.SupportRequestTypeID.ToString(CultureInfo.InvariantCulture), x => x.SupportRequestTypeDisplayName);
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.RequestSupport);
             var referrer = HttpContext.Request.GetReferrer();
-            var cancelUrl = referrer ?? SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
+            var cancelUrl = string.IsNullOrWhiteSpace(referrer) ? SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()) : referrer;
             viewModel.ReturnUrl = cancelUrl;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             var viewData = new SupportFormViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, _webConfiguration.GoogleRecaptchaV3Config.SiteKey, supportRequestTypes, CurrentPerson.IsAnonymousUser(), cancelUrl);
@@ -110,7 +110,7 @@ namespace Neptune.WebMvc.Controllers
 
             if (!ModelState.IsValid)
             {
-                return ViewSupportImpl(viewModel, string.Empty);
+                return ViewSupportImpl(viewModel);
             }
 
             var supportRequestLog = SupportRequestLogs.Create(CurrentPerson);
@@ -173,7 +173,7 @@ namespace Neptune.WebMvc.Controllers
                 allSupportRequestTypes.OrderBy(x => x.SupportRequestTypeSortOrder)
                     .ToSelectListWithEmptyFirstRow(x => x.SupportRequestTypeID.ToString(CultureInfo.InvariantCulture), x => x.SupportRequestTypeDisplayName);
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.RequestSupport);
-            var cancelUrl = referrer ?? SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
+            var cancelUrl = string.IsNullOrWhiteSpace(referrer) ? SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()) : referrer;
             viewModel.ReturnUrl = cancelUrl;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             var viewData = new SupportFormViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, _webConfiguration.GoogleRecaptchaV3Config.SiteKey, supportRequestTypes, isAnonymousUser, cancelUrl);
@@ -187,7 +187,7 @@ namespace Neptune.WebMvc.Controllers
             await ValidateRecaptcha(viewModel);
             if (!ModelState.IsValid)
             {
-                return ViewSupportImpl(viewModel, string.Empty);
+                return ViewSupportImpl(viewModel);
             }
             var supportRequestLog = SupportRequestLogs.Create(CurrentPerson);
             viewModel.UpdateModel(supportRequestLog, CurrentPerson);
