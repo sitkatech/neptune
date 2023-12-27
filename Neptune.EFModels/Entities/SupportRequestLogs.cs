@@ -31,7 +31,6 @@ namespace Neptune.EFModels.Entities
             };
             if (person != null && !person.IsAnonymousUser())
             {
-                supportRequest.RequestPerson = person;
                 supportRequest.RequestPersonID = person.PersonID;
                 supportRequest.RequestPersonName = person.GetFullNameFirstLast();
                 supportRequest.RequestPersonEmail = person.Email;

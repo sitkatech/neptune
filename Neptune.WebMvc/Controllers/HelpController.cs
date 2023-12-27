@@ -117,12 +117,12 @@ namespace Neptune.WebMvc.Controllers
             viewModel.UpdateModel(supportRequestLog, CurrentPerson);
             await _dbContext.SupportRequestLogs.AddAsync(supportRequestLog);
             await _dbContext.SaveChangesAsync();
-            await SendMessage(supportRequestLog, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);
+            await SendMessage(supportRequestLog, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType, CurrentPerson);
             SetMessageForDisplay("Support request sent.");
             return Redirect(viewModel.ReturnUrl);
         }
 
-        private async Task ValidateRecaptcha(SupportFormViewModel viewModel)
+        private async Task ValidateRecaptcha(RecaptchaFormViewModel viewModel)
         {
             if (!HttpContext.User.Identity.IsAuthenticated)
             {
@@ -177,7 +177,7 @@ namespace Neptune.WebMvc.Controllers
             viewModel.ReturnUrl = cancelUrl;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             var viewData = new SupportFormViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, _webConfiguration.GoogleRecaptchaV3Config.SiteKey, supportRequestTypes, isAnonymousUser, cancelUrl);
-            return RazorView<Views.Help.RequestOrganizationNameChange, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
+            return RazorView<RequestOrganizationNameChange, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 
         [HttpPost]
@@ -193,7 +193,7 @@ namespace Neptune.WebMvc.Controllers
             viewModel.UpdateModel(supportRequestLog, CurrentPerson);
             await _dbContext.SupportRequestLogs.AddAsync(supportRequestLog);
             await _dbContext.SaveChangesAsync();
-            await SendMessage(supportRequestLog, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);
+            await SendMessage(supportRequestLog, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType, CurrentPerson);
             SetMessageForDisplay("Support request sent.");
             return Redirect(SitkaRoute<OrganizationController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
         }
@@ -219,7 +219,7 @@ namespace Neptune.WebMvc.Controllers
                 new BulkUploadRequestViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.BulkUploadRequest)));
         }
 
-        private async Task SendMessage(SupportRequestLog supportRequestLog, string currentUrl, SupportRequestType supportRequestType)
+        private async Task SendMessage(SupportRequestLog supportRequestLog, string currentUrl, SupportRequestType supportRequestType, Person? requestPerson)
         {
             var ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
             var userAgent = HttpContext.Request.Headers.UserAgent;
@@ -241,7 +241,7 @@ namespace Neptune.WebMvc.Controllers
     <br />
     <div style='font-size: 10px; color: gray'>
     OTHER DETAILS:<br />
-    LOGIN: {(supportRequestLog.RequestPerson != null ? $"{supportRequestLog.RequestPerson.GetFullNameFirstLast()} (UserID {supportRequestLog.RequestPerson.PersonID})" : "(anonymous user)")}<br />
+    LOGIN: {(requestPerson != null ? $"{requestPerson.GetFullNameFirstLast()} (UserID {requestPerson.PersonID})" : "(anonymous user)")}<br />
     IP ADDRESS: {ipAddress}<br />
     USERAGENT: {userAgent}<br />
     URL FROM: {currentUrl}<br />
