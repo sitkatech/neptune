@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Views.Shared;
@@ -30,8 +31,11 @@ using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.Help;
 using System.Net.Mail;
+using LtInfo.Common;
 using Neptune.Common;
 using Neptune.Common.Email;
+using Neptune.Jobs;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -95,24 +99,40 @@ namespace Neptune.WebMvc.Controllers
             var cancelUrl = referrer ?? SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
             viewModel.ReturnUrl = cancelUrl;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            var viewData = new SupportFormViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, successMessage, CurrentPerson.IsAnonymousUser(), supportRequestTypes, allSupportRequestTypes.Select(x => x.AsSimpleDto()).ToList(), cancelUrl);
+            var viewData = new SupportFormViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, _webConfiguration.GoogleRecaptchaV3Config.SiteKey, supportRequestTypes, CurrentPerson.IsAnonymousUser(), cancelUrl);
             return RazorView<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Support(SupportFormViewModel viewModel)
         {
+            await ValidateRecaptcha(viewModel);
+
             if (!ModelState.IsValid)
             {
                 return ViewSupportImpl(viewModel, string.Empty);
             }
+
             var supportRequestLog = SupportRequestLogs.Create(CurrentPerson);
             viewModel.UpdateModel(supportRequestLog, CurrentPerson);
             await _dbContext.SupportRequestLogs.AddAsync(supportRequestLog);
             await _dbContext.SaveChangesAsync();
-            await SendMessage(supportRequestLog, HttpContext.Connection.RemoteIpAddress.ToString(), HttpContext.Request.Headers.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);
+            await SendMessage(supportRequestLog, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);
             SetMessageForDisplay("Support request sent.");
             return Redirect(viewModel.ReturnUrl);
+        }
+
+        private async Task ValidateRecaptcha(SupportFormViewModel viewModel)
+        {
+            if (!HttpContext.User.Identity.IsAuthenticated)
+            {
+                if (
+                    !(await RecaptchaValidator.IsValidResponse(_webConfiguration.GoogleRecaptchaV3Config.VerifyUrl,
+                        _webConfiguration.GoogleRecaptchaV3Config.SecretKey, viewModel.RecaptchaToken)))
+                {
+                    ModelState.AddModelError(null, "Your Captcha response is incorrect.");
+                }
+            }
         }
 
         [HttpGet]
@@ -156,13 +176,15 @@ namespace Neptune.WebMvc.Controllers
             var cancelUrl = referrer ?? SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
             viewModel.ReturnUrl = cancelUrl;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            var viewData = new SupportFormViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, string.Empty, isAnonymousUser, supportRequestTypes, allSupportRequestTypes.Select(x => x.AsSimpleDto()).ToList(), cancelUrl);
+            var viewData = new SupportFormViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, _webConfiguration.GoogleRecaptchaV3Config.SiteKey, supportRequestTypes, isAnonymousUser, cancelUrl);
             return RazorView<Views.Help.RequestOrganizationNameChange, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 
         [HttpPost]
+        [LoggedInUnclassifiedFeature]
         public async Task<IActionResult> RequestOrganizationNameChange(SupportFormViewModel viewModel)
         {
+            await ValidateRecaptcha(viewModel);
             if (!ModelState.IsValid)
             {
                 return ViewSupportImpl(viewModel, string.Empty);
@@ -171,7 +193,7 @@ namespace Neptune.WebMvc.Controllers
             viewModel.UpdateModel(supportRequestLog, CurrentPerson);
             await _dbContext.SupportRequestLogs.AddAsync(supportRequestLog);
             await _dbContext.SaveChangesAsync();
-            await SendMessage(supportRequestLog, HttpContext.Connection.RemoteIpAddress.ToString(), HttpContext.Request.Headers.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
+            await SendMessage(supportRequestLog, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);
             SetMessageForDisplay("Support request sent.");
             return Redirect(SitkaRoute<OrganizationController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
         }
@@ -197,8 +219,10 @@ namespace Neptune.WebMvc.Controllers
                 new BulkUploadRequestViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.BulkUploadRequest)));
         }
 
-        private async Task SendMessage(SupportRequestLog supportRequestLog, string ipAddress, string userAgent, string currentUrl, SupportRequestType supportRequestType)
+        private async Task SendMessage(SupportRequestLog supportRequestLog, string currentUrl, SupportRequestType supportRequestType)
         {
+            var ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+            var userAgent = HttpContext.Request.Headers.UserAgent;
             var subject = $"Support Request for Neptune - {DateTime.Now.ToStringDateTime()}";
             var message = $@"
 <div style='font-size: 12px; font-family: Arial'>

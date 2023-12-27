@@ -734,4 +734,6 @@ stages:
                 nereid-celeryworker.image.tag="$(nereidTag)"
                 global.secrets.hangfirePassword="$(HANGFIRE_PASSWORD)"
                 global.secrets.keystoneOpenIDClientSecret="$(keystoneOpenIDClientSecret)"
+                global.secrets.recaptchaV3SiteKey="$(recaptchaV3SiteKey)"
+                global.secrets.recaptchaV3SecretKey="$(recaptchaV3SecretKey)"
               force: false

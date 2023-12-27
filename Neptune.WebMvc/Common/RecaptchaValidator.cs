@@ -1,6 +1,6 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="SitkaRecaptchaViewData.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
-Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+<copyright file="RecaptchaValidator.cs" company="Sitka Technology Group">
+Copyright (c) Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
 
@@ -18,19 +18,21 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using Neptune.Web.Common;
 
-namespace Neptune.Web.Views.Shared
+namespace Neptune.WebMvc.Common
 {
-    public class SitkaRecaptchaViewData
+    public class RecaptchaValidator
     {
-        public SitkaRecaptchaViewData()
+        /// <summary>
+        /// This is using the new Recaptcha v3 API
+        /// </summary>
+        public static async Task<bool> IsValidResponse(string verifyURL, string secretKey, string captchaResponseToken)
         {
-            RecaptchaPublicKey = NeptuneWebConfiguration.RecaptchaPublicKey;
-            Theme = "clean";
-        }
+            var reCaptchaVerifyUri = $"{verifyURL}?secret={secretKey}&response={captchaResponseToken}";
 
-        public readonly string RecaptchaPublicKey;
-        public readonly string Theme;
+            var httpClient = new HttpClient();
+            var googleRecaptchaV3Response = await httpClient.GetFromJsonAsync<GoogleRecaptchaV3Response>(reCaptchaVerifyUri);
+            return googleRecaptchaV3Response!.Success;
+        }
     }
 }

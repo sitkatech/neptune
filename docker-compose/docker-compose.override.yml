@@ -28,6 +28,9 @@ services:
       - RecaptchaPublicKey=${RecaptchaPublicKey}
       - RecaptchaPrivateKey=${RecaptchaPrivateKey}
       - RecaptchaValidatorUrl=${RecaptchaValidatorUrl}
+      - GoogleRecaptchaV3Config__SiteKey=${GoogleRecaptchaV3SiteKey}
+      - GoogleRecaptchaV3Config__SecretKey=${GoogleRecaptchaV3SecretKey}
+      - GoogleRecaptchaV3Config__VerifyUrl=${GoogleRecaptchaV3VerifyUrl}
     ports:
       - "6211:8080"
       - "6212:8081"

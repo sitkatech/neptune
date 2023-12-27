@@ -21,29 +21,27 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Neptune.EFModels.Entities;
-using Neptune.Models.DataTransferObjects;
 using Neptune.WebMvc.Common;
 
 namespace Neptune.WebMvc.Views.Shared
 {
     public class SupportFormViewData : NeptuneViewData
     {
-        public readonly List<SupportRequestTypeSimpleDto> SupportRequestTypeSimples;
-        public readonly string SuccessMessage;
         public readonly bool IsUserAnonymous;
         public readonly IEnumerable<SelectListItem> SupportRequestTypes;
         public string CancelUrl { get; }
+        public string GoogleRecaptchaSiteKey { get; }
 
-        public SupportFormViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
-            EFModels.Entities.NeptunePage neptunePage, string successMessage,
-            bool isUserAnonymous, IEnumerable<SelectListItem> supportRequestTypes,
-            List<SupportRequestTypeSimpleDto> supportRequestTypeSimples, string cancelUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
+        public SupportFormViewData(HttpContext httpContext, LinkGenerator linkGenerator,
+            WebConfiguration webConfiguration, Person currentPerson,
+            EFModels.Entities.NeptunePage neptunePage,
+            string googleRecaptchaSiteKey, IEnumerable<SelectListItem> supportRequestTypes,
+            bool isUserAnonymous, string cancelUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = "Stormwater Tools";
             PageTitle = "Request Support";
-            SupportRequestTypeSimples = supportRequestTypeSimples;
             CancelUrl = cancelUrl;
-            SuccessMessage = successMessage;
+            GoogleRecaptchaSiteKey = googleRecaptchaSiteKey;
             IsUserAnonymous = isUserAnonymous;
             SupportRequestTypes = supportRequestTypes;
         }

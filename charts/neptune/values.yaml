@@ -24,6 +24,8 @@ global:
     sendGridApiKey: "sendgridapikeyhere"
     hangfirePassword: "passwordhere"
     keystoneOpenIDClientSecret: "secrethere"
+    recaptchaV3SiteKey: "recaptchaV3SiteKeyHere"
+    recaptchaV3SecretKey: "recaptchaV3SecretKeyHere"
 
 api:
   replicaCount: 1

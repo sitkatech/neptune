@@ -5,9 +5,6 @@ namespace Neptune.WebMvc.Common;
 public class WebConfiguration : NeptuneJobConfiguration
 {
     public string DatabaseConnectionString { get; set; }
-    public string RecaptchaPublicKey { get; set; }
-    public string RecaptchaPrivateKey { get; set; }
-    public string RecaptchaValidatorUrl { get; set; }
 
     public string KeystoneUrl { get; set; }
     public string KeystoneRegisterUrl { get; set; }
@@ -26,4 +23,6 @@ public class WebConfiguration : NeptuneJobConfiguration
 
     public string PathToFieldVisitUploadTemplate { get; set; }
     public string AzureBlobStorageConnectionString { get; set; }
+
+    public GoogleRecaptchaV3Config GoogleRecaptchaV3Config { get; set; }
 }

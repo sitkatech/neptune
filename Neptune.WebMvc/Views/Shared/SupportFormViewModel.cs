@@ -22,11 +22,10 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Neptune.EFModels.Entities;
-using Neptune.WebMvc.Common.Models;
 
 namespace Neptune.WebMvc.Views.Shared
 {
-    public class SupportFormViewModel : FormViewModel, IValidatableObject
+    public class SupportFormViewModel : RecaptchaFormViewModel
     {
         [Required]
         [DisplayName("Name")]
@@ -58,6 +57,7 @@ namespace Neptune.WebMvc.Views.Shared
         [DisplayName("Subject")]
         public SupportRequestTypeEnum? SupportRequestTypeEnum { get; set; }
 
+
         public string CurrentPageUrl { get; set; }
         public string ReturnUrl { get; set; }
 
@@ -86,33 +86,6 @@ namespace Neptune.WebMvc.Views.Shared
             {
                 supportRequestLog.RequestPersonID = updatePerson.PersonID;
             }
-        }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var errors = new List<ValidationResult>();
-
-            // TODO: recaptcha
-            //var httpContext = HttpContext;
-            //if (!httpContext.User.Identity.IsAuthenticated) // this means we are anonymous
-            //{
-            //    var ipAddress = string.Empty;
-            //    if (httpContext != null)
-            //    {
-            //        ipAddress = httpContext.Request.UserHostAddress;
-            //    }
-            //    var gRecaptchaResponse = httpContext.Request.Form["g-recaptcha-response"];
-            //    if (
-            //        !RecaptchaValidator.IsValidResponse(gRecaptchaResponse,
-            //            ipAddress,
-            //            NeptuneWebConfiguration.RecaptchaPrivateKey,
-            //            NeptuneWebConfiguration.RecaptchaValidatorUrl,
-            //            SitkaLogger.Instance.LogDetailedErrorMessage))
-            //    {
-            //        errors.Add(new ValidationResult("Your Captcha response is incorrect."));
-            //    }
-            //}
-            return errors;
         }
     }
 }

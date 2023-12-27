@@ -23,7 +23,9 @@
 @inherits SupportForm
 @model SupportFormViewModel
 
-@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+@{
+    ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);
+}
 
 @using (Html.BeginForm())
 {
@@ -98,20 +100,34 @@
         </div>
         @Html.HiddenFor(x => x.CurrentPageUrl)
 
-        @if (ViewDataTyped.IsUserAnonymous)
-        {
-            <div style="margin-bottom: 5px">
-                This question is testing whether you are a human visitor and to prevent automated spam submissions:
-            </div>
-            @*todo: SitkaRecaptcha.RenderPartialView(Html);*@
-        }
     </div>
     <hr>
     <div class="row">
         <div class="col-xs-12" style="text-align: right">
-            <button class="btn btn-neptune" style="display: inline-block;" type="submit">
-                Submit Request
-            </button>
+            @if (ViewDataTyped.IsUserAnonymous)
+            {
+                <script src="https://www.google.com/recaptcha/api.js"></script>
+
+                <script type="text/javascript">
+                    function onGoogleRecaptchaSubmitCallback(token) {
+                        $("#RecaptchaToken").val(token);
+                        document.forms[0].submit();
+                    }
+                </script>
+                @Html.HiddenFor(x => x.RecaptchaToken)
+                <button class="g-recaptcha btn btn-neptune"
+                        data-sitekey="@ViewDataTyped.GoogleRecaptchaSiteKey"
+                        data-callback="onGoogleRecaptchaSubmitCallback"
+                        data-action="submit">
+                    Submit Request
+                </button>
+            }
+            else
+            {
+                <button class="btn btn-neptune" style="display: inline-block;" type="submit">
+                    Submit Request
+                </button>
+            }
             <a href="@ViewDataTyped.CancelUrl" class="btn btn-neptune" style="display: inline-block;">Cancel</a>
         </div>
     </div>
