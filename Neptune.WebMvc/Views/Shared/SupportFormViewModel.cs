@@ -35,7 +35,6 @@ namespace Neptune.WebMvc.Views.Shared
 
         [Required]
         [DisplayName("Email Address")]
-        [DataType(DataType.EmailAddress)]
         [RegularExpression("^([\\w-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([\\w-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$",
             ErrorMessage = "Email supplied does not appear to be formatted correctly")]
         [StringLength(SupportRequestLog.FieldLengths.RequestPersonEmail)]

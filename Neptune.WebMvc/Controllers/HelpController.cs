@@ -200,46 +200,34 @@ namespace Neptune.WebMvc.Controllers
         private async Task SendMessage(SupportRequestLog supportRequestLog, string ipAddress, string userAgent, string currentUrl, SupportRequestType supportRequestType)
         {
             var subject = $"Support Request for Neptune - {DateTime.Now.ToStringDateTime()}";
-            var message = string.Format(@"
+            var message = $@"
 <div style='font-size: 12px; font-family: Arial'>
-    <strong>{0}</strong><br />
+    <strong>{subject}</strong><br />
     <br />
-    <strong>From:</strong> {1} - {2}<br />
-    <strong>Email:</strong> {3}<br />
-    <strong>Phone:</strong> {4}<br />
+    <strong>From:</strong> {supportRequestLog.RequestPersonName} - {supportRequestLog.RequestPersonOrganization ?? "(not provided)"}<br />
+    <strong>Email:</strong> {supportRequestLog.RequestPersonEmail}<br />
+    <strong>Phone:</strong> {supportRequestLog.RequestPersonPhone ?? "(not provided)"}<br />
     <br />
-    <strong>Subject:</strong> {5}<br />
+    <strong>Subject:</strong> {supportRequestType.SupportRequestTypeDisplayName}<br />
     <br />
     <strong>Description:</strong><br />
-    {6}
+    {supportRequestLog.RequestDescription.HtmlEncodeWithBreaks()}
     <br />
     <br />
     <br />
     <div style='font-size: 10px; color: gray'>
     OTHER DETAILS:<br />
-    LOGIN: {7}<br />
-    IP ADDRESS: {8}<br />
-    USERAGENT: {9}<br />
-    URL FROM: {10}<br />
+    LOGIN: {(supportRequestLog.RequestPerson != null ? $"{supportRequestLog.RequestPerson.GetFullNameFirstLast()} (UserID {supportRequestLog.RequestPerson.PersonID})" : "(anonymous user)")}<br />
+    IP ADDRESS: {ipAddress}<br />
+    USERAGENT: {userAgent}<br />
+    URL FROM: {currentUrl}<br />
     <br />
     </div>
-    <div>You received this email because you are set up as a point of contact for support - if that's not correct, let us know: {11}</div>.
+    <div>You received this email because you are set up as a point of contact for support - if that's not correct, let us know: {"support@sitkatech.com"}</div>.
 </div>
-",
-                subject,
-                supportRequestLog.RequestPersonName,
-                supportRequestLog.RequestPersonOrganization ?? "(not provided)",
-                supportRequestLog.RequestPersonEmail,
-                supportRequestLog.RequestPersonPhone ?? "(not provided)",
-                supportRequestType.SupportRequestTypeDisplayName,
-                supportRequestLog.RequestDescription.HtmlEncodeWithBreaks(),
-                supportRequestLog.RequestPerson != null ? $"{supportRequestLog.RequestPerson.GetFullNameFirstLast()} (UserID {supportRequestLog.RequestPerson.PersonID})" : "(anonymous user)",
-                ipAddress,
-                userAgent,
-                currentUrl,
-                "support@sitkatech.com");
+";
             // Create Notification
-            var mailMessage = new MailMessage { From = new MailAddress("DoNotReplyEmail"), Subject = subject, Body = message, IsBodyHtml = true };
+            var mailMessage = new MailMessage { From = new MailAddress(_webConfiguration.DoNotReplyEmail), Subject = subject, Body = message, IsBodyHtml = true };
 
             // Reply-To Header
             mailMessage.ReplyToList.Add(supportRequestLog.RequestPersonEmail);
