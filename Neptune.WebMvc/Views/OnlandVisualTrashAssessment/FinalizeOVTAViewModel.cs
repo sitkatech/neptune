@@ -69,9 +69,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
 
         }
 
-        public async Task UpdateModel(NeptuneDbContext dbContext,
-            EFModels.Entities.OnlandVisualTrashAssessment onlandVisualTrashAssessment,
-            DbSet<OnlandVisualTrashAssessmentPreliminarySourceIdentificationType> allOnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes)
+        public async Task UpdateModel(NeptuneDbContext dbContext, EFModels.Entities.OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
             if (Finalize.GetValueOrDefault())
             {
@@ -97,10 +95,10 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
                     await dbContext.SaveChangesAsync();
                     await dbContext.Entry(onlandVisualTrashAssessmentArea).ReloadAsync();
 
-                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
-                        onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
+                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
                     onlandVisualTrashAssessment.DraftGeometry = null;
                     onlandVisualTrashAssessment.DraftAreaDescription = null;
+                    onlandVisualTrashAssessment.DraftAreaName = null;
                 }
 
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID =
@@ -142,8 +140,11 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
             {
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = ScoreID;
                 onlandVisualTrashAssessment.Notes = Notes;
-                onlandVisualTrashAssessment.DraftAreaName = AssessmentAreaName;
-                onlandVisualTrashAssessment.DraftAreaDescription = AssessmentAreaDescription;
+                if(onlandVisualTrashAssessment.AssessingNewArea ?? false)
+                {
+                    onlandVisualTrashAssessment.DraftAreaName = AssessmentAreaName;
+                    onlandVisualTrashAssessment.DraftAreaDescription = AssessmentAreaDescription;
+                }
             }
 
             await dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Where(x =>
@@ -161,11 +162,6 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
                     }).ToList();
 
             await dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.AddRangeAsync(onlandVisualTrashAssessmentPreliminarySourceIdentificationTypesToUpdate);
-
-            // bug?: why are we nulling these unconditionally?
-            onlandVisualTrashAssessment.DraftAreaDescription = null;
-            onlandVisualTrashAssessment.DraftAreaName = null;
-            onlandVisualTrashAssessment.DraftGeometry = null;
             await dbContext.SaveChangesAsync();
         }
 

@@ -397,8 +397,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewFinalizeOVTA(onlandVisualTrashAssessment, viewModel);
             }
 
-            await _dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.LoadAsync();
-            await viewModel.UpdateModel(_dbContext, onlandVisualTrashAssessment, _dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes);
+            await viewModel.UpdateModel(_dbContext, onlandVisualTrashAssessment);
             SetMessageForDisplay("The OVTA was successfully finalized");
 
 
