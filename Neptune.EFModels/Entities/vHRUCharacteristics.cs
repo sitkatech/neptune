@@ -38,7 +38,7 @@ public static class vHRUCharacteristics
             return new List<vHRUCharacteristic>();
         }
 
-        if (delineation.DelineationType == DelineationType.Centralized && !treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID.HasValue)
+        if (delineation.DelineationType == DelineationType.Centralized && treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID.HasValue)
         {
             if (!treatmentBMP.RegionalSubbasinID.HasValue)
             {
