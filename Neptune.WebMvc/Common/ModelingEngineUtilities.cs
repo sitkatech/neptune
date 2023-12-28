@@ -1,4 +1,6 @@
-﻿using Neptune.EFModels.Entities;
+﻿using Hangfire;
+using Neptune.EFModels.Entities;
+using Neptune.Jobs.Hangfire;
 using NetTopologySuite.Geometries;
 
 namespace Neptune.WebMvc.Common
@@ -36,7 +38,7 @@ namespace Neptune.WebMvc.Common
             await dbContext.LoadGeneratingUnitRefreshAreas.AddAsync(loadGeneratingUnitRefreshArea);
             await dbContext.SaveChangesAsync();
 
-            //BackgroundJob.Enqueue(() => ScheduledBackgroundJobLaunchHelper.RunLoadGeneratingUnitRefreshJob(loadGeneratingUnitRefreshArea.LoadGeneratingUnitRefreshAreaID));
+            BackgroundJob.Enqueue<LoadGeneratingUnitRefreshJob>(x => x.RunJob(loadGeneratingUnitRefreshArea.LoadGeneratingUnitRefreshAreaID, false));
         }
     }
 }

@@ -226,7 +226,7 @@ namespace Neptune.WebMvc.Controllers
                 await ModelingEngineUtilities.QueueLGURefreshForArea(oldShape, newShape, _dbContext);
             }
 
-            return Json(new {success = true, delineationID = treatmentBMP.Delineation.DelineationID});
+            return Json(new {success = true, delineationID = treatmentBMPDelineation.DelineationID});
         }
 
         [HttpGet("{delineationPrimaryKey}")]
