@@ -337,7 +337,6 @@ if __name__ == '__main__':
     parseArguments()
     
     qgs = QgsApplication([], False, "")
-
     qgs.initQgis()
         
     Processing.initialize()
@@ -395,12 +394,12 @@ if __name__ == '__main__':
     print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + finalOutputPath)
 
     # The union will include false TGUs, where there is no land use block ID. The GDAL query will remove those.
-    land_use_block_layer = fetchLayerFromFileSystem(LAND_USE_BLOCK_INPUT_PATH, "LandUseBlockLayer")
-    land_use_block_layer_in_2771 = duplicateLayer(land_use_block_layer, "LandUseBlockLayerIn2771")
+    land_use_block_layer = fetchLayerFromFileSystem(LAND_USE_BLOCK_INPUT_PATH, "LUBLayer")
+    land_use_block_layer_dupe = duplicateLayer(land_use_block_layer, "LUBLayerDupe") # we need to set it to crs 2771
     
     land_use_block_layer_unionandfixed_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'land_use_block_layer_unionedandfixed.geojson'
     odw_layer_unionandfixed_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'odw_layer_unionedandfixed.geojson'
-    unionAndFix(land_use_block_layer_in_2771, odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, finalOutputPath, PROCESSING_CONTEXT)
+    unionAndFix(land_use_block_layer_dupe, odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, finalOutputPath, PROCESSING_CONTEXT)
 
     # we are getting line strings back from the union. let's try and remove the bad geometries
     #tgu_layer = fetchLayerFromFileSystem(finalOutputPath, "TGUsNoLines")
@@ -425,4 +424,3 @@ if __name__ == '__main__':
     #print("Ending removing line strings and bad geometries.")
     
     print("Succeeded!")
-    qgs.exitQgis()
