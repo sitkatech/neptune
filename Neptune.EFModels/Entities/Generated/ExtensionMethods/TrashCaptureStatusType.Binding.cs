@@ -130,19 +130,19 @@ namespace Neptune.EFModels.Entities
     public partial class TrashCaptureStatusTypeFull : TrashCaptureStatusType
     {
         private TrashCaptureStatusTypeFull(int trashCaptureStatusTypeID, string trashCaptureStatusTypeName, string trashCaptureStatusTypeDisplayName, int trashCaptureStatusTypeSortOrder, int trashCaptureStatusTypePriority, string trashCaptureStatusTypeColorCode) : base(trashCaptureStatusTypeID, trashCaptureStatusTypeName, trashCaptureStatusTypeDisplayName, trashCaptureStatusTypeSortOrder, trashCaptureStatusTypePriority, trashCaptureStatusTypeColorCode) {}
-        public static readonly TrashCaptureStatusTypeFull Instance = new TrashCaptureStatusTypeFull(1, @"Full", @"Full", 10, 1, @"18af18");
+        public static readonly TrashCaptureStatusTypeFull Instance = new TrashCaptureStatusTypeFull(1, @"Full", @"Full", 10, 1, @"18AF18");
     }
 
     public partial class TrashCaptureStatusTypePartial : TrashCaptureStatusType
     {
         private TrashCaptureStatusTypePartial(int trashCaptureStatusTypeID, string trashCaptureStatusTypeName, string trashCaptureStatusTypeDisplayName, int trashCaptureStatusTypeSortOrder, int trashCaptureStatusTypePriority, string trashCaptureStatusTypeColorCode) : base(trashCaptureStatusTypeID, trashCaptureStatusTypeName, trashCaptureStatusTypeDisplayName, trashCaptureStatusTypeSortOrder, trashCaptureStatusTypePriority, trashCaptureStatusTypeColorCode) {}
-        public static readonly TrashCaptureStatusTypePartial Instance = new TrashCaptureStatusTypePartial(2, @"Partial", @"Partial (>5mm but less than full sizing)", 20, 2, @"5289ff");
+        public static readonly TrashCaptureStatusTypePartial Instance = new TrashCaptureStatusTypePartial(2, @"Partial", @"Partial (>5mm but less than full sizing)", 20, 2, @"5289FF");
     }
 
     public partial class TrashCaptureStatusTypeNone : TrashCaptureStatusType
     {
         private TrashCaptureStatusTypeNone(int trashCaptureStatusTypeID, string trashCaptureStatusTypeName, string trashCaptureStatusTypeDisplayName, int trashCaptureStatusTypeSortOrder, int trashCaptureStatusTypePriority, string trashCaptureStatusTypeColorCode) : base(trashCaptureStatusTypeID, trashCaptureStatusTypeName, trashCaptureStatusTypeDisplayName, trashCaptureStatusTypeSortOrder, trashCaptureStatusTypePriority, trashCaptureStatusTypeColorCode) {}
-        public static readonly TrashCaptureStatusTypeNone Instance = new TrashCaptureStatusTypeNone(3, @"None", @"No Trash Capture", 30, 3, @"3d3d3e");
+        public static readonly TrashCaptureStatusTypeNone Instance = new TrashCaptureStatusTypeNone(3, @"None", @"No Trash Capture", 30, 3, @"3D3D3E");
     }
 
     public partial class TrashCaptureStatusTypeNotProvided : TrashCaptureStatusType

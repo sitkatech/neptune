@@ -128,7 +128,7 @@ NeptuneMaps.StormwaterSearch.prototype.setSelectedMarker = function(layer)
     {
         pointToLayer: function(feature, latlng)
         {
-            var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-ffff00.png');
+            var icon = self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-FFFF00.png');
 
             return L.marker(latlng,
             {

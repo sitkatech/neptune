@@ -260,7 +260,7 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
         $scope.lastSelected = L.geoJson(layer.toGeoJSON(),
             {
                 pointToLayer: function (feature, latlng) {
-                    var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-ffff00.png');
+                    var icon = $scope.neptuneMap.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-FFFF00.png');
 
                     return L.marker(latlng,
                         {
