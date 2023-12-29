@@ -7,11 +7,11 @@ using Neptune.EFModels.Entities;
 
 namespace Neptune.Jobs.Hangfire
 {
-    public class HRURefreshBackgroundJob : ScheduledBackgroundJobBase<HRURefreshBackgroundJob>
+    public class HRURefreshScheduledBackgroundJob : ScheduledBackgroundJobBase<HRURefreshScheduledBackgroundJob>
     {
         public const string JobName = "HRU Refresh";
 
-        public HRURefreshBackgroundJob(ILogger<HRURefreshBackgroundJob> logger,
+        public HRURefreshScheduledBackgroundJob(ILogger<HRURefreshScheduledBackgroundJob> logger,
             IWebHostEnvironment webHostEnvironment, NeptuneDbContext neptuneDbContext,
             IOptions<NeptuneJobConfiguration> neptuneJobConfiguration, SitkaSmtpClientService sitkaSmtpClientService) : base(JobName, logger, webHostEnvironment,
             neptuneDbContext, neptuneJobConfiguration, sitkaSmtpClientService)

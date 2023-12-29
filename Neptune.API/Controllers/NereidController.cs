@@ -53,7 +53,7 @@ namespace Neptune.API.Controllers
         [SitkaAdminFeature]
         public ContentResult TriggerHRURun()
         {
-            BackgroundJob.Enqueue<HRURefreshBackgroundJob>(x => x.RunJob(null));
+            BackgroundJob.Enqueue<HRURefreshJob>(x => x.RunJob());
             return Content("HRU refresh will run in the background");
         }
 

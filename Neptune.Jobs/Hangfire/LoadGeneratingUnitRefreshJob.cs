@@ -22,7 +22,7 @@ namespace Neptune.Jobs.Hangfire
                 { LoadGeneratingUnitRefreshAreaID = loadGeneratingUnitRefreshAreaID });
             if (runHRURefreshJob)
             {
-                BackgroundJob.Enqueue<HRURefreshBackgroundJob>(x => x.RunJob(null));
+                BackgroundJob.Enqueue<HRURefreshJob>(x => x.RunJob());
             }
         }
     }
