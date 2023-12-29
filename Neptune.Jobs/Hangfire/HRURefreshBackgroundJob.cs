@@ -122,11 +122,12 @@ namespace Neptune.Jobs.Hangfire
 
             if (lastRegionalSubbasinUpdateDate > lastNereidResultUpdateDate)
             {
-                BackgroundJob.Enqueue<TotalNetworkSolveJob>(x => x.RunJob(null));
+                // todo: temporarily turning this off
+                //BackgroundJob.Enqueue<TotalNetworkSolveScheduledBackgroundJob>(x => x.RunJob(null));
             }
             else if (DbContext.DirtyModelNodes.AsNoTracking().Any())
             {
-                BackgroundJob.Enqueue<DeltaSolveJob>(x => x.RunJob(null));
+                BackgroundJob.Enqueue<DeltaSolveJob>(x => x.RunJob());
             }
         }
     }

@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Hangfire;
 using Hangfire.Storage;
-using Neptune.API.Hangfire;
 using Neptune.Common.DesignByContract;
 
 namespace Neptune.Jobs.Hangfire
@@ -14,13 +13,15 @@ namespace Neptune.Jobs.Hangfire
 
             AddRecurringJob<TrashGeneratingUnitRefreshScheduledBackgroundJob>(TrashGeneratingUnitRefreshScheduledBackgroundJob.JobName, x => x.RunJob(null), MakeDailyUtcCronJobStringFromLocalTime(22, 30), recurringJobIds);
 
-            AddRecurringJob<RegionalSubbasinRefreshScheduledBackgroundJob>("Refresh RSBs",
-                x => x.RunJob(null),
-                MakeWeeklyUtcCronJobStringFromLocalTime(1, 30, DayOfWeek.Saturday), recurringJobIds);
+            // todo: turning this off for now
+            //AddRecurringJob<RegionalSubbasinRefreshScheduledBackgroundJob>("Refresh RSBs",
+            //    x => x.RunJob(null),
+            //    MakeWeeklyUtcCronJobStringFromLocalTime(1, 30, DayOfWeek.Saturday), recurringJobIds);
 
             AddRecurringJob<HRURefreshBackgroundJob>(HRURefreshBackgroundJob.JobName, x => x.RunJob(null), "0 * * * *", recurringJobIds);
 
-            AddRecurringJob<TotalNetworkSolveJob>(TotalNetworkSolveJob.JobName, x => x.RunJob(null), MakeDailyUtcCronJobStringFromLocalTime(1, 0), recurringJobIds);
+            //todo: turning this off for now
+            //AddRecurringJob<TotalNetworkSolveScheduledBackgroundJob>(TotalNetworkSolveScheduledBackgroundJob.JobName, x => x.RunJob(null), MakeDailyUtcCronJobStringFromLocalTime(1, 0), recurringJobIds);
 
             // Remove any jobs we haven't explicitly scheduled
             RemoveExtraneousJobs(recurringJobIds);

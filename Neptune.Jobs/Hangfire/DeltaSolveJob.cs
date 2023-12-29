@@ -1,38 +1,32 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Neptune.Common.Email;
 using Neptune.EFModels.Entities;
 using Neptune.Jobs.Services;
 
 namespace Neptune.Jobs.Hangfire;
 
-public class DeltaSolveJob : ScheduledBackgroundJobBase<DeltaSolveJob>
+public class DeltaSolveJob
 {
-    public const string JobName = "Nereid Delta Solve";
-
+    private readonly ILogger<DeltaSolveJob> _logger;
+    private readonly NeptuneDbContext _dbContext;
     private readonly NereidService _nereidService;
 
-    public DeltaSolveJob(ILogger<DeltaSolveJob> logger,
-        IWebHostEnvironment webHostEnvironment, NeptuneDbContext neptuneDbContext,
-        IOptions<NeptuneJobConfiguration> neptuneJobConfiguration, SitkaSmtpClientService sitkaSmtpClientService, NereidService nereidService) : base(JobName, logger, webHostEnvironment,
-        neptuneDbContext, neptuneJobConfiguration, sitkaSmtpClientService)
+    public DeltaSolveJob(ILogger<DeltaSolveJob> logger, NeptuneDbContext dbContext, NereidService nereidService)
     {
+        _logger = logger;
+        _dbContext = dbContext;
         _nereidService = nereidService;
     }
 
-    public override List<RunEnvironment> RunEnvironments => new() { RunEnvironment.Development, RunEnvironment.Staging, RunEnvironment.Production };
-
-    protected override void RunJobImplementation()
+    public async Task RunJob()
     {
-        var dirtyModelNodes = DbContext.DirtyModelNodes.ToList();
+        var dirtyModelNodes = _dbContext.DirtyModelNodes.ToList();
 
-        var networkSolveResultBaseline = _nereidService.DeltaSolve(DbContext, dirtyModelNodes, true).Result;
-        var networkSolveResult = _nereidService.DeltaSolve(DbContext, dirtyModelNodes, false).Result;
+        await _nereidService.DeltaSolve(_dbContext, dirtyModelNodes, true);
+        await _nereidService.DeltaSolve(_dbContext, dirtyModelNodes, false);
 
-        DbContext.DirtyModelNodes.RemoveRange(dirtyModelNodes);
-        DbContext.Database.SetCommandTimeout(600);
-        DbContext.SaveChanges();
+        _dbContext.DirtyModelNodes.RemoveRange(dirtyModelNodes);
+        _dbContext.Database.SetCommandTimeout(600);
+        await _dbContext.SaveChangesAsync();
     }
 }

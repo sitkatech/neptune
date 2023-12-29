@@ -61,7 +61,7 @@ namespace Neptune.API.Controllers
         [SitkaAdminFeature]
         public IActionResult DeltaSolve()
         {
-            BackgroundJob.Enqueue<DeltaSolveJob>(x => x.RunJob(null));
+            BackgroundJob.Enqueue<DeltaSolveJob>(x => x.RunJob());
             return Ok("En-queued");
         }
 

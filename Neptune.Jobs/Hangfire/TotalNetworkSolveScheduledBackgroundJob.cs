@@ -8,13 +8,13 @@ using Neptune.Jobs.Services;
 
 namespace Neptune.Jobs.Hangfire
 {
-    public class TotalNetworkSolveJob : ScheduledBackgroundJobBase<TotalNetworkSolveJob>
+    public class TotalNetworkSolveScheduledBackgroundJob : ScheduledBackgroundJobBase<TotalNetworkSolveScheduledBackgroundJob>
     {
         public const string JobName = "Nereid Total Network Solve";
 
         private readonly NereidService _nereidService;
 
-        public TotalNetworkSolveJob(ILogger<TotalNetworkSolveJob> logger,
+        public TotalNetworkSolveScheduledBackgroundJob(ILogger<TotalNetworkSolveScheduledBackgroundJob> logger,
             IWebHostEnvironment webHostEnvironment, NeptuneDbContext neptuneDbContext,
             IOptions<NeptuneJobConfiguration> neptuneJobConfiguration, SitkaSmtpClientService sitkaSmtpClientService, NereidService nereidService) : base(JobName, logger, webHostEnvironment,
             neptuneDbContext, neptuneJobConfiguration, sitkaSmtpClientService)
