@@ -53,6 +53,9 @@ def fetchLayerFromDatabase(uri, spatialTableName, geometryColumn):
 def fetchLayerFromFileSystem(path, name):
     layer = QgsVectorLayer(path, name, "ogr")
     raiseIfLayerInvalid(layer)
+    crs = layer.crs()
+    crs.createFromId(2771)
+    layer.setCrs(crs)
     return layer
 
 def selectPolygonFeatures(inputLayer, context = None):
@@ -82,6 +85,15 @@ def removeSlivers(inputLayer, memoryOutputName=None, filesystemOutputPath=None, 
     }
     result = runNativeAlgorithm("qgis:eliminateselectedpolygons", params, memoryOutputName, filesystemOutputPath, context)
     return result
+
+def dissolve(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
+    params = {
+        'INPUT':inputLayer,
+        'FIELD':[],
+    }
+    result = runNativeAlgorithm("native:dissolve", params, memoryOutputName, filesystemOutputPath, context)
+    return result
+
 
 def saveSelectedFeatures(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
     params = {

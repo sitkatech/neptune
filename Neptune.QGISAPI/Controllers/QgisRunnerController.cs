@@ -101,13 +101,13 @@ public class QgisRunnerController : ControllerBase
             new Feature(x.DelineationGeometry, new AttributesTable { { "DelinID", x.DelinID } })).ToList();
         var regionalSubbasinInputFeatures = _dbContext.vPyQgisRegionalSubbasinLGUInputs.AsNoTracking().Select(x =>
             new Feature(x.CatchmentGeometry, new AttributesTable { { "RSBID", x.RSBID }, { "ModelID", x.ModelID } })).ToList();
-        var clipLayerPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}_inputClip.json";
+        var clipLayerPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}_inputClip.geojson";
         var loadGeneratingUnitRefreshArea = await CreateLoadGeneratingUnitRefreshAreaIfProvided(requestDto, clipLayerPath);
         var featureCollection = await GenerateLGUsImpl(regionalSubbasinInputFeatures, lguInputFeatures, outputFolder, outputLayerPrefix, new List<int>(), loadGeneratingUnitRefreshArea != null ? clipLayerPath : null);
 
         if (loadGeneratingUnitRefreshArea != null)
         {
-            await _dbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToDeltaRefresh @LoadGeneratingUnitRefreshAreaID = {loadGeneratingUnitRefreshArea}");
+            await _dbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToDeltaRefresh @LoadGeneratingUnitRefreshAreaID = {loadGeneratingUnitRefreshArea.LoadGeneratingUnitRefreshAreaID}");
         }
         else
         {
@@ -313,11 +313,10 @@ public class QgisRunnerController : ControllerBase
                 await _dbContext.LoadGeneratingUnitRefreshAreas.FindAsync(loadGeneratingUnitRefreshAreaID.Value);
             var loadGeneratingUnitRefreshAreaGeometry = loadGeneratingUnitRefreshArea
                 .LoadGeneratingUnitRefreshAreaGeometry;
-            var lguInputClipFeatures = _dbContext.LoadGeneratingUnits
-                .Where(x => x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshAreaGeometry)).ToList()
-                .Select(x => new Feature(x.LoadGeneratingUnitGeometry, new AttributesTable())).ToList();
-
-            await WriteFeaturesToGeoJsonFile(clipLayerPath, lguInputClipFeatures, loadGeneratingUnitRefreshAreaGeometry);
+            //var lguRefreshAreaGeometry = _dbContext.LoadGeneratingUnits.AsNoTracking()
+            //    .Where(x => x.LoadGeneratingUnitGeometry.Intersects(loadGeneratingUnitRefreshAreaGeometry)).Select(x => x.LoadGeneratingUnitGeometry).ToList().UnionListGeometries();
+            var lguInputClipFeatures = new Feature(loadGeneratingUnitRefreshAreaGeometry, new AttributesTable());
+            await WriteFeaturesToGeoJsonFile(clipLayerPath, new[] { lguInputClipFeatures }, loadGeneratingUnitRefreshAreaGeometry);
         }
 
         return loadGeneratingUnitRefreshArea;

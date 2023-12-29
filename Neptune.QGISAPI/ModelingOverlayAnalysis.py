@@ -32,6 +32,7 @@ from pyqgis_utils import (
     fixGeometriesWithinLayer,
     snapGeometriesWithinLayer,
     union,
+    dissolve,
     QgisError,
     fetchLayerFromFileSystem,
     intersection,
@@ -109,23 +110,24 @@ if __name__ == '__main__':
     
     #def fetchLayer(spatialTableName, geometryColumnName):
     #    return fetchLayerFromDatabase(neptuneDataSource, spatialTableName, geometryColumnName)
-
-    clip_layer = None
-    delineationLayer = None
-    if CLIP_PATH is not None:
-        clip_layer = fetchLayerFromFileSystem(CLIP_PATH, "ClipLayer")
         
+    delineationLayer = None
+
     delineationLayer_buffersnapfixpath = OUTPUT_FOLDER_AND_FILE_PREFIX + 'delineationLayer_buffersnapfix.geojson'
-    delineationLayerResult = bufferSnapFix(LGU_INPUT_PATH, delineationLayer_buffersnapfixpath, context=PROCESSING_CONTEXT)
+    delineationLayer = fetchLayerFromFileSystem(LGU_INPUT_PATH, "LGU Input")
+    delineationLayerResult = bufferSnapFix(delineationLayer, delineationLayer_buffersnapfixpath, context=PROCESSING_CONTEXT)
 
     modelBasinLayer_buffersnapfixpath = OUTPUT_FOLDER_AND_FILE_PREFIX + 'modelBasinLayer_buffersnapfix.geojson'
-    modelBasinLayerResult = bufferSnapFix(MODEL_BASIN_INPUT_PATH, modelBasinLayer_buffersnapfixpath, context=PROCESSING_CONTEXT)
+    modelBasinLayer = fetchLayerFromFileSystem(MODEL_BASIN_INPUT_PATH, "Model Basin")
+    modelBasinLayerResult = bufferSnapFix(modelBasinLayer, modelBasinLayer_buffersnapfixpath, context=PROCESSING_CONTEXT)
 
     regionalSubbasinLayer_buffersnapfixpath = OUTPUT_FOLDER_AND_FILE_PREFIX + 'regionalSubbasinLayer_buffersnapfix.geojson'
-    regionalSubbasinLayerResult = bufferSnapFix(REGIONAL_SUBBASIN_INPUT_PATH, regionalSubbasinLayer_buffersnapfixpath, context=PROCESSING_CONTEXT)
+    regionalSubbasinLayer = fetchLayerFromFileSystem(REGIONAL_SUBBASIN_INPUT_PATH, "RSB")
+    regionalSubbasinLayerResult = bufferSnapFix(regionalSubbasinLayer, regionalSubbasinLayer_buffersnapfixpath, context=PROCESSING_CONTEXT)
 
     wqmpLayer_buffersnapfixpath = OUTPUT_FOLDER_AND_FILE_PREFIX + 'wqmpLayer_buffersnapfix.geojson'
-    wqmpLayerResult = bufferSnapFix(WQMP_INPUT_PATH, wqmpLayer_buffersnapfixpath, context=PROCESSING_CONTEXT)
+    wqmpLayer = fetchLayerFromFileSystem(WQMP_INPUT_PATH, "WQMP")
+    wqmpLayerResult = bufferSnapFix(wqmpLayer, wqmpLayer_buffersnapfixpath, context=PROCESSING_CONTEXT)
 
     if RSB_IDs is not None:
         #If we've got set RSBs we want only what's within those RSBs'
@@ -138,19 +140,20 @@ if __name__ == '__main__':
         delineationLayerClipped = clip(delineationLayer_buffersnapfixpath, modelBasinLayer_buffersnapfixpath, "DelineationClipped", context=PROCESSING_CONTEXT)
         wqmpLayerClipped = clip(wqmpLayer_buffersnapfixpath, modelBasinLayer_buffersnapfixpath, "WQMPClipped", context=PROCESSING_CONTEXT)
 
-    wqmpLayerClipped = bufferZero(wqmpLayerClipped, "WQMP", None, context=PROCESSING_CONTEXT)
+    wqmpLayerClipped = bufferZero(wqmpLayerClipped, "WQMPClippedZero", None, context=PROCESSING_CONTEXT)
 
     rsb_wqmp = union(regionalSubbasinLayerClipped, wqmpLayerClipped, "rsb_wqmp", None, context=PROCESSING_CONTEXT)
     #raiseIfLayerInvalid(lspc_rsb_delineation)
     rsb_wqmp = bufferZero(rsb_wqmp, "ModelBasin-RSB-D", None, context=PROCESSING_CONTEXT)
 
+    masterOverlay = union(rsb_wqmp, delineationLayerClipped, "MasterOverlay", None, context=PROCESSING_CONTEXT)
 
     # clip the model basin layer to the input boundary so that all further datasets will be clipped as well
-    if clip_layer is not None:
-        masterOverlay = union(rsb_wqmp, delineationLayerClipped, "MasterOverlay", None, context=PROCESSING_CONTEXT)
-        masterOverlay = clip(masterOverlay, clip_layer, "MasterOverlay", None, context=PROCESSING_CONTEXT)
-    else: 
-        masterOverlay = union(rsb_wqmp, delineationLayerClipped, "MasterOverlay", None, context=PROCESSING_CONTEXT)
+    if CLIP_PATH is not None:
+        clipLayer_dissolvedpath = OUTPUT_FOLDER_AND_FILE_PREFIX + 'clipLayer_dissolved.geojson'
+        clipLayer = fetchLayerFromFileSystem(CLIP_PATH, "LGU Clip")
+        clipLayerResult = dissolve(clipLayer, filesystemOutputPath=clipLayer_dissolvedpath, context=PROCESSING_CONTEXT)
+        masterOverlay = clip(masterOverlay, clipLayer_dissolvedpath, "MasterOverlayClipped", None, context=PROCESSING_CONTEXT)
 
     masterOverlay = multipartToSinglePart(masterOverlay, "SinglePartLGUs", None, context=PROCESSING_CONTEXT)
 
