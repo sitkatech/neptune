@@ -698,7 +698,7 @@ stages:
               overrideValues: |
                 global.domains.api="$(domainApi)"
                 global.domains.web="$(domainWeb)"
-                global.domains.webMvc="$(domainWebMvc)"
+                global.domains.webmvc="$(domainWebMvc)"
                 global.domains.geoserver="$(domainGeoserver)"
                 global.env.appInsightsInstrumentationKey="$(INSTRUMENTATION_KEY)"
                 global.env.name="$(Environment)"
