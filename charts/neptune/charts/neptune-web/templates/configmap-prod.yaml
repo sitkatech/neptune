@@ -1,0 +1,25 @@
+{{ if eq .Values.global.env.name "prod" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "web.fullname" . }}-prod-configmap
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  production: "true"
+  staging: "false"
+  dev: "true"
+  mainAppApiUrl: "https://{{ .Values.global.domains.api }}"
+  createAccountRedirectUrl: "https://{{ .Values.global.domains.web }}/create-user-callback"
+  geoserverMapServiceUrl: "https://{{ .Values.global.domains.geoserver }}/geoserver/OCStormwater"
+  ocStormwaterToolsBaseUrl: "https://{{ .Values.global.domains.webmvc }}"
+  keystone_clientId: "Hippocamp"
+  keystone_issuer: "https://identity.sitkatech.com"
+  keystone_redirectUriRelative: "/signin-oidc"
+  keystone_scope: "openid profile offline_access keystone"
+  keystone_sessionCheckEnabled: "false"
+  keystone_logoutUrl: "https://identity.sitkatech.com/account/logout"
+  keystone_postLogoutRedirectUri: "/"
+  keystone_waitForTokenInMsec: "500"
+  keystone_responseType: "code"
+  keystone_disablePKCE: "false"
+{{ end }}  

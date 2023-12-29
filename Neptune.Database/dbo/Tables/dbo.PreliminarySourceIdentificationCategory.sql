@@ -1,0 +1,5 @@
+CREATE TABLE [dbo].[PreliminarySourceIdentificationCategory](
+	[PreliminarySourceIdentificationCategoryID] [int] NOT NULL CONSTRAINT [PK_PreliminarySourceIdentificationCategory_PreliminarySourceIdentificationCategoryID] PRIMARY KEY,
+	[PreliminarySourceIdentificationCategoryName] [varchar](100) CONSTRAINT [AK_PreliminarySourceIdentificationCategory_PreliminarySourceIdentificationCategoryName] UNIQUE,
+	[PreliminarySourceIdentificationCategoryDisplayName] [varchar](100) CONSTRAINT [AK_PreliminarySourceIdentificationCategory_PreliminarySourceIdentificationCategoryDisplayName] UNIQUE
+)

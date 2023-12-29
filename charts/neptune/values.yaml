@@ -1,0 +1,503 @@
+global:
+  env:
+    name: "qa"
+    dbServer: "db-server.database.windows.net"
+    databaseName: "NeptuneDB"
+    sqlUsername: "SqlAdministrator"
+    sqlGeoserverUsername: "NeptuneGeo"
+    appInsightsInstrumentationKey: "00000000-0000-0000-0000-000000000000"
+  domains:
+    api: "api-neptune.aks-qa.sitkatech.com"
+    web: "planning-neptune.aks-qa.sitkatech.com"
+    webmvc: "neptune.aks-qa.sitkatech.com"
+    geoserver: "geoserver-neptune.aks-qa.sitkatech.com"
+    nereid: "neptune-nereid"
+    gdalApi: "neptune-gdalapi"
+    qgisApi: "neptune-qgisapi"
+    nereidRedis: "neptune-nereid-redis:6379"
+  secrets:
+    geoserverSqlServerPassword: "passwordhere"
+    geoserverAdminPassword: "geomaster"
+    applicationStorageAccountName: "neptuneapplicationgrsqa"
+    applicationStorageAccountKey:  "longkeyreplacedhere"
+    apiSqlPassword: "passwordhere"
+    sendGridApiKey: "sendgridapikeyhere"
+    hangfirePassword: "passwordhere"
+    keystoneOpenIDClientSecret: "secrethere"
+    recaptchaV3SiteKey: "recaptchaV3SiteKeyHere"
+    recaptchaV3SecretKey: "recaptchaV3SecretKeyHere"
+
+api:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/neptune/api
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  resources: 
+    requests:
+      memory: "1G"
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+    # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: ""
+    annotations:
+      kubernetes.io/ingress.class: azure/application-gateway
+      cert-manager.io/cluster-issuer: letsencrypt
+      acme.cert-manager.io/http01-edit-in-place: "true"
+      appgw.ingress.kubernetes.io/ssl-redirect: "true"
+      appgw.ingress.kubernetes.io/request-timeout: "300"
+      cert-manager.io/issue-temporary-certificate: "true"
+      appgw.ingress.kubernetes.io/connection-draining: "true"
+      appgw.ingress.kubernetes.io/connection-draining-timeout: "30"
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+web:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/neptune/web
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  resources: 
+    requests:
+      memory: "1G"
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+    # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: ""
+    annotations:
+      kubernetes.io/ingress.class: azure/application-gateway
+      cert-manager.io/cluster-issuer: letsencrypt
+      acme.cert-manager.io/http01-edit-in-place: "true"
+      appgw.ingress.kubernetes.io/ssl-redirect: "true"
+      appgw.ingress.kubernetes.io/request-timeout: "300"
+      cert-manager.io/issue-temporary-certificate: "true"
+      appgw.ingress.kubernetes.io/connection-draining: "true"
+      appgw.ingress.kubernetes.io/connection-draining-timeout: "30"
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+webmvc:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/neptune/webmvc
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  resources: 
+    requests:
+      memory: "1G"
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+    # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: ""
+    annotations:
+      kubernetes.io/ingress.class: azure/application-gateway
+      cert-manager.io/cluster-issuer: letsencrypt
+      acme.cert-manager.io/http01-edit-in-place: "true"
+      appgw.ingress.kubernetes.io/ssl-redirect: "true"
+      appgw.ingress.kubernetes.io/request-timeout: "300"
+      cert-manager.io/issue-temporary-certificate: "true"
+      appgw.ingress.kubernetes.io/connection-draining: "true"
+      appgw.ingress.kubernetes.io/connection-draining-timeout: "30"
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+geoserver:
+  replicaCount: 1
+  image:
+    repository: kartoza/geoserver
+    pullPolicy: Always
+    tag: "2.16.2"
+    # Overrides the image tag whose default is the chart appVersion.
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  resources: 
+    requests:
+      memory: "1G"
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+    # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: ""
+    annotations:
+      kubernetes.io/ingress.class: azure/application-gateway
+      cert-manager.io/cluster-issuer: letsencrypt
+      acme.cert-manager.io/http01-edit-in-place: "true"
+      appgw.ingress.kubernetes.io/ssl-redirect: "true"
+      cert-manager.io/issue-temporary-certificate: "true"
+      appgw.ingress.kubernetes.io/connection-draining: "true"
+      appgw.ingress.kubernetes.io/connection-draining-timeout: "30"
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+gdalapi:
+  replicaCount: 1
+  image:
+    repository: esasitkagovcr.azurecr.us/neptune/gdalapi
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+    # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+qgisapi:
+  replicaCount: 1
+  image:
+    repository: esasitkagovcr.azurecr.us/neptune/qgisapi
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+    # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+nereid:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/neptune/nereid
+    tag: "v0.7.0"
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+nereid-tests:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/neptune/nereid_tests
+    tag: "v0.7.0"
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    create: true  
+    annotations: {}
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+nereid-redis:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/neptune/redis
+    tag: "v0.7.0"
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    type: ClusterIP
+    port: 6379
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+nereid-flower:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/neptune/flower
+    tag: "v0.7.0"
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    type: ClusterIP
+    port: 5555
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}
+
+nereid-celeryworker:
+  replicaCount: 1
+  image:
+    repository: esacontainers.azurecr.io/neptune/celeryworker
+    tag: "v0.7.0"
+    pullPolicy: Always
+  nameOverride: ""
+  fullnameOverride: ""
+  namespace: h2o
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: 
+    agentpool: appnodepool
+  tolerations: []
+  affinity: {}

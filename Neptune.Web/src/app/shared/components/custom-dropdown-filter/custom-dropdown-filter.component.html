@@ -1,0 +1,14 @@
+<div class="p-2">
+    <div id="filter-select-buttons" class="mb-2">
+        <input type="radio" name="select-all" id="select" [checked]="state.selectAll" (change)="onSelectAll()">
+        <label for="select">Select All</label>
+        <input type="radio" name="select-all" id="deselect" [checked]="state.deselectAll" (change)="onDeselectAll()">
+        <label for="deselect">Deselect All</label>
+    </div>
+    <div id="filter-options" class="pt-2 pl-2">
+        <div *ngFor="let element of getDropdownValues()">
+            <input type="checkbox" name="{{element}}" [(ngModel)]="state[element]" (ngModelChange)="updateFilter()" checked>
+            <label for="{{element}}" class="ml-2">{{element}}</label>
+        </div>
+    </div>
+</div>

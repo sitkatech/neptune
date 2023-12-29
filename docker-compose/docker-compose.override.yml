@@ -1,0 +1,165 @@
+version: '3.4'
+
+services:
+  neptune.webmvc:
+    build:
+      args:
+        source: .
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - SECRET_PATH=${SECRET_PATH}
+      - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
+      - SitkaEmailRedirect=${SitkaEmailRedirect}
+      - SitkaSupportEmail=${SitkaSupportEmail}
+      - DoNotReplyEmail=${DoNotReplyEmail}
+      - MailLogBcc=${MailLogBcc}
+      - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
+      - KeystoneOpenIDClientID=${KeystoneOpenIDClientID}
+      - MapServiceUrl=${MapServiceUrl}
+      - AutoDelineateServiceUrl=${AutoDelineateServiceUrl}
+      - NereidUrl=${NereidUrl}
+      - GDALAPIBaseUrl=${GDALAPIBaseUrl}
+      - QGISAPIBaseUrl=${QGISAPIBaseUrl}
+      - OCGISBaseUrl=${OCGISBaseUrl}
+      - PlanningModuleBaseUrl=${PlanningModuleBaseUrl}
+      - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
+      - RecaptchaPublicKey=${RecaptchaPublicKey}
+      - RecaptchaPrivateKey=${RecaptchaPrivateKey}
+      - RecaptchaValidatorUrl=${RecaptchaValidatorUrl}
+      - GoogleRecaptchaV3Config__SiteKey=${GoogleRecaptchaV3SiteKey}
+      - GoogleRecaptchaV3Config__SecretKey=${GoogleRecaptchaV3SecretKey}
+      - GoogleRecaptchaV3Config__VerifyUrl=${GoogleRecaptchaV3VerifyUrl}
+    ports:
+      - "6211:8080"
+      - "6212:8081"
+    volumes:
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  neptune.api:
+    build:
+      args:
+        source: .
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - SECRET_PATH=${NeptuneAPISecretPath}
+      - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
+      - SitkaEmailRedirect=${SitkaEmailRedirect}
+      - SitkaSupportEmail=${SitkaSupportEmail}
+      - DoNotReplyEmail=${DoNotReplyEmail}
+      - MailLogBcc=${MailLogBcc}
+      - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
+      - KeystoneRedirectUrl=${KeystoneRedirectUrl}
+      - OcStormwaterToolsBaseUrl=${OcStormwaterToolsBaseUrl}
+      - NereidUrl=${NereidUrl}
+      - GDALAPIBaseUrl=${GDALAPIBaseUrl}
+      - QGISAPIBaseUrl=${QGISAPIBaseUrl}
+      - OCGISBaseUrl=${OCGISBaseUrl}
+      - PlanningModuleBaseUrl=${PlanningModuleBaseUrl}
+    ports:
+      - "8211:8080"
+      - "8212:8081"
+    volumes:
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  neptune.gdalapi:
+    build:
+      args:
+        source: .
+    hostname: gdalapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - AzureBlobStorageConnectionString=${AzureBlobStorageConnectionString}
+    ports:
+      - "8231:8080"
+
+  neptune.qgisapi:
+    build:
+      args:
+        source: .
+    hostname: qgisapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - SECRET_PATH=${QGISAPISecretPath}
+    ports:
+      - "8232:8080"
+
+  geoserver:
+    container_name: neptune_geoserver
+    image: kartoza/geoserver:2.16.2
+    entrypoint: /bin/bash /opt/geoserver/data_dir/sitka-geoserver-config/scripts/sitka-entry-point.sh
+    environment:
+      - ENABLE_JSONP=true
+      - CATALINA_OPTS=-DALLOW_ENV_PARAMETRIZATION=true
+      - STABLE_EXTENSIONS=sqlserver-plugin
+      # default login is admin unless a different value is specified here
+      - GEOSERVER_ADMIN_USER=admin
+      # default password is geoserver unless specified differently in the secret
+      - GEOSERVER_ADMIN_PASSWORD_SECRET=/run/secrets/GeoserverAdminPassword.txt
+      - GEOSERVER_SQL_SERVER_PASSWORD_SECRET=/run/secrets/GeoserverSqlServerPassword.txt
+      - GEOSERVER_CONFIG_DIRECTORY=/opt/geoserver/data_dir
+    ports:
+      - 127.0.0.1:8780:8080
+    volumes:
+      - c:/git/sitkatech/neptune/Neptune.GeoServer/data_dir:/opt/geoserver/data_dir
+    secrets:
+      - GeoserverSqlServerPassword.txt
+      - GeoserverAdminPassword.txt
+
+  neptune.celeryworker:
+    container_name: nereid_celeryworker
+    image: esacontainers.azurecr.io/neptune/celeryworker:v0.10.0rc2
+    environment:
+      CELERY_BROKER_URL: redis://nereid_redis:6379/0
+      CELERY_RESULT_BACKEND: redis://nereid_redis:6379/0
+    volumes:
+      - c:/Sitka/Neptune/nereid_data:/nereid/nereid/data/project_data
+    ports:
+      - "8233:5555"
+
+  neptune.flower:
+    container_name: nereid_flower
+    image: esacontainers.azurecr.io/neptune/flower:v0.10.0rc2
+    environment:
+      CELERY_BROKER_URL: redis://nereid_redis:6379/0
+      CELERY_RESULT_BACKEND: redis://nereid_redis:6379/0
+
+  neptune.nereid:
+    container_name: nereid
+    image: esacontainers.azurecr.io/neptune/nereid:v0.10.0rc2
+    hostname: nereid
+    command: bash /start-reload.sh
+    volumes:
+      - c:/Sitka/Neptune/nereid_data:/nereid/nereid/data/project_data
+    ports:
+      - "8234:80"
+    environment:
+      CELERY_BROKER_URL: redis://nereid_redis:6379/0
+      CELERY_RESULT_BACKEND: redis://nereid_redis:6379/0
+      NEREID_ASYNC_MODE: replace
+
+  neptune.nereid-tests:
+    container_name: nereid_tests
+    image: esacontainers.azurecr.io/neptune/nereid-tests:v0.10.0rc2
+    environment:
+      CELERY_BROKER_URL: redis://nereid_redis:6379/0
+      CELERY_RESULT_BACKEND: redis://nereid_redis:6379/0
+      NEREID_ASYNC_MODE: replace
+    volumes:
+      - c:/Sitka/Neptune/nereid_data:/nereid/nereid/data/project_data
+
+  neptune.redis:
+    container_name: nereid_redis
+    image: esacontainers.azurecr.io/neptune/redis:v0.10.0rc2
+
+secrets:
+  GeoserverSqlServerPassword.txt:
+    file: C:\Sitka\Neptune\Geoserver\GeoserverSqlServerPassword.txt
+      # using "file:"  allows you to mimic docker secrets on your dev machine by pointing to a plaintext file
+  GeoserverAdminPassword.txt:
+    file: C:\Sitka\Neptune\Geoserver\GeoserverAdminPassword.txt

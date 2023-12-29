@@ -1,4 +1,0 @@
-datastore-host = host.docker.internal
-datastore-password = /run/secrets/GeoserverSqlServerPassword.txt
-datastore-user = SWTGeoLocal
-datastore-database = Neptune

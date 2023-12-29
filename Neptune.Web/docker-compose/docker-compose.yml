@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  neptune.web:
+    image: neptune/web
+    build:
+      args:
+        env: ${ENVIRONMENT}
+      context: ../..
+      dockerfile: Neptune.Web/Dockerfile

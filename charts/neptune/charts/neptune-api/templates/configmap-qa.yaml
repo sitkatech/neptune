@@ -1,0 +1,23 @@
+{{ if eq .Values.global.env.name "qa" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "api.fullname" . }}-qa-configmap
+data:
+  DOCKER_BUILD_SOURCE: "."
+  ASPNETCORE_ENVIRONMENT: "Staging"
+  SECRET_PATH: "/app/secrets/neptuneApiSecrets"
+  APPINSIGHTS_INSTRUMENTATIONKEY: "{{ .Values.global.env.appInsightsInstrumentationKey }}"
+  SitkaEmailRedirect: "notifications-qa@sitkatech.com"
+  SitkaSupportEmail: "h2o.team@esassoc.com"
+  DoNotReplyEmail: "donotreply@ocstormwatertools.org"
+  MailLogBcc: ""
+  KeystoneOpenIDUrl: "https://identity-qa.sitkatech.com"
+  KeystoneRedirectUrl: "https://{{ .Values.global.domains.web }}/create-user-callback"
+  OcStormwaterToolsBaseUrl: "https://{{ .Values.global.domains.webmvc }}"
+  NereidUrl: "http://{{ .Values.global.domains.nereid }}"
+  GDALAPIBaseUrl: "http://{{ .Values.global.domains.gdalApi }}"
+  QGISAPIBaseUrl: "http://{{ .Values.global.domains.qgisApi }}"
+  OCGISBaseUrl: "https://ocgis.com/arcpub/rest/services/"
+  PlanningModuleBaseUrl: "https://{{ .Values.global.domains.web }}"
+{{ end }}

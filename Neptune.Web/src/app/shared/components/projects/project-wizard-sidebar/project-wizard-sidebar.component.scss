@@ -1,0 +1,16 @@
+.sidebar-header {
+    background: #dee2e6;
+    border-radius: 6px 6px 0 0;
+}
+
+.indented-pages {
+    padding-left: 0.5rem;
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+}
+
+.not-allowed:hover {
+    cursor: not-allowed;
+}

@@ -1,0 +1,113 @@
+<ng-container *ngIf="projectModel">
+    <h2 class="d-inline-block">
+        Project Basics
+    </h2>
+    <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+</ng-container>
+<form (ngSubmit)="onSubmit(createProjectForm)" #createProjectForm="ngForm" *ngIf="projectModel && stormwaterJurisdictions">
+    <h5 class="mt-4">Project Basics</h5>
+    <div class="row mt-4">
+        <div class="col-sm-3 control-label text-sm-right">
+            <label class="required">Project Name</label>
+        </div>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" name="project-name" [(ngModel)]="projectModel.ProjectName"
+            [ngClass]='{"field-invalid": isFieldInvalid("ProjectName")}'>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-sm-3 control-label text-sm-right">
+            <label>Description</label>
+        </div>
+        <div class="col-sm-7">
+            <textarea class="form-control" name="description" style="height: 100px" placeholder=""
+                [(ngModel)]="projectModel.ProjectDescription">
+            </textarea>
+        </div>
+    </div>
+    <h5 class="mt-4">Project Contact Information</h5>
+    <div class="row mt-4">
+        <div class="col-sm-3 control-label text-sm-right">
+            <label class="required">Project Owner</label>
+        </div>
+        <div class="col-sm-7">
+            <ng-select [(ngModel)]="projectModel.OrganizationID"
+                [items]="organizations" bindLabel="OrganizationName" bindValue="OrganizationID" 
+                placeholder="Choose One" name="OrganizationID" required
+                [ngClass]='{"field-invalid": isFieldInvalid("OrganizationID")}'>
+            </ng-select>
+        </div>
+    </div>
+    <div class="row mt-3" *ngIf="stormwaterJurisdictions.length > 1; else singleJurisdictionDisplay">
+        <div class="col-sm-3 control-label text-sm-right">
+            <label class="required">Jurisdiction</label>
+        </div>
+        <div class="col-sm-7">
+            <ng-select [(ngModel)]="projectModel.StormwaterJurisdictionID"
+                [items]="stormwaterJurisdictions" bindLabel="Organization.OrganizationName" bindValue="StormwaterJurisdictionID" 
+                placeholder="Choose One" name="StormwaterJurisdictionID" required
+                [ngClass]='{"field-invalid": this.isFieldInvalid("StormwaterJurisdictionID")}'>
+            </ng-select>
+        </div>
+    </div>
+    <ng-template #singleJurisdictionDisplay>
+        <div class="row mt-3">
+            <div class="col-sm-3 control-label text-sm-right">
+                <label>Jurisdiction</label>
+            </div>
+            <div class="col-sm-7 font-weight-bold">
+                <div>
+                    {{stormwaterJurisdictions[0].Organization.OrganizationName}}
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <div class="row mt-3">
+        <div class="col-sm-3 control-label text-sm-right">
+            <label class="required">Primary Contact</label>
+        </div>
+        <div class="col-sm-7">
+            <ng-select [(ngModel)]="projectModel.PrimaryContactPersonID"
+                [items]="users" bindLabel="FullName" bindValue="PersonID" 
+                placeholder="Choose One" name="PrimaryContactPerson" required
+                [ngClass]='{"field-invalid": this.isFieldInvalid("PrimaryContactPersonID")}'>
+            </ng-select>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-sm-3 control-label text-sm-right">
+            <label>Additional Contact Information</label>
+        </div>
+        <div class="col-sm-7">
+            <textarea class="form-control" name="contact-information" style="height: 100px" placeholder=""
+                [(ngModel)]="projectModel.AdditionalContactInformation">
+            </textarea>
+        </div>
+    </div>
+    <h5 class="mt-4">Grant Programs</h5>
+    <p class="mt-2">I am interested in seeing metrics for following grant programs:</p>
+    <div class="row mt-2 ml-4">
+        <div class="col">
+            <input type="checkbox" name="OCTAM2Tier2" id="OCTAM2Tier2" [(ngModel)]="projectModel.CalculateOCTAM2Tier2Scores">
+            <label for="OCTAM2Tier2" class="control-label ml-2">
+                <field-definition fieldDefinitionType="OCTAM2Tier2GrantProgram"></field-definition>
+            </label>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-sm-2">
+            <i class="fas fa-bolt"></i> Required field
+        </div>
+        <div class="col-sm-8 text-right">
+            <button type="submit" class="btn btn-outline-primary mr-2" [disabled]="isLoadingSubmit">
+                <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
+                Save
+            </button>
+            <button (click)="onSubmit($event, true)" class="btn btn-hippocamp" [disabled]="isLoadingSubmit">
+                <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
+                Save and Continue
+            </button>
+            <!-- <a class="btn btn-secondary ml-1" routerLink="/projects">Cancel</a> -->
+        </div>
+    </div>
+</form>

@@ -1,0 +1,10 @@
+CREATE TABLE [dbo].[TreatmentBMPObservation](
+	[TreatmentBMPObservationID] [int] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_TreatmentBMPObservation_TreatmentBMPObservationID] PRIMARY KEY,
+	[TreatmentBMPAssessmentID] [int] NOT NULL CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID] FOREIGN KEY REFERENCES [dbo].[TreatmentBMPAssessment] ([TreatmentBMPAssessmentID]),
+	[TreatmentBMPTypeAssessmentObservationTypeID] [int] NOT NULL CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID] FOREIGN KEY REFERENCES [dbo].[TreatmentBMPTypeAssessmentObservationType] ([TreatmentBMPTypeAssessmentObservationTypeID]),
+	[TreatmentBMPTypeID] [int] NOT NULL CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPType_TreatmentBMPTypeID] FOREIGN KEY REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID]),
+	[TreatmentBMPAssessmentObservationTypeID] [int] NOT NULL CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeID] FOREIGN KEY REFERENCES [dbo].[TreatmentBMPAssessmentObservationType] ([TreatmentBMPAssessmentObservationTypeID]),
+	[ObservationData] [nvarchar](max),
+	--CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPAssessmentID], [TreatmentBMPTypeID]) REFERENCES [dbo].[TreatmentBMPAssessment] ([TreatmentBMPAssessmentID], [TreatmentBMPTypeID]),
+	--CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID_TreatmentBMPTyp] FOREIGN KEY([TreatmentBMPTypeAssessmentObservationTypeID], [TreatmentBMPTypeID], [TreatmentBMPAssessmentObservationTypeID]) REFERENCES [dbo].[TreatmentBMPTypeAssessmentObservationType] ([TreatmentBMPTypeAssessmentObservationTypeID], [TreatmentBMPTypeID], [TreatmentBMPAssessmentObservationTypeID])
+)

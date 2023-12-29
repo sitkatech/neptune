@@ -1,0 +1,27 @@
+{
+    "production": [TODO],
+    "staging": [TODO],
+    "dev": [TODO],
+    "mainAppApiUrl": [TODO],
+    "createAccountRedirectUrl": [TODO],
+  
+    "keystoneSupportBaseUrl": [TODO],
+    "geoserverMapServiceUrl": [TODO],
+    
+    "ocStormwaterToolsBaseUrl": [TODO],
+  
+    "keystoneAuthConfiguration": {
+      "clientId": [TODO],
+      "issuer": [TODO],
+      "responseType": "code",
+      "disablePKCE": false,
+      "redirectUriRelative": [TODO],
+      "scope": [TODO],
+      "sessionChecksEnabled": [TODO],
+      "logoutUrl": [TODO],
+      "postLogoutRedirectUri": [TODO],
+      "waitForTokenInMsec": [TODO]
+    }
+
+    "appInsightsInstrumentationKey": [TODO]
+  }

@@ -1,0 +1,58 @@
+﻿@using Neptune.EFModels.Entities
+@using Neptune.WebMvc.Common.BootstrapWrappers
+@using Neptune.WebMvc.Common.DhtmlWrappers
+@using Neptune.WebMvc.Common.ModalDialog
+@using Neptune.WebMvc.Views.Shared
+
+@inherits Neptune.WebMvc.Views.WaterQualityManagementPlan.Index
+
+@section JavascriptAndStylesContent
+{
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+}
+
+@section RightOfPageTitle
+{
+    @if (ViewDataTyped.CurrentPersonCanCreate)
+    {
+        <div class="pull-right" style="margin-left: 1em;">
+            @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")} Add Plan", ViewDataTyped.NewWaterQualityManagementPlanUrl, string.Format("Create New {0}", FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string> {"btn btn-neptune"}, true)
+        </div>
+    }
+    @if (ViewDataTyped.CurrentPerson.IsAdministrator())
+    {
+        <div class="pull-right" style="margin-left: 1em;">
+            <a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadWQMPUrl"><span class="glyphicon glyphicon-plus"></span> Bulk Upload WQMPs</a>
+        </div>
+    }
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <h2>All Water Quality Management Plans</h2>
+    </div>
+    <div class="col-xs-12">
+        @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+    </div>
+    <div class="col-xs-12">
+        @Html.DhtmlxGrid(ViewDataTyped.IndexGridSpec, ViewDataTyped.IndexGridName, ViewDataTyped.IndexGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+    </div>
+</div>
+@if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
+{
+    <br />
+    <br />
+    <br />
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>All Water Quality Management Plan O&amp;M Verifications</h2>
+        </div>
+        <div class="col-xs-12">
+            @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.VerificationNeptunePage); }
+        </div>
+        <div class="col-xs-12">
+            @Html.DhtmlxGrid(ViewDataTyped.VerificationGridSpec, ViewDataTyped.VerificationGridName, ViewDataTyped.VerificationGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+        </div>
+    </div>  
+}

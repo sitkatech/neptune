@@ -1,0 +1,4287 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Neptune.API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/customRichText/{customRichTextTypeID}": {
+      "get": {
+        "tags": [
+          "CustomRichText"
+        ],
+        "parameters": [
+          {
+            "name": "customRichTextTypeID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeptunePageDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeptunePageDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeptunePageDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "CustomRichText"
+        ],
+        "parameters": [
+          {
+            "name": "customRichTextTypeID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NeptunePageDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NeptunePageDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/NeptunePageDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeptunePageDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeptunePageDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeptunePageDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/delineations": {
+      "get": {
+        "tags": [
+          "Delineation"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DelineationDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DelineationDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DelineationDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fieldDefinitions": {
+      "get": {
+        "tags": [
+          "FieldDefinition"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FieldDefinitionDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FieldDefinitionDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FieldDefinitionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fieldDefinitions/{fieldDefinitionTypeID}": {
+      "get": {
+        "tags": [
+          "FieldDefinition"
+        ],
+        "parameters": [
+          {
+            "name": "fieldDefinitionTypeID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldDefinitionDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldDefinitionDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldDefinitionDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "FieldDefinition"
+        ],
+        "parameters": [
+          {
+            "name": "fieldDefinitionTypeID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FieldDefinitionDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FieldDefinitionDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FieldDefinitionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldDefinitionDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldDefinitionDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldDefinitionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/FileResource/{fileResourceGuidAsString}": {
+      "get": {
+        "tags": [
+          "FileResource"
+        ],
+        "parameters": [
+          {
+            "name": "fileResourceGuidAsString",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/health": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/config": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/validate": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/subgraph": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/solution-sequence": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/land-surface-loading": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/land-surface-loading-baseline": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/treatment-facility-validate": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/treatment-facility-validate/{treatmentBMPID}": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/no-treatment-facility-validate": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/treatment-sites": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/treatment-facilities": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/land-surface-table": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/total-network-graph": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/solution-test-case": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/solve-oc": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/nereid/delta-solve-test": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/organizations": {
+      "get": {
+        "tags": [
+          "Organization"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrganizationSimpleDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrganizationSimpleDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrganizationSimpleDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectID}": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSimpleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSimpleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSimpleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/new": {
+      "post": {
+        "tags": [
+          "Project"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectUpsertDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectUpsertDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectUpsertDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/update": {
+      "post": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectUpsertDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectUpsertDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectUpsertDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/attachments": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectDocumentDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectDocumentDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectDocumentDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "DisplayName",
+                  "FileResource",
+                  "ProjectID"
+                ],
+                "type": "object",
+                "properties": {
+                  "ProjectID": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "FileResource": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "DisplayName": {
+                    "maxLength": 200,
+                    "minLength": 0,
+                    "type": "string"
+                  },
+                  "DocumentDescription": {
+                    "maxLength": 500,
+                    "minLength": 0,
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "ProjectID": {
+                  "style": "form"
+                },
+                "FileResource": {
+                  "style": "form"
+                },
+                "DisplayName": {
+                  "style": "form"
+                },
+                "DocumentDescription": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "413": {
+            "description": "Client Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/attachments/{attachmentID}": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "attachmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDocumentDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDocumentDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDocumentDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "attachmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectDocumentUpdateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectDocumentUpdateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectDocumentUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDocumentDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDocumentDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDocumentDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "attachmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/delete": {
+      "delete": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/project-network-solve-histories": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectNetworkSolveHistorySimpleDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectNetworkSolveHistorySimpleDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectNetworkSolveHistorySimpleDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/treatment-bmp-hru-characteristics": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPHRUCharacteristicsSummarySimpleDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPHRUCharacteristicsSummarySimpleDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPHRUCharacteristicsSummarySimpleDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/load-reducing-results": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectLoadReducingResultDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectLoadReducingResultDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectLoadReducingResultDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/load-generating-results": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectLoadGeneratingResultDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectLoadGeneratingResultDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectLoadGeneratingResultDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/modeled-performance": {
+      "post": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/delineations": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DelineationUpsertDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DelineationUpsertDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DelineationUpsertDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DelineationUpsertDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DelineationUpsertDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DelineationUpsertDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/copy": {
+      "post": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/download": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/treatmentBMPs/download": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/OCTAM2Tier2GrantProgram": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/OCTAM2Tier2GrantProgram/download": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/OCTAM2Tier2GrantProgram/treatmentBMPs": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/delineations": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DelineationDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DelineationDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DelineationDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles": {
+      "get": {
+        "tags": [
+          "Role"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RoleSimpleDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RoleSimpleDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RoleSimpleDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jurisdictions/{personID}": {
+      "get": {
+        "tags": [
+          "StormwaterJurisdiction"
+        ],
+        "parameters": [
+          {
+            "name": "personID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jurisdictions/{projectID}/getBoundingBoxByProjectID": {
+      "get": {
+        "tags": [
+          "StormwaterJurisdiction"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jurisdictions/boundingBox": {
+      "get": {
+        "tags": [
+          "StormwaterJurisdiction"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "SystemInfo"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemInfoDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemInfoDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemInfoDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/{projectID}/getByProjectID": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPTypes": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeWithModelingAttributesDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeWithModelingAttributesDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeWithModelingAttributesDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/{treatmentBMPID}/treatmentBMPType/{treatmentBMPTypeID}": {
+      "put": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "treatmentBMPTypeID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPModelingAttributeDropdownItems": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/{projectID}": {
+      "put": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/{treatmentBMPID}/upstreamRSBCatchmentGeoJSON": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeometryGeoJSONAndAreaDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeometryGeoJSONAndAreaDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeometryGeoJSONAndAreaDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatmentBMPs/verified": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonCreateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonCreateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PersonSimpleDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PersonSimpleDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PersonSimpleDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{personID}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "personID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user-claims/{globalID}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "globalID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BoundingBoxDto": {
+        "type": "object",
+        "properties": {
+          "Left": {
+            "type": "number",
+            "format": "double"
+          },
+          "Bottom": {
+            "type": "number",
+            "format": "double"
+          },
+          "Right": {
+            "type": "number",
+            "format": "double"
+          },
+          "Top": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DelineationDto": {
+        "type": "object",
+        "properties": {
+          "DelineationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DelineationTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IsVerified": {
+            "type": "boolean"
+          },
+          "DateLastVerified": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "VerifiedByPersonID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DateLastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "HasDiscrepancies": {
+            "type": "boolean"
+          },
+          "Geometry": {
+            "type": "string",
+            "nullable": true
+          },
+          "DelineationArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DelineationTypeName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DelineationUpsertDto": {
+        "type": "object",
+        "properties": {
+          "DelineationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DelineationTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DelineationArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Geometry": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "HasDiscrepancies": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FieldDefinitionDto": {
+        "type": "object",
+        "properties": {
+          "FieldDefinitionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FieldDefinitionType": {
+            "$ref": "#/components/schemas/FieldDefinitionTypeSimpleDto"
+          },
+          "FieldDefinitionValue": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FieldDefinitionTypeSimpleDto": {
+        "type": "object",
+        "properties": {
+          "FieldDefinitionTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FieldDefinitionTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "FieldDefinitionTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FileResourceDto": {
+        "type": "object",
+        "properties": {
+          "FileResourceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FileResourceMimeType": {
+            "$ref": "#/components/schemas/FileResourceMimeTypeSimpleDto"
+          },
+          "OriginalBaseFilename": {
+            "type": "string",
+            "nullable": true
+          },
+          "OriginalFileExtension": {
+            "type": "string",
+            "nullable": true
+          },
+          "FileResourceGUID": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "CreatePerson": {
+            "$ref": "#/components/schemas/PersonDto"
+          },
+          "CreateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ContentLength": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FileResourceMimeTypeSimpleDto": {
+        "type": "object",
+        "properties": {
+          "FileResourceMimeTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FileResourceMimeTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "FileResourceMimeTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "FileResourceMimeTypeContentTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "FileResourceMimeTypeIconSmallFilename": {
+            "type": "string",
+            "nullable": true
+          },
+          "FileResourceMimeTypeIconNormalFilename": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FileResourceSimpleDto": {
+        "type": "object",
+        "properties": {
+          "FileResourceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FileResourceMimeTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OriginalBaseFilename": {
+            "type": "string",
+            "nullable": true
+          },
+          "OriginalFileExtension": {
+            "type": "string",
+            "nullable": true
+          },
+          "FileResourceGUID": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "CreatePersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CreateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ContentLength": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GeometryGeoJSONAndAreaDto": {
+        "type": "object",
+        "properties": {
+          "GeometryGeoJSON": {
+            "type": "string",
+            "nullable": true
+          },
+          "Area": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "NeptunePageDto": {
+        "type": "object",
+        "properties": {
+          "NeptunePageID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NeptunePageType": {
+            "$ref": "#/components/schemas/NeptunePageTypeSimpleDto"
+          },
+          "NeptunePageContent": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsEmptyContent": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "NeptunePageTypeSimpleDto": {
+        "type": "object",
+        "properties": {
+          "NeptunePageTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NeptunePageTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "NeptunePageTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganizationDto": {
+        "type": "object",
+        "properties": {
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OrganizationGuid": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "OrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrganizationShortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PrimaryContactPerson": {
+            "$ref": "#/components/schemas/PersonDto"
+          },
+          "IsActive": {
+            "type": "boolean"
+          },
+          "OrganizationUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "LogoFileResource": {
+            "$ref": "#/components/schemas/FileResourceDto"
+          },
+          "OrganizationType": {
+            "$ref": "#/components/schemas/OrganizationTypeSimpleDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganizationSimpleDto": {
+        "type": "object",
+        "properties": {
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OrganizationGuid": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "OrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrganizationShortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PrimaryContactPersonID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsActive": {
+            "type": "boolean"
+          },
+          "OrganizationUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "LogoFileResourceID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OrganizationTypeID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganizationTypeSimpleDto": {
+        "type": "object",
+        "properties": {
+          "OrganizationTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OrganizationTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrganizationTypeAbbreviation": {
+            "type": "string",
+            "nullable": true
+          },
+          "LegendColor": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsDefaultOrganizationType": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PersonCreateDto": {
+        "required": [
+          "Email",
+          "FirstName",
+          "LastName",
+          "LoginName",
+          "UserGuid"
+        ],
+        "type": "object",
+        "properties": {
+          "FirstName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "LastName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "OrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "LoginName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "UserGuid": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PersonDto": {
+        "type": "object",
+        "properties": {
+          "PersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PersonGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "FirstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "Phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "Role": {
+            "$ref": "#/components/schemas/RoleSimpleDto"
+          },
+          "CreateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "UpdateDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "LastActivityDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "IsActive": {
+            "type": "boolean"
+          },
+          "Organization": {
+            "$ref": "#/components/schemas/OrganizationDto"
+          },
+          "ReceiveSupportEmails": {
+            "type": "boolean"
+          },
+          "LoginName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ReceiveRSBRevisionRequestEmails": {
+            "type": "boolean"
+          },
+          "WebServiceAccessToken": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "IsOCTAGrantReviewer": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PersonSimpleDto": {
+        "type": "object",
+        "properties": {
+          "PersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PersonGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "FirstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "Phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "RoleID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CreateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "UpdateDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "LastActivityDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "IsActive": {
+            "type": "boolean"
+          },
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ReceiveSupportEmails": {
+            "type": "boolean"
+          },
+          "LoginName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ReceiveRSBRevisionRequestEmails": {
+            "type": "boolean"
+          },
+          "WebServiceAccessToken": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "IsOCTAGrantReviewer": {
+            "type": "boolean"
+          },
+          "FullName": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "Type": {
+            "type": "string",
+            "nullable": true
+          },
+          "Title": {
+            "type": "string",
+            "nullable": true
+          },
+          "Status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "Instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "ProjectDocumentDto": {
+        "type": "object",
+        "properties": {
+          "ProjectDocumentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FileResourceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "UploadDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "DocumentDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "FileResource": {
+            "$ref": "#/components/schemas/FileResourceSimpleDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectDocumentUpdateDto": {
+        "required": [
+          "DisplayName",
+          "ProjectID"
+        ],
+        "type": "object",
+        "properties": {
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DisplayName": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "DocumentDescription": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectDto": {
+        "type": "object",
+        "properties": {
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectStatusID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PrimaryContactPersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CreatePersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ProjectDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "AdditionalContactInformation": {
+            "type": "string",
+            "nullable": true
+          },
+          "DoesNotIncludeTreatmentBMPs": {
+            "type": "boolean"
+          },
+          "CalculateOCTAM2Tier2Scores": {
+            "type": "boolean"
+          },
+          "ShareOCTAM2Tier2Scores": {
+            "type": "boolean"
+          },
+          "OCTAM2Tier2ScoresLastSharedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "OCTAWatersheds": {
+            "type": "string",
+            "nullable": true
+          },
+          "PollutantVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PollutantMetals": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PollutantBacteria": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PollutantNutrients": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PollutantTSS": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "TPI": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SEA": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DryWeatherWQLRI": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherWQLRI": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "AreaTreatedAcres": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "ImperviousAreaTreatedAcres": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "UpdatePersonID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DateUpdated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Organization": {
+            "$ref": "#/components/schemas/OrganizationSimpleDto"
+          },
+          "StormwaterJurisdiction": {
+            "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+          },
+          "ProjectStatus": {
+            "$ref": "#/components/schemas/ProjectStatusSimpleDto"
+          },
+          "PrimaryContactPerson": {
+            "$ref": "#/components/schemas/PersonSimpleDto"
+          },
+          "CreatePerson": {
+            "$ref": "#/components/schemas/PersonSimpleDto"
+          },
+          "HasModeledResults": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectLoadGeneratingResultDto": {
+        "type": "object",
+        "properties": {
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DelineationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WetWeatherVolumeGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherTSSGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherTNGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherTPGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherFCGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherTCuGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherTPbGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherTZnGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherVolumeGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherTSSGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherTNGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherTPGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherFCGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherTCuGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherTPbGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerDryWeatherTZnGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherVolumeGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherTSSGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherTNGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherTPGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherFCGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherTCuGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherTPbGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterDryWeatherTZnGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DryWeatherVolumeGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "DryWeatherTSSGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "DryWeatherTNGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "DryWeatherTPGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "DryWeatherFCGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "DryWeatherTCuGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "DryWeatherTPbGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "DryWeatherTZnGenerated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectLoadReducingResultDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "EffectiveAreaAcres": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DesignStormDepth85thPercentile": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DesignVolume85thPercentile": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherRetained": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherUntreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTSSReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTNReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTPReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherFCReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTCuReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTPbReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTZnReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTSSInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTNInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTPInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherFCInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTCuInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTPbInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WetWeatherTZnInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherRetained": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherUntreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTSSReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTNReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTPReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherFCReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTCuReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTPbReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTZnReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTSSInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTNInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTPInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherFCInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTCuInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTPbInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "SummerDryWeatherTZnInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherRetained": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherUntreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTSSReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTNReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTPReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherFCReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTCuReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTPbReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTZnReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTSSInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTNInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTPInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherFCInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTCuInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTPbInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "WinterDryWeatherTZnInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherRetained": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherUntreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTSSReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTNReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTPReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherFCReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTCuReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTPbReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTZnReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTSSInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTNInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTPInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherFCInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTCuInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTPbInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "DryWeatherTZnInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalRetained": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalUntreated": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTSSReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTNReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTPReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalFCReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTCuReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTPbReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTZnReduced": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTSSInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTNInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTPInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalFCInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTCuInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTPbInflow": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalTZnInflow": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectNetworkSolveHistorySimpleDto": {
+        "type": "object",
+        "properties": {
+          "ProjectNetworkSolveHistoryID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "RequestedByPersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectNetworkSolveHistoryStatusTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ErrorMessage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectSimpleDto": {
+        "type": "object",
+        "properties": {
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectStatusID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PrimaryContactPersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CreatePersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ProjectDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "AdditionalContactInformation": {
+            "type": "string",
+            "nullable": true
+          },
+          "DoesNotIncludeTreatmentBMPs": {
+            "type": "boolean"
+          },
+          "CalculateOCTAM2Tier2Scores": {
+            "type": "boolean"
+          },
+          "ShareOCTAM2Tier2Scores": {
+            "type": "boolean"
+          },
+          "OCTAM2Tier2ScoresLastSharedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "OCTAWatersheds": {
+            "type": "string",
+            "nullable": true
+          },
+          "PollutantVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PollutantMetals": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PollutantBacteria": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PollutantNutrients": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PollutantTSS": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "TPI": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SEA": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DryWeatherWQLRI": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WetWeatherWQLRI": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "AreaTreatedAcres": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "ImperviousAreaTreatedAcres": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "UpdatePersonID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DateUpdated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectStatusSimpleDto": {
+        "type": "object",
+        "properties": {
+          "ProjectStatusID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectStatusName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ProjectStatusDisplayName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectUpsertDto": {
+        "required": [
+          "OrganizationID",
+          "PrimaryContactPersonID",
+          "ProjectName",
+          "StormwaterJurisdictionID"
+        ],
+        "type": "object",
+        "properties": {
+          "ProjectName": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PrimaryContactPersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectDescription": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "AdditionalContactInformation": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DoesNotIncludeTreatmentBMPs": {
+            "type": "boolean"
+          },
+          "CalculateOCTAM2Tier2Scores": {
+            "type": "boolean"
+          },
+          "ShareOCTAM2Tier2Scores": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RoleSimpleDto": {
+        "type": "object",
+        "properties": {
+          "RoleID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "RoleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "RoleDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "RoleDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "PeopleWithRoleCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "StormwaterJurisdictionDto": {
+        "type": "object",
+        "properties": {
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StateProvinceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionPublicBMPVisibilityTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionPublicWQMPVisibilityTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Organization": {
+            "$ref": "#/components/schemas/OrganizationSimpleDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SystemInfoDto": {
+        "type": "object",
+        "properties": {
+          "Environment": {
+            "type": "string",
+            "nullable": true
+          },
+          "CurrentTimeUTC": {
+            "type": "string",
+            "nullable": true
+          },
+          "Application": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "FullInformationalVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "PodName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Version": {
+            "type": "string",
+            "nullable": true
+          },
+          "CompilationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPDisplayDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "DisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "Latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "InventoryIsVerified": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPHRUCharacteristicsSummarySimpleDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LandUse": {
+            "type": "string",
+            "nullable": true
+          },
+          "Area": {
+            "type": "number",
+            "format": "double"
+          },
+          "ImperviousCover": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPModelingAttributeDefinitionDto": {
+        "type": "object",
+        "properties": {
+          "ModelingAttributeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Units": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPModelingAttributeDropdownItemDto": {
+        "type": "object",
+        "properties": {
+          "ItemID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ItemName": {
+            "type": "string",
+            "nullable": true
+          },
+          "FieldName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPTypeWithModelingAttributesDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPModelingTypeID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "TreatmentBMPModelingAttributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDefinitionDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPUpsertDto": {
+        "required": [
+          "Latitude",
+          "Longitude",
+          "TreatmentBMPName",
+          "TreatmentBMPTypeID"
+        ],
+        "type": "object",
+        "properties": {
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPModelingTypeID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "WatershedName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "Latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "Notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "AverageDivertedFlowrate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "AverageTreatmentFlowrate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DesignDryWeatherTreatmentCapacity": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DesignLowFlowDiversionCapacity": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DesignMediaFiltrationRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DesignResidenceTimeforPermanentPool": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DiversionRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DrawdownTimeForWQDetentionVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "EffectiveFootprint": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "EffectiveRetentionDepth": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "InfiltrationDischargeRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "InfiltrationSurfaceArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "MediaBedFootprint": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PermanentPoolOrWetlandVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "StorageVolumeBelowLowestOutletElevation": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "SummerHarvestedWaterDemand": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DrawdownTimeForDetentionVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "TotalEffectiveBMPVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "TotalEffectiveDrywellBMPVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "TreatmentRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "UnderlyingInfiltrationRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WaterQualityDetentionVolume": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WettedFootprint": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "WinterHarvestedWaterDemand": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "RoutingConfigurationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "TimeOfConcentrationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "UnderlyingHydrologicSoilGroupID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "MonthsOfOperationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DryWeatherFlowOverrideID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "AreAllModelingAttributesComplete": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "IsFullyParameterized": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

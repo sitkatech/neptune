@@ -1,0 +1,7 @@
+CREATE TABLE [dbo].[StormwaterJurisdiction](
+	[StormwaterJurisdictionID] [int] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_StormwaterJurisdiction_StormwaterJurisdictionID] PRIMARY KEY,
+	[OrganizationID] [int] NOT NULL CONSTRAINT [AK_StormwaterJurisdiction_OrganizationID] UNIQUE CONSTRAINT [FK_StormwaterJurisdiction_Organization_OrganizationID] FOREIGN KEY REFERENCES [dbo].[Organization] ([OrganizationID]),
+	[StateProvinceID] [int] NOT NULL CONSTRAINT [FK_StormwaterJurisdiction_StateProvince_StateProvinceID] FOREIGN KEY REFERENCES [dbo].[StateProvince] ([StateProvinceID]),
+	[StormwaterJurisdictionPublicBMPVisibilityTypeID] [int] NOT NULL CONSTRAINT [FK_StormwaterJurisdiction_StormwaterJurisdictionPublicBMPVisibilityType_StormwaterJurisdictionPublicBMPVisibilityTypeID] FOREIGN KEY REFERENCES [dbo].[StormwaterJurisdictionPublicBMPVisibilityType] ([StormwaterJurisdictionPublicBMPVisibilityTypeID]),
+	[StormwaterJurisdictionPublicWQMPVisibilityTypeID] [int] NOT NULL CONSTRAINT [FK_StormwaterJurisdiction_StormwaterJurisdictionPublicWQMPVisibilityType_StormwaterJurisdictionPublicWQMPVisibilityTypeID] FOREIGN KEY REFERENCES [dbo].[StormwaterJurisdictionPublicWQMPVisibilityType] ([StormwaterJurisdictionPublicWQMPVisibilityTypeID])
+)

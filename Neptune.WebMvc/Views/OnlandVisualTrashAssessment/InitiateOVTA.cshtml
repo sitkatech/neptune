@@ -1,0 +1,142 @@
+﻿@using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Common.BootstrapWrappers
+@using Neptune.WebMvc.Common.HtmlHelperExtensions
+@inherits Neptune.WebMvc.Views.OnlandVisualTrashAssessment.InitiateOVTA
+@model Neptune.WebMvc.Views.OnlandVisualTrashAssessment.InitiateOVTAViewModel
+@{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
+
+@section JavascriptAndStylesContent
+{
+    <script type="text/javascript" src="@Url.Content("~/Content/angular-controllers/Trash/AssessmentAreaMapController.js")"></script>
+    <script type="text/javascript">
+        // <![CDATA[
+        angular.module("NeptuneApp")
+            .factory("angularModelAndViewData",
+                function() {
+                    return {
+                        AngularModel: @Html.Raw(Model.ToJsonHtmlString()),
+                        AngularViewData: @Html.Raw(ViewDataTyped.ViewDataForAngular.ToJsonHtmlString())
+                    };
+                });
+
+        jQuery(document).ready(function() {
+            HookupCheckIfFormIsDirtyNoDisable(undefined);
+        });
+
+    </script>
+}
+
+
+@if (!ViewDataTyped.OVTASection.IsSectionEnabled(ViewDataTyped.OVTA))
+{
+    <p class="systemText">@ViewDataTyped.OVTASection.GetSectionDisabledMessage()</p>
+}
+else
+{
+
+    <div ng-app="NeptuneApp" ng-controller="AssessmentAreaMapController">
+        @using (Html.BeginForm(FormMethod.Post, new {@class = "field-visit-form"}))
+        {
+            <div class="formPage">
+                <div class="form-horizontal">
+
+                    <p class="systemText">Are you reassessing a previously-assessed area, or assessing a new area for the first time?</p>
+
+                    <div class="form-group">
+                        <div class="col-sm-3 control-label">
+                        </div>
+                        <div class="col-sm-9">
+                            <label>
+                                <input type="radio" ng-model="AngularModel.AssessingNewArea" ng-value="false" name="@Html.NameFor(m => m.AssessingNewArea)"/>
+                                Reassess existing area
+                            </label><br/>
+                            <label>
+                                <input type="radio" ng-model="AngularModel.AssessingNewArea" ng-value="true" name="@Html.NameFor(m => m.AssessingNewArea)"/>
+                                Assess new area
+                            </label>
+                        </div>
+                    </div>
+                    <hr/>
+                    @if (ViewDataTyped.DefaultJurisdiction == null)
+                    {
+                        <div class="form-group row">
+                            <div class="col-sm-3 control-label">
+                                @Html.LabelWithSugarFor(m => m.StormwaterJurisdiction)
+                            </div>
+                            <div class="col-sm-9">
+                                <select ng-model="AngularModel.StormwaterJurisdiction"
+                                        class="selectpicker"
+                                        ng-change="jurisdictionChanged()"
+                                        data-live-search="true"
+                                        data-container="body"
+                                        data-width="100%" selectpicker
+                                        title="Select a Stormwater Jurisdiction"
+                                        ng-options="stormwaterJurisdiction as stormwaterJurisdiction.StormwaterJurisdictionDisplayName for stormwaterJurisdiction in AngularViewData.StormwaterJurisdictions track by stormwaterJurisdiction.StormwaterJurisdictionID">
+                                    <option value="" disabled selected>Select a Stormwater Jurisdiction</option>
+                                </select>
+                                @Html.ValidationMessageFor(m => m.StormwaterJurisdiction)
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group row">
+                            <div class="col-sm-3 control-label">
+                                @Html.LabelWithSugarFor(m => m.StormwaterJurisdiction)
+                            </div>
+                            <div class="col-sm-9">
+                                @ViewDataTyped.DefaultJurisdiction.GetOrganizationDisplayName()
+                            </div>
+                        </div>
+                    }
+                    <div class="row" ng-show="isMapEnabled()">
+                        <div class="col-sm-3 control-label">@Html.LabelWithSugarFor(m => m.OnlandVisualTrashAssessmentAreaID)</div>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input type="text" id="assessmentAreaFinder" class="typeahead form-control"
+                                       placeholder="Search by Assessment Area name" autocomplete="off"
+                                       ng-value="lastSelectedName" style="border-top-left-radius: 4px; border-bottom-left-radius: 4px;"/>
+                                <span class="input-group-btn">
+                                    <a id="assessmentAreaFinderButton" class="btn btn-default">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 20px;" ng-show="isMapEnabled()">
+                        <div class="col-xs-12 col-sm-12 col-md-3 control-label">
+                            <button type="button" class="btn btn-sm btn-neptune" ng-click="zoomToLocation()">
+                                <span class="glyphicon glyphicon-phone"></span>
+                                Locate me
+                            </button>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-9">
+                            <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 475px; margin: 0"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <input type="hidden" name="@Html.NameFor(m => m.OnlandVisualTrashAssessmentAreaID)" id="@Html.IdFor(m => m.OnlandVisualTrashAssessmentAreaID)" value="{{lastSelectedID}}"/>
+
+                <input type="hidden" name="@Html.NameFor(m => m.StormwaterJurisdiction.StormwaterJurisdictionID)" id="@Html.IdFor(m => m.StormwaterJurisdiction.StormwaterJurisdictionID)" value="{{AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID}}" ng-model="AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID" ng-if="AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID"/>
+
+                <input type="hidden" name="@Html.NameFor(m => m.StormwaterJurisdiction.StormwaterJurisdictionDisplayName)" id="@Html.IdFor(m => m.StormwaterJurisdiction.StormwaterJurisdictionDisplayName)" value="{{AngularModel.StormwaterJurisdiction.StormwaterJurisdictionDisplayName}}" ng-model="AngularModel.StormwaterJurisdiction.StormwaterJurisdictionDisplayName" ng-if="AngularModel.StormwaterJurisdiction.StormwaterJurisdictionDisplayName"/>
+            </div>
+
+            <hr/>
+            <div class="row">
+                <div class="col-xs-12 col-sm-3">
+                    <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+                </div>
+
+                <div class="col-xs-12 col-sm-9" style="text-align: right">
+                    <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
+                    <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
+                </div>
+            </div>
+        }
+    </div>
+}

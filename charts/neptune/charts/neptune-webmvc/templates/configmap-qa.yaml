@@ -1,0 +1,26 @@
+{{ if eq .Values.global.env.name "qa" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "webmvc.fullname" . }}-qa-configmap
+data:
+  SECRET_PATH: "/app/secrets/neptuneWebMvcSecrets"
+  DOCKER_BUILD_SOURCE: "."
+  ASPNETCORE_ENVIRONMENT: "Staging"
+  ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+  APPINSIGHTS_INSTRUMENTATIONKEY: "{{ .Values.global.env.appInsightsInstrumentationKey }}"
+  SitkaEmailRedirect: "notifications-qa@sitkatech.com"
+  SitkaSupportEmail: "h2o.team@esassoc.com"
+  DoNotReplyEmail: "donotreply@ocstormwatertools.org"
+  MailLogBcc: ""
+  KeystoneOpenIDUrl: "https://identity-qa.sitkatech.com"
+  KeystoneOpenIDClientID: "Neptune"
+  MapServiceUrl: "https://{{ .Values.global.domains.geoserver }}/geoserver/OCStormwater/ows"
+  AutoDelineateServiceUrl: "https://www.ocgis.com/arcpub/rest/services/Flood/GlobalStormwaterDelineation/GPServer/Global%20Stormwater%20Delineation/"
+  NereidUrl: "http://{{ .Values.global.domains.nereid }}"
+  GDALAPIBaseUrl: "http://{{ .Values.global.domains.gdalApi }}"
+  QGISAPIBaseUrl: "http://{{ .Values.global.domains.qgisApi }}"
+  OCGISBaseUrl: "https://ocgis.com/arcpub/rest/services/"
+  PlanningModuleBaseUrl: "https://{{ .Values.global.domains.web }}"
+  PathToFieldVisitUploadTemplate: "Content/Bulk_Upload_FieldVisists_for_Trash_Screens_Template.xlsx"
+{{ end }}

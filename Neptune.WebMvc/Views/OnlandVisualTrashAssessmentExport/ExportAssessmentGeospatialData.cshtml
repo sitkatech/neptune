@@ -1,0 +1,112 @@
+﻿@using Neptune.EFModels.Entities
+@using Neptune.WebMvc.Views.OnlandVisualTrashAssessmentExport
+@using Neptune.WebMvc.Views.Shared
+@inherits Neptune.WebMvc.Views.OnlandVisualTrashAssessmentExport.ExportAssessmentGeospatialData
+
+@section JavascriptAndStylesContent
+{
+    <style>
+        .systemText {
+            margin-top: 5px;
+        }
+        .row {
+            margin-top: 5px;
+        }
+    </style>
+}
+
+@{
+    ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);
+}
+
+@foreach (var jurisdiction in ViewDataTyped.StormwaterJurisdictions)
+{
+
+    var organizationDisplayName = jurisdiction.GetOrganizationDisplayName();
+
+    var onlandVisualTrashAssessmentAreas = ViewDataTyped.OnlandVisualTrashAssessmentAreas[jurisdiction.StormwaterJurisdictionID].ToList();
+    var showAreas = onlandVisualTrashAssessmentAreas.Any();
+    var showTransects = onlandVisualTrashAssessmentAreas.Any(x=>x.TransectLine != null);
+    var onlandVisualTrashAssessments = ViewDataTyped.OnlandVisualTrashAssessments[jurisdiction.StormwaterJurisdictionID].ToList();
+    var showObservationPoints = onlandVisualTrashAssessments.Any(x=> x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID);
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Jurisdiction:
+                    @organizationDisplayName
+                </div>
+                <div class="panel-body">
+                    @if (showAreas)
+                    {
+                        <div class="row">
+                            <div class="col-sm-4 text-right">
+                                <a class="btn btn-neptune" href="@jurisdiction.GetGeoserverRequestUrl(OnlandVisualTrashAssessmentExportTypeEnum.ExportAreas, ViewDataTyped.MapServiceUrl)">Download Assessment Areas</a>
+                            </div>
+                            <div class="col-sm-8">
+                                <p class="systemText">Download all Assessment Areas for @organizationDisplayName as a shapefile</p>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-sm-4 text-right">
+                                <a class="btn btn-neptune" disabled="disabled">Download Assessment Areas</a>
+                            </div>
+                            <div class="col-sm-8">
+                                <p class="systemText">There are no Assessment Areas to export for @organizationDisplayName</p>
+                            </div>
+                        </div>
+                    }
+                    @if (showObservationPoints)
+                    {
+                        <div class="row">
+                            <div class="col-sm-4 text-right">
+                                <a class="btn btn-neptune" href="@jurisdiction.GetGeoserverRequestUrl(OnlandVisualTrashAssessmentExportTypeEnum.ExportObservationPoints, ViewDataTyped.MapServiceUrl)">Download Observation Points</a>
+                            </div>
+                            <div class="col-sm-8">
+                                <p class="systemText">Download all Observation Points for @organizationDisplayName as a shapefile</p>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-sm-4 text-right">
+                                <a class="btn btn-neptune" disabled="disabled">Download Observation Points</a>
+                            </div>
+                            <div class="col-sm-8">
+                                <p class="systemText">There are no Observation Points to export for @organizationDisplayName</p>
+                            </div>
+                        </div>
+                    }
+                    @if (showTransects)
+                    {
+                        <div class="row">
+                            <div class="col-sm-4 text-right">
+                                <a class="btn btn-neptune" href="@jurisdiction.GetGeoserverRequestUrl(OnlandVisualTrashAssessmentExportTypeEnum.ExportTransects, ViewDataTyped.MapServiceUrl)">Download Assessment Transects</a>
+                            </div>
+                            <div class="col-sm-8">
+                                <p class="systemText">Download all Assessment Transects for @organizationDisplayName as a shapefile</p>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        
+                        <div class="row">
+                            <div class="col-sm-4 text-right">
+                                <a class="btn btn-neptune" disabled="disabled">Download Assessment Transects</a>
+                            </div>
+                            <div class="col-sm-8">
+                                <p class="systemText">There are no Assessment Transects to export for @organizationDisplayName</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

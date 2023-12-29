@@ -1,0 +1,5 @@
+CREATE TABLE [dbo].[WaterQualityManagementPlanDevelopmentType](
+	[WaterQualityManagementPlanDevelopmentTypeID] [int] NOT NULL CONSTRAINT [PK_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeID] PRIMARY KEY,
+	[WaterQualityManagementPlanDevelopmentTypeName] [varchar](100) CONSTRAINT [AK_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeName] UNIQUE,
+	[WaterQualityManagementPlanDevelopmentTypeDisplayName] [varchar](100) CONSTRAINT [AK_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeDisplayName] UNIQUE
+)

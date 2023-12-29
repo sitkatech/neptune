@@ -1,0 +1,5 @@
+CREATE TABLE [dbo].[StormwaterJurisdictionPublicWQMPVisibilityType](
+	[StormwaterJurisdictionPublicWQMPVisibilityTypeID] [int] NOT NULL CONSTRAINT [PK_StormwaterJurisdictionPublicWQMPVisibilityType_StormwaterJurisdictionPublicWQMPVisibilityTypeID] PRIMARY KEY,
+	[StormwaterJurisdictionPublicWQMPVisibilityTypeName] [varchar](100) CONSTRAINT [AK_StormwaterJurisdictionPublicWQMPVisibilityType_StormwaterJurisdictionPublicWQMPVisibilityTypeName] UNIQUE,
+	[StormwaterJurisdictionPublicWQMPVisibilityTypeDisplayName] [varchar](100) CONSTRAINT [AK_StormwaterJurisdictionPublicWQMPVisibilityType_StormwaterJurisdictionPublicWQMPVisibilityTypeDisplayName] UNIQUE
+)

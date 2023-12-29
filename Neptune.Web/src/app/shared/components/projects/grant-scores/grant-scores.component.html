@@ -1,0 +1,95 @@
+<ng-container *ngIf="project">
+    <ng-container *ngIf="project.HasModeledResults; else noGrantScores">
+        <div class="row mr-1 ml-1">
+            <div class="col p-0">
+                <ul ngbNav #nav="ngbNav" class="nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active">OCTA M2 Tier 2 Grant Program</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row bg-white border mr-1 ml-1 pb-4" *ngIf="project">
+            <div class="col-xl-6">
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5 class="border-bottom p-2">Score Summary</h5>
+                    </div>
+
+                    <div class="col-sm-4 text-sm-right">
+                        <field-definition fieldDefinitionType="OCTAWatershed" labelOverride="Watershed(s)"></field-definition>
+                    </div>
+                    <div class="col-sm-8">
+                        <span *ngIf="project.OCTAWatersheds">{{ project.OCTAWatersheds }}</span>
+                    </div>
+                    <div class="col-sm-4 mt-1 text-sm-right">
+                        <field-definition fieldDefinitionType="SEAScore" labelOverride="SEA Score"></field-definition>
+                    </div>
+                    <div class="col-sm-8 mt-1">
+                        <span *ngIf="project.SEA">{{ project.SEA | number: '1.0-0' }}</span>
+                    </div>
+                    <div class="col-sm-4 mt-1 text-sm-right">
+                        <field-definition fieldDefinitionType="TPIScore" labelOverride="TPI Score"></field-definition>
+                    </div>
+                    <div class="col-sm-8 mt-1">
+                        <span *ngIf="project.TPI">{{ project.TPI | number: '1.0-0' }}</span>
+                    </div>
+                    <div class="col-sm-4 mt-1 text-sm-right">
+                        <field-definition fieldDefinitionType="WQLRI" labelOverride="Dry Weather WQLRI"></field-definition>
+                    </div>
+                    <div class="col-sm-8 mt-1">
+                        <span *ngIf="project.DryWeatherWQLRI">{{ project.DryWeatherWQLRI | number: '1.0-0' }}</span>
+                    </div>
+                    <div class="col-sm-4 mt-1 text-sm-right">
+                        <field-definition fieldDefinitionType="WQLRI" labelOverride="Wet Weather WQLRI"></field-definition>
+                    </div>
+                    <div class="col-sm-8 mt-1">
+                        <span *ngIf="project.WetWeatherWQLRI">{{ project.WetWeatherWQLRI | number: '1.0-0' }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h5 class="border-bottom p-2">
+                            <field-definition fieldDefinitionType="PollutantContributiontoSEA" labelOverride="Pollutant Contribution to SEA"></field-definition>
+                        </h5>
+                    </div>
+                    <div class="col-sm-4 text-sm-right">TSS</div>
+                    <div class="col-sm-8">
+                        <span *ngIf="project.PollutantTSS">{{ project.PollutantTSS | percent: '1.0-0' }}</span>
+                    </div>
+                    <div class="col-sm-4 mt-1 text-sm-right">Nutrients</div>
+                    <div class="col-sm-8 mt-1">
+                        <span *ngIf="project.PollutantNutrients">{{ project.PollutantNutrients | percent: '1.0-0' }}</span>
+                    </div>
+                    <div class="col-sm-4 mt-1 text-sm-right">Metals</div>
+                    <div class="col-sm-8 mt-1"> 
+                        <span *ngIf="project.PollutantMetals">{{ project.PollutantMetals | percent: '1.0-0' }}</span>
+                    </div>
+                    <div class="col-sm-4 mt-1 text-sm-right">Bacteria</div>
+                    <div class="col-sm-8 mt-1">
+                        <span *ngIf="project.PollutantBacteria">{{ project.PollutantBacteria | percent: '1.0-0' }}</span>
+                    </div>
+                    <div class="col-sm-4 mt-1 text-sm-right">Volume</div>
+                    <div class="col-sm-8 mt-1">
+                        <span *ngIf="project.PollutantVolume">{{ project.PollutantVolume | percent: '1.0-0' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 mt-5">
+                <hr>
+                <custom-rich-text [customRichTextTypeID]="OCTAM2Tier2RichTextTypeID"></custom-rich-text>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noGrantScores>
+        <div>
+            <i>
+                Grant Metrics will be calculated when modeling results are calculated. 
+                Use the “Calculate” button to calculate, or to update results if the project inputs have changed.
+            </i>
+        </div>
+    </ng-template>
+</ng-container>

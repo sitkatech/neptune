@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "nereid-redis.fullname" . }}
+  labels:
+    {{- include "nereid-redis.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: 6379
+      targetPort: 6379
+      protocol: TCP
+  selector:
+    {{- include "nereid-redis.selectorLabels" . | nindent 4 }}

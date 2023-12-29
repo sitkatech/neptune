@@ -1,0 +1,27 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+jobs:  
+  - job: RestoreDevBlobStorage
+    displayName: Restore Dev Blob Storage
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: '$(azureSubscription)'
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $startDate = [DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")
+          $expireDate = [DateTime]::UtcNow.AddHours(2).ToString("yyyy-MM-ddTHH:mm:ssZ")
+          $prodSasKey = az storage account generate-sas --account-name $(storageAccountProdApplicationName) --account-key $(storageAccountProdAccountKey) --expiry $expireDate --start $startDate --permissions acdfilprtuwxy --resource-types sco --services bfqt
+          $devSasKey = az storage account generate-sas --account-name $(storageAccountDevApplicationName) --account-key $(storageAccountDevAccountKey) --expiry $expireDate --start $startDate --permissions acdfilprtuwxy --resource-types sco --services bfqt
+          azcopy sync ("https://$(storageAccountProdApplicationName).blob.core.windows.net/file-resource/?" + $prodSasKey) ("https://$(storageAccountDevApplicationName).blob.core.windows.net/file-resource/?" + $devSasKey) --recursive --from-to BlobBlob
+          
+

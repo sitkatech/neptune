@@ -1,0 +1,460 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Neptune.Database</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{18896e6a-80c1-423a-b354-62466f4de70d}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Neptune.Database</RootNamespace>
+    <AssemblyName>Neptune.Database</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo" />
+    <Folder Include="HangFire" />
+    <Folder Include="Scripts" />
+    <Folder Include="dbo\Tables" />
+    <Folder Include="dbo\Functions" />
+    <Folder Include="dbo\Procs" />
+    <Folder Include="dbo\Views" />
+    <Folder Include="dbo\User Defined Types" />
+    <Folder Include="HangFire\Tables" />
+    <Folder Include="Scripts\LookupTables" />
+    <Folder Include="Scripts\PreReleaseScripts" />
+    <Folder Include="Scripts\ReleaseScripts" />
+    <Folder Include="Scripts\Utility" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Neptune.Database.publish.xml" />
+    <None Include="Scripts\PreReleaseScripts\README.md" />
+    <None Include="Scripts\ReleaseScripts\README.md" />
+    <None Include="Scripts\ReleaseScripts\001-rename fields on ModelingAttribute table.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\LookupTables\Script.PostDeployment.LookupTables.sql" />
+    <None Include="Scripts\PreReleaseScripts\Script.PreDeployment.ReleaseScripts.sql" />
+    <None Include="Scripts\ReleaseScripts\Script.PostDeployment.ReleaseScripts.sql" />
+    <None Include="Scripts\Utility\Script.PostDeployment.Utility.sql" />
+    <Build Include="HangFire\HangFire.sql" />
+    <Build Include="dbo\Tables\dbo.County.sql" />
+    <Build Include="dbo\Tables\dbo.CustomAttribute.sql" />
+    <Build Include="dbo\Tables\dbo.CustomAttributeDataType.sql" />
+    <Build Include="dbo\Tables\dbo.CustomAttributeType.sql" />
+    <Build Include="dbo\Tables\dbo.CustomAttributeTypePurpose.sql" />
+    <Build Include="dbo\Tables\dbo.CustomAttributeValue.sql" />
+    <Build Include="dbo\Tables\dbo.DatabaseMigration.sql" />
+    <Build Include="dbo\Tables\dbo.Delineation.sql" />
+    <Build Include="dbo\Tables\dbo.DelineationOverlap.sql" />
+    <Build Include="dbo\Tables\dbo.DelineationStaging.sql" />
+    <Build Include="dbo\Tables\dbo.DelineationType.sql" />
+    <Build Include="dbo\Tables\dbo.DirtyModelNode.sql" />
+    <Build Include="dbo\Tables\dbo.DryWeatherFlowOverride.sql" />
+    <Build Include="dbo\Tables\dbo.FieldDefinition.sql" />
+    <Build Include="dbo\Tables\dbo.FieldDefinitionType.sql" />
+    <Build Include="dbo\Tables\dbo.FieldVisit.sql" />
+    <Build Include="dbo\Tables\dbo.FieldVisitSection.sql" />
+    <Build Include="dbo\Tables\dbo.FieldVisitStatus.sql" />
+    <Build Include="dbo\Tables\dbo.FieldVisitType.sql" />
+    <Build Include="dbo\Tables\dbo.FileResource.sql" />
+    <Build Include="dbo\Tables\dbo.FileResourceMimeType.sql" />
+    <Build Include="dbo\Tables\dbo.FundingEvent.sql" />
+    <Build Include="dbo\Tables\dbo.FundingEventFundingSource.sql" />
+    <Build Include="dbo\Tables\dbo.FundingEventType.sql" />
+    <Build Include="dbo\Tables\dbo.FundingSource.sql" />
+    <Build Include="dbo\Tables\dbo.geometry_columns.sql" />
+    <Build Include="dbo\Tables\dbo.gt_pk_metadata.sql" />
+    <Build Include="dbo\Tables\dbo.HRUCharacteristic.sql" />
+    <Build Include="dbo\Tables\dbo.HRUCharacteristicLandUseCode.sql" />
+    <Build Include="dbo\Tables\dbo.HydrologicSubarea.sql" />
+    <Build Include="dbo\Tables\dbo.HydromodificationAppliesType.sql" />
+    <Build Include="dbo\Tables\dbo.LandUseBlock.sql" />
+    <Build Include="dbo\Tables\dbo.LandUseBlockStaging.sql" />
+    <Build Include="dbo\Tables\dbo.LoadGeneratingUnit.sql" />
+    <Build Include="dbo\Tables\dbo.LoadGeneratingUnitRefreshArea.sql" />
+    <Build Include="dbo\Tables\dbo.MaintenanceRecord.sql" />
+    <Build Include="dbo\Tables\dbo.MaintenanceRecordObservation.sql" />
+    <Build Include="dbo\Tables\dbo.MaintenanceRecordObservationValue.sql" />
+    <Build Include="dbo\Tables\dbo.MaintenanceRecordType.sql" />
+    <Build Include="dbo\Tables\dbo.MeasurementUnitType.sql" />
+    <Build Include="dbo\Tables\dbo.ModelBasin.sql" />
+    <Build Include="dbo\Tables\dbo.ModelBasinStaging.sql" />
+    <Build Include="dbo\Tables\dbo.MonthsOfOperation.sql" />
+    <Build Include="dbo\Tables\dbo.NeptuneArea.sql" />
+    <Build Include="dbo\Tables\dbo.NeptuneHomePageImage.sql" />
+    <Build Include="dbo\Tables\dbo.NeptunePage.sql" />
+    <Build Include="dbo\Tables\dbo.NeptunePageImage.sql" />
+    <Build Include="dbo\Tables\dbo.NeptunePageType.sql" />
+    <Build Include="dbo\Tables\dbo.NereidResult.sql" />
+    <Build Include="dbo\Tables\dbo.Notification.sql" />
+    <Build Include="dbo\Tables\dbo.NotificationType.sql" />
+    <Build Include="dbo\Tables\dbo.ObservationTargetType.sql" />
+    <Build Include="dbo\Tables\dbo.ObservationThresholdType.sql" />
+    <Build Include="dbo\Tables\dbo.ObservationTypeCollectionMethod.sql" />
+    <Build Include="dbo\Tables\dbo.ObservationTypeSpecification.sql" />
+    <Build Include="dbo\Tables\dbo.OCTAPrioritization.sql" />
+    <Build Include="dbo\Tables\dbo.OCTAPrioritizationStaging.sql" />
+    <Build Include="dbo\Tables\dbo.OnlandVisualTrashAssessment.sql" />
+    <Build Include="dbo\Tables\dbo.OnlandVisualTrashAssessmentArea.sql" />
+    <Build Include="dbo\Tables\dbo.OnlandVisualTrashAssessmentObservation.sql" />
+    <Build Include="dbo\Tables\dbo.OnlandVisualTrashAssessmentObservationPhoto.sql" />
+    <Build Include="dbo\Tables\dbo.OnlandVisualTrashAssessmentObservationPhotoStaging.sql" />
+    <Build Include="dbo\Tables\dbo.OnlandVisualTrashAssessmentPreliminarySourceIdentificationType.sql" />
+    <Build Include="dbo\Tables\dbo.OnlandVisualTrashAssessmentScore.sql" />
+    <Build Include="dbo\Tables\dbo.OnlandVisualTrashAssessmentStatus.sql" />
+    <Build Include="dbo\Tables\dbo.Organization.sql" />
+    <Build Include="dbo\Tables\dbo.OrganizationType.sql" />
+    <Build Include="dbo\Tables\dbo.OVTASection.sql" />
+    <Build Include="dbo\Tables\dbo.Parcel.sql" />
+    <Build Include="dbo\Tables\dbo.ParcelGeometry.sql" />
+    <Build Include="dbo\Tables\dbo.ParcelStaging.sql" />
+    <Build Include="dbo\Tables\dbo.PermitType.sql" />
+    <Build Include="dbo\Tables\dbo.Person.sql" />
+    <Build Include="dbo\Tables\dbo.PrecipitationZone.sql" />
+    <Build Include="dbo\Tables\dbo.PrecipitationZoneStaging.sql" />
+    <Build Include="dbo\Tables\dbo.PreliminarySourceIdentificationCategory.sql" />
+    <Build Include="dbo\Tables\dbo.PreliminarySourceIdentificationType.sql" />
+    <Build Include="dbo\Tables\dbo.PriorityLandUseType.sql" />
+    <Build Include="dbo\Tables\dbo.Project.sql" />
+    <Build Include="dbo\Tables\dbo.ProjectDocument.sql" />
+    <Build Include="dbo\Tables\dbo.ProjectHRUCharacteristic.sql" />
+    <Build Include="dbo\Tables\dbo.ProjectLoadGeneratingUnit.sql" />
+    <Build Include="dbo\Tables\dbo.ProjectNereidResult.sql" />
+    <Build Include="dbo\Tables\dbo.ProjectNetworkSolveHistory.sql" />
+    <Build Include="dbo\Tables\dbo.ProjectNetworkSolveHistoryStatusType.sql" />
+    <Build Include="dbo\Tables\dbo.ProjectStatus.sql" />
+    <Build Include="dbo\Tables\dbo.QuickBMP.sql" />
+    <Build Include="dbo\Tables\dbo.RegionalSubbasin.sql" />
+    <Build Include="dbo\Tables\dbo.RegionalSubbasinRevisionRequest.sql" />
+    <Build Include="dbo\Tables\dbo.RegionalSubbasinRevisionRequestStatus.sql" />
+    <Build Include="dbo\Tables\dbo.RegionalSubbasinStaging.sql" />
+    <Build Include="dbo\Tables\dbo.Role.sql" />
+    <Build Include="dbo\Tables\dbo.RoutingConfiguration.sql" />
+    <Build Include="dbo\Tables\dbo.SizingBasisType.sql" />
+    <Build Include="dbo\Tables\dbo.SourceControlBMP.sql" />
+    <Build Include="dbo\Tables\dbo.SourceControlBMPAttribute.sql" />
+    <Build Include="dbo\Tables\dbo.SourceControlBMPAttributeCategory.sql" />
+    <Build Include="dbo\Tables\dbo.spatial_ref_sys.sql" />
+    <Build Include="dbo\Tables\dbo.StateProvince.sql" />
+    <Build Include="dbo\Tables\dbo.StormwaterBreadCrumbEntity.sql" />
+    <Build Include="dbo\Tables\dbo.StormwaterJurisdiction.sql" />
+    <Build Include="dbo\Tables\dbo.StormwaterJurisdictionGeometry.sql" />
+    <Build Include="dbo\Tables\dbo.StormwaterJurisdictionPerson.sql" />
+    <Build Include="dbo\Tables\dbo.StormwaterJurisdictionPublicBMPVisibilityType.sql" />
+    <Build Include="dbo\Tables\dbo.StormwaterJurisdictionPublicWQMPVisibilityType.sql" />
+    <Build Include="dbo\Tables\dbo.SupportRequestLog.sql" />
+    <Build Include="dbo\Tables\dbo.SupportRequestType.sql" />
+    <Build Include="dbo\Tables\dbo.TimeOfConcentration.sql" />
+    <Build Include="dbo\Tables\dbo.TrainingVideo.sql" />
+    <Build Include="dbo\Tables\dbo.TrashCaptureStatusType.sql" />
+    <Build Include="dbo\Tables\dbo.TrashGeneratingUnit.sql" />
+    <Build Include="dbo\Tables\dbo.TrashGeneratingUnit4326.sql" />
+    <Build Include="dbo\Tables\dbo.TrashGeneratingUnitAdjustment.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMP.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMPAssessment.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMPAssessmentObservationType.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMPAssessmentPhoto.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMPAssessmentType.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMPBenchmarkAndThreshold.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMPDocument.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMPImage.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMPLifespanType.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMPModelingAttribute.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMPModelingType.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMPObservation.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMPType.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMPTypeAssessmentObservationType.sql" />
+    <Build Include="dbo\Tables\dbo.TreatmentBMPTypeCustomAttributeType.sql" />
+    <Build Include="dbo\Tables\dbo.UnderlyingHydrologicSoilGroup.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlan.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanBoundary.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanDevelopmentType.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanDocument.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanDocumentType.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanLandUse.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanModelingApproach.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanParcel.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanPermitTerm.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanPhoto.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanPriority.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanStatus.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanVerify.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanVerifyPhoto.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanVerifyQuickBMP.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanVerifySourceControlBMP.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanVerifyStatus.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanVerifyTreatmentBMP.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanVerifyType.sql" />
+    <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanVisitStatus.sql" />
+    <Build Include="dbo\Tables\dbo.Watershed.sql" />
+    <Build Include="dbo\User Defined Types\html.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Scripts\Script.PreDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\LookupTables\dbo.CustomAttributeDataType.sql" />
+    <None Include="Scripts\LookupTables\dbo.CustomAttributeTypePurpose.sql" />
+    <None Include="Scripts\LookupTables\dbo.DelineationType.sql" />
+    <None Include="Scripts\LookupTables\dbo.DryWeatherFlowOverride.sql" />
+    <None Include="Scripts\LookupTables\dbo.FieldDefinitionType.sql" />
+    <None Include="Scripts\LookupTables\dbo.FieldVisitSection.sql" />
+    <None Include="Scripts\LookupTables\dbo.FieldVisitStatus.sql" />
+    <None Include="Scripts\LookupTables\dbo.FieldVisitType.sql" />
+    <None Include="Scripts\LookupTables\dbo.FileResourceMimeType.sql" />
+    <None Include="Scripts\LookupTables\dbo.FundingEventType.sql" />
+    <None Include="Scripts\LookupTables\dbo.HRUCharacteristicLandUseCode.sql" />
+    <None Include="Scripts\LookupTables\dbo.HydromodificationAppliesType.sql" />
+    <None Include="Scripts\LookupTables\dbo.MaintenanceRecordType.sql" />
+    <None Include="Scripts\LookupTables\dbo.MeasurementUnitType.sql" />
+    <None Include="Scripts\LookupTables\dbo.MonthsOfOperation.sql" />
+    <None Include="Scripts\LookupTables\dbo.NeptuneArea.sql" />
+    <None Include="Scripts\LookupTables\dbo.NeptunePageType.sql" />
+    <None Include="Scripts\LookupTables\dbo.NotificationType.sql" />
+    <None Include="Scripts\LookupTables\dbo.ObservationTargetType.sql" />
+    <None Include="Scripts\LookupTables\dbo.ObservationThresholdType.sql" />
+    <None Include="Scripts\LookupTables\dbo.ObservationTypeCollectionMethod.sql" />
+    <None Include="Scripts\LookupTables\dbo.ObservationTypeSpecification.sql" />
+    <None Include="Scripts\LookupTables\dbo.OnlandVisualTrashAssessmentScore.sql" />
+    <None Include="Scripts\LookupTables\dbo.OnlandVisualTrashAssessmentStatus.sql" />
+    <None Include="Scripts\LookupTables\dbo.OVTASection.sql" />
+    <None Include="Scripts\LookupTables\dbo.PermitType.sql" />
+    <None Include="Scripts\LookupTables\dbo.PreliminarySourceIdentificationCategory.sql" />
+    <None Include="Scripts\LookupTables\dbo.PreliminarySourceIdentificationType.sql" />
+    <None Include="Scripts\LookupTables\dbo.PriorityLandUseType.sql" />
+    <None Include="Scripts\LookupTables\dbo.ProjectNetworkSolveHistoryStatusType.sql" />
+    <None Include="Scripts\LookupTables\dbo.ProjectStatus.sql" />
+    <None Include="Scripts\LookupTables\dbo.RegionalSubbasinRevisionRequestStatus.sql" />
+    <None Include="Scripts\LookupTables\dbo.Role.sql" />
+    <None Include="Scripts\LookupTables\dbo.RoutingConfiguration.sql" />
+    <None Include="Scripts\LookupTables\dbo.SizingBasisType.sql" />
+    <None Include="Scripts\LookupTables\dbo.StormwaterBreadCrumbEntity.sql" />
+    <None Include="Scripts\LookupTables\dbo.StormwaterJurisdictionPublicBMPVisibilityType.sql" />
+    <None Include="Scripts\LookupTables\dbo.StormwaterJurisdictionPublicWQMPVisibilityType.sql" />
+    <None Include="Scripts\LookupTables\dbo.SupportRequestType.sql" />
+    <None Include="Scripts\LookupTables\dbo.TimeOfConcentration.sql" />
+    <None Include="Scripts\LookupTables\dbo.TrashCaptureStatusType.sql" />
+    <None Include="Scripts\LookupTables\dbo.TreatmentBMPAssessmentType.sql" />
+    <None Include="Scripts\LookupTables\dbo.TreatmentBMPLifespanType.sql" />
+    <None Include="Scripts\LookupTables\dbo.TreatmentBMPModelingType.sql" />
+    <None Include="Scripts\LookupTables\dbo.UnderlyingHydrologicSoilGroup.sql" />
+    <None Include="Scripts\LookupTables\dbo.WaterQualityManagementPlanDevelopmentType.sql" />
+    <None Include="Scripts\LookupTables\dbo.WaterQualityManagementPlanDocumentType.sql" />
+    <None Include="Scripts\LookupTables\dbo.WaterQualityManagementPlanLandUse.sql" />
+    <None Include="Scripts\LookupTables\dbo.WaterQualityManagementPlanModelingApproach.sql" />
+    <None Include="Scripts\LookupTables\dbo.WaterQualityManagementPlanPermitTerm.sql" />
+    <None Include="Scripts\LookupTables\dbo.WaterQualityManagementPlanPriority.sql" />
+    <None Include="Scripts\LookupTables\dbo.WaterQualityManagementPlanStatus.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Views\dbo.vFieldVisitDetailed.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerAssessmentAreaExport.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerDelineation.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerJurisdiction.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerLandUseBlock.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerMaskLayer.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerObservationPointExport.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerOCTAPrioritization.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerOnlandVisualTrashAssessmentArea.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerParcel.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerRegionalSubbasin.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerTransectLineExport.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerTrashGeneratingUnit.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerTrashGeneratingUnitLoad.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerWaterQualityManagementPlan.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerWatershed.sql" />
+    <Build Include="dbo\Views\dbo.vModelingResultUnitConversion.sql" />
+    <Build Include="dbo\Views\dbo.vMostRecentTreatmentBMPAssessment.sql" />
+    <Build Include="dbo\Views\dbo.vNereidBMPColocation.sql" />
+    <Build Include="dbo\Views\dbo.vNereidLoadingInput.sql" />
+    <Build Include="dbo\Views\dbo.vNereidProjectLoadingInput.sql" />
+    <Build Include="dbo\Views\dbo.vNereidProjectRegionalSubbasinCentralizedBMP.sql" />
+    <Build Include="dbo\Views\dbo.vNereidProjectTreatmentBMPRegionalSubbasin.sql" />
+    <Build Include="dbo\Views\dbo.vNereidRegionalSubbasinCentralizedBMP.sql" />
+    <Build Include="dbo\Views\dbo.vNereidTreatmentBMPRegionalSubbasin.sql" />
+    <Build Include="dbo\Views\dbo.vOnlandVisualTrashAssessmentAreaProgress.sql" />
+    <Build Include="dbo\Views\dbo.vPowerBICentralizedBMPLoadGeneratingUnit.sql" />
+    <Build Include="dbo\Views\dbo.vPowerBILandUseStatistic.sql" />
+    <Build Include="dbo\Views\dbo.vPowerBITreatmentBMP.sql" />
+    <Build Include="dbo\Views\dbo.vPowerBIWaterQualityManagementPlan.sql" />
+    <Build Include="dbo\Views\dbo.vPowerBIWaterQualityManagementPlanOAndMVerification.sql" />
+    <Build Include="dbo\Views\dbo.vProjectDryWeatherWQLRIScore.sql" />
+    <Build Include="dbo\Views\dbo.vProjectGrantScore.sql" />
+    <Build Include="dbo\Views\dbo.vProjectLoadGeneratingResult.sql" />
+    <Build Include="dbo\Views\dbo.vProjectLoadReducingResult.sql" />
+    <Build Include="dbo\Views\dbo.vProjectWetWeatherWQLRIScore.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisDelineationLGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisDelineationTGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisLandUseBlockTGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisModelBasinLGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisOnlandVisualTrashAssessmentAreaDated.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisProjectDelineationLGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisRegionalSubbasinLGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisWaterQualityManagementPlanLGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vPyQgisWaterQualityManagementPlanTGUInput.sql" />
+    <Build Include="dbo\Views\dbo.vRegionalSubbasinUpstream.sql" />
+    <Build Include="dbo\Views\dbo.vRegionalSubbasinUpstreamCatchmentGeometry4326.sql" />
+    <Build Include="dbo\Views\dbo.vStormwaterJurisdictionOrganizationMapping.sql" />
+    <Build Include="dbo\Views\dbo.vTrashGeneratingUnitLoadStatistic.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPDetailed.sql" />
+    <Build Include="dbo\Views\dbo.vWaterQualityManagementPlanLGUAudit.sql" />
+    <Build Include="dbo\Functions\dbo.fGetTGUInputGeometry.sql" />
+    <Build Include="dbo\Functions\dbo.fProjectGrantScore.sql" />
+    <Build Include="dbo\Procs\dbo.pDeleteLoadGeneratingUnitsPriorToDeltaRefresh.sql" />
+    <Build Include="dbo\Procs\dbo.pDeleteNereidResults.sql" />
+    <Build Include="dbo\Procs\dbo.pDeleteProjectLoadGeneratingUnitsPriorToRefreshForProject.sql" />
+    <Build Include="dbo\Procs\dbo.pDeleteProjectNereidResults.sql" />
+    <Build Include="dbo\Procs\dbo.pDelineationMarkThoseThatHaveDiscrepancies.sql" />
+    <Build Include="dbo\Procs\dbo.pFixInvalidRegionalSubbasinGeometries.sql" />
+    <Build Include="dbo\Procs\dbo.pLandUseBlockStagingDeleteByPersonID.sql" />
+    <Build Include="dbo\Procs\dbo.pModelBasinUpdateFromStaging.sql" />
+    <Build Include="dbo\Procs\dbo.pOCTAPrioritizationUpdateFromStaging.sql" />
+    <Build Include="dbo\Procs\dbo.pParcelStagingDelete.sql" />
+    <Build Include="dbo\Procs\dbo.pParcelUpdateFromStaging.sql" />
+    <Build Include="dbo\Procs\dbo.pPrecipitationZoneUpdateFromStaging.sql" />
+    <Build Include="dbo\Procs\dbo.pProjectGrantScoreUpdate.sql" />
+    <Build Include="dbo\Procs\dbo.pRebuildWaterQualityManagementPlanParcel.sql" />
+    <Build Include="dbo\Procs\dbo.pTreatmentBMPUpdateModelBasin.sql" />
+    <Build Include="dbo\Procs\dbo.pTreatmentBMPUpdatePrecipitationZone.sql" />
+    <Build Include="dbo\Procs\dbo.pTreatmentBMPUpdateTreatmentBMPType.sql" />
+    <Build Include="dbo\Procs\dbo.pTreatmentBMPUpdateWatershed.sql" />
+    <Build Include="dbo\Procs\dbo.pUpdateRegionalSubbasinIntersectionCache.sql" />
+    <Build Include="dbo\Procs\dbo.pUpdateRegionalSubbasinLiveFromStaging.sql" />
+    <Build Include="dbo\Procs\dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh.sql" />
+    <None Include="Scripts\LookupTables\dbo.WaterQualityManagementPlanVerifyStatus.sql" />
+    <None Include="Scripts\LookupTables\dbo.WaterQualityManagementPlanVerifyType.sql" />
+    <None Include="Scripts\LookupTables\dbo.WaterQualityManagementPlanVisitStatus.sql" />
+    <Build Include="HangFire\Tables\HangFire.AggregatedCounter.sql" />
+    <Build Include="HangFire\Tables\HangFire.Counter.sql" />
+    <Build Include="HangFire\Tables\HangFire.Hash.sql" />
+    <Build Include="HangFire\Tables\HangFire.Job.sql" />
+    <Build Include="HangFire\Tables\HangFire.JobParameter.sql" />
+    <Build Include="HangFire\Tables\HangFire.JobQueue.sql" />
+    <Build Include="HangFire\Tables\HangFire.List.sql" />
+    <Build Include="HangFire\Tables\HangFire.Schema.sql" />
+    <Build Include="HangFire\Tables\HangFire.Server.sql" />
+    <Build Include="HangFire\Tables\HangFire.Set.sql" />
+    <Build Include="HangFire\Tables\HangFire.State.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerTreatmentBMPDelineation.sql" />
+    <Build Include="dbo\Views\dbo.vGeoServerTreatmentBMPPointLocation.sql" />
+    <Build Include="dbo\Views\dbo.vWaterQualityManagementPlanDetailed.sql" />
+    <Build Include="dbo\Views\dbo.vLoadReducingResult.sql" />
+    <Build Include="dbo\Views\dbo.vLoadGeneratingResult.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPUpstream.sql" />
+    <None Include="Scripts\LookupTables\dbo.SourceControlBMPAttributeCategory.sql" />
+    <Build Include="dbo\Views\dbo.vMaintenanceRecordDetailed.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPAssessmentDetailed.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPAssessmentObservationTypePassFail.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPAssessmentObservationTypeDiscreteValue.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPObservationDiscreteValue.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPObservationPassFail.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPObservation.sql" />
+    <Build Include="dbo\Views\dbo.vRegionalSubbasinUpstreamCatchmentGeometry.sql" />
+    <Build Include="dbo\Views\dbo.vHRUCharacteristic.sql" />
+    <Build Include="dbo\Procs\dbo.pTrashGeneratingUnitDelete.sql" />
+    <Build Include="dbo\Procs\dbo.pProjectLoadGeneratingUnitMakeValid.sql" />
+    <Build Include="dbo\Procs\dbo.pLoadGeneratingUnitMakeValid.sql" />
+    <Build Include="dbo\Procs\dbo.pTrashGeneratingUnitMakeValid.sql" />
+    <Build Include="dbo\Procs\dbo.pTrashGeneratingUnit4326MakeValid.sql" />
+    <Build Include="dbo\Procs\dbo.pWatershedMakeValid.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPGdbExport.sql" />
+  </ItemGroup>
+  <UsingTask TaskName="ScriptDeploymentGenerator" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <releaseScriptFolder ParameterType="System.String" Required="true" />
+      <releaseScriptFileName ParameterType="System.String" Required="true" />
+      <projectName ParameterType="System.String" Required="true" />
+      <title ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs"><![CDATA[
+
+        var files = Directory.GetFiles(releaseScriptFolder, "*.sql");
+        StringBuilder sb = new StringBuilder();
+
+        sb.AppendLine("/*");
+        sb.AppendLine(title + " Script");
+        sb.AppendLine("--------------------------------------------------------------------------------------");
+        sb.AppendLine("This file is generated on every build, DO NOT modify.");
+        sb.AppendLine("--------------------------------------------------------------------------------------");
+        sb.AppendLine("*/");
+        sb.AppendLine("");
+        sb.AppendLine("PRINT N'" + projectName + " - " + releaseScriptFileName +"';");
+        sb.AppendLine("GO");
+        sb.AppendLine("");
+
+        foreach (var file in files.OrderBy(f => f))
+        {
+            if (file.Contains(releaseScriptFileName))
+            {
+              continue;
+            }
+
+            var fileName = file.Replace(releaseScriptFolder, "");
+
+            sb.AppendLine(":r \"." + fileName + "\"");
+            sb.AppendLine("GO");
+                    
+        }
+        using (System.IO.StreamWriter file = new System.IO.StreamWriter(Path.Combine(releaseScriptFolder, releaseScriptFileName)))
+        {
+          file.WriteLine(sb.ToString()); 
+        }
+
+]]></Code>
+    </Task>
+  </UsingTask>
+  <Target Name="CustomBuildStep" BeforeTargets="BeforeBuild">
+    <ScriptDeploymentGenerator projectName="$(MSBuildProjectName)" title="Post-Deployment" releaseScriptFolder="Scripts\\ReleaseScripts" releaseScriptFileName="Script.PostDeployment.ReleaseScripts.sql" />
+    <ScriptDeploymentGenerator projectName="$(MSBuildProjectName)" title="Pre-Deployment" releaseScriptFolder="Scripts\\PreReleaseScripts" releaseScriptFileName="Script.PreDeployment.ReleaseScripts.sql" />
+    <ScriptDeploymentGenerator projectName="$(MSBuildProjectName)" title="Lookup-Table" releaseScriptFolder="Scripts\\LookupTables" releaseScriptFileName="Script.PostDeployment.LookupTables.sql" />
+  </Target>
+</Project>

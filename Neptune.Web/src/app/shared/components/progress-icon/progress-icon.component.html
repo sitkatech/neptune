@@ -1,0 +1,18 @@
+<ng-container *ngIf="isInformational">
+    <hippocamp-icon 
+        icon="info" 
+        class="info"
+        ngbTooltip="Informational Page" 
+        container="body">
+    </hippocamp-icon>
+</ng-container>
+
+<ng-container *ngIf="!isInformational">
+    <hippocamp-icon 
+        [icon]="isComplete ? 'check' : 'edit'" 
+        [class.complete]="isComplete" 
+        [class.incomplete]="!isComplete" 
+        [ngbTooltip]="isComplete ? tooltipCompleteText : tooltipIncompleteText" 
+        container="body">
+    </hippocamp-icon>
+</ng-container>
