@@ -1081,21 +1081,11 @@ namespace Neptune.WebMvc.Controllers
         [NeptuneViewFeature]
         public async Task<FileResult> BMPInventoryExport()
         {
-            var treatmentBMPs = _dbContext.TreatmentBMPs
-                .Include(x => x.StormwaterJurisdiction)
-                .ThenInclude(x => x.Organization)
-                .Include(x => x.TreatmentBMPType)
-                .ThenInclude(x => x.TreatmentBMPTypeCustomAttributeTypes)
-                .ThenInclude(x => x.CustomAttributeType)
-                .Include(x => x.TreatmentBMPAssessments)
-                .ThenInclude(x => x.FieldVisit)
-                .Include(x => x.WaterQualityManagementPlan)
-                .Include(x => x.CustomAttributes)
-                .ThenInclude(x => x.CustomAttributeValues)
-                .Include(x => x.OwnerOrganization)
+            var treatmentBMPs = _dbContext.vTreatmentBMPGdbExports
                 .AsNoTracking()
-                .ToList().Where(x => x.CanView(CurrentPerson)).ToList();
-
+                .ToList().Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x.StormwaterJurisdictionID)).ToList();
+            var treatmentBMPTypes = TreatmentBMPTypes.List(_dbContext).ToDictionary(x => x.TreatmentBMPTypeID);
+            var customAttributes = CustomAttributes.List(_dbContext).ToLookup(x => x.TreatmentBMPID);
             var allTreatmentBMPsFeatureCollection = treatmentBMPs.ToExportGeoJsonFeatureCollection();
             var outputLayerName = $"TreatmentBMPs_Export_{DateTime.Now:yyyyMMdd}";
 
@@ -1114,13 +1104,19 @@ namespace Neptune.WebMvc.Controllers
                     GeometryTypeName = "POINT"
                 }
             };
-            gdbInputs.AddRange(treatmentBMPs.GroupBy(x => x.TreatmentBMPType, new HavePrimaryKeyComparer<TreatmentBMPType>())
-            .Select(grouping => new GdbInput()
+            gdbInputs.AddRange(treatmentBMPs.GroupBy(x => x.TreatmentBMPTypeID)
+            .Select(grouping =>
             {
-                FileContents = GeoJsonSerializer.SerializeToByteArray(grouping.ToExportGeoJsonFeatureCollection(grouping.Key), jsonSerializerOptions),
-                LayerName = grouping.Key.TreatmentBMPTypeName,
-                CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
-                GeometryTypeName = "POINT"
+                var treatmentBMPType = treatmentBMPTypes[grouping.Key];
+                return new GdbInput()
+                {
+                    FileContents =
+                        GeoJsonSerializer.SerializeToByteArray(grouping.ToExportGeoJsonFeatureCollection(treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes, customAttributes),
+                            jsonSerializerOptions),
+                    LayerName = treatmentBMPType.TreatmentBMPTypeName,
+                    CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
+                    GeometryTypeName = "POINT"
+                };
             }));
             apiRequest.GdbInputs = gdbInputs;
 

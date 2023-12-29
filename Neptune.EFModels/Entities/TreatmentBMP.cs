@@ -67,7 +67,7 @@ namespace Neptune.EFModels.Entities
             return latestAssessment;
         }
 
-        public string GetCustomAttributeValueWithUnits(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType, ICollection<CustomAttribute> customAttributes)
+        public static string GetCustomAttributeValueWithUnits(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType, ICollection<CustomAttribute> customAttributes)
         {
             if (customAttributes.Any())
             {
@@ -85,7 +85,7 @@ namespace Neptune.EFModels.Entities
                     var value = string.Join(", ", customAttribute.CustomAttributeValues.OrderBy(x => x.AttributeValue).Select(x => x.AttributeValue));
 
                     return $"{value}{measurementUnit}";
-                }           
+                }
             }
             return string.Empty;
         }
