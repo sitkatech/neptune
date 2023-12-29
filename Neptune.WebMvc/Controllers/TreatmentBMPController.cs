@@ -32,7 +32,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.Common;
-using Neptune.Common.DesignByContract;
 using Neptune.Common.GeoSpatial;
 using Neptune.Common.Mvc;
 using Neptune.Common.Services.GDAL;
@@ -55,7 +54,6 @@ using EditViewModel = Neptune.WebMvc.Views.TreatmentBMP.EditViewModel;
 using TreatmentBMPAssessmentSummary = Neptune.EFModels.Entities.TreatmentBMPAssessmentSummary;
 using Neptune.EFModels.Nereid;
 using Neptune.Jobs.Services;
-using DocumentFormat.OpenXml.InkML;
 
 namespace Neptune.WebMvc.Controllers
 {

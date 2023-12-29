@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Azure.Storage.Blobs.Models;
 using Neptune.WebMvc.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +28,6 @@ using Neptune.Common;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Services;
 using Neptune.WebMvc.Services.Filters;
-using Microsoft.AspNetCore.StaticFiles;
 
 namespace Neptune.WebMvc.Controllers
 {

@@ -75,7 +75,7 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - AzureBlobStorageConnectionString=${AzureBlobStorageConnectionString}
     ports:
-      - "8231:80"
+      - "8231:8080"
 
   neptune.qgisapi:
     build:

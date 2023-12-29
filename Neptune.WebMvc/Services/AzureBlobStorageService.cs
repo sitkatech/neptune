@@ -8,9 +8,10 @@ namespace Neptune.WebMvc.Services;
 
 public class AzureBlobStorageService
 {
+    public const string BlobContainerName = "file-resource";
     private readonly WebConfiguration _webConfiguration;
     private readonly BlobContainerClient _fileResourceContainerClient;
-    private readonly Dictionary<string, string> _contentTypes = new Dictionary<string, string>()
+    private readonly Dictionary<string, string> _contentTypes = new()
         {
             {".x3d", "application/vnd.hzn-3d-crossword"},
             {".3gp", "video/3gpp"},
@@ -700,7 +701,7 @@ public class AzureBlobStorageService
     public AzureBlobStorageService(IOptions<WebConfiguration> configuration)
     {
         _webConfiguration = configuration.Value;
-        _fileResourceContainerClient = new BlobServiceClient(_webConfiguration.AzureBlobStorageConnectionString).GetBlobContainerClient("file-resource");
+        _fileResourceContainerClient = new BlobServiceClient(_webConfiguration.AzureBlobStorageConnectionString).GetBlobContainerClient(BlobContainerName);
     }
 
     public async Task<bool> UploadFileResource(FileResource fileResource, byte[] fileBytes)
@@ -730,7 +731,7 @@ public class AzureBlobStorageService
         return await DownloadBlobFromBlobStorage(fileResource.GetFileResourceGUIDAsString().ToLower());
     }
 
-    private async Task<BlobDownloadResult> DownloadBlobFromBlobStorage(string canonicalName)
+    public async Task<BlobDownloadResult> DownloadBlobFromBlobStorage(string canonicalName)
     {
         var blobClient = _fileResourceContainerClient.GetBlobClient(canonicalName);
         var downloadResult = await blobClient.DownloadContentAsync();
