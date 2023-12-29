@@ -30,6 +30,10 @@ spec:
     - secretName: neptune-webmvc-tls
       hosts:
         - {{ .Values.global.domains.webmvc }}
+  {{ if eq .Values.global.env.name "prod" }}
+        - ocstormwatertools.org
+  {{- end }}
+
   rules:
     - host: {{ .Values.global.domains.webmvc }}
       http:
@@ -46,4 +50,21 @@ spec:
               serviceName: {{ $fullName }}
               servicePort: {{ $svcPort }}
               {{- end }}
+  {{ if eq .Values.global.env.name "prod" }}
+    - host: ocstormwatertools.org
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $svcPort }}
+              {{- else }}
+              serviceName: {{ $fullName }}
+              servicePort: {{ $svcPort }}
+              {{- end }}
+  {{- end }}
 {{- end }}
