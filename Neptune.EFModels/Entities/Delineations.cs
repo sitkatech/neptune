@@ -219,7 +219,7 @@ namespace Neptune.EFModels.Entities
                 DelineationTypeID = delineationUpsertDto.DelineationTypeID,
                 DelineationGeometry4326 = delineationGeometry?.Geometry,
                 DelineationGeometry = delineationGeometry != null ? delineationGeometry.Geometry.ProjectTo2771() : null,
-                DateLastModified = DateTime.Now,
+                DateLastModified = DateTime.UtcNow,
                 TreatmentBMPID = delineationUpsertDto.TreatmentBMPID
             };
 
@@ -235,7 +235,7 @@ namespace Neptune.EFModels.Entities
         public static void MarkAsVerified(Delineation delineation, Person currentPerson)
         {
             delineation.IsVerified = true;
-            delineation.DateLastVerified = DateTime.Now;
+            delineation.DateLastVerified = DateTime.UtcNow;
             delineation.VerifiedByPersonID = currentPerson.PersonID;
         }
 

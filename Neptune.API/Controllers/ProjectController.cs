@@ -145,7 +145,7 @@ namespace Neptune.API.Controllers
                 FileResource = fileResource,
                 DisplayName = projectDocumentUpsertDto.DisplayName,
                 DocumentDescription = projectDocumentUpsertDto.DocumentDescription,
-                UploadDate = DateOnly.FromDateTime(DateTime.Now)
+                UploadDate = DateOnly.FromDateTime(DateTime.UtcNow)
             };
 
             _dbContext.ProjectDocuments.Add(projectDocument);

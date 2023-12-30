@@ -626,9 +626,9 @@ namespace Neptune.WebMvc.Controllers
             {
                 WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID,
                 LastEditedByPersonID = CurrentPerson.PersonID,
-                LastEditedDate = DateTime.Now,
+                LastEditedDate = DateTime.UtcNow,
                 IsDraft = true,
-                VerificationDate = DateTime.Now
+                VerificationDate = DateTime.UtcNow
             };
             var viewModel = new NewWqmpVerifyViewModel(waterQualityManagementPlan, waterQualityManagementPlanVerify, quickBMPs, treatmentBMPs);
             return ViewNewWqmpVerify(waterQualityManagementPlan, viewModel);
@@ -650,7 +650,7 @@ namespace Neptune.WebMvc.Controllers
                 WaterQualityManagementPlanVerifyTypeID = viewModel.WaterQualityManagementPlanVerifyTypeID,
                 WaterQualityManagementPlanVisitStatusID = viewModel.WaterQualityManagementPlanVisitStatusID,
                 LastEditedByPersonID = CurrentPerson.PersonID,
-                LastEditedDate = DateTime.Now,
+                LastEditedDate = DateTime.UtcNow,
                 IsDraft = !viewModel.HiddenIsFinalizeVerificationInput,
                 VerificationDate = viewModel.VerificationDate
             };

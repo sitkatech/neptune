@@ -78,7 +78,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             waterQualityManagementPlanVerify.SourceControlCondition = SourceControlCondition;
             waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatusID = WaterQualityManagementPlanVerifyStatusID;
             waterQualityManagementPlanVerify.LastEditedByPersonID = currentPerson.PersonID;
-            waterQualityManagementPlanVerify.LastEditedDate = DateTime.Now;
+            waterQualityManagementPlanVerify.LastEditedDate = DateTime.UtcNow;
             waterQualityManagementPlanVerify.VerificationDate = VerificationDate;
 
             var allWaterQualityManagementPlanVerifyQuickBMPsInDatabase = dbContext.WaterQualityManagementPlanVerifyQuickBMPs;

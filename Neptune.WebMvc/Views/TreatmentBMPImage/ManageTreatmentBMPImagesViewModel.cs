@@ -50,7 +50,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMPImage
                         ? null
                         : new EFModels.Entities.TreatmentBMPImage
                         {
-                            UploadDate = DateOnly.FromDateTime(DateTime.Now),
+                            UploadDate = DateOnly.FromDateTime(DateTime.UtcNow),
                             Caption = x.Caption,
                             TreatmentBMPImageID = x.PrimaryKey
                         })
@@ -70,7 +70,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMPImage
                     {
                         FileResource = fileResource,
                         TreatmentBMP = treatmentBMP,
-                        UploadDate = DateOnly.FromDateTime(DateTime.Now),
+                        UploadDate = DateOnly.FromDateTime(DateTime.UtcNow),
                         Caption = Caption
                     });
             }

@@ -46,7 +46,7 @@ namespace Neptune.WebMvc.Models
         {
             TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             FundingEventFundingSources = new List<FundingEventFundingSourceSimple>();
-            Year = DateTime.Now.Year;
+            Year = DateTime.UtcNow.Year;
         }
 
         public FundingEvent ToFundingEvent()

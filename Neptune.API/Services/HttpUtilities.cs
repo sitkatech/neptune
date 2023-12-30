@@ -30,7 +30,7 @@ namespace Neptune.API.Services
                 OriginalFileExtension = inputFile.FileName.Split('.').Last(),
                 FileResourceGUID = Guid.NewGuid(),
                 CreatePersonID = person.PersonID,
-                CreateDate = DateTime.Now,
+                CreateDate = DateTime.UtcNow,
                 ContentLength = bytes.Length
             };
             await dbContext.FileResources.AddAsync(fileResource);

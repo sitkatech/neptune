@@ -55,7 +55,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlanDocument
                 WaterQualityManagementPlan = waterQualityManagementPlan, FileResource = fileResource,
                 DisplayName = DisplayName,
                 WaterQualityManagementPlanDocumentTypeID = WaterQualityManagementPlanDocumentTypeID.Value,
-                UploadDate = DateTime.Now, Description = Description
+                UploadDate = DateTime.UtcNow, Description = Description
             };
             await dbContext.WaterQualityManagementPlanDocuments.AddAsync(newPhoto);
         }

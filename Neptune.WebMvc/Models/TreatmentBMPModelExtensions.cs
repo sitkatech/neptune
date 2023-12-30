@@ -239,7 +239,7 @@ namespace Neptune.WebMvc.Models
                     delineation.DelineationGeometry = newShape;
                     delineation.DelineationGeometry4326 = updated4326Geometry;
                     delineation.IsVerified = false;
-                    delineation.DateLastModified = DateTime.Now;
+                    delineation.DateLastModified = DateTime.UtcNow;
                 }
                 else
                 {
@@ -255,7 +255,7 @@ namespace Neptune.WebMvc.Models
             {
                 treatmentBMP.InventoryIsVerified = false;
             }
-            treatmentBMP.InventoryLastChangedDate = DateTime.Now;
+            treatmentBMP.InventoryLastChangedDate = DateTime.UtcNow;
         }
 
         public static TreatmentBMPTypeAssessmentObservationType GetTreatmentBMPTypeObservationType(this TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)

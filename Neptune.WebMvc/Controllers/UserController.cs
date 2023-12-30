@@ -404,7 +404,7 @@ namespace Neptune.WebMvc.Controllers
 
 
         //    var firmaPerson = new Person(keystoneUser.UserGuid, keystoneUser.FirstName, keystoneUser.LastName,
-        //        keystoneUser.Email, Role.Unassigned, DateTime.Now, true, organization, false,
+        //        keystoneUser.Email, Role.Unassigned, DateTime.UtcNow, true, organization, false,
         //        keystoneUser.LoginName, false, Guid.NewGuid(), false);
         //    _dbContext.People.Add(firmaPerson);
         //    return firmaPerson;

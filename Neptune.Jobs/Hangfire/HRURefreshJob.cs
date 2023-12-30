@@ -77,7 +77,7 @@ public class HRURefreshJob
                             HydrologicSoilGroup = x.Attributes.HydrologicSoilGroup,
                             SlopePercentage = x.Attributes.SlopePercentage.GetValueOrDefault(),
                             ImperviousAcres = x.Attributes.ImperviousAcres.GetValueOrDefault(),
-                            LastUpdated = DateTime.Now,
+                            LastUpdated = DateTime.UtcNow,
                             Area = x.Attributes.Acres.GetValueOrDefault(),
                             HRUCharacteristicLandUseCodeID =
                                 hruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID,

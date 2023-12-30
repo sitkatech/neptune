@@ -148,7 +148,7 @@ public class QgisRunnerController : ControllerBase
 
         if (loadGeneratingUnitRefreshArea != null)
         {
-            loadGeneratingUnitRefreshArea.ProcessDate = DateTime.Now;
+            loadGeneratingUnitRefreshArea.ProcessDate = DateTime.UtcNow;
             await _dbContext.SaveChangesAsync();
         }
 
@@ -225,7 +225,7 @@ public class QgisRunnerController : ControllerBase
                     WaterQualityManagementPlanID = waterQualityManagementPlanID,
                     LandUseBlockID = landUseBlockID,
                     OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID,
-                    LastUpdateDate = DateTime.Now
+                    LastUpdateDate = DateTime.UtcNow
                 };
                 trashGeneratingUnits.Add(trashGeneratingUnit);
 
@@ -237,7 +237,7 @@ public class QgisRunnerController : ControllerBase
                     WaterQualityManagementPlanID = waterQualityManagementPlanID,
                     LandUseBlockID = landUseBlockID,
                     OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID,
-                    LastUpdateDate = DateTime.Now
+                    LastUpdateDate = DateTime.UtcNow
                 };
                 trashGeneratingUnit4326s.Add(trashGeneratingUnit4326);
             }

@@ -85,7 +85,7 @@ public static class AuthenticationHelper
                 LastName = lastName,
                 Email = email,
                 RoleID = Role.Unassigned.RoleID,
-                CreateDate = DateTime.Now,
+                CreateDate = DateTime.UtcNow,
                 IsActive = true,
                 OrganizationID = unknownOrganization.OrganizationID,
                 LoginName = loginName
@@ -104,7 +104,7 @@ public static class AuthenticationHelper
                 person.Email = email;
                 // person.Phone = primaryPhone?.ToPhoneNumberString();
                 person.LoginName = loginName;
-                person.UpdateDate = DateTime.Now;
+                person.UpdateDate = DateTime.UtcNow;
             }
         }
 
@@ -152,7 +152,7 @@ public static class AuthenticationHelper
             person.Organization = unknownOrganization;
         }
 
-        person.LastActivityDate = DateTime.Now;
+        person.LastActivityDate = DateTime.UtcNow;
         await dbContext.SaveChangesAsync();
 
         if (sendNewUserNotification)
@@ -303,7 +303,7 @@ public static class AuthenticationHelper
     //         Check.RequireThrowUserDisplayable(person.IsActive, $"User account for {email} is not active and cannot login at this time. Contact support for more information.");
     //     }
     //     // TODO: should this be update date or last activity date?
-    //     person.UpdateDate = DateTime.Now;
+    //     person.UpdateDate = DateTime.UtcNow;
     //
     //     _dbContext.SaveChanges(person);
     //

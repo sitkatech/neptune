@@ -191,7 +191,7 @@ namespace Neptune.WebMvc.Controllers
                     treatmentBMPDelineation.DelineationTypeID =
                         delineationType.DelineationTypeID;
                     treatmentBMPDelineation.IsVerified = false;
-                    treatmentBMPDelineation.DateLastModified = DateTime.Now;
+                    treatmentBMPDelineation.DateLastModified = DateTime.UtcNow;
                 }
                 else
                 {
@@ -211,7 +211,7 @@ namespace Neptune.WebMvc.Controllers
                     DelineationGeometry = geom2771,
                     DelineationGeometry4326 = geom4326,
                     DelineationTypeID = delineationType.DelineationTypeID,
-                    DateLastModified = DateTime.Now,
+                    DateLastModified = DateTime.UtcNow,
                     IsVerified = false,
                     HasDiscrepancies = false
                 };
@@ -251,7 +251,7 @@ namespace Neptune.WebMvc.Controllers
             }
 
             delineation.IsVerified = viewModel.IsVerified;
-            delineation.DateLastVerified = DateTime.Now;
+            delineation.DateLastVerified = DateTime.UtcNow;
             delineation.VerifiedByPersonID = CurrentPerson.PersonID;
             await _dbContext.SaveChangesAsync();
 

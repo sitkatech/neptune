@@ -29,7 +29,7 @@ public class FileResourceService
             OriginalFileExtension = extension,
             FileResourceGUID = Guid.NewGuid(),
             CreatePersonID = currentPerson.PersonID,
-            CreateDate = DateTime.Now,
+            CreateDate = DateTime.UtcNow,
             ContentLength = fileResourceData.LongLength
         };
         await _dbContext.FileResources.AddAsync(fileResource);

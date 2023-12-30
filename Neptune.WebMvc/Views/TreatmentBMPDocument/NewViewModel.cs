@@ -62,7 +62,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMPDocument
         {
             treatmentBMPDocument.DisplayName = DisplayName;
             treatmentBMPDocument.DocumentDescription = DocumentDescription;
-            treatmentBMPDocument.UploadDate = DateOnly.FromDateTime(DateTime.Now);
+            treatmentBMPDocument.UploadDate = DateOnly.FromDateTime(DateTime.UtcNow);
             var fileResource = await fileResourceService.CreateNewFromIFormFile(FileResourceData, currentPerson);
             treatmentBMPDocument.FileResource = fileResource;
         }

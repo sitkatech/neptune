@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 
 namespace Neptune.EFModels.Nereid
@@ -61,7 +60,7 @@ namespace Neptune.EFModels.Nereid
         {
             var dirtyModelNode = new DirtyModelNode()
             {
-                CreateDate = DateTime.Now,
+                CreateDate = DateTime.UtcNow,
                 TreatmentBMPID = treatmentBMP.TreatmentBMPID
             };
 
@@ -73,7 +72,7 @@ namespace Neptune.EFModels.Nereid
         {
             var dirtyModelNodes = treatmentBmpsUpdated.Select(x=> new DirtyModelNode()
             {
-                CreateDate = DateTime.Now,
+                CreateDate = DateTime.UtcNow,
                 TreatmentBMPID = x.TreatmentBMPID
             });
 
@@ -129,7 +128,7 @@ namespace Neptune.EFModels.Nereid
         {
             var dirtyModelNode = new DirtyModelNode()
             {
-                CreateDate = DateTime.Now,
+                CreateDate = DateTime.UtcNow,
                 RegionalSubbasinID = regionalSubbasinID
             };
 
@@ -141,7 +140,7 @@ namespace Neptune.EFModels.Nereid
         {
             var dirtyModelNode = new DirtyModelNode()
             {
-                CreateDate = DateTime.Now,
+                CreateDate = DateTime.UtcNow,
                 TreatmentBMPID = treatmentBMP.TreatmentBMPID
             };
 
@@ -155,7 +154,7 @@ namespace Neptune.EFModels.Nereid
             {
                 var dirtyModelNode = new DirtyModelNode()
                 {
-                    CreateDate = DateTime.Now,
+                    CreateDate = DateTime.UtcNow,
                     DelineationID = delineation.DelineationID
                 };
 
@@ -169,7 +168,7 @@ namespace Neptune.EFModels.Nereid
         {
             var dirtyModelNode = new DirtyModelNode()
             {
-                CreateDate = DateTime.Now,
+                CreateDate = DateTime.UtcNow,
                 DelineationID = delineation.DelineationID
             };
 
@@ -181,7 +180,7 @@ namespace Neptune.EFModels.Nereid
         {
             var dirtyModelNode = new DirtyModelNode()
             {
-                CreateDate = DateTime.Now,
+                CreateDate = DateTime.UtcNow,
                 WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID
             };
 

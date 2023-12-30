@@ -315,7 +315,7 @@ namespace Neptune.WebMvc.Controllers
 
             var onlandVisualTrashAssessment = new OnlandVisualTrashAssessment{
                 CreatedByPersonID = CurrentPerson.PersonID, 
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 StormwaterJurisdictionID = onlandVisualTrashAssessmentArea.StormwaterJurisdictionID,
                 OnlandVisualTrashAssessmentStatusID = (int) OnlandVisualTrashAssessmentStatusEnum.InProgress, 
                 IsProgressAssessment = false, IsTransectBackingAssessment = false,

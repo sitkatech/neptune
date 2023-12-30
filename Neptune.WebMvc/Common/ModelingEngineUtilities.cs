@@ -32,7 +32,7 @@ namespace Neptune.WebMvc.Common
             var loadGeneratingUnitRefreshArea = new LoadGeneratingUnitRefreshArea()
             {
                 LoadGeneratingUnitRefreshAreaGeometry = loadGeneratingUnitRefreshAreaGeometry,
-                ProcessDate = DateTime.Now
+                ProcessDate = DateTime.UtcNow
             };
 
             await dbContext.LoadGeneratingUnitRefreshAreas.AddAsync(loadGeneratingUnitRefreshArea);

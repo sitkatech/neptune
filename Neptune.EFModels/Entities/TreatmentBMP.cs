@@ -121,7 +121,7 @@ namespace Neptune.EFModels.Entities
         public void MarkAsVerified(Person currentPerson)
         {
             InventoryIsVerified = true;
-            DateOfLastInventoryVerification = DateTime.Now;
+            DateOfLastInventoryVerification = DateTime.UtcNow;
             InventoryVerifiedByPersonID = currentPerson.PersonID;
         }
 

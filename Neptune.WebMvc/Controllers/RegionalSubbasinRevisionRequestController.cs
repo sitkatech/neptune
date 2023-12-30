@@ -96,7 +96,7 @@ namespace Neptune.WebMvc.Controllers
                 TreatmentBMPID = treatmentBMPPrimaryKey.PrimaryKeyValue,
                 RegionalSubbasinRevisionRequestGeometry = unionListGeometries,
                 RequestPersonID = CurrentPerson.PersonID,
-                RequestDate = DateTime.Now,
+                RequestDate = DateTime.UtcNow,
                 RegionalSubbasinRevisionRequestStatusID = (int) RegionalSubbasinRevisionRequestStatusEnum.Open,
                 Notes = viewModel.Notes
             };
@@ -166,7 +166,7 @@ namespace Neptune.WebMvc.Controllers
             regionalSubbasinRevisionRequest.CloseNotes = viewModel.CloseNotes;
             regionalSubbasinRevisionRequest.RegionalSubbasinRevisionRequestStatusID = (int) RegionalSubbasinRevisionRequestStatusEnum.Closed;
             regionalSubbasinRevisionRequest.ClosedByPersonID = CurrentPerson.PersonID;
-            regionalSubbasinRevisionRequest.ClosedDate = DateTime.Now;
+            regionalSubbasinRevisionRequest.ClosedDate = DateTime.UtcNow;
             await _dbContext.SaveChangesAsync();
 
             await SendRSBRevisionRequestClosedEmail(CurrentPerson, regionalSubbasinRevisionRequest);

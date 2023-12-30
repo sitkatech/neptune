@@ -81,7 +81,7 @@ namespace Neptune.WebMvc.Views.Shared
             // ReSharper disable once PossibleInvalidOperationException
             supportRequestLog.SupportRequestTypeID = (int) SupportRequestTypeEnum.Value;
             supportRequestLog.RequestDescription = RequestDescription;
-            supportRequestLog.RequestDate = DateTime.Now;
+            supportRequestLog.RequestDate = DateTime.UtcNow;
             if (updatePerson != null && !updatePerson.IsAnonymousUser())
             {
                 supportRequestLog.RequestPersonID = updatePerson.PersonID;

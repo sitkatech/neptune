@@ -140,7 +140,7 @@ namespace Neptune.Common
 
         public static FiscalQuarter GetCurrentFiscalQuarter()
         {
-            return ((Month)DateTime.Now.Month).GetFiscalQuarter();
+            return ((Month)DateTime.UtcNow.Month).GetFiscalQuarter();
         }
 
         public static FiscalQuarter GetPreviousFiscalQuarter()
@@ -336,7 +336,7 @@ namespace Neptune.Common
 
         public static int GetCurrentFiscalYear()
         {
-            return DateTime.Now.GetFiscalYear();
+            return DateTime.UtcNow.GetFiscalYear();
         }
 
         public static int GetPreviousFiscalYear(this DateTime dateToCheck)
@@ -346,7 +346,7 @@ namespace Neptune.Common
 
         public static int GetNextFiscalYear(this DateTime dateToCheck)
         {
-            return DateTime.Now.GetFiscalYear() + 1;
+            return DateTime.UtcNow.GetFiscalYear() + 1;
         }
 
         public static int GetFiscalYear(this DateTime dateToCheck)
@@ -462,12 +462,12 @@ namespace Neptune.Common
 
         public static int GetPreviousFiscalYear()
         {
-            return DateTime.Now.GetPreviousFiscalYear();
+            return DateTime.UtcNow.GetPreviousFiscalYear();
         }
 
         public static int GetNextFiscalYear()
         {
-            return DateTime.Now.GetNextFiscalYear();
+            return DateTime.UtcNow.GetNextFiscalYear();
         }
 
         public static int GetCalendarYearForFiscalYearFiscalMonth(int fiscalYear, int fiscalMonth)

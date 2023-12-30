@@ -21,7 +21,7 @@ namespace Neptune.EFModels.Entities
         public void MarkAsVerified(Person currentPerson)
         {
             IsVerified = true;
-            DateLastVerified = DateTime.Now;
+            DateLastVerified = DateTime.UtcNow;
             VerifiedByPersonID = currentPerson.PersonID;
         }
 

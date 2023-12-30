@@ -78,12 +78,12 @@ namespace Neptune.WebMvc.Views.User
             if (ModelObjectHelpers.IsRealPrimaryKeyValue(person.PersonID))
             {
                 // Existing person
-                person.UpdateDate = DateTime.Now;
+                person.UpdateDate = DateTime.UtcNow;
             }
             else
             {
                 // New person
-                person.CreateDate = DateTime.Now;
+                person.CreateDate = DateTime.UtcNow;
             }
         }
     }
