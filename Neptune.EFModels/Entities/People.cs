@@ -142,7 +142,7 @@ namespace Neptune.EFModels.Entities
 
         public static Person? GetByGuid(NeptuneDbContext dbContext, Guid personGuid)
         {
-            return GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.PersonGuid == personGuid);
+            return dbContext.People.SingleOrDefault(x => x.PersonGuid == personGuid);
         }
 
         public static PersonDto? GetByGuidAsDto(NeptuneDbContext dbContext, Guid personGuid)

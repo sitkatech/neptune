@@ -38,8 +38,8 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<BoundingBoxDto> GetBoundingBoxByPersonID()
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByPersonID(_dbContext, personDto.PersonID);
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByPersonID(_dbContext, person.PersonID);
             return Ok(boundingBoxDto);
         }
     }

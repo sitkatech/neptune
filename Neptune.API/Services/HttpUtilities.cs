@@ -18,7 +18,7 @@ namespace Neptune.API.Services
                 bytes = ms.ToArray();
             }
 
-            var personDto = UserContext.GetUserFromHttpContext(dbContext, httpContext);
+            var person = UserContext.GetUserFromHttpContext(dbContext, httpContext);
 
             var fileResourceMimeType = FileResourceMimeType.GetFileResourceMimeTypeByContentTypeName(dbContext,
                 inputFile.ContentType);
@@ -29,7 +29,7 @@ namespace Neptune.API.Services
                 OriginalBaseFilename = inputFile.FileName,
                 OriginalFileExtension = inputFile.FileName.Split('.').Last(),
                 FileResourceGUID = Guid.NewGuid(),
-                CreatePersonID = personDto.PersonID,
+                CreatePersonID = person.PersonID,
                 CreateDate = DateTime.Now,
                 ContentLength = bytes.Length
             };

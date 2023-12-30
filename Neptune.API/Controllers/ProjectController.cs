@@ -37,14 +37,14 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<ProjectSimpleDto> GetByID([FromRoute] int projectID)
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var projectDto = Projects.GetByIDAsDto(_dbContext, projectID);
 
-            if (personDto.IsOCTAGrantReviewer && projectDto.ShareOCTAM2Tier2Scores)
+            if (person.IsOCTAGrantReviewer && projectDto.ShareOCTAM2Tier2Scores)
             {
                 return Ok(projectDto);
             }
-            if (UserCanEditJurisdiction(personDto, projectDto.StormwaterJurisdictionID))
+            if (UserCanEditJurisdiction(person, projectDto.StormwaterJurisdictionID))
             {
                 return Ok(projectDto);
             }
@@ -55,8 +55,8 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public ActionResult<List<ProjectDto>> ListByPersonID()
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var projectDtos = Projects.ListByPersonIDAsDto(_dbContext, personDto.PersonID);
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var projectDtos = Projects.ListByPersonIDAsDto(_dbContext, person.PersonID);
             return Ok(projectDtos);
         }
 
@@ -68,8 +68,8 @@ namespace Neptune.API.Controllers
             {
                 return BadRequest();
             }
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            if (!UserCanEditJurisdiction(personDto, projectCreateDto.StormwaterJurisdictionID.Value))
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            if (!UserCanEditJurisdiction(person, projectCreateDto.StormwaterJurisdictionID.Value))
             {
                 return Forbid();
             }
@@ -80,7 +80,7 @@ namespace Neptune.API.Controllers
                 ModelState.AddModelError("ProjectName", $"A project with the name {projectCreateDto.ProjectName} already exists");
                 return BadRequest(ModelState);
             }
-            var project = await Projects.CreateNew(_dbContext, projectCreateDto, personDto);
+            var project = await Projects.CreateNew(_dbContext, projectCreateDto, person, person.PersonID);
             return Ok(project);
         }
 
@@ -88,17 +88,17 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public async Task<IActionResult> Update([FromRoute] int projectID, [FromBody] ProjectUpsertDto projectCreateDto)
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var project = Projects.GetByIDWithChangeTracking(_dbContext, projectID);
             if (ThrowNotFound(project, "Project", projectID, out var actionResult))
             {
                 return actionResult;
             }
-            if (!UserCanEditJurisdiction(personDto, projectCreateDto.StormwaterJurisdictionID.Value))
+            if (!UserCanEditJurisdiction(person, projectCreateDto.StormwaterJurisdictionID.Value))
             {
                 return Forbid();
             }
-            await Projects.Update(_dbContext, project, projectCreateDto, personDto.PersonID);
+            await Projects.Update(_dbContext, project, projectCreateDto, person.PersonID);
             return Ok();
         }
 
@@ -159,13 +159,13 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public ActionResult<ProjectDocumentDto> UpdateAttachment([FromRoute] int attachmentID, [FromBody] ProjectDocumentUpdateDto projectDocumentUpdateDto)
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var projectDocument = ProjectDocuments.GetByIDWithTracking(_dbContext, attachmentID);
             if (ThrowNotFound(projectDocument, "ProjectDocument", attachmentID, out var actionResult))
             {
                 return actionResult;
             }
-            if (!UserCanEditJurisdiction(personDto, projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID))
+            if (!UserCanEditJurisdiction(person, projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID))
             {
                 return Forbid();
             }
@@ -179,13 +179,13 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public IActionResult DeleteAttachment([FromRoute] int attachmentID)
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var projectDocument = ProjectDocuments.GetByIDWithTracking(_dbContext, attachmentID);
             if (ThrowNotFound(projectDocument, "ProjectDocument", attachmentID, out var actionResult))
             {
                 return actionResult;
             }
-            if (!UserCanEditJurisdiction(personDto, projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID))
+            if (!UserCanEditJurisdiction(person, projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID))
             {
                 return Forbid();
             }
@@ -197,13 +197,13 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public async Task<IActionResult> Delete([FromRoute] int projectID)
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var project = Projects.GetByID(_dbContext, projectID);
             if (ThrowNotFound(project, "Project", projectID, out var actionResult))
             {
                 return actionResult;
             }
-            if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            if (!UserCanEditJurisdiction(person, project.StormwaterJurisdictionID))
             {
                 return Forbid();
             }
@@ -215,9 +215,9 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<List<ProjectNetworkSolveHistorySimpleDto>> GetProjectNetworkSolveHistoriesForProject(int projectID)
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var project = Projects.GetByID(_dbContext, projectID);
-            if ((!personDto.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            if ((!person.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !UserCanEditJurisdiction(person, project.StormwaterJurisdictionID))
             {
                 return Forbid();
             }
@@ -230,9 +230,9 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<List<TreatmentBMPHRUCharacteristicsSummarySimpleDto>> GetTreatmentBMPHRUCharacteristicsForProject([FromRoute] int projectID)
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var project = Projects.GetByID(_dbContext, projectID);
-            if ((!personDto.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            if ((!person.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !UserCanEditJurisdiction(person, project.StormwaterJurisdictionID))
             {
                 return Forbid();
             }
@@ -246,9 +246,9 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<List<ProjectLoadReducingResultDto>> GetLoadRemovingResultsForProject([FromRoute] int projectID)
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var project = Projects.GetByID(_dbContext, projectID);
-            if ((!personDto.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            if ((!person.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !UserCanEditJurisdiction(person, project.StormwaterJurisdictionID))
             {
                 return Forbid();
             }
@@ -262,9 +262,9 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<List<ProjectLoadGeneratingResultDto>> GetLoadGeneratingResultsForProject([FromRoute] int projectID)
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var project = Projects.GetByID(_dbContext, projectID);
-            if ((!personDto.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            if ((!person.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !UserCanEditJurisdiction(person, project.StormwaterJurisdictionID))
             {
                 return Forbid();
             }
@@ -278,9 +278,9 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public async Task<IActionResult> TriggerModeledPerformanceForProject([FromRoute] int projectID)
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var project = Projects.GetByIDWithChangeTracking(_dbContext, projectID);
-            if (!UserCanEditJurisdiction(personDto, project.StormwaterJurisdictionID))
+            if (!UserCanEditJurisdiction(person, project.StormwaterJurisdictionID))
             {
                 return Forbid();
             }
@@ -288,7 +288,7 @@ namespace Neptune.API.Controllers
             var projectNetworkSolveHistoryEntity = new ProjectNetworkSolveHistory
             {
                 ProjectID = projectID,
-                RequestedByPersonID = personDto.PersonID,
+                RequestedByPersonID = person.PersonID,
                 ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Queued,
                 LastUpdated = DateTime.UtcNow
             };
@@ -384,16 +384,16 @@ namespace Neptune.API.Controllers
             return File(stream.ToArray(), "text/csv");
         }
 
-        private bool UserCanEditJurisdiction(PersonDto personDto, int stormwaterJurisdictionID)
+        private bool UserCanEditJurisdiction(Person person, int stormwaterJurisdictionID)
         {
-            if (personDto.Role.RoleID == (int) RoleEnum.Admin || personDto.Role.RoleID == (int) RoleEnum.SitkaAdmin )
+            if (person.RoleID == (int) RoleEnum.Admin || person.RoleID == (int) RoleEnum.SitkaAdmin )
             {
                 return true;
             }
 
-            if (personDto.Role.RoleID == (int) RoleEnum.JurisdictionEditor || personDto.Role.RoleID == (int) RoleEnum.JurisdictionManager)
+            if (person.RoleID == (int) RoleEnum.JurisdictionEditor || person.RoleID == (int) RoleEnum.JurisdictionManager)
             {
-                var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonDto(_dbContext, personDto);
+                var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(_dbContext, person.PersonID);
                 return stormwaterJurisdictionIDs.Contains(stormwaterJurisdictionID);
             }
 
@@ -477,8 +477,8 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<List<DelineationDto>> List()
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            if (!personDto.IsOCTAGrantReviewer)
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            if (!person.IsOCTAGrantReviewer)
             {
                 return Forbid();
             }

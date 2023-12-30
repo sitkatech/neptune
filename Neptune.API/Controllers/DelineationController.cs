@@ -20,8 +20,8 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public ActionResult<List<DelineationDto>> List()
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var delineationsUpsertDtos = Delineations.ListByPersonIDAsDto(_dbContext, personDto.PersonID);
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var delineationsUpsertDtos = Delineations.ListByPersonIDAsDto(_dbContext, person.PersonID);
             return Ok(delineationsUpsertDtos);
         }
     }

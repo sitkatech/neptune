@@ -74,7 +74,7 @@ namespace Neptune.EFModels.Entities
                 .ToList();
         }
 
-        public static async Task<ProjectDto> CreateNew(NeptuneDbContext dbContext, ProjectUpsertDto projectUpsertDto, PersonDto personDto)
+        public static async Task<ProjectDto> CreateNew(NeptuneDbContext dbContext, ProjectUpsertDto projectUpsertDto, Person person, int personID)
         {
             var project = new Project()
             {
@@ -83,7 +83,7 @@ namespace Neptune.EFModels.Entities
                 StormwaterJurisdictionID = projectUpsertDto.StormwaterJurisdictionID.Value,
                 ProjectStatusID = (int)ProjectStatusEnum.Draft,
                 PrimaryContactPersonID = projectUpsertDto.PrimaryContactPersonID.Value,
-                CreatePersonID = personDto.PersonID,
+                CreatePersonID = personID,
                 DateCreated = DateTime.UtcNow,
                 ProjectDescription = projectUpsertDto.ProjectDescription,
                 AdditionalContactInformation = projectUpsertDto.AdditionalContactInformation,

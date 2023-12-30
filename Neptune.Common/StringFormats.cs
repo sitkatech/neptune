@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Neptune.Common;
@@ -232,27 +233,10 @@ namespace Neptune.WebMvc.Common
             }
             return currencyValue;
         }
-        public static string ToStringCdataEnclosed(this string value)
-        {
-            return string.Format(@"<![CDATA[{0}]]>", value);
-        }
-        public static string ToStringForRss(this DateTime value)
-        {
-            var ts = TimeZone.CurrentTimeZone.GetUtcOffset(value);
-            return value.Subtract(ts).ToString("ddd, dd MMM yyyy HH':'mm':'ss 'GMT'").ToStringCdataEnclosed();
-        }
-        public static string ToStringCurrencyEdit(this decimal value)
-        {
-            return value.ToString("f00");
-        }
-        public static string ToStringDate(this DateTime dateTime, bool twoDigitYear)
-        {
-            return ToStringDate((DateTime?)dateTime, twoDigitYear);
-        }
 
         public static string ToStringDate(this DateTime dateTime)
         {
-            return dateTime.ToString("MM/dd/yyyy");
+            return ConvertTimeFromUtcToPST(dateTime).ToString("MM/dd/yyyy");
         }
         public static string ToStringDate(this DateTime? dateTime)
         {
@@ -262,29 +246,12 @@ namespace Neptune.WebMvc.Common
         public static string ToStringDate(this DateTime? dateTime, bool twoDigitYear)
         {
             var formatString = twoDigitYear ? "MM/dd/yy" : "MM/dd/yyyy";
-            return (dateTime.HasValue) ? dateTime.Value.ToString(formatString) : string.Empty;
+            return (dateTime.HasValue) ? ConvertTimeFromUtcToPST(dateTime.Value).ToString(formatString) : string.Empty;
         }
 
-        public static string ToStringDateMonthYear(this DateTime dateTime)
-        {
-            return dateTime.ToString("M/yyyy");
-        }
-        public static string ToStringDateMonthYear(this DateTime? dateTime)
-        {
-            return (dateTime.HasValue) ? dateTime.Value.ToStringDateMonthYear() : string.Empty;
-        }
-
-        public static string ToStringDateYearMonthDay(this DateTime dateTime)
-        {
-            return dateTime.ToString("yyyy-MM-dd");
-        }
-        public static string ToStringDateYearMonthDay(this DateTime? dateTime)
-        {
-            return (dateTime.HasValue) ? dateTime.Value.ToStringDateYearMonthDay() : string.Empty;
-        }
         public static string ToStringTime(this DateTime? dateTime)
         {
-            return (dateTime.HasValue) ? dateTime.Value.ToString("hh:mm tt") : string.Empty;
+            return (dateTime.HasValue) ? ConvertTimeFromUtcToPST(dateTime.Value).ToString("hh:mm tt") : string.Empty;
         }
         public static string ToStringTime(this DateTime dateTime)
         {
@@ -296,15 +263,22 @@ namespace Neptune.WebMvc.Common
         }
         public static string ToStringDateTime(this DateTime? dateTime)
         {
-            return (dateTime.HasValue) ? dateTime.Value.ToString("MM/dd/yyyy h:mm tt") : string.Empty;
+            return (dateTime.HasValue) ?
+                ConvertTimeFromUtcToPST(dateTime).ToString("MM/dd/yyyy h:mm tt") : string.Empty;
         }
+
+        private static DateTime ConvertTimeFromUtcToPST([DisallowNull] DateTime? dateTime)
+        {
+            return TimeZoneInfo.ConvertTimeFromUtc(dateTime.Value, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+        }
+
         public static string ToStringDateTimeNoLeadingZeros(this DateTime dateTime)
         {
             return ((DateTime?)dateTime).ToStringDateTimeNoLeadingZeros();
         }
         public static string ToStringDateTimeNoLeadingZeros(this DateTime? dateTime)
         {
-            return (dateTime.HasValue) ? dateTime.Value.ToString("M/d/yyyy h:mm tt") : string.Empty;
+            return (dateTime.HasValue) ? ConvertTimeFromUtcToPST(dateTime.Value).ToString("M/d/yyyy h:mm tt") : string.Empty;
         }
         public static string ToStringDateTimeFull(this DateTime dateTime)
         {

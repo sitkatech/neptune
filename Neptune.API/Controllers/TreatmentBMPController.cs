@@ -32,8 +32,8 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public ActionResult<List<TreatmentBMPDisplayDto>> ListByPersonID()
         {
-            var personDto = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var treatmentBMPDisplayDtos = TreatmentBMPs.ListByPersonIDAsDisplayDto(_dbContext, personDto);
+            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
+            var treatmentBMPDisplayDtos = TreatmentBMPs.ListByPersonIDAsDisplayDto(_dbContext, person);
             return Ok(treatmentBMPDisplayDtos);
         }
 

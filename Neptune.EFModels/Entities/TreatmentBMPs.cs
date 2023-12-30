@@ -113,7 +113,7 @@ namespace Neptune.EFModels.Entities
             return treatmentBMPDisplayDtos;
         }
 
-        public static List<TreatmentBMPDisplayDto> ListByPersonIDAsDisplayDto(NeptuneDbContext dbContext, PersonDto person)
+        public static List<TreatmentBMPDisplayDto> ListByPersonIDAsDisplayDto(NeptuneDbContext dbContext, Person person)
         {
             var personID = person.PersonID;
             if (person.Role.RoleID == (int)RoleEnum.Admin || person.Role.RoleID == (int)RoleEnum.SitkaAdmin)
