@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
@@ -59,6 +60,25 @@ namespace Neptune.WebMvc.Controllers
             xml = xml.Replace("<![CDATA[$", "<![CDATA["); // RL 7/11/2015 Poor man's hack to remove currency and allow for total rows
             var stream = generator.Generate(xml);
             return File(stream.ToArray(), generator.ContentType, $"{gridName}.xlsx");
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            var person = CurrentPerson;
+            if (!CurrentPerson.IsAnonymousUser())
+            {
+                var currentDateTime = DateTime.UtcNow;
+
+                // Log Last Activity times Person if enough time has passed since last activity
+                var minimumTimeSpanForActivityLogging = new TimeSpan(0, 3, 0);
+                if (currentDateTime - (person.LastActivityDate ?? new DateTime()) >
+                    minimumTimeSpanForActivityLogging)
+                {
+                    person.LastActivityDate = currentDateTime;
+                    _dbContext.SaveChanges();
+                }
+            }
+            base.OnActionExecuting(context);
         }
     }
 }

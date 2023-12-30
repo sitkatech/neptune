@@ -1,4 +1,5 @@
 ﻿using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
 using Neptune.WebMvc.Models;
 
 namespace Neptune.WebMvc.Common;
@@ -13,11 +14,6 @@ public static class UserContext
         {
             var userGuid = Guid.Parse(claimsPrincipal.Claims.Single(x => x.Type == "sub").Value);
             person = People.GetByGuid(dbContext, userGuid);
-            if (person != null)
-            {
-                person.LastActivityDate = DateTime.UtcNow;
-                dbContext.SaveChanges();
-            }
         }
 
         return person ?? PersonModelExtensions.GetAnonymousSitkaUser();
