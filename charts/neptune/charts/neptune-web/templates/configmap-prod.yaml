@@ -7,7 +7,7 @@ data:
   ASPNETCORE_ENVIRONMENT: "Production"
   production: "true"
   staging: "false"
-  dev: "true"
+  dev: "false"
   mainAppApiUrl: "https://{{ .Values.global.domains.api }}"
   createAccountRedirectUrl: "https://{{ .Values.global.domains.web }}/create-user-callback"
   geoserverMapServiceUrl: "https://{{ .Values.global.domains.geoserver }}/geoserver/OCStormwater"
