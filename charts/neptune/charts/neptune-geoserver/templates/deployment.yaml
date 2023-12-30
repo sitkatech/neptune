@@ -99,7 +99,7 @@ spec:
             readOnly: true
           - name: geoserver-data
             mountPath: /opt/geoserver
-            readOnly: false            
+            readOnly: false
           envFrom:
           - configMapRef:
               name: {{ include "geoserver.fullname" . }}-{{ .Values.global.env.name }}-configmap
