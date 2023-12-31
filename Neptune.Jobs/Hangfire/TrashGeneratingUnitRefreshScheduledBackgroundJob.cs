@@ -18,7 +18,7 @@ namespace Neptune.Jobs.Hangfire
         {
         }
 
-        public override List<RunEnvironment> RunEnvironments => new() { RunEnvironment.Staging, RunEnvironment.Production };
+        public override List<RunEnvironment> RunEnvironments => new() { RunEnvironment.Development, RunEnvironment.Staging, RunEnvironment.Production };
 
         protected override async void RunJobImplementation()
         {

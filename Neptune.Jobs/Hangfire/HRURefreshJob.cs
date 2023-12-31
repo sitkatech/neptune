@@ -127,7 +127,8 @@ public class HRURefreshJob
 
         if (lastRegionalSubbasinUpdateDate > lastNereidResultUpdateDate)
         {
-            BackgroundJob.Enqueue<TotalNetworkSolveScheduledBackgroundJob>(x => x.RunJob(null));
+            // todo: temporarily turning this off
+            //BackgroundJob.Enqueue<TotalNetworkSolveScheduledBackgroundJob>(x => x.RunJob(null));
         }
         else if (_dbContext.DirtyModelNodes.AsNoTracking().Any())
         {
