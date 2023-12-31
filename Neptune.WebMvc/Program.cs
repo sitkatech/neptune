@@ -11,6 +11,7 @@ using Neptune.WebMvc.Services;
 using NetTopologySuite.IO.Converters;
 using SendGrid.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Hangfire;
@@ -188,16 +189,39 @@ var builder = WebApplication.CreateBuilder(args);
             options.SkipUnrecognizedRequests = true;
             options.Events = new OpenIdConnectEvents()
             {
-                OnTokenValidated = tvc =>
+                OnRedirectToIdentityProvider = async context =>
                 {
-                    var dbContext = tvc.HttpContext.RequestServices.GetRequiredService<NeptuneDbContext>();
-                    var sitkaSmtpClientService = tvc.HttpContext.RequestServices.GetRequiredService<SitkaSmtpClientService>();
+                    //save current url to state
+                    context.ProtocolMessage.State = context.HttpContext.Request.QueryString.HasValue
+                        ? context.HttpContext.Request.Query["returnUrl"]
+                        : "/";
+                },
+                OnTokenValidated = context =>
+                {
+                    var dbContext = context.HttpContext.RequestServices.GetRequiredService<NeptuneDbContext>();
+                    var sitkaSmtpClientService = context.HttpContext.RequestServices.GetRequiredService<SitkaSmtpClientService>();
 
-                    if (tvc.Principal.Identity?.IsAuthenticated == true) // we have a token and we can determine the person.
+                    if (context.Principal.Identity?.IsAuthenticated == true) // we have a token and we can determine the person.
                     {
-                        AuthenticationHelper.ProcessLoginFromKeystone(tvc, dbContext, configuration, logger, sitkaSmtpClientService);
+                        AuthenticationHelper.ProcessLoginFromKeystone(context, dbContext, configuration, logger, sitkaSmtpClientService);
                     }
-                    return Task.FromResult(0);
+                    var url = context.ProtocolMessage.State;
+                    var claims = new List<Claim>
+                    {
+                        new("returnUrl", url)
+                    };
+                    var appIdentity = new ClaimsIdentity(claims);
+
+                    //add url to claims
+                    context.Principal.AddIdentity(appIdentity);
+
+                    return Task.CompletedTask;
+                },
+                OnTicketReceived = ctx =>
+                {
+                    var url = ctx.Principal.FindFirst("returnUrl").Value;
+                    ctx.ReturnUri = url;
+                    return Task.CompletedTask;
                 }
             };
 
