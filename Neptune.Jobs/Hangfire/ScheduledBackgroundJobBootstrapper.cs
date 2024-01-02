@@ -1,7 +1,9 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
 using Hangfire;
 using Hangfire.Storage;
 using Neptune.Common.DesignByContract;
+using Neptune.EFModels.Entities;
 
 namespace Neptune.Jobs.Hangfire
 {
@@ -89,7 +91,7 @@ namespace Neptune.Jobs.Hangfire
 
         public static DateTime MakeUtcCronTime(int year, int month, int day, int hour, int minute)
         {
-            var tz = TimeZoneInfo.Local; // getting the current system timezone
+            var tz = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"); // getting the timezone in PST
             var localCronTime = new DateTime(year, month, day, hour, minute, 0, DateTimeKind.Local);
 
             // Catch cases where time is invalid or ambiguous due to daylight savings
@@ -104,7 +106,7 @@ namespace Neptune.Jobs.Hangfire
                 Check.Ensure(!tz.IsInvalidTime(localCronTime));
             }
 
-            var utcCronTime = TimeZoneInfo.ConvertTimeToUtc(localCronTime);
+            var utcCronTime = localCronTime - tz.GetUtcOffset(localCronTime);
             return utcCronTime;
         }
     }
