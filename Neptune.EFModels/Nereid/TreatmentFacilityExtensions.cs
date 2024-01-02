@@ -5,12 +5,14 @@ namespace Neptune.EFModels.Nereid;
 
 public static class TreatmentFacilityExtensions
 {
-    public static TreatmentFacility ToTreatmentFacility(this TreatmentBMP treatmentBMP, bool isBaselineCondition,
+    public static TreatmentFacility ToTreatmentFacility(this TreatmentBMP treatmentBMP,
+        Dictionary<int, Delineation?> delineations, bool isBaselineCondition,
         Dictionary<int, int> modelBasins, Dictionary<int, double> precipitationZones)
     {
         var treatmentBMPNodeID = NereidUtilities.TreatmentBMPNodeID(treatmentBMP.TreatmentBMPID);
         var modelBasinKey = treatmentBMP.ModelBasinID.HasValue && modelBasins.TryGetValue(treatmentBMP.ModelBasinID.Value, out var modelBasinID) ? modelBasinID.ToString() : null;
-        var isFullyParameterized = treatmentBMP.IsFullyParameterized(treatmentBMP.Delineation);
+        var delineation = delineations[treatmentBMP.TreatmentBMPID];
+        var isFullyParameterized = treatmentBMP.IsFullyParameterized(delineation);
         double? treatmentRate = null;
         double? area = null;
         double? designCapacity = null;

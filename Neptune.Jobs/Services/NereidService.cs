@@ -160,6 +160,7 @@ public class NereidService : BaseAPIService<NereidService>
                 x.PercentOfSiteTreated != null && x.PercentCaptured != null && x.PercentRetained != null &&
                 x.TreatmentBMPType.IsAnalyzedInModelingModule)
             .ToList();
+        var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(dbContext);
 
         var solutionSequenceResult =
             await RunJobAtNereid<SolutionSequenceRequest, SolutionSequenceResult>(
@@ -195,7 +196,7 @@ public class NereidService : BaseAPIService<NereidService>
                 var subgraph = MakeSubgraphFromParentGraphAndNodes(graph, seriesNodes);
 
                 var notFoundNodes = await SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWQMPNodes,
-                    allModelingQuickBMPs, isBaselineCondition, modelBasins, precipitationZones, projectDistributedDelineationIDs);
+                    allModelingQuickBMPs, isBaselineCondition, modelBasins, precipitationZones, delineations, projectDistributedDelineationIDs);
                 missingNodeIDs.AddRange(notFoundNodes);
             }
         }
@@ -267,7 +268,7 @@ public class NereidService : BaseAPIService<NereidService>
         List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs,
         List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes,
         List<QuickBMP> allModelingQuickBMPs, bool isBaselineCondition, Dictionary<int, int> modelBasins,
-        Dictionary<int, double> precipitationZones, List<int> projectDelineationIDs = null)
+        Dictionary<int, double> precipitationZones, Dictionary<int, Delineation?> delineations, List<int> projectDelineationIDs = null)
     {
         var notFoundNodes = new List<string>();
 
@@ -293,8 +294,8 @@ public class NereidService : BaseAPIService<NereidService>
         var treatmentFacilities = allModelingBMPs
             .Where(x => treatmentBMPToIncludeIDs.Contains(x.TreatmentBMPID) &&
                         // Don't create TreatmentFacilities for BMPs belonging to a Simple WQMP
-                        x.WaterQualityManagementPlan?.WaterQualityManagementPlanModelingApproachID != WaterQualityManagementPlanModelingApproach.Simplified.WaterQualityManagementPlanModelingApproachID)
-            .Select(x => x.ToTreatmentFacility(isBaselineCondition, modelBasins, precipitationZones)).ToList();
+                        x.WaterQualityManagementPlan?.WaterQualityManagementPlanModelingApproachID !=  (int) WaterQualityManagementPlanModelingApproachEnum.Simplified)
+            .Select(x => x.ToTreatmentFacility(delineations, isBaselineCondition, modelBasins, precipitationZones)).ToList();
 
         var filteredQuickBMPs = allModelingQuickBMPs
             .Where(x => waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID) &&
@@ -435,7 +436,7 @@ public class NereidService : BaseAPIService<NereidService>
         var nodes = new List<Node>();
         var edges = new List<Edge>();
 
-        MakeRSBNodesAndEdges(dbContext.RegionalSubbasins.Where(x => x.IsInModelBasin == true).ToList(), out var rsbEdges, out var rsbNodes);
+        MakeRSBNodesAndEdges(dbContext.RegionalSubbasins.AsNoTracking().Where(x => x.IsInModelBasin == true).ToList(), out var rsbEdges, out var rsbNodes);
         nodes.AddRange(rsbNodes);
         edges.AddRange(rsbEdges);
 
@@ -541,8 +542,8 @@ public class NereidService : BaseAPIService<NereidService>
 
     private static void MakeDistributedDelineationNodesAndEdges(NeptuneDbContext dbContext, out List<Edge> delineationEdges, out List<Node> delineationNodes, int? projectID = null, List<int> projectRegionalSubbasinIDs = null)
     {
-        var distributedDelineations = dbContext.Delineations.Include(x => x.TreatmentBMP)
-            .Where(x => x.DelineationTypeID == DelineationType.Distributed.DelineationTypeID &&
+        var distributedDelineations = dbContext.Delineations.Include(x => x.TreatmentBMP).AsNoTracking()
+            .Where(x => x.DelineationTypeID == (int) DelineationTypeEnum.Distributed &&
                         // don't include delineations for non-modeled BMPs
                         x.TreatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule &&
                         x.TreatmentBMP.RegionalSubbasinID != null &&
