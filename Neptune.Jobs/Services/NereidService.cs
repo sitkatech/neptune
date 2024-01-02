@@ -111,7 +111,7 @@ public class NereidService : BaseAPIService<NereidService>
 
         var deltaSubgraph = MakeSubgraphFromParentGraphAndNodes(graph, nodesForSubgraph);
 
-        var networkSolveResult = await NetworkSolveImpl(deltaSubgraph, dbContext, true, isBaselineCondition);
+        var networkSolveResult = await NetworkSolveImpl(deltaSubgraph, dbContext, true, isBaselineCondition, null, null, null);
 
         var scenarioNereidResults =
             dbContext.NereidResults.Where(x => x.IsBaselineCondition == isBaselineCondition).ToList();
@@ -129,7 +129,7 @@ public class NereidService : BaseAPIService<NereidService>
         return networkSolveResult;
     }
 
-    private async Task<NetworkSolveResult> NetworkSolveImpl(Graph graph, NeptuneDbContext dbContext, bool sendPreviousResults, bool isBaselineCondition, int? projectID = null, List<int> projectRegionalSubbasinIDs = null, List<int> projectDistributedDelineationIDs = null)
+    private async Task<NetworkSolveResult> NetworkSolveImpl(Graph graph, NeptuneDbContext dbContext, bool sendPreviousResults, bool isBaselineCondition, int? projectID, List<int>? projectRegionalSubbasinIDs, List<int>? projectDistributedDelineationIDs)
     {
         const string solutionSequenceUrl = "api/v1/network/solution_sequence?min_branch_size=12";
 
@@ -219,7 +219,7 @@ public class NereidService : BaseAPIService<NereidService>
     public async Task<NetworkSolveResult> TotalNetworkSolve(NeptuneDbContext dbContext, bool isBaselineCondition)
     {
         var graph = BuildTotalNetworkGraph(dbContext);
-        var networkSolveResult = await NetworkSolveImpl(graph, dbContext, false, isBaselineCondition);
+        var networkSolveResult = await NetworkSolveImpl(graph, dbContext, false, isBaselineCondition, null, null, null);
 
         var baselineConditionSqlParam = new SqlParameter("@isBaselineCondition", isBaselineCondition);
         await dbContext.Database.ExecuteSqlRawAsync(
@@ -268,7 +268,7 @@ public class NereidService : BaseAPIService<NereidService>
         List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs,
         List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes,
         List<QuickBMP> allModelingQuickBMPs, bool isBaselineCondition, Dictionary<int, int> modelBasins,
-        Dictionary<int, double> precipitationZones, Dictionary<int, Delineation?> delineations, List<int> projectDelineationIDs = null)
+        Dictionary<int, double> precipitationZones, Dictionary<int, Delineation?> delineations, List<int>? projectDelineationIDs)
     {
         var notFoundNodes = new List<string>();
 
