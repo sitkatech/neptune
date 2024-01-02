@@ -147,7 +147,7 @@ namespace Neptune.EFModels.Entities
 
         public static PersonDto? GetByGuidAsDto(NeptuneDbContext dbContext, Guid personGuid)
         {
-            var person = dbContext.People.Include(x => x.Organization).ThenInclude(x => x.OrganizationType).SingleOrDefault(x => x.PersonGuid == personGuid);
+            var person = dbContext.People.Include(x => x.Organization).ThenInclude(x => x.OrganizationType).AsNoTracking().SingleOrDefault(x => x.PersonGuid == personGuid);
             return person?.AsDto();
         }
         public static List<int> ListStormwaterJurisdictionIDsByPersonDto(NeptuneDbContext dbContext, PersonDto person)
