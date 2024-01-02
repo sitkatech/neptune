@@ -18,11 +18,11 @@ namespace Neptune.Jobs.Hangfire
         {
         }
 
+        public override List<RunEnvironment> RunEnvironments => new() { RunEnvironment.Staging, RunEnvironment.Production };
+
         protected override void RunJobImplementation()
         {
             BackgroundJob.Enqueue<RegionalSubbasinRefreshJob>(x => x.RunJob());
         }
-
-        public override List<RunEnvironment> RunEnvironments => new() { RunEnvironment.Development, RunEnvironment.Staging, RunEnvironment.Production };
     }
 }
