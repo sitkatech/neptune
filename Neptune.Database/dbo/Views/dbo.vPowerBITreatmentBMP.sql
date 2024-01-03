@@ -1,7 +1,6 @@
 create view dbo.vPowerBITreatmentBMP
 as
 select 
-	bmp.TreatmentBMPID as PrimaryKey,
     bmp.TreatmentBMPID,
 	bmp.TreatmentBMPName,
 	ty.TreatmentBMPTypeName,

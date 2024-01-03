@@ -61,7 +61,7 @@ namespace Neptune.WebMvc.Controllers
         {
             var data = _dbContext.vPowerBITreatmentBMPs.Select(x => new TreatmentBMPForPowerBI
             {
-                PrimaryKey = x.PrimaryKey,
+                PrimaryKey = x.TreatmentBMPID,
                 TreatmentBMPName = x.TreatmentBMPName,
                 Jurisdiction = x.Jurisdiction,
                 LocationLon = x.LocationLon,
@@ -70,7 +70,7 @@ namespace Neptune.WebMvc.Controllers
                 DelineationType = x.DelineationType,
                 WaterQualityManagementPlanID = x.WaterQualityManagementPlanID,
                 TreatmentBMPModelingAttributeID = x.TreatmentBMPModelingAttributeID,
-                TreatmentBMPID = x.PrimaryKey,
+                TreatmentBMPID = x.TreatmentBMPID,
                 TreatmentBMPTypeName = x.TreatmentBMPTypeName,
                 UpstreamTreatmentBMPID = x.UpstreamTreatmentBMPID,
                 AverageDivertedFlowrate = x.AverageDivertedFlowrate,

@@ -9,8 +9,6 @@ namespace Neptune.EFModels.Entities;
 [Keyless]
 public partial class vPowerBITreatmentBMP
 {
-    public int PrimaryKey { get; set; }
-
     public int TreatmentBMPID { get; set; }
 
     [StringLength(200)]
