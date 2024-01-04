@@ -75,8 +75,11 @@ export class ModelResultsComponent implements OnInit {
 
     this.selectedProjectLoadReducingResult = new ProjectLoadReducingResultDto();
     //We get the property names of the first one so we have a fully populated object because Typescript doesn't always populate the keys which is VERY annoying
-    for (let key of Object.getOwnPropertyNames(this.projectLoadReducingResults[0])) {
-      this.selectedProjectLoadReducingResult[key] = this.projectLoadReducingResults.reduce((sum, current) => sum + (current[key] ?? 0), 0);
+    if(this.projectLoadReducingResults.length > 0)
+    {
+      for (let key of Object.getOwnPropertyNames(this.projectLoadReducingResults[0])) {
+        this.selectedProjectLoadReducingResult[key] = this.projectLoadReducingResults.reduce((sum, current) => sum + (current[key] ?? 0), 0);
+      }
     }
 
     this.selectedTreatmentBMPHRUCharacteristicSummaries = [...this.treatmentBMPHRUCharacteristicSummaries.reduce((r, o) => {
