@@ -54,6 +54,8 @@ using EditViewModel = Neptune.WebMvc.Views.TreatmentBMP.EditViewModel;
 using TreatmentBMPAssessmentSummary = Neptune.EFModels.Entities.TreatmentBMPAssessmentSummary;
 using Neptune.EFModels.Nereid;
 using Neptune.Jobs.Services;
+using Neptune.WebMvc.Views.HRUCharacteristic;
+using IndexViewData = Neptune.WebMvc.Views.TreatmentBMP.IndexViewData;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -218,6 +220,23 @@ namespace Neptune.WebMvc.Controllers
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
+        [HttpGet("{treatmentBMPPrimaryKey}")]
+        [NeptuneAdminFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
+        public GridJsonNetJObjectResult<vHRUCharacteristic> HRUCharacteristicGridJsonData([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = TreatmentBMPs.GetByID(_dbContext, treatmentBMPPrimaryKey);
+            var treatmentBMPID = treatmentBMP.TreatmentBMPID;
+            var treatmentBMPTree = _dbContext.vTreatmentBMPUpstreams.AsNoTracking()
+                .Single(x => x.TreatmentBMPID != null && x.TreatmentBMPID == treatmentBMPID);
+
+            var upstreamestBMP = treatmentBMPTree.UpstreamBMPID.HasValue ? TreatmentBMPs.GetByID(_dbContext, treatmentBMPTree.UpstreamBMPID) : null;
+            var delineation = Delineations.GetByTreatmentBMPID(_dbContext, upstreamestBMP?.TreatmentBMPID ?? treatmentBMPID);
+            var gridSpec = new HRUCharacteristicGridSpec(_linkGenerator);
+            var hruCharacteristics = vHRUCharacteristics.ListByTreatmentBMP(_dbContext, upstreamestBMP ?? treatmentBMP, delineation);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vHRUCharacteristic>(hruCharacteristics, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
 
         [HttpGet]
         [JurisdictionEditFeature]

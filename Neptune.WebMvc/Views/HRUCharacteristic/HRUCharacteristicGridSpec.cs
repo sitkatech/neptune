@@ -41,9 +41,9 @@ namespace Neptune.WebMvc.Views.HRUCharacteristic
             Add("Baseline Model Basin Land Use Description", x => x.HRUCharacteristicLandUseCodeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Hydrologic Soil Group", x => x.HydrologicSoilGroup.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Slope Percentage", x => x.SlopePercentage, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnFilterType.Numeric);
-            Add("Impervious Acres", x => x.ImperviousAcres, 100, DhtmlxGridColumnFormatType.Decimal);
-            Add("Baseline Impervious Acres", x => x.BaselineImperviousAcres, 100, DhtmlxGridColumnFormatType.Decimal);
-            Add("Total Acres", x => x.Area, 100, DhtmlxGridColumnFormatType.Decimal);
+            Add("Impervious Acres", x => x.ImperviousAcres, 100, DhtmlxGridColumnFormatType.Decimal, DhtmlxGridColumnAggregationType.Total);
+            Add("Baseline Impervious Acres", x => x.BaselineImperviousAcres, 100, DhtmlxGridColumnFormatType.Decimal, DhtmlxGridColumnAggregationType.Total);
+            Add("Total Acres", x => x.Area, 100, DhtmlxGridColumnFormatType.Decimal, DhtmlxGridColumnAggregationType.Total);
             Add("Treatment BMP", x => x.TreatmentBMPID == null
                 ? new HtmlString("N/A")
                 : UrlTemplate.MakeHrefString(

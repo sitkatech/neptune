@@ -100,42 +100,43 @@
 
 @if (!ViewDataTyped.CurrentPersonIsAnonymousOrUnassigned)
 {
-if (ViewDataTyped.DelineationErrors.Any() || ViewDataTyped.ParameterizationErrors.Any())
-{
-    <div class="alert alert-info">
-        @if (ViewDataTyped.DelineationErrors.Any())
-        {
-            <div class="pull-right">
-                <a class="btn btn-xs btn-primary" href="@ViewDataTyped.DelineationMapUrl">Review and Edit on the Delineation Map</a>
-            </div>
-            @:This BMP delineation may have errors:
-            <ul>
-                @foreach (var delineationError in ViewDataTyped.DelineationErrors)
-                {
-                    <li>@delineationError</li>
-                }
-            </ul>
-        }
-        @if (ViewDataTyped.ParameterizationErrors.Any())
-        {
-            @:This BMP is not fully parameterized:
-            <ul>
-                @foreach (var parameterizationError in ViewDataTyped.ParameterizationErrors)
-                {
-                    <li>@parameterizationError</li>
-                }
-            </ul>
-        }
-    </div>
+    if (ViewDataTyped.DelineationErrors.Any() || ViewDataTyped.ParameterizationErrors.Any())
+    {
+        <div class="alert alert-info">
+            @if (ViewDataTyped.DelineationErrors.Any())
+            {
+                <div class="pull-right">
+                    <a class="btn btn-xs btn-primary" href="@ViewDataTyped.DelineationMapUrl">Review and Edit on the Delineation Map</a>
+                </div>
+                @:This BMP delineation may have errors:
+                <ul>
+                    @foreach (var delineationError in ViewDataTyped.DelineationErrors)
+                    {
+                        <li>@delineationError</li>
+                    }
+                </ul>
+            }
+            @if (ViewDataTyped.ParameterizationErrors.Any())
+            {
+                @:This BMP is not fully parameterized:
+                <ul>
+                    @foreach (var parameterizationError in ViewDataTyped.ParameterizationErrors)
+                    {
+                        <li>@parameterizationError</li>
+                    }
+                </ul>
+            }
+        </div>
+    }
+
+    if (ViewDataTyped.OpenRevisionRequest != null)
+    {
+        <div class="alert alert-info">
+            There is an open <a href="@ViewDataTyped.OpenRevisionRequestDetailUrl">Regional Subbasin Revision Request</a> relating to this BMP.
+        </div>
+    }
 }
 
-if (ViewDataTyped.OpenRevisionRequest != null)
-{
-    <div class="alert alert-info">
-        There is an open <a href="@ViewDataTyped.OpenRevisionRequestDetailUrl">Regional Subbasin Revision Request</a> relating to this BMP.
-    </div>
-}
-}
 <div class="row">
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
@@ -815,8 +816,22 @@ if (ViewDataTyped.OpenRevisionRequest != null)
             </div>
         }
     </div>
-
     <div class="col-xs-12">
+        @if (ViewDataTyped.CurrentPerson.IsSitkaAdministrator() && ViewDataTyped.TreatmentBMPType.IsAnalyzedInModelingModule)
+        {
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panelNeptune">
+                        <div class="panel-heading panelTitle">
+                            HRU Characteristics (Sitka Admin only)
+                        </div>
+                        <div class="panel-body">
+                            @Html.DhtmlxGrid(ViewDataTyped.HRUCharacteristicsGridSpec, ViewDataTyped.HRUCharacteristicsGridName, ViewDataTyped.HRUCharacteristicsGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
         <div class="row">
             <div class="col-xs-12">
                 <div class="panel panelNeptune">

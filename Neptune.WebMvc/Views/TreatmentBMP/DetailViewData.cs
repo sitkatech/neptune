@@ -27,9 +27,11 @@ using Neptune.WebMvc.Views.Shared;
 using Microsoft.AspNetCore.Html;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using Neptune.WebMvc.Common.DhtmlWrappers;
 using Neptune.WebMvc.Views.FieldVisit;
 using Neptune.WebMvc.Views.Shared.HRUCharacteristics;
 using Neptune.WebMvc.Views.Shared.ModeledPerformance;
+using Neptune.WebMvc.Views.HRUCharacteristic;
 
 namespace Neptune.WebMvc.Views.TreatmentBMP
 {
@@ -142,6 +144,9 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public EFModels.Entities.Delineation? Delineation { get; }
         public EFModels.Entities.TreatmentBMP? UpstreamestBMP { get; }
         public Watershed? Watershed { get; }
+        public GridSpec<vHRUCharacteristic> HRUCharacteristicsGridSpec { get; }
+        public string HRUCharacteristicsGridName { get; }
+        public string HRUCharacteristicsGridDataUrl { get; }
 
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
@@ -219,6 +224,11 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
 
             VerifiedUnverifiedUrl = verifiedUnverifiedUrl;
             HRUCharacteristicsViewData = hruCharacteristicsViewData;
+
+            HRUCharacteristicsGridSpec = new HRUCharacteristicGridSpec(LinkGenerator);
+            HRUCharacteristicsGridName = "HRUCharacteristics";
+            HRUCharacteristicsGridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.HRUCharacteristicGridJsonData(treatmentBMP));
+
             MapServiceUrl = mapServiceUrl;
             ModeledPerformanceViewData = modeledPerformanceViewData;
 
