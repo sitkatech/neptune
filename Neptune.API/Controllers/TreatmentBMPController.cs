@@ -133,7 +133,7 @@ namespace Neptune.API.Controllers
 
             // merge TreatmentBMPModelingAttributeIDs
             var updatedTreatmentBMPModelingAttributes = updatedTreatmentBMPs.Select(x => x.TreatmentBMPModelingAttributeTreatmentBMP).ToList();
-            existingProjectTreatmentBMPModelingAttributes.Merge(updatedTreatmentBMPModelingAttributes, allTreatmentBMPModelingAttributesInDatabase,
+            existingProjectTreatmentBMPModelingAttributes.MergeUpdate(updatedTreatmentBMPModelingAttributes,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
                 (x, y) =>
                 {
