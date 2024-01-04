@@ -74,7 +74,8 @@ namespace Neptune.WebMvc.Controllers
                 if (currentDateTime - (person.LastActivityDate ?? new DateTime()) >
                     minimumTimeSpanForActivityLogging)
                 {
-                    person.LastActivityDate = currentDateTime;
+                    var personUpdate = _dbContext.People.Single(x => x.PersonID == person.PersonID);
+                    personUpdate.LastActivityDate = currentDateTime;
                     _dbContext.SaveChanges();
                 }
             }

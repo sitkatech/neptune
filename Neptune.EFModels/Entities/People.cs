@@ -142,12 +142,12 @@ namespace Neptune.EFModels.Entities
 
         public static Person? GetByGuid(NeptuneDbContext dbContext, Guid personGuid)
         {
-            return dbContext.People.SingleOrDefault(x => x.PersonGuid == personGuid);
+            return GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.PersonGuid == personGuid);
         }
 
         public static PersonDto? GetByGuidAsDto(NeptuneDbContext dbContext, Guid personGuid)
         {
-            var person = dbContext.People.Include(x => x.Organization).ThenInclude(x => x.OrganizationType).AsNoTracking().SingleOrDefault(x => x.PersonGuid == personGuid);
+            var person = GetByGuid(dbContext, personGuid);
             return person?.AsDto();
         }
         public static List<int> ListStormwaterJurisdictionIDsByPersonDto(NeptuneDbContext dbContext, PersonDto person)
