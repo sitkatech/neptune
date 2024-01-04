@@ -275,6 +275,12 @@
                                             <div class="input-group"><input class="form-control numericAttribute" name="@Html.NameFor(m => m.InfiltrationDischargeRate)" aria-describedby="attributeUnit" type="text" value="@Model.InfiltrationDischargeRate" /><span class="input-group-addon" id="attributeUnit">cfs</span></div>
                                         </div>
                                     </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 control-label">
+                                            @Html.LabelWithSugarFor(x => x.TimeOfConcentrationID)
+                                        </label>
+                                        <div class="col-sm-8">@Html.DropDownListFor(x => x.TimeOfConcentrationID, ViewDataTyped.TimeOfConcentrations, new { @class = "form-control" })</div>
+                                    </div>
                                     break;
                                 case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
                                 case TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:

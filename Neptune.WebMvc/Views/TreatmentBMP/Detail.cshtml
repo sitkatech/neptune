@@ -477,6 +477,12 @@
                                             </td>
                                             <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.InfiltrationDischargeRate, "cfs")</td>
                                         </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
+                                            </td>
+                                            <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
+                                        </tr>
                                         break;
                                     case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
                                     case TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:

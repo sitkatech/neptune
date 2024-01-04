@@ -239,6 +239,9 @@ public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<TreatmentBMPDeta
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.TotalEffectiveBMPVolume, 100);
                 Add(FieldDefinitionType.InfiltrationDischargeRate.ToGridHeaderString("Infiltration Discharge Rate (cfs)"),
                     x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.InfiltrationDischargeRate, 100);
+                Add(FieldDefinitionType.TimeOfConcentrationID.ToGridHeaderString("Time Of Concentration (mins)"),
+                    x => x.TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.TimeOfConcentration?
+                        .TimeOfConcentrationDisplayName, 100);
                 break;
             case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
             case TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:

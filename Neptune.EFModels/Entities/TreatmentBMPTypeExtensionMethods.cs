@@ -1,8 +1,4 @@
-﻿using Neptune.EFModels.Entities;
-using Neptune.Models.DataTransferObjects;
-using NetTopologySuite.Algorithm;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities;
 
@@ -167,6 +163,7 @@ public static partial class TreatmentBMPTypeExtensionMethods
             case TreatmentBMPModelingTypeEnum.Drywell:
                 modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("TotalEffectiveDrywellBMPVolume", "cu ft"));
                 modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("InfiltrationDischargeRate", "cfs"));
+                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("TimeOfConcentrationID", null));
 //                modelingAttributes.Add(new TreatmentBMPModelingAttributeDefinitionDto("DryWeatherFlowOverrideID", null));
                 break;
             case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
