@@ -47,11 +47,12 @@ namespace Neptune.Jobs.Hangfire
                 throw new NullReferenceException($"Project with ID {projectID} does not exist!");
             }
             var projectNetworkSolveHistory = _dbContext.ProjectNetworkSolveHistories.Include(x => x.RequestedByPerson).First(x => x.ProjectNetworkSolveHistoryID == projectNetworkSolveHistoryID);
-            var projectRegionalSubbasinIDs = _dbContext.TreatmentBMPs.AsNoTracking().Where(x => x.ProjectID == projectID).Select(x => x.RegionalSubbasinID).Distinct().ToList();
+            var treatmentBMPs = _dbContext.TreatmentBMPs.Include(x => x.Delineation).AsNoTracking().Where(x => x.ProjectID == projectID);
+            var projectRegionalSubbasinIDs = treatmentBMPs.Select(x => x.RegionalSubbasinID).Distinct().ToList();
 
             var regionalSubbasinIDs = _dbContext.vRegionalSubbasinUpstreams.AsNoTracking()
                 .Where(x => projectRegionalSubbasinIDs.Contains(x.PrimaryKey) && x.RegionalSubbasinID.HasValue).Select(x => x.RegionalSubbasinID.Value).ToList();
-            var projectDistributedDelineationIDs = project.TreatmentBMPs.Select(x => x.Delineation).Where(y => y.DelineationTypeID == (int)DelineationTypeEnum.Distributed).Select(x => x.DelineationID).ToList();
+            var projectDistributedDelineationIDs = treatmentBMPs.Select(x => x.Delineation).Where(x => x.DelineationTypeID == (int)DelineationTypeEnum.Distributed).Select(x => x.DelineationID).ToList();
             try
             {
                 //Get our LGUs

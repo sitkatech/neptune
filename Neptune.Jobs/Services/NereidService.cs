@@ -33,12 +33,9 @@ public class NereidService : BaseAPIService<NereidService>
     public async Task<NereidResult<TResp>> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl)
     {
         //todo: log nereid requests for troubleshooting?
+        //Logger.LogInformation($"Executing Nereid request: {nereidRequestUrl}");
         //var serializedRequest = GeoJsonSerializer.Serialize(nereidRequestObject);
         //Logger.LogInformation(serializedRequest);
-        //var requestStringContent = new StringContent(serializedRequest, System.Text.Encoding.UTF8, "application/json");
-        //Logger.LogInformation($"Executing Nereid request: {nereidRequestUrl}");
-        //var requestLogFile = Path.Combine(_neptuneConfiguration.NereidLogFileFolder, $"NereidRequest_{DateTime.Now:yyyyMMddHHmmss}.json");
-        //await File.WriteAllTextAsync(requestLogFile, serializedRequest);
         var httpResponseMessage = await PostJsonImpl(nereidRequestUrl, nereidRequestObject, GeoJsonSerializer.DefaultSerializerOptions);
         var postResultContentAsStringResult = await httpResponseMessage.Content.ReadAsStringAsync();
         //todo: log nereid responses for troubleshooting?
