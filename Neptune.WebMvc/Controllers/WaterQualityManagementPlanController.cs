@@ -652,7 +652,7 @@ namespace Neptune.WebMvc.Controllers
                 LastEditedByPersonID = CurrentPerson.PersonID,
                 LastEditedDate = DateTime.UtcNow,
                 IsDraft = !viewModel.HiddenIsFinalizeVerificationInput,
-                VerificationDate = viewModel.VerificationDate
+                VerificationDate = viewModel.VerificationDate.ConvertTimeFromPSTToUTC()
             };
             await _dbContext.WaterQualityManagementPlanVerifies.AddAsync(waterQualityManagementPlanVerify);
             await _dbContext.SaveChangesAsync();

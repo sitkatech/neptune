@@ -272,6 +272,11 @@ namespace Neptune.WebMvc.Common
             return TimeZoneInfo.ConvertTimeFromUtc(dateTime.Value, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
         }
 
+        public static DateTime ConvertTimeFromPSTToUTC(this DateTime dateTime)
+        {
+            return TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+        }
+
         public static string ToStringDateTimeNoLeadingZeros(this DateTime dateTime)
         {
             return ((DateTime?)dateTime).ToStringDateTimeNoLeadingZeros();

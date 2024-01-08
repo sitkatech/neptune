@@ -144,7 +144,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             treatmentBMP.WaterQualityManagementPlanID = WaterQualityManagementPlanID;
 
             treatmentBMP.TreatmentBMPLifespanTypeID = TreatmentBMPLifespanTypeID;
-            treatmentBMP.TreatmentBMPLifespanEndDate = TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID ? TreatmentBMPLifespanEndDate : null;
+            treatmentBMP.TreatmentBMPLifespanEndDate = TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID ? TreatmentBMPLifespanEndDate?.ConvertTimeFromPSTToUTC() : null;
             treatmentBMP.TrashCaptureEffectiveness = TrashCaptureStatusTypeID == TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID ? TrashCaptureEffectiveness : null;
         }
 

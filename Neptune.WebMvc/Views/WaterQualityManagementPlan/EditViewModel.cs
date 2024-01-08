@@ -144,7 +144,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
                 WaterQualityManagementPlanDevelopmentTypeID ?? ModelObjectHelpers.NotYetAssignedID;
             waterQualityManagementPlan.WaterQualityManagementPlanLandUseID =
                 WaterQualityManagementPlanLandUseID ?? ModelObjectHelpers.NotYetAssignedID;
-            waterQualityManagementPlan.ApprovalDate = ApprovalDate;
+            waterQualityManagementPlan.ApprovalDate = ApprovalDate?.ConvertTimeFromPSTToUTC();
             waterQualityManagementPlan.MaintenanceContactName = MaintenanceContactName;
             waterQualityManagementPlan.MaintenanceContactOrganization = MaintenanceContactOrganization;
             waterQualityManagementPlan.MaintenanceContactAddress1 = MaintenanceContactAddress1;

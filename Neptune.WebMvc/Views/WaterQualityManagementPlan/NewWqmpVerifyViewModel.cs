@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Neptune.Common;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.Models;
 using Neptune.WebMvc.Common.Mvc;
 using Neptune.WebMvc.Services;
@@ -79,7 +80,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatusID = WaterQualityManagementPlanVerifyStatusID;
             waterQualityManagementPlanVerify.LastEditedByPersonID = currentPerson.PersonID;
             waterQualityManagementPlanVerify.LastEditedDate = DateTime.UtcNow;
-            waterQualityManagementPlanVerify.VerificationDate = VerificationDate;
+            waterQualityManagementPlanVerify.VerificationDate = VerificationDate.ConvertTimeFromPSTToUTC();
 
             var allWaterQualityManagementPlanVerifyQuickBMPsInDatabase = dbContext.WaterQualityManagementPlanVerifyQuickBMPs;
             var waterQualityManagementPlanVerifyQuickBMPsToUpdate = WaterQualityManagementPlanVerifyQuickBMPs

@@ -145,7 +145,7 @@ namespace Neptune.WebMvc.Controllers
                     TreatmentBMPID = treatmentBMP.TreatmentBMPID,
                     FieldVisitStatusID = FieldVisitStatus.InProgress.FieldVisitStatusID,
                     PerformedByPersonID = CurrentPerson.PersonID,
-                    VisitDate = viewModel.FieldVisitDate,
+                    VisitDate = viewModel.FieldVisitDate.ConvertTimeFromPSTToUTC(),
                     FieldVisitTypeID = fieldVisitType.FieldVisitTypeID,
                     InventoryUpdated = false, IsFieldVisitVerified = false
                 };
@@ -159,7 +159,7 @@ namespace Neptune.WebMvc.Controllers
                     TreatmentBMPID = treatmentBMP.TreatmentBMPID,
                     FieldVisitStatusID = FieldVisitStatus.InProgress.FieldVisitStatusID,
                     PerformedByPersonID = CurrentPerson.PersonID,
-                    VisitDate = viewModel.FieldVisitDate,
+                    VisitDate = viewModel.FieldVisitDate.ConvertTimeFromPSTToUTC(),
                     FieldVisitTypeID = fieldVisitType.FieldVisitTypeID,
                     InventoryUpdated = false,
                     IsFieldVisitVerified = false
@@ -200,7 +200,7 @@ namespace Neptune.WebMvc.Controllers
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             fieldVisit.FieldVisitTypeID = viewModel.FieldVisitTypeID;
-            fieldVisit.VisitDate = viewModel.FieldVisitDate;
+            fieldVisit.VisitDate = viewModel.FieldVisitDate.ConvertTimeFromPSTToUTC();
 
             await _dbContext.SaveChangesAsync();
 
