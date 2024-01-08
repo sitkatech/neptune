@@ -647,7 +647,7 @@ public class NereidService : BaseAPIService<NereidService>
                 WaterQualityManagementPlanID = x.WaterQualityManagementPlanID.Value,
                 RegionalSubbasinID = x.RegionalSubbasinID.Value,
                 OCSurveyCatchmentID = x.RegionalSubbasin.OCSurveyCatchmentID,
-                DateOfConstruction = x.WaterQualityManagementPlan.DateOfContruction
+                DateOfConstruction = x.WaterQualityManagementPlan.DateOfConstruction
             }).Distinct().ToList();
 
         if (projectID != null && projectRegionalSubbasinIDs != null)
@@ -659,7 +659,7 @@ public class NereidService : BaseAPIService<NereidService>
                     WaterQualityManagementPlanID = x.WaterQualityManagementPlanID.Value,
                     RegionalSubbasinID = x.RegionalSubbasinID.Value,
                     OCSurveyCatchmentID = x.RegionalSubbasin.OCSurveyCatchmentID,
-                    DateOfConstruction = x.WaterQualityManagementPlan.DateOfContruction
+                    DateOfConstruction = x.WaterQualityManagementPlan.DateOfConstruction
                 }).Distinct().ToList();
             wqmpns = wqmpns.Where(x => projectRegionalSubbasinIDs.Contains(x.RegionalSubbasinID)).ToList();
             wqmpns.AddRange(ppwqmpns);

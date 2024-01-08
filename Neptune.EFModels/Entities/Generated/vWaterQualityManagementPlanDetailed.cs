@@ -27,7 +27,7 @@ public partial class vWaterQualityManagementPlanDetailed
     public DateTime? ApprovalDate { get; set; }
 
     [Column(TypeName = "datetime")]
-    public DateTime? DateOfContruction { get; set; }
+    public DateTime? DateOfConstruction { get; set; }
 
     [StringLength(500)]
     [Unicode(false)]

@@ -11,7 +11,7 @@ as
 
 select	wqmp.WaterQualityManagementPlanID, wqmp.WaterQualityManagementPlanName, 
         wqmp.StormwaterJurisdictionID, o.OrganizationName as StormwaterJurisdictionName, sj.StormwaterJurisdictionPublicWQMPVisibilityTypeID,
-        wqmp.ApprovalDate, wqmp.DateOfContruction, wqmp.RecordNumber,
+        wqmp.ApprovalDate, wqmp.DateOfConstruction, wqmp.RecordNumber,
         wqmplu.WaterQualityManagementPlanLandUseID, wqmplu.WaterQualityManagementPlanLandUseDisplayName,
         wqmppr.WaterQualityManagementPlanPriorityID, wqmppr.WaterQualityManagementPlanPriorityDisplayName,
         wqmps.WaterQualityManagementPlanStatusID, wqmps.WaterQualityManagementPlanStatusDisplayName,

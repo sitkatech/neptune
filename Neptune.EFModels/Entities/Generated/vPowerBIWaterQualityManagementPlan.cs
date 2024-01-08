@@ -9,8 +9,6 @@ namespace Neptune.EFModels.Entities;
 [Keyless]
 public partial class vPowerBIWaterQualityManagementPlan
 {
-    public int PrimaryKey { get; set; }
-
     public int WaterQualityManagementPlanID { get; set; }
 
     [StringLength(100)]

@@ -25,7 +25,7 @@ namespace Neptune.Models.DataTransferObjects
         public string MaintenanceContactZip { get; set; }
         public int? WaterQualityManagementPlanPermitTermID { get; set; }
         public int? HydromodificationAppliesTypeID { get; set; }
-        public DateTime? DateOfContruction { get; set; }
+        public DateTime? DateOfConstruction { get; set; }
         public int? HydrologicSubareaID { get; set; }
         public string RecordNumber { get; set; }
         public decimal? RecordedWQMPAreaInAcres { get; set; }

@@ -122,7 +122,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             MaintenanceContactState = waterQualityManagementPlan.MaintenanceContactState;
             MaintenanceContactZip = waterQualityManagementPlan.MaintenanceContactZip;
             MaintenanceContactPhone = waterQualityManagementPlan.MaintenanceContactPhone;
-            DateOfConstruction = waterQualityManagementPlan.DateOfContruction;
+            DateOfConstruction = waterQualityManagementPlan.DateOfConstruction;
             HydromodificationAppliesTypeID = waterQualityManagementPlan.HydromodificationAppliesTypeID;
             WaterQualityManagementPlanPermitTermID = waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID;
             HydrologicSubareaID = waterQualityManagementPlan.HydrologicSubareaID;
@@ -153,7 +153,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             waterQualityManagementPlan.MaintenanceContactState = MaintenanceContactState;
             waterQualityManagementPlan.MaintenanceContactZip = MaintenanceContactZip;
             waterQualityManagementPlan.MaintenanceContactPhone = MaintenanceContactPhone;
-            waterQualityManagementPlan.DateOfContruction = DateOfConstruction;
+            waterQualityManagementPlan.DateOfConstruction = DateOfConstruction?.ConvertTimeFromPSTToUTC();
             waterQualityManagementPlan.HydromodificationAppliesTypeID = HydromodificationAppliesTypeID;
             waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID = WaterQualityManagementPlanPermitTermID;
             waterQualityManagementPlan.HydrologicSubareaID = HydrologicSubareaID;

@@ -67,7 +67,7 @@ public partial class WaterQualityManagementPlan
     public int? HydromodificationAppliesTypeID { get; set; }
 
     [Column(TypeName = "datetime")]
-    public DateTime? DateOfContruction { get; set; }
+    public DateTime? DateOfConstruction { get; set; }
 
     public int? HydrologicSubareaID { get; set; }
 

@@ -1,7 +1,6 @@
 Create view dbo.vPowerBIWaterQualityManagementPlan
 as
 select 
-wqmp.WaterQualityManagementPlanID as PrimaryKey,
 wqmp.WaterQualityManagementPlanID,
 wqmp.WaterQualityManagementPlanName,
 o.OrganizationName,
@@ -10,7 +9,7 @@ devel.WaterQualityManagementPlanDevelopmentTypeDisplayName,
 land.WaterQualityManagementPlanLandUseDisplayName,
 term.WaterQualityManagementPlanPermitTermDisplayName,
 DATEDIFF(second, {d '1970-01-01'}, wqmp.ApprovalDate) as ApprovalDate,
-DATEDIFF(second, {d '1970-01-01'}, wqmp.DateOfContruction) as DateOfConstruction,
+DATEDIFF(second, {d '1970-01-01'}, wqmp.DateOfConstruction) as DateOfConstruction,
 hydromod.HydromodificationAppliesTypeDisplayName as HydromodificationAppliesDisplayName,
 hydrosub.HydrologicSubareaName,
 wqmp.RecordedWQMPAreaInAcres,

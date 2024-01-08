@@ -17,7 +17,7 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[MaintenanceContactZip] [varchar](100) NULL,
 	[WaterQualityManagementPlanPermitTermID] [int] NULL CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanPermitTerm_WaterQualityManagementPlanPermitTermID] FOREIGN KEY REFERENCES [dbo].[WaterQualityManagementPlanPermitTerm] ([WaterQualityManagementPlanPermitTermID]),
 	[HydromodificationAppliesTypeID] [int] NULL CONSTRAINT [FK_WaterQualityManagementPlan_HydromodificationAppliesType_HydromodificationAppliesTypeID] FOREIGN KEY REFERENCES [dbo].[HydromodificationAppliesType] ([HydromodificationAppliesTypeID]),
-	[DateOfContruction] [datetime] NULL,
+	[DateOfConstruction] [datetime] NULL,
 	[HydrologicSubareaID] [int] NULL CONSTRAINT [FK_WaterQualityManagementPlan_HydrologicSubarea_HydrologicSubareaID] FOREIGN KEY REFERENCES [dbo].[HydrologicSubarea] ([HydrologicSubareaID]),
 	[RecordNumber] [varchar](500) NULL,
 	[RecordedWQMPAreaInAcres] [decimal](5, 1) NULL,

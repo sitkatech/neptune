@@ -31,7 +31,7 @@ namespace Neptune.EFModels.Entities
                 MaintenanceContactZip = waterQualityManagementPlan.MaintenanceContactZip,
                 WaterQualityManagementPlanPermitTermID = waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID,
                 HydromodificationAppliesTypeID = waterQualityManagementPlan.HydromodificationAppliesTypeID,
-                DateOfContruction = waterQualityManagementPlan.DateOfContruction,
+                DateOfConstruction = waterQualityManagementPlan.DateOfConstruction,
                 HydrologicSubareaID = waterQualityManagementPlan.HydrologicSubareaID,
                 RecordNumber = waterQualityManagementPlan.RecordNumber,
                 RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres,
