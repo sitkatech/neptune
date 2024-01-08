@@ -45,13 +45,13 @@
                 {{getLabelText()}}
 
                 <ng-container *ngIf="!isEditing else isEditingTemplate">
-                    <i class="fas fa-question-circle small" style="cursor: help;" #p="ngbPopover" [ngbPopover]="popContent"
+                    <i class="fas fa-question-circle small" style="cursor: help;" [placement]="['bottom','right','left','auto']" #p="ngbPopover" [ngbPopover]="popContent"
                         [popoverTitle]="popTitle" [autoClose]="'outside'"
                         popoverClass="popover-override" container="body" [ngClass]="{'text-white': white}">
                     </i>
                 </ng-container>
                 <ng-template #isEditingTemplate>
-                    <i class="fas fa-question-circle small" style="cursor: help;" #editingPopover="ngbPopover" [ngbPopover]="popContent"
+                    <i class="fas fa-question-circle small" style="cursor: help;" [placement]="['bottom','right','left','auto']" #editingPopover="ngbPopover" [ngbPopover]="popContent"
                         [popoverTitle]="popTitle" [autoClose]="false"
                         popoverClass="popover-override" container="body" [ngClass]="{'text-white': white}">
                     </i>
@@ -62,7 +62,7 @@
     <ng-container *ngIf="!showEditButton()">
         <span> 
             {{getLabelText()}}
-            <i class="fas fa-question-circle small" style="cursor: help;" [ngbPopover]="popContent"  popoverClass="popover-override"
+            <i class="fas fa-question-circle small" style="cursor: help;" [ngbPopover]="popContent" popoverClass="popover-override"
                 [popoverTitle]="fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName"
                 container="body" [ngClass]="{'text-white': white}">
             </i>
