@@ -858,23 +858,22 @@ namespace Neptune.WebMvc.Controllers
         [NeptuneAdminFeature]
         public async Task<IActionResult> UploadWqmps(UploadWqmpsViewModel viewModel)
         {
-            //todo: bulk upload wqmps
-            //var uploadedCSVFile = viewModel.UploadCSV;
-            //var wqmps = WQMPCsvParserHelper.CSVUpload(uploadedCSVFile.InputStream, out var errorList);
+            var uploadedCSVFile = viewModel.UploadCSV;
+            var wqmps = WQMPCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), out var errorList);
 
-            //if (errorList.Any())
-            //{
-            //    return ViewUploadWqmps(viewModel, errorList);
-            //}
+            if (errorList.Any())
+            {
+                return ViewUploadWqmps(viewModel, errorList);
+            }
 
-            //var wqmpsAdded = wqmps.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
-            //var wqmpsUpdated = wqmps.Where(x => ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
+            var wqmpsAdded = wqmps.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
+            var wqmpsUpdated = wqmps.Where(x => ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
 
-            //_dbContext.WaterQualityManagementPlans.AddRange(wqmpsAdded);
-            //await _dbContext.SaveChangesAsync();
+            await _dbContext.WaterQualityManagementPlans.AddRangeAsync(wqmpsAdded);
+            await _dbContext.SaveChangesAsync();
 
-            //var message = $"Upload Successful: {wqmpsAdded.Count} records added, {wqmpsUpdated.Count} records updated!";
-            //SetMessageForDisplay(message);
+            var message = $"Upload Successful: {wqmpsAdded.Count} records added, {wqmpsUpdated.Count} records updated!";
+            SetMessageForDisplay(message);
             return new RedirectResult(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
         }
 

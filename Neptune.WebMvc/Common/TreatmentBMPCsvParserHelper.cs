@@ -65,8 +65,8 @@ namespace Neptune.WebMvc.Common
 
             // if the fields don't match throw an exception
             var rowCount = 1;
-            var organizations = dbContext.Organizations.ToList();
-            var stormwaterJurisdictions = dbContext.StormwaterJurisdictions.ToList();
+            var organizations = dbContext.Organizations.AsNoTracking().ToList();
+            var stormwaterJurisdictions = StormwaterJurisdictions.List(dbContext).ToList();
             var treatmentBMPNamesInCsv = new List<string>();
             while (!parser.EndOfData)
             {

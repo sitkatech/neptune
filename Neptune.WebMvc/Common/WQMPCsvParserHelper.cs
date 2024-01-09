@@ -1,30 +1,27 @@
-﻿using Microsoft.VisualBasic.FileIO;
-using Neptune.Web.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic.FileIO;
+using Neptune.EFModels.Entities;
 
-namespace Neptune.Web.Common
+namespace Neptune.WebMvc.Common
 {
     public static class WQMPCsvParserHelper
     {
-        public static List<WaterQualityManagementPlan> CSVUpload(Stream fileStream,
+        public static List<WaterQualityManagementPlan> CSVUpload(NeptuneDbContext dbContext, Stream fileStream,
             out List<string> errorList)
         {
             var streamReader = new StreamReader(fileStream);
             var parser = new TextFieldParser(streamReader);
-            return ParseWqmpRowsFromCsv(parser, out errorList);
+            return ParseWqmpRowsFromCsv(dbContext, parser, out errorList);
         }
 
-        public static List<WaterQualityManagementPlan> CSVUpload(string fileStream, out List<string> errorList)
+        public static List<WaterQualityManagementPlan> CSVUpload(NeptuneDbContext dbContext, string fileStream, out List<string> errorList)
         {
             var stringReader = new StringReader(fileStream);
             var parser = new TextFieldParser(stringReader);
-            return ParseWqmpRowsFromCsv(parser, out errorList);
+            return ParseWqmpRowsFromCsv(dbContext, parser, out errorList);
         }
 
-        public static List<WaterQualityManagementPlan> ParseWqmpRowsFromCsv(TextFieldParser parser, out List<string> errorList)
+        public static List<WaterQualityManagementPlan> ParseWqmpRowsFromCsv(NeptuneDbContext dbContext, TextFieldParser parser, out List<string> errorList)
         {
             parser.SetDelimiters(",");
             errorList = new List<string>();
@@ -54,14 +51,14 @@ namespace Neptune.Web.Common
 
             // if the fields don't match throw an exception
             var rowCount = 1;
-            var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
+            var stormwaterJurisdictions = StormwaterJurisdictions.List(dbContext).ToList();
             var wqmpNamesInCsv = new List<string>();
-            var hydrologicSubareas = HttpRequestStorage.DatabaseEntities.HydrologicSubareas.ToList();
+            var hydrologicSubareas = dbContext.HydrologicSubareas.AsNoTracking().ToList();
             while (!parser.EndOfData)
             {
                 var currentRow = parser.ReadFields();
 
-                var currentWQMP = ParseRequiredAndOptionalFieldsAndCreateWQMP(currentRow, fieldsDict, rowCount, out var currentErrorList, stormwaterJurisdictions, wqmpNamesInCsv, hydrologicSubareas);
+                var currentWQMP = ParseRequiredAndOptionalFieldsAndCreateWQMP(dbContext, currentRow, fieldsDict, rowCount, out var currentErrorList, stormwaterJurisdictions, wqmpNamesInCsv, hydrologicSubareas);
                 if (currentWQMP != null)
                 {
                     wqmpsToUpload.Add(currentWQMP);
@@ -75,7 +72,7 @@ namespace Neptune.Web.Common
             return wqmpsToUpload;
         }
 
-        private static WaterQualityManagementPlan ParseRequiredAndOptionalFieldsAndCreateWQMP(string[] row,
+        private static WaterQualityManagementPlan ParseRequiredAndOptionalFieldsAndCreateWQMP(NeptuneDbContext dbContext, string[] row,
             Dictionary<string, int> fieldsDict, int rowNumber, out List<string> errorList,
             List<StormwaterJurisdiction> stormwaterJurisdictions, List<string> wqmpNamesInCsv, List<HydrologicSubarea> hydrologicSubareas)
         {
@@ -100,15 +97,18 @@ namespace Neptune.Web.Common
                 wqmpNamesInCsv.Add(wqmpName);
             }
 
-            var wqmp = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.SingleOrDefault(x =>
+            var wqmp = dbContext.WaterQualityManagementPlans.SingleOrDefault(x =>
                 x.WaterQualityManagementPlanName == wqmpName &&
                 x.StormwaterJurisdictionID == stormwaterJurisdictionID.Value);
 
             if (wqmp == null)
             {
-                wqmp = new WaterQualityManagementPlan(stormwaterJurisdictionID.Value, wqmpName,
-                    default, (int)WaterQualityManagementPlanModelingApproachEnum.Detailed
-                );
+                wqmp = new WaterQualityManagementPlan
+                {
+                    StormwaterJurisdictionID = stormwaterJurisdictionID.Value,
+                    WaterQualityManagementPlanName = wqmpName,
+                    WaterQualityManagementPlanModelingApproachID = (int)WaterQualityManagementPlanModelingApproachEnum.Detailed
+                };
             }
 
             var landUseID = FindLookupValue(row, fieldsDict, "Land Use", rowNumber, errorList, WaterQualityManagementPlanLandUse.All,
@@ -248,7 +248,7 @@ namespace Neptune.Web.Common
                 }
                 else
                 {
-                    wqmp.DateOfContruction = constructionDateParsed;
+                    wqmp.DateOfConstruction = constructionDateParsed;
                 }
             }
 
