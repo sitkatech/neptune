@@ -84,6 +84,7 @@ namespace Neptune.WebMvc.Controllers
             return RazorView<Views.Home.Index, IndexViewData>(viewData);
         }
 
+        [HttpGet]
         public ViewResult Error()
         {
             var errorMessage = "Oops, an error has occurred!";
@@ -120,7 +121,7 @@ namespace Neptune.WebMvc.Controllers
             }
         }
 
-
+        [HttpGet]
         public ViewResult NotFound()
         {
             var viewData = new NotFoundViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson);

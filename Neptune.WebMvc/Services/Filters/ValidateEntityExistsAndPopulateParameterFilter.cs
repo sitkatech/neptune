@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Neptune.Common;
 using Neptune.EFModels.Entities;
 
 namespace Neptune.WebMvc.Services.Filters
@@ -36,8 +37,7 @@ namespace Neptune.WebMvc.Services.Filters
                 var entityType = baseType.GenericTypeArguments.First();
                 if (!parameterIsInt)
                 {
-                    context.Result = new NotFoundObjectResult($"Could not find a {entityType.Name} with the ID {idParameter}.");
-                    return;
+                    throw new SitkaRecordNotFoundException($"Could not find a {entityType.Name} with the ID {idParameter}.");
                 }
 
                 dynamic entity;
@@ -47,9 +47,14 @@ namespace Neptune.WebMvc.Services.Filters
                 }
                 catch
                 {
-                    context.Result = new NotFoundObjectResult($"Could not find a {entityType.Name} with the ID {idParameter}.");
-                    return;
+                    throw new SitkaRecordNotFoundException($"Could not find a {entityType.Name} with the ID {idParameter}.");
                 }
+
+                if (entity == null)
+                {
+                    throw new SitkaRecordNotFoundException($"Could not find a {entityType.Name} with the ID {idParameter}.");
+                }
+
                 var param = context.ActionDescriptor.Parameters.FirstOrDefault(x => x is ControllerParameterDescriptor descriptor && descriptor.ParameterType == primaryKeyType);
                 if (param != null)
                 {
