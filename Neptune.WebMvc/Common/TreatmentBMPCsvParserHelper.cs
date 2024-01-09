@@ -1,12 +1,11 @@
 ﻿using Microsoft.VisualBasic.FileIO;
-using Newtonsoft.Json;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common.Models;
 using NetTopologySuite.Geometries;
-using Neptune.WebMvc.Models;
 
 namespace Neptune.WebMvc.Common
 {
@@ -126,7 +125,7 @@ namespace Neptune.WebMvc.Common
                 treatmentBMPNamesInCsv.Add(treatmentBMPName);
             }
 
-            var treatmentBMP = dbContext.TreatmentBMPs.SingleOrDefault(x =>
+            var treatmentBMP = dbContext.TreatmentBMPs.Include(x => x.TreatmentBMPType).SingleOrDefault(x =>
                 x.TreatmentBMPName == treatmentBMPName &&
                 x.StormwaterJurisdictionID == stormwaterJurisdictionID.Value);
             if (treatmentBMP != null)
@@ -437,11 +436,11 @@ namespace Neptune.WebMvc.Common
 
                     var customAttributeTypeAcceptableValues =
                         customAttributeType.CustomAttributeTypeOptionsSchema != null
-                            ? JsonConvert.DeserializeObject<List<string>>(
+                            ? System.Text.Json.JsonSerializer.Deserialize<List<string>>(
                                 customAttributeType.CustomAttributeTypeOptionsSchema)
                             : null;
 
-                    if (String.IsNullOrEmpty(value))
+                    if (string.IsNullOrEmpty(value))
                     {
                         //Don't do anything with an empty value if we're updating, but add it if we're new
                         if (isNew)
@@ -707,11 +706,11 @@ namespace Neptune.WebMvc.Common
             }
             else if (fieldDefinition == FieldDefinitionType.DrawdownTimeForWQDetentionVolume.FieldDefinitionTypeDisplayName)
             {
-                returnVal = "DrawdownTimeforWQDetentionVolume";
+                returnVal = "DrawdownTimeForWQDetentionVolume";
             }
             else if (fieldDefinition == FieldDefinitionType.PermanentPoolOrWetlandVolume.FieldDefinitionTypeDisplayName)
             {
-                returnVal = "PermanentPoolorWetlandVolume";
+                returnVal = "PermanentPoolOrWetlandVolume";
             }
             else if (fieldDefinition == FieldDefinitionType.TimeOfConcentrationID.FieldDefinitionTypeDisplayName)
             {
