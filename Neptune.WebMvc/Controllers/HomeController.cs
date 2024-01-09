@@ -122,13 +122,6 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        public ViewResult NotFound()
-        {
-            var viewData = new NotFoundViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson);
-            return RazorView<NotFound, NotFoundViewData>(viewData);
-        }
-
-        [HttpGet]
         public ViewResult ViewPageContent(NeptunePageTypeEnum neptunePageTypeEnum)
         {
             var neptunePageType = NeptunePageType.ToType(neptunePageTypeEnum);

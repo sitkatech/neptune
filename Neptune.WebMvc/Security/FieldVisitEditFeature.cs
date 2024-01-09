@@ -27,8 +27,6 @@ namespace Neptune.WebMvc.Security
     [SecurityFeatureDescription("Allows conducting and editing Field Visits for a BMP if you are assigned to edit that BMP's jurisdiction")]
     public class FieldVisitEditFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<FieldVisit>
     {
-        public string FeatureName { get; }
-
         private readonly NeptuneFeatureWithContextImpl<FieldVisit> _lakeTahoeInfoFeatureWithContextImpl;
 
         public FieldVisitEditFeature()

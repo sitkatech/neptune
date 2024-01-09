@@ -6,10 +6,8 @@ public class WebConfiguration : NeptuneJobConfiguration
 {
     public string DatabaseConnectionString { get; set; }
 
-    public string KeystoneUrl { get; set; }
-    public string KeystoneRegisterUrl { get; set; }
+    public string KeystoneRegisterUrl => $"{KeystoneOpenIDUrl}/Account/Register";
     public string KeystoneInviteUserUrl { get; set; }
-    public string KeystoneUserProfileUrl { get; set; }
     public string KeystoneOpenIDClientID { get; set; }
     public string KeystoneOpenIDUrl { get; set; }
     public string KeystoneOpenIDClientSecret { get; set; }

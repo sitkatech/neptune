@@ -23,7 +23,6 @@ using System.Globalization;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.User;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.Common.DesignByContract;
 using Neptune.Common.Mvc;
@@ -34,6 +33,7 @@ using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Services.Filters;
 using Neptune.WebMvc.Views.Shared;
 using Neptune.WebMvc.Views.Shared.UserJurisdictions;
+using System.Web;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -47,7 +47,8 @@ namespace Neptune.WebMvc.Controllers
         [UserEditFeature]
         public ViewResult Index()
         {
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson);
+            var keystoneRegisterUserUrl = $"{_webConfiguration.KeystoneRegisterUrl}?ClientID={_webConfiguration.KeystoneOpenIDClientID}&RedirectUrl={HttpUtility.UrlEncode(SitkaRoute<AccountController>.BuildUrlFromExpression(_linkGenerator, x => x.Login()))}";
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, keystoneRegisterUserUrl);
             return RazorView<Views.User.Index, IndexViewData>(viewData);
         }
 
