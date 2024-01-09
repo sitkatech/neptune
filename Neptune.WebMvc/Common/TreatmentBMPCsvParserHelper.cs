@@ -424,9 +424,9 @@ namespace Neptune.WebMvc.Common
                             .TreatmentBMPTypeCustomAttributeTypeID) ?? new CustomAttribute()
                     {
                         TreatmentBMP = treatmentBMP,
-                        TreatmentBMPTypeCustomAttributeType = treatmentBMPTypeCustomAttributeType,
-                        TreatmentBMPType = treatmentBMPTypeCustomAttributeType.TreatmentBMPType,
-                        CustomAttributeType = treatmentBMPTypeCustomAttributeType.CustomAttributeType
+                        TreatmentBMPTypeCustomAttributeTypeID = treatmentBMPTypeCustomAttributeType.TreatmentBMPTypeCustomAttributeTypeID,
+                        TreatmentBMPTypeID = treatmentBMPTypeCustomAttributeType.TreatmentBMPTypeID,
+                        CustomAttributeTypeID = treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID
                     };
                 if (fieldsDict.ContainsKey(customAttributeType.CustomAttributeTypeName))
                 {
@@ -446,7 +446,7 @@ namespace Neptune.WebMvc.Common
                         if (isNew)
                         {
                             customAttributeValues.Add(new CustomAttributeValue
-                                { CustomAttributeID = customAttribute.CustomAttributeID, AttributeValue = value });
+                                { CustomAttribute = customAttribute, AttributeValue = value });
                         }
                     }
                     else if (!ValidateCustomAttributeValueEntry(
@@ -471,13 +471,15 @@ namespace Neptune.WebMvc.Common
                         if (customAttributeType.CustomAttributeDataType == CustomAttributeDataType.MultiSelect)
                         {
                             var attributeValues = value.Split(new[] {','}).Select(x => x.Trim()).Select(x =>
-                                new CustomAttributeValue { CustomAttributeID = customAttribute.CustomAttributeID, AttributeValue = x });
+                                new CustomAttributeValue { CustomAttribute = customAttribute, AttributeValue = x });
                             customAttributeValues.AddRange(attributeValues);
                         }
                         else
                         {
                             customAttributeValues.Add(new CustomAttributeValue
-                                { CustomAttributeID = customAttribute.CustomAttributeID, AttributeValue = value });
+                            {
+                                CustomAttribute = customAttribute, AttributeValue = value
+                            });
                         }
                     }
                 }
