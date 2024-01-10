@@ -85,12 +85,4 @@ public static class StormwaterJurisdictionPeople
             .ThenInclude(x => x.Organization)
             .AsNoTracking().Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID).ToList();
     }
-
-    public static List<StormwaterJurisdictionPerson> ListByPersonID(NeptuneDbContext dbContext, int personID)
-    {
-        return dbContext.StormwaterJurisdictionPeople
-            .Include(x => x.StormwaterJurisdiction)
-            .ThenInclude(x => x.Organization)
-            .AsNoTracking().Where(x => x.PersonID == personID).ToList();
-    }
 }

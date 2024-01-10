@@ -90,9 +90,4 @@ public static class StormwaterJurisdictions
         var stormwaterJurisdictionIDsViewable  = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForWQMPs(dbContext, person);
         return GetImpl(dbContext).AsNoTracking().Where(x => stormwaterJurisdictionIDsViewable.Contains(x.StormwaterJurisdictionID)).ToList();
     }
-
-    public static List<StormwaterJurisdiction> ListAssignedForPerson(NeptuneDbContext dbContext, Person person)
-    {
-        return StormwaterJurisdictionPeople.ListByPersonID(dbContext, person.PersonID).Select(x => x.StormwaterJurisdiction).ToList();
-    }
 }

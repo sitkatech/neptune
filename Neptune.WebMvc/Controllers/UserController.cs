@@ -266,7 +266,7 @@ namespace Neptune.WebMvc.Controllers
         private PartialViewResult ViewEditJurisdiction(EditUserJurisdictionsViewModel viewModel)
         {
             var allStormwaterJurisdictions = StormwaterJurisdictions.List(_dbContext);
-            var stormwaterJurisdictionsCurrentPersonCanManage = StormwaterJurisdictions.ListAssignedForPerson(_dbContext, CurrentPerson);
+            var stormwaterJurisdictionsCurrentPersonCanManage = StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson);
             var viewData = new EditUserJurisdictionsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage, true);
             return RazorPartialView<EditUserJurisdictions, EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>(viewData, viewModel);
         }
