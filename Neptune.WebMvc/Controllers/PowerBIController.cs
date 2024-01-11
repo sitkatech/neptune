@@ -1,11 +1,11 @@
 ﻿using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Models;
+using Neptune.Common.GeoSpatial;
+using System.Text.Json.Nodes;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -15,7 +15,7 @@ namespace Neptune.WebMvc.Controllers
         {
         }
 
-        [HttpGet]
+        [HttpGet("{webServiceToken}")]
         [WebServiceNameAndDescription("Treatment Facility Parameterization",
                                             "This table can be joined to the ‘Treatment Facility Attributes’ table to indicate " +
                                             "if a facility is fully parameterized and ready to be computed in the Modeling Module. The BMP " +
@@ -38,14 +38,11 @@ namespace Neptune.WebMvc.Controllers
                     };
                 });
 
-            return new JsonResult(new {
-                Data = data,
-                MaxJsonLength = int.MaxValue
-            });
+            return Json(data);
         }
 
 
-        [HttpGet]
+        [HttpGet("{webServiceToken}")]
         [WebServiceNameAndDescriptionAttribute("Treatment Facility Attributes, Centralized BMP Attributes",
                                 "This table contains the Modeling Attributes that have been entered for each Facility. Each row is a single facility and" +
                                           " its physical attributes. Null values for a modeling parameter in this table does not necessarily indicate that the BMP is missing data. " +
@@ -101,13 +98,10 @@ namespace Neptune.WebMvc.Controllers
                 WinterHarvestedWaterDemand = x.WinterHarvestedWaterDemand
             });
 
-            return new JsonResult(new {
-                Data = data,
-                MaxJsonLength = int.MaxValue
-            });
+            return Json(data);
         }
 
-        [HttpGet]
+        [HttpGet("{webServiceToken}")]
         [WebServiceNameAndDescriptionAttribute("WQMP Attributes",
                                                 "This table includes summary attributes of WQMP sites helpful for filtering and " +
                                                 "reporting, and each row is a single WQMP project site. Additional summary attributes may " +
@@ -140,9 +134,9 @@ namespace Neptune.WebMvc.Controllers
             return Json(data);
         }
 
-        [HttpGet]
+        [HttpGet("{webServiceToken}")]
         [WebServiceNameAndDescriptionAttribute("Water Quality Management Plan O&M Verifications", "An inventory of O&M Verification visits for Water Quality Management Plans (WQMPs)")]
-        public ActionResult WaterQualityManagementPlanOAndMVerifications([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
+        public JsonResult WaterQualityManagementPlanOAndMVerifications([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var data = _dbContext.vPowerBIWaterQualityManagementPlanOAndMVerifications.ToList().Select(x => new
                 {
@@ -163,11 +157,11 @@ namespace Neptune.WebMvc.Controllers
             //JsonResult serializes ampersands to be their unicode values because it uses JavascriptSerializer
             //JsonConvert does not
             //Returning this way to protect the MANY ampersands we encounter in this particular method
-            return Content(JsonConvert.SerializeObject(data), "application/json");
+            return Json(data);
         }
 
 
-        [HttpGet]
+        [HttpGet("{webServiceToken}")]
         [WebServiceNameAndDescriptionAttribute("Land Use",
                                                 "This table is the result of a spatial overlay analysis (union) between the Regional " +
                                                 "Subbasins managed by OC Survey, WQMP project boundaries entered into OCST, and distributed " +
@@ -183,15 +177,10 @@ namespace Neptune.WebMvc.Controllers
         public JsonResult LandUseStatistics([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var data = _dbContext.vPowerBILandUseStatistics.ToList();
-
-
-            return new JsonResult(new {
-                Data = data,
-                MaxJsonLength = int.MaxValue
-            });
+            return Json(data);
         }
 
-        [HttpGet]
+        [HttpGet("{webServiceToken}")]
         [WebServiceNameAndDescriptionAttribute("Centralized BMP Land Use Relationship",
                                                 "This table is a utility table to enable upstream summary reporting of " +
                                                 "centralized facilities. Centralized facilities are a special case, since the area " +
@@ -209,20 +198,17 @@ namespace Neptune.WebMvc.Controllers
                 x.TreatmentBMPID
             });
 
-            return new JsonResult(new {
-                Data = data,
-                MaxJsonLength = int.MaxValue
-            });
+            return Json(data);
         }
 
-        [HttpGet]
+        [HttpGet("{webServiceToken}")]
         [WebServiceNameAndDescriptionAttribute("Model Results", "Returns all pollutant runoff/reduction model results for all nodes in South Orange County.")]
-        public ContentResult ModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
+        public JsonResult ModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var jobjects = _dbContext.NereidResults.Where(x=> !x.IsBaselineCondition).ToList()
                 .Select(x =>
                 {
-                    var jobject = JObject.Parse(x.FullResponse);
+                    var jobject = GeoJsonSerializer.Deserialize<JsonObject>(x.FullResponse);
                     jobject["TreatmentBMPID"] = x.TreatmentBMPID;
                     jobject["WaterQualityManagementPlanID"] = x.WaterQualityManagementPlanID;
                     jobject["DelineationID"] = x.DelineationID;
@@ -230,17 +216,17 @@ namespace Neptune.WebMvc.Controllers
                     return jobject;
                 }).ToList();
 
-            return Content(new JArray(jobjects).ToString());
+            return Json(jobjects);
         }
 
-        [HttpGet]
+        [HttpGet("{webServiceToken}")]
         [WebServiceNameAndDescriptionAttribute("Baseline Model Results", "Returns all pollutant runoff/reduction model results for all nodes in South Orange County in the Baseline Condition.")]
-        public ContentResult BaselineModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
+        public JsonResult BaselineModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var jobjects = _dbContext.NereidResults.Where(x=> x.IsBaselineCondition).ToList()
                 .Select(x =>
                 {
-                    var jobject = JObject.Parse(x.FullResponse);
+                    var jobject = GeoJsonSerializer.Deserialize<JsonObject>(x.FullResponse);
                     jobject["TreatmentBMPID"] = x.TreatmentBMPID;
                     jobject["WaterQualityManagementPlanID"] = x.WaterQualityManagementPlanID;
                     jobject["DelineationID"] = x.DelineationID;
@@ -248,7 +234,7 @@ namespace Neptune.WebMvc.Controllers
                     return jobject;
                 }).ToList();
 
-            return Content(new JArray(jobjects).ToString());
+            return Json(jobjects);
         }
     }
 
