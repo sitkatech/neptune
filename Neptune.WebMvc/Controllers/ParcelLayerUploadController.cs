@@ -10,6 +10,10 @@ using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Views.ParcelLayerUpload;
 using Neptune.Common.Services.GDAL;
+using Neptune.WebMvc.Services;
+using Neptune.Common;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO.Converters;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -17,12 +21,14 @@ namespace Neptune.WebMvc.Controllers
     {
         private readonly SitkaSmtpClientService _sitkaSmtpClient;
         private readonly GDALAPIService _gdalApiService;
+        private readonly AzureBlobStorageService _azureBlobStorageService;
         private const int ToleranceInSquareMeters = 200;
 
-        public ParcelLayerUploadController(NeptuneDbContext dbContext, ILogger<ParcelLayerUploadController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService, GDALAPIService gdalApiService) : base(dbContext, logger, linkGenerator, webConfiguration)
+        public ParcelLayerUploadController(NeptuneDbContext dbContext, ILogger<ParcelLayerUploadController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService, GDALAPIService gdalApiService, AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
             _sitkaSmtpClient = sitkaSmtpClientService;
             _gdalApiService = gdalApiService;
+            _azureBlobStorageService = azureBlobStorageService;
         }
 
         [HttpGet]
@@ -35,10 +41,13 @@ namespace Neptune.WebMvc.Controllers
 
         [HttpPost]
         [NeptuneAdminFeature]
+        [RequestSizeLimit(100_000_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<IActionResult> UpdateParcelLayerGeometry(UploadParcelLayerViewModel viewModel)
         {
             var file = viewModel.FileResourceData;
-            await _dbContext.Database.ExecuteSqlRawAsync("dbo.pParcelStagingDelete");
+            var blobName = Guid.NewGuid().ToString();
+            await _azureBlobStorageService.UploadToBlobStorage(await FileStreamHelpers.StreamToBytes(file), blobName, ".gdb");
             var featureClassNames = await _gdalApiService.OgrInfoGdbToFeatureClassInfo(file);
 
             if (featureClassNames.Count == 0)
@@ -69,8 +78,9 @@ namespace Neptune.WebMvc.Controllers
 
                 var apiRequest = new GdbToGeoJsonRequestDto()
                 {
-                    File = file,
-                    GdbLayerOutputs = new List<GdbLayerOutput>
+                    BlobContainer = AzureBlobStorageService.BlobContainerName,
+                    CanonicalName = blobName,
+                    GdbLayerOutputs = new()
                     {
                         new()
                         {
@@ -78,16 +88,19 @@ namespace Neptune.WebMvc.Controllers
                             FeatureLayerName = featureClassNames.Single().LayerName,
                             NumberOfSignificantDigits = 4,
                             Filter = "WHERE AssessmentNo is not null",
-                            CoordinateSystemID = Proj4NetHelper.WEB_MERCATOR,
+                            CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
+                            Extent = null
                         }
                     }
                 };
                 var geoJson = await _gdalApiService.Ogr2OgrGdbToGeoJson(apiRequest);
-                var parcelStagings = await GeoJsonSerializer.DeserializeFromFeatureCollection<ParcelStaging>(geoJson,
+                var parcelStagings = await GeoJsonSerializer.DeserializeFromFeatureCollectionWithCCWCheck<ParcelStaging>(geoJson,
                     GeoJsonSerializer.DefaultSerializerOptions);
-                if (parcelStagings.Any())
+                var validParcelStagings = parcelStagings.Where(x => x.Geometry is { IsValid: true, Area: > 0 }).ToList();
+                if (validParcelStagings.Any())
                 {
-                    await _dbContext.ParcelStagings.AddRangeAsync(parcelStagings);
+                    await _dbContext.Database.ExecuteSqlRawAsync("dbo.pParcelStagingDelete");
+                    _dbContext.ParcelStagings.AddRange(validParcelStagings);
                     await _dbContext.SaveChangesAsync();
                 }
             }
@@ -96,13 +109,13 @@ namespace Neptune.WebMvc.Controllers
                 if (e.Message.Contains("Unrecognized field name",
                         StringComparison.InvariantCultureIgnoreCase))
                 {
-                    ModelState.AddModelError("FileResourceData",
+                    ModelState.AddModelError("",
                         "The columns in the uploaded file did not match the Parcel schema. The file is invalid and cannot be uploaded.");
                 }
                 else
                 {
-                    ModelState.AddModelError("FileResourceData",
-                        $"There was a problem processing the Feature Class \"{featureClassNames[0]}\". The file may be corrupted or invalid.");
+                    ModelState.AddModelError("",
+                        $"There was a problem processing the Feature Class \"{featureClassNames[0].LayerName}\". The file may be corrupted or invalid.");
                 }
                 return ViewUpdateParcelLayerGeometry(viewModel);
             }
@@ -190,7 +203,7 @@ namespace Neptune.WebMvc.Controllers
         {
             var newGisUploadUrl = SitkaRoute<ParcelLayerUploadController>.BuildUrlFromExpression(_linkGenerator, c => c.UpdateParcelLayerGeometry());
 
-            var viewData = new UploadParcelLayerViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, newGisUploadUrl);
+            var viewData = new UploadParcelLayerViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson);
             return RazorView<UploadParcelLayer, UploadParcelLayerViewData, UploadParcelLayerViewModel>(viewData, viewModel);
         }
     }

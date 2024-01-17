@@ -46,26 +46,10 @@ namespace Neptune.Common.Services.GDAL
             return gdbZip;
         }
 
-        public async Task<List<string>> Ogr2OgrGdbToGeoJsonList(GdbToGeoJsonRequestDto geoJsonRequestToGdbDto)
-        {
-            var requestContent = geoJsonRequestToGdbDto.ToMultipartFormDataContent();
-            _logger.LogInformation("Sending request to GDAL API");
-            var response = await _httpClient.PostAsync("/ogr2ogr/gdb-geojson-list", requestContent);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadFromJsonAsync<List<string>>();
-                return result;
-            }
-            else
-            {
-                throw new Exception($"Ogr2OgrGdbToGeoJsonList request failed: {response.Content}");
-            }
-        }
         public async Task<byte[]> Ogr2OgrGdbToGeoJson(GdbToGeoJsonRequestDto geoJsonRequestToGdbDto)
         {
-            var requestContent = geoJsonRequestToGdbDto.ToMultipartFormDataContent();
             _logger.LogInformation("Sending request to GDAL API");
-            var response = await _httpClient.PostAsync("/ogr2ogr/gdb-geojson", requestContent);
+            var response = await _httpClient.PostAsJsonAsync("/ogr2ogr/gdb-geojson", geoJsonRequestToGdbDto);
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsByteArrayAsync();
@@ -87,7 +71,6 @@ namespace Neptune.Common.Services.GDAL
 
             var form = new MultipartFormDataContent();
             form.Add(byteContent, "file", formFile.FileName);
-
 
             _logger.LogInformation("Sending request to GDAL API");
 

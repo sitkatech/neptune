@@ -103,11 +103,11 @@ namespace Neptune.Jobs.Hangfire
                         {
                             landUseBlock.StormwaterJurisdictionID = stormwaterJurisdictionIDToAssign.StormwaterJurisdictionID;
 
-                            if (landUseBlockStaging.LandUseBlockStagingGeometry == null)
+                            if (landUseBlockStaging.Geometry == null)
                             {
                                 errorList.Add(
                                     $"The Land Use Block Geometry at row {count} is null. A value must be provided");
-                            } else if (!landUseBlockStaging.LandUseBlockStagingGeometry.IsValid)
+                            } else if (!landUseBlockStaging.Geometry.IsValid)
                             {
                                 errorList.Add(
                                     $"The Land Use Block Geometry at row {count} is invalid.");
@@ -115,7 +115,7 @@ namespace Neptune.Jobs.Hangfire
                             else
                             {
 
-                                var clippedGeometry = landUseBlockStaging.LandUseBlockStagingGeometry
+                                var clippedGeometry = landUseBlockStaging.Geometry
                                     .Intersection(stormwaterJurisdictionIDToAssign.StormwaterJurisdictionGeometry.GeometryNative);
 
                                 if (clippedGeometry == null || clippedGeometry.IsEmpty)

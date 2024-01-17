@@ -112,21 +112,10 @@ namespace Neptune.GDALAPI.Controllers
             _ogr2OgrService.Run(args);
         }
 
-        [HttpPost("ogr2ogr/gdb-geojson-list")]
-        [RequestSizeLimit(100_000_000_000)]
-        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
-        public async Task<ActionResult<List<string>>> GdbToGeoJsonList([FromForm] GdbToGeoJsonRequestDto requestDto)
-        {
-            using var disposableTempGdbZip = DisposableTempFile.MakeDisposableTempFileEndingIn(".gdb.zip");
-            await RetrieveGdbFromFileOrBlobStorage(requestDto, disposableTempGdbZip);
-            var result = requestDto.GdbLayerOutputs.Select(layerOutput => ExtractGeoJsonFromGdb(disposableTempGdbZip, layerOutput)).ToList();
-            return Ok(result);
-        }
-
         [HttpPost("ogr2ogr/gdb-geojson")]
         [RequestSizeLimit(100_000_000_000)]
         [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
-        public async Task<ActionResult<string>> GdbToGeoJson([FromForm] GdbToGeoJsonRequestDto requestDto)
+        public async Task<ActionResult<string>> GdbToGeoJson([FromBody] GdbToGeoJsonRequestDto requestDto)
         {
             if (requestDto.GdbLayerOutputs.Count != 1)
             {
@@ -159,18 +148,9 @@ namespace Neptune.GDALAPI.Controllers
         private async Task RetrieveGdbFromFileOrBlobStorage(GdbToGeoJsonRequestDto requestDto,
             DisposableTempFile disposableTempGdbZip)
         {
-            if (requestDto.File != null) // if there is a file uploaded, use that file
-            {
-                _logger.LogInformation($"Using GDB File Uploaded {requestDto.File.FileName}");
-                await using var fileStream = new FileStream(disposableTempGdbZip.FileInfo.FullName, FileMode.Create);
-                await requestDto.File.CopyToAsync(fileStream);
-            }
-            else // otherwise download from the blobcontainer the file with the canonical name
-            {
-                _logger.LogInformation($"Retrieving GDB File from blob storage: {requestDto.CanonicalName}");
-                await _azureStorage.DownloadToAsync(requestDto.BlobContainer, requestDto.CanonicalName,
-                    disposableTempGdbZip.FileInfo.FullName);
-            }
+            _logger.LogInformation($"Retrieving GDB File from blob storage: {requestDto.CanonicalName}");
+            await _azureStorage.DownloadToAsync(requestDto.BlobContainer, requestDto.CanonicalName,
+                disposableTempGdbZip.FileInfo.FullName);
         }
 
         private static void GdbFolderToZipFile(DirectoryInfo folderToZip, string desiredName, DisposableTempFile zipDestination)
@@ -264,14 +244,16 @@ namespace Neptune.GDALAPI.Controllers
             }
 
             // layer creation options: see https://gdal.org/drivers/vector/geojson.html
-            var layerCreationOptions = new List<string>()
-            {
-                "-lco",
-                "COORDINATE_PRECISION=3",
-                significantDigits.HasValue ? "SIGNIFICANT_FIGURES=" + significantDigits : null
-            };
+            //var layerCreationOptions = new List<string>()
+            //{
+            //    "-lco",
+            //    "COORDINATE_PRECISION=3",
+            //    significantDigits.HasValue ? "SIGNIFICANT_FIGURES=" + significantDigits : null
+            //};
 
-            return commandLineArguments.Where(x => x != null).Union(layerCreationOptions.Where(x => !string.IsNullOrWhiteSpace(x))).ToList();
+            return commandLineArguments.Where(x => x != null)
+                //.Union(layerCreationOptions.Where(x => !string.IsNullOrWhiteSpace(x)))
+                .ToList();
         }
 
         public static string GetMapProjection(int coordinateSystemId)

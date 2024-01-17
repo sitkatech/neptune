@@ -7,5 +7,5 @@ public class GdbLayerOutput
     public int NumberOfSignificantDigits { get; set; }
     public List<string> Columns { get; set; }
     public int CoordinateSystemID { get; set; }
-    public GdbExtent Extent { get; set; }
+    public GdbExtent? Extent { get; set; }
 }

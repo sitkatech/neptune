@@ -856,6 +856,8 @@ namespace Neptune.WebMvc.Controllers
         
         [HttpPost]
         [NeptuneAdminFeature]
+        [RequestSizeLimit(100_000_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<IActionResult> UploadWqmps(UploadWqmpsViewModel viewModel)
         {
             var uploadedCSVFile = viewModel.UploadCSV;

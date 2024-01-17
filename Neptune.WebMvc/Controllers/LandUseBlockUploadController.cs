@@ -24,6 +24,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Neptune.Common;
 using Neptune.Common.Email;
 using Neptune.Common.GeoSpatial;
 using Neptune.Common.Services.GDAL;
@@ -31,6 +32,7 @@ using Neptune.EFModels.Entities;
 using Neptune.Jobs.Hangfire;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Security;
+using Neptune.WebMvc.Services;
 using Neptune.WebMvc.Views.LandUseBlockUpload;
 
 namespace Neptune.WebMvc.Controllers
@@ -41,11 +43,13 @@ namespace Neptune.WebMvc.Controllers
     {
         private readonly SitkaSmtpClientService _sitkaSmtpClientService;
         private readonly GDALAPIService _gdalApiService;
+        private readonly AzureBlobStorageService _azureBlobStorageService;
 
-        public LandUseBlockUploadController(NeptuneDbContext dbContext, ILogger<LandUseBlockUploadController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService, GDALAPIService gdalApiService) : base(dbContext, logger, linkGenerator, webConfiguration)
+        public LandUseBlockUploadController(NeptuneDbContext dbContext, ILogger<LandUseBlockUploadController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService, GDALAPIService gdalApiService, AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
             _sitkaSmtpClientService = sitkaSmtpClientService;
             _gdalApiService = gdalApiService;
+            _azureBlobStorageService = azureBlobStorageService;
         }
 
         [HttpGet]
@@ -61,7 +65,8 @@ namespace Neptune.WebMvc.Controllers
         public async Task<ActionResult> UpdateLandUseBlockGeometry(UpdateLandUseBlockGeometryViewModel viewModel)
         {
             var file = viewModel.FileResourceData;
-            await _dbContext.Database.ExecuteSqlRawAsync($"dbo.pLandUseBlockStagingDeleteByPersonID @PersonID = {CurrentPerson.PersonID}");
+            var blobName = Guid.NewGuid().ToString();
+            await _azureBlobStorageService.UploadToBlobStorage(await FileStreamHelpers.StreamToBytes(file), blobName, ".gdb");
             var featureClassNames = await _gdalApiService.OgrInfoGdbToFeatureClassInfo(file);
 
             if (featureClassNames.Count == 0)
@@ -96,8 +101,9 @@ namespace Neptune.WebMvc.Controllers
 
                 var apiRequest = new GdbToGeoJsonRequestDto()
                 {
-                    File = file,
-                    GdbLayerOutputs = new List<GdbLayerOutput>
+                    BlobContainer = AzureBlobStorageService.BlobContainerName,
+                    CanonicalName = blobName,
+                    GdbLayerOutputs = new()
                     {
                         new()
                         {
@@ -105,16 +111,18 @@ namespace Neptune.WebMvc.Controllers
                             FeatureLayerName = featureClassNames.Single().LayerName,
                             NumberOfSignificantDigits = 4,
                             Filter = "WHERE AssessmentNo is not null",
-                            CoordinateSystemID = Proj4NetHelper.WEB_MERCATOR,
+                            CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
                         }
                     }
                 };
                 var geoJson = await _gdalApiService.Ogr2OgrGdbToGeoJson(apiRequest);
-                var landUseBlockStagings = await GeoJsonSerializer.DeserializeFromFeatureCollection<LandUseBlockStaging>(geoJson,
+                var landUseBlockStagings = await GeoJsonSerializer.DeserializeFromFeatureCollectionWithCCWCheck<LandUseBlockStaging>(geoJson,
                     GeoJsonSerializer.DefaultSerializerOptions);
-                if (landUseBlockStagings.Any())
+                var validLandUseBlockStagings = landUseBlockStagings.Where(x => x.Geometry is { IsValid: true, Area: > 0 }).ToList();
+                if (validLandUseBlockStagings.Any())
                 {
-                    await _dbContext.LandUseBlockStagings.AddRangeAsync(landUseBlockStagings);
+                    await _dbContext.Database.ExecuteSqlRawAsync($"dbo.pLandUseBlockStagingDeleteByPersonID @PersonID = {CurrentPerson.PersonID}"); 
+                    _dbContext.LandUseBlockStagings.AddRange(validLandUseBlockStagings);
                     await _dbContext.SaveChangesAsync();
                 }
             }
@@ -123,12 +131,12 @@ namespace Neptune.WebMvc.Controllers
                 if (e.Message.Contains("Unrecognized field name",
                         StringComparison.InvariantCultureIgnoreCase))
                 {
-                    ModelState.AddModelError("FileResourceData",
+                    ModelState.AddModelError("",
                         "The columns in the uploaded file did not match the LandUseBlock schema. The file is invalid and cannot be uploaded.");
                 }
                 else
                 {
-                    ModelState.AddModelError("FileResourceData",
+                    ModelState.AddModelError("",
                         $"There was a problem processing the Feature Class \"{featureClassNames[0]}\". The file may be corrupted or invalid.");
                 }
                 return ViewUpdateLandUseBlockGeometry(viewModel);

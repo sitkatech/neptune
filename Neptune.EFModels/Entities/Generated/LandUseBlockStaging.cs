@@ -22,7 +22,7 @@ public partial class LandUseBlockStaging
     public string? LandUseDescription { get; set; }
 
     [Column(TypeName = "geometry")]
-    public Geometry LandUseBlockStagingGeometry { get; set; } = null!;
+    public Geometry Geometry { get; set; } = null!;
 
     [Column(TypeName = "decimal(4, 1)")]
     public decimal? TrashGenerationRate { get; set; }

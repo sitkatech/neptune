@@ -11,5 +11,9 @@ namespace Neptune.WebMvc.Views.ParcelLayerUpload
         [DisplayName("Zipped File Geodatabase to Upload")]
         [SitkaFileExtensions("zip")]
         public IFormFile FileResourceData { get; set; }
+
+        public UploadParcelLayerViewModel()
+        {
+        }
     }
 }

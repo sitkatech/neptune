@@ -191,8 +191,48 @@ public static class GeoJsonSerializer
 
     public static T DeserializeFromFeature<T>(IFeature feature, JsonSerializerOptions geoJSONSerializerOptions) where T : IHasGeometry
     {
-        feature.Attributes.TryDeserializeJsonObject<T>(geoJSONSerializerOptions, out var deserialized);
+        ((IPartiallyDeserializedAttributesTable)feature.Attributes).TryDeserializeJsonObject<T>(geoJSONSerializerOptions, out var deserialized);
         deserialized.Geometry = feature.Geometry;
+        return deserialized;
+    }
+
+    public static T DeserializeFromFeatureWithCCWCheck<T>(IFeature feature, JsonSerializerOptions geoJSONSerializerOptions) where T : IHasGeometry
+    {
+        ((IPartiallyDeserializedAttributesTable)feature.Attributes).TryDeserializeJsonObject<T>(geoJSONSerializerOptions, out var deserialized);
+        var geometry = feature.Geometry.MakeValid();
+        if (geometry.GeometryType.ToUpper() == "POLYGON")
+        {
+            var polygon = (Polygon)geometry;
+            if (!polygon.Shell.IsCCW)
+            {
+                geometry = geometry.Reverse();
+            }
+        }
+        else if (geometry.GeometryType.ToUpper() == "MULTIPOLYGON")
+        {
+            if (geometry.NumGeometries == 1)
+            {
+                var geometryPart = (Polygon)geometry.GetGeometryN(0);
+                if (!geometryPart.Shell.IsCCW)
+                {
+                    geometry = geometryPart.Reverse();
+                }
+            }
+            else
+            {
+                for (var i = 0; i < geometry.NumGeometries; i++)
+                {
+                    var geometryPart = (Polygon)geometry.GetGeometryN(i);
+                    if (!geometryPart.Shell.IsCCW)
+                    {
+                        // if any is not counter-clockwise, just reverse the whole geometry and stop processing the rest
+                        geometry = geometry.Reverse();
+                        break;
+                    }
+                }
+            }
+        }
+        deserialized.Geometry = geometry;
         return deserialized;
     }
 
@@ -208,9 +248,20 @@ public static class GeoJsonSerializer
         return DeserializeFromFeatureCollection<T>(featureCollection, geoJSONSerializerOptions);
     }
 
+    public static async Task<List<T>> DeserializeFromFeatureCollectionWithCCWCheck<T>(byte[] byteArray, JsonSerializerOptions geoJSONSerializerOptions) where T : IHasGeometry
+    {
+        var featureCollection = await GetFeatureCollectionFromGeoJsonByteArray(byteArray, geoJSONSerializerOptions);
+        return DeserializeFromFeatureCollectionWithCCWCheck<T>(featureCollection, geoJSONSerializerOptions);
+    }
+
     public static List<T> DeserializeFromFeatureCollection<T>(FeatureCollection featureCollection, JsonSerializerOptions geoJSONSerializerOptions) where T : IHasGeometry
     {
         return featureCollection.AsParallel().Select(x => DeserializeFromFeature<T>(x, geoJSONSerializerOptions)).ToList();
+    }
+
+    public static List<T> DeserializeFromFeatureCollectionWithCCWCheck<T>(FeatureCollection featureCollection, JsonSerializerOptions geoJSONSerializerOptions) where T : IHasGeometry
+    {
+        return featureCollection.AsParallel().Select(x => DeserializeFromFeatureWithCCWCheck<T>(x, geoJSONSerializerOptions)).ToList();
     }
 
     public static List<T> DeserializeFromFeatureCollection<T>(FeatureCollection featureCollection) where T : IHasGeometry

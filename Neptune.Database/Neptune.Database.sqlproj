@@ -407,6 +407,9 @@
     <Build Include="dbo\Procs\dbo.pWatershedMakeValid.sql" />
     <Build Include="dbo\Views\dbo.vTreatmentBMPGdbExport.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Neptune.Database.refactorlog" />
+  </ItemGroup>
   <UsingTask TaskName="ScriptDeploymentGenerator" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
       <releaseScriptFolder ParameterType="System.String" Required="true" />

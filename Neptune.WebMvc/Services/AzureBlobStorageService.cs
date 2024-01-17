@@ -10,7 +10,7 @@ public class AzureBlobStorageService
 {
     public const string BlobContainerName = "file-resource";
     private readonly WebConfiguration _webConfiguration;
-    private readonly BlobContainerClient _fileResourceContainerClient;
+    private readonly BlobContainerClient _blobContainerClient;
     private readonly Dictionary<string, string> _contentTypes = new()
         {
             {".x3d", "application/vnd.hzn-3d-crossword"},
@@ -701,19 +701,25 @@ public class AzureBlobStorageService
     public AzureBlobStorageService(IOptions<WebConfiguration> configuration)
     {
         _webConfiguration = configuration.Value;
-        _fileResourceContainerClient = new BlobServiceClient(_webConfiguration.AzureBlobStorageConnectionString).GetBlobContainerClient(BlobContainerName);
+        _blobContainerClient = new BlobServiceClient(_webConfiguration.AzureBlobStorageConnectionString).GetBlobContainerClient(BlobContainerName);
     }
 
     public async Task<bool> UploadFileResource(FileResource fileResource, byte[] fileBytes)
     {
-        using MemoryStream ms =  new MemoryStream(fileBytes);
+        var blobName = fileResource.FileResourceGUID.ToString();
+        var extension = fileResource.OriginalFileExtension.ToLower();
+        return await UploadToBlobStorage(fileBytes, blobName, extension);
+    }
 
-        var blobClient = _fileResourceContainerClient.GetBlobClient(fileResource.FileResourceGUID.ToString());
-        var exists =  await blobClient.ExistsAsync();
+    public async Task<bool> UploadToBlobStorage(byte[] fileBytes, string blobName, string extension)
+    {
+        using var ms = new MemoryStream(fileBytes);
+        var blobClient = _blobContainerClient.GetBlobClient(blobName);
+        var exists = await blobClient.ExistsAsync();
 
         if (!exists.Value)
         {
-            await blobClient.UploadAsync(ms, new BlobHttpHeaders { ContentType = GetFileResourceContentType(fileResource) });
+            await blobClient.UploadAsync(ms, new BlobHttpHeaders { ContentType = GetContentTypeFromExtension(extension) });
         }
 
         return await blobClient.ExistsAsync();
@@ -721,7 +727,13 @@ public class AzureBlobStorageService
 
     public async Task<bool> DeleteFileResourceBlob(FileResource fileResource)
     {
-        var blobClient = _fileResourceContainerClient.GetBlobClient(fileResource.FileResourceGUID.ToString());
+        var blobName = fileResource.FileResourceGUID.ToString();
+        return await DeleteFromBlobStorage(blobName);
+    }
+
+    public async Task<bool> DeleteFromBlobStorage(string blobName)
+    {
+        var blobClient = _blobContainerClient.GetBlobClient(blobName);
         var deleted = await blobClient.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots);
         return deleted.Value;
     }
@@ -733,14 +745,13 @@ public class AzureBlobStorageService
 
     public async Task<BlobDownloadResult> DownloadBlobFromBlobStorage(string canonicalName)
     {
-        var blobClient = _fileResourceContainerClient.GetBlobClient(canonicalName);
+        var blobClient = _blobContainerClient.GetBlobClient(canonicalName);
         var downloadResult = await blobClient.DownloadContentAsync();
         return downloadResult.Value;
     }
 
-    private string GetFileResourceContentType(FileResource fileResource)
+    private string GetContentTypeFromExtension(string extension)
     {
-        var extension = fileResource.OriginalFileExtension.ToLower();
         if (!extension.StartsWith("."))
         {
             extension = $".{extension}";

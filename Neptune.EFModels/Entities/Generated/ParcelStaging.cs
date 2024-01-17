@@ -8,7 +8,6 @@ using NetTopologySuite.Geometries;
 namespace Neptune.EFModels.Entities;
 
 [Table("ParcelStaging")]
-[Index("ParcelStagingGeometry", Name = "SPATIAL_ParcelStaging_ParcelStagingGeometry")]
 public partial class ParcelStaging
 {
     [Key]
@@ -19,7 +18,7 @@ public partial class ParcelStaging
     public string? ParcelNumber { get; set; }
 
     [Column(TypeName = "geometry")]
-    public Geometry ParcelStagingGeometry { get; set; } = null!;
+    public Geometry Geometry { get; set; } = null!;
 
     public double ParcelStagingAreaSquareFeet { get; set; }
 
