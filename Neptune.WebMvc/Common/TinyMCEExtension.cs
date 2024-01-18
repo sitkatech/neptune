@@ -207,14 +207,14 @@ namespace Neptune.WebMvc.Common
                     break;
                 case TinyMCEToolbarStyle.Minimal:
                     toolbarSettings =
-                        "undo redo | styleselect | bold italic | bullist numlist | alignleft aligncenter alignright alignjustify | outdent indent | blockquote table | image media link unlink | styles | code ";
+                        " styleselect | bold italic removeformat | bullist numlist outdent indent | image table hr charmap | link unlink anchor";
                     plugins = "lists link code help wordcount anchor";
                     toolbarMode = "floating";
                     hasImageToolbarButton = false;
                     break;
                 case TinyMCEToolbarStyle.MinimalWithImages:
                     toolbarSettings =
-                        "undo redo | styleselect | bold italic | bullist numlist | alignleft aligncenter alignright alignjustify | outdent indent | blockquote table | image media link unlink | styles | code";
+                        "styleselect | bold italic removeformat | bullist numlist outdent indent | image table hr charmap | link unlink anchor";
                     plugins = "lists link image table code help wordcount charmap anchor";
                     toolbarMode = "floating";
                     hasImageToolbarButton = true;
