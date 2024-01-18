@@ -33,73 +33,69 @@ public class HRURefreshJob
         stopwatch.Start();
 
         var lguUpdateCandidates = LoadGeneratingUnits.ListUpdateCandidates(_dbContext);
-        var loadGeneratingUnitsToUpdateGroupedByModelBasin = lguUpdateCandidates.GroupBy(x => x.ModelBasinID);
+        var loadGeneratingUnitsToUpdateGroupedByRegionalSubbasin = lguUpdateCandidates.GroupBy(x => x.RegionalSubbasinID);
 
-        foreach (var group in loadGeneratingUnitsToUpdateGroupedByModelBasin)
+        foreach (var group in loadGeneratingUnitsToUpdateGroupedByRegionalSubbasin)
         {
-            var batches = group.Chunk(25);
-
-            foreach (var batch in batches)
+            try
             {
-                try
+                var loadGeneratingUnits = group.ToList();
+                var hruRequestFeatures = HruRequestFeatureHelpers.GetHRURequestFeatures(
+                    loadGeneratingUnits.ToDictionary(x => x.LoadGeneratingUnitID,
+                        x => x.LoadGeneratingUnitGeometry), false);
+                var hruResponseFeatures =
+                    await _ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList());
+
+                if (!hruResponseFeatures.Any())
                 {
-                    var loadGeneratingUnits = batch.ToList();
-                    var hruRequestFeatures = HruRequestFeatureHelpers.GetHRURequestFeatures(
-                        loadGeneratingUnits.ToDictionary(x => x.LoadGeneratingUnitID,
-                            x => x.LoadGeneratingUnitGeometry), false);
-                    var hruResponseFeatures =
-                        await _ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList());
-
-                    if (!hruResponseFeatures.Any())
+                    foreach (var loadGeneratingUnit in loadGeneratingUnits)
                     {
-                        foreach (var loadGeneratingUnit in loadGeneratingUnits)
-                        {
-                            loadGeneratingUnit.IsEmptyResponseFromHRUService = true;
+                        loadGeneratingUnit.IsEmptyResponseFromHRUService = true;
 
-                        }
-
-                        _logger.LogWarning(
-                            $"No data for LGUs with these IDs: {string.Join(", ", loadGeneratingUnits.Select(x => x.LoadGeneratingUnitID.ToString()))}");
                     }
 
-                    var hruCharacteristics = hruResponseFeatures.Select(x =>
+                    _logger.LogWarning(
+                        $"No data for LGUs with these IDs: {string.Join(", ", loadGeneratingUnits.Select(x => x.LoadGeneratingUnitID.ToString()))}");
+                }
+
+                var hruCharacteristics = hruResponseFeatures.Select(x =>
+                {
+                    var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
+                        string.Equals(y.HRUCharacteristicLandUseCodeName, x.Attributes.ModelBasinLandUseDescription,
+                            StringComparison.CurrentCultureIgnoreCase));
+                    var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
+                        string.Equals(y.HRUCharacteristicLandUseCodeName, x.Attributes.BaselineLandUseDescription,
+                            StringComparison.CurrentCultureIgnoreCase));
+
+                    var hruCharacteristic = new HRUCharacteristic
                     {
-                        var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
-                            string.Equals(y.HRUCharacteristicLandUseCodeName, x.Attributes.ModelBasinLandUseDescription,
-                                StringComparison.CurrentCultureIgnoreCase));
-                        var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
-                            string.Equals(y.HRUCharacteristicLandUseCodeName, x.Attributes.BaselineLandUseDescription,
-                                StringComparison.CurrentCultureIgnoreCase));
+                        LoadGeneratingUnitID = x.Attributes.QueryFeatureID,
+                        HydrologicSoilGroup = x.Attributes.HydrologicSoilGroup,
+                        SlopePercentage = x.Attributes.SlopePercentage.GetValueOrDefault(),
+                        HRUCharacteristicLandUseCodeID =
+                            hruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID,
+                        BaselineHRUCharacteristicLandUseCodeID =
+                            baselineHruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID,
+                        Area = x.Attributes.Acres.GetValueOrDefault(),
 
-                        var hruCharacteristic = new HRUCharacteristic
-                        {
-                            LoadGeneratingUnitID = x.Attributes.QueryFeatureID,
-                            HydrologicSoilGroup = x.Attributes.HydrologicSoilGroup,
-                            SlopePercentage = x.Attributes.SlopePercentage.GetValueOrDefault(),
-                            ImperviousAcres = x.Attributes.ImperviousAcres.GetValueOrDefault(),
-                            LastUpdated = DateTime.UtcNow,
-                            Area = x.Attributes.Acres.GetValueOrDefault(),
-                            HRUCharacteristicLandUseCodeID =
-                                hruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID,
-                            BaselineImperviousAcres = x.Attributes.BaselineImperviousAcres.GetValueOrDefault(),
-                            BaselineHRUCharacteristicLandUseCodeID =
-                                baselineHruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID
-                        };
-                        return hruCharacteristic;
-                    });
-                    _dbContext.HRUCharacteristics.AddRange(hruCharacteristics);
-                    await _dbContext.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-                    // this batch failed, but we don't want to give up the whole job.
-                    _logger.LogWarning(ex.Message);
-                }
+                        LastUpdated = DateTime.UtcNow,
+                        ImperviousAcres = x.Attributes.ImperviousAcres.GetValueOrDefault(),
+                        BaselineImperviousAcres = x.Attributes.BaselineImperviousAcres.GetValueOrDefault(),
+                    };
+                    return hruCharacteristic;
+                });
+                _dbContext.HRUCharacteristics.AddRange(hruCharacteristics);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // this batch failed, but we don't want to give up the whole job.
+                _logger.LogWarning(ex.Message);
+            }
 
-                if (stopwatch.Elapsed.Minutes > 50)
-                {
-                    break;
-                }
+            if (stopwatch.Elapsed.Minutes > 50)
+            {
+                break;
             }
 
             if (stopwatch.Elapsed.Minutes > 50)

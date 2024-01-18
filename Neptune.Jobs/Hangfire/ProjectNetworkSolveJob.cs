@@ -131,62 +131,66 @@ You can view the results or trigger another network solve <a href='{planningURL}
             stopwatch.Start();
 
             var loadGeneratingUnitsToUpdate = _dbContext.ProjectLoadGeneratingUnits.Where(x => x.ProjectID == projectID && x.ProjectLoadGeneratingUnitGeometry.Area >= 10).ToList();
-            var loadGeneratingUnitsToUpdateGroupedByModelBasin = loadGeneratingUnitsToUpdate.GroupBy(x => x.ModelBasinID);
+            var loadGeneratingUnitsToUpdateGroupedByRegionalSubbasin = loadGeneratingUnitsToUpdate.GroupBy(x => x.RegionalSubbasinID);
 
-            foreach (var group in loadGeneratingUnitsToUpdateGroupedByModelBasin)
+            foreach (var group in loadGeneratingUnitsToUpdateGroupedByRegionalSubbasin)
             {
-                var batches = group.Chunk(25);
-
-                foreach (var batch in batches)
+                try
                 {
-                    try
-                    {
-                        var projectLoadGeneratingUnits = batch.ToList();
-                        var hruRequestFeatures = HruRequestFeatureHelpers.GetHRURequestFeatures(projectLoadGeneratingUnits.ToDictionary(x => x.ProjectLoadGeneratingUnitID, x => x.ProjectLoadGeneratingUnitGeometry), true);
-                        var hruResponseFeatures = await _ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList());
+                    var projectLoadGeneratingUnits = group.ToList();
+                    var hruRequestFeatures = HruRequestFeatureHelpers.GetHRURequestFeatures(
+                        projectLoadGeneratingUnits.ToDictionary(x => x.ProjectLoadGeneratingUnitID,
+                            x => x.ProjectLoadGeneratingUnitGeometry), true);
+                    var hruResponseFeatures =
+                        await _ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList());
 
-                        if (!hruResponseFeatures.Any())
+                    if (!hruResponseFeatures.Any())
+                    {
+                        foreach (var loadGeneratingUnit in projectLoadGeneratingUnits)
                         {
-                            foreach (var loadGeneratingUnit in projectLoadGeneratingUnits)
-                            {
-                                loadGeneratingUnit.IsEmptyResponseFromHRUService = true;
-                            }
-                            _logger.LogWarning($"No data for ProjectLGUs with these IDs: {string.Join(", ", projectLoadGeneratingUnits.Select(x => x.ProjectLoadGeneratingUnitID.ToString()))}");
+                            loadGeneratingUnit.IsEmptyResponseFromHRUService = true;
                         }
 
-                        var projectHruCharacteristics = hruResponseFeatures.Select(x =>
+                        _logger.LogWarning(
+                            $"No data for ProjectLGUs with these IDs: {string.Join(", ", projectLoadGeneratingUnits.Select(x => x.ProjectLoadGeneratingUnitID.ToString()))}");
+                    }
+
+                    var projectHruCharacteristics = hruResponseFeatures.Select(x =>
+                    {
+                        var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
+                            y.HRUCharacteristicLandUseCodeName == x.Attributes.ModelBasinLandUseDescription);
+                        var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
+                            y.HRUCharacteristicLandUseCodeName == x.Attributes.BaselineLandUseDescription);
+
+                        var projectHRUCharacteristic = new ProjectHRUCharacteristic
                         {
-                            var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y => y.HRUCharacteristicLandUseCodeName == x.Attributes.ModelBasinLandUseDescription);
-                            var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y => y.HRUCharacteristicLandUseCodeName == x.Attributes.BaselineLandUseDescription);
+                            ProjectLoadGeneratingUnitID = x.Attributes.QueryFeatureID,
+                            ProjectID = projectID,
+                            HydrologicSoilGroup = x.Attributes.HydrologicSoilGroup,
+                            SlopePercentage = x.Attributes.SlopePercentage.GetValueOrDefault(),
+                            ImperviousAcres = x.Attributes.ImperviousAcres.GetValueOrDefault(),
+                            LastUpdated = DateTime.UtcNow,
+                            Area = x.Attributes.Acres.GetValueOrDefault(),
+                            HRUCharacteristicLandUseCodeID =
+                                hruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID,
+                            BaselineImperviousAcres = x.Attributes.BaselineImperviousAcres.GetValueOrDefault(),
+                            BaselineHRUCharacteristicLandUseCodeID =
+                                baselineHruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID
+                        };
+                        return projectHRUCharacteristic;
+                    }).ToList();
+                    await _dbContext.ProjectHRUCharacteristics.AddRangeAsync(projectHruCharacteristics);
+                    await _dbContext.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    // this batch failed, but we don't want to give up the whole job.
+                    _logger.LogWarning(ex.Message);
+                }
 
-                            var projectHRUCharacteristic = new ProjectHRUCharacteristic
-                            {
-                                ProjectLoadGeneratingUnitID = x.Attributes.QueryFeatureID,
-                                ProjectID = projectID,
-                                HydrologicSoilGroup = x.Attributes.HydrologicSoilGroup,
-                                SlopePercentage = x.Attributes.SlopePercentage.GetValueOrDefault(),
-                                ImperviousAcres = x.Attributes.ImperviousAcres.GetValueOrDefault(),
-                                LastUpdated = DateTime.UtcNow,
-                                Area = x.Attributes.Acres.GetValueOrDefault(),
-                                HRUCharacteristicLandUseCodeID = hruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID,
-                                BaselineImperviousAcres = x.Attributes.BaselineImperviousAcres.GetValueOrDefault(),
-                                BaselineHRUCharacteristicLandUseCodeID = baselineHruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID
-                            };
-                            return projectHRUCharacteristic;
-                        }).ToList();
-                        await _dbContext.ProjectHRUCharacteristics.AddRangeAsync(projectHruCharacteristics);
-                        await _dbContext.SaveChangesAsync();
-                    }
-                    catch (Exception ex)
-                    {
-                        // this batch failed, but we don't want to give up the whole job.
-                        _logger.LogWarning(ex.Message);
-                    }
-
-                    if (stopwatch.Elapsed.Minutes > 20)
-                    {
-                        break;
-                    }
+                if (stopwatch.Elapsed.Minutes > 20)
+                {
+                    break;
                 }
 
                 if (stopwatch.Elapsed.Minutes > 20)
