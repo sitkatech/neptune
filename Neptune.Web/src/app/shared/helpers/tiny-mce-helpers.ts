@@ -9,11 +9,13 @@ export default class TinyMCEHelpers {
      */
     public static DefaultInitConfig(editorComponent : EditorComponent = null, overrideConfig : object = null) : object {
         let config = { 
-            plugins: 'lists link image table code help wordcount', 
-            file_picker_types: 'image',
-            images_file_types: 'jpg,svg,webp,gif',
-            image_title: true,
-            promotion: false,
+          plugins: 'lists link image table code help wordcount', 
+          menubar: false,
+          toolbar: 'undo redo | styleselect | bold italic | bullist numlist | alignleft aligncenter alignright alignjustify | outdent indent | blockquote table | image media link unlink | styles | code',
+          selector: 'textarea',
+          file_picker_types: 'image',
+          images_file_types: 'jpg,svg,webp,gif',
+          promotion: false,
             // This is from the TinyMCE documentation on how to handle image uploads
             file_picker_callback: (cb, value, meta) => {
               const input = document.createElement('input');

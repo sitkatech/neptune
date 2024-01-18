@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Alert } from 'src/app/shared/models/alert';
@@ -6,6 +6,8 @@ import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { FieldDefinitionDto, PersonDto } from 'src/app/shared/generated/model/models';
 import { FieldDefinitionService } from 'src/app/shared/generated/api/field-definition.service';
+import { EditorComponent } from "@tinymce/tinymce-angular";
+import TinyMCEHelpers from 'src/app/shared/helpers/tiny-mce-helpers';
 
 @Component({
   selector: 'hippocamp-field-definition-edit',
@@ -18,6 +20,8 @@ export class FieldDefinitionEditComponent implements OnInit {
 
   public fieldDefinition: FieldDefinitionDto;
   public editor;
+  @ViewChild('tinyMceEditor') tinyMceEditor : EditorComponent;
+  public tinyMceConfig: object;
 
   public isLoadingSubmit: boolean;
 
@@ -40,6 +44,12 @@ export class FieldDefinitionEditComponent implements OnInit {
               })
           }
       });
+  }
+
+  ngAfterViewInit(): void {
+    // We need to use ngAfterViewInit because the image upload needs a reference to the component
+    // to setup the blobCache for image base64 encoding
+    this.tinyMceConfig = TinyMCEHelpers.DefaultInitConfig(this.tinyMceEditor)
   }
 
   ngOnDestroy() {      
@@ -68,3 +78,4 @@ export class FieldDefinitionEditComponent implements OnInit {
   }
 
 }
+

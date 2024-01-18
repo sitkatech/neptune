@@ -16,7 +16,7 @@
     <div class="row mt-4">
         <div class="col-12">
             <editor #tinyMceEditor
-                [init]="{ toolbar: false, menubar: false, plugins: 'quickbars', promotion: false }"
+                [init]="tinyMceConfig"
                 [(ngModel)]="fieldDefinition.FieldDefinitionValue">
             </editor>
             <div style="float:right;">
