@@ -226,10 +226,9 @@
                 <field-definition fieldDefinitionType="TreatmentBMPType"></field-definition>
             </div>
             <div class="col-sm-7">
-                <ng-select [(ngModel)]="selectedTreatmentBMPType"
-                    [items]="treatmentBMPTypes" bindLabel="TreatmentBMPTypeName" bindValue="TreatmentBMPTypeID" 
-                    name="type" required>
-                </ng-select>
+                <select name="type" class="form-control mb-3" [(ngModel)]="selectedTreatmentBMPType" (change)="updateSelectedProjectLoadReducingResult()" required>
+                    <option *ngFor="let treatmentBMPType of treatmentBMPTypes" [value]="treatmentBMPType.TreatmentBMPTypeID">{{ treatmentBMPType.TreatmentBMPTypeName }}</option>
+                </select>
             </div>
         </div>
         <div class="modal-footer">

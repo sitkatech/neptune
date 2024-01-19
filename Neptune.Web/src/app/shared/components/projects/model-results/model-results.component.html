@@ -20,10 +20,9 @@
     </ngb-alert>
     <div class="row">
         <div class="col-12 col-md-6 col-lg-4">
-            <ng-select class="mb-3" [(ngModel)]="treatmentBMPIDForSelectedProjectLoadReducingResult" [items]="modelingSelectListOptions"
-                [clearable]="false" (change)="updateSelectedProjectLoadReducingResult()" bindLabel="TreatmentBMPName"
-                bindValue="TreatmentBMPID">
-            </ng-select>
+            <select class="form-control mb-3" [(ngModel)]="treatmentBMPIDForSelectedProjectLoadReducingResult" (change)="updateSelectedProjectLoadReducingResult()">
+                <option *ngFor="let selectListOption of modelingSelectListOptions" [value]="selectListOption.TreatmentBMPID">{{ selectListOption.TreatmentBMPName }}</option>
+            </select>
         </div>
     </div>
     <div class="row">
