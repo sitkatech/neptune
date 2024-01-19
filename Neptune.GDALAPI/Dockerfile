@@ -1,6 +1,6 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM osgeo/gdal:ubuntu-full-latest as base
+FROM ghcr.io/osgeo/gdal:ubuntu-full-latest as base
 WORKDIR /app
 EXPOSE 80
 
