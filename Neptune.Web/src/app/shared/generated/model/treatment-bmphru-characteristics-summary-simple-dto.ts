@@ -11,6 +11,7 @@
  */
 
 export class TreatmentBMPHRUCharacteristicsSummarySimpleDto { 
+    ProjectHRUCharacteristicID?: number;
     TreatmentBMPID?: number;
     LandUse?: string;
     Area?: number;

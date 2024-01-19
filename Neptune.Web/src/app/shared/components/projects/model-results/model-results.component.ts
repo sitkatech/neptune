@@ -68,7 +68,7 @@ export class ModelResultsComponent implements OnInit {
   updateSelectedProjectLoadReducingResult() {
     if (this.treatmentBMPIDForSelectedProjectLoadReducingResult != 0) {
       this.selectedProjectLoadReducingResult = this.projectLoadReducingResults.filter(x => x.TreatmentBMPID == this.treatmentBMPIDForSelectedProjectLoadReducingResult)[0];
-      this.selectedTreatmentBMPHRUCharacteristicSummaries = this.treatmentBMPHRUCharacteristicSummaries.filter(x => x.TreatmentBMPID == this.treatmentBMPIDForSelectedProjectLoadReducingResult).sort((a, b) => { if (a.LandUse > b.LandUse) { return 1; } if (b.LandUse > a.LandUse) { return -1; } return 0 });
+      this.selectedTreatmentBMPHRUCharacteristicSummaries = this.hruCharacteristicsGroupByLandUse(this.treatmentBMPHRUCharacteristicSummaries.filter(x => x.TreatmentBMPID == this.treatmentBMPIDForSelectedProjectLoadReducingResult));
       this.updateSelectedTreatmentBMPHRUCharacteristicSummaryTotal();
       return;
     }
@@ -82,7 +82,13 @@ export class ModelResultsComponent implements OnInit {
       }
     }
 
-    this.selectedTreatmentBMPHRUCharacteristicSummaries = [...this.treatmentBMPHRUCharacteristicSummaries.reduce((r, o) => {
+    this.selectedTreatmentBMPHRUCharacteristicSummaries = this.hruCharacteristicsGroupByLandUse([...new Map(this.treatmentBMPHRUCharacteristicSummaries.map(item => [item['ProjectHRUCharacteristicID'], item])).values()]);
+    this.updateSelectedTreatmentBMPHRUCharacteristicSummaryTotal();
+
+  }
+
+  private hruCharacteristicsGroupByLandUse(distinctHRUCharacteristicSummaries: TreatmentBMPHRUCharacteristicsSummarySimpleDto[]): TreatmentBMPHRUCharacteristicsSummarySimpleDto[] {
+    return [...distinctHRUCharacteristicSummaries.reduce((r, o) => {
       const key = o.LandUse;
 
       const item = r.get(key) || Object.assign({}, o, {
@@ -94,9 +100,7 @@ export class ModelResultsComponent implements OnInit {
       item.ImperviousCover += o.ImperviousCover;
 
       return r.set(key, item);
-    }, new Map).values()].sort((a, b) => { if (a.LandUse > b.LandUse) { return 1; } if (b.LandUse > a.LandUse) { return -1; } return 0 });
-    this.updateSelectedTreatmentBMPHRUCharacteristicSummaryTotal();
-
+    }, new Map).values()].sort((a, b) => { if (a.LandUse > b.LandUse) { return 1; } if (b.LandUse > a.LandUse) { return -1; } return 0; });
   }
 
   updateSelectedTreatmentBMPHRUCharacteristicSummaryTotal() {

@@ -293,13 +293,13 @@ namespace Neptune.EFModels.Entities
             return projectTreatmentBMPs.SelectMany(x =>
                 x.GetHRUCharacteristics(dbContext)
                 .ToList()
-                .GroupBy(y => y.HRUCharacteristicLandUseCode)
                 .Select(y => new TreatmentBMPHRUCharacteristicsSummarySimpleDto()
                 {
+                    ProjectHRUCharacteristicID = y.ProjectHRUCharacteristicID,
                     TreatmentBMPID = x.TreatmentBMPID,
-                    Area = y.Sum(z => z.Area),
-                    ImperviousCover = y.Sum(z => z.ImperviousAcres),
-                    LandUse = y.Key.HRUCharacteristicLandUseCodeDisplayName
+                    Area = y.Area,
+                    ImperviousCover = y.ImperviousAcres,
+                    LandUse = y.HRUCharacteristicLandUseCode.HRUCharacteristicLandUseCodeDisplayName
                 })
                 .ToList()
             )

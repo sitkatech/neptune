@@ -3999,6 +3999,10 @@
       "TreatmentBMPHRUCharacteristicsSummarySimpleDto": {
         "type": "object",
         "properties": {
+          "ProjectHRUCharacteristicID": {
+            "type": "integer",
+            "format": "int32"
+          },
           "TreatmentBMPID": {
             "type": "integer",
             "format": "int32"
