@@ -209,7 +209,7 @@ export class DelineationsComponent implements OnInit {
       transparent: true,
       format: "image/png",
       tiled: true,
-      cql_filter: "DelineationStatus = 'Verified'"
+      cql_filter: "DelineationStatus = 'Verified' AND IsAnalyzedInModelingModule = 1"
     } as L.WMSOptions);
 
     this.overlayLayers = Object.assign({
@@ -433,9 +433,6 @@ export class DelineationsComponent implements OnInit {
 
     $(leafletControlLayersSelector).append(closem);
 
-    this.treatmentBMPsLayer.on("click", (event: L.LeafletEvent) => {
-      this.selectFeatureImpl(event.propagatedFrom.feature.properties.TreatmentBMPID);
-    });
     this.map.on("click", (event: L.LeafletEvent) => {
       if (!this.isEditingLocation) {
         return;
@@ -455,7 +452,7 @@ export class DelineationsComponent implements OnInit {
     });
   }
 
-  private selectFeatureImpl(treatmentBMPID: number) {
+  private selectFeatureImpl(treatmentBMPID: number) {    
     if (this.isPerformingDrawAction) {
       return;
     }
@@ -493,8 +490,7 @@ export class DelineationsComponent implements OnInit {
     })
 
     this.selectedListItem = treatmentBMPID;
-    this.selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
-
+    this.selectedTreatmentBMP = this.treatmentBMPs.find(x => x.TreatmentBMPID == treatmentBMPID);
     this.treatmentBMPsLayer?.eachLayer(layer => {
       if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
         layer.setIcon(MarkerHelper.treatmentBMPMarker).setZIndexOffset(1000);
@@ -652,9 +648,6 @@ export class DelineationsComponent implements OnInit {
         pointToLayer: (feature, latlng) => {
           return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker })
         },
-        filter: (feature) => {
-          return this.selectedTreatmentBMP == null || feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID
-        },
         onEachFeature: (feature, layer) => {
           if (this.selectedTreatmentBMP != null) {
             if (layer.feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID) {
@@ -666,13 +659,13 @@ export class DelineationsComponent implements OnInit {
       });
       this.treatmentBMPsLayer.addTo(this.map);
 
-    this.treatmentBMPsLayer.on("click", (event: L.LeafletEvent) => {
-      if (this.isEditingLocation) {
-        return;
-      }
-      this.selectTreatmentBMP(event.propagatedFrom.feature.properties.TreatmentBMPID);
-    });
-  }
+      this.treatmentBMPsLayer.on("click", (event: L.LeafletEvent) => {
+        if (this.isEditingLocation) {
+          return;
+        }
+        this.selectFeatureImpl(event.propagatedFrom.feature.properties.TreatmentBMPID);
+      });
+    }
 
   private clearSelectedItem() {
     if (this.selectedListItem) {
