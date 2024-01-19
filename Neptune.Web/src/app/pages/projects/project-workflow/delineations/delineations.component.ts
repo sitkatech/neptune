@@ -469,7 +469,7 @@ export class DelineationsComponent implements OnInit {
       this.selectedDelineation = null;
     }
 
-    this.selectedDelineation = this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    this.selectedDelineation = this.delineations?.find(x => x.TreatmentBMPID == treatmentBMPID);
     this.delineationFeatureGroup.eachLayer(layer => {
       if (this.selectedDelineation == null || this.selectedDelineation.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
         layer.setStyle(this.delineationDefaultStyle);
@@ -523,11 +523,16 @@ export class DelineationsComponent implements OnInit {
   }
 
   public treatmentBMPHasDelineationGeometry(treatmentBMPID: number) {
-    return this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0]?.Geometry;
+    return this.delineations?.find(x => x.TreatmentBMPID == treatmentBMPID)?.Geometry;
+  }
+
+  public getTreatmentBMPDelineation(treatmentBMPID: number) {
+    console.log(this.delineations);
+    return this.delineations?.find(x => x.TreatmentBMPID == treatmentBMPID);
   }
 
   public getDelineationAreaForTreatmentBMP(treatmentBMPID: number) {
-    let delineation = this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    let delineation = this.delineations?.find(x => x.TreatmentBMPID == treatmentBMPID);
 
     if (delineation?.DelineationArea == null) {
       return "Not provided yet"

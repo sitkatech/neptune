@@ -30,8 +30,12 @@
                                 (click)="selectFeatureImpl(treatmentBMP.TreatmentBMPID)">
                                 <td>{{treatmentBMP.TreatmentBMPName}}</td>
                                 <td [class.font-italic]="!treatmentBMPHasDelineationGeometry(treatmentBMP.TreatmentBMPID)" >{{getDelineationAreaForTreatmentBMP(treatmentBMP.TreatmentBMPID)}}</td>
-                                <td><button class="btn btn-hippocamp" (click)="drawDelineationForTreatmentBMP(treatmentBMP.TreatmentBMPID)" [disabled]="isEditingLocation || isPerformingDrawAction || isLoadingSubmit">Draw on Map</button></td>
-                                <td><button class="btn btn-hippocamp" (click)="getUpstreamRSBCatchmentForTreatmentBMP(treatmentBMP.TreatmentBMPID)" [disabled]="isEditingLocation || isPerformingDrawAction || isLoadingSubmit">Trace Network</button></td>
+                                <td>
+                                    <span *ngIf="getTreatmentBMPDelineation(treatmentBMP.TreatmentBMPID)?.DelineationTypeID == 2">Yes</span>
+                                    <button *ngIf="!treatmentBMPHasDelineation(treatmentBMP.TreatmentBMPID)" class="btn btn-hippocamp" (click)="drawDelineationForTreatmentBMP(treatmentBMP.TreatmentBMPID)" [disabled]="isEditingLocation || isPerformingDrawAction || isLoadingSubmit">Draw on Map</button></td>
+                                <td>
+                                    <span *ngIf="getTreatmentBMPDelineation(treatmentBMP.TreatmentBMPID)?.DelineationTypeID == 1">Yes</span>
+                                    <button *ngIf="!treatmentBMPHasDelineation(treatmentBMP.TreatmentBMPID)" class="btn btn-hippocamp" (click)="getUpstreamRSBCatchmentForTreatmentBMP(treatmentBMP.TreatmentBMPID)" [disabled]="isEditingLocation || isPerformingDrawAction || isLoadingSubmit">Trace Network</button></td>
                             </tr>
                         </tbody>
                     </table>
