@@ -73,7 +73,7 @@ export class DelineationsComponent implements OnInit {
   private delineationDefaultStyle = {
     color: 'blue',
     fillOpacity: 0.2,
-    opacity: 1
+    opacity: 0
   }
   private delineationSelectedStyle = {
     color: 'yellow',
@@ -360,7 +360,7 @@ export class DelineationsComponent implements OnInit {
       .on(L.Draw.Event.CREATED, (event) => {
         this.isPerformingDrawAction = false;
         const layer = (event as L.DrawEvents.Created).layer;
-        var delineationUpsertDto = this.delineations.filter(x => this.selectedTreatmentBMP.TreatmentBMPID == x.TreatmentBMPID)[0];
+        var delineationUpsertDto = this.delineations.find(x => this.selectedTreatmentBMP.TreatmentBMPID == x.TreatmentBMPID);
         if (delineationUpsertDto == null) {
           delineationUpsertDto = new DelineationUpsertDto({
             DelineationID: this.newDelineationID,
@@ -384,7 +384,7 @@ export class DelineationsComponent implements OnInit {
         this.isPerformingDrawAction = false;
         const layers = (event as L.DrawEvents.Edited).layers;
         layers.eachLayer((layer) => {
-          var delineationUpsertDto = this.delineations.filter(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID)[0];
+          var delineationUpsertDto = this.delineations.find(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID);
           delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON());
           delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
         });
@@ -395,7 +395,7 @@ export class DelineationsComponent implements OnInit {
         this.isPerformingDrawAction = false;
         const layers = (event as L.DrawEvents.Deleted).layers;
         layers.eachLayer((layer) => {
-          var delineationUpsertDto = this.delineations.filter(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID)[0];
+          var delineationUpsertDto = this.delineations.find(x => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID);
           delineationUpsertDto.Geometry = null;
           delineationUpsertDto.DelineationArea = null;
         });
@@ -527,7 +527,6 @@ export class DelineationsComponent implements OnInit {
   }
 
   public getTreatmentBMPDelineation(treatmentBMPID: number) {
-    console.log(this.delineations);
     return this.delineations?.find(x => x.TreatmentBMPID == treatmentBMPID);
   }
 
@@ -602,7 +601,7 @@ export class DelineationsComponent implements OnInit {
     //We need a fully qualified geojson string and above we are just getting the geometry
     //Possible can remove the update above if we are always going to do it here
     this.delineationFeatureGroup.eachLayer((layer) => {
-      var delineationUpsertDto = delineations.filter(x => x.TreatmentBMPID == layer.feature.properties.TreatmentBMPID)[0];
+      var delineationUpsertDto = delineations.find(x => x.TreatmentBMPID == layer.feature.properties.TreatmentBMPID);
       delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON());
     });
   }
@@ -616,7 +615,7 @@ export class DelineationsComponent implements OnInit {
 
   public getUpstreamRSBCatchmentForTreatmentBMP(treatmentBMPID: number) {
     this.treatmentBMPService.treatmentBMPsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID).subscribe(result => {
-      let currentDelineationForTreatmentBMP = this.delineations.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+      let currentDelineationForTreatmentBMP = this.delineations.find(x => x.TreatmentBMPID == treatmentBMPID);
       if (currentDelineationForTreatmentBMP == null) {
         currentDelineationForTreatmentBMP = new DelineationUpsertDto({
           TreatmentBMPID: treatmentBMPID
@@ -640,7 +639,7 @@ export class DelineationsComponent implements OnInit {
     this.updateTreatmentBMPsLayer();
   }
   public treatmentBMPHasDelineation(treatmentBMPID: number) {
-    return this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0] != null;
+    return this.delineations?.find(x => x.TreatmentBMPID == treatmentBMPID) != null;
   }
   public updateTreatmentBMPsLayer() {
     if (this.treatmentBMPsLayer) {
@@ -695,7 +694,7 @@ export class DelineationsComponent implements OnInit {
     this.selectedListItem = treatmentBMPID;
     let selectedNumber = null;
     let selectedAttributes = null;
-    this.selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    this.selectedTreatmentBMP = this.treatmentBMPs.find(x => x.TreatmentBMPID == treatmentBMPID);
     selectedAttributes = [
       `<strong>Type:</strong> ${this.selectedTreatmentBMP.TreatmentBMPTypeName}`,
       `<strong>Latitude:</strong> ${this.selectedTreatmentBMP.Latitude}`,

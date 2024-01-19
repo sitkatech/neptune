@@ -266,7 +266,7 @@ export class ModeledPerformanceComponent implements OnInit {
   }
 
   private selectFeatureImpl(treatmentBMPID: number) {
-    this.selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    this.selectedTreatmentBMP = this.treatmentBMPs.find(x => x.TreatmentBMPID == treatmentBMPID);
     let hasFlownToSelectedObject = false;
     this.delineationsLayer?.eachLayer(layer => {
       if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
@@ -291,7 +291,7 @@ export class ModeledPerformanceComponent implements OnInit {
   }
 
   getDelineationAcreageForTreatmentBMP(treatmentBMPID: number) : string {
-    let delineation = this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    let delineation = this.delineations?.find(x => x.TreatmentBMPID == treatmentBMPID);
     if (delineation == null) {
       return "Not provided";
     }

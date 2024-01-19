@@ -365,7 +365,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
   }
 
   public selectTreatmentBMPImpl(treatmentBMPID: number) {
-    let selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    let selectedTreatmentBMP = this.treatmentBMPs.find(x => x.TreatmentBMPID == treatmentBMPID);
     this.selectProjectImpl(selectedTreatmentBMP.ProjectID);
     this.selectedTreatmentBMP = selectedTreatmentBMP;
     this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => {
@@ -391,7 +391,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
       //   this.map.flyTo(layer.getLatLng());
       // }
     })
-    this.selectedDelineation = this.delineations.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    this.selectedDelineation = this.delineations.find(x => x.TreatmentBMPID == treatmentBMPID);
   }
 
   public selectProjectImpl(projectID: number) {
@@ -403,7 +403,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     this.selectedDelineation = null;
     this.selectedTreatmentBMP = null;
 
-    this.selectedProject = this.projects.filter(x => x.ProjectID == projectID)[0];
+    this.selectedProject = this.projects.find(x => x.ProjectID == projectID);
     this.relatedTreatmentBMPs = this.treatmentBMPs.filter(x => x.ProjectID == projectID);
     let relatedTreatmentBMPIDs = this.relatedTreatmentBMPs.map(x => x.TreatmentBMPID);
     let featureGroupForZoom = new L.featureGroup();

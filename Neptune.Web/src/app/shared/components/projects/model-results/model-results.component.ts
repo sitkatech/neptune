@@ -59,7 +59,7 @@ export class ModelResultsComponent implements OnInit {
     var tempOptions = [];
     tempOptions.push({ TreatmentBMPID: 0, TreatmentBMPName: "All Treatment BMPs" });
     this.projectLoadReducingResults.forEach(x => {
-      var treatmentBMP = this.treatmentBMPs.filter(y => y.TreatmentBMPID == x.TreatmentBMPID)[0];
+      var treatmentBMP = this.treatmentBMPs.find(y => y.TreatmentBMPID == x.TreatmentBMPID);
       tempOptions.push({ TreatmentBMPID: treatmentBMP.TreatmentBMPID, TreatmentBMPName: treatmentBMP.TreatmentBMPName });
     });
     this.modelingSelectListOptions = [...this.modelingSelectListOptions, ...tempOptions];
@@ -67,7 +67,7 @@ export class ModelResultsComponent implements OnInit {
 
   updateSelectedProjectLoadReducingResult() {
     if (this.treatmentBMPIDForSelectedProjectLoadReducingResult != 0) {
-      this.selectedProjectLoadReducingResult = this.projectLoadReducingResults.filter(x => x.TreatmentBMPID == this.treatmentBMPIDForSelectedProjectLoadReducingResult)[0];
+      this.selectedProjectLoadReducingResult = this.projectLoadReducingResults.find(x => x.TreatmentBMPID == this.treatmentBMPIDForSelectedProjectLoadReducingResult);
       this.selectedTreatmentBMPHRUCharacteristicSummaries = this.hruCharacteristicsGroupByLandUse(this.treatmentBMPHRUCharacteristicSummaries.filter(x => x.TreatmentBMPID == this.treatmentBMPIDForSelectedProjectLoadReducingResult));
       this.updateSelectedTreatmentBMPHRUCharacteristicSummaryTotal();
       return;

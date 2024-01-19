@@ -87,13 +87,14 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   private delineationDefaultStyle = {
     color: 'blue',
     fillOpacity: 0.2,
-    opacity: 1
+    opacity: 0
   }
   private delineationSelectedStyle = {
     color: 'yellow',
     fillOpacity: 0.2,
     opacity: 1
   }
+
   public treatmentBMPModelingTypeEnum = TreatmentBMPModelingTypeEnum;
   public fieldDefinitionTypeEnum = FieldDefinitionTypeEnum;
   public modelingAttributeDropdownItems: Array<TreatmentBMPModelingAttributeDropdownItemDto>;
@@ -140,7 +141,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
         this.originalDoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
         this.treatmentBMPs = treatmentBMPs;
         this.originalTreatmentBMPs = JSON.stringify(treatmentBMPs);
-        this.delineations = delineations
+        this.delineations = delineations;
         this.boundingBox = boundingBox;
         this.treatmentBMPTypes = treatmentBMPTypes;
         this.modelingAttributeDropdownItems = modelingAttributeDropdownItems;
@@ -271,18 +272,13 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     if (this.includeDelineations) {
       const delineationGeoJson = this.mapDelineationsToGeoJson(this.delineations);
       this.delineationsLayer = new L.GeoJSON(delineationGeoJson, {
-        style: (feature) => {
-          if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != feature.properties.TreatmentBMPID) {
-            return this.delineationDefaultStyle;
-          }
-          return this.delineationSelectedStyle;
-        },
         onEachFeature: (feature, layer) => {
           if (this.selectedTreatmentBMP != null) {
             if (layer.feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID) {
+              layer.setStyle(this.delineationDefaultStyle);
               return;
             }
-            layer.bringToFront();
+            layer.setStyle(this.delineationSelectedStyle).bringToFront();
             if (this.zoomOnSelection) {
               this.map.flyToBounds(layer.getBounds(), { padding: new L.Point(50, 50) });
               hasFlownToSelectedObject = true;
@@ -379,24 +375,6 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
       });
 
     $(leafletControlLayersSelector).append(closem);
-
-    this.map.on("click", (event: L.LeafletEvent) => {
-      if (!this.isEditingLocation) {
-        return;
-      }
-      if (this.selectedObjectMarker) {
-        this.map.removeLayer(this.selectedObjectMarker);
-      }
-      this.selectedObjectMarker = new L.marker(
-        event.latlng,
-        { icon: MarkerHelper.selectedMarker, zIndexOffset: 1000 });
-
-      this.selectedObjectMarker.addTo(this.map);
-
-      this.selectedTreatmentBMP.Latitude = event.latlng.lat;
-      this.selectedTreatmentBMP.Longitude = event.latlng.lng;
-      this.updateTreatmentBMPsLayer();
-    });
   }
 
   public selectTreatmentBMP(treatmentBMPID: number) {
@@ -411,7 +389,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     this.selectedListItem = treatmentBMPID;
     let selectedNumber = null;
     let selectedAttributes = null;
-    this.selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    this.selectedTreatmentBMP = this.treatmentBMPs.find(x => x.TreatmentBMPID == treatmentBMPID);
     this.selectedTreatmentBMPType = this.selectedTreatmentBMP.TreatmentBMPTypeID;
     selectedAttributes = [
       `<strong>Type:</strong> ${this.selectedTreatmentBMP.TreatmentBMPTypeName}`,
@@ -525,11 +503,11 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   }
 
   public treatmentBMPHasDelineation(treatmentBMPID: number) {
-    return this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0] != null;
+    return this.delineations?.find(x => x.TreatmentBMPID == treatmentBMPID) != null;
   }
 
   public getDelineationAreaForTreatmentBMP(treatmentBMPID: number) {
-    let delineation = this.delineations?.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    let delineation = this.delineations?.find(x => x.TreatmentBMPID == treatmentBMPID);
 
     if (delineation?.DelineationArea == null) {
       return "Not provided yet"

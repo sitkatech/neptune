@@ -387,7 +387,7 @@ export class PlanningMapComponent implements OnInit {
       this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
     }
 
-    let selectedTreatmentBMP = this.treatmentBMPs.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    let selectedTreatmentBMP = this.treatmentBMPs.find(x => x.TreatmentBMPID == treatmentBMPID);
     this.selectedTreatmentBMP = selectedTreatmentBMP;
     this.selectProjectImpl(selectedTreatmentBMP.ProjectID);
     this.plannedProjectTreatmentBMPsLayer.eachLayer(layer => {
@@ -413,7 +413,7 @@ export class PlanningMapComponent implements OnInit {
       //   this.map.flyTo(layer.getLatLng());
       // }
     });
-    this.selectedDelineation = this.delineations.filter(x => x.TreatmentBMPID == treatmentBMPID)[0];
+    this.selectedDelineation = this.delineations.find(x => x.TreatmentBMPID == treatmentBMPID);
   }
 
   public selectProjectImpl(projectID: number) {
@@ -425,7 +425,7 @@ export class PlanningMapComponent implements OnInit {
     this.selectedDelineation = null;
     //this.selectedTreatmentBMP = null;
 
-    this.selectedProject = this.projects.filter(x => x.ProjectID == projectID)[0];
+    this.selectedProject = this.projects.find(x => x.ProjectID == projectID);
     this.relatedTreatmentBMPs = this.treatmentBMPs.filter(x => x.ProjectID == projectID);
     let relatedTreatmentBMPIDs = this.relatedTreatmentBMPs.map(x => x.TreatmentBMPID);
     let featureGroupForZoom = new L.featureGroup();
