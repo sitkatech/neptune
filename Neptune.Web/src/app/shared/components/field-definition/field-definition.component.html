@@ -30,7 +30,7 @@
         </ng-container>
         <div *ngIf="isEditing">
             <editor #tinyMceEditor
-                [init]="{toolbar: false, menubar: false, height:200,width:250, plugins: 'quickbars'}"
+                [init]="tinyMceConfig"
                 [(ngModel)]="editedContent">
             </editor>
             <div style="float:right;">

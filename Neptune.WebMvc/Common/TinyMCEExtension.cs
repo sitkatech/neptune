@@ -17,10 +17,17 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System.Linq.Expressions;
 using System.Text.Encodings.Web;
+using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Drawing.Wordprocessing;
+using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Office2010.PowerPoint;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Neptune.WebMvc.Common.Models;
+using static System.Net.Mime.MediaTypeNames;
 using TagBuilder = Microsoft.AspNetCore.Mvc.Rendering.TagBuilder;
 
 namespace Neptune.WebMvc.Common
@@ -180,36 +187,34 @@ namespace Neptune.WebMvc.Common
                 case TinyMCEToolbarStyle.All:
                     plugins = "code lists link image table code help wordcount charmap anchor fullscreen";
                     toolbarSettings =
-                        "code | styleselect | bold italic removeformat | bullist numlist outdent indent | image table hr charmap | link unlink anchor | styles | fontfamily | fullscreen ";
+                        "undo redo | styleselect | bold italic | bullist numlist | alignleft aligncenter alignright alignjustify | outdent indent | blockquote table | image media link unlink | styles | code | fullscreen ";
                     toolbarMode = "wrap";
                     hasImageToolbarButton = true;
                     break;
                 case TinyMCEToolbarStyle.AllOnOneRow:
                     plugins = "AllOnOneRow";
                     toolbarMode = "floating";
-                    toolbarSettings =
-                        "styleselect | bold italic removeformat | bullist numlist outdent indent | image table hr charmap | link unlink anchor | styles | fontfamily ";
-
+                    toolbarSettings = 
+                        "undo redo | styleselect | bold italic | bullist numlist | alignleft aligncenter alignright alignjustify | outdent indent | blockquote table | image media link unlink | styles | code";
                     hasImageToolbarButton = true;
                     break;
                 case TinyMCEToolbarStyle.AllOnOneRowNoMaximize:
                     plugins = "lists link image table code help wordcount charmap anchor";
                     toolbarMode = "floating";
                     toolbarSettings =
-                        "styleselect | bold italic removeformat | bullist numlist outdent indent | image table hr charmap | link unlink anchor | styles | fontfamily ";
-
+                        "undo redo | styleselect | bold italic | bullist numlist | alignleft aligncenter alignright alignjustify | outdent indent | blockquote table | image media link unlink | styles | code";
                     hasImageToolbarButton = true;
                     break;
                 case TinyMCEToolbarStyle.Minimal:
                     toolbarSettings =
-                        "styleselect | bold italic removeformat | bullist numlist outdent indent | styles | fontfamily | link unlink anchor ";
+                        " styleselect | bold italic removeformat | bullist numlist outdent indent | image table hr charmap | link unlink anchor";
                     plugins = "lists link code help wordcount anchor";
                     toolbarMode = "floating";
                     hasImageToolbarButton = false;
                     break;
                 case TinyMCEToolbarStyle.MinimalWithImages:
                     toolbarSettings =
-                        " styleselect | bold italic removeformat | bullist numlist outdent indent | image table hr charmap | link unlink anchor";
+                        "styleselect | bold italic removeformat | bullist numlist outdent indent | image table hr charmap | link unlink anchor";
                     plugins = "lists link image table code help wordcount charmap anchor";
                     toolbarMode = "floating";
                     hasImageToolbarButton = true;
