@@ -93,12 +93,12 @@ public class HRURefreshJob
                 _logger.LogWarning(ex.Message);
             }
 
-            if (stopwatch.Elapsed.Minutes > 50)
+            if (stopwatch.Elapsed.Minutes > 45)
             {
                 break;
             }
 
-            if (stopwatch.Elapsed.Minutes > 50)
+            if (stopwatch.Elapsed.Minutes > 45)
             {
                 break;
             }
