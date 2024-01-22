@@ -838,6 +838,10 @@ public partial class NeptuneDbContext : DbContext
         {
             entity.HasKey(e => e.TreatmentBMPID).HasName("PK_TreatmentBMP_TreatmentBMPID");
 
+            entity.HasIndex(e => new { e.StormwaterJurisdictionID, e.TreatmentBMPName }, "AK_TreatmentBMP_StormwaterJurisdictionID_TreatmentBMPName")
+                .IsUnique()
+                .HasFilter("([ProjectID] IS NULL)");
+
             entity.HasOne(d => d.InventoryVerifiedByPerson).WithMany(p => p.TreatmentBMPs).HasConstraintName("FK_TreatmentBMP_Person_InventoryVerifiedByPersonID_PersonID");
 
             entity.HasOne(d => d.OwnerOrganization).WithMany(p => p.TreatmentBMPs)

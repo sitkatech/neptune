@@ -78,19 +78,6 @@ namespace Neptune.API.Controllers
                 return BadRequest();
             }
 
-            var existingTreatmentBMPs = _dbContext.TreatmentBMPs.AsNoTracking().ToList();
-            foreach (var treatmentBMPUpsertDto in treatmentBMPUpsertDtos)
-            {
-                var namingConflicts = existingTreatmentBMPs
-                    .Where(x => x.TreatmentBMPName == treatmentBMPUpsertDto.TreatmentBMPName && x.TreatmentBMPID != treatmentBMPUpsertDto.TreatmentBMPID)
-                    .ToList();
-
-                if (namingConflicts.Count > 0)
-                {
-                    ModelState.AddModelError("TreatmentBMPName", 
-                        $"A Treatment BMP with the name {treatmentBMPUpsertDto.TreatmentBMPName} already exists. Treatment BMP names must be unique.");
-                }
-            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -99,8 +86,6 @@ namespace Neptune.API.Controllers
             await Projects.DeleteProjectNereidResultsAndGrantScores(_dbContext, projectID);
             var existingProjectTreatmentBMPs = _dbContext.TreatmentBMPs.Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP).Where(x => x.ProjectID == project.ProjectID).ToList();
             var existingProjectTreatmentBMPModelingAttributes = existingProjectTreatmentBMPs.Where(x => x.TreatmentBMPModelingAttributeTreatmentBMP != null).Select(x => x.TreatmentBMPModelingAttributeTreatmentBMP).ToList();
-
-            var allTreatmentBMPModelingAttributesInDatabase = _dbContext.TreatmentBMPModelingAttributes;
 
             var updatedTreatmentBMPs = treatmentBMPUpsertDtos.Select(x => TreatmentBMPs.TreatmentBMPFromUpsertDtoAndProject(_dbContext, x, project)).ToList();
 

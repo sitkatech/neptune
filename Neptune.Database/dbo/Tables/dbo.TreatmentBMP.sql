@@ -27,11 +27,14 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[UpstreamBMPID] [int] NULL CONSTRAINT [FK_TreatmentBMP_TreatmentBMP_UpstreamBMPID_TreatmentBMPID] FOREIGN KEY REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID]),
 	[RegionalSubbasinID] [int] NULL,
 	[ProjectID] [int] NULL CONSTRAINT [FK_TreatmentBMP_Project_ProjectID] FOREIGN KEY REFERENCES [dbo].[Project] ([ProjectID]),
-	CONSTRAINT [AK_TreatmentBMP_StormwaterJurisdictionID_TreatmentBMPName] UNIQUE([StormwaterJurisdictionID], [TreatmentBMPName]),
 	CONSTRAINT [AK_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID] UNIQUE([TreatmentBMPID], [TreatmentBMPTypeID]),
 	CONSTRAINT [CK_TreatmentBMP_LifespanEndDateMustBeSetIfLifespanTypeIsFixedEndDate] CHECK  (([TreatmentBMPLifespanTypeID]=(3) AND [TreatmentBMPLifespanEndDate] IS NOT NULL OR [TreatmentBMPLifespanTypeID]<>(3) AND [TreatmentBMPLifespanEndDate] IS NULL)),
 	CONSTRAINT [CK_TreatmentBMP_TrashCaptureEffectivenessMustBeBetween1And99] CHECK  (([TrashCaptureEffectiveness] IS NULL OR [TrashCaptureEffectiveness]>(0) AND [TrashCaptureEffectiveness]<(100)))
 )
+GO
+
+CREATE UNIQUE INDEX AK_TreatmentBMP_StormwaterJurisdictionID_TreatmentBMPName ON dbo.TreatmentBMP 
+(StormwaterJurisdictionID, TreatmentBMPName) WHERE ProjectID IS NULL
 GO
 
 CREATE SPATIAL INDEX [SPATIAL_TreatmentBMP_LocationPoint4326] ON [dbo].[TreatmentBMP]

@@ -8,7 +8,6 @@ using NetTopologySuite.Geometries;
 namespace Neptune.EFModels.Entities;
 
 [Table("TreatmentBMP")]
-[Index("StormwaterJurisdictionID", "TreatmentBMPName", Name = "AK_TreatmentBMP_StormwaterJurisdictionID_TreatmentBMPName", IsUnique = true)]
 [Index("TreatmentBMPID", "TreatmentBMPTypeID", Name = "AK_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID", IsUnique = true)]
 [Index("LocationPoint", Name = "SPATIAL_TreatmentBMP_LocationPoint")]
 [Index("LocationPoint4326", Name = "SPATIAL_TreatmentBMP_LocationPoint4326")]
