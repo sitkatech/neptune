@@ -28,7 +28,7 @@ import { IconComponent } from './components/icon/icon.component';
 import { UnderConstructionComponent } from './components/under-construction/under-construction.component';
 import { NeptuneModelingResultSigFigPipe } from './pipes/neptune-modeling-result-sig-fig.pipe';
 import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
-import { TreatmentBmpMapEditorAndModelingAttributesComponent } from './components/projects/treatment-bmp-map-editor-and-modeling-attributes/treatment-bmp-map-editor-and-modeling-attributes.component';
+import { TreatmentBmpMapEditorAndModelingAttributesComponent } from './components/projects/project-map/project-map.component';
 import { ModelResultsComponent } from './components/projects/model-results/model-results.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AttachmentsDisplayComponent } from './components/projects/attachments-display/attachments-display.component';

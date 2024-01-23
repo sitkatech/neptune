@@ -3,7 +3,7 @@ import 'leaflet.fullscreen';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { TreatmentBmpMapEditorAndModelingAttributesComponent } from 'src/app/shared/components/projects/treatment-bmp-map-editor-and-modeling-attributes/treatment-bmp-map-editor-and-modeling-attributes.component';
+import { TreatmentBmpMapEditorAndModelingAttributesComponent } from 'src/app/shared/components/projects/project-map/project-map.component';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 

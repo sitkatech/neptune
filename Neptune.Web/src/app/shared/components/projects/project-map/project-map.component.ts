@@ -33,9 +33,9 @@ declare var $: any
 
 //This component could use a fair amount of cleanup. It should likely be sent in the treatment bmps and delineations instead of grabbing them itself
 @Component({
-  selector: 'hippocamp-treatment-bmp-map-editor-and-modeling-attributes',
-  templateUrl: './treatment-bmp-map-editor-and-modeling-attributes.component.html',
-  styleUrls: ['./treatment-bmp-map-editor-and-modeling-attributes.component.scss']
+  selector: 'project-map',
+  templateUrl: './project-map.component.html',
+  styleUrls: ['./project-map.component.scss']
 })
 export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnInit {
 
