@@ -78,6 +78,19 @@ namespace Neptune.API.Controllers
                 return BadRequest();
             }
 
+            var existingTreatmentBMPs = _dbContext.TreatmentBMPs.Where(x => x.ProjectID == projectID).AsNoTracking().ToList();
+            foreach (var treatmentBMPUpsertDto in treatmentBMPUpsertDtos)
+            {
+                var namingConflicts = existingTreatmentBMPs
+                    .Where(x => x.TreatmentBMPName == treatmentBMPUpsertDto.TreatmentBMPName && x.TreatmentBMPID != treatmentBMPUpsertDto.TreatmentBMPID)
+                    .ToList();
+
+                if (namingConflicts.Count > 0)
+                {
+                    ModelState.AddModelError("TreatmentBMPName", 
+                        $"A Treatment BMP with the name {treatmentBMPUpsertDto.TreatmentBMPName} already exists for this project. Treatment BMP names must be unique within a project.");
+                }
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

@@ -375,6 +375,25 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
       });
 
     $(leafletControlLayersSelector).append(closem);
+
+    
+    this.map.on("click", (event: L.LeafletEvent) => {
+      if (!this.isEditingLocation) {
+        return;
+      }
+      if (this.selectedObjectMarker) {
+        this.map.removeLayer(this.selectedObjectMarker);
+      }
+      this.selectedObjectMarker = new L.marker(
+        event.latlng,
+        { icon: MarkerHelper.selectedMarker, zIndexOffset: 1000 });
+
+      this.selectedObjectMarker.addTo(this.map);
+
+      this.selectedTreatmentBMP.Latitude = event.latlng.lat;
+      this.selectedTreatmentBMP.Longitude = event.latlng.lng;
+      this.updateTreatmentBMPsLayer();
+    });
   }
 
   public selectTreatmentBMP(treatmentBMPID: number) {
