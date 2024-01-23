@@ -90,7 +90,7 @@ as return
         join projectCentralizedRSBs prsb on t.RegionalSubbasinID = prsb.RegionalSubbasinID
         where pnr.ProjectID = @projectID
 
-        union all
+        union
 
         -- LG for RSBs and WQMPs inside centralized upstream RSBs
         select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadGenerating' as NereidResultType
@@ -98,14 +98,14 @@ as return
         join projectCentralizedRSBs prsb on pnr.RegionalSubbasinID = prsb.RegionalSubbasinID
         where pnr.ProjectID = @projectID and TreatmentBMPID is null and NodeID not like '%-TMNT'
 
-        union all
+        union
 
         -- LG for distributed delineations for this project
         select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadGenerating' as NereidResultType
         from dbo.ProjectNereidResult pnr
         join projectDelineations pd on pnr.ProjectID = pd.ProjectID and pnr.DelineationID = pd.DelineationID 
 
-        union all
+        union
         -- LR existing
         select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadReducingExisting' as NereidResultType
         from dbo.ProjectNereidResult pnr
@@ -113,14 +113,14 @@ as return
         join projectCentralizedRSBs prsb on pd.RegionalSubbasinID = prsb.RegionalSubbasinID
         where pnr.ProjectID = @projectID
 
-        union all
+        union
         select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadReducingExisting' as NereidResultType
         from dbo.ProjectNereidResult pnr
         join dbo.WaterQualityManagementPlan t on pnr.WaterQualityManagementPlanID = t.WaterQualityManagementPlanID
         join projectCentralizedRSBs prsb on pnr.RegionalSubbasinID = prsb.RegionalSubbasinID
         where pnr.ProjectID = @projectID and NodeID like '%-TMNT'
 
-        union all
+        union
 
         -- LR for Project
         select pnr.ProjectNereidResultID, pnr.ProjectID, pnr.NodeID, 'LoadReducingNew' as NereidResultType
