@@ -1,15 +1,10 @@
-<div class="row m-1 mb-3" *ngIf="!readOnly">
-    <button class="btn btn-hippocamp ml-auto" (click)="addTreatmentBMP()">
-        Add New Treatment BMP
-    </button>
-</div>
-<div class="row" *ngIf="!readOnly || (readOnly && treatmentBMPs != null && treatmentBMPs.length > 0); else noTreatmentBMPs">
+<div class="row" *ngIf="(treatmentBMPs != null && treatmentBMPs.length > 0); else noTreatmentBMPs">
     <div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9" [style.height]="mapHeight" style="overflow-y: auto;">
         <ul class="list-group">
             <li class="list-group-item font-weight-bold" *ngFor="let treatmentBMP of treatmentBMPs"
                 [class.selected]="selectedListItem == treatmentBMP.TreatmentBMPID"
                 (click)="selectTreatmentBMP(treatmentBMP.TreatmentBMPID)">
-                {{treatmentBMP.TreatmentBMPName ?? "New Treatment BMP"}}
+                {{treatmentBMP.TreatmentBMPName}}
                 <p class="small mb-0 mt-1">
                     Type: {{treatmentBMP.TreatmentBMPTypeID ? getTypeNameByTypeID(treatmentBMP.TreatmentBMPTypeID) : "Not Selected"}}
                 </p>
@@ -17,34 +12,19 @@
         </ul>
     </div>
     <div class="col-sm-8 col-md-9 col-sm-push-4 col-md-push-3">
-        <div id={{mapID}} class="location-card" [style.height]="mapHeight" [style.cursor]="isEditingLocation ? 'crosshair' : ''"></div>
+        <div id={{mapID}} class="location-card" [style.height]="mapHeight" [style.cursor]="''"></div>
     </div>
 </div>
-<div class="card mt-4" *ngIf="selectedTreatmentBMP; else noTreatmentBMPsCheckboxOption">
+<div class="card mt-4" *ngIf="selectedTreatmentBMP">
     <div class="card-body bg-white">
         <div class="row">
-            <div class="col-sm-4 order-sm-last" *ngIf="!readOnly">
-                <div class="row d-flex">
-                    <div class="col-auto ml-auto text-right">
-                        <a class="btn mt-2 btn-outline-info  mb-2" (click)="toggleIsEditingLocation()">
-                            <i class="fa fa-edit mr-1"></i>{{isEditingLocation ? "Save Location" : "Edit Location"}}
-                        </a>
-                        <a class="btn btn-outline-danger ml-2" (click)="onDelete()">
-                            <i class="fa fa-trash mr-1"></i> Delete
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div [ngClass]="readOnly ? 'col-12' : 'col-sm-8'">
+            <div class="col-12">
                 <div class="row mt-2">
                     <div class="col-lg-3 control-label font-weight-bold text-lg-right">
                         <label>Name</label>
                     </div>
                     <div class="col-lg-9">
-                        <input type="text" *ngIf="!readOnly; else readOnlyName" class="form-control" name="name" [(ngModel)]="selectedTreatmentBMP.TreatmentBMPName">
-                        <ng-template #readOnlyName>
-                            {{selectedTreatmentBMP.TreatmentBMPName}}
-                        </ng-template>
+                        {{selectedTreatmentBMP.TreatmentBMPName}}
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -52,31 +32,15 @@
                         <field-definition fieldDefinitionType="TreatmentBMPType"></field-definition>
                     </div>
                     <div class="col-lg-9">
-                        <div *ngIf="selectedTreatmentBMP.TreatmentBMPID > 0 || readOnly; else treatmentBMPTypeSelect">
-                            {{getTypeNameByTypeID(selectedTreatmentBMP.TreatmentBMPTypeID)}}
-                            <button class="btn btn-outline-primary mr-2" (click)="onEditTreatmentBMPTypes()" *ngIf="!readOnly">
-                                Change Type
-                            </button>
-                        </div>
-                        <ng-template #treatmentBMPTypeSelect>
-                            <ng-select [(ngModel)]="selectedTreatmentBMP.TreatmentBMPTypeID" (change)="updateModelingTypeOnTypeChange($event)"
-                                [items]="treatmentBMPTypes" bindLabel="TreatmentBMPTypeName" bindValue="TreatmentBMPTypeID" 
-                                name="type" required>
-                            </ng-select>
-                        </ng-template>
+                        {{getTypeNameByTypeID(selectedTreatmentBMP.TreatmentBMPTypeID)}}
                     </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col-lg-3 control-label d text-lg-right">
-                        <label><span class="font-weight-bold">Notes</span><span class="font-italic"> (optional)</span></label>
+                        <label><span class="font-weight-bold">Notes</span></label>
                     </div>
                     <div class="col-lg-9">
-                        <textarea *ngIf="!readOnly; else readOnlyNotes" class="form-control" name="notes" style="height: 60px" placeholder=""
-                            [(ngModel)]="selectedTreatmentBMP.Notes">
-                        </textarea>
-                        <ng-template #readOnlyNotes>
-                            {{selectedTreatmentBMP.Notes}}
-                        </ng-template>
+                        {{selectedTreatmentBMP.Notes}}
                     </div>
                 </div>
             </div>
@@ -88,28 +52,28 @@
                         <h5 class="border-bottom p-2">Location</h5>
                     </div>
                     <ng-container *ngIf="selectedTreatmentBMP.Latitude && selectedTreatmentBMP.Longitude; else noLocationSelected">
-                        <div class="col-sm-4 text-sm-right font-weight-bold mt-1">Latitude</div>
-                        <div class="col-sm-8">
+                        <div class="col-sm-5 text-sm-right font-weight-bold mt-1">Latitude</div>
+                        <div class="col-sm-7">
                             {{selectedTreatmentBMP.Latitude}}
                         </div>
-                        <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">Longitude</div>
-                        <div class="col-sm-8 mt-1">
+                        <div class="col-sm-5 mt-1 font-weight-bold text-sm-right">Longitude</div>
+                        <div class="col-sm-7 mt-1">
                             {{selectedTreatmentBMP.Longitude}}
                         </div>
-                        <div class="col-sm-4 mt-1 font-weight-bold text-sm-right"><field-definition fieldDefinitionType="Area" [labelOverride]="'Delineation Area'"></field-definition></div>
-                        <div class="col-sm-8 mt-1" [class.font-italic]="!treatmentBMPHasDelineation(selectedTreatmentBMP.TreatmentBMPID)">
+                        <div class="col-sm-5 mt-1 font-weight-bold text-sm-right"><field-definition fieldDefinitionType="Area" [labelOverride]="'Delineation Area'"></field-definition></div>
+                        <div class="col-sm-7 mt-1" [class.font-italic]="!treatmentBMPHasDelineation(selectedTreatmentBMP.TreatmentBMPID)">
                             {{getDelineationAreaForTreatmentBMP(selectedTreatmentBMP.TreatmentBMPID)}}
                         </div>
                         <ng-container *ngIf="selectedTreatmentBMP.WatershedName">
-                            <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">
+                            <div class="col-sm-5 mt-1 font-weight-bold text-sm-right">
                                 <field-definition [fieldDefinitionType]="'Watershed'"></field-definition>
                             </div>
-                            <div class="col-sm-8 mt-1">{{selectedTreatmentBMP.WatershedName}}</div>
+                            <div class="col-sm-7 mt-1">{{selectedTreatmentBMP.WatershedName}}</div>
                         </ng-container>
                     </ng-container>
                     <ng-template #noLocationSelected>
                         <div class="font-italic ml-3">
-                           {{!readOnly ? "Location details will display once Treatment BMP location is selected." : "Location details not yet provided."}}
+                            Location details not yet provided.
                         </div>
                     </ng-template>
                 </div>
@@ -123,27 +87,16 @@
                 <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeID; else noTypeSelected">
                     <ng-container *ngIf="getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID).length > 0; else modelingTypesNotApplicable">
                         <div class="row p-2" *ngFor="let treatmentBMPModelingAttributeDefinitionDto of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID)">
-                            <div class="col-sm-4 control-label font-weight-bold text-sm-right">
+                            <div class="col-sm-7 control-label font-weight-bold text-sm-right">
                                 <field-definition [fieldDefinitionType]="treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName"></field-definition>
                             </div>
-                            <div class="col-sm-6" *ngIf="isFieldWithDropdown(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName); else numericModelingAttributeField">
-                                <select class="form-control" *ngIf="!readOnly; else readOnlyDropdownDisplay" [(ngModel)]="selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]" [name]="treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName">
-                                    <option *ngFor="let dropdownItem of getModelingAttributeDropdownItemsByFieldName(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName)" [value]="dropdownItem.ItemID">
-                                        {{dropdownItem.ItemName}}
-                                    </option>
-                                </select>
-                                <ng-template #readOnlyDropdownDisplay>
-                                    {{getDropdownItemNameByFieldNameAndItemID(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName, selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName])}}
-                                </ng-template>
+                            <div class="col-sm-5" *ngIf="isFieldWithDropdown(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName); else numericModelingAttributeField">
+                                {{getDropdownItemNameByFieldNameAndItemID(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName, selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName])}}
                             </div>
                             <ng-template #numericModelingAttributeField>
-                                <div class="col-sm-4">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" [(ngModel)]="selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]" [name]="treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName" [readOnly]="readOnly">
-                                        <div class="input-group-append">
-                                        <span class="input-group-text">{{treatmentBMPModelingAttributeDefinitionDto.Units}}</span>
-                                        </div>
-                                    </div>
+                                <div class="col-sm-5">
+                                    {{selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName] | number}}
+                                    <span *ngIf="selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]">{{treatmentBMPModelingAttributeDefinitionDto.Units}}</span>
                                 </div>
                             </ng-template>
                         </div>
@@ -163,80 +116,6 @@
         </div>
     </div>
 </div>
-<ng-template #noTreatmentBMPsCheckboxOption>
-    <div class="row m-2 mt-4 mb-0" *ngIf="!readOnly">
-        <div class="ml-auto">
-            <input type="checkbox" name="no-treatment-bmps" [(ngModel)]="project.DoesNotIncludeTreatmentBMPs">
-            <label for="no-treatment-bmps" class="ml-2">My project does not include any Stormwater Treatment BMPs</label>
-        </div>
-    </div>
-</ng-template>
 <ng-template #noTreatmentBMPs>
     <p class="text-italic">No BMPs have been added to this project yet</p>
-</ng-template>
-<div class="row mt-3" *ngIf="!readOnly">
-    <div class="col-auto ml-auto">
-        <button class="btn btn-outline-primary mr-2" [disabled]="isLoadingSubmit" (click)="onSubmit()">
-            <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
-            Save
-        </button>
-        <button class="btn btn-hippocamp" [disabled]="isLoadingSubmit" (click)="onSubmit(true)">
-            <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
-            Save and Continue
-        </button>
-    </div>
-</div>
-<ng-template #deleteTreatmentBMPModal let-modal *ngIf="!readOnly">
-    <div class="modal-header">
-        <h5 class="modal-title text-white" id="deleteTreatmentBMPModalTitle">Warning</h5>
-        <button type="button" class="close" aria-label="Close" (click)="modal.close('Cross click')">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <p>
-            You are about to delete {{selectedTreatmentBMP.TreatmentBMPName}}.
-        </p>
-        <p>Are you sure you wish to proceed?</p>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger btn-sm" (click)="deleteTreatmentBMP()">
-                <span *ngIf="isLoadingDelete" class="fa fa-spinner loading-spinner"></span>
-                Delete
-            </button>
-            <button type="button" class="btn btn-secondary btn-sm" (click)="modal.close('Cancel click')">Cancel</button>
-        </div>
-    </div>
-</ng-template>
-
-<ng-template #editTreatmentBMPTypeModal let-modal *ngIf="!readOnly">
-    <div class="modal-header">
-        <h5 class="modal-title text-white" id="editTreatmentBMPTypeModalTitle">Change Treatment BMP Type</h5>
-        <button type="button" class="close" aria-label="Close" (click)="modal.close('Cross click')">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <p>
-            This will change BMP “{{selectedTreatmentBMP.TreatmentBMPName}}” to the selected BMP Type. 
-            Custom Attributes and Model Attributes of this BMP which are not applicable to the new BMP type will be discarded.
-        </p>
-        <p>Are you sure you wish to proceed?</p>
-        <div class="row mt-4">
-            <div class="col-sm-3 control-label text-sm-right">
-                <field-definition fieldDefinitionType="TreatmentBMPType"></field-definition>
-            </div>
-            <div class="col-sm-7">
-                <select name="type" class="form-control mb-3" [(ngModel)]="selectedTreatmentBMPType" (change)="updateSelectedProjectLoadReducingResult()" required>
-                    <option *ngFor="let treatmentBMPType of treatmentBMPTypes" [value]="treatmentBMPType.TreatmentBMPTypeID">{{ treatmentBMPType.TreatmentBMPTypeName }}</option>
-                </select>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-primary btn-sm" (click)="changeTreatmentBMPType(selectedTreatmentBMPType)">
-                <span *ngIf="isLoadingDelete" class="fa fa-spinner loading-spinner"></span>
-                Update
-            </button>
-            <button type="button" class="btn btn-secondary btn-sm" (click)="modal.close('Cancel click')">Cancel</button>
-        </div>
-    </div>
 </ng-template>
