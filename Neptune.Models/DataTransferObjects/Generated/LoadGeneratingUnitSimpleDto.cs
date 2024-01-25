@@ -13,5 +13,6 @@ namespace Neptune.Models.DataTransferObjects
         public int? DelineationID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
         public bool? IsEmptyResponseFromHRUService { get; set; }
+        public DateTime? DateHRURequested { get; set; }
     }
 }

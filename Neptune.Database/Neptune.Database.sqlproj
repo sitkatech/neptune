@@ -406,6 +406,9 @@
     <Build Include="dbo\Procs\dbo.pTrashGeneratingUnit4326MakeValid.sql" />
     <Build Include="dbo\Procs\dbo.pWatershedMakeValid.sql" />
     <Build Include="dbo\Views\dbo.vTreatmentBMPGdbExport.sql" />
+    <Build Include="dbo\Tables\dbo.SpatialGridUnit.sql" />
+    <Build Include="dbo\Views\dbo.vLoadGeneratingUnitUpdateCandidate.sql" />
+    <Build Include="dbo\Views\dbo.vProjectLoadGeneratingUnitUpdateCandidate.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Neptune.Database.refactorlog" />

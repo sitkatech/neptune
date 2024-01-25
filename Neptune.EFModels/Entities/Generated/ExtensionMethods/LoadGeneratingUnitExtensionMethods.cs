@@ -18,7 +18,8 @@ namespace Neptune.EFModels.Entities
                 RegionalSubbasinID = loadGeneratingUnit.RegionalSubbasinID,
                 DelineationID = loadGeneratingUnit.DelineationID,
                 WaterQualityManagementPlanID = loadGeneratingUnit.WaterQualityManagementPlanID,
-                IsEmptyResponseFromHRUService = loadGeneratingUnit.IsEmptyResponseFromHRUService
+                IsEmptyResponseFromHRUService = loadGeneratingUnit.IsEmptyResponseFromHRUService,
+                DateHRURequested = loadGeneratingUnit.DateHRURequested
             };
             return dto;
         }

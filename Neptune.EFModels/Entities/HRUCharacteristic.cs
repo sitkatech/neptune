@@ -1,6 +1,6 @@
 ﻿namespace Neptune.EFModels.Entities
 {
-    public partial class HRUCharacteristic
+    public partial class HRUCharacteristic : IHRUCharacteristic
     {
         public TreatmentBMP? GetTreatmentBMP()
         {

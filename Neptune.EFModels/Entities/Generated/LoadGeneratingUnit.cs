@@ -27,6 +27,9 @@ public partial class LoadGeneratingUnit
 
     public bool? IsEmptyResponseFromHRUService { get; set; }
 
+    [Column(TypeName = "datetime")]
+    public DateTime? DateHRURequested { get; set; }
+
     [ForeignKey("DelineationID")]
     [InverseProperty("LoadGeneratingUnits")]
     public virtual Delineation? Delineation { get; set; }

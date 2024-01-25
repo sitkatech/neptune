@@ -127,6 +127,8 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<SourceControlBMPAttribute> SourceControlBMPAttributes { get; set; }
 
+    public virtual DbSet<SpatialGridUnit> SpatialGridUnits { get; set; }
+
     public virtual DbSet<StateProvince> StateProvinces { get; set; }
 
     public virtual DbSet<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
@@ -199,6 +201,8 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<vLoadGeneratingResult> vLoadGeneratingResults { get; set; }
 
+    public virtual DbSet<vLoadGeneratingUnitUpdateCandidate> vLoadGeneratingUnitUpdateCandidates { get; set; }
+
     public virtual DbSet<vLoadReducingResult> vLoadReducingResults { get; set; }
 
     public virtual DbSet<vMaintenanceRecordDetailed> vMaintenanceRecordDetaileds { get; set; }
@@ -238,6 +242,8 @@ public partial class NeptuneDbContext : DbContext
     public virtual DbSet<vProjectGrantScore> vProjectGrantScores { get; set; }
 
     public virtual DbSet<vProjectLoadGeneratingResult> vProjectLoadGeneratingResults { get; set; }
+
+    public virtual DbSet<vProjectLoadGeneratingUnitUpdateCandidate> vProjectLoadGeneratingUnitUpdateCandidates { get; set; }
 
     public virtual DbSet<vProjectLoadReducingResult> vProjectLoadReducingResults { get; set; }
 
@@ -762,6 +768,13 @@ public partial class NeptuneDbContext : DbContext
             entity.Property(e => e.SourceControlBMPAttributeID).ValueGeneratedNever();
         });
 
+        modelBuilder.Entity<SpatialGridUnit>(entity =>
+        {
+            entity.HasKey(e => e.SpatialGridUnitID).HasName("PK_SpatialGridUnit_SpatialGridUnitID");
+
+            entity.Property(e => e.SpatialGridUnitID).ValueGeneratedNever();
+        });
+
         modelBuilder.Entity<StateProvince>(entity =>
         {
             entity.HasKey(e => e.StateProvinceID).HasName("PK_StateProvince_StateProvinceID");
@@ -1069,6 +1082,11 @@ public partial class NeptuneDbContext : DbContext
             entity.ToView("vLoadGeneratingResult");
         });
 
+        modelBuilder.Entity<vLoadGeneratingUnitUpdateCandidate>(entity =>
+        {
+            entity.ToView("vLoadGeneratingUnitUpdateCandidate");
+        });
+
         modelBuilder.Entity<vLoadReducingResult>(entity =>
         {
             entity.ToView("vLoadReducingResult");
@@ -1167,6 +1185,11 @@ public partial class NeptuneDbContext : DbContext
         modelBuilder.Entity<vProjectLoadGeneratingResult>(entity =>
         {
             entity.ToView("vProjectLoadGeneratingResult");
+        });
+
+        modelBuilder.Entity<vProjectLoadGeneratingUnitUpdateCandidate>(entity =>
+        {
+            entity.ToView("vProjectLoadGeneratingUnitUpdateCandidate");
         });
 
         modelBuilder.Entity<vProjectLoadReducingResult>(entity =>

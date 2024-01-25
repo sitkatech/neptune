@@ -8,7 +8,6 @@ using Neptune.Common.Email;
 using Neptune.Common.Services;
 using Neptune.Common.Services.GDAL;
 using Neptune.EFModels.Entities;
-using Neptune.Jobs.EsriAsynchronousJob;
 using Neptune.Jobs.Services;
 
 namespace Neptune.Jobs.Hangfire
@@ -130,56 +129,41 @@ You can view the results or trigger another network solve <a href='{planningURL}
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var loadGeneratingUnitsToUpdate = _dbContext.ProjectLoadGeneratingUnits.Where(x => x.ProjectID == projectID && x.ProjectLoadGeneratingUnitGeometry.Area >= 10).ToList();
-            var loadGeneratingUnitsToUpdateGroupedByRegionalSubbasin = loadGeneratingUnitsToUpdate.GroupBy(x => x.RegionalSubbasinID);
+            var loadGeneratingUnitsToUpdate = _dbContext.vProjectLoadGeneratingUnitUpdateCandidates.Where(x => x.ProjectID == projectID).ToList();
+            var loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit = loadGeneratingUnitsToUpdate.GroupBy(x => x.SpatialGridUnitID);
 
-            foreach (var group in loadGeneratingUnitsToUpdateGroupedByRegionalSubbasin)
+            foreach (var group in loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit)
             {
                 try
                 {
-                    var projectLoadGeneratingUnits = group.ToList();
-                    var hruRequestFeatures = HruRequestFeatureHelpers.GetHRURequestFeatures(
-                        projectLoadGeneratingUnits.ToDictionary(x => x.ProjectLoadGeneratingUnitID,
-                            x => x.ProjectLoadGeneratingUnitGeometry), true);
-                    var hruResponseFeatures =
-                        await _ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList());
+                    var loadGeneratingUnitIDs = group.Select(x => x.PrimaryKey);
+                    await _dbContext.ProjectLoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
+                            .Contains(x.ProjectLoadGeneratingUnitID))
+                        .ExecuteUpdateAsync(x => x.SetProperty(y => y.DateHRURequested, DateTime.UtcNow));
+                    var hruResponseResult = await HRURefreshJob.ProcessHRUsForLGUs(group, _ocgisService, true);
 
+                    var hruResponseFeatures = hruResponseResult.HRUResponseFeatures;
                     if (!hruResponseFeatures.Any())
                     {
-                        foreach (var loadGeneratingUnit in projectLoadGeneratingUnits)
-                        {
-                            loadGeneratingUnit.IsEmptyResponseFromHRUService = true;
-                        }
+                        var lguIDsWithProblems = hruResponseResult.LoadGeneratingUnitIDs;
+                        await _dbContext.ProjectLoadGeneratingUnits.Where(x =>
+                                lguIDsWithProblems.Contains(x.ProjectLoadGeneratingUnitID))
+                            .ExecuteUpdateAsync(x => x.SetProperty(y => y.IsEmptyResponseFromHRUService, true));
 
-                        _logger.LogWarning(
-                            $"No data for ProjectLGUs with these IDs: {string.Join(", ", projectLoadGeneratingUnits.Select(x => x.ProjectLoadGeneratingUnitID.ToString()))}");
+                        _logger.LogWarning($"No data for PLGUs with these IDs: {string.Join(", ", lguIDsWithProblems)}");
                     }
 
                     var projectHruCharacteristics = hruResponseFeatures.Select(x =>
                     {
-                        var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
-                            y.HRUCharacteristicLandUseCodeName == x.Attributes.ModelBasinLandUseDescription);
-                        var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
-                            y.HRUCharacteristicLandUseCodeName == x.Attributes.BaselineLandUseDescription);
-
                         var projectHRUCharacteristic = new ProjectHRUCharacteristic
                         {
                             ProjectLoadGeneratingUnitID = x.Attributes.QueryFeatureID,
-                            ProjectID = projectID,
-                            HydrologicSoilGroup = x.Attributes.HydrologicSoilGroup,
-                            SlopePercentage = x.Attributes.SlopePercentage.GetValueOrDefault(),
-                            ImperviousAcres = x.Attributes.ImperviousAcres.GetValueOrDefault(),
-                            LastUpdated = DateTime.UtcNow,
-                            Area = x.Attributes.Acres.GetValueOrDefault(),
-                            HRUCharacteristicLandUseCodeID =
-                                hruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID,
-                            BaselineImperviousAcres = x.Attributes.BaselineImperviousAcres.GetValueOrDefault(),
-                            BaselineHRUCharacteristicLandUseCodeID =
-                                baselineHruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID
+                            ProjectID = projectID
                         };
+                        HRURefreshJob.SetHRUCharacteristicProperties(x, projectHRUCharacteristic);
                         return projectHRUCharacteristic;
                     }).ToList();
-                    await _dbContext.ProjectHRUCharacteristics.AddRangeAsync(projectHruCharacteristics);
+                    _dbContext.ProjectHRUCharacteristics.AddRange(projectHruCharacteristics);
                     await _dbContext.SaveChangesAsync();
                 }
                 catch (Exception ex)

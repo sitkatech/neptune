@@ -32,56 +32,36 @@ public class HRURefreshJob
         var stopwatch = new Stopwatch();
         stopwatch.Start();
 
-        var lguUpdateCandidates = LoadGeneratingUnits.ListUpdateCandidates(_dbContext);
-        var loadGeneratingUnitsToUpdateGroupedByRegionalSubbasin = lguUpdateCandidates.GroupBy(x => x.RegionalSubbasinID);
+        var loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit = _dbContext.vLoadGeneratingUnitUpdateCandidates.ToList().GroupBy(x => x.SpatialGridUnitID);
 
-        foreach (var group in loadGeneratingUnitsToUpdateGroupedByRegionalSubbasin)
+        foreach (var group in loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit)
         {
             try
             {
-                var loadGeneratingUnits = group.ToList();
-                var hruRequestFeatures = HruRequestFeatureHelpers.GetHRURequestFeatures(
-                    loadGeneratingUnits.ToDictionary(x => x.LoadGeneratingUnitID,
-                        x => x.LoadGeneratingUnitGeometry), false);
-                var hruResponseFeatures =
-                    await _ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList());
+                var loadGeneratingUnitIDs = group.Select(x => x.PrimaryKey);
+                await _dbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
+                        .Contains(x.LoadGeneratingUnitID))
+                    .ExecuteUpdateAsync(x => x.SetProperty(y => y.DateHRURequested, DateTime.UtcNow));
+                var hruResponseResult = await ProcessHRUsForLGUs(group, _ocgisService, false);
 
+                var hruResponseFeatures = hruResponseResult.HRUResponseFeatures;
                 if (!hruResponseFeatures.Any())
                 {
-                    foreach (var loadGeneratingUnit in loadGeneratingUnits)
-                    {
-                        loadGeneratingUnit.IsEmptyResponseFromHRUService = true;
+                    var lguIDsWithProblems = hruResponseResult.LoadGeneratingUnitIDs;
+                    await _dbContext.LoadGeneratingUnits.Where(x =>
+                            lguIDsWithProblems.Contains(x.LoadGeneratingUnitID))
+                        .ExecuteUpdateAsync(x => x.SetProperty(y => y.IsEmptyResponseFromHRUService, true));
 
-                    }
-
-                    _logger.LogWarning(
-                        $"No data for LGUs with these IDs: {string.Join(", ", loadGeneratingUnits.Select(x => x.LoadGeneratingUnitID.ToString()))}");
+                    _logger.LogWarning($"No data for LGUs with these IDs: {string.Join(", ", lguIDsWithProblems)}");
                 }
 
                 var hruCharacteristics = hruResponseFeatures.Select(x =>
                 {
-                    var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
-                        string.Equals(y.HRUCharacteristicLandUseCodeName, x.Attributes.ModelBasinLandUseDescription,
-                            StringComparison.CurrentCultureIgnoreCase));
-                    var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
-                        string.Equals(y.HRUCharacteristicLandUseCodeName, x.Attributes.BaselineLandUseDescription,
-                            StringComparison.CurrentCultureIgnoreCase));
-
                     var hruCharacteristic = new HRUCharacteristic
                     {
-                        LoadGeneratingUnitID = x.Attributes.QueryFeatureID,
-                        HydrologicSoilGroup = x.Attributes.HydrologicSoilGroup,
-                        SlopePercentage = x.Attributes.SlopePercentage.GetValueOrDefault(),
-                        HRUCharacteristicLandUseCodeID =
-                            hruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID,
-                        BaselineHRUCharacteristicLandUseCodeID =
-                            baselineHruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID,
-                        Area = x.Attributes.Acres.GetValueOrDefault(),
-
-                        LastUpdated = DateTime.UtcNow,
-                        ImperviousAcres = x.Attributes.ImperviousAcres.GetValueOrDefault(),
-                        BaselineImperviousAcres = x.Attributes.BaselineImperviousAcres.GetValueOrDefault(),
+                        LoadGeneratingUnitID = x.Attributes.QueryFeatureID
                     };
+                    SetHRUCharacteristicProperties(x, hruCharacteristic);
                     return hruCharacteristic;
                 });
                 _dbContext.HRUCharacteristics.AddRange(hruCharacteristics);
@@ -109,6 +89,17 @@ public class HRURefreshJob
         stopwatch.Stop();
     }
 
+    public static async Task<HRUResponseResult> ProcessHRUsForLGUs(IEnumerable<ILoadGeneratingUnit> loadGeneratingUnitsGroup, OCGISService ocgisService, bool isProject)
+    {
+        var loadGeneratingUnits = loadGeneratingUnitsGroup.ToList();
+        var loadGeneratingUnitIDs = loadGeneratingUnits.Select(y => y.PrimaryKey);
+        var hruRequestFeatures = HruRequestFeatureHelpers.GetHRURequestFeatures(
+            loadGeneratingUnits.ToDictionary(x => x.PrimaryKey,
+                x => x.Geometry), isProject);
+        var hruResponseFeatures = await ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList());
+        return new HRUResponseResult(hruResponseFeatures, loadGeneratingUnitIDs);
+    }
+
     private void ExecuteNetworkSolveJobIfNeeded()
     {
         var updatedRegionalSubbasins =
@@ -129,5 +120,25 @@ public class HRURefreshJob
         {
             BackgroundJob.Enqueue<DeltaSolveJob>(x => x.RunJob());
         }
+    }
+
+    public static void SetHRUCharacteristicProperties(HRUResponseFeature hruResponseFeature, IHRUCharacteristic hruCharacteristic)
+    {
+        var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
+            y.HRUCharacteristicLandUseCodeName == hruResponseFeature.Attributes.ModelBasinLandUseDescription);
+        var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
+            y.HRUCharacteristicLandUseCodeName == hruResponseFeature.Attributes.BaselineLandUseDescription);
+
+        hruCharacteristic.HydrologicSoilGroup = hruResponseFeature.Attributes.HydrologicSoilGroup;
+        hruCharacteristic.SlopePercentage = hruResponseFeature.Attributes.SlopePercentage.GetValueOrDefault();
+        hruCharacteristic.ImperviousAcres = hruResponseFeature.Attributes.ImperviousAcres.GetValueOrDefault();
+        hruCharacteristic.LastUpdated = DateTime.UtcNow;
+        hruCharacteristic.Area = hruResponseFeature.Attributes.Acres.GetValueOrDefault();
+        hruCharacteristic.HRUCharacteristicLandUseCodeID =
+            hruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID;
+        hruCharacteristic.BaselineImperviousAcres =
+            hruResponseFeature.Attributes.BaselineImperviousAcres.GetValueOrDefault();
+        hruCharacteristic.BaselineHRUCharacteristicLandUseCodeID =
+            baselineHruCharacteristicLandUseCode.HRUCharacteristicLandUseCodeID;
     }
 }
