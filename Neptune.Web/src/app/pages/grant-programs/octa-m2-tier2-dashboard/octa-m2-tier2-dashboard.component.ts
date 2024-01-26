@@ -42,7 +42,6 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
 
   public projects: Array<ProjectDto>;
   private treatmentBMPs: Array<TreatmentBMPDisplayDto>;
-  private verifiedTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
   private delineations: Array<DelineationDto>;
   public selectedTreatmentBMP: TreatmentBMPDisplayDto;
   public relatedTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
@@ -102,13 +101,11 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         this.boundingBox = result;
         forkJoin({
           projects: this.projectService.projectsOCTAM2Tier2GrantProgramGet(),
-          treatmentBMPs: this.projectService.projectsOCTAM2Tier2GrantProgramTreatmentBMPsGet(),
-          verifiedTreatmentBMPs: this.treatmentBMPService.treatmentBMPsVerifiedGet(),
+          treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
           delineations: this.projectService.projectsDelineationsGet(),
-        }).subscribe(({ projects, treatmentBMPs, verifiedTreatmentBMPs, delineations}) => {
+        }).subscribe(({ projects, treatmentBMPs, delineations}) => {
           this.projects = projects;
           this.treatmentBMPs = treatmentBMPs;
-          this.verifiedTreatmentBMPs = verifiedTreatmentBMPs;
           this.addTreatmentBMPLayersToMap();
           this.delineations = delineations;
         });
@@ -201,7 +198,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
       "<span>Stormwater Network <br/> <img src='./assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({ url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/" }),
       "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions),
       "<img src='./assets/main/map-legend-images/wqmpBoundary.png' style='height:12px; margin-bottom:4px'> WQMPs": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", WQMPsWMSOptions),
-      "<span>Delineations (Verified) </br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
+      "<span>Inventoried BMP Delineations</br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
     }, this.overlayLayers);
 
     this.compileService.configure(this.appRef);
@@ -291,8 +288,12 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
       this.layerControl.removeLayer(this.inventoriedTreatmentBMPsLayer);
     }
 
+    // add inventoried BMPs layer
+    this.addInventoriedBMPsLayer();
+
     // add planned project BMPs layer
-    const projectTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID != null));
+    const projectIDs = this.projects.map(x => x.ProjectID);
+    const projectTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => projectIDs.includes(x.ProjectID)));
     this.plannedProjectTreatmentBMPsLayer = new L.GeoJSON(projectTreatmentBMPGeoJSON, {
       pointToLayer: (feature, latlng) => {
         return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker })
@@ -305,33 +306,37 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     });
     this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
     this.layerControl.addOverlay(this.plannedProjectTreatmentBMPsLayer, this.plannedTreatmentBMPOverlayName)
-    
-    // add inventoried BMPs layer
-    const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.verifiedTreatmentBMPs);
+        
+    this.map.fireEvent('dataload');
+  }
+
+  private addInventoriedBMPsLayer() {
+    const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID == null && x.InventoryIsVerified));
     this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
       pointToLayer: (feature, latlng) => {
-        return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker })
+        return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker });
       },
       onEachFeature: (feature, layer) => {
         layer.bindPopup(
-          `<b>Name:</b> ${feature.properties.TreatmentBMPName} <br>`
+          `<b>Name:</b> <a target="_blank" href="${this.ocstBaseUrl()}/TreatmentBMP/Detail/${feature.properties.TreatmentBMPID}">${feature.properties.TreatmentBMPName}</a><br>`
           + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
+
         );
       },
     });
 
     var clusteredInventoriedBMPLayer = L.markerClusterGroup({
-      iconCreateFunction: function(cluster) {
+      iconCreateFunction: function (cluster) {
         var childCount = cluster.getChildCount();
 
-          return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', 
-            className: 'marker-cluster', iconSize: new L.Point(40, 40) });
+        return new L.DivIcon({
+          html: '<div><span>' + childCount + '</span></div>',
+          className: 'marker-cluster', iconSize: new L.Point(40, 40)
+        });
       }
     });
     clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
     this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
-    
-    this.map.fireEvent('dataload');
   }
 
   private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPDisplayDto[]) {
@@ -339,25 +344,23 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
       type: "FeatureCollection",
       features: treatmentBMPs.map(x => {
         let treatmentBMPGeoJson =
-          this.mapTreatmentBMPToFeature(x);
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [x.Longitude ?? 0, x.Latitude ?? 0]
+          },
+          "properties": {
+            TreatmentBMPID: x.TreatmentBMPID,
+            TreatmentBMPName: x.TreatmentBMPName,
+            TreatmentBMPTypeName: x.TreatmentBMPTypeName,
+            Latitude: x.Latitude,
+            Longitude: x.Longitude
+          }
+        };
         return treatmentBMPGeoJson;
       })
     }
-  }
-
-  private mapTreatmentBMPToFeature(x: TreatmentBMPDisplayDto) {
-    return {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [x.Longitude ?? 0, x.Latitude ?? 0]
-      },
-      "properties": {
-        TreatmentBMPID: x.TreatmentBMPID,
-        TreatmentBMPName: x.TreatmentBMPName,
-        TreatmentBMPTypeName: x.TreatmentBMPTypeName
-      }
-    };
   }
 
   private mapDelineationsToGeoJson(delineations: DelineationDto[]) {
@@ -524,5 +527,9 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     }, (() => {
       this.alertService.pushAlert(new Alert(`There was an error while downloading the file. Please refresh the page and try again.`, AlertContext.Danger));
     }))
+  }
+
+  public ocstBaseUrl(): string {
+    return environment.ocStormwaterToolsBaseUrl
   }
 }

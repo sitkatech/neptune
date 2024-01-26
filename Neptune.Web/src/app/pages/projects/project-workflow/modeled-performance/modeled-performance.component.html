@@ -1,4 +1,4 @@
-<ng-container [class.d-none]="!treatmentBMPs">
+<ng-container [class.d-none]="!projectTreatmentBMPs">
 <div class="mt-md-0 mt-4">
     <h2 class="d-inline-block">Modeled Performance and Grant Metrics</h2>
     <a href="{{getAboutModelingPerformanceURL()}}" class="float-right">About Modeling Performance</a>
@@ -53,7 +53,7 @@
                                 </th>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let treatmentBMP of treatmentBMPs" class="selectable"
+                                <tr *ngFor="let treatmentBMP of projectTreatmentBMPs" class="selectable"
                                     [class.selected]="selectedTreatmentBMP?.TreatmentBMPID == treatmentBMP.TreatmentBMPID"
                                     (click)="selectFeatureImpl(treatmentBMP.TreatmentBMPID)">
                                     <td>
@@ -87,7 +87,7 @@
                 Model Results
             </div>
             <div class="card-body">
-                <hippocamp-model-results [projectID]="projectID" [treatmentBMPs]="treatmentBMPs"
+                <hippocamp-model-results [projectID]="projectID" [treatmentBMPs]="projectTreatmentBMPs"
                     [delineations]="delineations" [projectNetworkSolveHistories]="projectNetworkSolveHistories">
                 </hippocamp-model-results>
             </div>

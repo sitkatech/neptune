@@ -436,22 +436,6 @@ namespace Neptune.API.Controllers
             return File(stream.ToArray(), "text/csv");
         }
 
-        [HttpGet("projects/OCTAM2Tier2GrantProgram/treatmentBMPs")]
-        [UserViewFeature]
-        public ActionResult<List<TreatmentBMPDisplayDto>> ListTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram()
-        {
-            var currentUser = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            if (!currentUser.IsOCTAGrantReviewer)
-            {
-                return Forbid();
-            }
-
-            var projectIDs = Projects.ListOCTAM2Tier2ProjectIDs(_dbContext);
-            var treatmentBMPDisplayDtos = TreatmentBMPs.ListByProjectIDsAsDisplayDto(_dbContext, projectIDs);
-
-            return Ok(treatmentBMPDisplayDtos);
-        }
-
         [HttpGet("projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download")]
         [UserViewFeature]
         [Produces(@"text/csv")]

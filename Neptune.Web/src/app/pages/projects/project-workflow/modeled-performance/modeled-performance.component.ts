@@ -1,7 +1,7 @@
 import { ApplicationRef, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { BoundingBoxDto, DelineationUpsertDto, PersonDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPUpsertDto, ProjectDto } from 'src/app/shared/generated/model/models';
+import { BoundingBoxDto, DelineationUpsertDto, PersonDto, ProjectNetworkSolveHistorySimpleDto, TreatmentBMPUpsertDto, ProjectDto, TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/models';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
@@ -33,7 +33,8 @@ export class ModeledPerformanceComponent implements OnInit {
   
   @ViewChild('mapDiv') mapDiv: ElementRef;
   public mapID: string = 'modeledPerformanceMap';
-  public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
+  public treatmentBMPs: Array<TreatmentBMPDisplayDto>;
+  public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
   public delineations: DelineationUpsertDto[];
   public zoomMapToDefaultExtent: boolean = true;
   public mapHeight: string = '750px';
@@ -44,7 +45,7 @@ export class ModeledPerformanceComponent implements OnInit {
   public tileLayers: { [key: string]: any } = {};
   public overlayLayers: { [key: string]: any } = {};
   private boundingBox: BoundingBoxDto;
-  public selectedTreatmentBMP: TreatmentBMPUpsertDto;
+  public selectedTreatmentBMP: TreatmentBMPDisplayDto;
   public treatmentBMPsLayer: L.GeoJSON<any>;
   public delineationsLayer: L.GeoJSON<any>;
   private delineationDefaultStyle = {
@@ -61,6 +62,9 @@ export class ModeledPerformanceComponent implements OnInit {
   public projectID: number;
   public project: ProjectDto;
   public customRichTextTypeID = NeptunePageTypeEnum.HippocampModeledPerformance;
+
+  private inventoriedTreatmentBMPOverlayName = "<span>Inventoried BMP Locations<br /> <img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin:3px'> BMP (Verified)</span>";
+  private inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -84,7 +88,7 @@ export class ModeledPerformanceComponent implements OnInit {
         this.projectID = parseInt(projectID);
         forkJoin({
           project: this.projectService.projectsProjectIDGet(this.projectID),
-          treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
+          treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
           delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
           boundingBox: this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID),
           projectNetworkSolveHistories:  this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID)
@@ -93,7 +97,8 @@ export class ModeledPerformanceComponent implements OnInit {
           if (project.ShareOCTAM2Tier2Scores) {
             this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
           }
-          if (treatmentBMPs.length == 0) {
+          this.projectTreatmentBMPs = treatmentBMPs.filter(x => x.ProjectID == this.projectID);
+          if (this.projectTreatmentBMPs.length == 0) {
             this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
           }
 
@@ -155,7 +160,7 @@ export class ModeledPerformanceComponent implements OnInit {
       "<span>Stormwater Network <br/> <img src='../../assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({ url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/" }),
       "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions),
       "<img src='./assets/main/map-legend-images/wqmpBoundary.png' style='height:12px; margin-bottom:4px'> WQMPs": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", WQMPsWMSOptions),
-      "<span>Delineations (Verified) </br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
+      "<span>Inventoried BMP Delineations</br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
     }, this.overlayLayers);
 
     this.compileService.configure(this.appRef);
@@ -190,7 +195,7 @@ export class ModeledPerformanceComponent implements OnInit {
     })
     this.delineationsLayer.addTo(this.map);
 
-    const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
+    const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.projectTreatmentBMPs);
     this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
       pointToLayer: (feature, latlng) => {
         return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker })
@@ -204,6 +209,10 @@ export class ModeledPerformanceComponent implements OnInit {
     this.treatmentBMPsLayer.addTo(this.map);
     this.setControl();
     this.registerClickEvents();
+
+    // add inventoried BMPs layer
+    this.addInventoriedBMPsLayer();
+
     let tempFeatureGroup = new L.FeatureGroup([this.treatmentBMPsLayer, this.delineationsLayer]);
     this.map.fitBounds(tempFeatureGroup.getBounds(), {padding: new L.Point(50,50)});
   }
@@ -233,32 +242,57 @@ export class ModeledPerformanceComponent implements OnInit {
     });
   }
 
-  private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPUpsertDto[]) {
+  private addInventoriedBMPsLayer() {
+    const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID == null && x.InventoryIsVerified));
+    this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
+      pointToLayer: (feature, latlng) => {
+        return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker });
+      },
+      onEachFeature: (feature, layer) => {
+        layer.bindPopup(
+          `<b>Name:</b> <a target="_blank" href="${this.ocstBaseUrl()}/TreatmentBMP/Detail/${feature.properties.TreatmentBMPID}">${feature.properties.TreatmentBMPName}</a><br>`
+          + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
+
+        );
+      },
+    });
+
+    var clusteredInventoriedBMPLayer = L.markerClusterGroup({
+      iconCreateFunction: function (cluster) {
+        var childCount = cluster.getChildCount();
+
+        return new L.DivIcon({
+          html: '<div><span>' + childCount + '</span></div>',
+          className: 'marker-cluster', iconSize: new L.Point(40, 40)
+        });
+      }
+    });
+    clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
+    this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
+  }
+
+  private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPDisplayDto[]) {
     return {
       type: "FeatureCollection",
       features: treatmentBMPs.map(x => {
         let treatmentBMPGeoJson =
-          this.mapTreatmentBMPToFeature(x);
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [x.Longitude ?? 0, x.Latitude ?? 0]
+          },
+          "properties": {
+            TreatmentBMPID: x.TreatmentBMPID,
+            TreatmentBMPName: x.TreatmentBMPName,
+            TreatmentBMPTypeName: x.TreatmentBMPTypeName,
+            Latitude: x.Latitude,
+            Longitude: x.Longitude
+          }
+        };
         return treatmentBMPGeoJson;
       })
     }
-  }
-
-  private mapTreatmentBMPToFeature(x: TreatmentBMPUpsertDto) {
-    return {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [x.Longitude, x.Latitude]
-      },
-      "properties": {
-        TreatmentBMPID: x.TreatmentBMPID,
-        TreatmentBMPName: x.TreatmentBMPName,
-        TreatmentBMPTypeName: x.TreatmentBMPTypeName,
-        Latitude: x.Latitude,
-        Longitude: x.Longitude
-      }
-    };
   }
 
   private mapDelineationsToGeoJson(delineations: DelineationUpsertDto[]) {
@@ -338,5 +372,9 @@ export class ModeledPerformanceComponent implements OnInit {
 
   continueToNextStep() {
     this.router.navigateByUrl(`/projects/edit/${this.projectID}/attachments`)
+  }
+
+  public ocstBaseUrl(): string {
+    return environment.ocStormwaterToolsBaseUrl
   }
 }

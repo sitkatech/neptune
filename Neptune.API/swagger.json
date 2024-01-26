@@ -1452,44 +1452,6 @@
         }
       }
     },
-    "/projects/OCTAM2Tier2GrantProgram/treatmentBMPs": {
-      "get": {
-        "tags": [
-          "Project"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download": {
       "get": {
         "tags": [
@@ -2032,44 +1994,6 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GeometryGeoJSONAndAreaDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/treatmentBMPs/verified": {
-      "get": {
-        "tags": [
-          "TreatmentBMP"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
-                  }
                 }
               }
             }

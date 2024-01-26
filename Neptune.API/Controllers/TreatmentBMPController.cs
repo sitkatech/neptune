@@ -227,13 +227,5 @@ namespace Neptune.API.Controllers
 
             return Ok(RegionalSubbasins.GetUpstreamCatchmentGeometry4326GeoJSONAndArea(_dbContext, regionalSubbasin.RegionalSubbasinID, treatmentBMPID, delineation?.DelineationID));
         }
-
-        [HttpGet("treatmentBMPs/verified")]
-        [UserViewFeature]
-        public ActionResult<List<TreatmentBMPDisplayDto>> ListVerifiedTreatmentBMPs()
-        {
-            var treatmentBMPDisplayDtos = TreatmentBMPs.ListVerifiedTreatmentBMPs(_dbContext);
-            return Ok(treatmentBMPDisplayDtos);
-        }
     }
 }

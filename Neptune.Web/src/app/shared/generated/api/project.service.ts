@@ -29,7 +29,6 @@ import { ProjectLoadReducingResultDto } from '../model/project-load-reducing-res
 import { ProjectNetworkSolveHistorySimpleDto } from '../model/project-network-solve-history-simple-dto';
 import { ProjectSimpleDto } from '../model/project-simple-dto';
 import { ProjectUpsertDto } from '../model/project-upsert-dto';
-import { TreatmentBMPDisplayDto } from '../model/treatment-bmp-display-dto';
 import { TreatmentBMPHRUCharacteristicsSummarySimpleDto } from '../model/treatment-bmphru-characteristics-summary-simple-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -474,44 +473,6 @@ export class ProjectService {
         return this.httpClient.get(`${this.basePath}/projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download`,
             {
                 responseType: "blob",
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public projectsOCTAM2Tier2GrantProgramTreatmentBMPsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPDisplayDto>>;
-    public projectsOCTAM2Tier2GrantProgramTreatmentBMPsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPDisplayDto>>>;
-    public projectsOCTAM2Tier2GrantProgramTreatmentBMPsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPDisplayDto>>>;
-    public projectsOCTAM2Tier2GrantProgramTreatmentBMPsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'text/plain',
-            'application/json',
-            'text/json',
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<Array<TreatmentBMPDisplayDto>>(`${this.basePath}/projects/OCTAM2Tier2GrantProgram/treatmentBMPs`,
-            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

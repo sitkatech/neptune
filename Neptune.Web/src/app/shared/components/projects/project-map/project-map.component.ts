@@ -5,10 +5,7 @@ import * as esri from 'esri-leaflet';
 import { forkJoin } from 'rxjs';
 import { BoundingBoxDto } from 'src/app/shared/generated/model/bounding-box-dto';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
-import { ProjectSimpleDto } from 'src/app/shared/generated/model/project-simple-dto';
-import { ProjectUpsertDto } from 'src/app/shared/generated/model/project-upsert-dto';
 import { TreatmentBMPModelingAttributeDropdownItemDto } from 'src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto';
-import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
 import { MarkerHelper } from 'src/app/shared/helpers/marker-helper';
@@ -20,6 +17,7 @@ import { TreatmentBMPModelingTypeEnum } from 'src/app/shared/generated/enum/trea
 import { TreatmentBMPTypeWithModelingAttributesDto } from 'src/app/shared/generated/model/treatment-bmp-type-with-modeling-attributes-dto';
 import { TreatmentBMPModelingAttributeDefinitionDto } from 'src/app/shared/generated/model/treatment-bmp-modeling-attribute-definition-dto';
 import { TreatmentBmpsComponent } from 'src/app/pages/projects/project-workflow/treatment-bmps/treatment-bmps.component';
+import { TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/treatment-bmp-display-dto';
 
 declare var $: any
 
@@ -37,7 +35,8 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
 
   public mapID: string = 'projectMap';
   public visibleTreatmentBMPStyle: string = 'treatmentBMP_purple_outline_only';
-  public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
+  public treatmentBMPs: Array<TreatmentBMPDisplayDto>;
+  public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
   public selectedTreatmentBMPStyle: string = 'treatmentBMP_yellow';
   public zoomMapToDefaultExtent: boolean = true;
   public mapHeight: string = '750px';
@@ -63,9 +62,9 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   public selectedListItem: number;
   public selectedListItemDetails: { [key: string]: any } = {};
   public selectedObjectMarker: L.Layer;
-  public selectedTreatmentBMP: TreatmentBMPUpsertDto;
-  public selectedTreatmentBMPType: number;
+  public selectedTreatmentBMP: TreatmentBMPDisplayDto;
   public treatmentBMPsLayer: L.GeoJSON<any>;
+  public inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
   public delineationsLayer: L.GeoJson<any>;
 
   private delineationDefaultStyle = {
@@ -86,6 +85,8 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
 
   public delineations: DelineationUpsertDto[];
 
+  private inventoriedTreatmentBMPOverlayName = "<span>Inventoried BMP Locations<br /> <img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin:3px'> BMP (Verified)</span>";
+
   constructor(
     private cdr: ChangeDetectorRef,
     private projectService: ProjectService,
@@ -100,13 +101,14 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     if (this.projectID) {
 
       forkJoin({
-        treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
+        treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
         delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
         boundingBox: this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID),
         treatmentBMPTypes: this.treatmentBMPService.treatmentBMPTypesGet(),
         modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBMPModelingAttributeDropdownItemsGet()
       }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
         this.treatmentBMPs = treatmentBMPs;
+        this.projectTreatmentBMPs = treatmentBMPs.filter(x => x.ProjectID == this.projectID);
         this.delineations = delineations;
         this.boundingBox = boundingBox;
         this.treatmentBMPTypes = treatmentBMPTypes;
@@ -167,7 +169,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
       "<span>Stormwater Network <br/> <img src='./assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({ url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/" }),
       "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions),
       "<img src='./assets/main/map-legend-images/wqmpBoundary.png' style='height:12px; margin-bottom:4px'> WQMPs": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", WQMPsWMSOptions),
-      "<span>Delineations (Verified) </br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
+      "<span>Inventoried BMP Delineations</br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
     }, this.overlayLayers);
 
     this.compileService.configure(this.appRef);
@@ -198,17 +200,50 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     });
     this.map.fitBounds([[this.boundingBox.Bottom, this.boundingBox.Left], [this.boundingBox.Top, this.boundingBox.Right]], this.defaultFitBoundsOptions);
     this.updateTreatmentBMPsLayer();
+
     this.setControl();
     this.registerClickEvents();
 
-    if (this.treatmentBMPs.length > 0) {
-      this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
+    // add inventoried BMPs layer
+    this.addInventoriedBMPsLayer();
+
+    if (this.projectTreatmentBMPs.length > 0) {
+      this.selectTreatmentBMP(this.projectTreatmentBMPs[0].TreatmentBMPID);
     }
 
     if (this.zoomToProjectExtentOnLoad) {
       let tempFeatureGroup = new L.FeatureGroup([this.treatmentBMPsLayer, this.delineationsLayer]);
       this.map.fitBounds(tempFeatureGroup.getBounds(), { padding: new L.Point(50, 50) });
     }
+  }
+
+  private addInventoriedBMPsLayer() {
+    const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID == null && x.InventoryIsVerified));
+    this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
+      pointToLayer: (feature, latlng) => {
+        return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker });
+      },
+      onEachFeature: (feature, layer) => {
+        layer.bindPopup(
+          `<b>Name:</b> <a target="_blank" href="${this.ocstBaseUrl()}/TreatmentBMP/Detail/${feature.properties.TreatmentBMPID}">${feature.properties.TreatmentBMPName}</a><br>`
+          + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
+
+        );
+      },
+    });
+
+    var clusteredInventoriedBMPLayer = L.markerClusterGroup({
+      iconCreateFunction: function (cluster) {
+        var childCount = cluster.getChildCount();
+
+        return new L.DivIcon({
+          html: '<div><span>' + childCount + '</span></div>',
+          className: 'marker-cluster', iconSize: new L.Point(40, 40)
+        });
+      }
+    });
+    clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
+    this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
   }
 
   public updateTreatmentBMPsLayer() {
@@ -245,7 +280,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
       this.selectTreatmentBMP(event.propagatedFrom.feature.properties.TreatmentBMPID);
     });
 
-    const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
+    const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.projectTreatmentBMPs);
       this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
         pointToLayer: (feature, latlng) => {
           return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker })
@@ -269,32 +304,28 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     });
   }
 
-  private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPUpsertDto[]) {
+  private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPDisplayDto[]) {
     return {
       type: "FeatureCollection",
       features: treatmentBMPs.map(x => {
         let treatmentBMPGeoJson =
-          this.mapTreatmentBMPToFeature(x);
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [x.Longitude ?? 0, x.Latitude ?? 0]
+          },
+          "properties": {
+            TreatmentBMPID: x.TreatmentBMPID,
+            TreatmentBMPName: x.TreatmentBMPName,
+            TreatmentBMPTypeName: x.TreatmentBMPTypeName,
+            Latitude: x.Latitude,
+            Longitude: x.Longitude
+          }
+        };
         return treatmentBMPGeoJson;
       })
     }
-  }
-
-  private mapTreatmentBMPToFeature(x: TreatmentBMPUpsertDto) {
-    return {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [x.Longitude ?? 0, x.Latitude ?? 0]
-      },
-      "properties": {
-        TreatmentBMPID: x.TreatmentBMPID,
-        TreatmentBMPName: x.TreatmentBMPName,
-        TreatmentBMPTypeName: x.TreatmentBMPTypeName,
-        Latitude: x.Latitude,
-        Longitude: x.Longitude
-      }
-    };
   }
 
   private mapDelineationsToGeoJson(delineations: DelineationUpsertDto[]) {
@@ -333,8 +364,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     this.selectedListItem = treatmentBMPID;
     let selectedNumber = null;
     let selectedAttributes = null;
-    this.selectedTreatmentBMP = this.treatmentBMPs.find(x => x.TreatmentBMPID == treatmentBMPID);
-    this.selectedTreatmentBMPType = this.selectedTreatmentBMP.TreatmentBMPTypeID;
+    this.selectedTreatmentBMP = this.projectTreatmentBMPs.find(x => x.TreatmentBMPID == treatmentBMPID);
     selectedAttributes = [
       `<strong>Type:</strong> ${this.selectedTreatmentBMP.TreatmentBMPTypeName}`,
       `<strong>Latitude:</strong> ${this.selectedTreatmentBMP.Latitude}`,
@@ -358,10 +388,6 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
 
   public getModelingAttributeFieldsToDisplay(treatmentBMPTypeID: number): Array<TreatmentBMPModelingAttributeDefinitionDto> {
     return (this.treatmentBMPTypes.find(x => x.TreatmentBMPTypeID == treatmentBMPTypeID).TreatmentBMPModelingAttributes) ?? [];
-  }
-
-  public getTypeNameByTypeID(typeID: number) {
-    return (this.treatmentBMPTypes.find(x => x.TreatmentBMPTypeID == typeID).TreatmentBMPTypeName) ?? -1;
   }
 
   public getDropdownItemNameByFieldNameAndItemID(fieldName: string, itemID: number): string {
@@ -392,5 +418,9 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     }
 
     return `${delineation.DelineationArea} ac`;
+  }
+
+  public ocstBaseUrl(): string {
+    return environment.ocStormwaterToolsBaseUrl
   }
 }

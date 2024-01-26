@@ -354,13 +354,6 @@ namespace Neptune.EFModels.Entities
             return treatmentBMP;
         }
 
-        public static List<TreatmentBMPDisplayDto> ListVerifiedTreatmentBMPs(NeptuneDbContext dbContext)
-        {
-            return GetImpl(dbContext)
-                .Where(x => x.ProjectID == null && x.InventoryIsVerified && x.TreatmentBMPType.IsAnalyzedInModelingModule)
-                .Select(x => x.AsDisplayDto()).ToList();
-        }
-
         public static List<TreatmentBMP> ListModelingTreatmentBMPs(NeptuneDbContext dbContext, int? projectID = null, List<int>? projectRSBIDs = null)
         {
             var toReturn = dbContext.TreatmentBMPs
