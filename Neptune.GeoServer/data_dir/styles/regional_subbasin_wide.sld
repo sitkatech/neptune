@@ -16,6 +16,7 @@
           <Name>rule1</Name>
           <Title>Network Catchment</Title>
           <Abstract>Network Catchment</Abstract>
+          <MaxScaleDenominator>75000</MaxScaleDenominator>
           <PolygonSymbolizer>
             <Stroke>
               <CssParameter name="stroke">#2e2b31</CssParameter>
