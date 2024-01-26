@@ -8,7 +8,6 @@ import { GestureHandling } from "leaflet-gesture-handling";
 import { forkJoin } from 'rxjs';
 import { BoundingBoxDto } from 'src/app/shared/generated/model/bounding-box-dto';
 import { DelineationUpsertDto } from 'src/app/shared/generated/model/delineation-upsert-dto';
-import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
 import { AlertService } from 'src/app/shared/services/alert.service';
@@ -133,8 +132,7 @@ export class DelineationsComponent implements OnInit {
     private alertService: AlertService,
     private cdr: ChangeDetectorRef,
     private projectWorkflowService: ProjectWorkflowService,
-    private projectService: ProjectService,
-    private wfsService: WfsService
+    private projectService: ProjectService
   ) {
   }
 
@@ -743,6 +741,7 @@ export class DelineationsComponent implements OnInit {
       this.selectedListItemDetails.attributes = selectedAttributes;
     }
   }
+
   public ocstBaseUrl(): string {
     return environment.ocStormwaterToolsBaseUrl
   }

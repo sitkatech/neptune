@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9" [style.height]="mapHeight" style="overflow-y: auto;">
                 <ul class="list-group">
-                    <li class="list-group-item font-weight-bold" *ngFor="let treatmentBMP of treatmentBMPs"
+                    <li class="list-group-item font-weight-bold" *ngFor="let treatmentBMP of projectTreatmentBMPs"
                         [class.selected]="selectedListItem == treatmentBMP.TreatmentBMPID"
                         (click)="selectTreatmentBMP(treatmentBMP.TreatmentBMPID)">
                         {{treatmentBMP.TreatmentBMPName ?? "New Treatment BMP"}}
