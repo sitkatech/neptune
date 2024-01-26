@@ -107,7 +107,7 @@ export class ProjectListComponent implements OnInit {
         }, cellRenderer: LinkRendererComponent,
         cellRendererParams: { inRouterLink: "/projects/" },
         filterValueGetter: (params: any) => {
-          return params.data.ProjectID;
+          return params.data.ProjectName;
         },
         comparator: this.utilityFunctionsService.linkRendererComparator
       },
