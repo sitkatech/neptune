@@ -34,7 +34,7 @@ public class HRURefreshJob
 
         var loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit = _dbContext.vLoadGeneratingUnitUpdateCandidates.ToList().GroupBy(x => x.SpatialGridUnitID);
 
-        foreach (var group in loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit)
+        foreach (var group in loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit.OrderByDescending(x => x.Count()))
         {
             try
             {

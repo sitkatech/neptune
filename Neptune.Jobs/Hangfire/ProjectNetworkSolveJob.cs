@@ -132,7 +132,7 @@ You can view the results or trigger another network solve <a href='{planningURL}
             var loadGeneratingUnitsToUpdate = _dbContext.vProjectLoadGeneratingUnitUpdateCandidates.Where(x => x.ProjectID == projectID).ToList();
             var loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit = loadGeneratingUnitsToUpdate.GroupBy(x => x.SpatialGridUnitID);
 
-            foreach (var group in loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit)
+            foreach (var group in loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit.OrderByDescending(x => x.Count()))
             {
                 try
                 {
