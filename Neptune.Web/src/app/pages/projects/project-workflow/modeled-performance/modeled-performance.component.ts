@@ -34,7 +34,6 @@ export class ModeledPerformanceComponent implements OnInit {
   @ViewChild('mapDiv') mapDiv: ElementRef;
   public mapID: string = 'modeledPerformanceMap';
   public treatmentBMPs: Array<TreatmentBMPDisplayDto>;
-  public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
   public delineations: DelineationUpsertDto[];
   public zoomMapToDefaultExtent: boolean = true;
   public mapHeight: string = '750px';
@@ -63,6 +62,7 @@ export class ModeledPerformanceComponent implements OnInit {
   public project: ProjectDto;
   public customRichTextTypeID = NeptunePageTypeEnum.HippocampModeledPerformance;
 
+  public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
   private inventoriedTreatmentBMPOverlayName = "<span>Inventoried BMP Locations<br /> <img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin:3px'> BMP (Verified)</span>";
   private inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
 

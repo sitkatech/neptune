@@ -275,6 +275,56 @@ export class TreatmentBMPService {
     /**
      * 
      * 
+     * @param projectID 
+     * @param treatmentBMPDisplayDto 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public treatmentBMPsProjectIDUpdateLocationsPut(projectID: number, treatmentBMPDisplayDto?: Array<TreatmentBMPDisplayDto>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public treatmentBMPsProjectIDUpdateLocationsPut(projectID: number, treatmentBMPDisplayDto?: Array<TreatmentBMPDisplayDto>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public treatmentBMPsProjectIDUpdateLocationsPut(projectID: number, treatmentBMPDisplayDto?: Array<TreatmentBMPDisplayDto>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public treatmentBMPsProjectIDUpdateLocationsPut(projectID: number, treatmentBMPDisplayDto?: Array<TreatmentBMPDisplayDto>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (projectID === null || projectID === undefined) {
+            throw new Error('Required parameter projectID was null or undefined when calling treatmentBMPsProjectIDUpdateLocationsPut.');
+        }
+
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/_*+json',
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.put<any>(`${this.basePath}/treatmentBMPs/${encodeURIComponent(String(projectID))}/updateLocations`,
+            treatmentBMPDisplayDto,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
      * @param treatmentBMPID 
      * @param treatmentBMPTypeID 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

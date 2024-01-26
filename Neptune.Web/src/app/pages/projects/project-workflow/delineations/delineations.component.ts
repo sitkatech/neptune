@@ -22,6 +22,7 @@ import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stor
 import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
 import { DelineationTypeEnum } from 'src/app/shared/generated/enum/delineation-type-enum';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
+import { TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/treatment-bmp-display-dto';
 
 declare var $: any
 
@@ -35,7 +36,7 @@ export class DelineationsComponent implements OnInit {
   @ViewChild('mapDiv') mapDiv: ElementRef;
   public mapID: string = 'delineationsMap';
   public drawMapClicked: boolean = false;
-  public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
+  public treatmentBMPs: Array<TreatmentBMPDisplayDto>;
   public delineations: DelineationUpsertDto[];
   private originalDelineations: string;
   public zoomMapToDefaultExtent: boolean = true;
@@ -67,7 +68,7 @@ export class DelineationsComponent implements OnInit {
   public selectedListItem: number;
   public selectedObjectMarker: L.Layer;
   public selectedDelineation: DelineationUpsertDto;
-  public selectedTreatmentBMP: TreatmentBMPUpsertDto;
+  public selectedTreatmentBMP: TreatmentBMPDisplayDto;
   public treatmentBMPsLayer: L.GeoJSON<any>;
   public selectedListItemDetails: { [key: string]: any } = {};
   private delineationDefaultStyle = {
@@ -118,6 +119,10 @@ export class DelineationsComponent implements OnInit {
   public isLoadingSubmit: boolean = false;
   public isEditingLocation = false;
 
+  public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
+  private inventoriedTreatmentBMPOverlayName = "<span>Inventoried BMP Locations<br /> <img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin:3px'> BMP (Verified)</span>";
+  private inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
+
   constructor(
     private treatmentBMPService: TreatmentBMPService,
     private stormwaterJurisdictionService: StormwaterJurisdictionService,
@@ -149,7 +154,7 @@ export class DelineationsComponent implements OnInit {
 
       forkJoin({
         project: this.projectService.projectsProjectIDGet(this.projectID),
-        treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
+        treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
         delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
         boundingBox: this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID),
       }).subscribe(({ project, treatmentBMPs, delineations, boundingBox }) => {
@@ -157,8 +162,9 @@ export class DelineationsComponent implements OnInit {
         if (project.ShareOCTAM2Tier2Scores) {
           this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
         }
-        if (treatmentBMPs.length == 0) {
-          this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
+        this.projectTreatmentBMPs = treatmentBMPs.filter(x => x.ProjectID == this.projectID);
+        if (this.projectTreatmentBMPs.length == 0) {
+         this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
         }
 
         this.treatmentBMPs = treatmentBMPs;
@@ -217,7 +223,7 @@ export class DelineationsComponent implements OnInit {
       "<span>Stormwater Network <br/> <img src='../../assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({ url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/" }),
       "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", jurisdictionsWMSOptions),
       "<img src='./assets/main/map-legend-images/wqmpBoundary.png' style='height:12px; margin-bottom:4px'> WQMPs": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", WQMPsWMSOptions),
-      "<span>Delineations (Verified) </br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
+      "<span>Inventoried BMP Delineations</br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", verifiedDelineationsWMSOptions)
     }, this.overlayLayers);
 
     this.compileService.configure(this.appRef);
@@ -252,50 +258,74 @@ export class DelineationsComponent implements OnInit {
     this.editableDelineationFeatureGroup.addTo(this.map);
     this.resetDelineationFeatureGroups();
 
-    const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
+    const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.projectTreatmentBMPs);
     this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
       pointToLayer: (feature, latlng) => {
         return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker })
       }
     });
-    this.selectTreatmentBMP(this.treatmentBMPs[0].TreatmentBMPID);
+    this.selectTreatmentBMP(this.projectTreatmentBMPs[0].TreatmentBMPID);
     this.treatmentBMPsLayer.addTo(this.map);
     this.setControl();
     this.registerClickEvents();
 
-    if (this.treatmentBMPs.length > 0) {
-      this.selectFeatureImpl(this.treatmentBMPs[0].TreatmentBMPID);
-    }
+    // add inventoried BMPs layer
+    this.addInventoriedBMPsLayer();
 
     this.mapInitComplete = true;
   }
 
-  private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPUpsertDto[]) {
+  private addInventoriedBMPsLayer() {
+    const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter(x => x.ProjectID == null && x.InventoryIsVerified));
+    this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
+      pointToLayer: (feature, latlng) => {
+        return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker });
+      },
+      onEachFeature: (feature, layer) => {
+        layer.bindPopup(
+          `<b>Name:</b> <a target="_blank" href="${this.ocstBaseUrl()}/TreatmentBMP/Detail/${feature.properties.TreatmentBMPID}">${feature.properties.TreatmentBMPName}</a><br>`
+          + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
+
+        );
+      },
+    });
+
+    var clusteredInventoriedBMPLayer = L.markerClusterGroup({
+      iconCreateFunction: function (cluster) {
+        var childCount = cluster.getChildCount();
+
+        return new L.DivIcon({
+          html: '<div><span>' + childCount + '</span></div>',
+          className: 'marker-cluster', iconSize: new L.Point(40, 40)
+        });
+      }
+    });
+    clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
+    this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
+  }
+
+  private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPDisplayDto[]) {
     return {
       type: "FeatureCollection",
       features: treatmentBMPs.map(x => {
         let treatmentBMPGeoJson =
-          this.mapTreatmentBMPToFeature(x);
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [x.Longitude ?? 0, x.Latitude ?? 0]
+          },
+          "properties": {
+            TreatmentBMPID: x.TreatmentBMPID,
+            TreatmentBMPName: x.TreatmentBMPName,
+            TreatmentBMPTypeName: x.TreatmentBMPTypeName,
+            Latitude: x.Latitude,
+            Longitude: x.Longitude
+          }
+        };
         return treatmentBMPGeoJson;
       })
     }
-  }
-
-  private mapTreatmentBMPToFeature(x: TreatmentBMPUpsertDto) {
-    return {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [x.Longitude, x.Latitude]
-      },
-      "properties": {
-        TreatmentBMPID: x.TreatmentBMPID,
-        TreatmentBMPName: x.TreatmentBMPName,
-        TreatmentBMPTypeName: x.TreatmentBMPTypeName,
-        Latitude: x.Latitude,
-        Longitude: x.Longitude
-      }
-    };
   }
 
   private mapDelineationsToGeoJson(delineations: DelineationUpsertDto[]) {
@@ -490,7 +520,7 @@ export class DelineationsComponent implements OnInit {
     })
 
     this.selectedListItem = treatmentBMPID;
-    this.selectedTreatmentBMP = this.treatmentBMPs.find(x => x.TreatmentBMPID == treatmentBMPID);
+    this.selectedTreatmentBMP = this.projectTreatmentBMPs.find(x => x.TreatmentBMPID == treatmentBMPID);
     this.treatmentBMPsLayer?.eachLayer(layer => {
       if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
         layer.setIcon(MarkerHelper.treatmentBMPMarker).setZIndexOffset(1000);
@@ -570,7 +600,7 @@ export class DelineationsComponent implements OnInit {
     var updatedDelineations = this.delineations.filter(x => x.Geometry != null);
     forkJoin({
       delineations: this.projectService.projectsProjectIDDelineationsPut(this.projectID, updatedDelineations),
-      treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDPut(this.projectID, this.treatmentBMPs)
+      treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDUpdateLocationsPut(this.projectID, this.projectTreatmentBMPs)
     }).subscribe(({delineations, treatmentBMPs}) => {
       window.scroll(0, 0); 
       this.isLoadingSubmit = false;
@@ -638,16 +668,18 @@ export class DelineationsComponent implements OnInit {
     $('.leaflet-interactive').css('cursor','crosshair');
     this.updateTreatmentBMPsLayer();
   }
+
   public treatmentBMPHasDelineation(treatmentBMPID: number) {
     return this.delineations?.find(x => x.TreatmentBMPID == treatmentBMPID) != null;
   }
+
   public updateTreatmentBMPsLayer() {
     if (this.treatmentBMPsLayer) {
       this.map.removeLayer(this.treatmentBMPsLayer);
       this.treatmentBMPsLayer = null;
     }
 
-    const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
+    const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.projectTreatmentBMPs);
       this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
         pointToLayer: (feature, latlng) => {
           return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker })

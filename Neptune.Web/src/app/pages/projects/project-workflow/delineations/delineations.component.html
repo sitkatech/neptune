@@ -1,4 +1,4 @@
-<ng-container [class.d-none]="treatmentBMPs">
+<ng-container [class.d-none]="projectTreatmentBMPs">
     <h2 class="d-inline-block">
         Delineation Drainage Areas
     </h2>
@@ -24,7 +24,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let treatmentBMP of treatmentBMPs"
+                            <tr *ngFor="let treatmentBMP of projectTreatmentBMPs"
                                 class="selectable"
                                 [class.selected]="selectedListItem == treatmentBMP.TreatmentBMPID"
                                 (click)="selectFeatureImpl(treatmentBMP.TreatmentBMPID)">

@@ -36,7 +36,6 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   public mapID: string = 'projectMap';
   public visibleTreatmentBMPStyle: string = 'treatmentBMP_purple_outline_only';
   public treatmentBMPs: Array<TreatmentBMPDisplayDto>;
-  public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
   public selectedTreatmentBMPStyle: string = 'treatmentBMP_yellow';
   public zoomMapToDefaultExtent: boolean = true;
   public mapHeight: string = '750px';
@@ -64,7 +63,6 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
   public selectedObjectMarker: L.Layer;
   public selectedTreatmentBMP: TreatmentBMPDisplayDto;
   public treatmentBMPsLayer: L.GeoJSON<any>;
-  public inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
   public delineationsLayer: L.GeoJson<any>;
 
   private delineationDefaultStyle = {
@@ -85,7 +83,9 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
 
   public delineations: DelineationUpsertDto[];
 
+  public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
   private inventoriedTreatmentBMPOverlayName = "<span>Inventoried BMP Locations<br /> <img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin:3px'> BMP (Verified)</span>";
+  public inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
 
   constructor(
     private cdr: ChangeDetectorRef,

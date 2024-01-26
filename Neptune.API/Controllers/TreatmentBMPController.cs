@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.Common;
+using Neptune.Common.GeoSpatial;
 
 namespace Neptune.API.Controllers
 {
@@ -66,6 +67,33 @@ namespace Neptune.API.Controllers
         {
             var treatmentBMPModelingAttributeDropdownItemDtos = TreatmentBMPs.GetModelingAttributeDropdownItemsAsDto(_dbContext);
             return Ok(treatmentBMPModelingAttributeDropdownItemDtos);
+        }
+
+        [HttpPut("treatmentBMPs/{projectID}/updateLocations")]
+        [JurisdictionEditFeature]
+        public async Task<ActionResult> MergeTreatmentBMPLocations([FromRoute] int projectID, List<TreatmentBMPDisplayDto> treatmentBMPDisplayDtos)
+        {
+            var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
+            if (project == null)
+            {
+                return BadRequest();
+            }
+
+            var existingProjectTreatmentBMPs = _dbContext.TreatmentBMPs.Where(x => x.ProjectID == project.ProjectID).ToList();
+            foreach (var treatmentBMPDisplayDto in treatmentBMPDisplayDtos)
+            {
+                var treatmentBMP = existingProjectTreatmentBMPs.SingleOrDefault(x =>
+                    x.TreatmentBMPID == treatmentBMPDisplayDto.TreatmentBMPID);
+                if (treatmentBMP != null)
+                {
+                    var locationPointGeometry4326 = TreatmentBMPs.CreateLocationPoint4326FromLatLong(treatmentBMPDisplayDto.Latitude, treatmentBMPDisplayDto.Longitude);
+                    var locationPoint = locationPointGeometry4326.ProjectTo2771();
+                    treatmentBMP.LocationPoint = locationPoint;
+                    treatmentBMP.LocationPoint4326 = locationPointGeometry4326;
+                }
+            }
+            await _dbContext.SaveChangesAsync();
+            return Ok();
         }
 
         [HttpPut("treatmentBMPs/{projectID}")]

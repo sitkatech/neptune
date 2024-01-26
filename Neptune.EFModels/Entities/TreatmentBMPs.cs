@@ -273,7 +273,7 @@ namespace Neptune.EFModels.Entities
             return treatmentBMPModelingAttributeDropdownItemDtos;
         }
 
-        private static Geometry CreateLocationPoint4326FromLatLong(double latitude, double longitude)
+        public static Geometry CreateLocationPoint4326FromLatLong(double latitude, double longitude)
         {
             return new Point(longitude, latitude) { SRID = 4326 };
         }
