@@ -38,7 +38,7 @@ namespace Neptune.WebMvc.Common
             await dbContext.LoadGeneratingUnitRefreshAreas.AddAsync(loadGeneratingUnitRefreshArea);
             await dbContext.SaveChangesAsync();
 
-            BackgroundJob.Enqueue<LoadGeneratingUnitRefreshJob>(x => x.RunJob(loadGeneratingUnitRefreshArea.LoadGeneratingUnitRefreshAreaID, false));
+            BackgroundJob.Enqueue<LoadGeneratingUnitRefreshJob>(x => x.RunJob(loadGeneratingUnitRefreshArea.LoadGeneratingUnitRefreshAreaID));
         }
     }
 }

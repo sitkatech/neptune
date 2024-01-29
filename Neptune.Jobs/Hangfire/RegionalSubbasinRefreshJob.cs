@@ -18,6 +18,6 @@ public class RegionalSubbasinRefreshJob
     public async Task RunJob()
     {
         await _ocgisService.RefreshSubbasins();
-        BackgroundJob.Enqueue<LoadGeneratingUnitRefreshJob>(x => x.RunJob(null, true));
+        BackgroundJob.Enqueue<LoadGeneratingUnitRefreshJob>(x => x.RunJob(null));
     }
 }

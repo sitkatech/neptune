@@ -16,13 +16,14 @@ namespace Neptune.Jobs.Hangfire
             _qgisApiService = qgisAPIService;
         }
 
-        public async Task RunJob(int? loadGeneratingUnitRefreshAreaID, bool runHRURefreshJob)
+        public async Task RunJob(int? loadGeneratingUnitRefreshAreaID)
         {
             await _qgisApiService.GenerateLGUs(new GenerateLoadGeneratingUnitRequestDto()
                 { LoadGeneratingUnitRefreshAreaID = loadGeneratingUnitRefreshAreaID });
-            if (runHRURefreshJob)
+            if (!loadGeneratingUnitRefreshAreaID.HasValue) 
             {
-                BackgroundJob.Enqueue<HRURefreshJob>(x => x.RunJob());
+                // no loadGeneratingUnitRefreshAreaID implies a full LGU refresh, so we need to run a Full HRU refresh
+                BackgroundJob.Enqueue<HRURefreshJob>(x => x.RunJob(null));
             }
         }
     }

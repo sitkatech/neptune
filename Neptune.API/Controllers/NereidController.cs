@@ -30,33 +30,6 @@ namespace Neptune.API.Controllers
             _nereidService = nereidService;
         }
 
-        /// <summary>
-        /// Manually fire a re-calculation of the LGU layer.
-        /// Available only to Sitka Admins
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
-        public ContentResult TriggerLGURun()
-        {
-            BackgroundJob.Enqueue<LoadGeneratingUnitRefreshJob>(x => x.RunJob(null, false));
-            return Content("LGU refresh will run in the background");
-        }
-
-        /// <summary>
-        /// Manually fire a run of the HRU statistics job.
-        /// This does not recalculate the LGU layer or discard existing HRU statistics.
-        /// Available only to Sitka Admins
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [SitkaAdminFeature]
-        public ContentResult TriggerHRURun()
-        {
-            BackgroundJob.Enqueue<HRURefreshJob>(x => x.RunJob());
-            return Content("HRU refresh will run in the background");
-        }
-
         [HttpGet]
         [SitkaAdminFeature]
         public IActionResult DeltaSolve()

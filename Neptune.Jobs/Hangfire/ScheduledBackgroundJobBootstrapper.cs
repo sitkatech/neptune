@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Hangfire;
 using Hangfire.Storage;
 using Neptune.Common.DesignByContract;
-using Neptune.EFModels.Entities;
 
 namespace Neptune.Jobs.Hangfire
 {
@@ -19,7 +17,7 @@ namespace Neptune.Jobs.Hangfire
                 x => x.RunJob(null),
                 MakeWeeklyUtcCronJobStringFromLocalTime(1, 30, DayOfWeek.Saturday), recurringJobIds);
 
-            AddRecurringJob<HRURefreshScheduledBackgroundJob>(HRURefreshScheduledBackgroundJob.JobName, x => x.RunJob(null), "0 * * * *", recurringJobIds);
+            AddRecurringJob<HRURefreshScheduledBackgroundJob>(HRURefreshScheduledBackgroundJob.JobName, x => x.RunJob(null), "0 * * * 1-5", recurringJobIds);
 
             AddRecurringJob<TotalNetworkSolveScheduledBackgroundJob>(TotalNetworkSolveScheduledBackgroundJob.JobName, x => x.RunJob(null), MakeDailyUtcCronJobStringFromLocalTime(1, 0), recurringJobIds);
 

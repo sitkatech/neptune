@@ -22,7 +22,7 @@ namespace Neptune.Jobs.Hangfire
 
         protected override void RunJobImplementation()
         {
-            BackgroundJob.Enqueue<HRURefreshJob>(x => x.RunJob());
+            BackgroundJob.Enqueue<HRURefreshJob>(x => x.RunJob(45));
         }
     }
 }

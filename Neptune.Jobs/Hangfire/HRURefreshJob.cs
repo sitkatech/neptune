@@ -21,7 +21,7 @@ public class HRURefreshJob
         _ocgisService = ocgisService;
     }
 
-    public async Task RunJob()
+    public async Task RunJob(int? maxTimeAllowed)
     {
         // this job assumes the LGUs are already correct but that for whatever reason, some are missing their HRUs
 
@@ -73,12 +73,12 @@ public class HRURefreshJob
                 _logger.LogWarning(ex.Message);
             }
 
-            if (stopwatch.Elapsed.Minutes > 45)
+            if (maxTimeAllowed.HasValue && stopwatch.Elapsed.Minutes > maxTimeAllowed.Value)
             {
                 break;
             }
 
-            if (stopwatch.Elapsed.Minutes > 45)
+            if (maxTimeAllowed.HasValue && stopwatch.Elapsed.Minutes > maxTimeAllowed.Value)
             {
                 break;
             }

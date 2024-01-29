@@ -54,7 +54,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewRefreshHRUCharacteristics(viewModel);
             }
 
-            BackgroundJob.Enqueue<LoadGeneratingUnitRefreshJob>(x => x.RunJob(null, true));
+            BackgroundJob.Enqueue<LoadGeneratingUnitRefreshJob>(x => x.RunJob(null));
 
             SetMessageForDisplay("HRU Characteristic refresh will run in the background.");
             return new ModalDialogFormJsonResult();

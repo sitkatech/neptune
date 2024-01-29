@@ -51,7 +51,7 @@ public class OCGISService : BaseAPIService<OCGISService>
                 };
             })
             .ToList();
-        await _dbContext.RegionalSubbasinStagings.AddRangeAsync(regionalSubbasinStagings);
+        _dbContext.RegionalSubbasinStagings.AddRange(regionalSubbasinStagings);
         await _dbContext.SaveChangesAsync();
         await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
         await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pUpdateRegionalSubbasinLiveFromStaging");
@@ -91,7 +91,7 @@ public class OCGISService : BaseAPIService<OCGISService>
                 };
             })
             .ToList();
-        await _dbContext.PrecipitationZoneStagings.AddRangeAsync(precipitationZoneStagings);
+        _dbContext.PrecipitationZoneStagings.AddRange(precipitationZoneStagings);
         await _dbContext.SaveChangesAsync();
         await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pPrecipitationZoneUpdateFromStaging");
         await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdatePrecipitationZone");
@@ -114,7 +114,7 @@ public class OCGISService : BaseAPIService<OCGISService>
                 ModelBasinRegion = x.ModelBasinRegion
             };
         }).ToList();
-        await _dbContext.ModelBasinStagings.AddRangeAsync(modelBasinStagings);
+        _dbContext.ModelBasinStagings.AddRange(modelBasinStagings);
         await _dbContext.SaveChangesAsync();
         await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pModelBasinUpdateFromStaging");
         await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdateModelBasin");
@@ -149,7 +149,7 @@ public class OCGISService : BaseAPIService<OCGISService>
                 PC_TSS_PCT = x.PC_TSS_PCT
             };
         }).ToList();
-        await _dbContext.OCTAPrioritizationStagings.AddRangeAsync(octaPrioritizationStagings);
+        _dbContext.OCTAPrioritizationStagings.AddRange(octaPrioritizationStagings);
         await _dbContext.SaveChangesAsync();
         await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pOCTAPrioritizationUpdateFromStaging");
         foreach (var octaPrioritization in _dbContext.OCTAPrioritizations)
