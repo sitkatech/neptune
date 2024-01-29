@@ -9,8 +9,7 @@ ENV XDG_RUNTIME_DIR=/tmp/runtime-root
 WORKDIR /app
 EXPOSE 80
 
-RUN apt-get update && \
-    apt-get install -y wget
+RUN apt-get install -y wget
 
 # Download Microsoft signing key and repository
 RUN wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
