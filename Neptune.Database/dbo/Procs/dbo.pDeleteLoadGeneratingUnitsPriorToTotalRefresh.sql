@@ -1,5 +1,8 @@
 Create Procedure dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh 
-As
-Delete from dbo.HRUCharacteristic
+with execute as owner
+as
+truncate table dbo.HRUCharacteristic
 Delete from dbo.LoadGeneratingUnit
+DBCC CHECKIDENT ('dbo.LoadGeneratingUnit', RESEED, 0);
+
 GO
