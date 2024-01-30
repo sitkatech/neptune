@@ -15,6 +15,7 @@ using Neptune.WebMvc.Services.Filters;
 using NetTopologySuite.Features;
 using Index = Neptune.WebMvc.Views.RegionalSubbasin.Index;
 using IndexViewData = Neptune.WebMvc.Views.RegionalSubbasin.IndexViewData;
+using Neptune.Jobs.Hangfire;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -94,7 +95,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewRefreshFromOCSurvey(viewModel);
             }
 
-            BackgroundJob.Enqueue<OCGISService>(x => x.RefreshSubbasins());
+            BackgroundJob.Enqueue<RegionalSubbasinRefreshJob>(x => x.RunJob());
             SetMessageForDisplay("Regional Subbasins refresh will run in the background.");
             return new ModalDialogFormJsonResult();
         }
