@@ -50,7 +50,7 @@
                                 <label>Name</label>
                             </div>
                             <div class="col-lg-9">
-                                <input type="text" class="form-control" name="name" [(ngModel)]="selectedTreatmentBMP.TreatmentBMPName">
+                                <input type="text" class="form-control" name="name" [(ngModel)]="selectedTreatmentBMP.TreatmentBMPName" required>
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -65,10 +65,9 @@
                                     </button>
                                 </div>
                                 <ng-template #treatmentBMPTypeSelect>
-                                    <ng-select [(ngModel)]="selectedTreatmentBMP.TreatmentBMPTypeID" (change)="updateModelingTypeOnTypeChange($event)"
-                                        [items]="treatmentBMPTypes" bindLabel="TreatmentBMPTypeName" bindValue="TreatmentBMPTypeID" 
-                                        name="type" required>
-                                    </ng-select>
+                                    <select name="type" class="form-control" [(ngModel)]="selectedTreatmentBMP.TreatmentBMPTypeID" (change)="updateModelingTypeOnTypeChange($event)" required>
+                                        <option *ngFor="let treatmentBMPType of treatmentBMPTypes" [value]="treatmentBMPType.TreatmentBMPTypeID">{{ treatmentBMPType.TreatmentBMPTypeName }}</option>
+                                    </select>
                                 </ng-template>
                             </div>
                         </div>

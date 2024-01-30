@@ -98,7 +98,7 @@ namespace Neptune.API.Controllers
 
         [HttpPut("treatmentBMPs/{projectID}")]
         [JurisdictionEditFeature]
-        public async Task<ActionResult> MergeTreatmentBMPs(List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos, [FromRoute] int projectID)
+        public async Task<ActionResult> MergeTreatmentBMPs([FromRoute] int projectID, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos)
         {
             var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
             if (project == null)
@@ -106,19 +106,25 @@ namespace Neptune.API.Controllers
                 return BadRequest();
             }
 
-            var existingTreatmentBMPs = _dbContext.TreatmentBMPs.Where(x => x.ProjectID == projectID).AsNoTracking().ToList();
-            foreach (var treatmentBMPUpsertDto in treatmentBMPUpsertDtos)
+            var namingConflicts = treatmentBMPUpsertDtos.GroupBy(x => x.TreatmentBMPName).Where(x => x.Count() > 1).ToList();
+            if (namingConflicts.Any())
             {
-                var namingConflicts = existingTreatmentBMPs
-                    .Where(x => x.TreatmentBMPName == treatmentBMPUpsertDto.TreatmentBMPName && x.TreatmentBMPID != treatmentBMPUpsertDto.TreatmentBMPID)
-                    .ToList();
-
-                if (namingConflicts.Count > 0)
+                ModelState.AddModelError("TreatmentBMPName",
+                    $"Treatment BMP names need to be unique within a project.  The following names are used more than once: {string.Join(", ", namingConflicts)}");
+            }
+            else
+            {
+                var existingTreatmentBMPs = _dbContext.TreatmentBMPs.Where(x => x.ProjectID == projectID).AsNoTracking().ToList();
+                foreach (var treatmentBMPUpsertDto in treatmentBMPUpsertDtos.Where(treatmentBMPUpsertDto =>
+                             existingTreatmentBMPs
+                                 .Any(x => x.TreatmentBMPName == treatmentBMPUpsertDto.TreatmentBMPName &&
+                                           x.TreatmentBMPID != treatmentBMPUpsertDto.TreatmentBMPID)))
                 {
-                    ModelState.AddModelError("TreatmentBMPName", 
+                    ModelState.AddModelError("TreatmentBMPName",
                         $"A Treatment BMP with the name {treatmentBMPUpsertDto.TreatmentBMPName} already exists for this project. Treatment BMP names must be unique within a project.");
                 }
             }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
