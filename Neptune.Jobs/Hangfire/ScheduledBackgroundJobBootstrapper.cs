@@ -17,7 +17,7 @@ namespace Neptune.Jobs.Hangfire
                 x => x.RunJob(null),
                 MakeWeeklyUtcCronJobStringFromLocalTime(1, 30, DayOfWeek.Saturday), recurringJobIds);
 
-            AddRecurringJob<HRURefreshScheduledBackgroundJob>(HRURefreshScheduledBackgroundJob.JobName, x => x.RunJob(null), "0 * * * 1-5", recurringJobIds);
+            AddRecurringJob<HRURefreshScheduledBackgroundJob>(HRURefreshScheduledBackgroundJob.JobName, x => x.RunJob(null), "0 0-4,14-23 * * 1-5", recurringJobIds);
 
             AddRecurringJob<TotalNetworkSolveScheduledBackgroundJob>(TotalNetworkSolveScheduledBackgroundJob.JobName, x => x.RunJob(null), MakeDailyUtcCronJobStringFromLocalTime(1, 0), recurringJobIds);
 
