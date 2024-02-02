@@ -22,5 +22,5 @@ data:
   QGISAPIBaseUrl: "http://{{ .Values.global.domains.qgisApi }}"
   OCGISBaseUrl: "https://ocgis.com/arcpub/rest/services/"
   PlanningModuleBaseUrl: "https://{{ .Values.global.domains.web }}"
-  PathToFieldVisitUploadTemplate: "Content/Bulk_Upload_FieldVisists_for_Trash_Screens_Template.xlsx"
+  PathToFieldVisitUploadTemplate: "Bulk_Upload_FieldVisists_for_Trash_Screens_Template.xlsx"
 {{ end }}

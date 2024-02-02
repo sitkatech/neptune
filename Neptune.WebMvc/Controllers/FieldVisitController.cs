@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.FieldVisit;
@@ -38,18 +39,23 @@ using FieldVisitSection = Neptune.EFModels.Entities.FieldVisitSection;
 using Index = Neptune.WebMvc.Views.FieldVisit.Index;
 using Neptune.WebMvc.Services.Filters;
 using Microsoft.Extensions.Options;
+using Neptune.Common;
 using Neptune.Common.GeoSpatial;
 using Neptune.WebMvc.Services;
+using ClosedXML.Excel;
+using Azure.Storage.Blobs;
 
 namespace Neptune.WebMvc.Controllers
 {
     public class FieldVisitController : NeptuneBaseController<FieldVisitController>
     {
         private readonly FileResourceService _fileResourceService;
+        private readonly AzureBlobStorageService _azureBlobStorageService;
 
-        public FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisitController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService) : base(dbContext, logger, linkGenerator, webConfiguration)
+        public FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisitController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService, AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
             _fileResourceService = fileResourceService;
+            _azureBlobStorageService = azureBlobStorageService;
         }
 
         [HttpGet]
@@ -991,7 +997,7 @@ namespace Neptune.WebMvc.Controllers
         private ViewResult ViewBulkUploadTrashScreenVisit(
             BulkUploadTrashScreenVisitViewModel bulkUploadTrashScreenVisitViewModel)
         {
-            var neptunePage = EFModels.Entities.NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.BulkUploadFieldVisits);
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.BulkUploadFieldVisits);
             var bulkUploadTrashScreenVisitViewData = new BulkUploadTrashScreenVisitViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
 
             return RazorView<BulkUploadTrashScreenVisit, BulkUploadTrashScreenVisitViewData,
@@ -1017,298 +1023,262 @@ namespace Neptune.WebMvc.Controllers
 
         [HttpPost]
         [JurisdictionManageFeature]
+        [RequestSizeLimit(100_000_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<IActionResult> BulkUploadTrashScreenVisit(BulkUploadTrashScreenVisitViewModel viewModel)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return ViewBulkUploadTrashScreenVisit(viewModel);
-            //}
+            if (!ModelState.IsValid)
+            {
+                return ViewBulkUploadTrashScreenVisit(viewModel);
+            }
 
-            //var uploadXlsxInputStream = viewModel.UploadXLSX.InputStream;
+            var uploadXlsxInputStream = viewModel.UploadXLSX.OpenReadStream();
 
-            //// todo: set this in startup or something like that.
-            //ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            DataTable dataTableFromExcel;
+            try
+            {
+                dataTableFromExcel = GetDataTableFromExcel(uploadXlsxInputStream, "Field Visits");
+            }
+            catch (Exception)
+            {
+                SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
+                return ViewBulkUploadTrashScreenVisit(viewModel);
+            }
 
-            //DataTable dataTableFromExcel;
-            //try
-            //{
-            //    dataTableFromExcel = GetDataTableFromExcel(uploadXlsxInputStream, "Field Visits");
-            //}
-            //catch (Exception)
-            //{
-            //    SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
-            //    return ViewBulkUploadTrashScreenVisit(viewModel);
-            //}
+            var numRows = dataTableFromExcel.Rows.Count;
 
-            //var numRows = dataTableFromExcel.Rows.Count;
+            var stormwaterJurisdictionsPersonCanView = StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson);
 
-            //var stormwaterJurisdictionsPersonCanView = StormwaterJurisdictions.ListViewableByPerson(_dbContext, CurrentPerson);
+            if (!CurrentPerson.IsAdministrator())
+            {
+                foreach (DataRow row in dataTableFromExcel.Rows)
+                {
+                    var rowJurisdiction = row["Jurisdiction"].ToString();
+                    if (!stormwaterJurisdictionsPersonCanView.Select(x => x.Organization.OrganizationName)
+                        .Contains(rowJurisdiction))
+                    {
+                        SetErrorForDisplay(
+                            $"You attempted to upload a spreadsheet containing BMPs in Jurisdiction {rowJurisdiction}, which you do not have permission to manage.");
+                        return ViewBulkUploadTrashScreenVisit(viewModel);
+                    }
+                }
+            }
 
-            //if (!CurrentPerson.IsAdministrator())
-            //{
-            //    foreach (DataRow row in dataTableFromExcel.Rows)
-            //    {
-            //        var rowJurisdiction = row["Jurisdiction"].ToString();
-            //        if (!stormwaterJurisdictionsPersonCanView.Select(x => x.Organization.OrganizationName)
-            //            .Contains(rowJurisdiction))
-            //        {
-            //            SetErrorForDisplay(
-            //                $"You attempted to upload a spreadsheet containing BMPs in Jurisdiction {rowJurisdiction}, which you do not have permission to manage.");
-            //            return ViewBulkUploadTrashScreenVisit(viewModel);
-            //        }
-            //    }
-            //}
+            var treatmentBMPTypeAssessmentObservationTypes =
+                _dbContext.TreatmentBMPTypeAssessmentObservationTypes
+                    .Include(x => x.TreatmentBMPAssessmentObservationType).AsNoTracking().Where(x =>
+                    x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID).ToList();
 
-            //var treatmentBMPTypeAssessmentObservationTypes =
-            //    _dbContext.TreatmentBMPTypeAssessmentObservationTypes
-            //        .Include(x => x.TreatmentBMPAssessmentObservationType).Where(x =>
-            //        x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID).ToList();
+            var treatmentBMPTypeCustomAttributeTypes = _dbContext
+                .TreatmentBMPTypeCustomAttributeTypes.Include(x => x.CustomAttributeType).AsNoTracking()
+                .Where(x => x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID &&
+                            x.CustomAttributeType.CustomAttributeTypePurposeID == (int)
+                            CustomAttributeTypePurposeEnum.Maintenance).ToList();
 
-            //var treatmentBMPTypeCustomAttributeTypes = _dbContext
-            //    .TreatmentBMPTypeCustomAttributeTypes.Include(x => x.CustomAttributeType)
-            //    .Where(x => x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID &&
-            //                x.CustomAttributeType.CustomAttributeTypePurposeID ==
-            //                CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList();
+            var caredAboutAssessmentObservationTypeNames = new[] { INLET, OUTLET, OPERABILITY, NUISANCE, ACCUMULATION };
+            var caredAboutCustomAttributeTypeNames = new[]{ GREEN_WASTE, MECHANICAL_REPAIR, SEDIMENT, STRUCTURAL_REPAIR, TRASH, VOLUME_CUFT, VOLUME_GAL };
 
-            //var caredAboutAssessmentObservationTypeNames = new[] { INLET, OUTLET, OPERABILITY, NUISANCE, ACCUMULATION };
+            var treatmentBMPTypeCustomAttributeTypeDictionary = caredAboutCustomAttributeTypeNames.ToDictionary(name => name, name => treatmentBMPTypeCustomAttributeTypes.Single(x => x.CustomAttributeType.CustomAttributeTypeName == name));
 
-            //var caredAboutCustomAttributeTypeNames = new[]
-            //{
-            //    GREEN_WASTE,
-            //    MECHANICAL_REPAIR,
-            //    SEDIMENT,
-            //    STRUCTURAL_REPAIR,
-            //    TRASH,
-            //    VOLUME_CUFT,
-            //    VOLUME_GAL
-            //};
+            var treatmentBMPAssessmentObservationTypeDictionary = caredAboutAssessmentObservationTypeNames.ToDictionary(name => name, name => treatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPAssessmentObservationType).Single(x => x.TreatmentBMPAssessmentObservationTypeName == name));
 
-            //var customAttributeTypeDictionary = new Dictionary<string, CustomAttributeType>();
-            //foreach (var name in caredAboutCustomAttributeTypeNames)
-            //{
-            //    customAttributeTypeDictionary.Add(name,
-            //        treatmentBMPTypeCustomAttributeTypes.Select(x => x.CustomAttributeType).Single(x =>
-            //            x.CustomAttributeTypeName == name));
-            //}
+            var allFieldVisits = _dbContext.FieldVisits.AsNoTracking().ToList();
 
-            //var treatmentBMPTypeCustomAttributeTypeDictionary = new Dictionary<string, TreatmentBMPTypeCustomAttributeType>();
-            //foreach (var name in caredAboutCustomAttributeTypeNames)
-            //{
-            //    treatmentBMPTypeCustomAttributeTypeDictionary.Add(name,
-            //        treatmentBMPTypeCustomAttributeTypes.Single(x =>
-            //            x.CustomAttributeType.CustomAttributeTypeName == name));
-            //}
+            var numColumns = dataTableFromExcel.Columns.Count;
 
-            //var treatmentBMPTypeassessmentObservationTypeDictionary =
-            //    new Dictionary<string, TreatmentBMPTypeAssessmentObservationType>();
+            var errors = new List<string>();
 
-            //foreach (var name in caredAboutAssessmentObservationTypeNames)
-            //{
-            //    treatmentBMPTypeassessmentObservationTypeDictionary.Add(name,
-            //        treatmentBMPTypeAssessmentObservationTypes.Single(x =>
-            //            x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName == name));
-            //}
+            try
+            {
+                for (var i = 0; i < numRows; i++)
+                {
+                    try
+                    {
+                        var row = dataTableFromExcel.Rows[i];
+                        var rowEmpty = true;
+                        for (var j = 0; j < numColumns; j++)
+                        {
+                            rowEmpty = string.IsNullOrWhiteSpace(row[j].ToString());
+                            if (!rowEmpty)
+                            {
+                                break;
+                            }
+                        }
 
-            //var treatmentBMPAssessmentObservationTypeDictionary =
-            //    new Dictionary<string, TreatmentBMPAssessmentObservationType>();
+                        if (rowEmpty)
+                        {
+                            continue;
+                        }
 
-            //foreach (var name in caredAboutAssessmentObservationTypeNames)
-            //{
-            //    treatmentBMPAssessmentObservationTypeDictionary.Add(name,
-            //        treatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPAssessmentObservationType).Single(x =>
-            //              x.TreatmentBMPAssessmentObservationTypeName == name));
-            //}
+                        var treatmentBMPName = row["BMP Name"].ToString();
+                        var jurisdictionName = row["Jurisdiction"].ToString();
 
-            //var allFieldVisits = _dbContext.FieldVisits.ToList();
+                        var treatmentBMP = _dbContext.TreatmentBMPs
+                            .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization).AsNoTracking().SingleOrDefault(x =>
+                                x.TreatmentBMPName == treatmentBMPName &&
+                                x.StormwaterJurisdiction.Organization.OrganizationName == jurisdictionName);
 
-            //var numColumns = dataTableFromExcel.Columns.Count;
+                        if (treatmentBMP == null)
+                        {
+                            throw new InvalidOperationException($"Invalid BMP Name or Jurisdiction at row {i + 2}");
+                        }
 
-            //var errors = new List<string>();
+                        var rawFieldVisitType = row["Field Visit Type"].ToString();
+                        var fieldVisitType = FieldVisitType.All.SingleOrDefault(x => x.FieldVisitTypeDisplayName == rawFieldVisitType);
+                        if (fieldVisitType == null)
+                        {
+                            throw new InvalidOperationException($"Invalid Field Visit Type at row {i + 2}");
+                        }
 
-            //try
-            //{
-            //    for (int i = 0; i < numRows; i++)
-            //    {
-            //        try
-            //        {
+                        var rawFieldVisitDate = row["Field Visit Date"].ToString();
+                        var fieldVisitDateIsValid = DateTime.TryParse(rawFieldVisitDate, out var fieldVisitDate);
 
+                        if (!fieldVisitDateIsValid)
+                        {
+                            throw new InvalidOperationException($"Invalid Field Visit Date at row {i + 2}");
+                        }
 
-            //            var row = dataTableFromExcel.Rows[i];
+                        var fieldVisit = allFieldVisits.SingleOrDefault(x =>
+                                             x.TreatmentBMPID == treatmentBMP.TreatmentBMPID &&
+                                             x.VisitDate.Date == fieldVisitDate.Date) ??
 
-            //            var rowEmpty = true;
+                                         new FieldVisit
+                                         {
+                                             TreatmentBMPID = treatmentBMP.TreatmentBMPID,
+                                             FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID,
+                                             PerformedByPersonID = CurrentPerson.PersonID,
+                                             VisitDate = fieldVisitDate,
+                                             FieldVisitTypeID = fieldVisitType.FieldVisitTypeID,
+                                             InventoryUpdated = false,
+                                             IsFieldVisitVerified = true
+                                         };
 
-            //            for (int j = 0; j < numColumns; j++)
-            //            {
-            //                rowEmpty = string.IsNullOrWhiteSpace(row[j].ToString());
-            //                if (!rowEmpty)
-            //                {
-            //                    break;
-            //                }
-            //            }
+                        if (InitialAssessmentFieldsPopulated(row, i))
+                        {
+                            var initialAssessment = fieldVisit.GetInitialAssessment() ?? new TreatmentBMPAssessment
+                            {
+                                TreatmentBMPID = treatmentBMP.TreatmentBMPID,
+                                TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
+                                FieldVisitID = fieldVisit.FieldVisitID,
+                                TreatmentBMPAssessmentTypeID = (int)TreatmentBMPAssessmentTypeEnum.Initial,
+                                IsAssessmentComplete = true
+                            };
 
-            //            if (rowEmpty)
-            //            {
-            //                continue;
-            //            }
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, INLET, true,
+                                false, _dbContext);
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OUTLET, true, false, _dbContext);
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OPERABILITY,
+                                true, false, _dbContext);
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, NUISANCE, true, false, _dbContext);
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, ACCUMULATION,
+                                false, false, _dbContext);
 
-            //            var treatmentBMPName = row["BMP Name"].ToString();
-            //            var jurisdictionName = row["Jurisdiction"].ToString();
+                            initialAssessment.CalculateAssessmentScore();
+                        }
 
-            //            var treatmentBMP = _dbContext.TreatmentBMPs
-            //                .Include(x => x.TreatmentBMPType)
-            //                .Include(x => x.StormwaterJurisdiction.Organization).SingleOrDefault(x =>
-            //                    x.TreatmentBMPName == treatmentBMPName &&
-            //                    x.StormwaterJurisdiction.Organization.OrganizationName == jurisdictionName);
+                        if (MaintenanceRecordFieldsPopulated(row))
+                        {
+                            var maintenanceRecord = fieldVisit.MaintenanceRecord ??
+                                                    new MaintenanceRecord
+                                                    {
+                                                        TreatmentBMPID =  treatmentBMP.TreatmentBMPID,
+                                                        TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
+                                                        FieldVisitID = fieldVisit.FieldVisitID
+                                                    };
 
-            //            if (treatmentBMP == null)
-            //            {
-            //                throw new InvalidOperationException($"Invalid BMP Name or Jurisdiction at row {i + 2}");
-            //            }
+                            var rawMaintenanceType = row["Maintenance Type"].ToString();
+                            var rawDescription = row["Description"].ToString();
 
-            //            var rawFieldVisitType = row["Field Visit Type"].ToString();
-            //            var fieldVisitType =
-            //                FieldVisitType.All.SingleOrDefault(x => x.FieldVisitTypeDisplayName == rawFieldVisitType);
-            //            if (fieldVisitType == null)
-            //            {
-            //                throw new InvalidOperationException($"Invalid Field Visit Type at row {i + 2}");
-            //            }
+                            var maintenanceRecordType = MaintenanceRecordType.All.SingleOrDefault(x =>
+                                x.MaintenanceRecordTypeDisplayName == rawMaintenanceType);
 
-            //            var rawFieldVisitDate = row["Field Visit Date"].ToString();
-            //            var fieldVisitDateIsValid = DateTime.TryParse(rawFieldVisitDate, out var fieldVisitDate);
-
-            //            if (!fieldVisitDateIsValid)
-            //            {
-            //                throw new InvalidOperationException($"Invalid Field Visit Date at row {i + 2}");
-            //            }
-
-            //            var fieldVisit = allFieldVisits.SingleOrDefault(x =>
-            //                                 x.TreatmentBMPID == treatmentBMP.TreatmentBMPID &&
-            //                                 x.VisitDate.Date == fieldVisitDate.Date) ??
-
-            //                             new FieldVisit
-            //                             {
-            //                                 TreatmentBMPID = treatmentBMP.TreatmentBMPID,
-            //                                 FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID,
-            //                                 PerformedByPersonID = CurrentPerson.PersonID,
-            //                                 VisitDate = fieldVisitDate,
-            //                                 FieldVisitTypeID = fieldVisitType.FieldVisitTypeID,
-            //                                 InventoryUpdated = false,
-            //                                 IsFieldVisitVerified = true
-            //                             };
-
-            //            if (InitialAssessmentFieldsPopulated(row, i))
-            //            {
-            //                var initialAssessment = fieldVisit.GetInitialAssessment() ?? new TreatmentBMPAssessment(
-            //                    treatmentBMP, treatmentBMP.TreatmentBMPType,
-            //                    fieldVisit, TreatmentBMPAssessmentType.Initial, true);
-
-            //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-            //                    treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, INLET, true,
-            //                    false, _dbContext);
-            //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-            //                    treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OUTLET, true, false, _dbContext);
-            //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-            //                    treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OPERABILITY,
-            //                    true, false, _dbContext);
-            //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-            //                    treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, NUISANCE, true, false, _dbContext);
-            //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-            //                    treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, ACCUMULATION,
-            //                    false, false, _dbContext);
-
-            //                initialAssessment.CalculateAssessmentScore();
-            //            }
-
-            //            if (MaintenanceRecordFieldsPopulated(row))
-            //            {
-            //                var maintenanceRecord = fieldVisit.MaintenanceRecord ??
-            //                                        new MaintenanceRecord(treatmentBMP, treatmentBMP.TreatmentBMPType,
-            //                                            fieldVisit);
-
-            //                var rawMaintenanceType = row["Maintenance Type"].ToString();
-            //                var rawDescription = row["Description"].ToString();
-
-            //                var maintenanceRecordType = MaintenanceRecordType.All.SingleOrDefault(x =>
-            //                    x.MaintenanceRecordTypeDisplayName == rawMaintenanceType);
-
-            //                if (maintenanceRecordType == null)
-            //                {
-            //                    throw new InvalidOperationException($"Invalid Maintenance type at row {i + 2}");
-            //                }
+                            if (maintenanceRecordType == null)
+                            {
+                                throw new InvalidOperationException($"Invalid Maintenance type at row {i + 2}");
+                            }
 
 
-            //                maintenanceRecord.MaintenanceRecordTypeID = maintenanceRecordType.MaintenanceRecordTypeID;
-            //                maintenanceRecord.MaintenanceRecordDescription = rawDescription;
+                            maintenanceRecord.MaintenanceRecordTypeID = maintenanceRecordType.MaintenanceRecordTypeID;
+                            maintenanceRecord.MaintenanceRecordDescription = rawDescription;
 
-            //                UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
-            //                    treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, STRUCTURAL_REPAIR, i);
-            //                UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
-            //                    treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, MECHANICAL_REPAIR, i);
-            //                UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
-            //                    treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, VOLUME_CUFT, i);
-            //                UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
-            //                    treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, VOLUME_GAL, i);
-            //                UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
-            //                    treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, TRASH, i);
-            //                UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
-            //                    treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, GREEN_WASTE, i);
-            //                UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(row,
-            //                    treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, SEDIMENT, i);
-            //            }
+                            await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
+                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, STRUCTURAL_REPAIR, i);
+                            await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
+                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, MECHANICAL_REPAIR, i);
+                            await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
+                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, VOLUME_CUFT, i);
+                            await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
+                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, VOLUME_GAL, i);
+                            await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
+                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, TRASH, i);
+                            await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
+                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, GREEN_WASTE, i);
+                            await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
+                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, SEDIMENT, i);
+                        }
 
-            //            if (PostMaintenanceAssessmentFieldsPopulated(row, i))
-            //            {
-            //                var postMaintenanceAssessment =
-            //                    fieldVisit.GetPostMaintenanceAssessment() ?? new TreatmentBMPAssessment(treatmentBMP,
-            //                        treatmentBMP.TreatmentBMPType,
-            //                        fieldVisit, TreatmentBMPAssessmentType.PostMaintenance, true);
+                        if (PostMaintenanceAssessmentFieldsPopulated(row, i))
+                        {
+                            var postMaintenanceAssessment =
+                                fieldVisit.GetPostMaintenanceAssessment() ?? new TreatmentBMPAssessment
+                                {
+                                    TreatmentBMPID = treatmentBMP.TreatmentBMPID,
+                                    TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
+                                    FieldVisitID = fieldVisit.FieldVisitID,
+                                    TreatmentBMPAssessmentTypeID = (int)TreatmentBMPAssessmentTypeEnum.PostMaintenance,
+                                    IsAssessmentComplete = true
+                                };
 
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, INLET,
+                                true, true, _dbContext);
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, OUTLET,
+                                true, true, _dbContext);
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment,
+                                OPERABILITY,
+                                true, true, _dbContext);
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, NUISANCE,
+                                true, true, _dbContext);
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment,
+                                ACCUMULATION,
+                                false, true, _dbContext);
 
-            //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-            //                    treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, INLET,
-            //                    true, true, _dbContext);
-            //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-            //                    treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, OUTLET,
-            //                    true, true, _dbContext);
-            //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-            //                    treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment,
-            //                    OPERABILITY,
-            //                    true, true, _dbContext);
-            //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-            //                    treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, NUISANCE,
-            //                    true, true, _dbContext);
-            //                UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-            //                    treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment,
-            //                    ACCUMULATION,
-            //                    false, true, _dbContext);
-
-            //                postMaintenanceAssessment.CalculateAssessmentScore();
-            //            }
+                            postMaintenanceAssessment.CalculateAssessmentScore();
+                        }
 
 
 
-            //        }
-            //        catch (InvalidOperationException ioe)
-            //        {
-            //            errors.Add(ioe.Message);
-            //        }
-            //    }
-            //}
-            //catch (Exception)
-            //{
-            //    SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
-            //    return ViewBulkUploadTrashScreenVisit(viewModel);
-            //}
+                    }
+                    catch (InvalidOperationException ioe)
+                    {
+                        errors.Add(ioe.Message);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
+                return ViewBulkUploadTrashScreenVisit(viewModel);
+            }
 
-            //if (errors.Count > 0)
-            //{
-            //    SetErrorForDisplay(string.Join("<br/>", errors));
-            //    return ViewBulkUploadTrashScreenVisit(viewModel);
-            //}
+            if (errors.Count > 0)
+            {
+                SetErrorForDisplay(string.Join("<br/>", errors));
+                return ViewBulkUploadTrashScreenVisit(viewModel);
+            }
 
-            //await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
 
-            //SetMessageForDisplay("Successfully bulk uploaded Field Visit Assessment and Maintenance Records");
+            SetMessageForDisplay("Successfully bulk uploaded Field Visit Assessment and Maintenance Records");
 
             return RedirectToAction(new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Index()));
         }
@@ -1367,7 +1337,7 @@ namespace Neptune.WebMvc.Controllers
             var endIndex = row.Table.Columns.IndexOf($"{ACCUMULATION} Notes");
 
             // they are allowed to submit a completely blank initial assessment, but all fields must be filled out if any are
-            bool allowBlank = true;
+            var allowBlank = true;
 
             for (var i = startIndex; i <= endIndex; i++)
             {
@@ -1393,13 +1363,14 @@ namespace Neptune.WebMvc.Controllers
             return !allowBlank;
         }
 
-        private static void UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(DataRow row,
-            Dictionary<string, TreatmentBMPTypeCustomAttributeType> treatmentBMPTypeCustomAttributeTypeDictionary,
+        private static async Task UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(NeptuneDbContext dbContext,
+            DataRow row,
+            IReadOnlyDictionary<string, TreatmentBMPTypeCustomAttributeType>
+                treatmentBMPTypeCustomAttributeTypeDictionary,
             MaintenanceRecord maintenanceRecord, string observationName, int rowNumber)
         {
             var rawObservation = row[observationName].ToString();
-            var treatmentBMPTypeCustomAttributeType =
-                treatmentBMPTypeCustomAttributeTypeDictionary[observationName];
+            var treatmentBMPTypeCustomAttributeType = treatmentBMPTypeCustomAttributeTypeDictionary[observationName];
 
             var maintenanceRecordObservation = maintenanceRecord.MaintenanceRecordObservations.SingleOrDefault(x =>
                 x.CustomAttributeType.CustomAttributeTypeName == observationName);
@@ -1416,8 +1387,7 @@ namespace Neptune.WebMvc.Controllers
 
             if (maintenanceRecordObservation != null)
             {
-                var maintenanceRecordObservationValue =
-                    maintenanceRecordObservation.MaintenanceRecordObservationValues.SingleOrDefault();
+                var maintenanceRecordObservationValue = maintenanceRecordObservation.MaintenanceRecordObservationValues.SingleOrDefault();
                 if (maintenanceRecordObservationValue != null)
                 {
                     maintenanceRecordObservationValue.ObservationValue = valueParsedForDataType;
@@ -1430,6 +1400,7 @@ namespace Neptune.WebMvc.Controllers
                             MaintenanceRecordObservation = maintenanceRecordObservation,
                             ObservationValue = valueParsedForDataType
                         };
+                    await dbContext.MaintenanceRecordObservationValues.AddAsync(maintenanceRecordObservationValue);
                 }
             }
             else
@@ -1441,17 +1412,17 @@ namespace Neptune.WebMvc.Controllers
                     TreatmentBMPType = treatmentBMPTypeCustomAttributeType.TreatmentBMPType,
                     CustomAttributeType = treatmentBMPTypeCustomAttributeType.CustomAttributeType
                 };
+                await dbContext.MaintenanceRecordObservations.AddAsync(maintenanceRecordObservation);
                 var maintenanceRecordObservationValue =
                     new MaintenanceRecordObservationValue
                     {
                         MaintenanceRecordObservation = maintenanceRecordObservation,
                         ObservationValue = valueParsedForDataType
                     };
+                await dbContext.MaintenanceRecordObservationValues.AddAsync(maintenanceRecordObservationValue);
             }
         }
 
-
-        // todo: I don't think this is handling the post-maintenance assessment at all
         private static async Task UpdateOrCreateSingleValueObservationFromDataTableRow(DataRow row,
             Dictionary<string, TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypeDictionary, int rowNumber, TreatmentBMPAssessment assessment, string observationTypeName, bool isPassFail, bool isPostMaintenance, NeptuneDbContext dbContext)
         {
@@ -1461,8 +1432,7 @@ namespace Neptune.WebMvc.Controllers
             string inletConditionObservationValue;
             if (isPassFail)
             {
-                inletConditionObservationValue =
-                    rawInletCondition == "PASS" ? "true" : (rawInletCondition == "FAIL" ? "false" : "invalid");
+                inletConditionObservationValue = rawInletCondition == "PASS" ? "true" : (rawInletCondition == "FAIL" ? "false" : "invalid");
             }
             else
             {
@@ -1504,68 +1474,77 @@ namespace Neptune.WebMvc.Controllers
             initialInletConditionObservation.ObservationData = inletConditionJson;
         }
 
-        //todo: bulk upload trash
-        //[HttpGet]
-        //[JurisdictionManageFeature]
-        //public FileResult TrashScreenBulkUploadTemplate()
-        //{
-        //    var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictions.ListViewableIDsByPerson(_dbContext, CurrentPerson).ToList();
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public async Task<FileResult> TrashScreenBulkUploadTemplate()
+        {
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson).ToList();
 
-        //    var currentPersonTrashScreens = TreatmentBMPs.GetNonPlanningModuleBMPs(_dbContext)
-        //        .Where(x => x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID &&
-        //                    stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            var currentPersonTrashScreens = TreatmentBMPs.GetNonPlanningModuleBMPs(_dbContext)
+                .Where(x => x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID &&
+                            stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
 
-        //    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var row = 2;
+            using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
+            await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToFieldVisitUploadTemplate, disposableTempFile.FileInfo.FullName);
 
-        //    // todo: pretty sure i need to wrap usings around this...
-        //    var newFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx").FileInfo;
-        //    var template =
-        //        new FileInfo(
-        //            NeptuneWebConfiguration.PathToFieldVisitUploadTemplate);
-        //    var row = 2;
-        //    using (var package = new ExcelPackage(newFile, template))
-        //    {
-        //        var worksheet = package.Workbook.Worksheets["Field Visits"];
-        //        foreach (var treatmentBMP in currentPersonTrashScreens)
-        //        {
-        //            worksheet.Cells[$"A{row}"].Value = treatmentBMP.TreatmentBMPName;
-        //            worksheet.Cells[$"B{row}"].Value = treatmentBMP.StormwaterJurisdiction.Organization.OrganizationName;
-        //            worksheet.Cells[$"C{row}"].Value = treatmentBMP.YearBuilt;
-        //            worksheet.Cells[$"D{row}"].Value = treatmentBMP.Notes;
-        //            row++;
-        //        }
-        //        package.Save();
+            using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
+            var worksheet = workbook.Worksheet("Field Visits");
+            foreach (var treatmentBMP in currentPersonTrashScreens)
+            {
+                worksheet.Cells($"A{row}").Value = treatmentBMP.TreatmentBMPName;
+                worksheet.Cells($"B{row}").Value = treatmentBMP.StormwaterJurisdiction.Organization.OrganizationName;
+                worksheet.Cells($"C{row}").Value = treatmentBMP.YearBuilt;
+                worksheet.Cells($"D{row}").Value = treatmentBMP.Notes;
+                row++;
+            }
 
-        //    }
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            return File(stream.ToArray(), @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                $"TrashScreenBulkUploadTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.xlsx");
+        }
 
-        //    return File(newFile.FullName, @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"TrashScreenBulkUploadTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.xlsx");
-        //}
+        public static DataTable GetDataTableFromExcel(Stream inputStream, dynamic worksheet)
+        {
+            var dataTable = new DataTable();
+            using var workBook = new XLWorkbook(inputStream);
+            IXLWorksheet workSheet = workBook.Worksheet(worksheet);
 
-        //public static DataTable GetDataTableFromExcel(Stream stream, string worksheetName, bool hasHeader = true)
-        //{
-        //    // code borrowed from https://stackoverflow.com/questions/11239805/how-convert-stream-excel-file-to-datatable-c/11239895#11239895
-        //    // with variables given appropriate names, some changes for our use-case, and mild clean-up
-        //    using (var excelPackage = new OfficeOpenXml.ExcelPackage())
-        //    {
-        //        excelPackage.Load(stream);
-        //        var worksheet = excelPackage.Workbook.Worksheets[worksheetName];
-        //        var dataTable = new DataTable();
-        //        foreach (var firstRowCell in worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column])
-        //        {
-        //            dataTable.Columns.Add(hasHeader ? firstRowCell.Text : $"Column {firstRowCell.Start.Column}");
-        //        }
-        //        var startRow = hasHeader ? 2 : 1;
-        //        for (var rowNumber = startRow; rowNumber <= worksheet.Dimension.End.Row; rowNumber++)
-        //        {
-        //            var worksheetRow = worksheet.Cells[rowNumber, 1, rowNumber, worksheet.Dimension.End.Column];
-        //            var dataTableRow = dataTable.Rows.Add();
-        //            foreach (var cell in worksheetRow)
-        //            {
-        //                dataTableRow[cell.Start.Column - 1] = cell.Text;
-        //            }
-        //        }
-        //        return dataTable;
-        //    }
-        //}
+            //Loop through the Worksheet rows.
+            var firstRow = true;
+            foreach (var row in workSheet.Rows())
+            {
+                //Use the first row to add columns to DataTable.
+                if (firstRow)
+                {
+                    foreach (var cell in row.Cells())
+                    {
+                        if (!string.IsNullOrEmpty(cell.Value.ToString()))
+                        {
+                            dataTable.Columns.Add(cell.Value.ToString());
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    firstRow = false;
+                }
+                else
+                {
+                    var i = 0;
+                    var toInsert = dataTable.NewRow();
+                    foreach (var cell in row.Cells(1, dataTable.Columns.Count))
+                    {
+                        toInsert[i] = cell.Value.ToString();
+                        i++;
+                    }
+                    dataTable.Rows.Add(toInsert);
+                }
+            }
+
+            return dataTable;
+        }
     }
 }

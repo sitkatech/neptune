@@ -13,7 +13,7 @@ namespace Neptune.WebMvc.Views.FieldVisit
             EntityName = FieldDefinitionType.FieldVisit.GetFieldDefinitionLabel();
             EntityUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             PageTitle = "Bulk Upload Trash Screen Field Visits";
-            TemplateDownloadUrl = "";// todo: SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.TrashScreenBulkUploadTemplate());
+            TemplateDownloadUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.TrashScreenBulkUploadTemplate());
         }
     }
 }
