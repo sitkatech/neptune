@@ -13,7 +13,7 @@ namespace Neptune.EFModels.Entities
 
         public abstract double? GetObservationValueFromObservationData(string observationData);
 
-        public abstract double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation);
+        public abstract double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation, TreatmentBMP treatmentBMP);
 
         public virtual string CalculateOverrideScoreText(string assessmentScoreIfFailing, string observationTypeSchema, bool overrideAssessmentScoreIfFailing)
         {
@@ -86,15 +86,16 @@ namespace Neptune.EFModels.Entities
             return observation.SingleValueObservations.Average(x => double.Parse(x.ObservationValue.ToString()));
         }
 
-        public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
+        public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation, TreatmentBMP treatmentBMP)
         {            
             var observationValue = GetObservationValueFromObservationData(treatmentBMPObservation.ObservationData);
-            var treatmentBMPBenchmarkAndThresholds = treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP.TreatmentBMPBenchmarkAndThresholds;
-            var benchmarkValue = treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetBenchmarkValue(treatmentBMPBenchmarkAndThresholds);
-            var thresholdValue = treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetThresholdValue(treatmentBMPBenchmarkAndThresholds);
+            var treatmentBMPBenchmarkAndThresholds = treatmentBMP.TreatmentBMPBenchmarkAndThresholds;
+            var treatmentBMPAssessmentObservationType = treatmentBMPObservation.TreatmentBMPAssessmentObservationType;
+            var benchmarkValue = treatmentBMPAssessmentObservationType.GetBenchmarkValue(treatmentBMPBenchmarkAndThresholds);
+            var thresholdValue = treatmentBMPAssessmentObservationType.GetThresholdValue(treatmentBMPBenchmarkAndThresholds);
 
-            var useUpperValue = treatmentBMPObservation.TreatmentBMPAssessmentObservationType.UseUpperValueForThreshold(benchmarkValue, observationValue);
-            var thresholdValueInBenchmarkUnits = treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, useUpperValue);
+            var useUpperValue = treatmentBMPAssessmentObservationType.UseUpperValueForThreshold(benchmarkValue, observationValue);
+            var thresholdValueInBenchmarkUnits = treatmentBMPAssessmentObservationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, useUpperValue);
 
             if (observationValue == null || benchmarkValue == null || thresholdValueInBenchmarkUnits == null)
             {
@@ -163,7 +164,7 @@ namespace Neptune.EFModels.Entities
             return conveyanceFails ? 0 : 5;
         }
 
-        public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
+        public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation, TreatmentBMP treatmentBMP)
         {
             var observationValue = GetObservationValueFromObservationData(treatmentBMPObservation.ObservationData);
             return observationValue;
@@ -241,7 +242,7 @@ namespace Neptune.EFModels.Entities
             return observation.SingleValueObservations.Sum(x => double.Parse(x.ObservationValue.ToString()));
         }
 
-        public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
+        public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation, TreatmentBMP treatmentBMP)
         {
             var observationValue = GetObservationValueFromObservationData(treatmentBMPObservation.ObservationData);
             var treatmentBMPBenchmarkAndThresholds = treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP.TreatmentBMPBenchmarkAndThresholds;

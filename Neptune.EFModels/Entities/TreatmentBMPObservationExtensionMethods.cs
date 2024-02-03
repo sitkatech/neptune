@@ -12,7 +12,7 @@ public static partial class TreatmentBMPObservationExtensionMethods
             ObservationScore = overrideAssessmentScoreIfFailing ? string.Empty : treatmentBMPObservation.FormattedObservationScore(),
             ObservationValue = treatmentBMPObservation.CalculateObservationValue(),
             IsComplete = isComplete,
-            OverrideScore = overrideAssessmentScoreIfFailing && isComplete && treatmentBMPObservation.OverrideScoreForFailingObservation(treatmentBMPObservation.TreatmentBMPAssessmentObservationType),
+            OverrideScore = overrideAssessmentScoreIfFailing && isComplete && treatmentBMPObservation.OverrideScoreForFailingObservation(),
             OverrideScoreText = treatmentBMPObservation.CalculateOverrideScoreText(overrideAssessmentScoreIfFailing),
         };
         return treatmentBMPTypeObservationTypeDto;

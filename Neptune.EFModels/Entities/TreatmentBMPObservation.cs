@@ -42,14 +42,14 @@ namespace Neptune.EFModels.Entities
             return true;
         }
 
-        public double? CalculateObservationScore()
+        public double? CalculateObservationScore(TreatmentBMP treatmentBMP)
         {
-            return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.CalculateScore(this);
+            return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.CalculateScore(this, treatmentBMP);
         }
 
         public string FormattedObservationScore()
         {
-            var score = CalculateObservationScore();
+            var score = CalculateObservationScore(TreatmentBMPAssessment.TreatmentBMP);
             return score?.ToString("0.0") ?? "-";
         }
 
@@ -71,9 +71,9 @@ namespace Neptune.EFModels.Entities
             return $"{observationValue.ToString(CultureInfo.InvariantCulture)}";
         }
 
-        public bool OverrideScoreForFailingObservation(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
+        public bool OverrideScoreForFailingObservation()
         {
-            var score = CalculateObservationScore();
+            var score = CalculateObservationScore(TreatmentBMPAssessment.TreatmentBMP);
             if ((score?? 0) < 0.01)
             {
                 return true;

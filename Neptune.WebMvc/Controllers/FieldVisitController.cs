@@ -43,7 +43,6 @@ using Neptune.Common;
 using Neptune.Common.GeoSpatial;
 using Neptune.WebMvc.Services;
 using ClosedXML.Excel;
-using Azure.Storage.Blobs;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -788,7 +787,7 @@ namespace Neptune.WebMvc.Controllers
 
             // cache the score and the completeness status because they are difficult to calculate en masse later.
             treatmentBMPAssessment.CalculateIsAssessmentComplete();
-            treatmentBMPAssessment.CalculateAssessmentScore();
+            treatmentBMPAssessment.CalculateAssessmentScore(treatmentBMPType, treatmentBMPAssessment.TreatmentBMP);
 
             if (await FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Detail(fieldVisit))); }
             SetMessageForDisplay("Assessment Information successfully saved.");
@@ -839,7 +838,7 @@ namespace Neptune.WebMvc.Controllers
             TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, TreatmentBMPType treatmentBMPType, NeptuneDbContext dbContext)
         {
             var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList()
-                .Find(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID ==
+                .Find(x => x.TreatmentBMPAssessmentObservationTypeID ==
                            treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             if (treatmentBMPObservation == null)
             {
@@ -849,7 +848,7 @@ namespace Neptune.WebMvc.Controllers
                             x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType
                                 .TreatmentBMPAssessmentObservationTypeID);
                 Check.RequireNotNull(treatmentBMPTypeAssessmentObservationType,
-                    $"Not a valid Observation Type ID {treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID} for Treatment BMP Type ID {treatmentBMPAssessment.TreatmentBMPTypeID}");
+                    $"Not a valid Observation Type ID {treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID} for Treatment BMP Type ID {treatmentBMPType.TreatmentBMPTypeID}");
                 treatmentBMPObservation = new TreatmentBMPObservation
                 {
                     TreatmentBMPAssessment = treatmentBMPAssessment,
@@ -1066,11 +1065,12 @@ namespace Neptune.WebMvc.Controllers
 
             var treatmentBMPTypeAssessmentObservationTypes =
                 _dbContext.TreatmentBMPTypeAssessmentObservationTypes
-                    .Include(x => x.TreatmentBMPAssessmentObservationType).AsNoTracking().Where(x =>
+                    .Include(x => x.TreatmentBMPAssessmentObservationType).Where(x =>
                     x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID).ToList();
 
             var treatmentBMPTypeCustomAttributeTypes = _dbContext
-                .TreatmentBMPTypeCustomAttributeTypes.Include(x => x.CustomAttributeType).AsNoTracking()
+
+                .TreatmentBMPTypeCustomAttributeTypes.Include(x => x.CustomAttributeType)
                 .Where(x => x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID &&
                             x.CustomAttributeType.CustomAttributeTypePurposeID == (int)
                             CustomAttributeTypePurposeEnum.Maintenance).ToList();
@@ -1081,8 +1081,6 @@ namespace Neptune.WebMvc.Controllers
             var treatmentBMPTypeCustomAttributeTypeDictionary = caredAboutCustomAttributeTypeNames.ToDictionary(name => name, name => treatmentBMPTypeCustomAttributeTypes.Single(x => x.CustomAttributeType.CustomAttributeTypeName == name));
 
             var treatmentBMPAssessmentObservationTypeDictionary = caredAboutAssessmentObservationTypeNames.ToDictionary(name => name, name => treatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPAssessmentObservationType).Single(x => x.TreatmentBMPAssessmentObservationTypeName == name));
-
-            var allFieldVisits = _dbContext.FieldVisits.AsNoTracking().ToList();
 
             var numColumns = dataTableFromExcel.Columns.Count;
 
@@ -1114,7 +1112,8 @@ namespace Neptune.WebMvc.Controllers
                         var jurisdictionName = row["Jurisdiction"].ToString();
 
                         var treatmentBMP = _dbContext.TreatmentBMPs
-                            .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization).AsNoTracking().SingleOrDefault(x =>
+                            .Include(x => x.TreatmentBMPBenchmarkAndThresholds)
+                            .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization).SingleOrDefault(x =>
                                 x.TreatmentBMPName == treatmentBMPName &&
                                 x.StormwaterJurisdiction.Organization.OrganizationName == jurisdictionName);
 
@@ -1138,58 +1137,71 @@ namespace Neptune.WebMvc.Controllers
                             throw new InvalidOperationException($"Invalid Field Visit Date at row {i + 2}");
                         }
 
-                        var fieldVisit = allFieldVisits.SingleOrDefault(x =>
-                                             x.TreatmentBMPID == treatmentBMP.TreatmentBMPID &&
-                                             x.VisitDate.Date == fieldVisitDate.Date) ??
+                        var fieldVisit = _dbContext.FieldVisits
+                                .Include(x => x.TreatmentBMPAssessments).ThenInclude(x => x.TreatmentBMPObservations)
+                                .SingleOrDefault(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID && x.VisitDate.Date == fieldVisitDate.Date);
+                        if (fieldVisit == null)
+                        {
+                            fieldVisit = new FieldVisit
+                            {
+                                TreatmentBMP = treatmentBMP,
+                                FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID,
+                                PerformedByPersonID = CurrentPerson.PersonID,
+                                VisitDate = fieldVisitDate,
+                                FieldVisitTypeID = fieldVisitType.FieldVisitTypeID,
+                                InventoryUpdated = false,
+                                IsFieldVisitVerified = true
+                            };
+                            await _dbContext.FieldVisits.AddAsync(fieldVisit);
+                        }
 
-                                         new FieldVisit
-                                         {
-                                             TreatmentBMPID = treatmentBMP.TreatmentBMPID,
-                                             FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID,
-                                             PerformedByPersonID = CurrentPerson.PersonID,
-                                             VisitDate = fieldVisitDate,
-                                             FieldVisitTypeID = fieldVisitType.FieldVisitTypeID,
-                                             InventoryUpdated = false,
-                                             IsFieldVisitVerified = true
-                                         };
-
+                        var treatmentBMPType = TreatmentBMPTypes.GetByIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPTypeID);
                         if (InitialAssessmentFieldsPopulated(row, i))
                         {
-                            var initialAssessment = fieldVisit.GetInitialAssessment() ?? new TreatmentBMPAssessment
+                            var initialAssessment = fieldVisit.GetInitialAssessment();
+                            if (initialAssessment == null)
                             {
-                                TreatmentBMPID = treatmentBMP.TreatmentBMPID,
-                                TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
-                                FieldVisitID = fieldVisit.FieldVisitID,
-                                TreatmentBMPAssessmentTypeID = (int)TreatmentBMPAssessmentTypeEnum.Initial,
-                                IsAssessmentComplete = true
-                            };
+                                initialAssessment = new TreatmentBMPAssessment
+                                {
+                                    TreatmentBMP = treatmentBMP,
+                                    TreatmentBMPType = treatmentBMPType,
+                                    FieldVisit = fieldVisit,
+                                    TreatmentBMPAssessmentTypeID = (int)TreatmentBMPAssessmentTypeEnum.Initial,
+                                    IsAssessmentComplete = true
+                                };
+                                await _dbContext.TreatmentBMPAssessments.AddAsync(initialAssessment);
+                            }
 
                             await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, INLET, true,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, INLET, true,
                                 false, _dbContext);
                             await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OUTLET, true, false, _dbContext);
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, OUTLET, true, false, _dbContext);
                             await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, OPERABILITY,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, OPERABILITY,
                                 true, false, _dbContext);
                             await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, NUISANCE, true, false, _dbContext);
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, NUISANCE, true, false, _dbContext);
                             await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, ACCUMULATION,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, ACCUMULATION,
                                 false, false, _dbContext);
 
-                            initialAssessment.CalculateAssessmentScore();
+                            initialAssessment.CalculateAssessmentScore(treatmentBMPType, treatmentBMP);
                         }
 
                         if (MaintenanceRecordFieldsPopulated(row))
                         {
-                            var maintenanceRecord = fieldVisit.MaintenanceRecord ??
-                                                    new MaintenanceRecord
-                                                    {
-                                                        TreatmentBMPID =  treatmentBMP.TreatmentBMPID,
-                                                        TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
-                                                        FieldVisitID = fieldVisit.FieldVisitID
-                                                    };
+                            var maintenanceRecord = fieldVisit.MaintenanceRecord;
+                            if (maintenanceRecord == null)
+                            {
+                                maintenanceRecord = new MaintenanceRecord
+                                {
+                                    TreatmentBMP = treatmentBMP,
+                                    TreatmentBMPType = treatmentBMPType,
+                                    FieldVisit = fieldVisit
+                                };
+                                await _dbContext.MaintenanceRecords.AddAsync(maintenanceRecord);
+                            }
 
                             var rawMaintenanceType = row["Maintenance Type"].ToString();
                             var rawDescription = row["Description"].ToString();
@@ -1224,39 +1236,29 @@ namespace Neptune.WebMvc.Controllers
 
                         if (PostMaintenanceAssessmentFieldsPopulated(row, i))
                         {
-                            var postMaintenanceAssessment =
-                                fieldVisit.GetPostMaintenanceAssessment() ?? new TreatmentBMPAssessment
+                            var postMaintenanceAssessment = fieldVisit.GetPostMaintenanceAssessment();
+                            if (postMaintenanceAssessment == null)
+                            {
+                                postMaintenanceAssessment = new TreatmentBMPAssessment
                                 {
-                                    TreatmentBMPID = treatmentBMP.TreatmentBMPID,
-                                    TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
-                                    FieldVisitID = fieldVisit.FieldVisitID,
+                                    TreatmentBMP = treatmentBMP,
+                                    TreatmentBMPType = treatmentBMPType,
+                                    FieldVisit = fieldVisit,
                                     TreatmentBMPAssessmentTypeID = (int)TreatmentBMPAssessmentTypeEnum.PostMaintenance,
                                     IsAssessmentComplete = true
                                 };
+                                await _dbContext.TreatmentBMPAssessments.AddAsync(postMaintenanceAssessment);
+                            }
 
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, INLET,
-                                true, true, _dbContext);
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, OUTLET,
-                                true, true, _dbContext);
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment,
-                                OPERABILITY,
-                                true, true, _dbContext);
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, NUISANCE,
-                                true, true, _dbContext);
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment,
-                                ACCUMULATION,
-                                false, true, _dbContext);
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, INLET, true, true, _dbContext);
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, OUTLET, true, true, _dbContext);
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment,
+                                treatmentBMPType, OPERABILITY, true, true, _dbContext);
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, NUISANCE, true, true, _dbContext);
+                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, ACCUMULATION, false, true, _dbContext);
 
-                            postMaintenanceAssessment.CalculateAssessmentScore();
+                            postMaintenanceAssessment.CalculateAssessmentScore(treatmentBMPType, treatmentBMP);
                         }
-
-
-
                     }
                     catch (InvalidOperationException ioe)
                     {
@@ -1408,8 +1410,8 @@ namespace Neptune.WebMvc.Controllers
                 maintenanceRecordObservation = new MaintenanceRecordObservation()
                 {
                     MaintenanceRecord = maintenanceRecord,
-                    TreatmentBMPTypeCustomAttributeType = treatmentBMPTypeCustomAttributeType,
-                    TreatmentBMPType = treatmentBMPTypeCustomAttributeType.TreatmentBMPType,
+                    TreatmentBMPTypeCustomAttributeTypeID = treatmentBMPTypeCustomAttributeType.TreatmentBMPTypeCustomAttributeTypeID,
+                    TreatmentBMPTypeID = treatmentBMPTypeCustomAttributeType.TreatmentBMPTypeID,
                     CustomAttributeType = treatmentBMPTypeCustomAttributeType.CustomAttributeType
                 };
                 await dbContext.MaintenanceRecordObservations.AddAsync(maintenanceRecordObservation);
@@ -1424,7 +1426,9 @@ namespace Neptune.WebMvc.Controllers
         }
 
         private static async Task UpdateOrCreateSingleValueObservationFromDataTableRow(DataRow row,
-            Dictionary<string, TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypeDictionary, int rowNumber, TreatmentBMPAssessment assessment, string observationTypeName, bool isPassFail, bool isPostMaintenance, NeptuneDbContext dbContext)
+            Dictionary<string, TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypeDictionary,
+            int rowNumber, TreatmentBMPAssessment assessment, TreatmentBMPType treatmentBMPType,
+            string observationTypeName, bool isPassFail, bool isPostMaintenance, NeptuneDbContext dbContext)
         {
             var suffix = isPostMaintenance ? " (Post-Maintenance)" : "";
             var rawInletCondition = row[$"{observationTypeName}{suffix}"].ToString().ToUpperInvariant();
@@ -1470,7 +1474,7 @@ namespace Neptune.WebMvc.Controllers
             }
 
             var initialInletConditionObservation = await GetExistingTreatmentBMPObservationOrCreateNew(assessment,
-                treatmentBMPAssessmentObservationTypeDictionary[observationTypeName], assessment.TreatmentBMPType, dbContext);
+                treatmentBMPAssessmentObservationTypeDictionary[observationTypeName], treatmentBMPType, dbContext);
             initialInletConditionObservation.ObservationData = inletConditionJson;
         }
 
