@@ -106,7 +106,7 @@ namespace Neptune.API.Controllers
                 return BadRequest();
             }
 
-            var namingConflicts = treatmentBMPUpsertDtos.GroupBy(x => x.TreatmentBMPName).Where(x => x.Count() > 1).ToList();
+            var namingConflicts = treatmentBMPUpsertDtos.GroupBy(x => x.TreatmentBMPName).Where(x => x.Count() > 1).Select(x => x.Key).ToList();
             if (namingConflicts.Any())
             {
                 ModelState.AddModelError("TreatmentBMPName",
