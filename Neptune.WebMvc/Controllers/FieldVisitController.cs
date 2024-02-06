@@ -1147,7 +1147,7 @@ namespace Neptune.WebMvc.Controllers
                                 TreatmentBMP = treatmentBMP,
                                 FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID,
                                 PerformedByPersonID = CurrentPerson.PersonID,
-                                VisitDate = fieldVisitDate,
+                                VisitDate = fieldVisitDate.ConvertTimeFromPSTToUTC(),
                                 FieldVisitTypeID = fieldVisitType.FieldVisitTypeID,
                                 InventoryUpdated = false,
                                 IsFieldVisitVerified = true
