@@ -147,7 +147,7 @@ webmvc:
   namespace: h2o
   resources: 
     requests:
-      memory: "16G"
+      memory: "10G"
   serviceAccount:
     # Specifies whether a service account should be created
     create: true
