@@ -1138,6 +1138,9 @@ namespace Neptune.WebMvc.Controllers
                         }
 
                         var fieldVisit = _dbContext.FieldVisits
+                                .Include(x => x.MaintenanceRecord)
+                                .ThenInclude(x => x.MaintenanceRecordObservations)
+                                .ThenInclude(x => x.MaintenanceRecordObservationValues)
                                 .Include(x => x.TreatmentBMPAssessments).ThenInclude(x => x.TreatmentBMPObservations)
                                 .SingleOrDefault(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID && x.VisitDate.Date == fieldVisitDate.Date);
                         if (fieldVisit == null)
