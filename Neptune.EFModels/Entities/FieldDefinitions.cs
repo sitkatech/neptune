@@ -48,7 +48,7 @@ namespace Neptune.EFModels.Entities
 
         private static IQueryable<FieldDefinition> GetImpl(NeptuneDbContext dbContext)
         {
-            return dbContext.FieldDefinitions.AsNoTracking();
+            return dbContext.FieldDefinitions;
         }
 
         public static List<FieldDefinitionDto> List(NeptuneDbContext dbContext)

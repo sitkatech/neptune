@@ -17,17 +17,10 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System.Linq.Expressions;
 using System.Text.Encodings.Web;
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Drawing.Wordprocessing;
-using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Office2010.PowerPoint;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Neptune.WebMvc.Common.Models;
-using static System.Net.Mime.MediaTypeNames;
 using TagBuilder = Microsoft.AspNetCore.Mvc.Rendering.TagBuilder;
 
 namespace Neptune.WebMvc.Common

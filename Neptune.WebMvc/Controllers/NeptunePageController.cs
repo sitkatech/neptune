@@ -84,8 +84,7 @@ namespace Neptune.WebMvc.Controllers
 
         private PartialViewResult ViewEdit(EditViewModel viewModel, NeptunePage neptunePage)
         {
-            var tinyMCEToolbar = TinyMCEExtension.TinyMCEToolbarStyle.AllOnOneRowNoMaximize;
-            var viewData = new EditViewData(_linkGenerator, tinyMCEToolbar, neptunePage);
+            var viewData = new EditViewData(_linkGenerator, TinyMCEExtension.TinyMCEToolbarStyle.MinimalWithImages, neptunePage);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

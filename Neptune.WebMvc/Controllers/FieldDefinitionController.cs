@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Microsoft.AspNetCore.Html;
 using Neptune.WebMvc.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -86,7 +85,7 @@ namespace Neptune.WebMvc.Controllers
             var fieldDefinition = FieldDefinitions.GetByFieldDefinitionTypeWithChangeTracking(_dbContext, fieldDefinitionTypeID);
             if (fieldDefinition == null)
             {
-                fieldDefinition = new FieldDefinition() { FieldDefinitionTypeID = fieldDefinitionTypeID };
+                fieldDefinition = new FieldDefinition { FieldDefinitionTypeID = fieldDefinitionTypeID };
                 await _dbContext.FieldDefinitions.AddAsync(fieldDefinition);
             }
 
