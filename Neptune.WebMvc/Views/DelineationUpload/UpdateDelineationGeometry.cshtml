@@ -1,8 +1,10 @@
-﻿@using LtInfo.Common.HtmlHelperExtensions
-@using Neptune.Web.Views.Shared
-@using LtInfo.Common.ModalDialog
-@using LtInfo.Common.Mvc
-@inherits Neptune.Web.Views.DelineationUpload.UpdateDelineationGeometry
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Common.HtmlHelperExtensions
+@using Neptune.WebMvc.Common.ModalDialog
+@using Neptune.WebMvc.Views.Shared
+@inherits Neptune.WebMvc.Views.DelineationUpload.UpdateDelineationGeometry
+@model Neptune.WebMvc.Views.DelineationUpload.UpdateDelineationGeometryViewModel
 @section JavascriptAndStylesContent
 {
     @{ MapJavascriptIncludes.RenderPartialView(Html); }

@@ -91,12 +91,6 @@
                         <div class="col-xs-8">@ViewDataTyped.Person.CreateDate.ToStringDateTimeNoLeadingZeros()</div>
                     </div>
                 }
-                @if (ViewDataTyped.UserCanManageThisPersonPermissions || ViewDataTyped.IsViewingSelf)
-                {
-                    <div class="alert" role="alert">
-                        This information can be <a target="_blank" class="alert-link" href="@ViewDataTyped.Person.GetKeystoneEditLink()">edited here</a>
-                    </div>
-                }
             </div>
         </div>
     </div>

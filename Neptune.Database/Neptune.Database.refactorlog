@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
-  <Operation Name="Rename Refactor" Key="18e16493-0356-4c45-9ff1-79bafb0de610" ChangeDateTime="01/12/2024 05:33:40">
-    <Property Name="ElementName" Value="[dbo].[LandUseBlockStaging].[LandUseBlockStagingGeometry]" />
+  <Operation Name="Rename Refactor" Key="18e16493-0356-4c45-9ff1-79bafb0de611" ChangeDateTime="02/8/2024 05:33:40">
+    <Property Name="ElementName" Value="[dbo].[DelineationStaging].[DelineationStagingGeometry]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[dbo].[LandUseBlockStaging]" />
+    <Property Name="ParentElementName" Value="[dbo].[DelineationStaging]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Geometry" />
   </Operation>

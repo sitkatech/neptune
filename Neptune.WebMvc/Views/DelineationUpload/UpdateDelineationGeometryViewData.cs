@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using LtInfo.Common.Mvc;
-using Neptune.Web.Models;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Neptune.Common.Mvc;
+using Neptune.EFModels.Entities;
+using Neptune.WebMvc.Common;
 
-namespace Neptune.Web.Views.DelineationUpload
+namespace Neptune.WebMvc.Views.DelineationUpload
 {
     public class UpdateDelineationGeometryViewData : NeptuneViewData
     {
@@ -14,7 +13,7 @@ namespace Neptune.Web.Views.DelineationUpload
 
         public IEnumerable<SelectListItem> StormwaterJurisdictions { get; }
 
-        public UpdateDelineationGeometryViewData(Person currentPerson, string newGisUploadUrl, string approvedGisUploadUrl, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public UpdateDelineationGeometryViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, string newGisUploadUrl, string approvedGisUploadUrl, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             NewGisUploadUrl = newGisUploadUrl;
             ApprovedGisUploadUrl = approvedGisUploadUrl;

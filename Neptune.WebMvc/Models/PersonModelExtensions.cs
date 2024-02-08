@@ -28,42 +28,6 @@ namespace Neptune.WebMvc.Models
     /// </summary>
     public static class PersonModelExtensions
     {
-        //public static HtmlString GetFullNameFirstLastAsUrl(this Person person)
-        //{
-        //    return UrlTemplate.MakeHrefString(person.GetDetailUrl(), person.GetFullNameFirstLast());
-        //}
-
-        //public static HtmlString GetFullNameFirstLastAndOrgAsUrl(this Person person)
-        //{
-        //    var userUrl = person.GetFullNameFirstLastAsUrl();
-        //    var orgUrl = person.Organization.GetDisplayNameAsUrl();
-        //    return new HtmlString($"{userUrl} - {orgUrl}");
-        //}
-
-        //public static HtmlString GetFullNameFirstLastAndOrgShortNameAsUrl(this Person person)
-        //{
-        //    var userUrl = person.GetFullNameFirstLastAsUrl();
-        //    var orgUrl = person.Organization.GetShortNameAsUrl();
-        //    return new HtmlString($"{userUrl} ({orgUrl})");
-        //}
-
-        //public static HtmlString GetFullNameFirstLastAsStringAndOrgAsUrl(this Person person)
-        //{
-        //    var userString = person.GetFullNameFirstLast();
-        //    var orgUrl = person.Organization.GetShortNameAsUrl();
-        //    return new HtmlString($"{userString} - {orgUrl}");
-        //}
-
-        public static bool ShouldReceiveNotifications(this Person person)
-        {
-            return person.ReceiveSupportEmails;
-        }
-
-        public static string GetKeystoneEditLink(this Person person)
-        {
-            return "";//todo:$"{NeptuneWebConfiguration.KeystoneUserProfileUrl}{person.PersonGuid}";
-        }
-
         /// <summary>
         /// Needed for Keystone; basically <see cref="Person" /> is set to this fake
         /// "Anonymous" person when we are not authenticated to not have to handle the null Person case.

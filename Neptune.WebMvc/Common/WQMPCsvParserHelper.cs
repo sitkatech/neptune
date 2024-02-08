@@ -221,7 +221,6 @@ namespace Neptune.WebMvc.Common
                 wqmp.HydromodificationAppliesTypeID = hydromodificationAppliesTypeID.Value;
             }
 
-            // TODO: determine if we want to be parsing really long but acceptable datetimes
             var approvalDateString = SetStringValue(row, fieldsDict, rowNumber, errorList, "Approval Date", 100, false);
             if (!string.IsNullOrWhiteSpace(approvalDateString))
             {

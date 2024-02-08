@@ -43,7 +43,7 @@ namespace Neptune.WebMvc.Models
         /// </summary>
         private static bool IsValidAsUnitTestToken(Guid tokenGuidToCheck, bool isBeingCalledByStaticConstructor)
         {
-            return (tokenGuidToCheck == WebServiceTokenGuidForUnitTests && (isBeingCalledByStaticConstructor /* todo: || NeptuneWebConfiguration.NeptuneEnvironment.IsUnitTestWebServiceTokenOkInThisEnvironment*/));
+            return (tokenGuidToCheck == WebServiceTokenGuidForUnitTests && isBeingCalledByStaticConstructor);
         }
 
         /// <summary>

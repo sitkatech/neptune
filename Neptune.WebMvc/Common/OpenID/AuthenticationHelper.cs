@@ -130,7 +130,7 @@ public static class AuthenticationHelper
                     IsActive = true, 
                     OrganizationTypeID = defaultOrganizationType.OrganizationTypeID,
                     OrganizationShortName = keystoneOrganizationShortName,
-                    OrganizationGuid = keystoneOrganizationGuid // TODO: Get OrganizationUrl from Keystone
+                    OrganizationGuid = keystoneOrganizationGuid
                 };
                 await dbContext.Organizations.AddAsync(organization);
                 sendNewOrganizationNotification = true;

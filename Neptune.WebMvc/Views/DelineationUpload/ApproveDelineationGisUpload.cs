@@ -1,6 +1,6 @@
-﻿using LtInfo.Common.Mvc;
+﻿using Neptune.WebMvc.Common.Mvc;
 
-namespace Neptune.Web.Views.DelineationUpload
+namespace Neptune.WebMvc.Views.DelineationUpload
 {
     public abstract class ApproveDelineationGisUpload : TypedWebPartialViewPage<ApproveDelineationGisUploadViewData, ApproveDelineationGisUploadViewModel>
     {

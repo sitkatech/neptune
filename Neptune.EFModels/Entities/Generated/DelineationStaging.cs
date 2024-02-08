@@ -9,14 +9,14 @@ namespace Neptune.EFModels.Entities;
 
 [Table("DelineationStaging")]
 [Index("TreatmentBMPName", "StormwaterJurisdictionID", "UploadedByPersonID", Name = "AK_DelineationStaging_TreatmentBMPName_StormwaterJurisdictionID", IsUnique = true)]
-[Index("DelineationStagingGeometry", Name = "SPATIAL_DelineationStaging_DelineationStagingGeometry")]
+[Index("Geometry", Name = "SPATIAL_DelineationStaging_Geometry")]
 public partial class DelineationStaging
 {
     [Key]
     public int DelineationStagingID { get; set; }
 
     [Column(TypeName = "geometry")]
-    public Geometry DelineationStagingGeometry { get; set; } = null!;
+    public Geometry Geometry { get; set; } = null!;
 
     public int UploadedByPersonID { get; set; }
 

@@ -1,20 +1,18 @@
-﻿using System;
-using Neptune.Web.Common;
-using System.Collections.Generic;
-using System.Linq;
-using LtInfo.Common.DesignByContract;
+﻿using Microsoft.EntityFrameworkCore;
+using Neptune.Common.DesignByContract;
+using Neptune.EFModels.Entities;
 
-namespace Neptune.Web.Models
+namespace Neptune.WebMvc.Models
 {
     public class DelineationUploadGisReportJsonResult
     {
-        public int StormwaterJurisdictionID;
-        public int? NumberOfDelineations;
-        public int? NumberOfDelineationsToBeUpdated;
-        public int? NumberOfDelineationsToBeCreated;
-        public List<string> Errors;
+        public int StormwaterJurisdictionID { get; set; }
+        public int? NumberOfDelineations { get; set; }
+        public int? NumberOfDelineationsToBeUpdated { get; set; }
+        public int? NumberOfDelineationsToBeCreated { get; set; }
+        public List<string> Errors { get; set; }
 
-        public static DelineationUploadGisReportJsonResult GetDelineationUploadGisReportFromStaging(Person person, ICollection<DelineationStaging> delineationStagings)
+        public static DelineationUploadGisReportJsonResult GetDelineationUploadGisReportFromStaging(NeptuneDbContext dbContext, Person person, ICollection<DelineationStaging> delineationStagings)
         {
             var errors = new List<string>();
             var stormwaterJurisdictions = delineationStagings.Select(x => x.StormwaterJurisdiction).Distinct().ToList();
@@ -24,9 +22,9 @@ namespace Neptune.Web.Models
 
             var stormwaterJurisdiction = stormwaterJurisdictions.Single();
 
-            var treatmentBMPsWithDelineationInStormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => x.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).ToList();
+            var treatmentBMPsWithDelineationInStormwaterJurisdiction = dbContext.Delineations.Include(x => x.TreatmentBMP).Where(x => x.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).ToList();
 
-            var treatmentBMPNamesInStormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetNonPlanningModuleBMPs().Where(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).Select(x => x.TreatmentBMPName).ToList();
+            var treatmentBMPNamesInStormwaterJurisdiction = TreatmentBMPs.GetNonPlanningModuleBMPs(dbContext).Where(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).Select(x => x.TreatmentBMPName).ToList();
 
             var candidateDelineationNames = delineationStagings.Select(x => x.TreatmentBMPName).Distinct().ToList();
 
@@ -42,7 +40,7 @@ namespace Neptune.Web.Models
                 errors.Add($"{treatmentBMPNamesDifference.Count} Delineations were found that do not match a Treatment BMP Name in the selected Jurisdiction: {string.Join(", ", treatmentBMPNamesDifference)}");
             }
 
-            var delineationsWithBadGeometry = delineationStagings.Where(x => x.DelineationStagingGeometry.IsValid == false).ToList();
+            var delineationsWithBadGeometry = delineationStagings.Where(x => x.Geometry.IsValid == false).ToList();
             if (delineationsWithBadGeometry.Any())
             {
                 errors.Add("The following Delineations have bad geometries: " + string.Join(", ", delineationsWithBadGeometry.Select(x => x.TreatmentBMPName)));

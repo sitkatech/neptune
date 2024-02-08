@@ -78,7 +78,7 @@ namespace Neptune.WebMvc.Controllers
 
             var treatmentBMPs = TreatmentBMPs.GetNonPlanningModuleBMPs(_dbContext).Include(x => x.Delineation).Where(x => stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdictionID)).ToList();
             var delineationMapInitJson = new DelineationMapInitJson("delineationMap", treatmentBMPs, boundingBoxDto, MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext).ToList(), _linkGenerator);
-            var bulkUploadTreatmentBMPDelineationsUrl = ""; // todo: SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateDelineationGeometry());
+            var bulkUploadTreatmentBMPDelineationsUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateDelineationGeometry());
             var stormwaterJurisdictionCqlFilter = CurrentPerson.GetStormwaterJurisdictionCqlFilter(_dbContext);
             var viewData = new DelineationMapViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP, bulkUploadTreatmentBMPDelineationsUrl, stormwaterJurisdictionCqlFilter, _webConfiguration.MapServiceUrl, _webConfiguration.AutoDelineateServiceUrl);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
@@ -277,7 +277,6 @@ namespace Neptune.WebMvc.Controllers
         }
 
 
-        // todo: this and the other delete should share some of their code
         [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
@@ -293,15 +292,7 @@ namespace Neptune.WebMvc.Controllers
                     $"No delineation found for Treatment BMP {treatmentBMPPrimaryKey}");
             }
 
-            await delineation.DeleteFull(_dbContext);
-
-            if (isDelineationDistributed)
-            {
-                await ModelingEngineUtilities.QueueLGURefreshForArea(geometry, null, _dbContext);
-            }
-
-            SetMessageForDisplay("The Delineation was successfully deleted.");
-
+            await DeleteImpl(delineation, isDelineationDistributed, geometry);
             return Json(new {success = true});
         }
 
@@ -330,6 +321,13 @@ namespace Neptune.WebMvc.Controllers
                 return ViewDeleteDelineation(delineation, viewModel);
             }
 
+            await DeleteImpl(delineation, isDelineationDistributed, geometry);
+            return new ModalDialogFormJsonResult(
+                SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
+        }
+
+        private async Task DeleteImpl(Delineation delineation, bool isDelineationDistributed, Geometry geometry)
+        {
             await delineation.DeleteFull(_dbContext);
 
             SetMessageForDisplay("The Delineation was successfully deleted.");
@@ -338,9 +336,6 @@ namespace Neptune.WebMvc.Controllers
             {
                 await ModelingEngineUtilities.QueueLGURefreshForArea(geometry, null, _dbContext);
             }
-
-            return new ModalDialogFormJsonResult(
-                SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
         }
 
         private PartialViewResult ViewDeleteDelineation(Delineation delineation, ConfirmDialogFormViewModel viewModel)
