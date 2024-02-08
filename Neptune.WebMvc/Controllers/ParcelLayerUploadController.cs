@@ -1,32 +1,24 @@
-﻿using System.Globalization;
-using System.Net.Mail;
-using Neptune.WebMvc.Common;
+﻿using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Security;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Neptune.Common.Email;
-using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Views.ParcelLayerUpload;
 using Neptune.Common.Services.GDAL;
 using Neptune.WebMvc.Services;
 using Neptune.Common;
-using NetTopologySuite.Geometries;
-using NetTopologySuite.IO.Converters;
+using Hangfire;
+using Neptune.Jobs.Hangfire;
 
 namespace Neptune.WebMvc.Controllers
 {
     public class ParcelLayerUploadController : NeptuneBaseController<ParcelLayerUploadController>
     {
-        private readonly SitkaSmtpClientService _sitkaSmtpClient;
         private readonly GDALAPIService _gdalApiService;
         private readonly AzureBlobStorageService _azureBlobStorageService;
-        private const int ToleranceInSquareMeters = 200;
 
-        public ParcelLayerUploadController(NeptuneDbContext dbContext, ILogger<ParcelLayerUploadController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService, GDALAPIService gdalApiService, AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
+        public ParcelLayerUploadController(NeptuneDbContext dbContext, ILogger<ParcelLayerUploadController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, GDALAPIService gdalApiService, AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
-            _sitkaSmtpClient = sitkaSmtpClientService;
             _gdalApiService = gdalApiService;
             _azureBlobStorageService = azureBlobStorageService;
         }
@@ -65,146 +57,19 @@ namespace Neptune.WebMvc.Controllers
                 return ViewUpdateParcelLayerGeometry(viewModel);
             }
 
-            try
-            {
-                var columns = new List<string>
-                {
-                    "AssessmentNo as ParcelNumber",
-                    "SiteAddress as ParcelAddress",
-                    "Shape_Area as ParcelStagingAreaSquareFeet",
-                    "Shape as ParcelStagingGeometry",
-                    $"{CurrentPerson.PersonID} as UploadedByPersonID"
-                };
+            BackgroundJob.Enqueue<ParcelUploadJob>(x => x.RunJob(blobName, featureClassNames.Single().LayerName, CurrentPerson.PersonID, CurrentPerson.Email));
 
-                var apiRequest = new GdbToGeoJsonRequestDto()
-                {
-                    BlobContainer = AzureBlobStorageService.BlobContainerName,
-                    CanonicalName = blobName,
-                    GdbLayerOutputs = new()
-                    {
-                        new()
-                        {
-                            Columns = columns,
-                            FeatureLayerName = featureClassNames.Single().LayerName,
-                            NumberOfSignificantDigits = 4,
-                            Filter = "WHERE AssessmentNo is not null",
-                            CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
-                            Extent = null
-                        }
-                    }
-                };
-                var geoJson = await _gdalApiService.Ogr2OgrGdbToGeoJson(apiRequest);
-                var parcelStagings = await GeoJsonSerializer.DeserializeFromFeatureCollectionWithCCWCheck<ParcelStaging>(geoJson,
-                    GeoJsonSerializer.DefaultSerializerOptions);
-                var validParcelStagings = parcelStagings.Where(x => x.Geometry is { IsValid: true, Area: > 0 }).ToList();
-                if (validParcelStagings.Any())
-                {
-                    await _dbContext.Database.ExecuteSqlRawAsync("dbo.pParcelStagingDelete");
-                    _dbContext.ParcelStagings.AddRange(validParcelStagings);
-                    await _dbContext.SaveChangesAsync();
-                }
-            }
-            catch (Exception e)
-            {
-                if (e.Message.Contains("Unrecognized field name",
-                        StringComparison.InvariantCultureIgnoreCase))
-                {
-                    ModelState.AddModelError("",
-                        "The columns in the uploaded file did not match the Parcel schema. The file is invalid and cannot be uploaded.");
-                }
-                else
-                {
-                    ModelState.AddModelError("",
-                        $"There was a problem processing the Feature Class \"{featureClassNames[0].LayerName}\". The file may be corrupted or invalid.");
-                }
-                return ViewUpdateParcelLayerGeometry(viewModel);
-            }
-
-            try
-            {
-                var parcelStagingsCount = _dbContext.ParcelStagings.Count();
-
-                if (parcelStagingsCount > 0)
-                {
-                    // first wipe the dependent WQMPParcel table, then wipe the old parcels
-                    await _dbContext.Database.ExecuteSqlRawAsync("EXECUTE dbo.pParcelUpdateFromStaging");
-
-                    // we need to get the 4326 representation of the geometry; unfortunately can't do it in sql
-                    var parcels = _dbContext.ParcelGeometries.ToList();
-                    foreach (var parcel in parcels)
-                    {
-                        parcel.Geometry4326 = parcel.GeometryNative.ProjectTo4326();
-                    }
-
-                    await _dbContext.SaveChangesAsync();
-
-                    // calculate wqmp parcel intersections
-                    foreach (var waterQualityManagementPlanBoundary in _dbContext.WaterQualityManagementPlanBoundaries)
-                    {
-                        var waterQualityManagementPlanParcels = ParcelGeometries
-                            .GetIntersected(_dbContext, waterQualityManagementPlanBoundary.GeometryNative).ToList().Where(x =>
-                                x.GeometryNative.Intersection(waterQualityManagementPlanBoundary.GeometryNative).Area >
-                                ToleranceInSquareMeters)
-                            .Select(x =>
-                                new WaterQualityManagementPlanParcel
-                                {
-                                    WaterQualityManagementPlanID = waterQualityManagementPlanBoundary.WaterQualityManagementPlanID,
-                                    ParcelID = x.ParcelID
-                                })
-                            .ToList();
-                        _dbContext.WaterQualityManagementPlanParcels.AddRange(waterQualityManagementPlanParcels);
-                    }
-                    await _dbContext.SaveChangesAsync();
-
-                    var errorCount = parcelStagingsCount - parcels.Count;
-                    var errorMessage = errorCount > 0
-                        ? $"{errorCount} Parcels were not imported because they either had an invalid geometry or no APN. "
-                        : "";
-                    var body =
-                        $"Your Parcel Upload has been processed. {parcels.Count.ToString(CultureInfo.CurrentCulture)} updated Parcels are now in the Orange County Stormwater Tools system. {errorMessage}";
-
-                    var mailMessage = new MailMessage
-                    {
-                        Subject = "Parcel Upload Results",
-                        Body = body,
-                        From = new MailAddress(_webConfiguration.DoNotReplyEmail, "Orange County Stormwater Tools")
-                    };
-
-                    mailMessage.To.Add(CurrentPerson.Email);
-                    await _sitkaSmtpClient.Send(mailMessage);
-                }
-
-                await _dbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pParcelStagingDeleteByPersonID @PersonID = {CurrentPerson.PersonID}");
-            }
-            catch (Exception)
-            {
-                var body =
-                    "There was an unexpected system error during processing of your Parcel Upload. The Orange County Stormwater Tools development team will investigate and be in touch when this issue is resolved.";
-
-                var mailMessage = new MailMessage
-                {
-                    Subject = "Parcel Upload Error",
-                    Body = body,
-                    From = new MailAddress(_webConfiguration.DoNotReplyEmail, "Orange County Stormwater Tools")
-                };
-
-                mailMessage.To.Add(CurrentPerson.Email);
-                await _sitkaSmtpClient.Send(mailMessage);
-
-                throw;
-            }
-
-            SetMessageForDisplay("Parcels were successfully added to the staging area. The staged Parcels will be processed and added to the system. You will receive an email notification when this process completes or if errors in the upload are discovered during processing.");
+            SetMessageForDisplay("Parcels are currently being added to the staging area. The staged Parcels will be processed and added to the system. You will receive an email notification when this process completes or if errors in the upload are discovered during processing.");
 
             return Redirect(SitkaRoute<ParcelController>.BuildUrlFromExpression(_linkGenerator, c => c.Index()));
         }
 
         private ViewResult ViewUpdateParcelLayerGeometry(UploadParcelLayerViewModel viewModel)
         {
-            var newGisUploadUrl = SitkaRoute<ParcelLayerUploadController>.BuildUrlFromExpression(_linkGenerator, c => c.UpdateParcelLayerGeometry());
-
             var viewData = new UploadParcelLayerViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson);
             return RazorView<UploadParcelLayer, UploadParcelLayerViewData, UploadParcelLayerViewModel>(viewData, viewModel);
         }
     }
+
+
 }

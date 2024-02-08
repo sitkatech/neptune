@@ -29,6 +29,15 @@ begin
     where len(ps.ParcelNumber) > 0 and ps.[Geometry].STIsValid() = 1
     order by ps.ParcelStagingID, ps.ParcelNumber
 
+
+    -- recalculate wqmp parcel intersections
+    insert into dbo.WaterQualityManagementPlanParcel(WaterQualityManagementPlanID, ParcelID)
+    select WaterQualityManagementPlanID, ParcelID
+    from dbo.WaterQualityManagementPlanBoundary wqmp
+    join dbo.ParcelGeometry p on wqmp.GeometryNative.STIntersects(p.GeometryNative)  = 1
+    where wqmp.GeometryNative.STIntersection(p.GeometryNative).STArea() > 200
+    order by WaterQualityManagementPlanID, ParcelID
+
 end
 
 GO

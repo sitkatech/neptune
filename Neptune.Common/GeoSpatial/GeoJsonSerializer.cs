@@ -196,7 +196,7 @@ public static class GeoJsonSerializer
         return deserialized;
     }
 
-    public static T DeserializeFromFeatureWithCCWCheck<T>(IFeature feature, JsonSerializerOptions geoJSONSerializerOptions) where T : IHasGeometry
+    public static T DeserializeFromFeatureWithCCWCheck<T>(IFeature feature, JsonSerializerOptions geoJSONSerializerOptions, int srid) where T : IHasGeometry
     {
         ((IPartiallyDeserializedAttributesTable)feature.Attributes).TryDeserializeJsonObject<T>(geoJSONSerializerOptions, out var deserialized);
         var geometry = feature.Geometry.MakeValid();
@@ -233,6 +233,7 @@ public static class GeoJsonSerializer
             }
         }
         deserialized.Geometry = geometry;
+        deserialized.Geometry.SRID = srid;
         return deserialized;
     }
 
@@ -248,10 +249,10 @@ public static class GeoJsonSerializer
         return DeserializeFromFeatureCollection<T>(featureCollection, geoJSONSerializerOptions);
     }
 
-    public static async Task<List<T>> DeserializeFromFeatureCollectionWithCCWCheck<T>(byte[] byteArray, JsonSerializerOptions geoJSONSerializerOptions) where T : IHasGeometry
+    public static async Task<List<T>> DeserializeFromFeatureCollectionWithCCWCheck<T>(byte[] byteArray, JsonSerializerOptions geoJSONSerializerOptions, int srid) where T : IHasGeometry
     {
         var featureCollection = await GetFeatureCollectionFromGeoJsonByteArray(byteArray, geoJSONSerializerOptions);
-        return DeserializeFromFeatureCollectionWithCCWCheck<T>(featureCollection, geoJSONSerializerOptions);
+        return DeserializeFromFeatureCollectionWithCCWCheck<T>(featureCollection, geoJSONSerializerOptions, srid);
     }
 
     public static List<T> DeserializeFromFeatureCollection<T>(FeatureCollection featureCollection, JsonSerializerOptions geoJSONSerializerOptions) where T : IHasGeometry
@@ -259,9 +260,9 @@ public static class GeoJsonSerializer
         return featureCollection.AsParallel().Select(x => DeserializeFromFeature<T>(x, geoJSONSerializerOptions)).ToList();
     }
 
-    public static List<T> DeserializeFromFeatureCollectionWithCCWCheck<T>(FeatureCollection featureCollection, JsonSerializerOptions geoJSONSerializerOptions) where T : IHasGeometry
+    public static List<T> DeserializeFromFeatureCollectionWithCCWCheck<T>(FeatureCollection featureCollection, JsonSerializerOptions geoJSONSerializerOptions, int srid) where T : IHasGeometry
     {
-        return featureCollection.AsParallel().Select(x => DeserializeFromFeatureWithCCWCheck<T>(x, geoJSONSerializerOptions)).ToList();
+        return featureCollection.AsParallel().Select(x => DeserializeFromFeatureWithCCWCheck<T>(x, geoJSONSerializerOptions, srid)).ToList();
     }
 
     public static List<T> DeserializeFromFeatureCollection<T>(FeatureCollection featureCollection) where T : IHasGeometry

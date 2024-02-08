@@ -117,7 +117,7 @@ namespace Neptune.WebMvc.Controllers
                 };
                 var geoJson = await _gdalApiService.Ogr2OgrGdbToGeoJson(apiRequest);
                 var landUseBlockStagings = await GeoJsonSerializer.DeserializeFromFeatureCollectionWithCCWCheck<LandUseBlockStaging>(geoJson,
-                    GeoJsonSerializer.DefaultSerializerOptions);
+                    GeoJsonSerializer.DefaultSerializerOptions, Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
                 var validLandUseBlockStagings = landUseBlockStagings.Where(x => x.Geometry is { IsValid: true, Area: > 0 }).ToList();
                 if (validLandUseBlockStagings.Any())
                 {
