@@ -7,7 +7,7 @@ namespace Neptune.EFModels.Entities
     public partial class TreatmentBMPType : IHavePrimaryKey
     {
         public int PrimaryKey => TreatmentBMPTypeID;
-        public TreatmentBMPModelingType TreatmentBMPModelingType => TreatmentBMPModelingTypeID.HasValue ? TreatmentBMPModelingType.AllLookupDictionary[TreatmentBMPModelingTypeID.Value] : null;
+        public TreatmentBMPModelingType? TreatmentBMPModelingType => TreatmentBMPModelingTypeID.HasValue ? TreatmentBMPModelingType.AllLookupDictionary[TreatmentBMPModelingTypeID.Value] : null;
 
         public static class FieldLengths
         {

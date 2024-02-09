@@ -9,7 +9,7 @@ namespace Neptune.EFModels.Entities
         public int PrimaryKey => WaterQualityManagementPlanVerifyID;
         public WaterQualityManagementPlanVerifyType WaterQualityManagementPlanVerifyType => WaterQualityManagementPlanVerifyType.AllLookupDictionary[WaterQualityManagementPlanVerifyTypeID];
         public WaterQualityManagementPlanVisitStatus WaterQualityManagementPlanVisitStatus => WaterQualityManagementPlanVisitStatus.AllLookupDictionary[WaterQualityManagementPlanVisitStatusID];
-        public WaterQualityManagementPlanVerifyStatus WaterQualityManagementPlanVerifyStatus => WaterQualityManagementPlanVerifyStatusID.HasValue ? WaterQualityManagementPlanVerifyStatus.AllLookupDictionary[WaterQualityManagementPlanVerifyStatusID.Value] : null;
+        public WaterQualityManagementPlanVerifyStatus? WaterQualityManagementPlanVerifyStatus => WaterQualityManagementPlanVerifyStatusID.HasValue ? WaterQualityManagementPlanVerifyStatus.AllLookupDictionary[WaterQualityManagementPlanVerifyStatusID.Value] : null;
 
         public static class FieldLengths
         {

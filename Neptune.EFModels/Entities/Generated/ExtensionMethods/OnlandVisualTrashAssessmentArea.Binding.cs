@@ -7,8 +7,8 @@ namespace Neptune.EFModels.Entities
     public partial class OnlandVisualTrashAssessmentArea : IHavePrimaryKey
     {
         public int PrimaryKey => OnlandVisualTrashAssessmentAreaID;
-        public OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentBaselineScore => OnlandVisualTrashAssessmentBaselineScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentBaselineScoreID.Value] : null;
-        public OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentProgressScore => OnlandVisualTrashAssessmentProgressScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentProgressScoreID.Value] : null;
+        public OnlandVisualTrashAssessmentScore? OnlandVisualTrashAssessmentBaselineScore => OnlandVisualTrashAssessmentBaselineScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentBaselineScoreID.Value] : null;
+        public OnlandVisualTrashAssessmentScore? OnlandVisualTrashAssessmentProgressScore => OnlandVisualTrashAssessmentProgressScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentProgressScoreID.Value] : null;
 
         public static class FieldLengths
         {

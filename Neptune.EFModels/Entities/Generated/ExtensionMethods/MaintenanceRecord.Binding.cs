@@ -7,7 +7,7 @@ namespace Neptune.EFModels.Entities
     public partial class MaintenanceRecord : IHavePrimaryKey
     {
         public int PrimaryKey => MaintenanceRecordID;
-        public MaintenanceRecordType MaintenanceRecordType => MaintenanceRecordTypeID.HasValue ? MaintenanceRecordType.AllLookupDictionary[MaintenanceRecordTypeID.Value] : null;
+        public MaintenanceRecordType? MaintenanceRecordType => MaintenanceRecordTypeID.HasValue ? MaintenanceRecordType.AllLookupDictionary[MaintenanceRecordTypeID.Value] : null;
 
         public static class FieldLengths
         {

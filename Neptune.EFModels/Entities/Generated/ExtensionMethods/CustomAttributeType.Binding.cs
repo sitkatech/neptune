@@ -8,7 +8,7 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => CustomAttributeTypeID;
         public CustomAttributeDataType CustomAttributeDataType => CustomAttributeDataType.AllLookupDictionary[CustomAttributeDataTypeID];
-        public MeasurementUnitType MeasurementUnitType => MeasurementUnitTypeID.HasValue ? MeasurementUnitType.AllLookupDictionary[MeasurementUnitTypeID.Value] : null;
+        public MeasurementUnitType? MeasurementUnitType => MeasurementUnitTypeID.HasValue ? MeasurementUnitType.AllLookupDictionary[MeasurementUnitTypeID.Value] : null;
         public CustomAttributeTypePurpose CustomAttributeTypePurpose => CustomAttributeTypePurpose.AllLookupDictionary[CustomAttributeTypePurposeID];
 
         public static class FieldLengths

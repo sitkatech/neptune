@@ -8,7 +8,7 @@ namespace Neptune.EFModels.Entities
     {
         public int PrimaryKey => OnlandVisualTrashAssessmentID;
         public OnlandVisualTrashAssessmentStatus OnlandVisualTrashAssessmentStatus => OnlandVisualTrashAssessmentStatus.AllLookupDictionary[OnlandVisualTrashAssessmentStatusID];
-        public OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentScore => OnlandVisualTrashAssessmentScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentScoreID.Value] : null;
+        public OnlandVisualTrashAssessmentScore? OnlandVisualTrashAssessmentScore => OnlandVisualTrashAssessmentScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentScoreID.Value] : null;
 
         public static class FieldLengths
         {
