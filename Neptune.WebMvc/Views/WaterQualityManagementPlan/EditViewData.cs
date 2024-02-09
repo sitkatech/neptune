@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
+using Neptune.WebMvc.Common.Mvc;
 
 namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
 {

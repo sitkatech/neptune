@@ -121,7 +121,7 @@ namespace Neptune.WebMvc.Controllers
                 var validLandUseBlockStagings = landUseBlockStagings.Where(x => x.Geometry is { IsValid: true, Area: > 0 }).ToList();
                 if (validLandUseBlockStagings.Any())
                 {
-                    await _dbContext.Database.ExecuteSqlRawAsync($"dbo.pLandUseBlockStagingDeleteByPersonID @PersonID = {CurrentPerson.PersonID}"); 
+                    await _dbContext.Database.ExecuteSqlAsync($"dbo.pLandUseBlockStagingDeleteByPersonID @PersonID = {CurrentPerson.PersonID}"); 
                     _dbContext.LandUseBlockStagings.AddRange(validLandUseBlockStagings);
                     await _dbContext.SaveChangesAsync();
                 }

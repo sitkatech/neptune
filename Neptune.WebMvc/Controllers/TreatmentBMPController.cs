@@ -33,7 +33,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
-using Neptune.Common.Mvc;
 using Neptune.Common.Services.GDAL;
 using Neptune.EFModels;
 using Neptune.EFModels.Entities;
@@ -54,6 +53,7 @@ using EditViewModel = Neptune.WebMvc.Views.TreatmentBMP.EditViewModel;
 using TreatmentBMPAssessmentSummary = Neptune.EFModels.Entities.TreatmentBMPAssessmentSummary;
 using Neptune.EFModels.Nereid;
 using Neptune.Jobs.Services;
+using Neptune.WebMvc.Common.Mvc;
 using Neptune.WebMvc.Views.HRUCharacteristic;
 using IndexViewData = Neptune.WebMvc.Views.TreatmentBMP.IndexViewData;
 
@@ -633,9 +633,10 @@ namespace Neptune.WebMvc.Controllers
                 treatmentBMPs = TreatmentBMPs.ListByTreatmentBMPIDList(_dbContext, viewModel.TreatmentBMPIDList).ToList();
             }
 
+            var postUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator,
+                x => x.BulkDeleteTreatmentBMPsModal(null));
             var viewData = new BulkDeleteTreatmentBMPsViewData(treatmentBMPs,
-                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator,
-                    x => x.BulkDeleteTreatmentBMPsModal(null)));
+                postUrl);
             return RazorPartialView<BulkDeleteTreatmentBMPs, BulkDeleteTreatmentBMPsViewData, BulkDeleteTreatmentBMPsViewModel>(viewData, viewModel);
         }
 

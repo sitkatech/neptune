@@ -22,10 +22,10 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Neptune.Common;
-using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.WebMvc.Common;
+using Neptune.WebMvc.Common.Mvc;
 using Neptune.WebMvc.Controllers;
 using Neptune.WebMvc.Views.Shared;
 

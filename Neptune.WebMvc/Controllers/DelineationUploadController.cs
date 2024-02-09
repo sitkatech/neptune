@@ -49,7 +49,7 @@ namespace Neptune.WebMvc.Controllers
         [JurisdictionManageFeature]
         public ViewResult UpdateDelineationGeometry()
         {
-            var viewModel = new UpdateDelineationGeometryViewModel();
+            var viewModel = new UpdateDelineationGeometryViewModel(){ TreatmentBMPNameField = "TreatmentBMPName" };
             return ViewUpdateDelineationGeometry(viewModel);
         }
 

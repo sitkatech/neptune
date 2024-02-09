@@ -79,7 +79,7 @@ public class QgisRunnerController : ControllerBase
             }));
         }
 
-        await _dbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pDeleteProjectLoadGeneratingUnitsPriorToRefreshForProject @ProjectID = {projectID}");
+        await _dbContext.Database.ExecuteSqlAsync($"EXEC dbo.pDeleteProjectLoadGeneratingUnitsPriorToRefreshForProject @ProjectID = {projectID}");
 
         if (projectLoadGeneratingUnits.Any())
         {
@@ -107,7 +107,7 @@ public class QgisRunnerController : ControllerBase
 
         if (loadGeneratingUnitRefreshArea != null)
         {
-            await _dbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToDeltaRefresh @LoadGeneratingUnitRefreshAreaID = {loadGeneratingUnitRefreshArea.LoadGeneratingUnitRefreshAreaID}");
+            await _dbContext.Database.ExecuteSqlAsync($"EXEC dbo.pDeleteLoadGeneratingUnitsPriorToDeltaRefresh @LoadGeneratingUnitRefreshAreaID = {loadGeneratingUnitRefreshArea.LoadGeneratingUnitRefreshAreaID}");
         }
         else
         {

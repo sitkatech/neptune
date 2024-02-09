@@ -22,8 +22,8 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Neptune.Common.Mvc;
 using Neptune.EFModels.Entities;
+using Neptune.WebMvc.Common.Mvc;
 
 namespace Neptune.WebMvc.Views.FieldVisit
 {

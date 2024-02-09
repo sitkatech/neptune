@@ -79,7 +79,7 @@ namespace Neptune.WebMvc.Common.HtmlHelperExtensions
         /// </summary>
         public static IHtmlContent TextAreaWithMaxLengthFor<TViewModel, TValue>(this IHtmlHelper<TViewModel> htmlHelper,
             Expression<Func<TViewModel, TValue>> expression,
-            TextAreaDimensions textAreaDimensions, string optionalPlaceholderText, IEnumerable<string> cssClasses)
+            TextAreaDimensions textAreaDimensions, string? optionalPlaceholderText, IEnumerable<string>? cssClasses)
         {
             int? maxLength = null;
             if (expression.Body is MemberExpression memberExpression)
@@ -102,10 +102,6 @@ namespace Neptune.WebMvc.Common.HtmlHelperExtensions
             var fullBindingName = htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(fieldName);
             var fieldId = TagBuilder.CreateSanitizedId(fullBindingName, "_");
             var htmlAttributes = new Dictionary<string, object> { { "id", fieldId } };
-            if (textAreaEnableType == TextAreaEnableType.Disabled)
-            {
-                htmlAttributes.Add("readonly", "readonly");
-            }
             if (!string.IsNullOrWhiteSpace(optionalPlaceholderText))
             {
                 htmlAttributes.Add("placeholder", optionalPlaceholderText);
