@@ -1,6 +1,6 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM qgis/qgis as base
+FROM qgis/qgis:release-3_28 as base
 # Set environment variables for QGIS
 ENV QGIS_PREFIX_PATH=/usr
 ENV QT_QPA_PLATFORM=offscreen
