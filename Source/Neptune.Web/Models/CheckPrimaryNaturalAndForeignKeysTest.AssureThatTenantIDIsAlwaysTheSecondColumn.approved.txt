@@ -1,1 +1,0 @@
-﻿table_schema	table_name	column_name	Data_type	ORDINAL_POSITION
