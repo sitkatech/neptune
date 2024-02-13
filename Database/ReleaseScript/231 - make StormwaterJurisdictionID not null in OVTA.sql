@@ -1,1 +1,0 @@
-alter table dbo.OnlandVisualTrashAssessment alter column StormwaterJurisdictionID int not null

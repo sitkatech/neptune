@@ -1,2 +1,0 @@
-alter table WaterQualityManagementPlan
-add WaterQualityManagementPlanBoundary4326 [geometry] NULL

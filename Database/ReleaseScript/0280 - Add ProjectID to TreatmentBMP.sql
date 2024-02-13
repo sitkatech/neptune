@@ -1,1 +1,0 @@
-alter table dbo.TreatmentBMP add ProjectID int null constraint FK_TreatmentBMP_Project_ProjectID foreign key references dbo.Project(ProjectID)

@@ -1,1 +1,0 @@
-alter table dbo.MaintenanceRecord add constraint AK_MaintenanceRecord_FieldVisitID unique (FieldVisitID)
