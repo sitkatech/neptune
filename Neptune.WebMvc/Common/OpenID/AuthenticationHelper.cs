@@ -175,7 +175,7 @@ public static class AuthenticationHelper
         var message = $@"
 <div style='font-size: 12px; font-family: Arial'>
     <strong>User added:</strong> {person.GetFullNameFirstLast()}<br />
-    <strong>Added on:</strong> {DateTime.Now}<br />
+    <strong>Added on:</strong> {DateTime.UtcNow.ToStringDateTime()}<br />
     <strong>Email:</strong> {person.Email}<br />
     <strong>Phone:</strong> {person.Phone.ToPhoneNumberString()}<br />
     <br />
@@ -208,7 +208,7 @@ public static class AuthenticationHelper
 <div style='font-size: 12px; font-family: Arial'>
     <strong>{fieldDefinitionOrganizationLabel} created:</strong> {organization.GetDisplayName() //organization.GetDisplayNameAsUrl() - TODO:
     }<br />
-    <strong>Created on:</strong> {DateTime.Now}<br />
+    <strong>Created on:</strong> {DateTime.UtcNow.ToStringDateTime()}<br />
     <strong>Created because:</strong> New user logged in<br />
     <strong>New user:</strong> {person.GetFullNameFirstLast()} ({person.Email})<br />
     <br />

@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Views.Shared;
@@ -30,12 +29,9 @@ using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.Help;
 using System.Net.Mail;
-using LtInfo.Common;
 using Neptune.Common;
 using Neptune.Common.Email;
-using Neptune.Jobs;
 using Neptune.WebMvc.Common.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -223,7 +219,7 @@ namespace Neptune.WebMvc.Controllers
         {
             var ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
             var userAgent = HttpContext.Request.Headers.UserAgent;
-            var subject = $"Support Request for Neptune - {DateTime.Now.ToStringDateTime()}";
+            var subject = $"Support Request for Neptune - {DateTime.UtcNow.ToStringDateTime()}";
             var message = $@"
 <div style='font-size: 12px; font-family: Arial'>
     <strong>{subject}</strong><br />
