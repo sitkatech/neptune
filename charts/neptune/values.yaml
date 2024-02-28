@@ -251,7 +251,7 @@ geoserver:
 gdalapi:
   replicaCount: 1
   image:
-    repository: esasitkagovcr.azurecr.us/neptune/gdalapi
+    repository: esacontainers.azurecr.io/neptune/gdalapi
     pullPolicy: Always
   nameOverride: ""
   fullnameOverride: ""
@@ -295,7 +295,7 @@ gdalapi:
 qgisapi:
   replicaCount: 1
   image:
-    repository: esasitkagovcr.azurecr.us/neptune/qgisapi
+    repository: esacontainers.azurecr.io/neptune/qgisapi
     pullPolicy: Always
   nameOverride: ""
   fullnameOverride: ""
