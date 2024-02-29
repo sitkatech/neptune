@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Neptune.Web
 {
@@ -49,7 +49,7 @@ namespace Neptune.Web
                 if (context.Request.Path.Value == "/assets/config.json")
                 {
                     var result = new ConfigDto(Configuration);
-                    var json = JsonConvert.SerializeObject(result);
+                    var json = System.Text.Json.JsonSerializer.Serialize(result);
                     await context.Response.WriteAsync(json);
                     return;
                 }
@@ -83,23 +83,23 @@ namespace Neptune.Web
             OcStormwaterToolsBaseUrl = configuration["OcStormwaterToolsBaseUrl"];
         }
 
-        [JsonProperty("production")]
+        [JsonPropertyName("production")]
         public bool Production { get; set; }
-        [JsonProperty("staging")]
+        [JsonPropertyName("staging")]
         public bool Staging { get; set; }
-        [JsonProperty("dev")]
+        [JsonPropertyName("dev")]
         public bool Dev { get; set; }
-        [JsonProperty("mainAppApiUrl")]
+        [JsonPropertyName("mainAppApiUrl")]
         public string MainAppApiUrl { get; set; }
-        [JsonProperty("createAccountRedirectUrl")]
+        [JsonPropertyName("createAccountRedirectUrl")]
         public string CreateAccountRedirectUrl { get; set; }
-        [JsonProperty("geoserverMapServiceUrl")]
+        [JsonPropertyName("geoserverMapServiceUrl")]
         public string GeoserverMapServiceUrl { get; set; }
-        [JsonProperty("keystoneAuthConfiguration")]
+        [JsonPropertyName("keystoneAuthConfiguration")]
         public KeystoneAuthConfigurationDto KeystoneAuthConfiguration { get; set; }
-        [JsonProperty("appInsightsInstrumentationKey")]
+        [JsonPropertyName("appInsightsInstrumentationKey")]
         public string AppInsightsInstrumentationKey {get; set;}
-        [JsonProperty("ocStormwaterToolsBaseUrl")]
+        [JsonPropertyName("ocStormwaterToolsBaseUrl")]
         public string OcStormwaterToolsBaseUrl { get; set;}
     }
 
@@ -119,25 +119,25 @@ namespace Neptune.Web
             DisablePKCE = bool.Parse(configuration["Keystone_DisablePKCE"]);
         }
 
-        [JsonProperty("clientId")]
+        [JsonPropertyName("clientId")]
         public string ClientID { get; set; }
-        [JsonProperty("issuer")]
+        [JsonPropertyName("issuer")]
         public string Issuer { get; set; }
-        [JsonProperty("redirectUriRelative")]
+        [JsonPropertyName("redirectUriRelative")]
         public string RedirectUriRelative { get; set; }
-        [JsonProperty("scope")]
+        [JsonPropertyName("scope")]
         public string Scope { get; set; }
-        [JsonProperty("sessionChecksEnabled")]
+        [JsonPropertyName("sessionChecksEnabled")]
         public bool SessionChecksEnabled { get; set; }
-        [JsonProperty("logoutUrl")]
+        [JsonPropertyName("logoutUrl")]
         public string LogoutUrl { get; set; }
-        [JsonProperty("postLogoutRedirectUri")]
+        [JsonPropertyName("postLogoutRedirectUri")]
         public string PostLogoutRedirectUri { get; set; }
-        [JsonProperty("waitForTokenInMsec")]
+        [JsonPropertyName("waitForTokenInMsec")]
         public int WaitForTokenInMsec { get; set; }
-        [JsonProperty("responseType")]
+        [JsonPropertyName("responseType")]
         public string ResponseType {get; set;}
-        [JsonProperty("disablePKCE")]
+        [JsonPropertyName("disablePKCE")]
         public bool DisablePKCE {get; set;}
     }
 }
