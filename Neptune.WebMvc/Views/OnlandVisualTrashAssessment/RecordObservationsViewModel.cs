@@ -46,7 +46,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
                     LocationPoint = locationPoint2771,
                     LocationPoint4326 = locationPoint4326,
                     Note = onlandVisualTrashAssessmentObservationSimple.Note, 
-                    ObservationDatetime = onlandVisualTrashAssessmentObservationSimple.ObservationDateTime.ConvertTimeFromPSTToUTC()
+                    ObservationDatetime = onlandVisualTrashAssessmentObservationSimple.ObservationDateTime
                 };
                 if (onlandVisualTrashAssessmentObservationSimple.PhotoStagingID.HasValue)
                 {
@@ -77,7 +77,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
                 var locationPoint2771 = locationPoint4326.ProjectTo2771();
                 onlandVisualTrashAssessmentObservation.LocationPoint = locationPoint2771;
                 onlandVisualTrashAssessmentObservation.Note = onlandVisualTrashAssessmentObservationSimple.Note;
-                onlandVisualTrashAssessmentObservation.ObservationDatetime = onlandVisualTrashAssessmentObservationSimple.ObservationDateTime.ConvertTimeFromPSTToUTC();
+                onlandVisualTrashAssessmentObservation.ObservationDatetime = onlandVisualTrashAssessmentObservationSimple.ObservationDateTime;
                 onlandVisualTrashAssessmentObservation.LocationPoint4326 = locationPoint4326;
 
                 if (onlandVisualTrashAssessmentObservationSimple.PhotoStagingID.HasValue)

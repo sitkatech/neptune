@@ -2807,24 +2807,24 @@
       "ProblemDetails": {
         "type": "object",
         "properties": {
-          "Type": {
+          "type": {
             "type": "string",
             "nullable": true
           },
-          "Title": {
+          "title": {
             "type": "string",
             "nullable": true
           },
-          "Status": {
+          "status": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "Detail": {
+          "detail": {
             "type": "string",
             "nullable": true
           },
-          "Instance": {
+          "instance": {
             "type": "string",
             "nullable": true
           }
