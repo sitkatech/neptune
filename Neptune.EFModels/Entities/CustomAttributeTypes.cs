@@ -27,6 +27,10 @@ namespace Neptune.EFModels.Entities
 {
     public static class CustomAttributeTypes
     {
+        public const int CustomAttributeTypeIDNumberOfInletScreens = 90;
+        public const int CustomAttributeTypeIDNumberOfConnectorPipeScreens = 91;
+        public const int CustomAttributeTypeIDNumberOfTrashBaskets = 97;
+
         public static IQueryable<CustomAttributeType> GetImpl(NeptuneDbContext dbContext)
         {
             return dbContext.CustomAttributeTypes.Include(x => x.TreatmentBMPTypeCustomAttributeTypes)

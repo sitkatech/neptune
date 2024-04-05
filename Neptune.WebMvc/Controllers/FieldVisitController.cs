@@ -1491,6 +1491,15 @@ namespace Neptune.WebMvc.Controllers
                 .Where(x => x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID &&
                             stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
 
+            var treatmentBMPIDs = currentPersonTrashScreens.Select(x => x.TreatmentBMPID);
+
+            var inletScreensDict = CustomAttributes.ListByCustomAttributeTypeID(_dbContext,
+                CustomAttributeTypes.CustomAttributeTypeIDNumberOfInletScreens).Where(x =>  treatmentBMPIDs.Contains(x.TreatmentBMPID)).ToDictionary(x => x.TreatmentBMPID);
+            var trashBucketsDict = CustomAttributes.ListByCustomAttributeTypeID(_dbContext,
+                CustomAttributeTypes.CustomAttributeTypeIDNumberOfTrashBaskets).Where(x =>  treatmentBMPIDs.Contains(x.TreatmentBMPID)).ToDictionary(x => x.TreatmentBMPID);
+            var connectorPipeScreensDict = CustomAttributes.ListByCustomAttributeTypeID(_dbContext,
+                CustomAttributeTypes.CustomAttributeTypeIDNumberOfConnectorPipeScreens).Where(x =>  treatmentBMPIDs.Contains(x.TreatmentBMPID)).ToDictionary(x => x.TreatmentBMPID);
+
             var row = 2;
             using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
             await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToFieldVisitUploadTemplate, disposableTempFile.FileInfo.FullName);
@@ -1503,6 +1512,9 @@ namespace Neptune.WebMvc.Controllers
                 worksheet.Cells($"B{row}").Value = treatmentBMP.StormwaterJurisdiction.Organization.OrganizationName;
                 worksheet.Cells($"C{row}").Value = treatmentBMP.YearBuilt;
                 worksheet.Cells($"D{row}").Value = treatmentBMP.Notes;
+                SetCellValueFromCustomAttribute(inletScreensDict, treatmentBMP, worksheet, "E", row);
+                SetCellValueFromCustomAttribute(trashBucketsDict, treatmentBMP, worksheet, "F", row);
+                SetCellValueFromCustomAttribute(connectorPipeScreensDict, treatmentBMP, worksheet, "G", row);
                 row++;
             }
 
@@ -1510,6 +1522,22 @@ namespace Neptune.WebMvc.Controllers
             workbook.SaveAs(stream);
             return File(stream.ToArray(), @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 $"TrashScreenBulkUploadTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.xlsx");
+        }
+
+        private static void SetCellValueFromCustomAttribute(IReadOnlyDictionary<int, CustomAttribute> customAttributeDict, TreatmentBMP treatmentBMP,
+            IXLRangeBase worksheet, string column, int row)
+        {
+            if (customAttributeDict.TryGetValue(treatmentBMP.TreatmentBMPID, out var customAttribute))
+            {
+                var value = customAttribute.CustomAttributeValues.FirstOrDefault();
+                if (value != null && !string.IsNullOrWhiteSpace(value.AttributeValue))
+                {
+                    if (int.TryParse(value.AttributeValue, out var int1))
+                    {
+                        worksheet.Cells($"{column}{row}").Value = int1;
+                    }
+                }
+            }
         }
 
         public static DataTable GetDataTableFromExcel(Stream inputStream, dynamic worksheet)
