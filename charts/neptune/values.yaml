@@ -30,7 +30,7 @@ global:
 api:
   replicaCount: 1
   image:
-    repository: esacontainers.azurecr.io/neptune/api
+    repository: containersesaqa.azurecr.io/neptune/api
     pullPolicy: Always
   nameOverride: ""
   fullnameOverride: ""
@@ -85,7 +85,7 @@ api:
 web:
   replicaCount: 1
   image:
-    repository: esacontainers.azurecr.io/neptune/web
+    repository: containersesaqa.azurecr.io/neptune/web
     pullPolicy: Always
   nameOverride: ""
   fullnameOverride: ""
@@ -140,14 +140,14 @@ web:
 webmvc:
   replicaCount: 1
   image:
-    repository: esacontainers.azurecr.io/neptune/webmvc
+    repository: containersesaqa.azurecr.io/neptune/webmvc
     pullPolicy: Always
   nameOverride: ""
   fullnameOverride: ""
   namespace: h2o
   resources: 
     requests:
-      memory: "10G"
+      memory: "8G"
   serviceAccount:
     # Specifies whether a service account should be created
     create: true
@@ -251,7 +251,7 @@ geoserver:
 gdalapi:
   replicaCount: 1
   image:
-    repository: esacontainers.azurecr.io/neptune/gdalapi
+    repository: containersesaqa.azurecr.io/neptune/gdalapi
     pullPolicy: Always
   nameOverride: ""
   fullnameOverride: ""
@@ -295,7 +295,7 @@ gdalapi:
 qgisapi:
   replicaCount: 1
   image:
-    repository: esacontainers.azurecr.io/neptune/qgisapi
+    repository: containersesaqa.azurecr.io/neptune/qgisapi
     pullPolicy: Always
   nameOverride: ""
   fullnameOverride: ""
@@ -339,7 +339,7 @@ qgisapi:
 nereid:
   replicaCount: 1
   image:
-    repository: esacontainers.azurecr.io/neptune/nereid
+    repository: containersesaqa.azurecr.io/neptune/nereid
     tag: "v0.7.0"
     pullPolicy: Always
   nameOverride: ""
@@ -373,7 +373,7 @@ nereid:
 nereid-tests:
   replicaCount: 1
   image:
-    repository: esacontainers.azurecr.io/neptune/nereid_tests
+    repository: containersesaqa.azurecr.io/neptune/nereid_tests
     tag: "v0.7.0"
     pullPolicy: Always
   nameOverride: ""
@@ -407,7 +407,7 @@ nereid-tests:
 nereid-redis:
   replicaCount: 1
   image:
-    repository: esacontainers.azurecr.io/neptune/redis
+    repository: containersesaqa.azurecr.io/neptune/redis
     tag: "v0.7.0"
     pullPolicy: Always
   nameOverride: ""
@@ -437,7 +437,7 @@ nereid-redis:
 nereid-flower:
   replicaCount: 1
   image:
-    repository: esacontainers.azurecr.io/neptune/flower
+    repository: containersesaqa.azurecr.io/neptune/flower
     tag: "v0.7.0"
     pullPolicy: Always
   nameOverride: ""
@@ -471,7 +471,7 @@ nereid-flower:
 nereid-celeryworker:
   replicaCount: 1
   image:
-    repository: esacontainers.azurecr.io/neptune/celeryworker
+    repository: containersesaqa.azurecr.io/neptune/celeryworker
     tag: "v0.7.0"
     pullPolicy: Always
   nameOverride: ""
