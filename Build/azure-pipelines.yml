@@ -23,6 +23,9 @@ variables:
   domainWeb: 'neptune.esa-$(Environment).sitkatech.com'
   domainGeoserver: 'geoserver-neptune.esa-$(Environment).sitkatech.com'
 
+  nereidTag: 'v0.10.1'
+  nereidDataTag: '2023.11.08'
+
 resources:
   repositories:
   - repository: self
