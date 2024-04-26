@@ -12,6 +12,8 @@ variables:
   resourceGroupName: 'neptune-$(Environment)'
   keyVaultName: 'neptune-keyvault-$(Environment)'
   storageAccountName: 'neptuneapp$(Environment)'
+  storageAccountNameProd: 'neptuneappprod'
+  storageAccountNameDev: 'neptuneappdev'
 
   databaseName: 'NeptuneDB'
   databaseEdition: 'Standard'
@@ -246,7 +248,7 @@ stages:
           -var "domainWebMvc=$(domainWebMvc)" 
           -var "domainGeoserver=$(domainGeoserver)" 
           -var "environment=$(environment)" 
-          -var "storageAccountDevApplicationName=$(storageAccountDevApplicationName)" 
+          -var "storageAccountNameDev=$(storageAccountNameDev)" 
           -var "team=$(team)" 
           -var "projectNumber=$(projectNumber)" 
           -var "elasticPoolName=$(kv-elasticPoolName)" 
@@ -312,7 +314,6 @@ stages:
 
             - bash: |
                 echo "##vso[task.setvariable variable=STORAGE_ACCOUNT_SAS_KEY;isOutput=true;issecret=true]$(TF_OUT_STORAGE_ACCOUNT_SAS_KEY)"
-                echo "##vso[task.setvariable variable=APPLICATION_STORAGE_ACCOUNT_CONNECTION_STRING;isOutput=true;issecret=true]$(TF_OUT_APPLICATION_STORAGE_ACCOUNT_CONNECTION_STRING)"
                 echo "##vso[task.setvariable variable=APPLICATION_STORAGE_ACCOUNT_KEY;isOutput=true;issecret=true]$(TF_OUT_APPLICATION_STORAGE_ACCOUNT_KEY)"
                 echo "##vso[task.setvariable variable=SQL_API_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_SQL_API_PASSWORD)"
                 echo "##vso[task.setvariable variable=SQL_GEOSERVER_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_SQL_GEOSERVER_PASSWORD)"
@@ -345,9 +346,9 @@ stages:
           inlineScript: |
             $startDate = [DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")
             $expireDate = [DateTime]::UtcNow.AddHours(2).ToString("yyyy-MM-ddTHH:mm:ssZ")
-            $prodSasKey = az storage account generate-sas --account-name $(storageAccountProdApplicationName) --account-key $(storageAccountProdAccountKey) --expiry $expireDate --start $startDate --permissions acdfilprtuwxy --resource-types sco --services bfqt
-            $qaSasKey = az storage account generate-sas --account-name $(storageAccountApplicationName) --account-key $(storageAccountQaAccountKey) --expiry $expireDate --start $startDate --permissions acdfilprtuwxy --resource-types sco --services bfqt
-            azcopy sync ("https://$(storageAccountProdApplicationName).blob.core.windows.net/file-resource/?" + $prodSasKey) ("https://$(storageAccountApplicationName).blob.core.windows.net/file-resource/?" + $qaSasKey) --recursive --from-to BlobBlob
+            $prodSasKey = az storage account generate-sas --account-name $(storageAccountNameProd) --account-key $(storageAccountProdAccountKey) --expiry $expireDate --start $startDate --permissions acdfilprtuwxy --resource-types sco --services bfqt
+            $qaSasKey = az storage account generate-sas --account-name $(storageAccountName) --account-key $(APPLICATION_STORAGE_ACCOUNT_KEY) --expiry $expireDate --start $startDate --permissions acdfilprtuwxy --resource-types sco --services bfqt
+            azcopy sync ("https://$(storageAccountNameProd).blob.core.windows.net/files/?" + $prodSasKey) ("https://$(storageAccountName).blob.core.windows.net/files/?" + $qaSasKey) --recursive --from-to BlobBlob
             
 
 - stage: DeployDB
