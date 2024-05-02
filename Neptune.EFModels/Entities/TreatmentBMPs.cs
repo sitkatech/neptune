@@ -326,6 +326,7 @@ namespace Neptune.EFModels.Entities
                 StorageVolumeBelowLowestOutletElevation = treatmentBMPUpsertDto.StorageVolumeBelowLowestOutletElevation,
                 SummerHarvestedWaterDemand = treatmentBMPUpsertDto.SummerHarvestedWaterDemand,
                 DrawdownTimeForDetentionVolume = treatmentBMPUpsertDto.DrawdownTimeForDetentionVolume,
+                TimeOfConcentrationID = treatmentBMPUpsertDto.TimeOfConcentrationID,
                 TotalEffectiveBMPVolume = treatmentBMPUpsertDto.TotalEffectiveBMPVolume,
                 TotalEffectiveDrywellBMPVolume = treatmentBMPUpsertDto.TotalEffectiveDrywellBMPVolume,
                 TreatmentRate = treatmentBMPUpsertDto.TreatmentRate,
