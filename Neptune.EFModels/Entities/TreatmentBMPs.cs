@@ -33,6 +33,8 @@ namespace Neptune.EFModels.Entities
         {
             return dbContext.TreatmentBMPs
                 .Include(x => x.TreatmentBMPType).Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule)
+                .Include(x => x.Delineation)
+                .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
                 .AsNoTracking();
         }
         public static List<TreatmentBMP> GetProvisionalTreatmentBMPs(NeptuneDbContext dbContext, Person currentPerson)
@@ -324,6 +326,7 @@ namespace Neptune.EFModels.Entities
                 StorageVolumeBelowLowestOutletElevation = treatmentBMPUpsertDto.StorageVolumeBelowLowestOutletElevation,
                 SummerHarvestedWaterDemand = treatmentBMPUpsertDto.SummerHarvestedWaterDemand,
                 DrawdownTimeForDetentionVolume = treatmentBMPUpsertDto.DrawdownTimeForDetentionVolume,
+                TimeOfConcentrationID = treatmentBMPUpsertDto.TimeOfConcentrationID,
                 TotalEffectiveBMPVolume = treatmentBMPUpsertDto.TotalEffectiveBMPVolume,
                 TotalEffectiveDrywellBMPVolume = treatmentBMPUpsertDto.TotalEffectiveDrywellBMPVolume,
                 TreatmentRate = treatmentBMPUpsertDto.TreatmentRate,

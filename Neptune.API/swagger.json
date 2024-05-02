@@ -3967,6 +3967,9 @@
           },
           "InventoryIsVerified": {
             "type": "boolean"
+          },
+          "IsFullyParameterized": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

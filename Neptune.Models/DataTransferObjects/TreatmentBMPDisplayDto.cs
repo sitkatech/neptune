@@ -10,4 +10,5 @@ public class TreatmentBMPDisplayDto
     public double Latitude { get; set; }
     public int? ProjectID { get; set; }
     public bool InventoryIsVerified { get; set; }
+    public bool IsFullyParameterized { get; set; }
 }
