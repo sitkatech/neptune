@@ -17,7 +17,8 @@ public static partial class TreatmentBMPExtensionMethods
             InventoryIsVerified = treatmentBMP.InventoryIsVerified,
             Longitude = treatmentBMP.LocationPoint4326.Coordinate.X,
             Latitude = treatmentBMP.LocationPoint4326.Coordinate.Y,
-            TreatmentBMPName = treatmentBMP.TreatmentBMPName
+            TreatmentBMPName = treatmentBMP.TreatmentBMPName,
+            IsFullyParameterized = treatmentBMP.IsFullyParameterized(treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP)
         };
         return treatmentBMPSimpleDto;
     }
