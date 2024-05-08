@@ -150,6 +150,33 @@ stages:
           $(Build.BuildNumber)-$(environment)
         includeLatestTag: true
 
+  - job: BuildQGIS
+    displayName: Build QGISApi
+    condition: eq(variables['build'], 'true')
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - checkout: self
+      fetchDepth: 0
+
+    - task: AzureKeyVault@2
+      inputs:
+        azureSubscription: "$(azureSubscription)"
+        KeyVaultName: '$(spokeKeyVaultName)'
+        SecretsFilter: '*'
+        RunAsPreJob: true
+
+    - template: azure-pipelines/templates/docker/docker-template.yml@BuildTemplates 
+      parameters:
+        displayName: 'QGISApi'
+        subscription: '$(azureSubscription)'
+        containerRegistry: '$(kv-containerRegistry)'
+        dockerComposeFile: 'docker-compose/docker-compose.qgisapi.yml'
+        dockerComposeFileArgs: 'env=$(environment)'
+        additionalImageTags: |
+          $(Build.BuildNumber)-$(environment)
+        includeLatestTag: true
+
 - stage: BuildNereid
   displayName: Build Nereid
   dependsOn: Test
