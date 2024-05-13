@@ -22,8 +22,9 @@ variables:
   sqlGeoserverUsername: 'NeptuneGeo'
 
   domainApi: 'api-neptune.esa-$(Environment).sitkatech.com'
-  domainWeb: 'neptune.esa-$(Environment).sitkatech.com'
+  domainWeb: 'neptune-planning.esa-$(Environment).sitkatech.com'
   domainGeoserver: 'geoserver-neptune.esa-$(Environment).sitkatech.com'
+  domainWebMvc: 'neptune.esa-$(Environment).sitkatech.com'
 
   nereidTag: 'v0.10.1'
   nereidDataTag: '2023.11.08'
@@ -189,7 +190,7 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - checkout: nereid
-    
+
     - task: AzureKeyVault@2
       inputs:
         azureSubscription: "$(azureSubscription)"
