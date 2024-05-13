@@ -189,17 +189,24 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - checkout: nereid
+    
+    - task: AzureKeyVault@2
+      inputs:
+        azureSubscription: "$(azureSubscription)"
+        KeyVaultName: '$(spokeKeyVaultName)'
+        SecretsFilter: '*'
+        RunAsPreJob: true
 
     - task: DockerCompose@0
       displayName: Build Nereid services
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
-        azureContainerRegistry: '$(containerRegistry)'
+        azureContainerRegistry: '$(kv-containerRegistry)'
         dockerComposeFile: docker-compose.build.yml
         additionalDockerComposeFiles: |
           docker-compose.image.yml
         dockerComposeFileArgs: |
-          NEREID_ARTIFACT_REGISTRY_PATH=$(containerRegistry)/neptune/
+          NEREID_ARTIFACT_REGISTRY_PATH=$(kv-containerRegistry)/neptune/
         action: Build services
         additionalImageTags: >-
           $(Build.BuildNumber)-$(environment)
@@ -212,12 +219,12 @@ stages:
       condition: eq(variables['buildNereid'], 'true')
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
-        azureContainerRegistry: '$(containerRegistry)'
+        azureContainerRegistry: '$(kv-containerRegistry)'
         dockerComposeFile: docker-compose.build.yml
         additionalDockerComposeFiles: |
           docker-compose.image.yml
         dockerComposeFileArgs: |
-          NEREID_ARTIFACT_REGISTRY_PATH=$(containerRegistry)/neptune/
+          NEREID_ARTIFACT_REGISTRY_PATH=$(kv-containerRegistry)/neptune/
         action: Push services
         additionalImageTags: >-
           $(Build.BuildNumber)-$(environment)
@@ -671,23 +678,23 @@ stages:
                 global.secrets.apiSqlPassword=$(SQL_API_PASSWORD)
                 global.secrets.sendGridApiKey="$(kv-sendGridApiKey)"
                 api.image.tag="$(Build.BuildNumber)-$(environment)"
-                api.image.repository="$(containerRegistry)/neptune/api"
+                api.image.repository="$(kv-containerRegistry)/neptune/api"
                 web.image.tag="$(Build.BuildNumber)-$(environment)"
-                web.image.repository="$(containerRegistry)/neptune/web"
+                web.image.repository="$(kv-containerRegistry)/neptune/web"
                 webmvc.image.tag="$(Build.BuildNumber)-$(environment)"
-                webmvc.image.repository="$(containerRegistry)/neptune/webmvc"
+                webmvc.image.repository="$(kv-containerRegistry)/neptune/webmvc"
                 gdalapi.image.tag="$(Build.BuildNumber)-$(environment)"
-                gdalapi.image.repository="$(containerRegistry)/neptune/gdalapi"
+                gdalapi.image.repository="$(kv-containerRegistry)/neptune/gdalapi"
                 qgisapi.image.tag="$(Build.BuildNumber)-$(environment)"
-                qgisapi.image.repository="$(containerRegistry)/neptune/qgisapi"
-                nereid.image.repository="$(containerRegistry)/neptune/nereid"
+                qgisapi.image.repository="$(kv-containerRegistry)/neptune/qgisapi"
+                nereid.image.repository="$(kv-containerRegistry)/neptune/nereid"
                 nereid.image.tag="$(nereidTag)"
-                nereid-tests.image.repository="$(containerRegistry)/neptune/nereid-tests"
+                nereid-tests.image.repository="$(kv-containerRegistry)/neptune/nereid-tests"
                 nereid-tests.image.tag="$(nereidTag)"
-                nereid-redis.image.repository="$(containerRegistry)/neptune/redis"
+                nereid-redis.image.repository="$(kv-containerRegistry)/neptune/redis"
                 nereid-redis.image.tag="$(nereidTag)"
-                nereid-flower.image.repository="$(containerRegistry)/neptune/flower"
+                nereid-flower.image.repository="$(kv-containerRegistry)/neptune/flower"
                 nereid-flower.image.tag="$(nereidTag)"
-                nereid-celeryworker.image.repository="$(containerRegistry)/neptune/celeryworker"
+                nereid-celeryworker.image.repository="$(kv-containerRegistry)/neptune/celeryworker"
                 nereid-celeryworker.image.tag="$(nereidTag)"
               force: false
