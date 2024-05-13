@@ -305,6 +305,7 @@ stages:
     - BuildWeb
     - BuildDB
     - BuildTerraform
+    - BuildNereid
   condition: |
     and
     (
