@@ -1,8 +1,4 @@
 
-variable "appInsightsName" {
-  type = string
-}
-
 variable "keyVaultName" {
   type = string
 }
@@ -50,6 +46,10 @@ variable "environment" {
 }
 
 variable "azureClusterResourceGroup" {
+  type = string
+}
+
+variable "databaseResourceGroup" {
   type = string
 }
 
