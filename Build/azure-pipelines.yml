@@ -144,7 +144,7 @@ stages:
         displayName: 'Web'
         subscription: '$(azureSubscription)'
         containerRegistry: '$(kv-containerRegistry)'
-        dockerComposeFile: 'docker-compose/docker-compose.yml'
+        dockerComposeFile: 'Neptune.Web/docker-compose/docker-compose.yml'
         dockerComposeFileArgs: 'env=$(environment)'
         additionalImageTags: |
           $(Build.BuildNumber)-$(environment)
