@@ -363,19 +363,18 @@ stages:
       displayName: Restore QA Blob Storage
       pool:
         vmImage: 'windows-latest'
+      variables: 
+        APPLICATION_STORAGE_ACCOUNT_KEY: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.APPLICATION_STORAGE_ACCOUNT_KEY'] ]
       steps:
 
-      - task: AzureCLI@2
-        inputs:
-          azureSubscription: '$(azureSubscription)'
-          scriptType: 'ps'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            $startDate = [DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")
-            $expireDate = [DateTime]::UtcNow.AddHours(2).ToString("yyyy-MM-ddTHH:mm:ssZ")
-            $prodSasKey = az storage account generate-sas --account-name $(storageAccountNameProd) --account-key $(storageAccountProdAccountKey) --expiry $expireDate --start $startDate --permissions acdfilprtuwxy --resource-types sco --services bfqt
-            $qaSasKey = az storage account generate-sas --account-name $(storageAccountName) --account-key $(APPLICATION_STORAGE_ACCOUNT_KEY) --expiry $expireDate --start $startDate --permissions acdfilprtuwxy --resource-types sco --services bfqt
-            azcopy sync ("https://$(storageAccountNameProd).blob.core.windows.net/files/?" + $prodSasKey) ("https://$(storageAccountName).blob.core.windows.net/files/?" + $qaSasKey) --recursive --from-to BlobBlob
+      - template: azure-pipelines/templates/blob-storage-restore/blob-storage-restore.yml@BuildTemplates 
+        parameters:
+          subscription: '$(azureSubscription)'
+          containers: 'file-resource,inventory'
+          fromStorageAccountName: '$(storageAccountProdApplicationName)'
+          fromStorageAccountKey: '$(storageAccountProdAccountKey)'
+          toStorageAccountName: '$(storageAccountName)'
+          toStorageAccountKey: '$(APPLICATION_STORAGE_ACCOUNT_KEY)'
             
 
 - stage: DeployDB
