@@ -425,17 +425,6 @@ resource "azurerm_key_vault_secret" "sqlAdminUser" {
   ]
 }
   
-resource "azurerm_key_vault_secret" "appInsightsInstrumentationKey" {
-  name                         = "appInsightsInstrumentationKey"
-  value                        = azurerm_application_insights.web.instrumentation_key
-  key_vault_id                 = azurerm_key_vault.web.id
-
-  tags                         = local.tags
-  depends_on = [
-    azurerm_key_vault_access_policy.thisPipeline
-  ]
-}
- 
 resource "azurerm_key_vault_secret" "sqlApiUsername" {
    name                         = "sqlApiUsername"
    value                        = var.sqlApiUsername
