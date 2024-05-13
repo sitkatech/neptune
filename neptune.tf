@@ -239,7 +239,7 @@ resource "azurerm_storage_share" "web" {
 #sql
 data "azurerm_mssql_server" "spoke" {
   name                = var.dbServerName
-  resource_group_name = var.azureClusterResourceGroup
+  resource_group_name = var.databaseResourceGroup
 }
 
 data "azurerm_mssql_elasticpool" "spoke" {
