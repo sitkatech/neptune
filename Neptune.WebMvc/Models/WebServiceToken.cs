@@ -96,7 +96,7 @@ namespace Neptune.WebMvc.Models
 
             if (IsValidAsUnitTestToken(_tokenGuid, isBeingCalledByStaticConstructor))
             {
-                _person = People.GetByID(dbContext, 3); // TODO: Laryea's ID; might want to make a system person?
+                _person = People.GetByID(dbContext, Person.SystemPersonID);
             }
             else
             {
@@ -107,7 +107,7 @@ namespace Neptune.WebMvc.Models
 
         /// <summary>
         /// Returns the <see cref="EFModels.Entities.Person.PersonID"/> associated with this <see cref="WebServiceToken"/>.
-        /// In unit test situation using <see cref="WebServiceTokenGuidForUnitTests"/> that would be Laryea's person ID for now
+        /// In unit test situation using <see cref="WebServiceTokenGuidForUnitTests"/> that would be System person ID for now
         /// Might want to introduce a system person at some point.
         /// </summary>
         public Person Person => _person;
@@ -119,7 +119,7 @@ namespace Neptune.WebMvc.Models
 
         /// <summary>
         /// Throws an exception if the <see cref="Person"/> associated with this <see cref="WebServiceToken"/> does not have access to <see cref="LakeTahoeInfoBaseFeature" />
-        /// In a unit test using <see cref="WebServiceTokenGuidForUnitTests"/> this will always pass, and <see cref="Person"/> will return Laryea's person ID for now
+        /// In a unit test using <see cref="WebServiceTokenGuidForUnitTests"/> this will always pass, and <see cref="Person"/> will return System person ID for now
         /// Might want to introduce a system person at some point.
         /// </summary>
         /// <param name="feature"></param>
