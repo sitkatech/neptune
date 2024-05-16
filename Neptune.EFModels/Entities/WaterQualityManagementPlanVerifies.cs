@@ -12,6 +12,7 @@ public static class WaterQualityManagementPlanVerifies
             .ThenInclude(x => x.StormwaterJurisdiction)
             .ThenInclude(x => x.Organization)
             .Include(x => x.LastEditedByPerson)
+            .Include(x => x.FileResource)
             ;
     }
 
