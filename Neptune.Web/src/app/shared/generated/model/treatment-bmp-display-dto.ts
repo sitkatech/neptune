@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { TreatmentBMPModelingAttributeSimpleDto } from '././treatment-bmp-modeling-attribute-simple-dto';
 
 export class TreatmentBMPDisplayDto { 
     TreatmentBMPID?: number;
@@ -20,6 +21,7 @@ export class TreatmentBMPDisplayDto {
     ProjectID?: number;
     InventoryIsVerified?: boolean;
     IsFullyParameterized?: boolean;
+    TreatmentBMPModelingAttribute?: TreatmentBMPModelingAttributeSimpleDto;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
