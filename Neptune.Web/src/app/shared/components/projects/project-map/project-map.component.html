@@ -84,18 +84,18 @@
                         <h5 class="border-bottom p-2">Modeling Attributes</h5>
                     </div>
                 </div>
-                <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeID; else noTypeSelected">
-                    <ng-container *ngIf="getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID).length > 0; else modelingTypesNotApplicable">
-                        <div class="row p-2" *ngFor="let treatmentBMPModelingAttributeDefinitionDto of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID)">
+                <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeName; else noTypeSelected">
+                    <ng-container *ngIf="getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeName).length > 0; else modelingTypesNotApplicable">
+                        <div class="row p-2" *ngFor="let treatmentBMPModelingAttributeDefinitionDto of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeName)">
                             <div class="col-sm-7 control-label font-weight-bold text-sm-right">
                                 <field-definition [fieldDefinitionType]="treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName"></field-definition>
                             </div>
                             <div class="col-sm-5" *ngIf="isFieldWithDropdown(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName); else numericModelingAttributeField">
-                                {{getDropdownItemNameByFieldNameAndItemID(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName, selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName])}}
+                                {{getDropdownItemNameByFieldNameAndItemID(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName, selectedTreatmentBMP.TreatmentBMPModelingAttribute[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName])}}
                             </div>
                             <ng-template #numericModelingAttributeField>
                                 <div class="col-sm-5">
-                                    {{selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName] | number}}
+                                    {{selectedTreatmentBMP.TreatmentBMPModelingAttribute[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName] | number}}
                                     <span *ngIf="selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]">{{treatmentBMPModelingAttributeDefinitionDto.Units}}</span>
                                 </div>
                             </ng-template>

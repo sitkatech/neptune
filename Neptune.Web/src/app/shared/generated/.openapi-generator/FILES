@@ -48,7 +48,9 @@ model/system-info-dto.ts
 model/treatment-bmp-display-dto.ts
 model/treatment-bmp-modeling-attribute-definition-dto.ts
 model/treatment-bmp-modeling-attribute-dropdown-item-dto.ts
+model/treatment-bmp-modeling-attribute-simple-dto.ts
 model/treatment-bmp-type-with-modeling-attributes-dto.ts
 model/treatment-bmp-upsert-dto.ts
 model/treatment-bmphru-characteristics-summary-simple-dto.ts
+param.ts
 variables.ts
