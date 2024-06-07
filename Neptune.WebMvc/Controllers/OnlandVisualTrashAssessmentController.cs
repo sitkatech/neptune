@@ -556,7 +556,7 @@ namespace Neptune.WebMvc.Controllers
 
             var isProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment;
             await onlandVisualTrashAssessment.DeleteFull(_dbContext);
-            await _dbContext.SaveChangesAsync();
+
             if (onlandVisualTrashAssessmentArea != null)
             {
                 var onlandVisualTrashAssessments = OnlandVisualTrashAssessments.ListByOnlandVisualTrashAssessmentAreaID(_dbContext, onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID);
