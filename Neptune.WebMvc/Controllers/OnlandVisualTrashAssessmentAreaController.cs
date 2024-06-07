@@ -211,9 +211,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewDeleteOnlandVisualTrashAssessmentArea(onlandVisualTrashAssessmentArea, viewModel);
             }
 
-            await _dbContext.OnlandVisualTrashAssessmentAreas.Where(x =>
-                x.OnlandVisualTrashAssessmentAreaID ==
-                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID).ExecuteDeleteAsync();
+            await onlandVisualTrashAssessmentArea.DeleteFull(_dbContext);
 
             SetMessageForDisplay(
                 $"Successfully deleted the assessment area, {onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}.");
