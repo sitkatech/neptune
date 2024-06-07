@@ -23,7 +23,6 @@ namespace Neptune.WebMvc.Views.Home
         public string FindABmpUrl { get; set; }
         public string ExploreBmpTypesUrl { get; set; }
         public string AddABmpUrl { get; set; }
-        public string InviteANewUserUrl { get; set; }
         public string AddAFundingSourceUrl { get; set; }
         public string FieldVisitsUrl { get; set; }
         public string EditUserRolesUrl { get; set; }
@@ -52,7 +51,6 @@ namespace Neptune.WebMvc.Views.Home
             var fieldVisitsUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             ViewWaterQualityManagementPlansUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             FieldVisitsUrl = fieldVisitsUrl;
-            InviteANewUserUrl = ""; //todo SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Invite());
             EditUserRolesUrl = SitkaRoute<UserController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             AddAFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             ManagerDashboardUrl = SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
