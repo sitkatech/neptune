@@ -379,7 +379,7 @@ stages:
       - template: azure-pipelines/templates/blob-storage-restore/blob-storage-restore.yml@BuildTemplates 
         parameters:
           subscription: '$(azureSubscription)'
-          containers: 'file-resource,inventory'
+          containers: '*'
           fromStorageAccountName: '$(storageAccountProdApplicationName)'
           fromStorageAccountKey: '$(storageAccountProdAccountKey)'
           toStorageAccountName: '$(storageAccountName)'
