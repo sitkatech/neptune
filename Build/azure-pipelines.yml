@@ -21,10 +21,11 @@ variables:
   sqlApiUsername: 'NeptuneWeb'
   sqlGeoserverUsername: 'NeptuneGeo'
 
-  domainApi: 'api-neptune.esa-$(Environment).sitkatech.com'
-  domainWeb: 'neptune-planning.esa-$(Environment).sitkatech.com'
-  domainGeoserver: 'geoserver-neptune.esa-$(Environment).sitkatech.com'
-  domainWebMvc: 'neptune.esa-$(Environment).sitkatech.com'
+  # define these in the pipelines:
+  # domainApi: 'api-neptune.esa-$(Environment).sitkatech.com'
+  # domainWeb: 'neptune-planning.esa-$(Environment).sitkatech.com'
+  # domainGeoserver: 'geoserver-neptune.esa-$(Environment).sitkatech.com'
+  # domainWebMvc: 'neptune.esa-$(Environment).sitkatech.com'
 
   nereidTag: 'v0.10.1'
   nereidDataTag: '2023.11.08'
