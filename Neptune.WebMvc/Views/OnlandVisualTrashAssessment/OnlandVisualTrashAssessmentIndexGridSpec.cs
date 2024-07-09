@@ -38,7 +38,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
                 var deleteUrlTemplate =
                     new UrlTemplate<int>(
                         SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
-                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.OnlandVisualTrashAssessmentID), true, true), 25, DhtmlxGridColumnFilterType.None);
+                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.OnlandVisualTrashAssessmentID), x.OnlandVisualTrashAssessmentStatusID != (int)OnlandVisualTrashAssessmentStatusEnum.Complete, x.OnlandVisualTrashAssessmentStatusID != (int) OnlandVisualTrashAssessmentStatusEnum.Complete), 25, DhtmlxGridColumnFilterType.None);
             }
 
             if (currentPerson.IsJurisdictionEditorOrManagerOrAdmin())

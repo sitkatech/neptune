@@ -26,6 +26,7 @@ namespace Neptune.EFModels.Entities
     public partial class Person //, IKeystoneUser
     {
         public const int AnonymousPersonID = -999;
+        public const int SystemPersonID = 1122;
 
         public bool IsAnonymousUser()
         {
@@ -115,29 +116,29 @@ namespace Neptune.EFModels.Entities
         {
             foreach (var delineation in dbContext.Delineations.Where(x => x.VerifiedByPersonID == PersonID).ToList())
             {
-                delineation.VerifiedByPersonID = AnonymousPersonID;
+                delineation.VerifiedByPersonID = SystemPersonID;
             }
 
             foreach (var fieldVisit in dbContext.FieldVisits.Where(x => x.PerformedByPersonID == PersonID).ToList())
             {
-                fieldVisit.PerformedByPersonID = AnonymousPersonID;
+                fieldVisit.PerformedByPersonID = SystemPersonID;
             }
 
             foreach (var fileResource in dbContext.FileResources.Where(x => x.CreatePersonID == PersonID).ToList())
             {
-                fileResource.CreatePersonID = AnonymousPersonID;
+                fileResource.CreatePersonID = SystemPersonID;
             }
 
             await dbContext.Notifications.Where(x => x.PersonID == PersonID).ExecuteDeleteAsync();
 
             foreach (var onlandVisualTrashAssessment in dbContext.OnlandVisualTrashAssessments.Where(x => x.CreatedByPersonID == PersonID).ToList())
             {
-                onlandVisualTrashAssessment.CreatedByPersonID = AnonymousPersonID;
+                onlandVisualTrashAssessment.CreatedByPersonID = SystemPersonID;
             }
             
             foreach (var parcelStaging in dbContext.ParcelStagings.Where(x => x.UploadedByPersonID == PersonID).ToList())
             {
-                parcelStaging.UploadedByPersonID = AnonymousPersonID;
+                parcelStaging.UploadedByPersonID = SystemPersonID;
             }
             foreach (var project in dbContext.Projects.Where(x => x.CreatePersonID == PersonID 
                                                                   || x.PrimaryContactPersonID == PersonID 
@@ -145,24 +146,24 @@ namespace Neptune.EFModels.Entities
             {
                 if (project.CreatePersonID == PersonID)
                 {
-                    project.CreatePersonID = AnonymousPersonID;
+                    project.CreatePersonID = SystemPersonID;
                 }
 
                 if (project.PrimaryContactPersonID == PersonID)
                 {
-                    project.PrimaryContactPersonID = AnonymousPersonID;
+                    project.PrimaryContactPersonID = SystemPersonID;
                 }
 
                 if (project.UpdatePersonID == PersonID)
                 {
-                    project.UpdatePersonID = AnonymousPersonID;
+                    project.UpdatePersonID = SystemPersonID;
                 }
             }
 
 
             foreach (var projectNetworkSolveHistory in dbContext.ProjectNetworkSolveHistories.Where(x => x.RequestedByPersonID == PersonID).ToList())
             {
-                projectNetworkSolveHistory.RequestedByPersonID = AnonymousPersonID;
+                projectNetworkSolveHistory.RequestedByPersonID = SystemPersonID;
             }
 
             foreach (var regionalSubbasinRevisionRequest in dbContext.RegionalSubbasinRevisionRequests
@@ -170,12 +171,12 @@ namespace Neptune.EFModels.Entities
             {
                 if (regionalSubbasinRevisionRequest.ClosedByPersonID == PersonID)
                 {
-                    regionalSubbasinRevisionRequest.ClosedByPersonID = AnonymousPersonID;
+                    regionalSubbasinRevisionRequest.ClosedByPersonID = SystemPersonID;
                 }
 
                 if (regionalSubbasinRevisionRequest.RequestPersonID == PersonID)
                 {
-                    regionalSubbasinRevisionRequest.RequestPersonID = AnonymousPersonID;
+                    regionalSubbasinRevisionRequest.RequestPersonID = SystemPersonID;
                 }
             }
 
@@ -183,22 +184,25 @@ namespace Neptune.EFModels.Entities
 
             foreach (var supportRequestLog in dbContext.SupportRequestLogs.Where(x => x.RequestPersonID == PersonID).ToList())
             {
-                supportRequestLog.RequestPersonID = AnonymousPersonID;
+                supportRequestLog.RequestPersonID = SystemPersonID;
             }
 
             foreach (var trashGeneratingUnitAdjustment in dbContext.TrashGeneratingUnitAdjustments.Where(x => x.AdjustedByPersonID == PersonID).ToList())
             {
-                trashGeneratingUnitAdjustment.AdjustedByPersonID = AnonymousPersonID;
+                trashGeneratingUnitAdjustment.AdjustedByPersonID = SystemPersonID;
             }
             foreach (var treatmentBMP in dbContext.TreatmentBMPs.Where(x => x.InventoryVerifiedByPersonID == PersonID).ToList())
             {
-                treatmentBMP.InventoryVerifiedByPersonID = AnonymousPersonID;
+                treatmentBMP.InventoryVerifiedByPersonID = SystemPersonID;
             }
 
             foreach (var waterQualityManagementPlanVerify in dbContext.WaterQualityManagementPlanVerifies.Where(x => x.LastEditedByPersonID == PersonID).ToList())
             {
-                waterQualityManagementPlanVerify.LastEditedByPersonID = AnonymousPersonID;
+                waterQualityManagementPlanVerify.LastEditedByPersonID = SystemPersonID;
             }
+
+            await dbContext.SaveChangesAsync();
+
             await dbContext.People.Where(x => x.PersonID == PersonID).ExecuteDeleteAsync();
         }
     }

@@ -109,42 +109,48 @@ public static class AuthenticationHelper
         }
 
         // handle the organization
-        Organization organization = null;
-        var keystoneOrganizationGuidString = claimsIdentity.GetClaimValue("organization_identifier");
-        if (keystoneOrganizationGuidString != null)
+        if (claimsIdentity.TryGetClaimValue("organization_identifier", out var keystoneOrganizationGuidString))
         {
-            var keystoneOrganizationGuid = new Guid(keystoneOrganizationGuidString);
-            var keystoneOrganizationName = claimsIdentity.GetClaimValue("organization_name");
-            var keystoneOrganizationShortName = claimsIdentity.GetClaimValue("organization_shortname");
-            // first look by guid, then by name; if not available, create it on the fly since it is a person org
-            organization = Organizations.GetByGuid(dbContext, keystoneOrganizationGuid) ??
-                 Organizations.GetByName(dbContext, keystoneOrganizationName);
-
-            if (organization == null)
+            if (!string.IsNullOrWhiteSpace(keystoneOrganizationGuidString))
             {
-                _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}".ToString());
-                var defaultOrganizationType = OrganizationTypes.GetDefaultOrganizationType(dbContext);
-                organization = new Organization()
+                var keystoneOrganizationGuid = new Guid(keystoneOrganizationGuidString);
+                var keystoneOrganizationName = claimsIdentity.GetClaimValue("organization_name");
+                var keystoneOrganizationShortName = claimsIdentity.GetClaimValue("organization_shortname");
+                // first look by guid, then by name; if not available, create it on the fly since it is a person org
+                var organization = Organizations.GetByGuid(dbContext, keystoneOrganizationGuid) ??
+                                   Organizations.GetByName(dbContext, keystoneOrganizationName);
+
+                if (organization == null)
                 {
-                    OrganizationName = keystoneOrganizationName, 
-                    IsActive = true, 
-                    OrganizationTypeID = defaultOrganizationType.OrganizationTypeID,
-                    OrganizationShortName = keystoneOrganizationShortName,
-                    OrganizationGuid = keystoneOrganizationGuid
-                };
-                await dbContext.Organizations.AddAsync(organization);
-                sendNewOrganizationNotification = true;
-            }
+                    _logger.LogInformation(
+                        $"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}"
+                            .ToString());
+                    var defaultOrganizationType = OrganizationTypes.GetDefaultOrganizationType(dbContext);
+                    organization = new Organization()
+                    {
+                        OrganizationName = keystoneOrganizationName,
+                        IsActive = true,
+                        OrganizationTypeID = defaultOrganizationType.OrganizationTypeID,
+                        OrganizationShortName = keystoneOrganizationShortName,
+                        OrganizationGuid = keystoneOrganizationGuid
+                    };
+                    await dbContext.Organizations.AddAsync(organization);
+                    sendNewOrganizationNotification = true;
+                }
 
-            organization.OrganizationName = keystoneOrganizationName;
+                organization.OrganizationName = keystoneOrganizationName;
 
-            if (!organization.OrganizationGuid.HasValue)
-            {
-                _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Setting the KeystoneGuid field for existing Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}".ToString());
-                organization.OrganizationGuid = keystoneOrganizationGuid;
+                if (!organization.OrganizationGuid.HasValue)
+                {
+                    _logger.LogInformation(
+                        $"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Setting the KeystoneGuid field for existing Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}"
+                            .ToString());
+                    organization.OrganizationGuid = keystoneOrganizationGuid;
+                }
+
+                person.Organization = organization;
+                person.OrganizationID = organization.OrganizationID;
             }
-            person.Organization = organization;
-            person.OrganizationID = organization.OrganizationID;
         }
         else
         {

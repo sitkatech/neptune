@@ -53,9 +53,9 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             EnforcementOrFollowupActions = waterQualityManagementPlanVerify.EnforcementOrFollowupActions;
             SourceControlCondition = waterQualityManagementPlanVerify.SourceControlCondition;
 
-            WaterQualityManagementPlanVerifyQuickBMPs = quickBMPs.Select(x => 
+            WaterQualityManagementPlanVerifyQuickBMPs = quickBMPs?.Select(x => 
                 x.AsWaterQualityManagementPlanVerifyQuickBMPDto()).OrderBy(x => x.QuickBMPName).ToList();
-            WaterQualityManagementPlanVerifyTreatmentBMPSimples = treatmentBMPs.Select(x => x.AsWaterQualityManagementPlanVerifyTreatmentBMPSimpleDto()).OrderBy(x => x.TreatmentBMPName).ToList();
+            WaterQualityManagementPlanVerifyTreatmentBMPSimples = treatmentBMPs?.Select(x => x.AsWaterQualityManagementPlanVerifyTreatmentBMPSimpleDto()).OrderBy(x => x.TreatmentBMPName).ToList();
         }
 
         public async Task UpdateModel(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, Person currentPerson, NeptuneDbContext dbContext, FileResourceService fileResourceService, List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBMPs, List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBMPs)

@@ -386,8 +386,8 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     return TreatmentBmpsComponent.modelingAttributeFieldsWithDropdown.indexOf(fieldName) > -1;
   }
 
-  public getModelingAttributeFieldsToDisplay(treatmentBMPTypeID: number): Array<TreatmentBMPModelingAttributeDefinitionDto> {
-    return (this.treatmentBMPTypes.find(x => x.TreatmentBMPTypeID == treatmentBMPTypeID).TreatmentBMPModelingAttributes) ?? [];
+  public getModelingAttributeFieldsToDisplay(treatmentBMPTypeName: string): Array<TreatmentBMPModelingAttributeDefinitionDto> {
+    return (this.treatmentBMPTypes.find(x => x.TreatmentBMPTypeName == treatmentBMPTypeName).TreatmentBMPModelingAttributes) ?? [];
   }
 
   public getDropdownItemNameByFieldNameAndItemID(fieldName: string, itemID: number): string {
