@@ -40,6 +40,8 @@ namespace Neptune.EFModels.Entities
                 .Where(x => x.ProjectLoadGeneratingUnit.DelineationID == DelineationID).ExecuteDeleteAsync();
             await dbContext.ProjectLoadGeneratingUnits.Where(x => x.DelineationID == DelineationID)
                 .ExecuteDeleteAsync();
+            await dbContext.TrashGeneratingUnits.Where(x => x.DelineationID == DelineationID)
+                .ExecuteDeleteAsync();
             await dbContext.ProjectNereidResults.Where(x => x.DelineationID == DelineationID).ExecuteDeleteAsync();
             await dbContext.Delineations.Where(x => x.DelineationID == DelineationID).ExecuteDeleteAsync();
         }
