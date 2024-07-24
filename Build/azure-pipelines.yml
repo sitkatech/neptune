@@ -1,8 +1,44 @@
+trigger: none
+
+variables:
+  team: 'h2o'
+  projectNumber: 'D020211956.00'
+
+  azureApplicationTFStateResourceGroup: 'esa-$(Environment)'
+  TfStateStorageAccountName: 'esatfstate$(Environment)'
+  TfStateStorageAccountContainerName: 'neptune'
+  spokeKeyVaultName: 'aks-spoke-kv-esa-$(Environment)'
+
+  resourceGroupName: 'neptune-$(Environment)'
+  keyVaultName: 'neptune-keyvault-$(Environment)'
+  storageAccountName: 'neptuneapp$(Environment)'
+  storageAccountNameProd: 'neptuneappprod'
+  storageAccountNameDev: 'neptuneappdev'
+
+  databaseName: 'NeptuneDB'
+  databaseEdition: 'Standard'
+  databaseTier: 'ElasticPool'
+  sqlApiUsername: 'NeptuneWeb'
+  sqlGeoserverUsername: 'NeptuneGeo'
+
+  # define these in the pipelines:
+  # domainApi: 'api-neptune.esa-$(Environment).sitkatech.com'
+  # domainWeb: 'neptune-planning.esa-$(Environment).sitkatech.com'
+  # domainGeoserver: 'geoserver-neptune.esa-$(Environment).sitkatech.com'
+  # domainWebMvc: 'neptune.esa-$(Environment).sitkatech.com'
+
+  nereidTag: 'v0.10.1'
+  nereidDataTag: '2023.11.08'
+
 resources:
   repositories:
   - repository: self
     type: git
     ref: develop
+  - repository: BuildTemplates
+    type: github
+    name: sitkatech/BuildTemplates
+    endpoint: "sitkatech"
   - repository: nereid
     name: Geosyntec/nereid
     type: github
@@ -13,13 +49,20 @@ resources:
     type: github
     ref: refs/tags/$(nereidDataTag)
     endpoint: NereidGithubServiceConnection
-    
-
-variables:
-  team: 'h2o'
-  projectNumber: 'D020211956.00'
-
+   
 stages:
+- stage: BuildDB
+  displayName: Build DB
+  jobs:
+
+  - template: azure-pipelines/templates/database/dacpac-template.yml@BuildTemplates 
+    parameters:
+      name: 'Database'
+      solutionFile: 'Neptune.Database/Neptune.Database.sqlproj'
+      additionalArgs: '/p:DSP=Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider'
+      publishPath: 'Neptune.Database/bin/Debug/Neptune.Database.dacpac'
+      artifactName: 'Database'
+
 - stage: Test
   displayName: Test All
   condition: and(succeeded(), eq(variables['runTests'], 'true'))
@@ -61,34 +104,24 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - checkout: self
+      fetchDepth: 0
 
-    - task: DockerCompose@0
-      displayName: Build API services
+    - task: AzureKeyVault@2
       inputs:
-        azureSubscriptionEndpoint: '$(azureSubscription)'
-        azureContainerRegistry: '$(containerRegistry)'
-        dockerComposeFile: docker-compose/docker-compose.yml
-        dockerComposeFileArgs: env=$(environment)
-        action: Build services
-        additionalImageTags: >-
+        azureSubscription: "$(azureSubscription)"
+        KeyVaultName: '$(spokeKeyVaultName)'
+        SecretsFilter: '*'
+        RunAsPreJob: true
+
+    - template: azure-pipelines/templates/docker/docker-template.yml@BuildTemplates 
+      parameters:
+        displayName: 'API'
+        subscription: '$(azureSubscription)'
+        containerRegistry: '$(kv-containerRegistry)'
+        dockerComposeFile: 'docker-compose/docker-compose.yml'
+        dockerComposeFileArgs: 'env=$(environment)'
+        additionalImageTags: |
           $(Build.BuildNumber)-$(environment)
-
-          $(environment)
-        includeLatestTag: true
-
-    - task: DockerCompose@0
-      displayName: Push API Image to Registry  
-      condition: eq(variables['pushImages'], 'true')
-      inputs:
-        azureSubscriptionEndpoint: '$(azureSubscription)'
-        azureContainerRegistry: '$(containerRegistry)'
-        dockerComposeFile: docker-compose/docker-compose.yml
-        dockerComposeFileArgs: env=$(environment)
-        action: Push services
-        additionalImageTags: >-
-          $(Build.BuildNumber)-$(environment)
-
-          $(environment)
         includeLatestTag: true
 
 
@@ -99,34 +132,51 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - checkout: self
-        
-    - task: DockerCompose@0
-      displayName: Build Web services
-      inputs:
-        azureSubscriptionEndpoint: '$(azureSubscription)'
-        azureContainerRegistry: '$(containerRegistry)'
-        dockerComposeFile: Neptune.Web/docker-compose/docker-compose.yml
-        dockerComposeFileArgs: env=$(environment)
-        action: Build services
-        additionalImageTags: >-
-          $(Build.BuildNumber)-$(environment)
+      fetchDepth: 0
 
-          $(environment)
+    - task: AzureKeyVault@2
+      inputs:
+        azureSubscription: "$(azureSubscription)"
+        KeyVaultName: '$(spokeKeyVaultName)'
+        SecretsFilter: '*'
+        RunAsPreJob: true
+
+    - template: azure-pipelines/templates/docker/docker-template.yml@BuildTemplates 
+      parameters:
+        displayName: 'Web'
+        subscription: '$(azureSubscription)'
+        containerRegistry: '$(kv-containerRegistry)'
+        dockerComposeFile: 'Neptune.Web/docker-compose/docker-compose.yml'
+        dockerComposeFileArgs: 'env=$(environment)'
+        additionalImageTags: |
+          $(Build.BuildNumber)-$(environment)
         includeLatestTag: true
 
-    - task: DockerCompose@0
-      displayName: Push Web Image to Registry  
-      condition: eq(variables['pushImages'], 'true')
-      inputs:
-        azureSubscriptionEndpoint: '$(azureSubscription)'
-        azureContainerRegistry: '$(containerRegistry)'      
-        dockerComposeFile: Neptune.Web/docker-compose/docker-compose.yml
-        dockerComposeFileArgs: env=$(environment)
-        action: Push services
-        additionalImageTags: >-
-          $(Build.BuildNumber)-$(environment)
+  - job: BuildQGIS
+    displayName: Build QGISApi
+    condition: eq(variables['build'], 'true')
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - checkout: self
+      fetchDepth: 0
 
-          $(environment)
+    - task: AzureKeyVault@2
+      inputs:
+        azureSubscription: "$(azureSubscription)"
+        KeyVaultName: '$(spokeKeyVaultName)'
+        SecretsFilter: '*'
+        RunAsPreJob: true
+
+    - template: azure-pipelines/templates/docker/docker-template.yml@BuildTemplates 
+      parameters:
+        displayName: 'QGISApi'
+        subscription: '$(azureSubscription)'
+        containerRegistry: '$(kv-containerRegistry)'
+        dockerComposeFile: 'docker-compose/docker-compose.qgisapi.yml'
+        dockerComposeFileArgs: 'env=$(environment)'
+        additionalImageTags: |
+          $(Build.BuildNumber)-$(environment)
         includeLatestTag: true
 
 - stage: BuildNereid
@@ -142,21 +192,26 @@ stages:
     steps:
     - checkout: nereid
 
+    - task: AzureKeyVault@2
+      inputs:
+        azureSubscription: "$(azureSubscription)"
+        KeyVaultName: '$(spokeKeyVaultName)'
+        SecretsFilter: '*'
+        RunAsPreJob: true
+
     - task: DockerCompose@0
       displayName: Build Nereid services
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
-        azureContainerRegistry: '$(containerRegistry)'
+        azureContainerRegistry: '$(kv-containerRegistry)'
         dockerComposeFile: docker-compose.build.yml
         additionalDockerComposeFiles: |
           docker-compose.image.yml
         dockerComposeFileArgs: |
-          NEREID_ARTIFACT_REGISTRY_PATH=$(containerRegistry)/neptune/
+          NEREID_ARTIFACT_REGISTRY_PATH=$(kv-containerRegistry)/neptune/
         action: Build services
         additionalImageTags: >-
           $(Build.BuildNumber)-$(environment)
-
-          $(environment)
 
           $(nereidTag)
         includeLatestTag: true
@@ -166,17 +221,15 @@ stages:
       condition: eq(variables['buildNereid'], 'true')
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
-        azureContainerRegistry: '$(containerRegistry)'
+        azureContainerRegistry: '$(kv-containerRegistry)'
         dockerComposeFile: docker-compose.build.yml
         additionalDockerComposeFiles: |
           docker-compose.image.yml
         dockerComposeFileArgs: |
-          NEREID_ARTIFACT_REGISTRY_PATH=$(containerRegistry)/neptune/
+          NEREID_ARTIFACT_REGISTRY_PATH=$(kv-containerRegistry)/neptune/
         action: Push services
         additionalImageTags: >-
           $(Build.BuildNumber)-$(environment)
-
-          $(environment)
 
           $(nereidTag)
         includeLatestTag: true
@@ -192,73 +245,50 @@ stages:
       vmImage: 'windows-latest'
       demands: msbuild
     steps:
-    - task: AzureCLI@1
-      displayName: 'Azure CLI'
-      inputs:
-        azureSubscription: '$(azureSubscription)'
-        scriptLocation: inlineScript
-        inlineScript: |
-          call az storage account create --name $(storageAccountName) --resource-group $(azureApplicationTfStateResourceGroup) --location westus --sku Standard_LRS
-          
-          call az storage container create --name terraform --account-name $(storageAccountName)
-          
-    - task: TerraformInstaller@0
-      inputs:
-        terraformVersion: '0.14.11'
+    - checkout: self
+      fetchDepth: 0
 
-    - task: TerraformCLI@0
+    - task: AzureKeyVault@2
       inputs:
-        command: 'init'
-        backendType: 'azurerm'
-        backendServiceArm: '$(azureSubscription)'
-        #backendAzureRmSubscriptionId: 'a'
-        ensureBackend: true
-        backendAzureRmResourceGroupName: '$(azureApplicationTfStateResourceGroup)'
-        backendAzureRmResourceGroupLocation: 'WestUS2'
-        backendAzureRmStorageAccountName: '$(storageAccountName)'
-        backendAzureRmContainerName: 'terraform'
-        #backendAzureRmKey: 'd'
-        allowTelemetryCollection: true
+        azureSubscription: "$(azureSubscription)"
+        KeyVaultName: '$(spokeKeyVaultName)'
+        SecretsFilter: '*'
+        RunAsPreJob: true
 
-    - task: TerraformCLI@0
-      inputs:
-        command: 'plan'
-        environmentServiceName: '$(azureSubscription)'
-        commandOptions: |
-          -var "appInsightsName=$(appInsightsName)" 
+    - template: azure-pipelines/templates/terraform/terraform.yml@BuildTemplates 
+      parameters: 
+        ServiceConnectionName: "$(azureSubscription)"
+        TfStateStorageAccountName: "$(tfStateStorageAccountName)"
+        TfStateStorageAccountContainerName: "$(TfStateStorageAccountContainerName)"
+        TfStateStorageAccountResourceGroup: "$(azureApplicationTfStateResourceGroup)"
+        WorkingDirectory: './'
+        TerraformCommand: plan
+        TerraformCommandOptions: |
           -var "keyVaultName=$(keyVaultName)" 
-          -var "storageAccountName=$(storageAccountApplicationName)" 
+          -var "storageAccountName=$(storageAccountName)" 
           -var "resourceGroupName=$(resourceGroupName)" 
-          -var "dbServerName=$(dbServerName)" 
-          -var "aspNetEnvironment=$(aspNetEnvironment)" 
+          -var "dbServerName=$(kv-dbServerName)" 
+          -var "datadogApiKey=$(kv-datadogApiKey)" 
+          -var "datadogAppKey=$(kv-datadogAppKey)" 
           -var "databaseName=$(databaseName)" 
           -var "databaseEdition=$(databaseEdition)" 
           -var "databaseTier=$(databaseTier)" 
-          -var "sqlPassword=$(sqlPassword)" 
-          -var "sqlUsername=$(sqlUsername)" 
-          -var "azureClusterResourceGroup=$(azureClusterResourceGroup)" 
+          -var "sqlPassword=$(kv-sqlAdministratorPassword)" 
+          -var "sqlUsername=$(kv-sqlAdministratorUsername)" 
+          -var "azureClusterResourceGroup=$(kv-azureClusterResourceGroup)" 
+          -var "databaseResourceGroup=$(kv-databaseResourceGroup)" 
           -var "sqlApiUsername=$(sqlApiUsername)" 
           -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" 
-          -var "datadogApiKey=$(datadogApiKey)" 
-          -var "datadogAppKey=$(datadogAppKey)" 
           -var "domainWeb=$(domainWeb)" 
           -var "domainApi=$(domainApi)" 
           -var "domainWebMvc=$(domainWebMvc)" 
           -var "domainGeoserver=$(domainGeoserver)" 
           -var "environment=$(environment)" 
-          -var "storageAccountDevApplicationName=$(storageAccountDevApplicationName)" 
+          -var "storageAccountNameDev=$(storageAccountNameDev)" 
           -var "team=$(team)" 
           -var "projectNumber=$(projectNumber)" 
-        allowTelemetryCollection: true
-        publishPlanResults: 'tfplan'
-        
+          -var "elasticPoolName=$(kv-elasticPoolName)" 
 
-    - publish: 'tfplan'
-      artifact: plan
-      
-    - publish: 'neptune.tf'
-      artifact: terraform
-    
     - task: CopyFiles@2
       inputs:
         sourceFolder: 'charts/neptune'
@@ -278,33 +308,18 @@ stages:
         pathtoPublish: 'Neptune.GeoServer/data_dir'
       condition: and(succeeded(), eq(variables['deploy'], 'true'))
 
-- stage: BuildDB
-  displayName: Build DB
-  dependsOn: Test
-  condition: in(dependencies.Test.result, 'Succeeded', 'SucceededWithIssues', 'Skipped')
-  jobs:
-  - template: templates/dacpac-template.yml
-    parameters:
-      name: 'Database'
-      solutionFile: 'Neptune.Database/Neptune.Database.sqlproj'
-      additionalArgs: '/p:DSP=Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider'
-      publishPath: 'Neptune.Database/bin/Debug/Neptune.Database.dacpac'
-      artifactName: 'Database'
-
-
-
 - stage: DeployTerraform
   displayName: Deploy Terraform (with Approval)
   dependsOn: 
     - BuildWeb
     - BuildDB
-    - BuildNereid
     - BuildTerraform
+    - BuildNereid
   condition: |
     and
     (
-      in(dependencies.BuildWeb.result, 'Succeeded', 'SucceededWithIssues', 'Skipped'),
-      in(dependencies.BuildDB.result, 'Succeeded', 'SucceededWithIssues', 'Skipped'),
+      in(dependencies.BuildWeb.result, 'Succeeded', 'SucceededWithIssues'),
+      in(dependencies.BuildDB.result, 'Succeeded', 'SucceededWithIssues'),
       in(dependencies.BuildNereid.result, 'Succeeded', 'SucceededWithIssues', 'Skipped'),
       in(dependencies.BuildTerraform.result, 'Succeeded', 'SucceededWithIssues'),
       eq(variables['deploy'], 'true')
@@ -321,73 +336,28 @@ stages:
       runOnce:
         deploy:
           steps:
-          - download: current
-            artifact: terraform
+            - checkout: self
+              fetchDepth: 0
                   
-          - task: TerraformInstaller@0
-            inputs:
-              terraformVersion: '0.14.11'
+             # new
+            - template: azure-pipelines/templates/terraform/terraform.yml@BuildTemplates 
+              parameters: 
+                ServiceConnectionName: "$(azureSubscription)"
+                TfStateStorageAccountName: "$(tfStateStorageAccountName)"
+                TfStateStorageAccountContainerName: "$(TfStateStorageAccountContainerName)"
+                TfStateStorageAccountResourceGroup: "$(azureApplicationTfStateResourceGroup)"
+                WorkingDirectory: './'
+                TerraformCommand: apply
 
-          - task: TerraformCLI@0
-            inputs:
-              command: 'init'
-              workingDirectory: '$(Pipeline.Workspace)/terraform'
-              backendType: 'azurerm'
-              backendServiceArm: '$(azureSubscription)'
-              ensureBackend: true
-              backendAzureRmResourceGroupName: '$(azureApplicationTfStateResourceGroup)'
-              backendAzureRmResourceGroupLocation: 'WestUS2'
-              backendAzureRmStorageAccountName: '$(storageAccountName)'
-              backendAzureRmContainerName: 'terraform'
-              allowTelemetryCollection: true
-
-          - task: TerraformCLI@0
-            inputs:
-              command: 'apply'
-              workingDirectory: '$(Pipeline.Workspace)/terraform'
-              environmentServiceName: '$(azureSubscription)'
-              commandOptions: |
-                -var "appInsightsName=$(appInsightsName)" 
-                -var "keyVaultName=$(keyVaultName)" 
-                -var "storageAccountName=$(storageAccountApplicationName)" 
-                -var "resourceGroupName=$(resourceGroupName)" 
-                -var "dbServerName=$(dbServerName)" 
-                -var "aspNetEnvironment=$(aspNetEnvironment)" 
-                -var "databaseName=$(databaseName)" 
-                -var "databaseEdition=$(databaseEdition)" 
-                -var "databaseTier=$(databaseTier)" 
-                -var "sqlPassword=$(sqlPassword)" 
-                -var "sqlUsername=$(sqlUsername)" 
-                -var "azureClusterResourceGroup=$(azureClusterResourceGroup)" 
-                -var "sqlApiUsername=$(sqlApiUsername)" 
-                -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" 
-                -var "datadogApiKey=$(datadogApiKey)" 
-                -var "datadogAppKey=$(datadogAppKey)" 
-                -var "domainWeb=$(domainWeb)" 
-                -var "domainApi=$(domainApi)" 
-                -var "domainWebMvc=$(domainWebMvc)" 
-                -var "domainGeoserver=$(domainGeoserver)" 
-                -var "environment=$(environment)" 
-                -var "storageAccountDevApplicationName=$(storageAccountDevApplicationName)" 
-                -var "team=$(team)" 
-                -var "projectNumber=$(projectNumber)" 
-              allowTelemetryCollection: true
-
-          - task: TerraformCLI@0
-            displayName: 'Terraform output'
-            inputs:
-              command: 'output'
-              workingDirectory: '$(Pipeline.Workspace)/terraform'
-              
-          - bash: |
-              echo "##vso[task.setvariable variable=STORAGE_ACCOUNT_SAS_KEY;isOutput=true]$(TF_OUT_STORAGE_ACCOUNT_SAS_KEY)"
-              echo "##vso[task.setvariable variable=APPLICATION_STORAGE_ACCOUNT_KEY;isOutput=true]$(TF_OUT_APPLICATION_STORAGE_ACCOUNT_KEY)"
-              echo "##vso[task.setvariable variable=INSTRUMENTATION_KEY;isOutput=true]$(TF_OUT_INSTRUMENTATION_KEY)"
-              echo "##vso[task.setvariable variable=SQL_API_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_SQL_API_PASSWORD)"
-              echo "##vso[task.setvariable variable=SQL_GEOSERVER_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_SQL_GEOSERVER_PASSWORD)"
-              echo "##vso[task.setvariable variable=GEOSERVER_ADMIN_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_GEOSERVER_ADMIN_PASSWORD)"
-              echo "##vso[task.setvariable variable=HANGFIRE_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_HANGFIRE_PASSWORD)"
-          - bash: 'env | sort'
+            - bash: |
+                echo "##vso[task.setvariable variable=STORAGE_ACCOUNT_SAS_KEY;isOutput=true;issecret=true]$(TF_OUT_STORAGE_ACCOUNT_SAS_KEY)"
+                echo "##vso[task.setvariable variable=APPLICATION_STORAGE_ACCOUNT_KEY;isOutput=true;issecret=true]$(TF_OUT_APPLICATION_STORAGE_ACCOUNT_KEY)"
+                echo "##vso[task.setvariable variable=SQL_API_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_SQL_API_PASSWORD)"
+                echo "##vso[task.setvariable variable=SQL_GEOSERVER_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_SQL_GEOSERVER_PASSWORD)"
+                echo "##vso[task.setvariable variable=GEOSERVER_ADMIN_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_GEOSERVER_ADMIN_PASSWORD)"
+                echo "##vso[task.setvariable variable=HANGFIRE_PASSWORD;isOutput=true;issecret=true]$(TF_OUT_HANGFIRE_PASSWORD)"
+                echo "##vso[task.setvariable variable=DATABASE_ID;isOutput=true;issecret=true]$(TF_OUT_DATABASE_ID)"
+            - bash: 'env | sort'
 
 - stage: RestoreFiles
   displayName: Restore Files
@@ -403,19 +373,18 @@ stages:
       displayName: Restore QA Blob Storage
       pool:
         vmImage: 'windows-latest'
+      variables: 
+        APPLICATION_STORAGE_ACCOUNT_KEY: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.APPLICATION_STORAGE_ACCOUNT_KEY'] ]
       steps:
 
-      - task: AzureCLI@2
-        inputs:
-          azureSubscription: '$(azureSubscription)'
-          scriptType: 'ps'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            $startDate = [DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")
-            $expireDate = [DateTime]::UtcNow.AddHours(2).ToString("yyyy-MM-ddTHH:mm:ssZ")
-            $prodSasKey = az storage account generate-sas --account-name $(storageAccountProdApplicationName) --account-key $(storageAccountProdAccountKey) --expiry $expireDate --start $startDate --permissions acdfilprtuwxy --resource-types sco --services bfqt
-            $qaSasKey = az storage account generate-sas --account-name $(storageAccountApplicationName) --account-key $(storageAccountQaAccountKey) --expiry $expireDate --start $startDate --permissions acdfilprtuwxy --resource-types sco --services bfqt
-            azcopy sync ("https://$(storageAccountProdApplicationName).blob.core.windows.net/file-resource/?" + $prodSasKey) ("https://$(storageAccountApplicationName).blob.core.windows.net/file-resource/?" + $qaSasKey) --recursive --from-to BlobBlob
+      - template: azure-pipelines/templates/blob-storage-restore/blob-storage-restore.yml@BuildTemplates 
+        parameters:
+          subscription: '$(azureSubscription)'
+          containers: '*'
+          fromStorageAccountName: '$(storageAccountProdApplicationName)'
+          fromStorageAccountKey: '$(storageAccountProdAccountKey)'
+          toStorageAccountName: '$(storageAccountName)'
+          toStorageAccountKey: '$(APPLICATION_STORAGE_ACCOUNT_KEY)'
             
 
 - stage: DeployDB
@@ -432,6 +401,10 @@ stages:
     pool:
       vmImage: 'windows-latest'
       demands: msbuild
+    variables: 
+      SQL_API_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.SQL_API_PASSWORD'] ]
+      SQL_GEOSERVER_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.SQL_GEOSERVER_PASSWORD'] ]
+      DATABASE_ID: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.DATABASE_ID'] ]
     # creates an environment if it doesn't exist
     environment: $(Environment)
     strategy:
@@ -441,6 +414,13 @@ stages:
           steps:
           - download: current
             artifact: Database 
+
+          - task: AzureKeyVault@2
+            inputs:
+              azureSubscription: "$(azureSubscription)"
+              KeyVaultName: '$(spokeKeyVaultName)'
+              SecretsFilter: '*'
+              RunAsPreJob: true
           
           - task: DownloadPipelineArtifact@2
             inputs:
@@ -452,107 +432,42 @@ stages:
               path: '$(Pipeline.Workspace)/bacpac'
             condition: and(succeeded(), eq(variables['restoreDatabase'], true))
 
-          - task: SqlAzureDacpacDeployment@1
-            displayName: 'Azure SQL InlineSqlTask - Clean Up Old QA DB'
-            inputs:
-              azureSubscription: '$(azureSubscription)'
-              ServerName: '$(dbServer)' 
-              DatabaseName: master
-              SqlUsername: '$(sqlUsername)'
-              SqlPassword: '$(sqlPassword)'
-              deployType: InlineSqlTask
-              SqlInline: |
-                if exists (select * from sys.databases where name = '$(databaseName)_qa')
-                begin
-                  drop database [$(databaseName)_qa]
-                end  
-                if exists (select * from sys.databases where name = '$(databaseName)_prod')
-                begin
-                  drop database [$(databaseName)_prod]
-                end          
-                
-            condition: and(succeeded(), eq(variables['restoreDatabase'], true))
+          - template: azure-pipelines/templates/database/db-deploy-template.yml@BuildTemplates 
+            parameters:
+              subscription: '$(azureSubscription)'
+              serverName: '$(kv-dbServerName).database.windows.net'
+              databaseName: '$(databaseName)'
+              databaseEdition: '$(databaseEdition)'
+              elasticPoolName: '$(kv-elasticPoolName)'
+              sqlAdministratorUsername: '$(kv-sqlAdministratorUsername)'
+              sqlAdministratorPassword: '$(kv-sqlAdministratorPassword)'
+              sqlApiUsername: '$(sqlApiUsername)'
+              bacpacFile: '$(Pipeline.Workspace)/bacpac/$(databaseName).bacpac'
+              dacpacFile: '$(Pipeline.Workspace)/Database/Neptune.Database.dacpac'
+              projectResourceGroupName: '$(resourceGroupName)'
+              databaseID: '$(DATABASE_ID)'
 
-          - task: SqlAzureDacpacDeployment@1
-            displayName: 'Azure SQL InlineSqlTask - Import Prod BacPac'
-            inputs:
-              azureSubscription: '$(azureSubscription)'
-              ServerName: '$(dbServer)' 
-              DatabaseName: '$(databaseName)_prod'
-              SqlUsername: '$(sqlUsername)'
-              SqlPassword: '$(sqlPassword)'
-              DeploymentAction: Import
-              BacpacFile: '$(Pipeline.Workspace)/bacpac/$(databaseName).bacpac'
-              AdditionalArguments: '/p:DatabaseEdition=$(databaseEdition) /p:DatabaseServiceObjective=$(databaseTier)'
-            condition: and(succeeded(), eq(variables['restoreDatabase'], true))
+          - template: azure-pipelines/templates/database/db-user.yml@BuildTemplates 
+            parameters:
+              subscription: '$(azureSubscription)'
+              serverName: '$(kv-dbServerName).database.windows.net'
+              databaseName: '$(databaseName)'
+              sqlAdministratorUsername: '$(kv-sqlAdministratorUsername)'
+              sqlAdministratorPassword: '$(kv-sqlAdministratorPassword)'
+              desiredSqlUsername: '$(sqlApiUsername)'
+              desiredSqlPassword: '$(SQL_API_PASSWORD)'
+              roles: 'db_owner'
 
-          - task: SqlAzureDacpacDeployment@1
-            displayName: 'Azure SQL DacpacTask'
-            inputs:
-              azureSubscription: '$(azureSubscription)'
-              ServerName: '$(dbServer)' 
-              DatabaseName: '$(databaseName)_prod'
-              SqlUsername: '$(sqlUsername)'
-              SqlPassword: '$(sqlPassword)'
-              DacpacFile: '$(Pipeline.Workspace)/Database/Neptune.Database.dacpac'
-              AdditionalArguments: '/p:GenerateSmartDefaults=true /p:BlockOnPossibleDataLoss=false /p:DropObjectsNotInSource=true /p:CommandTimeout=600 /TargetTimeout:600 /p:DatabaseEdition=$(databaseEdition) /p:DatabaseServiceObjective=$(databaseTier)'
-            condition: and(succeeded(), eq(variables['restoreDatabase'], true))
-
-          - task: SqlAzureDacpacDeployment@1
-            displayName: 'Azure SQL DacpacTask NoRestore'
-            inputs:
-              azureSubscription: '$(azureSubscription)'
-              ServerName: '$(dbServer)' 
-              DatabaseName: '$(databaseName)'
-              SqlUsername: '$(sqlUsername)'
-              SqlPassword: '$(sqlPassword)'
-              DacpacFile: '$(Pipeline.Workspace)/Database/Neptune.Database.dacpac'
-              AdditionalArguments: '/p:GenerateSmartDefaults=true /p:BlockOnPossibleDataLoss=false /p:DropObjectsNotInSource=true /p:CommandTimeout=600 /TargetTimeout:600 /p:DatabaseEdition=$(databaseEdition) /p:DatabaseServiceObjective=$(databaseTier)'
-            condition: and(succeeded(), eq(variables['restoreDatabase'], false))
-
-          - task: SqlAzureDacpacDeployment@1
-            displayName: 'Azure SQL InlineSqlTask - Swap DBs'
-            inputs:
-              azureSubscription: '$(azureSubscription)'
-              ServerName: '$(dbServer)' 
-              DatabaseName: master
-              SqlUsername: '$(sqlUsername)'
-              SqlPassword: '$(sqlPassword)'
-              deployType: InlineSqlTask
-              SqlInline: |
-                ALTER DATABASE [$(databaseName)] MODIFY NAME = [$(databaseName)_qa]
-                GO                
-                ALTER DATABASE [$(databaseName)_prod] MODIFY NAME = [$(databaseName)]
-                GO
-                drop database [$(databaseName)_qa]
-              
-            condition: and(succeeded(), eq(variables['restoreDatabase'], true))
-
-          - task: SqlAzureDacpacDeployment@1
-            displayName: 'Azure SQL InlineSqlTask - Rename Users'
-            inputs:
-              azureSubscription: '$(azureSubscription)'
-              ServerName: '$(dbServer)' 
-              DatabaseName: $(databaseName)
-              SqlUsername: '$(sqlUsername)'
-              SqlPassword: '$(sqlPassword)'
-              deployType: InlineSqlTask
-              SqlInline: |
-                if not exists (select * from sys.database_principals where name = N'$(sqlApiUsername)')
-                  BEGIN
-                    CREATE USER [$(sqlApiUsername)] FOR LOGIN [$(sqlApiUsername)] WITH DEFAULT_SCHEMA=[dbo]
-                    EXEC sp_addrolemember 'db_datawriter', '$(sqlApiUsername)'
-                    EXEC sp_addrolemember 'db_datareader', '$(sqlApiUsername)'
-                    GRANT EXECUTE ON SCHEMA::dbo TO $(sqlApiUsername)
-                  END
-                                
-                if not exists (select * from sys.database_principals where name = N'$(sqlGeoserverUsername)')
-                  BEGIN
-                    CREATE USER [$(sqlGeoserverUsername)] FOR LOGIN [$(sqlGeoserverUsername)] WITH DEFAULT_SCHEMA=[dbo]
-                    EXEC sp_addrolemember 'db_datareader', '$(sqlGeoserverUsername)'              
-                  END
-            condition: succeeded()
-
+          - template: azure-pipelines/templates/database/db-user.yml@BuildTemplates 
+            parameters:
+              subscription: '$(azureSubscription)'
+              serverName: '$(kv-dbServerName).database.windows.net'
+              databaseName: '$(databaseName)'
+              sqlAdministratorUsername: '$(kv-sqlAdministratorUsername)'
+              sqlAdministratorPassword: '$(kv-sqlAdministratorPassword)'
+              desiredSqlUsername: '$(sqlGeoserverUsername)'
+              desiredSqlPassword: '$(SQL_GEOSERVER_PASSWORD)'
+              roles: 'db_datareader'
 
 - stage: DeployGeoServer
   displayName: Deploy GeoServer
@@ -578,16 +493,14 @@ stages:
           steps:        
           - download: current
             artifact: GeoServerArtifacts
-          - bash: |
-              echo "variable value is $(STORAGE_ACCOUNT_SAS_KEY)"
-             
+
           - task: AzureCLI@2
             inputs:
               azureSubscription: '$(azureSubscription)'
               scriptType: 'ps'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                azcopy copy "$(Pipeline.Workspace)\GeoServerArtifacts\*" "https://$(storageAccountApplicationName).file.core.windows.net/geoserver/data_dir/$(STORAGE_ACCOUNT_SAS_KEY)" --from-to=LocalFile --recursive
+                azcopy copy "$(Pipeline.Workspace)\GeoServerArtifacts\*" "https://$(storageAccountName).file.core.windows.net/geoserver/data_dir/$(STORAGE_ACCOUNT_SAS_KEY)" --from-to=LocalFile --recursive
 
 - stage: DeployNereid
   displayName: Deploy Nereid
@@ -618,19 +531,17 @@ stages:
               scriptType: 'ps'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                azcopy copy "$(Build.SourcesDirectory)\*" "https://$(storageAccountApplicationName).file.core.windows.net/nereid/$(STORAGE_ACCOUNT_SAS_KEY)" --from-to=LocalFile --recursive
+                azcopy copy "$(Build.SourcesDirectory)\*" "https://$(storageAccountName).file.core.windows.net/nereid/$(STORAGE_ACCOUNT_SAS_KEY)" --from-to=LocalFile --recursive
 
 - stage: DeployHelm
   displayName: Deploy Helm
   dependsOn: 
-  - DeployNereid
   - DeployGeoServer
   - DeployDB
   - DeployTerraform
   condition: |
     and
     (
-      in(dependencies.DeployNereid.result, 'Succeeded', 'SucceededWithIssues', 'Skipped'),
       in(dependencies.DeployGeoServer.result, 'Succeeded', 'SucceededWithIssues'),
       in(dependencies.DeployDB.result, 'Succeeded', 'SucceededWithIssues'),
       in(dependencies.DeployTerraform.result, 'Succeeded', 'SucceededWithIssues'),
@@ -642,7 +553,6 @@ stages:
       vmImage: 'ubuntu-latest'
     variables: 
       APPLICATION_STORAGE_ACCOUNT_KEY: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.APPLICATION_STORAGE_ACCOUNT_KEY'] ]
-      INSTRUMENTATION_KEY: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.INSTRUMENTATION_KEY'] ]
       SQL_API_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.SQL_API_PASSWORD'] ]
       SQL_GEOSERVER_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.SQL_GEOSERVER_PASSWORD'] ]
       GEOSERVER_ADMIN_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.GEOSERVER_ADMIN_PASSWORD'] ]
@@ -650,10 +560,64 @@ stages:
     # creates an environment if it doesn't exist
     environment: $(Environment)
     strategy:
-      # default deployment strategy, more coming...
       runOnce:
+        preDeploy:
+          steps:
+            - task: AzureKeyVault@2
+              inputs:
+                azureSubscription: "$(azureSubscription)"
+                KeyVaultName: '$(spokeKeyVaultName)'
+                SecretsFilter: 'kv-AtlassianClientSecret'
+                RunAsPreJob: true
+
+            - template: azure-pipelines/templates/azure-jira-update/update-jira.yml@BuildTemplates 
+              parameters: 
+                JiraState: "Pending"
+                JiraEnvironment: "$(aspNetEnvironment)"
+                AtlassianClientSecret: "$(kv-AtlassianClientSecret)"
+        on:
+          failure:
+            steps:
+            - task: AzureKeyVault@2
+              inputs:
+                azureSubscription: "$(azureSubscription)"
+                KeyVaultName: '$(spokeKeyVaultName)'
+                SecretsFilter: 'kv-AtlassianClientSecret'
+                RunAsPreJob: true
+
+            - template: azure-pipelines/templates/azure-jira-update/update-jira.yml@BuildTemplates 
+              parameters: 
+                JiraState: "Failed"
+                JiraEnvironment: "$(aspNetEnvironment)"
+                AtlassianClientSecret: "$(kv-AtlassianClientSecret)"
+          success: 
+            steps:
+            - task: AzureKeyVault@2
+              inputs:
+                azureSubscription: "$(azureSubscription)"
+                KeyVaultName: '$(spokeKeyVaultName)'
+                SecretsFilter: 'kv-AtlassianClientSecret'
+                RunAsPreJob: true
+
+            - template: azure-pipelines/templates/azure-jira-update/update-jira.yml@BuildTemplates 
+              parameters: 
+                JiraState: "Successful"
+                JiraEnvironment: "$(aspNetEnvironment)"
+                AtlassianClientSecret: "$(kv-AtlassianClientSecret)"
         deploy:
           steps:
+          - task: AzureKeyVault@2
+            inputs:
+              azureSubscription: "$(azureSubscription)"
+              KeyVaultName: '$(spokeKeyVaultName)'
+              SecretsFilter: '*'
+              RunAsPreJob: true
+
+          - template: azure-pipelines/templates/azure-jira-update/update-jira.yml@BuildTemplates 
+            parameters: 
+              JiraState: "InProgress"
+              JiraEnvironment: "$(aspNetEnvironment)"
+              AtlassianClientSecret: "$(kv-AtlassianClientSecret)"
           - download: current
             artifact: ChartArtifacts
                         
@@ -668,8 +632,8 @@ stages:
             inputs:
               connectionType: Azure Resource Manager
               azureSubscriptionEndpoint: '$(azureSubscription)'
-              azureResourceGroup: '$(azureClusterResourceGroup)'
-              kubernetesCluster: '$(kubernetesCluster)'
+              azureResourceGroup: '$(kv-azureClusterResourceGroup)'
+              kubernetesCluster: '$(kv-kubernetesCluster)'
               command: login
 
           - task: HelmDeploy@0
@@ -677,8 +641,8 @@ stages:
             inputs:
               connectionType: Azure Resource Manager
               azureSubscription: '$(azureSubscription)'
-              azureResourceGroup: '$(azureClusterResourceGroup)'
-              kubernetesCluster: '$(kubernetesCluster)'
+              azureResourceGroup: '$(kv-azureClusterResourceGroup)'
+              kubernetesCluster: '$(kv-kubernetesCluster)'
               command: 'dependency'
               arguments: 'update $(Pipeline.Workspace)/ChartArtifacts/chart'
 
@@ -687,8 +651,8 @@ stages:
             inputs:
               connectionType: Azure Resource Manager
               azureSubscription: '$(azureSubscription)'
-              azureResourceGroup: '$(azureClusterResourceGroup)'
-              kubernetesCluster: '$(kubernetesCluster)'
+              azureResourceGroup: '$(kv-azureClusterResourceGroup)'
+              kubernetesCluster: '$(kv-kubernetesCluster)'
               namespace: '$(team)'
               arguments: '--create-namespace'
               command: upgrade
@@ -700,40 +664,39 @@ stages:
                 global.domains.web="$(domainWeb)"
                 global.domains.webmvc="$(domainWebMvc)"
                 global.domains.geoserver="$(domainGeoserver)"
-                global.env.appInsightsInstrumentationKey="$(INSTRUMENTATION_KEY)"
                 global.env.name="$(Environment)"
-                global.env.dbServer=$(dbServer)
+                global.env.dbServer=$(kv-dbServerName).database.windows.net
                 global.env.databaseName=$(databaseName)
                 global.env.sqlUsername=$(sqlApiUsername)
                 global.env.sqlGeoserverUsername=$(sqlGeoserverUsername)
                 global.secrets.geoserverSqlServerPassword="$(SQL_GEOSERVER_PASSWORD)"
                 global.secrets.geoserverAdminPassword="$(GEOSERVER_ADMIN_PASSWORD)"
-                global.secrets.applicationStorageAccountName="$(storageAccountApplicationName)"
+                global.secrets.applicationStorageAccountName="$(storageAccountName)"
                 global.secrets.applicationStorageAccountKey="$(APPLICATION_STORAGE_ACCOUNT_KEY)"
                 global.secrets.hangfirePassword="$(HANGFIRE_PASSWORD)"
                 global.secrets.keystoneOpenIDClientSecret="$(keystoneOpenIDClientSecret)"
                 global.secrets.recaptchaV3SiteKey="$(recaptchaV3SiteKey)"
                 global.secrets.recaptchaV3SecretKey="$(recaptchaV3SecretKey)"
                 global.secrets.apiSqlPassword=$(SQL_API_PASSWORD)
-                global.secrets.sendGridApiKey="$(SendGridApiKey)"
+                global.secrets.sendGridApiKey="$(kv-sendGridApiKey)"
                 api.image.tag="$(Build.BuildNumber)-$(environment)"
-                api.image.repository="$(containerRegistry)/neptune/api"
+                api.image.repository="$(kv-containerRegistry)/neptune/api"
                 web.image.tag="$(Build.BuildNumber)-$(environment)"
-                web.image.repository="$(containerRegistry)/neptune/web"
+                web.image.repository="$(kv-containerRegistry)/neptune/web"
                 webmvc.image.tag="$(Build.BuildNumber)-$(environment)"
-                webmvc.image.repository="$(containerRegistry)/neptune/webmvc"
+                webmvc.image.repository="$(kv-containerRegistry)/neptune/webmvc"
                 gdalapi.image.tag="$(Build.BuildNumber)-$(environment)"
-                gdalapi.image.repository="$(containerRegistry)/neptune/gdalapi"
+                gdalapi.image.repository="$(kv-containerRegistry)/neptune/gdalapi"
                 qgisapi.image.tag="$(Build.BuildNumber)-$(environment)"
-                qgisapi.image.repository="$(containerRegistry)/neptune/qgisapi"
-                nereid.image.repository="$(containerRegistry)/neptune/nereid"
+                qgisapi.image.repository="$(kv-containerRegistry)/neptune/qgisapi"
+                nereid.image.repository="$(kv-containerRegistry)/neptune/nereid"
                 nereid.image.tag="$(nereidTag)"
-                nereid-tests.image.repository="$(containerRegistry)/neptune/nereid-tests"
+                nereid-tests.image.repository="$(kv-containerRegistry)/neptune/nereid-tests"
                 nereid-tests.image.tag="$(nereidTag)"
-                nereid-redis.image.repository="$(containerRegistry)/neptune/redis"
+                nereid-redis.image.repository="$(kv-containerRegistry)/neptune/redis"
                 nereid-redis.image.tag="$(nereidTag)"
-                nereid-flower.image.repository="$(containerRegistry)/neptune/flower"
+                nereid-flower.image.repository="$(kv-containerRegistry)/neptune/flower"
                 nereid-flower.image.tag="$(nereidTag)"
-                nereid-celeryworker.image.repository="$(containerRegistry)/neptune/celeryworker"
+                nereid-celeryworker.image.repository="$(kv-containerRegistry)/neptune/celeryworker"
                 nereid-celeryworker.image.tag="$(nereidTag)"
               force: false

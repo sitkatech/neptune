@@ -26,12 +26,6 @@ spec:
       - name: secrets
         secret:
           secretName: neptune-webmvc-secrets
-      # - name: certs
-      #   hostPath:
-      #     # directory location on host
-      #     path: /run/desktop/mnt/host/c/Users/stewart.gordon/.aspnet/https
-      #     # this field is optional
-      #     type: Directory
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -43,7 +37,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.global.env.name }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -85,9 +79,6 @@ spec:
           - name: secrets
             mountPath: /app/secrets
             readOnly: true
-          # - name: certs
-          #   mountPath: /https
-          #   readOnly: true
       terminationGracePeriodSeconds: 131
       {{- with .Values.nodeSelector }}
       nodeSelector:
