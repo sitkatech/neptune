@@ -258,6 +258,7 @@ resource "azurerm_mssql_database" "database" {
   sku_name       = var.databaseTier
   zone_redundant = false
   elastic_pool_id = data.azurerm_mssql_elasticpool.spoke.id
+  enclave_type = "VBS"
 
   long_term_retention_policy {
     weekly_retention  = "P3M"
