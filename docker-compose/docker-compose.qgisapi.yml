@@ -1,5 +1,3 @@
-
-
 services:
   neptune.qgisapi:
     image: neptune/qgisapi

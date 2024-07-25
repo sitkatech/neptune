@@ -1,5 +1,3 @@
-
-
 services:
   neptune.webmvc:
     build:
@@ -78,7 +76,10 @@ services:
       - "8231:8080"
 
   neptune.qgisapi:
+    image: neptune/qgisapi
     build:
+      context: ..
+      dockerfile: Neptune.QGISAPI/Dockerfile
       args:
         source: .
     hostname: qgisapi
@@ -91,29 +92,24 @@ services:
 
   geoserver:
     container_name: neptune_geoserver
-    image: kartoza/geoserver:2.16.2
-    entrypoint: /bin/bash /opt/geoserver/data_dir/sitka-geoserver-config/scripts/sitka-entry-point.sh
+    image: kartoza/geoserver:2.25.2
     environment:
       - ENABLE_JSONP=true
       - CATALINA_OPTS=-DALLOW_ENV_PARAMETRIZATION=true
       - STABLE_EXTENSIONS=sqlserver-plugin
-      # default login is admin unless a different value is specified here
+      - TOMCAT_EXTRAS=false
+      - ROOT_WEBAPP_REDIRECT=true
+      - SAMPLE_DATA=false
       - GEOSERVER_ADMIN_USER=admin
-      # default password is geoserver unless specified differently in the secret
-      - GEOSERVER_ADMIN_PASSWORD_SECRET=/run/secrets/GeoserverAdminPassword.txt
-      - GEOSERVER_SQL_SERVER_PASSWORD_SECRET=/run/secrets/GeoserverSqlServerPassword.txt
-      - GEOSERVER_CONFIG_DIRECTORY=/opt/geoserver/data_dir
+      - GEOSERVER_ADMIN_PASSWORD=${GeoserverAdminPassword}
     ports:
       - 127.0.0.1:8780:8080
     volumes:
       - c:/git/sitkatech/neptune/Neptune.GeoServer/data_dir:/opt/geoserver/data_dir
-    secrets:
-      - GeoserverSqlServerPassword.txt
-      - GeoserverAdminPassword.txt
 
   neptune.celeryworker:
     container_name: nereid_celeryworker
-    image: esacontainers.azurecr.io/neptune/celeryworker:v0.10.1
+    image: containersesaqa.azurecr.io/neptune/celeryworker:v0.10.1
     environment:
       CELERY_BROKER_URL: redis://nereid_redis:6379/0
       CELERY_RESULT_BACKEND: redis://nereid_redis:6379/0
@@ -124,14 +120,14 @@ services:
 
   neptune.flower:
     container_name: nereid_flower
-    image: esacontainers.azurecr.io/neptune/flower:v0.10.1
+    image: containersesaqa.azurecr.io/neptune/flower:v0.10.1
     environment:
       CELERY_BROKER_URL: redis://nereid_redis:6379/0
       CELERY_RESULT_BACKEND: redis://nereid_redis:6379/0
 
   neptune.nereid:
     container_name: nereid
-    image: esacontainers.azurecr.io/neptune/nereid:v0.10.1
+    image: containersesaqa.azurecr.io/neptune/nereid:v0.10.1
     hostname: nereid
     command: bash /start-reload.sh
     volumes:
@@ -145,7 +141,7 @@ services:
 
   neptune.nereid-tests:
     container_name: nereid_tests
-    image: esacontainers.azurecr.io/neptune/nereid-tests:v0.10.1
+    image: containersesaqa.azurecr.io/neptune/nereid-tests:v0.10.1
     environment:
       CELERY_BROKER_URL: redis://nereid_redis:6379/0
       CELERY_RESULT_BACKEND: redis://nereid_redis:6379/0
@@ -155,11 +151,4 @@ services:
 
   neptune.redis:
     container_name: nereid_redis
-    image: esacontainers.azurecr.io/neptune/redis:v0.10.1
-
-secrets:
-  GeoserverSqlServerPassword.txt:
-    file: C:\Sitka\Neptune\Geoserver\GeoserverSqlServerPassword.txt
-      # using "file:"  allows you to mimic docker secrets on your dev machine by pointing to a plaintext file
-  GeoserverAdminPassword.txt:
-    file: C:\Sitka\Neptune\Geoserver\GeoserverAdminPassword.txt
+    image: containersesaqa.azurecr.io/neptune/redis:v0.10.1

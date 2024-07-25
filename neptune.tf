@@ -435,7 +435,7 @@ resource "azurerm_key_vault_secret" "sqlApiUsername" {
    depends_on = [
     azurerm_key_vault_access_policy.thisPipeline
   ]
- }
+}
 
 resource "azurerm_key_vault_secret" "sqlApiPassword" {
   name                         = "sqlApiPassword"
@@ -542,9 +542,7 @@ resource "datadog_synthetics_test" "api_test" {
       renotify_interval = 120
     }
   }
-  #email subject, attach url in place of var.domainApi
   name    = "${var.environment} - https://${var.domainApi}/healthz API test"
-  #email body
   message = "Notify @rlee@esassoc.com @sgordon@esassoc.com @team-${var.team}${var.environment == "qa" ? "-qa" : ""}"
   tags    = ["env:${var.environment}", "managed:terraformed", "team:${var.team}"]
 
@@ -579,10 +577,8 @@ resource "datadog_synthetics_test" "web_test" {
       renotify_interval = 120
     }
   }
-  #email subject, attach url in place of var.domainWeb
-  name    = "${var.environment} - https://${var.domainWeb} Web test"
-  #email body
-  message = "Notify @rlee@esassoc.com @sgordon@esassoc.com  @team-${var.team}${var.environment == "qa" ? "-qa" : ""}"
+  name    = "${var.environment} - ${var.domainWeb} Web test"
+  message = "Notify @rlee@esassoc.com @sgordon@esassoc.com @team-${var.team}${var.environment == "qa" ? "-qa" : ""}"
   tags    = ["env:${var.environment}", "managed:terraformed", "team:${var.team}"]
 
   status = "live"
@@ -593,7 +589,7 @@ resource "datadog_synthetics_test" "geoserver_test" {
   subtype = "http"
   request_definition {
     method = "GET"
-    url    = "https://${var.domainGeoserver}/geoserver/web/"
+    url    = "https://${var.domainGeoserver}/geoserver/web/wicket/resource/org.geoserver.web.GeoServerBasePage/img/logo.png"
   }
   request_headers = {
     Content-Type   = "application/json"
@@ -616,9 +612,7 @@ resource "datadog_synthetics_test" "geoserver_test" {
       renotify_interval = 120
     }
   }
-  #email subject, attach url in place of var.domainGeoserver
   name    = "${var.environment} - https://${var.domainWeb} Geoserver test"
-  #email body
   message = "Notify @rlee@esassoc.com @sgordon@esassoc.com  @team-${var.team}${var.environment == "qa" ? "-qa" : ""}"
   tags    = ["env:${var.environment}", "managed:terraformed", "team:${var.team}"]
   status = "live"
