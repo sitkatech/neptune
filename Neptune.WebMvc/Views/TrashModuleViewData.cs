@@ -47,14 +47,14 @@ namespace Neptune.WebMvc.Views
 
         private LtInfoMenuItem BuildResultsMenu(Person currentPerson)
         {
-            return new LtInfoMenuItem(SitkaRoute<HomeController>.BuildUrlFromExpression(LinkGenerator, x => x.Index()), "Results", true, true, null);
+            return new LtInfoMenuItem(SitkaRoute<TrashHomeController>.BuildUrlFromExpression(LinkGenerator, x => x.Index()), "Results", true, true, null);
         }
 
         private LtInfoMenuItem BuildManageMenu(Person currentPerson)
         {
             var manageMenu = new LtInfoMenuItem("Manage");
 
-            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<WebMvc.Controllers.HomeController>(LinkGenerator, x => x.ManageHomePageImages()), currentPerson, "Homepage Configuration", "Group1"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(LinkGenerator, x => x.ManageHomePageImages()), currentPerson, "Homepage Configuration", "Group1"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NeptunePageController>(LinkGenerator, x => x.Index()), currentPerson, "Page Content", "Group1"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldDefinitionController>(LinkGenerator, x => x.Index()), currentPerson, "Custom Labels & Definitions", "Group1"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<UserController>(LinkGenerator, x => x.Index()), currentPerson, "Users", "Group1"));
