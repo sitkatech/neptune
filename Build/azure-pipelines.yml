@@ -13,7 +13,7 @@ variables:
   keyVaultName: 'neptune-keyvault-$(Environment)'
   storageAccountName: 'neptuneapp$(Environment)'
   storageAccountNameProd: 'neptuneappprod'
-  storageAccountNameDev: 'neptuneappdev'
+  # storageAccountNameDev: 'neptuneappdev'
 
   databaseName: 'NeptuneDB'
   databaseEdition: 'Standard'
