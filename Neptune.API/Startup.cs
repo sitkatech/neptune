@@ -1,8 +1,5 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
+﻿using Hangfire;
+using Hangfire.SqlServer;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,57 +8,39 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
-using Neptune.API.Services;
-using Neptune.API.Services.Telemetry;
-using Neptune.EFModels.Entities;
-using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.DependencyCollector;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
-using ILogger = Serilog.ILogger;
-using NetTopologySuite.Geometries;
-using NetTopologySuite.IO.Converters;
-using System.Text.Json.Serialization;
-using System.Text.Json;
+using Neptune.API.Services;
+using Neptune.API.Services.Filter;
 using Neptune.Common.Email;
 using Neptune.Common.JsonConverters;
-using SendGrid.Extensions.DependencyInjection;
-using Serilog.Sinks.ApplicationInsights.TelemetryConverters;
-using Hangfire;
-using Hangfire.SqlServer;
-using Neptune.API.Services.Filter;
 using Neptune.Common.Services;
 using Neptune.Common.Services.GDAL;
+using Neptune.EFModels.Entities;
 using Neptune.Jobs;
 using Neptune.Jobs.Hangfire;
 using Neptune.Jobs.Services;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO.Converters;
+using SendGrid.Extensions.DependencyInjection;
+using Serilog;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading;
+using ILogger = Serilog.ILogger;
 
 namespace Neptune.API
 {
     public class Startup
     {
-        private readonly TelemetryClient _telemetryClient;
         private readonly IWebHostEnvironment _environment;
         private readonly string _instrumentationKey;
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
             Configuration = configuration;
             _environment = environment;
-
-            _instrumentationKey = Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
-
-            if (!string.IsNullOrWhiteSpace(_instrumentationKey))
-            {
-                _telemetryClient = new TelemetryClient(TelemetryConfiguration.CreateDefault())
-                {
-                    InstrumentationKey = _instrumentationKey
-                };
-            }
-            else
-            {
-                _telemetryClient = new TelemetryClient(TelemetryConfiguration.CreateDefault());
-            }
         }
 
         public IConfiguration Configuration { get; }
@@ -69,7 +48,6 @@ namespace Neptune.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplicationInsightsTelemetry(_instrumentationKey);
             services.AddControllers(options =>
                 {
                     options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
@@ -187,9 +165,6 @@ namespace Neptune.API
                 return httpClientHandler;
             });
 
-            services.AddSingleton<ITelemetryInitializer, CloudRoleNameTelemetryInitializer>();
-            services.AddSingleton<ITelemetryInitializer, UserInfoTelemetryInitializer>();
-
             var logger = GetSerilogLogger();
             services.AddSingleton(logger);
 
@@ -263,8 +238,6 @@ namespace Neptune.API
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.Use(TelemetryHelper.PostBodyTelemetryMiddleware);
-
             #region Hangfire
             app.UseHangfireDashboard("/hangfire", new DashboardOptions()
             {
@@ -294,20 +267,9 @@ namespace Neptune.API
             });
 
             applicationLifetime.ApplicationStopping.Register(OnShutdown);
-
-            var modules = app.ApplicationServices.GetServices<ITelemetryModule>();
-            var dependencyModule = modules.OfType<DependencyTrackingTelemetryModule>().FirstOrDefault();
-
-            if (dependencyModule != null)
-            {
-                var domains = dependencyModule.ExcludeComponentCorrelationHttpHeadersOnDomains;
-                domains.Add("core.windows.net");
-                domains.Add("10.0.75.1");
-            }
         }
         private void OnShutdown()
         {
-            _telemetryClient.Flush();
             Thread.Sleep(1000);
         }
 
@@ -317,11 +279,6 @@ namespace Neptune.API
             var serilogLogger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
                 .WriteTo.Console(outputTemplate: outputTemplate);
-
-            if (!_environment.IsDevelopment())
-            {
-                serilogLogger.WriteTo.ApplicationInsights(_telemetryClient, new TraceTelemetryConverter());
-            }
 
             return serilogLogger.CreateLogger();
         }
