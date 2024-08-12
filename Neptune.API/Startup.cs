@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Neptune.API.Services;
 using Neptune.API.Services.Filter;
 using Neptune.Common.Email;
@@ -29,7 +28,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
-using ILogger = Serilog.ILogger;
+using LogHelper = Neptune.API.Services.Logging.LogHelper;
 
 namespace Neptune.API
 {
@@ -165,8 +164,6 @@ namespace Neptune.API
                 return httpClientHandler;
             });
 
-            var logger = GetSerilogLogger();
-            services.AddSingleton(logger);
 
             services.AddTransient(s => new KeystoneService(s.GetService<IHttpContextAccessor>(), keystoneHost));
 
@@ -210,9 +207,14 @@ namespace Neptune.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime, ILoggerFactory loggerFactory, ILogger logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
         {
-            loggerFactory.AddSerilog(logger);
+            app.UseSerilogRequestLogging(opts =>
+            {
+                opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
+                opts.GetLevel = LogHelper.CustomGetLevel;
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -271,16 +273,6 @@ namespace Neptune.API
         private void OnShutdown()
         {
             Thread.Sleep(1000);
-        }
-
-        private ILogger GetSerilogLogger()
-        {
-            var outputTemplate = $"[{_environment.EnvironmentName}] {{Timestamp:yyyy-MM-dd HH:mm:ss zzz}} {{Level}} | {{RequestId}}-{{SourceContext}}: {{Message}}{{NewLine}}{{Exception}}";
-            var serilogLogger = new LoggerConfiguration()
-                .ReadFrom.Configuration(Configuration)
-                .WriteTo.Console(outputTemplate: outputTemplate);
-
-            return serilogLogger.CreateLogger();
         }
     }
 }

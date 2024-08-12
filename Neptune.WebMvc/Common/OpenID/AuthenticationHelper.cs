@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Neptune.Common.Email;
 using Neptune.EFModels.Entities;
+using Serilog.Core;
 
 namespace Neptune.WebMvc.Common.OpenID;
 
@@ -61,13 +62,13 @@ public static class AuthenticationHelper
         await next();
     }
 
-    public static async Task ProcessLoginFromKeystone(TokenValidatedContext tokenValidatedContext, NeptuneDbContext dbContext, WebConfiguration configuration, ILogger _logger, SitkaSmtpClientService sitkaSmtpClientService)
+    public static async Task ProcessLoginFromKeystone(TokenValidatedContext tokenValidatedContext, NeptuneDbContext dbContext, WebConfiguration configuration, Logger _logger, SitkaSmtpClientService sitkaSmtpClientService)
     {
         var sendNewUserNotification = false;
         var sendNewOrganizationNotification = false;
         var claimsIdentity = (ClaimsIdentity)tokenValidatedContext.Principal.Identity;
         var keystoneGuid = new Guid(claimsIdentity.GetClaimValue("sub"));
-        _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Processing Keystone login for user with Keystone guid {keystoneGuid}".ToString());
+        _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Processing Keystone login for user with Keystone guid {keystoneGuid}".ToString());
         var person = People.GetByGuid(dbContext, keystoneGuid);
         var firstName = claimsIdentity.GetClaimValue("given_name");
         var lastName = claimsIdentity.GetClaimValue("family_name");
@@ -75,7 +76,7 @@ public static class AuthenticationHelper
         var loginName = claimsIdentity.GetClaimValue("login_name");
         if (person == null)
         {
-            _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
+            _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
             // new user - provision with limited role
             var unknownOrganization = Organizations.GetUnknownOrganization(dbContext);
             person = new Person()
@@ -95,10 +96,10 @@ public static class AuthenticationHelper
         }
         else
         {
-            _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Signing in user {firstName} {lastName} from Keystone login".ToString());
+            _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Signing in user {firstName} {lastName} from Keystone login".ToString());
             if (person.FirstName != firstName || person.LastName != lastName || person.Email != email || person.LoginName != loginName)
             {
-                _logger.LogInformation($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
+                _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
                 person.FirstName = firstName;
                 person.LastName = lastName;
                 person.Email = email;
@@ -122,7 +123,7 @@ public static class AuthenticationHelper
 
                 if (organization == null)
                 {
-                    _logger.LogInformation(
+                    _logger.Information(
                         $"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}"
                             .ToString());
                     var defaultOrganizationType = OrganizationTypes.GetDefaultOrganizationType(dbContext);
@@ -142,7 +143,7 @@ public static class AuthenticationHelper
 
                 if (!organization.OrganizationGuid.HasValue)
                 {
-                    _logger.LogInformation(
+                    _logger.Information(
                         $"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Setting the KeystoneGuid field for existing Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}"
                             .ToString());
                     organization.OrganizationGuid = keystoneOrganizationGuid;

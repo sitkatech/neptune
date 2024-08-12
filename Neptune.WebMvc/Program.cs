@@ -18,17 +18,21 @@ using Hangfire;
 using Hangfire.SqlServer;
 using Neptune.Jobs;
 using Neptune.Jobs.Services;
+using Serilog;
+using Serilog.Core;
+using LogHelper = Neptune.WebMvc.Services.Logging.LogHelper;
 
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.Logging.ClearProviders();
     builder.Logging.AddConsole();
-
-    using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
-        .SetMinimumLevel(LogLevel.Information)
-        .AddConsole());
-
-    ILogger logger = loggerFactory.CreateLogger<Program>();
+    builder.Host.UseSerilog((context, services, configuration) =>
+    {
+        configuration
+            .Enrich.FromLogContext()
+            .ReadFrom.Configuration(context.Configuration);
+    });
+    var logger = CreateSerilogLogger(builder);
 
     // Add services to the container.
     var services = builder.Services;
@@ -236,6 +240,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 {
+    app.UseSerilogRequestLogging(opts =>
+    {
+        opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
+        opts.GetLevel = LogHelper.CustomGetLevel;
+    });
+
     // Configure the HTTP request pipeline.
     if (!app.Environment.IsDevelopment())
     {
@@ -300,4 +310,15 @@ var app = builder.Build();
     app.MapHealthChecks("/healthz");
 
     app.Run();
+}
+return;
+
+Logger CreateSerilogLogger(WebApplicationBuilder webApplicationBuilder)
+{
+    var outputTemplate = $"[{webApplicationBuilder.Environment.EnvironmentName}] {{Timestamp:yyyy-MM-dd HH:mm:ss zzz}} {{Level}} | {{RequestId}}-{{SourceContext}}: {{Message}}{{NewLine}}{{Exception}}";
+    var serilogLogger = new LoggerConfiguration()
+        .ReadFrom.Configuration(webApplicationBuilder.Configuration)
+        .WriteTo.Console(outputTemplate: outputTemplate);
+
+    return serilogLogger.CreateLogger();
 }

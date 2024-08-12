@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace Neptune.API
 {
@@ -23,7 +24,14 @@ namespace Neptune.API
                     {
                         config.AddJsonFile(secretPath);
                     }
-                }).ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+                })
+                .UseSerilog((context, services, configuration) =>
+                {
+                    configuration
+                        .Enrich.FromLogContext()
+                        .ReadFrom.Configuration(context.Configuration);
+                })
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
             return hostBuilder;
         }
     }
