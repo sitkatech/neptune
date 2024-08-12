@@ -40,7 +40,7 @@ namespace Neptune.Common
             return string.Join("\r\n\t", environmentVariables.Select(x => $"{x.Key}: {x.Value}").ToList());
         }
 
-        public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName, List<string> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs, Dictionary<string, string> environmentVariables, ILogger Logger)
+        public static ProcessUtilityResult ShellAndWaitImpl(string workingDirectory, string exeFileName, List<string> commandLineArguments, bool redirectStdErrAndStdOut, int? maxTimeoutMs, Dictionary<string, string> environmentVariables, ILogger logger)
         {
             var argumentsAsString = ConjoinCommandLineArguments(commandLineArguments);
             var stdErrAndStdOut = string.Empty;
@@ -73,7 +73,7 @@ namespace Neptune.Common
             }
 
             var processDebugInfo = $"Process Details:\r\n\"{exeFileName}\" {ConjoinCommandLineArguments(commandLineArguments)}\r\nWorking Directory: {workingDirectory}\r\nEnvironment Variables: {ConjoinEnvironmentVariables(environmentVariables)}";
-            Logger.LogInformation($"Starting Process: {processDebugInfo}");
+            logger.LogInformation($"Starting Process: {processDebugInfo}");
             try
             {
                 objProc.Start();

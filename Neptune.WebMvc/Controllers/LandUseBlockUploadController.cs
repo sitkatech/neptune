@@ -110,7 +110,7 @@ namespace Neptune.WebMvc.Controllers
                             Columns = columns,
                             FeatureLayerName = featureClassNames.Single().LayerName,
                             NumberOfSignificantDigits = 4,
-                            Filter = "WHERE AssessmentNo is not null",
+                            Filter = "",
                             CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
                         }
                     }
