@@ -165,46 +165,15 @@ namespace Neptune.Jobs.Hangfire
                 {
                     var stormwaterJurisdictionIDsToClear =
                         landUseBlocksToUpload.Select(x => x.StormwaterJurisdictionID).Distinct();
-                    var stormwaterJurisdictionToClears = stormwaterJurisdictions.Values
-                        .Where(x => stormwaterJurisdictionIDsToClear.Contains(x.StormwaterJurisdictionID)).ToList();
-
-                    //foreach (var stormwaterJurisdictionToClear in stormwaterJurisdictionToClears)
-                    //{
-                    //    var landUseBlocksToClear = stormwaterJurisdictionToClear.LandUseBlocks;
-                    //    var trashGeneratingUnitsToUpdateLandUseBlockID = landUseBlocksToClear.SelectMany(x=>x.TrashGeneratingUnits);
-
-                    //    foreach (var trashGeneratingUnit in trashGeneratingUnitsToUpdateLandUseBlockID)
-                    //    {
-                    //        trashGeneratingUnit.LandUseBlockID = null;
-                    //    }
-                    //    DbContext.SaveChanges(person);
-
-                    //    DbContext.LandUseBlocks.DeleteLandUseBlock(landUseBlocksToClear);
-                    //    DbContext.SaveChanges(person);
-
-                    //}
-
-                    // NP 6/25 SUPER gross to fire plain sql at the db, but trying to use the ORM as above results in exceeding any reasonable timeout
-                    var landUseBlockIDsToClear = stormwaterJurisdictionToClears.SelectMany(x => x.LandUseBlocks)
-                        .Select(x => x.LandUseBlockID).ToList();
-
-                    if (landUseBlockIDsToClear.Any())
-                    {
-                        var landUseBlockIDsToClearCommaSeparatedString = string.Join(",", landUseBlockIDsToClear);
-
-                        var nullOutTGULandUseBlockIDs =
-                            $"UPDATE dbo.TrashGeneratingUnit SET LandUseBlockID = null WHERE LandUseBlockID in ({landUseBlockIDsToClearCommaSeparatedString})";
-
-                        var nullOutTGU4326LandUseBlockIDs =
-                            $"UPDATE dbo.TrashGeneratingUnit4326 SET LandUseBlockID = null WHERE LandUseBlockID in ({landUseBlockIDsToClearCommaSeparatedString})";
-                        var deleteLandUseBlocks =
-                            $"DELETE FROM dbo.LandUseBlock WHERE LandUseBlockID in ({landUseBlockIDsToClearCommaSeparatedString})";
-
-                        _dbContext.Database.SetCommandTimeout(960);
-                        await _dbContext.Database.ExecuteSqlRawAsync(nullOutTGULandUseBlockIDs);
-                        await _dbContext.Database.ExecuteSqlRawAsync(nullOutTGU4326LandUseBlockIDs);
-                        await _dbContext.Database.ExecuteSqlRawAsync(deleteLandUseBlocks);
-                    }
+                    await _dbContext.TrashGeneratingUnits
+                        .Where(x => stormwaterJurisdictionIDsToClear.Contains(x.StormwaterJurisdictionID))
+                        .ExecuteUpdateAsync(x => x.SetProperty(y => y.LandUseBlockID, (int?)null));
+                    await _dbContext.TrashGeneratingUnit4326s
+                        .Where(x => stormwaterJurisdictionIDsToClear.Contains(x.StormwaterJurisdictionID))
+                        .ExecuteUpdateAsync(x => x.SetProperty(y => y.LandUseBlockID, (int?)null));
+                    await _dbContext.LandUseBlocks
+                        .Where(x => stormwaterJurisdictionIDsToClear.Contains(x.StormwaterJurisdictionID))
+                        .ExecuteDeleteAsync();
 
                     await _dbContext.LandUseBlocks.AddRangeAsync(landUseBlocksToUpload);
                     await _dbContext.SaveChangesAsync();
@@ -238,7 +207,7 @@ namespace Neptune.Jobs.Hangfire
                     await _sitkaSmtpClient.Send(mailMessage);
                 }
 
-                _dbContext.Database.ExecuteSqlRaw($"EXEC dbo.pLandUseBlockStagingDeleteByPersonID @PersonID = {personID}");
+                await _dbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pLandUseBlockStagingDeleteByPersonID @PersonID = {personID}");
             }
             catch (Exception)
             {
