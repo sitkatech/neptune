@@ -1,4 +1,5 @@
-﻿using Neptune.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using Neptune.Common;
 using Neptune.EFModels.Entities;
 
 namespace Neptune.WebMvc.Common
@@ -49,12 +50,12 @@ namespace Neptune.WebMvc.Common
         // done
         public static double TargetLoadReduction(NeptuneDbContext dbContext, StormwaterJurisdiction jurisdiction)
         {
-            var vTrashGeneratingUnitLoadStatistics = dbContext.vTrashGeneratingUnitLoadStatistics.Where(x =>
+            var landUseBlocks = dbContext.LandUseBlocks.AsNoTracking().Where(x => x.PermitTypeID == (int) PermitTypeEnum.PhaseIMS4 &&
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID && x.PriorityLandUseTypeID != (int)PriorityLandUseTypeEnum.ALU);
 
-            return vTrashGeneratingUnitLoadStatistics.Any()
-                ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
-                    x.Area * (double) (x.BaselineLoadingRate - FullTrashCaptureLoading) *
+            return landUseBlocks.Any()
+                ? landUseBlocks.Sum(x =>
+                    x.LandUseBlockGeometry.Area * (double) (x.TrashGenerationRate - FullTrashCaptureLoading) *
                     Constants.SquareMetersToAcres)
                 : 0;
         }
