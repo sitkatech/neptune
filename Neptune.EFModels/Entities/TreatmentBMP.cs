@@ -156,6 +156,7 @@ namespace Neptune.EFModels.Entities
                 .Include(x => x.Delineation)
                 .Where(x => x.Delineation != null && x.Delineation.TreatmentBMPID == TreatmentBMPID)
                 .ExecuteDeleteAsync();
+            await dbContext.TrashGeneratingUnits.Include(x => x.Delineation).Where(x => x.Delineation.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.Delineations.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.DirtyModelNodes.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.MaintenanceRecordObservationValues
@@ -203,11 +204,8 @@ namespace Neptune.EFModels.Entities
             await dbContext.TreatmentBMPImages.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.TreatmentBMPModelingAttributes.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
-            var treatmentBMPs = dbContext.TreatmentBMPs.Where(x => x.UpstreamBMPID == TreatmentBMPID).AsEnumerable();
-            foreach (var treatmentBMP in treatmentBMPs)
-            {
-                treatmentBMP.UpstreamBMPID = null;
-            }
+            await dbContext.TreatmentBMPs.Where(x => x.UpstreamBMPID == TreatmentBMPID)
+                    .ExecuteUpdateAsync(x => x.SetProperty(y => y.UpstreamBMPID, (int?) null));
 
             await dbContext.SaveChangesAsync();
             await dbContext.TreatmentBMPs.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
