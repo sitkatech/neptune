@@ -61,5 +61,6 @@ from dbo.TrashGeneratingUnit4326 tgu
 		on o.OrganizationID = sj.OrganizationID
 	left join dbo.WaterQualityManagementPlan wqmp
 		on tgu.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
---WHERE tgu.TrashGeneratingUnit4326Geometry.STGeometryType() in ('POLYGON', 'MULTIPOLYGON')
+WHERE tgu.TrashGeneratingUnit4326Geometry.STGeometryType() in ('POLYGON', 'MULTIPOLYGON')
+and lub.PermitTypeID = 1
 Go
