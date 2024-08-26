@@ -6,7 +6,7 @@ namespace Neptune.WebMvc.Views.Delineation
 {
     public class DelineationMapViewData : NeptuneViewData
     {
-        public DelineationMapViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, StormwaterMapInitJson mapInitJson, EFModels.Entities.TreatmentBMP initialTreatmentBMP, string bulkUploadTreatmentBMPDelineationsUrl, string getStormwaterJurisdictionCqlFilter, string geoServerUrl, string autoDelineateServiceUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
+        public DelineationMapViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, StormwaterMapInitJson mapInitJson, EFModels.Entities.TreatmentBMP initialTreatmentBMP, string bulkUploadTreatmentBMPDelineationsUrl, string getStormwaterJurisdictionCqlFilter, string geoServerUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             MapInitJson = mapInitJson;
             IsInitialTreatmentBMPProvided = initialTreatmentBMP != null;
@@ -15,7 +15,7 @@ namespace Neptune.WebMvc.Views.Delineation
             PageTitle = "Delineation Map";
             GeoServerUrl = geoServerUrl;
 
-            DelineationMapConfig = new DelineationMapConfig(linkGenerator, getStormwaterJurisdictionCqlFilter, autoDelineateServiceUrl);
+            DelineationMapConfig = new DelineationMapConfig(linkGenerator, getStormwaterJurisdictionCqlFilter);
             BulkUploadTreatmentBMPDelineationsUrl = bulkUploadTreatmentBMPDelineationsUrl;
             HasManagePermission = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
         }

@@ -15,7 +15,6 @@ services:
       - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
       - KeystoneOpenIDClientID=${KeystoneOpenIDClientID}
       - MapServiceUrl=${MapServiceUrl}
-      - AutoDelineateServiceUrl=${AutoDelineateServiceUrl}
       - NereidUrl=${NereidUrl}
       - GDALAPIBaseUrl=${GDALAPIBaseUrl}
       - QGISAPIBaseUrl=${QGISAPIBaseUrl}

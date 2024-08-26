@@ -5,7 +5,6 @@ namespace Neptune.WebMvc.Views.Delineation
 {
     public class DelineationMapConfig
     {
-        public string AutoDelineateBaseUrl { get; }
         public string JurisdictionCQLFilter { get; }
         public string DeleteDelineationUrlTemplate { get; }
         public string CatchmentTraceUrlTemplate { get; }
@@ -14,7 +13,7 @@ namespace Neptune.WebMvc.Views.Delineation
         public string TreatmentBMPLocationUrlTemplate { get; }
         public string NewRegionalSubbasinRevisionRequestUrlTemplate { get; }
 
-        public DelineationMapConfig(LinkGenerator linkGenerator, string jurisdictionCQLFilter, string autoDelineateServiceUrl)
+        public DelineationMapConfig(LinkGenerator linkGenerator, string jurisdictionCQLFilter)
         {
             JurisdictionCQLFilter = jurisdictionCQLFilter;
 
@@ -23,7 +22,6 @@ namespace Neptune.WebMvc.Views.Delineation
             ChangeDelineationStatusUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(linkGenerator, x => x.ChangeDelineationStatus(UrlTemplate.Parameter1Int))).UrlTemplateString;
             TreatmentBMPDelineationUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(linkGenerator, x => x.ForTreatmentBMP(UrlTemplate.Parameter1Int))).UrlTemplateString;
             TreatmentBMPLocationUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.EditLocationFromDelineationMap(UrlTemplate.Parameter1Int))).UrlTemplateString;
-            AutoDelineateBaseUrl = autoDelineateServiceUrl;
             NewRegionalSubbasinRevisionRequestUrlTemplate = new UrlTemplate<int>(SitkaRoute<RegionalSubbasinRevisionRequestController>.BuildUrlFromExpression(linkGenerator, x => x.New(UrlTemplate.Parameter1Int))).UrlTemplateString;
         }
     }
