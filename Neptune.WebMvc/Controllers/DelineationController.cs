@@ -205,7 +205,7 @@ namespace Neptune.WebMvc.Controllers
                     return Json(new {success = true});
                 }
 
-                var delineation = new Delineation()
+                treatmentBMPDelineation = new Delineation()
                 {
                     TreatmentBMPID = treatmentBMPPrimaryKey.PrimaryKeyValue,
                     DelineationGeometry = geom2771,
@@ -215,7 +215,7 @@ namespace Neptune.WebMvc.Controllers
                     IsVerified = false,
                     HasDiscrepancies = false
                 };
-                await _dbContext.Delineations.AddAsync(delineation);
+                await _dbContext.Delineations.AddAsync(treatmentBMPDelineation);
             }
 
             await _dbContext.SaveChangesAsync();
