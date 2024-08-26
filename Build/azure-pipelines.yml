@@ -283,7 +283,7 @@ stages:
           -var "domainApi=$(domainApi)" 
           -var "domainWebMvc=$(domainWebMvc)" 
           -var "domainGeoserver=$(domainGeoserver)" 
-          -var "environment=$(environment)" 
+          -var "environment=$(Environment)" 
           -var "storageAccountNameDev=$(storageAccountNameDev)" 
           -var "team=$(team)" 
           -var "projectNumber=$(projectNumber)" 

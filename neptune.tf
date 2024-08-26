@@ -57,6 +57,10 @@ variable "sqlApiUsername" {
   type = string
 }
 
+variable "sqlGeoserverUsername" {
+  type = string
+}
+
 variable "datadogApiKey" {
   type = string
   sensitive = true
@@ -83,19 +87,15 @@ variable "domainGeoserver" {
   type = string
 }
 
-variable "sqlGeoserverUsername" {
-  type = string
-}
-
-variable "elasticPoolName" {
-  type = string
-}
-
 variable "projectNumber" {
   type = string
 }
 
 variable "team" {
+  type = string
+}
+
+variable "elasticPoolName" {
   type = string
 }
 
