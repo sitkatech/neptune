@@ -203,8 +203,11 @@ namespace Neptune.WebMvc.Controllers
             var imageCarouselViewData = new ImageCarouselViewData(carouselImages, 400, _linkGenerator);
             var verifiedUnverifiedUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.VerifyInventory(treatmentBMPPrimaryKey));
 
+            var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(CurrentPerson);
+
             var modelingResultsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.GetModelResults(treatmentBMP));
-            var modeledBMPPerformanceViewData = new ModeledPerformanceViewData(_linkGenerator, modelingResultsUrl, "To BMP");
+            var treatmentBMPNereidLog = TreatmentBMPNereidLogs.GetByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
+            var modeledBMPPerformanceViewData = new ModeledPerformanceViewData(_linkGenerator, modelingResultsUrl, "To BMP", isSitkaAdmin, treatmentBMPNereidLog?.NereidRequest, treatmentBMPNereidLog?.NereidResponse);
             var hruCharacteristics = vHRUCharacteristics.ListByTreatmentBMP(_dbContext, upstreamestBMP ?? treatmentBMP, delineation);
             var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
             var otherTreatmentBmpsExistInSubbasin = treatmentBMP.GetRegionalSubbasin(_dbContext)?.GetTreatmentBMPs(_dbContext).Any(x => x.TreatmentBMPID != treatmentBMP.TreatmentBMPID) ?? false;

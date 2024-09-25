@@ -1,4 +1,5 @@
 ﻿@using Neptune.EFModels.Entities
+@using Neptune.WebMvc.Common
 @using Neptune.WebMvc.Common.HtmlHelperExtensions
 @inherits Neptune.WebMvc.Views.Shared.ModeledPerformance.ModeledPerformance
 
@@ -94,7 +95,7 @@
             <tbody>
                 <tr>
                     <td class="left">@Html.LabelWithSugarFor(FieldDefinitionType.TotalSuspendedSolids, labelText: "Total Suspended Solids")</td>
-   <td><span ng-bind="modelResults.WetWeatherTSSReduced | sigFig:2 | number"></span> kg</td>
+                    <td><span ng-bind="modelResults.WetWeatherTSSReduced | sigFig:2 | number"></span> kg</td>
                     <td><span ng-bind="100 * modelResults.WetWeatherTSSReduced/modelResults.WetWeatherTSSInflow || 0 | number: 0"></span>%</td>
                 </tr>
                 <tr>
@@ -280,37 +281,89 @@
             </tbody>
         </table>
     </div>
-<p class="systemText" style="margin-bottom: 10px;" ng-if="modelResults.Outdated">
-    <span ng-if="modelResults.IsWQMPResult && modelResults.IsSimplifiedWQMPResult">This WQMP’s parameters have changed since the last model run; a new model run is pending to re-calculate results.</span>
-    <span ng-if="modelResults.IsWQMPResult && !modelResults.IsSimplifiedWQMPResult">Parameters for related detailed BMPs have changed since the last model run; a new model run is pending to re-calculate results.</span>
-    <span ng-if="!modelResults.IsWQMPResult">This BMP's parameters have changed since the last model run; a new model run is pending to re-calculate results.</span>
-</p>
+    <p class="systemText" style="margin-bottom: 10px;" ng-if="modelResults.Outdated">
+        <span ng-if="modelResults.IsWQMPResult && modelResults.IsSimplifiedWQMPResult">This WQMP’s parameters have changed since the last model run; a new model run is pending to re-calculate results.</span>
+        <span ng-if="modelResults.IsWQMPResult && !modelResults.IsSimplifiedWQMPResult">Parameters for related detailed BMPs have changed since the last model run; a new model run is pending to re-calculate results.</span>
+        <span ng-if="!modelResults.IsWQMPResult">This BMP's parameters have changed since the last model run; a new model run is pending to re-calculate results.</span>
+    </p>
     <p class="systemText" ng-if="!modelResults.IsResultSetEmpty">Results last calculated at <span ng-bind="modelResults.LastUpdated | date : 'MM/dd/yyyy h:mm a'"></span></p>
     <p class="systemText" ng-if="modelResults.IsResultSetEmpty && modelResults.IsWQMPResult">Model results for this WQMP are awaiting calculation.</p>
     <p class="systemText" ng-if="modelResults.IsResultSetEmpty && !modelResults.IsWQMPResult">Model results for this BMP are awaiting calculation.</p>
 </div>
 
-<a href="@ViewDataTyped.AboutModelingBMPPerformanceURL">About Modeling BMP Performance</a>
+@if (ViewDataTyped.IsSitkaAdmin)
+{
+    <div style="margin: 10px 0">
+        @if (!string.IsNullOrWhiteSpace(ViewDataTyped.NereidRequest))
+        {
+            <a href="javascript:void()" onclick="downloadNereidRequest()">Latest Nereid Request</a>
+        }
+        |
+        @if (!string.IsNullOrWhiteSpace(ViewDataTyped.NereidResponse))
+        {
+            <a href="javascript:void()" onclick="downloadNereidResponse()">Latest Nereid Response</a>
+        }
+    </div>
+}
+<div>
+    <a href="@ViewDataTyped.AboutModelingBMPPerformanceURL">About Modeling BMP Performance</a>
+</div>
 
 <script>
-    angular.module("NeptuneApp").filter('sigFig', function() {
+    angular.module("NeptuneApp").filter('sigFig', function () {
         return function (input, prec) {
             if (!input) {
                 return 0;
             }
             return parseFloat(input.toPrecision(prec));
-        }})
-
-        .controller("ModeledBMPPerformanceController",
-        function($scope) {
-            jQuery.ajax("@ViewDataTyped.ModelingResultsUrl").done(function(data) {
+        }
+    }).controller("ModeledBMPPerformanceController",
+        function ($scope) {
+            jQuery.ajax("@ViewDataTyped.ModelingResultsUrl").done(function (data) {
                 $scope.modelResults = data;
                 $scope.$apply();
-            }).fail(function(error) {
+            }).fail(function (error) {
                 console.log(error);
             });
 
             $scope.weatherTye = 'total';
         });
-
 </script>
+
+@if (ViewDataTyped.IsSitkaAdmin && !string.IsNullOrWhiteSpace(ViewDataTyped.NereidRequest))
+{
+    <script>
+        function downloadNereidRequest() {
+            var data = @Html.Raw(ViewDataTyped.NereidRequest.ToJsonHtmlString());
+
+            const blob = new Blob([data], { type: "text/plain" });
+            const jsonObjectUrl = URL.createObjectURL(blob);
+
+            const filename = "nereidRequest.json";
+            const anchorEl = document.createElement("a");
+            anchorEl.href = jsonObjectUrl;
+            anchorEl.download = filename;
+            anchorEl.click();
+            URL.revokeObjectURL(jsonObjectUrl);
+        }
+    </script>
+}
+
+@if (ViewDataTyped.IsSitkaAdmin && !string.IsNullOrWhiteSpace(ViewDataTyped.NereidResponse))
+{
+    <script>
+        function downloadNereidResponse() {
+            var data = @Html.Raw(ViewDataTyped.NereidResponse.ToJsonHtmlString());
+
+            const blob = new Blob([data], { type: "text/plain" });
+            const jsonObjectUrl = URL.createObjectURL(blob);
+
+            const filename = "nereidResponse.json";
+            const anchorEl = document.createElement("a");
+            anchorEl.href = jsonObjectUrl;
+            anchorEl.download = filename;
+            anchorEl.click();
+            URL.revokeObjectURL(jsonObjectUrl);
+        }
+    </script>
+}

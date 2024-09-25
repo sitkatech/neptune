@@ -181,8 +181,10 @@ namespace Neptune.WebMvc.Controllers
                 .OrderBy(x => x.SourceControlBMPAttributeID)
                 .GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
             var quickBmps = QuickBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(CurrentPerson);
             var modelingResultsUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.GetModelResults(waterQualityManagementPlan));
-            var modeledPerformanceViewData = new ModeledPerformanceViewData(_linkGenerator, modelingResultsUrl, "Site Runoff");
+            var waterQualityManagementPlanNereidLog = WaterQualityManagementPlanNereidLogs.GetByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var modeledPerformanceViewData = new ModeledPerformanceViewData(_linkGenerator, modelingResultsUrl, "Site Runoff", isSitkaAdmin, waterQualityManagementPlanNereidLog?.NereidRequest, waterQualityManagementPlanNereidLog?.NereidResponse);
             var parcelGridSpec = new ParcelGridSpec();
 
             var waterQualityManagementPlanDocuments = WaterQualityManagementPlanDocuments.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);

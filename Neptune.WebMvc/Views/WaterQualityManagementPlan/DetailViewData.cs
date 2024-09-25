@@ -89,7 +89,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             CurrentPersonCanManageWaterQualityManagementPlans = new WaterQualityManagementPlanManageFeature()
                 .HasPermission(currentPerson, waterQualityManagementPlan)
                 .HasPermission;
-            currentPerson.IsManagerOrAdmin();
+
             EditUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
                     x.Edit(WaterQualityManagementPlan));
