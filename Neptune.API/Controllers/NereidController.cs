@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Hangfire;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -447,42 +448,6 @@ namespace Neptune.API.Controllers
 
             return Ok(new { ElapsedTime = stopwatchElapsedMilliseconds, ResponseContent = responseContent });
         }
-
-        /// <summary>
-        /// Runs Nereid on the entire OC network graph using the solution sequence pattern.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("nereid/solve-oc")]
-        [SitkaAdminFeature]
-        public async Task<IActionResult> SolveOC()
-        {
-            try
-            {
-                var networkSolveResult = await _nereidService.TotalNetworkSolve(_dbContext, true);
-                var solutionSummary = new SolutionSummary()
-                {
-                    NodesProcessed = networkSolveResult.NodesProcessed,
-                    MissingNodeIDs = networkSolveResult.MissingNodeIDs,
-                    Failed = false
-                };
-                return Ok(solutionSummary);
-            }
-            catch (NereidException<SolutionRequestObject, SolutionResponseObject> nereidException)
-            {
-                var solutionSummary = new SolutionSummary
-                {
-                    NodesProcessed = 0,
-                    MissingNodeIDs = new List<string>(),
-                    Failed = true,
-                    ExceptionMessage = nereidException.Message,
-                    InnerExceptionStackTrace = nereidException.InnerException?.StackTrace,
-                    FailingRequest = nereidException.Request,
-                    FailureResponse = nereidException.Response
-                };
-                return Ok(solutionSummary);
-            }
-        }
-        
 
         /// <summary>
         /// Kicks off a delta solve for whatever DirtyModelNodes are in the system. Does not mark the nodes as processed.

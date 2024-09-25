@@ -488,18 +488,6 @@
         }
       }
     },
-    "/nereid/solve-oc": {
-      "get": {
-        "tags": [
-          "Nereid"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/nereid/delta-solve-test": {
       "get": {
         "tags": [

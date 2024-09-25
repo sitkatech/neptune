@@ -240,11 +240,7 @@ public class NereidService : BaseAPIService<NereidService>
         var graph = BuildTotalNetworkGraph(dbContext);
         var networkSolveResult = await NetworkSolveImpl(graph, dbContext, false, isBaselineCondition, null, null, null);
 
-        var baselineConditionSqlParam = new SqlParameter("@isBaselineCondition", isBaselineCondition);
-        await dbContext.Database.ExecuteSqlRawAsync(
-            "EXEC dbo.pDeleteNereidResults @isBaselineCondition", baselineConditionSqlParam);
-
-        await dbContext.NereidResults.AddRangeAsync(networkSolveResult.NereidResults);
+        dbContext.NereidResults.AddRange(networkSolveResult.NereidResults);
         await dbContext.SaveChangesAsync();
 
         return networkSolveResult;
@@ -259,7 +255,7 @@ public class NereidService : BaseAPIService<NereidService>
         var projectIDSqlParam = new SqlParameter("@projectID", projectID);
         await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteProjectNereidResults @projectID", projectIDSqlParam);
 
-        await dbContext.ProjectNereidResults.AddRangeAsync(networkSolveResult.NereidResults.Select(x =>
+        dbContext.ProjectNereidResults.AddRange(networkSolveResult.NereidResults.Select(x =>
             new ProjectNereidResult
             {
                 ProjectID = projectID,

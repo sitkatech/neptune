@@ -22,6 +22,9 @@ public class TotalNetworkSolveJob
     {
         // clear out all dirty nodes since the whole network is being run.
         await _dbContext.DirtyModelNodes.ExecuteDeleteAsync();
+        // clear out all the nereid results since we are rerunning it for the whole network
+        await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteNereidResults");
+
         await _nereidService.TotalNetworkSolve(_dbContext, true);
         await _nereidService.TotalNetworkSolve(_dbContext, false);
     }

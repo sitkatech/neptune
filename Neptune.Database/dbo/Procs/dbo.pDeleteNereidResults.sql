@@ -1,7 +1,5 @@
-Create Procedure dbo.pDeleteNereidResults (
-@isBaselineCondition bit
-)
-
+Create Procedure dbo.pDeleteNereidResults
+with execute as owner
 As
-Delete from dbo.NereidResult where IsBaselineCondition = @isBaselineCondition
+truncate table dbo.NereidResult
 GO
