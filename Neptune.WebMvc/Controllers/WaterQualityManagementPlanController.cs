@@ -232,8 +232,10 @@ namespace Neptune.WebMvc.Controllers
             {
                 TrashCaptureStatusTypeID = TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID,
                 WaterQualityManagementPlanModelingApproachID = WaterQualityManagementPlanModelingApproach.Detailed
-                    .WaterQualityManagementPlanModelingApproachID
+                    .WaterQualityManagementPlanModelingApproachID,
+                WaterQualityManagementPlanNereidLog = new WaterQualityManagementPlanNereidLog()
             };
+
             viewModel.UpdateModel(waterQualityManagementPlan);
             await _dbContext.WaterQualityManagementPlans.AddAsync(waterQualityManagementPlan);
             await _dbContext.SaveChangesAsync();

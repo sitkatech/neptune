@@ -14,11 +14,11 @@ export class ProblemDetails {
   [key: string]: any | any;
 
 
-    Type?: string;
-    Title?: string;
-    Status?: number;
-    Detail?: string;
-    Instance?: string;
+    type?: string;
+    title?: string;
+    status?: number;
+    detail?: string;
+    instance?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

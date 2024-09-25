@@ -153,6 +153,9 @@ public partial class TreatmentBMP
     [InverseProperty("UpstreamTreatmentBMP")]
     public virtual ICollection<TreatmentBMPModelingAttribute> TreatmentBMPModelingAttributeUpstreamTreatmentBMPs { get; set; } = new List<TreatmentBMPModelingAttribute>();
 
+    [InverseProperty("TreatmentBMP")]
+    public virtual TreatmentBMPNereidLog? TreatmentBMPNereidLog { get; set; }
+
     [ForeignKey("TreatmentBMPTypeID")]
     [InverseProperty("TreatmentBMPs")]
     public virtual TreatmentBMPType TreatmentBMPType { get; set; } = null!;

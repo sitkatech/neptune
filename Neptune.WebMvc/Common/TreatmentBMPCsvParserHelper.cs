@@ -6,6 +6,7 @@ using Neptune.EFModels;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common.Models;
 using NetTopologySuite.Geometries;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.WebMvc.Common
 {
@@ -144,7 +145,8 @@ namespace Neptune.WebMvc.Common
                     TreatmentBMPName = treatmentBMPName,
                     TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID,
                     StormwaterJurisdictionID = stormwaterJurisdictionID.Value, 
-                    InventoryIsVerified = false
+                    InventoryIsVerified = false,
+                    TreatmentBMPNereidLog = new TreatmentBMPNereidLog()
                 };
             }
 

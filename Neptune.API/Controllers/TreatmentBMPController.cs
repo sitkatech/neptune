@@ -230,6 +230,9 @@ namespace Neptune.API.Controllers
             await _dbContext.TreatmentBMPModelingAttributes
                 .Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID))
                 .ExecuteDeleteAsync();
+            await _dbContext.TreatmentBMPNereidLogs
+                .Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID))
+                .ExecuteDeleteAsync();
             await _dbContext.TreatmentBMPs.Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID))
                 .ExecuteDeleteAsync();
 

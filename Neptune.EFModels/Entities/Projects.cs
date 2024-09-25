@@ -186,23 +186,29 @@ namespace Neptune.EFModels.Entities
 
             var treatmentBMPsToCopy = dbContext.TreatmentBMPs.Where(x => x.ProjectID == projectToCopy.ProjectID).ToList();
 
-            var newTreatmentBMPs = treatmentBMPsToCopy.Select(x => new TreatmentBMP()
+            var newTreatmentBMPs = treatmentBMPsToCopy.Select(x =>
             {
-                ProjectID = newProject.ProjectID,
-                TreatmentBMPName = $"{x.TreatmentBMPName} - Copy {dateCreated}",
-                TreatmentBMPTypeID = x.TreatmentBMPTypeID,
-                LocationPoint = x.LocationPoint,
-                StormwaterJurisdictionID = x.StormwaterJurisdictionID,
-                Notes = x.Notes,
-                OwnerOrganizationID = x.OwnerOrganizationID,
-                InventoryIsVerified = x.InventoryIsVerified,
-                LocationPoint4326 = x.LocationPoint4326,
-                TrashCaptureStatusTypeID = x.TrashCaptureStatusTypeID,
-                SizingBasisTypeID = x.SizingBasisTypeID,
-                WatershedID = x.WatershedID,
-                ModelBasinID = x.ModelBasinID,
-                PrecipitationZoneID = x.PrecipitationZoneID,
-                RegionalSubbasinID = x.RegionalSubbasinID
+                var treatmentBMP = new TreatmentBMP()
+                {
+                    ProjectID = newProject.ProjectID,
+                    TreatmentBMPName = $"{x.TreatmentBMPName} - Copy {dateCreated}",
+                    TreatmentBMPTypeID = x.TreatmentBMPTypeID,
+                    LocationPoint = x.LocationPoint,
+                    StormwaterJurisdictionID = x.StormwaterJurisdictionID,
+                    Notes = x.Notes,
+                    OwnerOrganizationID = x.OwnerOrganizationID,
+                    InventoryIsVerified = x.InventoryIsVerified,
+                    LocationPoint4326 = x.LocationPoint4326,
+                    TrashCaptureStatusTypeID = x.TrashCaptureStatusTypeID,
+                    SizingBasisTypeID = x.SizingBasisTypeID,
+                    WatershedID = x.WatershedID,
+                    ModelBasinID = x.ModelBasinID,
+                    PrecipitationZoneID = x.PrecipitationZoneID,
+                    RegionalSubbasinID = x.RegionalSubbasinID,
+                    TreatmentBMPNereidLog = new TreatmentBMPNereidLog()
+                };
+
+                return treatmentBMP;
             }).ToList();
 
             await dbContext.TreatmentBMPs.AddRangeAsync(newTreatmentBMPs);

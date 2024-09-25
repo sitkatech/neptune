@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic.FileIO;
 using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.WebMvc.Common
 {
@@ -107,7 +108,8 @@ namespace Neptune.WebMvc.Common
                 {
                     StormwaterJurisdictionID = stormwaterJurisdictionID.Value,
                     WaterQualityManagementPlanName = wqmpName,
-                    WaterQualityManagementPlanModelingApproachID = (int)WaterQualityManagementPlanModelingApproachEnum.Detailed
+                    WaterQualityManagementPlanModelingApproachID = (int)WaterQualityManagementPlanModelingApproachEnum.Detailed,
+                    WaterQualityManagementPlanNereidLog = new WaterQualityManagementPlanNereidLog()
                 };
             }
 

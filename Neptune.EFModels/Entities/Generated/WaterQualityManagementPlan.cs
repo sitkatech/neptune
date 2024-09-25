@@ -129,6 +129,9 @@ public partial class WaterQualityManagementPlan
     public virtual ICollection<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; } = new List<WaterQualityManagementPlanDocument>();
 
     [InverseProperty("WaterQualityManagementPlan")]
+    public virtual WaterQualityManagementPlanNereidLog? WaterQualityManagementPlanNereidLog { get; set; }
+
+    [InverseProperty("WaterQualityManagementPlan")]
     public virtual ICollection<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; } = new List<WaterQualityManagementPlanParcel>();
 
     [InverseProperty("WaterQualityManagementPlan")]

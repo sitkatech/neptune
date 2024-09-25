@@ -354,6 +354,11 @@ namespace Neptune.EFModels.Entities
 
             treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP = treatmentBMPModelingAttribute;
 
+            var treatmentBMPNereidLog = new TreatmentBMPNereidLog()
+            {
+                TreatmentBMPID = treatmentBMPUpsertDto.TreatmentBMPID
+            };
+            treatmentBMP.TreatmentBMPNereidLog = treatmentBMPNereidLog;
             return treatmentBMP;
         }
 

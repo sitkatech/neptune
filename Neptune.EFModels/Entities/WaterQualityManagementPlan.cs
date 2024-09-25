@@ -100,6 +100,8 @@ namespace Neptune.EFModels.Entities
                 .Where(x => x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
             await dbContext.WaterQualityManagementPlanVerifies
                 .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
+            await dbContext.WaterQualityManagementPlanNereidLogs
+                .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
             
             await dbContext.WaterQualityManagementPlans
                 .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();

@@ -30,17 +30,12 @@ public class NereidService : BaseAPIService<NereidService>
 
     }
 
-    public async Task<NereidResult<TResp>> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject, string nereidRequestUrl)
+    public async Task<NereidResult<TResp>> RunJobAtNereid<TReq, TResp>(TReq nereidRequestObject,
+        string nereidRequestUrl, List<Node> graphNodes, NeptuneDbContext? dbContext)
     {
-        //todo: log nereid requests for troubleshooting?
-        //Logger.LogInformation($"Executing Nereid request: {nereidRequestUrl}");
-        //var serializedRequest = GeoJsonSerializer.Serialize(nereidRequestObject);
-        //Logger.LogInformation(serializedRequest);
+        var serializedRequest = GeoJsonSerializer.Serialize(nereidRequestObject);
         var httpResponseMessage = await PostJsonImpl(nereidRequestUrl, nereidRequestObject, GeoJsonSerializer.DefaultSerializerOptions);
         var postResultContentAsStringResult = await httpResponseMessage.Content.ReadAsStringAsync();
-        //todo: log nereid responses for troubleshooting?
-        //var responseLogFile = Path.Combine(_neptuneConfiguration.NereidLogFileFolder, $"NereidResponse_{DateTime.Now:yyyyMMddHHmmss}.json");
-        //await File.WriteAllTextAsync(responseLogFile, postResultContentAsStringResult);
 
         var nereidResultResponse = GeoJsonSerializer.Deserialize<NereidResult<TResp>>(postResultContentAsStringResult);
         if (nereidResultResponse.Detail != null)
@@ -70,6 +65,33 @@ public class NereidService : BaseAPIService<NereidService>
                 Thread.Sleep(1000);
             }
         }
+
+        if (dbContext != null)
+        {
+            var serializedResponse = GeoJsonSerializer.Serialize(nereidResultResponse);
+
+            var treatmentBMPIDs = graphNodes.Where(x => x.TreatmentBMPID.HasValue).Select(x => x.TreatmentBMPID.Value);
+            if (treatmentBMPIDs.Any())
+            {
+                await dbContext.TreatmentBMPNereidLogs.Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).ExecuteUpdateAsync(
+                    x => x
+                        .SetProperty(y => y.LastRequestDate, DateTime.UtcNow)
+                        .SetProperty(y => y.NereidRequest, serializedRequest)
+                        .SetProperty(y => y.NereidResponse, serializedResponse)
+                );
+            }
+            var waterQualityManagementPlanIDs = graphNodes.Where(x => x.WaterQualityManagementPlan != null).Select(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanID);
+            if (waterQualityManagementPlanIDs.Any())
+            {
+                await dbContext.WaterQualityManagementPlanNereidLogs.Where(x => waterQualityManagementPlanIDs.Contains(x.WaterQualityManagementPlanID)).ExecuteUpdateAsync(
+                    x => x
+                        .SetProperty(y => y.LastRequestDate, DateTime.UtcNow)
+                        .SetProperty(y => y.NereidRequest, serializedRequest)
+                        .SetProperty(y => y.NereidResponse, serializedResponse)
+                );
+            }
+        }
+
         return nereidResultResponse;
     }
 
@@ -95,7 +117,7 @@ public class NereidService : BaseAPIService<NereidService>
         var subgraphRequestObject = new NereidSubgraphRequestObject(graph, dirtyGraphNodes);
 
         var subgraphResult = await RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
-            subgraphUrl);
+            subgraphUrl, subgraphRequestObject.Nodes, dbContext);
         List<Node> nodesForSubgraph;
         try
         {
@@ -161,7 +183,7 @@ public class NereidService : BaseAPIService<NereidService>
 
         var solutionSequenceResult =
             await RunJobAtNereid<SolutionSequenceRequest, SolutionSequenceResult>(
-                new SolutionSequenceRequest(graph), solutionSequenceUrl);
+                new SolutionSequenceRequest(graph), solutionSequenceUrl, graph.Nodes, dbContext);
 
         // for the delta run, associate each node with its previous results
         if (sendPreviousResults)
@@ -193,7 +215,7 @@ public class NereidService : BaseAPIService<NereidService>
                 var subgraph = MakeSubgraphFromParentGraphAndNodes(graph, seriesNodes);
 
                 var notFoundNodes = await SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWQMPNodes,
-                    allModelingQuickBMPs, isBaselineCondition, modelBasins, precipitationZones, delineations, projectDistributedDelineationIDs);
+                    allModelingQuickBMPs, isBaselineCondition, modelBasins, precipitationZones, delineations, projectDistributedDelineationIDs, dbContext);
                 missingNodeIDs.AddRange(notFoundNodes);
             }
         }
@@ -265,7 +287,8 @@ public class NereidService : BaseAPIService<NereidService>
         List<vNereidLoadingInput> allLoadingInputs, List<TreatmentBMP> allModelingBMPs,
         List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes,
         List<QuickBMP> allModelingQuickBMPs, bool isBaselineCondition, Dictionary<int, int> modelBasins,
-        Dictionary<int, double> precipitationZones, Dictionary<int, Delineation?> delineations, List<int>? projectDelineationIDs)
+        Dictionary<int, double> precipitationZones, Dictionary<int, Delineation?> delineations,
+        List<int>? projectDelineationIDs, NeptuneDbContext? dbContext)
     {
         var notFoundNodes = new List<string>();
 
@@ -341,7 +364,7 @@ public class NereidService : BaseAPIService<NereidService>
         NereidResult<SolutionResponseObject> results = null;
         try
         {
-            results = await RunJobAtNereid<SolutionRequestObject, SolutionResponseObject>(solutionRequestObject, solveUrl);
+            results = await RunJobAtNereid<SolutionRequestObject, SolutionResponseObject>(solutionRequestObject, solveUrl, solutionRequestObject.Graph.Nodes, dbContext);
         }
         catch (Exception e)
         {

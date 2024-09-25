@@ -72,7 +72,7 @@ namespace Neptune.API.Controllers
             var buildGraphEndTime = stopwatch.Elapsed;
 
             var validateCallStartTime = stopwatch.Elapsed;
-            var networkValidatorResult = await _nereidService.RunJobAtNereid<Graph, NetworkValidatorResult>(graph, networkValidatorUrl);
+            var networkValidatorResult = await _nereidService.RunJobAtNereid<Graph, NetworkValidatorResult>(graph, networkValidatorUrl, graph.Nodes, null);
 
             var validateCallEndTime = stopwatch.Elapsed;
 
@@ -112,7 +112,7 @@ namespace Neptune.API.Controllers
             var subgraphCallStartTime = stopwatch.Elapsed;
 
             var subgraphResult = await _nereidService.RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
-                subgraphUrl);
+                subgraphUrl, subgraphRequestObject.Nodes, null);
             var subgraphCallEndTime = stopwatch.Elapsed;
 
             stopwatch.Stop();
@@ -150,8 +150,7 @@ namespace Neptune.API.Controllers
             var solutionSequenceRequestObject = new SolutionSequenceRequest(graph);
 
             var subgraphCallStartTime = stopwatch.Elapsed;
-            var solutionSequenceResult = await _nereidService.RunJobAtNereid<SolutionSequenceRequest, SolutionSequenceResult>(solutionSequenceRequestObject,
-                    solutionSequenceUrl);
+            var solutionSequenceResult = await _nereidService.RunJobAtNereid<SolutionSequenceRequest, SolutionSequenceResult>(solutionSequenceRequestObject, solutionSequenceUrl, graph.Nodes, null);
             var subgraphCallEndTime = stopwatch.Elapsed;
 
             stopwatch.Stop();
@@ -188,7 +187,7 @@ namespace Neptune.API.Controllers
             var buildLoadingInputEndTime = stopwatch.Elapsed;
             stopwatch.Stop();
 
-            var responseObject = await _nereidService.RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl);
+            var responseObject = await _nereidService.RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, new List<Node>(), null);
 
             var returnValue = new
             {
@@ -220,7 +219,7 @@ namespace Neptune.API.Controllers
             var buildLoadingInputEndTime = stopwatch.Elapsed;
             stopwatch.Stop();
 
-            var responseObject = await _nereidService.RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl);
+            var responseObject = await _nereidService.RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, new List<Node>(), null);
 
             var returnValue = new
             {
@@ -257,7 +256,7 @@ namespace Neptune.API.Controllers
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var treatmentFacilityUrl = "api/v1/treatment_facility/validate?state=ca&region=oc";
-            var responseObject = await _nereidService.RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable, treatmentFacilityUrl);
+            var responseObject = await _nereidService.RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable, treatmentFacilityUrl, new List<Node>(), null);
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
 
             return Ok(new
@@ -289,7 +288,7 @@ namespace Neptune.API.Controllers
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var responseObject = await _nereidService.RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable, treatmentFacilityUrl);
+            var responseObject = await _nereidService.RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable, treatmentFacilityUrl, new List<Node>(), null);
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
 
             return Ok(
@@ -323,7 +322,7 @@ namespace Neptune.API.Controllers
             try
             {
                 var responseObject = await _nereidService.RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable,
-                    treatmentFacilityUrl);
+                    treatmentFacilityUrl, new List<Node>(), null);
                 return Ok(
                     new
                     {
@@ -441,7 +440,7 @@ namespace Neptune.API.Controllers
             var precipitationZones = _dbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
 
             var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext);
-            var responseContent = await _nereidService.SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWQMPNodes, allModelingQuickBMPs, true, modelBasins, precipitationZones, delineations, null);
+            var responseContent = await _nereidService.SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWQMPNodes, allModelingQuickBMPs, true, modelBasins, precipitationZones, delineations, null, null);
 
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
             stopwatch.Stop();

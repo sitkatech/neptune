@@ -262,8 +262,10 @@ namespace Neptune.WebMvc.Controllers
                 OwnerOrganizationID = CurrentPerson.OrganizationID, 
                 InventoryIsVerified = false,
                 TrashCaptureStatusTypeID = viewModel.TrashCaptureStatusTypeID.GetValueOrDefault(),
-                SizingBasisTypeID = viewModel.SizingBasisTypeID.GetValueOrDefault()
+                SizingBasisTypeID = viewModel.SizingBasisTypeID.GetValueOrDefault(),
+                TreatmentBMPNereidLog = new TreatmentBMPNereidLog()
             };
+
             viewModel.UpdateModel(_dbContext, treatmentBMP, CurrentPerson, null);
             treatmentBMP.SetTreatmentBMPPointInPolygonDataByLocationPoint(treatmentBMP.LocationPoint, _dbContext);
             await _dbContext.TreatmentBMPs.AddAsync(treatmentBMP);
