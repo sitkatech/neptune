@@ -24,21 +24,6 @@ public class TotalNetworkSolveJob
         await _dbContext.DirtyModelNodes.ExecuteDeleteAsync();
         // clear out all the nereid results since we are rerunning it for the whole network
         await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteNereidResults");
-        // we need to set the NereidLog to null
-
-        await _dbContext.TreatmentBMPNereidLogs.ExecuteUpdateAsync(
-            x => x
-                .SetProperty(y => y.LastRequestDate, (DateTime?) null)
-                .SetProperty(y => y.NereidRequest, (string?) null)
-                .SetProperty(y => y.NereidResponse, (string?) null)
-        );
-
-        await _dbContext.WaterQualityManagementPlanNereidLogs.ExecuteUpdateAsync(
-            x => x
-                .SetProperty(y => y.LastRequestDate, (DateTime?) null)
-                .SetProperty(y => y.NereidRequest, (string?) null)
-                .SetProperty(y => y.NereidResponse, (string?) null)
-        );
 
         await _nereidService.TotalNetworkSolve(_dbContext, true);
         await _nereidService.TotalNetworkSolve(_dbContext, false);
