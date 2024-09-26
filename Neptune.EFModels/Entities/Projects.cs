@@ -205,7 +205,6 @@ namespace Neptune.EFModels.Entities
                     ModelBasinID = x.ModelBasinID,
                     PrecipitationZoneID = x.PrecipitationZoneID,
                     RegionalSubbasinID = x.RegionalSubbasinID,
-                    TreatmentBMPNereidLog = new TreatmentBMPNereidLog()
                 };
 
                 return treatmentBMP;

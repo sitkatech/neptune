@@ -206,7 +206,7 @@ namespace Neptune.WebMvc.Controllers
             var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(CurrentPerson);
 
             var modelingResultsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.GetModelResults(treatmentBMP));
-            var treatmentBMPNereidLog = TreatmentBMPNereidLogs.GetByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
+            var treatmentBMPNereidLog = NereidLogs.GetByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var modeledBMPPerformanceViewData = new ModeledPerformanceViewData(_linkGenerator, modelingResultsUrl, "To BMP", isSitkaAdmin, treatmentBMPNereidLog?.NereidRequest, treatmentBMPNereidLog?.NereidResponse);
             var hruCharacteristics = vHRUCharacteristics.ListByTreatmentBMP(_dbContext, upstreamestBMP ?? treatmentBMP, delineation);
             var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
@@ -265,8 +265,7 @@ namespace Neptune.WebMvc.Controllers
                 OwnerOrganizationID = CurrentPerson.OrganizationID, 
                 InventoryIsVerified = false,
                 TrashCaptureStatusTypeID = viewModel.TrashCaptureStatusTypeID.GetValueOrDefault(),
-                SizingBasisTypeID = viewModel.SizingBasisTypeID.GetValueOrDefault(),
-                TreatmentBMPNereidLog = new TreatmentBMPNereidLog()
+                SizingBasisTypeID = viewModel.SizingBasisTypeID.GetValueOrDefault()
             };
 
             viewModel.UpdateModel(_dbContext, treatmentBMP, CurrentPerson, null);

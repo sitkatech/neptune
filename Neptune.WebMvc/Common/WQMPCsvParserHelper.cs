@@ -108,8 +108,7 @@ namespace Neptune.WebMvc.Common
                 {
                     StormwaterJurisdictionID = stormwaterJurisdictionID.Value,
                     WaterQualityManagementPlanName = wqmpName,
-                    WaterQualityManagementPlanModelingApproachID = (int)WaterQualityManagementPlanModelingApproachEnum.Detailed,
-                    WaterQualityManagementPlanNereidLog = new WaterQualityManagementPlanNereidLog()
+                    WaterQualityManagementPlanModelingApproachID = (int)WaterQualityManagementPlanModelingApproachEnum.Detailed
                 };
             }
 

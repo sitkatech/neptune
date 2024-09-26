@@ -145,8 +145,7 @@ namespace Neptune.WebMvc.Common
                     TreatmentBMPName = treatmentBMPName,
                     TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID,
                     StormwaterJurisdictionID = stormwaterJurisdictionID.Value, 
-                    InventoryIsVerified = false,
-                    TreatmentBMPNereidLog = new TreatmentBMPNereidLog()
+                    InventoryIsVerified = false
                 };
             }
 

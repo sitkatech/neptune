@@ -183,8 +183,8 @@ namespace Neptune.WebMvc.Controllers
             var quickBmps = QuickBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
             var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(CurrentPerson);
             var modelingResultsUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.GetModelResults(waterQualityManagementPlan));
-            var waterQualityManagementPlanNereidLog = WaterQualityManagementPlanNereidLogs.GetByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
-            var modeledPerformanceViewData = new ModeledPerformanceViewData(_linkGenerator, modelingResultsUrl, "Site Runoff", isSitkaAdmin, waterQualityManagementPlanNereidLog?.NereidRequest, waterQualityManagementPlanNereidLog?.NereidResponse);
+            var nereidLog = NereidLogs.GetByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var modeledPerformanceViewData = new ModeledPerformanceViewData(_linkGenerator, modelingResultsUrl, "Site Runoff", isSitkaAdmin, nereidLog?.NereidRequest, nereidLog?.NereidResponse);
             var parcelGridSpec = new ParcelGridSpec();
 
             var waterQualityManagementPlanDocuments = WaterQualityManagementPlanDocuments.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
@@ -234,8 +234,7 @@ namespace Neptune.WebMvc.Controllers
             {
                 TrashCaptureStatusTypeID = TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID,
                 WaterQualityManagementPlanModelingApproachID = WaterQualityManagementPlanModelingApproach.Detailed
-                    .WaterQualityManagementPlanModelingApproachID,
-                WaterQualityManagementPlanNereidLog = new WaterQualityManagementPlanNereidLog()
+                    .WaterQualityManagementPlanModelingApproachID
             };
 
             viewModel.UpdateModel(waterQualityManagementPlan);

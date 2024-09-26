@@ -202,7 +202,6 @@ namespace Neptune.EFModels.Entities
                 .Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.TreatmentBMPDocuments.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.TreatmentBMPImages.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
-            await dbContext.TreatmentBMPNereidLogs.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.TreatmentBMPModelingAttributes.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x => x.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.TreatmentBMPs.Where(x => x.UpstreamBMPID == TreatmentBMPID)

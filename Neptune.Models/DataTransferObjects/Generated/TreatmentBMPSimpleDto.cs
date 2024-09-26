@@ -33,5 +33,6 @@ namespace Neptune.Models.DataTransferObjects
         public int? UpstreamBMPID { get; set; }
         public int? RegionalSubbasinID { get; set; }
         public int? ProjectID { get; set; }
+        public int? LastNereidLogID { get; set; }
     }
 }

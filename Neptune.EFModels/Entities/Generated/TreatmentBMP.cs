@@ -81,6 +81,8 @@ public partial class TreatmentBMP
 
     public int? ProjectID { get; set; }
 
+    public int? LastNereidLogID { get; set; }
+
     [InverseProperty("TreatmentBMP")]
     public virtual ICollection<CustomAttribute> CustomAttributes { get; set; } = new List<CustomAttribute>();
 
@@ -102,6 +104,10 @@ public partial class TreatmentBMP
 
     [InverseProperty("UpstreamBMP")]
     public virtual ICollection<TreatmentBMP> InverseUpstreamBMP { get; set; } = new List<TreatmentBMP>();
+
+    [ForeignKey("LastNereidLogID")]
+    [InverseProperty("TreatmentBMPs")]
+    public virtual NereidLog? LastNereidLog { get; set; }
 
     [InverseProperty("TreatmentBMP")]
     public virtual ICollection<MaintenanceRecord> MaintenanceRecords { get; set; } = new List<MaintenanceRecord>();
@@ -152,9 +158,6 @@ public partial class TreatmentBMP
 
     [InverseProperty("UpstreamTreatmentBMP")]
     public virtual ICollection<TreatmentBMPModelingAttribute> TreatmentBMPModelingAttributeUpstreamTreatmentBMPs { get; set; } = new List<TreatmentBMPModelingAttribute>();
-
-    [InverseProperty("TreatmentBMP")]
-    public virtual TreatmentBMPNereidLog? TreatmentBMPNereidLog { get; set; }
 
     [ForeignKey("TreatmentBMPTypeID")]
     [InverseProperty("TreatmentBMPs")]

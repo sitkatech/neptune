@@ -69,27 +69,32 @@ public class NereidService : BaseAPIService<NereidService>
         if (dbContext != null)
         {
             var serializedResponse = GeoJsonSerializer.Serialize(nereidResultResponse);
+            var nereidLog = new NereidLog()
+            {
+                RequestDate = DateTime.UtcNow,
+                NereidRequest = serializedRequest,
+                NereidResponse = serializedResponse
+            };
+            await dbContext.AddAsync(nereidLog);
+            await dbContext.SaveChangesAsync();
 
-            var treatmentBMPIDs = graphNodes.Where(x => x.TreatmentBMPID.HasValue).Select(x => x.TreatmentBMPID.Value);
+            var treatmentBMPIDs = graphNodes.Where(x => x.TreatmentBMPID.HasValue).Select(x => x.TreatmentBMPID.Value).ToList();
             if (treatmentBMPIDs.Any())
             {
-                await dbContext.TreatmentBMPNereidLogs.Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).ExecuteUpdateAsync(
+                await dbContext.TreatmentBMPs.Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).ExecuteUpdateAsync(
                     x => x
-                        .SetProperty(y => y.LastRequestDate, DateTime.UtcNow)
-                        .SetProperty(y => y.NereidRequest, serializedRequest)
-                        .SetProperty(y => y.NereidResponse, serializedResponse)
+                        .SetProperty(y => y.LastNereidLogID, nereidLog.NereidLogID)
                 );
             }
-            var waterQualityManagementPlanIDs = graphNodes.Where(x => x.WaterQualityManagementPlan != null).Select(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanID);
+            var waterQualityManagementPlanIDs = graphNodes.Where(x => x.WaterQualityManagementPlan != null).Select(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanID).ToList();
             if (waterQualityManagementPlanIDs.Any())
             {
-                await dbContext.WaterQualityManagementPlanNereidLogs.Where(x => waterQualityManagementPlanIDs.Contains(x.WaterQualityManagementPlanID)).ExecuteUpdateAsync(
+                await dbContext.WaterQualityManagementPlans.Where(x => waterQualityManagementPlanIDs.Contains(x.WaterQualityManagementPlanID)).ExecuteUpdateAsync(
                     x => x
-                        .SetProperty(y => y.LastRequestDate, DateTime.UtcNow)
-                        .SetProperty(y => y.NereidRequest, serializedRequest)
-                        .SetProperty(y => y.NereidResponse, serializedResponse)
+                        .SetProperty(y => y.LastNereidLogID, nereidLog.NereidLogID)
                 );
             }
+
         }
 
         return nereidResultResponse;
@@ -152,7 +157,7 @@ public class NereidService : BaseAPIService<NereidService>
     {
         const string solutionSequenceUrl = "api/v1/network/solution_sequence?min_branch_size=12";
 
-        var allLoadingInputs = projectID != null ? dbContext.vNereidProjectLoadingInputs.AsNoTracking().Where(x => x.ProjectID == projectID).ToList().Select(x =>
+        var allLoadingInputs = projectID != null ? dbContext.vNereidProjectLoadingInputs.Where(x => x.ProjectID == projectID).ToList().Select(x =>
             new vNereidLoadingInput()
             {
                 Area = x.Area,
@@ -170,12 +175,12 @@ public class NereidService : BaseAPIService<NereidService>
                 RelationallyAssociatedModelingApproach = x.RelationallyAssociatedModelingApproach,
                 SpatiallyAssociatedModelingApproach = x.SpatiallyAssociatedModelingApproach,
                 WaterQualityManagementPlanID = x.WaterQualityManagementPlanID
-            }).ToList() : dbContext.vNereidLoadingInputs.AsNoTracking().ToList();
+            }).ToList() : dbContext.vNereidLoadingInputs.ToList();
         var allModelingBMPs = TreatmentBMPs.ListModelingTreatmentBMPs(dbContext, projectID, projectRegionalSubbasinIDs).ToList();
         var allWQMPNodes =
             GetWaterQualityManagementPlanNodes(dbContext, projectID, projectRegionalSubbasinIDs).ToList();
         //This will get taken care of inside of SolveSubgraph based on the WQMP nodes above, so no need to filter it here
-        var allModelingQuickBMPs = dbContext.QuickBMPs.AsNoTracking().Include(x => x.TreatmentBMPType).Include(x => x.WaterQualityManagementPlan).Where(x =>
+        var allModelingQuickBMPs = dbContext.QuickBMPs.Include(x => x.TreatmentBMPType).Include(x => x.WaterQualityManagementPlan).Where(x =>
                 x.PercentOfSiteTreated != null && x.PercentCaptured != null && x.PercentRetained != null &&
                 x.TreatmentBMPType.IsAnalyzedInModelingModule)
             .ToList();
@@ -204,8 +209,8 @@ public class NereidService : BaseAPIService<NereidService>
             }
         }
 
-        var modelBasins = dbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
-        var precipitationZones = dbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
+        var modelBasins = dbContext.ModelBasins.ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
+        var precipitationZones = dbContext.PrecipitationZones.ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
         var missingNodeIDs = new List<string>();
         foreach (var parallel in solutionSequenceResult.Data.SolutionSequence.Parallel)
         {
@@ -452,7 +457,7 @@ public class NereidService : BaseAPIService<NereidService>
         var nodes = new List<Node>();
         var edges = new List<Edge>();
 
-        MakeRSBNodesAndEdges(dbContext.RegionalSubbasins.AsNoTracking().Where(x => x.IsInModelBasin == true).ToList(), out var rsbEdges, out var rsbNodes);
+        MakeRSBNodesAndEdges(dbContext.RegionalSubbasins.Where(x => x.IsInModelBasin == true).ToList(), out var rsbEdges, out var rsbNodes);
         nodes.AddRange(rsbNodes);
         edges.AddRange(rsbEdges);
 
@@ -558,7 +563,7 @@ public class NereidService : BaseAPIService<NereidService>
 
     private static void MakeDistributedDelineationNodesAndEdges(NeptuneDbContext dbContext, out List<Edge> delineationEdges, out List<Node> delineationNodes, int? projectID = null, List<int> projectRegionalSubbasinIDs = null)
     {
-        var distributedDelineations = dbContext.Delineations.Include(x => x.TreatmentBMP).AsNoTracking()
+        var distributedDelineations = dbContext.Delineations.Include(x => x.TreatmentBMP)
             .Where(x => x.DelineationTypeID == (int) DelineationTypeEnum.Distributed &&
                         // don't include delineations for non-modeled BMPs
                         x.TreatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule &&

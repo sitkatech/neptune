@@ -24,5 +24,6 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[TrashCaptureStatusTypeID] [int] NOT NULL CONSTRAINT [FK_WaterQualityManagementPlan_TrashCaptureStatusType_TrashCaptureStatusTypeID] FOREIGN KEY REFERENCES [dbo].[TrashCaptureStatusType] ([TrashCaptureStatusTypeID]),
 	[TrashCaptureEffectiveness] [int] NULL CONSTRAINT [CK_WaterQualityManagementPlan_TrashCaptureEffectivenessMustBeBetween1And99] CHECK  (([TrashCaptureEffectiveness] IS NULL OR [TrashCaptureEffectiveness]>(0) AND [TrashCaptureEffectiveness]<(100))),
 	[WaterQualityManagementPlanModelingApproachID] [int] NOT NULL CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanModelingApproach_WaterQualityManagementPlanModelingApproachID] FOREIGN KEY REFERENCES [dbo].[WaterQualityManagementPlanModelingApproach] ([WaterQualityManagementPlanModelingApproachID]),
+	[LastNereidLogID] [int] NULL CONSTRAINT [FK_WaterQualityManagementPlan_NereidLog_LastNereidLogID_NereidLogID] FOREIGN KEY REFERENCES [dbo].NereidLog ([NereidLogID]),
 	CONSTRAINT [AK_WaterQualityManagementPlan_WaterQualityManagementPlanName_StormwaterJurisdictionID] UNIQUE ([WaterQualityManagementPlanName], [StormwaterJurisdictionID])
 )

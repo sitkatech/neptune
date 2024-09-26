@@ -38,7 +38,8 @@ namespace Neptune.EFModels.Entities
                 PrecipitationZoneID = treatmentBMP.PrecipitationZoneID,
                 UpstreamBMPID = treatmentBMP.UpstreamBMPID,
                 RegionalSubbasinID = treatmentBMP.RegionalSubbasinID,
-                ProjectID = treatmentBMP.ProjectID
+                ProjectID = treatmentBMP.ProjectID,
+                LastNereidLogID = treatmentBMP.LastNereidLogID
             };
             return dto;
         }

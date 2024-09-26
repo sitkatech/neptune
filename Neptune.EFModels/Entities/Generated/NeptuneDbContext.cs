@@ -67,6 +67,8 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<NeptunePageImage> NeptunePageImages { get; set; }
 
+    public virtual DbSet<NereidLog> NereidLogs { get; set; }
+
     public virtual DbSet<NereidResult> NereidResults { get; set; }
 
     public virtual DbSet<Notification> Notifications { get; set; }
@@ -163,8 +165,6 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<TreatmentBMPModelingAttribute> TreatmentBMPModelingAttributes { get; set; }
 
-    public virtual DbSet<TreatmentBMPNereidLog> TreatmentBMPNereidLogs { get; set; }
-
     public virtual DbSet<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
 
     public virtual DbSet<TreatmentBMPType> TreatmentBMPTypes { get; set; }
@@ -178,8 +178,6 @@ public partial class NeptuneDbContext : DbContext
     public virtual DbSet<WaterQualityManagementPlanBoundary> WaterQualityManagementPlanBoundaries { get; set; }
 
     public virtual DbSet<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; }
-
-    public virtual DbSet<WaterQualityManagementPlanNereidLog> WaterQualityManagementPlanNereidLogs { get; set; }
 
     public virtual DbSet<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; }
 
@@ -527,6 +525,11 @@ public partial class NeptuneDbContext : DbContext
             entity.HasOne(d => d.NeptunePage).WithMany(p => p.NeptunePageImages).OnDelete(DeleteBehavior.ClientSetNull);
         });
 
+        modelBuilder.Entity<NereidLog>(entity =>
+        {
+            entity.HasKey(e => e.NereidLogID).HasName("PK_NereidLog_NereidLogID");
+        });
+
         modelBuilder.Entity<NereidResult>(entity =>
         {
             entity.HasKey(e => e.NereidResultID).HasName("PK_NereidResult_NereidResultID");
@@ -861,6 +864,8 @@ public partial class NeptuneDbContext : DbContext
 
             entity.HasOne(d => d.InventoryVerifiedByPerson).WithMany(p => p.TreatmentBMPs).HasConstraintName("FK_TreatmentBMP_Person_InventoryVerifiedByPersonID_PersonID");
 
+            entity.HasOne(d => d.LastNereidLog).WithMany(p => p.TreatmentBMPs).HasConstraintName("FK_TreatmentBMP_NereidLog_LastNereidLogID_NereidLogID");
+
             entity.HasOne(d => d.OwnerOrganization).WithMany(p => p.TreatmentBMPs)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_TreatmentBMP_Organization_OwnerOrganizationID_OrganizationID");
@@ -937,13 +942,6 @@ public partial class NeptuneDbContext : DbContext
             entity.HasOne(d => d.UpstreamTreatmentBMP).WithMany(p => p.TreatmentBMPModelingAttributeUpstreamTreatmentBMPs).HasConstraintName("FK_TreatmentBMPModelingAttribute_TreatmentBMP_UpstreamTreatmentBMPID_TreatmentBMPID");
         });
 
-        modelBuilder.Entity<TreatmentBMPNereidLog>(entity =>
-        {
-            entity.HasKey(e => e.TreatmentBMPNereidLogID).HasName("PK_TreatmentBMPNereidLog_TreatmentBMPNereidLogID");
-
-            entity.HasOne(d => d.TreatmentBMP).WithOne(p => p.TreatmentBMPNereidLog).OnDelete(DeleteBehavior.ClientSetNull);
-        });
-
         modelBuilder.Entity<TreatmentBMPObservation>(entity =>
         {
             entity.HasKey(e => e.TreatmentBMPObservationID).HasName("PK_TreatmentBMPObservation_TreatmentBMPObservationID");
@@ -984,6 +982,8 @@ public partial class NeptuneDbContext : DbContext
         {
             entity.HasKey(e => e.WaterQualityManagementPlanID).HasName("PK_WaterQualityManagementPlan_WaterQualityManagementPlanID");
 
+            entity.HasOne(d => d.LastNereidLog).WithMany(p => p.WaterQualityManagementPlans).HasConstraintName("FK_WaterQualityManagementPlan_NereidLog_LastNereidLogID_NereidLogID");
+
             entity.HasOne(d => d.StormwaterJurisdiction).WithMany(p => p.WaterQualityManagementPlans).OnDelete(DeleteBehavior.ClientSetNull);
         });
 
@@ -1003,13 +1003,6 @@ public partial class NeptuneDbContext : DbContext
             entity.HasOne(d => d.FileResource).WithMany(p => p.WaterQualityManagementPlanDocuments).OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.WaterQualityManagementPlan).WithMany(p => p.WaterQualityManagementPlanDocuments).OnDelete(DeleteBehavior.ClientSetNull);
-        });
-
-        modelBuilder.Entity<WaterQualityManagementPlanNereidLog>(entity =>
-        {
-            entity.HasKey(e => e.WaterQualityManagementPlanNereidLogID).HasName("PK_WaterQualityManagementPlanNereidLog_WaterQualityManagementPlanNereidLogID");
-
-            entity.HasOne(d => d.WaterQualityManagementPlan).WithOne(p => p.WaterQualityManagementPlanNereidLog).OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<WaterQualityManagementPlanParcel>(entity =>

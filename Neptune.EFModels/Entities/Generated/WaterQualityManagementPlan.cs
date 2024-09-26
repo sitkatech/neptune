@@ -84,12 +84,18 @@ public partial class WaterQualityManagementPlan
 
     public int WaterQualityManagementPlanModelingApproachID { get; set; }
 
+    public int? LastNereidLogID { get; set; }
+
     [InverseProperty("WaterQualityManagementPlan")]
     public virtual ICollection<DirtyModelNode> DirtyModelNodes { get; set; } = new List<DirtyModelNode>();
 
     [ForeignKey("HydrologicSubareaID")]
     [InverseProperty("WaterQualityManagementPlans")]
     public virtual HydrologicSubarea? HydrologicSubarea { get; set; }
+
+    [ForeignKey("LastNereidLogID")]
+    [InverseProperty("WaterQualityManagementPlans")]
+    public virtual NereidLog? LastNereidLog { get; set; }
 
     [InverseProperty("WaterQualityManagementPlan")]
     public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; } = new List<LoadGeneratingUnit>();
@@ -127,9 +133,6 @@ public partial class WaterQualityManagementPlan
 
     [InverseProperty("WaterQualityManagementPlan")]
     public virtual ICollection<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; } = new List<WaterQualityManagementPlanDocument>();
-
-    [InverseProperty("WaterQualityManagementPlan")]
-    public virtual WaterQualityManagementPlanNereidLog? WaterQualityManagementPlanNereidLog { get; set; }
 
     [InverseProperty("WaterQualityManagementPlan")]
     public virtual ICollection<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; } = new List<WaterQualityManagementPlanParcel>();

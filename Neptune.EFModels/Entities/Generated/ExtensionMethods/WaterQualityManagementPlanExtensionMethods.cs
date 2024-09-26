@@ -37,7 +37,8 @@ namespace Neptune.EFModels.Entities
                 RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres,
                 TrashCaptureStatusTypeID = waterQualityManagementPlan.TrashCaptureStatusTypeID,
                 TrashCaptureEffectiveness = waterQualityManagementPlan.TrashCaptureEffectiveness,
-                WaterQualityManagementPlanModelingApproachID = waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID
+                WaterQualityManagementPlanModelingApproachID = waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID,
+                LastNereidLogID = waterQualityManagementPlan.LastNereidLogID
             };
             return dto;
         }

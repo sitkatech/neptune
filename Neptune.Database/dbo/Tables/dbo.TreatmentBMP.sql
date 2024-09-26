@@ -27,6 +27,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[UpstreamBMPID] [int] NULL CONSTRAINT [FK_TreatmentBMP_TreatmentBMP_UpstreamBMPID_TreatmentBMPID] FOREIGN KEY REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID]),
 	[RegionalSubbasinID] [int] NULL,
 	[ProjectID] [int] NULL CONSTRAINT [FK_TreatmentBMP_Project_ProjectID] FOREIGN KEY REFERENCES [dbo].[Project] ([ProjectID]),
+	[LastNereidLogID] [int] NULL CONSTRAINT [FK_TreatmentBMP_NereidLog_LastNereidLogID_NereidLogID] FOREIGN KEY REFERENCES [dbo].NereidLog ([NereidLogID]),
 	CONSTRAINT [AK_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID] UNIQUE([TreatmentBMPID], [TreatmentBMPTypeID]),
 	CONSTRAINT [CK_TreatmentBMP_LifespanEndDateMustBeSetIfLifespanTypeIsFixedEndDate] CHECK  (([TreatmentBMPLifespanTypeID]=(3) AND [TreatmentBMPLifespanEndDate] IS NOT NULL OR [TreatmentBMPLifespanTypeID]<>(3) AND [TreatmentBMPLifespanEndDate] IS NULL)),
 	CONSTRAINT [CK_TreatmentBMP_TrashCaptureEffectivenessMustBeBetween1And99] CHECK  (([TrashCaptureEffectiveness] IS NULL OR [TrashCaptureEffectiveness]>(0) AND [TrashCaptureEffectiveness]<(100)))
