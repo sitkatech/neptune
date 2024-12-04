@@ -726,6 +726,8 @@ public partial class NeptuneDbContext : DbContext
         {
             entity.HasKey(e => e.QuickBMPID).HasName("PK_QuickBMP_QuickBMPID");
 
+            entity.Property(e => e.NumberOfIndividualBMPs).HasDefaultValue(1);
+
             entity.HasOne(d => d.TreatmentBMPType).WithMany(p => p.QuickBMPs).OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.WaterQualityManagementPlan).WithMany(p => p.QuickBMPs).OnDelete(DeleteBehavior.ClientSetNull);

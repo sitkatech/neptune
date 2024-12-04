@@ -21,7 +21,8 @@ namespace Neptune.EFModels.Entities
                 PercentOfSiteTreated = quickBMP.PercentOfSiteTreated,
                 PercentCaptured = quickBMP.PercentCaptured,
                 PercentRetained = quickBMP.PercentRetained,
-                DryWeatherFlowOverrideID = quickBMP.DryWeatherFlowOverrideID
+                DryWeatherFlowOverrideID = quickBMP.DryWeatherFlowOverrideID,
+                NumberOfIndividualBMPs = quickBMP.NumberOfIndividualBMPs
             };
             return dto;
         }

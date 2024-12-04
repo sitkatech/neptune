@@ -136,7 +136,8 @@ USING (VALUES
 (135, 'DesignStormDepth85thPercentile', '85th Percentile Design Storm Depth (inches)'),
 (136, 'DesignVolume85thPercentile', '85th Percentile Design Volume (cuft)'),
 (137, 'LandUseBasedWaterQualityScore', 'Land Use Based Water Quality Score'),
-(138, 'ReceivingWaterScore', 'Receiving Water Score')
+(138, 'ReceivingWaterScore', 'Receiving Water Score'),
+(139, 'NumberOfIndividualBMPs', '# of Individual BMPs')
 )
 AS Source (FieldDefinitionTypeID, FieldDefinitionTypeName, FieldDefinitionTypeDisplayName)
 ON Target.FieldDefinitionTypeID = Source.FieldDefinitionTypeID

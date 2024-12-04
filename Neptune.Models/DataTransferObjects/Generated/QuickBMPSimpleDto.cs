@@ -16,5 +16,6 @@ namespace Neptune.Models.DataTransferObjects
         public decimal? PercentCaptured { get; set; }
         public decimal? PercentRetained { get; set; }
         public int? DryWeatherFlowOverrideID { get; set; }
+        public int NumberOfIndividualBMPs { get; set; }
     }
 }

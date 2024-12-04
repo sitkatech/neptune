@@ -36,7 +36,8 @@
                 DryWeatherFlowOverrideID: $scope.AngularViewData.DryWeatherFlowOverrideDefaultID,
                 PercentOfSiteTreated: null,
                 PercentCaptured: null,
-                PercentRetained: null
+                PercentRetained: null,
+                NumberOfIndividualBMPs: 1
             };
             return newQuickBMP;
         };
