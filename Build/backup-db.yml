@@ -13,6 +13,7 @@ variables:
 jobs:
 - job: BackupDB
   displayName: 'Backup Production DB'
+  timeoutInMinutes: 120
   pool:
     vmImage: 'windows-latest'
     demands:
