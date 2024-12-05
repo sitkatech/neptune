@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Hangfire.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -31,6 +32,9 @@ using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Services;
 using Neptune.WebMvc.Views.DelineationUpload;
+using NetTopologySuite.Features;
+using System.Data;
+using System.IO.Compression;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -38,6 +42,7 @@ namespace Neptune.WebMvc.Controllers
     {
         private readonly AzureBlobStorageService _azureBlobStorageService;
         private readonly GDALAPIService _gdalApiService;
+        private const string CatalogContainerName = "catalog";
 
         public DelineationUploadController(NeptuneDbContext dbContext, ILogger<DelineationUploadController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, AzureBlobStorageService azureBlobStorageService, GDALAPIService gdalApiService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
@@ -162,6 +167,89 @@ namespace Neptune.WebMvc.Controllers
             return RedirectToAction(new SitkaRoute<DelineationUploadController>(_linkGenerator, x => x.ApproveDelineationGisUpload()));
         }
 
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public ViewResult DownloadDelineationGeometry()
+        {
+            var viewModel = new DownloadDelineationGeometryViewModel() { TreatmentBMPNameField = "TreatmentBMPName" };
+            return ViewDownloadDelineationGeometry(viewModel);
+        }
+
+        [HttpPost]
+        [JurisdictionManageFeature]
+        [Produces(@"application/octet-stream")]
+        public async Task<FileContentResult> DownloadDelineationGeometry(DownloadDelineationGeometryViewModel viewModel)
+        {
+            //var file = viewModel.FileResourceData;
+            var blobName = Guid.NewGuid().ToString();
+            await using var stream = new MemoryStream();
+
+            var featureCollection = new FeatureCollection();
+            var delineations = _dbContext.Delineations.Include(x => x.TreatmentBMP)
+                .ThenInclude(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
+                .Include(x => x.TreatmentBMP)
+                .ThenInclude(x => x.TreatmentBMPType)
+                .Where(x =>
+                x.TreatmentBMP.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID &&
+                x.DelineationTypeID == (int)DelineationTypeEnum.Distributed).ToList();
+
+            foreach (var delineation in delineations)
+            {
+                var attributesTable = new AttributesTable
+                {
+                    { "DelineationID", delineation.DelineationID },
+                    { "BMPName", delineation.TreatmentBMP.TreatmentBMPName },
+                    { "Jurisdiction", delineation.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName() },
+                    { "BMPType", delineation.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
+                    { "DelineationStatus", delineation.GetDelineationStatus() },
+                    { "DelineationArea", delineation.GetDelineationArea() },
+                    { "DateOfLastDelineationModification", delineation.DateLastModified },
+                    { "DateOfLastDelineationVerification", delineation.DateLastVerified },
+                };
+                var feature = new Feature(delineation.DelineationGeometry4326, attributesTable);
+                featureCollection.Add(feature);
+            }
+
+            await GeoJsonSerializer.SerializeAsGeoJsonToStream(featureCollection,
+                GeoJsonSerializer.DefaultSerializerOptions, stream);
+
+            //var gdbInput = new GdbInput()
+            //{
+            //    LayerName = "test",
+            //    CoordinateSystemID = Proj4NetHelper.NAD_83_CA_ZONE_VI_SRID,
+            //    GeometryTypeName = "POLYGON",
+            //    BlobContainer = CatalogContainerName,
+            //};
+            //await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
+            //{
+            //    GdbInputs = new List<GdbInput>{gdbInput},
+            //    GdbName = blobName
+            //});
+
+            //using var disposableTempGdbZipFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".gdb.zip");
+            //using var disposableTempGdbFile = DisposableTempDirectory.MakeDisposableTempDirectoryEndingIn(".gdb");
+            //var gdbFileFolder = disposableTempGdbFile.DirectoryInfo;
+            //await using (Stream destination = disposableTempGdbZipFile.FileInfo.OpenWrite())
+            //{
+            //    await stream.CopyToAsync(destination);
+            //}
+            //var finalDirectoryName = $"test.gdb";
+            //var temp = gdbFileFolder.GetDirectories();//.First().GetFiles();
+
+            //using (var zipArchive = new ZipArchive(stream, ZipArchiveMode.Create, false))
+            //{
+            //    foreach (var fileInfo in gdbFileFolder.GetDirectories().First().GetFiles())
+            //    {
+            //        zipArchive.CreateEntryFromFile(fileInfo.FullName, $"{finalDirectoryName}/{fileInfo.Name}");
+            //    }
+            //}
+
+
+            return File(stream.ToArray(), "application/octet-stream", "test.json");
+        }
+
+
         private PartialViewResult ViewUpdateDelineationGeometryErrors(UpdateDelineationGeometryViewModel viewModel)
         {
             var viewData = new UpdateDelineationGeometryViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson,
@@ -177,6 +265,16 @@ namespace Neptune.WebMvc.Controllers
             var viewData = new UpdateDelineationGeometryViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson,
                 newGisUploadUrl, approveGisUploadUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
             return RazorView<UpdateDelineationGeometry, UpdateDelineationGeometryViewData, UpdateDelineationGeometryViewModel>(viewData, viewModel);
+        }
+
+        private ViewResult ViewDownloadDelineationGeometry(DownloadDelineationGeometryViewModel viewModel)
+        {
+            var newGisUploadUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.DownloadDelineationGeometry());
+            var approveGisUploadUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.ApproveDelineationGisUpload());
+
+            var viewData = new DownloadDelineationGeometryViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson,
+                newGisUploadUrl, approveGisUploadUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
+            return RazorView<DownloadDelineationGeometry, DownloadDelineationGeometryViewData, DownloadDelineationGeometryViewModel>(viewData, viewModel);
         }
 
         [HttpGet]
