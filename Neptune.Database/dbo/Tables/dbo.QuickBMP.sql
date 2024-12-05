@@ -8,5 +8,6 @@ CREATE TABLE [dbo].[QuickBMP](
 	[PercentCaptured] [decimal](5, 2) NULL,
 	[PercentRetained] [decimal](5, 2) NULL,
 	[DryWeatherFlowOverrideID] [int] NULL CONSTRAINT [FK_QuickBMP_DryWeatherFlowOverride_DryWeatherFlowOverrideID] FOREIGN KEY REFERENCES [dbo].[DryWeatherFlowOverride] ([DryWeatherFlowOverrideID]),
+	[NumberOfIndividualBMPs] [int] NOT NULL default 1,
 	CONSTRAINT [AK_QuickBMP_WaterQualityManagementPlanID_QuickBMPName] UNIQUE([WaterQualityManagementPlanID], [QuickBMPName])
 )

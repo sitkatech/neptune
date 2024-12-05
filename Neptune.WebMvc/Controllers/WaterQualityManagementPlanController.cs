@@ -186,6 +186,7 @@ namespace Neptune.WebMvc.Controllers
             var nereidLog = NereidLogs.GetByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
             var modeledPerformanceViewData = new ModeledPerformanceViewData(_linkGenerator, modelingResultsUrl, "Site Runoff", isSitkaAdmin, nereidLog?.NereidRequest, nereidLog?.NereidResponse);
             var parcelGridSpec = new ParcelGridSpec();
+            var quickBMPGridSpec = new QuickBMPGridSpec();
 
             var waterQualityManagementPlanDocuments = WaterQualityManagementPlanDocuments.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
             var calculateTotalAcreage = (waterQualityManagementPlanBoundary?.GeometryNative?.Area ?? 0) * Constants.SquareMetersToAcres;
@@ -193,7 +194,7 @@ namespace Neptune.WebMvc.Controllers
                 waterQualityManagementPlanVerifyDraft, mapInitJson, treatmentBMPs, parcelGridSpec,
                 waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
                 waterQualityManagementPlanVerifyTreatmentBMP,
-                hruCharacteristicsViewData, waterQualityManagementPlanModelingApproaches, modeledPerformanceViewData, sourceControlBMPs, quickBmps, hasWaterQualityManagementPlanBoundary, delineationsDict, waterQualityManagementPlanDocuments, calculateTotalAcreage);
+                hruCharacteristicsViewData, waterQualityManagementPlanModelingApproaches, modeledPerformanceViewData, sourceControlBMPs, quickBmps, quickBMPGridSpec, hasWaterQualityManagementPlanBoundary, delineationsDict, waterQualityManagementPlanDocuments, calculateTotalAcreage);
 
             return RazorView<Detail, DetailViewData>(viewData);
         }
@@ -207,6 +208,18 @@ namespace Neptune.WebMvc.Controllers
             var parcels = WaterQualityManagementPlanParcels.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlanPrimaryKey.PrimaryKeyValue).Select(x => x.Parcel).OrderBy(x => x.ParcelNumber).ToList();
             var gridSpec = new ParcelGridSpec();
             return new GridJsonNetJObjectResult<Parcel>(parcels, gridSpec);
+        }
+
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
+        [WaterQualityManagementPlanViewFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public GridJsonNetJObjectResult<QuickBMP> SimplifiedStructuralBMPsForWaterQualityManagementPlanGridData([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var quickBmps =
+                QuickBMPs.ListByWaterQualityManagementPlanID(_dbContext,
+                    waterQualityManagementPlanPrimaryKey.PrimaryKeyValue);
+            var gridSpec = new QuickBMPGridSpec();
+            return new GridJsonNetJObjectResult<QuickBMP>(quickBmps, gridSpec);
         }
 
         #region CRUD Water Quality Management Plan

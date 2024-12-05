@@ -497,47 +497,7 @@
                 </div>
             }
             <div>
-                @if (ViewDataTyped.QuickBMPs.Any())
-                {
-                    <div style="padding: 0 16px">
-                        <table id="quickBMPTable" class="table table-condensed">
-                            <thead>
-                            <tr>
-                                <th style="white-space: nowrap; border-top: none;min-width: 100px;"><label>Name</label></th>
-                                <th style="white-space: nowrap; border-top: none"><label>Type</label></th>
-                                <th style="white-space: nowrap; border-top: none"><label>Notes <a style="cursor: pointer" onclick="expandOrCollapseNotesField('quickBMPTable', this)"><span class="glyphicon glyphicon-chevron-down"></span>&nbsp;&nbsp;Expand</a></label></th>
-                                <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentOfSiteTreated)</th>
-                                <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentCaptured)</th>
-                                <th style="border-top: none; text-align: right">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentRetained)</th>
-                                <th style="border-top: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
-                            {
-                                <tr>
-                                    <td>@quickBMP.QuickBMPName</td>
-                                    <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                    <td class="notes collapsed">@quickBMP.QuickBMPNote</td>
-                                    <td style="text-align: right">@(quickBMP.PercentOfSiteTreated.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentOfSiteTreated) : "")</td>
-                                    <td style="text-align: right">@(quickBMP.PercentCaptured.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentCaptured) : "")</td>
-                                    <td style="text-align: right">@(quickBMP.PercentRetained.HasValue ? string.Format("{0:0.#} %", quickBMP.PercentRetained) : "")</td>
-                                    <td>@ViewDataTyped.DisplayDryWeatherFlowOverride(quickBMP)</td>
-                                </tr>
-                            }
-                            <tr>
-                                <td colspan="3" style="text-align: right; font-weight: bold">Total % Site Treated:</td>
-                                <td colspan="1" style="text-align: right; font-weight:bold">@(string.Format("{0:0.#} %", ViewDataTyped.QuickBMPs.Sum(x => x.PercentOfSiteTreated)))</td>
-                                <td colspan="3"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                }
-                else
-                {
-                    <p class="systemText">No Other Structural BMPs have been selected.</p>
-                }
+                @Html.DhtmlxGrid(ViewDataTyped.QuickBMPGridSpec, ViewDataTyped.QuickBMPGridName, ViewDataTyped.QuickBMPGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
             </div>
 
             <h4 style="margin-top: 32px">

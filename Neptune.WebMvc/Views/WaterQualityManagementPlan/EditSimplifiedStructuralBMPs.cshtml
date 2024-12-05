@@ -55,84 +55,95 @@
                     <tbody>
                         <tr ng-repeat-start="quickBmp in AngularModel.QuickBMPs">
                             <th style="width: 30px; border:none">  </th>
-                            <th class="col-sm-3" style="vertical-align: bottom; white-space: nowrap; border:none;"> Name <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
-                            <th class="col-sm-3"style="vertical-align: bottom; white-space: nowrap; border:none;"> Type <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
-                            <th class="col-sm-2"style="vertical-align: bottom; border: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentOfSiteTreated)</th>
-                            <th class="col-sm-2"style="vertical-align: bottom; border: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentCaptured)</th>
-                            <th class="col-sm-2"style="vertical-align: bottom; border: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentRetained)</th>
+                            <th colspan="2" class="col-sm-4" style="vertical-align: bottom; white-space: nowrap; border:none;"> Name <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
+                            <th colspan="2" class="col-sm-4"style="vertical-align: bottom; white-space: nowrap; border:none;"> Type <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
+                            <th class="col-sm-4" style="border: none"> Notes</th>
                         </tr>
-                    <tr>
-                        <td style="width: 30px; border:none">
-                            <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteQuickBMPRow(AngularModel.QuickBMPs, quickBmp)" style="cursor: pointer"></span>
-                        </td>
-                        <td style="text-align: right; padding-right: 17px; border:none">
+                        <tr>
+                            <td style="width: 30px; border:none">
+                                <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteQuickBMPRow(AngularModel.QuickBMPs, quickBmp)" style="cursor: pointer"></span>
+                            </td>
+                            <td colspan="2" style="text-align: right; padding-right: 17px; border:none">
                                 <input type="text" name="@Html.NameFor(x => x.QuickBMPs[0].QuickBMPName).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.QuickBMPName" value="{{quickBmp.QuickBMPName}}" />
-                        </td>
-                        <td style="text-align: right; padding-right: 17px; border:none">
-                            <select name="@Html.NameFor(x => x.QuickBMPs[0].TreatmentBMPTypeID).ToString().Replace("0", "{{$index}}")"
-                                    class="selectpicker"
-                                    data-live-search="true"
-                                    data-container="body"
-                                    data-width="100%"  selectpicker
-                                    title="Select a Treatment BMP Type">
-                                <option ng-selected="isTreatmentBMPTypeSelected(treatmentType, quickBmp)"
-                                        ng-repeat="treatmentType in AngularViewData.TreatmentBMPTypes"
-                                        value="{{treatmentType.TreatmentBMPTypeID}}">
-                                    {{treatmentType.TreatmentBMPTypeName}}
-                                </option>
-                            </select>
-                        </td>
-                        <td style="padding-right: 17px; border: none">
-                            <div class="input-group">
-                                <input type="number" style="text-align: right; padding-right:0" name="@Html.NameFor(x => x.QuickBMPs[0].PercentOfSiteTreated).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max="100" ng-model="quickBmp.PercentOfSiteTreated" />
-                                <div class="input-group-addon">
-                                    <span>%</span>
-                                </div>
+                            </td>
+                            <td colspan="2" style="text-align: right; padding-right: 17px; border:none">
+                                <select name="@Html.NameFor(x => x.QuickBMPs[0].TreatmentBMPTypeID).ToString().Replace("0", "{{$index}}")"
+                                        class="selectpicker"
+                                        data-live-search="true"
+                                        data-container="body"
+                                        data-width="100%"  selectpicker
+                                        title="Select a Treatment BMP Type">
+                                    <option ng-selected="isTreatmentBMPTypeSelected(treatmentType, quickBmp)"
+                                            ng-repeat="treatmentType in AngularViewData.TreatmentBMPTypes"
+                                            value="{{treatmentType.TreatmentBMPTypeID}}">
+                                        {{treatmentType.TreatmentBMPTypeName}}
+                                    </option>
+                                </select>
+                            </td>
+                            <td rowspan="5" style="border: none;">
+                                <textarea name="@Html.NameFor(x => x.QuickBMPs[0].QuickBMPNote).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.QuickBMPNote" rows="10"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="width: 30px; border:none"></th>
+                            <th style="vertical-align: bottom; white-space: nowrap; border: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForNumberOfIndividualBMPs, true)</th>
+                            <th style="vertical-align: bottom; border: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentOfSiteTreated)</th>
+                            <th colspan="2" style="vertical-align: bottom; white-space: nowrap; border: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)</th>
+                        </tr>
+                        <tr>
+                            <td style="width: 30px; border:none"></td>
+                            <td style="text-align: right; padding-right: 17px; border:none">
+                                <input type="number" style="text-align: right; padding-right:0" name="@Html.NameFor(x => x.QuickBMPs[0].NumberOfIndividualBMPs).ToString().Replace("0", "{{$index}}")" class="form-control" min="1" max="100" ng-model="quickBmp.NumberOfIndividualBMPs" />
+                            </td>
+                            <td style="padding-right: 17px; border: none">
+                                <div class="input-group">
+                                    <input type="number" style="text-align: right; padding-right:0" name="@Html.NameFor(x => x.QuickBMPs[0].PercentOfSiteTreated).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max="100" ng-model="quickBmp.PercentOfSiteTreated"/>
+                                    <div class="input-group-addon">
+                                        <span>%</span>
+                                    </div>
                                 </div>
                             </td>
-                        <td style="padding-right: 17px; border: none">
-                            <div class="input-group">
-                                <input type="number" style="text-align: right; padding-right:0" name="@Html.NameFor(x => x.QuickBMPs[0].PercentCaptured).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max="100" ng-model="quickBmp.PercentCaptured" />
-                                <div class="input-group-addon">
-                                    <span>%</span>
+                            <td colspan="2" style="text-align: right; padding-right: 17px; border:none">
+                                <select name="@Html.NameFor(x => x.QuickBMPs[0].DryWeatherFlowOverrideID).ToString().Replace("0", "{{$index}}")"
+                                        class="selectpicker"
+                                        data-container="body"
+                                        data-width="100%" selectpicker
+                                        ng-init="blah = quickBmp"
+                                        ng-model="blah.DryWeatherFlowOverrideID"
+                                        ng-change="updateDryWeatherFlowOverrideIDForQuickBmp($index, blah)"
+                                        ng-options="option.DryWeatherFlowOverrideID as option.DryWeatherFlowOverrideDisplayName for option in AngularViewData.DryWeatherFlowOverrides">
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="width: 30px; border:none"></th>
+                            <th colspan="2" style="vertical-align: bottom; border: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentCaptured)</th>
+                            <th colspan="2" style="vertical-align: bottom; border: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPercentRetained)</th>
+                        </tr>
+                        <tr ng-repeat-end style="border-bottom: 2px solid #ddd;">
+                            <td style="width: 30px; border:none"></td>
+                            <td colspan="2" style="padding-right: 17px; padding-bottom: 5px; border: none">
+                                <div class="input-group">
+                                    <input type="number" style="text-align: right; padding-right:0" name="@Html.NameFor(x => x.QuickBMPs[0].PercentCaptured).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max="100" ng-model="quickBmp.PercentCaptured" />
+                                    <div class="input-group-addon">
+                                        <span>%</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td style="padding-right: 17px; border: none">
-                            <div class="input-group">
-                                <input type="number" style="text-align: right; padding-right:0" name="@Html.NameFor(x => x.QuickBMPs[0].PercentRetained).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max="100" ng-model="quickBmp.PercentRetained" />
-                                <div class="input-group-addon">
-                                    <span>%</span>
+                            </td>
+                            <td colspan="2" style="border: none; padding-right: 17px;">
+                                <div class="input-group">
+                                    <input type="number" style="text-align: right; padding-right:0" name="@Html.NameFor(x => x.QuickBMPs[0].PercentRetained).ToString().Replace("0", "{{$index}}")" class="form-control" min="0" max="100" ng-model="quickBmp.PercentRetained" />
+                                    <div class="input-group-addon">
+                                        <span>%</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th style="width: 30px; border:none"></th>
-                        <th colspan="3" style="border: none"> Notes</th>
-                        <th colspan="2" style="vertical-align: bottom; white-space: nowrap; border: none">@Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)</th>
-                    </tr>
-                    <tr ng-repeat-end style="border-bottom: 2px solid #ddd;">
-                        <td style="width: 30px; border:none"></td>
-                        <td colspan="3" style="padding-right: 17px; border: none;">
-                            <textarea name="@Html.NameFor(x => x.QuickBMPs[0].QuickBMPNote).ToString().Replace("0", "{{$index}}")" class="form-control" ng-model="quickBmp.QuickBMPNote"></textarea>
-                        </td>
-                        <td colspan="2" style="text-align: right; padding-right: 17px; border:none">
-                            <select name="@Html.NameFor(x => x.QuickBMPs[0].DryWeatherFlowOverrideID).ToString().Replace("0", "{{$index}}")"
-                                    class="selectpicker"
-                                    data-container="body"
-                                    data-width="100%" selectpicker
-                                    ng-init="blah = quickBmp"
-                                    ng-model="blah.DryWeatherFlowOverrideID"
-                                    ng-change="updateDryWeatherFlowOverrideIDForQuickBmp($index, blah)"
-                                    ng-options="option.DryWeatherFlowOverrideID as option.DryWeatherFlowOverrideDisplayName for option in AngularViewData.DryWeatherFlowOverrides">
-                            </select>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                   
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="3" style="text-align: right; vertical-align: middle">
+                            <td colspan="2" style="text-align: right; vertical-align: middle">
                                 Untreated Percentage
                             </td>
                             <td style="padding-right: 17px; border: none">
@@ -143,8 +154,9 @@
                                     </div>
                                 </div>
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td style="border: none"></td>
+                            <td style="border: none"></td>
+                            <td style="border: none"></td>
                         </tr>
                     </tfoot>
                 </table>
