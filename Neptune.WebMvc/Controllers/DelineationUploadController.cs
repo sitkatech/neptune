@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using EllipticCurve.Utils;
 using Hangfire.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -177,7 +178,7 @@ namespace Neptune.WebMvc.Controllers
 
         [HttpPost]
         [JurisdictionManageFeature]
-        [Produces(@"application/octet-stream")]
+        [Produces(@"application/zip")]
         public async Task<FileContentResult> DownloadDelineationGeometry(DownloadDelineationGeometryViewModel viewModel)
         {
             //var file = viewModel.FileResourceData;
@@ -214,39 +215,23 @@ namespace Neptune.WebMvc.Controllers
             await GeoJsonSerializer.SerializeAsGeoJsonToStream(featureCollection,
                 GeoJsonSerializer.DefaultSerializerOptions, stream);
 
-            //var gdbInput = new GdbInput()
-            //{
-            //    LayerName = "test",
-            //    CoordinateSystemID = Proj4NetHelper.NAD_83_CA_ZONE_VI_SRID,
-            //    GeometryTypeName = "POLYGON",
-            //    BlobContainer = CatalogContainerName,
-            //};
-            //await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
-            //{
-            //    GdbInputs = new List<GdbInput>{gdbInput},
-            //    GdbName = blobName
-            //});
+            var jurisdictionName = delineations[0].TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName().Replace(' ', '-');
 
-            //using var disposableTempGdbZipFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".gdb.zip");
-            //using var disposableTempGdbFile = DisposableTempDirectory.MakeDisposableTempDirectoryEndingIn(".gdb");
-            //var gdbFileFolder = disposableTempGdbFile.DirectoryInfo;
-            //await using (Stream destination = disposableTempGdbZipFile.FileInfo.OpenWrite())
-            //{
-            //    await stream.CopyToAsync(destination);
-            //}
-            //var finalDirectoryName = $"test.gdb";
-            //var temp = gdbFileFolder.GetDirectories();//.First().GetFiles();
+            var gdbInput = new GdbInput()
+            {
+                FileContents = stream.ToArray(),
+                LayerName = "test",
+                CoordinateSystemID = Proj4NetHelper.NAD_83_CA_ZONE_VI_SRID,
+                GeometryTypeName = "POLYGON",
+                BlobContainer = CatalogContainerName,
+            };
+            var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
+            {
+                GdbInputs = new List<GdbInput> { gdbInput },
+                GdbName = $"{jurisdictionName}"
+            });
 
-            //using (var zipArchive = new ZipArchive(stream, ZipArchiveMode.Create, false))
-            //{
-            //    foreach (var fileInfo in gdbFileFolder.GetDirectories().First().GetFiles())
-            //    {
-            //        zipArchive.CreateEntryFromFile(fileInfo.FullName, $"{finalDirectoryName}/{fileInfo.Name}");
-            //    }
-            //}
-
-
-            return File(stream.ToArray(), "application/octet-stream", "test.json");
+            return File(bytes, "application/zip", $"{jurisdictionName}-delineations.gdb.zip");
         }
 
 
