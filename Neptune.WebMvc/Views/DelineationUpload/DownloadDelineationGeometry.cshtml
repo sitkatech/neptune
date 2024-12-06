@@ -14,21 +14,14 @@
     <div class="row">
         <div class="col-md-6">
             <p>
-                Use this form on the right to bulk upload Treatment BMP Delineations. Requirements:
+                Use this form on the right to bulk download Treatment BMP Delineations. 
             </p>
             <ul>
-                <li>A single ArcGIS file geodatabase containing only delineation features</li>
-                <li>The file geodatabase (.gdb) must be contained within a compressed zip file (.zip)</li>
-                <li>The zip file must contain only one file geodatabase and no other data</li>
-                <li>The file geodatabase must contain only one feature class</li>
-                <li>The feature class must have an attribute for Treatment BMP name and all values must match a Treatment BMP name already in the Inventory Module</li>
-                <li>You must supply the name of the attribute representing the Treatment BMP name</li>
-                <li>
-                    Geodatabases using ESRI Smart Database Compression (SDC) are not supported. Please
-                    <a href="http://desktop.arcgis.com/en/arcmap/10.3/tools/data-management-toolbox/uncompress-file-geodatabase-data.htm">uncompress</a>
-                    before zipping and uploading
-                </li>
-                <li>Version 10.1+ file geodatabases are supported</li>
+                <li>A single ArcGIS file geodatabase containing drainage delineation features will be produced. -Facilities that receive both piped flow and local surface flow (centralized delineations) are defined as a collection of regional subbasins rather than unique polygons and are excluded from the GDB download</li>
+                <li>The file geodatabase will contain only one feature class for facilities that receive local flow only (distributed delineations) </li>
+                <li>The file will contain attributes for BMP Name, Jurisdiction, BMP Type, Delineation Status, Delineation Area (ac), Date of Last Delineation Modification, and Date of Last Delineation Verification</li>
+                <li>This file download is intended to support bulk editing in desktop GIS software and can be  re-uploaded to the platform to update existing or add new delineations for inventoried BMPs. </li>
+                <li><i>Note:  The GDB download may take a while to be generated depending on the volume of data in the system for the selected jurisdiction. Thank you for your patience.</i></li>
             </ul>
         </div>
         <div class="col-md-6">
@@ -44,7 +37,7 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-neptune" style="display: inline-block;">
-                    <span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
+                    Download GDB
                 </button>
             </form>
             
@@ -55,12 +48,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <p id="approvalInstructionsText">
-                After you upload your file, you will see a report of the number of Treatment BMPs in the system which will have their delineations Downloadd. Once you confirm the upload, new delineations will be added and any existing delineation locations with the same Treatment BMP name and specified Jurisdiction will be overwritten. All uploaded delineations will be marked as provisional.
-            </p>
-            <form id="approveGisUploadForm" method="post" action="@ViewDataTyped.ApprovedGisUploadUrl">
-                <div id="gisUploadResults"></div>
-            </form>
+            
         </div>
     </div>
 </div>
