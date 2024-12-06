@@ -43,7 +43,6 @@ namespace Neptune.WebMvc.Controllers
     {
         private readonly AzureBlobStorageService _azureBlobStorageService;
         private readonly GDALAPIService _gdalApiService;
-        private const string CatalogContainerName = "catalog";
 
         public DelineationUploadController(NeptuneDbContext dbContext, ILogger<DelineationUploadController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, AzureBlobStorageService azureBlobStorageService, GDALAPIService gdalApiService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
@@ -181,10 +180,6 @@ namespace Neptune.WebMvc.Controllers
         [Produces(@"application/zip")]
         public async Task<FileContentResult> DownloadDelineationGeometry(DownloadDelineationGeometryViewModel viewModel)
         {
-            //var file = viewModel.FileResourceData;
-            var blobName = Guid.NewGuid().ToString();
-            await using var stream = new MemoryStream();
-
             var featureCollection = new FeatureCollection();
             var delineations = _dbContext.Delineations.Include(x => x.TreatmentBMP)
                 .ThenInclude(x => x.StormwaterJurisdiction)
@@ -208,10 +203,10 @@ namespace Neptune.WebMvc.Controllers
                     { "DateOfLastDelineationModification", delineation.DateLastModified },
                     { "DateOfLastDelineationVerification", delineation.DateLastVerified },
                 };
-                var feature = new Feature(delineation.DelineationGeometry4326, attributesTable);
+                var feature = new Feature(delineation.DelineationGeometry, attributesTable);
                 featureCollection.Add(feature);
             }
-
+            await using var stream = new MemoryStream();
             await GeoJsonSerializer.SerializeAsGeoJsonToStream(featureCollection,
                 GeoJsonSerializer.DefaultSerializerOptions, stream);
 
@@ -220,18 +215,18 @@ namespace Neptune.WebMvc.Controllers
             var gdbInput = new GdbInput()
             {
                 FileContents = stream.ToArray(),
-                LayerName = "test",
+                LayerName = "distributed-delineations",
                 CoordinateSystemID = Proj4NetHelper.NAD_83_CA_ZONE_VI_SRID,
                 GeometryTypeName = "POLYGON",
-                BlobContainer = CatalogContainerName,
+                BlobContainer = AzureBlobStorageService.BlobContainerName,
             };
             var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
             {
                 GdbInputs = new List<GdbInput> { gdbInput },
-                GdbName = $"{jurisdictionName}"
+                GdbName = $"{jurisdictionName}-delineation-export"
             });
 
-            return File(bytes, "application/zip", $"{jurisdictionName}-delineations.gdb.zip");
+            return File(bytes, "application/zip", $"{jurisdictionName}-delineation-export.gdb.zip");
         }
 
 
