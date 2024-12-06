@@ -14,15 +14,16 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             SaveFiltersInCookie = true;
 
             Add("Name", x => x.QuickBMPName, 150, DhtmlxGridColumnFilterType.Text);
-            Add("Type", x => x.TreatmentBMPType.TreatmentBMPTypeName, 175, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Notes", x => x.QuickBMPNote, 225, DhtmlxGridColumnFilterType.Text);
-            Add(FieldDefinitionType.PercentOfSiteTreated.ToGridHeaderString(), x => x.PercentOfSiteTreated, 100, DhtmlxGridColumnFormatType.Percent, DhtmlxGridColumnAggregationType.Total);
-            Add(FieldDefinitionType.PercentCaptured.ToGridHeaderString(), x => x.PercentCaptured, 100, DhtmlxGridColumnFormatType.Percent);
-            Add(FieldDefinitionType.PercentRetained.ToGridHeaderString(), x => x.PercentRetained, 100, DhtmlxGridColumnFormatType.Percent);
+            Add("Type", x => x.TreatmentBMPType.TreatmentBMPTypeName, 174, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Notes", x => x.QuickBMPNote, 224, DhtmlxGridColumnFilterType.Text);
+            Add(FieldDefinitionType.NumberOfIndividualBMPs.ToGridHeaderString(), x => x.NumberOfIndividualBMPs, 100);
+            Add(FieldDefinitionType.PercentOfSiteTreated.ToGridHeaderString(), x => x.PercentOfSiteTreated, 100, DhtmlxGridColumnFormatType.PercentNoDecimalPlace, DhtmlxGridColumnAggregationType.Total);
+            Add(FieldDefinitionType.PercentCaptured.ToGridHeaderString(), x => x.PercentCaptured, 100, DhtmlxGridColumnFormatType.PercentNoDecimalPlace);
+            Add(FieldDefinitionType.PercentRetained.ToGridHeaderString(), x => x.PercentRetained, 100, DhtmlxGridColumnFormatType.PercentNoDecimalPlace);
             Add(FieldDefinitionType.DryWeatherFlowOverrideID.ToGridHeaderString(),
                 x => x.DryWeatherFlowOverride != null ? x.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName : DryWeatherFlowOverride.No.DryWeatherFlowOverrideDisplayName,
-                150, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add(FieldDefinitionType.NumberOfIndividualBMPs.ToGridHeaderString(), x => x.NumberOfIndividualBMPs, 100);
+                140, DhtmlxGridColumnFilterType.SelectFilterStrict);
+
 
         }
     }
