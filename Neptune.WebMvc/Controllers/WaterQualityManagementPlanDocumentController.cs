@@ -32,6 +32,8 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpPost("{waterQualityManagementPlanPrimaryKey}")]
+        [RequestSizeLimit(100_000_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         [WaterQualityManagementPlanManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
         public async Task<IActionResult> New([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, NewViewModel viewModel)

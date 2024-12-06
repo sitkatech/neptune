@@ -36,7 +36,8 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
                     DryWeatherFlowOverrideID = x.DryWeatherFlowOverrideID,
                     PercentOfSiteTreated = x.PercentOfSiteTreated,
                     PercentCaptured = x.PercentCaptured,
-                    PercentRetained = x.PercentRetained
+                    PercentRetained = x.PercentRetained,
+                    NumberOfIndividualBMPs = x.NumberOfIndividualBMPs.Value
                 }).ToList()
                 : new List<QuickBMP>();
 
@@ -51,6 +52,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
                     x.PercentOfSiteTreated = y.PercentOfSiteTreated;
                     x.PercentCaptured = y.PercentCaptured;
                     x.PercentRetained = y.PercentRetained;
+                    x.NumberOfIndividualBMPs = y.NumberOfIndividualBMPs;
                 });
         }
 

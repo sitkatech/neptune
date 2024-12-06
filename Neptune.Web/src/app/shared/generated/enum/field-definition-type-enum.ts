@@ -139,5 +139,6 @@ export enum FieldDefinitionTypeEnum {
   DesignStormDepth85thPercentile = 135,
   DesignVolume85thPercentile = 136,
   LandUseBasedWaterQualityScore = 137,
-  ReceivingWaterScore = 138
+  ReceivingWaterScore = 138,
+  NumberOfIndividualBMPs = 139
 }

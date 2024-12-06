@@ -19,7 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
 @model IFormFile
-@Html.TextBox("", null, new { type = "file" })
+@Html.TextBox("", null, new { type = "file" }) <span style="font-style: italic">(100 MB limit)</span>
 <script>
     jQuery("#@ViewData.TemplateInfo.HtmlFieldPrefix").fileinput({ showUpload: false, showPreview: false, showRemove: false, defaultPreviewContent: "", allowedPreviewTypes: false, multiple: false, showCaption: true, browseClass: "btn btn-sm btn-neptune" });
 </script>

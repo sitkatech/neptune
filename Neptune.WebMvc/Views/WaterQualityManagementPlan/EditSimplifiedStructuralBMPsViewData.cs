@@ -14,6 +14,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         public FieldDefinitionType FieldDefinitionForPercentCaptured { get; }
         public FieldDefinitionType FieldDefinitionForPercentRetained { get; }
         public FieldDefinitionType FieldDefinitionForDryWeatherFlowOverride { get; }
+        public FieldDefinitionType FieldDefinitionForNumberOfIndividualBMPs { get; }
 
         public EditSimplifiedStructuralBMPsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
@@ -30,6 +31,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             FieldDefinitionForPercentCaptured = FieldDefinitionType.PercentCaptured;
             FieldDefinitionForPercentRetained = FieldDefinitionType.PercentRetained;
             FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverrideID;
+            FieldDefinitionForNumberOfIndividualBMPs = FieldDefinitionType.NumberOfIndividualBMPs;
 
             ViewDataForAngular = new EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(treatmentBMPTypes, dryWeatherFlowOverrides, dryWeatherFlowOverrideDefaultID, dryWeatherFlowOverrideYesID);
 

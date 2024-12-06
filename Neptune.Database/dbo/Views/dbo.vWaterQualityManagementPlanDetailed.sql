@@ -48,7 +48,7 @@ left join
 ) tbmp on wqmp.WaterQualityManagementPlanID = tbmp.WaterQualityManagementPlanID
 left join
 (
-	select WaterQualityManagementPlanID, count(*) as QuickBMPCount
+	select WaterQualityManagementPlanID, sum(NumberOfIndividualBMPs) as QuickBMPCount
 	from dbo.QuickBMP
     where WaterQualityManagementPlanID is not null
 	group by WaterQualityManagementPlanID

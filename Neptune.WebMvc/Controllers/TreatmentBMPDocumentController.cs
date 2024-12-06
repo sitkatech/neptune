@@ -30,6 +30,8 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
+        [RequestSizeLimit(100_000_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         [TreatmentBMPManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> New([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, NewViewModel viewModel)

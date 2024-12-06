@@ -36,6 +36,8 @@ public partial class QuickBMP
 
     public int? DryWeatherFlowOverrideID { get; set; }
 
+    public int NumberOfIndividualBMPs { get; set; }
+
     [ForeignKey("TreatmentBMPTypeID")]
     [InverseProperty("QuickBMPs")]
     public virtual TreatmentBMPType TreatmentBMPType { get; set; } = null!;

@@ -30,6 +30,9 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
 
         public List<EFModels.Entities.TreatmentBMP> TreatmentBMPs { get; }
         public List<QuickBMP> QuickBMPs { get; }
+        public QuickBMPGridSpec QuickBMPGridSpec { get; }
+        public string QuickBMPGridName { get; }
+        public string QuickBMPGridDataUrl { get; }
         public IEnumerable<IGrouping<int, SourceControlBMP>> SourceControlBMPs { get; }
         public Dictionary<int, EFModels.Entities.Delineation?> TreatmentBMPDelineationsDict { get; }
 
@@ -78,7 +81,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             HRUCharacteristicsViewData hruCharacteristicsViewData,
             List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches,
             ModeledPerformanceViewData modeledPerformanceViewData,
-            IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs, bool hasWaterQualityManagementPlanBoundary, Dictionary<int, EFModels.Entities.Delineation?> treatmentBMPDelineationsDict, List<EFModels.Entities.WaterQualityManagementPlanDocument> waterQualityManagementPlanDocuments, double calculatedWqmpAcreage)
+            IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs, QuickBMPGridSpec quickBMPGridSpec, bool hasWaterQualityManagementPlanBoundary, Dictionary<int, EFModels.Entities.Delineation?> treatmentBMPDelineationsDict, List<EFModels.Entities.WaterQualityManagementPlanDocument> waterQualityManagementPlanDocuments, double calculatedWqmpAcreage)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -154,6 +157,11 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
 
             TreatmentBMPs = treatmentBMPs;
             QuickBMPs = quickBMPs;
+            QuickBMPGridSpec = quickBMPGridSpec;
+            QuickBMPGridName = "quickBMPGrid";
+            QuickBMPGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, c =>
+                c.SimplifiedStructuralBMPsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
+
             HasWaterQualityManagementPlanBoundary = hasWaterQualityManagementPlanBoundary;
             SourceControlBMPs = sourceControlBMPs;
             TreatmentBMPDelineationsDict = treatmentBMPDelineationsDict;
