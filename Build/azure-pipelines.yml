@@ -407,6 +407,7 @@ stages:
       DATABASE_ID: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.DATABASE_ID'] ]
     # creates an environment if it doesn't exist
     environment: $(Environment)
+    timeoutInMinutes: 120
     strategy:
       # default deployment strategy, more coming...
       runOnce:
