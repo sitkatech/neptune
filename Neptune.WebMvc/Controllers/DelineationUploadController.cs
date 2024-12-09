@@ -219,7 +219,7 @@ namespace Neptune.WebMvc.Controllers
             {
                 FileContents = stream.ToArray(),
                 LayerName = "distributed-delineations",
-                CoordinateSystemID = Proj4NetHelper.NAD_83_CA_ZONE_VI_SRID,
+                CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
                 GeometryTypeName = "POLYGON",
             };
             var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
