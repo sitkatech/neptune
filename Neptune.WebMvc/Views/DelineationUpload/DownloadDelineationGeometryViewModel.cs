@@ -8,15 +8,6 @@ namespace Neptune.WebMvc.Views.DelineationUpload
     public class DownloadDelineationGeometryViewModel : FormViewModel
     {
         [Required]
-        [DisplayName("Zipped File Geodatabase to Upload")]
-        [SitkaFileExtensions("zip")]
-        public IFormFile FileResourceData { get; set; }
-
-        [Required]
-        [DisplayName("Treatment BMP Name Field")]
-        public string TreatmentBMPNameField { get; set; }
-
-        [Required]
         [DisplayName("Stormwater Jurisdiction")]
         public int? StormwaterJurisdictionID { get; set; }
     }

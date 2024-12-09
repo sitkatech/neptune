@@ -3,21 +3,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.Mvc;
+using Neptune.WebMvc.Controllers;
 
 namespace Neptune.WebMvc.Views.DelineationUpload
 {
     public class DownloadDelineationGeometryViewData : NeptuneViewData
     {
-        public string NewGisUploadUrl { get; }
-        public string ApprovedGisUploadUrl { get; }
+        public string GisDownloadUrl { get; }
+
+        public string GisUploadUrl { get; }
 
         public IEnumerable<SelectListItem> StormwaterJurisdictions { get; }
 
-        public DownloadDelineationGeometryViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, string newGisUploadUrl, string approvedGisUploadUrl, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
+        public DownloadDelineationGeometryViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, string newGisUploadUrl, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions, string gisUploadUrl) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
-            NewGisUploadUrl = newGisUploadUrl;
-            ApprovedGisUploadUrl = approvedGisUploadUrl;
+            GisDownloadUrl = newGisUploadUrl;
+            GisUploadUrl = gisUploadUrl;
             EntityName = FieldDefinitionType.Delineation.FieldDefinitionTypeDisplayName;
+            EntityUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(linkGenerator, x => x.DelineationMap(null));
+
             PageTitle = "Download Delineation Geometry";
 
             StormwaterJurisdictions =

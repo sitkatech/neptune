@@ -9,6 +9,10 @@
 {
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
 }
+@section RightOfPageTitle
+{
+    <a class="btn btn-neptune headerButtonText observationTypeButton" href="@ViewDataTyped.DownloadGisUrl">Download GDB</a>
+}
 @Html.ValidationSummary()
 <div class="formPage">
     <div class="row">
@@ -39,7 +43,7 @@
                             @Html.LabelWithSugarFor(x => x.StormwaterJurisdictionID)
                         </div>
                         <div class="col-md-6">
-                            @Html.DropDownListFor(x => x.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictions, new Dictionary<string, object> {{"class", "form-control"}})
+                            @Html.DropDownListFor(x => x.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictions, new Dictionary<string, object> { { "class", "form-control" } })
                         </div>
                     </div>
                     <div class="row form-group">
@@ -47,7 +51,7 @@
                             @Html.LabelWithSugarFor(x => x.TreatmentBMPNameField)
                         </div>
                         <div class="col-md-6">
-                            @Html.TextBoxFor(x => x.TreatmentBMPNameField, new {@class = "form-control"})
+                            @Html.TextBoxFor(x => x.TreatmentBMPNameField, new { @class = "form-control" })
                             @Html.ValidationMessageFor(x => x.TreatmentBMPNameField)
                         </div>
                     </div>
