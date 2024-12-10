@@ -3,7 +3,7 @@ using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Controllers;
 using Neptune.WebMvc.Models;
 
-namespace Neptune.WebMvc.Views.DelineationUpload
+namespace Neptune.WebMvc.Views.DelineationGeometry
 {
     public class ApproveDelineationGisUploadViewData : NeptuneViewData
     {

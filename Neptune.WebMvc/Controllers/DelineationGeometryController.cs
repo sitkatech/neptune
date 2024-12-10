@@ -32,19 +32,17 @@ using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Services;
-using Neptune.WebMvc.Views.DelineationUpload;
 using NetTopologySuite.Features;
-using System.Data;
-using System.IO.Compression;
+using Neptune.WebMvc.Views.DelineationGeometry;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class DelineationUploadController : NeptuneBaseController<DelineationUploadController>
+    public class DelineationGeometryController : NeptuneBaseController<DelineationGeometryController>
     {
         private readonly AzureBlobStorageService _azureBlobStorageService;
         private readonly GDALAPIService _gdalApiService;
 
-        public DelineationUploadController(NeptuneDbContext dbContext, ILogger<DelineationUploadController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, AzureBlobStorageService azureBlobStorageService, GDALAPIService gdalApiService) : base(dbContext, logger, linkGenerator, webConfiguration)
+        public DelineationGeometryController(NeptuneDbContext dbContext, ILogger<DelineationGeometryController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, AzureBlobStorageService azureBlobStorageService, GDALAPIService gdalApiService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
             _azureBlobStorageService = azureBlobStorageService;
             _gdalApiService = gdalApiService;
@@ -164,7 +162,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewUpdateDelineationGeometryErrors(viewModel);
             }
 
-            return RedirectToAction(new SitkaRoute<DelineationUploadController>(_linkGenerator, x => x.ApproveDelineationGisUpload()));
+            return RedirectToAction(new SitkaRoute<DelineationGeometryController>(_linkGenerator, x => x.ApproveDelineationGisUpload()));
         }
 
         [HttpGet]
@@ -241,9 +239,9 @@ namespace Neptune.WebMvc.Controllers
 
         private ViewResult ViewUpdateDelineationGeometry(UpdateDelineationGeometryViewModel viewModel)
         {
-            var newGisUploadUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateDelineationGeometry());
-            var approveGisUploadUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.ApproveDelineationGisUpload());
-            var downloadGisUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.DownloadDelineationGeometry());
+            var newGisUploadUrl = SitkaRoute<DelineationGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateDelineationGeometry());
+            var approveGisUploadUrl = SitkaRoute<DelineationGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.ApproveDelineationGisUpload());
+            var downloadGisUrl = SitkaRoute<DelineationGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.DownloadDelineationGeometry());
 
             var viewData = new UpdateDelineationGeometryViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson,
                 newGisUploadUrl, approveGisUploadUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson), downloadGisUrl);
@@ -252,8 +250,8 @@ namespace Neptune.WebMvc.Controllers
 
         private ViewResult ViewDownloadDelineationGeometry(DownloadDelineationGeometryViewModel viewModel)
         {
-            var newGisUploadUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.DownloadDelineationGeometry());
-            var gisUploadUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateDelineationGeometry());
+            var newGisUploadUrl = SitkaRoute<DelineationGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.DownloadDelineationGeometry());
+            var gisUploadUrl = SitkaRoute<DelineationGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateDelineationGeometry());
 
             var viewData = new DownloadDelineationGeometryViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson,
                 newGisUploadUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson), gisUploadUrl);
