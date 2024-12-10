@@ -5,7 +5,7 @@ using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.Mvc;
 using Neptune.WebMvc.Controllers;
 
-namespace Neptune.WebMvc.Views.DelineationUpload
+namespace Neptune.WebMvc.Views.DelineationDownload
 {
     public class DownloadDelineationGeometryViewData : NeptuneViewData
     {
