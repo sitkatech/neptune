@@ -78,9 +78,10 @@ namespace Neptune.WebMvc.Controllers
 
             var treatmentBMPs = TreatmentBMPs.GetNonPlanningModuleBMPs(_dbContext).Include(x => x.Delineation).Where(x => stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdictionID)).ToList();
             var delineationMapInitJson = new DelineationMapInitJson("delineationMap", treatmentBMPs, boundingBoxDto, MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext).ToList(), _linkGenerator);
-            var bulkUploadTreatmentBMPDelineationsUrl = SitkaRoute<DelineationUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateDelineationGeometry());
+            var bulkUploadTreatmentBMPDelineationsUrl = SitkaRoute<DelineationGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateDelineationGeometry());
+            var downloadDelineationsUrl = SitkaRoute<DelineationGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.DownloadDelineationGeometry());
             var stormwaterJurisdictionCqlFilter = CurrentPerson.GetStormwaterJurisdictionCqlFilter(_dbContext);
-            var viewData = new DelineationMapViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP, bulkUploadTreatmentBMPDelineationsUrl, stormwaterJurisdictionCqlFilter, _webConfiguration.MapServiceUrl);
+            var viewData = new DelineationMapViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP, bulkUploadTreatmentBMPDelineationsUrl, stormwaterJurisdictionCqlFilter, _webConfiguration.MapServiceUrl, downloadDelineationsUrl);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
         }
 

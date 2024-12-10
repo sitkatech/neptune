@@ -6,7 +6,7 @@ namespace Neptune.WebMvc.Views.Delineation
 {
     public class DelineationMapViewData : NeptuneViewData
     {
-        public DelineationMapViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, StormwaterMapInitJson mapInitJson, EFModels.Entities.TreatmentBMP initialTreatmentBMP, string bulkUploadTreatmentBMPDelineationsUrl, string getStormwaterJurisdictionCqlFilter, string geoServerUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
+        public DelineationMapViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, StormwaterMapInitJson mapInitJson, EFModels.Entities.TreatmentBMP initialTreatmentBMP, string bulkUploadTreatmentBMPDelineationsUrl, string getStormwaterJurisdictionCqlFilter, string geoServerUrl, string downloadDelineationsUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             MapInitJson = mapInitJson;
             IsInitialTreatmentBMPProvided = initialTreatmentBMP != null;
@@ -18,6 +18,7 @@ namespace Neptune.WebMvc.Views.Delineation
             DelineationMapConfig = new DelineationMapConfig(linkGenerator, getStormwaterJurisdictionCqlFilter);
             BulkUploadTreatmentBMPDelineationsUrl = bulkUploadTreatmentBMPDelineationsUrl;
             HasManagePermission = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
+            DownloadDelineationsUrl=downloadDelineationsUrl;
         }
 
         public int? InitialTreatmentBMPID { get; }
@@ -28,6 +29,7 @@ namespace Neptune.WebMvc.Views.Delineation
         public DelineationMapConfig DelineationMapConfig { get; set; }
 
         public string BulkUploadTreatmentBMPDelineationsUrl { get; }
+        public string DownloadDelineationsUrl { get; }
 
         public bool HasManagePermission { get; }
     }
