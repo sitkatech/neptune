@@ -1,5 +1,7 @@
 ﻿@using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Common.HtmlHelperExtensions
 @using Neptune.WebMvc.Views.Shared
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @inherits Neptune.WebMvc.Views.LandUseBlockDownload.DownloadLandUseBlockGeometry
 @model Neptune.WebMvc.Views.LandUseBlockDownload.DownloadLandUseBlockGeometryViewModel
 
@@ -30,14 +32,15 @@
                     <li>Version 10.1+ file geodatabases are supported</li>
                 </ul>
                 <p>After you upload your file the new Land Use Blocks will be added and overwrite any existing Land Use Blocks for your Jurisdiction. It may take up to twenty four hours to see updated Trash Results on the home page.</p>
-                <div>
-                    @Html.EditorFor(x => x.FileResourceData)
-                    @Html.ValidationMessageFor(x => x.FileResourceData)
-                    <span class="smallExplanationText">
-                        Allowed Extensions: @Model.GetFileExtensions(x => x.FileResourceData)
-                    </span>
+                <div class="row form-group" style="margin-top: 0px;">
+                    <div class="col-md-6">
+                        @Html.LabelWithSugarFor(x => x.StormwaterJurisdictionID)
+                    </div>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(x => x.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictions, new Dictionary<string, object> {{"class", "form-control"}})
+                    </div>
                 </div>
-            </div>
+                </div>
         </div>
         <div class="row">
             <div class="col-md-12 text-right">

@@ -7,10 +7,9 @@ namespace Neptune.WebMvc.Views.LandUseBlockDownload
 {
     public class DownloadLandUseBlockGeometryViewModel : FormViewModel
     {
-        [Required]
-        [DisplayName("Zipped File Geodatabase to Upload")]
-        [SitkaFileExtensions("zip")]
-        public IFormFile FileResourceData { get; set; }
         public int PersonID { get; set; }
+        [Required]
+        [DisplayName("Stormwater Jurisdiction")]
+        public int? StormwaterJurisdictionID { get; set; }
     }
 }
