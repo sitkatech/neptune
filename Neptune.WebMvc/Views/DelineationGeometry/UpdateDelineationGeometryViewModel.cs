@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Neptune.WebMvc.Common.Models;
 using Neptune.WebMvc.Common.Mvc;
 
-namespace Neptune.WebMvc.Views.DelineationUpload
+namespace Neptune.WebMvc.Views.DelineationGeometry
 {
     public class UpdateDelineationGeometryViewModel : FormViewModel
     {
