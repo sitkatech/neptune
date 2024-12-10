@@ -5,7 +5,7 @@ using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.Mvc;
 using Neptune.WebMvc.Controllers;
 
-namespace Neptune.WebMvc.Views.LandUseBlockDownload
+namespace Neptune.WebMvc.Views.LandUseBlockGeometry
 {
     public class DownloadLandUseBlockGeometryViewData : TrashModuleViewData
     {

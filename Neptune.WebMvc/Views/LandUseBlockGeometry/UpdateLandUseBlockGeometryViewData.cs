@@ -2,7 +2,7 @@
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Controllers;
 
-namespace Neptune.WebMvc.Views.LandUseBlockUpload
+namespace Neptune.WebMvc.Views.LandUseBlockGeometry
 {
     public class UpdateLandUseBlockGeometryViewData : TrashModuleViewData
     {

@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Neptune.WebMvc.Common.Models;
-using Neptune.WebMvc.Common.Mvc;
 
-namespace Neptune.WebMvc.Views.LandUseBlockDownload
+namespace Neptune.WebMvc.Views.LandUseBlockGeometry
 {
     public class DownloadLandUseBlockGeometryViewModel : FormViewModel
     {
