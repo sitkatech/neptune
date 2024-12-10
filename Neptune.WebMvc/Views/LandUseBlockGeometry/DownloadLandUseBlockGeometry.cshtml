@@ -9,6 +9,10 @@
 {
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
 }
+@section RightOfPageTitle
+{
+    <a class="btn btn-neptune headerButtonText observationTypeButton" href="@ViewDataTyped.UploadLandUseBlockUrl">Upload Land Use Block</a>
+}
 @Html.ValidationSummary()
 
 <form id="uploadGisForm" method="post" action="@ViewDataTyped.NewGisUploadUrl" enctype="multipart/form-data">
@@ -16,22 +20,8 @@
         <div class="row">
             <div class="col-md-12">
                 <p>
-                    Use this form to bulk upload Land Use Blocks. Requirements:
+                    Use this form to download Land Use Blocks for a given jurisdiction:
                 </p>
-                <ul>
-                    <li>A single ArcGIS file geodatabase containing only Land Use Block features</li>
-                    <li>The file geodatabase (.gdb) must be contained within a compressed zip file (.zip)</li>
-                    <li>The zip file must contain only one file geodatabase and no other data</li>
-                    <li>The file geodatabase must contain only one feature class</li>
-                    <li>The feature class must have fields exactly matching the Land Use Block schema. All fields in the schema are required; null values will cause the upload to fail.</li>
-                    <li>
-                        Geodatabases using ESRI Smart Database Compression (SDC) are not supported. Please
-                        <a href="http://desktop.arcgis.com/en/arcmap/10.3/tools/data-management-toolbox/uncompress-file-geodatabase-data.htm">uncompress</a>
-                        before zipping and uploading
-                    </li>
-                    <li>Version 10.1+ file geodatabases are supported</li>
-                </ul>
-                <p>After you upload your file the new Land Use Blocks will be added and overwrite any existing Land Use Blocks for your Jurisdiction. It may take up to twenty four hours to see updated Trash Results on the home page.</p>
                 <div class="row form-group" style="margin-top: 0px;">
                     <div class="col-md-6">
                         @Html.LabelWithSugarFor(x => x.StormwaterJurisdictionID)
@@ -44,7 +34,7 @@
         </div>
         <div class="row">
             <div class="col-md-12 text-right">
-                <button type="submit" class="btn btn-neptune"><span class="glyphicon glyphicon-arrow-up"></span> Upload</button>
+                <button type="submit" class="btn btn-neptune"><span class="glyphicon glyphicon-arrow-down"></span> Download</button>
             </div>
         </div>
     </div>

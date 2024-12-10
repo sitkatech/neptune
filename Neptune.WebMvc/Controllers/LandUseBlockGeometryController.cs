@@ -196,6 +196,7 @@ namespace Neptune.WebMvc.Controllers
             var landUseBlocks = _dbContext.LandUseBlocks
                 .Include(x => x.StormwaterJurisdiction)
                 .ThenInclude(x => x.Organization)
+                .Include(x => x.TrashGeneratingUnits)
                 .Where(x =>
                     x.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID).ToList();
 
@@ -205,10 +206,14 @@ namespace Neptune.WebMvc.Controllers
             {
                 { "LandUseBlockID", landUseBlock.LandUseBlockID },
                 { "PriorityLandUseType", PriorityLandUseType.AllLookupDictionary[(int)landUseBlock.PriorityLandUseTypeID].PriorityLandUseTypeDisplayName},
+                { "BlockArea", landUseBlock.LandUseBlockGeometry.Area * Constants.SquareMetersToAcres },
                 { "LandUseDescription", landUseBlock.LandUseDescription },
                 { "TrashGenerationRate", landUseBlock.TrashGenerationRate },
+                { "TrashResultsArea", (landUseBlock.TrashGeneratingUnits.Sum(y => y.TrashGeneratingUnitGeometry.Area) *
+                                       Constants.SquareMetersToAcres) },
                 { "LandUseForTGR", landUseBlock.LandUseForTGR },
-                { "MedianHouseHoldIncome", landUseBlock.MedianHouseholdIncomeRetail },
+                { "MedianHouseholdIncomeRetail", landUseBlock.MedianHouseholdIncomeRetail },
+                { "MedianHouseholdIncomeResidential", landUseBlock.MedianHouseholdIncomeResidential },
                 { "StormwaterJurisdiction", landUseBlock.StormwaterJurisdiction.GetOrganizationDisplayName() },
                 { "PermitType", PermitType.AllLookupDictionary[landUseBlock.PermitTypeID].PermitTypeDisplayName }
             };
@@ -224,14 +229,14 @@ namespace Neptune.WebMvc.Controllers
             var gdbInput = new GdbInput()
             {
                 FileContents = stream.ToArray(),
-                LayerName = "test",
+                LayerName = "land-use-blocks",
                 CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
                 GeometryTypeName = "POLYGON",
             };
             var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
             {
                 GdbInputs = new List<GdbInput> { gdbInput },
-                GdbName = $"{jurisdictionName}"
+                GdbName = $"{jurisdictionName}-land-use-blocks-export"
             });
 
             return File(bytes, "application/zip", $"{jurisdictionName}-land-use-block.gdb.zip");
@@ -240,16 +245,18 @@ namespace Neptune.WebMvc.Controllers
         private ViewResult ViewDownloadLandUseBlockGeometry(DownloadLandUseBlockGeometryViewModel viewModel)
         {
             var newGisDownloadUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.DownloadLandUseBlockGeometry());
+            var downloadLandUseBlockUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateLandUseBlockGeometry());
 
-            var viewData = new DownloadLandUseBlockGeometryViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, newGisDownloadUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
+            var viewData = new DownloadLandUseBlockGeometryViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, newGisDownloadUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson), downloadLandUseBlockUrl);
             return RazorView<DownloadLandUseBlockGeometry, DownloadLandUseBlockGeometryViewData, DownloadLandUseBlockGeometryViewModel>(viewData, viewModel);
         }
 
         private ViewResult ViewUpdateLandUseBlockGeometry(UpdateLandUseBlockGeometryViewModel viewModel)
         {
             var newGisUploadUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateLandUseBlockGeometry());
+            var downloadLandUseBuildUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.DownloadLandUseBlockGeometry());
 
-            var viewData = new UpdateLandUseBlockGeometryViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, newGisUploadUrl);
+            var viewData = new UpdateLandUseBlockGeometryViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, newGisUploadUrl, downloadLandUseBuildUrl);
             return RazorView<UpdateLandUseBlockGeometry, UpdateLandUseBlockGeometryViewData, UpdateLandUseBlockGeometryViewModel>(viewData, viewModel);
         }
     }

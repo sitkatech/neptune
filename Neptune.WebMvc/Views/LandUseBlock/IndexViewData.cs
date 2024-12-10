@@ -13,8 +13,9 @@ namespace Neptune.WebMvc.Views.LandUseBlock
         public bool HasManagePermission { get; }
 
         public string LandUseBlockBulkUploadUrl { get; } 
+        public string LandUseBlockDownloadUrl { get; } 
 
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, WebConfiguration webConfiguration, EFModels.Entities.NeptunePage neptunePage, string landUseBlockBulkUploadUrl) : base (httpContext, linkGenerator, currentPerson, webConfiguration, neptunePage)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, WebConfiguration webConfiguration, EFModels.Entities.NeptunePage neptunePage, string landUseBlockBulkUploadUrl, string landUseBlockDownloadUrl) : base (httpContext, linkGenerator, currentPerson, webConfiguration, neptunePage)
         {
             EntityName = "Land Use Block";
             PageTitle = "Index";
@@ -23,6 +24,7 @@ namespace Neptune.WebMvc.Views.LandUseBlock
             GridDataUrl = SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(linkGenerator, x => x.LandUseBlockGridJsonData());
             HasManagePermission = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             LandUseBlockBulkUploadUrl = landUseBlockBulkUploadUrl;
+            LandUseBlockDownloadUrl = landUseBlockDownloadUrl;
         }
     }
 }

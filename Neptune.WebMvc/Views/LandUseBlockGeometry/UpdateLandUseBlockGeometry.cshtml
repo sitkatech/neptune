@@ -7,6 +7,10 @@
 {
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
 }
+@section RightOfPageTitle
+{
+    <a class="btn btn-neptune headerButtonText observationTypeButton" href="@ViewDataTyped.DownloadLandUseBlockUrl">Download Land Use Block</a>
+}
 @Html.ValidationSummary()
 
 <form id="uploadGisForm" method="post" action="@ViewDataTyped.NewGisUploadUrl" enctype="multipart/form-data">
