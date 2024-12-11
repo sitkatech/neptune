@@ -33,19 +33,20 @@ using Neptune.Jobs.Hangfire;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Services;
-using Neptune.WebMvc.Views.LandUseBlockUpload;
+using Neptune.WebMvc.Views.LandUseBlockGeometry;
+using NetTopologySuite.Features;
 
 namespace Neptune.WebMvc.Controllers
 {
     //[Area("Trash")]
     //[Route("[area]/[controller]/[action]", Name = "[area]_[controller]_[action]")]
-    public class LandUseBlockUploadController : NeptuneBaseController<LandUseBlockUploadController>
+    public class LandUseBlockGeometryController : NeptuneBaseController<LandUseBlockGeometryController>
     {
         private readonly SitkaSmtpClientService _sitkaSmtpClientService;
         private readonly GDALAPIService _gdalApiService;
         private readonly AzureBlobStorageService _azureBlobStorageService;
 
-        public LandUseBlockUploadController(NeptuneDbContext dbContext, ILogger<LandUseBlockUploadController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService, GDALAPIService gdalApiService, AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
+        public LandUseBlockGeometryController(NeptuneDbContext dbContext, ILogger<LandUseBlockGeometryController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService, GDALAPIService gdalApiService, AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
             _sitkaSmtpClientService = sitkaSmtpClientService;
             _gdalApiService = gdalApiService;
@@ -58,6 +59,14 @@ namespace Neptune.WebMvc.Controllers
         {
             var viewModel = new UpdateLandUseBlockGeometryViewModel { PersonID = CurrentPerson.PersonID };
             return ViewUpdateLandUseBlockGeometry(viewModel);
+        }
+
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public ViewResult DownloadLandUseBlockGeometry()
+        {
+            var viewModel = new DownloadLandUseBlockGeometryViewModel { PersonID = CurrentPerson.PersonID };
+            return ViewDownloadLandUseBlockGeometry(viewModel);
         }
 
         [HttpPost]
@@ -174,11 +183,80 @@ namespace Neptune.WebMvc.Controllers
             return Redirect(SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
         }
 
+        [HttpPost]
+        [JurisdictionManageFeature]
+        public async Task<ActionResult> DownloadLandUseBlockGeometry(DownloadLandUseBlockGeometryViewModel viewModel)
+        {
+            var stormwaterJurisdiction = _dbContext.StormwaterJurisdictions.Include(x => x.Organization)
+                .Single(x => x.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID)
+                .GetOrganizationDisplayName();
+            await using var stream = new MemoryStream();
+
+            var featureCollection = new FeatureCollection();
+            var landUseBlocks = _dbContext.LandUseBlocks
+                .Include(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
+                .Include(x => x.TrashGeneratingUnits)
+                .Where(x =>
+                    x.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID).ToList();
+
+            foreach (var landUseBlock in landUseBlocks)
+            {
+                var attributesTable = new AttributesTable
+            {
+                { "LandUseBlockID", landUseBlock.LandUseBlockID },
+                { "PriorityLandUseType", PriorityLandUseType.AllLookupDictionary[(int)landUseBlock.PriorityLandUseTypeID].PriorityLandUseTypeDisplayName},
+                { "BlockArea", landUseBlock.LandUseBlockGeometry.Area * Constants.SquareMetersToAcres },
+                { "LandUseDescription", landUseBlock.LandUseDescription },
+                { "TrashGenerationRate", landUseBlock.TrashGenerationRate },
+                { "TrashResultsArea", (landUseBlock.TrashGeneratingUnits.Sum(y => y.TrashGeneratingUnitGeometry.Area) *
+                                       Constants.SquareMetersToAcres) },
+                { "LandUseForTGR", landUseBlock.LandUseForTGR },
+                { "MedianHouseholdIncomeRetail", landUseBlock.MedianHouseholdIncomeRetail },
+                { "MedianHouseholdIncomeResidential", landUseBlock.MedianHouseholdIncomeResidential },
+                { "StormwaterJurisdiction", landUseBlock.StormwaterJurisdiction.GetOrganizationDisplayName() },
+                { "PermitType", PermitType.AllLookupDictionary[landUseBlock.PermitTypeID].PermitTypeDisplayName }
+            };
+                var feature = new Feature(landUseBlock.LandUseBlockGeometry, attributesTable);
+                featureCollection.Add(feature);
+            }
+
+            await GeoJsonSerializer.SerializeAsGeoJsonToStream(featureCollection,
+                GeoJsonSerializer.DefaultSerializerOptions, stream);
+
+            var jurisdictionName = stormwaterJurisdiction.Replace(' ', '-');
+
+            var gdbInput = new GdbInput()
+            {
+                FileContents = stream.ToArray(),
+                LayerName = "land-use-blocks",
+                CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
+                GeometryTypeName = "POLYGON",
+            };
+            var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
+            {
+                GdbInputs = new List<GdbInput> { gdbInput },
+                GdbName = $"{jurisdictionName}-land-use-blocks-export"
+            });
+
+            return File(bytes, "application/zip", $"{jurisdictionName}-land-use-block.gdb.zip");
+        }
+
+        private ViewResult ViewDownloadLandUseBlockGeometry(DownloadLandUseBlockGeometryViewModel viewModel)
+        {
+            var newGisDownloadUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.DownloadLandUseBlockGeometry());
+            var downloadLandUseBlockUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateLandUseBlockGeometry());
+
+            var viewData = new DownloadLandUseBlockGeometryViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, newGisDownloadUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson), downloadLandUseBlockUrl);
+            return RazorView<DownloadLandUseBlockGeometry, DownloadLandUseBlockGeometryViewData, DownloadLandUseBlockGeometryViewModel>(viewData, viewModel);
+        }
+
         private ViewResult ViewUpdateLandUseBlockGeometry(UpdateLandUseBlockGeometryViewModel viewModel)
         {
-            var newGisUploadUrl = SitkaRoute<LandUseBlockUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateLandUseBlockGeometry());
+            var newGisUploadUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateLandUseBlockGeometry());
+            var downloadLandUseBuildUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.DownloadLandUseBlockGeometry());
 
-            var viewData = new UpdateLandUseBlockGeometryViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, newGisUploadUrl);
+            var viewData = new UpdateLandUseBlockGeometryViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, newGisUploadUrl, downloadLandUseBuildUrl);
             return RazorView<UpdateLandUseBlockGeometry, UpdateLandUseBlockGeometryViewData, UpdateLandUseBlockGeometryViewModel>(viewData, viewModel);
         }
     }
