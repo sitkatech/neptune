@@ -20,8 +20,8 @@ public static class SimplifiedBMPsCsvParserHelper
         var wqmpsToUpload = new List<QuickBMP>();
         var fieldsDict = new Dictionary<string, int>();
 
-        var requiredFields = new List<string> { "WQMP", "BMP Name", "BMP Type", "Count of BMPs", "Dry Weather Flow Override?", "Notes" };
-        var optionalFields = new List<string> { "% of Site Treated", "Wet Weather % Capture", "Wet Weather % Retained"};
+        var requiredFields = new List<string> { "WQMP", "BMP Name", "BMP Type", "Count of BMPs", "Dry Weather Flow Override?" };
+        var optionalFields = new List<string> { "% of Site Treated", "Wet Weather % Capture", "Wet Weather % Retained", "Notes" };
 
         try
         {
@@ -162,6 +162,12 @@ public static class SimplifiedBMPsCsvParserHelper
         if (dryWeatherFlowOverride.HasValue)
         {
             quickBMP.DryWeatherFlowOverrideID = dryWeatherFlowOverride.Value;
+        }
+
+        var notes = SetStringValue(row, fieldsDict, rowNumber, errorList, "Notes", QuickBMP.FieldLengths.QuickBMPNote, false);
+        if (notes != null)
+        {
+            quickBMP.QuickBMPNote = notes;
         }
 
         return quickBMP;
