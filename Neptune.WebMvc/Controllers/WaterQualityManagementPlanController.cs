@@ -903,5 +903,48 @@ namespace Neptune.WebMvc.Controllers
             return RazorView<UploadWqmps, UploadWqmpsViewData, UploadWqmpsViewModel>(viewData,
                 viewModel);
         }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public ViewResult UploadSimplifiedBMPs()
+        {
+            var viewModel = new UploadSimplifiedBMPsViewModel();
+            var errorList = new List<string>();
+            return ViewUploadSimplifiedBMPs(viewModel, errorList);
+        }
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        [RequestSizeLimit(100_000_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
+        public async Task<IActionResult> UploadSimplifiedBMPs(UploadSimplifiedBMPsViewModel viewModel)
+        {
+            var uploadedCSVFile = viewModel.UploadCSV;
+            var wqmps = SimplifiedBMPsCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), out var errorList);
+
+            if (errorList.Any())
+            {
+                return ViewUploadSimplifiedBMPs(viewModel, errorList);
+            }
+
+            var wqmpsAdded = wqmps.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
+            var wqmpsUpdated = wqmps.Where(x => ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
+
+            await _dbContext.QuickBMPs.AddRangeAsync(wqmpsAdded);
+            await _dbContext.SaveChangesAsync();
+
+            var message = $"Upload Successful: {wqmpsAdded.Count} records added, {wqmpsUpdated.Count} records updated!";
+            SetMessageForDisplay(message);
+            return new RedirectResult(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
+        }
+
+        private ViewResult ViewUploadSimplifiedBMPs(UploadSimplifiedBMPsViewModel viewModel, List<string> errorList)
+        {
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadWQMPs);
+            var viewData = new UploadSimplifiedBMPsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, errorList, neptunePage,
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.UploadWqmps()));
+            return RazorView<UploadSimplifiedBMPs, UploadSimplifiedBMPsViewData, UploadSimplifiedBMPsViewModel>(viewData,
+                viewModel);
+        }
     }
 }
