@@ -64,7 +64,8 @@ USING (VALUES
 (65, 'OCTAM2Tier2GrantProgramMetrics', 'OCTA M2 Tier 2 Grant Program Metrics'),
 (66, 'OCTAM2Tier2GrantProgramDashboard', 'OCTA M2 Tier 2 Grant Program Dashboard'),
 (67, 'EditWQMPBoundary', 'Refine WQMP Boundary Area'),
-(68, 'UploadWQMPs', 'Bulk Upload Water Quality Management Plans')
+(68, 'UploadWQMPs', 'Bulk Upload Water Quality Management Plans'),
+(69, 'UploadSimplifiedBMPs', 'Bulk Upload Simplified BMPs')
 )
 AS Source (NeptunePageTypeID, NeptunePageTypeName, NeptunePageTypeDisplayName)
 ON Target.NeptunePageTypeID = Source.NeptunePageTypeID

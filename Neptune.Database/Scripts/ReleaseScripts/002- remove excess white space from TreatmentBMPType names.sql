@@ -16,5 +16,5 @@ BEGIN
 	where TreatmentBMPTypeID = 25
 	
     INSERT INTO dbo.DatabaseMigration(MigrationAuthorName, ReleaseScriptFileName, MigrationReason)
-    SELECT 'Ray Lee', @MigrationName, '002- remove excess white space from TreatmentBMPType names'
+    SELECT 'Liz Arikawa', @MigrationName, '002- remove excess white space from TreatmentBMPType names'
 END
