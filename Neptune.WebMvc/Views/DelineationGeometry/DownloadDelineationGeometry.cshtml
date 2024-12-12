@@ -1,9 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@using Neptune.WebMvc.Common
 @using Neptune.WebMvc.Common.BootstrapWrappers
 @using Neptune.WebMvc.Common.HtmlHelperExtensions
-@using Neptune.WebMvc.Common.ModalDialog
-@using Neptune.WebMvc.Security
 @using Neptune.WebMvc.Views.Shared
 @inherits Neptune.WebMvc.Views.DelineationGeometry.DownloadDelineationGeometry
 @model Neptune.WebMvc.Views.DelineationGeometry.DownloadDelineationGeometryViewModel
@@ -42,9 +39,11 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-neptune" style="display: inline-block;">
-                    Download GDB
-                </button>
+                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <button type="submit" class="btn btn-neptune"> Download GDB</button>
+                    </div>
+                </div>
             </form>
 
         </div>
