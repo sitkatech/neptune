@@ -1,4 +1,5 @@
 ﻿@using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Common.BootstrapWrappers
 @using Neptune.WebMvc.Views.Shared
 @inherits Neptune.WebMvc.Views.LandUseBlockGeometry.UpdateLandUseBlockGeometry
 @model Neptune.WebMvc.Views.LandUseBlockGeometry.UpdateLandUseBlockGeometryViewModel
@@ -9,7 +10,7 @@
 }
 @section RightOfPageTitle
 {
-    <a class="btn btn-neptune headerButtonText observationTypeButton" href="@ViewDataTyped.DownloadLandUseBlockUrl">Download Land Use Block</a>
+    <a class="btn btn-neptune headerButtonText observationTypeButton" href="@ViewDataTyped.DownloadLandUseBlockUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-save") Download Land Use Block</a>
 }
 @Html.ValidationSummary()
 

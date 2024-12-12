@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Common.BootstrapWrappers
 @using Neptune.WebMvc.Common.HtmlHelperExtensions
 @using Neptune.WebMvc.Common.ModalDialog
 @using Neptune.WebMvc.Views.Shared
@@ -11,7 +12,7 @@
 }
 @section RightOfPageTitle
 {
-    <a class="btn btn-neptune headerButtonText observationTypeButton" href="@ViewDataTyped.DownloadGisUrl">Download GDB</a>
+    <a class="btn btn-neptune headerButtonText observationTypeButton" href="@ViewDataTyped.DownloadGisUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-save") Download GDB</a>
 }
 @Html.ValidationSummary()
 <div class="formPage">
