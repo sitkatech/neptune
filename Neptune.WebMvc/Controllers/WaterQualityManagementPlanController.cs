@@ -928,18 +928,19 @@ namespace Neptune.WebMvc.Controllers
             }
 
             var quickBMPsAdded = quickBMPs.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
+            var quickBMPsUpdated = quickBMPs.Where(x => ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
 
             await _dbContext.QuickBMPs.AddRangeAsync(quickBMPsAdded);
             await _dbContext.SaveChangesAsync();
 
-            var message = $"Upload Successful: {quickBMPsAdded.Count} records added!";
+            var message = $"Upload Successful: {quickBMPsAdded.Count} records added, {quickBMPsUpdated.Count} records updated!";
             SetMessageForDisplay(message);
             return new RedirectResult(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
         }
 
         private ViewResult ViewUploadSimplifiedBMPs(UploadSimplifiedBMPsViewModel viewModel, List<string> errorList)
         {
-            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadWQMPs);
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadSimplifiedBMPs);
             var viewData = new UploadSimplifiedBMPsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, errorList, neptunePage,
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.UploadWqmps()));
             return RazorView<UploadSimplifiedBMPs, UploadSimplifiedBMPsViewData, UploadSimplifiedBMPsViewModel>(viewData,

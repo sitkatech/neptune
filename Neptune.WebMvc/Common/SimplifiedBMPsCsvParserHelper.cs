@@ -39,15 +39,15 @@ public static class SimplifiedBMPsCsvParserHelper
         // if the fields don't match throw an exception
         var rowCount = 1;
         var treatmentBMPTypes = TreatmentBMPTypes.List(dbContext);
+        var quickBMPNamesInCsv = new List<string>();
         while (!parser.EndOfData)
         {
             var currentRow = parser.ReadFields();
 
-            var currentQuickBMP = ParseRequiredAndOptionalFieldsAndCreateSimplifiedBMPs(dbContext, currentRow, fieldsDict, rowCount, out var currentErrorList, treatmentBMPTypes);
+            var currentQuickBMP = ParseRequiredAndOptionalFieldsAndCreateSimplifiedBMPs(dbContext, currentRow, fieldsDict, rowCount, out var currentErrorList, treatmentBMPTypes, quickBMPNamesInCsv);
             if (currentQuickBMP != null)
             {
                 quickBMPsToUpload.Add(currentQuickBMP);
-                errorList.AddRange(currentErrorList);
             }
 
             errorList.AddRange(currentErrorList);
@@ -84,7 +84,7 @@ public static class SimplifiedBMPsCsvParserHelper
     }
 
     private static QuickBMP ParseRequiredAndOptionalFieldsAndCreateSimplifiedBMPs(NeptuneDbContext dbContext, string[] row,
-            Dictionary<string, int> fieldsDict, int rowNumber, out List<string> errorList, List<TreatmentBMPType> treatmentBMPTypes)
+            Dictionary<string, int> fieldsDict, int rowNumber, out List<string> errorList, List<TreatmentBMPType> treatmentBMPTypes, List<string> quickBMPNamesInCsv)
     {
         errorList = new List<string>();
 
@@ -92,7 +92,7 @@ public static class SimplifiedBMPsCsvParserHelper
 
         if (string.IsNullOrWhiteSpace(wqmpName))
         {
-            // no point in going further if we don't have a name and jurisdiction
+            // no point in going further if there is no wqmp name
             return null;
         }
 
@@ -105,18 +105,26 @@ public static class SimplifiedBMPsCsvParserHelper
             return null;
         }
 
-        var quickBMP = new QuickBMP() {WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID};
-
         var bmpName = SetStringValue(row, fieldsDict, rowNumber, errorList, "BMP Name",
-            QuickBMP.FieldLengths.QuickBMPName, false);
+            QuickBMP.FieldLengths.QuickBMPName, true);
+
+        var quickBMP = dbContext.QuickBMPs.SingleOrDefault(x =>
+            x.WaterQualityManagementPlanID == wqmp.WaterQualityManagementPlanID && x.QuickBMPName == bmpName) ?? new QuickBMP() {WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID};
+
         if (!string.IsNullOrWhiteSpace(bmpName))
         {
+            if (quickBMPNamesInCsv.Contains(bmpName))
+            {
+                errorList.Add(
+                    $"The Simplified BMP with Name '{bmpName}' was already added in this upload, duplicate name is found at row: {rowNumber}");
+            }
+            quickBMPNamesInCsv.Add(bmpName);
             quickBMP.QuickBMPName = bmpName;
         }
 
         var bmpType = FindLookupValue(row, fieldsDict, "BMP Type", rowNumber, errorList,
             treatmentBMPTypes, x => x.TreatmentBMPTypeName,
-            x => x.TreatmentBMPTypeID, true, false);
+            x => x.TreatmentBMPTypeID, true, true);
         if (bmpType.HasValue)
         {
             quickBMP.TreatmentBMPTypeID = bmpType.Value;
