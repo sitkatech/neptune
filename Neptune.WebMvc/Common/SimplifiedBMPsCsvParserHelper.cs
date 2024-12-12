@@ -17,16 +17,15 @@ public static class SimplifiedBMPsCsvParserHelper
     {
         parser.SetDelimiters(",");
         errorList = new List<string>();
-        var wqmpsToUpload = new List<QuickBMP>();
+        var quickBMPsToUpload = new List<QuickBMP>();
         var fieldsDict = new Dictionary<string, int>();
 
         var requiredFields = new List<string> { "WQMP", "BMP Name", "BMP Type", "Count of BMPs", "Dry Weather Flow Override?" };
-        var optionalFields = new List<string> { "% of Site Treated", "Wet Weather % Capture", "Wet Weather % Retained", "Notes" };
 
         try
         {
             var header = parser.ReadFields();
-            fieldsDict = ValidateHeader(header, requiredFields, optionalFields, out errorList);
+            fieldsDict = ValidateHeader(header, requiredFields, out errorList);
             if (errorList.Any())
             {
                 return null;
@@ -39,17 +38,15 @@ public static class SimplifiedBMPsCsvParserHelper
 
         // if the fields don't match throw an exception
         var rowCount = 1;
-        var stormwaterJurisdictions = StormwaterJurisdictions.List(dbContext).ToList();
-        var wqmpNamesInCsv = new List<string>();
         var treatmentBMPTypes = TreatmentBMPTypes.List(dbContext);
         while (!parser.EndOfData)
         {
             var currentRow = parser.ReadFields();
 
-            var currentWQMP = ParseRequiredAndOptionalFieldsAndCreateSimplifiedBMPs(dbContext, currentRow, fieldsDict, rowCount, out var currentErrorList, stormwaterJurisdictions, wqmpNamesInCsv, treatmentBMPTypes);
-            if (currentWQMP != null)
+            var currentQuickBMP = ParseRequiredAndOptionalFieldsAndCreateSimplifiedBMPs(dbContext, currentRow, fieldsDict, rowCount, out var currentErrorList, treatmentBMPTypes);
+            if (currentQuickBMP != null)
             {
-                wqmpsToUpload.Add(currentWQMP);
+                quickBMPsToUpload.Add(currentQuickBMP);
                 errorList.AddRange(currentErrorList);
             }
 
@@ -57,10 +54,10 @@ public static class SimplifiedBMPsCsvParserHelper
             rowCount++;
         }
 
-        return wqmpsToUpload;
+        return quickBMPsToUpload;
     }
 
-    private static Dictionary<string, int> ValidateHeader(string[] row, List<string> requiredFields, List<string> optionalFields, out List<string> errorList)
+    private static Dictionary<string, int> ValidateHeader(string[] row, List<string> requiredFields, out List<string> errorList)
     {
         errorList = new List<string>();
         var fieldsDict = new Dictionary<string, int>();
@@ -76,7 +73,6 @@ public static class SimplifiedBMPsCsvParserHelper
 
         var headers = fieldsDict.Keys.ToList();
         var requiredFieldDifference = requiredFields.Except(headers).ToList();
-        var optionalFieldDifference = headers.Except(requiredFields).Except(optionalFields).ToList();
 
         if (requiredFieldDifference.Any())
         {
@@ -84,17 +80,11 @@ public static class SimplifiedBMPsCsvParserHelper
                           string.Join(", ", requiredFieldDifference));
         }
 
-        //if (optionalFieldDifference.Any())
-        //{
-        //    errorList.Add($"The provided fields '{string.Join(", ", optionalFieldDifference)}' did not match a property of Water Quality Management Plan");
-        //}
-
         return fieldsDict;
     }
 
     private static QuickBMP ParseRequiredAndOptionalFieldsAndCreateSimplifiedBMPs(NeptuneDbContext dbContext, string[] row,
-            Dictionary<string, int> fieldsDict, int rowNumber, out List<string> errorList,
-            List<StormwaterJurisdiction> stormwaterJurisdictions, List<string> wqmpNamesInCsv, List<TreatmentBMPType> treatmentBMPTypes)
+            Dictionary<string, int> fieldsDict, int rowNumber, out List<string> errorList, List<TreatmentBMPType> treatmentBMPTypes)
     {
         errorList = new List<string>();
 
@@ -176,9 +166,9 @@ public static class SimplifiedBMPsCsvParserHelper
     private static string SetStringValue(string[] row, Dictionary<string, int> fieldsDict, int rowNumber, List<string> errorList, string fieldName,
             int fieldLength, bool requireNotEmpty)
     {
-        if (fieldsDict.ContainsKey(fieldName))
+        if (fieldsDict.TryGetValue(fieldName, out var value))
         {
-            var fieldValue = row[fieldsDict[fieldName]];
+            var fieldValue = row[value];
             if (!string.IsNullOrWhiteSpace(fieldValue))
             {
                 if (fieldValue.Length > fieldLength)
@@ -204,9 +194,9 @@ public static class SimplifiedBMPsCsvParserHelper
     private static int? FindLookupValue<T>(string[] row, Dictionary<string, int> fieldsDict, string fieldName, int rowNumber, List<string> errorList,
         List<T> lookupValues, Func<T, string> funcDisplayName, Func<T, int> funcID, bool showAvailableValuesInErrorMessage, bool requireNotEmpty)
     {
-        if (fieldsDict.ContainsKey(fieldName))
+        if (fieldsDict.TryGetValue(fieldName.Trim(), out var value))
         {
-            var fieldValue = row[fieldsDict[fieldName]];
+            var fieldValue = row[value];
             if (!string.IsNullOrWhiteSpace(fieldValue))
             {
                 if (!lookupValues.Select(funcDisplayName.Invoke).Contains(fieldValue))
@@ -238,9 +228,9 @@ public static class SimplifiedBMPsCsvParserHelper
 
     private static int? GetOptionalIntFieldValue(string[] row, Dictionary<string, int> fieldsDict, int rowNumber, List<string> errorList, string fieldName)
     {
-        if (fieldsDict.ContainsKey(fieldName))
+        if (fieldsDict.TryGetValue(fieldName, out var value))
         {
-            var fieldValue = row[fieldsDict[fieldName]];
+            var fieldValue = row[value];
             if (!string.IsNullOrWhiteSpace(fieldValue))
             {
                 if (!int.TryParse(fieldValue, out var fieldValueAsInt))
@@ -259,9 +249,9 @@ public static class SimplifiedBMPsCsvParserHelper
 
     private static decimal? GetOptionalDecimalFieldValue(string[] row, Dictionary<string, int> fieldsDict, int rowNumber, List<string> errorList, string fieldName)
     {
-        if (fieldsDict.ContainsKey(fieldName))
+        if (fieldsDict.TryGetValue(fieldName, out var value))
         {
-            var fieldValue = row[fieldsDict[fieldName]];
+            var fieldValue = row[value];
             if (!string.IsNullOrWhiteSpace(fieldValue))
             {
                 if (!decimal.TryParse(fieldValue, out var fieldValueAsInt))

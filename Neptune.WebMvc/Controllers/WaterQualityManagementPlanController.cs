@@ -920,20 +920,19 @@ namespace Neptune.WebMvc.Controllers
         public async Task<IActionResult> UploadSimplifiedBMPs(UploadSimplifiedBMPsViewModel viewModel)
         {
             var uploadedCSVFile = viewModel.UploadCSV;
-            var wqmps = SimplifiedBMPsCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), out var errorList);
+            var quickBMPs = SimplifiedBMPsCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), out var errorList);
 
             if (errorList.Any())
             {
                 return ViewUploadSimplifiedBMPs(viewModel, errorList);
             }
 
-            var wqmpsAdded = wqmps.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
-            var wqmpsUpdated = wqmps.Where(x => ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
+            var quickBMPsAdded = quickBMPs.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
 
-            await _dbContext.QuickBMPs.AddRangeAsync(wqmpsAdded);
+            await _dbContext.QuickBMPs.AddRangeAsync(quickBMPsAdded);
             await _dbContext.SaveChangesAsync();
 
-            var message = $"Upload Successful: {wqmpsAdded.Count} records added, {wqmpsUpdated.Count} records updated!";
+            var message = $"Upload Successful: {quickBMPsAdded.Count} records added!";
             SetMessageForDisplay(message);
             return new RedirectResult(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
         }
