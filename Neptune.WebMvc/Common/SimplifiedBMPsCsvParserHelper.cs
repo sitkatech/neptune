@@ -156,7 +156,7 @@ public static class SimplifiedBMPsCsvParserHelper
 
         var dryWeatherFlowOverride = FindLookupValue(row, fieldsDict, "Dry Weather Flow Override?", rowNumber, errorList,
             DryWeatherFlowOverride.All, x => x.DryWeatherFlowOverrideDisplayName,
-            x => x.DryWeatherFlowOverrideID, true, false);
+            x => x.DryWeatherFlowOverrideID, true, true);
         if (dryWeatherFlowOverride.HasValue)
         {
             quickBMP.DryWeatherFlowOverrideID = dryWeatherFlowOverride.Value;
