@@ -68,7 +68,7 @@ USING (VALUES
 (67, N'ViaOVTAScore', N'Via OVTA Score'),
 (68, N'TotalAchieved', N'Total Achieved'),
 (69, N'TargetLoadReduction', N'Target Load Reduction'),
-(70, N'LoadingRate', N'Loading Rate'),
+(70, N'TrashGenerationRate', N'Trash Generation Rate'),
 (71, N'LandUse', N'Land Use'),
 (72, N'Area', N'Area'),
 (73, N'ImperviousArea', N'Impervious Area'),
@@ -137,7 +137,9 @@ USING (VALUES
 (136, 'DesignVolume85thPercentile', '85th Percentile Design Volume (cuft)'),
 (137, 'LandUseBasedWaterQualityScore', 'Land Use Based Water Quality Score'),
 (138, 'ReceivingWaterScore', 'Receiving Water Score'),
-(139, 'NumberOfIndividualBMPs', '# of Individual BMPs')
+(139, 'NumberOfIndividualBMPs', '# of Individual BMPs'),
+(140, 'LandUseType', 'Land Use Type'),
+(141, 'LandUseDescription', 'Land Use Description')
 )
 AS Source (FieldDefinitionTypeID, FieldDefinitionTypeName, FieldDefinitionTypeDisplayName)
 ON Target.FieldDefinitionTypeID = Source.FieldDefinitionTypeID
