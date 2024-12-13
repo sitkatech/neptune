@@ -26,7 +26,7 @@ namespace Neptune.WebMvc.Views.DelineationGeometry
 
             StormwaterJurisdictions =
                 stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
-                    .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
+                    .ToSelectList(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
 
         }
     }

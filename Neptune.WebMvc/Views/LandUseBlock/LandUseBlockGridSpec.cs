@@ -15,12 +15,12 @@ namespace Neptune.WebMvc.Views.LandUseBlock
             var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
 
             Add("Block ID", x => x.LandUseBlockID.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
-            Add("Land Use Type", x => x.PriorityLandUseType?.PriorityLandUseTypeDisplayName ?? "Not Priority Land Use", 140, DhtmlxGridColumnFilterType.Text);
+            Add(FieldDefinitionType.LandUseType.ToGridHeaderString(), x => x.PriorityLandUseType?.PriorityLandUseTypeDisplayName ?? "Not Priority Land Use", 140, DhtmlxGridColumnFilterType.Text);
             Add("Stormwater Jurisdiction", x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.StormwaterJurisdiction.GetOrganizationDisplayName()), 170, DhtmlxGridColumnFilterType.Html);
             Add("Block Area", x => (x.LandUseBlockGeometry.Area * Constants.SquareMetersToAcres).ToString("F2", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
-            Add(FieldDefinitionType.LoadingRate.ToGridHeaderString(), x => x.TrashGenerationRate.GetValueOrDefault().ToString(CultureInfo.InvariantCulture), 100,
+            Add(FieldDefinitionType.TrashGenerationRate.ToGridHeaderString(), x => x.TrashGenerationRate.GetValueOrDefault().ToString(CultureInfo.InvariantCulture), 100,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Land Use Description", x => x.LandUseDescription, 100, DhtmlxGridColumnFilterType.Text);
+            Add(FieldDefinitionType.LandUseDescription.ToGridHeaderString(), x => x.LandUseDescription, 100, DhtmlxGridColumnFilterType.Text);
             Add("Median Household Income Residential", x => x.MedianHouseholdIncomeResidential.ToStringCurrency(), 100,
                 DhtmlxGridColumnFilterType.Text);
             Add("Median Household Income Retail", x => x.MedianHouseholdIncomeRetail.ToStringCurrency(), 100,
@@ -30,6 +30,8 @@ namespace Neptune.WebMvc.Views.LandUseBlock
                      Constants.SquareMetersToAcres).ToString("F2", CultureInfo.InvariantCulture), 100,
                 DhtmlxGridColumnFilterType.Numeric);
             Add("Permit Type", x => x.PermitType.PermitTypeDisplayName, 100,
+                DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Land Use for TGR", x => x.LandUseForTGR, 100,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
         }
 

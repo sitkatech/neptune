@@ -71,7 +71,7 @@ export enum FieldDefinitionTypeEnum {
   ViaOVTAScore = 67,
   TotalAchieved = 68,
   TargetLoadReduction = 69,
-  LoadingRate = 70,
+  TrashGenerationRate = 70,
   LandUse = 71,
   Area = 72,
   ImperviousArea = 73,
@@ -140,5 +140,7 @@ export enum FieldDefinitionTypeEnum {
   DesignVolume85thPercentile = 136,
   LandUseBasedWaterQualityScore = 137,
   ReceivingWaterScore = 138,
-  NumberOfIndividualBMPs = 139
+  NumberOfIndividualBMPs = 139,
+  LandUseType = 140,
+  LandUseDescription = 141
 }

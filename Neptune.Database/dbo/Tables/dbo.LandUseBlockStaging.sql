@@ -5,8 +5,9 @@ CREATE TABLE [dbo].[LandUseBlockStaging](
 	[Geometry] [geometry] NOT NULL,
 	[TrashGenerationRate] [decimal](4, 1) NULL,
 	[LandUseForTGR] [varchar](80) NULL,
-	[MedianHouseholdIncome] [numeric](18, 0) NULL,
-	[StormwaterJurisdiction] [varchar](255),
+	[MedianHouseholdIncomeResidential] [numeric](18, 0) NULL,
+	[MedianHouseholdIncomeRetail] [numeric](18, 0) NULL,
+	[StormwaterJurisdictionID] [int] NOT NULL CONSTRAINT [FK_LandUseBlockStaging_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY REFERENCES [dbo].[StormwaterJurisdiction]([StormwaterJurisdictionID]),
 	[PermitType] [varchar](255) NULL,
 	[UploadedByPersonID] [int] NOT NULL CONSTRAINT [FK_LandUseBlockStaging_Person_UploadedByPersonID_PersonID] FOREIGN KEY REFERENCES [dbo].[Person] ([PersonID]),
 )

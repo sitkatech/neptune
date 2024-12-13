@@ -98,14 +98,14 @@ namespace Neptune.WebMvc.Controllers
                 var columns = new List<string>
                 {
                     $"{CurrentPerson.PersonID} as UploadedByPersonID",
-                    "PLU_Cat as PriorityLandUseType",
-                    "LU_Descr as LandUseDescription",
-                    "shape as LandUseBlockGeometry",
-                    "TGR as TrashGenerationRate",
-                    "LU_for_TGR as LandUseForTGR",
-                    "MHI as MedianHouseHoldIncome",
-                    "Jurisdic as StormwaterJurisdiction",
-                    "Permit as PermitType",
+                    "prioritylandusetype as PriorityLandUseType",
+                    "landusedescription as LandUseDescription",
+                    "trashgenerationrate as TrashGenerationRate",
+                    "landusefortgr as LandUseForTGR",
+                    "medianhouseholdincomeresidential as MedianHouseholdIncomeResidential",
+                    "medianhouseholdincomeretail as MedianHouseholdIncomeRetail",
+                    $"{viewModel.StormwaterJurisdictionID} as StormwaterJurisdictionID",
+                    "permittype as PermitType",
                 };
 
                 var apiRequest = new GdbToGeoJsonRequestDto()
@@ -256,7 +256,7 @@ namespace Neptune.WebMvc.Controllers
             var newGisUploadUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateLandUseBlockGeometry());
             var downloadLandUseBuildUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.DownloadLandUseBlockGeometry());
 
-            var viewData = new UpdateLandUseBlockGeometryViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, newGisUploadUrl, downloadLandUseBuildUrl);
+            var viewData = new UpdateLandUseBlockGeometryViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, newGisUploadUrl, downloadLandUseBuildUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
             return RazorView<UpdateLandUseBlockGeometry, UpdateLandUseBlockGeometryViewData, UpdateLandUseBlockGeometryViewModel>(viewData, viewModel);
         }
     }

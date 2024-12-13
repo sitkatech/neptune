@@ -12,5 +12,8 @@ namespace Neptune.WebMvc.Views.LandUseBlockGeometry
         [SitkaFileExtensions("zip")]
         public IFormFile FileResourceData { get; set; }
         public int PersonID { get; set; }
+        [Required]
+        [DisplayName("Stormwater Jurisdiction")]
+        public int? StormwaterJurisdictionID { get; set; }
     }
 }

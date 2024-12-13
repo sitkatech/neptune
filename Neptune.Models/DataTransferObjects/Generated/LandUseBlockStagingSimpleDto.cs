@@ -12,8 +12,9 @@ namespace Neptune.Models.DataTransferObjects
         public string LandUseDescription { get; set; }
         public decimal? TrashGenerationRate { get; set; }
         public string LandUseForTGR { get; set; }
-        public decimal? MedianHouseholdIncome { get; set; }
-        public string StormwaterJurisdiction { get; set; }
+        public decimal? MedianHouseholdIncomeResidential { get; set; }
+        public decimal? MedianHouseholdIncomeRetail { get; set; }
+        public int StormwaterJurisdictionID { get; set; }
         public string PermitType { get; set; }
         public int UploadedByPersonID { get; set; }
     }

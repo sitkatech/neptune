@@ -67,78 +67,20 @@ namespace Neptune.Jobs.Hangfire
 
                     if (landUseBlockStaging.LandUseForTGR == "Residential")
                     {
-                        landUseBlock.MedianHouseholdIncomeResidential = landUseBlockStaging.MedianHouseholdIncome;
+                        landUseBlock.MedianHouseholdIncomeResidential = landUseBlockStaging.MedianHouseholdIncomeResidential;
                         landUseBlock.MedianHouseholdIncomeRetail = 0;
                     }
                     else if (landUseBlockStaging.LandUseForTGR == "Retail")
                     {
                         landUseBlock.MedianHouseholdIncomeResidential = 0;
-                        landUseBlock.MedianHouseholdIncomeRetail = landUseBlockStaging.MedianHouseholdIncome;
+                        landUseBlock.MedianHouseholdIncomeRetail = landUseBlockStaging.MedianHouseholdIncomeRetail;
                     }
                     else
                     {
                         landUseBlock.MedianHouseholdIncomeResidential = 0;
                         landUseBlock.MedianHouseholdIncomeRetail = 0;
                     }
-
-                    var stormwaterJurisdictionName = landUseBlockStaging.StormwaterJurisdiction;
-                    if (string.IsNullOrEmpty(stormwaterJurisdictionName))
-                    {
-                        errorList.Add(
-                            $"The Stormwater Jurisdiction at row {count} is null, empty or whitespace. A value must be provided");
-                    }
-
-                    if (!stormwaterJurisdictionNames
-                        .Contains(stormwaterJurisdictionName))
-                    {
-
-                        errorList.Add(
-                            $"The Stormwater Jurisdiction '{stormwaterJurisdictionName}' at row {count} was not found. Acceptable values are {allowedStormwaterJurisdictionNames}");
-                    }
-                    else
-                    {
-                        var stormwaterJurisdictionIDToAssign = stormwaterJurisdictions.ContainsKey(landUseBlockStaging.StormwaterJurisdiction) ? stormwaterJurisdictions[landUseBlockStaging.StormwaterJurisdiction] : null;
-                        if (stormwaterJurisdictionIDToAssign != null && editableStormwaterJurisdictionIDs
-                            .Contains(stormwaterJurisdictionIDToAssign.StormwaterJurisdictionID))
-                        {
-                            landUseBlock.StormwaterJurisdictionID = stormwaterJurisdictionIDToAssign.StormwaterJurisdictionID;
-
-                            if (landUseBlockStaging.Geometry == null)
-                            {
-                                errorList.Add(
-                                    $"The Land Use Block Geometry at row {count} is null. A value must be provided");
-                            } else if (!landUseBlockStaging.Geometry.IsValid)
-                            {
-                                errorList.Add(
-                                    $"The Land Use Block Geometry at row {count} is invalid.");
-                            }
-                            else
-                            {
-
-                                var clippedGeometry = landUseBlockStaging.Geometry
-                                    .Intersection(stormwaterJurisdictionIDToAssign.StormwaterJurisdictionGeometry.GeometryNative);
-
-                                if (clippedGeometry == null || clippedGeometry.IsEmpty)
-                                {
-                                    errorList.Add(
-                                        $"The Land Use Block Geometry at row {count} is not in the assigned Stormwater Jurisdiction. Please make sure Land Use Block is in {stormwaterJurisdictionIDToAssign.Organization.OrganizationName}.");
-                                }
-                                else
-                                {
-                                    landUseBlock.LandUseBlockGeometry = clippedGeometry;
-                                    landUseBlock.LandUseBlockGeometry4326 = clippedGeometry.ProjectTo4326();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            errorList.Add(
-                                $"You do not have permission to edit Stormwater Jurisdiction {stormwaterJurisdictionIDToAssign.Organization.OrganizationName}. Please remove all features with this Stormwater Jurisdiction from the upload and try again.");
-                        }
-                    }
-
-
-
+                    
                     var permitType = landUseBlockStaging.PermitType;
                     if (string.IsNullOrEmpty(permitType))
                     {
