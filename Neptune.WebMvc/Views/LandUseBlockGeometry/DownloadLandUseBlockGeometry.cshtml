@@ -19,7 +19,7 @@
 <form id="uploadGisForm" method="post" action="@ViewDataTyped.NewGisUploadUrl" enctype="multipart/form-data">
     <div class="formPage">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <p>
                     Use this form to download Land Use Blocks for a given jurisdiction:
                     <ul>
@@ -28,16 +28,18 @@
                         <li>This file download is intended to support bulk editing in desktop GIS software and can be re-uploaded to the platform to replace the existing land use blocks utilized in trash results calculations.</li>
                     </ul>
                 </p>
+            </div>
+            <div class="col-md-6">
                 <div class="row form-group" style="margin-top: 0px;">
                     <div class="col-md-6">
                         @Html.LabelWithSugarFor(x => x.StormwaterJurisdictionID)
                     </div>
                     <div class="col-md-6">
-                        @Html.DropDownListFor(x => x.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictions, new Dictionary<string, object> {{"class", "form-control"}})
+                        @Html.DropDownListFor(x => x.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictions, new Dictionary<string, object> { { "class", "form-control" } })
                     </div>
                 </div>
-                </div>
-        </div>
+                </>
+            </div>
         <div class="row">
             <div class="col-md-12 text-right">
                 <button type="submit" class="btn btn-neptune"><span class="glyphicon glyphicon-arrow-down"></span> Download</button>

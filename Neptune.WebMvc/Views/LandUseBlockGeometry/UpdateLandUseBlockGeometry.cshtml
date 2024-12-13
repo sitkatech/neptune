@@ -17,7 +17,7 @@
 <form id="uploadGisForm" method="post" action="@ViewDataTyped.NewGisUploadUrl" enctype="multipart/form-data">
     <div class="formPage">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <p>
                     Use this form to bulk upload Land Use Blocks. Requirements:
                 </p>
@@ -35,13 +35,13 @@
                     <li>Version 10.1+ file geodatabases are supported</li>
                 </ul>
                 <p>After you upload your file the new Land Use Blocks will be added and overwrite any existing Land Use Blocks for your Jurisdiction. It may take up to twenty four hours to see updated Trash Results on the home page.</p>
-                <div>
-                    @Html.EditorFor(x => x.FileResourceData)
-                    @Html.ValidationMessageFor(x => x.FileResourceData)
-                    <span class="smallExplanationText">
-                        Allowed Extensions: @Model.GetFileExtensions(x => x.FileResourceData)
-                    </span>
-                </div>
+            </div>
+            <div class="col-md-6">
+                @Html.EditorFor(x => x.FileResourceData)
+                @Html.ValidationMessageFor(x => x.FileResourceData)
+                <span class="smallExplanationText">
+                    Allowed Extensions: @Model.GetFileExtensions(x => x.FileResourceData)
+                </span>
             </div>
         </div>
         <div class="row">
