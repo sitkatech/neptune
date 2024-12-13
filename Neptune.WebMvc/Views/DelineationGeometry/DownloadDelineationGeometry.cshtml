@@ -10,7 +10,7 @@
 }
 @section RightOfPageTitle
 {
-    <a class="btn btn-neptune headerButtonText observationTypeButton" href="@ViewDataTyped.GisUploadUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-open") Upload GDB</a>
+    <a class="btn btn-warning headerButtonText observationTypeButton" href="@ViewDataTyped.GisUploadUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload GDB</a>
 }
 @Html.ValidationSummary()
 <div class="formPage">
@@ -41,7 +41,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12 text-right">
-                        <button type="submit" class="btn btn-neptune"> Download GDB</button>
+                        <button type="submit" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download GDB</button>
                     </div>
                 </div>
             </form>

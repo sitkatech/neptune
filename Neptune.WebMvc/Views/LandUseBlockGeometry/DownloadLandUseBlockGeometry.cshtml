@@ -12,7 +12,7 @@
 }
 @section RightOfPageTitle
 {
-    <a class="btn btn-neptune headerButtonText observationTypeButton" href="@ViewDataTyped.UploadLandUseBlockUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-open") Upload Land Use Block</a>
+    <a class="btn btn-warning headerButtonText observationTypeButton" href="@ViewDataTyped.UploadLandUseBlockUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload Land Use Block</a>
 }
 @Html.ValidationSummary()
 
@@ -39,11 +39,13 @@
                     </div>
                 </div>
                 </>
+                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <button type="submit" class="btn btn-neptune"><span class="glyphicon glyphicon-download"></span> Download</button>
+                    </div>
+                </div>
             </div>
-        <div class="row">
-            <div class="col-md-12 text-right">
-                <button type="submit" class="btn btn-neptune"><span class="glyphicon glyphicon-arrow-down"></span> Download</button>
-            </div>
+        
         </div>
     </div>
     @Html.HiddenFor(x => x.PersonID)
