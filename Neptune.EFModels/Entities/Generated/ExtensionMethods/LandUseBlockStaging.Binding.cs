@@ -14,7 +14,6 @@ namespace Neptune.EFModels.Entities
             public const int PriorityLandUseType = 255;
             public const int LandUseDescription = 500;
             public const int LandUseForTGR = 80;
-            public const int StormwaterJurisdiction = 255;
             public const int PermitType = 255;
         }
     }

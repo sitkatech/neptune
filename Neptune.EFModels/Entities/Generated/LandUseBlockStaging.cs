@@ -32,17 +32,22 @@ public partial class LandUseBlockStaging
     public string? LandUseForTGR { get; set; }
 
     [Column(TypeName = "numeric(18, 0)")]
-    public decimal? MedianHouseholdIncome { get; set; }
+    public decimal? MedianHouseholdIncomeResidential { get; set; }
 
-    [StringLength(255)]
-    [Unicode(false)]
-    public string? StormwaterJurisdiction { get; set; }
+    [Column(TypeName = "numeric(18, 0)")]
+    public decimal? MedianHouseholdIncomeRetail { get; set; }
+
+    public int StormwaterJurisdictionID { get; set; }
 
     [StringLength(255)]
     [Unicode(false)]
     public string? PermitType { get; set; }
 
     public int UploadedByPersonID { get; set; }
+
+    [ForeignKey("StormwaterJurisdictionID")]
+    [InverseProperty("LandUseBlockStagings")]
+    public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; } = null!;
 
     [ForeignKey("UploadedByPersonID")]
     [InverseProperty("LandUseBlockStagings")]
