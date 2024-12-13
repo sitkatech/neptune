@@ -25,6 +25,9 @@ public partial class StormwaterJurisdiction
     public virtual ICollection<DelineationStaging> DelineationStagings { get; set; } = new List<DelineationStaging>();
 
     [InverseProperty("StormwaterJurisdiction")]
+    public virtual ICollection<LandUseBlockStaging> LandUseBlockStagings { get; set; } = new List<LandUseBlockStaging>();
+
+    [InverseProperty("StormwaterJurisdiction")]
     public virtual ICollection<LandUseBlock> LandUseBlocks { get; set; } = new List<LandUseBlock>();
 
     [InverseProperty("StormwaterJurisdiction")]

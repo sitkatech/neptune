@@ -18,8 +18,9 @@ namespace Neptune.EFModels.Entities
                 LandUseDescription = landUseBlockStaging.LandUseDescription,
                 TrashGenerationRate = landUseBlockStaging.TrashGenerationRate,
                 LandUseForTGR = landUseBlockStaging.LandUseForTGR,
-                MedianHouseholdIncome = landUseBlockStaging.MedianHouseholdIncome,
-                StormwaterJurisdiction = landUseBlockStaging.StormwaterJurisdiction,
+                MedianHouseholdIncomeResidential = landUseBlockStaging.MedianHouseholdIncomeResidential,
+                MedianHouseholdIncomeRetail = landUseBlockStaging.MedianHouseholdIncomeRetail,
+                StormwaterJurisdictionID = landUseBlockStaging.StormwaterJurisdictionID,
                 PermitType = landUseBlockStaging.PermitType,
                 UploadedByPersonID = landUseBlockStaging.UploadedByPersonID
             };
