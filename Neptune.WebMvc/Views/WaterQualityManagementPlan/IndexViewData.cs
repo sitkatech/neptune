@@ -19,6 +19,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         public bool CurrentPersonCanCreate { get; }
         public ViewPageContentViewData VerificationNeptunePage { get; }
         public string BulkUploadWQMPUrl { get; }
+        public string BulkUploadSimplifiedBMPs { get; }
 
         public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage,
             IndexGridSpec indexGridSpec, EFModels.Entities.NeptunePage secondaryNeptunePage, WaterQualityManagementPlanVerificationGridSpec verificationGridSpec) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
@@ -45,6 +46,9 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             CurrentPersonCanCreate = new WaterQualityManagementPlanCreateFeature().HasPermissionByPerson(currentPerson);
             BulkUploadWQMPUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
                 x.UploadWqmps());
+            BulkUploadSimplifiedBMPs =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator,
+                    x => x.UploadSimplifiedBMPs());
         }
 
     }
