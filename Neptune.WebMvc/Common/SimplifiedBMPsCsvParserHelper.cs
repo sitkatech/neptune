@@ -130,25 +130,25 @@ public static class SimplifiedBMPsCsvParserHelper
             quickBMP.TreatmentBMPTypeID = bmpType.Value;
         }
 
-        var countOfBMPs = GetOptionalIntFieldValue(row, fieldsDict, rowNumber, errorList, "Count of BMPs");
+        var countOfBMPs = GetIntFieldValue(row, fieldsDict, rowNumber, errorList, "Count of BMPs", true);
         if (countOfBMPs.HasValue)
         {
             quickBMP.NumberOfIndividualBMPs = countOfBMPs.Value;
         }
 
-        var percentageOfSiteTreated = GetOptionalDecimalFieldValue(row, fieldsDict, rowNumber, errorList, "% of Site Treated");
+        var percentageOfSiteTreated = GetDecimalFieldValue(row, fieldsDict, rowNumber, errorList, "% of Site Treated", false);
         if (percentageOfSiteTreated.HasValue)
         {
             quickBMP.PercentOfSiteTreated = percentageOfSiteTreated;
         }
 
-        var wetWeatherPercentageCapture = GetOptionalDecimalFieldValue(row, fieldsDict, rowNumber, errorList, "Wet Weather % Capture");
+        var wetWeatherPercentageCapture = GetDecimalFieldValue(row, fieldsDict, rowNumber, errorList, "Wet Weather % Capture", false);
         if (wetWeatherPercentageCapture.HasValue)
         {
             quickBMP.PercentCaptured = wetWeatherPercentageCapture;
         }
 
-        var wetWeatherPercentageRetained = GetOptionalDecimalFieldValue(row, fieldsDict, rowNumber, errorList, "Wet Weather % Retained");
+        var wetWeatherPercentageRetained = GetDecimalFieldValue(row, fieldsDict, rowNumber, errorList, "Wet Weather % Retained", false);
         if (wetWeatherPercentageRetained.HasValue)
         {
             quickBMP.PercentRetained = wetWeatherPercentageRetained;
@@ -234,7 +234,7 @@ public static class SimplifiedBMPsCsvParserHelper
         return null;
     }
 
-    private static int? GetOptionalIntFieldValue(string[] row, Dictionary<string, int> fieldsDict, int rowNumber, List<string> errorList, string fieldName)
+    private static int? GetIntFieldValue(string[] row, Dictionary<string, int> fieldsDict, int rowNumber, List<string> errorList, string fieldName, bool requireNotEmpty)
     {
         if (fieldsDict.TryGetValue(fieldName, out var value))
         {
@@ -245,6 +245,10 @@ public static class SimplifiedBMPsCsvParserHelper
                 {
                     errorList.Add($"{fieldName} can not be converted to Int at row: {rowNumber}");
                 }
+                else if (fieldValueAsInt < 0)
+                {
+                    errorList.Add($"{fieldName} cannot be less than 0 at row: {rowNumber}");
+                }
                 else
                 {
                     return fieldValueAsInt;
@@ -252,24 +256,41 @@ public static class SimplifiedBMPsCsvParserHelper
             }
         }
 
+        if (requireNotEmpty)
+        {
+            errorList.Add($"{fieldName} is null, empty, or just whitespaces for row: {rowNumber}");
+        }
+
         return null;
     }
 
-    private static decimal? GetOptionalDecimalFieldValue(string[] row, Dictionary<string, int> fieldsDict, int rowNumber, List<string> errorList, string fieldName)
+    private static decimal? GetDecimalFieldValue(string[] row, Dictionary<string, int> fieldsDict, int rowNumber, List<string> errorList, string fieldName, bool requireNotEmpty)
     {
         if (fieldsDict.TryGetValue(fieldName, out var value))
         {
             var fieldValue = row[value];
             if (!string.IsNullOrWhiteSpace(fieldValue))
             {
-                if (!decimal.TryParse(fieldValue, out var fieldValueAsInt))
+                if (!decimal.TryParse(fieldValue, out var fieldValueAsDecimal))
                 {
                     errorList.Add($"{fieldName} can not be converted to decimal at row: {rowNumber}");
                 }
+                else if (fieldValueAsDecimal < 0.0M)
+                {
+                    errorList.Add($"{fieldName} cannot be less than 0 at row: {rowNumber}");
+                }
+                else if (fieldValueAsDecimal > 100.0M)
+                {
+                    errorList.Add($"{fieldName} cannot be greater than 100 at row: {rowNumber}");
+                }
                 else
                 {
-                    return fieldValueAsInt;
+                    return fieldValueAsDecimal;
                 }
+            }
+            if (requireNotEmpty)
+            {
+                errorList.Add($"{fieldName} is null, empty, or just whitespaces for row: {rowNumber}");
             }
         }
 
