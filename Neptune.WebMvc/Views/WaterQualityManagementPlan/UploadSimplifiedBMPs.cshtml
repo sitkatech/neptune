@@ -20,6 +20,7 @@
     -----------------------------------------------------------------------*@
 
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Neptune.WebMvc.Common.BootstrapWrappers
 @using Neptune.WebMvc.Common.HtmlHelperExtensions
 @using Neptune.WebMvc.Views.Shared
 @inherits Neptune.WebMvc.Views.WaterQualityManagementPlan.UploadSimplifiedBMPs
@@ -56,7 +57,7 @@
             <a class="btn btn-neptune" href="@ViewDataTyped.WqmpIndexUrl">Cancel</a>
         </div>
         <div class="pull-right" style="margin-left: 1em;">
-            <button type="submit" class="btn btn-neptune">Upload</button>
+            <button type="submit" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</button>
         </div>
         <div class="clearfix"></div>
     </div>

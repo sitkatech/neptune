@@ -22,11 +22,11 @@
     @if (ViewDataTyped.CurrentPerson.IsAdministrator())
     {
         <div class="pull-right" style="margin-left: 1em;">
-            <a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadWQMPUrl"><span class="glyphicon glyphicon-plus"></span> Bulk Upload WQMPs</a>
+            <a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadWQMPUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Bulk Upload WQMPs</a>
         </div>
         <br/>
         <div class="pull-right" style="margin-left: 1em;">
-            <a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadSimplifiedBMPs"><span class="glyphicon glyphicon-plus"></span> Bulk Upload Simplified BMPs</a>
+            <a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadSimplifiedBMPs">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Bulk Upload Simplified BMPs</a>
         </div>
     }
 }
