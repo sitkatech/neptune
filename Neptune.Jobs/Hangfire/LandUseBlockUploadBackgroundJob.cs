@@ -64,6 +64,8 @@ namespace Neptune.Jobs.Hangfire
                     landUseBlock.LandUseDescription = landUseBlockStaging.LandUseDescription;
                     landUseBlock.TrashGenerationRate = landUseBlockStaging.TrashGenerationRate;
                     landUseBlock.LandUseForTGR = landUseBlockStaging.LandUseForTGR;
+                    landUseBlock.LandUseBlockGeometry = landUseBlockStaging.Geometry;
+                    landUseBlock.StormwaterJurisdictionID = landUseBlockStaging.StormwaterJurisdictionID;
 
                     if (landUseBlockStaging.LandUseForTGR == "Residential")
                     {
