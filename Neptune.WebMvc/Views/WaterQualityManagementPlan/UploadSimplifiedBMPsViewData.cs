@@ -15,6 +15,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         {
             PageTitle = "Simplified BMPs Bulk Upload";
             EntityName = $"{FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
+            EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
             WqmpsUploadUrl = wqmpsUploadUrl;
             WqmpIndexUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
             ErrorList = errorList;
