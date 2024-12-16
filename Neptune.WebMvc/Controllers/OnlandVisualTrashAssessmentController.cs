@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Data;
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -18,6 +19,7 @@ using Neptune.WebMvc.Views;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessment;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessment.MapInitJson;
 using Neptune.WebMvc.Views.Shared;
+using NetTopologySuite.Triangulate;
 using Index = Neptune.WebMvc.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.WebMvc.Views.OnlandVisualTrashAssessment.IndexViewData;
 using OVTASection = Neptune.EFModels.Entities.OVTASection;
@@ -594,6 +596,91 @@ namespace Neptune.WebMvc.Controllers
         // helpers
 
         // assumes that we are not looking for the parcels-via-transect area
+
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public ViewResult BulkUploadOTVAs()
+        {
+            var bulkUploadTrashScreenVisitViewModel = new BulkUploadOTVAsViewModel();
+
+            return ViewBulkUploadOTVAs(bulkUploadTrashScreenVisitViewModel);
+        }
+
+        private ViewResult ViewBulkUploadOTVAs(
+            BulkUploadOTVAsViewModel bulkUploadTrashScreenVisitViewModel)
+        {
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.BulkUploadFieldVisits);
+            var bulkUploadTrashScreenVisitViewData = new BulkUploadOTVAsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
+
+            return RazorView<BulkUploadOTVAs, BulkUploadOTVAsViewData,
+                BulkUploadOTVAsViewModel>(bulkUploadTrashScreenVisitViewData,
+                bulkUploadTrashScreenVisitViewModel);
+        }
+
+        [HttpPost]
+        [JurisdictionManageFeature]
+        [RequestSizeLimit(100_000_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
+        public async Task<IActionResult> BulkUploadOTVAs(BulkUploadOTVAsViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewBulkUploadOTVAs(viewModel);
+            }
+
+            var uploadXlsxInputStream = viewModel.UploadXLSX.OpenReadStream();
+
+            DataTable dataTableFromExcel;
+
+            SetMessageForDisplay("Successfully bulk uploaded Field Visit Assessment and Maintenance Records");
+
+            return RedirectToAction(new SitkaRoute<OnlandVisualTrashAssessmentController>(_linkGenerator, x => x.Index()));
+        }
+
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public async Task<FileResult> TrashScreenBulkUploadTemplate()
+        {
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson).ToList();
+
+            //var currentPersonTrashScreens = TreatmentBMPs.GetNonPlanningModuleBMPs(_dbContext)
+            //    .Where(x => x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID &&
+            //                stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+
+            //var treatmentBMPIDs = currentPersonTrashScreens.Select(x => x.TreatmentBMPID);
+
+            //var inletScreensDict = CustomAttributes.ListByCustomAttributeTypeID(_dbContext,
+            //    CustomAttributeTypes.CustomAttributeTypeIDNumberOfInletScreens).Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).ToDictionary(x => x.TreatmentBMPID);
+            //var trashBucketsDict = CustomAttributes.ListByCustomAttributeTypeID(_dbContext,
+            //    CustomAttributeTypes.CustomAttributeTypeIDNumberOfTrashBaskets).Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).ToDictionary(x => x.TreatmentBMPID);
+            //var connectorPipeScreensDict = CustomAttributes.ListByCustomAttributeTypeID(_dbContext,
+            //    CustomAttributeTypes.CustomAttributeTypeIDNumberOfConnectorPipeScreens).Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).ToDictionary(x => x.TreatmentBMPID);
+
+            //var row = 2;
+            //using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
+            //await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToFieldVisitUploadTemplate, disposableTempFile.FileInfo.FullName);
+
+            //using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
+            //var worksheet = workbook.Worksheet("Field Visits");
+            //foreach (var treatmentBMP in currentPersonTrashScreens)
+            //{
+            //    worksheet.Cells($"A{row}").Value = treatmentBMP.TreatmentBMPName;
+            //    worksheet.Cells($"B{row}").Value = treatmentBMP.StormwaterJurisdiction.Organization.OrganizationName;
+            //    worksheet.Cells($"C{row}").Value = treatmentBMP.YearBuilt;
+            //    worksheet.Cells($"D{row}").Value = treatmentBMP.Notes;
+            //    SetCellValueFromCustomAttribute(inletScreensDict, treatmentBMP, worksheet, "E", row);
+            //    SetCellValueFromCustomAttribute(trashBucketsDict, treatmentBMP, worksheet, "F", row);
+            //    SetCellValueFromCustomAttribute(connectorPipeScreensDict, treatmentBMP, worksheet, "G", row);
+            //    row++;
+            //}
+
+            //using var stream = new MemoryStream();
+            //workbook.SaveAs(stream);
+            //return File(stream.ToArray(), @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            //    $"TrashScreenBulkUploadTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.xlsx");
+            return null;
+        }
+
 
         private ActionResult RedirectToAppropriateStep(FormViewModel viewModel,
             OVTASection ovtaSection, OnlandVisualTrashAssessment ovta)
