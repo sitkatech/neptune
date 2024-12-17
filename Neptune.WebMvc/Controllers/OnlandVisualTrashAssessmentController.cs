@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Globalization;
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -14,12 +15,12 @@ using Neptune.WebMvc.Common.Mvc;
 using Neptune.WebMvc.Common.MvcResults;
 using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
+using Neptune.WebMvc.Services;
 using Neptune.WebMvc.Services.Filters;
 using Neptune.WebMvc.Views;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessment;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessment.MapInitJson;
 using Neptune.WebMvc.Views.Shared;
-using NetTopologySuite.Triangulate;
 using Index = Neptune.WebMvc.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.WebMvc.Views.OnlandVisualTrashAssessment.IndexViewData;
 using OVTASection = Neptune.EFModels.Entities.OVTASection;
@@ -30,8 +31,10 @@ namespace Neptune.WebMvc.Controllers
     //[Route("[area]/[controller]/[action]", Name = "[area]_[controller]_[action]")]
     public class OnlandVisualTrashAssessmentController : NeptuneBaseController<OnlandVisualTrashAssessmentController>
     {
-        public OnlandVisualTrashAssessmentController(NeptuneDbContext dbContext, ILogger<OnlandVisualTrashAssessmentController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
+        private readonly AzureBlobStorageService _azureBlobStorageService;
+        public OnlandVisualTrashAssessmentController(NeptuneDbContext dbContext, ILogger<OnlandVisualTrashAssessmentController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
+            _azureBlobStorageService = azureBlobStorageService;
         }
 
         [HttpGet("{onlandVisualTrashAssessmentPrimaryKey}")]
@@ -673,12 +676,17 @@ namespace Neptune.WebMvc.Controllers
             //    SetCellValueFromCustomAttribute(connectorPipeScreensDict, treatmentBMP, worksheet, "G", row);
             //    row++;
             //}
-
-            //using var stream = new MemoryStream();
-            //workbook.SaveAs(stream);
+            using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
+            await _azureBlobStorageService.DownloadBlobToFileAsync("OVTAAssessment_BulkUpload_Template.xlsx", disposableTempFile.FileInfo.FullName);
+            using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
+            //var worksheet = workbook.Worksheet("Field Visits");
+            using var stream2 = new MemoryStream();
+            workbook.SaveAs(stream2);
+            return File(stream2.ToArray(), @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                $"OVTAsBulkUploadTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.xlsx");
             //return File(stream.ToArray(), @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             //    $"TrashScreenBulkUploadTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.xlsx");
-            return null;
+            //return null;
         }
 
 
