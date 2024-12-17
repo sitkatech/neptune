@@ -21,6 +21,8 @@ using Neptune.WebMvc.Views;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessment;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessment.MapInitJson;
 using Neptune.WebMvc.Views.Shared;
+using NetTopologySuite.Triangulate;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using Index = Neptune.WebMvc.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.WebMvc.Views.OnlandVisualTrashAssessment.IndexViewData;
 using OVTASection = Neptune.EFModels.Entities.OVTASection;
@@ -635,6 +637,108 @@ namespace Neptune.WebMvc.Controllers
 
             DataTable dataTableFromExcel;
 
+            try
+            {
+                dataTableFromExcel = GetDataTableFromExcel(uploadXlsxInputStream, "OVTA Assessments");
+            }
+            catch (Exception)
+            {
+                SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
+                return ViewBulkUploadOTVAs(viewModel);
+            }
+
+            var numRows = dataTableFromExcel.Rows.Count;
+
+            var stormwaterJurisdictionsPersonCanView = StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson);
+            var ovtaAreas = _dbContext.OnlandVisualTrashAssessmentAreas.ToList();
+            var users = _dbContext.People.ToList();
+            if (!CurrentPerson.IsAdministrator())
+            {
+                foreach (DataRow row in dataTableFromExcel.Rows)
+                {
+                    var rowJurisdiction = row["Jurisdiction"].ToString();
+                    if (!stormwaterJurisdictionsPersonCanView.Select(x => x.Organization.OrganizationName)
+                            .Contains(rowJurisdiction))
+                    {
+                        SetErrorForDisplay(
+                            $"You attempted to upload a spreadsheet containing BMPs in Jurisdiction {rowJurisdiction}, which you do not have permission to manage.");
+                        return ViewBulkUploadOTVAs(viewModel);
+                    }
+                }
+            }
+
+            var numColumns = dataTableFromExcel.Columns.Count;
+
+            var errors = new List<string>();
+
+            try
+            {
+                for (var i = 0; i < numRows; i++)
+                {
+                    try
+                    {
+                        var row = dataTableFromExcel.Rows[i];
+                        var rowEmpty = true;
+                        for (var j = 0; j < numColumns; j++)
+                        {
+                            rowEmpty = string.IsNullOrWhiteSpace(row[j].ToString());
+                            if (!rowEmpty)
+                            {
+                                break;
+                            }
+                        }
+
+                        if (rowEmpty)
+                        {
+                            continue;
+                        }
+
+                        var areaName = ovtaAreas.SingleOrDefault(x => x.OnlandVisualTrashAssessmentAreaName == row["AreaName"].ToString())?.OnlandVisualTrashAssessmentAreaID;
+
+                        if (areaName == null)
+                        {
+                            errors.Add($"Cannot find OVTA area name in row {i + 1}");
+                            continue;
+                        }
+                        
+                        var jurisdictionName = row["JurisdicitionName"].ToString();
+
+                        // check to make sure values are valid
+                        var onlandTrashVisualAssessment = new OnlandVisualTrashAssessment()
+                        {
+                            OnlandVisualTrashAssessmentAreaID = areaName,
+                            CreatedByPersonID = users.Single(x => x.Email == row["CreatedByPerson"].ToString()).PersonID,
+                            StormwaterJurisdictionID = stormwaterJurisdictionsPersonCanView.Single(x => x.Organization.OrganizationName == jurisdictionName || x.Organization.OrganizationShortName == jurisdictionName).StormwaterJurisdictionID,
+                            OnlandVisualTrashAssessmentStatusID = row["Status"].ToString() == "Finalized" ? (int)OnlandVisualTrashAssessmentStatusEnum.Complete : (int)OnlandVisualTrashAssessmentStatusEnum.InProgress,
+                            CreatedDate = DateTime.Parse(row["CreatedDate"].ToString()),
+                            CompletedDate = DateTime.Parse(row["CompletedDate"].ToString()),
+                            OnlandVisualTrashAssessmentScoreID = OnlandVisualTrashAssessmentScore.All.Single(x => x.OnlandVisualTrashAssessmentScoreDisplayName == row["Score"].ToString()).OnlandVisualTrashAssessmentScoreID,
+                            IsProgressAssessment = row["IsProgressAssessment"].ToString() == "Yes",
+                        };
+
+                        _dbContext.Add(onlandTrashVisualAssessment);
+
+                    }
+                    catch (InvalidOperationException ioe)
+                    {
+                        errors.Add(ioe.Message);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
+                return ViewBulkUploadOTVAs(viewModel);
+            }
+
+            if (errors.Count > 0)
+            {
+                SetErrorForDisplay(string.Join("<br/>", errors));
+                return ViewBulkUploadOTVAs(viewModel);
+            }
+
+            await _dbContext.SaveChangesAsync();
+
             SetMessageForDisplay("Successfully bulk uploaded Field Visit Assessment and Maintenance Records");
 
             return RedirectToAction(new SitkaRoute<OnlandVisualTrashAssessmentController>(_linkGenerator, x => x.Index()));
@@ -646,36 +750,6 @@ namespace Neptune.WebMvc.Controllers
         {
             var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson).ToList();
 
-            //var currentPersonTrashScreens = TreatmentBMPs.GetNonPlanningModuleBMPs(_dbContext)
-            //    .Where(x => x.TreatmentBMPTypeID == InletAndTrashScreenTreatmentBMPTypeID &&
-            //                stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
-
-            //var treatmentBMPIDs = currentPersonTrashScreens.Select(x => x.TreatmentBMPID);
-
-            //var inletScreensDict = CustomAttributes.ListByCustomAttributeTypeID(_dbContext,
-            //    CustomAttributeTypes.CustomAttributeTypeIDNumberOfInletScreens).Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).ToDictionary(x => x.TreatmentBMPID);
-            //var trashBucketsDict = CustomAttributes.ListByCustomAttributeTypeID(_dbContext,
-            //    CustomAttributeTypes.CustomAttributeTypeIDNumberOfTrashBaskets).Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).ToDictionary(x => x.TreatmentBMPID);
-            //var connectorPipeScreensDict = CustomAttributes.ListByCustomAttributeTypeID(_dbContext,
-            //    CustomAttributeTypes.CustomAttributeTypeIDNumberOfConnectorPipeScreens).Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).ToDictionary(x => x.TreatmentBMPID);
-
-            //var row = 2;
-            //using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
-            //await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToFieldVisitUploadTemplate, disposableTempFile.FileInfo.FullName);
-
-            //using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
-            //var worksheet = workbook.Worksheet("Field Visits");
-            //foreach (var treatmentBMP in currentPersonTrashScreens)
-            //{
-            //    worksheet.Cells($"A{row}").Value = treatmentBMP.TreatmentBMPName;
-            //    worksheet.Cells($"B{row}").Value = treatmentBMP.StormwaterJurisdiction.Organization.OrganizationName;
-            //    worksheet.Cells($"C{row}").Value = treatmentBMP.YearBuilt;
-            //    worksheet.Cells($"D{row}").Value = treatmentBMP.Notes;
-            //    SetCellValueFromCustomAttribute(inletScreensDict, treatmentBMP, worksheet, "E", row);
-            //    SetCellValueFromCustomAttribute(trashBucketsDict, treatmentBMP, worksheet, "F", row);
-            //    SetCellValueFromCustomAttribute(connectorPipeScreensDict, treatmentBMP, worksheet, "G", row);
-            //    row++;
-            //}
             using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
             await _azureBlobStorageService.DownloadBlobToFileAsync("OVTAAssessment_BulkUpload_Template.xlsx", disposableTempFile.FileInfo.FullName);
             using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
@@ -684,9 +758,6 @@ namespace Neptune.WebMvc.Controllers
             workbook.SaveAs(stream2);
             return File(stream2.ToArray(), @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 $"OVTAsBulkUploadTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.xlsx");
-            //return File(stream.ToArray(), @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            //    $"TrashScreenBulkUploadTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.xlsx");
-            //return null;
         }
 
 
@@ -697,6 +768,48 @@ namespace Neptune.WebMvc.Controllers
                 ? ovtaSection.GetNextSectionUrl(ovta, _linkGenerator)
                 : ovtaSection.GetSectionUrl(ovta, _linkGenerator);
             return Redirect(nextSectionUrl);
+        }
+
+        private static DataTable GetDataTableFromExcel(Stream inputStream, dynamic worksheet)
+        {
+            var dataTable = new DataTable();
+            using var workBook = new XLWorkbook(inputStream);
+            IXLWorksheet workSheet = workBook.Worksheet(worksheet);
+
+            //Loop through the Worksheet rows.
+            var firstRow = true;
+            foreach (var row in workSheet.Rows())
+            {
+                //Use the first row to add columns to DataTable.
+                if (firstRow)
+                {
+                    foreach (var cell in row.Cells())
+                    {
+                        if (!string.IsNullOrEmpty(cell.Value.ToString()))
+                        {
+                            dataTable.Columns.Add(cell.Value.ToString());
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    firstRow = false;
+                }
+                else
+                {
+                    var i = 0;
+                    var toInsert = dataTable.NewRow();
+                    foreach (var cell in row.Cells(1, dataTable.Columns.Count))
+                    {
+                        toInsert[i] = cell.Value.ToString();
+                        i++;
+                    }
+                    dataTable.Rows.Add(toInsert);
+                }
+            }
+
+            return dataTable;
         }
     }
 }
