@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Globalization;
 using ClosedXML.Excel;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -656,7 +657,7 @@ namespace Neptune.WebMvc.Controllers
             {
                 foreach (DataRow row in dataTableFromExcel.Rows)
                 {
-                    var rowJurisdiction = row["Jurisdiction"].ToString();
+                    var rowJurisdiction = row["Jurisdiction Name"].ToString();
                     if (!stormwaterJurisdictionsPersonCanView.Select(x => x.Organization.OrganizationName)
                             .Contains(rowJurisdiction))
                     {
@@ -693,27 +694,45 @@ namespace Neptune.WebMvc.Controllers
                             continue;
                         }
 
-                        var areaName = ovtaAreas.SingleOrDefault(x => x.OnlandVisualTrashAssessmentAreaName == row["AreaName"].ToString())?.OnlandVisualTrashAssessmentAreaID;
+                        var areaName = ovtaAreas.SingleOrDefault(x => x.OnlandVisualTrashAssessmentAreaName == row["Area Name"].ToString())?.OnlandVisualTrashAssessmentAreaID;
+                        var createdByPersonID = users.SingleOrDefault(x => x.Email == row["Created By Person"].ToString().Trim())?.PersonID;
 
-                        if (areaName == null)
+                        var newErrors = CheckDataFromRow(areaName, i, createdByPersonID, row);
+
+                        if (newErrors.Count > 0)
                         {
-                            errors.Add($"Cannot find OVTA area name in row {i + 1}");
+                            errors.AddRange(newErrors);
                             continue;
                         }
+                         
+                        if (!row["Vehicles"].ToString().IsNullOrEmpty())
+                        {
+                            var temp = row["Vehicles"].ToString().Trim().Split(',');
+                            var ids = new List<int>();
+                            foreach (var s in temp)
+                            {
+                                var id = PreliminarySourceIdentificationType.All.SingleOrDefault(x =>
+                                    x.PreliminarySourceIdentificationTypeDisplayName == s.Trim());
+                                if (id == null)
+                                {
+                                    errors.Add($"{s.Trim()} is not a valid Preliminary Source Identification Type for Vehicles in row {i + 1}");
+                                }
+                                ids.Add(id.PreliminarySourceIdentificationTypeID);
+                            }
+                        }
                         
-                        var jurisdictionName = row["JurisdicitionName"].ToString();
 
                         // check to make sure values are valid
                         var onlandTrashVisualAssessment = new OnlandVisualTrashAssessment()
                         {
                             OnlandVisualTrashAssessmentAreaID = areaName,
-                            CreatedByPersonID = users.Single(x => x.Email == row["CreatedByPerson"].ToString()).PersonID,
-                            StormwaterJurisdictionID = stormwaterJurisdictionsPersonCanView.Single(x => x.Organization.OrganizationName == jurisdictionName || x.Organization.OrganizationShortName == jurisdictionName).StormwaterJurisdictionID,
-                            OnlandVisualTrashAssessmentStatusID = row["Status"].ToString() == "Finalized" ? (int)OnlandVisualTrashAssessmentStatusEnum.Complete : (int)OnlandVisualTrashAssessmentStatusEnum.InProgress,
-                            CreatedDate = DateTime.Parse(row["CreatedDate"].ToString()),
-                            CompletedDate = DateTime.Parse(row["CompletedDate"].ToString()),
-                            OnlandVisualTrashAssessmentScoreID = OnlandVisualTrashAssessmentScore.All.Single(x => x.OnlandVisualTrashAssessmentScoreDisplayName == row["Score"].ToString()).OnlandVisualTrashAssessmentScoreID,
-                            IsProgressAssessment = row["IsProgressAssessment"].ToString() == "Yes",
+                            CreatedByPersonID = (int)createdByPersonID,
+                            StormwaterJurisdictionID = stormwaterJurisdictionsPersonCanView.Single(x => x.Organization.OrganizationName == row["Jurisdicition Name"].ToString() || x.Organization.OrganizationShortName == row["Jurisdicition Name"].ToString()).StormwaterJurisdictionID,
+                            OnlandVisualTrashAssessmentStatusID = row["Status"].ToString().Trim() == "Finalized" ? (int)OnlandVisualTrashAssessmentStatusEnum.Complete : (int)OnlandVisualTrashAssessmentStatusEnum.InProgress,
+                            CreatedDate = DateTime.Parse(row["Created Date"].ToString().Trim()),
+                            CompletedDate = DateTime.Parse(row["Completed Date"].ToString().Trim()),
+                            OnlandVisualTrashAssessmentScoreID = OnlandVisualTrashAssessmentScore.All.Single(x => x.OnlandVisualTrashAssessmentScoreDisplayName == row["Score"].ToString().Trim()).OnlandVisualTrashAssessmentScoreID,
+                            IsProgressAssessment = row["Is Progress Assessment"].ToString().Trim() == "Yes",
                         };
 
                         _dbContext.Add(onlandTrashVisualAssessment);
@@ -739,9 +758,45 @@ namespace Neptune.WebMvc.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            SetMessageForDisplay("Successfully bulk uploaded Field Visit Assessment and Maintenance Records");
+            SetMessageForDisplay("Successfully bulk uploaded OVTAs");
 
             return RedirectToAction(new SitkaRoute<OnlandVisualTrashAssessmentController>(_linkGenerator, x => x.Index()));
+        }
+
+        private static List<string> CheckDataFromRow(int? areaName, int i, int? createdByPersonID, DataRow row)
+        {
+            var errors = new List<string>();
+            if (areaName == null)
+            {
+                errors.Add($"Cannot find OVTA area name in row {i + 1}");
+            }
+
+            if (createdByPersonID == null)
+            {
+                errors.Add($"Cannot find Person in row {i + 1}");
+            }
+
+            if (row["Is Progress Assessment"].ToString().IsNullOrEmpty() ||
+                (row["Is Progress Assessment"].ToString().Trim() != "Yes" && row["Is Progress Assessment"].ToString().Trim() != "No"))
+            {
+                errors.Add($"Is Progress Assessment is not a valid value in row {i + 1}. It must be either Yes or No.");
+            }
+
+            if (row["Status"].ToString().IsNullOrEmpty() || 
+                (row["Status"].ToString().Trim() != "Finalized" && row["Status"].ToString().Trim() != "Draft"))
+            {
+                errors.Add($"Status is not a valid value in row {i + 1}. It must be either Finalized or Draft.");
+            }
+
+            if (row["Score"].ToString().IsNullOrEmpty() ||
+                !(OnlandVisualTrashAssessmentScore.All
+                    .Select(x => x.OnlandVisualTrashAssessmentScoreDisplayName).ToList()
+                    .Contains(row["Score"].ToString().Trim())))
+            {
+                errors.Add($"Score is not a valid value in row {i + 1}. It must be one of the following A, B, C or D.");
+            }
+
+            return errors;
         }
 
         [HttpGet]
@@ -753,7 +808,6 @@ namespace Neptune.WebMvc.Controllers
             using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
             await _azureBlobStorageService.DownloadBlobToFileAsync("OVTAAssessment_BulkUpload_Template.xlsx", disposableTempFile.FileInfo.FullName);
             using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
-            //var worksheet = workbook.Worksheet("Field Visits");
             using var stream2 = new MemoryStream();
             workbook.SaveAs(stream2);
             return File(stream2.ToArray(), @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
