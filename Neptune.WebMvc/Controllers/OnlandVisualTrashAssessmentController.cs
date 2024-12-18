@@ -615,7 +615,7 @@ namespace Neptune.WebMvc.Controllers
         private ViewResult ViewBulkUploadOTVAs(
             BulkUploadOTVAsViewModel bulkUploadTrashScreenVisitViewModel)
         {
-            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.BulkUploadFieldVisits);
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadOVTAs);
             var bulkUploadTrashScreenVisitViewData = new BulkUploadOTVAsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
 
             return RazorView<BulkUploadOTVAs, BulkUploadOTVAsViewData,
