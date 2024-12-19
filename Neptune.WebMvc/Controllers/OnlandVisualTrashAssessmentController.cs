@@ -704,23 +704,39 @@ namespace Neptune.WebMvc.Controllers
                             errors.AddRange(newErrors);
                             continue;
                         }
-                         
-                        if (!row["Vehicles"].ToString().IsNullOrEmpty())
+
+                        var categories = PreliminarySourceIdentificationCategory.All.Select(x =>
+                            x.PreliminarySourceIdentificationCategoryDisplayName).ToList();
+                        var assessmentPreliminarySourceIdentificationTypes = new List<OnlandVisualTrashAssessmentPreliminarySourceIdentificationType>();
+                        foreach (var category in categories)
                         {
-                            var temp = row["Vehicles"].ToString().Trim().Split(',');
-                            var ids = new List<int>();
-                            foreach (var s in temp)
+                            if (!row[category].ToString().IsNullOrEmpty())
                             {
-                                var id = PreliminarySourceIdentificationType.All.SingleOrDefault(x =>
-                                    x.PreliminarySourceIdentificationTypeDisplayName == s.Trim());
-                                if (id == null)
+                                var identificationTypes = row[category].ToString().Trim().Split(',');
+                                foreach (var identificationType in identificationTypes)
                                 {
-                                    errors.Add($"{s.Trim()} is not a valid Preliminary Source Identification Type for Vehicles in row {i + 1}");
+                                    if (identificationType.ToLower().Contains("other"))
+                                    {
+                                        errors.Add($"Cannot use {identificationType.Trim()} in row {i+1} as bulk uploader does not allow for Other as a preliminary type.");
+                                        continue;
+                                    }
+                                    var id = PreliminarySourceIdentificationType.All.SingleOrDefault(x =>
+                                        x.PreliminarySourceIdentificationTypeDisplayName == identificationType.Trim() 
+                                        && x.PreliminarySourceIdentificationCategory.PreliminarySourceIdentificationCategoryDisplayName == category);
+                                    if (id == null)
+                                    {
+                                        errors.Add($"{identificationType.Trim()} is not a valid Preliminary Source Identification Type for {category} in row {i + 1}");
+                                        continue;
+                                    }
+                                    assessmentPreliminarySourceIdentificationTypes.Add(new OnlandVisualTrashAssessmentPreliminarySourceIdentificationType()
+                                    {
+                                        PreliminarySourceIdentificationTypeID = id.PreliminarySourceIdentificationTypeID
+                                    });
                                 }
-                                ids.Add(id.PreliminarySourceIdentificationTypeID);
                             }
+
                         }
-                        
+
 
                         // check to make sure values are valid
                         var onlandTrashVisualAssessment = new OnlandVisualTrashAssessment()
@@ -733,6 +749,7 @@ namespace Neptune.WebMvc.Controllers
                             CompletedDate = DateTime.Parse(row["Completed Date"].ToString().Trim()),
                             OnlandVisualTrashAssessmentScoreID = OnlandVisualTrashAssessmentScore.All.Single(x => x.OnlandVisualTrashAssessmentScoreDisplayName == row["Score"].ToString().Trim()).OnlandVisualTrashAssessmentScoreID,
                             IsProgressAssessment = row["Is Progress Assessment"].ToString().Trim() == "Yes",
+                            OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes = assessmentPreliminarySourceIdentificationTypes
                         };
 
                         _dbContext.Add(onlandTrashVisualAssessment);
