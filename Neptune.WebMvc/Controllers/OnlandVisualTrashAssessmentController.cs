@@ -22,8 +22,6 @@ using Neptune.WebMvc.Views;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessment;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessment.MapInitJson;
 using Neptune.WebMvc.Views.Shared;
-using NetTopologySuite.Triangulate;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Index = Neptune.WebMvc.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.WebMvc.Views.OnlandVisualTrashAssessment.IndexViewData;
 using OVTASection = Neptune.EFModels.Entities.OVTASection;
@@ -616,7 +614,7 @@ namespace Neptune.WebMvc.Controllers
             BulkUploadOTVAsViewModel bulkUploadTrashScreenVisitViewModel)
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadOVTAs);
-            var bulkUploadTrashScreenVisitViewData = new BulkUploadOTVAsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
+            var bulkUploadTrashScreenVisitViewData = new BulkUploadOTVAsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
 
             return RazorView<BulkUploadOTVAs, BulkUploadOTVAsViewData,
                 BulkUploadOTVAsViewModel>(bulkUploadTrashScreenVisitViewData,
@@ -749,7 +747,8 @@ namespace Neptune.WebMvc.Controllers
                             CompletedDate = DateTime.Parse(row["Completed Date"].ToString().Trim()),
                             OnlandVisualTrashAssessmentScoreID = OnlandVisualTrashAssessmentScore.All.Single(x => x.OnlandVisualTrashAssessmentScoreDisplayName == row["Score"].ToString().Trim()).OnlandVisualTrashAssessmentScoreID,
                             IsProgressAssessment = row["Is Progress Assessment"].ToString().Trim() == "Yes",
-                            OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes = assessmentPreliminarySourceIdentificationTypes
+                            OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes = assessmentPreliminarySourceIdentificationTypes,
+                            IsTransectBackingAssessment = false
                         };
 
                         _dbContext.Add(onlandTrashVisualAssessment);
@@ -820,8 +819,6 @@ namespace Neptune.WebMvc.Controllers
         [JurisdictionManageFeature]
         public async Task<FileResult> TrashScreenBulkUploadTemplate()
         {
-            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson).ToList();
-
             using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
             await _azureBlobStorageService.DownloadBlobToFileAsync("OVTAAssessment_BulkUpload_Template.xlsx", disposableTempFile.FileInfo.FullName);
             using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
