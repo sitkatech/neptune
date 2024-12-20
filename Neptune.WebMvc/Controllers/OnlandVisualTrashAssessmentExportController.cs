@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Security;
+using Neptune.WebMvc.Views.LandUseBlockGeometry;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessmentExport;
 
 namespace Neptune.WebMvc.Controllers
@@ -19,6 +20,19 @@ namespace Neptune.WebMvc.Controllers
         [NeptuneViewAndRequiresJurisdictionsFeature]
         public ViewResult ExportAssessmentGeospatialData()
         {
+            var viewModel = new ExportAssessmentGeospatialDataViewModel();
+            return ViewExportAssessmentGeospatialData(viewModel);
+        }
+
+        [HttpPost]
+        [NeptuneViewAndRequiresJurisdictionsFeature]
+        public ActionResult ExportAssessmentGeospatialData(ExportAssessmentGeospatialDataViewModel viewModel)
+        {
+            return ViewExportAssessmentGeospatialData(viewModel);
+        }
+
+        private ViewResult ViewExportAssessmentGeospatialData(ExportAssessmentGeospatialDataViewModel viewModel)
+        {
             var stormwaterJurisdictions = StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson);
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.ExportAssessmentGeospatialData);
             var stormwaterJurisdictionIDList = stormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID).ToList();
@@ -28,8 +42,8 @@ namespace Neptune.WebMvc.Controllers
                 .ListByStormwaterJurisdictionIDList(_dbContext, stormwaterJurisdictionIDList)
                 .ToLookup(x => x.StormwaterJurisdictionID);
             var viewData = new ExportAssessmentGeospatialDataViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, neptunePage, stormwaterJurisdictions, _webConfiguration.MapServiceUrl, onlandVisualTrashAssessmentAreas, onlandVisualTrashAssessments);
-            return RazorView<ExportAssessmentGeospatialData, ExportAssessmentGeospatialDataViewData>(
-                viewData);
+            return RazorView<ExportAssessmentGeospatialData, ExportAssessmentGeospatialDataViewData, ExportAssessmentGeospatialDataViewModel>(
+                viewData, viewModel);
         }
 
     }
