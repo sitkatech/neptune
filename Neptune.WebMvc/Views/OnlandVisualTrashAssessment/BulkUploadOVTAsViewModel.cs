@@ -5,7 +5,7 @@ using Neptune.WebMvc.Common.Mvc;
 
 namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment;
 
-public class BulkUploadOTVAsViewModel : FormViewModel
+public class BulkUploadOVTAsViewModel : FormViewModel
 {
     [Required]
     [SitkaFileExtensions("xlsx")]

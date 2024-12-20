@@ -2,7 +2,7 @@
 
 namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
 {
-    public abstract class BulkUploadOTVAs : TypedWebViewPage<BulkUploadOTVAsViewData, BulkUploadOTVAsViewModel>
+    public abstract class BulkUploadOVTAs : TypedWebViewPage<BulkUploadOVTAsViewData, BulkUploadOVTAsViewModel>
     {
     }
 }

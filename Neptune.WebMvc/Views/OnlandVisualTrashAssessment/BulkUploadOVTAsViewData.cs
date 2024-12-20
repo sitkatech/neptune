@@ -7,12 +7,12 @@ using Neptune.WebMvc.Controllers;
 
 namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
 {
-    public class BulkUploadOTVAsViewData: NeptuneViewData
+    public class BulkUploadOVTAsViewData: NeptuneViewData
     {
         public IEnumerable<SelectListItem> StormwaterJurisdictions { get; }
 
 
-        public BulkUploadOTVAsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
+        public BulkUploadOVTAsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = FieldDefinitionType.OnlandVisualTrashAssessment.GetFieldDefinitionLabel();
             EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Index());

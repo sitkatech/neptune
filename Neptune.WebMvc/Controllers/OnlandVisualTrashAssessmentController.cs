@@ -605,19 +605,19 @@ namespace Neptune.WebMvc.Controllers
         [JurisdictionManageFeature]
         public ViewResult BulkUploadOTVAs()
         {
-            var bulkUploadTrashScreenVisitViewModel = new BulkUploadOTVAsViewModel();
+            var bulkUploadTrashScreenVisitViewModel = new BulkUploadOVTAsViewModel();
 
             return ViewBulkUploadOTVAs(bulkUploadTrashScreenVisitViewModel);
         }
 
         private ViewResult ViewBulkUploadOTVAs(
-            BulkUploadOTVAsViewModel bulkUploadTrashScreenVisitViewModel)
+            BulkUploadOVTAsViewModel bulkUploadTrashScreenVisitViewModel)
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadOVTAs);
-            var bulkUploadTrashScreenVisitViewData = new BulkUploadOTVAsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
+            var bulkUploadTrashScreenVisitViewData = new BulkUploadOVTAsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
 
-            return RazorView<BulkUploadOTVAs, BulkUploadOTVAsViewData,
-                BulkUploadOTVAsViewModel>(bulkUploadTrashScreenVisitViewData,
+            return RazorView<BulkUploadOVTAs, BulkUploadOVTAsViewData,
+                BulkUploadOVTAsViewModel>(bulkUploadTrashScreenVisitViewData,
                 bulkUploadTrashScreenVisitViewModel);
         }
 
@@ -625,7 +625,7 @@ namespace Neptune.WebMvc.Controllers
         [JurisdictionManageFeature]
         [RequestSizeLimit(100_000_000_000)]
         [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
-        public async Task<IActionResult> BulkUploadOTVAs(BulkUploadOTVAsViewModel viewModel)
+        public async Task<IActionResult> BulkUploadOTVAs(BulkUploadOVTAsViewModel viewModel)
         {
             if (!ModelState.IsValid && viewModel.StormwaterJurisdictionID != null)
             {
