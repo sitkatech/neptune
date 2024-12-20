@@ -21,6 +21,7 @@ services:
       - OCGISBaseUrl=${OCGISBaseUrl}
       - PlanningModuleBaseUrl=${PlanningModuleBaseUrl}
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
+      - PathToOVTAUploadTemplate=${PathToOVTAUploadTemplate}
       - RecaptchaPublicKey=${RecaptchaPublicKey}
       - RecaptchaPrivateKey=${RecaptchaPrivateKey}
       - RecaptchaValidatorUrl=${RecaptchaValidatorUrl}

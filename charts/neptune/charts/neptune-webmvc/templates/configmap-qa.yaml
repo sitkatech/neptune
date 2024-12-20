@@ -23,4 +23,5 @@ data:
   OCGISBaseUrl: "https://ocgis.com/arcpub/rest/services/"
   PlanningModuleBaseUrl: "https://{{ .Values.global.domains.web }}"
   PathToFieldVisitUploadTemplate: "Bulk_Upload_FieldVisists_for_Trash_Screens_Template.xlsx"
+  PathToOVTAUploadTemplate: "OVTAAssessment_BulkUpload_Template.xlsx"
 {{ end }}
