@@ -627,7 +627,7 @@ namespace Neptune.WebMvc.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<IActionResult> BulkUploadOTVAs(BulkUploadOTVAsViewModel viewModel)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid && viewModel.StormwaterJurisdictionID != null)
             {
                 return ViewBulkUploadOTVAs(viewModel);
             }
@@ -817,11 +817,26 @@ namespace Neptune.WebMvc.Controllers
 
         [HttpGet]
         [JurisdictionManageFeature]
-        public async Task<FileResult> TrashScreenBulkUploadTemplate()
+        public async Task<FileResult> OVTABulkUploadTemplate([FromQuery] int stormwaterJurisdictionID)
         {
             using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
-            await _azureBlobStorageService.DownloadBlobToFileAsync("OVTAAssessment_BulkUpload_Template.xlsx", disposableTempFile.FileInfo.FullName);
+            await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToOVTAUploadTemplate, disposableTempFile.FileInfo.FullName);
             using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
+
+            var row = 2;
+            var worksheet = workbook.Worksheet("OVTA Assessments");
+            var ovtaAreas = _dbContext.OnlandVisualTrashAssessmentAreas
+                .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID).ToList();
+            var jurisdictionName = _dbContext.StormwaterJurisdictions.Include(x => x.Organization).Single(x =>
+                x.StormwaterJurisdictionID == stormwaterJurisdictionID).GetOrganizationDisplayName();
+
+            foreach (var ovtaArea in ovtaAreas)
+            {
+                worksheet.Cells($"A{row}").Value = ovtaArea.OnlandVisualTrashAssessmentAreaName;
+                worksheet.Cells($"B{row}").Value = jurisdictionName;
+                row++;
+            }
+
             using var stream2 = new MemoryStream();
             workbook.SaveAs(stream2);
             return File(stream2.ToArray(), @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

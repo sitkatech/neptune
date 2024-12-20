@@ -9,7 +9,6 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
 {
     public class BulkUploadOTVAsViewData: NeptuneViewData
     {
-        public string TemplateDownloadUrl { get; set; }
         public IEnumerable<SelectListItem> StormwaterJurisdictions { get; }
 
 
@@ -18,7 +17,6 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
             EntityName = FieldDefinitionType.OnlandVisualTrashAssessment.GetFieldDefinitionLabel();
             EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             PageTitle = "Bulk Upload OTVAs";
-            TemplateDownloadUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.TrashScreenBulkUploadTemplate());
             StormwaterJurisdictions =
                 stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
                     .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
