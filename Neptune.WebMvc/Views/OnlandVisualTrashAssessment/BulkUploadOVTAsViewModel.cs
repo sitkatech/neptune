@@ -11,8 +11,4 @@ public class BulkUploadOVTAsViewModel : FormViewModel
     [SitkaFileExtensions("xlsx")]
     [DisplayName("XLSX File to Import")]
     public IFormFile UploadXLSX { get; set; }
-
-    [Required]
-    [DisplayName("Stormwater Jurisdiction")]
-    public int? StormwaterJurisdictionID { get; set; }
 }

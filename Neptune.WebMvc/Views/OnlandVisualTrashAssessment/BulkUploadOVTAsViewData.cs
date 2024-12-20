@@ -9,6 +9,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
 {
     public class BulkUploadOVTAsViewData: NeptuneViewData
     {
+        public string TemplateDownloadUrl { get; set; }
         public IEnumerable<SelectListItem> StormwaterJurisdictions { get; }
 
 
@@ -20,7 +21,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
             StormwaterJurisdictions =
                 stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
                     .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
-
+            TemplateDownloadUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.OVTABulkUploadTemplate());
         }
     }
 }

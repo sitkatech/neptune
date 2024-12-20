@@ -28,27 +28,8 @@
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 
-<form action="/OnlandVisualTrashAssessment/OVTABulkUploadTemplate" method="get" enctype="multipart/form-data">
-    <div class="form-horizontal">
-        <div class="row form-group">
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-3">
-                @Html.LabelWithSugarFor(x => x.StormwaterJurisdictionID)
-            </div>
-            <div class="col-md-3">
-                @Html.DropDownListFor(x => x.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictions, new Dictionary<string, object> { { "class", "form-control" } })
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon glyphicon-download") Download Template</button>
-            </div>
-        </div>
-    </div>
-</form>
-
 <form method="post" enctype="multipart/form-data">
     <div class="form-horizontal">
-        
         <div class="form-group">
             <div class="col-sm-2">
                 @Html.LabelWithSugarFor(m => m.UploadXLSX)
@@ -62,4 +43,4 @@
         <button type="submit" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon glyphicon-upload") Upload</button>
     </div>
 </form>
-
+<a href="@ViewDataTyped.TemplateDownloadUrl" class="btn btn-neptune" download>@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon glyphicon-download-alt") Download Template</a>

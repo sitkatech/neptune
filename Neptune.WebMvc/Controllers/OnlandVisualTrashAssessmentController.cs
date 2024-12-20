@@ -627,7 +627,7 @@ namespace Neptune.WebMvc.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<IActionResult> BulkUploadOTVAs(BulkUploadOVTAsViewModel viewModel)
         {
-            if (!ModelState.IsValid && viewModel.StormwaterJurisdictionID != null)
+            if (!ModelState.IsValid)
             {
                 return ViewBulkUploadOTVAs(viewModel);
             }
@@ -817,7 +817,7 @@ namespace Neptune.WebMvc.Controllers
 
         [HttpGet]
         [JurisdictionManageFeature]
-        public async Task<FileResult> OVTABulkUploadTemplate([FromQuery] int stormwaterJurisdictionID)
+        public async Task<FileResult> OVTABulkUploadTemplate()
         {
             using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
             await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToOVTAUploadTemplate, disposableTempFile.FileInfo.FullName);
@@ -825,15 +825,17 @@ namespace Neptune.WebMvc.Controllers
 
             var row = 2;
             var worksheet = workbook.Worksheet("OVTA Assessments");
+            var stormwaterJurisdictionsPersonCanEdit =StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson).Select(x => x.StormwaterJurisdictionID);
             var ovtaAreas = _dbContext.OnlandVisualTrashAssessmentAreas
-                .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID).ToList();
-            var jurisdictionName = _dbContext.StormwaterJurisdictions.Include(x => x.Organization).Single(x =>
-                x.StormwaterJurisdictionID == stormwaterJurisdictionID).GetOrganizationDisplayName();
+                .Include(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
+                .Where(x => stormwaterJurisdictionsPersonCanEdit.Contains(x.StormwaterJurisdictionID)).ToList();
+            
 
             foreach (var ovtaArea in ovtaAreas)
             {
                 worksheet.Cells($"A{row}").Value = ovtaArea.OnlandVisualTrashAssessmentAreaName;
-                worksheet.Cells($"B{row}").Value = jurisdictionName;
+                worksheet.Cells($"B{row}").Value = ovtaArea.StormwaterJurisdiction.GetOrganizationDisplayName();
                 row++;
             }
 
