@@ -26,17 +26,7 @@
 <form method="post" enctype="multipart/form-data">
     <div class="formPage">
         <div class="row">
-            <div class="col-md-6">
-                <p>
-                    Use this form to download Land Use Blocks for a given jurisdiction:
-                    <ul>
-                        <li>A single ArcGIS file geodatabase containing land use block features will be produced for the selected jurisdiction.</li>
-                        <li>The will contain attributes for Block ID, Land Use Type,  Jurisdiction, Block Area, Trash Generation Rate, Land Use Description, Median Household Income Residential, Median Household Income Retail, Trash Results Area, Permit Type</li>
-                        <li>This file download is intended to support bulk editing in desktop GIS software and can be re-uploaded to the platform to replace the existing land use blocks utilized in trash results calculations.</li>
-                    </ul>
-                </p>
-            </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="row form-group" style="margin-top: 0px;">
                     <div class="col-md-6">
                         @Html.LabelWithSugarFor(x => x.StormwaterJurisdictionID)
@@ -48,7 +38,7 @@
                 </>
                 <div class="row">
                     <div class="col-md-12 text-right">
-                        <button type="submit" class="btn btn-neptune"><span class="glyphicon glyphicon-download"></span> Download</button>
+                        <button type="submit" class="btn btn-neptune"><span class="glyphicon glyphicon-download"></span> Download GDB</button>
                     </div>
                 </div>
             </div>
