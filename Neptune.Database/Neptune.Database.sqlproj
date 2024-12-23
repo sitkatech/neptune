@@ -412,6 +412,7 @@
     <Build Include="dbo\Tables\dbo.NereidLog.sql" />
     <None Include="Scripts\ReleaseScripts\002- remove excess white space from TreatmentBMPType names.sql" />
     <None Include="Scripts\ReleaseScripts\003- Add neptune page for upload simplified bmps.sql" />
+    <None Include="Scripts\ReleaseScripts\004 - Add neptune page for upload ovtas.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Neptune.Database.refactorlog" />
