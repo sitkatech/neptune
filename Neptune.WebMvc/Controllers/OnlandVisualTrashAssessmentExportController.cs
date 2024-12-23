@@ -78,7 +78,7 @@ namespace Neptune.WebMvc.Controllers
                     { "Note", observation.Note },
                     { "JurisID", observation.OnlandVisualTrashAssessment?.StormwaterJurisdictionID },
                     { "JurisName", stormwaterJurisdictionName },
-                    { "Score", observation.OnlandVisualTrashAssessment?.OnlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentScoreDisplayName },
+                    { "Score", observation.OnlandVisualTrashAssessment?.OnlandVisualTrashAssessmentScore?.OnlandVisualTrashAssessmentScoreDisplayName },
                     { "CompletedDate", observation.OnlandVisualTrashAssessment?.CompletedDate },
                     { "PhotoUrl", fileResourceGuid != null ? $"/FileResource/DisplayResource/{fileResourceGuid}" : null },
                 };
@@ -106,14 +106,15 @@ namespace Neptune.WebMvc.Controllers
                 CoordinateSystemID = Proj4NetHelper.WEB_MERCATOR,
                 GeometryTypeName = "POINT",
             };
+            var jurisdictionName = stormwaterJurisdictionName.Replace(' ', '-');
             var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
             {
                 GdbInputs = new List<GdbInput> { gdbInput, gdbInput2, gdbInput3 },
-                GdbName = $"test"
+                GdbName = $"ovta-export-{jurisdictionName}"
             });
 
 
-            return File(bytes, "application/zip", $"test.gdb.zip");
+            return File(bytes, "application/zip", $"ovta-export-{jurisdictionName}.gdb.zip");
         }
 
         private ViewResult ViewExportAssessmentGeospatialData(ExportAssessmentGeospatialDataViewModel viewModel)
