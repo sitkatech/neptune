@@ -78,40 +78,5 @@ namespace Neptune.WebMvc.Models
             };
             return new Feature(stormwaterJurisdiction.StormwaterJurisdictionGeometry.Geometry4326, attributesTable);
         }
-
-        public static string GetGeoserverRequestUrl(this StormwaterJurisdiction stormwaterJurisdiction,
-            OnlandVisualTrashAssessmentExportTypeEnum exportType, string mapServiceUrl)
-        {
-            string typeName;
-
-            switch (exportType)
-            {
-                case OnlandVisualTrashAssessmentExportTypeEnum.ExportAreas:
-                    typeName = "OCStormwater:AssessmentAreaExport";
-                    break;
-                case OnlandVisualTrashAssessmentExportTypeEnum.ExportTransects:
-                    typeName = "OCStormwater:TransectLineExport";
-                    break;
-                case OnlandVisualTrashAssessmentExportTypeEnum.ExportObservationPoints:
-                    typeName = "OCStormwater:ObservationPointExport";
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(exportType), exportType, null);
-            }
-
-            var cqlFilter = $"JurisID={stormwaterJurisdiction.StormwaterJurisdictionID}";
-
-            var parameters = new
-            {
-                service = "WFS",
-                version = "1.0.0",
-                request = "GetFeature",
-                typeName,
-                outputFormat = "shape-zip",
-                cql_filter = cqlFilter
-            };
-
-            return $"{mapServiceUrl}?{NeptuneHelpers.GetQueryString(parameters)}";
-        }
     }
 }
