@@ -58,6 +58,9 @@ namespace Neptune.EFModels.Entities
             await dbContext.LoadGeneratingUnits
                 .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID)
                 .ExecuteDeleteAsync();
+            await dbContext.LoadGeneratingUnit4326s
+                .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID)
+                .ExecuteDeleteAsync();
             await dbContext.NereidResults.Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
             await dbContext.ProjectHRUCharacteristics
                 .Include(x => x.ProjectLoadGeneratingUnit)

@@ -51,6 +51,9 @@ public partial class RegionalSubbasin
     public virtual ICollection<RegionalSubbasin> InverseOCSurveyDownstreamCatchment { get; set; } = new List<RegionalSubbasin>();
 
     [InverseProperty("RegionalSubbasin")]
+    public virtual ICollection<LoadGeneratingUnit4326> LoadGeneratingUnit4326s { get; set; } = new List<LoadGeneratingUnit4326>();
+
+    [InverseProperty("RegionalSubbasin")]
     public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; } = new List<LoadGeneratingUnit>();
 
     [ForeignKey("ModelBasinID")]

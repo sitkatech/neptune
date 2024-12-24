@@ -98,6 +98,9 @@ public partial class WaterQualityManagementPlan
     public virtual NereidLog? LastNereidLog { get; set; }
 
     [InverseProperty("WaterQualityManagementPlan")]
+    public virtual ICollection<LoadGeneratingUnit4326> LoadGeneratingUnit4326s { get; set; } = new List<LoadGeneratingUnit4326>();
+
+    [InverseProperty("WaterQualityManagementPlan")]
     public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; } = new List<LoadGeneratingUnit>();
 
     [InverseProperty("WaterQualityManagementPlan")]
