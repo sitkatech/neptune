@@ -68,13 +68,13 @@ namespace Neptune.WebMvc.Controllers
                 ModelState.AddModelError("FileResourceData",
                     "The file geodatabase contained no feature class. Please upload a file geodatabase containing exactly one feature class.");
             }
-            else if (featureClassNames.Count > 1)
+            else if (featureClassNames.Count > 2)
             {
                 ModelState.AddModelError("FileResourceData",
                     "The file geodatabase contained more than one feature class. Please upload a file geodatabase containing exactly one feature class.");
             }
 
-            var featureClassName = featureClassNames.Single().LayerName;
+            var featureClassName = featureClassNames.First().LayerName;
             //if (!OgrInfoCommandLineRunner.ConfirmAttributeExistsOnFeatureClass(
             //        new FileInfo(NeptuneWebConfiguration.OgrInfoExecutable),
             //        gdbFile,
@@ -95,7 +95,8 @@ namespace Neptune.WebMvc.Controllers
                 {
                     $"{CurrentPerson.PersonID} as UploadedByPersonID",
                     $"{viewModel.StormwaterJurisdictionID} as StormwaterJurisdictionID",
-                    $"{viewModel.TreatmentBMPNameField} as TreatmentBMPName"
+                    $"{viewModel.TreatmentBMPNameField} as TreatmentBMPName",
+                    $"DelineationStatus as IsVerified"
                 };
 
                 var apiRequest = new GdbToGeoJsonRequestDto()
@@ -309,7 +310,7 @@ namespace Neptune.WebMvc.Controllers
             var stormwaterJurisdictionID = delineationStagings.Select(x => x.StormwaterJurisdictionID).Distinct().Single();
             var stormwaterJurisdiction = StormwaterJurisdictions.GetByID(_dbContext, stormwaterJurisdictionID);
             var stormwaterJurisdictionName = stormwaterJurisdiction.GetOrganizationDisplayName();
-
+                                                        
             // Starting from the treatment BMP is kind of backwards, conceptually, but it's easier to read and write
             var treatmentBMPNames = delineationStagings.Select(x => x.TreatmentBMPName).ToList();
             var treatmentBMPsToUpdate = 
@@ -324,7 +325,7 @@ namespace Neptune.WebMvc.Controllers
                 treatmentBMP.Delineation = new Delineation
                 {
                     HasDiscrepancies = false,
-                    IsVerified = false,
+                    IsVerified = delineationStaging.IsVerified?.Trim() == "Verified",
                     DelineationTypeID = (int) DelineationTypeEnum.Distributed,
                     TreatmentBMPID = treatmentBMP.TreatmentBMPID,
                     DateLastModified = DateTime.UtcNow,
