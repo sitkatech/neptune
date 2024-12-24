@@ -68,5 +68,6 @@ export enum NeptunePageTypeEnum {
   OCTAM2Tier2GrantProgramDashboard = 66,
   EditWQMPBoundary = 67,
   UploadWQMPs = 68,
-  UploadSimplifiedBMPs = 69
+  UploadSimplifiedBMPs = 69,
+  UploadOVTAs = 70
 }
