@@ -4,6 +4,7 @@ CREATE TABLE [dbo].[DelineationStaging](
 	[UploadedByPersonID] [int] NOT NULL CONSTRAINT [FK_DelineationStaging_Person_UploadedByPersonID_PersonID] FOREIGN KEY REFERENCES [dbo].[Person] ([PersonID]),
 	[TreatmentBMPName] [varchar](200),
 	[StormwaterJurisdictionID] [int] NOT NULL CONSTRAINT [FK_DelineationStaging_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID]),
+	[IsVerified] [varchar](20) NULL,
 	CONSTRAINT [AK_DelineationStaging_TreatmentBMPName_StormwaterJurisdictionID] UNIQUE (
 		[TreatmentBMPName] ASC,
 		[StormwaterJurisdictionID] ASC,
