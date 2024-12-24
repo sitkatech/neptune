@@ -115,6 +115,7 @@ public class QgisRunnerController : ControllerBase
         }
 
         var loadGeneratingUnits = new List<LoadGeneratingUnit>();
+        var loadGeneratingUnit4326s = new List<LoadGeneratingUnit4326>();
 
         foreach (var feature in featureCollection.Where(x => x.Geometry != null).ToList())
         {
@@ -125,10 +126,10 @@ public class QgisRunnerController : ControllerBase
             // so we need to explode them if that happens since we are only expecting polygons for LGUs
             var geometries = GeometryHelper.MakeValidAndExplodeIfNeeded(loadGeneratingUnitResult.Geometry);
 
-            loadGeneratingUnits.AddRange(geometries.Select(geometry =>
+            foreach (var geometry in geometries)
             {
                 geometry.SRID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID;
-                return new LoadGeneratingUnit()
+                var loadGeneratingUnit = new LoadGeneratingUnit()
                 {
                     LoadGeneratingUnitGeometry = geometry,
                     DelineationID = loadGeneratingUnitResult.DelineationID,
@@ -136,7 +137,18 @@ public class QgisRunnerController : ControllerBase
                     ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
                     RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
                 };
-            }));
+                loadGeneratingUnits.Add(loadGeneratingUnit);
+
+                var loadGeneratingUnit4326 = new LoadGeneratingUnit4326
+                {
+                    LoadGeneratingUnit4326Geometry = geometry.ProjectTo4326(),
+                    DelineationID = loadGeneratingUnitResult.DelineationID,
+                    WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
+                    ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
+                    RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
+                };
+                loadGeneratingUnit4326s.Add(loadGeneratingUnit4326);
+            }
         }
 
         if (loadGeneratingUnits.Any())
@@ -144,6 +156,12 @@ public class QgisRunnerController : ControllerBase
             await _dbContext.LoadGeneratingUnits.AddRangeAsync(loadGeneratingUnits);
             await _dbContext.SaveChangesAsync();
             await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pLoadGeneratingUnitMakeValid");
+        }
+        if (loadGeneratingUnit4326s.Any())
+        {
+            await _dbContext.LoadGeneratingUnit4326s.AddRangeAsync(loadGeneratingUnit4326s);
+            await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pLoadGeneratingUnit4326MakeValid");
         }
 
         if (loadGeneratingUnitRefreshArea != null)

@@ -191,6 +191,7 @@ namespace Neptune.WebMvc.Views
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TrashGeneratingUnitController>(LinkGenerator, x => x.Index()), currentPerson, "Trash Generating Units", "Group3"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LandUseBlockController>(LinkGenerator, x => x.Index()), currentPerson, "Land Use Blocks", "Group3"));
 
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LoadGeneratingUnitController>(LinkGenerator, x => x.Index()), currentPerson, "Load Generating Units", "Group4"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HRUCharacteristicController>(LinkGenerator, x => x.Index()), currentPerson, "HRU Characteristics", "Group4"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinController>(LinkGenerator, x => x.Index()), currentPerson, "Regional Subbasins", "Group4"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<RegionalSubbasinController>(LinkGenerator, x => x.Grid()), currentPerson, "Regional Subbasin Grid", "Group4"));
