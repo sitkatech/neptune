@@ -18,14 +18,18 @@ import { TreatmentBMPTypeWithModelingAttributesDto } from 'src/app/shared/genera
 import { TreatmentBMPModelingAttributeDefinitionDto } from 'src/app/shared/generated/model/treatment-bmp-modeling-attribute-definition-dto';
 import { TreatmentBmpsComponent } from 'src/app/pages/projects/project-workflow/treatment-bmps/treatment-bmps.component';
 import { TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/treatment-bmp-display-dto';
+import { FieldDefinitionComponent } from '../../field-definition/field-definition.component';
+import { NgIf, NgFor, DecimalPipe } from '@angular/common';
 
 declare var $: any
 
 //This component could use a fair amount of cleanup. It should likely be sent in the treatment bmps and delineations instead of grabbing them itself
 @Component({
-  selector: 'project-map',
-  templateUrl: './project-map.component.html',
-  styleUrls: ['./project-map.component.scss']
+    selector: 'project-map',
+    templateUrl: './project-map.component.html',
+    styleUrls: ['./project-map.component.scss'],
+    standalone: true,
+    imports: [NgIf, NgFor, FieldDefinitionComponent, DecimalPipe]
 })
 export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnInit {
 

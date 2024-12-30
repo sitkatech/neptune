@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
@@ -12,11 +12,19 @@ import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { ConfirmService } from 'src/app/shared/services/confirm.service';
+import { GrantScoresComponent } from '../../../shared/components/projects/grant-scores/grant-scores.component';
+import { AttachmentsDisplayComponent } from '../../../shared/components/projects/attachments-display/attachments-display.component';
+import { ModelResultsComponent } from '../../../shared/components/projects/model-results/model-results.component';
+import { TreatmentBmpMapEditorAndModelingAttributesComponent } from '../../../shared/components/projects/project-map/project-map.component';
+import { FieldDefinitionComponent } from '../../../shared/components/field-definition/field-definition.component';
+import { NgIf, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'hippocamp-project-detail',
-  templateUrl: './project-detail.component.html',
-  styleUrls: ['./project-detail.component.scss']
+    selector: 'hippocamp-project-detail',
+    templateUrl: './project-detail.component.html',
+    styleUrls: ['./project-detail.component.scss'],
+    standalone: true,
+    imports: [NgIf, RouterLink, FieldDefinitionComponent, TreatmentBmpMapEditorAndModelingAttributesComponent, ModelResultsComponent, AttachmentsDisplayComponent, GrantScoresComponent, DatePipe]
 })
 export class ProjectDetailComponent implements OnInit {
 

@@ -1,18 +1,23 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { FieldDefinitionDto, PersonDto } from 'src/app/shared/generated/model/models';
 import { FieldDefinitionService } from 'src/app/shared/generated/api/field-definition.service';
-import { EditorComponent } from "@tinymce/tinymce-angular";
+import { EditorComponent, EditorModule } from "@tinymce/tinymce-angular";
 import TinyMCEHelpers from 'src/app/shared/helpers/tiny-mce-helpers';
+import { FormsModule } from '@angular/forms';
+import { AlertDisplayComponent } from '../../shared/components/alert-display/alert-display.component';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'hippocamp-field-definition-edit',
-  templateUrl: './field-definition-edit.component.html',
-  styleUrls: ['./field-definition-edit.component.scss']
+    selector: 'hippocamp-field-definition-edit',
+    templateUrl: './field-definition-edit.component.html',
+    styleUrls: ['./field-definition-edit.component.scss'],
+    standalone: true,
+    imports: [NgIf, RouterLink, AlertDisplayComponent, EditorModule, FormsModule]
 })
 export class FieldDefinitionEditComponent implements OnInit {
   

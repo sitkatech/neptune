@@ -22,6 +22,4 @@
       "postLogoutRedirectUri": [TODO],
       "waitForTokenInMsec": [TODO]
     }
-
-    "appInsightsInstrumentationKey": [TODO]
   }

@@ -1,0 +1,47 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-2c6158a3:193f5b0bbb4:-4391</id>
+  <name>LoadGeneratingUnits</name>
+  <nativeName>vGeoServerLoadGeneratingUnit</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl--4c8be7a1:15d76abd161:-7ffe</id>
+  </namespace>
+  <title>vGeoServerLoadGeneratingUnit</title>
+  <keywords>
+    <string>features</string>
+    <string>vGeoServerLoadGeneratingUnit</string>
+  </keywords>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-118.12210822520738</minx>
+    <maxx>-117.41285110263144</maxx>
+    <miny>33.38712941369434</miny>
+    <maxy>33.953708001693904</maxy>
+    <crs>EPSG:4326</crs>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-118.12208909284183</minx>
+    <maxx>-117.41283215101897</maxx>
+    <miny>33.38711941151194</miny>
+    <maxy>33.9536979752194</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="cachingEnabled">false</entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl--7c524755:15d7bc5e17f:-7fff</id>
+  </store>
+  <serviceConfiguration>false</serviceConfiguration>
+  <simpleConversionEnabled>false</simpleConversionEnabled>
+  <internationalTitle/>
+  <internationalAbstract/>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <padWithZeros>false</padWithZeros>
+  <forcedDecimal>false</forcedDecimal>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

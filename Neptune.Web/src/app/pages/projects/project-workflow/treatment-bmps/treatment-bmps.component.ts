@@ -31,13 +31,19 @@ import { AlertService } from 'src/app/shared/services/alert.service';
 import { CustomCompileService } from 'src/app/shared/services/custom-compile.service';
 import { environment } from 'src/environments/environment';
 import { TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/models';
+import { FieldDefinitionComponent } from '../../../../shared/components/field-definition/field-definition.component';
+import { FormsModule } from '@angular/forms';
+import { CustomRichTextComponent } from '../../../../shared/components/custom-rich-text/custom-rich-text.component';
+import { NgIf, NgFor } from '@angular/common';
 
 declare var $: any
 
 @Component({
-  selector: 'hippocamp-treatment-bmps',
-  templateUrl: './treatment-bmps.component.html',
-  styleUrls: ['./treatment-bmps.component.scss']
+    selector: 'hippocamp-treatment-bmps',
+    templateUrl: './treatment-bmps.component.html',
+    styleUrls: ['./treatment-bmps.component.scss'],
+    standalone: true,
+    imports: [NgIf, CustomRichTextComponent, NgFor, FormsModule, FieldDefinitionComponent]
 })
 export class TreatmentBmpsComponent implements OnInit {
 

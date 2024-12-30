@@ -79,7 +79,6 @@ namespace Neptune.Web
             CreateAccountRedirectUrl = configuration["CreateAccountRedirectUrl"];
             GeoserverMapServiceUrl = configuration["GeoserverMapServiceUrl"];
             KeystoneAuthConfiguration = new KeystoneAuthConfigurationDto(configuration);
-            AppInsightsInstrumentationKey =  configuration["AppInsightsInstrumentationKey"];
             OcStormwaterToolsBaseUrl = configuration["OcStormwaterToolsBaseUrl"];
         }
 
@@ -97,8 +96,6 @@ namespace Neptune.Web
         public string GeoserverMapServiceUrl { get; set; }
         [JsonPropertyName("keystoneAuthConfiguration")]
         public KeystoneAuthConfigurationDto KeystoneAuthConfiguration { get; set; }
-        [JsonPropertyName("appInsightsInstrumentationKey")]
-        public string AppInsightsInstrumentationKey {get; set;}
         [JsonPropertyName("ocStormwaterToolsBaseUrl")]
         public string OcStormwaterToolsBaseUrl { get; set;}
     }

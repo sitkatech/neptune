@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { forkJoin } from 'rxjs';
 import { AlertService } from 'src/app/shared/services/alert.service';
@@ -7,12 +7,16 @@ import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { UserService } from 'src/app/shared/generated/api/user.service';
+import { AlertDisplayComponent } from '../../shared/components/alert-display/alert-display.component';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'template-user-detail',
     templateUrl: './user-detail.component.html',
     styleUrls: ['./user-detail.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [NgIf, RouterLink, AlertDisplayComponent]
 })
 export class UserDetailComponent implements OnInit, OnDestroy {
     

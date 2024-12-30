@@ -2,11 +2,15 @@ import { Component, OnInit, HostListener, ChangeDetectorRef, OnDestroy } from '@
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { environment } from 'src/environments/environment';
 import { PersonDto } from '../../generated/model/person-dto';
+import { NgIf } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
     selector: 'header-nav',
     templateUrl: './header-nav.component.html',
-    styleUrls: ['./header-nav.component.scss']
+    styleUrls: ['./header-nav.component.scss'],
+    standalone: true,
+    imports: [RouterLink, RouterLinkActive, NgIf]
 })
 
 export class HeaderNavComponent implements OnInit, OnDestroy {

@@ -34,6 +34,8 @@ namespace Neptune.EFModels.Entities
                 .ExecuteDeleteAsync();
             await dbContext.LoadGeneratingUnits.Where(x => x.DelineationID == DelineationID)
                 .ExecuteDeleteAsync();
+            await dbContext.LoadGeneratingUnit4326s.Where(x => x.DelineationID == DelineationID)
+                .ExecuteDeleteAsync();
             await dbContext.NereidResults.Where(x => x.DelineationID == DelineationID).ExecuteDeleteAsync();
             await dbContext.ProjectHRUCharacteristics
                 .Include(x => x.ProjectLoadGeneratingUnit)

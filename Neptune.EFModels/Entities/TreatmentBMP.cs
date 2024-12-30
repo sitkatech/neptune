@@ -142,6 +142,9 @@ namespace Neptune.EFModels.Entities
             await dbContext.LoadGeneratingUnits
                 .Include(x => x.Delineation)
                 .Where(x => x.Delineation != null && x.Delineation.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
+            await dbContext.LoadGeneratingUnit4326s
+                .Include(x => x.Delineation)
+                .Where(x => x.Delineation != null && x.Delineation.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.NereidResults.Include(x => x.Delineation)
                 .Where(x => x.Delineation != null && x.Delineation.TreatmentBMPID == TreatmentBMPID).ExecuteDeleteAsync();
             await dbContext.ProjectHRUCharacteristics

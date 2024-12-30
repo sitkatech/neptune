@@ -2,11 +2,15 @@ import {Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import {AlertService} from '../../services/alert.service';
 import {Alert} from '../../models/alert';
 import { BehaviorSubject, Subscribable, Subscription } from 'rxjs';
+import { AlertComponent } from '../alert/alert.component';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
     selector: 'app-alert-display',
     templateUrl: './alert-display.component.html',
-    styleUrls: ['./alert-display.component.css']
+    styleUrls: ['./alert-display.component.css'],
+    standalone: true,
+    imports: [NgIf, NgFor, AlertComponent]
 })
 export class AlertDisplayComponent implements OnInit, OnDestroy {
 

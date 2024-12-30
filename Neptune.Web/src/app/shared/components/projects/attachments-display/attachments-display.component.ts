@@ -1,11 +1,16 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ProjectDocumentDto } from 'src/app/shared/generated/model/project-document-dto';
 import { environment } from 'src/environments/environment';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { IconComponent } from '../../icon/icon.component';
+import { NgIf, NgFor, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'hippocamp-attachments-display',
-  templateUrl: './attachments-display.component.html',
-  styleUrls: ['./attachments-display.component.scss']
+    selector: 'hippocamp-attachments-display',
+    templateUrl: './attachments-display.component.html',
+    styleUrls: ['./attachments-display.component.scss'],
+    standalone: true,
+    imports: [NgIf, NgFor, IconComponent, NgbTooltip, DatePipe]
 })
 export class AttachmentsDisplayComponent implements OnInit {
 

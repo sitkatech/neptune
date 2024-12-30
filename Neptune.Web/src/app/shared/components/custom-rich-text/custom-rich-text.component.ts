@@ -6,14 +6,18 @@ import { AlertContext } from '../../models/enums/alert-context.enum';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NeptunePageDto } from '../../generated/model/neptune-page-dto';
 import { PersonDto } from '../../generated/model/person-dto';
-import { EditorComponent } from '@tinymce/tinymce-angular';
+import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular';
 import TinyMCEHelpers from '../../helpers/tiny-mce-helpers';
 import { CustomRichTextService } from '../../generated/api/custom-rich-text.service';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'custom-rich-text',
-  templateUrl: './custom-rich-text.component.html',
-  styleUrls: ['./custom-rich-text.component.scss']
+    selector: 'custom-rich-text',
+    templateUrl: './custom-rich-text.component.html',
+    styleUrls: ['./custom-rich-text.component.scss'],
+    standalone: true,
+    imports: [NgIf, EditorModule, FormsModule]
 })
 export class CustomRichTextComponent implements OnInit, AfterViewChecked {
   @ViewChild('tinyMceEditor') tinyMceEditor: EditorComponent;

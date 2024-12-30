@@ -1,0 +1,17 @@
+<layer>
+  <name>LoadGeneratingUnits</name>
+  <id>LayerInfoImpl-2c6158a3:193f5b0bbb4:-4390</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--66eb2933:193dc7e5a3d:629c</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-2c6158a3:193f5b0bbb4:-4391</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2024-12-24 00:37:23.619 UTC</dateCreated>
+  <dateModified>2024-12-24 18:04:31.947 UTC</dateModified>
+</layer>

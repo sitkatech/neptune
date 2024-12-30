@@ -2,12 +2,13 @@ import { Component, Inject } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { JwksValidationHandler } from 'angular-oauth2-oidc-jwks';
 import { environment } from '../environments/environment';
-import { Router, RouteConfigLoadStart, RouteConfigLoadEnd, NavigationEnd } from '@angular/router';
+import { Router, RouteConfigLoadStart, RouteConfigLoadEnd, NavigationEnd, RouterOutlet } from '@angular/router';
 import { BusyService } from './shared/services';
 import { AuthenticationService } from './services/authentication.service';
 import { Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 import { MarkerHelper } from './shared/helpers/marker-helper';
+import { HeaderNavComponent } from './shared/components/header-nav/header-nav.component';
 
 declare var require: any
 MarkerHelper.fixMarkerPath();
@@ -15,7 +16,9 @@ MarkerHelper.fixMarkerPath();
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+    styleUrls: ['./app.component.scss'],
+    standalone: true,
+    imports: [HeaderNavComponent, RouterOutlet]
 })
 export class AppComponent {
 

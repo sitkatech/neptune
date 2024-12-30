@@ -1,11 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { UtilityFunctionsService } from 'src/app/services/utility-functions.service';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'hippocamp-csv-download-button',
-  templateUrl: './csv-download-button.component.html',
-  styleUrls: ['./csv-download-button.component.scss']
+    selector: 'hippocamp-csv-download-button',
+    templateUrl: './csv-download-button.component.html',
+    styleUrls: ['./csv-download-button.component.scss'],
+    standalone: true,
+    imports: [NgbTooltip]
 })
 export class CsvDownloadButtonComponent {
   @Input() grid: AgGridAngular;

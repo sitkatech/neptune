@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { OrganizationSimpleDto } from 'src/app/shared/generated/model/organization-simple-dto';
 import { ProjectUpsertDto } from 'src/app/shared/generated/model/project-upsert-dto';
@@ -7,11 +7,16 @@ import { ProjectWorkflowService } from 'src/app/services/project-workflow.servic
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { PersonDto, ProjectDto, StormwaterJurisdictionDto } from 'src/app/shared/generated/model/models';
+import { ProjectWizardSidebarComponent } from '../../../shared/components/projects/project-wizard-sidebar/project-wizard-sidebar.component';
+import { AlertDisplayComponent } from '../../../shared/components/alert-display/alert-display.component';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'hippocamp-project-workflow-outlet',
-  templateUrl: './project-workflow-outlet.component.html',
-  styleUrls: ['./project-workflow-outlet.component.scss']
+    selector: 'hippocamp-project-workflow-outlet',
+    templateUrl: './project-workflow-outlet.component.html',
+    styleUrls: ['./project-workflow-outlet.component.scss'],
+    standalone: true,
+    imports: [RouterLink, NgIf, AlertDisplayComponent, ProjectWizardSidebarComponent, RouterOutlet]
 })
 export class ProjectWorkflowOutletComponent implements OnInit {
 

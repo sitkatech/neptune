@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
+import { CustomRichTextComponent } from '../../../../shared/components/custom-rich-text/custom-rich-text.component';
 
 @Component({
-  selector: 'hippocamp-project-instructions',
-  templateUrl: './project-instructions.component.html',
-  styleUrls: ['./project-instructions.component.scss']
+    selector: 'hippocamp-project-instructions',
+    templateUrl: './project-instructions.component.html',
+    styleUrls: ['./project-instructions.component.scss'],
+    standalone: true,
+    imports: [CustomRichTextComponent]
 })
 export class ProjectInstructionsComponent implements OnInit {
 
