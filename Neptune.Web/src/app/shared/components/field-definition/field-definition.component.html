@@ -6,13 +6,13 @@
     <ng-template #popTitle>
         <div class="row">
             <div class="col-auto mr-auto">
-                <div class="mt-1">{{fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName}}</div>
+                <div class="mt-1">{{ fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName }}</div>
             </div>
             <div class="col-auto" *ngIf="!isEditing">
                 <div class="row">
                     <div class="col-sm-2 pl-0 pr-0">
                         <button type="button" class="btn btn-link" [hidden]="isEditing" *ngIf="showEditButton()" (click)="enterEdit($event)">
-                            <i class="fa fa-pencil-square-o" attr.aria-label="Edit the definition for {{fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName}}">
+                            <i class="fa fa-pencil-square-o" attr.aria-label="Edit the definition for {{ fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName }}">
                             </i>
                         </button>
                     </div>
@@ -22,49 +22,67 @@
     </ng-template>
     <ng-template #popContent>
         <ng-container *ngIf="!isEditing">
-            <div *ngIf="showEditButton()" style="position: relative; min-height: 30px;">
+            <div *ngIf="showEditButton()" style="position: relative; min-height: 30px">
                 <div *ngIf="!emptyContent" [innerHtml]="fieldDefinition.FieldDefinitionValue"></div>
                 <div *ngIf="emptyContent" class="hoverEmptySpace"></div>
             </div>
             <div *ngIf="!showEditButton()" [innerHtml]="fieldDefinition.FieldDefinitionValue"></div>
         </ng-container>
         <div *ngIf="isEditing">
-            <editor #tinyMceEditor
-                [init]="tinyMceConfig"
-                [(ngModel)]="editedContent">
-            </editor>
-            <div style="float:right;">
+            <editor #tinyMceEditor [init]="tinyMceConfig" [(ngModel)]="editedContent"> </editor>
+            <div style="float: right">
                 <button type="button" class="btn btn-sm btn-hippocamp mt-1 mr-1 mb-1" (click)="saveEdit()">Save</button>
-                <button type="button" class="btn btn-sm btn-secondary mt-1 mb-1" (click)="cancelEdit(p)">Cancel</button>
+                <button type="button" class="btn btn-sm btn-secondary mt-1 mb-1" (click)="cancelEdit()">Cancel</button>
             </div>
         </div>
     </ng-template>
     <ng-container *ngIf="showEditButton()">
-        <div class="d-inline-block" >
-            <span style="overflow:hidden; text-overflow:ellipsis">
-                {{getLabelText()}}
+        <div class="d-inline-block">
+            <span style="overflow: hidden; text-overflow: ellipsis">
+                {{ getLabelText() }}
 
-                <ng-container *ngIf="!isEditing else isEditingTemplate">
-                    <i class="fas fa-question-circle small" style="cursor: help;" [placement]="['bottom','right','left','auto']" #p="ngbPopover" [ngbPopover]="popContent"
-                        [popoverTitle]="popTitle" [autoClose]="'outside'"
-                        popoverClass="popover-override" container="body" [ngClass]="{'text-white': white}">
+                <ng-container *ngIf="!isEditing; else isEditingTemplate">
+                    <i
+                        class="fas fa-question-circle small"
+                        style="cursor: help"
+                        [placement]="['bottom', 'right', 'left', 'auto']"
+                        #p="ngbPopover"
+                        [ngbPopover]="popContent"
+                        [popoverTitle]="popTitle"
+                        [autoClose]="'outside'"
+                        popoverClass="popover-override"
+                        container="body"
+                        [ngClass]="{ 'text-white': white }">
                     </i>
                 </ng-container>
                 <ng-template #isEditingTemplate>
-                    <i class="fas fa-question-circle small" style="cursor: help;" [placement]="['bottom','right','left','auto']" #editingPopover="ngbPopover" [ngbPopover]="popContent"
-                        [popoverTitle]="popTitle" [autoClose]="false"
-                        popoverClass="popover-override" container="body" [ngClass]="{'text-white': white}">
+                    <i
+                        class="fas fa-question-circle small"
+                        style="cursor: help"
+                        [placement]="['bottom', 'right', 'left', 'auto']"
+                        #editingPopover="ngbPopover"
+                        [ngbPopover]="popContent"
+                        [popoverTitle]="popTitle"
+                        [autoClose]="false"
+                        popoverClass="popover-override"
+                        container="body"
+                        [ngClass]="{ 'text-white': white }">
                     </i>
                 </ng-template>
             </span>
         </div>
     </ng-container>
     <ng-container *ngIf="!showEditButton()">
-        <span> 
-            {{getLabelText()}}
-            <i class="fas fa-question-circle small" style="cursor: help;" [ngbPopover]="popContent" popoverClass="popover-override"
+        <span>
+            {{ getLabelText() }}
+            <i
+                class="fas fa-question-circle small"
+                style="cursor: help"
+                [ngbPopover]="popContent"
+                popoverClass="popover-override"
                 [popoverTitle]="fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName"
-                container="body" [ngClass]="{'text-white': white}">
+                container="body"
+                [ngClass]="{ 'text-white': white }">
             </i>
         </span>
     </ng-container>

@@ -26,6 +26,10 @@ public partial class DelineationStaging
 
     public int StormwaterJurisdictionID { get; set; }
 
+    [StringLength(20)]
+    [Unicode(false)]
+    public string? DelineationStatus { get; set; }
+
     [ForeignKey("StormwaterJurisdictionID")]
     [InverseProperty("DelineationStagings")]
     public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; } = null!;

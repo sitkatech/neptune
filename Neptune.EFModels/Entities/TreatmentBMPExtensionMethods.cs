@@ -19,7 +19,9 @@ public static partial class TreatmentBMPExtensionMethods
             Latitude = treatmentBMP.LocationPoint4326.Coordinate.Y,
             TreatmentBMPName = treatmentBMP.TreatmentBMPName,
             TreatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.AsSimpleDto(),
-            IsFullyParameterized = treatmentBMP.IsFullyParameterized(treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP)
+            IsFullyParameterized = treatmentBMP.IsFullyParameterized(treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP),
+            WatershedName = treatmentBMP.Watershed?.WatershedName,
+            Notes = treatmentBMP.Notes
         };
         return treatmentBMPSimpleDto;
     }
