@@ -96,7 +96,7 @@ namespace Neptune.WebMvc.Controllers
                     $"{CurrentPerson.PersonID} as UploadedByPersonID",
                     $"{viewModel.StormwaterJurisdictionID} as StormwaterJurisdictionID",
                     $"{viewModel.TreatmentBMPNameField} as TreatmentBMPName",
-                    $"DelineationStatus as DelineationStatus"
+                    $"DelineationStatus"
                 };
 
                 var apiRequest = new GdbToGeoJsonRequestDto()
