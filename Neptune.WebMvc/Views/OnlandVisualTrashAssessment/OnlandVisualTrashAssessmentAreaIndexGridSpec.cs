@@ -56,7 +56,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
             Add("Last Assessment Date", x => ovtaAssessmentsLookup?[x.OnlandVisualTrashAssessmentAreaID].Where(y =>
                 y.OnlandVisualTrashAssessmentStatusID == (int)OnlandVisualTrashAssessmentStatusEnum.Complete).Max(y => y.CompletedDate), 120, DhtmlxGridColumnFormatType.Date);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.StormwaterJurisdiction.GetOrganizationDisplayName()), 170);
-            Add("Description", x => x.AssessmentAreaDescription , 170);
+            Add("Description", x => x.AssessmentAreaDescription, 170);
         }
     }
 }

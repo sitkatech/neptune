@@ -58,14 +58,14 @@ namespace Neptune.WebMvc.Controllers
                     { "Description", area.AssessmentAreaDescription ?? null },
                     { "CreatedOn", area.OnlandVisualTrashAssessment?.CreatedDate }
                 };
-                areaFeatureCollection.Add(new Feature(area.OnlandVisualTrashAssessmentAreaGeometry4326, attributesTable));
+                areaFeatureCollection.Add(new Feature(area.OnlandVisualTrashAssessmentAreaGeometry, attributesTable));
 
                 var attributeTable2 = new AttributesTable()
                 {
                     { "OVTAAreaName", area.OnlandVisualTrashAssessmentAreaName },
-                    { "JurisID", area.StormwaterJurisdictionID }
+                    { "JurisdictionID", area.StormwaterJurisdictionID }
                 };
-                transectLineFeatureCollection.Add(new Feature(area.TransectLine4326, attributeTable2));
+                transectLineFeatureCollection.Add(new Feature(area.TransectLine, attributeTable2));
             }
 
             foreach (var observation in observations)
@@ -76,34 +76,34 @@ namespace Neptune.WebMvc.Controllers
                     { "OVTAAreaName", observation.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName },
                     { "AssessmentID", observation.OnlandVisualTrashAssessment?.OnlandVisualTrashAssessmentID },
                     { "Note", observation.Note },
-                    { "JurisID", observation.OnlandVisualTrashAssessment?.StormwaterJurisdictionID },
-                    { "JurisName", stormwaterJurisdictionName },
+                    { "JurisdictionID", observation.OnlandVisualTrashAssessment?.StormwaterJurisdictionID },
+                    { "JurisdictionName", stormwaterJurisdictionName },
                     { "Score", observation.OnlandVisualTrashAssessment?.OnlandVisualTrashAssessmentScore?.OnlandVisualTrashAssessmentScoreDisplayName },
                     { "CompletedDate", observation.OnlandVisualTrashAssessment?.CompletedDate },
                     { "PhotoUrl", fileResourceGuid != null ? $"/FileResource/DisplayResource/{fileResourceGuid}" : null },
                 };
-                observationPointFeatureCollection.Add(new Feature(observations.FirstOrDefault(x => x.OnlandVisualTrashAssessmentID == observation.OnlandVisualTrashAssessment?.OnlandVisualTrashAssessmentID)?.LocationPoint4326, attributeTable3));
+                observationPointFeatureCollection.Add(new Feature(observations.FirstOrDefault(x => x.OnlandVisualTrashAssessmentID == observation.OnlandVisualTrashAssessment?.OnlandVisualTrashAssessmentID)?.LocationPoint, attributeTable3));
             }
 
             var gdbInput = new GdbInput()
             {
                 FileContents = GeoJsonSerializer.SerializeToByteArray(areaFeatureCollection, GeoJsonSerializer.DefaultSerializerOptions),
                 LayerName = "ovta-areas",
-                CoordinateSystemID = Proj4NetHelper.WEB_MERCATOR,
+                CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
                 GeometryTypeName = "POLYGON",
             };
             var gdbInput2 = new GdbInput()
             {
                 FileContents = GeoJsonSerializer.SerializeToByteArray(transectLineFeatureCollection, GeoJsonSerializer.DefaultSerializerOptions),
                 LayerName = "transect-lines",
-                CoordinateSystemID = Proj4NetHelper.WEB_MERCATOR,
+                CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
                 GeometryTypeName = "LINESTRING",
             };
             var gdbInput3 = new GdbInput()
             {
                 FileContents = GeoJsonSerializer.SerializeToByteArray(observationPointFeatureCollection, GeoJsonSerializer.DefaultSerializerOptions),
                 LayerName = "observation-point",
-                CoordinateSystemID = Proj4NetHelper.WEB_MERCATOR,
+                CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
                 GeometryTypeName = "POINT",
             };
             var jurisdictionName = stormwaterJurisdictionName.Replace(' ', '-');
