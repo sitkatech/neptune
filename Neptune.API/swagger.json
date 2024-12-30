@@ -3961,6 +3961,14 @@
           },
           "TreatmentBMPModelingAttribute": {
             "$ref": "#/components/schemas/TreatmentBMPModelingAttributeSimpleDto"
+          },
+          "WatershedName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Notes": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

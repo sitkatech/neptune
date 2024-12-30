@@ -22,6 +22,8 @@ export class TreatmentBMPDisplayDto {
     InventoryIsVerified?: boolean;
     IsFullyParameterized?: boolean;
     TreatmentBMPModelingAttribute?: TreatmentBMPModelingAttributeSimpleDto;
+    WatershedName?: string;
+    Notes?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

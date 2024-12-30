@@ -9,16 +9,15 @@
         <div class="alert-content">
             <i class="fa fa-info"></i>
             <span *ngIf="userIsOCTAGrantReviewer(); else unassignedUserMessage">
-                Welcome {{currentUser.FullName}}. You have successfully logged in to the OCST Planning Module, 
-                and an administrator has granted you read-only access to Review Grant Programs. 
-                You may <a href="{{requestSupportUrl()}}">Request Support</a> to contact the Administrators with any questions or comments.
+                Welcome {{ currentUser.FirstName }} {{ currentUser.LastName }}. You have successfully logged in to the OCST Planning Module, and an administrator has granted you
+                read-only access to Review Grant Programs. You may <a href="{{ requestSupportUrl() }}">Request Support</a> to contact the Administrators with any questions or
+                comments.
             </span>
             <ng-template #unassignedUserMessage>
                 <span>
-                    Welcome {{currentUser.FullName}}. You have successfully logged in to the OCST Planning Module,
-                    but your account is not yet configured. You will receive an email from the Administrators when your account is ready to
-                    use. You may <a href="{{requestSupportUrl()}}">Request Support</a> to contact the Administrators with any questions or
-                    comments.
+                    Welcome {{ currentUser.FirstName }} {{ currentUser.LastName }}. You have successfully logged in to the OCST Planning Module, but your account is not yet
+                    configured. You will receive an email from the Administrators when your account is ready to use. You may
+                    <a href="{{ requestSupportUrl() }}">Request Support</a> to contact the Administrators with any questions or comments.
                 </span>
             </ng-template>
         </div>
@@ -35,25 +34,21 @@
                 </div>
                 <div class="card-body" *ngIf="!currentUser">
                     <div class="row">
-                        <div class="col">
-                            Log in to view your Account. Create an Account if you don't have one yet.
-                        </div>
+                        <div class="col">Log in to view your Account. Create an Account if you don't have one yet.</div>
                     </div>
                     <div class="row mt-2">
                         <div class="col mx-1">
                             <button (click)="login()" class="btn btn-hippocamp mr-1">Login</button>
-                            <button (click)="createAccount()" class="btn btn-hippocamp ml-1">Create
-                                Account</button>
+                            <button (click)="createAccount()" class="btn btn-hippocamp ml-1">Create Account</button>
                         </div>
                     </div>
                     <hr />
                     <div class="row">
                         <div class="col">
-                            <small style="font-size:11px;">
+                            <small style="font-size: 11px">
                                 Need help logging in? <br />
-                                <a href="{{forgotPasswordUrl()}}">Forgot Password</a> | <a
-                                    href="{{forgotUsernameUrl()}}">Forgot
-                                    Username</a> | <a href="{{keystoneSupportUrl()}}">Request Support</a>
+                                <a href="{{ forgotPasswordUrl() }}">Forgot Password</a> | <a href="{{ forgotUsernameUrl() }}">Forgot Username</a> |
+                                <a href="{{ keystoneSupportUrl() }}">Request Support</a>
                             </small>
                         </div>
                     </div>
@@ -62,12 +57,12 @@
                     <a class="btn btn-hippocamp mb-1 w-100" routerLink="/projects">View Projects</a>
                     <a class="btn btn-hippocamp mb-1 w-100" routerLink="/projects/new">Add a Project</a>
                     <a class="btn btn-hippocamp mb-1 w-100" routerLink="/planning-map">Planning Map</a>
-                    <a class="btn btn-hippocamp mb-1 w-100" href="{{ocstBaseUrl()}}">OCST Home</a>
-                    <a class="btn btn-hippocamp mb-1 w-100" href="{{requestSupportUrl()}}">Request Support</a>
+                    <a class="btn btn-hippocamp mb-1 w-100" href="{{ ocstBaseUrl() }}">OCST Home</a>
+                    <a class="btn btn-hippocamp mb-1 w-100" href="{{ requestSupportUrl() }}">Request Support</a>
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-8 order-md-1 order-12 col-sm-12">
             <div class="mt-2">
                 <custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>

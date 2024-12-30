@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from "@angular/core";
-import { EditorComponent, EditorModule } from "@tinymce/tinymce-angular";
+import { EditorComponent, EditorModule, TINYMCE_SCRIPT_SRC } from "@tinymce/tinymce-angular";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import TinyMCEHelpers from "../../helpers/tiny-mce-helpers";
 import { Alert } from "../../models/alert";
@@ -21,23 +21,18 @@ declare var $: any;
     templateUrl: "./field-definition.component.html",
     styleUrls: ["./field-definition.component.scss"],
     standalone: true,
-    imports: [
-        NgIf,
-        EditorModule,
-        FormsModule,
-        NgbPopover_1,
-        NgClass,
-    ],
+    imports: [NgIf, EditorModule, FormsModule, NgbPopover_1, NgClass],
+    providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }],
 })
 export class FieldDefinitionComponent implements OnInit {
     @Input() fieldDefinitionType: string;
     @Input() labelOverride: string;
     @Input() inline: boolean = true;
     @Input() white?: boolean;
-    @ViewChild('tinyMceEditor') tinyMceEditor : EditorComponent;
-    @ViewChild('p') public p: NgbPopover;
-    @ViewChild('editingPopover') public editingPopover: NgbPopover;
-    @ViewChild('popContent') public content: any;
+    @ViewChild("tinyMceEditor") tinyMceEditor: EditorComponent;
+    @ViewChild("p") public p: NgbPopover;
+    @ViewChild("editingPopover") public editingPopover: NgbPopover;
+    @ViewChild("popContent") public content: any;
     public tinyMceConfig: object;
 
     private currentUser: PersonDto;
@@ -59,17 +54,15 @@ export class FieldDefinitionComponent implements OnInit {
     ngAfterViewInit(): void {
         // We need to use ngAfterViewInit because the image upload needs a reference to the component
         // to setup the blobCache for image base64 encoding
-        this.tinyMceConfig = TinyMCEHelpers.DefaultInitConfig(this.tinyMceEditor)
-      }
+        this.tinyMceConfig = TinyMCEHelpers.DefaultInitConfig(this.tinyMceEditor);
+    }
 
     ngOnInit() {
         this.authenticationService.getCurrentUser().subscribe((currentUser) => {
             this.currentUser = currentUser;
         });
 
-        this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDGet(
-            FieldDefinitionTypeEnum[this.fieldDefinitionType]
-        ).subscribe(x => this.loadFieldDefinition(x));
+        this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDGet(FieldDefinitionTypeEnum[this.fieldDefinitionType]).subscribe((x) => this.loadFieldDefinition(x));
     }
 
     ngOnDestroy() {
@@ -101,7 +94,7 @@ export class FieldDefinitionComponent implements OnInit {
         this.isEditing = true;
 
         setTimeout(() => {
-          this.editingPopover.open()
+            this.editingPopover.open();
         }, 0);
     }
 
@@ -112,17 +105,17 @@ export class FieldDefinitionComponent implements OnInit {
     public saveEdit(): void {
         this.isEditing = false;
         this.isLoading = true;
-        
+
         this.fieldDefinition.FieldDefinitionValue = this.editedContent;
-        this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDPut(this.fieldDefinition.FieldDefinitionID, this.fieldDefinition).subscribe(x => {
-          this.loadFieldDefinition(x);
-          
-          setTimeout(() => {
-            this.p.open();  
-          }, 250);
-          
-        },
-            error => {
+        this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDPut(this.fieldDefinition.FieldDefinitionID, this.fieldDefinition).subscribe(
+            (x) => {
+                this.loadFieldDefinition(x);
+
+                setTimeout(() => {
+                    this.p.open();
+                }, 250);
+            },
+            (error) => {
                 this.isLoading = false;
                 this.alertService.pushAlert(new Alert("There was an error updating the field definition", AlertContext.Danger));
             }
