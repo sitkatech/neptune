@@ -95,7 +95,8 @@ namespace Neptune.WebMvc.Controllers
                 {
                     $"{CurrentPerson.PersonID} as UploadedByPersonID",
                     $"{viewModel.StormwaterJurisdictionID} as StormwaterJurisdictionID",
-                    $"{viewModel.TreatmentBMPNameField} as TreatmentBMPName"
+                    $"{viewModel.TreatmentBMPNameField} as TreatmentBMPName",
+                    $"DelineationStatus as DelineationStatus"
                 };
 
                 var apiRequest = new GdbToGeoJsonRequestDto()
@@ -179,17 +180,26 @@ namespace Neptune.WebMvc.Controllers
             var stormwaterJurisdiction = _dbContext.StormwaterJurisdictions.Include(x => x.Organization)
                 .Single(x => x.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID)
                 .GetOrganizationDisplayName();
-            var featureCollection = new FeatureCollection();
-            var delineations = _dbContext.Delineations.Include(x => x.TreatmentBMP)
+            var distributedFeatureCollection = new FeatureCollection();
+            var centralizedFeatureCollection = new FeatureCollection();
+            var distributedDelineations = _dbContext.Delineations.Include(x => x.TreatmentBMP)
+                    .ThenInclude(x => x.StormwaterJurisdiction)
+                        .ThenInclude(x => x.Organization)
+                .Include(x => x.TreatmentBMP)
+                    .ThenInclude(x => x.TreatmentBMPType)
+                .Where(x =>
+                x.TreatmentBMP.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID &&
+                x.DelineationTypeID == (int)DelineationTypeEnum.Distributed).ToList();
+            var centralizedDelineations = _dbContext.Delineations.Include(x => x.TreatmentBMP)
                 .ThenInclude(x => x.StormwaterJurisdiction)
                 .ThenInclude(x => x.Organization)
                 .Include(x => x.TreatmentBMP)
                 .ThenInclude(x => x.TreatmentBMPType)
                 .Where(x =>
-                x.TreatmentBMP.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID &&
-                x.DelineationTypeID == (int)DelineationTypeEnum.Distributed).ToList();
+                    x.TreatmentBMP.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID &&
+                    x.DelineationTypeID == (int)DelineationTypeEnum.Centralized).ToList();
 
-            foreach (var delineation in delineations)
+            foreach (var delineation in distributedDelineations)
             {
                 var attributesTable = new AttributesTable
                 {
@@ -202,25 +212,46 @@ namespace Neptune.WebMvc.Controllers
                     { "DateOfLastDelineationModification", delineation.DateLastModified },
                     { "DateOfLastDelineationVerification", delineation.DateLastVerified },
                 };
-                var feature = new Feature(delineation.DelineationGeometry, attributesTable);
-                featureCollection.Add(feature);
+                distributedFeatureCollection.Add(new Feature(delineation.DelineationGeometry, attributesTable));
             }
-            await using var stream = new MemoryStream();
-            await GeoJsonSerializer.SerializeAsGeoJsonToStream(featureCollection,
-                GeoJsonSerializer.DefaultSerializerOptions, stream);
+
+            foreach (var delineation in centralizedDelineations)
+            {
+                var attributesTable = new AttributesTable
+                {
+                    { "DelineationID", delineation.DelineationID },
+                    { "TreatmentBMPName", delineation.TreatmentBMP.TreatmentBMPName },
+                    { "Jurisdiction", delineation.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName() },
+                    { "BMPType", delineation.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
+                    { "DelineationStatus", delineation.GetDelineationStatus() },
+                    { "DelineationArea", delineation.GetDelineationArea() },
+                    { "DateOfLastDelineationModification", delineation.DateLastModified },
+                    { "DateOfLastDelineationVerification", delineation.DateLastVerified },
+                };
+                centralizedFeatureCollection.Add(new Feature(delineation.DelineationGeometry, attributesTable));
+            }
+
 
             var jurisdictionName = stormwaterJurisdiction.Replace(' ', '-');
 
             var gdbInput = new GdbInput()
             {
-                FileContents = stream.ToArray(),
+                FileContents = GeoJsonSerializer.SerializeToByteArray(distributedFeatureCollection, GeoJsonSerializer.DefaultSerializerOptions),
                 LayerName = "distributed-delineations",
+                CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
+                GeometryTypeName = "POLYGON",
+            };
+
+            var gdbInput2 = new GdbInput()
+            {
+                FileContents = GeoJsonSerializer.SerializeToByteArray(centralizedFeatureCollection, GeoJsonSerializer.DefaultSerializerOptions),
+                LayerName = "centralized-delineations",
                 CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
                 GeometryTypeName = "POLYGON",
             };
             var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
             {
-                GdbInputs = new List<GdbInput> { gdbInput },
+                GdbInputs = new List<GdbInput> { gdbInput, gdbInput2 },
                 GdbName = $"{jurisdictionName}-delineation-export"
             });
 
@@ -279,7 +310,7 @@ namespace Neptune.WebMvc.Controllers
             var stormwaterJurisdictionID = delineationStagings.Select(x => x.StormwaterJurisdictionID).Distinct().Single();
             var stormwaterJurisdiction = StormwaterJurisdictions.GetByID(_dbContext, stormwaterJurisdictionID);
             var stormwaterJurisdictionName = stormwaterJurisdiction.GetOrganizationDisplayName();
-
+                                                        
             // Starting from the treatment BMP is kind of backwards, conceptually, but it's easier to read and write
             var treatmentBMPNames = delineationStagings.Select(x => x.TreatmentBMPName).ToList();
             var treatmentBMPsToUpdate = 
@@ -294,7 +325,7 @@ namespace Neptune.WebMvc.Controllers
                 treatmentBMP.Delineation = new Delineation
                 {
                     HasDiscrepancies = false,
-                    IsVerified = false,
+                    IsVerified = delineationStaging.DelineationStatus?.Trim().ToLower() == "verified",
                     DelineationTypeID = (int) DelineationTypeEnum.Distributed,
                     TreatmentBMPID = treatmentBMP.TreatmentBMPID,
                     DateLastModified = DateTime.UtcNow,

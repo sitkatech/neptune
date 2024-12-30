@@ -11,5 +11,6 @@ namespace Neptune.Models.DataTransferObjects
         public int UploadedByPersonID { get; set; }
         public string TreatmentBMPName { get; set; }
         public int StormwaterJurisdictionID { get; set; }
+        public string DelineationStatus { get; set; }
     }
 }
