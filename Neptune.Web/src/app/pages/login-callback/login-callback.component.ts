@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
-  selector: 'hippocamp-login-callback',
-  templateUrl: './login-callback.component.html',
-  styleUrls: ['./login-callback.component.scss']
+    selector: 'hippocamp-login-callback',
+    templateUrl: './login-callback.component.html',
+    styleUrls: ['./login-callback.component.scss'],
+    standalone: true
 })
 export class LoginCallbackComponent implements OnInit, OnDestroy {
   

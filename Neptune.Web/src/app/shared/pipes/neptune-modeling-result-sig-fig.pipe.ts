@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'neptuneModelingResultSigFig'
+    name: 'neptuneModelingResultSigFig',
+    standalone: true
 })
 export class NeptuneModelingResultSigFigPipe implements PipeTransform {
 

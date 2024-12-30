@@ -1,15 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { environment } from 'src/environments/environment';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
 import { RoleEnum } from 'src/app/shared/generated/enum/role-enum';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
+import { CustomRichTextComponent } from '../../../shared/components/custom-rich-text/custom-rich-text.component';
+import { AlertDisplayComponent } from '../../../shared/components/alert-display/alert-display.component';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-home-index',
     templateUrl: './home-index.component.html',
-    styleUrls: ['./home-index.component.scss']
+    styleUrls: ['./home-index.component.scss'],
+    standalone: true,
+    imports: [NgIf, AlertDisplayComponent, RouterLink, CustomRichTextComponent]
 })
 export class HomeIndexComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;

@@ -36,7 +36,15 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from "@tinymce/tinymce-angular";
 import { AlertComponent } from "./components/alert/alert.component";
 
 @NgModule({
-    declarations: [
+    imports: [
+        CommonModule,
+        FormsModule,
+        HttpClientModule,
+        RouterModule,
+        NgbModule,
+        DragDropModule,
+        NgSelectModule,
+        EditorModule,
         AlertDisplayComponent,
         AlertComponent,
         HeaderNavComponent,
@@ -64,16 +72,6 @@ import { AlertComponent } from "./components/alert/alert.component";
         AttachmentsDisplayComponent,
         OctaPrioritizationDetailPopupComponent,
         GrantScoresComponent,
-    ],
-    imports: [
-        CommonModule,
-        FormsModule,
-        HttpClientModule,
-        RouterModule,
-        NgbModule,
-        DragDropModule,
-        NgSelectModule,
-        EditorModule,
     ],
     exports: [
         AlertDisplayComponent,

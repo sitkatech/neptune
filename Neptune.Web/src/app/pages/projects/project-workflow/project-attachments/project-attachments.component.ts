@@ -9,11 +9,18 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 import { PersonDto, ProjectDocumentDto, ProjectDocumentUpdateDto } from 'src/app/shared/generated/model/models';
+import { AttachmentsDisplayComponent } from '../../../../shared/components/projects/attachments-display/attachments-display.component';
+import { IconComponent } from '../../../../shared/components/icon/icon.component';
+import { FormsModule } from '@angular/forms';
+import { CustomRichTextComponent } from '../../../../shared/components/custom-rich-text/custom-rich-text.component';
+import { NgIf, NgClass } from '@angular/common';
 
 @Component({
-  selector: 'hippocamp-project-attachments',
-  templateUrl: './project-attachments.component.html',
-  styleUrls: ['./project-attachments.component.scss']
+    selector: 'hippocamp-project-attachments',
+    templateUrl: './project-attachments.component.html',
+    styleUrls: ['./project-attachments.component.scss'],
+    standalone: true,
+    imports: [NgIf, CustomRichTextComponent, FormsModule, NgClass, IconComponent, AttachmentsDisplayComponent]
 })
 export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
   @ViewChild('fileUpload') fileUpload: any;

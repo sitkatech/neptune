@@ -22,13 +22,18 @@ import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.
 import { DelineationTypeEnum } from 'src/app/shared/generated/enum/delineation-type-enum';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 import { TreatmentBMPDisplayDto } from 'src/app/shared/generated/model/treatment-bmp-display-dto';
+import { FieldDefinitionComponent } from '../../../../shared/components/field-definition/field-definition.component';
+import { NgFor, NgIf } from '@angular/common';
+import { CustomRichTextComponent } from '../../../../shared/components/custom-rich-text/custom-rich-text.component';
 
 declare var $: any
 
 @Component({
-  selector: 'hippocamp-delineations',
-  templateUrl: './delineations.component.html',
-  styleUrls: ['./delineations.component.scss']
+    selector: 'hippocamp-delineations',
+    templateUrl: './delineations.component.html',
+    styleUrls: ['./delineations.component.scss'],
+    standalone: true,
+    imports: [CustomRichTextComponent, NgFor, NgIf, FieldDefinitionComponent]
 })
 export class DelineationsComponent implements OnInit {
 

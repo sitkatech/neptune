@@ -18,13 +18,20 @@ import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stor
 import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
 import { ProjectNetworkSolveHistoryStatusTypeEnum } from 'src/app/shared/generated/enum/project-network-solve-history-status-type-enum';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
+import { GrantScoresComponent } from '../../../../shared/components/projects/grant-scores/grant-scores.component';
+import { ModelResultsComponent } from '../../../../shared/components/projects/model-results/model-results.component';
+import { FieldDefinitionComponent } from '../../../../shared/components/field-definition/field-definition.component';
+import { NgIf, NgFor } from '@angular/common';
+import { CustomRichTextComponent } from '../../../../shared/components/custom-rich-text/custom-rich-text.component';
 
 declare var $: any
 
 @Component({
-  selector: 'hippocamp-modeled-performance',
-  templateUrl: './modeled-performance.component.html',
-  styleUrls: ['./modeled-performance.component.scss']
+    selector: 'hippocamp-modeled-performance',
+    templateUrl: './modeled-performance.component.html',
+    styleUrls: ['./modeled-performance.component.scss'],
+    standalone: true,
+    imports: [CustomRichTextComponent, NgIf, FieldDefinitionComponent, NgFor, ModelResultsComponent, GrantScoresComponent]
 })
 export class ModeledPerformanceComponent implements OnInit {
   private currentUser: PersonDto;

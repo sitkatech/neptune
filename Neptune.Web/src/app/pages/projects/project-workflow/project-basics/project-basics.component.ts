@@ -13,11 +13,18 @@ import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stor
 import { UserService } from 'src/app/shared/generated/api/user.service';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
 import { PersonDto, ProjectDto, StormwaterJurisdictionDto } from 'src/app/shared/generated/model/models';
+import { FieldDefinitionComponent } from '../../../../shared/components/field-definition/field-definition.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { FormsModule } from '@angular/forms';
+import { CustomRichTextComponent } from '../../../../shared/components/custom-rich-text/custom-rich-text.component';
+import { NgIf, NgClass } from '@angular/common';
 
 @Component({
-  selector: 'hippocamp-project-basics',
-  templateUrl: './project-basics.component.html',
-  styleUrls: ['./project-basics.component.scss']
+    selector: 'hippocamp-project-basics',
+    templateUrl: './project-basics.component.html',
+    styleUrls: ['./project-basics.component.scss'],
+    standalone: true,
+    imports: [NgIf, CustomRichTextComponent, FormsModule, NgClass, NgSelectModule, FieldDefinitionComponent]
 })
 export class ProjectBasicsComponent implements OnInit {
   public currentUser: PersonDto;

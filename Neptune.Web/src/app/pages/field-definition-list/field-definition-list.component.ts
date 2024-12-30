@@ -2,15 +2,20 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 import { ColDef } from 'ag-grid-community';
-import { AgGridAngular } from 'ag-grid-angular';
+import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { FieldDefinitionDto, PersonDto } from 'src/app/shared/generated/model/models';
 import { FieldDefinitionService } from 'src/app/shared/generated/api/field-definition.service';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
+import { ClearGridFiltersButtonComponent } from '../../shared/components/clear-grid-filters-button/clear-grid-filters-button.component';
+import { CustomRichTextComponent } from '../../shared/components/custom-rich-text/custom-rich-text.component';
+import { AlertDisplayComponent } from '../../shared/components/alert-display/alert-display.component';
 
 @Component({
-  selector: 'hippocamp-field-definition-list',
-  templateUrl: './field-definition-list.component.html',
-  styleUrls: ['./field-definition-list.component.scss']
+    selector: 'hippocamp-field-definition-list',
+    templateUrl: './field-definition-list.component.html',
+    styleUrls: ['./field-definition-list.component.scss'],
+    standalone: true,
+    imports: [AlertDisplayComponent, CustomRichTextComponent, ClearGridFiltersButtonComponent, AgGridModule]
 })
 export class FieldDefinitionListComponent implements OnInit {
 

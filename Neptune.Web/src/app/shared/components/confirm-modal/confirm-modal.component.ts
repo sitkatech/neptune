@@ -3,9 +3,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ConfirmOptions, ConfirmState } from '../../services/confirm.service';
 
 @Component({
-  selector: 'hippocamp-confirm-modal',
-  templateUrl: './confirm-modal.component.html',
-  styleUrls: ['./confirm-modal.component.scss']
+    selector: 'hippocamp-confirm-modal',
+    templateUrl: './confirm-modal.component.html',
+    styleUrls: ['./confirm-modal.component.scss'],
+    standalone: true
 })
 export class ConfirmModalComponent {
 

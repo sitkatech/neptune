@@ -17,7 +17,7 @@ import { OctaPrioritizationDetailPopupComponent } from 'src/app/shared/component
 import { ColDef } from 'ag-grid-community';
 import { LinkRendererComponent } from 'src/app/shared/components/ag-grid/link-renderer/link-renderer.component';
 import { UtilityFunctionsService } from 'src/app/services/utility-functions.service';
-import { AgGridAngular } from 'ag-grid-angular';
+import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
@@ -26,13 +26,23 @@ import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { StormwaterJurisdictionService } from 'src/app/shared/generated/api/stormwater-jurisdiction.service';
 import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
+import { ClearGridFiltersButtonComponent } from '../../../shared/components/clear-grid-filters-button/clear-grid-filters-button.component';
+import { RouterLink } from '@angular/router';
+import { FieldDefinitionComponent } from '../../../shared/components/field-definition/field-definition.component';
+import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, NgFor, SlicePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { CustomRichTextComponent } from '../../../shared/components/custom-rich-text/custom-rich-text.component';
+import { AlertDisplayComponent } from '../../../shared/components/alert-display/alert-display.component';
 
 declare var $: any;
 
 @Component({
-  selector: 'hippocamp-octa-m2-tier2-dashboard',
-  templateUrl: './octa-m2-tier2-dashboard.component.html',
-  styleUrls: ['./octa-m2-tier2-dashboard.component.scss']
+    selector: 'hippocamp-octa-m2-tier2-dashboard',
+    templateUrl: './octa-m2-tier2-dashboard.component.html',
+    styleUrls: ['./octa-m2-tier2-dashboard.component.scss'],
+    standalone: true,
+    imports: [AlertDisplayComponent, CustomRichTextComponent, NgSelectModule, FormsModule, NgIf, NgSwitch, NgSwitchCase, FieldDefinitionComponent, NgSwitchDefault, NgFor, RouterLink, ClearGridFiltersButtonComponent, AgGridModule, SlicePipe]
 })
 export class OCTAM2Tier2DashboardComponent implements OnInit {
   @ViewChild("projectsGrid") projectsGrid: AgGridAngular;

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { AgGridAngular } from 'ag-grid-angular';
+import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { ColDef, GridApi } from 'ag-grid-community';
 import { UtilityFunctionsService } from 'src/app/services/utility-functions.service';
 import { PersonDto } from 'src/app/shared/generated/model/person-dto';
@@ -16,12 +16,18 @@ import { CustomDropdownFilterComponent } from 'src/app/shared/components/custom-
 import { environment } from 'src/environments/environment';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
+import { NgIf } from '@angular/common';
+import { ClearGridFiltersButtonComponent } from '../../../shared/components/clear-grid-filters-button/clear-grid-filters-button.component';
+import { CustomRichTextComponent } from '../../../shared/components/custom-rich-text/custom-rich-text.component';
+import { AlertDisplayComponent } from '../../../shared/components/alert-display/alert-display.component';
 
 
 @Component({
-  selector: 'hippocamp-project-list',
-  templateUrl: './project-list.component.html',
-  styleUrls: ['./project-list.component.scss']
+    selector: 'hippocamp-project-list',
+    templateUrl: './project-list.component.html',
+    styleUrls: ['./project-list.component.scss'],
+    standalone: true,
+    imports: [AlertDisplayComponent, CustomRichTextComponent, ClearGridFiltersButtonComponent, AgGridModule, NgIf]
 })
 export class ProjectListComponent implements OnInit {
   @ViewChild('projectsGrid') projectsGrid: AgGridAngular;

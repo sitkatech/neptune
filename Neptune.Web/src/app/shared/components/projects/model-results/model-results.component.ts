@@ -7,11 +7,18 @@ import { ProjectLoadReducingResultDto } from 'src/app/shared/generated/model/pro
 import { ProjectNetworkSolveHistorySimpleDto } from 'src/app/shared/generated/model/project-network-solve-history-simple-dto';
 import { TreatmentBMPUpsertDto } from 'src/app/shared/generated/model/treatment-bmp-upsert-dto';
 import { TreatmentBMPHRUCharacteristicsSummarySimpleDto } from 'src/app/shared/generated/model/treatment-bmphru-characteristics-summary-simple-dto';
+import { NeptuneModelingResultSigFigPipe } from '../../../pipes/neptune-modeling-result-sig-fig.pipe';
+import { FieldDefinitionComponent } from '../../field-definition/field-definition.component';
+import { FormsModule } from '@angular/forms';
+import { NgbAlert, NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLinkBase, NgbNavLink } from '@ng-bootstrap/ng-bootstrap';
+import { NgIf, NgFor, DecimalPipe, KeyValuePipe } from '@angular/common';
 
 @Component({
-  selector: 'hippocamp-model-results',
-  templateUrl: './model-results.component.html',
-  styleUrls: ['./model-results.component.scss']
+    selector: 'hippocamp-model-results',
+    templateUrl: './model-results.component.html',
+    styleUrls: ['./model-results.component.scss'],
+    standalone: true,
+    imports: [NgIf, NgbAlert, NgFor, FormsModule, NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLinkBase, NgbNavLink, FieldDefinitionComponent, DecimalPipe, KeyValuePipe, NeptuneModelingResultSigFigPipe]
 })
 export class ModelResultsComponent implements OnInit {
   public ModeledPerformanceDisplayTypeEnum = ModeledPerformanceDisplayTypeEnum;

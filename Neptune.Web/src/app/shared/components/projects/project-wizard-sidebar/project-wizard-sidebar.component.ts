@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLinkActive, RouterLink } from '@angular/router';
 import { forkJoin, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -11,11 +11,17 @@ import { ProjectUpsertDto } from '../../../generated/model/project-upsert-dto';
 import { TreatmentBMPUpsertDto } from '../../../generated/model/treatment-bmp-upsert-dto';
 import { ProjectService } from 'src/app/shared/generated/api/project.service';
 import { TreatmentBMPService } from 'src/app/shared/generated/api/treatment-bmp.service';
+import { ToggleStatusComponent } from '../../toggle-status/toggle-status.component';
+import { NgbAccordion, NgbPanel, NgbPanelHeader, NgbPanelToggle, NgbPanelContent } from '@ng-bootstrap/ng-bootstrap';
+import { ProgressIconComponent } from '../../progress-icon/progress-icon.component';
+import { NgIf, NgClass } from '@angular/common';
 
 @Component({
-  selector: 'hippocamp-project-wizard-sidebar',
-  templateUrl: './project-wizard-sidebar.component.html',
-  styleUrls: ['./project-wizard-sidebar.component.scss']
+    selector: 'hippocamp-project-wizard-sidebar',
+    templateUrl: './project-wizard-sidebar.component.html',
+    styleUrls: ['./project-wizard-sidebar.component.scss'],
+    standalone: true,
+    imports: [NgIf, RouterLinkActive, RouterLink, ProgressIconComponent, NgClass, NgbAccordion, NgbPanel, NgbPanelHeader, NgbPanelToggle, ToggleStatusComponent, NgbPanelContent]
 })
 export class ProjectWizardSidebarComponent implements OnInit, OnChanges, OnDestroy {
   @Input() projectModel: ProjectUpsertDto;

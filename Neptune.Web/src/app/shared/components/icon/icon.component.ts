@@ -1,9 +1,12 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'hippocamp-icon',
-  templateUrl: './icon.component.html',
-  styleUrls: ['./icon.component.scss']
+    selector: 'hippocamp-icon',
+    templateUrl: './icon.component.html',
+    styleUrls: ['./icon.component.scss'],
+    standalone: true,
+    imports: [NgIf]
 })
 
 /**

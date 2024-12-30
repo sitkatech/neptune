@@ -14,11 +14,19 @@ import { Alert } from 'src/app/shared/models/alert';
 import { AlertContext } from 'src/app/shared/models/enums/alert-context.enum';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { ConfirmService } from 'src/app/shared/services/confirm.service';
+import { GrantScoresComponent } from '../../../../shared/components/projects/grant-scores/grant-scores.component';
+import { AttachmentsDisplayComponent } from '../../../../shared/components/projects/attachments-display/attachments-display.component';
+import { ModelResultsComponent } from '../../../../shared/components/projects/model-results/model-results.component';
+import { TreatmentBmpMapEditorAndModelingAttributesComponent } from '../../../../shared/components/projects/project-map/project-map.component';
+import { NgIf, NgClass, DatePipe } from '@angular/common';
+import { CustomRichTextComponent } from '../../../../shared/components/custom-rich-text/custom-rich-text.component';
 
 @Component({
-  selector: 'hippocamp-review',
-  templateUrl: './review.component.html',
-  styleUrls: ['./review.component.scss']
+    selector: 'hippocamp-review',
+    templateUrl: './review.component.html',
+    styleUrls: ['./review.component.scss'],
+    standalone: true,
+    imports: [CustomRichTextComponent, NgIf, NgClass, TreatmentBmpMapEditorAndModelingAttributesComponent, ModelResultsComponent, AttachmentsDisplayComponent, GrantScoresComponent, DatePipe]
 })
 export class ReviewComponent implements OnInit {
 

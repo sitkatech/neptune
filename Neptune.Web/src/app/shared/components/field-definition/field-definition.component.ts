@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from "@angular/core";
-import { EditorComponent } from "@tinymce/tinymce-angular";
+import { EditorComponent, EditorModule } from "@tinymce/tinymce-angular";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import TinyMCEHelpers from "../../helpers/tiny-mce-helpers";
 import { Alert } from "../../models/alert";
@@ -10,6 +10,9 @@ import { PersonDto } from "../../generated/model/person-dto";
 import { NgbPopover } from "@ng-bootstrap/ng-bootstrap/popover/popover";
 import { FieldDefinitionService } from "../../generated/api/field-definition.service";
 import { FieldDefinitionTypeEnum } from "../../generated/enum/field-definition-type-enum";
+import { NgbPopover as NgbPopover_1 } from "@ng-bootstrap/ng-bootstrap";
+import { FormsModule } from "@angular/forms";
+import { NgIf, NgClass } from "@angular/common";
 
 declare var $: any;
 
@@ -17,6 +20,14 @@ declare var $: any;
     selector: "field-definition",
     templateUrl: "./field-definition.component.html",
     styleUrls: ["./field-definition.component.scss"],
+    standalone: true,
+    imports: [
+        NgIf,
+        EditorModule,
+        FormsModule,
+        NgbPopover_1,
+        NgClass,
+    ],
 })
 export class FieldDefinitionComponent implements OnInit {
     @Input() fieldDefinitionType: string;
