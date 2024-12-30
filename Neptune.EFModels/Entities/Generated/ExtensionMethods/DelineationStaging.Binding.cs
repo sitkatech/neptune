@@ -12,7 +12,7 @@ namespace Neptune.EFModels.Entities
         public static class FieldLengths
         {
             public const int TreatmentBMPName = 200;
-            public const int IsVerified = 20;
+            public const int DelineationStatus = 20;
         }
     }
 }

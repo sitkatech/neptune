@@ -325,7 +325,7 @@ namespace Neptune.WebMvc.Controllers
                 treatmentBMP.Delineation = new Delineation
                 {
                     HasDiscrepancies = false,
-                    IsVerified = delineationStaging.IsVerified?.Trim() == "Verified",
+                    IsVerified = delineationStaging.DelineationStatus?.Trim().ToLower() == "verified",
                     DelineationTypeID = (int) DelineationTypeEnum.Distributed,
                     TreatmentBMPID = treatmentBMP.TreatmentBMPID,
                     DateLastModified = DateTime.UtcNow,

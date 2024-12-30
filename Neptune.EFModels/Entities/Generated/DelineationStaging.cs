@@ -28,7 +28,7 @@ public partial class DelineationStaging
 
     [StringLength(20)]
     [Unicode(false)]
-    public string? IsVerified { get; set; }
+    public string? DelineationStatus { get; set; }
 
     [ForeignKey("StormwaterJurisdictionID")]
     [InverseProperty("DelineationStagings")]

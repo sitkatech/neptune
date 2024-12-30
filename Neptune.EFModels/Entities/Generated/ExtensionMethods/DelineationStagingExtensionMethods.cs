@@ -17,7 +17,7 @@ namespace Neptune.EFModels.Entities
                 UploadedByPersonID = delineationStaging.UploadedByPersonID,
                 TreatmentBMPName = delineationStaging.TreatmentBMPName,
                 StormwaterJurisdictionID = delineationStaging.StormwaterJurisdictionID,
-                IsVerified = delineationStaging.IsVerified
+                DelineationStatus = delineationStaging.DelineationStatus
             };
             return dto;
         }
