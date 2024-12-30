@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable, throwError as _throw } from "rxjs";
-import { BusyService } from "../busy/busy.service";
 import { AlertService } from "../alert.service";
 import { Alert } from "src/app/shared/models/alert";
 import { OAuthService } from "angular-oauth2-oidc";
@@ -12,21 +11,12 @@ import { AlertContext } from "../../models/enums/alert-context.enum";
 })
 export class ApiService {
     constructor(
-        private busyService: BusyService,
         private alertService: AlertService,
         private oauthService: OAuthService,
         private router: Router
     ) {}
 
-    handleError(
-        error: any,
-        supressErrorMessage = false,
-        clearBusyGlobally = true
-    ): Observable<any> {
-        if (clearBusyGlobally) {
-            this.busyService.setBusy(false);
-        }
-
+    handleError(error: any, supressErrorMessage = false): Observable<any> {
         if (!supressErrorMessage) {
             if (error && error.status === 401) {
                 this.alertService.pushAlert(
