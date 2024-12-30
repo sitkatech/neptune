@@ -68,13 +68,13 @@ namespace Neptune.WebMvc.Controllers
                 ModelState.AddModelError("FileResourceData",
                     "The file geodatabase contained no feature class. Please upload a file geodatabase containing exactly one feature class.");
             }
-            else if (featureClassNames.Count > 2)
+            else if (featureClassNames.Count > 1)
             {
                 ModelState.AddModelError("FileResourceData",
                     "The file geodatabase contained more than one feature class. Please upload a file geodatabase containing exactly one feature class.");
             }
 
-            var featureClassName = featureClassNames.First().LayerName;
+            var featureClassName = featureClassNames.Single().LayerName;
             //if (!OgrInfoCommandLineRunner.ConfirmAttributeExistsOnFeatureClass(
             //        new FileInfo(NeptuneWebConfiguration.OgrInfoExecutable),
             //        gdbFile,
