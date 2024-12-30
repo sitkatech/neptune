@@ -31,7 +31,6 @@ export class CustomRichTextComponent implements OnInit, AfterViewChecked {
     public isLoading: boolean = true;
     public isEditing: boolean = false;
     public isEmptyContent: boolean = false;
-    public watchUserChangeSubscription: any;
     public editedContent: string;
 
     currentUser: PersonDto;
