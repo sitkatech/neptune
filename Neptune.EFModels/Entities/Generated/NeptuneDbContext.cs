@@ -569,10 +569,6 @@ public partial class NeptuneDbContext : DbContext
         {
             entity.HasKey(e => e.OnlandVisualTrashAssessmentID).HasName("PK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentID");
 
-            entity.HasIndex(e => e.OnlandVisualTrashAssessmentAreaID, "CK_OnlandVisualTrashAssessment_AtMostOneTransectBackingAssessmentPerArea")
-                .IsUnique()
-                .HasFilter("([IsTransectBackingAssessment]=(1))");
-
             entity.HasOne(d => d.CreatedByPerson).WithMany(p => p.OnlandVisualTrashAssessments)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_OnlandVisualTrashAssessment_Person_CreatedByPersonID_PersonID");

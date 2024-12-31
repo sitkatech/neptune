@@ -40,7 +40,7 @@ namespace Neptune.WebMvc.Controllers
             var transectLineFeatureCollection = new FeatureCollection();
             var observationPointFeatureCollection = new FeatureCollection();
             var areas = _dbContext.OnlandVisualTrashAssessmentAreas
-                .Include(x => x.OnlandVisualTrashAssessment)
+                .Include(x => x.OnlandVisualTrashAssessments)
                 .Where(x => x.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID).ToList();
             var observations = _dbContext.OnlandVisualTrashAssessmentObservations
                 .Include(x => x.OnlandVisualTrashAssessmentObservationPhotos).ThenInclude(
@@ -56,7 +56,7 @@ namespace Neptune.WebMvc.Controllers
                 {
                     { "OVTAAreaName", area.OnlandVisualTrashAssessmentAreaName },
                     { "Description", area.AssessmentAreaDescription ?? null },
-                    { "CreatedOn", area.OnlandVisualTrashAssessment?.CreatedDate }
+                    { "CreatedOn", area.OnlandVisualTrashAssessments.FirstOrDefault()?.CreatedDate }
                 };
                 areaFeatureCollection.Add(new Feature(area.OnlandVisualTrashAssessmentAreaGeometry4326, attributesTable));
 
