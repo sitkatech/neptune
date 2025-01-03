@@ -20,6 +20,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         public ViewPageContentViewData VerificationNeptunePage { get; }
         public string BulkUploadWQMPUrl { get; }
         public string BulkUploadSimplifiedBMPs { get; }
+        public string BulkWqmpBoundaryFromAPNs { get; }
 
         public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage,
             IndexGridSpec indexGridSpec, EFModels.Entities.NeptunePage secondaryNeptunePage, WaterQualityManagementPlanVerificationGridSpec verificationGridSpec) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
@@ -49,6 +50,9 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             BulkUploadSimplifiedBMPs =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator,
                     x => x.UploadSimplifiedBMPs());
+            BulkWqmpBoundaryFromAPNs =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator,
+                    x => x.UploadWqmpBoundaryFromAPNs());
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using Neptune.WebMvc.Common;
+﻿using System.Net.Mail;
+using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.Shared;
@@ -19,16 +20,22 @@ using Neptune.WebMvc.Services;
 using Neptune.WebMvc.Services.Filters;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
+using Neptune.Common.Email;
+using DocumentFormat.OpenXml.Wordprocessing;
+using DocumentFormat.OpenXml.InkML;
 
 namespace Neptune.WebMvc.Controllers
 {
     public class WaterQualityManagementPlanController : NeptuneBaseController<WaterQualityManagementPlanController>
     {
         private readonly FileResourceService _fileResourceService;
+        private readonly SitkaSmtpClientService _sitkaSmtpClientService;
 
-        public WaterQualityManagementPlanController(NeptuneDbContext dbContext, ILogger<WaterQualityManagementPlanController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService) : base(dbContext, logger, linkGenerator, webConfiguration)
+
+        public WaterQualityManagementPlanController(NeptuneDbContext dbContext, ILogger<WaterQualityManagementPlanController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService, SitkaSmtpClientService sitkaSmtpClientService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
             _fileResourceService = fileResourceService;
+            _sitkaSmtpClientService = sitkaSmtpClientService;
         }
 
         [HttpGet]
@@ -944,6 +951,97 @@ namespace Neptune.WebMvc.Controllers
             var viewData = new UploadSimplifiedBMPsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, errorList, neptunePage,
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.UploadWqmps()));
             return RazorView<UploadSimplifiedBMPs, UploadSimplifiedBMPsViewData, UploadSimplifiedBMPsViewModel>(viewData,
+                viewModel);
+        }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public ViewResult UploadWqmpBoundaryFromAPNs()
+        {
+            var viewModel = new UploadWqmpBoundaryFromAPNsViewModel();
+            var errorList = new List<string>();
+            return ViewUploadWqmpBoundaryFromAPNs(viewModel, errorList);
+        }
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        [RequestSizeLimit(100_000_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
+        public async Task<IActionResult> UploadWqmpBoundaryFromAPNs(UploadWqmpBoundaryFromAPNsViewModel viewModel)
+        {
+            var uploadedCSVFile = viewModel.UploadCSV;
+            var wqmpBoundaries = WQMPAPNsCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), out var errorList , out var missingApnList, out var oldBoundaries);
+
+            if (errorList.Any())
+            {
+                return ViewUploadWqmpBoundaryFromAPNs(viewModel, errorList);
+            }
+
+            var wqmpBoundariesAdded = wqmpBoundaries.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
+            var wqmpBoundariesUpdated = wqmpBoundaries.Where(x => ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)).ToList();
+            await _dbContext.WaterQualityManagementPlanBoundaries.AddRangeAsync(wqmpBoundariesAdded);
+            await _dbContext.SaveChangesAsync();
+
+            // queue LGU refresh for area covered by all wqmp boundaries
+            var newBoundaryArea = wqmpBoundaries.Select(x => x.GeometryNative).ToList().UnionListGeometries();
+            var oldBoundaryArea = oldBoundaries.UnionListGeometries();
+            if (!(oldBoundaryArea == null && newBoundaryArea == null))
+            {
+                await ModelingEngineUtilities.QueueLGURefreshForArea(oldBoundaryArea, newBoundaryArea, _dbContext);
+            }
+            // mark each wqmp as dirty
+            var dirtyModelNodes = new List<DirtyModelNode>();
+            foreach (var wqmpBoundary in wqmpBoundaries)
+            {
+                var dirtyModelNode = new DirtyModelNode()
+                {
+                    CreateDate = DateTime.UtcNow,
+                    WaterQualityManagementPlanID = wqmpBoundary.WaterQualityManagementPlanID
+                };
+                dirtyModelNodes.Add(dirtyModelNode);
+            }
+            await _dbContext.DirtyModelNodes.AddRangeAsync(dirtyModelNodes);
+            await _dbContext.SaveChangesAsync();
+
+            var stormwaterJurisdiction = _dbContext.StormwaterJurisdictions.Include(x => x.Organization)
+                .Single(x => x.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID)
+                .GetOrganizationDisplayName();
+            var missingApnMailMessage = string.Empty;
+            if (missingApnList.Any())
+            {
+                missingApnMailMessage = $@"
+<br /><br />
+<div>The following APNs were not found in the system: {string.Join(", ", missingApnList.Distinct().OrderBy(x => x))}</div>
+";
+            }
+            var body = $@"
+<div>
+The WQMP Boundaries for Stormwater Jurisdiction {stormwaterJurisdiction} were successfully update from the parcel geometries of the provided valid APNs.
+{missingApnMailMessage}
+</div>
+";
+            var mailMessage = new MailMessage
+            {
+                Subject = "WQMP Boundary Upload from APN List",
+                Body = body,
+                IsBodyHtml = true,
+                From = new MailAddress(_webConfiguration.DoNotReplyEmail, "Orange County Stormwater Tools")
+            };
+            mailMessage.To.Add(CurrentPerson.Email);
+            await _sitkaSmtpClientService.Send(mailMessage);
+
+            var message = $"Upload Successful: {wqmpBoundariesAdded.Count} WQMP Boundaries added, {wqmpBoundariesUpdated.Count} WQMP Boundaries updated!";
+            SetMessageForDisplay(message);
+            return new RedirectResult(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
+        }
+
+        private ViewResult ViewUploadWqmpBoundaryFromAPNs(UploadWqmpBoundaryFromAPNsViewModel viewModel, List<string> errorList)
+        {
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WQMPBoundaryFromAPNList);
+            var viewData = new UploadWqmpBoundaryFromAPNsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, errorList, neptunePage,
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.UploadWqmps()),
+                StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
+            return RazorView<UploadWqmpBoundaryFromAPNs, UploadWqmpBoundaryFromAPNsViewData, UploadWqmpBoundaryFromAPNsViewModel>(viewData,
                 viewModel);
         }
     }
