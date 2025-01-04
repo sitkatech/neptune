@@ -37,7 +37,7 @@ import { ExpandCollapseDirective } from "src/app/shared/directives/expand-collap
 declare var $: any;
 
 @Component({
-    selector: "hippocamp-planning-map",
+    selector: "planning-map",
     templateUrl: "./planning-map.component.html",
     styleUrls: ["./planning-map.component.scss"],
     standalone: true,

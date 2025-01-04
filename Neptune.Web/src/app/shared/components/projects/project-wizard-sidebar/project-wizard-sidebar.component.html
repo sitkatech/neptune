@@ -16,7 +16,7 @@
 <div class="sidebar-card">
     <div class="card-body">
         <a [routerLink]="['instructions']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="icon-padding">
-            <hippocamp-progress-icon [isInformational]="true"></hippocamp-progress-icon>
+            <progress-icon [isInformational]="true"></progress-icon>
             Instructions
         </a>
     </div>
@@ -27,14 +27,14 @@
             [routerLinkActiveOptions]="{ exact: true }"
             [ngClass]="{ disabled: projectModel.ShareOCTAM2Tier2Scores }"
             class="icon-padding">
-            <hippocamp-progress-icon [isComplete]="isProjectBasicsComplete()"></hippocamp-progress-icon>
+            <progress-icon [isComplete]="isProjectBasicsComplete()"></progress-icon>
             Project Basics
         </a>
     </div>
     <div class="sidebar-card">
         <div class="card-body">
             <div class="icon-padding">
-                <hippocamp-progress-icon [isComplete]="isStormwaterTreatmentsComplete()"></hippocamp-progress-icon>
+                <progress-icon [isComplete]="isStormwaterTreatmentsComplete()"></progress-icon>
                 <span>Stormwater Treatments</span>
             </div>
         </div>
@@ -46,7 +46,7 @@
                     [routerLinkActiveOptions]="{ exact: true }"
                     class="icon-padding"
                     [ngClass]="{ disabled: !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores }">
-                    <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveModelingParameters()"></hippocamp-progress-icon>
+                    <progress-icon [isComplete]="doAllTreatmentBMPsHaveModelingParameters()"></progress-icon>
                     Treatment BMPs
                 </a>
             </div>
@@ -58,7 +58,7 @@
                     [routerLinkActiveOptions]="{ exact: true }"
                     class="icon-padding"
                     [ngClass]="{ disabled: !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs() }">
-                    <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveDelineations()"></hippocamp-progress-icon>
+                    <progress-icon [isComplete]="doAllTreatmentBMPsHaveDelineations()"></progress-icon>
                     Delineations
                 </a>
             </div>
@@ -70,7 +70,7 @@
                     [routerLinkActiveOptions]="{ exact: true }"
                     class="icon-padding"
                     [ngClass]="{ disabled: !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs() }">
-                    <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveCalculatedModelResults()"></hippocamp-progress-icon>
+                    <progress-icon [isComplete]="doAllTreatmentBMPsHaveCalculatedModelResults()"></progress-icon>
                     Modeled Performance and Grant Metrics
                 </a>
             </div>
@@ -79,14 +79,14 @@
 
     <div class="card-body" [ngClass]="{ 'not-allowed': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores }">
         <a [routerLink]="['attachments']" routerLinkActive="active" class="icon-padding" [ngClass]="{ disabled: !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores }">
-            <hippocamp-progress-icon [isComplete]="true"></hippocamp-progress-icon>
+            <progress-icon [isComplete]="true"></progress-icon>
             Attachments
         </a>
     </div>
 
     <div class="card-body" [ngClass]="{ 'not-allowed': !projectModel.ProjectName }">
         <a [routerLink]="['review-and-share']" routerLinkActive="active" class="icon-padding" [ngClass]="{ disabled: !projectModel.ProjectName }">
-            <hippocamp-progress-icon [isInformational]="true"></hippocamp-progress-icon>
+            <progress-icon [isInformational]="true"></progress-icon>
             Review and Share
         </a>
     </div>

@@ -16,7 +16,7 @@ import { CustomRichTextComponent } from "../../../../shared/components/custom-ri
 import { NgIf, NgClass } from "@angular/common";
 
 @Component({
-    selector: "hippocamp-project-attachments",
+    selector: "project-attachments",
     templateUrl: "./project-attachments.component.html",
     styleUrls: ["./project-attachments.component.scss"],
     standalone: true,

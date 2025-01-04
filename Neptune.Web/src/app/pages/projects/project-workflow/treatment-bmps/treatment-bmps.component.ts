@@ -39,7 +39,7 @@ import { NgIf, NgFor } from "@angular/common";
 declare var $: any;
 
 @Component({
-    selector: "hippocamp-treatment-bmps",
+    selector: "treatment-bmps",
     templateUrl: "./treatment-bmps.component.html",
     styleUrls: ["./treatment-bmps.component.scss"],
     standalone: true,

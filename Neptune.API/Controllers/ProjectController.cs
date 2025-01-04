@@ -35,7 +35,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("projects/{projectID}")]
         [UserViewFeature]
-        public ActionResult<ProjectSimpleDto> GetByID([FromRoute] int projectID)
+        public ActionResult<ProjectDto> GetByID([FromRoute] int projectID)
         {
             var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var projectDto = Projects.GetByIDAsDto(_dbContext, projectID);

@@ -1,16 +1,16 @@
 @use "/src/scss/abstracts" as *;
 
-$hippocamp-primary: $primary;
+$primary: $primary;
 $border-gray: $secondary;
 $background-gray: $muted;
-$hippocamp-orange: $neptune-orange;
+$orange: $neptune-orange;
 
 #filter-select-buttons input {
     display: none;
 }
 
 #filter-select-buttons {
-    background-color: $hippocamp-primary;
+    background-color: $primary;
     color: #fff;
     border: 1px solid $border-gray;
     border-radius: 5px;
@@ -33,7 +33,7 @@ $hippocamp-orange: $neptune-orange;
 }
 
 #filter-select-buttons label:hover {
-    color: $hippocamp-orange;
+    color: $orange;
 }
 
 #filter-select-buttons input:checked + label {

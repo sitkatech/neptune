@@ -22,7 +22,6 @@ export * from '././project-dto';
 export * from '././project-load-generating-result-dto';
 export * from '././project-load-reducing-result-dto';
 export * from '././project-network-solve-history-simple-dto';
-export * from '././project-simple-dto';
 export * from '././project-status-simple-dto';
 export * from '././project-upsert-dto';
 export * from '././role-simple-dto';

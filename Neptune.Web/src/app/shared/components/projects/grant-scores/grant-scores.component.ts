@@ -7,7 +7,7 @@ import { NgIf, DecimalPipe, PercentPipe } from "@angular/common";
 import { ProjectDto } from "src/app/shared/generated/model/project-dto";
 
 @Component({
-    selector: "hippocamp-grant-scores",
+    selector: "grant-scores",
     templateUrl: "./grant-scores.component.html",
     styleUrls: ["./grant-scores.component.scss"],
     standalone: true,

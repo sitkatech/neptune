@@ -24,7 +24,7 @@ import { ConfirmService } from "src/app/shared/services/confirm/confirm.service"
 import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
 
 @Component({
-    selector: "hippocamp-project-list",
+    selector: "project-list",
     templateUrl: "./project-list.component.html",
     styleUrls: ["./project-list.component.scss"],
     standalone: true,

@@ -1,20 +1,17 @@
-
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item" aria-current="page">
-        <a routerLink="/projects">Projects</a>
+            <a routerLink="/projects">Projects</a>
         </li>
-        <div *ngIf="projectModel?.ProjectName; then hasName else noName"></div>
+        <div *ngIf="projectModel?.ProjectName; then hasName; else noName"></div>
         <ng-template #hasName>
             <li class="breadcrumb-item active" aria-current="page">
                 {{ projectModel.ProjectName }}
             </li>
         </ng-template>
         <ng-template #noName>
-            <li class="breadcrumb-item active" aria-current="page">
-                Create New Project
-            </li>
-        </ng-template>       
+            <li class="breadcrumb-item active" aria-current="page">Create New Project</li>
+        </ng-template>
     </ol>
 </nav>
 
@@ -23,7 +20,7 @@
 <div class="container-fluid mt-4">
     <div class="row">
         <div class="col-md-3">
-            <hippocamp-project-wizard-sidebar [projectModel]="projectModel"></hippocamp-project-wizard-sidebar>
+            <project-wizard-sidebar [projectModel]="projectModel"></project-wizard-sidebar>
         </div>
         <div class="col-md-9">
             <router-outlet></router-outlet>

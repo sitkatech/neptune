@@ -560,17 +560,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectSimpleDto"
+                  "$ref": "#/components/schemas/ProjectDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectSimpleDto"
+                  "$ref": "#/components/schemas/ProjectDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectSimpleDto"
+                  "$ref": "#/components/schemas/ProjectDto"
                 }
               }
             }
@@ -3629,135 +3629,6 @@
           },
           "ErrorMessage": {
             "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ProjectSimpleDto": {
-        "type": "object",
-        "properties": {
-          "ProjectID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ProjectName": {
-            "type": "string",
-            "nullable": true
-          },
-          "OrganizationID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "StormwaterJurisdictionID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ProjectStatusID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "PrimaryContactPersonID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "CreatePersonID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "DateCreated": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "ProjectDescription": {
-            "type": "string",
-            "nullable": true
-          },
-          "AdditionalContactInformation": {
-            "type": "string",
-            "nullable": true
-          },
-          "DoesNotIncludeTreatmentBMPs": {
-            "type": "boolean"
-          },
-          "CalculateOCTAM2Tier2Scores": {
-            "type": "boolean"
-          },
-          "ShareOCTAM2Tier2Scores": {
-            "type": "boolean"
-          },
-          "OCTAM2Tier2ScoresLastSharedDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "OCTAWatersheds": {
-            "type": "string",
-            "nullable": true
-          },
-          "PollutantVolume": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "PollutantMetals": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "PollutantBacteria": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "PollutantNutrients": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "PollutantTSS": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "TPI": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "SEA": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "DryWeatherWQLRI": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "WetWeatherWQLRI": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "AreaTreatedAcres": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "ImperviousAreaTreatedAcres": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "UpdatePersonID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "DateUpdated": {
-            "type": "string",
-            "format": "date-time",
             "nullable": true
           }
         },

@@ -1,18 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
+import { Component, OnInit } from "@angular/core";
+import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 
 @Component({
-  selector: 'hippocamp-help',
-  templateUrl: './help.component.html',
-  styleUrls: ['./help.component.scss']
+    selector: "help",
+    templateUrl: "./help.component.html",
+    styleUrls: ["./help.component.scss"],
 })
 export class HelpComponent implements OnInit {
+    public richTextTypeID: number = NeptunePageTypeEnum.Help;
 
-  public richTextTypeID : number = NeptunePageTypeEnum.Help;
+    constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+    ngOnInit() {}
 }

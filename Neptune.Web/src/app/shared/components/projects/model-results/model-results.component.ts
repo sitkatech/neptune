@@ -5,23 +5,22 @@ import { ProjectNetworkSolveHistoryStatusTypeEnum } from "src/app/shared/generat
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
 import { ProjectLoadReducingResultDto } from "src/app/shared/generated/model/project-load-reducing-result-dto";
 import { ProjectNetworkSolveHistorySimpleDto } from "src/app/shared/generated/model/project-network-solve-history-simple-dto";
-import { TreatmentBMPUpsertDto } from "src/app/shared/generated/model/treatment-bmp-upsert-dto";
 import { TreatmentBMPHRUCharacteristicsSummarySimpleDto } from "src/app/shared/generated/model/treatment-bmphru-characteristics-summary-simple-dto";
 import { NeptuneModelingResultSigFigPipe } from "../../../pipes/neptune-modeling-result-sig-fig.pipe";
 import { FieldDefinitionComponent } from "../../field-definition/field-definition.component";
 import { FormsModule } from "@angular/forms";
-import { NgbAlert, NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLinkBase, NgbNavLink } from "@ng-bootstrap/ng-bootstrap";
+import { NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLinkBase, NgbNavLink } from "@ng-bootstrap/ng-bootstrap";
 import { NgIf, NgFor, DecimalPipe, KeyValuePipe } from "@angular/common";
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
+import { BtnGroupRadioInputComponent } from "../../inputs/btn-group-radio-input/btn-group-radio-input.component";
 
 @Component({
-    selector: "hippocamp-model-results",
+    selector: "model-results",
     templateUrl: "./model-results.component.html",
     styleUrls: ["./model-results.component.scss"],
     standalone: true,
     imports: [
         NgIf,
-        NgbAlert,
         NgFor,
         FormsModule,
         NgbNav,
@@ -33,6 +32,7 @@ import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment
         DecimalPipe,
         KeyValuePipe,
         NeptuneModelingResultSigFigPipe,
+        BtnGroupRadioInputComponent,
     ],
 })
 export class ModelResultsComponent implements OnInit {
@@ -56,6 +56,13 @@ export class ModelResultsComponent implements OnInit {
     @Input("delineations") delineations: Array<DelineationUpsertDto> = [];
     @Input("projectID") projectID: number;
 
+    public activeTab: string = "Total";
+    public tabs = [
+        { label: "Total", value: "Total" },
+        { label: "Dry", value: "Dry" },
+        { label: "Wet", value: "Wet" },
+    ];
+
     constructor(private projectService: ProjectService) {}
 
     ngOnInit(): void {
@@ -73,6 +80,14 @@ export class ModelResultsComponent implements OnInit {
                 this.populateModeledResultsOptions();
                 this.updateSelectedProjectLoadReducingResult();
             });
+        }
+    }
+
+    public setActiveTab(event) {
+        this.activeTab = event;
+        if (this.activeTab === "Total") {
+        } else if (this.activeTab === "Dry") {
+        } else if (this.activeTab === "Wet") {
         }
     }
 

@@ -26,12 +26,12 @@ import { OCTAM2Tier2DashboardComponent } from "./pages/grant-programs/octa-m2-ti
 import { OCTAGrantReviewerOnlyGuard } from "./shared/guards/unauthenticated-access/octa-grant-reviewer-only.guard";
 
 export const routeParams = {
-    definitionID: ":definitionID",
-    projectID: ":projectID",
+    definitionID: "definitionID",
+    projectID: "projectID",
 };
 
 export const routes: Routes = [
-    { path: `labels-and-definitions/${routeParams.definitionID}`, component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
+    { path: `labels-and-definitions/:${routeParams.definitionID}`, component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
     { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
     {
         path: "projects",
@@ -49,7 +49,7 @@ export const routes: Routes = [
                 ],
             },
             {
-                path: `edit/${routeParams.projectID}`,
+                path: `edit/:${routeParams.projectID}`,
                 component: ProjectWorkflowOutletComponent,
                 canActivate: [JurisdictionManagerOrEditorOnlyGuard],
                 children: [
@@ -69,7 +69,7 @@ export const routes: Routes = [
                     { path: "review-and-share", component: ReviewComponent },
                 ],
             },
-            { path: `${routeParams.projectID}`, component: ProjectDetailComponent },
+            { path: `:${routeParams.projectID}`, component: ProjectDetailComponent },
         ],
     },
     {

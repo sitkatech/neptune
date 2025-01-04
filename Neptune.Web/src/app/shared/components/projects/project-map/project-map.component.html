@@ -1,116 +1,109 @@
-<div class="row" *ngIf="(projectTreatmentBMPs != null && projectTreatmentBMPs.length > 0); else noTreatmentBMPs">
-    <div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9" [style.height]="mapHeight" style="overflow-y: auto;">
+<div class="grid-12" *ngIf="projectTreatmentBMPs != null && projectTreatmentBMPs.length > 0; else noTreatmentBMPs">
+    <div class="g-col-4" [style.height]="mapHeight" style="overflow-y: auto">
         <ul class="list-group">
-            <li class="list-group-item font-weight-bold" *ngFor="let treatmentBMP of projectTreatmentBMPs"
+            <li
+                class="list-group-item font-weight-bold"
+                *ngFor="let treatmentBMP of projectTreatmentBMPs"
                 [class.selected]="selectedListItem == treatmentBMP.TreatmentBMPID"
                 (click)="selectTreatmentBMP(treatmentBMP.TreatmentBMPID)">
-                {{treatmentBMP.TreatmentBMPName}}
-                <p class="small mb-0 mt-1">
-                    Type: {{treatmentBMP.TreatmentBMPTypeName}}
-                </p>
+                {{ treatmentBMP.TreatmentBMPName }}
+                <p class="small mb-0 mt-1">Type: {{ treatmentBMP.TreatmentBMPTypeName }}</p>
             </li>
         </ul>
     </div>
-    <div class="col-sm-8 col-md-9 col-sm-push-4 col-md-push-3">
-        <div id={{mapID}} class="location-card" [style.height]="mapHeight" [style.cursor]="''"></div>
+    <div class="g-col-8">
+        <div id="{{ mapID }}" class="location-card" [style.height]="mapHeight" [style.cursor]="''"></div>
     </div>
 </div>
 <div class="card mt-4" *ngIf="selectedTreatmentBMP">
     <div class="card-body bg-white">
-        <div class="row">
-            <div class="col-12">
-                <div class="row mt-2">
-                    <div class="col-lg-3 control-label font-weight-bold text-lg-right">
-                        <label>Name</label>
-                    </div>
-                    <div class="col-lg-9">
-                        {{selectedTreatmentBMP.TreatmentBMPName}}
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-lg-3 control-label font-weight-bold text-lg-right">
-                        <field-definition fieldDefinitionType="TreatmentBMPType"></field-definition>
-                    </div>
-                    <div class="col-lg-9">
-                        {{selectedTreatmentBMP.TreatmentBMPTypeName}}
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-lg-3 control-label d text-lg-right">
-                        <label><span class="font-weight-bold">Notes</span></label>
-                    </div>
-                    <div class="col-lg-9">
-                        {{selectedTreatmentBMP.Notes}}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xl-5">
-            <div class="row mt-3">
-                    <div class="col-12">
-                        <h5 class="border-bottom p-2">Location</h5>
-                    </div>
-                    <ng-container *ngIf="selectedTreatmentBMP.Latitude && selectedTreatmentBMP.Longitude; else noLocationSelected">
-                        <div class="col-sm-5 text-sm-right font-weight-bold mt-1">Latitude</div>
-                        <div class="col-sm-7">
-                            {{selectedTreatmentBMP.Latitude}}
-                        </div>
-                        <div class="col-sm-5 mt-1 font-weight-bold text-sm-right">Longitude</div>
-                        <div class="col-sm-7 mt-1">
-                            {{selectedTreatmentBMP.Longitude}}
-                        </div>
-                        <div class="col-sm-5 mt-1 font-weight-bold text-sm-right"><field-definition fieldDefinitionType="Area" [labelOverride]="'Delineation Area'"></field-definition></div>
-                        <div class="col-sm-7 mt-1" [class.font-italic]="!treatmentBMPHasDelineation(selectedTreatmentBMP.TreatmentBMPID)">
-                            {{getDelineationAreaForTreatmentBMP(selectedTreatmentBMP.TreatmentBMPID)}}
-                        </div>
+        <dl class="grid-12">
+            <dt class="g-col-3 control-label font-weight-bold text-lg-right">
+                <label>Name</label>
+            </dt>
+            <dd class="g-col-9">
+                {{ selectedTreatmentBMP.TreatmentBMPName }}
+            </dd>
+            <dt class="g-col-3 control-label font-weight-bold text-lg-right">
+                <field-definition fieldDefinitionType="TreatmentBMPType"></field-definition>
+            </dt>
+            <dd class="g-col-9">
+                {{ selectedTreatmentBMP.TreatmentBMPTypeName }}
+            </dd>
+            <dt class="g-col-3 control-label d text-lg-right">
+                <label><span class="font-weight-bold">Notes</span></label>
+            </dt>
+            <dd class="g-col-9">
+                {{ selectedTreatmentBMP.Notes }}
+            </dd>
+        </dl>
+        <div class="grid-12 mt-3">
+            <div class="g-col-5">
+                <h4 class="border-bottom p-2">Location</h4>
+                <ng-container *ngIf="selectedTreatmentBMP.Latitude && selectedTreatmentBMP.Longitude; else noLocationSelected">
+                    <dl class="grid-12">
+                        <dt class="g-col-5">Latitude</dt>
+                        <dd class="g-col-7">
+                            {{ selectedTreatmentBMP.Latitude }}
+                        </dd>
+                        <dt class="g-col-5">Longitude</dt>
+                        <dd class="g-col-7">
+                            {{ selectedTreatmentBMP.Longitude }}
+                        </dd>
+                        <dt class="g-col-5">
+                            <field-definition fieldDefinitionType="Area" [labelOverride]="'Delineation Area'"></field-definition>
+                        </dt>
+                        <dd class="g-col-7" [class.font-italic]="!treatmentBMPHasDelineation(selectedTreatmentBMP.TreatmentBMPID)">
+                            {{ getDelineationAreaForTreatmentBMP(selectedTreatmentBMP.TreatmentBMPID) }}
+                        </dd>
                         <ng-container *ngIf="selectedTreatmentBMP.WatershedName">
                             <div class="col-sm-5 mt-1 font-weight-bold text-sm-right">
                                 <field-definition [fieldDefinitionType]="'Watershed'"></field-definition>
                             </div>
-                            <div class="col-sm-7 mt-1">{{selectedTreatmentBMP.WatershedName}}</div>
+                            <div class="col-sm-7 mt-1">{{ selectedTreatmentBMP.WatershedName }}</div>
                         </ng-container>
-                    </ng-container>
-                    <ng-template #noLocationSelected>
-                        <div class="font-italic ml-3">
-                            Location details not yet provided.
-                        </div>
-                    </ng-template>
-                </div>
+                    </dl>
+                </ng-container>
+                <ng-template #noLocationSelected>
+                    <div class="font-italic ml-3">Location details not yet provided.</div>
+                </ng-template>
             </div>
-            <div class="col-xl-7">
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <h5 class="border-bottom p-2">Modeling Attributes</h5>
-                    </div>
-                </div>
+            <div class="g-col-7">
+                <h4 class="border-bottom p-2">Modeling Attributes</h4>
                 <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeName; else noTypeSelected">
                     <ng-container *ngIf="getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeName).length > 0; else modelingTypesNotApplicable">
-                        <div class="row p-2" *ngFor="let treatmentBMPModelingAttributeDefinitionDto of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeName)">
-                            <div class="col-sm-7 control-label font-weight-bold text-sm-right">
+                        <dl
+                            class="grid-12 p-2"
+                            *ngFor="let treatmentBMPModelingAttributeDefinitionDto of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeName)">
+                            <dt class="g-col-7">
                                 <field-definition [fieldDefinitionType]="treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName"></field-definition>
-                            </div>
-                            <div class="col-sm-5" *ngIf="isFieldWithDropdown(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName); else numericModelingAttributeField">
-                                {{getDropdownItemNameByFieldNameAndItemID(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName, selectedTreatmentBMP.TreatmentBMPModelingAttribute[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName])}}
-                            </div>
+                            </dt>
+                            <dd class="g-col-5" *ngIf="isFieldWithDropdown(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName); else numericModelingAttributeField">
+                                {{
+                                    getDropdownItemNameByFieldNameAndItemID(
+                                        treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName,
+                                        selectedTreatmentBMP.TreatmentBMPModelingAttribute[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]
+                                    )
+                                }}
+                            </dd>
                             <ng-template #numericModelingAttributeField>
-                                <div class="col-sm-5">
-                                    {{selectedTreatmentBMP.TreatmentBMPModelingAttribute[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName] | number}}
-                                    <span *ngIf="selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]">{{treatmentBMPModelingAttributeDefinitionDto.Units}}</span>
-                                </div>
+                                <dd class="g-col-5">
+                                    {{ selectedTreatmentBMP.TreatmentBMPModelingAttribute[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName] | number }}
+                                    <span *ngIf="selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]">{{
+                                        treatmentBMPModelingAttributeDefinitionDto.Units
+                                    }}</span>
+                                </dd>
                             </ng-template>
-                        </div>
+                        </dl>
                     </ng-container>
                 </ng-container>
                 <ng-template #noTypeSelected>
-                    <div class="font-italic">
-                        Modeling Attributes will display once a Treatment BMP Type is selected.
-                    </div>
+                    <div class="font-italic">Modeling Attributes will display once a Treatment BMP Type is selected.</div>
                 </ng-template>
                 <ng-template #modelingTypesNotApplicable>
                     <div class="font-italic">
                         No pollutant load or volume reduction will be calculated for this type of Treatment BMP therefore modeling attributes are not applicable.
-                     </div>
+                    </div>
                 </ng-template>
             </div>
         </div>

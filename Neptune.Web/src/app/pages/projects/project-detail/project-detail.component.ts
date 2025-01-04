@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { forkJoin } from "rxjs";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
@@ -17,10 +16,14 @@ import { AttachmentsDisplayComponent } from "../../../shared/components/projects
 import { ModelResultsComponent } from "../../../shared/components/projects/model-results/model-results.component";
 import { TreatmentBmpMapEditorAndModelingAttributesComponent } from "../../../shared/components/projects/project-map/project-map.component";
 import { FieldDefinitionComponent } from "../../../shared/components/field-definition/field-definition.component";
-import { NgIf, DatePipe } from "@angular/common";
+import { NgIf, DatePipe, AsyncPipe } from "@angular/common";
+import { routeParams } from "src/app/app.routes";
+import { Observable, combineLatest, map, of, forkJoin, switchMap } from "rxjs";
+import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
+import { AlertDisplayComponent } from "../../../shared/components/alert-display/alert-display.component";
 
 @Component({
-    selector: "hippocamp-project-detail",
+    selector: "project-detail",
     templateUrl: "./project-detail.component.html",
     styleUrls: ["./project-detail.component.scss"],
     standalone: true,
@@ -33,19 +36,22 @@ import { NgIf, DatePipe } from "@angular/common";
         AttachmentsDisplayComponent,
         GrantScoresComponent,
         DatePipe,
+        AsyncPipe,
+        PageHeaderComponent,
+        AlertDisplayComponent,
     ],
 })
 export class ProjectDetailComponent implements OnInit {
-    public projectID: number;
     private currentUser: PersonDto;
 
-    public project: ProjectDto;
-    public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
-    public delineations: Array<DelineationUpsertDto>;
-    public projectNetworkSolveHistories: Array<ProjectNetworkSolveHistorySimpleDto>;
-    public attachments: Array<ProjectDocumentDto>;
+    public currentProject$: Observable<ProjectDto>;
+    public treatmentBMPs$: Observable<Array<TreatmentBMPUpsertDto>>;
+    public delineations$: Observable<Array<DelineationUpsertDto>>;
+    public projectNetworkSolveHistories$: Observable<Array<ProjectNetworkSolveHistorySimpleDto>>;
+    public attachments$: Observable<Array<ProjectDocumentDto>>;
     public isReadOnly: boolean;
     public isCopyingProject = false;
+    public modeledResultsData$: Observable<ModeledResultsDto>;
 
     constructor(
         private authenticationService: AuthenticationService,
@@ -55,45 +61,50 @@ export class ProjectDetailComponent implements OnInit {
         private router: Router,
         private confirmService: ConfirmService,
         private alertService: AlertService
-    ) {
-        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    }
+    ) {}
 
     ngOnInit(): void {
+        this.currentProject$ = this.route.params.pipe(
+            switchMap((params) => {
+                return this.projectService.projectsProjectIDGet(params[routeParams.projectID]);
+            })
+        );
+
+        this.modeledResultsData$ = this.currentProject$.pipe(
+            switchMap((project) => {
+                return combineLatest({
+                    treatmentBMPs$: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(project.ProjectID),
+                    delineations$: this.projectService.projectsProjectIDDelineationsGet(project.ProjectID),
+                    projectNetworkSolveHistories$: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(project.ProjectID),
+                });
+            }),
+            map((value) => {
+                return {
+                    treatmentBMPs: value.treatmentBMPs$,
+                    delineations: value.delineations$,
+                    projectNetworkSolveHistories: value.projectNetworkSolveHistories$,
+                };
+            })
+        );
+
+        this.attachments$ = this.currentProject$.pipe(
+            switchMap((project) => {
+                return this.projectService.projectsProjectIDAttachmentsGet(project.ProjectID);
+            })
+        );
+
         this.authenticationService.getCurrentUser().subscribe((currentUser) => {
             this.currentUser = currentUser;
             this.isReadOnly = this.authenticationService.isUserUnassigned(currentUser);
-
-            const projectID = this.route.snapshot.paramMap.get("projectID");
-            if (projectID) {
-                this.projectID = parseInt(projectID);
-                forkJoin({
-                    project: this.projectService.projectsProjectIDGet(this.projectID),
-                    treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
-                    delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
-                    projectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID),
-                    attachments: this.projectService.projectsProjectIDAttachmentsGet(this.projectID),
-                }).subscribe(({ project, treatmentBMPs, delineations, projectNetworkSolveHistories, attachments }) => {
-                    this.treatmentBMPs = treatmentBMPs;
-                    this.delineations = delineations;
-                    this.projectNetworkSolveHistories = projectNetworkSolveHistories;
-                    this.project = project;
-                    this.attachments = attachments;
-                });
-            }
         });
     }
 
-    showModelResultsPanel(): boolean {
-        return !this.project?.DoesNotIncludeTreatmentBMPs && this.project?.HasModeledResults;
+    getWorkflowLink(project: ProjectDto) {
+        return `/projects/edit/${project.ProjectID}` + (project.ShareOCTAM2Tier2Scores ? "/review-and-share" : "");
     }
 
-    getWorkflowLink() {
-        return `/projects/edit/${this.projectID}` + (this.project.ShareOCTAM2Tier2Scores ? "/review-and-share" : "");
-    }
-
-    makeProjectCopy() {
-        const modalContents = `<p>Are you sure you want to copy project <b>${this.project.ProjectName}</b>?
+    makeProjectCopy(project: ProjectDto) {
+        const modalContents = `<p>Are you sure you want to copy project <b>${project.ProjectName}</b>?
       The new copy will be assigned the same name with the addition of <em>- Copy</em> and the current time and date. 
       You can change the name in the project editing workflow afterwards.</p>
       <p>Note: Model results and attachments will not be copied.</p>`;
@@ -102,7 +113,7 @@ export class ProjectDetailComponent implements OnInit {
             .then((confirmed) => {
                 if (confirmed) {
                     this.isCopyingProject = true;
-                    this.projectService.projectsProjectIDCopyPost(this.projectID).subscribe(
+                    this.projectService.projectsProjectIDCopyPost(project.ProjectID).subscribe(
                         (newProjectID) => {
                             this.router.navigateByUrl(`/projects/${newProjectID}`).then(() => {
                                 this.alertService.pushAlert(new Alert("Project successfully copied.", AlertContext.Success));
@@ -115,4 +126,10 @@ export class ProjectDetailComponent implements OnInit {
                 }
             });
     }
+}
+
+export interface ModeledResultsDto {
+    treatmentBMPs: Array<TreatmentBMPUpsertDto>;
+    delineations: Array<DelineationUpsertDto>;
+    projectNetworkSolveHistories: Array<ProjectNetworkSolveHistorySimpleDto>;
 }

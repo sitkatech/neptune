@@ -35,7 +35,7 @@ import { CustomRichTextComponent } from "../../../../shared/components/custom-ri
 declare var $: any;
 
 @Component({
-    selector: "hippocamp-modeled-performance",
+    selector: "modeled-performance",
     templateUrl: "./modeled-performance.component.html",
     styleUrls: ["./modeled-performance.component.scss"],
     standalone: true,

@@ -22,7 +22,7 @@ import { NgIf, NgClass, DatePipe } from "@angular/common";
 import { CustomRichTextComponent } from "../../../../shared/components/custom-rich-text/custom-rich-text.component";
 
 @Component({
-    selector: "hippocamp-review",
+    selector: "review",
     templateUrl: "./review.component.html",
     styleUrls: ["./review.component.scss"],
     standalone: true,

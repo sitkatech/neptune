@@ -11,7 +11,7 @@ import { NeptuneGridComponent } from "../../shared/components/neptune-grid/neptu
 import { PageHeaderComponent } from "../../shared/components/page-header/page-header.component";
 
 @Component({
-    selector: "hippocamp-field-definition-list",
+    selector: "field-definition-list",
     templateUrl: "./field-definition-list.component.html",
     styleUrls: ["./field-definition-list.component.scss"],
     standalone: true,

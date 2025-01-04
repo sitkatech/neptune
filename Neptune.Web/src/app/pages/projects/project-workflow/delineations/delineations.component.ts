@@ -29,7 +29,7 @@ import { CustomRichTextComponent } from "../../../../shared/components/custom-ri
 declare var $: any;
 
 @Component({
-    selector: "hippocamp-delineations",
+    selector: "delineations",
     templateUrl: "./delineations.component.html",
     styleUrls: ["./delineations.component.scss"],
     standalone: true,

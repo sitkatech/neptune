@@ -1,84 +1,81 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-import { OrganizationSimpleDto } from 'src/app/shared/generated/model/organization-simple-dto';
-import { ProjectUpsertDto } from 'src/app/shared/generated/model/project-upsert-dto';
-import { ProjectWorkflowService } from 'src/app/services/project-workflow.service';
-import { Subscription } from 'rxjs/internal/Subscription';
-import { ProjectService } from 'src/app/shared/generated/api/project.service';
-import { PersonDto, ProjectDto, StormwaterJurisdictionDto } from 'src/app/shared/generated/model/models';
-import { ProjectWizardSidebarComponent } from '../../../shared/components/projects/project-wizard-sidebar/project-wizard-sidebar.component';
-import { AlertDisplayComponent } from '../../../shared/components/alert-display/alert-display.component';
-import { NgIf } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from "@angular/router";
+import { AuthenticationService } from "src/app/services/authentication.service";
+import { OrganizationSimpleDto } from "src/app/shared/generated/model/organization-simple-dto";
+import { ProjectUpsertDto } from "src/app/shared/generated/model/project-upsert-dto";
+import { ProjectWorkflowService } from "src/app/services/project-workflow.service";
+import { Subscription } from "rxjs/internal/Subscription";
+import { ProjectService } from "src/app/shared/generated/api/project.service";
+import { PersonDto, ProjectDto, StormwaterJurisdictionDto } from "src/app/shared/generated/model/models";
+import { ProjectWizardSidebarComponent } from "../../../shared/components/projects/project-wizard-sidebar/project-wizard-sidebar.component";
+import { AlertDisplayComponent } from "../../../shared/components/alert-display/alert-display.component";
+import { NgIf } from "@angular/common";
 
 @Component({
-    selector: 'hippocamp-project-workflow-outlet',
-    templateUrl: './project-workflow-outlet.component.html',
-    styleUrls: ['./project-workflow-outlet.component.scss'],
+    selector: "project-workflow-outlet",
+    templateUrl: "./project-workflow-outlet.component.html",
+    styleUrls: ["./project-workflow-outlet.component.scss"],
     standalone: true,
-    imports: [RouterLink, NgIf, AlertDisplayComponent, ProjectWizardSidebarComponent, RouterOutlet]
+    imports: [RouterLink, NgIf, AlertDisplayComponent, ProjectWizardSidebarComponent, RouterOutlet],
 })
 export class ProjectWorkflowOutletComponent implements OnInit {
+    public currentUser: PersonDto;
 
-  
-  public currentUser: PersonDto;
+    private workflowUpdateSubscription: Subscription;
 
-  private workflowUpdateSubscription: Subscription;
-  
-  public projectID: number;
-  public projectModel: ProjectUpsertDto;
-  public organizations: Array<OrganizationSimpleDto>;
-  public stormwaterJurisdictions: Array<StormwaterJurisdictionDto>;
-  public isLoadingSubmit = false;
+    public projectID: number;
+    public projectModel: ProjectUpsertDto;
+    public organizations: Array<OrganizationSimpleDto>;
+    public stormwaterJurisdictions: Array<StormwaterJurisdictionDto>;
+    public isLoadingSubmit = false;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private cdr: ChangeDetectorRef,
-    private authenticationService: AuthenticationService,
-    private projectService: ProjectService,
-    private projectWorkflowService: ProjectWorkflowService
-  ) { }
+    constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private cdr: ChangeDetectorRef,
+        private authenticationService: AuthenticationService,
+        private projectService: ProjectService,
+        private projectWorkflowService: ProjectWorkflowService
+    ) {}
 
-  ngOnInit(): void {
-    this.authenticationService.getCurrentUser().subscribe(currentUser => {
-      this.currentUser = currentUser;
-      
-      this.projectModel = new ProjectUpsertDto();
-      this.parseURLForProjectIDAndGetEntitiesIfPresent();
+    ngOnInit(): void {
+        this.authenticationService.getCurrentUser().subscribe((currentUser) => {
+            this.currentUser = currentUser;
 
-      this.workflowUpdateSubscription = this.projectWorkflowService.workflowUpdate.subscribe(() => {
-        this.parseURLForProjectIDAndGetEntitiesIfPresent();
-      })
+            this.projectModel = new ProjectUpsertDto();
+            this.parseURLForProjectIDAndGetEntitiesIfPresent();
 
-      this.cdr.detectChanges();
-    });
-  }
+            this.workflowUpdateSubscription = this.projectWorkflowService.workflowUpdate.subscribe(() => {
+                this.parseURLForProjectIDAndGetEntitiesIfPresent();
+            });
 
-  ngOnDestroy() {
-    this.cdr.detach();
-  }
-
-  private parseURLForProjectIDAndGetEntitiesIfPresent() {
-    const projectID = this.route.snapshot.paramMap.get("projectID");
-      if (projectID) {
-        this.projectID = parseInt(projectID);
-        this.projectService.projectsProjectIDGet(this.projectID).subscribe(project => {
-          this.mapProjectSimpleDtoToProjectModel(project);
+            this.cdr.detectChanges();
         });
-      }
-  }
+    }
 
-  private mapProjectSimpleDtoToProjectModel(project: ProjectDto) {
-    this.projectModel.ProjectName = project.ProjectName;
-    this.projectModel.OrganizationID = project.OrganizationID;
-    this.projectModel.StormwaterJurisdictionID = project.StormwaterJurisdictionID;
-    this.projectModel.PrimaryContactPersonID = project.PrimaryContactPersonID;
-    this.projectModel.ProjectDescription = project.ProjectDescription;
-    this.projectModel.AdditionalContactInformation = project.AdditionalContactInformation;
-    this.projectModel.DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
-    this.projectModel.CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores;
-    this.projectModel.ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores;
-  }
+    ngOnDestroy() {
+        this.cdr.detach();
+    }
 
+    private parseURLForProjectIDAndGetEntitiesIfPresent() {
+        const projectID = this.route.snapshot.paramMap.get("projectID");
+        if (projectID) {
+            this.projectID = parseInt(projectID);
+            this.projectService.projectsProjectIDGet(this.projectID).subscribe((project) => {
+                this.mapProjectSimpleDtoToProjectModel(project);
+            });
+        }
+    }
+
+    private mapProjectSimpleDtoToProjectModel(project: ProjectDto) {
+        this.projectModel.ProjectName = project.ProjectName;
+        this.projectModel.OrganizationID = project.OrganizationID;
+        this.projectModel.StormwaterJurisdictionID = project.StormwaterJurisdictionID;
+        this.projectModel.PrimaryContactPersonID = project.PrimaryContactPersonID;
+        this.projectModel.ProjectDescription = project.ProjectDescription;
+        this.projectModel.AdditionalContactInformation = project.AdditionalContactInformation;
+        this.projectModel.DoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
+        this.projectModel.CalculateOCTAM2Tier2Scores = project.CalculateOCTAM2Tier2Scores;
+        this.projectModel.ShareOCTAM2Tier2Scores = project.ShareOCTAM2Tier2Scores;
+    }
 }

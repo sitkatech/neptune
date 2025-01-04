@@ -20,7 +20,7 @@ import { CustomRichTextComponent } from "../../../../shared/components/custom-ri
 import { NgIf, NgClass } from "@angular/common";
 
 @Component({
-    selector: "hippocamp-project-basics",
+    selector: "project-basics",
     templateUrl: "./project-basics.component.html",
     styleUrls: ["./project-basics.component.scss"],
     standalone: true,

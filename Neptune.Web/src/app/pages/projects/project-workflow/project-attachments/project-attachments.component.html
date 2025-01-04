@@ -104,11 +104,11 @@
     </div>
 
     <ng-container *ngIf="attachments && attachments.length > 0">
-        <hippocamp-attachments-display
+        <attachments-display
             [attachments]="attachments"
             [readOnly]="false"
             (onDeleteTriggered)="launchDeleteModal(deleteAttachmentModal, $event)"
-            (onEditTriggered)="launchEditModal(editAttachmentModal, $event)"></hippocamp-attachments-display>
+            (onEditTriggered)="launchEditModal(editAttachmentModal, $event)"></attachments-display>
     </ng-container>
 
     <div class="row m-1 mt-3">

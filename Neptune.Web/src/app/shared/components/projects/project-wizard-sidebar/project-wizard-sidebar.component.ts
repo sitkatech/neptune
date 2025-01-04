@@ -16,7 +16,7 @@ import { NgIf, NgClass } from "@angular/common";
 import { ExpandCollapseDirective } from "src/app/shared/directives/expand-collapse.directive";
 
 @Component({
-    selector: "hippocamp-project-wizard-sidebar",
+    selector: "project-wizard-sidebar",
     templateUrl: "./project-wizard-sidebar.component.html",
     styleUrls: ["./project-wizard-sidebar.component.scss"],
     standalone: true,

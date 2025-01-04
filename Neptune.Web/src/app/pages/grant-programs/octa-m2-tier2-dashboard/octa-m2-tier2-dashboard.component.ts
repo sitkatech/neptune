@@ -38,7 +38,7 @@ import { ExpandCollapseDirective } from "src/app/shared/directives/expand-collap
 declare var $: any;
 
 @Component({
-    selector: "hippocamp-octa-m2-tier2-dashboard",
+    selector: "octa-m2-tier2-dashboard",
     templateUrl: "./octa-m2-tier2-dashboard.component.html",
     styleUrls: ["./octa-m2-tier2-dashboard.component.scss"],
     standalone: true,

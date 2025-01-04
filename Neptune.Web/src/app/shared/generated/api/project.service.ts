@@ -27,7 +27,6 @@ import { ProjectDto } from '../model/project-dto';
 import { ProjectLoadGeneratingResultDto } from '../model/project-load-generating-result-dto';
 import { ProjectLoadReducingResultDto } from '../model/project-load-reducing-result-dto';
 import { ProjectNetworkSolveHistorySimpleDto } from '../model/project-network-solve-history-simple-dto';
-import { ProjectSimpleDto } from '../model/project-simple-dto';
 import { ProjectUpsertDto } from '../model/project-upsert-dto';
 import { TreatmentBMPHRUCharacteristicsSummarySimpleDto } from '../model/treatment-bmphru-characteristics-summary-simple-dto';
 
@@ -797,9 +796,9 @@ export class ProjectService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectsProjectIDGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<ProjectSimpleDto>;
-    public projectsProjectIDGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectSimpleDto>>;
-    public projectsProjectIDGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectSimpleDto>>;
+    public projectsProjectIDGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<ProjectDto>;
+    public projectsProjectIDGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectDto>>;
+    public projectsProjectIDGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectDto>>;
     public projectsProjectIDGet(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (projectID === null || projectID === undefined) {
@@ -823,7 +822,7 @@ export class ProjectService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ProjectSimpleDto>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}`,
+        return this.httpClient.get<ProjectDto>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

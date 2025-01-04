@@ -1,23 +1,21 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { DecimalPipe } from "@angular/common";
 
 @Component({
-    selector: 'hippocamp-octa-prioritization-detail-popup',
-    templateUrl: './octa-prioritization-detail-popup.component.html',
-    styleUrls: ['./octa-prioritization-detail-popup.component.scss'],
+    selector: "octa-prioritization-detail-popup",
+    templateUrl: "./octa-prioritization-detail-popup.component.html",
+    styleUrls: ["./octa-prioritization-detail-popup.component.scss"],
     standalone: true,
-    imports: [DecimalPipe]
+    imports: [DecimalPipe],
 })
 export class OctaPrioritizationDetailPopupComponent implements OnInit {
-  constructor(private cdr: ChangeDetectorRef) { }
+    constructor(private cdr: ChangeDetectorRef) {}
 
-  public feature : any;
-  
-  ngOnInit() {
-  }
+    public feature: any;
 
-  public detectChanges() : void{
-    this.cdr.detectChanges();
-  } 
+    ngOnInit() {}
 
+    public detectChanges(): void {
+        this.cdr.detectChanges();
+    }
 }

@@ -39,7 +39,6 @@ model/project-dto.ts
 model/project-load-generating-result-dto.ts
 model/project-load-reducing-result-dto.ts
 model/project-network-solve-history-simple-dto.ts
-model/project-simple-dto.ts
 model/project-status-simple-dto.ts
 model/project-upsert-dto.ts
 model/role-simple-dto.ts
