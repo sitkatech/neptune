@@ -1,33 +1,13 @@
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">Labels and Definitions</li>
-    </ol>
-</nav>
-<div class="container">
+<page-header [customRichTextTypeID]="richTextTypeID" pageTitle="Labels and Definitions"></page-header>
+
+<div class="page-body">
     <app-alert-display></app-alert-display>
 
-    <div class="row mb-0">
-        <div class="col">
-            <h2 class="d-inline-block">Labels and Definitions</h2>
-        </div>
-    </div>
-    <div class="row mt-1">
-        <div class="col">
-            <custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
-        </div>
-    </div>
-    <div class="row pt-0 mt-0">
-        <div class="col-auto mr-auto mb-3">&nbsp;</div>
-        <div class="col-auto mt-0 pt-0">
-            <hippocamp-clear-grid-filters-button class="m-2" [grid]="fieldDefinitionsGrid">
-            </hippocamp-clear-grid-filters-button>
-        </div>
-    </div>
+    <neptune-grid
+        height="800px"
+        [rowData]="fieldDefinitions"
+        [columnDefs]="columnDefs"
+        downloadFileName="field-definitions"
+        [pagination]="true"
+        [sizeColumnsToFitGrid]="true"></neptune-grid>
 </div>
-<div class="container">
-    <div class="table-responsive">
-        <ag-grid-angular #fieldDefinitionsGrid style="width: 100%; height: 800px;" class="ag-theme-balham" [rowData]="rowData"
-            [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]="100" [suppressMenuHide]="true">
-        </ag-grid-angular>
-    </div>
-</div>  

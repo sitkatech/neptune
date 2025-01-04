@@ -16,6 +16,7 @@ import { AuthInterceptor } from "./shared/interceptors/auth-interceptor";
 import { CookieService } from "ngx-cookie-service";
 import { CookieStorageService } from "./shared/services/cookies/cookie-storage.service";
 import { OAuthStorage, OAuthModule } from "angular-oauth2-oidc";
+import { PhonePipe } from "./shared/pipes/phone.pipe";
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -63,6 +64,7 @@ export const appConfig: ApplicationConfig = {
         DecimalPipe,
         CurrencyPipe,
         DatePipe,
+        PhonePipe,
         {
             provide: OAuthStorage,
             useClass: CookieStorageService,

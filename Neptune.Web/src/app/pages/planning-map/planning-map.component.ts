@@ -15,7 +15,7 @@ import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { PrioritizationMetric } from "src/app/shared/models/prioritization-metric";
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { OctaPrioritizationDetailPopupComponent } from "src/app/shared/components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component";
-import { ColDef } from "ag-grid-community";
+import { ColDef, GridApi, GridReadyEvent } from "ag-grid-community";
 import { LinkRendererComponent } from "src/app/shared/components/ag-grid/link-renderer/link-renderer.component";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { AgGridAngular, AgGridModule } from "ag-grid-angular";
@@ -33,6 +33,7 @@ import { FormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { CustomRichTextComponent } from "../../shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "../../shared/components/alert-display/alert-display.component";
+import { NeptuneGridComponent } from "../../shared/components/neptune-grid/neptune-grid.component";
 
 declare var $: any;
 
@@ -56,6 +57,7 @@ declare var $: any;
         ClearGridFiltersButtonComponent,
         AgGridModule,
         SlicePipe,
+        NeptuneGridComponent,
     ],
 })
 export class PlanningMapComponent implements OnInit {
@@ -71,6 +73,7 @@ export class PlanningMapComponent implements OnInit {
     public relatedTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
     public selectedDelineation: DelineationDto;
     public selectedProject: ProjectDto;
+    public gridApi: GridApi;
 
     public mapID: string = "planningMap";
     public mapHeight = window.innerHeight - window.innerHeight * 0.2 + "px";
@@ -179,7 +182,7 @@ export class PlanningMapComponent implements OnInit {
                     headerComponentParams: { fieldDefinitionType: "Jurisdiction" },
                     field: "StormwaterJurisdiction.Organization.OrganizationName",
                 },
-                this.utilityFunctionsService.createDateColumnDef("Date Created", "DateCreated", "M/d/yyyy", 120),
+                this.utilityFunctionsService.createDateColumnDef("Date Created", "DateCreated", "M/d/yyyy", { Width: 120 }),
                 { headerName: "Project Description", field: "ProjectDescription" },
             ];
 
@@ -584,5 +587,9 @@ export class PlanningMapComponent implements OnInit {
 
     public ocstBaseUrl(): string {
         return environment.ocStormwaterToolsBaseUrl;
+    }
+
+    public onGridReady(event: GridReadyEvent) {
+        this.gridApi = event.api;
     }
 }

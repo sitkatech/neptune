@@ -1,25 +1,46 @@
-@import "src/scss/_variables.scss";
+@use "/src/scss/abstracts" as *;
 
-.waterYearToDisplay{
-    width: 80% !important; padding:3px !important;
+.site-footer {
+    background-color: $primary;
+    font-size: $type-size-200;
+    color: $white;
+    padding: 2rem;
+
+    .credits {
+        @include desktop-small {
+            grid-column: 4 / span 6;
+            text-align: center;
+        }
+    }
+
+    .copy-3 {
+        line-height: 1.5em;
+    }
+
+    .ck {
+        a {
+            color: unset;
+        }
+    }
+
+    .btn-secondary-outline {
+        color: $white;
+        border-color: $white;
+
+        &:hover {
+            background: $white;
+            color: $primary;
+        }
+    }
 }
 
-.helper {
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
+custom-rich-text a {
+    color: $white;
 }
 
-.page-content {
-    margin-top: $header-nav-after-height
-}
-
-header-nav::after{
-    content: '';
-    background-image: linear-gradient(to bottom, $header-gradient-start 0%, $header-gradient-end 100%);
-    padding: 10px;
-    width: 100%;
-    height:$header-nav-after-height;    
-    position:absolute;
-    z-index: -1;
+.system-info {
+    display: flex;
+    gap: 2rem;
+    color: #fff;
+    justify-content: center;
 }

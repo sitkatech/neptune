@@ -1,4 +1,4 @@
-import { ApplicationRef, ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
+import { ApplicationRef, ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { forkJoin } from "rxjs";
 import * as L from "leaflet";
 import "leaflet-gesture-handling";
@@ -14,10 +14,10 @@ import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { PrioritizationMetric } from "src/app/shared/models/prioritization-metric";
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { OctaPrioritizationDetailPopupComponent } from "src/app/shared/components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component";
-import { ColDef } from "ag-grid-community";
+import { ColDef, GridApi, GridReadyEvent } from "ag-grid-community";
 import { LinkRendererComponent } from "src/app/shared/components/ag-grid/link-renderer/link-renderer.component";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
-import { AgGridAngular, AgGridModule } from "ag-grid-angular";
+import { AgGridModule } from "ag-grid-angular";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
@@ -26,14 +26,16 @@ import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
-import { ClearGridFiltersButtonComponent } from "../../../shared/components/clear-grid-filters-button/clear-grid-filters-button.component";
 import { RouterLink } from "@angular/router";
 import { FieldDefinitionComponent } from "../../../shared/components/field-definition/field-definition.component";
 import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, NgFor, SlicePipe } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
-import { CustomRichTextComponent } from "../../../shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "../../../shared/components/alert-display/alert-display.component";
+import { NeptuneGridComponent } from "../../../shared/components/neptune-grid/neptune-grid.component";
+import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
+import { IconComponent } from "../../../shared/components/icon/icon.component";
+import { ExpandCollapseDirective } from "src/app/shared/directives/expand-collapse.directive";
 
 declare var $: any;
 
@@ -44,7 +46,6 @@ declare var $: any;
     standalone: true,
     imports: [
         AlertDisplayComponent,
-        CustomRichTextComponent,
         NgSelectModule,
         FormsModule,
         NgIf,
@@ -54,14 +55,15 @@ declare var $: any;
         NgSwitchDefault,
         NgFor,
         RouterLink,
-        ClearGridFiltersButtonComponent,
         AgGridModule,
         SlicePipe,
+        NeptuneGridComponent,
+        PageHeaderComponent,
+        IconComponent,
+        ExpandCollapseDirective,
     ],
 })
 export class OCTAM2Tier2DashboardComponent implements OnInit {
-    @ViewChild("projectsGrid") projectsGrid: AgGridAngular;
-
     private currentUser: PersonDto;
     public richTextTypeID = NeptunePageTypeEnum.OCTAM2Tier2GrantProgramDashboard;
 
@@ -73,6 +75,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     public relateedTreatmentBMPsToDisplay: Array<TreatmentBMPDisplayDto>;
     public selectedDelineation: DelineationDto;
     public selectedProject: ProjectDto;
+    public gridApi: GridApi;
 
     public mapID: string = "planningMap";
     public mapHeight = window.innerHeight - window.innerHeight * 0.2 + "px";
@@ -162,20 +165,13 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
                     headerComponentParams: { fieldDefinitionType: "Jurisdiction" },
                     field: "StormwaterJurisdiction.Organization.OrganizationName",
                 },
-                this.utilityFunctionsService.createDateColumnDef("Last Shared On", "OCTAM2Tier2ScoresLastSharedDate", "short", 140),
-                this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition("AreaTreatedAcres", "AreaTreatedAcres", "Area", "Area Treated (ac)", null, 2),
-                this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition(
-                    "ImperviousAreaTreatedAcres",
-                    "ImperviousAreaTreatedAcres",
-                    "ImperviousArea",
-                    "Impervious Area Treated (ac)",
-                    220,
-                    2
-                ),
-                this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition("SEAScore", "SEA", "SEAScore", "SEA Score", 90, 2),
-                this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition("TPIScore", "TPI", "TPIScore", "TPI Score", 90, 2),
-                this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition("WQLRI", "DryWeatherWQLRI", "WQLRI", "Dry Weather WQLRI", null, 2),
-                this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition("WQLRI", "WetWeatherWQLRI", "WQLRI", "Wet Weather WQLRI", null, 2),
+                this.utilityFunctionsService.createDateColumnDef("Last Shared On", "OCTAM2Tier2ScoresLastSharedDate", "short", { Width: 140 }),
+                this.utilityFunctionsService.createDecimalColumnDef("Area Treated (ac)", "Area"),
+                this.utilityFunctionsService.createDecimalColumnDef("Impervious Area Treated (ac)", "ImperviousArea", { Width: 220 }),
+                this.utilityFunctionsService.createDecimalColumnDef("SEA Score", "SEA", { Width: 90 }),
+                this.utilityFunctionsService.createDecimalColumnDef("TPI Score", "TPI", { Width: 90 }),
+                this.utilityFunctionsService.createDecimalColumnDef("Dry Weather WQLRI", "DryWeatherWQLRI"),
+                this.utilityFunctionsService.createDecimalColumnDef("Wet Weather WQLRI", "WetWeatherWQLRI"),
             ];
 
             this.defaultColDef = {
@@ -498,13 +494,13 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         });
         this.map.fitBounds(featureGroupForZoom.getBounds(), { padding: new L.Point(50, 50) });
 
-        this.projectsGrid.api.forEachNode((node) => {
+        this.gridApi.forEachNode((node) => {
             if (node.data.ProjectID === projectID) {
                 node.setSelected(true);
                 var rowIndex = node.rowIndex;
                 //I am honestly kind of flabbergasted that ag-grid doesn't tell me what page the node is on
-                this.projectsGrid.api.paginationGoToPage(Math.floor(rowIndex / this.paginationPageSize));
-                this.projectsGrid.api.ensureIndexVisible(node.rowIndex);
+                this.gridApi.paginationGoToPage(Math.floor(rowIndex / this.paginationPageSize));
+                this.gridApi.ensureIndexVisible(node.rowIndex);
             }
         });
     }
@@ -537,7 +533,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     }
 
     public onSelectionChanged() {
-        const selectedNode = this.projectsGrid.api.getSelectedNodes()[0];
+        const selectedNode = this.gridApi.getSelectedNodes()[0];
         // If we have no selected node or our node has already been selected so we can stop infinite looping
         if (!selectedNode || (this.selectedProject != null && this.selectedProject.ProjectID == selectedNode.data.ProjectID)) {
             return;
@@ -555,11 +551,6 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     public getRelatedBMPsToShow() {
         let selectedTreatmentBMPID = this.selectedTreatmentBMP?.TreatmentBMPID;
         return this.relatedTreatmentBMPs.filter((x) => x.TreatmentBMPID != selectedTreatmentBMPID);
-    }
-
-    public exportProjectGridToCsv() {
-        let columnIDs = this.projectsGrid.columnApi.getAllGridColumns().map((x) => x.getColId());
-        this.utilityFunctionsService.exportGridToCsv(this.projectsGrid, "OCTA-M2-Tier2-projects" + ".csv", columnIDs);
     }
 
     public downloadProjectModelResults() {
@@ -602,5 +593,9 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
 
     public ocstBaseUrl(): string {
         return environment.ocStormwaterToolsBaseUrl;
+    }
+
+    public onGridReady(event: GridReadyEvent) {
+        this.gridApi = event.api;
     }
 }

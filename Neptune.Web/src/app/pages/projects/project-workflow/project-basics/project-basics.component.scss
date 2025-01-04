@@ -1,4 +1,4 @@
-@import "src/scss/_variables.scss";
+@use "/src/scss/abstracts" as *;
 
 .field-invalid {
     border: 1px solid $danger;

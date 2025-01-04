@@ -1,10 +1,23 @@
-<div class="modal-header pt-3">
-    <h5 class="modal-title text-white no-wrap">{{ options.title }}</h5>
+<div class="modal-header">
+    <h2 class="section-title">
+        <icon [icon]="modalContext.icon" class="confirmation-icon" *ngIf="modalContext.icon"></icon>
+        <icon [icon]="'Warning'" class="default-confirmation-icon" *ngIf="!modalContext.icon"></icon>
+        {{ modalContext.title }}
+    </h2>
+    <button type="button" class="close" (click)="close()">
+        <i class="fa fa-times-circle"></i>
+    </button>
 </div>
+
 <div class="modal-body">
-    <div [innerHtml]="this.sanitizer.bypassSecurityTrustHtml(options.message)"></div>
-    <div class="modal-footer">
-        <button class="btn {{options.buttonClassYes}}" [disabled]="options.buttonDisabledYes" (click)="yes()">{{ options.buttonTextYes }}</button>
-        <button class="btn btn-secondary right" (click)="no()">{{ options.buttonTextNo }}</button>
-    </div>
+    <div class="modal-body__content" [innerHtml]="this.sanitizer.bypassSecurityTrustHtml(modalContext.message)"></div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn {{ modalContext.buttonClassYes }}" (click)="save()">
+        {{ modalContext.buttonTextYes }}
+    </button>
+    <button class="btn btn-primary-outline" (click)="close()">
+        {{ modalContext.buttonTextNo }}
+    </button>
 </div>

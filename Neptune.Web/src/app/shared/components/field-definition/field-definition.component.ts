@@ -29,6 +29,7 @@ export class FieldDefinitionComponent implements OnInit {
     @Input() labelOverride: string;
     @Input() inline: boolean = true;
     @Input() white?: boolean;
+    @Input() useBodyContainer: boolean = false;
     @ViewChild("tinyMceEditor") tinyMceEditor: EditorComponent;
     @ViewChild("p") public p: NgbPopover;
     @ViewChild("editingPopover") public editingPopover: NgbPopover;

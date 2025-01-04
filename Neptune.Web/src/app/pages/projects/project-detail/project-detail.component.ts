@@ -11,7 +11,7 @@ import { TreatmentBMPUpsertDto } from "src/app/shared/generated/model/treatment-
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
-import { ConfirmService } from "src/app/shared/services/confirm.service";
+import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 import { GrantScoresComponent } from "../../../shared/components/projects/grant-scores/grant-scores.component";
 import { AttachmentsDisplayComponent } from "../../../shared/components/projects/attachments-display/attachments-display.component";
 import { ModelResultsComponent } from "../../../shared/components/projects/model-results/model-results.component";
@@ -98,7 +98,7 @@ export class ProjectDetailComponent implements OnInit {
       You can change the name in the project editing workflow afterwards.</p>
       <p>Note: Model results and attachments will not be copied.</p>`;
         this.confirmService
-            .confirm({ modalSize: "md", buttonClassYes: "btn-hippocamp", buttonTextYes: "Copy", buttonTextNo: "Cancel", title: "Copy Project", message: modalContents })
+            .confirm({ buttonClassYes: "btn-hippocamp", buttonTextYes: "Copy", buttonTextNo: "Cancel", title: "Copy Project", message: modalContents })
             .then((confirmed) => {
                 if (confirmed) {
                     this.isCopyingProject = true;

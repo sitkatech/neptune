@@ -1,5 +1,154 @@
-.metric-color-swatch {
-    width:30px;
-    height:30px;
-    opacity:0.75;
+@use "/src/scss/abstracts" as *;
+
+.content-section {
+    padding: $spacing-050 0 0 0;
+    display: grid;
+
+    &__header {
+        align-items: center;
+        font-size: $type-size-400;
+        padding-bottom: $spacing-400;
+
+        icon {
+            color: $blue-500;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 0 $spacing-200;
+            line-height: 1;
+
+            span {
+                font-size: $type-size-400;
+                color: $blue-500;
+                display: block;
+            }
+        }
+    }
+
+    &__body {
+        display: grid;
+        gap: 3rem;
+    }
+}
+
+.card {
+    &-header-dropdown {
+        border-bottom: 1px solid $gray-200;
+        padding: 0 0 $spacing-400 0;
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        h3 {
+            display: flex;
+            align-items: center;
+            gap: $spacing-200;
+        }
+
+        ::ng-deep {
+            svg {
+                width: 0.5rem;
+            }
+        }
+
+        icon {
+            color: $gray-1000;
+            transform: rotate(180deg);
+            width: 0.75rem;
+        }
+
+        &.open icon {
+            transform: rotate(0deg);
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    &-body-dropdown {
+        background: $white;
+        padding: $spacing-200;
+        display: none;
+
+        &.open {
+            display: grid;
+            gap: 2rem;
+        }
+    }
+
+    &-footer {
+        padding-top: $spacing-400;
+        border-top: 1px solid $gray-100;
+
+        .btn-primary {
+            background: $green-600;
+            border-color: $green-600;
+            color: $white;
+
+            &-outline {
+                border-color: $green-600;
+                color: $green-600;
+
+                &:hover {
+                    background: $green-600;
+                    color: $white;
+                }
+            }
+        }
+    }
+
+    .content-section {
+        font-size: $type-size-300;
+        font-weight: bold;
+    }
+
+    dl {
+        margin-left: 0.5rem;
+    }
+}
+
+label {
+    font-size: 0.875rem;
+
+    &.primary-label {
+        display: block;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        line-height: 1.25em;
+        margin-bottom: 0.125rem;
+        font-size: 0.75rem;
+    }
+}
+
+.choropleth {
+    padding: $spacing-100;
+
+    h4 {
+        margin: $spacing-300 0 5px;
+    }
+
+    .legend {
+        li {
+            clear: both;
+        }
+
+        i {
+            width: 25px;
+            height: 25px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.75;
+        }
+
+        .legend-text {
+            text-align: center;
+        }
+    }
 }

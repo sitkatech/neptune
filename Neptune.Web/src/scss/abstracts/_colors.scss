@@ -1,0 +1,146 @@
+$blue-lighter: #e7eff1;
+$blue-light: #b4ccd4;
+$blue-default: #0d5b73;
+$blue-dark: #0c5268;
+$blue-darker: #083745;
+
+$teal-lighter: #eff5f7;
+$teal-light: #cce0e7;
+$teal-dark: #518c9e;
+$teal-default: #5a9cb0;
+$teal-darker: #365e6a;
+
+$orange-lighter: #fff6ea;
+$orange-light: #ffe3bd;
+$orange-default: #ffa62b;
+$orange-dark: #e69527;
+$orange-darker: #c47b17;
+
+$green-lighter: #eaf8ea;
+$green-light: #bee9bd;
+$green-default: #2cb92a;
+$green-dark: #188c16;
+$green-darker: #0b5d0a;
+
+$yellow-lighter: #fffdf0;
+$yellow-light: #fff7d2;
+$yellow-default: #ffe66d;
+$yellow-dark: #efd13d;
+$yellow-darker: #cdab07;
+
+$red-lighter: #fdf0f0;
+$red-light: #f9d1d1;
+$red-default: #ed6969;
+$red-dark: #be4c4c;
+$red-darker: #822d2d;
+
+$gray-lighter: #fafafa;
+$gray-light: #d5d5d5;
+$gray-default: #8a8a8a;
+$gray-dark: #4e4e4e;
+$gray-darker: #2a2a2a;
+
+$white: #ffffff;
+$black: #000000;
+
+$tan: #f4f3ef;
+
+$blue-50: #f0f9fb;
+$blue-100: #daf0f3;
+$blue-200: #b9e1e8;
+$blue-300: #89cad7;
+$blue-400: #52aabe;
+$blue-500: #368ea4;
+$blue-600: #30748a;
+$blue-700: #2c5f72;
+$blue-800: #2b4f5f;
+$blue-900: #2a4755;
+$blue-950: #162b36;
+
+$gray-0: #ffffff;
+$gray-50: #fafafa;
+$gray-100: #efefef;
+$gray-200: #dcdcdc;
+$gray-300: #bdbdbd;
+$gray-400: #989898;
+$gray-500: #7c7c7c;
+$gray-600: #656565;
+$gray-700: #525252;
+$gray-800: #464646;
+$gray-900: #3d3d3d;
+$gray-950: #292929;
+$gray-1000: #000000;
+
+$green-50: #f2fcf1;
+$green-200: #c0f4be;
+$green-600: #209b1e;
+
+$footer-height: 60px;
+
+$theme-colors: (
+    "primary": #0099ab,
+    // systemBlue
+    "secondary": #969491,
+    // lightGray
+    "info": #228be6,
+    // brightBlue
+    "light": #f5f5f5,
+    // offWhite
+    "muted": #dee2e6,
+    // footerGray
+    "danger": #a94442,
+    "success": #5cb85c,
+    "warning": #f0ad4e,
+    "footer": #999999,
+    "header-background": #0099ab,
+    "header-nav-link": #77cfdc,
+    "grid-header-background": #0099ab,
+    "grid-accent-color": #00c1d5,
+    "grid-hover-color": cornsilk,
+    "account-dropdown-text": #fff,
+    "header-gradient-start": transparent,
+    "header-gradient-end": transparent,
+);
+
+// this looks redundant, but we need to override the bootstrap variables in both ways.
+//Custom variables only need the one override
+$primary: #0099ab;
+$secondary: #969491;
+$info: #228be6;
+$light: #f5f5f5;
+$muted: #dee2e6;
+$danger: #a94442;
+$success: #5cb85c;
+$warning: #f0ad4e;
+
+$account-dropdown-text: #fff;
+$button-border-and-background: #0099ab;
+$button-hover-text-color: #ffffff;
+$button-text-color: #ffffff;
+$button-hover-background: #00c1d5;
+$button-toggle-hover: #00c1d5;
+$footer: #999999;
+$header-background: #0099ab;
+$header-gradient-start: transparent;
+$header-gradient-end: transparent;
+$header-nav-after-height: 0px;
+$header-nav-link: #fff;
+$select: #fff;
+$select-and-nav-dropdown-hover: #00c1d5;
+$select-and-nav-hover: #00c1d5;
+$text-muted: darken(#d3d3d3, 15%);
+$text-warning: darken($warning, 20%);
+
+$neptune-orange: #e49937;
+$hippocamp-orange: $neptune-orange;
+
+//$font-family-sans-serif: "Lato", sans-serif, "Open Sans", sans-serif;
+//$font-size: 15px;
+$base-text: #333;
+
+$card-cap-bg: #969491;
+$card-header: #fff;
+$card-body: #f9f9f9;
+
+$modal-header-background: #0099ab;
+$link-color: #205c90;

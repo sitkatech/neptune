@@ -1,8 +1,8 @@
-@import "../../../../scss/_variables.scss";
+@use "/src/scss/abstracts" as *;
 
 :host {
-    position:Absolute;
-    left:0;
+    position: Absolute;
+    left: 0;
 }
 
 hippocamp-icon {
@@ -30,4 +30,3 @@ hippocamp-icon {
         border-radius: 50%;
     }
 }
-

@@ -63,6 +63,7 @@
         "ngx-cookie-service": "^17.0.0",
         "ngx-pagination": "^5.1.1",
         "ngx-progressbar": "^6.1.1",
+        "ngx-select-dropdown": "^3.3.0",
         "popper.js": "^1.16.1-lts",
         "rxjs": "^7.0.0",
         "set-value": ">=4.0.1",

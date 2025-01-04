@@ -13,7 +13,7 @@ import { TreatmentBMPUpsertDto } from "src/app/shared/generated/model/treatment-
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
-import { ConfirmService } from "src/app/shared/services/confirm.service";
+import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 import { GrantScoresComponent } from "../../../../shared/components/projects/grant-scores/grant-scores.component";
 import { AttachmentsDisplayComponent } from "../../../../shared/components/projects/attachments-display/attachments-display.component";
 import { ModelResultsComponent } from "../../../../shared/components/projects/model-results/model-results.component";
@@ -118,9 +118,8 @@ export class ReviewComponent implements OnInit {
 
         this.confirmService
             .confirm({
-                modalSize: "md",
                 buttonClassYes: "btn-hippocamp",
-                buttonDisabledYes: !canSubmit,
+                //buttonDisabledYes: !canSubmit,
                 buttonTextYes: buttonTextYes,
                 buttonTextNo: "Cancel",
                 title: `${buttonTextYes} Project`,

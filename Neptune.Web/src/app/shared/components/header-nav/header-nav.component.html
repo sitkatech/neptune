@@ -1,105 +1,147 @@
-<nav class="navbar navbar-expand-xl justify-content-start navbar-hippocamp navbar-dark navbar-responsive-header">
-
-    <a routerLink="/" routerLinkActive="active" class="navbar-brand nav-link">
-        OCST Planning Module
-    </a>
-    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbar2"
-        (click)="toggleCurrentPageHeader()">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</nav>
-
-<nav class="navbar navbar-expand-xl justify-content-start navbar-hippocamp-secondary mb-2">
-    <a href="{{ocStormwaterToolsMainUrl()}}" class="navbar-brand navbar-logo pt-0" target="_blank">
-        <img src="assets/main/logos/hippocamp_logo.png" class="navbarLogo" alt="OCST Planning Module">
-    </a>
-    <a routerLink="/" routerLinkActive="active" class="navbar-brand nav-link">
-        OCST Planning Module
-    </a>
-
-    <div class="flex-row navbar-collapse collapse float-right" id="navbar2">
-        <ul class="navbar-nav mt-lg-0 mr-sm-2 ml-3">
-            <li class="nav-item" routerLinkActive="active" *ngIf="!isAuthenticated()">
-                <a href="javascript:void(0);" (click)="login()" routerLinkActive="active" class="nav-link">Sign In</a>
-            </li>
-            <li class="nav-item dropdown welcomeUser" routerLinkActive="active" *ngIf="isAuthenticated()">
-                <a href="#" class="nav-link dropdown-toggle pr-3" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    Welcome {{getUserName()}}
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a href="javascript:void(0);" (click)="logout()" class="dropdown-item">Sign Out</a>
-                </div>
-            </li>
-            <li class="nav-item" routerLinkActive="active">
-                <a routerLink="/about" class="nav-link">
-                    About
-                </a>
-            </li>
-            <li class="nav-item dropdown" routerLinkActive="active">
-                <a href="#" class="nav-link dropdown-toggle pr-3" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    Help
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a href="{{requestSupportUrl()}}" class="dropdown-item">
-                        Request Support
-                    </a>
-                    <a routerLink="/training" class="dropdown-item">
-                        Training
-                    </a>
-                </div>
-            </li>
-        </ul>
+<header class="site-header">
+    <div>
+        <div *ngIf="showTestingWarning()" class="qa-warning">
+            <span class="fa fa-warning"></span>
+            {{ testingWarningText() }}
+        </div>
     </div>
 
-</nav>
+    <nav class="admin-nav">
+        <div class="admin-nav__wrapper" #mobileAdminToggle>
+            <a href="{{ ocStormwaterToolsMainUrl() }}" target="_blank">
+                <img src="assets/main/logos/hippocamp_logo.png" class="navbarLogo" alt="OCST Planning Module" style="height: 100px" />
+            </a>
+            <ul class="admin-nav__links admin-nav__main">
+                <li class="admin-nav__item home">
+                    <a routerLink="/" routerLinkActive="active" class="navbar-brand"> OCST Planning Module </a>
+                </li>
+            </ul>
 
+            <ul class="admin-nav__links admin-nav__utilities">
+                <!-- <button class="admin-nav__close" type="button" [dropdownToggleClose]="AdminMenuToggleButton">
+                    <i class="fas fa-times-circle"></i>
+                </button> -->
 
-<nav class="navbar navbar-expand-xl navbar-hippocamp">
-    <div class="collapse navbar-collapse" id="navbar2">
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <ng-container *ngIf="isAuthenticated() && isNotUnassigned()">
-                <li class="nav-item" routerLinkActive="active">
-                    <a href="/projects" class="nav-link" role="button">
-                        Projects
+                <li class="nav-item" routerLinkActive="active" *ngIf="!isAuthenticated()">
+                    <a href="javascript:void(0);" (click)="login()" routerLinkActive="active">Sign In</a>
+                </li>
+                <li class="nav-item dropdown welcomeUser" routerLinkActive="active" *ngIf="isAuthenticated()">
+                    <a
+                        href="javascript:void(0);"
+                        [dropdownToggle]="userToggle"
+                        class="nav-link dropdown-toggle"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                        <span class="username nav-link__label">
+                            Welcome {{ getUserName() }}
+                            <icon icon="AngleDown"></icon>
+                        </span>
                     </a>
+
+                    <div #userToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a href="javascript:void(0);" (click)="logout()" class="nav-link dropdown-item"> Sign Out </a>
+                    </div>
                 </li>
                 <li class="nav-item" routerLinkActive="active">
-                    <a href="/planning-map" class="nav-link" role="button">
-                        Planning Map
-                    </a>
+                    <a routerLink="/about"> About </a>
                 </li>
-            </ng-container>
-            <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAdministrator()">
-                <a href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                    Manage
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a href="{{usersListUrl()}}" class="dropdown-item">
-                        Users
+                <li class="nav-item dropdown" routerLinkActive="active">
+                    <a
+                        href="javascript:void(0);"
+                        [dropdownToggle]="helpToggle"
+                        class="nav-link dropdown-toggle"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                        <icon icon="Info"></icon>
+                        <span class="nav-link__label">
+                            Help
+                            <icon icon="AngleDown"></icon>
+                        </span>
                     </a>
-                    <a href="{{organizationsIndexUrl()}}" class="dropdown-item">
-                        Organizations
-                    </a>
-                    <a routerLink="/labels-and-definitions" class="dropdown-item">
-                        Labels and Definitions
-                    </a>
-                </div>
-            </li>
-            <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isOCTAGrantReviewer()">
-                <a href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                    Grant Programs
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a href="grant-programs/octa-m2-tier-2" class="dropdown-item">
-                        OCTA M2 Tier 2 Grant Program
-                    </a>
-                </div>
-            </li>
-        </ul>
 
-    </div>
-</nav>
+                    <div #helpToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ requestSupportUrl() }}" class="dropdown-item"> Request Support </a>
+                        <a routerLink="/training" class="dropdown-item"> Training </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- <button
+            class="admin-nav__toggle"
+            [dropdownToggle]="mobileAdminToggle"
+            #AdminMenuToggleButton="dropdownToggleName"
+            type="button"
+            aria-controls="hamburger-btn"
+            aria-expanded="false">
+            <svg width="24" height="6" viewBox="0 0 16 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M12 2C12 1.46957 12.2107 0.96086 12.5858 0.585787C12.9609 0.210714 13.4696 0 14 0C14.5304 0 15.0391 0.210714 15.4142 0.585787C15.7893 0.96086 16 1.46957 16 2C16 2.53043 15.7893 3.03914 15.4142 3.41421C15.0391 3.78929 14.5304 4 14 4C13.4696 4 12.9609 3.78929 12.5858 3.41421C12.2107 3.03914 12 2.53043 12 2ZM6 2C6 1.46957 6.21071 0.96086 6.58579 0.585787C6.96086 0.210714 7.46957 0 8 0C8.53043 0 9.03914 0.210714 9.41421 0.585787C9.78929 0.96086 10 1.46957 10 2C10 2.53043 9.78929 3.03914 9.41421 3.41421C9.03914 3.78929 8.53043 4 8 4C7.46957 4 6.96086 3.78929 6.58579 3.41421C6.21071 3.03914 6 2.53043 6 2ZM0 2C0 1.46957 0.210714 0.96086 0.585786 0.585787C0.960859 0.210714 1.46957 0 2 0C2.53043 0 3.03914 0.210714 3.41421 0.585787C3.78929 0.96086 4 1.46957 4 2C4 2.53043 3.78929 3.03914 3.41421 3.41421C3.03914 3.78929 2.53043 4 2 4C1.46957 4 0.960859 3.78929 0.585786 3.41421C0.210714 3.03914 0 2.53043 0 2Z"
+                    fill="white" />
+            </svg>
+        </button> -->
+    </nav>
+
+    <nav class="site-nav">
+        <div class="collapse navbar-collapse" id="navbar2">
+            <ul class="site-nav__links site-nav__main">
+                <ng-container *ngIf="isAuthenticated() && isNotUnassigned()">
+                    <li class="nav-item" routerLinkActive="active">
+                        <a href="/projects" class="nav-link" role="button"> Projects </a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a href="/planning-map" class="nav-link" role="button"> Planning Map </a>
+                    </li>
+                </ng-container>
+                <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAdministrator()">
+                    <a
+                        href="javascript:void(0);"
+                        [dropdownToggle]="manageToggle"
+                        class="nav-link dropdown-toggle"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                        <span class="nav-link__label">
+                            Manage
+                            <icon icon="AngleDown"></icon>
+                        </span>
+                    </a>
+
+                    <div #manageToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ usersListUrl() }}" class="dropdown-item"> Users </a>
+                        <a href="{{ organizationsIndexUrl() }}" class="dropdown-item"> Organizations </a>
+                        <a routerLink="/labels-and-definitions" class="dropdown-item"> Labels and Definitions </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isOCTAGrantReviewer()">
+                    <a
+                        href="javascript:void(0);"
+                        [dropdownToggle]="grantProgramsToggle"
+                        class="nav-link dropdown-toggle"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                        <span class="nav-link__label">
+                            Grant Programs
+                            <icon icon="AngleDown"></icon>
+                        </span>
+                    </a>
+
+                    <div #grantProgramsToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-divider"></div>
+                        <a href="grant-programs/octa-m2-tier-2" class="dropdown-item"> OCTA M2 Tier 2 Grant Program </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>

@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
-import { AgGridAngular, AgGridModule } from "ag-grid-angular";
-import { ColDef, GridApi } from "ag-grid-community";
+import { AgGridModule } from "ag-grid-angular";
+import { ColDef, GridApi, ValueGetterParams } from "ag-grid-community";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { PersonDto } from "src/app/shared/generated/model/person-dto";
 import { AuthenticationService } from "src/app/services/authentication.service";
@@ -11,27 +11,26 @@ import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { FontAwesomeIconLinkRendererComponent } from "src/app/shared/components/ag-grid/fontawesome-icon-link-renderer/fontawesome-icon-link-renderer.component";
 import { LinkRendererComponent } from "src/app/shared/components/ag-grid/link-renderer/link-renderer.component";
-import { FieldDefinitionGridHeaderComponent } from "src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component";
 import { CustomDropdownFilterComponent } from "src/app/shared/components/custom-dropdown-filter/custom-dropdown-filter.component";
 import { environment } from "src/environments/environment";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { NgIf } from "@angular/common";
-import { ClearGridFiltersButtonComponent } from "../../../shared/components/clear-grid-filters-button/clear-grid-filters-button.component";
 import { CustomRichTextComponent } from "../../../shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "../../../shared/components/alert-display/alert-display.component";
+import { NeptuneGridComponent } from "../../../shared/components/neptune-grid/neptune-grid.component";
+import { ProjectDto } from "src/app/shared/generated/model/project-dto";
+import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
+import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
 
 @Component({
     selector: "hippocamp-project-list",
     templateUrl: "./project-list.component.html",
     styleUrls: ["./project-list.component.scss"],
     standalone: true,
-    imports: [AlertDisplayComponent, CustomRichTextComponent, ClearGridFiltersButtonComponent, AgGridModule, NgIf],
+    imports: [AlertDisplayComponent, CustomRichTextComponent, AgGridModule, NgIf, NeptuneGridComponent, PageHeaderComponent],
 })
 export class ProjectListComponent implements OnInit {
-    @ViewChild("projectsGrid") projectsGrid: AgGridAngular;
-    @ViewChild("deleteProjectModal") deleteProjectModal;
-
     private currentUser: PersonDto;
 
     private gridApi: GridApi;
@@ -43,6 +42,7 @@ export class ProjectListComponent implements OnInit {
     public projectNameToDelete: string;
     private deleteColumnID = 1;
     public isLoadingDelete = false;
+    public projects: ProjectDto[];
 
     constructor(
         private router: Router,
@@ -51,7 +51,7 @@ export class ProjectListComponent implements OnInit {
         private alertService: AlertService,
         private projectService: ProjectService,
         private utilityFunctionsService: UtilityFunctionsService,
-        private modalService: NgbModal
+        private confirmService: ConfirmService
     ) {}
 
     ngOnInit(): void {
@@ -75,67 +75,27 @@ export class ProjectListComponent implements OnInit {
 
     private createProjectGridColDefs() {
         this.projectColumnDefs = [
-            {
-                valueGetter: (params) => params.data.ProjectID + (params.data.ShareOCTAM2Tier2Scores ? "/review-and-share" : ""),
-                cellRenderer: FontAwesomeIconLinkRendererComponent,
-                cellRendererParams: { inRouterLink: "/projects/edit/", fontawesomeIconName: "edit", CssClasses: "text-primary" },
-                width: 40,
-                sortable: false,
-                filter: false,
-            },
-            {
-                cellRenderer: FontAwesomeIconLinkRendererComponent,
-                cellRendererParams: { isSpan: true, fontawesomeIconName: "trash", CssClasses: "text-danger" },
-                width: 40,
-                sortable: false,
-                filter: false,
-            },
-            {
-                valueGetter: (params: any) => {
-                    return { LinkValue: params.data.ProjectID, LinkDisplay: "View", CssClasses: "btn btn-hippocamp btn-sm" };
-                },
-                cellRenderer: LinkRendererComponent,
-                cellRendererParams: { inRouterLink: "/projects/" },
-                width: 57,
-                sortable: false,
-                filter: false,
-            },
-            {
-                headerName: "Project ID",
-                valueGetter: (params: any) => {
-                    return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectID };
-                },
-                cellRenderer: LinkRendererComponent,
-                cellRendererParams: { inRouterLink: "/projects/" },
-                filterValueGetter: (params: any) => {
-                    return params.data.ProjectID;
-                },
-                comparator: this.utilityFunctionsService.linkRendererComparator,
-            },
-            {
-                headerName: "Project Name",
-                valueGetter: (params: any) => {
-                    return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectName };
-                },
-                cellRenderer: LinkRendererComponent,
-                cellRendererParams: { inRouterLink: "/projects/" },
-                filterValueGetter: (params: any) => {
-                    return params.data.ProjectName;
-                },
-                comparator: this.utilityFunctionsService.linkRendererComparator,
-            },
-            {
-                headerComponent: FieldDefinitionGridHeaderComponent,
-                headerComponentParams: { fieldDefinitionType: "Organization" },
-                field: "Organization.OrganizationName",
-            },
-            {
-                headerComponent: FieldDefinitionGridHeaderComponent,
-                headerComponentParams: { fieldDefinitionType: "Jurisdiction" },
-                field: "StormwaterJurisdiction.Organization.OrganizationName",
-            },
-            this.utilityFunctionsService.createDateColumnDef("Date Created", "DateCreated", "M/d/yyyy", 120),
-            { headerName: "Project Description", field: "ProjectDescription" },
+            this.utilityFunctionsService.createActionsColumnDef((params: any) => {
+                return [
+                    { ActionName: "View", ActionHandler: () => this.router.navigateByUrl(`/projects/${params.data.ProjectID}`) },
+                    {
+                        ActionName: "Edit",
+                        ActionIcon: "fas fa-edit",
+                        ActionHandler: () => this.router.navigateByUrl(`/projects/edit/${params.data.ProjectID + (params.data.ShareOCTAM2Tier2Scores ? "/review-and-share" : "")}`),
+                    },
+                    { ActionName: "Delete", ActionIcon: "fa fa-trash text-danger", ActionHandler: () => this.deleteModal(params) },
+                ];
+            }),
+            this.utilityFunctionsService.createLinkColumnDef("Project ID", "ProjectID", "ProjectID", {
+                InRouterLink: "/projects/",
+            }),
+            this.utilityFunctionsService.createLinkColumnDef("Project Name", "ProjectName", "ProjectID", {
+                InRouterLink: "/projects/",
+            }),
+            this.utilityFunctionsService.createBasicColumnDef("Organization", "Organization.OrganizationName"),
+            this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdiction.Organization.OrganizationName"),
+            this.utilityFunctionsService.createDateColumnDef("Date Created", "DateCreated", "M/d/yyyy", { Width: 120 }),
+            this.utilityFunctionsService.createBasicColumnDef("Project Description", "ProjectDescription"),
             {
                 headerName: "Shared with OCTA M2 Tier 2 Grant Program",
                 valueGetter: (params) => (params.data.ShareOCTAM2Tier2Scores ? "Yes" : "No"),
@@ -154,55 +114,26 @@ export class ProjectListComponent implements OnInit {
 
     private updateGridData() {
         this.projectService.projectsGet().subscribe((projects) => {
-            this.projectsGrid.api.setRowData(projects);
-            this.projectsGrid.api.sizeColumnsToFit();
+            this.projects = projects;
         });
     }
 
-    public exportToCsv() {
-        const columns = this.projectsGrid.columnApi.getAllGridColumns();
-        const columnIDsToDownload = columns.slice(2).map((x) => x.getId());
-
-        this.utilityFunctionsService.exportGridToCsv(this.projectsGrid, "projects.csv", columnIDsToDownload);
-    }
-
-    public onCellClicked(event: any): void {
-        if (event.column.colId == this.deleteColumnID) {
-            this.projectIDToDelete = event.data.ProjectID;
-            this.projectNameToDelete = event.data.ProjectName;
-            this.launchModal(this.deleteProjectModal, "deleteProjectModalTitle");
-        }
-    }
-
-    private launchModal(modalContent: any, modalTitle: string): void {
-        this.modalReference = this.modalService.open(modalContent, {
-            ariaLabelledBy: modalTitle,
-            beforeDismiss: () => this.checkIfDeleting(),
-            backdrop: "static",
-            keyboard: false,
-        });
-    }
-
-    private checkIfDeleting(): boolean {
-        return this.isLoadingDelete;
-    }
-
-    public deleteProject() {
-        this.isLoadingDelete = true;
-
-        this.projectService.projectsProjectIDDeleteDelete(this.projectIDToDelete).subscribe(
-            () => {
-                this.isLoadingDelete = false;
-                this.modalReference.close();
-                this.alertService.pushAlert(new Alert("Project was successfully deleted.", AlertContext.Success, true));
-                this.updateGridData();
-            },
-            (error) => {
-                this.isLoadingDelete = false;
-                window.scroll(0, 0);
-                this.cdr.detectChanges();
+    private deleteModal(params: ValueGetterParams<ProjectDto, any>) {
+        const confirmOptions = {
+            title: "Delete Project",
+            message: `<p>You are about to delete ${params.data.ProjectName}.</p><p>Are you sure you wish to proceed?</p>`,
+            buttonClassYes: "btn btn-danger",
+            buttonTextYes: "Delete",
+            buttonTextNo: "Cancel",
+        };
+        this.confirmService.confirm(confirmOptions).then((confirmed) => {
+            if (confirmed) {
+                this.projectService.projectsProjectIDDeleteDelete(params.data.ProjectID).subscribe(() => {
+                    this.alertService.pushAlert(new Alert("Successfully deleted project", AlertContext.Success));
+                    params.api.applyTransaction({ remove: [params.data] });
+                });
             }
-        );
+        });
     }
 
     public downloadProjectModelResults() {

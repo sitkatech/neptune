@@ -1,18 +1,20 @@
-import { Component, OnInit, HostListener, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-import { environment } from 'src/environments/environment';
-import { PersonDto } from '../../generated/model/person-dto';
-import { NgIf } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, OnInit, HostListener, ChangeDetectorRef, OnDestroy } from "@angular/core";
+import { AuthenticationService } from "src/app/services/authentication.service";
+import { environment } from "src/environments/environment";
+import { PersonDto } from "../../generated/model/person-dto";
+import { NgIf } from "@angular/common";
+import { RouterLink, RouterLinkActive } from "@angular/router";
+import { DropdownToggleDirective } from "../../directives/dropdown-toggle.directive";
+import { DropdownToggleCloseDirective } from "../../directives/dropdown-toggle-close.directive";
+import { IconComponent } from "../icon/icon.component";
 
 @Component({
-    selector: 'header-nav',
-    templateUrl: './header-nav.component.html',
-    styleUrls: ['./header-nav.component.scss'],
+    selector: "header-nav",
+    templateUrl: "./header-nav.component.html",
+    styleUrls: ["./header-nav.component.scss"],
     standalone: true,
-    imports: [RouterLink, RouterLinkActive, NgIf]
+    imports: [RouterLink, RouterLinkActive, NgIf, DropdownToggleDirective, DropdownToggleCloseDirective, IconComponent],
 })
-
 export class HeaderNavComponent implements OnInit, OnDestroy {
     private watchUserChangeSubscription: any;
     private currentUser: PersonDto;
@@ -21,29 +23,26 @@ export class HeaderNavComponent implements OnInit, OnDestroy {
 
     public showCurrentPageHeader: boolean = true;
 
-    @HostListener('window:resize', ['$event'])
+    @HostListener("window:resize", ["$event"])
     resize() {
         this.windowWidth = window.innerWidth;
     }
 
-    constructor(
-        private authenticationService: AuthenticationService,
-        private cdr: ChangeDetectorRef) {
-    }
+    constructor(private authenticationService: AuthenticationService, private cdr: ChangeDetectorRef) {}
 
     ngOnInit() {
-        this.watchUserChangeSubscription = this.authenticationService.currentUserSetObservable.subscribe(currentUser => {
+        this.watchUserChangeSubscription = this.authenticationService.currentUserSetObservable.subscribe((currentUser) => {
             this.currentUser = currentUser;
         });
     }
 
     ngOnDestroy() {
         this.watchUserChangeSubscription.unsubscribe();
-        
+
         this.cdr.detach();
     }
 
-    public toggleCurrentPageHeader(){
+    public toggleCurrentPageHeader() {
         this.showCurrentPageHeader = !this.showCurrentPageHeader;
     }
 
@@ -55,7 +54,7 @@ export class HeaderNavComponent implements OnInit, OnDestroy {
         return this.authenticationService.isUserAnAdministrator(this.currentUser);
     }
 
-    public isNotUnassigned(): boolean{
+    public isNotUnassigned(): boolean {
         if (!this.currentUser) {
             return false;
         }
@@ -67,8 +66,7 @@ export class HeaderNavComponent implements OnInit, OnDestroy {
     }
 
     public getUserName() {
-        return this.currentUser ? this.currentUser.FirstName + " " + this.currentUser.LastName
-            : null;
+        return this.currentUser ? this.currentUser.FirstName + " " + this.currentUser.LastName : null;
     }
 
     public login(): void {
@@ -83,7 +81,7 @@ export class HeaderNavComponent implements OnInit, OnDestroy {
         });
     }
 
-    public usersListUrl(): string{
+    public usersListUrl(): string {
         return `${environment.ocStormwaterToolsBaseUrl}/User/Index`;
     }
 
@@ -95,8 +93,15 @@ export class HeaderNavComponent implements OnInit, OnDestroy {
         return `${environment.ocStormwaterToolsBaseUrl}/Help/Support`;
     }
 
-    public ocStormwaterToolsMainUrl(): string{
+    public ocStormwaterToolsMainUrl(): string {
         return environment.ocStormwaterToolsBaseUrl;
     }
 
+    public showTestingWarning(): boolean {
+        return environment.staging || environment.dev;
+    }
+
+    public testingWarningText(): string {
+        return environment.staging ? "QA Environment" : "Development Environment";
+    }
 }

@@ -1,4 +1,4 @@
-@import "src/scss/_variables.scss";
+@use "/src/scss/abstracts" as *;
 
 $hippocamp-primary: $primary;
 $border-gray: $secondary;
@@ -28,7 +28,7 @@ $hippocamp-orange: $neptune-orange;
     text-align: center;
 }
 
-#filter-select-buttons label[for=select] {
+#filter-select-buttons label[for="select"] {
     border-right: 1px solid $border-gray;
 }
 
@@ -36,8 +36,8 @@ $hippocamp-orange: $neptune-orange;
     color: $hippocamp-orange;
 }
 
-#filter-select-buttons input:checked+label {
-    background-color: $background-gray; 
+#filter-select-buttons input:checked + label {
+    background-color: $background-gray;
     color: #000;
     font-weight: bold;
 }
