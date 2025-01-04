@@ -15,20 +15,18 @@ import { PrioritizationMetric } from "src/app/shared/models/prioritization-metri
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { OctaPrioritizationDetailPopupComponent } from "src/app/shared/components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component";
 import { ColDef, GridApi, GridReadyEvent } from "ag-grid-community";
-import { LinkRendererComponent } from "src/app/shared/components/ag-grid/link-renderer/link-renderer.component";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { AgGridModule } from "ag-grid-angular";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
-import { FieldDefinitionGridHeaderComponent } from "src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { RouterLink } from "@angular/router";
 import { FieldDefinitionComponent } from "../../../shared/components/field-definition/field-definition.component";
-import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, NgFor, SlicePipe } from "@angular/common";
+import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, NgFor } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { AlertDisplayComponent } from "../../../shared/components/alert-display/alert-display.component";
@@ -56,7 +54,6 @@ declare var $: any;
         NgFor,
         RouterLink,
         AgGridModule,
-        SlicePipe,
         NeptuneGridComponent,
         PageHeaderComponent,
         IconComponent,
@@ -106,7 +103,6 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     private viewInitialized: boolean = false;
 
     public columnDefs: ColDef[];
-    public defaultColDef: ColDef;
     public paginationPageSize: number = 100;
 
     constructor(
@@ -142,29 +138,12 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
             });
 
             this.columnDefs = [
-                {
-                    headerName: "Project Name",
-                    valueGetter: (params: any) => {
-                        return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectName };
-                    },
-                    cellRenderer: LinkRendererComponent,
-                    cellRendererParams: { inRouterLink: "/projects/" },
-                    filterValueGetter: (params: any) => {
-                        return params.data.ProjectID;
-                    },
-                    comparator: this.utilityFunctionsService.linkRendererComparator,
-                },
-                { headerName: "Project Description", field: "ProjectDescription" },
-                {
-                    headerComponent: FieldDefinitionGridHeaderComponent,
-                    headerComponentParams: { fieldDefinitionType: "Organization" },
-                    field: "Organization.OrganizationName",
-                },
-                {
-                    headerComponent: FieldDefinitionGridHeaderComponent,
-                    headerComponentParams: { fieldDefinitionType: "Jurisdiction" },
-                    field: "StormwaterJurisdiction.Organization.OrganizationName",
-                },
+                this.utilityFunctionsService.createLinkColumnDef("Project Name", "ProjectName", "ProjectID", {
+                    InRouterLink: "/projects/",
+                }),
+                this.utilityFunctionsService.createBasicColumnDef("Project Description", "ProjectDescription"),
+                this.utilityFunctionsService.createBasicColumnDef("Organization", "Organization.OrganizationName"),
+                this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdiction.Organization.OrganizationName"),
                 this.utilityFunctionsService.createDateColumnDef("Last Shared On", "OCTAM2Tier2ScoresLastSharedDate", "short", { Width: 140 }),
                 this.utilityFunctionsService.createDecimalColumnDef("Area Treated (ac)", "Area"),
                 this.utilityFunctionsService.createDecimalColumnDef("Impervious Area Treated (ac)", "ImperviousArea", { Width: 220 }),
@@ -173,12 +152,6 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
                 this.utilityFunctionsService.createDecimalColumnDef("Dry Weather WQLRI", "DryWeatherWQLRI"),
                 this.utilityFunctionsService.createDecimalColumnDef("Wet Weather WQLRI", "WetWeatherWQLRI"),
             ];
-
-            this.defaultColDef = {
-                filter: true,
-                sortable: true,
-                resizable: true,
-            };
         });
 
         this.tileLayers = Object.assign(

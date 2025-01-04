@@ -16,24 +16,23 @@ import { PrioritizationMetric } from "src/app/shared/models/prioritization-metri
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { OctaPrioritizationDetailPopupComponent } from "src/app/shared/components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component";
 import { ColDef, GridApi, GridReadyEvent } from "ag-grid-community";
-import { LinkRendererComponent } from "src/app/shared/components/ag-grid/link-renderer/link-renderer.component";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { AgGridAngular, AgGridModule } from "ag-grid-angular";
-import { FieldDefinitionGridHeaderComponent } from "src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component";
 import { DelineationService } from "src/app/shared/generated/api/delineation.service";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
-import { ClearGridFiltersButtonComponent } from "../../shared/components/clear-grid-filters-button/clear-grid-filters-button.component";
 import { RouterLink } from "@angular/router";
 import { FieldDefinitionComponent } from "../../shared/components/field-definition/field-definition.component";
-import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, NgFor, SlicePipe } from "@angular/common";
+import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, NgFor } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
-import { CustomRichTextComponent } from "../../shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "../../shared/components/alert-display/alert-display.component";
 import { NeptuneGridComponent } from "../../shared/components/neptune-grid/neptune-grid.component";
+import { PageHeaderComponent } from "../../shared/components/page-header/page-header.component";
+import { IconComponent } from "../../shared/components/icon/icon.component";
+import { ExpandCollapseDirective } from "src/app/shared/directives/expand-collapse.directive";
 
 declare var $: any;
 
@@ -44,7 +43,7 @@ declare var $: any;
     standalone: true,
     imports: [
         AlertDisplayComponent,
-        CustomRichTextComponent,
+        ExpandCollapseDirective,
         NgSelectModule,
         FormsModule,
         NgIf,
@@ -54,15 +53,13 @@ declare var $: any;
         NgSwitchDefault,
         NgFor,
         RouterLink,
-        ClearGridFiltersButtonComponent,
         AgGridModule,
-        SlicePipe,
         NeptuneGridComponent,
+        PageHeaderComponent,
+        IconComponent,
     ],
 })
 export class PlanningMapComponent implements OnInit {
-    @ViewChild("projectsGrid") projectsGrid: AgGridAngular;
-
     private currentUser: PersonDto;
     public richTextTypeID = NeptunePageTypeEnum.HippocampPlanningMap;
 
@@ -110,7 +107,6 @@ export class PlanningMapComponent implements OnInit {
     private viewInitialized: boolean = false;
 
     public columnDefs: ColDef[];
-    public defaultColDef: ColDef;
     public paginationPageSize: number = 100;
 
     constructor(
@@ -148,49 +144,17 @@ export class PlanningMapComponent implements OnInit {
             });
 
             this.columnDefs = [
-                {
-                    headerName: "Project ID",
-                    valueGetter: (params: any) => {
-                        return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectID };
-                    },
-                    cellRenderer: LinkRendererComponent,
-                    cellRendererParams: { inRouterLink: "/projects/" },
-                    filterValueGetter: (params: any) => {
-                        return params.data.ProjectID;
-                    },
-                    comparator: this.utilityFunctionsService.linkRendererComparator,
-                },
-                {
-                    headerName: "Project Name",
-                    valueGetter: (params: any) => {
-                        return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectName };
-                    },
-                    cellRenderer: LinkRendererComponent,
-                    cellRendererParams: { inRouterLink: "/projects/" },
-                    filterValueGetter: (params: any) => {
-                        return params.data.ProjectID;
-                    },
-                    comparator: this.utilityFunctionsService.linkRendererComparator,
-                },
-                {
-                    headerComponent: FieldDefinitionGridHeaderComponent,
-                    headerComponentParams: { fieldDefinitionType: "Organization" },
-                    field: "Organization.OrganizationName",
-                },
-                {
-                    headerComponent: FieldDefinitionGridHeaderComponent,
-                    headerComponentParams: { fieldDefinitionType: "Jurisdiction" },
-                    field: "StormwaterJurisdiction.Organization.OrganizationName",
-                },
+                this.utilityFunctionsService.createLinkColumnDef("Project ID", "ProjectID", "ProjectID", {
+                    InRouterLink: "/projects/",
+                }),
+                this.utilityFunctionsService.createLinkColumnDef("Project Name", "ProjectName", "ProjectID", {
+                    InRouterLink: "/projects/",
+                }),
+                this.utilityFunctionsService.createBasicColumnDef("Organization", "Organization.OrganizationName"),
+                this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdiction.Organization.OrganizationName"),
                 this.utilityFunctionsService.createDateColumnDef("Date Created", "DateCreated", "M/d/yyyy", { Width: 120 }),
-                { headerName: "Project Description", field: "ProjectDescription" },
+                this.utilityFunctionsService.createBasicColumnDef("Project Description", "ProjectDescription"),
             ];
-
-            this.defaultColDef = {
-                filter: true,
-                sortable: true,
-                resizable: true,
-            };
         });
 
         this.tileLayers = Object.assign(
@@ -522,18 +486,18 @@ export class PlanningMapComponent implements OnInit {
                 layer.addTo(featureGroupForZoom);
                 layer.enablePermanentHighlight();
             }
-            if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
-                layer.bringToFront();
-            }
+            // if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
+            //     layer.bringToFront();
+            // }
         });
 
-        this.projectsGrid.api.forEachNode((node) => {
+        this.gridApi.forEachNode((node) => {
             if (node.data.ProjectID === projectID) {
                 node.setSelected(true);
                 var rowIndex = node.rowIndex;
                 //I am honestly kind of flabbergasted that ag-grid doesn't tell me what page the node is on
-                this.projectsGrid.api.paginationGoToPage(Math.floor(rowIndex / this.paginationPageSize));
-                this.projectsGrid.api.ensureIndexVisible(node.rowIndex);
+                this.gridApi.paginationGoToPage(Math.floor(rowIndex / this.paginationPageSize));
+                this.gridApi.ensureIndexVisible(node.rowIndex);
             }
         });
     }
@@ -566,7 +530,7 @@ export class PlanningMapComponent implements OnInit {
     }
 
     public onSelectionChanged() {
-        const selectedNode = this.projectsGrid.api.getSelectedNodes()[0];
+        const selectedNode = this.gridApi.getSelectedNodes()[0];
         // If we have no selected node or our node has already been selected so we can stop infinite looping
         if (!selectedNode || (this.selectedProject != null && this.selectedProject.ProjectID == selectedNode.data.ProjectID)) {
             return;
