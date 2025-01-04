@@ -4,7 +4,7 @@
     <app-alert-display></app-alert-display>
 
     <div class="grid-12">
-        <div class="g-col-4 mb-2" [style.height]="mapHeight">
+        <div class="g-col-3" [style.height]="mapHeight">
             <div class="card">
                 <div class="card-header-dropdown" [expandCollapse]="filterBodyLocation" [startOpen]="true">
                     <h3 class="card-title">Map Overlay</h3>
@@ -63,9 +63,7 @@
                             {{ selectedProject.ProjectName }}
                         </dd>
 
-                        <dt class="g-col-4">
-                            <field-definition fieldDefinitionType="Jurisdiction"></field-definition>
-                        </dt>
+                        <dt class="g-col-4">Jurisdiction</dt>
                         <dd class="g-col-8">
                             {{ selectedProject.StormwaterJurisdiction.Organization.OrganizationName }}
                         </dd>
@@ -91,13 +89,14 @@
                                 {{ selectedProject.ProjectStatus.ProjectStatusDisplayName }}
                             </dd>
                             <ng-container *ngIf="selectedDelineation != null">
+                                <strong>Delineation</strong>
                                 <dt class="g-col-4">
-                                    <field-definition fieldDefinitionType="Area" [labelOverride]="'Delineation Area'"></field-definition>
+                                    <field-definition fieldDefinitionType="Area"></field-definition>
                                 </dt>
                                 <dd class="g-col-8">{{ selectedDelineation.DelineationArea }} ac</dd>
 
                                 <dt class="g-col-4">
-                                    <field-definition fieldDefinitionType="DelineationType"></field-definition>
+                                    <field-definition fieldDefinitionType="DelineationType" [labelOverride]="'Type'"></field-definition>
                                 </dt>
                                 <dd class="g-col-8">
                                     {{ selectedDelineation.DelineationTypeName }}
@@ -129,34 +128,34 @@
                 </ng-template>
             </div>
         </div>
-        <div class="g-col-8">
+        <div class="g-col-9">
             <div id="{{ mapID }}" class="location-card" [style.min-height]="mapHeight" [style.height]="'100%'"></div>
+            <neptune-grid
+                height="700px"
+                [rowData]="projects"
+                [columnDefs]="columnDefs"
+                rowSelection="single"
+                [downloadFileName]="'OCTA-M2-Tier2-projects'"
+                (selectionChanged)="onSelectionChanged()"
+                (gridReady)="onGridReady($event)">
+                <div customGridActionsRight>
+                    <div class="btn-group">
+                        <button
+                            class="btn btn-outline-primary btn-sm dropdown-toggle"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                            <i class="fas fa-download mr-2"></i>Download
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" (click)="downloadProjectModelResults()">Project List with Model Results</a>
+                            <a class="dropdown-item" (click)="downloadTreatmentBMPModelResults()">Treatment BMP List with Model Results</a>
+                        </div>
+                    </div>
+                </div>
+            </neptune-grid>
         </div>
     </div>
-    <neptune-grid
-        height="700px"
-        [rowData]="projects"
-        [columnDefs]="columnDefs"
-        rowSelection="single"
-        [downloadFileName]="'OCTA-M2-Tier2-projects'"
-        (selectionChanged)="onSelectionChanged()"
-        (gridReady)="onGridReady($event)">
-        <div customGridActionsRight>
-            <div class="btn-group">
-                <button
-                    class="btn btn-outline-primary btn-sm dropdown-toggle"
-                    type="button"
-                    id="dropdownMenuButton"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false">
-                    <i class="fas fa-download mr-2"></i>Download
-                </button>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" (click)="downloadProjectModelResults()">Project List with Model Results</a>
-                    <a class="dropdown-item" (click)="downloadTreatmentBMPModelResults()">Treatment BMP List with Model Results</a>
-                </div>
-            </div>
-        </div>
-    </neptune-grid>
 </section>
