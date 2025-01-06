@@ -417,6 +417,7 @@
     <Build Include="dbo\Tables\dbo.LoadGeneratingUnit4326.sql" />
     <Build Include="dbo\Procs\dbo.pLoadGeneratingUnit4326MakeValid.sql" />
     <None Include="Scripts\ReleaseScripts\004 - Add neptune page for upload ovtas.sql" />
+    <None Include="Scripts\ReleaseScripts\005 - Add neptune pages for data hub.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Neptune.Database.refactorlog" />
