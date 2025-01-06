@@ -17,7 +17,8 @@ public class DataHubController : NeptuneBaseController<DataHubController>
     [HttpGet]
     public ViewResult Index()
     {
-        var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson);
+        var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.BMPDataHub);
+        var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
         return RazorView<Index, IndexViewData>(viewData);
     }
 

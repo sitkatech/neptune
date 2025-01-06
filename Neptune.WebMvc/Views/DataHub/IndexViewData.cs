@@ -5,17 +5,22 @@ using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.Assessment;
 using Neptune.WebMvc.Views.FieldVisit;
 using Neptune.WebMvc.Views.MaintenanceRecord;
+using Neptune.WebMvc.Views.Shared;
 
 namespace Neptune.WebMvc.Views.DataHub
 {
     public class IndexViewData : NeptuneViewData
     {
-
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson)
+        public ViewPageContentViewData TreatmentBMPPage { get; }
+        public string UploadTreatmentBMPUrl { get; set; }
+        public string DownloadTreatmentBMPUrl { get; set; }
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
-            PageTitle = "Data Hub";
-            EntityName = "Field Records";
+            EntityName = "Data Hub";
+            TreatmentBMPPage = new ViewPageContentViewData(linkGenerator, neptunePage, currentPerson);
+            UploadTreatmentBMPUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.UploadBMPs());
+            DownloadTreatmentBMPUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.UploadBMPs());
         }
     }
 }

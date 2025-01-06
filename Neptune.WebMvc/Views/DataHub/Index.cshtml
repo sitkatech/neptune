@@ -20,6 +20,7 @@
     -----------------------------------------------------------------------*@
 @using Neptune.WebMvc.Views.Shared
 @using Neptune.WebMvc.Common.DhtmlWrappers
+@using Neptune.WebMvc.Common.BootstrapWrappers
 @inherits Neptune.WebMvc.Views.DataHub.Index
 @section JavascriptAndStylesContent
 {
@@ -33,4 +34,48 @@
     
 }
 
-    hi
+<div class="container-fluid">
+    <div class="row">
+        <ul class="nav nav-tabs" id="organizationDetailsTabs" style="border-bottom: none;">
+            <li class="active">
+                <a href="#bmpsAndDelineations" aria-controls="areaResultsOverview" role="tab" data-toggle="tab" id="areaResultsTab">BMPs and Delineations</a>
+            </li>
+            <li>
+                <a href="#wqmps" aria-controls="loadResultsOverview" role="tab" data-toggle="tab" id="loadResultsTab">WQMPs</a>
+            </li>
+            <li>
+                <a href="#trashModule" aria-controls="ovtaResultsOverview" role="tab" data-toggle="tab" id="ovtaResultsTab">Trash Module</a>
+            </li>
+            <li>
+                <a href="#parcels" aria-controls="ovtaResultsOverview" role="tab" data-toggle="tab" id="ovtaResultsTab">Parcels</a>
+            </li>
+            <li>
+                <a href="#countyIntegration" aria-controls="ovtaResultsOverview" role="tab" data-toggle="tab" id="ovtaResultsTab">County GIS Integration</a>
+            </li>
+            <li>
+                <a href="#webServices" aria-controls="ovtaResultsOverview" role="tab" data-toggle="tab" id="ovtaResultsTab">Web Services</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="bmpsAndDelineations" ng-controller="AreaBasedMapController">
+                <h3>Treatment BMPs</h3>
+                @{
+                    ViewPageContent.RenderPartialView(Html, ViewDataTyped.TreatmentBMPPage);
+                }
+                <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+            </div>
+            <div role="tabpanel" class="tab-pane " id="wqmps" ng-controller="LoadBasedMapController">
+                hello
+            </div>
+            <div role="tabpanel" class="tab-pane" id="trashModule" ng-controller="OVTABasedMapController">
+            </div>@*OVTABasedMapController*@
+        </div>
+        <p class="systemText text-danger" id="warnInternetExplorer" style="display: none;">Your browser might not support all features of this map. Please switch to Google Chrome or Mozilla Firefox for the best experience.</p>
+    </div>
+</div>
