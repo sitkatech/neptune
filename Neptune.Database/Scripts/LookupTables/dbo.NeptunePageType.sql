@@ -66,7 +66,8 @@ USING (VALUES
 (67, 'EditWQMPBoundary', 'Refine WQMP Boundary Area'),
 (68, 'UploadWQMPs', 'Bulk Upload Water Quality Management Plans'),
 (69, 'UploadSimplifiedBMPs', 'Bulk Upload Simplified BMPs'),
-(70, 'UploadOVTAs', 'Bulk Upload OVTAs')
+(70, 'UploadOVTAs', 'Bulk Upload OVTAs'),
+(71, 'WQMPBoundaryFromAPNList', 'WQMP Boundary from APN List')
 )
 AS Source (NeptunePageTypeID, NeptunePageTypeName, NeptunePageTypeDisplayName)
 ON Target.NeptunePageTypeID = Source.NeptunePageTypeID

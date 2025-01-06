@@ -69,5 +69,6 @@ export enum NeptunePageTypeEnum {
   EditWQMPBoundary = 67,
   UploadWQMPs = 68,
   UploadSimplifiedBMPs = 69,
-  UploadOVTAs = 70
+  UploadOVTAs = 70,
+  WQMPBoundaryFromAPNList = 71
 }
