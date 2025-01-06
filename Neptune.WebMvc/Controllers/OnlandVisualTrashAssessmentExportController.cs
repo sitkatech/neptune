@@ -37,52 +37,19 @@ namespace Neptune.WebMvc.Controllers
                 .Single(x => x.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID)
                 .GetOrganizationDisplayName();
             var areaFeatureCollection = new FeatureCollection();
-            var transectLineFeatureCollection = new FeatureCollection();
-            var observationPointFeatureCollection = new FeatureCollection();
             var areas = _dbContext.OnlandVisualTrashAssessmentAreas
                 .Include(x => x.OnlandVisualTrashAssessments)
                 .Where(x => x.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID).ToList();
-            var observations = _dbContext.OnlandVisualTrashAssessmentObservations
-                .Include(x => x.OnlandVisualTrashAssessmentObservationPhotos).ThenInclude(
-                    onlandVisualTrashAssessmentObservationPhoto =>
-                        onlandVisualTrashAssessmentObservationPhoto.FileResource)
-                .Include(x => x.OnlandVisualTrashAssessment)
-                .ThenInclude(x => x.OnlandVisualTrashAssessmentArea)
-                .Where(x => x.OnlandVisualTrashAssessment.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID).ToList();
-
+            
             foreach (var area in areas)
             {
                 var attributesTable = new AttributesTable
                 {
                     { "OVTAAreaName", area.OnlandVisualTrashAssessmentAreaName },
                     { "Description", area.AssessmentAreaDescription ?? null },
-                    { "CreatedOn", area.OnlandVisualTrashAssessments.FirstOrDefault()?.CreatedDate }
+                    { "CreatedOn", area.OnlandVisualTrashAssessments?.MaxBy(x => x.CreatedDate)?.CreatedDate }
                 };
                 areaFeatureCollection.Add(new Feature(area.OnlandVisualTrashAssessmentAreaGeometry, attributesTable));
-
-                var attributeTable2 = new AttributesTable()
-                {
-                    { "OVTAAreaName", area.OnlandVisualTrashAssessmentAreaName },
-                    { "JurisdictionID", area.StormwaterJurisdictionID }
-                };
-                transectLineFeatureCollection.Add(new Feature(area.TransectLine, attributeTable2));
-            }
-
-            foreach (var observation in observations)
-            {
-                var fileResourceGuid = observation.OnlandVisualTrashAssessmentObservationPhotos.FirstOrDefault()?.FileResource.FileResourceGUID;
-                var attributeTable3 = new AttributesTable()
-                {
-                    { "OVTAAreaName", observation.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName },
-                    { "AssessmentID", observation.OnlandVisualTrashAssessment?.OnlandVisualTrashAssessmentID },
-                    { "Note", observation.Note },
-                    { "JurisdictionID", observation.OnlandVisualTrashAssessment?.StormwaterJurisdictionID },
-                    { "JurisdictionName", stormwaterJurisdictionName },
-                    { "Score", observation.OnlandVisualTrashAssessment?.OnlandVisualTrashAssessmentScore?.OnlandVisualTrashAssessmentScoreDisplayName },
-                    { "CompletedDate", observation.OnlandVisualTrashAssessment?.CompletedDate },
-                    { "PhotoUrl", fileResourceGuid != null ? $"/FileResource/DisplayResource/{fileResourceGuid}" : null },
-                };
-                observationPointFeatureCollection.Add(new Feature(observations.FirstOrDefault(x => x.OnlandVisualTrashAssessmentID == observation.OnlandVisualTrashAssessment?.OnlandVisualTrashAssessmentID)?.LocationPoint, attributeTable3));
             }
 
             var gdbInput = new GdbInput()
@@ -92,24 +59,11 @@ namespace Neptune.WebMvc.Controllers
                 CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
                 GeometryTypeName = "POLYGON",
             };
-            var gdbInput2 = new GdbInput()
-            {
-                FileContents = GeoJsonSerializer.SerializeToByteArray(transectLineFeatureCollection, GeoJsonSerializer.DefaultSerializerOptions),
-                LayerName = "transect-lines",
-                CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
-                GeometryTypeName = "LINESTRING",
-            };
-            var gdbInput3 = new GdbInput()
-            {
-                FileContents = GeoJsonSerializer.SerializeToByteArray(observationPointFeatureCollection, GeoJsonSerializer.DefaultSerializerOptions),
-                LayerName = "observation-point",
-                CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
-                GeometryTypeName = "POINT",
-            };
+
             var jurisdictionName = stormwaterJurisdictionName.Replace(' ', '-');
             var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
             {
-                GdbInputs = new List<GdbInput> { gdbInput, gdbInput2, gdbInput3 },
+                GdbInputs = new List<GdbInput> { gdbInput },
                 GdbName = $"ovta-export-{jurisdictionName}"
             });
 
