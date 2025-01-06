@@ -104,7 +104,8 @@ namespace Neptune.WebMvc.Views
                 BuildProgramInfoMenu(currentPerson),
                 BuildDashboardMenu(currentPerson),
                 BuildDelineationMenu(currentPerson),
-                BuildManageMenu(CurrentPerson)
+                BuildDataHubMenu(currentPerson),
+                BuildManageMenu(currentPerson)
             };
 
             TopLevelLtInfoMenuItems.ForEach(x => x.ExtraTopLevelMenuCssClasses = new List<string> { "navigation-root-item" });
@@ -118,6 +119,15 @@ namespace Neptune.WebMvc.Views
 
             delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(LinkGenerator, x => x.DelineationMap(null)), currentPerson, "Delineation Map", "Group1"));
             delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(LinkGenerator, x => x.DelineationReconciliationReport()), currentPerson, "Delineation Reconciliation Report", "Group1"));
+
+            return delineationMenu;
+        }
+
+        private LtInfoMenuItem BuildDataHubMenu(Person currentPerson)
+        {
+            var delineationMenu = new LtInfoMenuItem("Data Hub");
+
+            delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(LinkGenerator, x => x.DelineationMap(null)), currentPerson, "Delineation Map", "Group1"));
 
             return delineationMenu;
         }
