@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
-using Neptune.WebMvc.Models;
-using Neptune.WebMvc.Views.Home;
-using Neptune.WebMvc.Views.Shared.JurisdictionControls;
+using Neptune.WebMvc.Views.DataHub;
+using Index = Neptune.WebMvc.Views.DataHub.Index;
+
 
 namespace Neptune.WebMvc.Controllers;
 
@@ -17,7 +17,8 @@ public class DataHubController : NeptuneBaseController<DataHubController>
     [HttpGet]
     public ViewResult Index()
     {
-        return null;
+        var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson);
+        return RazorView<Index, IndexViewData>(viewData);
     }
 
 }

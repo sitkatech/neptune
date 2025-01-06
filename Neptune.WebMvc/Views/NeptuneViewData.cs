@@ -127,7 +127,7 @@ namespace Neptune.WebMvc.Views
         {
             var delineationMenu = new LtInfoMenuItem("Data Hub");
 
-            delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(LinkGenerator, x => x.DelineationMap(null)), currentPerson, "Delineation Map", "Group1"));
+            delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DataHubController>(LinkGenerator, x => x.Index()), currentPerson, "Data Hub", "Group1"));
 
             return delineationMenu;
         }
