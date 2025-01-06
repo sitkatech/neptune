@@ -1,5 +1,5 @@
 <div class="grid-12" *ngIf="projectTreatmentBMPs != null && projectTreatmentBMPs.length > 0; else noTreatmentBMPs">
-    <div class="g-col-4" [style.height]="mapHeight" style="overflow-y: auto">
+    <div class="g-col-3" [style.height]="mapHeight" style="overflow-y: auto">
         <ul class="list-group">
             <li
                 class="list-group-item font-weight-bold"
@@ -11,7 +11,7 @@
             </li>
         </ul>
     </div>
-    <div class="g-col-8">
+    <div class="g-col-9">
         <div id="{{ mapID }}" class="location-card" [style.height]="mapHeight" [style.cursor]="''"></div>
     </div>
 </div>
@@ -40,6 +40,7 @@
         <div class="grid-12 mt-3">
             <div class="g-col-5">
                 <h4 class="border-bottom p-2">Location</h4>
+                <hr />
                 <ng-container *ngIf="selectedTreatmentBMP.Latitude && selectedTreatmentBMP.Longitude; else noLocationSelected">
                     <dl class="grid-12">
                         <dt class="g-col-5">Latitude</dt>
@@ -70,6 +71,7 @@
             </div>
             <div class="g-col-7">
                 <h4 class="border-bottom p-2">Modeling Attributes</h4>
+                <hr />
                 <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeName; else noTypeSelected">
                     <ng-container *ngIf="getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeName).length > 0; else modelingTypesNotApplicable">
                         <dl

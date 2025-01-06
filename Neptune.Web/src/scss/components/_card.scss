@@ -1,7 +1,6 @@
 @use "/src/scss/abstracts" as *;
 
 .card {
-    padding: $spacing-600;
     box-shadow: $shadow-300;
     border: 1px solid $gray-200;
     border-radius: $border-radius-200;
@@ -11,15 +10,19 @@
     }
 
     &-header {
-        background: unset;
-        border-bottom: 1px solid $gray-200;
-        padding: 0 0 $spacing-400 0;
         border-top-left-radius: 0.25rem;
         border-top-right-radius: 0.25rem;
 
         .section-title {
             padding-bottom: 0;
         }
+
+        padding: 1rem 1.25rem;
+        margin-bottom: 0;
+        background-color: #969491;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        color: $white;
+        font-weight: 700;
     }
 
     &-actions {
@@ -29,11 +32,11 @@
     }
 
     &-title {
-        font-size: $type-size-500;
+        font-size: $type-size-400;
         font-weight: 700;
         margin: 0;
         padding: 0;
-        color: $primary;
+        color: $white;
 
         i {
             font-size: $type-size-200;
@@ -42,7 +45,7 @@
     }
 
     &-body {
-        padding-top: $spacing-500;
+        padding: $spacing-500 $spacing-600;
 
         & + .card-footer {
             margin-top: $spacing-500;

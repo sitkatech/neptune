@@ -1,0 +1,19 @@
+@use "/src/scss/abstracts" as *;
+
+btn-group-radio-input {
+    ::ng-deep {
+        .button-group__item {
+            color: $gray-400;
+            border: 1px solid $gray-100;
+            border-radius: 4px;
+
+            &:hover,
+            &.active {
+                color: #fff;
+                border: 1px solid $primary;
+                border-radius: 4px;
+                background-color: $primary;
+            }
+        }
+    }
+}
