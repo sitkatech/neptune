@@ -125,11 +125,7 @@ namespace Neptune.WebMvc.Views
 
         private LtInfoMenuItem BuildDataHubMenu(Person currentPerson)
         {
-            var delineationMenu = new LtInfoMenuItem("Data Hub");
-
-            delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DataHubController>(LinkGenerator, x => x.Index()), currentPerson, "Data Hub", "Group1"));
-
-            return delineationMenu;
+            return new LtInfoMenuItem(SitkaRoute<DataHubController>.BuildUrlFromExpression(LinkGenerator, x => x.Index()), "Data Hub", currentPerson.IsManagerOrAdmin(), true, null);
         }
 
         private LtInfoMenuItem BuildBMPInventoryMenu(Person currentPerson)
