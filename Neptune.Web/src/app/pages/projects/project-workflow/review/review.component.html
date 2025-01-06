@@ -13,63 +13,63 @@
 </div>
 
 <ng-container *ngIf="project">
-    <div class="row mt-3 mb-3">
-        <div class="col-xl-7">
+    <div class="grid-12 mt-3 mb-3">
+        <div class="g-col-7">
             <div class="card">
                 <div class="card-header">Project Basics</div>
                 <div class="card-body">
-                    <dl class="row">
-                        <dt class="text-sm-right col-sm-4">Name</dt>
-                        <dd class="col-sm-7">
+                    <dl class="grid-12">
+                        <dt class="g-col-4">Name</dt>
+                        <dd class="g-col-7">
                             {{ project?.ProjectName }}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-4 mt-2">Description</dt>
-                        <dd class="col-sm-7 mt-2">
+                        <dt class="g-col-4 mt-2">Description</dt>
+                        <dd class="g-col-7 mt-2">
                             {{ project?.ProjectDescription }}
                             <em *ngIf="!project?.ProjectDescription" class="text-muted">None Provided</em>
                         </dd>
 
-                        <dt class="text-sm-right col-sm-4 mt-2">Status</dt>
-                        <dd class="col-sm-7 mt-2">
+                        <dt class="g-col-4 mt-2">Status</dt>
+                        <dd class="g-col-7 mt-2">
                             {{ project?.ProjectStatus.ProjectStatusDisplayName }}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-4 mt-2">Date Created</dt>
-                        <dd class="col-sm-7 mt-2">
+                        <dt class="g-col-4 mt-2">Date Created</dt>
+                        <dd class="g-col-7 mt-2">
                             {{ project?.DateCreated | date : "MM/dd/yyyy" }}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-4 mt-2">Project Owner</dt>
-                        <dd class="col-sm-7 mt-2">
+                        <dt class="g-col-4 mt-2">Project Owner</dt>
+                        <dd class="g-col-7 mt-2">
                             {{ project?.Organization.OrganizationName }}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-4 mt-2">Jurisdiction</dt>
-                        <dd class="col-sm-7 mt-2">
+                        <dt class="g-col-4 mt-2">Jurisdiction</dt>
+                        <dd class="g-col-7 mt-2">
                             {{ project?.StormwaterJurisdiction.Organization.OrganizationName }}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-4 mt-2">Primary Contact</dt>
-                        <dd class="col-sm-7 mt-2">
+                        <dt class="g-col-4 mt-2">Primary Contact</dt>
+                        <dd class="g-col-7 mt-2">
                             {{ project?.PrimaryContactPerson.FullName }}
                         </dd>
 
-                        <dt class="text-sm-right col-sm-4 mt-2">Additional Contact Information</dt>
-                        <dd class="col-sm-7 mt-2">
+                        <dt class="g-col-4 mt-2">Additional Contact Information</dt>
+                        <dd class="g-col-7 mt-2">
                             {{ project?.AdditionalContactInformation }}
                             <em *ngIf="!project?.AdditionalContactInformation" class="text-muted">None Provided</em>
                         </dd>
 
-                        <dt class="text-sm-right col-sm-4 mt-2">Includes Stormwater Treatment BMPs</dt>
-                        <dd class="col-sm-7 mt-2">
+                        <dt class="g-col-4 mt-2">Includes Stormwater Treatment BMPs</dt>
+                        <dd class="g-col-7 mt-2">
                             {{ project?.DoesNotIncludeTreatmentBMPs ? "No" : "Yes" }}
                         </dd>
                     </dl>
                 </div>
             </div>
         </div>
-        <div class="col-xl-5 mt-xl-0 mt-3">
+        <div class="g-col-5 mt-3">
             <div class="card">
                 <div class="card-header">Share Project</div>
                 <div class="card-body">

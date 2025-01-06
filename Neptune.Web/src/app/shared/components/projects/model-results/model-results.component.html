@@ -1,5 +1,5 @@
 <ng-container *ngIf="selectedProjectLoadReducingResult">
-    <div *ngIf="getNotFullyParameterizedBMPNames().length > 0" class="alert" [class]="'alert-info'">
+    <div *ngIf="getNotFullyParameterizedBMPNames().length > 0" class="alert alert-info">
         <div class="alert-content">
             <i class="fa fa-warning"></i>
             Some of the proposed BMPs (see list below) are not fully parameterized for modeling, or have missing delineations, so these results may be incomplete or inaccurate.
@@ -8,19 +8,21 @@
             </ul>
         </div>
     </div>
-    <div *ngIf="getBMPNamesForDelineationsWithDiscrepancies().length > 0" class="alert" [class]="'alert-info'">
+    <div *ngIf="getBMPNamesForDelineationsWithDiscrepancies().length > 0" class="alert alert-info">
         <div class="alert-content">
             <i class="fa fa-warning"></i>
-            <p>
-                Some of the proposed BMPs (see list below) have delineations that overlap an existing BMP delineation, another delineation within this project, or more than one
-                regional sub-basin. Results for these BMPs will be inaccurate for the overlapping area.
-            </p>
-            <ul>
-                <li *ngFor="let name of getBMPNamesForDelineationsWithDiscrepancies()">{{ name }}</li>
-            </ul>
+            <div>
+                <p>
+                    Some of the proposed BMPs (see list below) have delineations that overlap an existing BMP delineation, another delineation within this project, or more than one
+                    regional sub-basin. Results for these BMPs will be inaccurate for the overlapping area.
+                </p>
+                <ul class="mt-2">
+                    <li *ngFor="let name of getBMPNamesForDelineationsWithDiscrepancies()">{{ name }}</li>
+                </ul>
+            </div>
         </div>
     </div>
-    <div *ngIf="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)" class="alert" [class]="'alert-info'">
+    <div *ngIf="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)" class="alert alert-info">
         <div class="alert-content">
             <i class="fa fa-info"></i>
             Results for this project are currently being calculated. The below results will remain until the current calculation completes and then will be discarded in favor of
