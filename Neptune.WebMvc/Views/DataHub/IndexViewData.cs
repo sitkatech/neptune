@@ -14,13 +14,13 @@ namespace Neptune.WebMvc.Views.DataHub
         public ViewPageContentViewData TreatmentBMPPage { get; }
         public string UploadTreatmentBMPUrl { get; set; }
         public string DownloadTreatmentBMPUrl { get; set; }
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage treatmentBMPDataHubPage)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = "Data Hub";
-            TreatmentBMPPage = new ViewPageContentViewData(linkGenerator, neptunePage, currentPerson);
+            TreatmentBMPPage = new ViewPageContentViewData(linkGenerator, treatmentBMPDataHubPage, currentPerson);
             UploadTreatmentBMPUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.UploadBMPs());
-            DownloadTreatmentBMPUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.UploadBMPs());
+            DownloadTreatmentBMPUrl = ""; //SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.UploadBMPs());
         }
     }
 }
