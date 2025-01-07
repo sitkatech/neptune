@@ -70,13 +70,14 @@ export enum NeptunePageTypeEnum {
   UploadWQMPs = 68,
   UploadSimplifiedBMPs = 69,
   UploadOVTAs = 70,
-  BMPDataHub = 71,
-  DelineationDataHub = 72,
-  FieldVisitDataHub = 73,
-  WQMPDataHub = 74,
-  SimplifiedBMPsDataHub = 75,
-  WQMPLocationsDataHub = 76,
-  AssessmentAreasDataHub = 77,
-  OVTADataHub = 78,
-  LandUseBlockDataHub = 79
+  WQMPBoundaryFromAPNList = 71,
+  BMPDataHub = 72,
+  DelineationDataHub = 73,
+  FieldVisitDataHub = 74,
+  WQMPDataHub = 75,
+  SimplifiedBMPsDataHub = 76,
+  WQMPLocationsDataHub = 77,
+  AssessmentAreasDataHub = 78,
+  OVTADataHub = 79,
+  LandUseBlockDataHub = 80
 }

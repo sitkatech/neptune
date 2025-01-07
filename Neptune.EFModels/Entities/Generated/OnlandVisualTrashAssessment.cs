@@ -58,7 +58,7 @@ public partial class OnlandVisualTrashAssessment
     public virtual Person CreatedByPerson { get; set; } = null!;
 
     [ForeignKey("OnlandVisualTrashAssessmentAreaID")]
-    [InverseProperty("OnlandVisualTrashAssessment")]
+    [InverseProperty("OnlandVisualTrashAssessments")]
     public virtual OnlandVisualTrashAssessmentArea? OnlandVisualTrashAssessmentArea { get; set; }
 
     [InverseProperty("OnlandVisualTrashAssessment")]

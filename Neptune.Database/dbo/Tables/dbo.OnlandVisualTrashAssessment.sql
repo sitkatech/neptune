@@ -23,12 +23,6 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessment](
 )
 GO
 
-CREATE UNIQUE NONCLUSTERED INDEX [CK_OnlandVisualTrashAssessment_AtMostOneTransectBackingAssessmentPerArea] ON [dbo].[OnlandVisualTrashAssessment]
-(
-	[OnlandVisualTrashAssessmentAreaID] ASC
-)
-WHERE ([IsTransectBackingAssessment]=(1))
-GO
 
 CREATE SPATIAL INDEX [SPATIAL_OnlandVisualTrashAssessment_DraftGeometry] ON [dbo].[OnlandVisualTrashAssessment]
 (
