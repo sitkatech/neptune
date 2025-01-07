@@ -17,8 +17,10 @@ public class DataHubController : NeptuneBaseController<DataHubController>
     [HttpGet]
     public ViewResult Index()
     {
-        var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.BMPDataHub);
-        var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
+        var treatmentBMPDataHub = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.BMPDataHub);
+        var delineationDataHub = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.DelineationDataHub);
+        var fieldVisitDataHub = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.FieldVisitDataHub);
+        var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMPDataHub, delineationDataHub, fieldVisitDataHub);
         return RazorView<Index, IndexViewData>(viewData);
     }
 

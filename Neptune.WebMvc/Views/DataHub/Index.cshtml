@@ -25,7 +25,27 @@
 @section JavascriptAndStylesContent
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
-
+    <style>
+        #tcLegend, #ovtaAreaLegend {
+            padding-left: 0;
+            list-style-type: none;
+        }
+        .sidebar {
+            background-color: #EEEEEE;
+            padding: 1rem 2rem 2rem 2rem;
+            h4 {
+                color: #000;
+            }
+        }
+        .tab-pane {
+            h3 {
+                padding: 0 1rem 0 0;
+            }
+            a {
+                margin: 0 0.5rem 0 0;
+            }
+        }
+    </style>
 }
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
@@ -62,16 +82,42 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="bmpsAndDelineations" ng-controller="AreaBasedMapController">
-                <h3>Treatment BMPs</h3>
-                @{
-                    ViewPageContent.RenderPartialView(Html, ViewDataTyped.TreatmentBMPPage);
-                }
-                <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+            <div role="tabpanel" class="tab-pane active " id="bmpsAndDelineations" ng-controller="AreaBasedMapController">
+                <div class="col-md-9">
+                    <h3>Treatment BMPs</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.TreatmentBMPPage);
+                    }
+                    <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune" disabled>@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                
+                    <h3>Delineations</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.DelineationPage);
+                    }
+                    <a href="@ViewDataTyped.UploadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    <a href="@ViewDataTyped.DownloadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                    <h3>Field Visits</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.FieldTripPage);
+                    }
+                    <a href="@ViewDataTyped.UploadFieldTripUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                </div>
+                <div class="col-md-3 sidebar">
+                    <h4>Quick Links:</h4>
+                    Tabular data (.csv) can be downloaded from lists throughout the system:
+                    <ul>
+                        <li>BMP List</li>
+                        <li>Field Visits</li>
+                        <li>Modeling Attributes</li>
+                        <li>BMP Map</li>
+                        <li>BMP Types</li>
+                    </ul>
+                </div>
             </div>
+            
             <div role="tabpanel" class="tab-pane " id="wqmps" ng-controller="LoadBasedMapController">
-                hello
+                
             </div>
             <div role="tabpanel" class="tab-pane" id="trashModule" ng-controller="OVTABasedMapController">
             </div>@*OVTABasedMapController*@
