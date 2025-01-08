@@ -19,7 +19,6 @@
     </license>
     -----------------------------------------------------------------------*@
 @using Neptune.WebMvc.Views.Shared
-@using Neptune.WebMvc.Common.DhtmlWrappers
 @using Neptune.WebMvc.Common.BootstrapWrappers
 @inherits Neptune.WebMvc.Views.DataHub.Index
 @section JavascriptAndStylesContent
@@ -82,7 +81,7 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active " id="bmpsAndDelineations" ng-controller="AreaBasedMapController">
+            <div role="tabpanel" class="tab-pane active " id="bmpsAndDelineations">
                 <div class="col-md-9">
                     <h3>Treatment BMPs</h3>
                     @{
@@ -116,12 +115,175 @@
                 </div>
             </div>
             
-            <div role="tabpanel" class="tab-pane " id="wqmps" ng-controller="LoadBasedMapController">
-                
+            <div role="tabpanel" class="tab-pane " id="wqmps">
+                <div class="col-md-9">
+                    <h3>Water Quality Management Plans</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.WQMPPage);
+                    }
+                    <a href="@ViewDataTyped.UploadWQMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+
+                    <h3>Simplified BMPs</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.SimplifiedBMPPage);
+                    }
+                    <a href="@ViewDataTyped.UploadSimplifiedBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    <h3>Water Quality Management Plan Locations</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.WQMPLocationPage);
+                    }
+                    <a href="@ViewDataTyped.UploadWQMPLocationsUrl" class="btn btn-neptune" disabled>@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                </div>
+                <div class="col-md-3 sidebar">
+                    <h4>Quick Links:</h4>
+                    Tabular data (.csv) can be downloaded from lists throughout the system:
+                    <ul>
+                        <li>BMP List</li>
+                        <li>Field Visits</li>
+                        <li>Modeling Attributes</li>
+                        <li>BMP Map</li>
+                        <li>BMP Types</li>
+                    </ul>
+                </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="trashModule" ng-controller="OVTABasedMapController">
-            </div>@*OVTABasedMapController*@
+            <div role="tabpanel" class="tab-pane" id="trashModule">
+                <div class="col-md-9">
+                    <h3>Assessment Areas</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.AssessmentAreaPage);
+                    }
+                    @* <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a> *@
+                    <a href="@ViewDataTyped.DownloadAssessmentAreasUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+
+                    <h3>On-land Visual Trash Assessments (OVTAs)</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.OVTAsPage);
+                    }
+                    <a href="@ViewDataTyped.UploadOVTAUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    @* <a href="@ViewDataTyped.DownloadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a> *@
+                    <h3>Land Use Blocks</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.LandUseBlocksPage);
+                    }
+                    <a href="@ViewDataTyped.UploadLandUseBlocksUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    <a href="@ViewDataTyped.DownloadLandUseBlocksUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                </div>
+                <div class="col-md-3 sidebar">
+                    <h4>Quick Links:</h4>
+                    Tabular data (.csv) can be downloaded from lists throughout the system:
+                    <ul>
+                        <li>OVTA List</li>
+                        <li>Trash Generating Units Audit List</li>
+                        <li>Land Use Blocks</li>
+                    </ul>
+                    <h4>Tip:</h4>
+                    Go to the BMP and WQMP tabs to update asset inventories and set trash capture status.
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="parcels">
+                <div class="col-md-9">
+                    <h3>Assessment Areas</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.TreatmentBMPPage);
+                    }
+                    <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune" disabled>@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+
+                    <h3>On-land Visual Trash Assessments (OVTAs)</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.DelineationPage);
+                    }
+                    <a href="@ViewDataTyped.UploadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    <a href="@ViewDataTyped.DownloadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                    <h3>Land Use Blocks</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.FieldTripPage);
+                    }
+                    <a href="@ViewDataTyped.UploadFieldTripUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                </div>
+                <div class="col-md-3 sidebar">
+                    <h4>Quick Links:</h4>
+                    Tabular data (.csv) can be downloaded from lists throughout the system:
+                    <ul>
+                        <li>OVTA List</li>
+                        <li>Trash Generating Units Audit List</li>
+                        <li>Land Use Blocks</li>
+                    </ul>
+                    <h4>Tip:</h4>
+                    Go to the BMP and WQMP tabs to update asset inventories and set trash capture status.
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="countyIntegration">
+                <div class="col-md-9">
+                    <h3>Regional Subbasins</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.TreatmentBMPPage);
+                    }
+                    <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune" disabled>@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+
+                    <h3>Land Use Statistics</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.DelineationPage);
+                    }
+                    <a href="@ViewDataTyped.UploadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    <a href="@ViewDataTyped.DownloadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                    <h3>Model Basins</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.FieldTripPage);
+                    }
+                    <a href="@ViewDataTyped.UploadFieldTripUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    <h3>Precipitation Zones</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.FieldTripPage);
+                    }
+                    <a href="@ViewDataTyped.UploadFieldTripUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                </div>
+                <div class="col-md-3 sidebar">
+                    <h4>Quick Links:</h4>
+                    Tabular data (.csv) can be downloaded from lists throughout the system:
+                    <ul>
+                        <li>RSB List</li>
+                        <li>RSB Map</li>
+                        <li>HRU Characteristics List</li>
+                    </ul>
+                    <h4>Tip:</h4>
+                    Coming soon...
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="webServices">
+                <div class="col-md-9">
+                    <h3>Assessment Areas</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.TreatmentBMPPage);
+                    }
+                    <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune" disabled>@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+
+                    <h3>On-land Visual Trash Assessments (OVTAs)</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.DelineationPage);
+                    }
+                    <a href="@ViewDataTyped.UploadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    <a href="@ViewDataTyped.DownloadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                    <h3>Land Use Blocks</h3>
+                    @{
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.FieldTripPage);
+                    }
+                    <a href="@ViewDataTyped.UploadFieldTripUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                </div>
+                <div class="col-md-3 sidebar">
+                    <h4>Quick Links:</h4>
+                    Tabular data (.csv) can be downloaded from lists throughout the system:
+                    <ul>
+                        <li>OVTA List</li>
+                        <li>Trash Generating Units Audit List</li>
+                        <li>Land Use Blocks</li>
+                    </ul>
+                    <h4>Tip:</h4>
+                    Go to the BMP and WQMP tabs to update asset inventories and set trash capture status.
+                </div>
+            </div>
         </div>
-        <p class="systemText text-danger" id="warnInternetExplorer" style="display: none;">Your browser might not support all features of this map. Please switch to Google Chrome or Mozilla Firefox for the best experience.</p>
     </div>
 </div>
