@@ -79,10 +79,10 @@
             </div>
         </div>
     </div>
-    <div class="mt-3 mb-3" *ngIf="!project.DoesNotIncludeTreatmentBMPs">
-        <div class="card">
+    <div class="mt-3 mb-3" *ngIf="!project?.DoesNotIncludeTreatmentBMPs && project?.HasModeledResults">
+        <div class="card" *ngIf="modeledResultsData$ | async as modeledResultsData">
             <div class="card-header"><span class="card-title">Model Results</span></div>
-            <div class="card-body" *ngIf="modeledResultsData$ | async as modeledResultsData">
+            <div class="card-body">
                 <model-results
                     [projectID]="project.ProjectID"
                     [treatmentBMPs]="modeledResultsData.treatmentBMPs"
