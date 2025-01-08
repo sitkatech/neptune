@@ -155,12 +155,6 @@ namespace Neptune.WebMvc.Views
             programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPTypeController>(LinkGenerator ,x => x.Index()), currentPerson, "Treatment BMP Types", "Group1"));
             programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FundingSourceController>(LinkGenerator, x => x.Index()), currentPerson, "Funding Sources", "Group1"));
 
-            if (new JurisdictionEditFeature().HasPermissionByPerson(currentPerson))
-            {
-                programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(
-                new SitkaRoute<DataHubController>(x => x.Index(), SitkaRouteSecurity.SSL, LinkGenerator), currentPerson, "Web Services", "Group 2"));
-            }
-
             return programInfoMenu;
         }
 
