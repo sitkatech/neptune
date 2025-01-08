@@ -1,34 +1,34 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-import { environment } from 'src/environments/environment';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { PersonDto } from 'src/app/shared/generated/model/person-dto';
-import { RoleEnum } from 'src/app/shared/generated/enum/role-enum';
-import { NeptunePageTypeEnum } from 'src/app/shared/generated/enum/neptune-page-type-enum';
-import { CustomRichTextComponent } from '../../../shared/components/custom-rich-text/custom-rich-text.component';
-import { AlertDisplayComponent } from '../../../shared/components/alert-display/alert-display.component';
-import { NgIf } from '@angular/common';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { AuthenticationService } from "src/app/services/authentication.service";
+import { environment } from "src/environments/environment";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { PersonDto } from "src/app/shared/generated/model/person-dto";
+import { RoleEnum } from "src/app/shared/generated/enum/role-enum";
+import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
+import { CustomRichTextComponent } from "../../../shared/components/custom-rich-text/custom-rich-text.component";
+import { AlertDisplayComponent } from "../../../shared/components/alert-display/alert-display.component";
+import { AsyncPipe, NgIf } from "@angular/common";
+import { Observable } from "rxjs";
 
 @Component({
-    selector: 'app-home-index',
-    templateUrl: './home-index.component.html',
-    styleUrls: ['./home-index.component.scss'],
+    selector: "app-home-index",
+    templateUrl: "./home-index.component.html",
+    styleUrls: ["./home-index.component.scss"],
     standalone: true,
-    imports: [NgIf, AlertDisplayComponent, RouterLink, CustomRichTextComponent]
+    imports: [NgIf, AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe],
 })
 export class HomeIndexComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;
-    public currentUser: PersonDto;
+    public currentUser$: Observable<PersonDto>;
 
     public richTextTypeID: number = NeptunePageTypeEnum.HippocampHomePage;
 
-    constructor(private authenticationService: AuthenticationService,
-        private router: Router,
-        private route: ActivatedRoute) {
-    }
+    constructor(private authenticationService: AuthenticationService, private router: Router, private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
-        this.route.queryParams.subscribe(params => {
+        this.currentUser$ = this.authenticationService.getCurrentUser();
+
+        this.route.queryParams.subscribe((params) => {
             //We're logging in
             if (params.hasOwnProperty("code")) {
                 this.router.navigate(["/signin-oidc"], { queryParams: params });
@@ -42,16 +42,10 @@ export class HomeIndexComponent implements OnInit, OnDestroy {
 
             //We were forced to logout or were sent a link and just finished logging in
             if (sessionStorage.getItem("authRedirectUrl")) {
-                this.router.navigateByUrl(sessionStorage.getItem("authRedirectUrl"))
-                    .then(() => {
-                        sessionStorage.removeItem("authRedirectUrl");
-                    });
+                this.router.navigateByUrl(sessionStorage.getItem("authRedirectUrl")).then(() => {
+                    sessionStorage.removeItem("authRedirectUrl");
+                });
             }
-
-            this.authenticationService.getCurrentUser().subscribe(currentUser => {
-                this.currentUser = currentUser;
-            });
-
         });
     }
 
@@ -59,24 +53,24 @@ export class HomeIndexComponent implements OnInit, OnDestroy {
         this.watchUserChangeSubscription?.unsubscribe();
     }
 
-    public userIsUnassigned() {
-        if (!this.currentUser) {
+    public userIsUnassigned(currentUser: PersonDto) {
+        if (!currentUser) {
             return false; // doesn't exist != unassigned
         }
 
-        return this.currentUser.Role.RoleID === RoleEnum.Unassigned;
+        return currentUser.Role.RoleID === RoleEnum.Unassigned;
     }
 
-    public userIsOCTAGrantReviewer() {
-        if (!this.currentUser) {
+    public userIsOCTAGrantReviewer(currentUser: PersonDto) {
+        if (!currentUser) {
             return false;
         }
 
-        return this.currentUser.IsOCTAGrantReviewer;
+        return currentUser.IsOCTAGrantReviewer;
     }
 
-    public isUserAnAdministrator() {
-        return this.authenticationService.isUserAnAdministrator(this.currentUser);
+    public isUserAnAdministrator(currentUser: PersonDto) {
+        return this.authenticationService.isUserAnAdministrator(currentUser);
     }
 
     public login(): void {
@@ -104,6 +98,6 @@ export class HomeIndexComponent implements OnInit, OnDestroy {
     }
 
     public ocstBaseUrl(): string {
-        return environment.ocStormwaterToolsBaseUrl
+        return environment.ocStormwaterToolsBaseUrl;
     }
 }

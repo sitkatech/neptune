@@ -1,10 +1,120 @@
-.homepageJumbotronImage {
-    background-size: cover;
-    background-position: center center;
-    height: 300px;
+@use "/src/scss/abstracts" as *;
+
+.hero {
+    display: grid;
+
+    &__photo {
+        z-index: 0;
+        grid-column: 1;
+        grid-row: 1;
+        aspect-ratio: 4 / 3;
+
+        @include tablet {
+            aspect-ratio: 16 / 9;
+        }
+
+        @include desktop-medium {
+            aspect-ratio: unset;
+            max-height: clamp(20rem, 70vh, 48rem);
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-position: top center;
+            object-fit: cover;
+        }
+    }
+
+    &__info {
+        z-index: 2;
+        grid-column: 1;
+        grid-row: 1;
+        align-self: end;
+        color: white;
+        padding: 2rem;
+    }
+
+    &__name {
+        background: $secondary;
+        display: inline-block;
+        padding: 0.75rem 0.75rem 0.375rem 0.75rem;
+        font-size: $type-size-200;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: bold;
+        line-height: 1;
+    }
+
+    &__title {
+        font-size: $type-size-600;
+        font-weight: 900;
+
+        @include desktop-medium {
+            font-size: $type-size-800;
+        }
+
+        .line {
+            background: $primary;
+            display: inline-block;
+            padding: 0.75rem 0.5rem 0.5rem;
+
+            @include tablet {
+                padding: 1.25rem 1rem 1rem;
+            }
+
+            &-2 {
+                padding-top: 0;
+                padding-bottom: 0.375rem;
+
+                @include tablet {
+                    padding-bottom: 0.5rem;
+                }
+            }
+        }
+    }
+
+    &__actions {
+        background: $white;
+        box-shadow: $shadow-200;
+        margin: 2rem;
+
+        @include desktop-small {
+            grid-column: 1;
+            grid-row: 1;
+            z-index: 3;
+            max-width: 24rem;
+            width: 50%;
+            align-self: end;
+            justify-self: end;
+            transform: translateY(6rem);
+        }
+
+        .card-header {
+            border-top-color: transparent;
+            background-color: transparent;
+        }
+
+        .card-title {
+            font-weight: 500;
+            color: $primary;
+        }
+    }
+
+    &__btns {
+        display: grid;
+        gap: 1rem;
+
+        &-wrapper {
+            text-align: center;
+            .btn {
+                display: block;
+            }
+        }
+    }
 }
 
-#homepageJumbotronImage1 {
-    background-image: url("/assets/main/home_image.png");
-    background-position: right 0 bottom -130px;
+.alert-container {
+    padding: $spacing-700;
+    max-width: 94rem;
 }
