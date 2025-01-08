@@ -79,5 +79,10 @@ export enum NeptunePageTypeEnum {
   WQMPLocationsDataHub = 77,
   AssessmentAreasDataHub = 78,
   OVTADataHub = 79,
-  LandUseBlockDataHub = 80
+  LandUseBlockDataHub = 80,
+  RegionalSubbasinsDataHub = 81,
+  LandUseStatisticsDataHub = 82,
+  ModelBasinsDataHub = 83,
+  PrecipitationZonesDataHub = 84,
+  ParcelUploadDataHub = 85
 }

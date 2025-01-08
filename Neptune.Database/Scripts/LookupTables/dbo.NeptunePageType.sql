@@ -76,7 +76,12 @@ USING (VALUES
 (77, 'WQMPLocationsDataHub', 'WQMP Locations Data Hub'),
 (78, 'AssessmentAreasDataHub', 'Assessment Areas Data Hub'),
 (79, 'OVTADataHub', 'OVTA Data Hub'),
-(80, 'LandUseBlockDataHub', 'Land Use Block Data Hub')
+(80, 'LandUseBlockDataHub', 'Land Use Block Data Hub'),
+(81, 'RegionalSubbasinsDataHub', 'Regional Subbasins Data Hub'),
+(82, 'LandUseStatisticsDataHub', 'Land Use Statistics Data Hub'),
+(83, 'ModelBasinsDataHub', 'Model Basins Data Hub'),
+(84, 'PrecipitationZonesDataHub', 'Precipitation Zones Data Hub'),
+(85, 'ParcelUploadDataHub', 'Parcel Upload Data Hub')
 )
 AS Source (NeptunePageTypeID, NeptunePageTypeName, NeptunePageTypeDisplayName)
 ON Target.NeptunePageTypeID = Source.NeptunePageTypeID

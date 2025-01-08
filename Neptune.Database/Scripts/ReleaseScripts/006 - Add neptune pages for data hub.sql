@@ -16,7 +16,12 @@ BEGIN
 		(77, 'Data Hub'),
 		(78, 'Data Hub'),
 		(79, 'Data Hub'),
-		(80, 'Data Hub')
+		(80, 'Data Hub'),
+		(81, 'Data Hub'),
+		(82, 'Data Hub'),
+		(83, 'Data Hub'),
+		(84, 'Data Hub'),
+		(85, 'Data Hub')
 
     INSERT INTO dbo.DatabaseMigration(MigrationAuthorName, ReleaseScriptFileName, MigrationReason)
     SELECT 'Liz Arikawa', @MigrationName, '006 - Add neptune pages for data hub'
