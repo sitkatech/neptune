@@ -79,7 +79,7 @@
                         </div>
                         <div class="col">OCTA M2 Tier 2 Grant Program</div>
                         <div class="col-4">
-                            <button (click)="shareOrRevokeOCTAScores()" class="btn btn-hippocamp" [disabled]="isLoadingSubmit">
+                            <button (click)="shareOrRevokeOCTAScores()" class="btn btn-primary" [disabled]="isLoadingSubmit">
                                 <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
                                 {{ project.ShareOCTAM2Tier2Scores ? "Revoke" : "Share" }}
                             </button>

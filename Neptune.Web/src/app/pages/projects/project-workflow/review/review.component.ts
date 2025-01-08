@@ -118,7 +118,7 @@ export class ReviewComponent implements OnInit {
 
         this.confirmService
             .confirm({
-                buttonClassYes: "btn-hippocamp",
+                buttonClassYes: "btn-primary",
                 //buttonDisabledYes: !canSubmit,
                 buttonTextYes: buttonTextYes,
                 buttonTextNo: "Cancel",

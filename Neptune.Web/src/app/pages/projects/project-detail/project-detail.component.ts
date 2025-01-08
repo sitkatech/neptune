@@ -109,7 +109,7 @@ export class ProjectDetailComponent implements OnInit {
       You can change the name in the project editing workflow afterwards.</p>
       <p>Note: Model results and attachments will not be copied.</p>`;
         this.confirmService
-            .confirm({ buttonClassYes: "btn-hippocamp", buttonTextYes: "Copy", buttonTextNo: "Cancel", title: "Copy Project", message: modalContents })
+            .confirm({ buttonClassYes: "btn-primary", buttonTextYes: "Copy", buttonTextNo: "Cancel", title: "Copy Project", message: modalContents })
             .then((confirmed) => {
                 if (confirmed) {
                     this.isCopyingProject = true;

@@ -35,7 +35,7 @@
                                     <span *ngIf="getTreatmentBMPDelineation(treatmentBMP.TreatmentBMPID)?.DelineationTypeID == 2">Yes</span>
                                     <button
                                         *ngIf="!treatmentBMPHasDelineation(treatmentBMP.TreatmentBMPID)"
-                                        class="btn btn-hippocamp"
+                                        class="btn btn-primary"
                                         (click)="drawDelineationForTreatmentBMP(treatmentBMP.TreatmentBMPID)"
                                         [disabled]="isEditingLocation || isPerformingDrawAction || isLoadingSubmit">
                                         Draw on Map
@@ -45,7 +45,7 @@
                                     <span *ngIf="getTreatmentBMPDelineation(treatmentBMP.TreatmentBMPID)?.DelineationTypeID == 1">Yes</span>
                                     <button
                                         *ngIf="!treatmentBMPHasDelineation(treatmentBMP.TreatmentBMPID)"
-                                        class="btn btn-hippocamp"
+                                        class="btn btn-primary"
                                         (click)="getUpstreamRSBCatchmentForTreatmentBMP(treatmentBMP.TreatmentBMPID)"
                                         [disabled]="isEditingLocation || isPerformingDrawAction || isLoadingSubmit">
                                         Trace Network
@@ -114,7 +114,7 @@
                 <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
                 Save
             </button>
-            <button class="btn btn-hippocamp ml-auto" [disabled]="isLoadingSubmit" (click)="onSubmit(true)">
+            <button class="btn btn-primary ml-auto" [disabled]="isLoadingSubmit" (click)="onSubmit(true)">
                 <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
                 Save and Continue
             </button>
