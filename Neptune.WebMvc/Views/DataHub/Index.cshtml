@@ -20,6 +20,8 @@
     -----------------------------------------------------------------------*@
 @using Neptune.WebMvc.Views.Shared
 @using Neptune.WebMvc.Common.BootstrapWrappers
+@using Neptune.Common
+@using Neptune.WebMvc.Common
 @inherits Neptune.WebMvc.Views.DataHub.Index
 @section JavascriptAndStylesContent
 {
@@ -252,37 +254,35 @@
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane" id="webServices">
-                <div class="col-md-9">
-                    <h3>Assessment Areas</h3>
-                    @{
-                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.TreatmentBMPPage);
-                    }
-                    <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                    <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune" disabled>@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                <p>This document documents the web connections made in the demonstration PowerBI file <a href="~/Content/PowerBI/OCST_PowerBI_Demo_2020_03_23.zip" download>here</a>, and includes a description of how the connection is used by the file to inform the summary report dashboards.
+                    This information and the web addresses referenced herein may change in the coming months since this service is under active and rapid development.
+                </p>
 
-                    <h3>On-land Visual Trash Assessments (OVTAs)</h3>
-                    @{
-                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.DelineationPage);
+                <h3>Tabular Services</h3>
+                <table style="border: 0; font-size:14px" class="table table-condensed table-striped">
+                    <tr>
+                        <th>Name</th>
+                        <th>Short Description / Simple Use Case / URL</th>
+                    </tr>
+                    @foreach (var doc in ViewDataTyped.ServiceDocumentationList)
+                    {
+                        <tr>
+                            <td class="term">@doc.Name</td>
+                            <td>
+                                <strong>@doc.DescriptionHeader</strong>
+                                <div style="margin-top: 5px; margin-bottom: 5px; font-size: 11px">
+                                    @{ var url = doc.GetReplacedUrl(ViewDataTyped.WebServiceAccessToken);}
+                                    URL: <a href="@url" target="_blank">@url</a>
+                                </div>
+                                @{ var parameters = doc.GetParameters(ViewDataTyped.WebServiceAccessToken);}
+                                <i>Parameters: @(!string.IsNullOrWhiteSpace(parameters) ? parameters : ViewUtilities.NaString)</i>
+                                <br /><br />
+                                @doc.Description.ToHTMLFormattedString()
+
+                            </td>
+                        </tr>
                     }
-                    <a href="@ViewDataTyped.UploadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                    <a href="@ViewDataTyped.DownloadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
-                    <h3>Land Use Blocks</h3>
-                    @{
-                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.FieldTripPage);
-                    }
-                    <a href="@ViewDataTyped.UploadFieldTripUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                </div>
-                <div class="col-md-3 sidebar">
-                    <h4>Quick Links:</h4>
-                    Tabular data (.csv) can be downloaded from lists throughout the system:
-                    <ul>
-                        <li>OVTA List</li>
-                        <li>Trash Generating Units Audit List</li>
-                        <li>Land Use Blocks</li>
-                    </ul>
-                    <h4>Tip:</h4>
-                    Go to the BMP and WQMP tabs to update asset inventories and set trash capture status.
-                </div>
+                </table>
             </div>
         </div>
     </div>

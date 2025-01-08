@@ -158,7 +158,7 @@ namespace Neptune.WebMvc.Views
             if (new JurisdictionEditFeature().HasPermissionByPerson(currentPerson))
             {
                 programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(
-                new SitkaRoute<WebServicesController>(x => x.Index(), SitkaRouteSecurity.SSL, LinkGenerator), currentPerson, "Web Services", "Group 2"));
+                new SitkaRoute<DataHubController>(x => x.Index(), SitkaRouteSecurity.SSL, LinkGenerator), currentPerson, "Web Services", "Group 2"));
             }
 
             return programInfoMenu;

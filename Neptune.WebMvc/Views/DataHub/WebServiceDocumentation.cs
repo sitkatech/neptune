@@ -7,7 +7,7 @@ using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Controllers;
 using Neptune.WebMvc.Models;
 
-namespace Neptune.WebMvc.Views.WebServices
+namespace Neptune.WebMvc.Views.DataHub
 {
     public class WebServiceDocumentation
     {
@@ -44,7 +44,7 @@ namespace Neptune.WebMvc.Views.WebServices
             Check.Require(attribs.Length == 1, "Expected 1 and only 1 WebServiceDocumentation attribute on found Web Methods.");
 
             var attrib = (WebServiceNameAndDescriptionAttribute)attribs[0];
-            
+
             Description = attrib.Description;
             DescriptionHeader = attrib.Name;
             Name = methodInfo.Name;
@@ -58,7 +58,7 @@ namespace Neptune.WebMvc.Views.WebServices
                     var paramAttribs = x.GetCustomAttributes(typeof(ParameterDescriptionAttribute), false);
                     if (paramAttribs.Length > 0)
                     {
-                        var paramAttrib = (ParameterDescriptionAttribute) paramAttribs[0];
+                        var paramAttrib = (ParameterDescriptionAttribute)paramAttribs[0];
                         Parameters.Add(paramAttrib.Description);
                     }
                     else

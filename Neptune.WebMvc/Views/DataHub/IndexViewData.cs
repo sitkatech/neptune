@@ -1,16 +1,15 @@
 ﻿using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Controllers;
-using Neptune.WebMvc.Security;
-using Neptune.WebMvc.Views.Assessment;
-using Neptune.WebMvc.Views.FieldVisit;
-using Neptune.WebMvc.Views.MaintenanceRecord;
+using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Views.Shared;
 
 namespace Neptune.WebMvc.Views.DataHub
 {
     public class IndexViewData : NeptuneViewData
     {
+        public readonly WebServiceToken WebServiceAccessToken;
+        public readonly List<WebServiceDocumentation> ServiceDocumentationList;
         public ViewPageContentViewData TreatmentBMPPage { get; }
         public ViewPageContentViewData DelineationPage { get; }
         public ViewPageContentViewData FieldTripPage { get; }
@@ -32,11 +31,13 @@ namespace Neptune.WebMvc.Views.DataHub
         public string UploadOVTAUrl { get; set; }
         public string UploadLandUseBlocksUrl { get; set; }
         public string DownloadLandUseBlocksUrl { get; set; }
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<EFModels.Entities.NeptunePage> neptunePages)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<EFModels.Entities.NeptunePage> neptunePages, WebServiceToken webServiceAccessToken, List<WebServiceDocumentation> serviceDocumentationList)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = "Data Hub";
             PageTitle = "Index";
+            WebServiceAccessToken = webServiceAccessToken;
+            ServiceDocumentationList = serviceDocumentationList;
             TreatmentBMPPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.BMPDataHub), currentPerson);
             DelineationPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.DelineationDataHub), currentPerson);
             FieldTripPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.FieldVisitDataHub), currentPerson);
