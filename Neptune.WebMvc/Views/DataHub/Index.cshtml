@@ -22,6 +22,7 @@
 @using Neptune.WebMvc.Common.BootstrapWrappers
 @using Neptune.Common
 @using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Common.ModalDialog
 @inherits Neptune.WebMvc.Views.DataHub.Index
 @section JavascriptAndStylesContent
 {
@@ -45,6 +46,11 @@
             a {
                 margin: 0 0.5rem 0 0;
             }
+        }
+        .lastUpdated {
+            color: #464646;
+            font-style: italic;
+            padding-right: 1rem;
         }
     </style>
 }
@@ -116,7 +122,6 @@
                     </ul>
                 </div>
             </div>
-            
             <div role="tabpanel" class="tab-pane " id="wqmps">
                 <div class="col-md-9">
                     <h3>Water Quality Management Plans</h3>
@@ -184,62 +189,59 @@
             </div>
             <div role="tabpanel" class="tab-pane" id="parcels">
                 <div class="col-md-9">
-                    <h3>Assessment Areas</h3>
+                    <h3>Parcel Upload</h3>
                     @{
-                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.TreatmentBMPPage);
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.ParcelPage);
                     }
-                    <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                    <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune" disabled>@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                    <a href="@ViewDataTyped.ParcelUploadUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
 
-                    <h3>On-land Visual Trash Assessments (OVTAs)</h3>
-                    @{
-                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.DelineationPage);
-                    }
-                    <a href="@ViewDataTyped.UploadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                    <a href="@ViewDataTyped.DownloadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
-                    <h3>Land Use Blocks</h3>
-                    @{
-                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.FieldTripPage);
-                    }
-                    <a href="@ViewDataTyped.UploadFieldTripUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                 </div>
                 <div class="col-md-3 sidebar">
                     <h4>Quick Links:</h4>
                     Tabular data (.csv) can be downloaded from lists throughout the system:
                     <ul>
-                        <li>OVTA List</li>
-                        <li>Trash Generating Units Audit List</li>
-                        <li>Land Use Blocks</li>
+                        <li>Parcel List</li>
+                        <li>Parcel Map</li>
                     </ul>
                     <h4>Tip:</h4>
-                    Go to the BMP and WQMP tabs to update asset inventories and set trash capture status.
+                    Coming soon...
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane" id="countyIntegration">
                 <div class="col-md-9">
                     <h3>Regional Subbasins</h3>
                     @{
-                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.TreatmentBMPPage);
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.RegionalSubbasinsPage);
                     }
-                    <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                    <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune" disabled>@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                    <span class="lastUpdated">
+                        Last Updated: @ViewDataTyped.LastUpdatedRegionalSubbasins.ToStringDateTimeNoLeadingZeros()
+                    </span>
+                    @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")} Refresh", ViewDataTyped.RegionalSubbasinRefreshUrl, "Refresh Regional Subbasins From OC Survey", 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune"}, null, null)
 
                     <h3>Land Use Statistics</h3>
                     @{
-                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.DelineationPage);
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.LandUseStatisticsPage);
                     }
-                    <a href="@ViewDataTyped.UploadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                    <a href="@ViewDataTyped.DownloadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                    <span class="lastUpdated">
+                        Last Updated: Date
+                    </span>
+                    @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")} Refresh", ViewDataTyped.LandUseStatisticsRefreshUrl, "Refresh Regional Subbasins From OC Survey", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
                     <h3>Model Basins</h3>
                     @{
-                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.FieldTripPage);
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.ModelBasinsPage);
                     }
-                    <a href="@ViewDataTyped.UploadFieldTripUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    <span class="lastUpdated">
+                        Last Updated: @ViewDataTyped.LastUpdatedModalBasins.ToStringDateTimeNoLeadingZeros()
+                    </span>
+                    @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")} Refresh", ViewDataTyped.ModelBasinsRefreshUrl, "Refresh Regional Subbasins From OC Survey", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
                     <h3>Precipitation Zones</h3>
                     @{
-                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.FieldTripPage);
+                        ViewPageContent.RenderPartialView(Html, ViewDataTyped.PrecipitationZonesPage);
                     }
-                    <a href="@ViewDataTyped.UploadFieldTripUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    <span class="lastUpdated">
+                        Last Updated: @ViewDataTyped.LastUpdatedPrecipitationZones.ToStringDateTimeNoLeadingZeros()
+                    </span>
+                    @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")} Refresh", ViewDataTyped.PrecipitationZonesRefreshUrl, "Refresh Regional Subbasins From OC Survey", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
                 </div>
                 <div class="col-md-3 sidebar">
                     <h4>Quick Links:</h4>
