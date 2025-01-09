@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="DownloadInventoryToGIS.cs" company="Tahoe Regional Planning Agency">
+<copyright file="DownloadBMPsToGIS.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -23,7 +23,7 @@ using Neptune.WebMvc.Common.Mvc;
 
 namespace Neptune.WebMvc.Views.TreatmentBMP
 {
-    public abstract class DownloadInventoryToGIS : TypedWebViewPage<DownloadInventoryToGISViewData>
+    public abstract class DownloadBMPsToGIS : TypedWebViewPage<DownloadBMPsToGISViewData>
     {
     }
 }

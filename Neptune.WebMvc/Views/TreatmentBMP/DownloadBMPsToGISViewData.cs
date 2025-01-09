@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="DownloadInventoryToGISViewData.cs" company="Tahoe Regional Planning Agency">
+<copyright file="DownloadBMPsToGISViewData.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -26,14 +26,14 @@ using Neptune.WebMvc.Models;
 
 namespace Neptune.WebMvc.Views.TreatmentBMP
 {
-    public class DownloadInventoryToGISViewData : NeptuneViewData
+    public class DownloadBMPsToGISViewData : NeptuneViewData
     {
         public int TreatmentBmpsInExportCount { get; }
         public int FeatureClassesInExportCount { get; }
 
         public string DownloadBMPInventoryUrl { get; }
 
-        public DownloadInventoryToGISViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
+        public DownloadBMPsToGISViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.NeptunePage neptunePage, int treatmentBmpsInExportCount, int featureClassesInExportCount)
             : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
