@@ -21,6 +21,7 @@ public class DataHubController : NeptuneBaseController<DataHubController>
     {
         var neptunePages = _dbContext.NeptunePages.ToList();
         var lastUpdatedDateRegionalSubbasin = _dbContext.RegionalSubbasins.MaxBy(x => x.LastUpdate)?.LastUpdate;
+        var lastUpdatedDateHRUCharacteristics = _dbContext.HRUCharacteristics.MaxBy(x => x.LastUpdated)?.LastUpdated;
         var lastUpdatedDateModelBasins = _dbContext.ModelBasins.MaxBy(x => x.LastUpdate)?.LastUpdate;
         var lastUpdatedDatePrecipitationZones = _dbContext.PrecipitationZones.MaxBy(x => x.LastUpdate)?.LastUpdate;
         var allMethods = FindAttributedMethods(typeof(PowerBIController), typeof(WebServiceNameAndDescriptionAttribute));
@@ -28,7 +29,7 @@ public class DataHubController : NeptuneBaseController<DataHubController>
         var webServiceAccessToken = new WebServiceToken(_dbContext, CurrentPerson.WebServiceAccessToken.ToString());
         var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePages,
             webServiceAccessToken, serviceDocumentationList, lastUpdatedDateRegionalSubbasin,
-            lastUpdatedDateModelBasins, lastUpdatedDatePrecipitationZones);
+            lastUpdatedDateModelBasins, lastUpdatedDatePrecipitationZones, lastUpdatedDateHRUCharacteristics);
         return RazorView<Index, IndexViewData>(viewData);
     }
 

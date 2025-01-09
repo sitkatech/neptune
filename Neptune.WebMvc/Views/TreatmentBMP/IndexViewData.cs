@@ -18,8 +18,6 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public bool HasEditPermissions { get; }
         public string DownloadBMPInventoryUrl { get; }
         public bool HasAdminPermissions { get; }
-        public string RefreshModelBasinsUrl { get; }
-        public string RefreshPrecipitationZonesUrl { get; }
         public string RefreshOCTAPrioritizationLayerUrl { get; }
 
         public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
@@ -41,8 +39,6 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             HasEditPermissions = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             HasAdminPermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
             DownloadBMPInventoryUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.BMPInventoryExport());
-            RefreshModelBasinsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshModelBasinsFromOCSurvey());
-            RefreshPrecipitationZonesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshPrecipitationZonesFromOCSurvey());
             RefreshOCTAPrioritizationLayerUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshOCTAPrioritizationLayerFromOCSurvey());
         }
     }
