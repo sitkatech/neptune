@@ -152,7 +152,7 @@ export class ProjectBasicsComponent implements OnInit {
                 }
             );
         } else {
-            this.projectService.projectsNewPost(this.projectModel).subscribe(
+            this.projectService.projectsPost(this.projectModel).subscribe(
                 (project) => {
                     this.onSubmitSuccess("Your project was successfully created.", project.ProjectID, continueToNextStep);
                 },

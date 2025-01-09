@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Neptune.Models.DataTransferObjects;
+﻿using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {

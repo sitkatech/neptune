@@ -28,6 +28,7 @@ import { ProjectLoadGeneratingResultDto } from '../model/project-load-generating
 import { ProjectLoadReducingResultDto } from '../model/project-load-reducing-result-dto';
 import { ProjectNetworkSolveHistorySimpleDto } from '../model/project-network-solve-history-simple-dto';
 import { ProjectUpsertDto } from '../model/project-upsert-dto';
+import { ProjectWorkflowProgressDto } from '../model/project-workflow-progress-dto';
 import { TreatmentBMPHRUCharacteristicsSummarySimpleDto } from '../model/treatment-bmphru-characteristics-summary-simple-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -323,54 +324,6 @@ export class ProjectService {
     /**
      * 
      * 
-     * @param projectUpsertDto 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'body', reportProgress?: boolean): Observable<ProjectDto>;
-    public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectDto>>;
-    public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectDto>>;
-    public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'text/plain',
-            'application/json',
-            'text/json',
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/_*+json',
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.post<ProjectDto>(`${this.basePath}/projects/new`,
-            projectUpsertDto,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -472,6 +425,54 @@ export class ProjectService {
         return this.httpClient.get(`${this.basePath}/projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download`,
             {
                 responseType: "blob",
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param projectUpsertDto 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public projectsPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'body', reportProgress?: boolean): Observable<ProjectDto>;
+    public projectsPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectDto>>;
+    public projectsPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectDto>>;
+    public projectsPost(projectUpsertDto?: ProjectUpsertDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/_*+json',
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<ProjectDto>(`${this.basePath}/projects`,
+            projectUpsertDto,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -950,6 +951,49 @@ export class ProjectService {
 
         return this.httpClient.post<any>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/modeled-performance`,
             null,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param projectID 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public projectsProjectIDProgressGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<ProjectWorkflowProgressDto>;
+    public projectsProjectIDProgressGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectWorkflowProgressDto>>;
+    public projectsProjectIDProgressGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectWorkflowProgressDto>>;
+    public projectsProjectIDProgressGet(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (projectID === null || projectID === undefined) {
+            throw new Error('Required parameter projectID was null or undefined when calling projectsProjectIDProgressGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<ProjectWorkflowProgressDto>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/progress`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

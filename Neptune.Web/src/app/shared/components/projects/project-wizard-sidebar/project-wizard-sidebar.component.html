@@ -1,93 +1,32 @@
-<div class="sidebar-header p-2">
-    <div class="row m-2">
-        <p>Project Name: &nbsp;</p>
-        <div *ngIf="projectModel?.ProjectName; then hasName; else noName"></div>
-        <ng-template #hasName>
-            <p>
-                <strong>{{ projectModel.ProjectName }}</strong>
-            </p>
-        </ng-template>
-        <ng-template #noName>
-            <p><strong>Project Name Here</strong></p>
-        </ng-template>
-    </div>
-</div>
-
-<div class="sidebar-card">
-    <div class="card-body">
-        <a [routerLink]="['instructions']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="icon-padding">
-            <progress-icon [isInformational]="true"></progress-icon>
-            Instructions
-        </a>
-    </div>
-    <div class="card-body" [ngClass]="{ 'not-allowed': projectModel.ShareOCTAM2Tier2Scores }">
-        <a
-            [routerLink]="['project-basics']"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            [ngClass]="{ disabled: projectModel.ShareOCTAM2Tier2Scores }"
-            class="icon-padding">
-            <progress-icon [isComplete]="isProjectBasicsComplete()"></progress-icon>
-            Project Basics
-        </a>
-    </div>
-    <div class="sidebar-card">
-        <div class="card-body">
-            <div class="icon-padding">
-                <progress-icon [isComplete]="isStormwaterTreatmentsComplete()"></progress-icon>
-                <span>Stormwater Treatments</span>
-            </div>
-        </div>
-        <div class="indented-pages">
-            <div class="card-body" [ngClass]="{ 'not-allowed': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores }">
-                <a
-                    [routerLink]="['stormwater-treatments', 'treatment-bmps']"
-                    routerLinkActive="active"
-                    [routerLinkActiveOptions]="{ exact: true }"
-                    class="icon-padding"
-                    [ngClass]="{ disabled: !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores }">
-                    <progress-icon [isComplete]="doAllTreatmentBMPsHaveModelingParameters()"></progress-icon>
-                    Treatment BMPs
-                </a>
-            </div>
-
-            <div class="card-body" [ngClass]="{ 'not-allowed': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs() }">
-                <a
-                    [routerLink]="['stormwater-treatments', 'delineations']"
-                    routerLinkActive="active"
-                    [routerLinkActiveOptions]="{ exact: true }"
-                    class="icon-padding"
-                    [ngClass]="{ disabled: !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs() }">
-                    <progress-icon [isComplete]="doAllTreatmentBMPsHaveDelineations()"></progress-icon>
-                    Delineations
-                </a>
-            </div>
-
-            <div class="card-body" [ngClass]="{ 'not-allowed': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs() }">
-                <a
-                    [routerLink]="['stormwater-treatments', 'modeled-performance-and-metrics']"
-                    routerLinkActive="active"
-                    [routerLinkActiveOptions]="{ exact: true }"
-                    class="icon-padding"
-                    [ngClass]="{ disabled: !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs() }">
-                    <progress-icon [isComplete]="doAllTreatmentBMPsHaveCalculatedModelResults()"></progress-icon>
-                    Modeled Performance and Grant Metrics
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="card-body" [ngClass]="{ 'not-allowed': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores }">
-        <a [routerLink]="['attachments']" routerLinkActive="active" class="icon-padding" [ngClass]="{ disabled: !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores }">
-            <progress-icon [isComplete]="true"></progress-icon>
-            Attachments
-        </a>
-    </div>
-
-    <div class="card-body" [ngClass]="{ 'not-allowed': !projectModel.ProjectName }">
-        <a [routerLink]="['review-and-share']" routerLinkActive="active" class="icon-padding" [ngClass]="{ disabled: !projectModel.ProjectName }">
-            <progress-icon [isInformational]="true"></progress-icon>
-            Review and Share
-        </a>
-    </div>
-</div>
+<workflow-nav *ngIf="progress$ | async as progressDto">
+    <workflow-nav-item [navRouterLink]="['instructions']" [complete]="progressDto.Steps.Instructions" [required]="false"> Instructions </workflow-nav-item>
+    <workflow-nav-item [navRouterLink]="['project-basics']" [complete]="progressDto.Steps.BasicInfo" [disabled]="projectModel.ShareOCTAM2Tier2Scores">
+        Basic Information
+    </workflow-nav-item>
+    <workflow-nav-item
+        [navRouterLink]="['stormwater-treatments', 'treatment-bmps']"
+        [complete]="progressDto.Steps.TreatmentBMPs"
+        [disabled]="!projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores">
+        Treatment BMPs
+    </workflow-nav-item>
+    <workflow-nav-item
+        [navRouterLink]="['stormwater-treatments', 'delineations']"
+        [complete]="progressDto.Steps.Delineations"
+        [disabled]="!projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs()">
+        Delineations
+    </workflow-nav-item>
+    <workflow-nav-item
+        [navRouterLink]="['stormwater-treatments', 'modeled-performance-and-metrics']"
+        [complete]="progressDto.Steps.ModeledPerformanceAndGrantMetrics"
+        [disabled]="!projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs()">
+        Modeled Performance and Grant Metrics
+    </workflow-nav-item>
+    <workflow-nav-item
+        [navRouterLink]="['attachments']"
+        [complete]="progressDto.Steps.Attachments"
+        [disabled]="!projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores"
+        [required]="false">
+        Attachments
+    </workflow-nav-item>
+    <workflow-nav-item [navRouterLink]="['review-and-share']" [complete]="true" [required]="false" [disabled]="!projectModel.ProjectName"> Review and Share </workflow-nav-item>
+</workflow-nav>

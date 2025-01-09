@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Serilog;
 
-namespace Neptune.API.Services
+namespace Neptune.API.Services.Middleware
 {
     public class ExceptionMiddleware
     {

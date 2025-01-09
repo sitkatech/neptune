@@ -34,6 +34,21 @@ namespace Neptune.EFModels.Entities
             return GetByIDWithChangeTracking(dbContext, projectPrimaryKey.PrimaryKeyValue);
         }
 
+        public static Project GetByIDWithTrackingForWorkflow(NeptuneDbContext dbContext, int projectID)
+        {
+            return dbContext.Projects
+                .Include(x => x.Organization)
+                .Include(x => x.StormwaterJurisdiction)
+                .Include(x => x.TreatmentBMPs)
+                .ThenInclude(x => x.Delineation)
+                .Include(x => x.TreatmentBMPs)
+                .ThenInclude(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
+                .Include(x => x.TreatmentBMPs)
+                .ThenInclude(x => x.TreatmentBMPType)
+                .Include(x => x.ProjectNereidResults)
+                .Single(x => x.ProjectID == projectID);
+        }
+
         public static Project GetByID(NeptuneDbContext dbContext, int projectID)
         {
             var project = GetImpl(dbContext).AsNoTracking()

@@ -41,6 +41,8 @@ model/project-load-reducing-result-dto.ts
 model/project-network-solve-history-simple-dto.ts
 model/project-status-simple-dto.ts
 model/project-upsert-dto.ts
+model/project-workflow-progress-dto-steps.ts
+model/project-workflow-progress-dto.ts
 model/role-simple-dto.ts
 model/stormwater-jurisdiction-dto.ts
 model/system-info-dto.ts

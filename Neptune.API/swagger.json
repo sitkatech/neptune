@@ -614,9 +614,7 @@
             }
           }
         }
-      }
-    },
-    "/projects/new": {
+      },
       "post": {
         "tags": [
           "Project"
@@ -657,6 +655,46 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProjectDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/progress": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWorkflowProgressDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWorkflowProgressDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWorkflowProgressDto"
                 }
               }
             }
@@ -3698,6 +3736,51 @@
           },
           "ShareOCTAM2Tier2Scores": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectWorkflowProgressDto": {
+        "type": "object",
+        "properties": {
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProjectStatus": {
+            "$ref": "#/components/schemas/ProjectStatusSimpleDto"
+          },
+          "Steps": {
+            "type": "object",
+            "properties": {
+              "Instructions": {
+                "type": "boolean"
+              },
+              "BasicInfo": {
+                "type": "boolean"
+              },
+              "TreatmentBMPs": {
+                "type": "boolean"
+              },
+              "Delineations": {
+                "type": "boolean"
+              },
+              "ModeledPerformanceAndGrantMetrics": {
+                "type": "boolean"
+              },
+              "Attachments": {
+                "type": "boolean"
+              },
+              "ReviewAndShare": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "nullable": true
           }
         },
         "additionalProperties": false

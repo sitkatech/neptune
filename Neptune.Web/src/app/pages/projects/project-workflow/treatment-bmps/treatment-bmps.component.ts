@@ -18,7 +18,6 @@ import { TreatmentBMPModelingTypeEnum } from "src/app/shared/generated/enum/trea
 import { UnderlyingHydrologicSoilGroupEnum } from "src/app/shared/generated/enum/underlying-hydrologic-soil-group-enum";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
-import { ProjectSimpleDto } from "src/app/shared/generated/model/project-simple-dto";
 import { ProjectUpsertDto } from "src/app/shared/generated/model/project-upsert-dto";
 import { TreatmentBMPModelingAttributeDefinitionDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-definition-dto";
 import { TreatmentBMPModelingAttributeDropdownItemDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto";
@@ -30,7 +29,7 @@ import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import { environment } from "src/environments/environment";
-import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
+import { ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
 import { FieldDefinitionComponent } from "../../../../shared/components/field-definition/field-definition.component";
 import { FormsModule } from "@angular/forms";
 import { CustomRichTextComponent } from "../../../../shared/components/custom-rich-text/custom-rich-text.component";
@@ -134,7 +133,7 @@ export class TreatmentBmpsComponent implements OnInit {
                         this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
                     } else {
                         this.projectID = parseInt(projectID);
-                        this.mapProjectSimpleDtoToProject(project);
+                        this.mapProjectDtoToProject(project);
                         forkJoin({
                             treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
                             projectTreatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
@@ -243,7 +242,7 @@ export class TreatmentBmpsComponent implements OnInit {
         this.cdr.detach();
     }
 
-    private mapProjectSimpleDtoToProject(project: ProjectSimpleDto) {
+    private mapProjectDtoToProject(project: ProjectDto) {
         this.project.ProjectName = project.ProjectName;
         this.project.OrganizationID = project.OrganizationID;
         this.project.StormwaterJurisdictionID = project.StormwaterJurisdictionID;

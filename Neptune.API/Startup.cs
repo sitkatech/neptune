@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Neptune.API.Services;
 using Neptune.API.Services.Filter;
+using Neptune.API.Services.Middleware;
 using Neptune.Common.Email;
 using Neptune.Common.JsonConverters;
 using Neptune.Common.Services;
@@ -239,6 +240,7 @@ namespace Neptune.API
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseMiddleware<EntityNotFoundMiddleware>();
 
             #region Hangfire
             app.UseHangfireDashboard("/hangfire", new DashboardOptions()
