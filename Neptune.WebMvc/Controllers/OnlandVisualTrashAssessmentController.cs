@@ -655,7 +655,7 @@ namespace Neptune.WebMvc.Controllers
             {
                 foreach (DataRow row in dataTableFromExcel.Rows)
                 {
-                    var rowJurisdiction = row["Jurisdiction Name"].ToString();
+                    var rowJurisdiction = row["Jurisdicition Name"].ToString();
                     if (!stormwaterJurisdictionsPersonCanView.Select(x => x.Organization.OrganizationName)
                             .Contains(rowJurisdiction))
                     {
