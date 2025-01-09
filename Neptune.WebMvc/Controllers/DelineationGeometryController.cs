@@ -223,7 +223,7 @@ namespace Neptune.WebMvc.Controllers
                 GdbName = $"{jurisdictionName}-delineation-export"
             });
 
-            return File(bytes, "application/zip", $"{jurisdictionName}-delineation-export.gdb.zip");
+            return File(bytes, "application/zip", $"{delineationTypeName.ToLower()}-{jurisdictionName}-delineation-export.gdb.zip");
         }
 
 
