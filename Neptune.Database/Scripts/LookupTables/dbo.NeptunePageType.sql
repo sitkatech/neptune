@@ -81,7 +81,8 @@ USING (VALUES
 (82, 'LandUseStatisticsDataHub', 'Land Use Statistics Data Hub'),
 (83, 'ModelBasinsDataHub', 'Model Basins Data Hub'),
 (84, 'PrecipitationZonesDataHub', 'Precipitation Zones Data Hub'),
-(85, 'ParcelUploadDataHub', 'Parcel Upload Data Hub')
+(85, 'ParcelUploadDataHub', 'Parcel Upload Data Hub'),
+(86, 'ExportBMPInventoryToGIS', 'Export BMP Inventory to GIS')
 )
 AS Source (NeptunePageTypeID, NeptunePageTypeName, NeptunePageTypeDisplayName)
 ON Target.NeptunePageTypeID = Source.NeptunePageTypeID

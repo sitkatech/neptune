@@ -419,6 +419,7 @@
     <None Include="Scripts\ReleaseScripts\004 - Add neptune page for upload ovtas.sql" />
     <None Include="Scripts\ReleaseScripts\005 - Add neptune page for WQMP APN upload.sql" />
     <None Include="Scripts\ReleaseScripts\006 - Add neptune pages for data hub.sql" />
+    <None Include="Scripts\ReleaseScripts\007 - Add neptune page Export BMP Inventory to GIS.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Neptune.Database.refactorlog" />
