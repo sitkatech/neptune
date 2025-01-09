@@ -2,12 +2,14 @@
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Controllers;
 using Neptune.WebMvc.Models;
+using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.Shared;
 
 namespace Neptune.WebMvc.Views.DataHub
 {
     public class IndexViewData : NeptuneViewData
     {
+        public bool HasManagePermission { get; }
         public readonly WebServiceToken WebServiceAccessToken;
         public readonly List<WebServiceDocumentation> ServiceDocumentationList;
         public ViewPageContentViewData TreatmentBMPPage { get; }
@@ -42,12 +44,27 @@ namespace Neptune.WebMvc.Views.DataHub
         public string ModelBasinsRefreshUrl { get; }
         public string PrecipitationZonesRefreshUrl { get; }
         public DateTime? LastUpdatedRegionalSubbasins { get; set; }
+        public DateTime? LastUpdatedHRUCharacteristics { get; set; }
         public DateTime? LastUpdatedModalBasins { get; set; }
         public DateTime? LastUpdatedPrecipitationZones { get; set; }
+        public string BMPListUrl { get; set; }
+        public string FieldTripUrl { get; set; }
+        public string ModelingAttributeUrl { get; set; }
+        public string BMPMapUrl { get; set; }
+        public string BMPTypesUrl { get; set; }
+        public string WQMPListUrl { get; set; }
+        public string OVTAListUrl { get; set; }
+        public string TrashGeneratingUnitsAuditListUrl { get; set; }
+        public string LandUseBlocksUrl { get; set; }
+        public string ParcelMapUrl { get; set; }
+        public string RSBListUrl { get; set; }
+        public string RSBGridUrl { get; set; }
+        public string HRUCharacteristicsListUrl { get; set; }
 
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<EFModels.Entities.NeptunePage> neptunePages, WebServiceToken webServiceAccessToken, List<WebServiceDocumentation> serviceDocumentationList, DateTime? lastUpdatedRegionalSubbasin, DateTime? lastUpdatedDateModelBasins, DateTime? lastUpdatedDatePrecipitationZones)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<EFModels.Entities.NeptunePage> neptunePages, WebServiceToken webServiceAccessToken, List<WebServiceDocumentation> serviceDocumentationList, DateTime? lastUpdatedRegionalSubbasin, DateTime? lastUpdatedDateModelBasins, DateTime? lastUpdatedDatePrecipitationZones, DateTime? lastUpdatedDateHRUCharacteristics)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
+            HasManagePermission = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             EntityName = "Data Hub";
             PageTitle = "Index";
             WebServiceAccessToken = webServiceAccessToken;
@@ -73,20 +90,39 @@ namespace Neptune.WebMvc.Views.DataHub
             UploadFieldTripUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.BulkUploadTrashScreenVisit());
             UploadWQMPUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.UploadWqmps());
             UploadSimplifiedBMPUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.UploadSimplifiedBMPs());
-            UploadWQMPLocationsUrl = ""; //SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.BulkUploadTrashScreenVisit());
+            UploadWQMPLocationsUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.UploadWqmpBoundaryFromAPNs());
             DownloadAssessmentAreasUrl = SitkaRoute<OnlandVisualTrashAssessmentExportController>.BuildUrlFromExpression(linkGenerator, x => x.ExportAssessmentGeospatialData());
             UploadOVTAUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.BulkUploadOTVAs());
             UploadLandUseBlocksUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(linkGenerator, x => x.UpdateLandUseBlockGeometry());
             DownloadLandUseBlocksUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(linkGenerator, x => x.DownloadLandUseBlockGeometry());
             ParcelUploadUrl = SitkaRoute<ParcelLayerUploadController>.BuildUrlFromExpression(linkGenerator, x => x.UpdateParcelLayerGeometry());
             RegionalSubbasinRefreshUrl = SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshFromOCSurvey());
-            LandUseStatisticsRefreshUrl = SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshFromOCSurvey());
+            LandUseStatisticsRefreshUrl = SitkaRoute<HRUCharacteristicController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshHRUCharacteristics());
             ModelBasinsRefreshUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshModelBasinsFromOCSurvey());
             PrecipitationZonesRefreshUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshPrecipitationZonesFromOCSurvey());
 
             LastUpdatedRegionalSubbasins = lastUpdatedRegionalSubbasin;
+            LastUpdatedHRUCharacteristics = lastUpdatedDateHRUCharacteristics;
             LastUpdatedModalBasins = lastUpdatedDateModelBasins;
             LastUpdatedPrecipitationZones = lastUpdatedDatePrecipitationZones;
+
+            BMPListUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            FieldTripUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            ModelingAttributeUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.ViewTreatmentBMPModelingAttributes());
+            BMPMapUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.FindABMP());
+            BMPTypesUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            
+            WQMPListUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+           
+            OVTAListUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            TrashGeneratingUnitsAuditListUrl = SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            LandUseBlocksUrl = SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            
+            ParcelMapUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            
+            RSBListUrl = SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            RSBGridUrl = SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(linkGenerator, x => x.Grid());
+            HRUCharacteristicsListUrl = SitkaRoute<HRUCharacteristicController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
         }
     }
 }
