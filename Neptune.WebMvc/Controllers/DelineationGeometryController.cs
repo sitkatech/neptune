@@ -187,6 +187,7 @@ namespace Neptune.WebMvc.Controllers
                 .Include(x => x.TreatmentBMP)
                     .ThenInclude(x => x.TreatmentBMPType)
                 .Where(x =>
+                        x.TreatmentBMP.ProjectID == null &&
                 x.TreatmentBMP.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID &&
                 x.DelineationTypeID == viewModel.DelineationTypeID).ToList();
 
