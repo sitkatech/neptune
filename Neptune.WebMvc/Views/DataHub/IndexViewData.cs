@@ -26,42 +26,52 @@ namespace Neptune.WebMvc.Views.DataHub
         public ViewPageContentViewData LandUseStatisticsPage { get; }
         public ViewPageContentViewData ModelBasinsPage { get; }
         public ViewPageContentViewData PrecipitationZonesPage { get; }
-        public string UploadTreatmentBMPUrl { get; set; }
-        public string DownloadTreatmentBMPUrl { get; set; }
-        public string UploadDelineationUrl { get; set; }
-        public string DownloadDelineationUrl { get; set; }
-        public string UploadFieldTripUrl { get; set; }
-        public string UploadWQMPUrl { get; set; }
-        public string UploadSimplifiedBMPUrl { get; set; }
-        public string UploadWQMPLocationsUrl { get; set; }
-        public string DownloadAssessmentAreasUrl { get; set; }
-        public string UploadOVTAUrl { get; set; }
-        public string UploadLandUseBlocksUrl { get; set; }
-        public string DownloadLandUseBlocksUrl { get; set; }
-        public string ParcelUploadUrl { get; set; }
+        public string UploadTreatmentBMPUrl { get; }
+        public string DownloadTreatmentBMPUrl { get; }
+        public string UploadDelineationUrl { get; }
+        public string DownloadDelineationUrl { get; }
+        public string UploadFieldTripUrl { get; }
+        public string UploadWQMPUrl { get; }
+        public string UploadSimplifiedBMPUrl { get; }
+        public string UploadWQMPLocationsUrl { get; }
+        public string DownloadAssessmentAreasUrl { get; }
+        public string UploadOVTAUrl { get; }
+        public string UploadLandUseBlocksUrl { get; }
+        public string DownloadLandUseBlocksUrl { get; }
+        public string ParcelUploadUrl { get; }
         public string RegionalSubbasinRefreshUrl { get; }
         public string LandUseStatisticsRefreshUrl { get; }
         public string ModelBasinsRefreshUrl { get; }
         public string PrecipitationZonesRefreshUrl { get; }
-        public DateTime? LastUpdatedRegionalSubbasins { get; set; }
-        public DateTime? LastUpdatedHRUCharacteristics { get; set; }
-        public DateTime? LastUpdatedModalBasins { get; set; }
-        public DateTime? LastUpdatedPrecipitationZones { get; set; }
-        public string BMPListUrl { get; set; }
-        public string FieldTripUrl { get; set; }
-        public string ModelingAttributeUrl { get; set; }
-        public string BMPMapUrl { get; set; }
-        public string BMPTypesUrl { get; set; }
-        public string WQMPListUrl { get; set; }
-        public string OVTAListUrl { get; set; }
-        public string TrashGeneratingUnitsAuditListUrl { get; set; }
-        public string LandUseBlocksUrl { get; set; }
-        public string ParcelMapUrl { get; set; }
-        public string RSBListUrl { get; set; }
-        public string RSBGridUrl { get; set; }
-        public string HRUCharacteristicsListUrl { get; set; }
+        public DateTime? LastUpdatedRegionalSubbasins { get; }
+        public DateTime? LastUpdatedHRUCharacteristics { get; }
+        public DateTime? LastUpdatedModalBasins { get; }
+        public DateTime? LastUpdatedPrecipitationZones { get; }
+        public string BMPListUrl { get; }
+        public string FieldTripUrl { get; }
+        public string ModelingAttributeUrl { get; }
+        public string BMPMapUrl { get; }
+        public string BMPTypesUrl { get; }
+        public string WQMPListUrl { get; }
+        public string OVTAListUrl { get; }
+        public string TrashGeneratingUnitsAuditListUrl { get; }
+        public string LandUseBlocksUrl { get; }
+        public string ParcelMapUrl { get; }
+        public string RSBListUrl { get; }
+        public string RSBGridUrl { get; }
+        public string HRUCharacteristicsListUrl { get; }
 
-        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<EFModels.Entities.NeptunePage> neptunePages, WebServiceToken webServiceAccessToken, List<WebServiceDocumentation> serviceDocumentationList, DateTime? lastUpdatedRegionalSubbasin, DateTime? lastUpdatedDateModelBasins, DateTime? lastUpdatedDatePrecipitationZones, DateTime? lastUpdatedDateHRUCharacteristics)
+        public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator,
+            WebConfiguration webConfiguration, Person currentPerson, WebServiceToken webServiceAccessToken,
+            List<WebServiceDocumentation> serviceDocumentationList, DateTime? lastUpdatedRegionalSubbasin,
+            DateTime? lastUpdatedDateModelBasins, DateTime? lastUpdatedDatePrecipitationZones,
+            DateTime? lastUpdatedDateHRUCharacteristics, EFModels.Entities.NeptunePage treatmentBMPPage, EFModels.Entities.NeptunePage delineationPage,
+            EFModels.Entities.NeptunePage fieldTripPage, EFModels.Entities.NeptunePage wqmpPage, 
+            EFModels.Entities.NeptunePage simplifiedBMPPage, EFModels.Entities.NeptunePage wqmpLocationPage, 
+            EFModels.Entities.NeptunePage assessmentAreaPage, EFModels.Entities.NeptunePage ovtasPage,
+            EFModels.Entities.NeptunePage landUseBlocksPage, EFModels.Entities.NeptunePage parcelPage,
+            EFModels.Entities.NeptunePage regionalSubbasinsPage, EFModels.Entities.NeptunePage landUseStatisticsPage,
+            EFModels.Entities.NeptunePage modelBasinsPage, EFModels.Entities.NeptunePage precipitationZonesPage)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             HasManagePermission = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
@@ -69,20 +79,20 @@ namespace Neptune.WebMvc.Views.DataHub
             PageTitle = "Index";
             WebServiceAccessToken = webServiceAccessToken;
             ServiceDocumentationList = serviceDocumentationList;
-            TreatmentBMPPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.BMPDataHub), currentPerson);
-            DelineationPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.DelineationDataHub), currentPerson);
-            FieldTripPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.FieldVisitDataHub), currentPerson);
-            WQMPPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.WQMPDataHub), currentPerson);
-            SimplifiedBMPPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.SimplifiedBMPsDataHub), currentPerson);
-            WQMPLocationPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.WQMPLocationsDataHub), currentPerson);
-            AssessmentAreaPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.AssessmentAreasDataHub), currentPerson);
-            OVTAsPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.OVTADataHub), currentPerson);
-            LandUseBlocksPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.LandUseBlockDataHub), currentPerson);
-            ParcelPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.ParcelUploadDataHub), currentPerson);
-            RegionalSubbasinsPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.RegionalSubbasinsDataHub), currentPerson);
-            LandUseStatisticsPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.LandUseStatisticsDataHub), currentPerson);
-            ModelBasinsPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.ModelBasinsDataHub), currentPerson);
-            PrecipitationZonesPage = new ViewPageContentViewData(linkGenerator, neptunePages.Single(x => x.NeptunePageTypeID == (int)NeptunePageTypeEnum.PrecipitationZonesDataHub), currentPerson);
+            TreatmentBMPPage = new ViewPageContentViewData(linkGenerator, treatmentBMPPage, currentPerson);
+            DelineationPage = new ViewPageContentViewData(linkGenerator, delineationPage, currentPerson);
+            FieldTripPage = new ViewPageContentViewData(linkGenerator, fieldTripPage, currentPerson);
+            WQMPPage = new ViewPageContentViewData(linkGenerator, wqmpPage, currentPerson);
+            SimplifiedBMPPage = new ViewPageContentViewData(linkGenerator, simplifiedBMPPage, currentPerson);
+            WQMPLocationPage = new ViewPageContentViewData(linkGenerator, wqmpLocationPage, currentPerson);
+            AssessmentAreaPage = new ViewPageContentViewData(linkGenerator, assessmentAreaPage, currentPerson);
+            OVTAsPage = new ViewPageContentViewData(linkGenerator, ovtasPage, currentPerson);
+            LandUseBlocksPage = new ViewPageContentViewData(linkGenerator, landUseBlocksPage, currentPerson);
+            ParcelPage = new ViewPageContentViewData(linkGenerator, parcelPage, currentPerson);
+            RegionalSubbasinsPage = new ViewPageContentViewData(linkGenerator, regionalSubbasinsPage, currentPerson);
+            LandUseStatisticsPage = new ViewPageContentViewData(linkGenerator, landUseStatisticsPage, currentPerson);
+            ModelBasinsPage = new ViewPageContentViewData(linkGenerator, modelBasinsPage, currentPerson);
+            PrecipitationZonesPage = new ViewPageContentViewData(linkGenerator, precipitationZonesPage, currentPerson);
             UploadTreatmentBMPUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.UploadBMPs());
             DownloadTreatmentBMPUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.DownloadBMPsToGIS());
             UploadDelineationUrl = SitkaRoute<DelineationGeometryController>.BuildUrlFromExpression(linkGenerator, x => x.UpdateDelineationGeometry());

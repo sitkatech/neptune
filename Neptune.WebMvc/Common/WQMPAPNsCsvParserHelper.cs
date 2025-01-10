@@ -129,6 +129,11 @@ public static class WQMPAPNsCsvParserHelper
             var missingParcels = apns.Except(parcels.Select(x => x.ParcelNumber)).ToList();
             missingApnList.AddRange(missingParcels);
         }
+        if(parcels.Count == 0)
+        {
+            // do not proceed if there are no parcels to get the geometry from
+            return null;
+        }
         var parcelIDs = parcels.Select(x => x.ParcelID).ToList();
 
         oldBoundary = wqmpBoundary.GeometryNative;
