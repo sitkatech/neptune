@@ -57,7 +57,7 @@ export class TreatmentBmpsComponent implements OnInit {
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampTreatmentBMPs;
 
     @ViewChild("editTreatmentBMPTypeModal") editTreatmentBMPTypeModal;
-    private editTreatmentBMPTypeModalComonent: ComponentRef<ModalComponent>;
+    private editTreatmentBMPTypeModalComponent: ComponentRef<ModalComponent>;
 
     private zoomToProjectExtentOnLoad: boolean = false;
     private zoomOnSelection: boolean = false;
@@ -483,15 +483,15 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     openEditTreatmentBMPTypeModal(): void {
-        this.editTreatmentBMPTypeModalComonent = this.modalService.open(this.editTreatmentBMPTypeModal, null, {
+        this.editTreatmentBMPTypeModalComponent = this.modalService.open(this.editTreatmentBMPTypeModal, null, {
             ModalTheme: ModalThemeEnum.Light,
             ModalSize: ModalSizeEnum.Medium,
         });
     }
 
     closeEditTreatmentBMPTypeModal(): void {
-        if (!this.editTreatmentBMPTypeModalComonent) return;
-        this.modalService.close(this.editTreatmentBMPTypeModalComonent);
+        if (!this.editTreatmentBMPTypeModalComponent) return;
+        this.modalService.close(this.editTreatmentBMPTypeModalComponent);
     }
 
     public onDelete() {
@@ -517,7 +517,7 @@ export class TreatmentBmpsComponent implements OnInit {
 
     public changeTreatmentBMPType(treatmentBMPType: number) {
         this.treatmentBMPService.treatmentBMPsTreatmentBMPIDTreatmentBMPTypeTreatmentBMPTypeIDPut(this.selectedTreatmentBMP.TreatmentBMPID, treatmentBMPType).subscribe((temp) => {
-            this.modalReference.close();
+            this.closeEditTreatmentBMPTypeModal();
             this.selectedTreatmentBMP.TreatmentBMPTypeID = treatmentBMPType;
             this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = temp;
             this.originalTreatmentBMPs = JSON.stringify(this.projectTreatmentBMPs);
