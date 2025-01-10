@@ -2,13 +2,16 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { CustomRichTextComponent } from "../../../../shared/components/custom-rich-text/custom-rich-text.component";
+import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
+import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
+import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 
 @Component({
     selector: "project-instructions",
     templateUrl: "./project-instructions.component.html",
     styleUrls: ["./project-instructions.component.scss"],
     standalone: true,
-    imports: [CustomRichTextComponent],
+    imports: [CustomRichTextComponent, WorkflowBodyComponent, PageHeaderComponent, AlertDisplayComponent],
 })
 export class ProjectInstructionsComponent implements OnInit {
     public customRichTextTypeID: number = NeptunePageTypeEnum.HippocampProjectInstructions;

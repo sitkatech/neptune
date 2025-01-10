@@ -99,7 +99,7 @@ public class ProjectWorkflowProgress
             case ProjectWorkflowStep.TreatmentBMPs:
                 if (project.ProjectID > 0)
                 {
-                    return false;
+                    return true;
                 }
                 return !project.ShareOCTAM2Tier2Scores;
 
@@ -107,7 +107,7 @@ public class ProjectWorkflowProgress
             case ProjectWorkflowStep.Delineations:
                 if (project.ProjectID > 0)
                 {
-                    return false;
+                    return true;
                 }
                 if (project.ShareOCTAM2Tier2Scores)
                 {
