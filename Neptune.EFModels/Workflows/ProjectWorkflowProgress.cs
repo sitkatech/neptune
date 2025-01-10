@@ -1,4 +1,5 @@
-﻿using Neptune.EFModels.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Workflows;
@@ -63,7 +64,7 @@ public class ProjectWorkflowProgress
 
                 var treatmentBMPIDsWithNereidResults = project.ProjectNereidResults.Where(x => x.TreatmentBMPID.HasValue).Select(x => x.TreatmentBMPID.Value).Distinct().ToList();
                 var treatmentBMPIDs = project.TreatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
-                return treatmentBMPIDs.Count > 0  && new HashSet<int>(treatmentBMPIDs).SetEquals(treatmentBMPIDsWithNereidResults);
+                return treatmentBMPIDs.Count > 0  && !treatmentBMPIDs.Except(treatmentBMPIDsWithNereidResults).Any();
             case ProjectWorkflowStep.TreatmentBMPs:
                 if (project.DoesNotIncludeTreatmentBMPs)
                 {

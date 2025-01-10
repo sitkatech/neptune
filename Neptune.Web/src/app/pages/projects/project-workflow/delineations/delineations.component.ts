@@ -15,7 +15,6 @@ import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { ProjectWorkflowService } from "src/app/services/project-workflow.service";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
-import { WfsService } from "src/app/shared/services/wfs.service";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
@@ -25,6 +24,9 @@ import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment
 import { FieldDefinitionComponent } from "../../../../shared/components/field-definition/field-definition.component";
 import { NgFor, NgIf } from "@angular/common";
 import { CustomRichTextComponent } from "../../../../shared/components/custom-rich-text/custom-rich-text.component";
+import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
+import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
+import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 
 declare var $: any;
 
@@ -33,7 +35,7 @@ declare var $: any;
     templateUrl: "./delineations.component.html",
     styleUrls: ["./delineations.component.scss"],
     standalone: true,
-    imports: [CustomRichTextComponent, NgFor, NgIf, FieldDefinitionComponent],
+    imports: [CustomRichTextComponent, NgFor, NgIf, FieldDefinitionComponent, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent],
 })
 export class DelineationsComponent implements OnInit {
     @ViewChild("mapDiv") mapDiv: ElementRef;
@@ -621,7 +623,7 @@ export class DelineationsComponent implements OnInit {
         }
     }
 
-    public onSubmit(continueToNextStep?: boolean) {
+    public save(continueToNextStep?: boolean) {
         this.isLoadingSubmit = true;
         this.alertService.clearAlerts();
         this.getFullyQualifiedJSONGeometryForDelineations(this.delineations);
@@ -693,7 +695,7 @@ export class DelineationsComponent implements OnInit {
     }
     public toggleIsEditingLocation() {
         if (this.isEditingLocation) {
-            this.onSubmit();
+            this.save();
         }
         this.isEditingLocation = !this.isEditingLocation;
         $(".leaflet-interactive").css("cursor", "crosshair");
