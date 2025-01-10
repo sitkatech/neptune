@@ -1,19 +1,18 @@
 import { Component, OnInit } from "@angular/core";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
-import { CustomRichTextComponent } from "../../shared/components/custom-rich-text/custom-rich-text.component";
-import { AlertDisplayComponent } from "../../shared/components/alert-display/alert-display.component";
+import { PageHeaderComponent } from "../../shared/components/page-header/page-header.component";
 
 @Component({
     selector: "about",
     templateUrl: "./about.component.html",
     styleUrls: ["./about.component.scss"],
     standalone: true,
-    imports: [AlertDisplayComponent, CustomRichTextComponent],
+    imports: [PageHeaderComponent],
 })
 export class AboutComponent implements OnInit {
     constructor() {}
 
-    public richTextTypeID: number = NeptunePageTypeEnum.HippocampAbout;
+    public customRichTextTypeID: number = NeptunePageTypeEnum.HippocampAbout;
 
     ngOnInit(): void {}
 }
