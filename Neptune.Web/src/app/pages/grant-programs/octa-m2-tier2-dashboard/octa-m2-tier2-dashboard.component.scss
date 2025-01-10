@@ -34,6 +34,9 @@
 }
 
 .card {
+    &-header {
+        color: $white;
+    }
     &-header-dropdown {
         border-bottom: 1px solid $gray-200;
         border-top-left-radius: 0.25rem;
@@ -56,7 +59,6 @@
         }
 
         icon {
-            color: $gray-1000;
             transform: rotate(180deg);
             width: 0.75rem;
         }

@@ -2,21 +2,21 @@
 
 .button-group {
     display: flex;
-    background: $white;
-    border-radius: 0.25rem;
-    padding: 0.25rem;
-    border: 1px solid rgba($black, 0.1);
+    border-bottom: 1px solid $gray-200;
+    margin-bottom: $spacing-400;
 
     &__item {
         display: block;
-        padding: 0.75rem 1rem 0.5em;
+        padding: 0.75rem 1rem 0.25em;
         color: $primary;
         background-color: $white;
         font-weight: bold;
         transition: all 200ms ease;
-        border-radius: 0.25rem;
-        border: 1;
-        border-color: $primary;
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+        border: 1px solid $primary;
+        border-bottom: none;
+        appearance: none;
 
         &:hover {
             cursor: pointer;

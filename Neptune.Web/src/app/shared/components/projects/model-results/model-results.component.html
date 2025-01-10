@@ -1,5 +1,5 @@
 <ng-container *ngIf="selectedProjectLoadReducingResult">
-    <div *ngIf="getNotFullyParameterizedBMPNames().length > 0" class="alert alert-info">
+    <div *ngIf="getNotFullyParameterizedBMPNames().length > 0" class="alert alert-warning">
         <div class="alert-content">
             <i class="fa fa-warning"></i>
             Some of the proposed BMPs (see list below) are not fully parameterized for modeling, or have missing delineations, so these results may be incomplete or inaccurate.
@@ -8,7 +8,7 @@
             </ul>
         </div>
     </div>
-    <div *ngIf="getBMPNamesForDelineationsWithDiscrepancies().length > 0" class="alert alert-info">
+    <div *ngIf="getBMPNamesForDelineationsWithDiscrepancies().length > 0" class="alert alert-warning">
         <div class="alert-content">
             <i class="fa fa-warning"></i>
             <div>
@@ -22,7 +22,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)" class="alert alert-info">
+    <div *ngIf="isMostRecentHistoryOfType(ProjectNetworkHistoryStatusTypeEnum.Queued)" class="alert alert-warning">
         <div class="alert-content">
             <i class="fa fa-info"></i>
             Results for this project are currently being calculated. The below results will remain until the current calculation completes and then will be discarded in favor of
@@ -33,10 +33,10 @@
     <select class="form-control mb-3" [(ngModel)]="treatmentBMPIDForSelectedProjectLoadReducingResult" (change)="updateSelectedProjectLoadReducingResult()">
         <option *ngFor="let selectListOption of modelingSelectListOptions" [value]="selectListOption.TreatmentBMPID">{{ selectListOption.TreatmentBMPName }}</option>
     </select>
-    <btn-group-radio-input [options]="tabs" (change)="setActiveTab($event)" [default]="activeTab" [showIcons]="true"></btn-group-radio-input>
 
     <div class="grid-12">
         <div class="g-col-6">
+            <btn-group-radio-input [options]="tabs" (change)="setActiveTab($event)" [default]="activeTab" [showIcons]="true"></btn-group-radio-input>
             <div [hidden]="activeTab !== 'Wet'">
                 <table class="table table-responsive table-striped table-condensed modelResults">
                     <thead>
@@ -99,6 +99,8 @@
                             </td>
                         </tr>
                     </tbody>
+                </table>
+                <table class="table table-responsive table-striped table-condensed modelResults mt-4">
                     <thead>
                         <tr style="text-align: center">
                             <th class="left">Pollutant</th>
@@ -270,6 +272,8 @@
                             </td>
                         </tr>
                     </tbody>
+                </table>
+                <table class="table table-responsive table-striped table-condensed modelResults mt-4">
                     <thead>
                         <tr style="text-align: center">
                             <th class="left">Pollutant</th>
@@ -435,6 +439,8 @@
                             </td>
                         </tr>
                     </tbody>
+                </table>
+                <table class="table table-responsive table-striped table-condensed modelResults mt-4">
                     <thead>
                         <tr style="text-align: center">
                             <th class="left">Pollutant</th>

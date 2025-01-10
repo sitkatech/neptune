@@ -36,13 +36,12 @@
         display: block;
         font-size: $type-size-300;
         padding: 1rem 0;
-        color: $white;
+        color: $gray-900;
 
         @include desktop-medium {
             padding: 1rem;
             transition: all 300ms ease;
             font-size: $type-size-200;
-            color: $secondary;
         }
 
         &:hover {
@@ -270,5 +269,10 @@
                 text-decoration: underline;
             }
         }
+    }
+
+    &__help {
+        left: unset;
+        right: 0;
     }
 }

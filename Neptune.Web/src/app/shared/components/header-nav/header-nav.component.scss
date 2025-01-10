@@ -73,6 +73,14 @@
             margin-top: 0;
             border-top: none;
         }
+
+        .nav-link {
+            color: $primary;
+
+            &__label {
+                color: $primary;
+            }
+        }
     }
 
     a.navbar-brand {
@@ -154,10 +162,6 @@
             border-top: none;
         }
     }
-
-    a {
-        color: $white;
-    }
 }
 
 .site-logo {
@@ -231,6 +235,7 @@
         align-items: center;
         font-size: $type-size-200;
         line-height: 1em;
+        color: $white;
 
         icon {
             width: 1rem;
