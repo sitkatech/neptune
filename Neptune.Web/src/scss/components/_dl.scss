@@ -1,3 +1,5 @@
+@use "/src/scss/abstracts" as *;
+
 dl {
     &.section-spacer {
         display: block;
@@ -6,6 +8,11 @@ dl {
 
     dt {
         font-weight: bold;
+        font-size: $type-size-150;
+        text-transform: uppercase;
         text-align: right;
+        letter-spacing: 0.05em;
+        padding-bottom: 0.5rem;
+        margin-bottom: 0;
     }
 }

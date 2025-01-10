@@ -1,4 +1,4 @@
-import { ApplicationRef, ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
+import { ApplicationRef, ChangeDetectorRef, Component, ComponentRef, OnInit, ViewChild } from "@angular/core";
 import * as L from "leaflet";
 import "leaflet.fullscreen";
 import * as esri from "esri-leaflet";
@@ -34,6 +34,13 @@ import { FieldDefinitionComponent } from "../../../../shared/components/field-de
 import { FormsModule } from "@angular/forms";
 import { CustomRichTextComponent } from "../../../../shared/components/custom-rich-text/custom-rich-text.component";
 import { NgIf, NgFor } from "@angular/common";
+import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
+import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
+import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
+import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/services/modal/modal.service";
+import { ModalComponent } from "src/app/shared/components/modal/modal.component";
+import { ConfirmOptions } from "src/app/shared/services/confirm/confirm-options";
+import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 
 declare var $: any;
 
@@ -42,15 +49,15 @@ declare var $: any;
     templateUrl: "./treatment-bmps.component.html",
     styleUrls: ["./treatment-bmps.component.scss"],
     standalone: true,
-    imports: [NgIf, CustomRichTextComponent, NgFor, FormsModule, FieldDefinitionComponent],
+    imports: [NgIf, CustomRichTextComponent, NgFor, FormsModule, FieldDefinitionComponent, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent],
 })
 export class TreatmentBmpsComponent implements OnInit {
     private currentUser: PersonDto;
     public projectID: number;
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampTreatmentBMPs;
 
-    @ViewChild("deleteTreatmentBMPModal") deleteTreatmentBMPModal;
     @ViewChild("editTreatmentBMPTypeModal") editTreatmentBMPTypeModal;
+    private editTreatmentBMPTypeModalComonent: ComponentRef<ModalComponent>;
 
     private zoomToProjectExtentOnLoad: boolean = false;
     private zoomOnSelection: boolean = false;
@@ -108,10 +115,11 @@ export class TreatmentBmpsComponent implements OnInit {
         private stormwaterJurisdictionService: StormwaterJurisdictionService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService,
-        private modalService: NgbModal,
+        private modalService: ModalService,
         private alertService: AlertService,
         private projectWorkflowService: ProjectWorkflowService,
-        private router: Router
+        private router: Router,
+        private confirmService: ConfirmService
     ) {}
 
     canExit() {
@@ -474,28 +482,37 @@ export class TreatmentBmpsComponent implements OnInit {
         this.updateTreatmentBMPsLayer();
     }
 
-    private launchModal(modalContent: any, modalTitle: string): void {
-        this.modalReference = this.modalService.open(modalContent, { ariaLabelledBy: modalTitle, backdrop: "static", keyboard: false });
+    openEditTreatmentBMPTypeModal(): void {
+        this.editTreatmentBMPTypeModalComonent = this.modalService.open(this.editTreatmentBMPTypeModal, null, {
+            ModalTheme: ModalThemeEnum.Light,
+            ModalSize: ModalSizeEnum.Medium,
+        });
+    }
+
+    closeEditTreatmentBMPTypeModal(): void {
+        if (!this.editTreatmentBMPTypeModalComonent) return;
+        this.modalService.close(this.editTreatmentBMPTypeModalComonent);
     }
 
     public onDelete() {
-        this.launchModal(this.deleteTreatmentBMPModal, "deleteTreatmentBMPModalTitle");
-    }
-
-    public onEditTreatmentBMPTypes() {
-        this.launchModal(this.editTreatmentBMPTypeModal, "editTreatmentBMPTypeModalTitle");
-    }
-
-    public deleteTreatmentBMP() {
-        const index = this.projectTreatmentBMPs.indexOf(this.selectedTreatmentBMP);
-        this.projectTreatmentBMPs.splice(index, 1);
-        this.modalReference.close();
-
-        this.selectedTreatmentBMP = null;
-        this.clearSelectedItem();
-        if (this.projectTreatmentBMPs.length > 0) {
-            this.selectTreatmentBMP(this.projectTreatmentBMPs[0].TreatmentBMPID);
-        }
+        const options = {
+            title: "Confirm: Delete Treatment BMP",
+            message: `<p>You are about to delete ${this.selectedTreatmentBMP.TreatmentBMPName}.</p><p>Are you sure you wish to proceed?</p>`,
+            buttonClassYes: "btn-danger",
+            buttonTextYes: "Confirm",
+            buttonTextNo: "Cancel",
+        } as ConfirmOptions;
+        this.confirmService.confirm(options).then((confirmed) => {
+            if (confirmed) {
+                const index = this.projectTreatmentBMPs.indexOf(this.selectedTreatmentBMP);
+                this.projectTreatmentBMPs.splice(index, 1);
+                this.selectedTreatmentBMP = null;
+                this.clearSelectedItem();
+                if (this.projectTreatmentBMPs.length > 0) {
+                    this.selectTreatmentBMP(this.projectTreatmentBMPs[0].TreatmentBMPID);
+                }
+            }
+        });
     }
 
     public changeTreatmentBMPType(treatmentBMPType: number) {
@@ -547,7 +564,7 @@ export class TreatmentBmpsComponent implements OnInit {
         return `${delineation.DelineationArea} ac`;
     }
 
-    public onSubmit(continueToNextStep?: boolean) {
+    public save(continueToNextStep?: boolean) {
         this.isLoadingSubmit = true;
         this.alertService.clearAlerts();
         this.project.DoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs && (this.projectTreatmentBMPs == null || this.projectTreatmentBMPs.length == 0);

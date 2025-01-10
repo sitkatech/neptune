@@ -3,17 +3,16 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { combineLatest, map, Observable, of, pipe, switchMap, tap } from "rxjs";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
-import { ProjectUpsertDto, ProjectUpsertDtoForm, ProjectUpsertDtoFormControls } from "src/app/shared/generated/model/models";
+import { ProjectUpsertDtoForm, ProjectUpsertDtoFormControls } from "src/app/shared/generated/model/models";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { OrganizationService } from "src/app/shared/generated/api/organization.service";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { UserService } from "src/app/shared/generated/api/user.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
-import { PersonDto, ProjectDto } from "src/app/shared/generated/model/models";
+import { ProjectDto } from "src/app/shared/generated/model/models";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { CustomRichTextComponent } from "../../../../shared/components/custom-rich-text/custom-rich-text.component";
 import { NgIf, AsyncPipe } from "@angular/common";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
@@ -29,18 +28,7 @@ import { AuthenticationService } from "src/app/services/authentication.service";
     templateUrl: "./project-basics.component.html",
     styleUrls: ["./project-basics.component.scss"],
     standalone: true,
-    imports: [
-        NgIf,
-        AsyncPipe,
-        CustomRichTextComponent,
-        ReactiveFormsModule,
-        FormsModule,
-        FormFieldComponent,
-        NgSelectModule,
-        PageHeaderComponent,
-        WorkflowBodyComponent,
-        AlertDisplayComponent,
-    ],
+    imports: [NgIf, AsyncPipe, ReactiveFormsModule, FormsModule, FormFieldComponent, NgSelectModule, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent],
 })
 export class ProjectBasicsComponent implements OnInit {
     public FormFieldType = FormFieldType;
