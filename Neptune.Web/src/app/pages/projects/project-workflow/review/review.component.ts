@@ -20,6 +20,9 @@ import { ModelResultsComponent } from "../../../../shared/components/projects/mo
 import { TreatmentBmpMapEditorAndModelingAttributesComponent } from "../../../../shared/components/projects/project-map/project-map.component";
 import { NgIf, NgClass, DatePipe } from "@angular/common";
 import { CustomRichTextComponent } from "../../../../shared/components/custom-rich-text/custom-rich-text.component";
+import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
+import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
+import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 
 @Component({
     selector: "review",
@@ -35,6 +38,9 @@ import { CustomRichTextComponent } from "../../../../shared/components/custom-ri
         AttachmentsDisplayComponent,
         GrantScoresComponent,
         DatePipe,
+        PageHeaderComponent,
+        WorkflowBodyComponent,
+        AlertDisplayComponent,
     ],
 })
 export class ReviewComponent implements OnInit {

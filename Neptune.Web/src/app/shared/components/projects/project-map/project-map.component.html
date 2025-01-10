@@ -39,8 +39,7 @@
         </dl>
         <div class="grid-12 mt-3">
             <div class="g-col-5">
-                <h4 class="border-bottom p-2">Location</h4>
-                <hr />
+                <h3>Location</h3>
                 <ng-container *ngIf="selectedTreatmentBMP.Latitude && selectedTreatmentBMP.Longitude; else noLocationSelected">
                     <dl class="grid-12">
                         <dt class="g-col-5">Latitude</dt>
@@ -70,12 +69,11 @@
                 </ng-template>
             </div>
             <div class="g-col-7">
-                <h4 class="border-bottom p-2">Modeling Attributes</h4>
-                <hr />
+                <h3>Modeling Attributes</h3>
                 <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeName; else noTypeSelected">
                     <ng-container *ngIf="getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeName).length > 0; else modelingTypesNotApplicable">
                         <dl
-                            class="grid-12 p-2"
+                            class="grid-12"
                             *ngFor="let treatmentBMPModelingAttributeDefinitionDto of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeName)">
                             <dt class="g-col-7">
                                 <field-definition [fieldDefinitionType]="treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName"></field-definition>
