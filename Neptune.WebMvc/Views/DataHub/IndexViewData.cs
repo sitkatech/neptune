@@ -26,40 +26,40 @@ namespace Neptune.WebMvc.Views.DataHub
         public ViewPageContentViewData LandUseStatisticsPage { get; }
         public ViewPageContentViewData ModelBasinsPage { get; }
         public ViewPageContentViewData PrecipitationZonesPage { get; }
-        public string UploadTreatmentBMPUrl { get; set; }
-        public string DownloadTreatmentBMPUrl { get; set; }
-        public string UploadDelineationUrl { get; set; }
-        public string DownloadDelineationUrl { get; set; }
-        public string UploadFieldTripUrl { get; set; }
-        public string UploadWQMPUrl { get; set; }
-        public string UploadSimplifiedBMPUrl { get; set; }
-        public string UploadWQMPLocationsUrl { get; set; }
-        public string DownloadAssessmentAreasUrl { get; set; }
-        public string UploadOVTAUrl { get; set; }
-        public string UploadLandUseBlocksUrl { get; set; }
-        public string DownloadLandUseBlocksUrl { get; set; }
-        public string ParcelUploadUrl { get; set; }
+        public string UploadTreatmentBMPUrl { get; }
+        public string DownloadTreatmentBMPUrl { get; }
+        public string UploadDelineationUrl { get; }
+        public string DownloadDelineationUrl { get; }
+        public string UploadFieldTripUrl { get; }
+        public string UploadWQMPUrl { get; }
+        public string UploadSimplifiedBMPUrl { get; }
+        public string UploadWQMPLocationsUrl { get; }
+        public string DownloadAssessmentAreasUrl { get; }
+        public string UploadOVTAUrl { get; }
+        public string UploadLandUseBlocksUrl { get; }
+        public string DownloadLandUseBlocksUrl { get; }
+        public string ParcelUploadUrl { get; }
         public string RegionalSubbasinRefreshUrl { get; }
         public string LandUseStatisticsRefreshUrl { get; }
         public string ModelBasinsRefreshUrl { get; }
         public string PrecipitationZonesRefreshUrl { get; }
-        public DateTime? LastUpdatedRegionalSubbasins { get; set; }
-        public DateTime? LastUpdatedHRUCharacteristics { get; set; }
-        public DateTime? LastUpdatedModalBasins { get; set; }
-        public DateTime? LastUpdatedPrecipitationZones { get; set; }
-        public string BMPListUrl { get; set; }
-        public string FieldTripUrl { get; set; }
-        public string ModelingAttributeUrl { get; set; }
-        public string BMPMapUrl { get; set; }
-        public string BMPTypesUrl { get; set; }
-        public string WQMPListUrl { get; set; }
-        public string OVTAListUrl { get; set; }
-        public string TrashGeneratingUnitsAuditListUrl { get; set; }
-        public string LandUseBlocksUrl { get; set; }
-        public string ParcelMapUrl { get; set; }
-        public string RSBListUrl { get; set; }
-        public string RSBGridUrl { get; set; }
-        public string HRUCharacteristicsListUrl { get; set; }
+        public DateTime? LastUpdatedRegionalSubbasins { get; }
+        public DateTime? LastUpdatedHRUCharacteristics { get; }
+        public DateTime? LastUpdatedModalBasins { get; }
+        public DateTime? LastUpdatedPrecipitationZones { get; }
+        public string BMPListUrl { get; }
+        public string FieldTripUrl { get; }
+        public string ModelingAttributeUrl { get; }
+        public string BMPMapUrl { get; }
+        public string BMPTypesUrl { get; }
+        public string WQMPListUrl { get; }
+        public string OVTAListUrl { get; }
+        public string TrashGeneratingUnitsAuditListUrl { get; }
+        public string LandUseBlocksUrl { get; }
+        public string ParcelMapUrl { get; }
+        public string RSBListUrl { get; }
+        public string RSBGridUrl { get; }
+        public string HRUCharacteristicsListUrl { get; }
 
         public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<EFModels.Entities.NeptunePage> neptunePages, WebServiceToken webServiceAccessToken, List<WebServiceDocumentation> serviceDocumentationList, DateTime? lastUpdatedRegionalSubbasin, DateTime? lastUpdatedDateModelBasins, DateTime? lastUpdatedDatePrecipitationZones, DateTime? lastUpdatedDateHRUCharacteristics)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
