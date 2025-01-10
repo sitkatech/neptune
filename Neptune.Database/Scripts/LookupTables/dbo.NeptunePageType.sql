@@ -67,7 +67,21 @@ USING (VALUES
 (68, 'UploadWQMPs', 'Bulk Upload Water Quality Management Plans'),
 (69, 'UploadSimplifiedBMPs', 'Bulk Upload Simplified BMPs'),
 (70, 'UploadOVTAs', 'Bulk Upload OVTAs'),
-(71, 'WQMPBoundaryFromAPNList', 'WQMP Boundary from APN List')
+(71, 'WQMPBoundaryFromAPNList', 'WQMP Boundary from APN List'),
+(72, 'BMPDataHub', 'Treatment BMP Data Hub'),
+(73, 'DelineationDataHub', 'Delineation Data Hub'),
+(74, 'FieldVisitDataHub', 'Field Visit Data Hub'),
+(75, 'WQMPDataHub', 'WQMP Data Hub'),
+(76, 'SimplifiedBMPsDataHub', 'Simplified BMPs Data Hub'),
+(77, 'WQMPLocationsDataHub', 'WQMP Locations Data Hub'),
+(78, 'AssessmentAreasDataHub', 'Assessment Areas Data Hub'),
+(79, 'OVTADataHub', 'OVTA Data Hub'),
+(80, 'LandUseBlockDataHub', 'Land Use Block Data Hub'),
+(81, 'RegionalSubbasinsDataHub', 'Regional Subbasins Data Hub'),
+(82, 'LandUseStatisticsDataHub', 'Land Use Statistics Data Hub'),
+(83, 'ModelBasinsDataHub', 'Model Basins Data Hub'),
+(84, 'PrecipitationZonesDataHub', 'Precipitation Zones Data Hub'),
+(85, 'ParcelUploadDataHub', 'Parcel Upload Data Hub')
 )
 AS Source (NeptunePageTypeID, NeptunePageTypeName, NeptunePageTypeDisplayName)
 ON Target.NeptunePageTypeID = Source.NeptunePageTypeID
