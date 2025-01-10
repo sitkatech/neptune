@@ -21,10 +21,14 @@ public class ProjectWorkflowProgress
         return new ProjectWorkflowProgressDto
         {
             ProjectID = project.ProjectID,
-            StormwaterJurisdictionID = project.StormwaterJurisdictionID,
+            ProjectName = project.ProjectName,
             ProjectStatus = project.ProjectStatus.AsSimpleDto(),
             Steps = Enum.GetValuesAsUnderlyingType<ProjectWorkflowStep>().Cast<ProjectWorkflowStep>()
-                .ToDictionary(x => x, y => WorkflowStepComplete(project, y))
+                .ToDictionary(x => x, y => new WorkflowStepStatus()
+                {
+                    Completed = WorkflowStepComplete(project, y),
+                    Disabled = !WorkflowStepActive(project, y),
+                })
         };
     }
 
@@ -59,13 +63,13 @@ public class ProjectWorkflowProgress
 
                 var treatmentBMPIDsWithNereidResults = project.ProjectNereidResults.Where(x => x.TreatmentBMPID.HasValue).Select(x => x.TreatmentBMPID.Value).Distinct().ToList();
                 var treatmentBMPIDs = project.TreatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
-                return new HashSet<int>(treatmentBMPIDs).SetEquals(treatmentBMPIDsWithNereidResults);
+                return treatmentBMPIDs.Count > 0  && new HashSet<int>(treatmentBMPIDs).SetEquals(treatmentBMPIDsWithNereidResults);
             case ProjectWorkflowStep.TreatmentBMPs:
                 if (project.DoesNotIncludeTreatmentBMPs)
                 {
                     return true;
                 }
-                return  project.TreatmentBMPs.Any() && project.TreatmentBMPs.All(x => !x.TreatmentBMPType.HasMissingModelingAttributes(x.TreatmentBMPModelingAttributeTreatmentBMP));
+                return project.TreatmentBMPs.Any() && project.TreatmentBMPs.All(x => !x.TreatmentBMPType.HasMissingModelingAttributes(x.TreatmentBMPModelingAttributeTreatmentBMP));
             case ProjectWorkflowStep.Delineations:
                 if (project.DoesNotIncludeTreatmentBMPs)
                 {
@@ -84,11 +88,55 @@ public class ProjectWorkflowProgress
         }
     }
 
+    public static bool WorkflowStepActive(Project project, ProjectWorkflowStep wellRegistryWorkflowStep)
+    {
+        switch (wellRegistryWorkflowStep)
+        {
+            case ProjectWorkflowStep.Instructions:
+                return true;
+
+            case ProjectWorkflowStep.Attachments:
+            case ProjectWorkflowStep.TreatmentBMPs:
+                if (project.ProjectID > 0)
+                {
+                    return false;
+                }
+                return !project.ShareOCTAM2Tier2Scores;
+
+            case ProjectWorkflowStep.ModeledPerformanceAndGrantMetrics:
+            case ProjectWorkflowStep.Delineations:
+                if (project.ProjectID > 0)
+                {
+                    return false;
+                }
+                if (project.ShareOCTAM2Tier2Scores)
+                {
+                    return false;
+                }
+                return !project.DoesNotIncludeTreatmentBMPs && project.TreatmentBMPs.Any();
+
+            case ProjectWorkflowStep.BasicInfo:
+                return !project.ShareOCTAM2Tier2Scores;
+
+            case ProjectWorkflowStep.ReviewAndShare:
+                return project.ProjectID > 0;
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(wellRegistryWorkflowStep), wellRegistryWorkflowStep, null);
+        }
+    }
+
     public class ProjectWorkflowProgressDto
     {   
         public int ProjectID { get; set; }
-        public int StormwaterJurisdictionID { get; set; }
+        public string ProjectName { get; set; }
         public ProjectStatusSimpleDto ProjectStatus { get; set; }
-        public Dictionary<ProjectWorkflowStep, bool> Steps { get; set; }
+        public Dictionary<ProjectWorkflowStep, WorkflowStepStatus> Steps { get; set; }
+    }
+
+    public class WorkflowStepStatus
+    {
+        public bool Completed { get; set; }
+        public bool Disabled { get; set; }
     }
 }

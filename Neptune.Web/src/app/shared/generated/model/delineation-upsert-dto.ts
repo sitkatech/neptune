@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class DelineationUpsertDto { 
     DelineationID?: number;
     DelineationTypeID?: number;
@@ -20,4 +21,76 @@ export class DelineationUpsertDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface DelineationUpsertDtoForm { 
+    DelineationID?: FormControl<number>;
+    DelineationTypeID?: FormControl<number>;
+    DelineationArea?: FormControl<number>;
+    Geometry?: FormControl<string>;
+    TreatmentBMPID?: FormControl<number>;
+    HasDiscrepancies?: FormControl<boolean>;
+}
+
+export class DelineationUpsertDtoFormControls { 
+    public static DelineationID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static DelineationTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static DelineationArea = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Geometry = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static HasDiscrepancies = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

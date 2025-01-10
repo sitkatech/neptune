@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class PersonCreateDto { 
     FirstName: string;
     LastName: string;
@@ -20,4 +21,85 @@ export class PersonCreateDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface PersonCreateDtoForm { 
+    FirstName: FormControl<string>;
+    LastName: FormControl<string>;
+    OrganizationName?: FormControl<string>;
+    Email: FormControl<string>;
+    LoginName: FormControl<string>;
+    UserGuid: FormControl<string>;
+}
+
+export class PersonCreateDtoFormControls { 
+    public static FirstName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: true,
+            validators: 
+            [
+                Validators.required,
+                Validators.minLength(1),
+            ],
+        }
+    );
+    public static LastName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: true,
+            validators: 
+            [
+                Validators.required,
+                Validators.minLength(1),
+            ],
+        }
+    );
+    public static OrganizationName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Email = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: true,
+            validators: 
+            [
+                Validators.required,
+                Validators.minLength(1),
+            ],
+        }
+    );
+    public static LoginName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: true,
+            validators: 
+            [
+                Validators.required,
+                Validators.minLength(1),
+            ],
+        }
+    );
+    public static UserGuid = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: true,
+            validators: 
+            [
+                Validators.required,
+            ],
+        }
+    );
 }

@@ -53,4 +53,5 @@ model/treatment-bmp-modeling-attribute-simple-dto.ts
 model/treatment-bmp-type-with-modeling-attributes-dto.ts
 model/treatment-bmp-upsert-dto.ts
 model/treatment-bmphru-characteristics-summary-simple-dto.ts
+model/workflow-step-status.ts
 variables.ts

@@ -12,12 +12,63 @@
 import { ProjectWorkflowProgressDtoSteps } from '././project-workflow-progress-dto-steps';
 import { ProjectStatusSimpleDto } from '././project-status-simple-dto';
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class ProjectWorkflowProgressDto { 
     ProjectID?: number;
-    StormwaterJurisdictionID?: number;
+    ProjectName?: string;
     ProjectStatus?: ProjectStatusSimpleDto;
     Steps?: ProjectWorkflowProgressDtoSteps;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface ProjectWorkflowProgressDtoForm { 
+    ProjectID?: FormControl<number>;
+    ProjectName?: FormControl<string>;
+    ProjectStatus?: FormControl<ProjectStatusSimpleDto>;
+    Steps?: FormControl<ProjectWorkflowProgressDtoSteps>;
+}
+
+export class ProjectWorkflowProgressDtoFormControls { 
+    public static ProjectID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ProjectName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ProjectStatus = (value: FormControlState<ProjectStatusSimpleDto> | ProjectStatusSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<ProjectStatusSimpleDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Steps = (value: FormControlState<ProjectWorkflowProgressDtoSteps> | ProjectWorkflowProgressDtoSteps = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<ProjectWorkflowProgressDtoSteps>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

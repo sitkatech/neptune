@@ -1,26 +1,9 @@
 <div class="dashboard workflow">
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <h5 class="sidebar-title">
-                <div>
-                    <p>Project Name: &nbsp;</p>
-                    <div *ngIf="projectModel?.ProjectName; then hasName; else noName"></div>
-                    <ng-template #hasName>
-                        <p>
-                            <strong>{{ projectModel.ProjectName }}</strong>
-                        </p>
-                    </ng-template>
-                    <ng-template #noName>
-                        <p><strong>Project Name Here</strong></p>
-                    </ng-template>
-                </div>
-            </h5>
-        </div>
-        <project-wizard-sidebar [projectModel]="projectModel"></project-wizard-sidebar>
+        <project-wizard-sidebar></project-wizard-sidebar>
     </aside>
     <main class="main">
         <div class="outlet-container">
-            <app-alert-display></app-alert-display>
             <router-outlet></router-outlet>
         </div>
     </main>

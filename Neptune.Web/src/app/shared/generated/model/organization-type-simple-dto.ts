@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class OrganizationTypeSimpleDto { 
     OrganizationTypeID?: number;
     OrganizationTypeName?: string;
@@ -19,4 +20,65 @@ export class OrganizationTypeSimpleDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface OrganizationTypeSimpleDtoForm { 
+    OrganizationTypeID?: FormControl<number>;
+    OrganizationTypeName?: FormControl<string>;
+    OrganizationTypeAbbreviation?: FormControl<string>;
+    LegendColor?: FormControl<string>;
+    IsDefaultOrganizationType?: FormControl<boolean>;
+}
+
+export class OrganizationTypeSimpleDtoFormControls { 
+    public static OrganizationTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static OrganizationTypeName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static OrganizationTypeAbbreviation = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static LegendColor = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static IsDefaultOrganizationType = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

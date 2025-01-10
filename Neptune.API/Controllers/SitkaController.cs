@@ -6,20 +6,19 @@ using Neptune.EFModels.Entities;
 
 namespace Neptune.API.Controllers
 {
-    public abstract class SitkaController<T> : ControllerBase
+    public abstract class SitkaController<T>(
+        NeptuneDbContext dbContext,
+        ILogger<T> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration,
+        Person callingUser)
+        : ControllerBase
     {
-        protected readonly NeptuneDbContext _dbContext;
-        protected readonly ILogger<T> _logger;
-        protected readonly KeystoneService _keystoneService;
-        protected readonly NeptuneConfiguration _neptuneConfiguration;
-
-        protected SitkaController(NeptuneDbContext dbContext, ILogger<T> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration)
-        {
-            _dbContext = dbContext;
-            _logger = logger;
-            _keystoneService = keystoneService;
-            _neptuneConfiguration = neptuneConfiguration.Value;
-        }
+        protected readonly NeptuneDbContext DbContext = dbContext;
+        protected readonly ILogger<T> Logger = logger;
+        protected readonly KeystoneService KeystoneService = keystoneService;
+        protected readonly NeptuneConfiguration NeptuneConfiguration = neptuneConfiguration.Value;
+        protected readonly Person CallingUser = callingUser;
 
         protected ActionResult RequireNotNullThrowNotFound(object theObject, string objectType, object objectID)
         {
@@ -31,7 +30,7 @@ namespace Neptune.API.Controllers
             if (theObject == null)
             {
                 var notFoundMessage = $"{objectType} with ID {objectID} does not exist!";
-                _logger.LogError(notFoundMessage);
+                Logger.LogError(notFoundMessage);
                 {
                     actionResult = NotFound(notFoundMessage);
                     return true;

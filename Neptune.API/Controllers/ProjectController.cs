@@ -21,32 +21,27 @@ using Neptune.API.Services.Attributes;
 namespace Neptune.API.Controllers
 {
     [ApiController]
-
-    public class ProjectController : SitkaController<ProjectController>
+    public class ProjectController(
+        NeptuneDbContext dbContext,
+        ILogger<ProjectController> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration,
+        AzureBlobStorageService azureBlobStorageService,
+        Person callingUser)
+        : SitkaController<ProjectController>(dbContext, logger, keystoneService, neptuneConfiguration, callingUser)
     {
-        private readonly AzureBlobStorageService _azureBlobStorageService;
-
-        public ProjectController(NeptuneDbContext dbContext,
-            ILogger<ProjectController> logger,
-            KeystoneService keystoneService,
-            IOptions<NeptuneConfiguration> neptuneConfiguration,
-            AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-            _azureBlobStorageService = azureBlobStorageService;
-        }
-
         [HttpGet("projects/{projectID}")]
+        [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
         public ActionResult<ProjectDto> GetByID([FromRoute] int projectID)
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var projectDto = Projects.GetByIDAsDto(_dbContext, projectID);
+            var projectDto = Projects.GetByIDAsDto(DbContext, projectID);
 
-            if (person.IsOCTAGrantReviewer && projectDto.ShareOCTAM2Tier2Scores)
+            if (CallingUser.IsOCTAGrantReviewer && projectDto.ShareOCTAM2Tier2Scores)
             {
                 return Ok(projectDto);
             }
-            if (person.CanEditJurisdiction(projectDto.StormwaterJurisdictionID, _dbContext))
+            if (CallingUser.CanEditJurisdiction(projectDto.StormwaterJurisdictionID, DbContext))
             {
                 return Ok(projectDto);
             }
@@ -57,8 +52,7 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public ActionResult<List<ProjectDto>> ListByPersonID()
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var projectDtos = Projects.ListByPersonIDAsDto(_dbContext, person.PersonID);
+            var projectDtos = Projects.ListByPersonIDAsDto(DbContext, CallingUser.PersonID);
             return Ok(projectDtos);
         }
 
@@ -66,23 +60,18 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public async Task<ActionResult<ProjectDto>> New([FromBody] ProjectUpsertDto projectCreateDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            if (!person.CanEditJurisdiction(projectCreateDto.StormwaterJurisdictionID.Value, _dbContext))
+            if (!CallingUser.CanEditJurisdiction(projectCreateDto.StormwaterJurisdictionID.Value, DbContext))
             {
                 return Forbid();
             }
 
-            var projectNameAlreadyExists = _dbContext.Projects.Any(x => x.ProjectName == projectCreateDto.ProjectName);
+            var projectNameAlreadyExists = DbContext.Projects.Any(x => x.ProjectName == projectCreateDto.ProjectName);
             if (projectNameAlreadyExists)
             {
                 ModelState.AddModelError("ProjectName", $"A project with the name {projectCreateDto.ProjectName} already exists");
                 return BadRequest(ModelState);
             }
-            var project = await Projects.CreateNew(_dbContext, projectCreateDto, person, person.PersonID);
+            var project = await Projects.CreateNew(DbContext, projectCreateDto, CallingUser, CallingUser.PersonID);
             return Ok(project);
         }
 
@@ -91,39 +80,31 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public ActionResult<ProjectWorkflowProgress.ProjectWorkflowProgressDto> GetProjectProgress([FromRoute] int projectID)
         {
-            var project = Projects.GetByIDWithTrackingForWorkflow(_dbContext, projectID);
+            var project = Projects.GetByIDWithTrackingForWorkflow(DbContext, projectID);
             var projectWorkflowProgressDto = ProjectWorkflowProgress.GetProgress(project);
             return projectWorkflowProgressDto;
         }
 
         [HttpPost("projects/{projectID}/update")]
+        [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
         public async Task<IActionResult> Update([FromRoute] int projectID, [FromBody] ProjectUpsertDto projectCreateDto)
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var project = Projects.GetByIDWithChangeTracking(_dbContext, projectID);
-            if (ThrowNotFound(project, "Project", projectID, out var actionResult))
-            {
-                return actionResult;
-            }
-            if (!person.CanEditJurisdiction(projectCreateDto.StormwaterJurisdictionID.Value, _dbContext))
+            if (!CallingUser.CanEditJurisdiction(projectCreateDto.StormwaterJurisdictionID.Value, DbContext))
             {
                 return Forbid();
             }
-            await Projects.Update(_dbContext, project, projectCreateDto, person.PersonID);
+            var project = Projects.GetByIDWithChangeTracking(DbContext, projectID);
+            await Projects.Update(DbContext, project, projectCreateDto, CallingUser.PersonID);
             return Ok();
         }
 
         [HttpGet("projects/{projectID}/attachments")]
+        [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
         public ActionResult<List<ProjectDocumentDto>> ListAttachmentsByProjectID([FromRoute] int projectID)
         {
-            var project = Projects.GetByID(_dbContext, projectID);
-            if (ThrowNotFound(project, "Project", projectID, out var actionResult))
-            {
-                return actionResult;
-            }
-            var projectDocuments = ProjectDocuments.ListByProjectIDAsDto(_dbContext, projectID);
+            var projectDocuments = ProjectDocuments.ListByProjectIDAsDto(DbContext, projectID);
             return Ok(projectDocuments);
         }
 
@@ -131,25 +112,20 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public ActionResult<ProjectDocumentDto> GetAttachmentByID([FromRoute] int attachmentID)
         {
-            var projectDocument = ProjectDocuments.GetByID(_dbContext, attachmentID);
+            var projectDocument = ProjectDocuments.GetByID(DbContext, attachmentID);
             return Ok(projectDocument.AsDto());
         }
 
         [HttpPost("projects/{projectID}/attachments")]
+        [EntityNotFound(typeof(Project), "projectID")]
         [RequestSizeLimit(30 * 1024 * 1024)]
         [RequestFormLimits(MultipartBodyLengthLimit = 30 * 1024 * 1024), ProducesResponseType(StatusCodes.Status413RequestEntityTooLarge)]
         [JurisdictionEditFeature]
         public async Task<ActionResult<ProjectDocumentDto>> AddAttachment([FromRoute] int projectID, [FromForm] ProjectDocumentUpsertDto projectDocumentUpsertDto)
         {
-            var project = Projects.GetByIDWithChangeTracking(_dbContext, projectID);
-            if (ThrowNotFound(project, "Project", projectID, out var actionResult))
-            {
-                return actionResult;
-            }
-
             var fileResource =
-                await HttpUtilities.MakeFileResourceFromFormFile(projectDocumentUpsertDto.FileResource, _dbContext,
-                    HttpContext, _azureBlobStorageService);
+                await HttpUtilities.MakeFileResourceFromFormFile(projectDocumentUpsertDto.FileResource, DbContext,
+                    HttpContext, azureBlobStorageService);
 
             var projectDocument = new ProjectDocument()
             {
@@ -160,9 +136,9 @@ namespace Neptune.API.Controllers
                 UploadDate = DateOnly.FromDateTime(DateTime.UtcNow)
             };
 
-            _dbContext.ProjectDocuments.Add(projectDocument);
-            await _dbContext.SaveChangesAsync();
-            await _dbContext.Entry(projectDocument).ReloadAsync();
+            DbContext.ProjectDocuments.Add(projectDocument);
+            await DbContext.SaveChangesAsync();
+            await DbContext.Entry(projectDocument).ReloadAsync();
 
             return Ok(projectDocument.AsDto());
         }
@@ -171,18 +147,17 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public ActionResult<ProjectDocumentDto> UpdateAttachment([FromRoute] int attachmentID, [FromBody] ProjectDocumentUpdateDto projectDocumentUpdateDto)
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var projectDocument = ProjectDocuments.GetByIDWithTracking(_dbContext, attachmentID);
+            var projectDocument = ProjectDocuments.GetByIDWithTracking(DbContext, attachmentID);
             if (ThrowNotFound(projectDocument, "ProjectDocument", attachmentID, out var actionResult))
             {
                 return actionResult;
             }
-            if (!person.CanEditJurisdiction(projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID, _dbContext))
+            if (!CallingUser.CanEditJurisdiction(projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID, DbContext))
             {
                 return Forbid();
             }
 
-            var updatedProjectDocument = ProjectDocuments.Update(_dbContext, projectDocument, projectDocumentUpdateDto);
+            var updatedProjectDocument = ProjectDocuments.Update(DbContext, projectDocument, projectDocumentUpdateDto);
 
             return Ok(updatedProjectDocument.AsDto());
         }
@@ -191,108 +166,103 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public IActionResult DeleteAttachment([FromRoute] int attachmentID)
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var projectDocument = ProjectDocuments.GetByIDWithTracking(_dbContext, attachmentID);
+            var projectDocument = ProjectDocuments.GetByIDWithTracking(DbContext, attachmentID);
             if (ThrowNotFound(projectDocument, "ProjectDocument", attachmentID, out var actionResult))
             {
                 return actionResult;
             }
-            if (!person.CanEditJurisdiction(projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID, _dbContext))
+            if (!CallingUser.CanEditJurisdiction(projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID, DbContext))
             {
                 return Forbid();
             }
-            ProjectDocuments.Delete(_dbContext, projectDocument);
+            ProjectDocuments.Delete(DbContext, projectDocument);
             return Ok();
         }
 
         [HttpDelete("projects/{projectID}/delete")]
+        [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
         public async Task<IActionResult> Delete([FromRoute] int projectID)
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var project = Projects.GetByID(_dbContext, projectID);
-            if (ThrowNotFound(project, "Project", projectID, out var actionResult))
-            {
-                return actionResult;
-            }
-            if (!person.CanEditJurisdiction(project.StormwaterJurisdictionID, _dbContext))
+            var project = Projects.GetByID(DbContext, projectID);
+            if (!CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
             {
                 return Forbid();
             }
-            await Projects.Delete(_dbContext, projectID);
+            await Projects.Delete(DbContext, projectID);
             return Ok();
         }
 
         [HttpGet("projects/{projectID}/project-network-solve-histories")]
+        [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
         public ActionResult<List<ProjectNetworkSolveHistorySimpleDto>> GetProjectNetworkSolveHistoriesForProject(int projectID)
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var project = Projects.GetByID(_dbContext, projectID);
-            if ((!person.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !person.CanEditJurisdiction(project.StormwaterJurisdictionID, _dbContext))
+            var project = Projects.GetByID(DbContext, projectID);
+            if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
             {
                 return Forbid();
             }
 
-            var projectNetworkSolveHistoryDtos = ProjectNetworkSolveHistories.GetByProjectIDAsDto(_dbContext, projectID);
+            var projectNetworkSolveHistoryDtos = ProjectNetworkSolveHistories.GetByProjectIDAsDto(DbContext, projectID);
             return Ok(projectNetworkSolveHistoryDtos);
         }
 
         [HttpGet("projects/{projectID}/treatment-bmp-hru-characteristics")]
+        [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
         public ActionResult<List<TreatmentBMPHRUCharacteristicsSummarySimpleDto>> GetTreatmentBMPHRUCharacteristicsForProject([FromRoute] int projectID)
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var project = Projects.GetByID(_dbContext, projectID);
-            if ((!person.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !person.CanEditJurisdiction(project.StormwaterJurisdictionID, _dbContext))
+            var project = Projects.GetByID(DbContext, projectID);
+            if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
             {
                 return Forbid();
             }
 
-            var hruCharacteristics = Projects.GetTreatmentBMPHRUCharacteristicSimplesForProject(_dbContext, projectID);
+            var hruCharacteristics = Projects.GetTreatmentBMPHRUCharacteristicSimplesForProject(DbContext, projectID);
 
             return Ok(hruCharacteristics);
         }
 
         [HttpGet("projects/{projectID}/load-reducing-results")]
+        [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
         public ActionResult<List<ProjectLoadReducingResultDto>> GetLoadRemovingResultsForProject([FromRoute] int projectID)
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var project = Projects.GetByID(_dbContext, projectID);
-            if ((!person.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !person.CanEditJurisdiction(project.StormwaterJurisdictionID, _dbContext))
+            var project = Projects.GetByID(DbContext, projectID);
+            if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
             {
                 return Forbid();
             }
 
-            var modeledResults = ProjectLoadReducingResults.ListByProjectIDAsDto(_dbContext, projectID);
+            var modeledResults = ProjectLoadReducingResults.ListByProjectIDAsDto(DbContext, projectID);
 
             return Ok(modeledResults);
         }
 
         [HttpGet("projects/{projectID}/load-generating-results")]
+        [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
         public ActionResult<List<ProjectLoadGeneratingResultDto>> GetLoadGeneratingResultsForProject([FromRoute] int projectID)
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var project = Projects.GetByID(_dbContext, projectID);
-            if ((!person.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !person.CanEditJurisdiction(project.StormwaterJurisdictionID, _dbContext))
+            var project = Projects.GetByID(DbContext, projectID);
+            if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
             {
                 return Forbid();
             }
 
-            var modeledResults = ProjectLoadGeneratingResults.ListByProjectIDAsDto(_dbContext, projectID);
+            var modeledResults = ProjectLoadGeneratingResults.ListByProjectIDAsDto(DbContext, projectID);
 
             return Ok(modeledResults);
         }
 
         [HttpPost("projects/{projectID}/modeled-performance")]
+        [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
         public async Task<IActionResult> TriggerModeledPerformanceForProject([FromRoute] int projectID)
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var project = Projects.GetByIDWithChangeTracking(_dbContext, projectID);
-            if (!person.CanEditJurisdiction(project.StormwaterJurisdictionID, _dbContext))
+            var project = Projects.GetByIDWithChangeTracking(DbContext, projectID);
+            if (!CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
             {
                 return Forbid();
             }
@@ -300,57 +270,49 @@ namespace Neptune.API.Controllers
             var projectNetworkSolveHistoryEntity = new ProjectNetworkSolveHistory
             {
                 ProjectID = projectID,
-                RequestedByPersonID = person.PersonID,
+                RequestedByPersonID = CallingUser.PersonID,
                 ProjectNetworkSolveHistoryStatusTypeID = (int)ProjectNetworkSolveHistoryStatusTypeEnum.Queued,
                 LastUpdated = DateTime.UtcNow
             };
-            await _dbContext.ProjectNetworkSolveHistories.AddAsync(projectNetworkSolveHistoryEntity);
-            await _dbContext.SaveChangesAsync();
+            await DbContext.ProjectNetworkSolveHistories.AddAsync(projectNetworkSolveHistoryEntity);
+            await DbContext.SaveChangesAsync();
 
             BackgroundJob.Enqueue<ProjectNetworkSolveJob>(x => x.RunNetworkSolveForProject(projectID, projectNetworkSolveHistoryEntity.ProjectNetworkSolveHistoryID));
             return Ok();
         }
 
         [HttpGet("projects/{projectID}/delineations")]
+        [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
         public ActionResult<List<DelineationUpsertDto>> GetDelineationsByProjectID([FromRoute] int projectID)
         {
-            var delineationUpsertDtos = Delineations.ListByProjectIDAsUpsertDto(_dbContext, projectID);
+            var delineationUpsertDtos = Delineations.ListByProjectIDAsUpsertDto(DbContext, projectID);
             return Ok(delineationUpsertDtos);
         }
 
         [HttpPut("projects/{projectID}/delineations")]
+        [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
         public async Task<IActionResult> MergeDelineationsForProject([FromRoute] int projectID, List<DelineationUpsertDto> delineationUpsertDtos)
         {
-            // project validation here
-            var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
-            if (project == null)
-            {
-                return BadRequest();
-            }
-
-            await Projects.DeleteProjectNereidResultsAndGrantScores(_dbContext, projectID);
-            await Delineations.MergeDelineations(_dbContext, delineationUpsertDtos, project);
-
-            var personID = UserContext.GetUserFromHttpContext(_dbContext, HttpContext).PersonID;
-            Projects.SetUpdatePersonAndDate(_dbContext, projectID, personID);
-
+            await Projects.DeleteProjectNereidResultsAndGrantScores(DbContext, projectID);
+            await Delineations.MergeDelineations(DbContext, delineationUpsertDtos, projectID);
+            Projects.SetUpdatePersonAndDate(DbContext, projectID, CallingUser.PersonID);
             return Ok();
         }
 
         [HttpPost("projects/{projectID}/copy")]
+        [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
         public async Task<ActionResult<int>> CreateProjectCopy([FromRoute] int projectID)
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var project = Projects.GetByIDWithChangeTracking(_dbContext, projectID);
-            if (!person.CanEditJurisdiction(project.StormwaterJurisdictionID, _dbContext))
+            var project = Projects.GetByIDWithChangeTracking(DbContext, projectID);
+            if (!CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
             {
                 return Forbid();
             }
 
-            var newProject = await Projects.CreateCopy(_dbContext, project, person.PersonID);
+            var newProject = await Projects.CreateCopy(DbContext, project, CallingUser.PersonID);
             return Ok(newProject.ProjectID);
         }
 
@@ -360,8 +322,8 @@ namespace Neptune.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
         public async Task<FileContentResult> DownloadProjectsWithModels()
         {
-            var projectIDs = Projects.ListProjectIDs(_dbContext);
-            var records = Projects.ListByIDsAsModeledResultSummaryDtos(_dbContext, projectIDs);
+            var projectIDs = Projects.ListProjectIDs(DbContext);
+            var records = Projects.ListByIDsAsModeledResultSummaryDtos(DbContext, projectIDs);
 
             await using var stream = new MemoryStream();
             await using var writer = new StreamWriter(stream);
@@ -381,8 +343,8 @@ namespace Neptune.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
         public async Task<FileContentResult> DownloadTreatmentBMPsForProjects()
         {
-            var projectIDs = Projects.ListProjectIDs(_dbContext);
-            var records = ProjectLoadReducingResults.ListByProjectIDs(_dbContext, projectIDs);
+            var projectIDs = Projects.ListProjectIDs(DbContext);
+            var records = ProjectLoadReducingResults.ListByProjectIDs(DbContext, projectIDs);
 
             await using var stream = new MemoryStream();
             await using var writer = new StreamWriter(stream);
@@ -400,13 +362,12 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<List<ProjectDto>> GetProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
-            var currentUser = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            if (!currentUser.IsOCTAGrantReviewer)
+            if (!CallingUser.IsOCTAGrantReviewer)
             {
                 return Forbid();
             }
 
-            var projectHruCharacteristicsSummaryDtos = Projects.ListOCTAM2Tier2Projects(_dbContext)
+            var projectHruCharacteristicsSummaryDtos = Projects.ListOCTAM2Tier2Projects(DbContext)
                 .Select(x => x.AsDto()).ToList();
             return Ok(projectHruCharacteristicsSummaryDtos);
         }
@@ -417,8 +378,8 @@ namespace Neptune.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
         public async Task<FileContentResult> DownloadProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
-            var projectIDs = Projects.ListOCTAM2Tier2ProjectIDs(_dbContext);
-            var records = Projects.ListByIDsAsModeledResultSummaryDtos(_dbContext, projectIDs);
+            var projectIDs = Projects.ListOCTAM2Tier2ProjectIDs(DbContext);
+            var records = Projects.ListByIDsAsModeledResultSummaryDtos(DbContext, projectIDs);
 
             await using var stream = new MemoryStream();
             await using var writer = new StreamWriter(stream);
@@ -438,8 +399,8 @@ namespace Neptune.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
         public async Task<FileContentResult> DownloadTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
-            var projectIDs = Projects.ListOCTAM2Tier2ProjectIDs(_dbContext);
-            var records = ProjectLoadReducingResults.ListByProjectIDs(_dbContext, projectIDs);
+            var projectIDs = Projects.ListOCTAM2Tier2ProjectIDs(DbContext);
+            var records = ProjectLoadReducingResults.ListByProjectIDs(DbContext, projectIDs);
 
             await using var stream = new MemoryStream();
             await using var writer = new StreamWriter(stream);
@@ -457,12 +418,11 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<List<DelineationDto>> List()
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            if (!person.IsOCTAGrantReviewer)
+            if (!CallingUser.IsOCTAGrantReviewer)
             {
                 return Forbid();
             }
-            var dtos = Delineations.ListProjectDelineationsAsDto(_dbContext);
+            var dtos = Delineations.ListProjectDelineationsAsDto(DbContext);
             return Ok(dtos);
         }
 

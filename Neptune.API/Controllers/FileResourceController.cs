@@ -11,27 +11,22 @@ using Microsoft.Extensions.Options;
 namespace Neptune.API.Controllers
 {
     [ApiController]
-    public class FileResourceController : SitkaController<FileResourceController>
+    public class FileResourceController(
+        NeptuneDbContext dbContext,
+        ILogger<FileResourceController> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration,
+        AzureBlobStorageService azureBlobStorageService,
+        Person callingUser)
+        : SitkaController<FileResourceController>(dbContext, logger, keystoneService, neptuneConfiguration, callingUser)
     {
-        private readonly AzureBlobStorageService _azureBlobStorageService;
-
-        public FileResourceController(NeptuneDbContext dbContext,
-            ILogger<FileResourceController> logger,
-            KeystoneService keystoneService,
-            IOptions<NeptuneConfiguration> neptuneConfiguration,
-            AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-            _azureBlobStorageService = azureBlobStorageService;
-        }
-
-
         [HttpGet("FileResource/{fileResourceGuidAsString}")]
         public async Task<IActionResult> DisplayResource(string fileResourceGuidAsString)
         {
             var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out var fileResourceGuid);
             if (isStringAGuid)
             {
-                var fileResource = _dbContext.FileResources.AsNoTracking().SingleOrDefault(x => x.FileResourceGUID == fileResourceGuid);
+                var fileResource = DbContext.FileResources.AsNoTracking().SingleOrDefault(x => x.FileResourceGUID == fileResourceGuid);
                 if (fileResource != null)
                 {
                     return await DisplayFileResource(fileResource);
@@ -40,7 +35,7 @@ namespace Neptune.API.Controllers
             // Unhappy path - return an HTTP 404
             // ---------------------------------
             var message = $"File Resource {fileResourceGuidAsString} Not Found in database. It may have been deleted.";
-            _logger.LogError(message);
+            Logger.LogError(message);
             return new NotFoundResult();
         }
 
@@ -54,7 +49,7 @@ namespace Neptune.API.Controllers
             Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
 
             var blobDownloadResult =
-                await _azureBlobStorageService.DownloadFileResourceFromBlobStorage(fileResource);
+                await azureBlobStorageService.DownloadFileResourceFromBlobStorage(fileResource);
 
             return File(blobDownloadResult.Content.ToArray(), blobDownloadResult.Details.ContentType);
         }

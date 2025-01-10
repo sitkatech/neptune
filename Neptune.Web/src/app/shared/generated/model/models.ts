@@ -36,3 +36,4 @@ export * from '././treatment-bmp-modeling-attribute-dropdown-item-dto';
 export * from '././treatment-bmp-modeling-attribute-simple-dto';
 export * from '././treatment-bmp-type-with-modeling-attributes-dto';
 export * from '././treatment-bmp-upsert-dto';
+export * from '././workflow-step-status';

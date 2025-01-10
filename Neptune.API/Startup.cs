@@ -173,6 +173,8 @@ namespace Neptune.API
 
             services.AddHttpContextAccessor();
             services.AddScoped<AzureBlobStorageService>();
+            services.AddScoped(s => UserContext.GetUserFromHttpContext(s.GetService<NeptuneDbContext>(), s.GetService<IHttpContextAccessor>().HttpContext));
+
             services.AddControllers();
 
             #region Hangfire

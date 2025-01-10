@@ -26,7 +26,19 @@ export class ProjectWorkflowProgressService {
                 this.progressSubject.next(response);
             });
         } else {
-            this.progressSubject.next(new ProjectWorkflowProgressDto({ Steps: new ProjectWorkflowProgressDtoSteps() }));
+            this.progressSubject.next(
+                new ProjectWorkflowProgressDto({
+                    Steps: {
+                        Instructions: { Completed: true, Disabled: false },
+                        BasicInfo: { Completed: false, Disabled: false },
+                        TreatmentBMPs: { Completed: false, Disabled: true },
+                        Delineations: { Completed: false, Disabled: true },
+                        ModeledPerformanceAndGrantMetrics: { Completed: false, Disabled: true },
+                        Attachments: { Completed: false, Disabled: true },
+                        ReviewAndShare: { Completed: false, Disabled: true },
+                    },
+                })
+            );
         }
     }
 }

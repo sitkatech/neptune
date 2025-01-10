@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class NeptunePageTypeSimpleDto { 
     NeptunePageTypeID?: number;
     NeptunePageTypeName?: string;
@@ -17,4 +18,43 @@ export class NeptunePageTypeSimpleDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface NeptunePageTypeSimpleDtoForm { 
+    NeptunePageTypeID?: FormControl<number>;
+    NeptunePageTypeName?: FormControl<string>;
+    NeptunePageTypeDisplayName?: FormControl<string>;
+}
+
+export class NeptunePageTypeSimpleDtoFormControls { 
+    public static NeptunePageTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static NeptunePageTypeName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static NeptunePageTypeDisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

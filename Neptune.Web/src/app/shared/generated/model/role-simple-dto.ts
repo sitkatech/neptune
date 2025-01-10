@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class RoleSimpleDto { 
     RoleID?: number;
     RoleName?: string;
@@ -19,4 +20,65 @@ export class RoleSimpleDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface RoleSimpleDtoForm { 
+    RoleID?: FormControl<number>;
+    RoleName?: FormControl<string>;
+    RoleDisplayName?: FormControl<string>;
+    RoleDescription?: FormControl<string>;
+    PeopleWithRoleCount?: FormControl<number>;
+}
+
+export class RoleSimpleDtoFormControls { 
+    public static RoleID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static RoleName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static RoleDisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static RoleDescription = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static PeopleWithRoleCount = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

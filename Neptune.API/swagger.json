@@ -1574,21 +1574,10 @@
         }
       }
     },
-    "/jurisdictions/{personID}": {
+    "/jurisdictions": {
       "get": {
         "tags": [
           "StormwaterJurisdiction"
-        ],
-        "parameters": [
-          {
-            "name": "personID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -3729,13 +3718,16 @@
             "nullable": true
           },
           "DoesNotIncludeTreatmentBMPs": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "CalculateOCTAM2Tier2Scores": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "ShareOCTAM2Tier2Scores": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3747,9 +3739,9 @@
             "type": "integer",
             "format": "int32"
           },
-          "StormwaterJurisdictionID": {
-            "type": "integer",
-            "format": "int32"
+          "ProjectName": {
+            "type": "string",
+            "nullable": true
           },
           "ProjectStatus": {
             "$ref": "#/components/schemas/ProjectStatusSimpleDto"
@@ -3758,25 +3750,25 @@
             "type": "object",
             "properties": {
               "Instructions": {
-                "type": "boolean"
+                "$ref": "#/components/schemas/WorkflowStepStatus"
               },
               "BasicInfo": {
-                "type": "boolean"
+                "$ref": "#/components/schemas/WorkflowStepStatus"
               },
               "TreatmentBMPs": {
-                "type": "boolean"
+                "$ref": "#/components/schemas/WorkflowStepStatus"
               },
               "Delineations": {
-                "type": "boolean"
+                "$ref": "#/components/schemas/WorkflowStepStatus"
               },
               "ModeledPerformanceAndGrantMetrics": {
-                "type": "boolean"
+                "$ref": "#/components/schemas/WorkflowStepStatus"
               },
               "Attachments": {
-                "type": "boolean"
+                "$ref": "#/components/schemas/WorkflowStepStatus"
               },
               "ReviewAndShare": {
-                "type": "boolean"
+                "$ref": "#/components/schemas/WorkflowStepStatus"
               }
             },
             "additionalProperties": false,
@@ -4372,6 +4364,18 @@
           "IsFullyParameterized": {
             "type": "boolean",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WorkflowStepStatus": {
+        "type": "object",
+        "properties": {
+          "Completed": {
+            "type": "boolean"
+          },
+          "Disabled": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { FormControl, NG_VALUE_ACCESSOR, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { FormInputOption } from "../../forms/form-field/form-field.component";
 import { NgFor } from "@angular/common";
+import { FormInputOption } from "../../form-field/form-field.component";
 
 @Component({
     selector: "select-dropdown",
