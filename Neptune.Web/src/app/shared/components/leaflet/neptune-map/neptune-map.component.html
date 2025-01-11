@@ -1,0 +1,46 @@
+<div class="map-wrapper">
+    <div class="search-bar">
+        <ng-select
+            #ngSelectComponent
+            class="search"
+            name="parcelNumber"
+            [items]="searchString$ | async"
+            bindLabel="properties.display_name"
+            [ngModel]="searchString"
+            [typeahead]="searchResults$"
+            [minTermLength]="4"
+            [loading]="searchLoading"
+            placeholder="Search locations"
+            typeToSearchText="Begin typing to search"
+            (change)="makeNominatimRequest($event)"></ng-select>
+    </div>
+    <div [id]="mapID" [style.height]="mapHeight">
+        <div class="legend leaflet-control-layers leaflet-control-layers-expanded" [id]="legendID" *ngIf="showLegend">
+            <a class="leaflet-control-layers-toggle">
+                <icon icon="MapLegend" (click)="legendToggle()"></icon>
+            </a>
+            <div class="leaflet-control-layers-list">
+                <div *ngFor="let legendItem of legendItems" class="legend-item">
+                    <h4>{{ legendItem.Title }}</h4>
+                    <img
+                        src="{{ legendItem.WmsUrl }}REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=25&HEIGHT=25&LAYER={{
+                            legendItem.WmsLayerName
+                        }}&legend_options=fontSize:10"
+                        alt="{{ legendItem.Title }} Legend" />
+                </div>
+                <div class="leaflet-control-layers-close-button-wrapper">
+                    <a [href]="" (click)="legendToggle()">Close</a>
+                </div>
+            </div>
+        </div>
+        <ng-content></ng-content>
+    </div>
+    <div class="map-footer">
+        <i style="margin-left: auto"></i>
+        <div class="attribution">
+            &copy;
+            <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
+            contributors
+        </div>
+    </div>
+</div>

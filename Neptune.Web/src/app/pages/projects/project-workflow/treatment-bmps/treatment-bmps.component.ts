@@ -7,7 +7,6 @@ import { PersonDto } from "src/app/shared/generated/model/person-dto";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
-import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { forkJoin } from "rxjs";
 import { ProjectWorkflowService } from "src/app/services/project-workflow.service";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
@@ -94,7 +93,6 @@ export class TreatmentBmpsComponent implements OnInit {
     public modelingAttributeDropdownItems: Array<TreatmentBMPModelingAttributeDropdownItemDto>;
     public treatmentBMPTypes: Array<TreatmentBMPTypeWithModelingAttributesDto>;
     public newTreatmentBMPIndex = -1;
-    private modalReference: NgbModalRef;
     public isLoadingSubmit = false;
     public isEditingLocation = false;
 

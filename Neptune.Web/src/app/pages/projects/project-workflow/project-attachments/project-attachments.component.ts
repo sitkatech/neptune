@@ -5,7 +5,6 @@ import { ProjectDocumentUpsertDto } from "src/app/shared/models/project-document
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
-import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { PersonDto, ProjectDocumentDto, ProjectDocumentUpdateDto } from "src/app/shared/generated/model/models";
@@ -48,7 +47,6 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     public invalidFields: Array<string> = [];
 
     public fileName: string;
-    private modalReference: NgbModalRef;
     public isLoadingDelete = false;
     private isLoadingUpdate = false;
 
@@ -158,7 +156,6 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
                 this.projectService.projectsAttachmentsAttachmentIDDelete(this.attachmentIDToRemove).subscribe(
                     (response) => {
                         this.isLoadingDelete = false;
-                        this.modalReference.close();
                         this.alertService.pushAlert(new Alert("Attachment was successfully deleted.", AlertContext.Success, true));
                         this.refreshAttachments();
                     },

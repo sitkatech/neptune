@@ -1,34 +1,29 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { AgGridModule } from "ag-grid-angular";
 import { ColDef, GridApi, ValueGetterParams } from "ag-grid-community";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { PersonDto } from "src/app/shared/generated/model/person-dto";
 import { AuthenticationService } from "src/app/services/authentication.service";
-import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
-import { FontAwesomeIconLinkRendererComponent } from "src/app/shared/components/ag-grid/fontawesome-icon-link-renderer/fontawesome-icon-link-renderer.component";
-import { LinkRendererComponent } from "src/app/shared/components/ag-grid/link-renderer/link-renderer.component";
 import { CustomDropdownFilterComponent } from "src/app/shared/components/custom-dropdown-filter/custom-dropdown-filter.component";
 import { environment } from "src/environments/environment";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
-import { NgIf } from "@angular/common";
-import { CustomRichTextComponent } from "../../../shared/components/custom-rich-text/custom-rich-text.component";
-import { AlertDisplayComponent } from "../../../shared/components/alert-display/alert-display.component";
 import { NeptuneGridComponent } from "../../../shared/components/neptune-grid/neptune-grid.component";
 import { ProjectDto } from "src/app/shared/generated/model/project-dto";
 import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
+import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
 
 @Component({
     selector: "project-list",
     templateUrl: "./project-list.component.html",
     styleUrls: ["./project-list.component.scss"],
     standalone: true,
-    imports: [AlertDisplayComponent, CustomRichTextComponent, AgGridModule, NgIf, NeptuneGridComponent, PageHeaderComponent],
+    imports: [DropdownToggleDirective, AgGridModule, NeptuneGridComponent, PageHeaderComponent],
 })
 export class ProjectListComponent implements OnInit {
     private currentUser: PersonDto;
@@ -37,10 +32,7 @@ export class ProjectListComponent implements OnInit {
     public richTextTypeID = NeptunePageTypeEnum.HippocampProjectsList;
     public projectColumnDefs: Array<ColDef>;
     public defaultColDef: ColDef;
-    private modalReference: NgbModalRef;
-    private projectIDToDelete: number;
     public projectNameToDelete: string;
-    private deleteColumnID = 1;
     public isLoadingDelete = false;
     public projects: ProjectDto[];
 

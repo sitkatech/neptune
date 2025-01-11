@@ -1,14 +1,12 @@
-import { ApplicationRef, ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
-import { forkJoin } from "rxjs";
+import { ApplicationRef, ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { combineLatest, Observable, tap } from "rxjs";
 import * as L from "leaflet";
 import "leaflet-gesture-handling";
 import "leaflet.fullscreen";
 import "leaflet.marker.highlight";
 import "leaflet-loading";
 import "leaflet.markercluster";
-import * as esri from "esri-leaflet";
-import { AuthenticationService } from "src/app/services/authentication.service";
-import { BoundingBoxDto, DelineationDto, PersonDto, ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
+import { BoundingBoxDto, DelineationDto, ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import { environment } from "src/environments/environment";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
@@ -17,7 +15,7 @@ import { WfsService } from "src/app/shared/services/wfs.service";
 import { OctaPrioritizationDetailPopupComponent } from "src/app/shared/components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component";
 import { ColDef, GridApi, GridReadyEvent } from "ag-grid-community";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
-import { AgGridAngular, AgGridModule } from "ag-grid-angular";
+import { AgGridModule } from "ag-grid-angular";
 import { DelineationService } from "src/app/shared/generated/api/delineation.service";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
@@ -25,7 +23,7 @@ import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { RouterLink } from "@angular/router";
 import { FieldDefinitionComponent } from "../../shared/components/field-definition/field-definition.component";
-import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, NgFor } from "@angular/common";
+import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, NgFor, AsyncPipe } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { AlertDisplayComponent } from "../../shared/components/alert-display/alert-display.component";
@@ -33,6 +31,12 @@ import { NeptuneGridComponent } from "../../shared/components/neptune-grid/neptu
 import { PageHeaderComponent } from "../../shared/components/page-header/page-header.component";
 import { IconComponent } from "../../shared/components/icon/icon.component";
 import { ExpandCollapseDirective } from "src/app/shared/directives/expand-collapse.directive";
+import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../shared/components/leaflet/neptune-map/neptune-map.component";
+import { RegionalSubbasinsLayerComponent } from "../../shared/components/leaflet/layers/regional-subbasins-layer/regional-subbasins-layer.component";
+import { DelineationsLayerComponent } from "../../shared/components/leaflet/layers/delineations-layer/delineations-layer.component";
+import { JurisdictionsLayerComponent } from "../../shared/components/leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
+import { WqmpsLayerComponent } from "../../shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
+import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
 
 declare var $: any;
 
@@ -57,13 +61,21 @@ declare var $: any;
         NeptuneGridComponent,
         PageHeaderComponent,
         IconComponent,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        DelineationsLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        StormwaterNetworkLayerComponent,
+        AsyncPipe,
     ],
 })
 export class PlanningMapComponent implements OnInit {
-    private currentUser: PersonDto;
-    public richTextTypeID = NeptunePageTypeEnum.HippocampPlanningMap;
+    public customRichTextTypeID = NeptunePageTypeEnum.HippocampPlanningMap;
 
+    public mapIsReady: boolean = false;
     public projects: Array<ProjectDto>;
+    public planningMapInitData$: Observable<PlanningMapInitData>;
     private treatmentBMPs: Array<TreatmentBMPDisplayDto>;
     private delineations: Array<DelineationDto>;
     public selectedTreatmentBMP: TreatmentBMPDisplayDto;
@@ -72,11 +84,8 @@ export class PlanningMapComponent implements OnInit {
     public selectedProject: ProjectDto;
     public gridApi: GridApi;
 
-    public mapID: string = "planningMap";
     public mapHeight = window.innerHeight - window.innerHeight * 0.2 + "px";
     public map: L.Map;
-    public tileLayers: { [key: string]: any } = {};
-    public overlayLayers: { [key: string]: any } = {};
     public plannedProjectTreatmentBMPsLayer: L.GeoJSON<any>;
     public selectedProjectDelineationsLayer: L.GeoJSON<any>;
     private boundingBox: BoundingBoxDto;
@@ -104,13 +113,10 @@ export class PlanningMapComponent implements OnInit {
         "<span>Inventoried BMP Locations<br /> <img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin:3px'> BMP (Verified)</span>";
     private inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
 
-    private viewInitialized: boolean = false;
-
     public columnDefs: ColDef[];
     public paginationPageSize: number = 100;
 
     constructor(
-        private authenticationService: AuthenticationService,
         private treatmentBMPService: TreatmentBMPService,
         private delineationService: DelineationService,
         private appRef: ApplicationRef,
@@ -123,144 +129,42 @@ export class PlanningMapComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.authenticationService.getCurrentUser().subscribe((result) => {
-            this.currentUser = result;
-            this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet().subscribe((result) => {
-                this.boundingBox = result;
-                forkJoin({
-                    projects: this.projectService.projectsGet(),
-                    treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
-                    delineations: this.delineationService.delineationsGet(),
-                }).subscribe(({ projects, treatmentBMPs, delineations }) => {
-                    this.projects = projects;
-
-                    this.treatmentBMPs = treatmentBMPs;
-                    this.addTreatmentBMPLayersToMap();
-
-                    this.delineations = delineations;
-                });
-                this.initMap();
-                this.map.fireEvent("dataloading");
-            });
-
-            this.columnDefs = [
-                this.utilityFunctionsService.createLinkColumnDef("Project ID", "ProjectID", "ProjectID", {
-                    InRouterLink: "/projects/",
-                }),
-                this.utilityFunctionsService.createLinkColumnDef("Project Name", "ProjectName", "ProjectID", {
-                    InRouterLink: "/projects/",
-                }),
-                this.utilityFunctionsService.createBasicColumnDef("Organization", "Organization.OrganizationName"),
-                this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdiction.Organization.OrganizationName"),
-                this.utilityFunctionsService.createDateColumnDef("Date Created", "DateCreated", "M/d/yyyy", { Width: 120 }),
-                this.utilityFunctionsService.createBasicColumnDef("Project Description", "ProjectDescription"),
-            ];
-        });
-
-        this.tileLayers = Object.assign(
-            {},
-            {
-                Aerial: L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Aerial",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-                Street: L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Street",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-                Terrain: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Terrain",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-            },
-            this.tileLayers
+        this.planningMapInitData$ = combineLatest({
+            BoundingBox: this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet(),
+            Projects: this.projectService.projectsGet(),
+            TreatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
+            Delineations: this.delineationService.delineationsGet(),
+        }).pipe(
+            tap((data) => {
+                this.projects = data.Projects;
+                this.treatmentBMPs = data.TreatmentBMPs;
+                this.delineations = data.Delineations;
+                this.boundingBox = data.BoundingBox;
+            })
         );
 
-        let regionalSubbasinsWMSOptions = {
-            layers: "OCStormwater:RegionalSubbasins",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-        } as L.WMSOptions;
-
-        let jurisdictionsWMSOptions = {
-            layers: "OCStormwater:Jurisdictions",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-            styles: "jurisdiction_orange",
-        } as L.WMSOptions;
-
-        let WQMPsWMSOptions = {
-            layers: "OCStormwater:WaterQualityManagementPlans",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-        } as L.WMSOptions;
-
-        let verifiedDelineationsWMSOptions = {
-            layers: "OCStormwater:Delineations",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-            cql_filter: "DelineationStatus = 'Verified' AND IsAnalyzedInModelingModule = 1",
-        } as L.WMSOptions;
-
-        this.overlayLayers = Object.assign(
-            {
-                "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    regionalSubbasinsWMSOptions
-                ),
-                "<span>Stormwater Network <br/> <img src='./assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({
-                    url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
-                }),
-                "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    jurisdictionsWMSOptions
-                ),
-                "<img src='./assets/main/map-legend-images/wqmpBoundary.png' style='height:12px; margin-bottom:4px'> WQMPs": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    WQMPsWMSOptions
-                ),
-                "<span>Inventoried BMP Delineations</br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    verifiedDelineationsWMSOptions
-                ),
-            },
-            this.overlayLayers
-        );
+        this.columnDefs = [
+            this.utilityFunctionsService.createLinkColumnDef("Project ID", "ProjectID", "ProjectID", {
+                InRouterLink: "/projects/",
+            }),
+            this.utilityFunctionsService.createLinkColumnDef("Project Name", "ProjectName", "ProjectID", {
+                InRouterLink: "/projects/",
+            }),
+            this.utilityFunctionsService.createBasicColumnDef("Organization", "Organization.OrganizationName"),
+            this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdiction.Organization.OrganizationName"),
+            this.utilityFunctionsService.createDateColumnDef("Date Created", "DateCreated", "M/d/yyyy", { Width: 120 }),
+            this.utilityFunctionsService.createBasicColumnDef("Project Description", "ProjectDescription"),
+        ];
 
         this.compileService.configure(this.appRef);
     }
 
-    initMap() {
-        const mapOptions: L.MapOptions = {
-            // center: [46.8797, -110],
-            // zoom: 6,
-            minZoom: 9,
-            maxZoom: 22,
-            layers: [
-                this.tileLayers["Terrain"],
-                this.overlayLayers["<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions"],
-            ],
-            fullscreenControl: true,
-            gestureHandling: true,
-        } as L.MapOptions;
-        this.map = L.map(this.mapID, mapOptions);
-        this.initializePanes();
-        this.setControl();
+    public handleMapReady(event: NeptuneMapInitEvent): void {
+        this.map = event.map;
+        this.layerControl = event.layerControl;
+        this.mapIsReady = true;
+
         this.registerClickEvents();
-        this.map.fitBounds(
-            [
-                [this.boundingBox.Bottom, this.boundingBox.Left],
-                [this.boundingBox.Top, this.boundingBox.Right],
-            ],
-            this.defaultFitBoundsOptions
-        );
 
         this.map.on("overlayadd overlayremove", (e) => {
             if (e.name != this.plannedTreatmentBMPOverlayName) {
@@ -272,6 +176,19 @@ export class PlanningMapComponent implements OnInit {
                 });
             }
         });
+
+        this.initializePanes();
+        this.map.fitBounds(
+            [
+                [this.boundingBox.Bottom, this.boundingBox.Left],
+                [this.boundingBox.Top, this.boundingBox.Right],
+            ],
+            this.defaultFitBoundsOptions
+        );
+
+        this.addTreatmentBMPLayersToMap();
+
+        this.cdr.detectChanges();
     }
 
     public initializePanes(): void {
@@ -279,27 +196,7 @@ export class PlanningMapComponent implements OnInit {
         hippocampChoroplethPane.style.zIndex = 300;
     }
 
-    public setControl(): void {
-        var loadingControl = L.Control.loading({
-            separate: true,
-        });
-        this.map.addControl(loadingControl);
-
-        this.layerControl = new L.Control.Layers(this.tileLayers, this.overlayLayers, { collapsed: false }).addTo(this.map);
-    }
-
     public registerClickEvents(): void {
-        var leafletControlLayersSelector = ".leaflet-control-layers";
-        var closeButtonClass = "leaflet-control-layers-close";
-
-        var closem = L.DomUtil.create("a", closeButtonClass);
-        closem.innerHTML = "Close";
-        L.DomEvent.on(closem, "click", function () {
-            $(leafletControlLayersSelector).removeClass("leaflet-control-layers-expanded");
-        });
-
-        $(leafletControlLayersSelector).append(closem);
-
         const wfsService = this.wfsService;
         const self = this;
         this.map.on("click", (event: L.LeafletMouseEvent): void => {
@@ -322,13 +219,6 @@ export class PlanningMapComponent implements OnInit {
     }
 
     public addTreatmentBMPLayersToMap(): void {
-        //If you were called and there is no map, try again in a little bit
-        if (!this.map) {
-            setTimeout(() => {
-                this.addTreatmentBMPLayersToMap();
-            }, 500);
-        }
-
         if (this.plannedProjectTreatmentBMPsLayer) {
             this.map.removeLayer(this.plannedProjectTreatmentBMPsLayer);
             this.layerControl.removeLayer(this.plannedProjectTreatmentBMPsLayer);
@@ -443,9 +333,6 @@ export class PlanningMapComponent implements OnInit {
             }
             layer.setZIndexOffset(10000);
             layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-red.png"));
-            // if (!this.map.getBounds().contains(layer.getLatLng())) {
-            //   this.map.flyTo(layer.getLatLng());
-            // }
         });
         this.selectedDelineation = this.delineations.find((x) => x.TreatmentBMPID == treatmentBMPID);
     }
@@ -457,7 +344,6 @@ export class PlanningMapComponent implements OnInit {
         }
 
         this.selectedDelineation = null;
-        //this.selectedTreatmentBMP = null;
 
         this.selectedProject = this.projects.find((x) => x.ProjectID == projectID);
         this.relatedTreatmentBMPs = this.treatmentBMPs.filter((x) => x.ProjectID == projectID);
@@ -486,9 +372,6 @@ export class PlanningMapComponent implements OnInit {
                 layer.addTo(featureGroupForZoom);
                 layer.enablePermanentHighlight();
             }
-            // if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
-            //     layer.bringToFront();
-            // }
         });
 
         this.gridApi.forEachNode((node) => {
@@ -556,4 +439,11 @@ export class PlanningMapComponent implements OnInit {
     public onGridReady(event: GridReadyEvent) {
         this.gridApi = event.api;
     }
+}
+
+export interface PlanningMapInitData {
+    TreatmentBMPs: Array<TreatmentBMPDisplayDto>;
+    Delineations: Array<DelineationDto>;
+    Projects: Array<ProjectDto>;
+    BoundingBox: BoundingBoxDto;
 }

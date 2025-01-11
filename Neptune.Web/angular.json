@@ -42,12 +42,7 @@
                             "node_modules/leaflet-draw/dist/leaflet.draw.css",
                             "node_modules/leaflet-loading/src/Control.Loading.css"
                         ],
-                        "scripts": [
-                            "node_modules/jquery/dist/jquery.slim.min.js",
-                            "node_modules/popper.js/dist/umd/popper.min.js",
-                            "node_modules/iso8601-js-period/iso8601.js",
-                            "node_modules/tinymce/tinymce.min.js"
-                        ],
+                        "scripts": ["node_modules/iso8601-js-period/iso8601.js", "src/scripts/leaflet.groupedlayercontrol.js"],
                         "vendorChunk": true,
                         "extractLicenses": false,
                         "buildOptimizer": false,

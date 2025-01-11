@@ -43,7 +43,7 @@
 
     <div class="table-footer flex-between">
         <div *ngIf="!hideDownloadButton" class="download-button">
-            <csv-download-button [grid]="gridref" [fileName]="downloadFileName" [colIDsToExclude]="colIDsToExclude"></csv-download-button>
+            <neptune-csv-download-button [grid]="gridref" [fileName]="downloadFileName" [colIDsToExclude]="colIDsToExclude"></neptune-csv-download-button>
         </div>
 
         <pagination-controls *ngIf="gridLoaded && pagination" [grid]="gridref"></pagination-controls>

@@ -9,7 +9,6 @@ import { TreatmentBMPHRUCharacteristicsSummarySimpleDto } from "src/app/shared/g
 import { NeptuneModelingResultSigFigPipe } from "../../../pipes/neptune-modeling-result-sig-fig.pipe";
 import { FieldDefinitionComponent } from "../../field-definition/field-definition.component";
 import { FormsModule } from "@angular/forms";
-import { NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLinkBase, NgbNavLink } from "@ng-bootstrap/ng-bootstrap";
 import { NgIf, NgFor, DecimalPipe, KeyValuePipe } from "@angular/common";
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
 import { BtnGroupRadioInputComponent } from "../../inputs/btn-group-radio-input/btn-group-radio-input.component";
@@ -19,21 +18,7 @@ import { BtnGroupRadioInputComponent } from "../../inputs/btn-group-radio-input/
     templateUrl: "./model-results.component.html",
     styleUrls: ["./model-results.component.scss"],
     standalone: true,
-    imports: [
-        NgIf,
-        NgFor,
-        FormsModule,
-        NgbNav,
-        NgbNavItem,
-        NgbNavItemRole,
-        NgbNavLinkBase,
-        NgbNavLink,
-        FieldDefinitionComponent,
-        DecimalPipe,
-        KeyValuePipe,
-        NeptuneModelingResultSigFigPipe,
-        BtnGroupRadioInputComponent,
-    ],
+    imports: [NgIf, NgFor, FormsModule, FieldDefinitionComponent, DecimalPipe, KeyValuePipe, NeptuneModelingResultSigFigPipe, BtnGroupRadioInputComponent],
 })
 export class ModelResultsComponent implements OnInit {
     public ModeledPerformanceDisplayTypeEnum = ModeledPerformanceDisplayTypeEnum;
