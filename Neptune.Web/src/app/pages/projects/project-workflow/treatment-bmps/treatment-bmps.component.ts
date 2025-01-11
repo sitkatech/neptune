@@ -40,6 +40,12 @@ import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/serv
 import { ModalComponent } from "src/app/shared/components/modal/modal.component";
 import { ConfirmOptions } from "src/app/shared/services/confirm/confirm-options";
 import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
+import { DelineationsLayerComponent } from "src/app/shared/components/leaflet/layers/delineations-layer/delineations-layer.component";
+import { JurisdictionsLayerComponent } from "src/app/shared/components/leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
+import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leaflet/layers/regional-subbasins-layer/regional-subbasins-layer.component";
+import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
+import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
+import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 
 declare var $: any;
 
@@ -48,12 +54,29 @@ declare var $: any;
     templateUrl: "./treatment-bmps.component.html",
     styleUrls: ["./treatment-bmps.component.scss"],
     standalone: true,
-    imports: [NgIf, CustomRichTextComponent, NgFor, FormsModule, FieldDefinitionComponent, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent],
+    imports: [
+        NgIf,
+        CustomRichTextComponent,
+        NgFor,
+        FormsModule,
+        FieldDefinitionComponent,
+        PageHeaderComponent,
+        WorkflowBodyComponent,
+        AlertDisplayComponent,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        DelineationsLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        StormwaterNetworkLayerComponent,
+    ],
 })
 export class TreatmentBmpsComponent implements OnInit {
     private currentUser: PersonDto;
     public projectID: number;
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampTreatmentBMPs;
+
+    public mapIsReady: boolean = false;
 
     @ViewChild("editTreatmentBMPTypeModal") editTreatmentBMPTypeModal;
     private editTreatmentBMPTypeModalComponent: ComponentRef<ModalComponent>;
@@ -77,8 +100,6 @@ export class TreatmentBmpsComponent implements OnInit {
     public map: L.Map;
     public featureLayer: any;
     public layerControl: L.Control.Layers;
-    public tileLayers: { [key: string]: any } = {};
-    public overlayLayers: { [key: string]: any } = {};
     private boundingBox: BoundingBoxDto;
     public selectedListItem: number;
     public selectedListItemDetails: { [key: string]: any } = {};
@@ -158,94 +179,26 @@ export class TreatmentBmpsComponent implements OnInit {
                             this.modelingAttributeDropdownItems = modelingAttributeDropdownItems;
 
                             this.cdr.detectChanges();
-                            this.updateMapLayers();
                         });
                     }
                 });
             }
         });
-        this.tileLayers = Object.assign(
-            {},
-            {
-                Aerial: L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Aerial",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-                Street: L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Street",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-                Terrain: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Terrain",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-            },
-            this.tileLayers
-        );
-
-        let regionalSubbasinsWMSOptions = {
-            layers: "OCStormwater:RegionalSubbasins",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-        } as L.WMSOptions;
-
-        let jurisdictionsWMSOptions = {
-            layers: "OCStormwater:Jurisdictions",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-            styles: "jurisdiction_orange",
-        } as L.WMSOptions;
-
-        let WQMPsWMSOptions = {
-            layers: "OCStormwater:WaterQualityManagementPlans",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-        } as L.WMSOptions;
-
-        let verifiedDelineationsWMSOptions = {
-            layers: "OCStormwater:Delineations",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-            cql_filter: "DelineationStatus = 'Verified' AND IsAnalyzedInModelingModule = 1",
-        } as L.WMSOptions;
-
-        this.overlayLayers = Object.assign(
-            {
-                "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    regionalSubbasinsWMSOptions
-                ),
-                "<span>Stormwater Network <br/> <img src='./assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({
-                    url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
-                }),
-                "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    jurisdictionsWMSOptions
-                ),
-                "<img src='./assets/main/map-legend-images/wqmpBoundary.png' style='height:12px; margin-bottom:4px'> WQMPs": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    WQMPsWMSOptions
-                ),
-                "<span>Inventoried BMP Delineations</br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    verifiedDelineationsWMSOptions
-                ),
-            },
-            this.overlayLayers
-        );
 
         this.compileService.configure(this.appRef);
     }
 
     ngOnDestroy() {
         this.cdr.detach();
+    }
+
+    public handleMapReady(event: NeptuneMapInitEvent): void {
+        this.map = event.map;
+        this.layerControl = event.layerControl;
+        this.mapIsReady = true;
+
+        this.registerClickEvents();
+        this.updateMapLayers();
     }
 
     private mapProjectDtoToProject(project: ProjectDto) {
@@ -261,26 +214,7 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     public updateMapLayers(): void {
-        const mapOptions: L.MapOptions = {
-            // center: [46.8797, -110],
-            // zoom: 6,
-            minZoom: 9,
-            maxZoom: 22,
-            layers: [this.tileLayers["Terrain"]],
-            fullscreenControl: true,
-        } as L.MapOptions;
-        this.map = L.map(this.mapID, mapOptions);
-
-        this.map.fitBounds(
-            [
-                [this.boundingBox.Bottom, this.boundingBox.Left],
-                [this.boundingBox.Top, this.boundingBox.Right],
-            ],
-            this.defaultFitBoundsOptions
-        );
         this.updateTreatmentBMPsLayer();
-        this.setControl();
-        this.registerClickEvents();
 
         // add inventoried BMPs layer
         this.addInventoriedBMPsLayer();
@@ -383,22 +317,7 @@ export class TreatmentBmpsComponent implements OnInit {
         };
     }
 
-    public setControl(): void {
-        this.layerControl = new L.Control.Layers(this.tileLayers, this.overlayLayers, { collapsed: false }).addTo(this.map);
-    }
-
     public registerClickEvents(): void {
-        var leafletControlLayersSelector = ".leaflet-control-layers";
-        var closeButtonClass = "leaflet-control-layers-close";
-
-        var closem = L.DomUtil.create("a", closeButtonClass);
-        closem.innerHTML = "Close";
-        L.DomEvent.on(closem, "click", function () {
-            $(leafletControlLayersSelector).removeClass("leaflet-control-layers-expanded");
-        });
-
-        $(leafletControlLayersSelector).append(closem);
-
         this.map.on("click", (event: L.LeafletEvent) => {
             if (!this.isEditingLocation) {
                 return;
