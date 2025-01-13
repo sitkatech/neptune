@@ -36,6 +36,7 @@ import { DelineationsLayerComponent } from "../../shared/components/leaflet/laye
 import { JurisdictionsLayerComponent } from "../../shared/components/leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
 import { WqmpsLayerComponent } from "../../shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
+import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 
 declare var $: any;
 
@@ -66,6 +67,7 @@ declare var $: any;
         JurisdictionsLayerComponent,
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
+        InventoriedBMPsLayerComponent,
         AsyncPipe,
     ],
 })
@@ -108,9 +110,6 @@ export class PlanningMapComponent implements OnInit {
         opacity: 1,
     };
     private plannedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px'> Project BMPs";
-    private inventoriedTreatmentBMPOverlayName =
-        "<span>Inventoried BMP Locations<br /> <img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin:3px'> BMP (Verified)</span>";
-    private inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
 
     public columnDefs: ColDef[];
     public paginationPageSize: number = 100;
@@ -121,7 +120,6 @@ export class PlanningMapComponent implements OnInit {
         private appRef: ApplicationRef,
         private compileService: CustomCompileService,
         private stormwaterJurisdictionService: StormwaterJurisdictionService,
-        private cdr: ChangeDetectorRef,
         private projectService: ProjectService,
         private wfsService: WfsService,
         private utilityFunctionsService: UtilityFunctionsService
@@ -154,11 +152,6 @@ export class PlanningMapComponent implements OnInit {
         this.map.on("overlayadd overlayremove", (e) => {
             if (e.name != this.plannedTreatmentBMPOverlayName) {
                 return;
-            }
-            if (e.type == "overlayremove") {
-                this.plannedProjectTreatmentBMPsLayer.eachLayer((layer) => {
-                    layer.disablePermanentHighlight();
-                });
             }
         });
 
@@ -219,14 +212,6 @@ export class PlanningMapComponent implements OnInit {
             this.map.removeLayer(this.plannedProjectTreatmentBMPsLayer);
             this.layerControl.removeLayer(this.plannedProjectTreatmentBMPsLayer);
         }
-        if (this.inventoriedTreatmentBMPsLayer) {
-            this.map.removeLayer(this.inventoriedTreatmentBMPsLayer);
-            this.layerControl.removeLayer(this.inventoriedTreatmentBMPsLayer);
-        }
-
-        // add inventoried BMPs layer
-        this.addInventoriedBMPsLayer();
-
         // add planned project BMPs layer
         const projectTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter((x) => x.ProjectID != null));
         this.plannedProjectTreatmentBMPsLayer = new L.GeoJSON(projectTreatmentBMPGeoJSON, {
@@ -243,36 +228,6 @@ export class PlanningMapComponent implements OnInit {
         this.layerControl.addOverlay(this.plannedProjectTreatmentBMPsLayer, this.plannedTreatmentBMPOverlayName);
 
         this.map.fireEvent("dataload");
-    }
-
-    private addInventoriedBMPsLayer() {
-        const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter((x) => x.ProjectID == null && x.InventoryIsVerified));
-        this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
-            pointToLayer: (feature, latlng) => {
-                return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker });
-            },
-            onEachFeature: (feature, layer) => {
-                layer.bindPopup(
-                    `<b>Name:</b> <a target="_blank" href="${this.ocstBaseUrl()}/TreatmentBMP/Detail/${feature.properties.TreatmentBMPID}">${
-                        feature.properties.TreatmentBMPName
-                    }</a><br>` + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
-                );
-            },
-        });
-
-        var clusteredInventoriedBMPLayer = L.markerClusterGroup({
-            iconCreateFunction: function (cluster) {
-                var childCount = cluster.getChildCount();
-
-                return new L.DivIcon({
-                    html: "<div><span>" + childCount + "</span></div>",
-                    className: "marker-cluster",
-                    iconSize: new L.Point(40, 40),
-                });
-            },
-        });
-        clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
-        this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
     }
 
     private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPDisplayDto[]) {
@@ -304,7 +259,6 @@ export class PlanningMapComponent implements OnInit {
 
     public selectTreatmentBMPImpl(treatmentBMPID: number) {
         if (!this.map.hasLayer(this.plannedProjectTreatmentBMPsLayer)) {
-            this.plannedProjectTreatmentBMPsLayer.eachLayer((layer) => layer.disablePermanentHighlight());
             this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
         }
 
@@ -314,18 +268,6 @@ export class PlanningMapComponent implements OnInit {
         this.plannedProjectTreatmentBMPsLayer.eachLayer((layer) => {
             if (!layer.feature.properties.DefaultZIndexOffset) {
                 layer.feature.properties.DefaultZIndexOffset = layer._zIndex;
-            }
-            //Doing this here as well feels redundant, but if we dont
-            //whenever we set the icon it puts the highlight in a weird state.
-            //So just disable and enable as needed
-            layer.disablePermanentHighlight();
-            if (this.selectedTreatmentBMP == null || treatmentBMPID != layer.feature.properties.TreatmentBMPID) {
-                layer.setIcon(MarkerHelper.treatmentBMPMarker);
-                layer.setZIndexOffset(layer.feature.properties.DefaultZIndexOffset);
-                if (this.relatedTreatmentBMPs.some((x) => x.TreatmentBMPID == layer.feature.properties.TreatmentBMPID)) {
-                    layer.enablePermanentHighlight();
-                }
-                return;
             }
             layer.setZIndexOffset(10000);
             layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-red.png"));
@@ -362,11 +304,9 @@ export class PlanningMapComponent implements OnInit {
 
         this.map.fitBounds(featureGroupForZoom.getBounds(), { padding: new L.Point(50, 50) });
         this.plannedProjectTreatmentBMPsLayer.eachLayer((layer) => {
-            layer.disablePermanentHighlight();
             layer.setIcon(MarkerHelper.treatmentBMPMarker);
             if (relatedTreatmentBMPIDs.includes(layer.feature.properties.TreatmentBMPID)) {
                 layer.addTo(featureGroupForZoom);
-                layer.enablePermanentHighlight();
             }
         });
 
@@ -426,10 +366,6 @@ export class PlanningMapComponent implements OnInit {
     public getRelatedBMPsToShow() {
         let selectedTreatmentBMPID = this.selectedTreatmentBMP?.TreatmentBMPID;
         return this.relatedTreatmentBMPs.filter((x) => x.TreatmentBMPID != selectedTreatmentBMPID);
-    }
-
-    public ocstBaseUrl(): string {
-        return environment.ocStormwaterToolsBaseUrl;
     }
 
     public onGridReady(event: GridReadyEvent) {

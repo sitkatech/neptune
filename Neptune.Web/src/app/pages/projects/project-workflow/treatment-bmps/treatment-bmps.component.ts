@@ -2,7 +2,6 @@ import { ApplicationRef, ChangeDetectorRef, Component, ComponentRef, OnInit, Vie
 import * as L from "leaflet";
 import "leaflet.fullscreen";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthenticationService } from "src/app/services/authentication.service";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { forkJoin, Observable, switchMap } from "rxjs";
@@ -24,7 +23,6 @@ import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
-import { environment } from "src/environments/environment";
 import { ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
 import { FieldDefinitionComponent } from "../../../../shared/components/field-definition/field-definition.component";
 import { FormsModule } from "@angular/forms";
@@ -46,6 +44,7 @@ import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/compone
 import { ProjectWorkflowProgressService } from "src/app/shared/services/project-workflow-progress.service";
 import { routeParams } from "src/app/app.routes";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
+import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 
 @Component({
     selector: "treatment-bmps",
@@ -68,6 +67,7 @@ import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
         JurisdictionsLayerComponent,
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
+        InventoriedBMPsLayerComponent,
     ],
 })
 export class TreatmentBmpsComponent implements OnInit {
@@ -116,11 +116,6 @@ export class TreatmentBmpsComponent implements OnInit {
 
     public static modelingAttributeFieldsWithDropdown = ["TimeOfConcentrationID", "MonthsOfOperationID", "UnderlyingHydrologicSoilGroupID", "DryWeatherFlowOverrideID"];
     public delineations: DelineationUpsertDto[];
-
-    public treatmentBMPs: Array<TreatmentBMPDisplayDto>;
-    private inventoriedTreatmentBMPOverlayName =
-        "<span>Inventoried BMP Locations<br /> <img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin:3px'> BMP (Verified)</span>";
-    private inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
 
     constructor(
         private route: ActivatedRoute,
@@ -174,13 +169,11 @@ export class TreatmentBmpsComponent implements OnInit {
                     this.projectID = parseInt(projectID);
                     this.mapProjectDtoToProject(project);
                     forkJoin({
-                        treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
                         projectTreatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
                         delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                         treatmentBMPTypes: this.treatmentBMPService.treatmentBMPTypesGet(),
                         modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBMPModelingAttributeDropdownItemsGet(),
-                    }).subscribe(({ treatmentBMPs, projectTreatmentBMPs, delineations, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
-                        this.treatmentBMPs = treatmentBMPs;
+                    }).subscribe(({ projectTreatmentBMPs, delineations, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
                         this.originalDoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
                         this.projectTreatmentBMPs = projectTreatmentBMPs;
                         this.originalTreatmentBMPs = JSON.stringify(projectTreatmentBMPs);
@@ -188,8 +181,6 @@ export class TreatmentBmpsComponent implements OnInit {
                         this.treatmentBMPTypes = treatmentBMPTypes;
                         this.modelingAttributeDropdownItems = this.groupByPipe.transform(modelingAttributeDropdownItems, "FieldName");
                         this.updateMapLayers();
-
-                        this.cdr.detectChanges();
                     });
                 }
             });
@@ -212,9 +203,6 @@ export class TreatmentBmpsComponent implements OnInit {
 
     public updateMapLayers(): void {
         this.updateTreatmentBMPsLayer();
-
-        // add inventoried BMPs layer
-        this.addInventoriedBMPsLayer();
 
         if (this.projectTreatmentBMPs.length > 0) {
             this.selectTreatmentBMP(this.projectTreatmentBMPs[0].TreatmentBMPID);
@@ -254,37 +242,6 @@ export class TreatmentBmpsComponent implements OnInit {
             }
             this.selectTreatmentBMP(event.propagatedFrom.feature.properties.TreatmentBMPID);
         });
-    }
-
-    private addInventoriedBMPsLayer() {
-        const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter((x) => x.ProjectID == null && x.InventoryIsVerified));
-        this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
-            pointToLayer: (feature, latlng) => {
-                return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker });
-            },
-            onEachFeature: (feature, layer) => {
-                layer.bindPopup(
-                    `<b>Name:</b> <a target="_blank" href="${this.ocstBaseUrl()}/TreatmentBMP/Detail/${feature.properties.TreatmentBMPID}">${
-                        feature.properties.TreatmentBMPName
-                    }</a><br>` + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
-                );
-            },
-        });
-
-        var clusteredInventoriedBMPLayer = L.markerClusterGroup({
-            iconCreateFunction: function (cluster) {
-                var childCount = cluster.getChildCount();
-
-                return new L.DivIcon({
-                    html: "<div><span>" + childCount + "</span></div>",
-                    className: "marker-cluster",
-                    iconSize: new L.Point(40, 40),
-                });
-            },
-        });
-        clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
-        clusteredInventoriedBMPLayer.sortOrder = 80;
-        this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
     }
 
     private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPDisplayDto[]) {
@@ -517,9 +474,5 @@ export class TreatmentBmpsComponent implements OnInit {
                 this.cdr.detectChanges();
             }
         );
-    }
-
-    public ocstBaseUrl(): string {
-        return environment.ocStormwaterToolsBaseUrl;
     }
 }

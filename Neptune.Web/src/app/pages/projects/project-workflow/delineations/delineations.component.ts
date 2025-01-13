@@ -32,6 +32,7 @@ import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leafl
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { routeParams } from "src/app/app.routes";
+import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 
 declare var $: any;
 
@@ -55,13 +56,13 @@ declare var $: any;
         JurisdictionsLayerComponent,
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
+        InventoriedBMPsLayerComponent,
     ],
 })
 export class DelineationsComponent implements OnInit {
     public mapIsReady: boolean = false;
 
     public drawMapClicked: boolean = false;
-    public treatmentBMPs: Array<TreatmentBMPDisplayDto>;
     public delineations: DelineationUpsertDto[];
     private originalDelineations: string;
     public zoomMapToDefaultExtent: boolean = true;
@@ -141,9 +142,6 @@ export class DelineationsComponent implements OnInit {
     public isEditingLocation = false;
 
     public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
-    private inventoriedTreatmentBMPOverlayName =
-        "<span>Inventoried BMP Locations<br /> <img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin:3px'> BMP (Verified)</span>";
-    private inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
 
     constructor(
         private treatmentBMPService: TreatmentBMPService,
@@ -207,7 +205,6 @@ export class DelineationsComponent implements OnInit {
                     this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
                 }
 
-                this.treatmentBMPs = treatmentBMPs;
                 this.delineations = delineations;
                 this.originalDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));
 
@@ -232,40 +229,6 @@ export class DelineationsComponent implements OnInit {
         this.selectTreatmentBMP(this.projectTreatmentBMPs[0].TreatmentBMPID);
         this.treatmentBMPsLayer.addTo(this.map);
         this.setControl();
-
-        // add inventoried BMPs layer
-        this.addInventoriedBMPsLayer();
-    }
-
-    private addInventoriedBMPsLayer() {
-        const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter((x) => x.ProjectID == null && x.InventoryIsVerified));
-        this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
-            pointToLayer: (feature, latlng) => {
-                return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker });
-            },
-            onEachFeature: (feature, layer) => {
-                layer.bindPopup(
-                    `<b>Name:</b> <a target="_blank" href="${this.ocstBaseUrl()}/TreatmentBMP/Detail/${feature.properties.TreatmentBMPID}">${
-                        feature.properties.TreatmentBMPName
-                    }</a><br>` + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
-                );
-            },
-        });
-
-        var clusteredInventoriedBMPLayer = L.markerClusterGroup({
-            iconCreateFunction: function (cluster) {
-                var childCount = cluster.getChildCount();
-
-                return new L.DivIcon({
-                    html: "<div><span>" + childCount + "</span></div>",
-                    className: "marker-cluster",
-                    iconSize: new L.Point(40, 40),
-                });
-            },
-        });
-        clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
-        clusteredInventoriedBMPLayer.sortOrder = 80;
-        this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
     }
 
     private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPDisplayDto[]) {
@@ -654,7 +617,7 @@ export class DelineationsComponent implements OnInit {
         this.selectedListItem = treatmentBMPID;
         let selectedNumber = null;
         let selectedAttributes = null;
-        this.selectedTreatmentBMP = this.treatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
+        this.selectedTreatmentBMP = this.projectTreatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
         selectedAttributes = [
             `<strong>Type:</strong> ${this.selectedTreatmentBMP.TreatmentBMPTypeName}`,
             `<strong>Latitude:</strong> ${this.selectedTreatmentBMP.Latitude}`,

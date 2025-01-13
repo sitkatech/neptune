@@ -30,8 +30,7 @@ import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leafl
 import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
-
-declare var $: any;
+import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 
 @Component({
     selector: "modeled-performance",
@@ -55,6 +54,7 @@ declare var $: any;
         JurisdictionsLayerComponent,
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
+        InventoriedBMPsLayerComponent,
     ],
 })
 export class ModeledPerformanceComponent implements OnInit {
@@ -63,7 +63,6 @@ export class ModeledPerformanceComponent implements OnInit {
 
     public mapIsReady: boolean = false;
 
-    public treatmentBMPs: Array<TreatmentBMPDisplayDto>;
     public delineations: DelineationUpsertDto[];
     public mapHeight: string = "750px";
     public onEachFeatureCallback?: (feature, layer) => void;
@@ -89,9 +88,6 @@ export class ModeledPerformanceComponent implements OnInit {
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampModeledPerformance;
 
     public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
-    private inventoriedTreatmentBMPOverlayName =
-        "<span>Inventoried BMP Locations<br /> <img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin:3px'> BMP (Verified)</span>";
-    private inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
 
     constructor(
         private cdr: ChangeDetectorRef,
@@ -140,7 +136,6 @@ export class ModeledPerformanceComponent implements OnInit {
                 }
 
                 this.project = project;
-                this.treatmentBMPs = treatmentBMPs;
                 this.delineations = delineations;
                 this.projectNetworkSolveHistories = projectNetworkSolveHistories;
                 this.initializeMap();
@@ -178,9 +173,6 @@ export class ModeledPerformanceComponent implements OnInit {
         });
         this.treatmentBMPsLayer.addTo(this.map);
 
-        // add inventoried BMPs layer
-        this.addInventoriedBMPsLayer();
-
         let tempFeatureGroup = new L.FeatureGroup([this.treatmentBMPsLayer, this.delineationsLayer]);
         this.map.fitBounds(tempFeatureGroup.getBounds(), { padding: new L.Point(50, 50) });
     }
@@ -189,37 +181,6 @@ export class ModeledPerformanceComponent implements OnInit {
         this.treatmentBMPsLayer.on("click", (event: L.LeafletEvent) => {
             this.selectFeatureImpl(event.propagatedFrom.feature.properties.TreatmentBMPID);
         });
-    }
-
-    private addInventoriedBMPsLayer() {
-        const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter((x) => x.ProjectID == null && x.InventoryIsVerified));
-        this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
-            pointToLayer: (feature, latlng) => {
-                return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker });
-            },
-            onEachFeature: (feature, layer) => {
-                layer.bindPopup(
-                    `<b>Name:</b> <a target="_blank" href="${this.ocstBaseUrl()}/TreatmentBMP/Detail/${feature.properties.TreatmentBMPID}">${
-                        feature.properties.TreatmentBMPName
-                    }</a><br>` + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
-                );
-            },
-        });
-
-        var clusteredInventoriedBMPLayer = L.markerClusterGroup({
-            iconCreateFunction: function (cluster) {
-                var childCount = cluster.getChildCount();
-
-                return new L.DivIcon({
-                    html: "<div><span>" + childCount + "</span></div>",
-                    className: "marker-cluster",
-                    iconSize: new L.Point(40, 40),
-                });
-            },
-        });
-        clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
-        clusteredInventoriedBMPLayer.sortOrder = 80;
-        this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
     }
 
     private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPDisplayDto[]) {
@@ -250,7 +211,7 @@ export class ModeledPerformanceComponent implements OnInit {
     }
 
     public selectFeatureImpl(treatmentBMPID: number) {
-        this.selectedTreatmentBMP = this.treatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
+        this.selectedTreatmentBMP = this.projectTreatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
         let hasFlownToSelectedObject = false;
         this.delineationsLayer?.eachLayer((layer) => {
             if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
@@ -328,9 +289,5 @@ export class ModeledPerformanceComponent implements OnInit {
 
     continueToNextStep() {
         this.router.navigateByUrl(`/projects/edit/${this.projectID}/attachments`);
-    }
-
-    public ocstBaseUrl(): string {
-        return environment.ocStormwaterToolsBaseUrl;
     }
 }

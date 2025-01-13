@@ -6,7 +6,6 @@ import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto"
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
 import { TreatmentBMPModelingAttributeDropdownItemDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
-import { environment } from "src/environments/environment";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
@@ -25,6 +24,7 @@ import { RegionalSubbasinsLayerComponent } from "../../leaflet/layers/regional-s
 import { StormwaterNetworkLayerComponent } from "../../leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
 import { WqmpsLayerComponent } from "../../leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../leaflet/neptune-map/neptune-map.component";
+import { InventoriedBMPsLayerComponent } from "../../leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 
 declare var $: any;
 
@@ -45,6 +45,7 @@ declare var $: any;
         JurisdictionsLayerComponent,
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
+        InventoriedBMPsLayerComponent,
     ],
 })
 export class ProjectMapComponent implements OnInit {
@@ -54,7 +55,6 @@ export class ProjectMapComponent implements OnInit {
 
     public mapIsReady: boolean = false;
     public visibleTreatmentBMPStyle: string = "treatmentBMP_purple_outline_only";
-    public treatmentBMPs: Array<TreatmentBMPDisplayDto>;
     public selectedTreatmentBMPStyle: string = "treatmentBMP_yellow";
     public zoomMapToDefaultExtent: boolean = true;
     public mapHeight: string = "750px";
@@ -103,9 +103,6 @@ export class ProjectMapComponent implements OnInit {
     public delineations: DelineationUpsertDto[];
 
     public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
-    private inventoriedTreatmentBMPOverlayName =
-        "<span>Inventoried BMP Locations<br /> <img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin:3px'> BMP (Verified)</span>";
-    public inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
 
     constructor(
         private cdr: ChangeDetectorRef,
@@ -125,16 +122,11 @@ export class ProjectMapComponent implements OnInit {
                 treatmentBMPTypes: this.treatmentBMPService.treatmentBMPTypesGet(),
                 modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBMPModelingAttributeDropdownItemsGet(),
             }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
-                this.treatmentBMPs = treatmentBMPs;
                 this.projectTreatmentBMPs = treatmentBMPs.filter((x) => x.ProjectID == this.projectID);
                 this.delineations = delineations;
                 this.boundingBox = boundingBox;
                 this.treatmentBMPTypes = treatmentBMPTypes;
                 this.modelingAttributeDropdownItems = modelingAttributeDropdownItems;
-
-                if (treatmentBMPs != null && treatmentBMPs.length > 0) {
-                    this.cdr.detectChanges();
-                }
             });
         }
 
@@ -163,9 +155,6 @@ export class ProjectMapComponent implements OnInit {
         );
         this.updateTreatmentBMPsLayer();
 
-        // add inventoried BMPs layer
-        this.addInventoriedBMPsLayer();
-
         if (this.projectTreatmentBMPs.length > 0) {
             this.selectTreatmentBMP(this.projectTreatmentBMPs[0].TreatmentBMPID);
         }
@@ -174,37 +163,6 @@ export class ProjectMapComponent implements OnInit {
             let tempFeatureGroup = new L.FeatureGroup([this.treatmentBMPsLayer, this.delineationsLayer]);
             this.map.fitBounds(tempFeatureGroup.getBounds(), { padding: new L.Point(50, 50) });
         }
-    }
-
-    private addInventoriedBMPsLayer() {
-        const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter((x) => x.ProjectID == null && x.InventoryIsVerified));
-        this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
-            pointToLayer: (feature, latlng) => {
-                return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker });
-            },
-            onEachFeature: (feature, layer) => {
-                layer.bindPopup(
-                    `<b>Name:</b> <a target="_blank" href="${this.ocstBaseUrl()}/TreatmentBMP/Detail/${feature.properties.TreatmentBMPID}">${
-                        feature.properties.TreatmentBMPName
-                    }</a><br>` + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
-                );
-            },
-        });
-
-        var clusteredInventoriedBMPLayer = L.markerClusterGroup({
-            iconCreateFunction: function (cluster) {
-                var childCount = cluster.getChildCount();
-
-                return new L.DivIcon({
-                    html: "<div><span>" + childCount + "</span></div>",
-                    className: "marker-cluster",
-                    iconSize: new L.Point(40, 40),
-                });
-            },
-        });
-        clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
-        clusteredInventoriedBMPLayer.sortOrder = 80;
-        this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
     }
 
     public updateTreatmentBMPsLayer() {
@@ -358,9 +316,5 @@ export class ProjectMapComponent implements OnInit {
         }
 
         return `${delineation.DelineationArea} ac`;
-    }
-
-    public ocstBaseUrl(): string {
-        return environment.ocStormwaterToolsBaseUrl;
     }
 }
