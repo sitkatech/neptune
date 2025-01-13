@@ -63,7 +63,6 @@ namespace Neptune.WebMvc.Common
                 if (currentWQMP != null)
                 {
                     wqmpsToUpload.Add(currentWQMP);
-                    errorList.AddRange(currentErrorList);
                 }
 
                 errorList.AddRange(currentErrorList);
