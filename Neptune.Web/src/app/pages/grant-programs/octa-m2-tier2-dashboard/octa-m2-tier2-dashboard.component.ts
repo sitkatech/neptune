@@ -1,13 +1,11 @@
 import { ApplicationRef, ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { combineLatest, forkJoin, Observable, tap } from "rxjs";
+import { combineLatest, Observable, tap } from "rxjs";
 import * as L from "leaflet";
 import "leaflet-gesture-handling";
 import "leaflet.fullscreen";
-import "leaflet.marker.highlight";
 import "leaflet-loading";
-import * as esri from "esri-leaflet";
 import { AuthenticationService } from "src/app/services/authentication.service";
-import { BoundingBoxDto, DelineationDto, PersonDto, ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
+import { BoundingBoxDto, DelineationDto, ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import { environment } from "src/environments/environment";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";

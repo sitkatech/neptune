@@ -57,7 +57,6 @@
         "leaflet-gesture-handling": "^1.2.2",
         "leaflet-loading": "^0.1.24",
         "leaflet.fullscreen": "^2.1.0",
-        "leaflet.marker.highlight": "^0.0.3",
         "leaflet.markercluster": "^1.5.3",
         "ngx-cookie-service": "^17.0.0",
         "ngx-mask": "^18.0.0",

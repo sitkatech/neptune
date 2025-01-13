@@ -445,7 +445,6 @@ export class TreatmentBmpsComponent implements OnInit {
 
         this.projectTreatmentBMPs.push(newTreatmentBMP);
         this.selectTreatmentBMP(newTreatmentBMP.TreatmentBMPID);
-        document.getElementById(this.mapID).scrollIntoView();
 
         this.isEditingLocation = true;
     }

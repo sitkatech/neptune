@@ -3,7 +3,6 @@ import { combineLatest, Observable, tap } from "rxjs";
 import * as L from "leaflet";
 import "leaflet-gesture-handling";
 import "leaflet.fullscreen";
-import "leaflet.marker.highlight";
 import "leaflet-loading";
 import "leaflet.markercluster";
 import { BoundingBoxDto, DelineationDto, ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
