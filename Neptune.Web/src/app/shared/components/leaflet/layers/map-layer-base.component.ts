@@ -27,10 +27,10 @@ export class MapLayerBase implements IMapLayer, OnDestroy {
             const viewRef = this.layerTemplate.createEmbeddedView(null);
             viewRef.detectChanges();
             const layerHtml = viewRef.rootNodes[0].outerHTML;
+            this.layerControl.addOverlay(this.layer, layerHtml);
             if (this.displayOnLoad) {
                 this.map.addLayer(this.layer);
             }
-            this.layerControl.addOverlay(this.layer, layerHtml);
         }
     }
 

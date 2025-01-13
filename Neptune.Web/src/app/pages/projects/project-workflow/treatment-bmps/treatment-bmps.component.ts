@@ -1,14 +1,11 @@
 import { ApplicationRef, ChangeDetectorRef, Component, ComponentRef, OnInit, ViewChild } from "@angular/core";
 import * as L from "leaflet";
 import "leaflet.fullscreen";
-import * as esri from "esri-leaflet";
 import { ActivatedRoute, Router } from "@angular/router";
-import { PersonDto } from "src/app/shared/generated/model/person-dto";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
-import { forkJoin } from "rxjs";
-import { ProjectWorkflowService } from "src/app/services/project-workflow.service";
+import { forkJoin, Observable, switchMap } from "rxjs";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
@@ -32,7 +29,7 @@ import { ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/mod
 import { FieldDefinitionComponent } from "../../../../shared/components/field-definition/field-definition.component";
 import { FormsModule } from "@angular/forms";
 import { CustomRichTextComponent } from "../../../../shared/components/custom-rich-text/custom-rich-text.component";
-import { NgIf, NgFor } from "@angular/common";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
@@ -46,8 +43,9 @@ import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leafl
 import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
-
-declare var $: any;
+import { ProjectWorkflowProgressService } from "src/app/shared/services/project-workflow-progress.service";
+import { routeParams } from "src/app/app.routes";
+import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 
 @Component({
     selector: "treatment-bmps",
@@ -56,6 +54,7 @@ declare var $: any;
     standalone: true,
     imports: [
         NgIf,
+        AsyncPipe,
         CustomRichTextComponent,
         NgFor,
         FormsModule,
@@ -72,7 +71,6 @@ declare var $: any;
     ],
 })
 export class TreatmentBmpsComponent implements OnInit {
-    private currentUser: PersonDto;
     public projectID: number;
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampTreatmentBMPs;
 
@@ -81,7 +79,6 @@ export class TreatmentBmpsComponent implements OnInit {
     @ViewChild("editTreatmentBMPTypeModal") editTreatmentBMPTypeModal;
     private editTreatmentBMPTypeModalComponent: ComponentRef<ModalComponent>;
 
-    private zoomToProjectExtentOnLoad: boolean = false;
     private zoomOnSelection: boolean = false;
 
     public mapID: string = "treatmentBMPMap";
@@ -100,7 +97,7 @@ export class TreatmentBmpsComponent implements OnInit {
     public map: L.Map;
     public featureLayer: any;
     public layerControl: L.Control.Layers;
-    private boundingBox: BoundingBoxDto;
+    public boundingBox$: Observable<BoundingBoxDto>;
     public selectedListItem: number;
     public selectedListItemDetails: { [key: string]: any } = {};
     public selectedObjectMarker: L.Layer;
@@ -111,7 +108,7 @@ export class TreatmentBmpsComponent implements OnInit {
 
     public treatmentBMPModelingTypeEnum = TreatmentBMPModelingTypeEnum;
     public fieldDefinitionTypeEnum = FieldDefinitionTypeEnum;
-    public modelingAttributeDropdownItems: Array<TreatmentBMPModelingAttributeDropdownItemDto>;
+    public modelingAttributeDropdownItems: ReadonlyMap<string, TreatmentBMPModelingAttributeDropdownItemDto[]>;
     public treatmentBMPTypes: Array<TreatmentBMPTypeWithModelingAttributesDto>;
     public newTreatmentBMPIndex = -1;
     public isLoadingSubmit = false;
@@ -126,7 +123,6 @@ export class TreatmentBmpsComponent implements OnInit {
     private inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
 
     constructor(
-        private authenticationService: AuthenticationService,
         private route: ActivatedRoute,
         private cdr: ChangeDetectorRef,
         private projectService: ProjectService,
@@ -136,9 +132,10 @@ export class TreatmentBmpsComponent implements OnInit {
         private compileService: CustomCompileService,
         private modalService: ModalService,
         private alertService: AlertService,
-        private projectWorkflowService: ProjectWorkflowService,
+        private projectWorkflowProgressService: ProjectWorkflowProgressService,
         private router: Router,
-        private confirmService: ConfirmService
+        private confirmService: ConfirmService,
+        private groupByPipe: GroupByPipe
     ) {}
 
     canExit() {
@@ -149,42 +146,12 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.authenticationService.getCurrentUser().subscribe((currentUser) => {
-            this.currentUser = currentUser;
-
-            const projectID = this.route.snapshot.paramMap.get("projectID");
-            if (projectID) {
-                this.projectService.projectsProjectIDGet(parseInt(projectID)).subscribe((project) => {
-                    // redirect to review step if project is shared with OCTA grant program
-                    if (project.ShareOCTAM2Tier2Scores) {
-                        this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
-                    } else {
-                        this.projectID = parseInt(projectID);
-                        this.mapProjectDtoToProject(project);
-                        forkJoin({
-                            treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
-                            projectTreatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
-                            delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
-                            boundingBox: this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID),
-                            treatmentBMPTypes: this.treatmentBMPService.treatmentBMPTypesGet(),
-                            modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBMPModelingAttributeDropdownItemsGet(),
-                        }).subscribe(({ treatmentBMPs, projectTreatmentBMPs, delineations, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
-                            this.treatmentBMPs = treatmentBMPs;
-                            this.originalDoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
-                            this.projectTreatmentBMPs = projectTreatmentBMPs;
-                            this.originalTreatmentBMPs = JSON.stringify(projectTreatmentBMPs);
-                            this.delineations = delineations;
-                            this.boundingBox = boundingBox;
-                            this.treatmentBMPTypes = treatmentBMPTypes;
-                            this.modelingAttributeDropdownItems = modelingAttributeDropdownItems;
-
-                            this.cdr.detectChanges();
-                        });
-                    }
-                });
-            }
-        });
-
+        this.boundingBox$ = this.route.params.pipe(
+            switchMap((params) => {
+                this.projectID = parseInt(params[routeParams.projectID]);
+                return this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID);
+            })
+        );
         this.compileService.configure(this.appRef);
     }
 
@@ -197,8 +164,38 @@ export class TreatmentBmpsComponent implements OnInit {
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
 
+        const projectID = this.route.snapshot.paramMap.get("projectID");
+        if (projectID) {
+            this.projectService.projectsProjectIDGet(parseInt(projectID)).subscribe((project) => {
+                // redirect to review step if project is shared with OCTA grant program
+                if (project.ShareOCTAM2Tier2Scores) {
+                    this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
+                } else {
+                    this.projectID = parseInt(projectID);
+                    this.mapProjectDtoToProject(project);
+                    forkJoin({
+                        treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
+                        projectTreatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
+                        delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
+                        treatmentBMPTypes: this.treatmentBMPService.treatmentBMPTypesGet(),
+                        modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBMPModelingAttributeDropdownItemsGet(),
+                    }).subscribe(({ treatmentBMPs, projectTreatmentBMPs, delineations, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
+                        this.treatmentBMPs = treatmentBMPs;
+                        this.originalDoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
+                        this.projectTreatmentBMPs = projectTreatmentBMPs;
+                        this.originalTreatmentBMPs = JSON.stringify(projectTreatmentBMPs);
+                        this.delineations = delineations;
+                        this.treatmentBMPTypes = treatmentBMPTypes;
+                        this.modelingAttributeDropdownItems = this.groupByPipe.transform(modelingAttributeDropdownItems, "FieldName");
+                        this.updateMapLayers();
+
+                        this.cdr.detectChanges();
+                    });
+                }
+            });
+        }
+
         this.registerClickEvents();
-        this.updateMapLayers();
     }
 
     private mapProjectDtoToProject(project: ProjectDto) {
@@ -221,11 +218,6 @@ export class TreatmentBmpsComponent implements OnInit {
 
         if (this.projectTreatmentBMPs.length > 0) {
             this.selectTreatmentBMP(this.projectTreatmentBMPs[0].TreatmentBMPID);
-        }
-
-        if (this.zoomToProjectExtentOnLoad) {
-            let tempFeatureGroup = new L.FeatureGroup([this.treatmentBMPsLayer]);
-            this.map.fitBounds(tempFeatureGroup.getBounds(), { padding: new L.Point(50, 50) });
         }
     }
 
@@ -375,15 +367,6 @@ export class TreatmentBmpsComponent implements OnInit {
         return this.treatmentBMPTypes.find((x) => x.TreatmentBMPTypeID == typeID).TreatmentBMPTypeName ?? -1;
     }
 
-    public getModelingAttributeDropdownItemsByFieldName(fieldName: string): Array<TreatmentBMPModelingAttributeDropdownItemDto> {
-        return this.modelingAttributeDropdownItems.filter((x) => x.FieldName == fieldName);
-    }
-
-    public getDropdownItemNameByFieldNameAndItemID(fieldName: string, itemID: number): string {
-        const dropdownItem = this.modelingAttributeDropdownItems.find((x) => x.FieldName == fieldName && x.ItemID == itemID);
-        return dropdownItem ? dropdownItem.ItemName : "";
-    }
-
     public isFieldWithDropdown(fieldName: string): boolean {
         return TreatmentBmpsComponent.modelingAttributeFieldsWithDropdown.indexOf(fieldName) > -1;
     }
@@ -491,7 +474,7 @@ export class TreatmentBmpsComponent implements OnInit {
                 this.treatmentBMPService.treatmentBMPsProjectIDPut(this.projectID, this.projectTreatmentBMPs).subscribe(
                     () => {
                         this.isLoadingSubmit = false;
-                        this.projectWorkflowService.emitWorkflowUpdate();
+                        this.projectWorkflowProgressService.updateProgress(this.projectID);
                         this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID).subscribe(
                             (treatmentBMPs) => {
                                 this.projectTreatmentBMPs = treatmentBMPs;

@@ -13,7 +13,6 @@ import { environment } from "src/environments/environment";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
-import { ProjectWorkflowService } from "src/app/services/project-workflow.service";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
@@ -27,6 +26,7 @@ import { CustomRichTextComponent } from "../../../../shared/components/custom-ri
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
+import { ProjectWorkflowProgressService } from "src/app/shared/services/project-workflow-progress.service";
 
 declare var $: any;
 
@@ -138,7 +138,7 @@ export class DelineationsComponent implements OnInit {
         private router: Router,
         private alertService: AlertService,
         private cdr: ChangeDetectorRef,
-        private projectWorkflowService: ProjectWorkflowService,
+        private projectWorkflowProgressService: ProjectWorkflowProgressService,
         private projectService: ProjectService
     ) {}
 
@@ -635,7 +635,7 @@ export class DelineationsComponent implements OnInit {
             ({ delineations, treatmentBMPs }) => {
                 window.scroll(0, 0);
                 this.isLoadingSubmit = false;
-                this.projectWorkflowService.emitWorkflowUpdate();
+                this.projectWorkflowProgressService.updateProgress(this.projectID);
                 this.projectService.projectsProjectIDDelineationsGet(this.projectID).subscribe((delineations) => {
                     this.delineations = delineations;
                     this.originalDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));

@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { forkJoin } from "rxjs";
 import { AuthenticationService } from "src/app/services/authentication.service";
-import { ProjectWorkflowService } from "src/app/services/project-workflow.service";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
@@ -23,6 +22,7 @@ import { CustomRichTextComponent } from "../../../../shared/components/custom-ri
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
+import { ProjectWorkflowProgressService } from "src/app/shared/services/project-workflow-progress.service";
 
 @Component({
     selector: "review",
@@ -61,7 +61,7 @@ export class ReviewComponent implements OnInit {
         private route: ActivatedRoute,
         private alertService: AlertService,
         private confirmService: ConfirmService,
-        private projectWorkflowService: ProjectWorkflowService
+        private projectWorkflowProgressService: ProjectWorkflowProgressService
     ) {}
 
     ngOnInit(): void {
@@ -141,7 +141,7 @@ export class ReviewComponent implements OnInit {
                     this.projectService.projectsProjectIDUpdatePost(this.projectID, model).subscribe(
                         () => {
                             this.isLoadingSubmit = false;
-                            this.projectWorkflowService.emitWorkflowUpdate();
+                            this.projectWorkflowProgressService.updateProgress(this.projectID);
                             this.project.ShareOCTAM2Tier2Scores = !this.project.ShareOCTAM2Tier2Scores;
                             this.alertService.pushAlert(new Alert(`Your project was successfully ${buttonTextYes == "Share" ? "shared" : "revoked"}.`, AlertContext.Success));
                             window.scroll(0, 0);

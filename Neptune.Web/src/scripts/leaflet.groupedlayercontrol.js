@@ -4,8 +4,8 @@
 // Author: Ishmael Smyrnow
 L.Control.GroupedLayers = L.Control.extend({
     options: {
-        sortLayers: true,
-        sortGroups: true,
+        sortLayers: false,
+        sortGroups: false,
         sortBaseLayers: false,
         collapsed: true,
         position: "topright",

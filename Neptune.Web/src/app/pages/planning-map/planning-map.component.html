@@ -130,12 +130,11 @@
         </div>
         <div class="g-col-9" *ngIf="planningMapInitData$ | async">
             <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false">
-                <!-- the layers are in reverse order, so the last one on the list is the first on the layer control -->
-                <delineations-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></delineations-layer>
-                <wqmps-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></wqmps-layer>
-                <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl"></jurisdictions-layer>
-                <stormwater-network-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></stormwater-network-layer>
                 <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></regional-subbasins-layer>
+                <stormwater-network-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></stormwater-network-layer>
+                <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl"></jurisdictions-layer>
+                <wqmps-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></wqmps-layer>
+                <delineations-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></delineations-layer>
             </neptune-map>
 
             <neptune-grid
