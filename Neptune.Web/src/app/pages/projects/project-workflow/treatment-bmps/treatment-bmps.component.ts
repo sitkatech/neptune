@@ -283,6 +283,7 @@ export class TreatmentBmpsComponent implements OnInit {
             },
         });
         clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
+        clusteredInventoriedBMPLayer.sortOrder = 80;
         this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
     }
 

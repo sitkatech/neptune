@@ -6,23 +6,23 @@
                 *ngFor="let treatmentBMP of projectTreatmentBMPs"
                 [class.selected]="selectedListItem == treatmentBMP.TreatmentBMPID"
                 (click)="selectTreatmentBMP(treatmentBMP.TreatmentBMPID)">
-                {{ treatmentBMP.TreatmentBMPName }}
-                <p class="small mb-0 mt-1">Type: {{ treatmentBMP.TreatmentBMPTypeName }}</p>
+                <strong>{{ treatmentBMP.TreatmentBMPName }}</strong>
+                <p class="treatment-bmp-type">Type: {{ treatmentBMP.TreatmentBMPTypeName }}</p>
             </li>
         </ul>
     </div>
     <div class="g-col-9">
         <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false">
-            <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></regional-subbasins-layer>
-            <stormwater-network-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></stormwater-network-layer>
-            <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></jurisdictions-layer>
-            <wqmps-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></wqmps-layer>
-            <delineations-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></delineations-layer>
+            <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
+            <stormwater-network-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></stormwater-network-layer>
+            <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
+            <wqmps-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-layer>
+            <delineations-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></delineations-layer>
         </neptune-map>
     </div>
 </div>
 <div class="card mt-4" *ngIf="selectedTreatmentBMP">
-    <div class="card-body bg-white">
+    <div class="card-body">
         <dl class="grid-12">
             <dt class="g-col-3 control-label font-weight-bold text-lg-right">
                 <label>Name</label>
@@ -95,7 +95,7 @@
                             <ng-template #numericModelingAttributeField>
                                 <dd class="g-col-5">
                                     {{ selectedTreatmentBMP.TreatmentBMPModelingAttribute[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName] | number }}
-                                    <span *ngIf="selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]">{{
+                                    <span *ngIf="selectedTreatmentBMP.TreatmentBMPModelingAttribute[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]">{{
                                         treatmentBMPModelingAttributeDefinitionDto.Units
                                     }}</span>
                                 </dd>

@@ -14,7 +14,7 @@ import { ConfirmService } from "src/app/shared/services/confirm/confirm.service"
 import { GrantScoresComponent } from "../../../shared/components/projects/grant-scores/grant-scores.component";
 import { AttachmentsDisplayComponent } from "../../../shared/components/projects/attachments-display/attachments-display.component";
 import { ModelResultsComponent } from "../../../shared/components/projects/model-results/model-results.component";
-import { TreatmentBmpMapEditorAndModelingAttributesComponent } from "../../../shared/components/projects/project-map/project-map.component";
+import { ProjectMapComponent } from "../../../shared/components/projects/project-map/project-map.component";
 import { FieldDefinitionComponent } from "../../../shared/components/field-definition/field-definition.component";
 import { NgIf, DatePipe, AsyncPipe } from "@angular/common";
 import { routeParams } from "src/app/app.routes";
@@ -31,7 +31,7 @@ import { AlertDisplayComponent } from "../../../shared/components/alert-display/
         NgIf,
         RouterLink,
         FieldDefinitionComponent,
-        TreatmentBmpMapEditorAndModelingAttributesComponent,
+        ProjectMapComponent,
         ModelResultsComponent,
         AttachmentsDisplayComponent,
         GrantScoresComponent,

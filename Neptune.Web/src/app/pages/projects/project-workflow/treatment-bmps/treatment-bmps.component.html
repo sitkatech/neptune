@@ -26,11 +26,11 @@
                 [showLegend]="false"
                 [style.cursor]="isEditingLocation ? 'crosshair' : ''"
                 [boundingBox]="boundingBox">
-                <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></regional-subbasins-layer>
-                <stormwater-network-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></stormwater-network-layer>
-                <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></jurisdictions-layer>
-                <wqmps-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></wqmps-layer>
-                <delineations-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></delineations-layer>
+                <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
+                <stormwater-network-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></stormwater-network-layer>
+                <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
+                <wqmps-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-layer>
+                <delineations-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></delineations-layer>
             </neptune-map>
         </div>
     </div>

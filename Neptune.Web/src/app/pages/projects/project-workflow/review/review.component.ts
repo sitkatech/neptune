@@ -16,7 +16,7 @@ import { ConfirmService } from "src/app/shared/services/confirm/confirm.service"
 import { GrantScoresComponent } from "../../../../shared/components/projects/grant-scores/grant-scores.component";
 import { AttachmentsDisplayComponent } from "../../../../shared/components/projects/attachments-display/attachments-display.component";
 import { ModelResultsComponent } from "../../../../shared/components/projects/model-results/model-results.component";
-import { TreatmentBmpMapEditorAndModelingAttributesComponent } from "../../../../shared/components/projects/project-map/project-map.component";
+import { ProjectMapComponent } from "../../../../shared/components/projects/project-map/project-map.component";
 import { NgIf, NgClass, DatePipe } from "@angular/common";
 import { CustomRichTextComponent } from "../../../../shared/components/custom-rich-text/custom-rich-text.component";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
@@ -33,7 +33,7 @@ import { ProjectWorkflowProgressService } from "src/app/shared/services/project-
         CustomRichTextComponent,
         NgIf,
         NgClass,
-        TreatmentBmpMapEditorAndModelingAttributesComponent,
+        ProjectMapComponent,
         ModelResultsComponent,
         AttachmentsDisplayComponent,
         GrantScoresComponent,

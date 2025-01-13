@@ -8,6 +8,7 @@ export class MapLayerBase implements IMapLayer, OnDestroy {
     @Input() map: any;
     @Input() layerControl: any;
     @Input() displayOnLoad: boolean = false;
+    @Input() sortOrder: number;
     @ViewChild("layerName") layerTemplate!: TemplateRef<any>;
     layer: any;
 
@@ -27,6 +28,9 @@ export class MapLayerBase implements IMapLayer, OnDestroy {
             const viewRef = this.layerTemplate.createEmbeddedView(null);
             viewRef.detectChanges();
             const layerHtml = viewRef.rootNodes[0].outerHTML;
+            if (this.sortOrder) {
+                this.layer.sortOrder = this.sortOrder;
+            }
             this.layerControl.addOverlay(this.layer, layerHtml);
             if (this.displayOnLoad) {
                 this.map.addLayer(this.layer);

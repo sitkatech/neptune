@@ -4,7 +4,7 @@
 // Author: Ishmael Smyrnow
 L.Control.GroupedLayers = L.Control.extend({
     options: {
-        sortLayers: false,
+        sortLayers: true,
         sortGroups: false,
         sortBaseLayers: false,
         collapsed: true,
@@ -152,6 +152,7 @@ L.Control.GroupedLayers = L.Control.extend({
             layer: layer,
             name: name,
             overlay: overlay,
+            sortOrder: layer.sortOrder || 1,
         };
         this._layers.push(_layer);
 
@@ -179,7 +180,7 @@ L.Control.GroupedLayers = L.Control.extend({
             this._layers.sort(
                 L.bind(function (a, b) {
                     if (a.overlay == true && b.overlay == true) {
-                        return this.options.sortFunction(a.name, b.name);
+                        return this.options.sortFunction(a.sortOrder, b.sortOrder);
                     }
                 }, this)
             );

@@ -1,7 +1,6 @@
 import { ApplicationRef, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import * as L from "leaflet";
 import "leaflet.fullscreen";
-import * as esri from "esri-leaflet";
 import { forkJoin } from "rxjs";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
@@ -48,7 +47,7 @@ declare var $: any;
         StormwaterNetworkLayerComponent,
     ],
 })
-export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnInit {
+export class ProjectMapComponent implements OnInit {
     @Input("zoomToProjectExtentOnLoad") zoomToProjectExtentOnLoad: boolean = false;
     @Input("zoomOnSelection") zoomOnSelection: boolean = false;
     @Input("projectID") projectID: number;
@@ -204,6 +203,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
             },
         });
         clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
+        clusteredInventoriedBMPLayer.sortOrder = 80;
         this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
     }
 
