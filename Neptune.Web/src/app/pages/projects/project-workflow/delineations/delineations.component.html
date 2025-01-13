@@ -3,7 +3,19 @@
     <app-alert-display></app-alert-display>
     <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 
-    <div #mapDiv id="{{ mapID }}" class="location-card" [style.height]="mapHeight" [style.cursor]="isEditingLocation ? 'crosshair' : ''"></div>
+    <neptune-map
+        *ngIf="boundingBox$ | async as boundingBox"
+        (onMapLoad)="handleMapReady($event)"
+        [mapHeight]="mapHeight"
+        [showLegend]="false"
+        [style.cursor]="isEditingLocation ? 'crosshair' : ''"
+        [boundingBox]="boundingBox">
+        <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
+        <stormwater-network-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></stormwater-network-layer>
+        <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
+        <wqmps-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-layer>
+        <delineations-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></delineations-layer>
+    </neptune-map>
     <div class="mt-4 card">
         <div class="card-body bg-white">
             <div class="table-responsive">
@@ -89,9 +101,6 @@
                         <button class="btn btn-primary-outline mt-3" (click)="toggleIsEditingLocation()" [disabled]="drawMapClicked || isPerformingDrawAction || isLoadingSubmit">
                             <i class="fa fa-edit mr-1"></i>{{ isEditingLocation ? "Save Location" : "Edit Location" }}
                         </button>
-                    </div>
-                    <div class="row d-flex">
-                        <div class="col-auto ml-auto text-right"></div>
                     </div>
                 </div>
             </div>

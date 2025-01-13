@@ -1,16 +1,13 @@
-import { ApplicationRef, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { ApplicationRef, ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthenticationService } from "src/app/services/authentication.service";
-import { BoundingBoxDto, DelineationUpsertDto, PersonDto, ProjectNetworkSolveHistorySimpleDto, ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
+import { BoundingBoxDto, DelineationUpsertDto, ProjectNetworkSolveHistorySimpleDto, ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import * as L from "leaflet";
 import "leaflet.fullscreen";
-import * as esri from "esri-leaflet";
-import { GestureHandling } from "leaflet-gesture-handling";
-import { forkJoin } from "rxjs";
+import { forkJoin, Observable, switchMap } from "rxjs";
 import { environment } from "src/environments/environment";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
@@ -21,11 +18,18 @@ import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-
 import { GrantScoresComponent } from "../../../../shared/components/projects/grant-scores/grant-scores.component";
 import { ModelResultsComponent } from "../../../../shared/components/projects/model-results/model-results.component";
 import { FieldDefinitionComponent } from "../../../../shared/components/field-definition/field-definition.component";
-import { NgIf, NgFor } from "@angular/common";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 import { CustomRichTextComponent } from "../../../../shared/components/custom-rich-text/custom-rich-text.component";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
+import { routeParams } from "src/app/app.routes";
+import { DelineationsLayerComponent } from "src/app/shared/components/leaflet/layers/delineations-layer/delineations-layer.component";
+import { JurisdictionsLayerComponent } from "src/app/shared/components/leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
+import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leaflet/layers/regional-subbasins-layer/regional-subbasins-layer.component";
+import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
+import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
+import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 
 declare var $: any;
 
@@ -37,6 +41,7 @@ declare var $: any;
     imports: [
         CustomRichTextComponent,
         NgIf,
+        AsyncPipe,
         FieldDefinitionComponent,
         NgFor,
         ModelResultsComponent,
@@ -44,26 +49,27 @@ declare var $: any;
         PageHeaderComponent,
         WorkflowBodyComponent,
         AlertDisplayComponent,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        DelineationsLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        StormwaterNetworkLayerComponent,
     ],
 })
 export class ModeledPerformanceComponent implements OnInit {
-    private currentUser: PersonDto;
     public ProjectNetworkHistoryStatusTypeEnum = ProjectNetworkSolveHistoryStatusTypeEnum;
     public projectNetworkSolveHistories: ProjectNetworkSolveHistorySimpleDto[];
 
-    @ViewChild("mapDiv") mapDiv: ElementRef;
-    public mapID: string = "modeledPerformanceMap";
+    public mapIsReady: boolean = false;
+
     public treatmentBMPs: Array<TreatmentBMPDisplayDto>;
     public delineations: DelineationUpsertDto[];
-    public zoomMapToDefaultExtent: boolean = true;
     public mapHeight: string = "750px";
-    public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
     public onEachFeatureCallback?: (feature, layer) => void;
     public map: L.Map;
     public layerControl: L.Control.Layers;
-    public tileLayers: { [key: string]: any } = {};
-    public overlayLayers: { [key: string]: any } = {};
-    private boundingBox: BoundingBoxDto;
+    public boundingBox$: Observable<BoundingBoxDto>;
     public selectedTreatmentBMP: TreatmentBMPDisplayDto;
     public treatmentBMPsLayer: L.GeoJSON<any>;
     public delineationsLayer: L.GeoJSON<any>;
@@ -89,7 +95,6 @@ export class ModeledPerformanceComponent implements OnInit {
 
     constructor(
         private cdr: ChangeDetectorRef,
-        private authenticationService: AuthenticationService,
         private projectService: ProjectService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService,
@@ -101,116 +106,47 @@ export class ModeledPerformanceComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.authenticationService.getCurrentUser().subscribe((currentUser) => {
-            this.currentUser = currentUser;
-
-            const projectID = this.route.snapshot.paramMap.get("projectID");
-            if (projectID) {
-                this.projectID = parseInt(projectID);
-                forkJoin({
-                    project: this.projectService.projectsProjectIDGet(this.projectID),
-                    treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
-                    delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
-                    boundingBox: this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID),
-                    projectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID),
-                }).subscribe(({ project, treatmentBMPs, delineations, boundingBox, projectNetworkSolveHistories }) => {
-                    // redirect to review step if project is shared with OCTA grant program
-                    if (project.ShareOCTAM2Tier2Scores) {
-                        this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
-                    }
-                    this.projectTreatmentBMPs = treatmentBMPs.filter((x) => x.ProjectID == this.projectID);
-                    if (this.projectTreatmentBMPs.length == 0) {
-                        this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
-                    }
-
-                    this.project = project;
-                    this.treatmentBMPs = treatmentBMPs;
-                    this.delineations = delineations;
-                    this.boundingBox = boundingBox;
-                    this.projectNetworkSolveHistories = projectNetworkSolveHistories;
-                    this.initializeMap();
-                });
-            }
-        });
-
-        this.tileLayers = Object.assign(
-            {},
-            {
-                Aerial: L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Aerial",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-                Street: L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Street",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-                Terrain: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Terrain",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-            },
-            this.tileLayers
-        );
-
-        let regionalSubbasinsWMSOptions = {
-            layers: "OCStormwater:RegionalSubbasins",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-        } as L.WMSOptions;
-
-        let jurisdictionsWMSOptions = {
-            layers: "OCStormwater:Jurisdictions",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-            styles: "jurisdiction_orange",
-        } as L.WMSOptions;
-
-        let WQMPsWMSOptions = {
-            layers: "OCStormwater:WaterQualityManagementPlans",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-        } as L.WMSOptions;
-
-        let verifiedDelineationsWMSOptions = {
-            layers: "OCStormwater:Delineations",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-            cql_filter: "DelineationStatus = 'Verified'",
-        } as L.WMSOptions;
-
-        this.overlayLayers = Object.assign(
-            {
-                "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    regionalSubbasinsWMSOptions
-                ),
-                "<span>Stormwater Network <br/> <img src='../../assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({
-                    url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
-                }),
-                "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    jurisdictionsWMSOptions
-                ),
-                "<img src='./assets/main/map-legend-images/wqmpBoundary.png' style='height:12px; margin-bottom:4px'> WQMPs": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    WQMPsWMSOptions
-                ),
-                "<span>Inventoried BMP Delineations</br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    verifiedDelineationsWMSOptions
-                ),
-            },
-            this.overlayLayers
+        this.boundingBox$ = this.route.params.pipe(
+            switchMap((params) => {
+                this.projectID = parseInt(params[routeParams.projectID]);
+                return this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID);
+            })
         );
 
         this.compileService.configure(this.appRef);
+    }
+
+    public handleMapReady(event: NeptuneMapInitEvent): void {
+        this.map = event.map;
+        this.layerControl = event.layerControl;
+        this.mapIsReady = true;
+
+        const projectID = this.route.snapshot.paramMap.get("projectID");
+        if (projectID) {
+            this.projectID = parseInt(projectID);
+            forkJoin({
+                project: this.projectService.projectsProjectIDGet(this.projectID),
+                treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
+                delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
+                projectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID),
+            }).subscribe(({ project, treatmentBMPs, delineations, projectNetworkSolveHistories }) => {
+                // redirect to review step if project is shared with OCTA grant program
+                if (project.ShareOCTAM2Tier2Scores) {
+                    this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
+                }
+                this.projectTreatmentBMPs = treatmentBMPs.filter((x) => x.ProjectID == this.projectID);
+                if (this.projectTreatmentBMPs.length == 0) {
+                    this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
+                }
+
+                this.project = project;
+                this.treatmentBMPs = treatmentBMPs;
+                this.delineations = delineations;
+                this.projectNetworkSolveHistories = projectNetworkSolveHistories;
+                this.initializeMap();
+                this.registerClickEvents();
+            });
+        }
     }
 
     public getAboutModelingPerformanceURL(): string {
@@ -218,16 +154,6 @@ export class ModeledPerformanceComponent implements OnInit {
     }
 
     public initializeMap(): void {
-        const mapOptions: L.MapOptions = {
-            minZoom: 9,
-            maxZoom: 22,
-            layers: [this.tileLayers["Terrain"]],
-            fullscreenControl: true,
-            gestureHandling: true,
-        } as L.MapOptions;
-        this.map = L.map(this.mapID, mapOptions);
-        L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
-
         const delineationGeoJson = this.mapDelineationsToGeoJson(this.delineations);
         this.delineationsLayer = new L.GeoJSON(delineationGeoJson, {
             onEachFeature: (feature, layer) => {
@@ -251,8 +177,6 @@ export class ModeledPerformanceComponent implements OnInit {
             },
         });
         this.treatmentBMPsLayer.addTo(this.map);
-        this.setControl();
-        this.registerClickEvents();
 
         // add inventoried BMPs layer
         this.addInventoriedBMPsLayer();
@@ -261,23 +185,7 @@ export class ModeledPerformanceComponent implements OnInit {
         this.map.fitBounds(tempFeatureGroup.getBounds(), { padding: new L.Point(50, 50) });
     }
 
-    public setControl(): void {
-        this.layerControl = new L.Control.Layers(this.tileLayers, this.overlayLayers, { collapsed: false }).addTo(this.map);
-    }
-
     public registerClickEvents(): void {
-        var leafletControlLayersSelector = ".leaflet-control-layers";
-        var closeButtonClass = "leaflet-control-layers-close";
-
-        var closem = L.DomUtil.create("a", closeButtonClass);
-        closem.innerHTML = "Close";
-        L.DomEvent.on(closem, "click", function () {
-            $(leafletControlLayersSelector).removeClass("leaflet-control-layers-expanded");
-        });
-
-        $(leafletControlLayersSelector).append(closem);
-        $(leafletControlLayersSelector).removeClass("leaflet-control-layers-expanded");
-
         this.treatmentBMPsLayer.on("click", (event: L.LeafletEvent) => {
             this.selectFeatureImpl(event.propagatedFrom.feature.properties.TreatmentBMPID);
         });
@@ -310,6 +218,7 @@ export class ModeledPerformanceComponent implements OnInit {
             },
         });
         clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
+        clusteredInventoriedBMPLayer.sortOrder = 80;
         this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
     }
 
