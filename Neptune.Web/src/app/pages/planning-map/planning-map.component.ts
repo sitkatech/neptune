@@ -89,7 +89,7 @@ export class PlanningMapComponent implements OnInit {
     public map: L.Map;
     public plannedProjectTreatmentBMPsLayer: L.GeoJSON<any>;
     public selectedProjectDelineationsLayer: L.GeoJSON<any>;
-    private boundingBox: BoundingBoxDto;
+    public boundingBox$: Observable<BoundingBoxDto>;
     public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
     public layerControl: L.Control.Layers;
 
@@ -126,6 +126,8 @@ export class PlanningMapComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.boundingBox$ = this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet();
+
         this.columnDefs = [
             this.utilityFunctionsService.createLinkColumnDef("Project ID", "ProjectID", "ProjectID", {
                 InRouterLink: "/projects/",
@@ -156,7 +158,6 @@ export class PlanningMapComponent implements OnInit {
         });
 
         this.planningMapInitData$ = combineLatest({
-            BoundingBox: this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet(),
             Projects: this.projectService.projectsGet(),
             TreatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
             Delineations: this.delineationService.delineationsGet(),
@@ -165,16 +166,7 @@ export class PlanningMapComponent implements OnInit {
                 this.projects = data.Projects;
                 this.treatmentBMPs = data.TreatmentBMPs;
                 this.delineations = data.Delineations;
-                this.boundingBox = data.BoundingBox;
                 this.initializePanes();
-                this.map.fitBounds(
-                    [
-                        [this.boundingBox.Bottom, this.boundingBox.Left],
-                        [this.boundingBox.Top, this.boundingBox.Right],
-                    ],
-                    this.defaultFitBoundsOptions
-                );
-
                 this.addTreatmentBMPLayersToMap();
             })
         );
@@ -376,5 +368,4 @@ export interface PlanningMapInitData {
     TreatmentBMPs: Array<TreatmentBMPDisplayDto>;
     Delineations: Array<DelineationDto>;
     Projects: Array<ProjectDto>;
-    BoundingBox: BoundingBoxDto;
 }

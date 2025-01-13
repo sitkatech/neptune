@@ -88,10 +88,8 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     public mapHeight = window.innerHeight - window.innerHeight * 0.2 + "px";
     public map: L.Map;
     public plannedProjectTreatmentBMPsLayer: L.GeoJSON<any>;
-    public inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
     public selectedProjectDelineationsLayer: L.GeoJSON<any>;
-    private boundingBox: BoundingBoxDto;
-    public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
+    public boundingBox$: Observable<BoundingBoxDto>;
     public layerControl: L.Control.Layers;
 
     //this is needed to allow binding to the static class
@@ -122,6 +120,8 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.boundingBox$ = this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet();
+
         this.columnDefs = [
             this.utilityFunctionsService.createLinkColumnDef("Project Name", "ProjectName", "ProjectID", {
                 InRouterLink: "/projects/",
@@ -155,7 +155,6 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         });
 
         this.octaM2Tier2MapInitData$ = combineLatest({
-            BoundingBox: this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet(),
             Projects: this.projectService.projectsOCTAM2Tier2GrantProgramGet(),
             TreatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
             Delineations: this.projectService.projectsDelineationsGet(),
@@ -164,16 +163,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
                 this.projects = data.Projects;
                 this.treatmentBMPs = data.TreatmentBMPs;
                 this.delineations = data.Delineations;
-                this.boundingBox = data.BoundingBox;
                 this.initializePanes();
-                this.map.fitBounds(
-                    [
-                        [this.boundingBox.Bottom, this.boundingBox.Left],
-                        [this.boundingBox.Top, this.boundingBox.Right],
-                    ],
-                    this.defaultFitBoundsOptions
-                );
-
                 this.addTreatmentBMPLayersToMap();
             })
         );
@@ -410,5 +400,4 @@ export interface OCTAM2Tier2MapInitData {
     TreatmentBMPs: Array<TreatmentBMPDisplayDto>;
     Delineations: Array<DelineationDto>;
     Projects: Array<ProjectDto>;
-    BoundingBox: BoundingBoxDto;
 }
