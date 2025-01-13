@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
+using NetTopologySuite.Features;
 
 namespace Neptune.API.Controllers
 {
@@ -23,7 +24,7 @@ namespace Neptune.API.Controllers
         Person callingUser)
         : SitkaController<TreatmentBMPController>(dbContext, logger, keystoneService, neptuneConfiguration, callingUser)
     {
-        [HttpGet("treatmentBMPs/{projectID}/getByProjectID")]
+        [HttpGet("treatment-bmps/{projectID}/getByProjectID")]
         [UserViewFeature]
         public ActionResult<List<TreatmentBMPUpsertDto>> GetByProjectID([FromRoute] int projectID)
         {
@@ -31,12 +32,20 @@ namespace Neptune.API.Controllers
             return Ok(treatmentBMPUpsertDtos);
         }
 
-        [HttpGet("treatmentBMPs")]
+        [HttpGet("treatment-bmps")]
         [JurisdictionEditFeature]
         public ActionResult<List<TreatmentBMPDisplayDto>> ListByPersonID()
         {
             var treatmentBMPDisplayDtos = TreatmentBMPs.ListByPersonIDAsDisplayDto(DbContext, CallingUser);
             return Ok(treatmentBMPDisplayDtos);
+        }
+
+        [HttpGet("treatment-bmps/verified/feature-collection")]
+        [JurisdictionEditFeature]
+        public ActionResult<FeatureCollection> ListTreatmentBMPsAsFeatureCollection()
+        {
+            var featureCollection = TreatmentBMPs.ListInventoryIsVerifiedByPersonIDAsFeatureCollection(DbContext, CallingUser);
+            return Ok(featureCollection);
         }
 
         [HttpGet("treatmentBMPTypes")]

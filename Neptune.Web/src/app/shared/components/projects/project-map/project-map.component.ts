@@ -116,7 +116,7 @@ export class ProjectMapComponent implements OnInit {
     public ngOnInit(): void {
         if (this.projectID) {
             forkJoin({
-                treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
+                treatmentBMPs: this.treatmentBMPService.treatmentBmpsGet(),
                 delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                 boundingBox: this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID),
                 treatmentBMPTypes: this.treatmentBMPService.treatmentBMPTypesGet(),

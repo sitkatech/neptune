@@ -156,7 +156,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
 
         this.octaM2Tier2MapInitData$ = combineLatest({
             Projects: this.projectService.projectsOCTAM2Tier2GrantProgramGet(),
-            TreatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
+            TreatmentBMPs: this.treatmentBMPService.treatmentBmpsGet(),
             Delineations: this.projectService.projectsDelineationsGet(),
         }).pipe(
             tap((data) => {

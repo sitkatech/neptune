@@ -71,7 +71,7 @@ export class ReviewComponent implements OnInit {
                 this.projectID = parseInt(projectID);
                 forkJoin({
                     project: this.projectService.projectsProjectIDGet(this.projectID),
-                    treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
+                    treatmentBMPs: this.treatmentBMPService.treatmentBmpsProjectIDGetByProjectIDGet(this.projectID),
                     delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                     projectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID),
                     attachments: this.projectService.projectsProjectIDAttachmentsGet(this.projectID),

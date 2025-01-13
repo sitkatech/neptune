@@ -193,7 +193,7 @@ export class DelineationsComponent implements OnInit {
 
             forkJoin({
                 project: this.projectService.projectsProjectIDGet(this.projectID),
-                treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
+                treatmentBMPs: this.treatmentBMPService.treatmentBmpsGet(),
                 delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
             }).subscribe(({ project, treatmentBMPs, delineations }) => {
                 // redirect to review step if project is shared with OCTA grant program

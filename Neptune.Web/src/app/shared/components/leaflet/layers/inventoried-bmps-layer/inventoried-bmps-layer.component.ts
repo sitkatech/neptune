@@ -5,9 +5,9 @@ import * as L from "leaflet";
 import "leaflet.markercluster";
 import { MapLayerBase } from "../map-layer-base.component";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
-import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { Observable, tap } from "rxjs";
+import { IFeature } from "src/app/shared/generated/model/i-feature";
 @Component({
     selector: "inventoried-bmps-layer",
     standalone: true,
@@ -28,17 +28,16 @@ export class InventoriedBMPsLayerComponent extends MapLayerBase implements OnCha
         },
     });
 
-    public treatmentBMPs$: Observable<TreatmentBMPDisplayDto[]>;
+    public treatmentBMPs$: Observable<IFeature[]>;
 
     constructor(private treatmentBMPService: TreatmentBMPService) {
         super();
     }
 
     ngAfterViewInit(): void {
-        this.treatmentBMPs$ = this.treatmentBMPService.treatmentBMPsGet().pipe(
+        this.treatmentBMPs$ = this.treatmentBMPService.treatmentBmpsVerifiedFeatureCollectionGet().pipe(
             tap((treatmentBMPs) => {
-                const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(treatmentBMPs.filter((x) => x.ProjectID == null && x.InventoryIsVerified));
-                const inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
+                const inventoriedTreatmentBMPsLayer = new L.GeoJSON(treatmentBMPs, {
                     pointToLayer: (feature, latlng) => {
                         return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker });
                     },
@@ -54,29 +53,6 @@ export class InventoriedBMPsLayerComponent extends MapLayerBase implements OnCha
                 this.initLayer();
             })
         );
-    }
-
-    private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPDisplayDto[]) {
-        return {
-            type: "FeatureCollection",
-            features: treatmentBMPs.map((x) => {
-                let treatmentBMPGeoJson = {
-                    type: "Feature",
-                    geometry: {
-                        type: "Point",
-                        coordinates: [x.Longitude ?? 0, x.Latitude ?? 0],
-                    },
-                    properties: {
-                        TreatmentBMPID: x.TreatmentBMPID,
-                        TreatmentBMPName: x.TreatmentBMPName,
-                        TreatmentBMPTypeName: x.TreatmentBMPTypeName,
-                        Latitude: x.Latitude,
-                        Longitude: x.Longitude,
-                    },
-                };
-                return treatmentBMPGeoJson;
-            }),
-        };
     }
 
     public ocstBaseUrl(): string {

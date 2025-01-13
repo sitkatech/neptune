@@ -20,6 +20,7 @@ import { Observable }                                        from 'rxjs';
 
 import { DelineationDto } from '../model/delineation-dto';
 import { DelineationUpsertDto } from '../model/delineation-upsert-dto';
+import { IFeature } from '../model/i-feature';
 import { ProblemDetails } from '../model/problem-details';
 import { ProjectDocumentDto } from '../model/project-document-dto';
 import { ProjectDto } from '../model/project-dto';
@@ -943,6 +944,49 @@ export class ProjectService {
         ];
 
         return this.httpClient.get<Array<TreatmentBMPHRUCharacteristicsSummarySimpleDto>>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/treatment-bmp-hru-characteristics`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param projectID 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public projectsProjectIDTreatmentBmpsFeatureCollectionGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<IFeature>>;
+    public projectsProjectIDTreatmentBmpsFeatureCollectionGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<IFeature>>>;
+    public projectsProjectIDTreatmentBmpsFeatureCollectionGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<IFeature>>>;
+    public projectsProjectIDTreatmentBmpsFeatureCollectionGet(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (projectID === null || projectID === undefined) {
+            throw new Error('Required parameter projectID was null or undefined when calling projectsProjectIDTreatmentBmpsFeatureCollectionGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<IFeature>>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/treatment-bmps/feature-collection`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

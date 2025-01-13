@@ -17,6 +17,7 @@ using Microsoft.Extensions.Options;
 using Neptune.EFModels.Workflows;
 using Neptune.Jobs.Hangfire;
 using Neptune.API.Services.Attributes;
+using NetTopologySuite.Features;
 
 namespace Neptune.API.Controllers
 {
@@ -150,10 +151,19 @@ namespace Neptune.API.Controllers
             return Ok();
         }
 
+        [HttpGet("{projectID}/treatment-bmps/feature-collection")]
+        [EntityNotFound(typeof(Project), "projectID")]
+        [JurisdictionEditFeature]
+        public ActionResult<FeatureCollection> ListTreatmentBMPsByProjectID([FromRoute] int projectID)
+        {
+            var featureCollection = TreatmentBMPs.ListByProjectIDsAsFeatureCollection(DbContext, [projectID]);
+            return Ok(featureCollection);
+        }
+
         [HttpGet("{projectID}/project-network-solve-histories")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
-        public ActionResult<List<ProjectNetworkSolveHistorySimpleDto>> GetProjectNetworkSolveHistoriesForProject(int projectID)
+        public ActionResult<List<ProjectNetworkSolveHistorySimpleDto>> GetProjectNetworkSolveHistoriesForProject([FromRoute] int projectID)
         {
             var project = Projects.GetByID(DbContext, projectID);
             if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))

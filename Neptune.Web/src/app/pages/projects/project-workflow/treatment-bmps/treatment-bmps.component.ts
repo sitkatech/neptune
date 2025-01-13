@@ -169,7 +169,7 @@ export class TreatmentBmpsComponent implements OnInit {
                     this.projectID = parseInt(projectID);
                     this.mapProjectDtoToProject(project);
                     forkJoin({
-                        projectTreatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
+                        projectTreatmentBMPs: this.treatmentBMPService.treatmentBmpsProjectIDGetByProjectIDGet(this.projectID),
                         delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                         treatmentBMPTypes: this.treatmentBMPService.treatmentBMPTypesGet(),
                         modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBMPModelingAttributeDropdownItemsGet(),
@@ -432,7 +432,7 @@ export class TreatmentBmpsComponent implements OnInit {
                     () => {
                         this.isLoadingSubmit = false;
                         this.projectWorkflowProgressService.updateProgress(this.projectID);
-                        this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID).subscribe(
+                        this.treatmentBMPService.treatmentBmpsProjectIDGetByProjectIDGet(this.projectID).subscribe(
                             (treatmentBMPs) => {
                                 this.projectTreatmentBMPs = treatmentBMPs;
                                 this.originalTreatmentBMPs = JSON.stringify(treatmentBMPs);

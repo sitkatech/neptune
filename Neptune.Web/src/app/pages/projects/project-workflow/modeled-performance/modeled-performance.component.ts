@@ -122,7 +122,7 @@ export class ModeledPerformanceComponent implements OnInit {
             this.projectID = parseInt(projectID);
             forkJoin({
                 project: this.projectService.projectsProjectIDGet(this.projectID),
-                treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
+                treatmentBMPs: this.treatmentBMPService.treatmentBmpsGet(),
                 delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                 projectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID),
             }).subscribe(({ project, treatmentBMPs, delineations, projectNetworkSolveHistories }) => {
