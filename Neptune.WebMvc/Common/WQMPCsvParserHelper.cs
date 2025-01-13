@@ -233,7 +233,7 @@ namespace Neptune.WebMvc.Common
                 }
                 else
                 {
-                    wqmp.ApprovalDate = approvalDateParsed;
+                    wqmp.ApprovalDate = approvalDateParsed.ConvertTimeFromPSTToUTC();
                 }
             }
 
@@ -248,7 +248,7 @@ namespace Neptune.WebMvc.Common
                 }
                 else
                 {
-                    wqmp.DateOfConstruction = constructionDateParsed;
+                    wqmp.DateOfConstruction = constructionDateParsed.ConvertTimeFromPSTToUTC();
                 }
             }
 
