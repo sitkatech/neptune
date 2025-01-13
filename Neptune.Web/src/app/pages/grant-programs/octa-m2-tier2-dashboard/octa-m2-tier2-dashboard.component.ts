@@ -401,10 +401,6 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         );
     }
 
-    public ocstBaseUrl(): string {
-        return environment.ocStormwaterToolsBaseUrl;
-    }
-
     public onGridReady(event: GridReadyEvent) {
         this.gridApi = event.api;
     }
