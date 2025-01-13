@@ -224,6 +224,7 @@ export class PlanningMapComponent implements OnInit {
                 });
             },
         });
+        this.plannedProjectTreatmentBMPsLayer.sortOrder = 100;
         this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
         this.layerControl.addOverlay(this.plannedProjectTreatmentBMPsLayer, this.plannedTreatmentBMPOverlayName);
 
