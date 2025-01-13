@@ -120,7 +120,7 @@ export class ProjectListComponent implements OnInit {
         };
         this.confirmService.confirm(confirmOptions).then((confirmed) => {
             if (confirmed) {
-                this.projectService.projectsProjectIDDeleteDelete(params.data.ProjectID).subscribe(() => {
+                this.projectService.projectsProjectIDDelete(params.data.ProjectID).subscribe(() => {
                     this.alertService.pushAlert(new Alert("Successfully deleted project", AlertContext.Success));
                     params.api.applyTransaction({ remove: [params.data] });
                 });

@@ -19,6 +19,7 @@ import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/serv
 import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 import { ModalComponent } from "src/app/shared/components/modal/modal.component";
 import { ConfirmOptions } from "src/app/shared/services/confirm/confirm-options";
+import { ProjectDocumentService } from "src/app/shared/generated/api/project-document.service";
 
 @Component({
     selector: "project-attachments",
@@ -61,6 +62,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
         private router: Router,
         private authenticationService: AuthenticationService,
         private projectService: ProjectService,
+        private projectDocumentService: ProjectDocumentService,
         private cdr: ChangeDetectorRef,
         private alertService: AlertService,
         private modalService: ModalService,
@@ -153,7 +155,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
                 this.isLoadingDelete = true;
                 this.alertService.clearAlerts();
 
-                this.projectService.projectsAttachmentsAttachmentIDDelete(this.attachmentIDToRemove).subscribe(
+                this.projectDocumentService.projectDocumentsProjectDocumentIDDelete(this.attachmentIDToRemove).subscribe(
                     (response) => {
                         this.isLoadingDelete = false;
                         this.alertService.pushAlert(new Alert("Attachment was successfully deleted.", AlertContext.Success, true));
@@ -230,7 +232,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
         this.invalidFields = [];
         this.alertService.clearAlerts();
 
-        this.projectService.projectsAttachmentsAttachmentIDPut(this.editAttachmentID, this.editModel).subscribe(
+        this.projectDocumentService.projectDocumentsProjectDocumentIDPut(this.editAttachmentID, this.editModel).subscribe(
             (response) => {
                 this.isLoadingUpdate = false;
                 this.closeEditAttachmentModal();

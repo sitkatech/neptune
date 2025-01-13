@@ -10,6 +10,7 @@ import { FileResourceService } from './api/file-resource.service';
 import { NereidService } from './api/nereid.service';
 import { OrganizationService } from './api/organization.service';
 import { ProjectService } from './api/project.service';
+import { ProjectDocumentService } from './api/project-document.service';
 import { RoleService } from './api/role.service';
 import { StormwaterJurisdictionService } from './api/stormwater-jurisdiction.service';
 import { SystemInfoService } from './api/system-info.service';
@@ -28,6 +29,7 @@ import { UserService } from './api/user.service';
     NereidService,
     OrganizationService,
     ProjectService,
+    ProjectDocumentService,
     RoleService,
     StormwaterJurisdictionService,
     SystemInfoService,

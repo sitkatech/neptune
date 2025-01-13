@@ -21,6 +21,7 @@ using Neptune.API.Services.Attributes;
 namespace Neptune.API.Controllers
 {
     [ApiController]
+    [Route("projects")]
     public class ProjectController(
         NeptuneDbContext dbContext,
         ILogger<ProjectController> logger,
@@ -30,25 +31,7 @@ namespace Neptune.API.Controllers
         Person callingUser)
         : SitkaController<ProjectController>(dbContext, logger, keystoneService, neptuneConfiguration, callingUser)
     {
-        [HttpGet("projects/{projectID}")]
-        [EntityNotFound(typeof(Project), "projectID")]
-        [UserViewFeature]
-        public ActionResult<ProjectDto> GetByID([FromRoute] int projectID)
-        {
-            var projectDto = Projects.GetByIDAsDto(DbContext, projectID);
-
-            if (CallingUser.IsOCTAGrantReviewer && projectDto.ShareOCTAM2Tier2Scores)
-            {
-                return Ok(projectDto);
-            }
-            if (CallingUser.CanEditJurisdiction(projectDto.StormwaterJurisdictionID, DbContext))
-            {
-                return Ok(projectDto);
-            }
-            return Forbid();
-        }
-
-        [HttpGet("projects")]
+        [HttpGet]
         [JurisdictionEditFeature]
         public ActionResult<List<ProjectDto>> ListByPersonID()
         {
@@ -56,7 +39,7 @@ namespace Neptune.API.Controllers
             return Ok(projectDtos);
         }
 
-        [HttpPost("projects")]
+        [HttpPost]
         [JurisdictionEditFeature]
         public async Task<ActionResult<ProjectDto>> New([FromBody] ProjectUpsertDto projectCreateDto)
         {
@@ -75,7 +58,25 @@ namespace Neptune.API.Controllers
             return Ok(project);
         }
 
-        [HttpGet("projects/{projectID}/progress")]
+        [HttpGet("{projectID}")]
+        [EntityNotFound(typeof(Project), "projectID")]
+        [UserViewFeature]
+        public ActionResult<ProjectDto> GetByID([FromRoute] int projectID)
+        {
+            var projectDto = Projects.GetByIDAsDto(DbContext, projectID);
+
+            if (CallingUser.IsOCTAGrantReviewer && projectDto.ShareOCTAM2Tier2Scores)
+            {
+                return Ok(projectDto);
+            }
+            if (CallingUser.CanEditJurisdiction(projectDto.StormwaterJurisdictionID, DbContext))
+            {
+                return Ok(projectDto);
+            }
+            return Forbid();
+        }
+
+        [HttpGet("{projectID}/progress")]
         [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
         public ActionResult<ProjectWorkflowProgress.ProjectWorkflowProgressDto> GetProjectProgress([FromRoute] int projectID)
@@ -85,7 +86,7 @@ namespace Neptune.API.Controllers
             return projectWorkflowProgressDto;
         }
 
-        [HttpPost("projects/{projectID}/update")]
+        [HttpPost("{projectID}/update")]
         [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
         public async Task<IActionResult> Update([FromRoute] int projectID, [FromBody] ProjectUpsertDto projectCreateDto)
@@ -99,7 +100,7 @@ namespace Neptune.API.Controllers
             return Ok();
         }
 
-        [HttpGet("projects/{projectID}/attachments")]
+        [HttpGet("{projectID}/attachments")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
         public ActionResult<List<ProjectDocumentDto>> ListAttachmentsByProjectID([FromRoute] int projectID)
@@ -108,15 +109,7 @@ namespace Neptune.API.Controllers
             return Ok(projectDocuments);
         }
 
-        [HttpGet("projects/attachments/{attachmentID}")]
-        [JurisdictionEditFeature]
-        public ActionResult<ProjectDocumentDto> GetAttachmentByID([FromRoute] int attachmentID)
-        {
-            var projectDocument = ProjectDocuments.GetByID(DbContext, attachmentID);
-            return Ok(projectDocument.AsDto());
-        }
-
-        [HttpPost("projects/{projectID}/attachments")]
+        [HttpPost("{projectID}/attachments")]
         [EntityNotFound(typeof(Project), "projectID")]
         [RequestSizeLimit(30 * 1024 * 1024)]
         [RequestFormLimits(MultipartBodyLengthLimit = 30 * 1024 * 1024), ProducesResponseType(StatusCodes.Status413RequestEntityTooLarge)]
@@ -143,43 +136,7 @@ namespace Neptune.API.Controllers
             return Ok(projectDocument.AsDto());
         }
 
-        [HttpPut("projects/attachments/{attachmentID}")]
-        [JurisdictionEditFeature]
-        public ActionResult<ProjectDocumentDto> UpdateAttachment([FromRoute] int attachmentID, [FromBody] ProjectDocumentUpdateDto projectDocumentUpdateDto)
-        {
-            var projectDocument = ProjectDocuments.GetByIDWithTracking(DbContext, attachmentID);
-            if (ThrowNotFound(projectDocument, "ProjectDocument", attachmentID, out var actionResult))
-            {
-                return actionResult;
-            }
-            if (!CallingUser.CanEditJurisdiction(projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID, DbContext))
-            {
-                return Forbid();
-            }
-
-            var updatedProjectDocument = ProjectDocuments.Update(DbContext, projectDocument, projectDocumentUpdateDto);
-
-            return Ok(updatedProjectDocument.AsDto());
-        }
-
-        [HttpDelete("projects/attachments/{attachmentID}")]
-        [JurisdictionEditFeature]
-        public IActionResult DeleteAttachment([FromRoute] int attachmentID)
-        {
-            var projectDocument = ProjectDocuments.GetByIDWithTracking(DbContext, attachmentID);
-            if (ThrowNotFound(projectDocument, "ProjectDocument", attachmentID, out var actionResult))
-            {
-                return actionResult;
-            }
-            if (!CallingUser.CanEditJurisdiction(projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID, DbContext))
-            {
-                return Forbid();
-            }
-            ProjectDocuments.Delete(DbContext, projectDocument);
-            return Ok();
-        }
-
-        [HttpDelete("projects/{projectID}/delete")]
+        [HttpDelete("{projectID}")]
         [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
         public async Task<IActionResult> Delete([FromRoute] int projectID)
@@ -193,7 +150,7 @@ namespace Neptune.API.Controllers
             return Ok();
         }
 
-        [HttpGet("projects/{projectID}/project-network-solve-histories")]
+        [HttpGet("{projectID}/project-network-solve-histories")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
         public ActionResult<List<ProjectNetworkSolveHistorySimpleDto>> GetProjectNetworkSolveHistoriesForProject(int projectID)
@@ -208,7 +165,7 @@ namespace Neptune.API.Controllers
             return Ok(projectNetworkSolveHistoryDtos);
         }
 
-        [HttpGet("projects/{projectID}/treatment-bmp-hru-characteristics")]
+        [HttpGet("{projectID}/treatment-bmp-hru-characteristics")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
         public ActionResult<List<TreatmentBMPHRUCharacteristicsSummarySimpleDto>> GetTreatmentBMPHRUCharacteristicsForProject([FromRoute] int projectID)
@@ -224,7 +181,7 @@ namespace Neptune.API.Controllers
             return Ok(hruCharacteristics);
         }
 
-        [HttpGet("projects/{projectID}/load-reducing-results")]
+        [HttpGet("{projectID}/load-reducing-results")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
         public ActionResult<List<ProjectLoadReducingResultDto>> GetLoadRemovingResultsForProject([FromRoute] int projectID)
@@ -240,7 +197,7 @@ namespace Neptune.API.Controllers
             return Ok(modeledResults);
         }
 
-        [HttpGet("projects/{projectID}/load-generating-results")]
+        [HttpGet("{projectID}/load-generating-results")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
         public ActionResult<List<ProjectLoadGeneratingResultDto>> GetLoadGeneratingResultsForProject([FromRoute] int projectID)
@@ -256,7 +213,7 @@ namespace Neptune.API.Controllers
             return Ok(modeledResults);
         }
 
-        [HttpPost("projects/{projectID}/modeled-performance")]
+        [HttpPost("{projectID}/modeled-performance")]
         [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
         public async Task<IActionResult> TriggerModeledPerformanceForProject([FromRoute] int projectID)
@@ -281,7 +238,7 @@ namespace Neptune.API.Controllers
             return Ok();
         }
 
-        [HttpGet("projects/{projectID}/delineations")]
+        [HttpGet("{projectID}/delineations")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
         public ActionResult<List<DelineationUpsertDto>> GetDelineationsByProjectID([FromRoute] int projectID)
@@ -290,7 +247,7 @@ namespace Neptune.API.Controllers
             return Ok(delineationUpsertDtos);
         }
 
-        [HttpPut("projects/{projectID}/delineations")]
+        [HttpPut("{projectID}/delineations")]
         [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
         public async Task<IActionResult> MergeDelineationsForProject([FromRoute] int projectID, List<DelineationUpsertDto> delineationUpsertDtos)
@@ -301,7 +258,7 @@ namespace Neptune.API.Controllers
             return Ok();
         }
 
-        [HttpPost("projects/{projectID}/copy")]
+        [HttpPost("{projectID}/copy")]
         [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
         public async Task<ActionResult<int>> CreateProjectCopy([FromRoute] int projectID)
@@ -316,7 +273,7 @@ namespace Neptune.API.Controllers
             return Ok(newProject.ProjectID);
         }
 
-        [HttpGet("projects/download")]
+        [HttpGet("download")]
         [UserViewFeature]
         [Produces(@"text/csv")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
@@ -337,7 +294,7 @@ namespace Neptune.API.Controllers
             return File(stream.ToArray(), "text/csv");
         }
 
-        [HttpGet("projects/treatmentBMPs/download")]
+        [HttpGet("treatmentBMPs/download")]
         [UserViewFeature]
         [Produces(@"text/csv")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
@@ -358,7 +315,7 @@ namespace Neptune.API.Controllers
             return File(stream.ToArray(), "text/csv");
         }
 
-        [HttpGet("projects/OCTAM2Tier2GrantProgram")]
+        [HttpGet("OCTAM2Tier2GrantProgram")]
         [UserViewFeature]
         public ActionResult<List<ProjectDto>> GetProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
@@ -372,7 +329,7 @@ namespace Neptune.API.Controllers
             return Ok(projectHruCharacteristicsSummaryDtos);
         }
 
-        [HttpGet("projects/OCTAM2Tier2GrantProgram/download")]
+        [HttpGet("OCTAM2Tier2GrantProgram/download")]
         [UserViewFeature]
         [Produces(@"text/csv")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
@@ -393,7 +350,7 @@ namespace Neptune.API.Controllers
             return File(stream.ToArray(), "text/csv");
         }
 
-        [HttpGet("projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download")]
+        [HttpGet("OCTAM2Tier2GrantProgram/treatmentBMPs/download")]
         [UserViewFeature]
         [Produces(@"text/csv")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
@@ -414,7 +371,7 @@ namespace Neptune.API.Controllers
             return File(stream.ToArray(), "text/csv");
         }
 
-        [HttpGet("projects/delineations")]
+        [HttpGet("delineations")]
         [UserViewFeature]
         public ActionResult<List<DelineationDto>> List()
         {
