@@ -128,7 +128,7 @@
                 </ng-template>
             </div>
         </div>
-        <div class="g-col-9" *ngIf="planningMapInitData$ | async">
+        <div class="g-col-9">
             <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false">
                 <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></regional-subbasins-layer>
                 <stormwater-network-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl"></stormwater-network-layer>
@@ -138,6 +138,7 @@
             </neptune-map>
 
             <neptune-grid
+                *ngIf="planningMapInitData$ | async"
                 height="700px"
                 [rowData]="projects"
                 [columnDefs]="columnDefs"

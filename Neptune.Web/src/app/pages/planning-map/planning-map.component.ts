@@ -128,20 +128,6 @@ export class PlanningMapComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.planningMapInitData$ = combineLatest({
-            BoundingBox: this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet(),
-            Projects: this.projectService.projectsGet(),
-            TreatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
-            Delineations: this.delineationService.delineationsGet(),
-        }).pipe(
-            tap((data) => {
-                this.projects = data.Projects;
-                this.treatmentBMPs = data.TreatmentBMPs;
-                this.delineations = data.Delineations;
-                this.boundingBox = data.BoundingBox;
-            })
-        );
-
         this.columnDefs = [
             this.utilityFunctionsService.createLinkColumnDef("Project ID", "ProjectID", "ProjectID", {
                 InRouterLink: "/projects/",
@@ -176,18 +162,29 @@ export class PlanningMapComponent implements OnInit {
             }
         });
 
-        this.initializePanes();
-        this.map.fitBounds(
-            [
-                [this.boundingBox.Bottom, this.boundingBox.Left],
-                [this.boundingBox.Top, this.boundingBox.Right],
-            ],
-            this.defaultFitBoundsOptions
+        this.planningMapInitData$ = combineLatest({
+            BoundingBox: this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet(),
+            Projects: this.projectService.projectsGet(),
+            TreatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
+            Delineations: this.delineationService.delineationsGet(),
+        }).pipe(
+            tap((data) => {
+                this.projects = data.Projects;
+                this.treatmentBMPs = data.TreatmentBMPs;
+                this.delineations = data.Delineations;
+                this.boundingBox = data.BoundingBox;
+                this.initializePanes();
+                this.map.fitBounds(
+                    [
+                        [this.boundingBox.Bottom, this.boundingBox.Left],
+                        [this.boundingBox.Top, this.boundingBox.Right],
+                    ],
+                    this.defaultFitBoundsOptions
+                );
+
+                this.addTreatmentBMPLayersToMap();
+            })
         );
-
-        this.addTreatmentBMPLayersToMap();
-
-        this.cdr.detectChanges();
     }
 
     public initializePanes(): void {
