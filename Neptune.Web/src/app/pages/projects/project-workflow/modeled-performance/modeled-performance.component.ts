@@ -7,12 +7,11 @@ import { AlertService } from "src/app/shared/services/alert.service";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import * as L from "leaflet";
 import "leaflet.fullscreen";
-import { forkJoin, Observable, switchMap } from "rxjs";
+import { combineLatest, forkJoin, map, Observable, pipe, switchMap, tap } from "rxjs";
 import { environment } from "src/environments/environment";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
-import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { ProjectNetworkSolveHistoryStatusTypeEnum } from "src/app/shared/generated/enum/project-network-solve-history-status-type-enum";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { GrantScoresComponent } from "../../../../shared/components/projects/grant-scores/grant-scores.component";
@@ -59,7 +58,7 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
 })
 export class ModeledPerformanceComponent implements OnInit {
     public ProjectNetworkHistoryStatusTypeEnum = ProjectNetworkSolveHistoryStatusTypeEnum;
-    public projectNetworkSolveHistories: ProjectNetworkSolveHistorySimpleDto[];
+    public projectNetworkSolveHistories$: Observable<ProjectNetworkSolveHistorySimpleDto[]>;
 
     public mapIsReady: boolean = false;
 
@@ -84,7 +83,7 @@ export class ModeledPerformanceComponent implements OnInit {
     };
 
     public projectID: number;
-    public project: ProjectDto;
+    public project$: Observable<ProjectDto>;
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampModeledPerformance;
 
     public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
@@ -94,7 +93,6 @@ export class ModeledPerformanceComponent implements OnInit {
         private projectService: ProjectService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService,
-        private treatmentBMPService: TreatmentBMPService,
         private stormwaterJurisdictionService: StormwaterJurisdictionService,
         private route: ActivatedRoute,
         private router: Router,
@@ -102,10 +100,46 @@ export class ModeledPerformanceComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.boundingBox$ = this.route.params.pipe(
+        this.project$ = this.route.params.pipe(
             switchMap((params) => {
                 this.projectID = parseInt(params[routeParams.projectID]);
-                return this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID);
+                return this.projectService.projectsProjectIDGet(this.projectID);
+            }),
+            pipe(
+                tap((project) => {
+                    // redirect to review step if project is shared with OCTA grant program
+                    if (project.ShareOCTAM2Tier2Scores) {
+                        this.router.navigateByUrl(`projects/edit/${project.ProjectID}/review-and-share`);
+                    }
+                })
+            )
+        );
+        this.projectNetworkSolveHistories$ = this.project$.pipe(
+            switchMap((project) => {
+                return combineLatest({
+                    TreatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsGet(project.ProjectID),
+                    Delineations: this.projectService.projectsProjectIDDelineationsGet(project.ProjectID),
+                    ProjectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(project.ProjectID),
+                });
+            }),
+            pipe(
+                tap((data) => {
+                    if (data.TreatmentBMPs.length == 0) {
+                        this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
+                    }
+
+                    this.projectTreatmentBMPs = data.TreatmentBMPs;
+                    this.delineations = data.Delineations;
+                })
+            ),
+            map((data) => {
+                return data.ProjectNetworkSolveHistories;
+            })
+        );
+
+        this.boundingBox$ = this.project$.pipe(
+            switchMap((project) => {
+                return this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(project.ProjectID);
             })
         );
 
@@ -116,32 +150,8 @@ export class ModeledPerformanceComponent implements OnInit {
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
-
-        const projectID = this.route.snapshot.paramMap.get("projectID");
-        if (projectID) {
-            this.projectID = parseInt(projectID);
-            forkJoin({
-                project: this.projectService.projectsProjectIDGet(this.projectID),
-                treatmentBMPs: this.treatmentBMPService.treatmentBmpsGet(),
-                delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
-                projectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID),
-            }).subscribe(({ project, treatmentBMPs, delineations, projectNetworkSolveHistories }) => {
-                // redirect to review step if project is shared with OCTA grant program
-                if (project.ShareOCTAM2Tier2Scores) {
-                    this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
-                }
-                this.projectTreatmentBMPs = treatmentBMPs.filter((x) => x.ProjectID == this.projectID);
-                if (this.projectTreatmentBMPs.length == 0) {
-                    this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
-                }
-
-                this.project = project;
-                this.delineations = delineations;
-                this.projectNetworkSolveHistories = projectNetworkSolveHistories;
-                this.initializeMap();
-                this.registerClickEvents();
-            });
-        }
+        this.initializeMap();
+        this.registerClickEvents();
     }
 
     public getAboutModelingPerformanceURL(): string {
@@ -249,9 +259,7 @@ export class ModeledPerformanceComponent implements OnInit {
             (results) => {
                 this.alertService.pushAlert(new Alert("Model run was successfully started and will run in the background.", AlertContext.Success, true));
                 window.scroll(0, 0);
-                this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID).subscribe((result) => {
-                    this.projectNetworkSolveHistories = result;
-                });
+                this.projectNetworkSolveHistories$ = this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID);
             },
             (error) => {
                 window.scroll(0, 0);
@@ -260,17 +268,13 @@ export class ModeledPerformanceComponent implements OnInit {
         );
     }
 
-    showModelResultsPanel(): boolean {
-        return this.projectID && this.project?.HasModeledResults;
-    }
-
-    getModelResultsLastCalculatedText(): string {
-        if (this.projectNetworkSolveHistories == null || this.projectNetworkSolveHistories == undefined || this.projectNetworkSolveHistories.length == 0) {
+    getModelResultsLastCalculatedText(projectNetworkSolveHistories: ProjectNetworkSolveHistorySimpleDto[]): string {
+        if (projectNetworkSolveHistories == null || projectNetworkSolveHistories == undefined || projectNetworkSolveHistories.length == 0) {
             return "";
         }
 
         //These will be ordered by date by the api
-        var successfulResults = this.projectNetworkSolveHistories.filter((x) => x.ProjectNetworkSolveHistoryStatusTypeID == ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded);
+        var successfulResults = projectNetworkSolveHistories.filter((x) => x.ProjectNetworkSolveHistoryStatusTypeID == ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded);
 
         if (successfulResults == null || successfulResults.length == 0) {
             return "";
@@ -279,12 +283,8 @@ export class ModeledPerformanceComponent implements OnInit {
         return `Results last calculated at ${new Date(successfulResults[0].LastUpdated).toLocaleString()}`;
     }
 
-    isMostRecentHistoryOfType(type: ProjectNetworkSolveHistoryStatusTypeEnum): boolean {
-        return (
-            this.projectNetworkSolveHistories != null &&
-            this.projectNetworkSolveHistories.length > 0 &&
-            this.projectNetworkSolveHistories[0].ProjectNetworkSolveHistoryStatusTypeID == type
-        );
+    isMostRecentHistoryOfType(projectNetworkSolveHistories: ProjectNetworkSolveHistorySimpleDto[], type: ProjectNetworkSolveHistoryStatusTypeEnum): boolean {
+        return projectNetworkSolveHistories != null && projectNetworkSolveHistories.length > 0 && projectNetworkSolveHistories[0].ProjectNetworkSolveHistoryStatusTypeID == type;
     }
 
     continueToNextStep() {

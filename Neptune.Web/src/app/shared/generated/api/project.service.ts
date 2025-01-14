@@ -20,7 +20,6 @@ import { Observable }                                        from 'rxjs';
 
 import { DelineationDto } from '../model/delineation-dto';
 import { DelineationUpsertDto } from '../model/delineation-upsert-dto';
-import { IFeature } from '../model/i-feature';
 import { ProblemDetails } from '../model/problem-details';
 import { ProjectDocumentDto } from '../model/project-document-dto';
 import { ProjectDto } from '../model/project-dto';
@@ -29,6 +28,7 @@ import { ProjectLoadReducingResultDto } from '../model/project-load-reducing-res
 import { ProjectNetworkSolveHistorySimpleDto } from '../model/project-network-solve-history-simple-dto';
 import { ProjectUpsertDto } from '../model/project-upsert-dto';
 import { ProjectWorkflowProgressDto } from '../model/project-workflow-progress-dto';
+import { TreatmentBMPDisplayDto } from '../model/treatment-bmp-display-dto';
 import { TreatmentBMPHRUCharacteristicsSummarySimpleDto } from '../model/treatment-bmphru-characteristics-summary-simple-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -960,13 +960,13 @@ export class ProjectService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectsProjectIDTreatmentBmpsFeatureCollectionGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<IFeature>>;
-    public projectsProjectIDTreatmentBmpsFeatureCollectionGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<IFeature>>>;
-    public projectsProjectIDTreatmentBmpsFeatureCollectionGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<IFeature>>>;
-    public projectsProjectIDTreatmentBmpsFeatureCollectionGet(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public projectsProjectIDTreatmentBmpsGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPDisplayDto>>;
+    public projectsProjectIDTreatmentBmpsGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPDisplayDto>>>;
+    public projectsProjectIDTreatmentBmpsGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPDisplayDto>>>;
+    public projectsProjectIDTreatmentBmpsGet(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (projectID === null || projectID === undefined) {
-            throw new Error('Required parameter projectID was null or undefined when calling projectsProjectIDTreatmentBmpsFeatureCollectionGet.');
+            throw new Error('Required parameter projectID was null or undefined when calling projectsProjectIDTreatmentBmpsGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -986,7 +986,7 @@ export class ProjectService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<IFeature>>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/treatment-bmps/feature-collection`,
+        return this.httpClient.get<Array<TreatmentBMPDisplayDto>>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/treatment-bmps`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

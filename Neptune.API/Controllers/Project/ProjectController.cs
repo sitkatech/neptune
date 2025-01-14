@@ -151,12 +151,12 @@ namespace Neptune.API.Controllers
             return Ok();
         }
 
-        [HttpGet("{projectID}/treatment-bmps/feature-collection")]
+        [HttpGet("{projectID}/treatment-bmps")]
         [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
-        public ActionResult<FeatureCollection> ListTreatmentBMPsByProjectID([FromRoute] int projectID)
+        public ActionResult<List<TreatmentBMPDisplayDto>> ListTreatmentBMPsByProjectID([FromRoute] int projectID)
         {
-            var featureCollection = TreatmentBMPs.ListByProjectIDsAsFeatureCollection(DbContext, [projectID]);
+            var featureCollection = TreatmentBMPs.ListByProjectIDsAsDisplayDto(DbContext, [projectID]);
             return Ok(featureCollection);
         }
 

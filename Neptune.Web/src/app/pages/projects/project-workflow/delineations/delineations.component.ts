@@ -193,18 +193,18 @@ export class DelineationsComponent implements OnInit {
 
             forkJoin({
                 project: this.projectService.projectsProjectIDGet(this.projectID),
-                treatmentBMPs: this.treatmentBMPService.treatmentBmpsGet(),
+                treatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsGet(this.projectID),
                 delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
             }).subscribe(({ project, treatmentBMPs, delineations }) => {
                 // redirect to review step if project is shared with OCTA grant program
                 if (project.ShareOCTAM2Tier2Scores) {
                     this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
                 }
-                this.projectTreatmentBMPs = treatmentBMPs.filter((x) => x.ProjectID == this.projectID);
-                if (this.projectTreatmentBMPs.length == 0) {
+                if (treatmentBMPs.length == 0) {
                     this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
                 }
 
+                this.projectTreatmentBMPs = treatmentBMPs;
                 this.delineations = delineations;
                 this.originalDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));
 

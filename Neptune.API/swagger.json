@@ -900,7 +900,7 @@
         }
       }
     },
-    "/projects/{projectID}/treatment-bmps/feature-collection": {
+    "/projects/{projectID}/treatment-bmps": {
       "get": {
         "tags": [
           "Project"
@@ -924,7 +924,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/IFeature"
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
                   }
                 }
               },
@@ -932,7 +932,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/IFeature"
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
                   }
                 }
               },
@@ -940,7 +940,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/IFeature"
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
                   }
                 }
               }

@@ -90,7 +90,6 @@ export class PlanningMapComponent implements OnInit {
     public plannedProjectTreatmentBMPsLayer: L.GeoJSON<any>;
     public selectedProjectDelineationsLayer: L.GeoJSON<any>;
     public boundingBox$: Observable<BoundingBoxDto>;
-    public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
     public layerControl: L.Control.Layers;
 
     //this is needed to allow binding to the static class
