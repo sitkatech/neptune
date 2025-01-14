@@ -375,6 +375,82 @@ export class TreatmentBMPService {
     /**
      * 
      * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public treatmentBmpsOctaM2Tier2GrantProgramGet(observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPDisplayDto>>;
+    public treatmentBmpsOctaM2Tier2GrantProgramGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPDisplayDto>>>;
+    public treatmentBmpsOctaM2Tier2GrantProgramGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPDisplayDto>>>;
+    public treatmentBmpsOctaM2Tier2GrantProgramGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<TreatmentBMPDisplayDto>>(`${this.basePath}/treatment-bmps/octa-m2-tier2-grant-program`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public treatmentBmpsPlannedProjectsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPDisplayDto>>;
+    public treatmentBmpsPlannedProjectsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPDisplayDto>>>;
+    public treatmentBmpsPlannedProjectsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPDisplayDto>>>;
+    public treatmentBmpsPlannedProjectsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<TreatmentBMPDisplayDto>>(`${this.basePath}/treatment-bmps/planned-projects`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
      * @param projectID 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

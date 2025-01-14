@@ -156,7 +156,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
 
         this.octaM2Tier2MapInitData$ = combineLatest({
             Projects: this.projectService.projectsOCTAM2Tier2GrantProgramGet(),
-            TreatmentBMPs: this.treatmentBMPService.treatmentBmpsGet(),
+            TreatmentBMPs: this.treatmentBMPService.treatmentBmpsOctaM2Tier2GrantProgramGet(),
             Delineations: this.projectService.projectsDelineationsGet(),
         }).pipe(
             tap((data) => {
@@ -203,8 +203,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         }
 
         // add planned project BMPs layer
-        const projectIDs = this.projects.map((x) => x.ProjectID);
-        const projectTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter((x) => projectIDs.includes(x.ProjectID)));
+        const projectTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
         this.plannedProjectTreatmentBMPsLayer = new L.GeoJSON(projectTreatmentBMPGeoJSON, {
             pointToLayer: (feature, latlng) => {
                 return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });

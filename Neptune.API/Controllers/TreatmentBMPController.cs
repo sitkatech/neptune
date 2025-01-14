@@ -42,9 +42,25 @@ namespace Neptune.API.Controllers
 
         [HttpGet("treatment-bmps/verified/feature-collection")]
         [JurisdictionEditFeature]
-        public ActionResult<FeatureCollection> ListTreatmentBMPsAsFeatureCollection()
+        public ActionResult<FeatureCollection> ListInventoryVerifiedTreatmentBMPsAsFeatureCollection()
         {
             var featureCollection = TreatmentBMPs.ListInventoryIsVerifiedByPersonIDAsFeatureCollection(DbContext, CallingUser);
+            return Ok(featureCollection);
+        }
+
+        [HttpGet("treatment-bmps/planned-projects")]
+        [JurisdictionEditFeature]
+        public ActionResult<List<TreatmentBMPDisplayDto>> ListTreatmentBMPsWithProjectIDAsFeatureCollection()
+        {
+            var featureCollection = TreatmentBMPs.ListWithProjectByPerson(DbContext, CallingUser);
+            return Ok(featureCollection);
+        }
+
+        [HttpGet("treatment-bmps/octa-m2-tier2-grant-program")]
+        [JurisdictionEditFeature]
+        public ActionResult<List<TreatmentBMPDisplayDto>> ListOCTAM2Tier2GrantProgramTreatmentBMPs()
+        {
+            var featureCollection = TreatmentBMPs.ListWithOCTAM2Tier2GrantProgramByPerson(DbContext, CallingUser);
             return Ok(featureCollection);
         }
 

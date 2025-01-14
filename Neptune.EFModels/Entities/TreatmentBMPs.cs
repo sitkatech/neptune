@@ -37,6 +37,7 @@ namespace Neptune.EFModels.Entities
                 .Include(x => x.TreatmentBMPType).Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule)
                 .Include(x => x.Delineation)
                 .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
+                .Include(x => x.Project)
                 .AsNoTracking();
         }
         public static List<TreatmentBMP> GetProvisionalTreatmentBMPs(NeptuneDbContext dbContext, Person currentPerson)
@@ -99,11 +100,11 @@ namespace Neptune.EFModels.Entities
                 {
                     { "TreatmentBMPID", treatmentBMP.TreatmentBMPID },
                     { "TreatmentBMPName", treatmentBMP.TreatmentBMPName },
-                    { "TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID },
+                    //{ "TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID },
                     { "TreatmentBMPTypeName", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
-                    { "StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdictionID },
-                    { "Latitude", treatmentBMP.LocationPoint4326?.Coordinate.Y},
-                    { "Longitude", treatmentBMP.LocationPoint4326?.Coordinate.Z},
+                    //{ "StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdictionID },
+                    //{ "Latitude", treatmentBMP.LocationPoint4326?.Coordinate.Y},
+                    //{ "Longitude", treatmentBMP.LocationPoint4326?.Coordinate.Z},
                 };
                 var feature = new Feature(treatmentBMP.LocationPoint4326, attributesTable);
                 featureCollection.Add(feature);
@@ -127,6 +128,24 @@ namespace Neptune.EFModels.Entities
 
         public static FeatureCollection ListInventoryIsVerifiedByPersonIDAsFeatureCollection(NeptuneDbContext dbContext, Person person)
         {
+            var treatmentBmps = ListByPerson(dbContext, person);
+            return AsFeatureCollection(treatmentBmps.Where(x => x.ProjectID == null && x.InventoryIsVerified).ToList());
+        }
+
+        public static List<TreatmentBMPDisplayDto> ListWithProjectByPerson(NeptuneDbContext dbContext, Person person)
+        {
+            var treatmentBmps = ListByPerson(dbContext, person);
+            return treatmentBmps.Where(x => x.ProjectID != null).Select(x => x.AsDisplayDto()).ToList();
+        }
+
+        public static List<TreatmentBMPDisplayDto> ListWithOCTAM2Tier2GrantProgramByPerson(NeptuneDbContext dbContext, Person person)
+        {
+            var treatmentBmps = ListByPerson(dbContext, person);
+            return treatmentBmps.Where(x => x.Project is { ShareOCTAM2Tier2Scores: true }).Select(x => x.AsDisplayDto()).ToList();
+        }
+
+        private static List<TreatmentBMP> ListByPerson(NeptuneDbContext dbContext, Person person)
+        {
             var personID = person.PersonID;
             List<TreatmentBMP> treatmentBmps;
             if (person.Role.RoleID == (int)RoleEnum.Admin || person.Role.RoleID == (int)RoleEnum.SitkaAdmin)
@@ -141,7 +160,7 @@ namespace Neptune.EFModels.Entities
                     .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID)).ToList();
             }
 
-            return AsFeatureCollection(treatmentBmps.Where(x => x.ProjectID == null && x.InventoryIsVerified).ToList());
+            return treatmentBmps;
         }
 
         public static List<TreatmentBMPUpsertDto> ListByProjectIDAsUpsertDto(NeptuneDbContext dbContext, int projectID)

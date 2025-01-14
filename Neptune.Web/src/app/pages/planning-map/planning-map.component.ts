@@ -159,7 +159,7 @@ export class PlanningMapComponent implements OnInit {
 
         this.planningMapInitData$ = combineLatest({
             Projects: this.projectService.projectsGet(),
-            TreatmentBMPs: this.treatmentBMPService.treatmentBmpsGet(),
+            TreatmentBMPs: this.treatmentBMPService.treatmentBmpsPlannedProjectsGet(),
             Delineations: this.delineationService.delineationsGet(),
         }).pipe(
             tap((data) => {
@@ -205,7 +205,7 @@ export class PlanningMapComponent implements OnInit {
             this.layerControl.removeLayer(this.plannedProjectTreatmentBMPsLayer);
         }
         // add planned project BMPs layer
-        const projectTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter((x) => x.ProjectID != null));
+        const projectTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
         this.plannedProjectTreatmentBMPsLayer = new L.GeoJSON(projectTreatmentBMPGeoJSON, {
             pointToLayer: (feature, latlng) => {
                 return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });

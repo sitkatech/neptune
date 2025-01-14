@@ -1882,6 +1882,82 @@
         }
       }
     },
+    "/treatment-bmps/planned-projects": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/octa-m2-tier2-grant-program": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/treatmentBMPTypes": {
       "get": {
         "tags": [
