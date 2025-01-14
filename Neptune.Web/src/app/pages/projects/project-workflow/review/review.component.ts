@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { forkJoin } from "rxjs";
-import { AuthenticationService } from "src/app/services/authentication.service";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
@@ -55,7 +54,6 @@ export class ReviewComponent implements OnInit {
     public isLoadingSubmit = false;
 
     constructor(
-        private authenticationService: AuthenticationService,
         private projectService: ProjectService,
         private treatmentBMPService: TreatmentBMPService,
         private route: ActivatedRoute,
@@ -65,25 +63,23 @@ export class ReviewComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.authenticationService.getCurrentUser().subscribe((result) => {
-            const projectID = this.route.snapshot.paramMap.get("projectID");
-            if (projectID) {
-                this.projectID = parseInt(projectID);
-                forkJoin({
-                    project: this.projectService.projectsProjectIDGet(this.projectID),
-                    treatmentBMPs: this.treatmentBMPService.treatmentBmpsProjectIDGetByProjectIDGet(this.projectID),
-                    delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
-                    projectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID),
-                    attachments: this.projectService.projectsProjectIDAttachmentsGet(this.projectID),
-                }).subscribe(({ project, treatmentBMPs, delineations, projectNetworkSolveHistories, attachments }) => {
-                    this.treatmentBMPs = treatmentBMPs;
-                    this.delineations = delineations;
-                    this.projectNetworkSolveHistories = projectNetworkSolveHistories;
-                    this.project = project;
-                    this.attachments = attachments;
-                });
-            }
-        });
+        const projectID = this.route.snapshot.paramMap.get("projectID");
+        if (projectID) {
+            this.projectID = parseInt(projectID);
+            forkJoin({
+                project: this.projectService.projectsProjectIDGet(this.projectID),
+                treatmentBMPs: this.treatmentBMPService.treatmentBmpsProjectIDGetByProjectIDGet(this.projectID),
+                delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
+                projectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID),
+                attachments: this.projectService.projectsProjectIDAttachmentsGet(this.projectID),
+            }).subscribe(({ project, treatmentBMPs, delineations, projectNetworkSolveHistories, attachments }) => {
+                this.treatmentBMPs = treatmentBMPs;
+                this.delineations = delineations;
+                this.projectNetworkSolveHistories = projectNetworkSolveHistories;
+                this.project = project;
+                this.attachments = attachments;
+            });
+        }
     }
 
     showModelResultsPanel(): boolean {

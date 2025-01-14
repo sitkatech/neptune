@@ -1,4 +1,4 @@
-import { ApplicationRef, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { ApplicationRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import * as L from "leaflet";
 import "leaflet.fullscreen";
 import { forkJoin } from "rxjs";
@@ -49,17 +49,12 @@ declare var $: any;
     ],
 })
 export class ProjectMapComponent implements OnInit {
-    @Input("zoomToProjectExtentOnLoad") zoomToProjectExtentOnLoad: boolean = false;
-    @Input("zoomOnSelection") zoomOnSelection: boolean = false;
     @Input("projectID") projectID: number;
 
     public mapIsReady: boolean = false;
     public visibleTreatmentBMPStyle: string = "treatmentBMP_purple_outline_only";
     public selectedTreatmentBMPStyle: string = "treatmentBMP_yellow";
-    public zoomMapToDefaultExtent: boolean = true;
     public mapHeight: string = "750px";
-    public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
-    public onEachFeatureCallback?: (feature, layer) => void;
 
     @Output()
     public afterSetControl: EventEmitter<L.Control.Layers> = new EventEmitter();
@@ -70,13 +65,9 @@ export class ProjectMapComponent implements OnInit {
     @Output()
     public onMapMoveEnd: EventEmitter<L.LeafletEvent> = new EventEmitter();
 
-    public component: any;
     public map: L.Map;
-    public featureLayer: any;
     public layerControl: L.Control.Layers;
-    public tileLayers: { [key: string]: any } = {};
-    public overlayLayers: { [key: string]: any } = {};
-    private boundingBox: BoundingBoxDto;
+    public boundingBox: BoundingBoxDto;
     public selectedListItem: number;
     public selectedListItemDetails: { [key: string]: any } = {};
     public selectedObjectMarker: L.Layer;
@@ -105,7 +96,6 @@ export class ProjectMapComponent implements OnInit {
     public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
 
     constructor(
-        private cdr: ChangeDetectorRef,
         private projectService: ProjectService,
         private treatmentBMPService: TreatmentBMPService,
         private stormwaterJurisdictionService: StormwaterJurisdictionService,
@@ -116,13 +106,13 @@ export class ProjectMapComponent implements OnInit {
     public ngOnInit(): void {
         if (this.projectID) {
             forkJoin({
-                treatmentBMPs: this.treatmentBMPService.treatmentBmpsGet(),
+                treatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsGet(this.projectID),
                 delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                 boundingBox: this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID),
                 treatmentBMPTypes: this.treatmentBMPService.treatmentBMPTypesGet(),
                 modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBMPModelingAttributeDropdownItemsGet(),
             }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
-                this.projectTreatmentBMPs = treatmentBMPs.filter((x) => x.ProjectID == this.projectID);
+                this.projectTreatmentBMPs = treatmentBMPs;
                 this.delineations = delineations;
                 this.boundingBox = boundingBox;
                 this.treatmentBMPTypes = treatmentBMPTypes;
@@ -131,10 +121,6 @@ export class ProjectMapComponent implements OnInit {
         }
 
         this.compileService.configure(this.appRef);
-    }
-
-    ngOnDestroy() {
-        this.cdr.detach();
     }
 
     public handleMapReady(event: NeptuneMapInitEvent): void {
@@ -146,22 +132,10 @@ export class ProjectMapComponent implements OnInit {
     }
 
     public updateMapLayers(): void {
-        this.map.fitBounds(
-            [
-                [this.boundingBox.Bottom, this.boundingBox.Left],
-                [this.boundingBox.Top, this.boundingBox.Right],
-            ],
-            this.defaultFitBoundsOptions
-        );
         this.updateTreatmentBMPsLayer();
 
         if (this.projectTreatmentBMPs.length > 0) {
             this.selectTreatmentBMP(this.projectTreatmentBMPs[0].TreatmentBMPID);
-        }
-
-        if (this.zoomToProjectExtentOnLoad) {
-            let tempFeatureGroup = new L.FeatureGroup([this.treatmentBMPsLayer, this.delineationsLayer]);
-            this.map.fitBounds(tempFeatureGroup.getBounds(), { padding: new L.Point(50, 50) });
         }
     }
 
@@ -186,10 +160,8 @@ export class ProjectMapComponent implements OnInit {
                         return;
                     }
                     layer.setStyle(this.delineationSelectedStyle).bringToFront();
-                    if (this.zoomOnSelection) {
-                        this.map.flyToBounds(layer.getBounds(), { padding: new L.Point(50, 50) });
-                        hasFlownToSelectedObject = true;
-                    }
+                    this.map.flyToBounds(layer.getBounds(), { padding: new L.Point(50, 50) });
+                    hasFlownToSelectedObject = true;
                 }
             },
         });
@@ -208,7 +180,7 @@ export class ProjectMapComponent implements OnInit {
                 return this.selectedTreatmentBMP == null || feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID;
             },
             onEachFeature: (feature, layer) => {
-                if (this.selectedTreatmentBMP != null && this.zoomOnSelection && !hasFlownToSelectedObject) {
+                if (this.selectedTreatmentBMP != null && hasFlownToSelectedObject) {
                     if (layer.feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID) {
                         return;
                     }

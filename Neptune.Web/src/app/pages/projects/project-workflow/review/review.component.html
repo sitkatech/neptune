@@ -71,13 +71,13 @@
                 <div class="card">
                     <div class="card-header">Share Project</div>
                     <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
+                        <div class="grid-12">
+                            <div class="g-col-8">
                                 <i [ngClass]="project.ShareOCTAM2Tier2Scores ? 'fas fa-check text-success' : 'fas fa-times text-danger'"></i>
+                                OCTA M2 Tier 2 Grant Program
                             </div>
-                            <div class="col">OCTA M2 Tier 2 Grant Program</div>
-                            <div class="col-4">
-                                <button (click)="shareOrRevokeOCTAScores()" class="btn btn-primary" [disabled]="isLoadingSubmit">
+                            <div class="g-col-4">
+                                <button (click)="shareOrRevokeOCTAScores()" class="btn btn-primary btn-sm" [disabled]="isLoadingSubmit">
                                     <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
                                     {{ project.ShareOCTAM2Tier2Scores ? "Revoke" : "Share" }}
                                 </button>
@@ -87,49 +87,33 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-3 mb-3" *ngIf="!project?.DoesNotIncludeTreatmentBMPs">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">Treatment BMPs</div>
-                    <div class="card-body">
-                        <project-map #treatmentBMPMapAndModelingAttributes [projectID]="projectID" [zoomToProjectExtentOnLoad]="true" [zoomOnSelection]="true"> </project-map>
-                    </div>
-                </div>
+        <div class="card mt-3 mb-3" *ngIf="!project?.DoesNotIncludeTreatmentBMPs">
+            <div class="card-header">Treatment BMPs</div>
+            <div class="card-body">
+                <project-map #treatmentBMPMapAndModelingAttributes [projectID]="projectID"> </project-map>
             </div>
         </div>
-        <div class="row mt-3 mb-3" *ngIf="showModelResultsPanel()">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">Model Results</div>
-                    <div class="card-body">
-                        <model-results
-                            [projectID]="project.ProjectID"
-                            [treatmentBMPs]="treatmentBMPs"
-                            [delineations]="delineations"
-                            [projectNetworkSolveHistories]="projectNetworkSolveHistories">
-                        </model-results>
-                    </div>
-                </div>
+        <div class="card mt-3 mb-3" *ngIf="showModelResultsPanel()">
+            <div class="card-header">Model Results</div>
+            <div class="card-body">
+                <model-results
+                    [projectID]="project.ProjectID"
+                    [treatmentBMPs]="treatmentBMPs"
+                    [delineations]="delineations"
+                    [projectNetworkSolveHistories]="projectNetworkSolveHistories">
+                </model-results>
             </div>
         </div>
-        <div class="row mt-3 mb-3" *ngIf="attachments && attachments.length > 0">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">Attachments</div>
-                    <div class="card-body">
-                        <attachments-display [attachments]="attachments"></attachments-display>
-                    </div>
-                </div>
+        <div class="card mt-3 mb-3" *ngIf="attachments && attachments.length > 0">
+            <div class="card-header">Attachments</div>
+            <div class="card-body">
+                <attachments-display [attachments]="attachments"></attachments-display>
             </div>
         </div>
-        <div class="row mt-3 mb-3" *ngIf="project.CalculateOCTAM2Tier2Scores">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">Grant Metrics</div>
-                    <div class="card-body">
-                        <grant-scores [project]="project"></grant-scores>
-                    </div>
-                </div>
+        <div class="card mt-3 mb-3" *ngIf="project.CalculateOCTAM2Tier2Scores">
+            <div class="card-header">Grant Metrics</div>
+            <div class="card-body">
+                <grant-scores [project]="project"></grant-scores>
             </div>
         </div>
     </ng-container>

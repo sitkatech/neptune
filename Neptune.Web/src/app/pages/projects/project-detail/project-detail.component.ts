@@ -42,8 +42,6 @@ import { AlertDisplayComponent } from "../../../shared/components/alert-display/
     ],
 })
 export class ProjectDetailComponent implements OnInit {
-    private currentUser: PersonDto;
-
     public currentProject$: Observable<ProjectDto>;
     public treatmentBMPs$: Observable<Array<TreatmentBMPUpsertDto>>;
     public delineations$: Observable<Array<DelineationUpsertDto>>;
@@ -94,7 +92,6 @@ export class ProjectDetailComponent implements OnInit {
         );
 
         this.authenticationService.getCurrentUser().subscribe((currentUser) => {
-            this.currentUser = currentUser;
             this.isReadOnly = this.authenticationService.isUserUnassigned(currentUser);
         });
     }
