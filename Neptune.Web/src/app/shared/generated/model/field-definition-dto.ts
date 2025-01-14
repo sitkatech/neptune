@@ -11,6 +11,7 @@
  */
 import { FieldDefinitionTypeSimpleDto } from '././field-definition-type-simple-dto';
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class FieldDefinitionDto { 
     FieldDefinitionID?: number;
     FieldDefinitionType?: FieldDefinitionTypeSimpleDto;
@@ -18,4 +19,43 @@ export class FieldDefinitionDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface FieldDefinitionDtoForm { 
+    FieldDefinitionID?: FormControl<number>;
+    FieldDefinitionType?: FormControl<FieldDefinitionTypeSimpleDto>;
+    FieldDefinitionValue?: FormControl<string>;
+}
+
+export class FieldDefinitionDtoFormControls { 
+    public static FieldDefinitionID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FieldDefinitionType = (value: FormControlState<FieldDefinitionTypeSimpleDto> | FieldDefinitionTypeSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<FieldDefinitionTypeSimpleDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FieldDefinitionValue = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

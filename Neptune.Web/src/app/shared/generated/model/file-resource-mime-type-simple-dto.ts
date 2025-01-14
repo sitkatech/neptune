@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class FileResourceMimeTypeSimpleDto { 
     FileResourceMimeTypeID?: number;
     FileResourceMimeTypeName?: string;
@@ -20,4 +21,76 @@ export class FileResourceMimeTypeSimpleDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface FileResourceMimeTypeSimpleDtoForm { 
+    FileResourceMimeTypeID?: FormControl<number>;
+    FileResourceMimeTypeName?: FormControl<string>;
+    FileResourceMimeTypeDisplayName?: FormControl<string>;
+    FileResourceMimeTypeContentTypeName?: FormControl<string>;
+    FileResourceMimeTypeIconSmallFilename?: FormControl<string>;
+    FileResourceMimeTypeIconNormalFilename?: FormControl<string>;
+}
+
+export class FileResourceMimeTypeSimpleDtoFormControls { 
+    public static FileResourceMimeTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FileResourceMimeTypeName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FileResourceMimeTypeDisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FileResourceMimeTypeContentTypeName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FileResourceMimeTypeIconSmallFilename = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FileResourceMimeTypeIconNormalFilename = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

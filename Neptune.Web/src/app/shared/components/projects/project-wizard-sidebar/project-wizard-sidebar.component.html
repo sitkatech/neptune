@@ -1,93 +1,64 @@
-<div class="sidebar-header p-2">
-    <div class="row m-2">
-        <p>Project Name: &nbsp;</p>
-        <div *ngIf="projectModel?.ProjectName; then hasName; else noName"></div>
-        <ng-template #hasName>
-            <p>
-                <strong>{{ projectModel.ProjectName }}</strong>
-            </p>
-        </ng-template>
-        <ng-template #noName>
-            <p><strong>Project Name Here</strong></p>
-        </ng-template>
+<ng-container *ngIf="progress$ | async as progressDto">
+    <div class="sidebar-header">
+        <h5 class="sidebar-title">
+            <div>
+                <p>Project Name: &nbsp;</p>
+                <div *ngIf="progressDto?.ProjectID; then hasName; else noName"></div>
+                <ng-template #hasName>
+                    <p>
+                        <strong>{{ progressDto.ProjectName }}</strong>
+                    </p>
+                </ng-template>
+                <ng-template #noName>
+                    <p><strong>Project Name Here</strong></p>
+                </ng-template>
+            </div>
+        </h5>
     </div>
-</div>
 
-<div class="sidebar-card">
-    <div class="card-body">
-        <a [routerLink]="['instructions']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="icon-padding">
-            <hippocamp-progress-icon [isInformational]="true"></hippocamp-progress-icon>
+    <workflow-nav>
+        <workflow-nav-item
+            [navRouterLink]="['instructions']"
+            [complete]="progressDto.Steps.Instructions.Completed"
+            [disabled]="progressDto.Steps.Instructions.Disabled"
+            [required]="false">
             Instructions
-        </a>
-    </div>
-    <div class="card-body" [ngClass]="{ 'not-allowed': projectModel.ShareOCTAM2Tier2Scores }">
-        <a
-            [routerLink]="['project-basics']"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            [ngClass]="{ disabled: projectModel.ShareOCTAM2Tier2Scores }"
-            class="icon-padding">
-            <hippocamp-progress-icon [isComplete]="isProjectBasicsComplete()"></hippocamp-progress-icon>
-            Project Basics
-        </a>
-    </div>
-    <div class="sidebar-card">
-        <div class="card-body">
-            <div class="icon-padding">
-                <hippocamp-progress-icon [isComplete]="isStormwaterTreatmentsComplete()"></hippocamp-progress-icon>
-                <span>Stormwater Treatments</span>
-            </div>
-        </div>
-        <div class="indented-pages">
-            <div class="card-body" [ngClass]="{ 'not-allowed': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores }">
-                <a
-                    [routerLink]="['stormwater-treatments', 'treatment-bmps']"
-                    routerLinkActive="active"
-                    [routerLinkActiveOptions]="{ exact: true }"
-                    class="icon-padding"
-                    [ngClass]="{ disabled: !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores }">
-                    <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveModelingParameters()"></hippocamp-progress-icon>
-                    Treatment BMPs
-                </a>
-            </div>
-
-            <div class="card-body" [ngClass]="{ 'not-allowed': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs() }">
-                <a
-                    [routerLink]="['stormwater-treatments', 'delineations']"
-                    routerLinkActive="active"
-                    [routerLinkActiveOptions]="{ exact: true }"
-                    class="icon-padding"
-                    [ngClass]="{ disabled: !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs() }">
-                    <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveDelineations()"></hippocamp-progress-icon>
-                    Delineations
-                </a>
-            </div>
-
-            <div class="card-body" [ngClass]="{ 'not-allowed': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs() }">
-                <a
-                    [routerLink]="['stormwater-treatments', 'modeled-performance-and-metrics']"
-                    routerLinkActive="active"
-                    [routerLinkActiveOptions]="{ exact: true }"
-                    class="icon-padding"
-                    [ngClass]="{ disabled: !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores || !doesProjectHaveTreatmentBMPs() }">
-                    <hippocamp-progress-icon [isComplete]="doAllTreatmentBMPsHaveCalculatedModelResults()"></hippocamp-progress-icon>
-                    Modeled Performance and Grant Metrics
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="card-body" [ngClass]="{ 'not-allowed': !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores }">
-        <a [routerLink]="['attachments']" routerLinkActive="active" class="icon-padding" [ngClass]="{ disabled: !projectModel.ProjectName || projectModel.ShareOCTAM2Tier2Scores }">
-            <hippocamp-progress-icon [isComplete]="true"></hippocamp-progress-icon>
+        </workflow-nav-item>
+        <workflow-nav-item [navRouterLink]="['project-basics']" [complete]="progressDto.Steps.BasicInfo.Completed" [disabled]="progressDto.Steps.BasicInfo.Disabled">
+            Basic Information
+        </workflow-nav-item>
+        <workflow-nav-item
+            [navRouterLink]="['stormwater-treatments', 'treatment-bmps']"
+            [complete]="progressDto.Steps.TreatmentBMPs.Completed"
+            [disabled]="progressDto.Steps.TreatmentBMPs.Disabled">
+            Treatment BMPs
+        </workflow-nav-item>
+        <workflow-nav-item
+            [navRouterLink]="['stormwater-treatments', 'delineations']"
+            [complete]="progressDto.Steps.Delineations.Completed"
+            [disabled]="progressDto.Steps.Delineations.Disabled">
+            Delineations
+        </workflow-nav-item>
+        <workflow-nav-item
+            [navRouterLink]="['stormwater-treatments', 'modeled-performance-and-metrics']"
+            [complete]="progressDto.Steps.ModeledPerformanceAndGrantMetrics.Completed"
+            [disabled]="progressDto.Steps.ModeledPerformanceAndGrantMetrics.Disabled">
+            Modeled Performance and Grant Metrics
+        </workflow-nav-item>
+        <workflow-nav-item
+            [navRouterLink]="['attachments']"
+            [complete]="progressDto.Steps.Attachments.Completed"
+            [disabled]="progressDto.Steps.Attachments.Disabled"
+            [required]="false">
             Attachments
-        </a>
-    </div>
-
-    <div class="card-body" [ngClass]="{ 'not-allowed': !projectModel.ProjectName }">
-        <a [routerLink]="['review-and-share']" routerLinkActive="active" class="icon-padding" [ngClass]="{ disabled: !projectModel.ProjectName }">
-            <hippocamp-progress-icon [isInformational]="true"></hippocamp-progress-icon>
+        </workflow-nav-item>
+        <workflow-nav-item
+            [navRouterLink]="['review-and-share']"
+            [complete]="true"
+            [complete]="progressDto.Steps.ReviewAndShare.Completed"
+            [disabled]="progressDto.Steps.ReviewAndShare.Disabled"
+            [required]="false">
             Review and Share
-        </a>
-    </div>
-</div>
+        </workflow-nav-item>
+    </workflow-nav>
+</ng-container>

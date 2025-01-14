@@ -34,6 +34,21 @@ namespace Neptune.EFModels.Entities
             return GetByIDWithChangeTracking(dbContext, projectPrimaryKey.PrimaryKeyValue);
         }
 
+        public static Project GetByIDWithTrackingForWorkflow(NeptuneDbContext dbContext, int projectID)
+        {
+            return dbContext.Projects
+                .Include(x => x.Organization)
+                .Include(x => x.StormwaterJurisdiction)
+                .Include(x => x.TreatmentBMPs)
+                .ThenInclude(x => x.Delineation)
+                .Include(x => x.TreatmentBMPs)
+                .ThenInclude(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
+                .Include(x => x.TreatmentBMPs)
+                .ThenInclude(x => x.TreatmentBMPType)
+                .Include(x => x.ProjectNereidResults)
+                .Single(x => x.ProjectID == projectID);
+        }
+
         public static Project GetByID(NeptuneDbContext dbContext, int projectID)
         {
             var project = GetImpl(dbContext).AsNoTracking()
@@ -88,7 +103,7 @@ namespace Neptune.EFModels.Entities
                 ProjectDescription = projectUpsertDto.ProjectDescription,
                 AdditionalContactInformation = projectUpsertDto.AdditionalContactInformation,
                 DoesNotIncludeTreatmentBMPs = false,
-                CalculateOCTAM2Tier2Scores = projectUpsertDto.CalculateOCTAM2Tier2Scores,
+                CalculateOCTAM2Tier2Scores = (projectUpsertDto.CalculateOCTAM2Tier2Scores ?? false),
                 ShareOCTAM2Tier2Scores = false
             };
             await dbContext.Projects.AddAsync(project);
@@ -105,16 +120,16 @@ namespace Neptune.EFModels.Entities
             project.PrimaryContactPersonID = projectUpsertDto.PrimaryContactPersonID.Value;
             project.ProjectDescription = projectUpsertDto.ProjectDescription;
             project.AdditionalContactInformation = projectUpsertDto.AdditionalContactInformation;
-            project.DoesNotIncludeTreatmentBMPs = projectUpsertDto.DoesNotIncludeTreatmentBMPs;
-            project.CalculateOCTAM2Tier2Scores = projectUpsertDto.CalculateOCTAM2Tier2Scores;
+            project.DoesNotIncludeTreatmentBMPs = (projectUpsertDto.DoesNotIncludeTreatmentBMPs ?? false);
+            project.CalculateOCTAM2Tier2Scores = (projectUpsertDto.CalculateOCTAM2Tier2Scores ?? false);
             project.UpdatePersonID = personID;
             project.DateUpdated = DateTime.UtcNow;
 
-            if (projectUpsertDto.ShareOCTAM2Tier2Scores && !project.ShareOCTAM2Tier2Scores)
+            if ((projectUpsertDto.ShareOCTAM2Tier2Scores ?? false) && !project.ShareOCTAM2Tier2Scores)
             {
                 project.OCTAM2Tier2ScoresLastSharedDate = DateTime.UtcNow;
             }
-            project.ShareOCTAM2Tier2Scores = projectUpsertDto.ShareOCTAM2Tier2Scores;
+            project.ShareOCTAM2Tier2Scores = (projectUpsertDto.ShareOCTAM2Tier2Scores ?? false);
             
             //If we opt to not include treatmentBMPs, ensure we get rid of our pre-existing treatment bmps
             if (project.DoesNotIncludeTreatmentBMPs)

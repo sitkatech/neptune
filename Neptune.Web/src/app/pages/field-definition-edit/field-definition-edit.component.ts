@@ -13,7 +13,7 @@ import { AlertDisplayComponent } from "../../shared/components/alert-display/ale
 import { NgIf } from "@angular/common";
 
 @Component({
-    selector: "hippocamp-field-definition-edit",
+    selector: "field-definition-edit",
     templateUrl: "./field-definition-edit.component.html",
     styleUrls: ["./field-definition-edit.component.scss"],
     standalone: true,

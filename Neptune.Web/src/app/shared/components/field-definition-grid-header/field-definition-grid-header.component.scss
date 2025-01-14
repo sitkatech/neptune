@@ -1,28 +1,27 @@
-.customHeaderMenuButton {
-    margin-left: 4px;
+@use "/src/scss/abstracts" as *;
+
+:host {
+    width: 100%;
 }
 
-.customHeaderLabel {
-    margin-left: 5px;
+.custom-header-label {
+    // margin-left: 5px;
 }
 
-.customSortDownLabel {
-    margin-left: 10px;
-}
-
-.customSortUpLabel {
-    margin-left: 3px;
-}
-
-.customSortRemoveLabel {
-    font-size: 11px;
-    margin-left: 3px;
-}
-
-.active {
-    color: cornflowerblue;
+.filter-indicator {
+    color: $neptune-orange;
+    font-size: 16px;
 }
 
 .hidden {
     display: none;
+}
+
+.sort-buttons {
+    margin: 0 5px;
+}
+
+.custom-filter-button {
+    margin-right: 6px;
+    font-size: 0.6rem;
 }

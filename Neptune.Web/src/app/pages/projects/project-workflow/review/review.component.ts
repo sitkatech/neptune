@@ -1,8 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { forkJoin } from "rxjs";
-import { AuthenticationService } from "src/app/services/authentication.service";
-import { ProjectWorkflowService } from "src/app/services/project-workflow.service";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
@@ -13,16 +11,20 @@ import { TreatmentBMPUpsertDto } from "src/app/shared/generated/model/treatment-
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
-import { ConfirmService } from "src/app/shared/services/confirm.service";
+import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 import { GrantScoresComponent } from "../../../../shared/components/projects/grant-scores/grant-scores.component";
 import { AttachmentsDisplayComponent } from "../../../../shared/components/projects/attachments-display/attachments-display.component";
 import { ModelResultsComponent } from "../../../../shared/components/projects/model-results/model-results.component";
-import { TreatmentBmpMapEditorAndModelingAttributesComponent } from "../../../../shared/components/projects/project-map/project-map.component";
+import { ProjectMapComponent } from "../../../../shared/components/projects/project-map/project-map.component";
 import { NgIf, NgClass, DatePipe } from "@angular/common";
 import { CustomRichTextComponent } from "../../../../shared/components/custom-rich-text/custom-rich-text.component";
+import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
+import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
+import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
+import { ProjectWorkflowProgressService } from "src/app/shared/services/project-workflow-progress.service";
 
 @Component({
-    selector: "hippocamp-review",
+    selector: "review",
     templateUrl: "./review.component.html",
     styleUrls: ["./review.component.scss"],
     standalone: true,
@@ -30,11 +32,14 @@ import { CustomRichTextComponent } from "../../../../shared/components/custom-ri
         CustomRichTextComponent,
         NgIf,
         NgClass,
-        TreatmentBmpMapEditorAndModelingAttributesComponent,
+        ProjectMapComponent,
         ModelResultsComponent,
         AttachmentsDisplayComponent,
         GrantScoresComponent,
         DatePipe,
+        PageHeaderComponent,
+        WorkflowBodyComponent,
+        AlertDisplayComponent,
     ],
 })
 export class ReviewComponent implements OnInit {
@@ -49,35 +54,32 @@ export class ReviewComponent implements OnInit {
     public isLoadingSubmit = false;
 
     constructor(
-        private authenticationService: AuthenticationService,
         private projectService: ProjectService,
         private treatmentBMPService: TreatmentBMPService,
         private route: ActivatedRoute,
         private alertService: AlertService,
         private confirmService: ConfirmService,
-        private projectWorkflowService: ProjectWorkflowService
+        private projectWorkflowProgressService: ProjectWorkflowProgressService
     ) {}
 
     ngOnInit(): void {
-        this.authenticationService.getCurrentUser().subscribe((result) => {
-            const projectID = this.route.snapshot.paramMap.get("projectID");
-            if (projectID) {
-                this.projectID = parseInt(projectID);
-                forkJoin({
-                    project: this.projectService.projectsProjectIDGet(this.projectID),
-                    treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDGetByProjectIDGet(this.projectID),
-                    delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
-                    projectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID),
-                    attachments: this.projectService.projectsProjectIDAttachmentsGet(this.projectID),
-                }).subscribe(({ project, treatmentBMPs, delineations, projectNetworkSolveHistories, attachments }) => {
-                    this.treatmentBMPs = treatmentBMPs;
-                    this.delineations = delineations;
-                    this.projectNetworkSolveHistories = projectNetworkSolveHistories;
-                    this.project = project;
-                    this.attachments = attachments;
-                });
-            }
-        });
+        const projectID = this.route.snapshot.paramMap.get("projectID");
+        if (projectID) {
+            this.projectID = parseInt(projectID);
+            forkJoin({
+                project: this.projectService.projectsProjectIDGet(this.projectID),
+                treatmentBMPs: this.treatmentBMPService.treatmentBmpsProjectIDGetByProjectIDGet(this.projectID),
+                delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
+                projectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID),
+                attachments: this.projectService.projectsProjectIDAttachmentsGet(this.projectID),
+            }).subscribe(({ project, treatmentBMPs, delineations, projectNetworkSolveHistories, attachments }) => {
+                this.treatmentBMPs = treatmentBMPs;
+                this.delineations = delineations;
+                this.projectNetworkSolveHistories = projectNetworkSolveHistories;
+                this.project = project;
+                this.attachments = attachments;
+            });
+        }
     }
 
     showModelResultsPanel(): boolean {
@@ -118,9 +120,8 @@ export class ReviewComponent implements OnInit {
 
         this.confirmService
             .confirm({
-                modalSize: "md",
-                buttonClassYes: "btn-hippocamp",
-                buttonDisabledYes: !canSubmit,
+                buttonClassYes: "btn-primary",
+                //buttonDisabledYes: !canSubmit,
                 buttonTextYes: buttonTextYes,
                 buttonTextNo: "Cancel",
                 title: `${buttonTextYes} Project`,
@@ -136,7 +137,7 @@ export class ReviewComponent implements OnInit {
                     this.projectService.projectsProjectIDUpdatePost(this.projectID, model).subscribe(
                         () => {
                             this.isLoadingSubmit = false;
-                            this.projectWorkflowService.emitWorkflowUpdate();
+                            this.projectWorkflowProgressService.updateProgress(this.projectID);
                             this.project.ShareOCTAM2Tier2Scores = !this.project.ShareOCTAM2Tier2Scores;
                             this.alertService.pushAlert(new Alert(`Your project was successfully ${buttonTextYes == "Share" ? "shared" : "revoked"}.`, AlertContext.Success));
                             window.scroll(0, 0);

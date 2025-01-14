@@ -1,41 +1,33 @@
-import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from "@angular/core";
-import { EditorComponent, EditorModule, TINYMCE_SCRIPT_SRC } from "@tinymce/tinymce-angular";
-import { AuthenticationService } from "src/app/services/authentication.service";
-import TinyMCEHelpers from "../../helpers/tiny-mce-helpers";
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, AfterViewInit, OnDestroy } from "@angular/core";
 import { Alert } from "../../models/alert";
-import { AlertContext } from "../../models/enums/alert-context.enum";
+import { AuthenticationService } from "src/app/services/authentication.service";
 import { AlertService } from "../../services/alert.service";
+import { EditorComponent, TINYMCE_SCRIPT_SRC } from "@tinymce/tinymce-angular";
+import TinyMCEHelpers from "../../helpers/tiny-mce-helpers";
+import { AlertContext } from "../../models/enums/alert-context.enum";
 import { FieldDefinitionDto } from "../../generated/model/field-definition-dto";
-import { PersonDto } from "../../generated/model/person-dto";
-import { NgbPopover } from "@ng-bootstrap/ng-bootstrap/popover/popover";
 import { FieldDefinitionService } from "../../generated/api/field-definition.service";
 import { FieldDefinitionTypeEnum } from "../../generated/enum/field-definition-type-enum";
-import { NgbPopover as NgbPopover_1 } from "@ng-bootstrap/ng-bootstrap";
+import { PopperDirective } from "../../directives/popper.directive";
 import { FormsModule } from "@angular/forms";
-import { NgIf, NgClass } from "@angular/common";
-
-declare var $: any;
+import { NgIf } from "@angular/common";
 
 @Component({
     selector: "field-definition",
     templateUrl: "./field-definition.component.html",
     styleUrls: ["./field-definition.component.scss"],
     standalone: true,
-    imports: [NgIf, EditorModule, FormsModule, NgbPopover_1, NgClass],
+    imports: [NgIf, EditorComponent, FormsModule, PopperDirective],
     providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }],
 })
-export class FieldDefinitionComponent implements OnInit {
+export class FieldDefinitionComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() fieldDefinitionType: string;
     @Input() labelOverride: string;
-    @Input() inline: boolean = true;
-    @Input() white?: boolean;
-    @ViewChild("tinyMceEditor") tinyMceEditor: EditorComponent;
-    @ViewChild("p") public p: NgbPopover;
-    @ViewChild("editingPopover") public editingPopover: NgbPopover;
-    @ViewChild("popContent") public content: any;
-    public tinyMceConfig: object;
+    @Input() inline: boolean = false;
+    @Input() useBodyContainer: boolean = false;
 
-    private currentUser: PersonDto;
+    @ViewChild("tinyMceEditor") tinyMceEditor: EditorComponent;
+    public tinyMceConfig: object;
 
     public fieldDefinition: FieldDefinitionDto;
     public isLoading: boolean = true;
@@ -58,10 +50,6 @@ export class FieldDefinitionComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.authenticationService.getCurrentUser().subscribe((currentUser) => {
-            this.currentUser = currentUser;
-        });
-
         this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDGet(FieldDefinitionTypeEnum[this.fieldDefinitionType]).subscribe((x) => this.loadFieldDefinition(x));
     }
 
@@ -73,6 +61,7 @@ export class FieldDefinitionComponent implements OnInit {
         this.fieldDefinition = fieldDefinition;
         this.emptyContent = fieldDefinition.FieldDefinitionValue?.length == 0;
         this.isLoading = false;
+        this.cdr.detectChanges();
     }
 
     public getLabelText() {
@@ -92,10 +81,6 @@ export class FieldDefinitionComponent implements OnInit {
 
         this.editedContent = this.fieldDefinition.FieldDefinitionValue;
         this.isEditing = true;
-
-        setTimeout(() => {
-            this.editingPopover.open();
-        }, 0);
     }
 
     public cancelEdit(): void {
@@ -108,13 +93,7 @@ export class FieldDefinitionComponent implements OnInit {
 
         this.fieldDefinition.FieldDefinitionValue = this.editedContent;
         this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDPut(this.fieldDefinition.FieldDefinitionID, this.fieldDefinition).subscribe(
-            (x) => {
-                this.loadFieldDefinition(x);
-
-                setTimeout(() => {
-                    this.p.open();
-                }, 250);
-            },
+            (x) => this.loadFieldDefinition(x),
             (error) => {
                 this.isLoading = false;
                 this.alertService.pushAlert(new Alert("There was an error updating the field definition", AlertContext.Danger));

@@ -10,10 +10,39 @@
  * Do not edit the class manually.
  */
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class GeometryGeoJSONAndAreaDto { 
     GeometryGeoJSON?: string;
     Area?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface GeometryGeoJSONAndAreaDtoForm { 
+    GeometryGeoJSON?: FormControl<string>;
+    Area?: FormControl<number>;
+}
+
+export class GeometryGeoJSONAndAreaDtoFormControls { 
+    public static GeometryGeoJSON = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Area = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

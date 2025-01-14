@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Neptune.API.Services;
 using Neptune.API.Services.Filter;
+using Neptune.API.Services.Middleware;
 using Neptune.Common.Email;
 using Neptune.Common.JsonConverters;
 using Neptune.Common.Services;
@@ -172,6 +173,8 @@ namespace Neptune.API
 
             services.AddHttpContextAccessor();
             services.AddScoped<AzureBlobStorageService>();
+            services.AddScoped(s => UserContext.GetUserFromHttpContext(s.GetService<NeptuneDbContext>(), s.GetService<IHttpContextAccessor>().HttpContext));
+
             services.AddControllers();
 
             #region Hangfire
@@ -239,6 +242,7 @@ namespace Neptune.API
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseMiddleware<EntityNotFoundMiddleware>();
 
             #region Hangfire
             app.UseHangfireDashboard("/hangfire", new DashboardOptions()

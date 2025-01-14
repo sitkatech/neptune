@@ -11,6 +11,7 @@
  */
 import { OrganizationSimpleDto } from '././organization-simple-dto';
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class StormwaterJurisdictionDto { 
     StormwaterJurisdictionID?: number;
     OrganizationID?: number;
@@ -21,4 +22,76 @@ export class StormwaterJurisdictionDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface StormwaterJurisdictionDtoForm { 
+    StormwaterJurisdictionID?: FormControl<number>;
+    OrganizationID?: FormControl<number>;
+    StateProvinceID?: FormControl<number>;
+    StormwaterJurisdictionPublicBMPVisibilityTypeID?: FormControl<number>;
+    StormwaterJurisdictionPublicWQMPVisibilityTypeID?: FormControl<number>;
+    Organization?: FormControl<OrganizationSimpleDto>;
+}
+
+export class StormwaterJurisdictionDtoFormControls { 
+    public static StormwaterJurisdictionID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static OrganizationID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static StateProvinceID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static StormwaterJurisdictionPublicBMPVisibilityTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static StormwaterJurisdictionPublicWQMPVisibilityTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Organization = (value: FormControlState<OrganizationSimpleDto> | OrganizationSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<OrganizationSimpleDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

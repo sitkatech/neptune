@@ -1,29 +1,27 @@
-<ng-container *ngIf="customRichText$ | async">
-    <div [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
-        <ng-container *ngIf="!isEditing; else isEditingTemplate">
-            <div class="customRichTextContent" [class.editable]="showEditButton()" style="position: relative; min-height: 0">
-                <div class="hoverEditButton" *ngIf="showEditButton()">
-                    <div style="transform: translate3d(-10px, 20px, 0)">
-                        <button type="button" class="btn btn-secondary" (click)="enterEdit()">Edit</button>
-                    </div>
-                </div>
-
-                <div *ngIf="!isEmptyContent" [innerHtml]="customRichTextContent"></div>
-                <div *ngIf="isEmptyContent" class="hoverEmptySpace"></div>
-            </div>
-        </ng-container>
-
-        <ng-template #isEditingTemplate>
-            <div>
-                <div class="tinyMCEFontColor">
-                    <editor #tinyMceEditor [init]="tinyMceConfig" [(ngModel)]="editedContent"></editor>
-                </div>
-
-                <div class="flex-end">
-                    <button type="button" class="btn btn-secondary mt-1 mr-2" (click)="saveEdit()">Save</button>
-                    <button type="button" class="btn btn-secondary-outline mt-1" (click)="cancelEdit()">Cancel</button>
+<div [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
+    <ng-container *ngIf="!isEditing; else isEditingTemplate">
+        <div class="customRichTextContent" [class.editable]="showEditButton()" style="position: relative; min-height: 3rem">
+            <div class="hoverEditButton" *ngIf="showEditButton()">
+                <div style="transform: translate3d(-10px, 20px, 0)">
+                    <button type="button" class="btn btn-secondary" (click)="enterEdit()">Edit</button>
                 </div>
             </div>
-        </ng-template>
-    </div>
-</ng-container>
+
+            <div *ngIf="!isEmptyContent" [innerHtml]="customRichTextContent"></div>
+            <div *ngIf="isEmptyContent" class="hoverEmptySpace"></div>
+        </div>
+    </ng-container>
+
+    <ng-template #isEditingTemplate>
+        <div>
+            <div class="tinyMCEFontColor">
+                <editor #tinyMceEditor [init]="tinyMceConfig" [(ngModel)]="editedContent"></editor>
+            </div>
+
+            <div class="flex-end">
+                <button type="button" class="btn btn-secondary mt-1 mr-2" (click)="saveEdit()">Save</button>
+                <button type="button" class="btn btn-secondary-outline mt-1" (click)="cancelEdit()">Cancel</button>
+            </div>
+        </div>
+    </ng-template>
+</div>

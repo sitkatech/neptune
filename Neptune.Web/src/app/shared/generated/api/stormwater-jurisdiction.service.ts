@@ -103,18 +103,13 @@ export class StormwaterJurisdictionService {
     /**
      * 
      * 
-     * @param personID 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public jurisdictionsPersonIDGet(personID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<StormwaterJurisdictionDto>>;
-    public jurisdictionsPersonIDGet(personID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<StormwaterJurisdictionDto>>>;
-    public jurisdictionsPersonIDGet(personID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<StormwaterJurisdictionDto>>>;
-    public jurisdictionsPersonIDGet(personID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (personID === null || personID === undefined) {
-            throw new Error('Required parameter personID was null or undefined when calling jurisdictionsPersonIDGet.');
-        }
+    public jurisdictionsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<StormwaterJurisdictionDto>>;
+    public jurisdictionsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<StormwaterJurisdictionDto>>>;
+    public jurisdictionsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<StormwaterJurisdictionDto>>>;
+    public jurisdictionsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -133,7 +128,7 @@ export class StormwaterJurisdictionService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<StormwaterJurisdictionDto>>(`${this.basePath}/jurisdictions/${encodeURIComponent(String(personID))}`,
+        return this.httpClient.get<Array<StormwaterJurisdictionDto>>(`${this.basePath}/jurisdictions`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
