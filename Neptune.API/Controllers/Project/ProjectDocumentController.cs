@@ -15,9 +15,8 @@ public class ProjectDocumentController(
     NeptuneDbContext dbContext,
     ILogger<ProjectController> logger,
     KeystoneService keystoneService,
-    IOptions<NeptuneConfiguration> neptuneConfiguration,
-    Person callingUser)
-    : SitkaController<ProjectController>(dbContext, logger, keystoneService, neptuneConfiguration, callingUser)
+    IOptions<NeptuneConfiguration> neptuneConfiguration)
+    : SitkaController<ProjectController>(dbContext, logger, keystoneService, neptuneConfiguration)
 {
     [HttpGet("{projectDocumentID}")]
     [EntityNotFound(typeof(ProjectDocument), "projectDocumentID")]

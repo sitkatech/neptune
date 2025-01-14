@@ -14,12 +14,9 @@ namespace Neptune.API.Controllers
         NeptuneDbContext dbContext,
         ILogger<SystemInfoController> logger,
         KeystoneService keystoneService,
-        IOptions<NeptuneConfiguration> neptuneConfiguration,
-        Person callingUser)
-        : SitkaController<SystemInfoController>(dbContext, logger, keystoneService, neptuneConfiguration, callingUser)
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<SystemInfoController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        private readonly IOptions<NeptuneConfiguration> _neptuneConfiguration = neptuneConfiguration;
-
         [Route("/")] // Default Route
         [HttpGet]
         public ActionResult<SystemInfoDto> GetSystemInfo([FromServices] IWebHostEnvironment environment)

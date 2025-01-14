@@ -7,73 +7,6 @@ namespace Neptune.EFModels.Entities
 {
     public static class People
     {
-        //todo: invite user
-        //public static PersonDto CreateUnassignedPerson(NeptuneDbContext dbContext, PersonCreateDto userCreateDto)
-        //{
-        //    var userUpsertDto = new PersonUpsertDto()
-        //    {
-        //        FirstName = userCreateDto.FirstName,
-        //        LastName = userCreateDto.LastName,
-        //        OrganizationName = userCreateDto.OrganizationName,
-        //        Email = userCreateDto.Email,
-        //        RoleID = (int)RoleEnum.Unassigned,  // don't allow non-admin user to set their role to something other than Unassigned
-        //    };
-        //    return CreateNewPerson(dbContext, userUpsertDto, userCreateDto.LoginName, userCreateDto.UserGuid);
-        //}
-
-        //public static List<ErrorMessage> ValidateCreateUnassignedPerson(NeptuneDbContext dbContext, PersonCreateDto userCreateDto)
-        //{
-        //    var result = new List<ErrorMessage>();
-
-        //    var userByGuidDto = GetByPersonGuid(dbContext, userCreateDto.UserGuid);  // A duplicate Guid not only leads to 500s, it allows someone to hijack another user's account
-        //    if (userByGuidDto != null)
-        //    {
-        //        result.Add(new ErrorMessage() { Type = "Person Creation", Message = "Invalid user information." });  // purposely vague; we don't want a naughty person realizing they figured out someone else's Guid
-        //    }
-
-        //    var userByEmailDto = GetByEmailAsDto(dbContext, userCreateDto.Email);  // A duplicate email leads to 500s, so need to prevent duplicates
-        //    if (userByEmailDto != null)
-        //    {
-        //        result.Add(new ErrorMessage() { Type = "Person Creation", Message = "There is already a user account with this email address." });
-        //    }
-
-        //    return result;
-        //}
-
-        //public static PersonDto CreateNewPerson(NeptuneDbContext dbContext, PersonUpsertDto personToCreate, string loginName, Guid userGuid)
-        //{
-        //    if (!personToCreate.RoleID.HasValue)
-        //    {
-        //        return null;
-        //    }
-
-        //    var organizationID = Organizations.OrganizationIDUnassigned;
-        //    var organization = Organizations.GetByName(dbContext, personToCreate.OrganizationName);
-        //    if (organization != null)
-        //    {
-        //        organizationID = organization.OrganizationID;
-        //    }
-
-        //    var person = new Person
-        //    {
-        //        PersonGuid = userGuid,
-        //        LoginName = loginName,
-        //        Email = personToCreate.Email,
-        //        FirstName = personToCreate.FirstName,
-        //        LastName = personToCreate.LastName,
-        //        IsActive = true,
-        //        RoleID = personToCreate.RoleID.Value,
-        //        CreateDate = DateTime.UtcNow,
-        //        OrganizationID = organizationID
-        //    };
-
-        //    dbContext.People.Add(person);
-        //    dbContext.SaveChanges();
-        //    dbContext.Entry(person).Reload();
-
-        //    return GetByIDAsDto(dbContext, person.PersonID);
-        //}
-
         public static IEnumerable<string> GetEmailAddressesForAdminsThatReceiveSupportEmails(NeptuneDbContext dbContext)
         {
             var persons = GetImpl(dbContext).AsNoTracking()
@@ -152,7 +85,7 @@ namespace Neptune.EFModels.Entities
         }
         public static List<int> ListStormwaterJurisdictionIDsByPersonDto(NeptuneDbContext dbContext, PersonDto person)
         {
-            if (person.Role.RoleID == (int)RoleEnum.Admin || person.Role.RoleID == (int)RoleEnum.SitkaAdmin)
+            if (person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin)
             {
                 return dbContext.StormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID).ToList();
             }

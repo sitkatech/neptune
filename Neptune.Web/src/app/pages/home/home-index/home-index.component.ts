@@ -58,7 +58,7 @@ export class HomeIndexComponent implements OnInit, OnDestroy {
             return false; // doesn't exist != unassigned
         }
 
-        return currentUser.Role.RoleID === RoleEnum.Unassigned;
+        return currentUser.RoleID === RoleEnum.Unassigned;
     }
 
     public userIsOCTAGrantReviewer(currentUser: PersonDto) {

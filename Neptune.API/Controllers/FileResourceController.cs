@@ -16,9 +16,8 @@ namespace Neptune.API.Controllers
         ILogger<FileResourceController> logger,
         KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration,
-        AzureBlobStorageService azureBlobStorageService,
-        Person callingUser)
-        : SitkaController<FileResourceController>(dbContext, logger, keystoneService, neptuneConfiguration, callingUser)
+        AzureBlobStorageService azureBlobStorageService)
+        : SitkaController<FileResourceController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [HttpGet("FileResource/{fileResourceGuidAsString}")]
         public async Task<IActionResult> DisplayResource(string fileResourceGuidAsString)

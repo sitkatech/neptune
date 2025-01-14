@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
 using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.API.Controllers
 {
@@ -10,15 +11,15 @@ namespace Neptune.API.Controllers
         NeptuneDbContext dbContext,
         ILogger<T> logger,
         KeystoneService keystoneService,
-        IOptions<NeptuneConfiguration> neptuneConfiguration,
-        Person callingUser)
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
         : ControllerBase
     {
         protected readonly NeptuneDbContext DbContext = dbContext;
         protected readonly ILogger<T> Logger = logger;
         protected readonly KeystoneService KeystoneService = keystoneService;
         protected readonly NeptuneConfiguration NeptuneConfiguration = neptuneConfiguration.Value;
-        protected readonly Person CallingUser = callingUser;
+
+        protected PersonDto CallingUser => UserContext.GetUserFromHttpContext(dbContext, HttpContext);
 
         protected ActionResult RequireNotNullThrowNotFound(object theObject, string objectType, object objectID)
         {

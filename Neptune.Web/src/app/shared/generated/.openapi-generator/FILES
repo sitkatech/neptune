@@ -25,8 +25,6 @@ model/dimension.ts
 model/envelope.ts
 model/field-definition-dto.ts
 model/field-definition-type-simple-dto.ts
-model/file-resource-dto.ts
-model/file-resource-mime-type-simple-dto.ts
 model/file-resource-simple-dto.ts
 model/geometry-factory.ts
 model/geometry-geo-json-and-area-dto.ts
@@ -39,9 +37,7 @@ model/neptune-page-type-simple-dto.ts
 model/nts-geometry-services.ts
 model/ogc-geometry-type.ts
 model/ordinates.ts
-model/organization-dto.ts
 model/organization-simple-dto.ts
-model/organization-type-simple-dto.ts
 model/person-create-dto.ts
 model/person-dto.ts
 model/person-simple-dto.ts

@@ -22,9 +22,8 @@ namespace Neptune.API.Controllers
         ILogger<NereidController> logger,
         KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration,
-        NereidService nereidService,
-        Person callingUser)
-        : SitkaController<NereidController>(dbContext, logger, keystoneService, neptuneConfiguration, callingUser)
+        NereidService nereidService)
+        : SitkaController<NereidController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [HttpGet]
         [SitkaAdminFeature]

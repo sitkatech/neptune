@@ -15,10 +15,8 @@ namespace Neptune.API.Controllers
         NeptuneDbContext dbContext,
         ILogger<FieldDefinitionController> logger,
         KeystoneService keystoneService,
-        IOptions<NeptuneConfiguration> neptuneConfiguration,
-        Person callingUser)
-        : SitkaController<FieldDefinitionController>(dbContext, logger, keystoneService, neptuneConfiguration,
-            callingUser)
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<FieldDefinitionController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [HttpGet("/fieldDefinitions")]
         public ActionResult<List<FieldDefinitionDto>> List()

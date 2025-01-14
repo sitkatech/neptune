@@ -20,9 +20,8 @@ namespace Neptune.API.Controllers
         NeptuneDbContext dbContext,
         ILogger<TreatmentBMPController> logger,
         KeystoneService keystoneService,
-        IOptions<NeptuneConfiguration> neptuneConfiguration,
-        Person callingUser)
-        : SitkaController<TreatmentBMPController>(dbContext, logger, keystoneService, neptuneConfiguration, callingUser)
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<TreatmentBMPController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [HttpGet("treatment-bmps/{projectID}/getByProjectID")]
         [UserViewFeature]
@@ -36,7 +35,7 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public ActionResult<List<TreatmentBMPDisplayDto>> ListByPersonID()
         {
-            var treatmentBMPDisplayDtos = TreatmentBMPs.ListByPersonIDAsDisplayDto(DbContext, CallingUser);
+            var treatmentBMPDisplayDtos = TreatmentBMPs.ListByPersonAsDisplayDto(DbContext, CallingUser);
             return Ok(treatmentBMPDisplayDtos);
         }
 
@@ -44,7 +43,7 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public ActionResult<FeatureCollection> ListInventoryVerifiedTreatmentBMPsAsFeatureCollection()
         {
-            var featureCollection = TreatmentBMPs.ListInventoryIsVerifiedByPersonIDAsFeatureCollection(DbContext, CallingUser);
+            var featureCollection = TreatmentBMPs.ListInventoryIsVerifiedByPersonAsFeatureCollection(DbContext, CallingUser);
             return Ok(featureCollection);
         }
 

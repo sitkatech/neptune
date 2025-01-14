@@ -14,9 +14,8 @@ namespace Neptune.API.Controllers
         NeptuneDbContext dbContext,
         ILogger<DelineationController> logger,
         KeystoneService keystoneService,
-        IOptions<NeptuneConfiguration> neptuneConfiguration,
-        Person callingUser)
-        : SitkaController<DelineationController>(dbContext, logger, keystoneService, neptuneConfiguration, callingUser)
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<DelineationController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [HttpGet("delineations")]
         [JurisdictionEditFeature]

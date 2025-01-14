@@ -13,10 +13,8 @@ namespace Neptune.API.Controllers
         NeptuneDbContext dbContext,
         ILogger<CustomRichTextController> logger,
         KeystoneService keystoneService,
-        IOptions<NeptuneConfiguration> neptuneConfiguration,
-        Person callingUser)
-        : SitkaController<CustomRichTextController>(dbContext, logger, keystoneService, neptuneConfiguration,
-            callingUser)
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<CustomRichTextController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [HttpGet("customRichText/{customRichTextTypeID}")]
         public ActionResult<NeptunePageDto> GetCustomRichText([FromRoute] int customRichTextTypeID)

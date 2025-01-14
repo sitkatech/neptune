@@ -2702,72 +2702,6 @@
         },
         "additionalProperties": false
       },
-      "FileResourceDto": {
-        "type": "object",
-        "properties": {
-          "FileResourceID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "FileResourceMimeType": {
-            "$ref": "#/components/schemas/FileResourceMimeTypeSimpleDto"
-          },
-          "OriginalBaseFilename": {
-            "type": "string",
-            "nullable": true
-          },
-          "OriginalFileExtension": {
-            "type": "string",
-            "nullable": true
-          },
-          "FileResourceGUID": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "CreatePerson": {
-            "$ref": "#/components/schemas/PersonDto"
-          },
-          "CreateDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "ContentLength": {
-            "type": "integer",
-            "format": "int64"
-          }
-        },
-        "additionalProperties": false
-      },
-      "FileResourceMimeTypeSimpleDto": {
-        "type": "object",
-        "properties": {
-          "FileResourceMimeTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "FileResourceMimeTypeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "FileResourceMimeTypeDisplayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "FileResourceMimeTypeContentTypeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "FileResourceMimeTypeIconSmallFilename": {
-            "type": "string",
-            "nullable": true
-          },
-          "FileResourceMimeTypeIconNormalFilename": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "FileResourceSimpleDto": {
         "type": "object",
         "properties": {
@@ -3095,45 +3029,6 @@
         ],
         "type": "string"
       },
-      "OrganizationDto": {
-        "type": "object",
-        "properties": {
-          "OrganizationID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "OrganizationGuid": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "OrganizationName": {
-            "type": "string",
-            "nullable": true
-          },
-          "OrganizationShortName": {
-            "type": "string",
-            "nullable": true
-          },
-          "PrimaryContactPerson": {
-            "$ref": "#/components/schemas/PersonDto"
-          },
-          "IsActive": {
-            "type": "boolean"
-          },
-          "OrganizationUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "LogoFileResource": {
-            "$ref": "#/components/schemas/FileResourceDto"
-          },
-          "OrganizationType": {
-            "$ref": "#/components/schemas/OrganizationTypeSimpleDto"
-          }
-        },
-        "additionalProperties": false
-      },
       "OrganizationSimpleDto": {
         "type": "object",
         "properties": {
@@ -3174,31 +3069,6 @@
           "OrganizationTypeID": {
             "type": "integer",
             "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "OrganizationTypeSimpleDto": {
-        "type": "object",
-        "properties": {
-          "OrganizationTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "OrganizationTypeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "OrganizationTypeAbbreviation": {
-            "type": "string",
-            "nullable": true
-          },
-          "LegendColor": {
-            "type": "string",
-            "nullable": true
-          },
-          "IsDefaultOrganizationType": {
-            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3267,8 +3137,9 @@
             "type": "string",
             "nullable": true
           },
-          "Role": {
-            "$ref": "#/components/schemas/RoleSimpleDto"
+          "RoleID": {
+            "type": "integer",
+            "format": "int32"
           },
           "CreateDate": {
             "type": "string",
@@ -3287,8 +3158,9 @@
           "IsActive": {
             "type": "boolean"
           },
-          "Organization": {
-            "$ref": "#/components/schemas/OrganizationDto"
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
           },
           "ReceiveSupportEmails": {
             "type": "boolean"

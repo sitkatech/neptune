@@ -89,7 +89,7 @@ namespace Neptune.EFModels.Entities
                 .ToList();
         }
 
-        public static async Task<ProjectDto> CreateNew(NeptuneDbContext dbContext, ProjectUpsertDto projectUpsertDto, Person person, int personID)
+        public static async Task<ProjectDto> CreateNew(NeptuneDbContext dbContext, ProjectUpsertDto projectUpsertDto, int personID)
         {
             var project = new Project()
             {

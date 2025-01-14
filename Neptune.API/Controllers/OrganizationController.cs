@@ -12,9 +12,8 @@ namespace Neptune.API.Controllers
         NeptuneDbContext dbContext,
         ILogger<OrganizationController> logger,
         KeystoneService keystoneService,
-        IOptions<NeptuneConfiguration> neptuneConfiguration,
-        Person callingUser)
-        : SitkaController<OrganizationController>(dbContext, logger, keystoneService, neptuneConfiguration, callingUser)
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<OrganizationController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [HttpGet("organizations")]
         public ActionResult<List<OrganizationSimpleDto>> List()

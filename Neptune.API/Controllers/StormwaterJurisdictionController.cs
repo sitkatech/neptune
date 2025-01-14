@@ -14,10 +14,8 @@ namespace Neptune.API.Controllers
         NeptuneDbContext dbContext,
         ILogger<StormwaterJurisdictionController> logger,
         KeystoneService keystoneService,
-        IOptions<NeptuneConfiguration> neptuneConfiguration,
-        Person callingUser)
-        : SitkaController<StormwaterJurisdictionController>(dbContext, logger, keystoneService, neptuneConfiguration,
-            callingUser)
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<StormwaterJurisdictionController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [HttpGet("jurisdictions")]
         [JurisdictionEditFeature]

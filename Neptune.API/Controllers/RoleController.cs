@@ -14,9 +14,8 @@ namespace Neptune.API.Controllers
         NeptuneDbContext dbContext,
         ILogger<RoleController> logger,
         KeystoneService keystoneService,
-        IOptions<NeptuneConfiguration> neptuneConfiguration,
-        Person callingUser)
-        : SitkaController<RoleController>(dbContext, logger, keystoneService, neptuneConfiguration, callingUser)
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<RoleController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [HttpGet("roles")]
         [AdminFeature]

@@ -9,8 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { RoleSimpleDto } from '././role-simple-dto';
-import { OrganizationDto } from '././organization-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class PersonDto { 
@@ -20,12 +18,12 @@ export class PersonDto {
     LastName?: string;
     Email?: string;
     Phone?: string;
-    Role?: RoleSimpleDto;
+    RoleID?: number;
     CreateDate?: string;
     UpdateDate?: string;
     LastActivityDate?: string;
     IsActive?: boolean;
-    Organization?: OrganizationDto;
+    OrganizationID?: number;
     ReceiveSupportEmails?: boolean;
     LoginName?: string;
     ReceiveRSBRevisionRequestEmails?: boolean;
@@ -43,12 +41,12 @@ export interface PersonDtoForm {
     LastName?: FormControl<string>;
     Email?: FormControl<string>;
     Phone?: FormControl<string>;
-    Role?: FormControl<RoleSimpleDto>;
+    RoleID?: FormControl<number>;
     CreateDate?: FormControl<string>;
     UpdateDate?: FormControl<string>;
     LastActivityDate?: FormControl<string>;
     IsActive?: FormControl<boolean>;
-    Organization?: FormControl<OrganizationDto>;
+    OrganizationID?: FormControl<number>;
     ReceiveSupportEmails?: FormControl<boolean>;
     LoginName?: FormControl<string>;
     ReceiveRSBRevisionRequestEmails?: FormControl<boolean>;
@@ -117,7 +115,7 @@ export class PersonDtoFormControls {
             ],
         }
     );
-    public static Role = (value: FormControlState<RoleSimpleDto> | RoleSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<RoleSimpleDto>(
+    public static RoleID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
@@ -167,7 +165,7 @@ export class PersonDtoFormControls {
             ],
         }
     );
-    public static Organization = (value: FormControlState<OrganizationDto> | OrganizationDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<OrganizationDto>(
+    public static OrganizationID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

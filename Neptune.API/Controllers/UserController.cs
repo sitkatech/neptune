@@ -9,8 +9,6 @@ using System.Collections.Generic;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Neptune.Models.DataTransferObjects;
-using Microsoft.Extensions.DependencyInjection;
-using Neptune.Common;
 using Neptune.Common.Email;
 using Neptune.Models.DataTransferObjects.Person;
 
@@ -22,9 +20,8 @@ namespace Neptune.API.Controllers
         ILogger<UserController> logger,
         KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration,
-        SitkaSmtpClientService sitkaSmtpClientService,
-        Person callingUser)
-        : SitkaController<UserController>(dbContext, logger, keystoneService, neptuneConfiguration, callingUser)
+        SitkaSmtpClientService sitkaSmtpClientService)
+        : SitkaController<UserController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [HttpPost("users")]
         [LoggedInUnclassifiedFeature]

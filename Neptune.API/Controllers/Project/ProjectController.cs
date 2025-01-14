@@ -28,9 +28,8 @@ namespace Neptune.API.Controllers
         ILogger<ProjectController> logger,
         KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration,
-        AzureBlobStorageService azureBlobStorageService,
-        Person callingUser)
-        : SitkaController<ProjectController>(dbContext, logger, keystoneService, neptuneConfiguration, callingUser)
+        AzureBlobStorageService azureBlobStorageService)
+        : SitkaController<ProjectController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [HttpGet]
         [JurisdictionEditFeature]
@@ -55,7 +54,7 @@ namespace Neptune.API.Controllers
                 ModelState.AddModelError("ProjectName", $"A project with the name {projectCreateDto.ProjectName} already exists");
                 return BadRequest(ModelState);
             }
-            var project = await Projects.CreateNew(DbContext, projectCreateDto, CallingUser, CallingUser.PersonID);
+            var project = await Projects.CreateNew(DbContext, projectCreateDto, CallingUser.PersonID);
             return Ok(project);
         }
 

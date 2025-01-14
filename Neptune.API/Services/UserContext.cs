@@ -2,12 +2,13 @@
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.API.Services
 {
     public static class UserContext
     {
-        public static Person GetUserFromHttpContext(NeptuneDbContext dbContext, HttpContext httpContext)
+        public static PersonDto GetUserFromHttpContext(NeptuneDbContext dbContext, HttpContext httpContext)
         {
 
             var claimsPrincipal = httpContext.User;
@@ -17,7 +18,7 @@ namespace Neptune.API.Services
             }
 
             var userGuid = Guid.Parse(claimsPrincipal.Claims.Single(c => c.Type == "sub").Value);
-            var keystoneUser = People.GetByGuid(dbContext, userGuid);
+            var keystoneUser = People.GetByGuidAsDto(dbContext, userGuid);
 
             return keystoneUser;
         }
