@@ -1101,6 +1101,20 @@ namespace Neptune.WebMvc.Controllers
 
         [HttpGet]
         [NeptuneViewFeature]
+        public ViewResult DownloadBMPsToGIS()
+        {
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.ExportBMPInventoryToGIS);
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson);
+            var treatmentBmpsCurrentUserCanSee = CurrentPerson.GetTreatmentBmpsPersonCanView(_dbContext, stormwaterJurisdictionIDsPersonCanView);
+            var treatmentBmpsInExportCount = treatmentBmpsCurrentUserCanSee.Count;
+            var featureClassesInExportCount =
+                treatmentBmpsCurrentUserCanSee.Select(x => x.TreatmentBMPTypeID).Distinct().Count() + 1;
+            var viewData = new DownloadBMPsToGISViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, treatmentBmpsInExportCount, featureClassesInExportCount);
+            return RazorView<DownloadBMPsToGIS, DownloadBMPsToGISViewData>(viewData);
+        }
+
+        [HttpGet]
+        [NeptuneViewFeature]
         public async Task<FileResult> BMPInventoryExport()
         {
             var treatmentBMPs = _dbContext.vTreatmentBMPGdbExports

@@ -99,8 +99,8 @@
                     @if (ViewDataTyped.HasManagePermission)
                     {
                         <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                        <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune" disabled>@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     }
+                    <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     <h3>Delineations</h3>
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.DelineationPage);
