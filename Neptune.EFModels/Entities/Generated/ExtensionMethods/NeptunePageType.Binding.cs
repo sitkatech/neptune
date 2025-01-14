@@ -79,6 +79,21 @@ namespace Neptune.EFModels.Entities
         public static readonly NeptunePageTypeUploadWQMPs UploadWQMPs = NeptunePageTypeUploadWQMPs.Instance;
         public static readonly NeptunePageTypeUploadSimplifiedBMPs UploadSimplifiedBMPs = NeptunePageTypeUploadSimplifiedBMPs.Instance;
         public static readonly NeptunePageTypeUploadOVTAs UploadOVTAs = NeptunePageTypeUploadOVTAs.Instance;
+        public static readonly NeptunePageTypeWQMPBoundaryFromAPNList WQMPBoundaryFromAPNList = NeptunePageTypeWQMPBoundaryFromAPNList.Instance;
+        public static readonly NeptunePageTypeBMPDataHub BMPDataHub = NeptunePageTypeBMPDataHub.Instance;
+        public static readonly NeptunePageTypeDelineationDataHub DelineationDataHub = NeptunePageTypeDelineationDataHub.Instance;
+        public static readonly NeptunePageTypeFieldVisitDataHub FieldVisitDataHub = NeptunePageTypeFieldVisitDataHub.Instance;
+        public static readonly NeptunePageTypeWQMPDataHub WQMPDataHub = NeptunePageTypeWQMPDataHub.Instance;
+        public static readonly NeptunePageTypeSimplifiedBMPsDataHub SimplifiedBMPsDataHub = NeptunePageTypeSimplifiedBMPsDataHub.Instance;
+        public static readonly NeptunePageTypeWQMPLocationsDataHub WQMPLocationsDataHub = NeptunePageTypeWQMPLocationsDataHub.Instance;
+        public static readonly NeptunePageTypeAssessmentAreasDataHub AssessmentAreasDataHub = NeptunePageTypeAssessmentAreasDataHub.Instance;
+        public static readonly NeptunePageTypeOVTADataHub OVTADataHub = NeptunePageTypeOVTADataHub.Instance;
+        public static readonly NeptunePageTypeLandUseBlockDataHub LandUseBlockDataHub = NeptunePageTypeLandUseBlockDataHub.Instance;
+        public static readonly NeptunePageTypeRegionalSubbasinsDataHub RegionalSubbasinsDataHub = NeptunePageTypeRegionalSubbasinsDataHub.Instance;
+        public static readonly NeptunePageTypeLandUseStatisticsDataHub LandUseStatisticsDataHub = NeptunePageTypeLandUseStatisticsDataHub.Instance;
+        public static readonly NeptunePageTypeModelBasinsDataHub ModelBasinsDataHub = NeptunePageTypeModelBasinsDataHub.Instance;
+        public static readonly NeptunePageTypePrecipitationZonesDataHub PrecipitationZonesDataHub = NeptunePageTypePrecipitationZonesDataHub.Instance;
+        public static readonly NeptunePageTypeParcelUploadDataHub ParcelUploadDataHub = NeptunePageTypeParcelUploadDataHub.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly List<NeptunePageTypeSimpleDto> AllAsSimpleDto;
@@ -90,8 +105,8 @@ namespace Neptune.EFModels.Entities
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics, RegionalSubbasins, DelineationReconciliationReport, ViewTreatmentBMPModelingAttributes, UploadTreatmentBMPs, AboutModelingBMPPerformance, BulkUploadFieldVisits, HippocampHomePage, HippocampTraining, HippocampLabelsAndDefinitionsList, HippocampAbout, HippocampProjectsList, HippocampProjectInstructions, HippocampProjectBasics, HippocampProjectAttachments, HippocampTreatmentBMPs, HippocampDelineations, HippocampModeledPerformance, HippocampReview, HippocampPlanningMap, OCTAM2Tier2GrantProgramMetrics, OCTAM2Tier2GrantProgramDashboard, EditWQMPBoundary, UploadWQMPs, UploadSimplifiedBMPs, UploadOVTAs };
-            AllAsSimpleDto = new List<NeptunePageTypeSimpleDto> { HomePage.AsSimpleDto(), About.AsSimpleDto(), OrganizationsList.AsSimpleDto(), HomeMapInfo.AsSimpleDto(), HomeAdditionalInfo.AsSimpleDto(), TreatmentBMP.AsSimpleDto(), TreatmentBMPType.AsSimpleDto(), Jurisdiction.AsSimpleDto(), Assessment.AsSimpleDto(), ManageObservationTypesList.AsSimpleDto(), ManageTreatmentBMPTypesList.AsSimpleDto(), ManageObservationTypeInstructions.AsSimpleDto(), ManageObservationTypeObservationInstructions.AsSimpleDto(), ManageObservationTypeLabelsAndUnitsInstructions.AsSimpleDto(), ManageTreatmentBMPTypeInstructions.AsSimpleDto(), ManageCustomAttributeTypeInstructions.AsSimpleDto(), ManageCustomAttributeInstructions.AsSimpleDto(), ManageCustomAttributeTypesList.AsSimpleDto(), Legal.AsSimpleDto(), FundingSourcesList.AsSimpleDto(), FindABMP.AsSimpleDto(), LaunchPad.AsSimpleDto(), FieldRecords.AsSimpleDto(), RequestSupport.AsSimpleDto(), InviteUser.AsSimpleDto(), WaterQualityMaintenancePlan.AsSimpleDto(), ParcelList.AsSimpleDto(), Training.AsSimpleDto(), ManagerDashboard.AsSimpleDto(), WaterQualityMaintenancePlanOandMVerifications.AsSimpleDto(), ModelingHomePage.AsSimpleDto(), TrashHomePage.AsSimpleDto(), OVTAInstructions.AsSimpleDto(), OVTAIndex.AsSimpleDto(), TrashModuleProgramOverview.AsSimpleDto(), DelineationMap.AsSimpleDto(), BulkUploadRequest.AsSimpleDto(), TreatmentBMPAssessment.AsSimpleDto(), EditOVTAArea.AsSimpleDto(), LandUseBlock.AsSimpleDto(), ExportAssessmentGeospatialData.AsSimpleDto(), HRUCharacteristics.AsSimpleDto(), RegionalSubbasins.AsSimpleDto(), DelineationReconciliationReport.AsSimpleDto(), ViewTreatmentBMPModelingAttributes.AsSimpleDto(), UploadTreatmentBMPs.AsSimpleDto(), AboutModelingBMPPerformance.AsSimpleDto(), BulkUploadFieldVisits.AsSimpleDto(), HippocampHomePage.AsSimpleDto(), HippocampTraining.AsSimpleDto(), HippocampLabelsAndDefinitionsList.AsSimpleDto(), HippocampAbout.AsSimpleDto(), HippocampProjectsList.AsSimpleDto(), HippocampProjectInstructions.AsSimpleDto(), HippocampProjectBasics.AsSimpleDto(), HippocampProjectAttachments.AsSimpleDto(), HippocampTreatmentBMPs.AsSimpleDto(), HippocampDelineations.AsSimpleDto(), HippocampModeledPerformance.AsSimpleDto(), HippocampReview.AsSimpleDto(), HippocampPlanningMap.AsSimpleDto(), OCTAM2Tier2GrantProgramMetrics.AsSimpleDto(), OCTAM2Tier2GrantProgramDashboard.AsSimpleDto(), EditWQMPBoundary.AsSimpleDto(), UploadWQMPs.AsSimpleDto(), UploadSimplifiedBMPs.AsSimpleDto(), UploadOVTAs.AsSimpleDto() };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview, DelineationMap, BulkUploadRequest, TreatmentBMPAssessment, EditOVTAArea, LandUseBlock, ExportAssessmentGeospatialData, HRUCharacteristics, RegionalSubbasins, DelineationReconciliationReport, ViewTreatmentBMPModelingAttributes, UploadTreatmentBMPs, AboutModelingBMPPerformance, BulkUploadFieldVisits, HippocampHomePage, HippocampTraining, HippocampLabelsAndDefinitionsList, HippocampAbout, HippocampProjectsList, HippocampProjectInstructions, HippocampProjectBasics, HippocampProjectAttachments, HippocampTreatmentBMPs, HippocampDelineations, HippocampModeledPerformance, HippocampReview, HippocampPlanningMap, OCTAM2Tier2GrantProgramMetrics, OCTAM2Tier2GrantProgramDashboard, EditWQMPBoundary, UploadWQMPs, UploadSimplifiedBMPs, UploadOVTAs, WQMPBoundaryFromAPNList, BMPDataHub, DelineationDataHub, FieldVisitDataHub, WQMPDataHub, SimplifiedBMPsDataHub, WQMPLocationsDataHub, AssessmentAreasDataHub, OVTADataHub, LandUseBlockDataHub, RegionalSubbasinsDataHub, LandUseStatisticsDataHub, ModelBasinsDataHub, PrecipitationZonesDataHub, ParcelUploadDataHub };
+            AllAsSimpleDto = new List<NeptunePageTypeSimpleDto> { HomePage.AsSimpleDto(), About.AsSimpleDto(), OrganizationsList.AsSimpleDto(), HomeMapInfo.AsSimpleDto(), HomeAdditionalInfo.AsSimpleDto(), TreatmentBMP.AsSimpleDto(), TreatmentBMPType.AsSimpleDto(), Jurisdiction.AsSimpleDto(), Assessment.AsSimpleDto(), ManageObservationTypesList.AsSimpleDto(), ManageTreatmentBMPTypesList.AsSimpleDto(), ManageObservationTypeInstructions.AsSimpleDto(), ManageObservationTypeObservationInstructions.AsSimpleDto(), ManageObservationTypeLabelsAndUnitsInstructions.AsSimpleDto(), ManageTreatmentBMPTypeInstructions.AsSimpleDto(), ManageCustomAttributeTypeInstructions.AsSimpleDto(), ManageCustomAttributeInstructions.AsSimpleDto(), ManageCustomAttributeTypesList.AsSimpleDto(), Legal.AsSimpleDto(), FundingSourcesList.AsSimpleDto(), FindABMP.AsSimpleDto(), LaunchPad.AsSimpleDto(), FieldRecords.AsSimpleDto(), RequestSupport.AsSimpleDto(), InviteUser.AsSimpleDto(), WaterQualityMaintenancePlan.AsSimpleDto(), ParcelList.AsSimpleDto(), Training.AsSimpleDto(), ManagerDashboard.AsSimpleDto(), WaterQualityMaintenancePlanOandMVerifications.AsSimpleDto(), ModelingHomePage.AsSimpleDto(), TrashHomePage.AsSimpleDto(), OVTAInstructions.AsSimpleDto(), OVTAIndex.AsSimpleDto(), TrashModuleProgramOverview.AsSimpleDto(), DelineationMap.AsSimpleDto(), BulkUploadRequest.AsSimpleDto(), TreatmentBMPAssessment.AsSimpleDto(), EditOVTAArea.AsSimpleDto(), LandUseBlock.AsSimpleDto(), ExportAssessmentGeospatialData.AsSimpleDto(), HRUCharacteristics.AsSimpleDto(), RegionalSubbasins.AsSimpleDto(), DelineationReconciliationReport.AsSimpleDto(), ViewTreatmentBMPModelingAttributes.AsSimpleDto(), UploadTreatmentBMPs.AsSimpleDto(), AboutModelingBMPPerformance.AsSimpleDto(), BulkUploadFieldVisits.AsSimpleDto(), HippocampHomePage.AsSimpleDto(), HippocampTraining.AsSimpleDto(), HippocampLabelsAndDefinitionsList.AsSimpleDto(), HippocampAbout.AsSimpleDto(), HippocampProjectsList.AsSimpleDto(), HippocampProjectInstructions.AsSimpleDto(), HippocampProjectBasics.AsSimpleDto(), HippocampProjectAttachments.AsSimpleDto(), HippocampTreatmentBMPs.AsSimpleDto(), HippocampDelineations.AsSimpleDto(), HippocampModeledPerformance.AsSimpleDto(), HippocampReview.AsSimpleDto(), HippocampPlanningMap.AsSimpleDto(), OCTAM2Tier2GrantProgramMetrics.AsSimpleDto(), OCTAM2Tier2GrantProgramDashboard.AsSimpleDto(), EditWQMPBoundary.AsSimpleDto(), UploadWQMPs.AsSimpleDto(), UploadSimplifiedBMPs.AsSimpleDto(), UploadOVTAs.AsSimpleDto(), WQMPBoundaryFromAPNList.AsSimpleDto(), BMPDataHub.AsSimpleDto(), DelineationDataHub.AsSimpleDto(), FieldVisitDataHub.AsSimpleDto(), WQMPDataHub.AsSimpleDto(), SimplifiedBMPsDataHub.AsSimpleDto(), WQMPLocationsDataHub.AsSimpleDto(), AssessmentAreasDataHub.AsSimpleDto(), OVTADataHub.AsSimpleDto(), LandUseBlockDataHub.AsSimpleDto(), RegionalSubbasinsDataHub.AsSimpleDto(), LandUseStatisticsDataHub.AsSimpleDto(), ModelBasinsDataHub.AsSimpleDto(), PrecipitationZonesDataHub.AsSimpleDto(), ParcelUploadDataHub.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
             AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, NeptunePageTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.NeptunePageTypeID));
         }
@@ -168,10 +183,16 @@ namespace Neptune.EFModels.Entities
                     return AboutModelingBMPPerformance;
                 case NeptunePageTypeEnum.Assessment:
                     return Assessment;
+                case NeptunePageTypeEnum.AssessmentAreasDataHub:
+                    return AssessmentAreasDataHub;
+                case NeptunePageTypeEnum.BMPDataHub:
+                    return BMPDataHub;
                 case NeptunePageTypeEnum.BulkUploadFieldVisits:
                     return BulkUploadFieldVisits;
                 case NeptunePageTypeEnum.BulkUploadRequest:
                     return BulkUploadRequest;
+                case NeptunePageTypeEnum.DelineationDataHub:
+                    return DelineationDataHub;
                 case NeptunePageTypeEnum.DelineationMap:
                     return DelineationMap;
                 case NeptunePageTypeEnum.DelineationReconciliationReport:
@@ -184,6 +205,8 @@ namespace Neptune.EFModels.Entities
                     return ExportAssessmentGeospatialData;
                 case NeptunePageTypeEnum.FieldRecords:
                     return FieldRecords;
+                case NeptunePageTypeEnum.FieldVisitDataHub:
+                    return FieldVisitDataHub;
                 case NeptunePageTypeEnum.FindABMP:
                     return FindABMP;
                 case NeptunePageTypeEnum.FundingSourcesList:
@@ -228,6 +251,10 @@ namespace Neptune.EFModels.Entities
                     return Jurisdiction;
                 case NeptunePageTypeEnum.LandUseBlock:
                     return LandUseBlock;
+                case NeptunePageTypeEnum.LandUseBlockDataHub:
+                    return LandUseBlockDataHub;
+                case NeptunePageTypeEnum.LandUseStatisticsDataHub:
+                    return LandUseStatisticsDataHub;
                 case NeptunePageTypeEnum.LaunchPad:
                     return LaunchPad;
                 case NeptunePageTypeEnum.Legal:
@@ -252,6 +279,8 @@ namespace Neptune.EFModels.Entities
                     return ManageTreatmentBMPTypeInstructions;
                 case NeptunePageTypeEnum.ManageTreatmentBMPTypesList:
                     return ManageTreatmentBMPTypesList;
+                case NeptunePageTypeEnum.ModelBasinsDataHub:
+                    return ModelBasinsDataHub;
                 case NeptunePageTypeEnum.ModelingHomePage:
                     return ModelingHomePage;
                 case NeptunePageTypeEnum.OCTAM2Tier2GrantProgramDashboard:
@@ -260,16 +289,26 @@ namespace Neptune.EFModels.Entities
                     return OCTAM2Tier2GrantProgramMetrics;
                 case NeptunePageTypeEnum.OrganizationsList:
                     return OrganizationsList;
+                case NeptunePageTypeEnum.OVTADataHub:
+                    return OVTADataHub;
                 case NeptunePageTypeEnum.OVTAIndex:
                     return OVTAIndex;
                 case NeptunePageTypeEnum.OVTAInstructions:
                     return OVTAInstructions;
                 case NeptunePageTypeEnum.ParcelList:
                     return ParcelList;
+                case NeptunePageTypeEnum.ParcelUploadDataHub:
+                    return ParcelUploadDataHub;
+                case NeptunePageTypeEnum.PrecipitationZonesDataHub:
+                    return PrecipitationZonesDataHub;
                 case NeptunePageTypeEnum.RegionalSubbasins:
                     return RegionalSubbasins;
+                case NeptunePageTypeEnum.RegionalSubbasinsDataHub:
+                    return RegionalSubbasinsDataHub;
                 case NeptunePageTypeEnum.RequestSupport:
                     return RequestSupport;
+                case NeptunePageTypeEnum.SimplifiedBMPsDataHub:
+                    return SimplifiedBMPsDataHub;
                 case NeptunePageTypeEnum.Training:
                     return Training;
                 case NeptunePageTypeEnum.TrashHomePage:
@@ -296,6 +335,12 @@ namespace Neptune.EFModels.Entities
                     return WaterQualityMaintenancePlan;
                 case NeptunePageTypeEnum.WaterQualityMaintenancePlanOandMVerifications:
                     return WaterQualityMaintenancePlanOandMVerifications;
+                case NeptunePageTypeEnum.WQMPBoundaryFromAPNList:
+                    return WQMPBoundaryFromAPNList;
+                case NeptunePageTypeEnum.WQMPDataHub:
+                    return WQMPDataHub;
+                case NeptunePageTypeEnum.WQMPLocationsDataHub:
+                    return WQMPLocationsDataHub;
                 default:
                     throw new ArgumentException("Unable to map Enum: {enumValue}");
             }
@@ -370,7 +415,22 @@ namespace Neptune.EFModels.Entities
         EditWQMPBoundary = 67,
         UploadWQMPs = 68,
         UploadSimplifiedBMPs = 69,
-        UploadOVTAs = 70
+        UploadOVTAs = 70,
+        WQMPBoundaryFromAPNList = 71,
+        BMPDataHub = 72,
+        DelineationDataHub = 73,
+        FieldVisitDataHub = 74,
+        WQMPDataHub = 75,
+        SimplifiedBMPsDataHub = 76,
+        WQMPLocationsDataHub = 77,
+        AssessmentAreasDataHub = 78,
+        OVTADataHub = 79,
+        LandUseBlockDataHub = 80,
+        RegionalSubbasinsDataHub = 81,
+        LandUseStatisticsDataHub = 82,
+        ModelBasinsDataHub = 83,
+        PrecipitationZonesDataHub = 84,
+        ParcelUploadDataHub = 85
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -773,5 +833,95 @@ namespace Neptune.EFModels.Entities
     {
         private NeptunePageTypeUploadOVTAs(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
         public static readonly NeptunePageTypeUploadOVTAs Instance = new NeptunePageTypeUploadOVTAs(70, @"UploadOVTAs", @"Bulk Upload OVTAs");
+    }
+
+    public partial class NeptunePageTypeWQMPBoundaryFromAPNList : NeptunePageType
+    {
+        private NeptunePageTypeWQMPBoundaryFromAPNList(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeWQMPBoundaryFromAPNList Instance = new NeptunePageTypeWQMPBoundaryFromAPNList(71, @"WQMPBoundaryFromAPNList", @"WQMP Boundary from APN List");
+    }
+
+    public partial class NeptunePageTypeBMPDataHub : NeptunePageType
+    {
+        private NeptunePageTypeBMPDataHub(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeBMPDataHub Instance = new NeptunePageTypeBMPDataHub(72, @"BMPDataHub", @"Treatment BMP Data Hub");
+    }
+
+    public partial class NeptunePageTypeDelineationDataHub : NeptunePageType
+    {
+        private NeptunePageTypeDelineationDataHub(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeDelineationDataHub Instance = new NeptunePageTypeDelineationDataHub(73, @"DelineationDataHub", @"Delineation Data Hub");
+    }
+
+    public partial class NeptunePageTypeFieldVisitDataHub : NeptunePageType
+    {
+        private NeptunePageTypeFieldVisitDataHub(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeFieldVisitDataHub Instance = new NeptunePageTypeFieldVisitDataHub(74, @"FieldVisitDataHub", @"Field Visit Data Hub");
+    }
+
+    public partial class NeptunePageTypeWQMPDataHub : NeptunePageType
+    {
+        private NeptunePageTypeWQMPDataHub(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeWQMPDataHub Instance = new NeptunePageTypeWQMPDataHub(75, @"WQMPDataHub", @"WQMP Data Hub");
+    }
+
+    public partial class NeptunePageTypeSimplifiedBMPsDataHub : NeptunePageType
+    {
+        private NeptunePageTypeSimplifiedBMPsDataHub(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeSimplifiedBMPsDataHub Instance = new NeptunePageTypeSimplifiedBMPsDataHub(76, @"SimplifiedBMPsDataHub", @"Simplified BMPs Data Hub");
+    }
+
+    public partial class NeptunePageTypeWQMPLocationsDataHub : NeptunePageType
+    {
+        private NeptunePageTypeWQMPLocationsDataHub(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeWQMPLocationsDataHub Instance = new NeptunePageTypeWQMPLocationsDataHub(77, @"WQMPLocationsDataHub", @"WQMP Locations Data Hub");
+    }
+
+    public partial class NeptunePageTypeAssessmentAreasDataHub : NeptunePageType
+    {
+        private NeptunePageTypeAssessmentAreasDataHub(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeAssessmentAreasDataHub Instance = new NeptunePageTypeAssessmentAreasDataHub(78, @"AssessmentAreasDataHub", @"Assessment Areas Data Hub");
+    }
+
+    public partial class NeptunePageTypeOVTADataHub : NeptunePageType
+    {
+        private NeptunePageTypeOVTADataHub(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeOVTADataHub Instance = new NeptunePageTypeOVTADataHub(79, @"OVTADataHub", @"OVTA Data Hub");
+    }
+
+    public partial class NeptunePageTypeLandUseBlockDataHub : NeptunePageType
+    {
+        private NeptunePageTypeLandUseBlockDataHub(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeLandUseBlockDataHub Instance = new NeptunePageTypeLandUseBlockDataHub(80, @"LandUseBlockDataHub", @"Land Use Block Data Hub");
+    }
+
+    public partial class NeptunePageTypeRegionalSubbasinsDataHub : NeptunePageType
+    {
+        private NeptunePageTypeRegionalSubbasinsDataHub(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeRegionalSubbasinsDataHub Instance = new NeptunePageTypeRegionalSubbasinsDataHub(81, @"RegionalSubbasinsDataHub", @"Regional Subbasins Data Hub");
+    }
+
+    public partial class NeptunePageTypeLandUseStatisticsDataHub : NeptunePageType
+    {
+        private NeptunePageTypeLandUseStatisticsDataHub(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeLandUseStatisticsDataHub Instance = new NeptunePageTypeLandUseStatisticsDataHub(82, @"LandUseStatisticsDataHub", @"Land Use Statistics Data Hub");
+    }
+
+    public partial class NeptunePageTypeModelBasinsDataHub : NeptunePageType
+    {
+        private NeptunePageTypeModelBasinsDataHub(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeModelBasinsDataHub Instance = new NeptunePageTypeModelBasinsDataHub(83, @"ModelBasinsDataHub", @"Model Basins Data Hub");
+    }
+
+    public partial class NeptunePageTypePrecipitationZonesDataHub : NeptunePageType
+    {
+        private NeptunePageTypePrecipitationZonesDataHub(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypePrecipitationZonesDataHub Instance = new NeptunePageTypePrecipitationZonesDataHub(84, @"PrecipitationZonesDataHub", @"Precipitation Zones Data Hub");
+    }
+
+    public partial class NeptunePageTypeParcelUploadDataHub : NeptunePageType
+    {
+        private NeptunePageTypeParcelUploadDataHub(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName) {}
+        public static readonly NeptunePageTypeParcelUploadDataHub Instance = new NeptunePageTypeParcelUploadDataHub(85, @"ParcelUploadDataHub", @"Parcel Upload Data Hub");
     }
 }

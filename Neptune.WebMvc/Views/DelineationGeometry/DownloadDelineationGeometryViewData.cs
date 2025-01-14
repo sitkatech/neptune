@@ -15,7 +15,9 @@ namespace Neptune.WebMvc.Views.DelineationGeometry
 
         public IEnumerable<SelectListItem> StormwaterJurisdictions { get; }
 
-        public DownloadDelineationGeometryViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, string newGisUploadUrl, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions, string gisUploadUrl) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
+        public IEnumerable<SelectListItem> DelineationTypes { get; }
+
+        public DownloadDelineationGeometryViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, string newGisUploadUrl, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions, string gisUploadUrl, IEnumerable<DelineationType> delineationTypes) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             GisDownloadUrl = newGisUploadUrl;
             GisUploadUrl = gisUploadUrl;
@@ -27,6 +29,8 @@ namespace Neptune.WebMvc.Views.DelineationGeometry
             StormwaterJurisdictions =
                 stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
                     .ToSelectList(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
+
+            DelineationTypes = delineationTypes.ToSelectList(x => x.DelineationTypeID.ToString(CultureInfo.InvariantCulture), y => y.DelineationTypeDisplayName);
 
         }
     }
