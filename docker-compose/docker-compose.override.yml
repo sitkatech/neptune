@@ -96,6 +96,7 @@ services:
     environment:
       - ENABLE_JSONP=true
       - CATALINA_OPTS=-DALLOW_ENV_PARAMETRIZATION=true
+      - ENV_PROPERTIES=/opt/geoserver/geoserver-environment.properties
       - STABLE_EXTENSIONS=sqlserver-plugin
       - TOMCAT_EXTRAS=false
       - ROOT_WEBAPP_REDIRECT=true
@@ -106,6 +107,7 @@ services:
       - 127.0.0.1:8780:8080
     volumes:
       - c:/git/sitkatech/neptune/Neptune.GeoServer/data_dir:/opt/geoserver/data_dir
+      - c:/sitka/Neptune/GeoServer/geoserver-environment.properties:/opt/geoserver/geoserver-environment.properties
 
   neptune.celeryworker:
     container_name: nereid_celeryworker

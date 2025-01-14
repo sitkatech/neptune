@@ -22,13 +22,13 @@ import { DelineationDto } from '../model/delineation-dto';
 import { DelineationUpsertDto } from '../model/delineation-upsert-dto';
 import { ProblemDetails } from '../model/problem-details';
 import { ProjectDocumentDto } from '../model/project-document-dto';
-import { ProjectDocumentUpdateDto } from '../model/project-document-update-dto';
 import { ProjectDto } from '../model/project-dto';
 import { ProjectLoadGeneratingResultDto } from '../model/project-load-generating-result-dto';
 import { ProjectLoadReducingResultDto } from '../model/project-load-reducing-result-dto';
 import { ProjectNetworkSolveHistorySimpleDto } from '../model/project-network-solve-history-simple-dto';
-import { ProjectSimpleDto } from '../model/project-simple-dto';
 import { ProjectUpsertDto } from '../model/project-upsert-dto';
+import { ProjectWorkflowProgressDto } from '../model/project-workflow-progress-dto';
+import { TreatmentBMPDisplayDto } from '../model/treatment-bmp-display-dto';
 import { TreatmentBMPHRUCharacteristicsSummarySimpleDto } from '../model/treatment-bmphru-characteristics-summary-simple-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -71,142 +71,6 @@ export class ProjectService {
         return false;
     }
 
-
-    /**
-     * 
-     * 
-     * @param attachmentID 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public projectsAttachmentsAttachmentIDDelete(attachmentID: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public projectsAttachmentsAttachmentIDDelete(attachmentID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public projectsAttachmentsAttachmentIDDelete(attachmentID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public projectsAttachmentsAttachmentIDDelete(attachmentID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (attachmentID === null || attachmentID === undefined) {
-            throw new Error('Required parameter attachmentID was null or undefined when calling projectsAttachmentsAttachmentIDDelete.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.delete<any>(`${this.basePath}/projects/attachments/${encodeURIComponent(String(attachmentID))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param attachmentID 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public projectsAttachmentsAttachmentIDGet(attachmentID: number, observe?: 'body', reportProgress?: boolean): Observable<ProjectDocumentDto>;
-    public projectsAttachmentsAttachmentIDGet(attachmentID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectDocumentDto>>;
-    public projectsAttachmentsAttachmentIDGet(attachmentID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectDocumentDto>>;
-    public projectsAttachmentsAttachmentIDGet(attachmentID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (attachmentID === null || attachmentID === undefined) {
-            throw new Error('Required parameter attachmentID was null or undefined when calling projectsAttachmentsAttachmentIDGet.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'text/plain',
-            'application/json',
-            'text/json',
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<ProjectDocumentDto>(`${this.basePath}/projects/attachments/${encodeURIComponent(String(attachmentID))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param attachmentID 
-     * @param projectDocumentUpdateDto 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public projectsAttachmentsAttachmentIDPut(attachmentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'body', reportProgress?: boolean): Observable<ProjectDocumentDto>;
-    public projectsAttachmentsAttachmentIDPut(attachmentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectDocumentDto>>;
-    public projectsAttachmentsAttachmentIDPut(attachmentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectDocumentDto>>;
-    public projectsAttachmentsAttachmentIDPut(attachmentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (attachmentID === null || attachmentID === undefined) {
-            throw new Error('Required parameter attachmentID was null or undefined when calling projectsAttachmentsAttachmentIDPut.');
-        }
-
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'text/plain',
-            'application/json',
-            'text/json',
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/_*+json',
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.put<ProjectDocumentDto>(`${this.basePath}/projects/attachments/${encodeURIComponent(String(attachmentID))}`,
-            projectDocumentUpdateDto,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
 
     /**
      * 
@@ -324,54 +188,6 @@ export class ProjectService {
     /**
      * 
      * 
-     * @param projectUpsertDto 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'body', reportProgress?: boolean): Observable<ProjectDto>;
-    public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectDto>>;
-    public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectDto>>;
-    public projectsNewPost(projectUpsertDto?: ProjectUpsertDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'text/plain',
-            'application/json',
-            'text/json',
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/_*+json',
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.post<ProjectDto>(`${this.basePath}/projects/new`,
-            projectUpsertDto,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -473,6 +289,54 @@ export class ProjectService {
         return this.httpClient.get(`${this.basePath}/projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download`,
             {
                 responseType: "blob",
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param projectUpsertDto 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public projectsPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'body', reportProgress?: boolean): Observable<ProjectDto>;
+    public projectsPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectDto>>;
+    public projectsPost(projectUpsertDto?: ProjectUpsertDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectDto>>;
+    public projectsPost(projectUpsertDto?: ProjectUpsertDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/_*+json',
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<ProjectDto>(`${this.basePath}/projects`,
+            projectUpsertDto,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -664,13 +528,13 @@ export class ProjectService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectsProjectIDDeleteDelete(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public projectsProjectIDDeleteDelete(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public projectsProjectIDDeleteDelete(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public projectsProjectIDDeleteDelete(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public projectsProjectIDDelete(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public projectsProjectIDDelete(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public projectsProjectIDDelete(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public projectsProjectIDDelete(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (projectID === null || projectID === undefined) {
-            throw new Error('Required parameter projectID was null or undefined when calling projectsProjectIDDeleteDelete.');
+            throw new Error('Required parameter projectID was null or undefined when calling projectsProjectIDDelete.');
         }
 
         let headers = this.defaultHeaders;
@@ -687,7 +551,7 @@ export class ProjectService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.delete<any>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/delete`,
+        return this.httpClient.delete<any>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -797,9 +661,9 @@ export class ProjectService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectsProjectIDGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<ProjectSimpleDto>;
-    public projectsProjectIDGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectSimpleDto>>;
-    public projectsProjectIDGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectSimpleDto>>;
+    public projectsProjectIDGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<ProjectDto>;
+    public projectsProjectIDGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectDto>>;
+    public projectsProjectIDGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectDto>>;
     public projectsProjectIDGet(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (projectID === null || projectID === undefined) {
@@ -823,7 +687,7 @@ export class ProjectService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ProjectSimpleDto>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}`,
+        return this.httpClient.get<ProjectDto>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -967,6 +831,49 @@ export class ProjectService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    public projectsProjectIDProgressGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<ProjectWorkflowProgressDto>;
+    public projectsProjectIDProgressGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProjectWorkflowProgressDto>>;
+    public projectsProjectIDProgressGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProjectWorkflowProgressDto>>;
+    public projectsProjectIDProgressGet(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (projectID === null || projectID === undefined) {
+            throw new Error('Required parameter projectID was null or undefined when calling projectsProjectIDProgressGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<ProjectWorkflowProgressDto>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/progress`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param projectID 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
     public projectsProjectIDProjectNetworkSolveHistoriesGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<ProjectNetworkSolveHistorySimpleDto>>;
     public projectsProjectIDProjectNetworkSolveHistoriesGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ProjectNetworkSolveHistorySimpleDto>>>;
     public projectsProjectIDProjectNetworkSolveHistoriesGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ProjectNetworkSolveHistorySimpleDto>>>;
@@ -1037,6 +944,49 @@ export class ProjectService {
         ];
 
         return this.httpClient.get<Array<TreatmentBMPHRUCharacteristicsSummarySimpleDto>>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/treatment-bmp-hru-characteristics`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param projectID 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public projectsProjectIDTreatmentBmpsGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPDisplayDto>>;
+    public projectsProjectIDTreatmentBmpsGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPDisplayDto>>>;
+    public projectsProjectIDTreatmentBmpsGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPDisplayDto>>>;
+    public projectsProjectIDTreatmentBmpsGet(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (projectID === null || projectID === undefined) {
+            throw new Error('Required parameter projectID was null or undefined when calling projectsProjectIDTreatmentBmpsGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<TreatmentBMPDisplayDto>>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/treatment-bmps`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

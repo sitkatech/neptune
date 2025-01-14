@@ -10,16 +10,13 @@ using Neptune.Models.DataTransferObjects;
 namespace Neptune.API.Controllers
 {
     [ApiController]
-    public class SystemInfoController : SitkaController<SystemInfoController>
+    public class SystemInfoController(
+        NeptuneDbContext dbContext,
+        ILogger<SystemInfoController> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<SystemInfoController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        private readonly IOptions<NeptuneConfiguration> _neptuneConfiguration;
-
-        public SystemInfoController(NeptuneDbContext dbContext, ILogger<SystemInfoController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration)
-            : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-            _neptuneConfiguration = neptuneConfiguration;
-        }
-
         [Route("/")] // Default Route
         [HttpGet]
         public ActionResult<SystemInfoDto> GetSystemInfo([FromServices] IWebHostEnvironment environment)

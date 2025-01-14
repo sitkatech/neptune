@@ -30,7 +30,7 @@ namespace Neptune.WebMvc.Views.DelineationGeometry
                 stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
                     .ToSelectList(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
 
-            DelineationTypes = delineationTypes.ToSelectList(x => x.DelineationTypeID.ToString(CultureInfo.InvariantCulture), y => y.DelineationTypeDisplayName);
+            DelineationTypes = delineationTypes.OrderByDescending(x => x.DelineationTypeID).ToSelectList(x => x.DelineationTypeID.ToString(CultureInfo.InvariantCulture), y => y.DelineationTypeDisplayName);
 
         }
     }

@@ -1,13 +1,11 @@
-import { ApplicationRef, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { ApplicationRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import * as L from "leaflet";
 import "leaflet.fullscreen";
-import * as esri from "esri-leaflet";
 import { forkJoin } from "rxjs";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
 import { TreatmentBMPModelingAttributeDropdownItemDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
-import { environment } from "src/environments/environment";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
@@ -20,6 +18,13 @@ import { TreatmentBmpsComponent } from "src/app/pages/projects/project-workflow/
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
 import { FieldDefinitionComponent } from "../../field-definition/field-definition.component";
 import { NgIf, NgFor, DecimalPipe } from "@angular/common";
+import { DelineationsLayerComponent } from "../../leaflet/layers/delineations-layer/delineations-layer.component";
+import { JurisdictionsLayerComponent } from "../../leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
+import { RegionalSubbasinsLayerComponent } from "../../leaflet/layers/regional-subbasins-layer/regional-subbasins-layer.component";
+import { StormwaterNetworkLayerComponent } from "../../leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
+import { WqmpsLayerComponent } from "../../leaflet/layers/wqmps-layer/wqmps-layer.component";
+import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../leaflet/neptune-map/neptune-map.component";
+import { InventoriedBMPsLayerComponent } from "../../leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 
 declare var $: any;
 
@@ -29,21 +34,27 @@ declare var $: any;
     templateUrl: "./project-map.component.html",
     styleUrls: ["./project-map.component.scss"],
     standalone: true,
-    imports: [NgIf, NgFor, FieldDefinitionComponent, DecimalPipe],
+    imports: [
+        NgIf,
+        NgFor,
+        FieldDefinitionComponent,
+        DecimalPipe,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        DelineationsLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        StormwaterNetworkLayerComponent,
+        InventoriedBMPsLayerComponent,
+    ],
 })
-export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnInit {
-    @Input("zoomToProjectExtentOnLoad") zoomToProjectExtentOnLoad: boolean = false;
-    @Input("zoomOnSelection") zoomOnSelection: boolean = false;
+export class ProjectMapComponent implements OnInit {
     @Input("projectID") projectID: number;
 
-    public mapID: string = "projectMap";
+    public mapIsReady: boolean = false;
     public visibleTreatmentBMPStyle: string = "treatmentBMP_purple_outline_only";
-    public treatmentBMPs: Array<TreatmentBMPDisplayDto>;
     public selectedTreatmentBMPStyle: string = "treatmentBMP_yellow";
-    public zoomMapToDefaultExtent: boolean = true;
     public mapHeight: string = "750px";
-    public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
-    public onEachFeatureCallback?: (feature, layer) => void;
 
     @Output()
     public afterSetControl: EventEmitter<L.Control.Layers> = new EventEmitter();
@@ -54,13 +65,9 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     @Output()
     public onMapMoveEnd: EventEmitter<L.LeafletEvent> = new EventEmitter();
 
-    public component: any;
     public map: L.Map;
-    public featureLayer: any;
     public layerControl: L.Control.Layers;
-    public tileLayers: { [key: string]: any } = {};
-    public overlayLayers: { [key: string]: any } = {};
-    private boundingBox: BoundingBoxDto;
+    public boundingBox: BoundingBoxDto;
     public selectedListItem: number;
     public selectedListItemDetails: { [key: string]: any } = {};
     public selectedObjectMarker: L.Layer;
@@ -87,12 +94,8 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     public delineations: DelineationUpsertDto[];
 
     public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
-    private inventoriedTreatmentBMPOverlayName =
-        "<span>Inventoried BMP Locations<br /> <img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin:3px'> BMP (Verified)</span>";
-    public inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
 
     constructor(
-        private cdr: ChangeDetectorRef,
         private projectService: ProjectService,
         private treatmentBMPService: TreatmentBMPService,
         private stormwaterJurisdictionService: StormwaterJurisdictionService,
@@ -103,180 +106,37 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
     public ngOnInit(): void {
         if (this.projectID) {
             forkJoin({
-                treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
+                treatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsGet(this.projectID),
                 delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                 boundingBox: this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID),
                 treatmentBMPTypes: this.treatmentBMPService.treatmentBMPTypesGet(),
                 modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBMPModelingAttributeDropdownItemsGet(),
             }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
-                this.treatmentBMPs = treatmentBMPs;
-                this.projectTreatmentBMPs = treatmentBMPs.filter((x) => x.ProjectID == this.projectID);
+                this.projectTreatmentBMPs = treatmentBMPs;
                 this.delineations = delineations;
                 this.boundingBox = boundingBox;
                 this.treatmentBMPTypes = treatmentBMPTypes;
                 this.modelingAttributeDropdownItems = modelingAttributeDropdownItems;
-
-                if (treatmentBMPs != null && treatmentBMPs.length > 0) {
-                    this.cdr.detectChanges();
-                    this.updateMapLayers();
-                }
             });
         }
-
-        this.tileLayers = Object.assign(
-            {},
-            {
-                Aerial: L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Aerial",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-                Street: L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Street",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-                Terrain: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Terrain",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-            },
-            this.tileLayers
-        );
-
-        let regionalSubbasinsWMSOptions = {
-            layers: "OCStormwater:RegionalSubbasins",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-        } as L.WMSOptions;
-
-        let jurisdictionsWMSOptions = {
-            layers: "OCStormwater:Jurisdictions",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-            styles: "jurisdiction_orange",
-        } as L.WMSOptions;
-
-        let WQMPsWMSOptions = {
-            layers: "OCStormwater:WaterQualityManagementPlans",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-        } as L.WMSOptions;
-
-        let verifiedDelineationsWMSOptions = {
-            layers: "OCStormwater:Delineations",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-            cql_filter: "DelineationStatus = 'Verified' AND IsAnalyzedInModelingModule = 1",
-        } as L.WMSOptions;
-
-        this.overlayLayers = Object.assign(
-            {
-                "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    regionalSubbasinsWMSOptions
-                ),
-                "<span>Stormwater Network <br/> <img src='./assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({
-                    url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
-                }),
-                "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    jurisdictionsWMSOptions
-                ),
-                "<img src='./assets/main/map-legend-images/wqmpBoundary.png' style='height:12px; margin-bottom:4px'> WQMPs": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    WQMPsWMSOptions
-                ),
-                "<span>Inventoried BMP Delineations</br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    verifiedDelineationsWMSOptions
-                ),
-            },
-            this.overlayLayers
-        );
 
         this.compileService.configure(this.appRef);
     }
 
-    ngOnDestroy() {
-        this.cdr.detach();
+    public handleMapReady(event: NeptuneMapInitEvent): void {
+        this.map = event.map;
+        this.layerControl = event.layerControl;
+        this.mapIsReady = true;
+
+        this.updateMapLayers();
     }
 
     public updateMapLayers(): void {
-        const mapOptions: L.MapOptions = {
-            // center: [46.8797, -110],
-            // zoom: 6,
-            minZoom: 9,
-            maxZoom: 22,
-            layers: [this.tileLayers["Terrain"]],
-            fullscreenControl: true,
-        } as L.MapOptions;
-        this.map = L.map(this.mapID, mapOptions);
-
-        this.map.on("load", (event: L.LeafletEvent) => {
-            this.afterLoadMap.emit(event);
-        });
-        this.map.on("moveend", (event: L.LeafletEvent) => {
-            this.onMapMoveEnd.emit(event);
-        });
-        this.map.fitBounds(
-            [
-                [this.boundingBox.Bottom, this.boundingBox.Left],
-                [this.boundingBox.Top, this.boundingBox.Right],
-            ],
-            this.defaultFitBoundsOptions
-        );
         this.updateTreatmentBMPsLayer();
-
-        this.setControl();
-        this.registerClickEvents();
-
-        // add inventoried BMPs layer
-        this.addInventoriedBMPsLayer();
 
         if (this.projectTreatmentBMPs.length > 0) {
             this.selectTreatmentBMP(this.projectTreatmentBMPs[0].TreatmentBMPID);
         }
-
-        if (this.zoomToProjectExtentOnLoad) {
-            let tempFeatureGroup = new L.FeatureGroup([this.treatmentBMPsLayer, this.delineationsLayer]);
-            this.map.fitBounds(tempFeatureGroup.getBounds(), { padding: new L.Point(50, 50) });
-        }
-    }
-
-    private addInventoriedBMPsLayer() {
-        const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter((x) => x.ProjectID == null && x.InventoryIsVerified));
-        this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
-            pointToLayer: (feature, latlng) => {
-                return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker });
-            },
-            onEachFeature: (feature, layer) => {
-                layer.bindPopup(
-                    `<b>Name:</b> <a target="_blank" href="${this.ocstBaseUrl()}/TreatmentBMP/Detail/${feature.properties.TreatmentBMPID}">${
-                        feature.properties.TreatmentBMPName
-                    }</a><br>` + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
-                );
-            },
-        });
-
-        var clusteredInventoriedBMPLayer = L.markerClusterGroup({
-            iconCreateFunction: function (cluster) {
-                var childCount = cluster.getChildCount();
-
-                return new L.DivIcon({
-                    html: "<div><span>" + childCount + "</span></div>",
-                    className: "marker-cluster",
-                    iconSize: new L.Point(40, 40),
-                });
-            },
-        });
-        clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
-        this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
     }
 
     public updateTreatmentBMPsLayer() {
@@ -300,10 +160,8 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
                         return;
                     }
                     layer.setStyle(this.delineationSelectedStyle).bringToFront();
-                    if (this.zoomOnSelection) {
-                        this.map.flyToBounds(layer.getBounds(), { padding: new L.Point(50, 50) });
-                        hasFlownToSelectedObject = true;
-                    }
+                    this.map.flyToBounds(layer.getBounds(), { padding: new L.Point(50, 50) });
+                    hasFlownToSelectedObject = true;
                 }
             },
         });
@@ -322,7 +180,7 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
                 return this.selectedTreatmentBMP == null || feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID;
             },
             onEachFeature: (feature, layer) => {
-                if (this.selectedTreatmentBMP != null && this.zoomOnSelection && !hasFlownToSelectedObject) {
+                if (this.selectedTreatmentBMP != null && hasFlownToSelectedObject) {
                     if (layer.feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID) {
                         return;
                     }
@@ -362,24 +220,6 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
 
     private mapDelineationsToGeoJson(delineations: DelineationUpsertDto[]) {
         return delineations.map((x) => JSON.parse(x.Geometry));
-    }
-
-    public setControl(): void {
-        this.layerControl = new L.Control.Layers(this.tileLayers, this.overlayLayers, { collapsed: false }).addTo(this.map);
-        this.afterSetControl.emit(this.layerControl);
-    }
-
-    public registerClickEvents(): void {
-        var leafletControlLayersSelector = ".leaflet-control-layers";
-        var closeButtonClass = "leaflet-control-layers-close";
-
-        var closem = L.DomUtil.create("a", closeButtonClass);
-        closem.innerHTML = "Close";
-        L.DomEvent.on(closem, "click", function () {
-            $(leafletControlLayersSelector).removeClass("leaflet-control-layers-expanded");
-        });
-
-        $(leafletControlLayersSelector).append(closem);
     }
 
     public selectTreatmentBMP(treatmentBMPID: number) {
@@ -448,9 +288,5 @@ export class TreatmentBmpMapEditorAndModelingAttributesComponent implements OnIn
         }
 
         return `${delineation.DelineationArea} ac`;
-    }
-
-    public ocstBaseUrl(): string {
-        return environment.ocStormwaterToolsBaseUrl;
     }
 }

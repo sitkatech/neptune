@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class ProjectStatusSimpleDto { 
     ProjectStatusID?: number;
     ProjectStatusName?: string;
@@ -17,4 +18,43 @@ export class ProjectStatusSimpleDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface ProjectStatusSimpleDtoForm { 
+    ProjectStatusID?: FormControl<number>;
+    ProjectStatusName?: FormControl<string>;
+    ProjectStatusDisplayName?: FormControl<string>;
+}
+
+export class ProjectStatusSimpleDtoFormControls { 
+    public static ProjectStatusID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ProjectStatusName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ProjectStatusDisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

@@ -1,14 +1,62 @@
-<div class="container-fluid text-light my-0 py-0 d-none d-sm-block">
-    <div class="row mt-0">
-        <div class="col-sm homepageJumbotronImage" id="homepageJumbotronImage1"></div>
+<section class="hero">
+    <div class="hero__photo">
+        <img src="/assets/main/home_image.png" />
     </div>
-</div>
+    <div class="hero__actions card">
+        <ng-container *ngIf="currentUser$ | async as currentUser; else notSignedIn">
+            <div class="card-header"><h3 class="card-title">Quick Actions</h3></div>
+            <div class="card-body">
+                <div class="hero__btns">
+                    <div class="hero__btns-wrapper">
+                        <a class="btn btn-primary" routerLink="/projects">View Projects</a>
+                    </div>
+                    <div class="hero__btns-wrapper">
+                        <a class="btn btn-primary" routerLink="/projects/new">Add a Project</a>
+                    </div>
+                    <div class="hero__btns-wrapper">
+                        <a class="btn btn-primary" routerLink="/planning-map">Planning Map</a>
+                    </div>
+                    <div class="hero__btns-wrapper">
+                        <a class="btn btn-primary" href="{{ ocstBaseUrl() }}">OCST Home</a>
+                    </div>
+                    <div class="hero__btns-wrapper">
+                        <a class="btn btn-primary" href="{{ requestSupportUrl() }}">Request Support</a>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
 
-<div class="container mt-4">
-    <div *ngIf="userIsUnassigned()" class="alert alert-info">
+        <ng-template #notSignedIn>
+            <div class="card-header"><h3 class="card-title">Welcome.</h3></div>
+            <div class="card-body">
+                <p class="mb-2">Log in to view your Account. Create an Account if you don't have one yet.</p>
+                <div class="hero__btns">
+                    <div class="hero__btns-wrapper">
+                        <a (click)="login()" class="btn btn-primary">Login</a>
+                    </div>
+                    <div class="hero__btns-wrapper">
+                        <a (click)="createAccount()" class="btn btn-primary">Create Account</a>
+                    </div>
+                </div>
+                <hr />
+                <div>
+                    <small style="font-size: 11px">
+                        Need help logging in? <br />
+                        <a href="{{ forgotPasswordUrl() }}">Forgot Password</a> | <a href="{{ forgotUsernameUrl() }}">Forgot Username</a> |
+                        <a href="{{ keystoneSupportUrl() }}">Request Support</a>
+                    </small>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</section>
+<app-alert-display></app-alert-display>
+<h1 class="text-primary mt-4 mb-4">OCST Planning Module</h1>
+<ng-container *ngIf="currentUser$ | async as currentUser">
+    <div *ngIf="userIsUnassigned(currentUser)" class="alert alert-info">
         <div class="alert-content">
             <i class="fa fa-info"></i>
-            <span *ngIf="userIsOCTAGrantReviewer(); else unassignedUserMessage">
+            <span *ngIf="userIsOCTAGrantReviewer(currentUser); else unassignedUserMessage">
                 Welcome {{ currentUser.FirstName }} {{ currentUser.LastName }}. You have successfully logged in to the OCST Planning Module, and an administrator has granted you
                 read-only access to Review Grant Programs. You may <a href="{{ requestSupportUrl() }}">Request Support</a> to contact the Administrators with any questions or
                 comments.
@@ -22,51 +70,6 @@
             </ng-template>
         </div>
     </div>
+</ng-container>
 
-    <app-alert-display></app-alert-display>
-    <h1 class="text-primary mb-4">OCST Planning Module</h1>
-    <div class="row mt-sm-4">
-        <div class="col-md-4 order-md-12 order-1 col-sm-12">
-            <div class="card">
-                <div class="card-header">
-                    <ng-container *ngIf="!currentUser">Access</ng-container>
-                    <ng-container *ngIf="currentUser">Quick actions</ng-container>
-                </div>
-                <div class="card-body" *ngIf="!currentUser">
-                    <div class="row">
-                        <div class="col">Log in to view your Account. Create an Account if you don't have one yet.</div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col mx-1">
-                            <button (click)="login()" class="btn btn-hippocamp mr-1">Login</button>
-                            <button (click)="createAccount()" class="btn btn-hippocamp ml-1">Create Account</button>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col">
-                            <small style="font-size: 11px">
-                                Need help logging in? <br />
-                                <a href="{{ forgotPasswordUrl() }}">Forgot Password</a> | <a href="{{ forgotUsernameUrl() }}">Forgot Username</a> |
-                                <a href="{{ keystoneSupportUrl() }}">Request Support</a>
-                            </small>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body" *ngIf="currentUser">
-                    <a class="btn btn-hippocamp mb-1 w-100" routerLink="/projects">View Projects</a>
-                    <a class="btn btn-hippocamp mb-1 w-100" routerLink="/projects/new">Add a Project</a>
-                    <a class="btn btn-hippocamp mb-1 w-100" routerLink="/planning-map">Planning Map</a>
-                    <a class="btn btn-hippocamp mb-1 w-100" href="{{ ocstBaseUrl() }}">OCST Home</a>
-                    <a class="btn btn-hippocamp mb-1 w-100" href="{{ requestSupportUrl() }}">Request Support</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-8 order-md-1 order-12 col-sm-12">
-            <div class="mt-2">
-                <custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
-            </div>
-        </div>
-    </div>
-</div>
+<custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>

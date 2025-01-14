@@ -22,7 +22,10 @@ namespace Neptune.WebMvc.Models
 
             var stormwaterJurisdiction = stormwaterJurisdictions.Single();
 
-            var treatmentBMPsWithDelineationInStormwaterJurisdiction = dbContext.Delineations.Include(x => x.TreatmentBMP).Where(x => x.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).ToList();
+            var treatmentBMPsWithDelineationInStormwaterJurisdiction = dbContext.Delineations
+                .Include(x => x.TreatmentBMP).Where(x =>
+                    x.TreatmentBMP.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID &&
+                    x.DelineationTypeID == (int)DelineationTypeEnum.Distributed).ToList();
 
             var treatmentBMPNamesInStormwaterJurisdiction = TreatmentBMPs.GetNonPlanningModuleBMPs(dbContext).Where(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).Select(x => x.TreatmentBMPName).ToList();
 

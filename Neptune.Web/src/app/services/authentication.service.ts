@@ -167,7 +167,7 @@ export class AuthenticationService {
     }
 
     public isUserAnAdministrator(user: PersonDto): boolean {
-        const role = user && user.Role ? user.Role.RoleID : null;
+        const role = user ? user.RoleID : null;
         return role === RoleEnum.Admin || role === RoleEnum.SitkaAdmin;
     }
 
@@ -183,7 +183,7 @@ export class AuthenticationService {
     }
 
     public isUserUnassigned(user: PersonDto): boolean {
-        const role = user && user.Role ? user.Role.RoleID : null;
+        const role = user ? user.RoleID : null;
         return role === RoleEnum.Unassigned;
     }
 
@@ -195,7 +195,7 @@ export class AuthenticationService {
         if (roleIDs.length === 0) {
             return false;
         }
-        const roleID = this.currentUser && this.currentUser.Role ? this.currentUser.Role.RoleID : null;
+        const roleID = this.currentUser ? this.currentUser.RoleID : null;
         return roleIDs.includes(roleID);
     }
 }

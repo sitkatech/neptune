@@ -8,12 +8,12 @@ public class PersonDto
     public string LastName { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
-    public RoleSimpleDto Role { get; set; }
+    public int RoleID { get; set; }
     public DateTime CreateDate { get; set; }
     public DateTime? UpdateDate { get; set; }
     public DateTime? LastActivityDate { get; set; }
     public bool IsActive { get; set; }
-    public OrganizationDto Organization { get; set; }
+    public int OrganizationID { get; set; }
     public bool ReceiveSupportEmails { get; set; }
     public string LoginName { get; set; }
     public bool ReceiveRSBRevisionRequestEmails { get; set; }

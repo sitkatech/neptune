@@ -5,24 +5,23 @@
             <span *ngIf="!currentUserIsAdmin()">Users</span>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
-            {{user?.FullName ||  ((user?.FirstName || user?.LastName) ? (user?.FirstName + ' ' + user?.LastName) : null)}}
+            {{ user?.FullName || (user?.FirstName || user?.LastName ? user?.FirstName + " " + user?.LastName : null) }}
         </li>
     </ol>
 </nav>
 <div class="container mt-sm-4" *ngIf="user">
-    <div style="margin: 1rem 0 1rem 0;" *ngIf="user.UserGuid === null">
-        <a class="float-right btn btn-hippocamp btn-sm mr-3" routerLink="/invite-user/{{user.UserID}}">Invite User</a>
-    </div>  
+    <div style="margin: 1rem 0 1rem 0" *ngIf="user.UserGuid === null">
+        <a class="float-right btn btn-primary btn-sm mr-3" routerLink="/invite-user/{{ user.UserID }}">Invite User</a>
+    </div>
     <h2 class="d-inline-block">
-        {{user?.FullName ||  ((user?.FirstName || user?.LastName) ? (user?.FirstName + ' ' + user?.LastName) : null)}}
+        {{ user?.FullName || (user?.FirstName || user?.LastName ? user?.FirstName + " " + user?.LastName : null) }}
     </h2>
     <app-alert-display></app-alert-display>
     <div class="row mt-4">
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-header">
-                    <a *ngIf="currentUserIsAdmin()" class="btn btn-hippocamp btn-sm float-right"
-                        routerLink="/users/{{user?.UserID}}/edit">
+                    <a *ngIf="currentUserIsAdmin()" class="btn btn-primary btn-sm float-right" routerLink="/users/{{ user?.UserID }}/edit">
                         <span class="fas fa-edit"></span> Edit
                     </a>
                     Basics
@@ -31,49 +30,49 @@
                     <dl class="row">
                         <dt class="text-sm-right col-sm-5 col-xs-12">Username</dt>
                         <dd class="col-sm-7 col-xs-12">
-                            {{user?.LoginName}}
+                            {{ user?.LoginName }}
                             <em *ngIf="!user?.LoginName" class="text-muted">Not Available</em>
                         </dd>
 
                         <dt class="text-sm-right col-sm-5 col-xs-12">First Name</dt>
                         <dd class="col-sm-7 col-xs-12">
-                            {{user?.FirstName}}
+                            {{ user?.FirstName }}
                             <em *ngIf="!user?.FirstName" class="text-muted">Not Available</em>
                         </dd>
 
                         <dt class="text-sm-right col-sm-5 col-xs-12">Last Name</dt>
                         <dd class="col-sm-7 col-xs-12">
-                            {{user?.LastName}}
+                            {{ user?.LastName }}
                             <em *ngIf="!user?.LastName" class="text-muted">Not Available</em>
                         </dd>
 
                         <dt class="text-sm-right col-sm-5 col-xs-12">Full Name</dt>
                         <dd class="col-sm-7 col-xs-12">
-                            {{user?.FullName}}
+                            {{ user?.FullName }}
                             <em *ngIf="!user?.FullName" class="text-muted">Not Available</em>
                         </dd>
 
                         <dt class="text-sm-right col-sm-5 col-xs-12">Phone</dt>
                         <dd class="col-sm-7 col-xs-12">
-                            {{user?.Phone}}
+                            {{ user?.Phone }}
                             <em *ngIf="!user?.Phone" class="text-muted">Not Available</em>
                         </dd>
 
                         <dt class="text-sm-right col-sm-5 col-xs-12">Email</dt>
                         <dd class="col-sm-7 col-xs-12">
-                            {{user?.Email}}
+                            {{ user?.Email }}
                             <em *ngIf="!user?.Email" class="text-muted">Not Available</em>
                         </dd>
 
                         <dt class="text-sm-right col-sm-5 col-xs-12">Role</dt>
                         <dd class="col-sm-7 col-xs-12">
-                            {{user?.Role?.RoleDisplayName}}
+                            {{ user?.Role?.RoleDisplayName }}
                             <em *ngIf="!user?.Role?.RoleDisplayName" class="text-muted">Not Available</em>
                         </dd>
 
                         <dt class="text-sm-right col-sm-5 col-xs-12" *ngIf="user.Role.RoleID === 1">Receives System Communications</dt>
                         <dd class="col-sm-7 col-xs-12" *ngIf="user.Role.RoleID === 1">
-                            {{user?.ReceiveSupportEmails == true ? "Yes" : "No"}}
+                            {{ user?.ReceiveSupportEmails == true ? "Yes" : "No" }}
                             <em *ngIf="!user" class="text-muted">Not Available</em>
                         </dd>
                     </dl>

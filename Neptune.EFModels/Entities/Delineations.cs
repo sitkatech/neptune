@@ -148,9 +148,9 @@ namespace Neptune.EFModels.Entities
             return dtos;
         }
 
-        public static async Task MergeDelineations(NeptuneDbContext dbContext, List<DelineationUpsertDto> delineationUpsertDtos, Project project)
+        public static async Task MergeDelineations(NeptuneDbContext dbContext, List<DelineationUpsertDto> delineationUpsertDtos, int projectID)
         {
-            var existingProjectDelineations = dbContext.Delineations.Include(x => x.TreatmentBMP).Where(x => x.TreatmentBMP.ProjectID == project.ProjectID).ToList();
+            var existingProjectDelineations = dbContext.Delineations.Include(x => x.TreatmentBMP).Where(x => x.TreatmentBMP.ProjectID == projectID).ToList();
 
             var allDelineationsInDatabase = dbContext.Delineations;
 

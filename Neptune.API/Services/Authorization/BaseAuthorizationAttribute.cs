@@ -34,7 +34,7 @@ namespace Neptune.API.Services.Authorization
             {
                 //MK 1/16/2018 - If we don't have a repository we are in a terrible state.
                 throw new ApplicationException(
-                    "Could not find injected NeptuneDbRepository. WithRightsAttribute.cs needs your help!");
+                    "Could not find injected NeptuneDbRepository. OnAuthorization.cs needs your help!");
             }
 
             var person = UserContext.GetUserFromHttpContext(dbContext, context.HttpContext);

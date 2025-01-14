@@ -1,0 +1,16 @@
+@use "/src/scss/abstracts" as *;
+
+h3 {
+    text-align: center;
+    font-size: $type-size-300;
+    color: $teal-800;
+    padding-top: $spacing-300;
+    padding-bottom: $spacing-300;
+    border-top: 1px solid $gray-light;
+    border-bottom: 1px solid $gray-light;
+    text-transform: uppercase;
+}
+
+dt {
+    padding-bottom: 0;
+}

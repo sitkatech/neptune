@@ -84,5 +84,6 @@ export enum NeptunePageTypeEnum {
   LandUseStatisticsDataHub = 82,
   ModelBasinsDataHub = 83,
   PrecipitationZonesDataHub = 84,
-  ParcelUploadDataHub = 85
+  ParcelUploadDataHub = 85,
+  ExportBMPInventoryToGIS = 86
 }

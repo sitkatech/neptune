@@ -11,6 +11,7 @@
  */
 import { NeptunePageTypeSimpleDto } from '././neptune-page-type-simple-dto';
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class NeptunePageDto { 
     NeptunePageID?: number;
     NeptunePageType?: NeptunePageTypeSimpleDto;
@@ -19,4 +20,54 @@ export class NeptunePageDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface NeptunePageDtoForm { 
+    NeptunePageID?: FormControl<number>;
+    NeptunePageType?: FormControl<NeptunePageTypeSimpleDto>;
+    NeptunePageContent?: FormControl<string>;
+    IsEmptyContent?: FormControl<boolean>;
+}
+
+export class NeptunePageDtoFormControls { 
+    public static NeptunePageID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static NeptunePageType = (value: FormControlState<NeptunePageTypeSimpleDto> | NeptunePageTypeSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<NeptunePageTypeSimpleDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static NeptunePageContent = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static IsEmptyContent = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

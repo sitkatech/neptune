@@ -20,4 +20,6 @@ GO
 GO
 :r ".\006 - Add neptune pages for data hub.sql"
 GO
+:r ".\007 - Add neptune page Export BMP Inventory to GIS.sql"
+GO
 

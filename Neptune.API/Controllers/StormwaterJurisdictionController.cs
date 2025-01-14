@@ -10,18 +10,19 @@ using Microsoft.Extensions.Options;
 namespace Neptune.API.Controllers
 {
     [ApiController]
-    public class StormwaterJurisdictionController : SitkaController<StormwaterJurisdictionController>
+    public class StormwaterJurisdictionController(
+        NeptuneDbContext dbContext,
+        ILogger<StormwaterJurisdictionController> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<StormwaterJurisdictionController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        public StormwaterJurisdictionController(NeptuneDbContext dbContext, ILogger<StormwaterJurisdictionController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration) : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-        }
-
-        [HttpGet("jurisdictions/{personID}")]
+        [HttpGet("jurisdictions")]
         [JurisdictionEditFeature]
-        public ActionResult<List<StormwaterJurisdictionDto>> ListByPersonID([FromRoute] int personID)
+        public ActionResult<List<StormwaterJurisdictionDto>> ListByPersonID()
         {
-            var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(_dbContext, personID);
-            var stormwaterJurisdictionSimpleDtos = StormwaterJurisdictions.ListByIDsAsDto(_dbContext, stormwaterJurisdictionIDs);
+            var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(DbContext, CallingUser.PersonID);
+            var stormwaterJurisdictionSimpleDtos = StormwaterJurisdictions.ListByIDsAsDto(DbContext, stormwaterJurisdictionIDs);
             return Ok(stormwaterJurisdictionSimpleDtos);
         }
 
@@ -29,8 +30,8 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<BoundingBoxDto> GetBoundingBoxByProjectID([FromRoute] int projectID)
         {
-            var stormwaterJurisdictionID = Projects.GetByIDWithChangeTracking(_dbContext, projectID).StormwaterJurisdictionID;
-            var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByJurisdictionID(_dbContext, stormwaterJurisdictionID);
+            var stormwaterJurisdictionID = Projects.GetByIDWithChangeTracking(DbContext, projectID).StormwaterJurisdictionID;
+            var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByJurisdictionID(DbContext, stormwaterJurisdictionID);
             return Ok(boundingBoxDto);
         }
 
@@ -38,8 +39,7 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<BoundingBoxDto> GetBoundingBoxByPersonID()
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByPersonID(_dbContext, person.PersonID);
+            var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByPersonID(DbContext, CallingUser.PersonID);
             return Ok(boundingBoxDto);
         }
     }

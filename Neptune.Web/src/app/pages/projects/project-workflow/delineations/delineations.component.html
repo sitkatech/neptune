@@ -1,123 +1,115 @@
-<ng-container [class.d-none]="projectTreatmentBMPs">
-    <h2 class="d-inline-block">Delineation Drainage Areas</h2>
-    <div class="mb-4">
-        <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div #mapDiv id="{{ mapID }}" class="location-card" [style.height]="mapHeight" [style.cursor]="isEditingLocation ? 'crosshair' : ''"></div>
-        </div>
-    </div>
+<page-header pageTitle="Delineation Drainage Areas"></page-header>
+<workflow-body [showLoadingSpinner]="isLoadingSubmit">
+    <app-alert-display></app-alert-display>
+    <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+
+    <neptune-map
+        *ngIf="boundingBox$ | async as boundingBox"
+        (onMapLoad)="handleMapReady($event)"
+        [mapHeight]="mapHeight"
+        [showLegend]="false"
+        [style.cursor]="isEditingLocation ? 'crosshair' : ''"
+        [boundingBox]="boundingBox">
+        <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
+        <stormwater-network-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></stormwater-network-layer>
+        <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
+        <wqmps-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-layer>
+        <delineations-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></delineations-layer>
+        <inventoried-bmps-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></inventoried-bmps-layer>
+    </neptune-map>
     <div class="mt-4 card">
         <div class="card-body bg-white">
-            <div class="row">
-                <div class="col-12 table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Treatment BMP</th>
-                                <th>Delineation Area</th>
-                                <th>Distributed?</th>
-                                <th>Centralized?</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                *ngFor="let treatmentBMP of projectTreatmentBMPs"
-                                class="selectable"
-                                [class.selected]="selectedListItem == treatmentBMP.TreatmentBMPID"
-                                (click)="selectFeatureImpl(treatmentBMP.TreatmentBMPID)">
-                                <td>{{ treatmentBMP.TreatmentBMPName }}</td>
-                                <td [class.font-italic]="!treatmentBMPHasDelineationGeometry(treatmentBMP.TreatmentBMPID)">
-                                    {{ getDelineationAreaForTreatmentBMP(treatmentBMP.TreatmentBMPID) }}
-                                </td>
-                                <td>
-                                    <span *ngIf="getTreatmentBMPDelineation(treatmentBMP.TreatmentBMPID)?.DelineationTypeID == 2">Yes</span>
-                                    <button
-                                        *ngIf="!treatmentBMPHasDelineation(treatmentBMP.TreatmentBMPID)"
-                                        class="btn btn-hippocamp"
-                                        (click)="drawDelineationForTreatmentBMP(treatmentBMP.TreatmentBMPID)"
-                                        [disabled]="isEditingLocation || isPerformingDrawAction || isLoadingSubmit">
-                                        Draw on Map
-                                    </button>
-                                </td>
-                                <td>
-                                    <span *ngIf="getTreatmentBMPDelineation(treatmentBMP.TreatmentBMPID)?.DelineationTypeID == 1">Yes</span>
-                                    <button
-                                        *ngIf="!treatmentBMPHasDelineation(treatmentBMP.TreatmentBMPID)"
-                                        class="btn btn-hippocamp"
-                                        (click)="getUpstreamRSBCatchmentForTreatmentBMP(treatmentBMP.TreatmentBMPID)"
-                                        [disabled]="isEditingLocation || isPerformingDrawAction || isLoadingSubmit">
-                                        Trace Network
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Treatment BMP</th>
+                            <th>Delineation Area</th>
+                            <th>Distributed?</th>
+                            <th>Centralized?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let treatmentBMP of projectTreatmentBMPs"
+                            class="selectable"
+                            [class.selected]="selectedListItem == treatmentBMP.TreatmentBMPID"
+                            (click)="selectFeatureImpl(treatmentBMP.TreatmentBMPID)">
+                            <td>{{ treatmentBMP.TreatmentBMPName }}</td>
+                            <td [class.font-italic]="!treatmentBMPHasDelineationGeometry(treatmentBMP.TreatmentBMPID)">
+                                {{ getDelineationAreaForTreatmentBMP(treatmentBMP.TreatmentBMPID) }}
+                            </td>
+                            <td>
+                                <span *ngIf="getTreatmentBMPDelineation(treatmentBMP.TreatmentBMPID)?.DelineationTypeID == 2">Yes</span>
+                                <button
+                                    *ngIf="!treatmentBMPHasDelineation(treatmentBMP.TreatmentBMPID)"
+                                    class="btn btn-primary"
+                                    (click)="drawDelineationForTreatmentBMP(treatmentBMP.TreatmentBMPID)"
+                                    [disabled]="isEditingLocation || isPerformingDrawAction || isLoadingSubmit">
+                                    Draw on Map
+                                </button>
+                            </td>
+                            <td>
+                                <span *ngIf="getTreatmentBMPDelineation(treatmentBMP.TreatmentBMPID)?.DelineationTypeID == 1">Yes</span>
+                                <button
+                                    *ngIf="!treatmentBMPHasDelineation(treatmentBMP.TreatmentBMPID)"
+                                    class="btn btn-primary"
+                                    (click)="getUpstreamRSBCatchmentForTreatmentBMP(treatmentBMP.TreatmentBMPID)"
+                                    [disabled]="isEditingLocation || isPerformingDrawAction || isLoadingSubmit">
+                                    Trace Network
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
     <div class="mt-4 card" *ngIf="selectedTreatmentBMP">
-        <div class="card-body bg-white">
-            <div class="row">
-                <div class="col-12">
-                    <h5 class="border-bottom p-2">Location</h5>
-                </div>
-                <div class="col-sm-4 order-sm-last">
-                    <div class="row d-flex">
-                        <div class="col-auto ml-auto text-right">
-                            <button
-                                class="btn mt-2 btn-outline-info mb-2"
-                                (click)="toggleIsEditingLocation()"
-                                [disabled]="drawMapClicked || isPerformingDrawAction || isLoadingSubmit">
-                                <i class="fa fa-edit mr-1"></i>{{ isEditingLocation ? "Save Location" : "Edit Location" }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-5">
-                    <div class="row mt-3">
-                        <ng-container *ngIf="selectedTreatmentBMP.Latitude && selectedTreatmentBMP.Longitude; else noLocationSelected">
-                            <div class="col-sm-4 text-sm-right font-weight-bold mt-1">Latitude</div>
-                            <div class="col-sm-8">
-                                {{ selectedTreatmentBMP.Latitude }}
-                            </div>
-                            <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">Longitude</div>
-                            <div class="col-sm-8 mt-1">
-                                {{ selectedTreatmentBMP.Longitude }}
-                            </div>
-                            <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">
-                                <field-definition fieldDefinitionType="Area" [labelOverride]="'Delineation Area'"></field-definition>
-                            </div>
-                            <div class="col-sm-8 mt-1" [class.font-italic]="!treatmentBMPHasDelineation(selectedTreatmentBMP.TreatmentBMPID)">
-                                {{ getDelineationAreaForTreatmentBMP(selectedTreatmentBMP.TreatmentBMPID) }}
-                            </div>
-                            <ng-container *ngIf="selectedTreatmentBMP.WatershedName">
-                                <div class="col-sm-4 mt-1 font-weight-bold text-sm-right">
-                                    <field-definition [fieldDefinitionType]="'Watershed'"></field-definition>
-                                </div>
-                                <div class="col-sm-8 mt-1">{{ selectedTreatmentBMP.WatershedName }}</div>
-                            </ng-container>
+        <div class="card-body">
+            <h3>Location</h3>
+            <div class="grid-12">
+                <div class="g-col-8">
+                    <dl class="grid-12 mt-4" *ngIf="selectedTreatmentBMP.Latitude && selectedTreatmentBMP.Longitude; else noLocationSelected">
+                        <dt class="g-col-5">Latitude</dt>
+                        <dd class="g-col-7">
+                            {{ selectedTreatmentBMP.Latitude }}
+                        </dd>
+                        <dt class="g-col-5">Longitude</dt>
+                        <dd class="g-col-7">
+                            {{ selectedTreatmentBMP.Longitude }}
+                        </dd>
+                        <dt class="g-col-5">
+                            <field-definition fieldDefinitionType="Area" [labelOverride]="'Delineation Area'"></field-definition>
+                        </dt>
+                        <dd class="g-col-7" [class.font-italic]="!treatmentBMPHasDelineation(selectedTreatmentBMP.TreatmentBMPID)">
+                            {{ getDelineationAreaForTreatmentBMP(selectedTreatmentBMP.TreatmentBMPID) }}
+                        </dd>
+                        <ng-container *ngIf="selectedTreatmentBMP.WatershedName">
+                            <dt class="g-col-5">
+                                <field-definition [fieldDefinitionType]="'Watershed'"></field-definition>
+                            </dt>
+                            <dd class="g-col-7">{{ selectedTreatmentBMP.WatershedName }}</dd>
                         </ng-container>
-                        <ng-template #noLocationSelected>
-                            <div class="font-italic ml-3">"Location details not yet provided."</div>
-                        </ng-template>
+                    </dl>
+                    <ng-template #noLocationSelected>
+                        <div class="mt-3"><em>Location details not yet provided.</em></div>
+                    </ng-template>
+                </div>
+                <div class="g-col-4">
+                    <div class="flex-between no-wrap">
+                        <i></i>
+                        <button class="btn btn-primary-outline mt-3" (click)="toggleIsEditingLocation()" [disabled]="drawMapClicked || isPerformingDrawAction || isLoadingSubmit">
+                            <i class="fa fa-edit mr-1"></i>{{ isEditingLocation ? "Save Location" : "Edit Location" }}
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row mt-3">
-        <div class="col-auto ml-auto">
-            <button class="btn btn-outline-primary ml-auto mr-2" [disabled]="isLoadingSubmit" (click)="onSubmit()">
-                <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
-                Save
-            </button>
-            <button class="btn btn-hippocamp ml-auto" [disabled]="isLoadingSubmit" (click)="onSubmit(true)">
-                <span *ngIf="isLoadingSubmit" class="fa fa-spinner loading-spinner"></span>
-                Save and Continue
-            </button>
-        </div>
-    </div>
-</ng-container>
+</workflow-body>
+
+<div class="page-footer">
+    <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
+    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Save & Continue</button>
+</div>

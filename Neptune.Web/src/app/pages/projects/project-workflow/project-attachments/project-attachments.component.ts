@@ -1,34 +1,40 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ComponentRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { ProjectDocumentUpsertDto } from "src/app/shared/models/project-document-upsert-dto";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
-import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { PersonDto, ProjectDocumentDto, ProjectDocumentUpdateDto } from "src/app/shared/generated/model/models";
 import { AttachmentsDisplayComponent } from "../../../../shared/components/projects/attachments-display/attachments-display.component";
-import { IconComponent } from "../../../../shared/components/icon/icon.component";
 import { FormsModule, NgForm } from "@angular/forms";
 import { CustomRichTextComponent } from "../../../../shared/components/custom-rich-text/custom-rich-text.component";
 import { NgIf, NgClass } from "@angular/common";
+import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
+import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
+import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
+import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/services/modal/modal.service";
+import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
+import { ModalComponent } from "src/app/shared/components/modal/modal.component";
+import { ConfirmOptions } from "src/app/shared/services/confirm/confirm-options";
+import { ProjectDocumentService } from "src/app/shared/generated/api/project-document.service";
 
 @Component({
-    selector: "hippocamp-project-attachments",
+    selector: "project-attachments",
     templateUrl: "./project-attachments.component.html",
     styleUrls: ["./project-attachments.component.scss"],
     standalone: true,
-    imports: [NgIf, CustomRichTextComponent, FormsModule, NgClass, IconComponent, AttachmentsDisplayComponent],
+    imports: [NgIf, CustomRichTextComponent, FormsModule, NgClass, AttachmentsDisplayComponent, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent],
 })
 export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     @ViewChild("fileUpload") fileUpload: any;
-    @ViewChild("deleteAttachmentModal") deleteAttachmentModal: any;
     @ViewChild("editAttachmentModal") editAttachmentModal: any;
+    private editAttachmentModalComponent: ComponentRef<ModalComponent>;
 
     public currentUser: PersonDto;
-    public richTextTypeID = NeptunePageTypeEnum.HippocampProjectAttachments;
+    public customRichTextTypeID = NeptunePageTypeEnum.HippocampProjectAttachments;
 
     public projectID: number;
     public model: ProjectDocumentUpsertDto;
@@ -42,7 +48,6 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     public invalidFields: Array<string> = [];
 
     public fileName: string;
-    private modalReference: NgbModalRef;
     public isLoadingDelete = false;
     private isLoadingUpdate = false;
 
@@ -57,9 +62,11 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
         private router: Router,
         private authenticationService: AuthenticationService,
         private projectService: ProjectService,
+        private projectDocumentService: ProjectDocumentService,
         private cdr: ChangeDetectorRef,
         private alertService: AlertService,
-        private modalService: NgbModal
+        private modalService: ModalService,
+        private confirmService: ConfirmService
     ) {}
 
     ngOnInit(): void {
@@ -111,7 +118,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     public getFileName(): string {
         let file = this.getFile();
         if (!file) {
-            return "";
+            return "No file chosen...";
         }
         return file.name;
     }
@@ -134,54 +141,48 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
         return projectDocumentUpdateDto;
     }
 
-    public launchDeleteModal(modalContent: any, attachmentIDToRemove: number): void {
+    public launchDeleteModal(attachmentIDToRemove: number): void {
         this.attachmentIDToRemove = attachmentIDToRemove;
-        this.modalReference = this.modalService.open(modalContent, {
-            ariaLabelledBy: "deleteAttachmentModal",
-            beforeDismiss: () => this.checkIfDeleting(),
-            backdrop: "static",
-            keyboard: false,
+        const options = {
+            title: "Confirm: Delete Treatment Attachment",
+            message: "<p>Are you sure you wish to delete this attachment?<br />This action cannot be undone</p>",
+            buttonClassYes: "btn-danger",
+            buttonTextYes: "Confirm",
+            buttonTextNo: "Cancel",
+        } as ConfirmOptions;
+        this.confirmService.confirm(options).then((confirmed) => {
+            if (confirmed) {
+                this.isLoadingDelete = true;
+                this.alertService.clearAlerts();
+
+                this.projectDocumentService.projectDocumentsProjectDocumentIDDelete(this.attachmentIDToRemove).subscribe(
+                    (response) => {
+                        this.isLoadingDelete = false;
+                        this.alertService.pushAlert(new Alert("Attachment was successfully deleted.", AlertContext.Success, true));
+                        this.refreshAttachments();
+                    },
+                    (error) => {
+                        this.isLoadingDelete = false;
+                        window.scroll(0, 0);
+                        this.cdr.detectChanges();
+                    }
+                );
+            }
         });
     }
 
-    public launchEditModal(modalContent: any, attachment: ProjectDocumentDto): void {
+    openEditAttachmentModal(attachment: ProjectDocumentDto): void {
         this.editAttachmentID = attachment.ProjectDocumentID;
         this.editModel = this.mapProjectDocumentSimpleDtoToUpdate(attachment);
-
-        this.modalReference = this.modalService.open(modalContent, {
-            ariaLabelledBy: "editAttachmentModal",
-            beforeDismiss: () => this.checkIfUpdating(),
-            backdrop: "static",
-            keyboard: false,
-            size: "lg",
+        this.editAttachmentModalComponent = this.modalService.open(this.editAttachmentModal, null, {
+            ModalTheme: ModalThemeEnum.Light,
+            ModalSize: ModalSizeEnum.Medium,
         });
     }
 
-    private checkIfDeleting(): boolean {
-        return this.isLoadingDelete;
-    }
-
-    private checkIfUpdating(): boolean {
-        return this.isLoadingUpdate;
-    }
-
-    public deleteAttachment() {
-        this.isLoadingDelete = true;
-        this.alertService.clearAlerts();
-
-        this.projectService.projectsAttachmentsAttachmentIDDelete(this.attachmentIDToRemove).subscribe(
-            () => {
-                this.isLoadingDelete = false;
-                this.modalReference.close();
-                this.alertService.pushAlert(new Alert("Attachment was successfully deleted.", AlertContext.Success, true));
-                this.refreshAttachments();
-            },
-            (error) => {
-                this.isLoadingDelete = false;
-                window.scroll(0, 0);
-                this.cdr.detectChanges();
-            }
-        );
+    closeEditAttachmentModal(): void {
+        if (!this.editAttachmentModalComponent) return;
+        this.modalService.close(this.editAttachmentModalComponent);
     }
 
     refreshAttachments(): void {
@@ -231,10 +232,10 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
         this.invalidFields = [];
         this.alertService.clearAlerts();
 
-        this.projectService.projectsAttachmentsAttachmentIDPut(this.editAttachmentID, this.editModel).subscribe(
+        this.projectDocumentService.projectDocumentsProjectDocumentIDPut(this.editAttachmentID, this.editModel).subscribe(
             (response) => {
                 this.isLoadingUpdate = false;
-                this.modalReference.close("editAttachmentModal");
+                this.closeEditAttachmentModal();
                 this.onSubmitSuccess(editAttachmentForm, "Project attachment '" + response.DisplayName + "' successfully updated.");
             },
             (error) => {

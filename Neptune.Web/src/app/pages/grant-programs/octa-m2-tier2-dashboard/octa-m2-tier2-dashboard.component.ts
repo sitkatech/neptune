@@ -1,50 +1,51 @@
-import { ApplicationRef, ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
-import { forkJoin } from "rxjs";
+import { ApplicationRef, Component, OnInit } from "@angular/core";
+import { combineLatest, Observable, tap } from "rxjs";
 import * as L from "leaflet";
 import "leaflet-gesture-handling";
 import "leaflet.fullscreen";
-import "leaflet.marker.highlight";
 import "leaflet-loading";
-import * as esri from "esri-leaflet";
-import { AuthenticationService } from "src/app/services/authentication.service";
-import { BoundingBoxDto, DelineationDto, PersonDto, ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
+import { BoundingBoxDto, DelineationDto, ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import { environment } from "src/environments/environment";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { PrioritizationMetric } from "src/app/shared/models/prioritization-metric";
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { OctaPrioritizationDetailPopupComponent } from "src/app/shared/components/octa-prioritization-detail-popup/octa-prioritization-detail-popup.component";
-import { ColDef } from "ag-grid-community";
-import { LinkRendererComponent } from "src/app/shared/components/ag-grid/link-renderer/link-renderer.component";
+import { ColDef, GridApi, GridReadyEvent } from "ag-grid-community";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
-import { AgGridAngular, AgGridModule } from "ag-grid-angular";
+import { AgGridModule } from "ag-grid-angular";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
-import { FieldDefinitionGridHeaderComponent } from "src/app/shared/components/field-definition-grid-header/field-definition-grid-header.component";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
-import { ClearGridFiltersButtonComponent } from "../../../shared/components/clear-grid-filters-button/clear-grid-filters-button.component";
 import { RouterLink } from "@angular/router";
 import { FieldDefinitionComponent } from "../../../shared/components/field-definition/field-definition.component";
-import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, NgFor, SlicePipe } from "@angular/common";
+import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, NgFor, AsyncPipe } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
-import { CustomRichTextComponent } from "../../../shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "../../../shared/components/alert-display/alert-display.component";
-
-declare var $: any;
+import { NeptuneGridComponent } from "../../../shared/components/neptune-grid/neptune-grid.component";
+import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
+import { IconComponent } from "../../../shared/components/icon/icon.component";
+import { ExpandCollapseDirective } from "src/app/shared/directives/expand-collapse.directive";
+import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
+import { DelineationsLayerComponent } from "src/app/shared/components/leaflet/layers/delineations-layer/delineations-layer.component";
+import { JurisdictionsLayerComponent } from "src/app/shared/components/leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
+import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leaflet/layers/regional-subbasins-layer/regional-subbasins-layer.component";
+import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
+import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
+import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 
 @Component({
-    selector: "hippocamp-octa-m2-tier2-dashboard",
+    selector: "octa-m2-tier2-dashboard",
     templateUrl: "./octa-m2-tier2-dashboard.component.html",
     styleUrls: ["./octa-m2-tier2-dashboard.component.scss"],
     standalone: true,
     imports: [
         AlertDisplayComponent,
-        CustomRichTextComponent,
         NgSelectModule,
         FormsModule,
         NgIf,
@@ -54,17 +55,26 @@ declare var $: any;
         NgSwitchDefault,
         NgFor,
         RouterLink,
-        ClearGridFiltersButtonComponent,
         AgGridModule,
-        SlicePipe,
+        NeptuneGridComponent,
+        PageHeaderComponent,
+        IconComponent,
+        ExpandCollapseDirective,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        DelineationsLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        StormwaterNetworkLayerComponent,
+        AsyncPipe,
+        InventoriedBMPsLayerComponent,
     ],
 })
 export class OCTAM2Tier2DashboardComponent implements OnInit {
-    @ViewChild("projectsGrid") projectsGrid: AgGridAngular;
+    public mapIsReady: boolean = false;
+    public customRichTextTypeID = NeptunePageTypeEnum.OCTAM2Tier2GrantProgramDashboard;
 
-    private currentUser: PersonDto;
-    public richTextTypeID = NeptunePageTypeEnum.OCTAM2Tier2GrantProgramDashboard;
-
+    public octaM2Tier2MapInitData$: Observable<OCTAM2Tier2MapInitData>;
     public projects: Array<ProjectDto>;
     private treatmentBMPs: Array<TreatmentBMPDisplayDto>;
     private delineations: Array<DelineationDto>;
@@ -73,17 +83,13 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     public relateedTreatmentBMPsToDisplay: Array<TreatmentBMPDisplayDto>;
     public selectedDelineation: DelineationDto;
     public selectedProject: ProjectDto;
+    public gridApi: GridApi;
 
-    public mapID: string = "planningMap";
     public mapHeight = window.innerHeight - window.innerHeight * 0.2 + "px";
     public map: L.Map;
-    public tileLayers: { [key: string]: any } = {};
-    public overlayLayers: { [key: string]: any } = {};
     public plannedProjectTreatmentBMPsLayer: L.GeoJSON<any>;
-    public inventoriedTreatmentBMPsLayer: L.GeoJSON<any>;
     public selectedProjectDelineationsLayer: L.GeoJSON<any>;
-    private boundingBox: BoundingBoxDto;
-    public defaultFitBoundsOptions?: L.FitBoundsOptions = null;
+    public boundingBox$: Observable<BoundingBoxDto>;
     public layerControl: L.Control.Layers;
 
     //this is needed to allow binding to the static class
@@ -93,25 +99,19 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     public prioritizationMetricOverlayLayer: L.Layers;
 
     private plannedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Project BMPs";
-    private inventoriedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-orange.png' style='height:17px; margin-bottom:3px'> Inventoried BMPs (Verified)";
     private delineationDefaultStyle = {
         color: "#51F6F8",
         fillOpacity: 0.2,
         opacity: 1,
     };
 
-    private viewInitialized: boolean = false;
-
     public columnDefs: ColDef[];
-    public defaultColDef: ColDef;
     public paginationPageSize: number = 100;
 
     constructor(
-        private authenticationService: AuthenticationService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService,
         private stormwaterJurisdictionService: StormwaterJurisdictionService,
-        private cdr: ChangeDetectorRef,
         private projectService: ProjectService,
         private treatmentBMPService: TreatmentBMPService,
         private wfsService: WfsService,
@@ -120,174 +120,52 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.authenticationService.getCurrentUser().subscribe((result) => {
-            this.currentUser = result;
-            this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet().subscribe((result) => {
-                this.boundingBox = result;
-                forkJoin({
-                    projects: this.projectService.projectsOCTAM2Tier2GrantProgramGet(),
-                    treatmentBMPs: this.treatmentBMPService.treatmentBMPsGet(),
-                    delineations: this.projectService.projectsDelineationsGet(),
-                }).subscribe(({ projects, treatmentBMPs, delineations }) => {
-                    this.projects = projects;
-                    this.treatmentBMPs = treatmentBMPs;
-                    this.addTreatmentBMPLayersToMap();
-                    this.delineations = delineations;
-                });
-                this.initMap();
-                this.map.fireEvent("dataloading");
-            });
+        this.boundingBox$ = this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet();
 
-            this.columnDefs = [
-                {
-                    headerName: "Project Name",
-                    valueGetter: (params: any) => {
-                        return { LinkValue: params.data.ProjectID, LinkDisplay: params.data.ProjectName };
-                    },
-                    cellRenderer: LinkRendererComponent,
-                    cellRendererParams: { inRouterLink: "/projects/" },
-                    filterValueGetter: (params: any) => {
-                        return params.data.ProjectID;
-                    },
-                    comparator: this.utilityFunctionsService.linkRendererComparator,
-                },
-                { headerName: "Project Description", field: "ProjectDescription" },
-                {
-                    headerComponent: FieldDefinitionGridHeaderComponent,
-                    headerComponentParams: { fieldDefinitionType: "Organization" },
-                    field: "Organization.OrganizationName",
-                },
-                {
-                    headerComponent: FieldDefinitionGridHeaderComponent,
-                    headerComponentParams: { fieldDefinitionType: "Jurisdiction" },
-                    field: "StormwaterJurisdiction.Organization.OrganizationName",
-                },
-                this.utilityFunctionsService.createDateColumnDef("Last Shared On", "OCTAM2Tier2ScoresLastSharedDate", "short", 140),
-                this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition("AreaTreatedAcres", "AreaTreatedAcres", "Area", "Area Treated (ac)", null, 2),
-                this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition(
-                    "ImperviousAreaTreatedAcres",
-                    "ImperviousAreaTreatedAcres",
-                    "ImperviousArea",
-                    "Impervious Area Treated (ac)",
-                    220,
-                    2
-                ),
-                this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition("SEAScore", "SEA", "SEAScore", "SEA Score", 90, 2),
-                this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition("TPIScore", "TPI", "TPIScore", "TPI Score", 90, 2),
-                this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition("WQLRI", "DryWeatherWQLRI", "WQLRI", "Dry Weather WQLRI", null, 2),
-                this.utilityFunctionsService.createDecimalColumnDefWithFieldDefinition("WQLRI", "WetWeatherWQLRI", "WQLRI", "Wet Weather WQLRI", null, 2),
-            ];
-
-            this.defaultColDef = {
-                filter: true,
-                sortable: true,
-                resizable: true,
-            };
-        });
-
-        this.tileLayers = Object.assign(
-            {},
-            {
-                Aerial: L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Aerial",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-                Street: L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Street",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-                Terrain: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", {
-                    attribution: "Terrain",
-                    maxZoom: 22,
-                    maxNativeZoom: 18,
-                }),
-            },
-            this.tileLayers
-        );
-
-        let regionalSubbasinsWMSOptions = {
-            layers: "OCStormwater:RegionalSubbasins",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-        } as L.WMSOptions;
-
-        let jurisdictionsWMSOptions = {
-            layers: "OCStormwater:Jurisdictions",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-            styles: "jurisdiction_orange",
-        } as L.WMSOptions;
-
-        let WQMPsWMSOptions = {
-            layers: "OCStormwater:WaterQualityManagementPlans",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-        } as L.WMSOptions;
-
-        let verifiedDelineationsWMSOptions = {
-            layers: "OCStormwater:Delineations",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-            cql_filter: "DelineationStatus = 'Verified' AND IsAnalyzedInModelingModule = 1",
-        } as L.WMSOptions;
-
-        this.overlayLayers = Object.assign(
-            {
-                "<img src='./assets/main/map-legend-images/RegionalSubbasin.png' style='height:12px; margin-bottom:3px'> Regional Subbasins": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    regionalSubbasinsWMSOptions
-                ),
-                "<span>Stormwater Network <br/> <img src='./assets/main/map-legend-images/stormwaterNetwork.png' height='50'/> </span>": esri.dynamicMapLayer({
-                    url: "https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
-                }),
-                "<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    jurisdictionsWMSOptions
-                ),
-                "<img src='./assets/main/map-legend-images/wqmpBoundary.png' style='height:12px; margin-bottom:4px'> WQMPs": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    WQMPsWMSOptions
-                ),
-                "<span>Inventoried BMP Delineations</br><img src='./assets/main/map-legend-images/delineationVerified.png' style='margin-bottom:3px'></span>": L.tileLayer.wms(
-                    environment.geoserverMapServiceUrl + "/wms?",
-                    verifiedDelineationsWMSOptions
-                ),
-            },
-            this.overlayLayers
-        );
+        this.columnDefs = [
+            this.utilityFunctionsService.createLinkColumnDef("Project Name", "ProjectName", "ProjectID", {
+                InRouterLink: "/projects/",
+            }),
+            this.utilityFunctionsService.createBasicColumnDef("Project Description", "ProjectDescription"),
+            this.utilityFunctionsService.createBasicColumnDef("Organization", "Organization.OrganizationName"),
+            this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdiction.Organization.OrganizationName"),
+            this.utilityFunctionsService.createDateColumnDef("Last Shared On", "OCTAM2Tier2ScoresLastSharedDate", "short", { Width: 140 }),
+            this.utilityFunctionsService.createDecimalColumnDef("Area Treated (ac)", "Area"),
+            this.utilityFunctionsService.createDecimalColumnDef("Impervious Area Treated (ac)", "ImperviousArea", { Width: 220 }),
+            this.utilityFunctionsService.createDecimalColumnDef("SEA Score", "SEA", { Width: 90 }),
+            this.utilityFunctionsService.createDecimalColumnDef("TPI Score", "TPI", { Width: 90 }),
+            this.utilityFunctionsService.createDecimalColumnDef("Dry Weather WQLRI", "DryWeatherWQLRI"),
+            this.utilityFunctionsService.createDecimalColumnDef("Wet Weather WQLRI", "WetWeatherWQLRI"),
+        ];
 
         this.compileService.configure(this.appRef);
     }
 
-    initMap() {
-        const mapOptions: L.MapOptions = {
-            // center: [46.8797, -110],
-            // zoom: 6,
-            minZoom: 9,
-            maxZoom: 22,
-            layers: [
-                this.tileLayers["Terrain"],
-                this.overlayLayers["<img src='./assets/main/map-legend-images/jurisdiction.png' style='height:12px; margin-bottom:3px'> Jurisdictions"],
-            ],
-            fullscreenControl: true,
-            gestureHandling: true,
-        } as L.MapOptions;
-        this.map = L.map(this.mapID, mapOptions);
-        this.initializePanes();
-        this.setControl();
+    public handleMapReady(event: NeptuneMapInitEvent): void {
+        this.map = event.map;
+        this.layerControl = event.layerControl;
+        this.mapIsReady = true;
+
         this.registerClickEvents();
-        this.map.fitBounds(
-            [
-                [this.boundingBox.Bottom, this.boundingBox.Left],
-                [this.boundingBox.Top, this.boundingBox.Right],
-            ],
-            this.defaultFitBoundsOptions
+
+        this.map.on("overlayadd overlayremove", (e) => {
+            if (e.name != this.plannedTreatmentBMPOverlayName) {
+                return;
+            }
+        });
+
+        this.octaM2Tier2MapInitData$ = combineLatest({
+            Projects: this.projectService.projectsOCTAM2Tier2GrantProgramGet(),
+            TreatmentBMPs: this.treatmentBMPService.treatmentBmpsOctaM2Tier2GrantProgramGet(),
+            Delineations: this.projectService.projectsDelineationsGet(),
+        }).pipe(
+            tap((data) => {
+                this.projects = data.Projects;
+                this.treatmentBMPs = data.TreatmentBMPs;
+                this.delineations = data.Delineations;
+                this.initializePanes();
+                this.addTreatmentBMPLayersToMap();
+            })
         );
     }
 
@@ -296,27 +174,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         hippocampChoroplethPane.style.zIndex = 300;
     }
 
-    public setControl(): void {
-        var loadingControl = L.Control.loading({
-            separate: true,
-        });
-        this.map.addControl(loadingControl);
-
-        this.layerControl = new L.Control.Layers(this.tileLayers, this.overlayLayers, { collapsed: false }).addTo(this.map);
-    }
-
     public registerClickEvents(): void {
-        var leafletControlLayersSelector = ".leaflet-control-layers";
-        var closeButtonClass = "leaflet-control-layers-close";
-
-        var closem = L.DomUtil.create("a", closeButtonClass);
-        closem.innerHTML = "Close";
-        L.DomEvent.on(closem, "click", function () {
-            $(leafletControlLayersSelector).removeClass("leaflet-control-layers-expanded");
-        });
-
-        $(leafletControlLayersSelector).append(closem);
-
         const wfsService = this.wfsService;
         const self = this;
         this.map.on("click", (event: L.LeafletMouseEvent): void => {
@@ -339,72 +197,26 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     }
 
     public addTreatmentBMPLayersToMap(): void {
-        //If you were called and there is no map, try again in a little bit
-        if (!this.map) {
-            setTimeout(() => {
-                this.addTreatmentBMPLayersToMap();
-            }, 500);
-        }
-
         if (this.plannedProjectTreatmentBMPsLayer) {
             this.map.removeLayer(this.plannedProjectTreatmentBMPsLayer);
             this.layerControl.removeLayer(this.plannedProjectTreatmentBMPsLayer);
         }
-        if (this.inventoriedTreatmentBMPsLayer) {
-            this.map.removeLayer(this.inventoriedTreatmentBMPsLayer);
-            this.layerControl.removeLayer(this.inventoriedTreatmentBMPsLayer);
-        }
-
-        // add inventoried BMPs layer
-        this.addInventoriedBMPsLayer();
 
         // add planned project BMPs layer
-        const projectIDs = this.projects.map((x) => x.ProjectID);
-        const projectTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter((x) => projectIDs.includes(x.ProjectID)));
+        const projectTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
         this.plannedProjectTreatmentBMPsLayer = new L.GeoJSON(projectTreatmentBMPGeoJSON, {
             pointToLayer: (feature, latlng) => {
                 return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
             },
             onEachFeature: (feature, layer) => {
-                layer.on("click", (e) => {
+                layer.on("click", () => {
                     this.selectTreatmentBMPImpl(feature.properties.TreatmentBMPID);
                 });
             },
         });
+        this.plannedProjectTreatmentBMPsLayer.sortOrder = 100;
         this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
         this.layerControl.addOverlay(this.plannedProjectTreatmentBMPsLayer, this.plannedTreatmentBMPOverlayName);
-
-        this.map.fireEvent("dataload");
-    }
-
-    private addInventoriedBMPsLayer() {
-        const inventoriedTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs.filter((x) => x.ProjectID == null && x.InventoryIsVerified));
-        this.inventoriedTreatmentBMPsLayer = new L.GeoJSON(inventoriedTreatmentBMPGeoJSON, {
-            pointToLayer: (feature, latlng) => {
-                return L.marker(latlng, { icon: MarkerHelper.inventoriedTreatmentBMPMarker });
-            },
-            onEachFeature: (feature, layer) => {
-                layer.bindPopup(
-                    `<b>Name:</b> <a target="_blank" href="${this.ocstBaseUrl()}/TreatmentBMP/Detail/${feature.properties.TreatmentBMPID}">${
-                        feature.properties.TreatmentBMPName
-                    }</a><br>` + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
-                );
-            },
-        });
-
-        var clusteredInventoriedBMPLayer = L.markerClusterGroup({
-            iconCreateFunction: function (cluster) {
-                var childCount = cluster.getChildCount();
-
-                return new L.DivIcon({
-                    html: "<div><span>" + childCount + "</span></div>",
-                    className: "marker-cluster",
-                    iconSize: new L.Point(40, 40),
-                });
-            },
-        });
-        clusteredInventoriedBMPLayer.addLayer(this.inventoriedTreatmentBMPsLayer);
-        this.layerControl.addOverlay(clusteredInventoriedBMPLayer, this.inventoriedTreatmentBMPOverlayName);
     }
 
     private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPDisplayDto[]) {
@@ -442,23 +254,8 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
             if (!layer.feature.properties.DefaultZIndexOffset) {
                 layer.feature.properties.DefaultZIndexOffset = layer._zIndex;
             }
-            //Doing this here as well feels redundant, but if we dont
-            //whenever we set the icon it puts the highlight in a weird state.
-            //So just disable and enable as needed
-            layer.disablePermanentHighlight();
-            if (this.selectedTreatmentBMP == null || treatmentBMPID != layer.feature.properties.TreatmentBMPID) {
-                layer.setIcon(MarkerHelper.treatmentBMPMarker);
-                layer.setZIndexOffset(layer.feature.properties.DefaultZIndexOffset);
-                if (this.relatedTreatmentBMPs.some((x) => x.TreatmentBMPID == layer.feature.properties.TreatmentBMPID)) {
-                    layer.enablePermanentHighlight();
-                }
-                return;
-            }
             layer.setZIndexOffset(10000);
             layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-red.png"));
-            // if (!this.map.getBounds().contains(layer.getLatLng())) {
-            //   this.map.flyTo(layer.getLatLng());
-            // }
         });
         this.selectedDelineation = this.delineations.find((x) => x.TreatmentBMPID == treatmentBMPID);
     }
@@ -480,7 +277,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         let relatedDelineations = this.delineations.filter((x) => relatedTreatmentBMPIDs.includes(x.TreatmentBMPID));
         if (relatedDelineations != null && relatedDelineations.length > 0) {
             this.selectedProjectDelineationsLayer = new L.GeoJSON(this.mapDelineationsToGeoJson(relatedDelineations), {
-                style: (feature) => {
+                style: () => {
                     return this.delineationDefaultStyle;
                 },
             });
@@ -489,22 +286,20 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         }
 
         this.plannedProjectTreatmentBMPsLayer.eachLayer((layer) => {
-            layer.disablePermanentHighlight();
             layer.setIcon(MarkerHelper.treatmentBMPMarker);
             if (relatedTreatmentBMPIDs.includes(layer.feature.properties.TreatmentBMPID)) {
                 layer.addTo(featureGroupForZoom);
-                layer.enablePermanentHighlight();
             }
         });
         this.map.fitBounds(featureGroupForZoom.getBounds(), { padding: new L.Point(50, 50) });
 
-        this.projectsGrid.api.forEachNode((node) => {
+        this.gridApi.forEachNode((node) => {
             if (node.data.ProjectID === projectID) {
                 node.setSelected(true);
                 var rowIndex = node.rowIndex;
                 //I am honestly kind of flabbergasted that ag-grid doesn't tell me what page the node is on
-                this.projectsGrid.api.paginationGoToPage(Math.floor(rowIndex / this.paginationPageSize));
-                this.projectsGrid.api.ensureIndexVisible(node.rowIndex);
+                this.gridApi.paginationGoToPage(Math.floor(rowIndex / this.paginationPageSize));
+                this.gridApi.ensureIndexVisible(node.rowIndex);
             }
         });
     }
@@ -537,7 +332,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     }
 
     public onSelectionChanged() {
-        const selectedNode = this.projectsGrid.api.getSelectedNodes()[0];
+        const selectedNode = this.gridApi.getSelectedNodes()[0];
         // If we have no selected node or our node has already been selected so we can stop infinite looping
         if (!selectedNode || (this.selectedProject != null && this.selectedProject.ProjectID == selectedNode.data.ProjectID)) {
             return;
@@ -555,11 +350,6 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     public getRelatedBMPsToShow() {
         let selectedTreatmentBMPID = this.selectedTreatmentBMP?.TreatmentBMPID;
         return this.relatedTreatmentBMPs.filter((x) => x.TreatmentBMPID != selectedTreatmentBMPID);
-    }
-
-    public exportProjectGridToCsv() {
-        let columnIDs = this.projectsGrid.columnApi.getAllGridColumns().map((x) => x.getColId());
-        this.utilityFunctionsService.exportGridToCsv(this.projectsGrid, "OCTA-M2-Tier2-projects" + ".csv", columnIDs);
     }
 
     public downloadProjectModelResults() {
@@ -600,7 +390,13 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         );
     }
 
-    public ocstBaseUrl(): string {
-        return environment.ocStormwaterToolsBaseUrl;
+    public onGridReady(event: GridReadyEvent) {
+        this.gridApi = event.api;
     }
+}
+
+export interface OCTAM2Tier2MapInitData {
+    TreatmentBMPs: Array<TreatmentBMPDisplayDto>;
+    Delineations: Array<DelineationDto>;
+    Projects: Array<ProjectDto>;
 }

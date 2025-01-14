@@ -2,7 +2,7 @@ import { APP_INITIALIZER, ApplicationConfig, ErrorHandler, importProvidersFrom }
 import { RouterModule, TitleStrategy, provideRouter } from "@angular/router";
 
 import { routes } from "./app.routes";
-import { DecimalPipe, CurrencyPipe, DatePipe, PercentPipe } from "@angular/common";
+import { DecimalPipe, CurrencyPipe, DatePipe } from "@angular/common";
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { HttpErrorInterceptor } from "./shared/interceptors/httpErrorInterceptor";
@@ -16,6 +16,8 @@ import { AuthInterceptor } from "./shared/interceptors/auth-interceptor";
 import { CookieService } from "ngx-cookie-service";
 import { CookieStorageService } from "./shared/services/cookies/cookie-storage.service";
 import { OAuthStorage, OAuthModule } from "angular-oauth2-oidc";
+import { PhonePipe } from "./shared/pipes/phone.pipe";
+import { GroupByPipe } from "./shared/pipes/group-by.pipe";
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -63,6 +65,8 @@ export const appConfig: ApplicationConfig = {
         DecimalPipe,
         CurrencyPipe,
         DatePipe,
+        PhonePipe,
+        GroupByPipe,
         {
             provide: OAuthStorage,
             useClass: CookieStorageService,

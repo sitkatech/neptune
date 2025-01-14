@@ -11,38 +11,63 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
+using NetTopologySuite.Features;
 
 namespace Neptune.API.Controllers
 {
     [ApiController]
-    public class TreatmentBMPController : SitkaController<TreatmentBMPController>
+    public class TreatmentBMPController(
+        NeptuneDbContext dbContext,
+        ILogger<TreatmentBMPController> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<TreatmentBMPController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        public TreatmentBMPController(NeptuneDbContext dbContext, ILogger<TreatmentBMPController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration) : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-        }
-
-        [HttpGet("treatmentBMPs/{projectID}/getByProjectID")]
+        [HttpGet("treatment-bmps/{projectID}/getByProjectID")]
         [UserViewFeature]
         public ActionResult<List<TreatmentBMPUpsertDto>> GetByProjectID([FromRoute] int projectID)
         {
-            var treatmentBMPUpsertDtos = TreatmentBMPs.ListByProjectIDAsUpsertDto(_dbContext, projectID);
+            var treatmentBMPUpsertDtos = TreatmentBMPs.ListByProjectIDAsUpsertDto(DbContext, projectID);
             return Ok(treatmentBMPUpsertDtos);
         }
 
-        [HttpGet("treatmentBMPs")]
+        [HttpGet("treatment-bmps")]
         [JurisdictionEditFeature]
         public ActionResult<List<TreatmentBMPDisplayDto>> ListByPersonID()
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var treatmentBMPDisplayDtos = TreatmentBMPs.ListByPersonIDAsDisplayDto(_dbContext, person);
+            var treatmentBMPDisplayDtos = TreatmentBMPs.ListByPersonAsDisplayDto(DbContext, CallingUser);
             return Ok(treatmentBMPDisplayDtos);
+        }
+
+        [HttpGet("treatment-bmps/verified/feature-collection")]
+        [JurisdictionEditFeature]
+        public ActionResult<FeatureCollection> ListInventoryVerifiedTreatmentBMPsAsFeatureCollection()
+        {
+            var featureCollection = TreatmentBMPs.ListInventoryIsVerifiedByPersonAsFeatureCollection(DbContext, CallingUser);
+            return Ok(featureCollection);
+        }
+
+        [HttpGet("treatment-bmps/planned-projects")]
+        [JurisdictionEditFeature]
+        public ActionResult<List<TreatmentBMPDisplayDto>> ListTreatmentBMPsWithProjectIDAsFeatureCollection()
+        {
+            var featureCollection = TreatmentBMPs.ListWithProjectByPerson(DbContext, CallingUser);
+            return Ok(featureCollection);
+        }
+
+        [HttpGet("treatment-bmps/octa-m2-tier2-grant-program")]
+        [JurisdictionEditFeature]
+        public ActionResult<List<TreatmentBMPDisplayDto>> ListOCTAM2Tier2GrantProgramTreatmentBMPs()
+        {
+            var featureCollection = TreatmentBMPs.ListWithOCTAM2Tier2GrantProgramByPerson(DbContext, CallingUser);
+            return Ok(featureCollection);
         }
 
         [HttpGet("treatmentBMPTypes")]
         [UserViewFeature]
         public ActionResult<List<TreatmentBMPTypeWithModelingAttributesDto>> ListTypes()
         {
-            var treatmentBMPTypeWithModelingAttributesDtos = TreatmentBMPs.ListWithModelingAttributesAsDto(_dbContext);
+            var treatmentBMPTypeWithModelingAttributesDtos = TreatmentBMPs.ListWithModelingAttributesAsDto(DbContext);
             return Ok(treatmentBMPTypeWithModelingAttributesDtos);
         }
 
@@ -50,12 +75,11 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<int> ChangeTreatmentBMPType([FromRoute] int treatmentBMPID, int treatmentBMPTypeID)
         {
-            var updatedTreatmentBMPModelingTypeID = TreatmentBMPs.ChangeTreatmentBMPType(_dbContext, treatmentBMPID, treatmentBMPTypeID);
-            var personID = UserContext.GetUserFromHttpContext(_dbContext, HttpContext).PersonID;
-            var projectID = TreatmentBMPs.GetByTreatmentBMPID(_dbContext, treatmentBMPID).ProjectID;
+            var updatedTreatmentBMPModelingTypeID = TreatmentBMPs.ChangeTreatmentBMPType(DbContext, treatmentBMPID, treatmentBMPTypeID);
+            var projectID = TreatmentBMPs.GetByTreatmentBMPID(DbContext, treatmentBMPID).ProjectID;
             if (projectID != null)
             {
-                Projects.SetUpdatePersonAndDate(_dbContext, (int)projectID, personID);
+                Projects.SetUpdatePersonAndDate(DbContext, (int)projectID, CallingUser.PersonID);
             }
             
             return Ok(updatedTreatmentBMPModelingTypeID);
@@ -65,7 +89,7 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<List<TreatmentBMPModelingAttributeDropdownItemDto>> GetModelingAttributeDropdownItems()
         {
-            var treatmentBMPModelingAttributeDropdownItemDtos = TreatmentBMPs.GetModelingAttributeDropdownItemsAsDto(_dbContext);
+            var treatmentBMPModelingAttributeDropdownItemDtos = TreatmentBMPs.GetModelingAttributeDropdownItemsAsDto(DbContext);
             return Ok(treatmentBMPModelingAttributeDropdownItemDtos);
         }
 
@@ -73,13 +97,13 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public async Task<ActionResult> MergeTreatmentBMPLocations([FromRoute] int projectID, List<TreatmentBMPDisplayDto> treatmentBMPDisplayDtos)
         {
-            var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
+            var project = DbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
             if (project == null)
             {
                 return BadRequest();
             }
 
-            var existingProjectTreatmentBMPs = _dbContext.TreatmentBMPs.Where(x => x.ProjectID == project.ProjectID).ToList();
+            var existingProjectTreatmentBMPs = DbContext.TreatmentBMPs.Where(x => x.ProjectID == project.ProjectID).ToList();
             foreach (var treatmentBMPDisplayDto in treatmentBMPDisplayDtos)
             {
                 var treatmentBMP = existingProjectTreatmentBMPs.SingleOrDefault(x =>
@@ -92,7 +116,7 @@ namespace Neptune.API.Controllers
                     treatmentBMP.LocationPoint4326 = locationPointGeometry4326;
                 }
             }
-            await _dbContext.SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
             return Ok();
         }
 
@@ -100,7 +124,7 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public async Task<ActionResult> MergeTreatmentBMPs([FromRoute] int projectID, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos)
         {
-            var project = _dbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
+            var project = DbContext.Projects.SingleOrDefault(x => x.ProjectID == projectID);
             if (project == null)
             {
                 return BadRequest();
@@ -114,7 +138,7 @@ namespace Neptune.API.Controllers
             }
             else
             {
-                var existingTreatmentBMPs = _dbContext.TreatmentBMPs.Where(x => x.ProjectID == projectID).AsNoTracking().ToList();
+                var existingTreatmentBMPs = DbContext.TreatmentBMPs.Where(x => x.ProjectID == projectID).AsNoTracking().ToList();
                 foreach (var treatmentBMPUpsertDto in treatmentBMPUpsertDtos.Where(treatmentBMPUpsertDto =>
                              existingTreatmentBMPs
                                  .Any(x => x.TreatmentBMPName == treatmentBMPUpsertDto.TreatmentBMPName &&
@@ -130,14 +154,14 @@ namespace Neptune.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            await Projects.DeleteProjectNereidResultsAndGrantScores(_dbContext, projectID);
-            var existingProjectTreatmentBMPs = _dbContext.TreatmentBMPs.Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP).Where(x => x.ProjectID == project.ProjectID).ToList();
+            await Projects.DeleteProjectNereidResultsAndGrantScores(DbContext, projectID);
+            var existingProjectTreatmentBMPs = DbContext.TreatmentBMPs.Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP).Where(x => x.ProjectID == project.ProjectID).ToList();
             var existingProjectTreatmentBMPModelingAttributes = existingProjectTreatmentBMPs.Where(x => x.TreatmentBMPModelingAttributeTreatmentBMP != null).Select(x => x.TreatmentBMPModelingAttributeTreatmentBMP).ToList();
 
-            var updatedTreatmentBMPs = treatmentBMPUpsertDtos.Select(x => TreatmentBMPs.TreatmentBMPFromUpsertDtoAndProject(_dbContext, x, project)).ToList();
+            var updatedTreatmentBMPs = treatmentBMPUpsertDtos.Select(x => TreatmentBMPs.TreatmentBMPFromUpsertDtoAndProject(DbContext, x, project)).ToList();
 
-            await _dbContext.TreatmentBMPs.AddRangeAsync(updatedTreatmentBMPs.Where(x => x.TreatmentBMPID == 0));
-            await _dbContext.SaveChangesAsync();
+            await DbContext.TreatmentBMPs.AddRangeAsync(updatedTreatmentBMPs.Where(x => x.TreatmentBMPID == 0));
+            await DbContext.SaveChangesAsync();
 
             // update upsert dtos with new TreatmentBMPIDs
             foreach (var treatmentBMPUpsertDto in treatmentBMPUpsertDtos.Where(x => x.TreatmentBMPID == 0))
@@ -161,7 +185,7 @@ namespace Neptune.API.Controllers
                     x.Notes = y.Notes;
                 });
 
-            await _dbContext.SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             // merge TreatmentBMPModelingAttributeIDs
             var updatedTreatmentBMPModelingAttributes = updatedTreatmentBMPs.Select(x => x.TreatmentBMPModelingAttributeTreatmentBMP).ToList();
@@ -198,7 +222,7 @@ namespace Neptune.API.Controllers
                     x.MonthsOfOperationID = y.MonthsOfOperationID;
                     x.DryWeatherFlowOverrideID = y.DryWeatherFlowOverrideID;
                 });
-            await _dbContext.SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             await MergeDeleteTreatmentBMPs(existingProjectTreatmentBMPs, updatedTreatmentBMPs);
 
@@ -210,27 +234,27 @@ namespace Neptune.API.Controllers
             var treatmentBMPIDsWhoAreBeingDeleted = existingProjectTreatmentBMPs.Select(x => x.TreatmentBMPID)
                 .Where(x => updatedTreatmentBMPs.All(y => x != y.TreatmentBMPID)).ToList();
             // delete all the Delineation related entities
-            await _dbContext.ProjectHRUCharacteristics.Include(x => x.ProjectLoadGeneratingUnit)
+            await DbContext.ProjectHRUCharacteristics.Include(x => x.ProjectLoadGeneratingUnit)
                 .ThenInclude(x => x.Delineation).Where(x =>
                     x.ProjectLoadGeneratingUnit.DelineationID.HasValue &&
                     treatmentBMPIDsWhoAreBeingDeleted.Contains(x.ProjectLoadGeneratingUnit.Delineation
                         .TreatmentBMPID))
                 .ExecuteDeleteAsync();
-            await _dbContext.ProjectLoadGeneratingUnits.Include(x => x.Delineation)
+            await DbContext.ProjectLoadGeneratingUnits.Include(x => x.Delineation)
                 .Where(x => x.DelineationID.HasValue &&
                             treatmentBMPIDsWhoAreBeingDeleted.Contains(x.Delineation.TreatmentBMPID))
                 .ExecuteDeleteAsync();
-            await _dbContext.DelineationOverlaps
+            await DbContext.DelineationOverlaps
                 .Include(x => x.Delineation).Include(x => x.OverlappingDelineation).Where(x =>
                     treatmentBMPIDsWhoAreBeingDeleted.Contains(x.Delineation.TreatmentBMPID) ||
                     treatmentBMPIDsWhoAreBeingDeleted.Contains(x.OverlappingDelineation.TreatmentBMPID))
                 .ExecuteDeleteAsync();
-            await _dbContext.Delineations.Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID))
+            await DbContext.Delineations.Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID))
                 .ExecuteDeleteAsync();
-            await _dbContext.TreatmentBMPModelingAttributes
+            await DbContext.TreatmentBMPModelingAttributes
                 .Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID))
                 .ExecuteDeleteAsync();
-            await _dbContext.TreatmentBMPs.Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID))
+            await DbContext.TreatmentBMPs.Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID))
                 .ExecuteDeleteAsync();
 
             var treatmentBMPsWhoseLocationChanged = existingProjectTreatmentBMPs
@@ -240,7 +264,7 @@ namespace Neptune.API.Controllers
 
             if (treatmentBMPsWhoseLocationChanged.Any())
             {
-                await _dbContext.Delineations
+                await DbContext.Delineations
                     .Where(x => x.DelineationTypeID == (int)DelineationTypeEnum.Centralized &&
                                 treatmentBMPsWhoseLocationChanged.Contains(x.TreatmentBMPID)).ExecuteDeleteAsync();
             }
@@ -250,16 +274,16 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<GeometryGeoJSONAndAreaDto> GetUpstreamRSBCatchmentGeoJSONForTreatmentBMP([FromRoute] int treatmentBMPID)
         {
-            var treatmentBMP = TreatmentBMPs.GetByTreatmentBMPID(_dbContext, treatmentBMPID);
-            var delineation = Delineations.GetByTreatmentBMPID(_dbContext, treatmentBMPID);
+            var treatmentBMP = TreatmentBMPs.GetByTreatmentBMPID(DbContext, treatmentBMPID);
+            var delineation = Delineations.GetByTreatmentBMPID(DbContext, treatmentBMPID);
             if (ThrowNotFound(treatmentBMP, "TreatmentBMP", treatmentBMPID, out var actionResult))
             {
                 return actionResult;
             }
 
-            var regionalSubbasin = RegionalSubbasins.GetFirstByContainsGeometry(_dbContext, treatmentBMP.LocationPoint);
+            var regionalSubbasin = RegionalSubbasins.GetFirstByContainsGeometry(DbContext, treatmentBMP.LocationPoint);
 
-            return Ok(RegionalSubbasins.GetUpstreamCatchmentGeometry4326GeoJSONAndArea(_dbContext, regionalSubbasin.RegionalSubbasinID, treatmentBMPID, delineation?.DelineationID));
+            return Ok(RegionalSubbasins.GetUpstreamCatchmentGeometry4326GeoJSONAndArea(DbContext, regionalSubbasin.RegionalSubbasinID, treatmentBMPID, delineation?.DelineationID));
         }
     }
 }

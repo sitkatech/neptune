@@ -5,22 +5,18 @@
             <span *ngIf="!currentUserIsAdmin()">Labels and Definitions</span>
         </li>
         <li class="breadcrumb-item active" aria-current="page" *ngIf="fieldDefinition">
-            {{fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName}}
+            {{ fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName }}
         </li>
     </ol>
 </nav>
 <div class="container mt-sm-4" *ngIf="fieldDefinition">
     <app-alert-display></app-alert-display>
-    <h2 class="d-inline-block">
-        Edit Definition for Label: {{fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName}} </h2>
+    <h2 class="d-inline-block">Edit Definition for Label: {{ fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName }}</h2>
     <div class="row mt-4">
         <div class="col-12">
-            <editor #tinyMceEditor
-                [init]="tinyMceConfig"
-                [(ngModel)]="fieldDefinition.FieldDefinitionValue">
-            </editor>
-            <div style="float:right;">
-                <button type="button" class="btn btn-hippocamp mt-1 mr-1 mb-1" (click)="saveDefinition()" [disabled]="isLoadingSubmit">Save</button>
+            <editor #tinyMceEditor [init]="tinyMceConfig" [(ngModel)]="fieldDefinition.FieldDefinitionValue"> </editor>
+            <div style="float: right">
+                <button type="button" class="btn btn-primary mt-1 mr-1 mb-1" (click)="saveDefinition()" [disabled]="isLoadingSubmit">Save</button>
                 <a routerLink="/labels-and-definitions" class="btn btn-secondary mt-1 mb-1">Cancel</a>
             </div>
         </div>

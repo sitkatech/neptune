@@ -10,12 +10,13 @@ using Neptune.Models.DataTransferObjects;
 namespace Neptune.API.Controllers
 {
     [ApiController]
-    public class RoleController : SitkaController<RoleController>
+    public class RoleController(
+        NeptuneDbContext dbContext,
+        ILogger<RoleController> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<RoleController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        public RoleController(NeptuneDbContext dbContext, ILogger<RoleController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration) : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-        }
-
         [HttpGet("roles")]
         [AdminFeature]
         public ActionResult<List<RoleSimpleDto>> GetAllRoles()

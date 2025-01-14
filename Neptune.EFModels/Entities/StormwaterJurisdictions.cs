@@ -76,7 +76,8 @@ public static class StormwaterJurisdictions
     {
         return dbContext.StormwaterJurisdictions
             .Include(x => x.Organization)
-            .ThenInclude(x => x.OrganizationType);
+            .ThenInclude(x => x.OrganizationType)
+            .Include(x => x.TreatmentBMPs);
     }
 
     public static List<StormwaterJurisdiction> ListViewableByPersonForBMPs(NeptuneDbContext dbContext, Person person)
