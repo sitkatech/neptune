@@ -5,7 +5,6 @@ import { PersonDto } from "../../generated/model/person-dto";
 import { NgIf } from "@angular/common";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { DropdownToggleDirective } from "../../directives/dropdown-toggle.directive";
-import { DropdownToggleCloseDirective } from "../../directives/dropdown-toggle-close.directive";
 import { IconComponent } from "../icon/icon.component";
 
 @Component({
@@ -13,7 +12,7 @@ import { IconComponent } from "../icon/icon.component";
     templateUrl: "./header-nav.component.html",
     styleUrls: ["./header-nav.component.scss"],
     standalone: true,
-    imports: [RouterLink, RouterLinkActive, NgIf, DropdownToggleDirective, DropdownToggleCloseDirective, IconComponent],
+    imports: [RouterLink, RouterLinkActive, NgIf, DropdownToggleDirective, IconComponent],
 })
 export class HeaderNavComponent implements OnInit, OnDestroy {
     private watchUserChangeSubscription: any;
