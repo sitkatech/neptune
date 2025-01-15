@@ -5,7 +5,7 @@ import { IModal, ModalService } from "../../services/modal/modal.service";
 import { ModalComponent } from "../modal/modal.component";
 import { NgIf } from "@angular/common";
 import { ConfirmState } from "../../services/confirm/confirm-state";
-import { IconComponent } from "../icon/icon.component";
+import { IconComponent } from "src/app/shared/components/icon/icon.component";
 
 @Component({
     selector: "confirm-modal",

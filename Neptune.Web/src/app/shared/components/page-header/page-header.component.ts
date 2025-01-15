@@ -2,7 +2,7 @@ import { AfterContentInit, Component, Input, OnChanges, SimpleChanges, TemplateR
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
-import { IconComponent, IconInterface } from "../icon/icon.component";
+import { IconComponent, IconInterface } from "src/app/shared/components/icon/icon.component";
 
 @Component({
     selector: "page-header",

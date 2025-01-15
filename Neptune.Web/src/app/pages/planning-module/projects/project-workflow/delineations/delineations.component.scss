@@ -1,0 +1,11 @@
+tr.selectable {
+    cursor:pointer;
+}
+
+tr.selectable:hover {
+    background-color:#EEE;
+}
+
+tr.selectable.selected {
+    background-color: #FFFF85;
+}

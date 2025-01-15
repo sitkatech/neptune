@@ -7,7 +7,7 @@ import { BusyService } from "./shared/services";
 import { AuthenticationService } from "./services/authentication.service";
 import { Title } from "@angular/platform-browser";
 import { DOCUMENT, NgIf } from "@angular/common";
-import { HeaderNavComponent } from "./shared/components/header-nav/header-nav.component";
+import { HeaderNavComponent } from "src/app/pages/planning-module/header-nav/header-nav.component";
 
 @Component({
     selector: "app-root",
