@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.Common.DesignByContract;
 using Neptune.EFModels.Entities;
@@ -326,6 +325,26 @@ namespace Neptune.WebMvc.Controllers
 
             return new ModalDialogFormJsonResult(
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(_linkGenerator, x => x.RecordObservations(onlandVisualTrashAssessment)));
+        }
+
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public ActionResult BulkUploadOVTAAreas()
+        {
+            var bulkUploadTrashScreenVisitViewModel = new BulkUploadOVTAAreasViewModel();
+
+            return ViewBulkUploadOTVAAreas(bulkUploadTrashScreenVisitViewModel);
+        }
+
+        private ViewResult ViewBulkUploadOTVAAreas(
+            BulkUploadOVTAAreasViewModel bulkUploadTrashScreenVisitViewModel)
+        {
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadOVTAs);
+            var bulkUploadTrashScreenVisitViewData = new BulkUploadOVTAAreasViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
+
+            return RazorView<BulkUploadOVTAAreas, BulkUploadOVTAAreasViewData,
+                BulkUploadOVTAAreasViewModel>(bulkUploadTrashScreenVisitViewData,
+                bulkUploadTrashScreenVisitViewModel);
         }
     }
 
