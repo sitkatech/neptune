@@ -7,7 +7,7 @@ variable "storageAccountName" {
   type = string
 }
 
-variable "storageAccountNameDev" {
+variable "storageAccountDevApplicationName" {
   description = "The name for a dev storage account. If this variable isn't set it won't create this resource."
   type        = string
   default     = ""
@@ -158,8 +158,8 @@ resource "azurerm_resource_group" "web" {
 
 #dev blob storage
 resource "azurerm_storage_account" "dev" {
-  count                        = var.storageAccountNameDev != "" ? 1 : 0
-	name                         = var.storageAccountNameDev
+  count                        = var.storageAccountDevApplicationName != "" ? 1 : 0
+	name                         = var.storageAccountDevApplicationName
 	resource_group_name          = azurerm_resource_group.web.name
 	location                     = azurerm_resource_group.web.location
   account_replication_type	 	 = "LRS"
@@ -425,14 +425,14 @@ resource "azurerm_key_vault_secret" "sqlAdminUser" {
     azurerm_key_vault_access_policy.thisPipeline
   ]
 }
-  
-resource "azurerm_key_vault_secret" "sqlApiUsername" {
-   name                         = "sqlApiUsername"
-   value                        = var.sqlApiUsername
-   key_vault_id                 = azurerm_key_vault.web.id
  
-   tags                         = local.tags
-   depends_on = [
+resource "azurerm_key_vault_secret" "sqlApiUsername" {
+  name                         = "sqlApiUsername"
+  value                        = var.sqlApiUsername
+  key_vault_id                 = azurerm_key_vault.web.id
+
+  tags                         = local.tags
+  depends_on = [
     azurerm_key_vault_access_policy.thisPipeline
   ]
 }
