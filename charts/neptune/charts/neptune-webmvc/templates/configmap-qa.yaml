@@ -8,7 +8,6 @@ data:
   DOCKER_BUILD_SOURCE: "."
   ASPNETCORE_ENVIRONMENT: "Staging"
   ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
-  APPINSIGHTS_INSTRUMENTATIONKEY: "{{ .Values.global.env.appInsightsInstrumentationKey }}"
   SitkaEmailRedirect: "notifications-qa@sitkatech.com"
   SitkaSupportEmail: "h2o.team@esassoc.com"
   DoNotReplyEmail: "donotreply@ocstormwatertools.org"
