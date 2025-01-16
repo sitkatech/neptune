@@ -9,7 +9,7 @@ import { FieldDefinitionService } from "src/app/shared/generated/api/field-defin
 import { EditorComponent, EditorModule, TINYMCE_SCRIPT_SRC } from "@tinymce/tinymce-angular";
 import TinyMCEHelpers from "src/app/shared/helpers/tiny-mce-helpers";
 import { FormsModule } from "@angular/forms";
-import { AlertDisplayComponent } from "../../shared/components/alert-display/alert-display.component";
+import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { NgIf } from "@angular/common";
 
 @Component({

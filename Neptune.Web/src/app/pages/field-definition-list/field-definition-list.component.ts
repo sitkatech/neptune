@@ -6,9 +6,9 @@ import { AgGridAngular, AgGridModule } from "ag-grid-angular";
 import { FieldDefinitionDto, PersonDto } from "src/app/shared/generated/model/models";
 import { FieldDefinitionService } from "src/app/shared/generated/api/field-definition.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
-import { AlertDisplayComponent } from "../../shared/components/alert-display/alert-display.component";
-import { NeptuneGridComponent } from "../../shared/components/neptune-grid/neptune-grid.component";
-import { PageHeaderComponent } from "../../shared/components/page-header/page-header.component";
+import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
+import { NeptuneGridComponent } from "src/app/shared/components/neptune-grid/neptune-grid.component";
+import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 
 @Component({
     selector: "field-definition-list",

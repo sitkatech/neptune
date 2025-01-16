@@ -5,10 +5,10 @@ import { AlertService } from "../../services/alert.service";
 import { EditorComponent, TINYMCE_SCRIPT_SRC } from "@tinymce/tinymce-angular";
 import TinyMCEHelpers from "../../helpers/tiny-mce-helpers";
 import { AlertContext } from "../../models/enums/alert-context.enum";
-import { FieldDefinitionDto } from "../../generated/model/field-definition-dto";
-import { FieldDefinitionService } from "../../generated/api/field-definition.service";
-import { FieldDefinitionTypeEnum } from "../../generated/enum/field-definition-type-enum";
-import { PopperDirective } from "../../directives/popper.directive";
+import { FieldDefinitionDto } from "src/app/shared/generated/model/field-definition-dto";
+import { FieldDefinitionService } from "src/app/shared/generated/api/field-definition.service";
+import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
+import { PopperDirective } from "src/app/shared/directives/popper.directive";
 import { FormsModule } from "@angular/forms";
 import { NgIf } from "@angular/common";
 

@@ -6,13 +6,13 @@ import { AlertContext } from "../../models/enums/alert-context.enum";
 import { EditorComponent, TINYMCE_SCRIPT_SRC } from "@tinymce/tinymce-angular";
 import TinyMCEHelpers from "../../helpers/tiny-mce-helpers";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
-import { NeptunePageDto } from "../../generated/model/neptune-page-dto";
-import { CustomRichTextService } from "../../generated/api/custom-rich-text.service";
+import { NeptunePageDto } from "src/app/shared/generated/model/neptune-page-dto";
+import { CustomRichTextService } from "src/app/shared/generated/api/custom-rich-text.service";
 import { FormsModule } from "@angular/forms";
 import { NgIf } from "@angular/common";
-import { LoadingDirective } from "../../directives/loading.directive";
-import { IconComponent } from "../icon/icon.component";
-import { PersonDto } from "../../generated/model/person-dto";
+import { LoadingDirective } from "src/app/shared/directives/loading.directive";
+import { IconComponent } from "src/app/shared/components/icon/icon.component";
+import { PersonDto } from "src/app/shared/generated/model/person-dto";
 
 @Component({
     selector: "custom-rich-text",

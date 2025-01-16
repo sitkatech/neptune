@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { AlertService } from "../../services/alert.service";
-import { RoleEnum } from "../../generated/enum/role-enum";
+import { RoleEnum } from "src/app/shared/generated/enum/role-enum";
 
 @Injectable({
     providedIn: "root",
