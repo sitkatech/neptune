@@ -1,76 +1,8 @@
 <header class="site-header">
-    <div>
-        <div *ngIf="showTestingWarning()" class="qa-warning">
-            <span class="fa fa-warning"></span>
-            {{ testingWarningText() }}
-        </div>
-    </div>
-
-    <nav class="admin-nav">
-        <div class="admin-nav__wrapper" #mobileAdminToggle>
-            <a href="{{ ocStormwaterToolsMainUrl() }}" target="_blank">
-                <img src="assets/main/logos/hippocamp_logo.png" class="navbarLogo" alt="OCST Planning Module" style="height: 100px" />
-            </a>
-            <ul class="admin-nav__links admin-nav__main">
-                <li class="admin-nav__item home">
-                    <a [routerLink]="['/planning']" routerLinkActive="active" class="navbar-brand"> OCST Planning Module </a>
-                </li>
-            </ul>
-
-            <ul class="admin-nav__links admin-nav__utilities">
-                <li class="nav-item" routerLinkActive="active" *ngIf="!isAuthenticated()">
-                    <a href="javascript:void(0);" (click)="login()" routerLinkActive="active">Sign In</a>
-                </li>
-                <li class="nav-item dropdown welcomeUser" routerLinkActive="active" *ngIf="isAuthenticated()">
-                    <a
-                        href="javascript:void(0);"
-                        [dropdownToggle]="userToggle"
-                        class="nav-link dropdown-toggle"
-                        role="button"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false">
-                        <span class="username nav-link__label">
-                            Welcome {{ getUserName() }}
-                            <icon icon="AngleDown"></icon>
-                        </span>
-                    </a>
-
-                    <div #userToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a href="javascript:void(0);" (click)="logout()" class="dropdown-item"> Sign Out </a>
-                    </div>
-                </li>
-                <li class="nav-item" routerLinkActive="active">
-                    <a [routerLink]="['/planning/about']" class="nav-link"> About </a>
-                </li>
-                <li class="nav-item dropdown" routerLinkActive="active">
-                    <a
-                        href="javascript:void(0);"
-                        [dropdownToggle]="helpToggle"
-                        class="nav-link dropdown-toggle"
-                        role="button"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false">
-                        <icon icon="Info"></icon>
-                        <span class="nav-link__label">
-                            Help
-                            <icon icon="AngleDown"></icon>
-                        </span>
-                    </a>
-
-                    <div #helpToggle class="dropdown-menu dropdown-menu__help" aria-labelledby="navbarDropdown">
-                        <div class="dropdown-divider"></div>
-                        <a href="{{ requestSupportUrl() }}" class="dropdown-item"> Request Support </a>
-                        <a [routerLink]="['/planning/training']" class="dropdown-item"> Training </a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <header-nav moduleTitle="Planning Module"></header-nav>
 
     <nav class="site-nav">
-        <div class="collapse navbar-collapse" id="navbar2">
+        <div class="collapse navbar-collapse" *ngIf="currentUser$ | async">
             <ul class="site-nav__links site-nav__main">
                 <ng-container *ngIf="isAuthenticated() && isNotUnassigned()">
                     <li class="nav-item" routerLinkActive="active">

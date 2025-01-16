@@ -37,7 +37,7 @@ export const routeParams = {
 export const routes: Routes = [
     {
         path: `planning`,
-        title: "Planning Module",
+        title: "Stormwater Tools | Orange County | Planning Module",
         component: SiteLayoutComponent,
         children: [
             { path: "", title: "Home", component: HomeIndexComponent },
@@ -94,7 +94,7 @@ export const routes: Routes = [
     },
     {
         path: `trash`,
-        title: "Trash Module",
+        title: "Stormwater Tools | Orange County | Trash Module",
         component: TrashSiteLayoutComponent,
         children: [
             { path: "", title: "Home", component: TrashHomeComponent },

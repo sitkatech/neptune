@@ -53,7 +53,7 @@ export class AppComponent {
             }
         });
 
-        this.titleService.setTitle(`OCST Planning Module`);
+        this.titleService.setTitle(`Stormwater Tools | Orange County`);
         this.setAppFavicon();
     }
 

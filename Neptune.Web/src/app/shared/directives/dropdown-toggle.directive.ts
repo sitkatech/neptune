@@ -19,11 +19,7 @@ export class DropdownToggleDirective implements OnDestroy {
         this.toggleMenu();
     }
 
-    constructor(
-        private el: ElementRef,
-        private renderer: Renderer2,
-        private router: Router
-    ) {
+    constructor(private el: ElementRef, private renderer: Renderer2, private router: Router) {
         this.renderer.listen("window", "click", (e: Event) => {
             if (e.target !== this.el.nativeElement && !this.el.nativeElement.contains(e.target) && e.target !== this.dropdownToggle && !this.dropdownToggle.contains(e.target)) {
                 this.showMenu = false;
@@ -50,7 +46,9 @@ export class DropdownToggleDirective implements OnDestroy {
         if (this.showMenu) {
             this.renderer.addClass(this.dropdownToggle, this.classString);
         } else {
-            this.renderer.removeClass(this.dropdownToggle, this.classString);
+            if (this.dropdownToggle) {
+                this.renderer.removeClass(this.dropdownToggle, this.classString);
+            }
         }
     }
 }

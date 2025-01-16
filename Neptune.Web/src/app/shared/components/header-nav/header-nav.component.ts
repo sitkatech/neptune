@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ChangeDetectorRef, OnDestroy } from "@angular/core";
+import { Component, OnInit, HostListener, ChangeDetectorRef, OnDestroy, Input } from "@angular/core";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { environment } from "src/environments/environment";
 import { PersonDto } from "src/app/shared/generated/model/person-dto";
@@ -6,16 +6,16 @@ import { NgIf } from "@angular/common";
 import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
-import { HeaderNavComponent } from "../../../shared/components/header-nav/header-nav.component";
 
 @Component({
-    selector: "trash-site-layout",
-    templateUrl: "./trash-site-layout.component.html",
-    styleUrls: ["./trash-site-layout.component.scss"],
+    selector: "header-nav",
+    templateUrl: "./header-nav.component.html",
+    styleUrls: ["./header-nav.component.scss"],
     standalone: true,
-    imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, DropdownToggleDirective, IconComponent, HeaderNavComponent],
+    imports: [RouterLink, RouterLinkActive, NgIf, DropdownToggleDirective, IconComponent],
 })
-export class TrashSiteLayoutComponent implements OnInit, OnDestroy {
+export class HeaderNavComponent implements OnInit, OnDestroy {
+    @Input() moduleTitle: string;
     private watchUserChangeSubscription: any;
     private currentUser: PersonDto;
 
@@ -42,27 +42,12 @@ export class TrashSiteLayoutComponent implements OnInit, OnDestroy {
         this.cdr.detach();
     }
 
-    public toggleCurrentPageHeader() {
-        this.showCurrentPageHeader = !this.showCurrentPageHeader;
-    }
-
     public isAuthenticated(): boolean {
         return this.authenticationService.isAuthenticated();
     }
 
     public isAdministrator(): boolean {
         return this.authenticationService.isUserAnAdministrator(this.currentUser);
-    }
-
-    public isNotUnassigned(): boolean {
-        if (!this.currentUser) {
-            return false;
-        }
-        return !this.authenticationService.isUserUnassigned(this.currentUser);
-    }
-
-    public isOCTAGrantReviewer(): boolean {
-        return this.authenticationService.isCurrentUserAnOCTAGrantReviewer();
     }
 
     public getUserName() {
@@ -79,18 +64,6 @@ export class TrashSiteLayoutComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.cdr.detectChanges();
         });
-    }
-
-    public usersListUrl(): string {
-        return `${environment.ocStormwaterToolsBaseUrl}/User/Index`;
-    }
-
-    public organizationsIndexUrl(): string {
-        return `${environment.ocStormwaterToolsBaseUrl}/Organization/Index`;
-    }
-
-    public requestSupportUrl(): string {
-        return `${environment.ocStormwaterToolsBaseUrl}/Help/Support`;
     }
 
     public ocStormwaterToolsMainUrl(): string {
