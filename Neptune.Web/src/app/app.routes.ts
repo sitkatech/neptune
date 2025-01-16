@@ -25,6 +25,9 @@ import { PlanningMapComponent } from "./pages/planning-module/planning-map/plann
 import { OCTAM2Tier2DashboardComponent } from "./pages/planning-module/grant-programs/octa-m2-tier2-dashboard/octa-m2-tier2-dashboard.component";
 import { OCTAGrantReviewerOnlyGuard } from "./shared/guards/unauthenticated-access/octa-grant-reviewer-only.guard";
 import { SiteLayoutComponent } from "./pages/planning-module/site-layout/site-layout.component";
+import { TrashSiteLayoutComponent } from "./pages/trash-module/trash-site-layout/trash-site-layout.component";
+import { TrashHomeComponent } from "./pages/trash-module/trash-home/trash-home.component";
+import { TrashAboutComponent } from "./pages/trash-module/trash-about/trash-about.component";
 
 export const routeParams = {
     definitionID: "definitionID",
@@ -87,6 +90,17 @@ export const routes: Routes = [
             { path: "planning-map", component: PlanningMapComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
             { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
             { path: "about", component: AboutComponent, canActivate: [UnauthenticatedAccessGuard] },
+        ],
+    },
+    {
+        path: `trash`,
+        title: "Trash Module",
+        component: TrashSiteLayoutComponent,
+        children: [
+            { path: "", title: "Home", component: TrashHomeComponent },
+            { path: `labels-and-definitions/:${routeParams.definitionID}`, component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
+            { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
+            { path: "about", component: TrashAboutComponent, canActivate: [UnauthenticatedAccessGuard] },
         ],
     },
 

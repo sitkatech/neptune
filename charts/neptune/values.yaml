@@ -9,6 +9,7 @@ global:
   domains:
     api: "api-neptune.aks-qa.sitkatech.com"
     web: "planning-neptune.aks-qa.sitkatech.com"
+    trash: "trash-neptune.aks-qa.sitkatech.com"
     webmvc: "neptune.aks-qa.sitkatech.com"
     geoserver: "geoserver-neptune.aks-qa.sitkatech.com"
     nereid: "neptune-nereid"
