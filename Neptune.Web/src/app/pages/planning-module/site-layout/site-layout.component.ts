@@ -8,13 +8,13 @@ import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-togg
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
 
 @Component({
-    selector: "header-nav",
-    templateUrl: "./header-nav.component.html",
-    styleUrls: ["./header-nav.component.scss"],
+    selector: "site-layout",
+    templateUrl: "./site-layout.component.html",
+    styleUrls: ["./site-layout.component.scss"],
     standalone: true,
     imports: [RouterLink, RouterLinkActive, NgIf, DropdownToggleDirective, IconComponent],
 })
-export class HeaderNavComponent implements OnInit, OnDestroy {
+export class SiteLayoutComponent implements OnInit, OnDestroy {
     private watchUserChangeSubscription: any;
     private currentUser: PersonDto;
 
