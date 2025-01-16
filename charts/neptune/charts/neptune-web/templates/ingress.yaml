@@ -30,11 +30,27 @@ spec:
     - secretName: neptune-web-tls
       hosts:
         - {{ .Values.global.domains.web }}
+        - {{ .Values.global.domains.trash }}
   rules:
     - host: {{ .Values.global.domains.web }}
       http:
         paths:
-          - path: /
+          - path: /planning
+            pathType: ImplementationSpecific
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $svcPort }}
+              {{- else }}
+              serviceName: {{ $fullName }}
+              servicePort: {{ $svcPort }}
+              {{- end }}
+    - host: {{ .Values.global.domains.trash }}
+      http:
+        paths:
+          - path: /trash
             pathType: ImplementationSpecific
             backend:
               {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}

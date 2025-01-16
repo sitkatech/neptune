@@ -3,7 +3,7 @@ import { AuthenticationService } from "src/app/services/authentication.service";
 import { environment } from "src/environments/environment";
 import { PersonDto } from "src/app/shared/generated/model/person-dto";
 import { NgIf } from "@angular/common";
-import { RouterLink, RouterLinkActive } from "@angular/router";
+import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
 
@@ -12,7 +12,7 @@ import { IconComponent } from "src/app/shared/components/icon/icon.component";
     templateUrl: "./site-layout.component.html",
     styleUrls: ["./site-layout.component.scss"],
     standalone: true,
-    imports: [RouterLink, RouterLinkActive, NgIf, DropdownToggleDirective, IconComponent],
+    imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, DropdownToggleDirective, IconComponent],
 })
 export class SiteLayoutComponent implements OnInit, OnDestroy {
     private watchUserChangeSubscription: any;

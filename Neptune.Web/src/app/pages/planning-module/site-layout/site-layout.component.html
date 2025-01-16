@@ -13,7 +13,7 @@
             </a>
             <ul class="admin-nav__links admin-nav__main">
                 <li class="admin-nav__item home">
-                    <a routerLink="/" routerLinkActive="active" class="navbar-brand"> OCST Planning Module </a>
+                    <a [routerLink]="['/planning']" routerLinkActive="active" class="navbar-brand"> OCST Planning Module </a>
                 </li>
             </ul>
 
@@ -45,7 +45,7 @@
                     </div>
                 </li>
                 <li class="nav-item" routerLinkActive="active">
-                    <a routerLink="/about" class="nav-link"> About </a>
+                    <a [routerLink]="['/planning/about']" class="nav-link"> About </a>
                 </li>
                 <li class="nav-item dropdown" routerLinkActive="active">
                     <a
@@ -66,7 +66,7 @@
                     <div #helpToggle class="dropdown-menu dropdown-menu__help" aria-labelledby="navbarDropdown">
                         <div class="dropdown-divider"></div>
                         <a href="{{ requestSupportUrl() }}" class="dropdown-item"> Request Support </a>
-                        <a routerLink="/training" class="dropdown-item"> Training </a>
+                        <a [routerLink]="['/planning/training']" class="dropdown-item"> Training </a>
                     </div>
                 </li>
             </ul>
@@ -78,10 +78,10 @@
             <ul class="site-nav__links site-nav__main">
                 <ng-container *ngIf="isAuthenticated() && isNotUnassigned()">
                     <li class="nav-item" routerLinkActive="active">
-                        <a href="/projects" class="nav-link" role="button"> Projects </a>
+                        <a [routerLink]="['/planning/projects']" class="nav-link" role="button"> Projects </a>
                     </li>
                     <li class="nav-item" routerLinkActive="active">
-                        <a href="/planning-map" class="nav-link" role="button"> Planning Map </a>
+                        <a [routerLink]="['/planning/planning-map']" class="nav-link" role="button"> Planning Map </a>
                     </li>
                 </ng-container>
                 <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAdministrator()">
@@ -103,7 +103,7 @@
                         <div class="dropdown-divider"></div>
                         <a href="{{ usersListUrl() }}" class="dropdown-item"> Users </a>
                         <a href="{{ organizationsIndexUrl() }}" class="dropdown-item"> Organizations </a>
-                        <a routerLink="/labels-and-definitions" class="dropdown-item"> Labels and Definitions </a>
+                        <a [routerLink]="['/planning/labels-and-definitions']" class="dropdown-item"> Labels and Definitions </a>
                     </div>
                 </li>
 
@@ -124,10 +124,16 @@
 
                     <div #grantProgramsToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <div class="dropdown-divider"></div>
-                        <a href="grant-programs/octa-m2-tier-2" class="dropdown-item"> OCTA M2 Tier 2 Grant Program </a>
+                        <a [routerLink]="['/planning/grant-programs/octa-m2-tier-2']" class="dropdown-item"> OCTA M2 Tier 2 Grant Program </a>
                     </div>
                 </li>
             </ul>
         </div>
     </nav>
 </header>
+
+<main class="site">
+    <div class="site-wrapper">
+        <router-outlet></router-outlet>
+    </div>
+</main>

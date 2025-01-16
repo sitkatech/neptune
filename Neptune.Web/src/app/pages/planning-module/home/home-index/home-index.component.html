@@ -8,13 +8,13 @@
             <div class="card-body">
                 <div class="hero__btns">
                     <div class="hero__btns-wrapper">
-                        <a class="btn btn-primary" routerLink="/projects">View Projects</a>
+                        <a class="btn btn-primary" [routerLink]="['/planning/projects']">View Projects</a>
                     </div>
                     <div class="hero__btns-wrapper">
-                        <a class="btn btn-primary" routerLink="/projects/new">Add a Project</a>
+                        <a class="btn btn-primary" [routerLink]="['/planning/projects/new']">Add a Project</a>
                     </div>
                     <div class="hero__btns-wrapper">
-                        <a class="btn btn-primary" routerLink="/planning-map">Planning Map</a>
+                        <a class="btn btn-primary" [routerLink]="['/planning/planning-map']">Planning Map</a>
                     </div>
                     <div class="hero__btns-wrapper">
                         <a class="btn btn-primary" href="{{ ocstBaseUrl() }}">OCST Home</a>

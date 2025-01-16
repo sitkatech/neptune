@@ -7,14 +7,13 @@ import { BusyService } from "./shared/services";
 import { AuthenticationService } from "./services/authentication.service";
 import { Title } from "@angular/platform-browser";
 import { DOCUMENT, NgIf } from "@angular/common";
-import { SiteLayoutComponent } from "src/app/pages/planning-module/site-layout/site-layout.component";
 
 @Component({
     selector: "app-root",
     templateUrl: "./app.component.html",
     styleUrls: ["./app.component.scss"],
     standalone: true,
-    imports: [SiteLayoutComponent, RouterOutlet, NgIf],
+    imports: [RouterOutlet, NgIf],
 })
 export class AppComponent {
     public isIframe = false;

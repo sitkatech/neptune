@@ -109,7 +109,7 @@ export class ModeledPerformanceComponent implements OnInit {
                 tap((project) => {
                     // redirect to review step if project is shared with OCTA grant program
                     if (project.ShareOCTAM2Tier2Scores) {
-                        this.router.navigateByUrl(`projects/edit/${project.ProjectID}/review-and-share`);
+                        this.router.navigateByUrl(`/planning/projects/edit/${project.ProjectID}/review-and-share`);
                     }
                 })
             )
@@ -125,7 +125,7 @@ export class ModeledPerformanceComponent implements OnInit {
             pipe(
                 tap((data) => {
                     if (data.TreatmentBMPs.length == 0) {
-                        this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
+                        this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}`);
                     }
 
                     this.projectTreatmentBMPs = data.TreatmentBMPs;
@@ -288,6 +288,6 @@ export class ModeledPerformanceComponent implements OnInit {
     }
 
     continueToNextStep() {
-        this.router.navigateByUrl(`/projects/edit/${this.projectID}/attachments`);
+        this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}/attachments`);
     }
 }

@@ -24,6 +24,7 @@ import { ReviewComponent } from "./pages/planning-module/projects/project-workfl
 import { PlanningMapComponent } from "./pages/planning-module/planning-map/planning-map.component";
 import { OCTAM2Tier2DashboardComponent } from "./pages/planning-module/grant-programs/octa-m2-tier2-dashboard/octa-m2-tier2-dashboard.component";
 import { OCTAGrantReviewerOnlyGuard } from "./shared/guards/unauthenticated-access/octa-grant-reviewer-only.guard";
+import { SiteLayoutComponent } from "./pages/planning-module/site-layout/site-layout.component";
 
 export const routeParams = {
     definitionID: "definitionID",
@@ -31,60 +32,69 @@ export const routeParams = {
 };
 
 export const routes: Routes = [
-    { path: `labels-and-definitions/:${routeParams.definitionID}`, component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
-    { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
     {
-        path: "projects",
-        canActivate: [UnauthenticatedAccessGuard],
+        path: `planning`,
+        title: "Planning Module",
+        component: SiteLayoutComponent,
         children: [
-            { path: "", component: ProjectListComponent, canActivate: [JurisdictionManagerOrEditorOnlyGuard] },
+            { path: "", title: "Home", component: HomeIndexComponent },
+            { path: `labels-and-definitions/:${routeParams.definitionID}`, component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
+            { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
             {
-                path: "new",
-                component: ProjectWorkflowOutletComponent,
-                canActivate: [JurisdictionManagerOrEditorOnlyGuard],
+                path: "projects",
+                canActivate: [UnauthenticatedAccessGuard],
                 children: [
-                    { path: "", redirectTo: "instructions", pathMatch: "full" },
-                    { path: "instructions", component: ProjectInstructionsComponent },
-                    { path: "project-basics", component: ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard] },
-                ],
-            },
-            {
-                path: `edit/:${routeParams.projectID}`,
-                component: ProjectWorkflowOutletComponent,
-                canActivate: [JurisdictionManagerOrEditorOnlyGuard],
-                children: [
-                    { path: "", redirectTo: "instructions", pathMatch: "full" },
-                    { path: "instructions", component: ProjectInstructionsComponent },
-                    { path: "project-basics", component: ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard] },
+                    { path: "", component: ProjectListComponent, canActivate: [JurisdictionManagerOrEditorOnlyGuard] },
                     {
-                        path: "stormwater-treatments",
+                        path: "new",
+                        component: ProjectWorkflowOutletComponent,
+                        canActivate: [JurisdictionManagerOrEditorOnlyGuard],
                         children: [
-                            { path: "", redirectTo: "treatment-bmps", pathMatch: "full" },
-                            { path: "treatment-bmps", component: TreatmentBmpsComponent, canDeactivate: [UnsavedChangesGuard] },
-                            { path: "delineations", component: DelineationsComponent, canDeactivate: [UnsavedChangesGuard] },
-                            { path: "modeled-performance-and-metrics", component: ModeledPerformanceComponent },
+                            { path: "", redirectTo: "instructions", pathMatch: "full" },
+                            { path: "instructions", component: ProjectInstructionsComponent },
+                            { path: "project-basics", component: ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard] },
                         ],
                     },
-                    { path: "attachments", component: ProjectAttachmentsComponent },
-                    { path: "review-and-share", component: ReviewComponent },
+                    {
+                        path: `edit/:${routeParams.projectID}`,
+                        component: ProjectWorkflowOutletComponent,
+                        canActivate: [JurisdictionManagerOrEditorOnlyGuard],
+                        children: [
+                            { path: "", redirectTo: "instructions", pathMatch: "full" },
+                            { path: "instructions", component: ProjectInstructionsComponent },
+                            { path: "project-basics", component: ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard] },
+                            {
+                                path: "stormwater-treatments",
+                                children: [
+                                    { path: "", redirectTo: "treatment-bmps", pathMatch: "full" },
+                                    { path: "treatment-bmps", component: TreatmentBmpsComponent, canDeactivate: [UnsavedChangesGuard] },
+                                    { path: "delineations", component: DelineationsComponent, canDeactivate: [UnsavedChangesGuard] },
+                                    { path: "modeled-performance-and-metrics", component: ModeledPerformanceComponent },
+                                ],
+                            },
+                            { path: "attachments", component: ProjectAttachmentsComponent },
+                            { path: "review-and-share", component: ReviewComponent },
+                        ],
+                    },
+                    { path: `:${routeParams.projectID}`, component: ProjectDetailComponent },
                 ],
             },
-            { path: `:${routeParams.projectID}`, component: ProjectDetailComponent },
+            {
+                path: "grant-programs",
+                canActivate: [UnauthenticatedAccessGuard, OCTAGrantReviewerOnlyGuard],
+                children: [{ path: "octa-m2-tier-2", component: OCTAM2Tier2DashboardComponent }],
+            },
+            { path: "planning-map", component: PlanningMapComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
+            { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
+            { path: "about", component: AboutComponent, canActivate: [UnauthenticatedAccessGuard] },
         ],
     },
-    {
-        path: "grant-programs",
-        canActivate: [UnauthenticatedAccessGuard, OCTAGrantReviewerOnlyGuard],
-        children: [{ path: "octa-m2-tier-2", component: OCTAM2Tier2DashboardComponent }],
-    },
-    { path: "planning-map", component: PlanningMapComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
-    { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
-    { path: "about", component: AboutComponent, canActivate: [UnauthenticatedAccessGuard] },
+
     { path: "create-user-callback", component: CreateUserCallbackComponent },
     { path: "not-found", component: NotFoundComponent },
     { path: "subscription-insufficient", component: SubscriptionInsufficientComponent },
     { path: "unauthenticated", component: UnauthenticatedComponent },
     { path: "signin-oidc", component: LoginCallbackComponent },
-    { path: "", component: HomeIndexComponent },
+    { path: "", redirectTo: "/planning", pathMatch: "full" },
     { path: "**", component: NotFoundComponent },
 ];

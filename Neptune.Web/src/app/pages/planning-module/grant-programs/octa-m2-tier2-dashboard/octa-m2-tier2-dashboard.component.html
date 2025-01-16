@@ -54,7 +54,7 @@
                     <div class="flex-between">
                         <div class="content-section">Project</div>
                         <div class="flex-end">
-                            <a routerLink="/projects/{{ selectedProject.ProjectID }}" class="btn btn-sm btn-primary ml-auto">View Project Details</a>
+                            <a [routerLink]="['/planning/projects', selectedProject.ProjectID]" class="btn btn-sm btn-primary ml-auto">View Project Details</a>
                         </div>
                     </div>
                     <dl class="grid-12 mt-3">
