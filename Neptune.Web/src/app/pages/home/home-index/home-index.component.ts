@@ -1,9 +1,8 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { environment } from "src/environments/environment";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { PersonDto } from "src/app/shared/generated/model/person-dto";
-import { RoleEnum } from "src/app/shared/generated/enum/role-enum";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
@@ -18,8 +17,7 @@ import { HeaderNavComponent } from "../../../shared/components/header-nav/header
     standalone: true,
     imports: [NgIf, AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe, HeaderNavComponent],
 })
-export class HomeIndexComponent implements OnInit, OnDestroy {
-    public watchUserChangeSubscription: any;
+export class HomeIndexComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;
 
     public customRichTextTypeID: number = NeptunePageTypeEnum.HomePage;
@@ -48,30 +46,6 @@ export class HomeIndexComponent implements OnInit, OnDestroy {
                 });
             }
         });
-    }
-
-    ngOnDestroy(): void {
-        this.watchUserChangeSubscription?.unsubscribe();
-    }
-
-    public userIsUnassigned(currentUser: PersonDto) {
-        if (!currentUser) {
-            return false; // doesn't exist != unassigned
-        }
-
-        return currentUser.RoleID === RoleEnum.Unassigned;
-    }
-
-    public userIsOCTAGrantReviewer(currentUser: PersonDto) {
-        if (!currentUser) {
-            return false;
-        }
-
-        return currentUser.IsOCTAGrantReviewer;
-    }
-
-    public isUserAnAdministrator(currentUser: PersonDto) {
-        return this.authenticationService.isUserAnAdministrator(currentUser);
     }
 
     public login(): void {

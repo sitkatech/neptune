@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Input } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { environment } from "src/environments/environment";
 import { PersonDto } from "src/app/shared/generated/model/person-dto";
@@ -18,13 +18,6 @@ import { Observable } from "rxjs";
 export class HeaderNavComponent implements OnInit {
     @Input() moduleTitle: string;
     public currentUser$: Observable<PersonDto>;
-
-    public windowWidth: number;
-
-    @HostListener("window:resize", ["$event"])
-    resize() {
-        this.windowWidth = window.innerWidth;
-    }
 
     constructor(private authenticationService: AuthenticationService) {}
 

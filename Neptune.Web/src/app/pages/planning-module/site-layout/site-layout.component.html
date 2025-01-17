@@ -2,9 +2,9 @@
     <header-nav moduleTitle="Planning Module"></header-nav>
 
     <nav class="site-nav">
-        <div class="collapse navbar-collapse" *ngIf="currentUser$ | async">
+        <div class="collapse navbar-collapse" *ngIf="currentUser$ | async as currentUser">
             <ul class="site-nav__links site-nav__main">
-                <ng-container *ngIf="isAuthenticated() && isNotUnassigned()">
+                <ng-container *ngIf="isAuthenticated() && isNotUnassigned(currentUser)">
                     <li class="nav-item" routerLinkActive="active">
                         <a [routerLink]="['/planning/projects']" class="nav-link" role="button"> Projects </a>
                     </li>
@@ -12,7 +12,7 @@
                         <a [routerLink]="['/planning/planning-map']" class="nav-link" role="button"> Planning Map </a>
                     </li>
                 </ng-container>
-                <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAdministrator()">
+                <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAdministrator(currentUser)">
                     <a
                         href="javascript:void(0);"
                         [dropdownToggle]="manageToggle"

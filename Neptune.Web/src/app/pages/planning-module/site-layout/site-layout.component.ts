@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ChangeDetectorRef, OnDestroy } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { environment } from "src/environments/environment";
 import { PersonDto } from "src/app/shared/generated/model/person-dto";
@@ -7,7 +7,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
 import { HeaderNavComponent } from "../../../shared/components/header-nav/header-nav.component";
-import { Observable, tap } from "rxjs";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "site-layout",
@@ -18,40 +18,26 @@ import { Observable, tap } from "rxjs";
 })
 export class SiteLayoutComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;
-    private currentUser: PersonDto;
-
-    public windowWidth: number;
-
-    public showCurrentPageHeader: boolean = true;
-
-    @HostListener("window:resize", ["$event"])
-    resize() {
-        this.windowWidth = window.innerWidth;
-    }
 
     constructor(private authenticationService: AuthenticationService) {}
 
     ngOnInit() {
-        this.currentUser$ = this.authenticationService.getCurrentUser().pipe(
-            tap((currentUser) => {
-                this.currentUser = currentUser;
-            })
-        );
+        this.currentUser$ = this.authenticationService.getCurrentUser();
     }
 
     public isAuthenticated(): boolean {
         return this.authenticationService.isAuthenticated();
     }
 
-    public isAdministrator(): boolean {
-        return this.authenticationService.isUserAnAdministrator(this.currentUser);
+    public isAdministrator(currentUser: PersonDto): boolean {
+        return this.authenticationService.isUserAnAdministrator(currentUser);
     }
 
-    public isNotUnassigned(): boolean {
-        if (!this.currentUser) {
+    public isNotUnassigned(currentUser: PersonDto): boolean {
+        if (!currentUser) {
             return false;
         }
-        return !this.authenticationService.isUserUnassigned(this.currentUser);
+        return !this.authenticationService.isUserUnassigned(currentUser);
     }
 
     public isOCTAGrantReviewer(): boolean {

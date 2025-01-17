@@ -8,7 +8,7 @@ import { SiteLayoutComponent } from "../../../pages/planning-module/site-layout/
     templateUrl: "./not-found.component.html",
     styleUrls: ["./not-found.component.scss"],
     standalone: true,
-    imports: [AlertDisplayComponent, PageHeaderComponent, SiteLayoutComponent],
+    imports: [PageHeaderComponent, SiteLayoutComponent],
 })
 export class NotFoundComponent implements OnInit {
     constructor() {}
