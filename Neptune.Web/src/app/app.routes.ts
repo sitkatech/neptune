@@ -29,6 +29,9 @@ import { TrashSiteLayoutComponent } from "./pages/trash-module/trash-site-layout
 import { TrashHomeComponent } from "./pages/trash-module/trash-home/trash-home.component";
 import { TrashAboutComponent } from "./pages/trash-module/trash-about/trash-about.component";
 import { PLanningHomeComponent as PlanningHomeComponent } from "./pages/planning-module/planning-home/planning-home/planning-home.component";
+import { SiteLayoutComponent } from "./pages/site-layout/site-layout.component";
+import { AboutComponent } from "./pages/about/about.component";
+import { ModelingAboutComponent } from "./pages/modeling-about/modeling-about.component";
 
 export const routeParams = {
     definitionID: "definitionID",
@@ -42,8 +45,6 @@ export const routes: Routes = [
         component: PlanningSiteLayoutComponent,
         children: [
             { path: "", title: "Home", component: PlanningHomeComponent },
-            { path: `labels-and-definitions/:${routeParams.definitionID}`, component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
-            { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
             {
                 path: "projects",
                 canActivate: [UnauthenticatedAccessGuard],
@@ -99,17 +100,26 @@ export const routes: Routes = [
         component: TrashSiteLayoutComponent,
         children: [
             { path: "", title: "Home", component: TrashHomeComponent },
-            { path: `labels-and-definitions/:${routeParams.definitionID}`, component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
-            { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
             { path: "about", component: TrashAboutComponent, canActivate: [UnauthenticatedAccessGuard] },
         ],
     },
 
     { path: "create-user-callback", component: CreateUserCallbackComponent },
+    { path: "signin-oidc", component: LoginCallbackComponent },
+    {
+        path: ``,
+        title: "Stormwater Tools | Orange County",
+        component: SiteLayoutComponent,
+        children: [
+            { path: "", component: HomeIndexComponent },
+            { path: "about", component: AboutComponent },
+            { path: "modeling", component: ModelingAboutComponent },
+            { path: `labels-and-definitions/:${routeParams.definitionID}`, component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
+            { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
+        ],
+    },
     { path: "not-found", component: NotFoundComponent },
     { path: "subscription-insufficient", component: SubscriptionInsufficientComponent },
     { path: "unauthenticated", component: UnauthenticatedComponent },
-    { path: "signin-oidc", component: LoginCallbackComponent },
-    { path: "", component: HomeIndexComponent },
     { path: "**", component: NotFoundComponent },
 ];

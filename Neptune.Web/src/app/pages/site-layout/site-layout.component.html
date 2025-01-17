@@ -1,0 +1,38 @@
+<header class="site-header">
+    <header-nav moduleTitle=""></header-nav>
+
+    <nav class="site-nav">
+        <div class="collapse navbar-collapse" *ngIf="currentUser$ | async as currentUser">
+            <ul class="site-nav__links site-nav__main">
+                <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAdministrator(currentUser)">
+                    <a
+                        href="javascript:void(0);"
+                        [dropdownToggle]="manageToggle"
+                        class="nav-link dropdown-toggle"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                        <span class="nav-link__label">
+                            Manage
+                            <icon icon="AngleDown"></icon>
+                        </span>
+                    </a>
+
+                    <div #manageToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ usersListUrl() }}" class="dropdown-item"> Users </a>
+                        <a href="{{ organizationsIndexUrl() }}" class="dropdown-item"> Organizations </a>
+                        <a [routerLink]="['/labels-and-definitions']" class="dropdown-item"> Labels and Definitions </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<main class="site">
+    <div class="site-wrapper">
+        <router-outlet></router-outlet>
+    </div>
+</main>

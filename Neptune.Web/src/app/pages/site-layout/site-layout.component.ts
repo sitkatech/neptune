@@ -1,21 +1,22 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthenticationService } from "src/app/services/authentication.service";
+import { environment } from "src/environments/environment";
 import { PersonDto } from "src/app/shared/generated/model/person-dto";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
-import { HeaderNavComponent } from "../../../shared/components/header-nav/header-nav.component";
+import { HeaderNavComponent } from "../../shared/components/header-nav/header-nav.component";
 import { Observable } from "rxjs";
 
 @Component({
-    selector: "planning-site-layout",
-    templateUrl: "./planning-site-layout.component.html",
-    styleUrls: ["./planning-site-layout.component.scss"],
+    selector: "site-layout",
+    templateUrl: "./site-layout.component.html",
+    styleUrls: ["./site-layout.component.scss"],
     standalone: true,
     imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, AsyncPipe, DropdownToggleDirective, IconComponent, HeaderNavComponent],
 })
-export class PlanningSiteLayoutComponent implements OnInit {
+export class SiteLayoutComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;
 
     constructor(private authenticationService: AuthenticationService) {}
@@ -28,6 +29,10 @@ export class PlanningSiteLayoutComponent implements OnInit {
         return this.authenticationService.isAuthenticated();
     }
 
+    public isAdministrator(currentUser: PersonDto): boolean {
+        return this.authenticationService.isUserAnAdministrator(currentUser);
+    }
+
     public isNotUnassigned(currentUser: PersonDto): boolean {
         if (!currentUser) {
             return false;
@@ -37,5 +42,13 @@ export class PlanningSiteLayoutComponent implements OnInit {
 
     public isOCTAGrantReviewer(): boolean {
         return this.authenticationService.isCurrentUserAnOCTAGrantReviewer();
+    }
+
+    public usersListUrl(): string {
+        return `${environment.ocStormwaterToolsBaseUrl}/User/Index`;
+    }
+
+    public organizationsIndexUrl(): string {
+        return `${environment.ocStormwaterToolsBaseUrl}/Organization/Index`;
     }
 }

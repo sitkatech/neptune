@@ -28,7 +28,7 @@
                 <div #moduleSwitcherToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                     <a href="{{ ocStormwaterToolsMainUrl() }}" class="dropdown-item" target="_blank"> OC Stormwater Tools Home </a>
                     <div class="dropdown-divider"></div>
-                    <a href="{{ ocStormwaterToolsMainUrl() }}/Home/Modeling" class="dropdown-item">
+                    <a [routerLink]="['/modeling']" class="dropdown-item">
                         <img src="assets/main/icons/modelingIcon.png" style="height: 35px; padding-right: 15px" />
                         Modeling Module
                     </a>
