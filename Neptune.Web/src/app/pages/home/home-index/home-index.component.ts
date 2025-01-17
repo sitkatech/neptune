@@ -9,19 +9,20 @@ import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-t
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { Observable } from "rxjs";
+import { HeaderNavComponent } from "../../../shared/components/header-nav/header-nav.component";
 
 @Component({
     selector: "app-home-index",
     templateUrl: "./home-index.component.html",
     styleUrls: ["./home-index.component.scss"],
     standalone: true,
-    imports: [NgIf, AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe],
+    imports: [NgIf, AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe, HeaderNavComponent],
 })
 export class HomeIndexComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;
     public currentUser$: Observable<PersonDto>;
 
-    public richTextTypeID: number = NeptunePageTypeEnum.HippocampHomePage;
+    public customRichTextTypeID: number = NeptunePageTypeEnum.HomePage;
 
     constructor(private authenticationService: AuthenticationService, private router: Router, private route: ActivatedRoute) {}
 

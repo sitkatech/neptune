@@ -2,7 +2,7 @@ import { Routes } from "@angular/router";
 import { NotFoundComponent, UnauthenticatedComponent, SubscriptionInsufficientComponent } from "./shared/pages";
 import { UnauthenticatedAccessGuard } from "./shared/guards/unauthenticated-access/unauthenticated-access.guard";
 import { ManagerOnlyGuard } from "./shared/guards/unauthenticated-access/manager-only-guard";
-import { HomeIndexComponent } from "./pages/planning-module/home/home-index/home-index.component";
+import { HomeIndexComponent } from "./pages/home/home-index/home-index.component";
 import { LoginCallbackComponent } from "./pages/login-callback/login-callback.component";
 import { CreateUserCallbackComponent } from "./pages/create-user-callback/create-user-callback.component";
 import { FieldDefinitionListComponent } from "./pages/field-definition-list/field-definition-list.component";
@@ -28,6 +28,7 @@ import { SiteLayoutComponent } from "./pages/planning-module/site-layout/site-la
 import { TrashSiteLayoutComponent } from "./pages/trash-module/trash-site-layout/trash-site-layout.component";
 import { TrashHomeComponent } from "./pages/trash-module/trash-home/trash-home.component";
 import { TrashAboutComponent } from "./pages/trash-module/trash-about/trash-about.component";
+import { PLanningHomeComponent as PlanningHomeComponent } from "./pages/planning-module/planning-home/planning-home/planning-home.component";
 
 export const routeParams = {
     definitionID: "definitionID",
@@ -40,7 +41,7 @@ export const routes: Routes = [
         title: "Stormwater Tools | Orange County | Planning Module",
         component: SiteLayoutComponent,
         children: [
-            { path: "", title: "Home", component: HomeIndexComponent },
+            { path: "", title: "Home", component: PlanningHomeComponent },
             { path: `labels-and-definitions/:${routeParams.definitionID}`, component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
             { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
             {
@@ -109,6 +110,6 @@ export const routes: Routes = [
     { path: "subscription-insufficient", component: SubscriptionInsufficientComponent },
     { path: "unauthenticated", component: UnauthenticatedComponent },
     { path: "signin-oidc", component: LoginCallbackComponent },
-    { path: "", redirectTo: "/planning", pathMatch: "full" },
+    { path: "", component: HomeIndexComponent },
     { path: "**", component: NotFoundComponent },
 ];
