@@ -10,6 +10,8 @@ namespace Neptune.WebMvc.Views.DataHub
     public class IndexViewData : NeptuneViewData
     {
         public bool HasManagePermission { get; }
+        public bool IsAdmin { get; }
+        public bool IsManagerOrEditor { get; }
         public readonly WebServiceToken WebServiceAccessToken;
         public readonly List<WebServiceDocumentation> ServiceDocumentationList;
         public ViewPageContentViewData TreatmentBMPPage { get; }
@@ -75,6 +77,8 @@ namespace Neptune.WebMvc.Views.DataHub
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             HasManagePermission = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
+            IsAdmin = currentPerson.IsAdministrator();
+            IsManagerOrEditor = currentPerson.IsJurisdictionEditorOrManager();
             EntityName = "Data Hub";
             PageTitle = "Index";
             WebServiceAccessToken = webServiceAccessToken;

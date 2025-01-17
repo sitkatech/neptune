@@ -81,6 +81,12 @@ namespace Neptune.EFModels.Entities
                    RoleID == Role.SitkaAdmin.RoleID || RoleID == Role.JurisdictionEditor.RoleID;
         }
 
+        public bool IsJurisdictionEditorOrManager()
+        {
+            return RoleID == Role.JurisdictionManager.RoleID || 
+                   RoleID == Role.JurisdictionEditor.RoleID;
+        }
+
         public bool IsAnonymousOrUnassigned()
         {
             return IsAnonymousUser() || Role == Role.Unassigned;
