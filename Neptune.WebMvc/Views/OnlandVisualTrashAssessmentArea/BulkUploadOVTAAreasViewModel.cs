@@ -8,9 +8,9 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea;
 public class BulkUploadOVTAAreasViewModel : FormViewModel
 {
     [Required]
-    [SitkaFileExtensions("xlsx")]
-    [DisplayName("XLSX File to Import")]
-    public IFormFile UploadXLSX { get; set; }
+    [DisplayName("Zipped File Geodatabase to Upload")]
+    [SitkaFileExtensions("zip")]
+    public IFormFile FileResourceData { get; set; }
 
     [Required]
     public int StormwaterJurisdictionID { get; set; }
