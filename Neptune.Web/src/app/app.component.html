@@ -1,11 +1,5 @@
-<site-layout></site-layout>
-
-<main class="site">
-    <div class="site-wrapper">
-        <!--This is to avoid reload during acquireTokenSilent() because of hidden iframe -->
-        <router-outlet *ngIf="!isIframe"></router-outlet>
-    </div>
-</main>
+<!--This is to avoid reload during acquireTokenSilent() because of hidden iframe -->
+<router-outlet *ngIf="!isIframe"></router-outlet>
 
 <footer class="site-footer grid-12">
     <div class="credits copy copy-3">

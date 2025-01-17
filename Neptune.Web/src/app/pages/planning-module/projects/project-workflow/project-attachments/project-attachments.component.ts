@@ -77,7 +77,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
             this.projectService.projectsProjectIDGet(this.projectID).subscribe((project) => {
                 // redirect to review step if project is shared with OCTA grant program
                 if (project.ShareOCTAM2Tier2Scores) {
-                    this.router.navigateByUrl(`projects/edit/${this.projectID}/review-and-share`);
+                    this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}/review-and-share`);
                 }
 
                 this.model = new ProjectDocumentUpsertDto();
@@ -265,6 +265,6 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     }
 
     continueToNextStep() {
-        this.router.navigateByUrl(`/projects/edit/${this.projectID}/review-and-share`);
+        this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}/review-and-share`);
     }
 }

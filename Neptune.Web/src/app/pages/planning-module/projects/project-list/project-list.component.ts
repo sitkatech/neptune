@@ -4,7 +4,7 @@ import { ColDef, GridApi, ValueGetterParams } from "ag-grid-community";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { PersonDto } from "src/app/shared/generated/model/person-dto";
 import { AuthenticationService } from "src/app/services/authentication.service";
-import { Router } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
@@ -23,7 +23,7 @@ import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-togg
     templateUrl: "./project-list.component.html",
     styleUrls: ["./project-list.component.scss"],
     standalone: true,
-    imports: [DropdownToggleDirective, AgGridModule, NeptuneGridComponent, PageHeaderComponent],
+    imports: [DropdownToggleDirective, AgGridModule, NeptuneGridComponent, PageHeaderComponent, RouterLink],
 })
 export class ProjectListComponent implements OnInit {
     private currentUser: PersonDto;
@@ -69,20 +69,21 @@ export class ProjectListComponent implements OnInit {
         this.projectColumnDefs = [
             this.utilityFunctionsService.createActionsColumnDef((params: any) => {
                 return [
-                    { ActionName: "View", ActionHandler: () => this.router.navigateByUrl(`/projects/${params.data.ProjectID}`) },
+                    { ActionName: "View", ActionHandler: () => this.router.navigate(["planning", "projects", params.data.ProjectID]) },
                     {
                         ActionName: "Edit",
                         ActionIcon: "fas fa-edit",
-                        ActionHandler: () => this.router.navigateByUrl(`/projects/edit/${params.data.ProjectID + (params.data.ShareOCTAM2Tier2Scores ? "/review-and-share" : "")}`),
+                        ActionHandler: () =>
+                            this.router.navigateByUrl(`/planning/projects/edit/${params.data.ProjectID + (params.data.ShareOCTAM2Tier2Scores ? "/review-and-share" : "")}`),
                     },
                     { ActionName: "Delete", ActionIcon: "fa fa-trash text-danger", ActionHandler: () => this.deleteModal(params) },
                 ];
             }),
             this.utilityFunctionsService.createLinkColumnDef("Project ID", "ProjectID", "ProjectID", {
-                InRouterLink: "/projects/",
+                InRouterLink: "/planning/projects/",
             }),
             this.utilityFunctionsService.createLinkColumnDef("Project Name", "ProjectName", "ProjectID", {
-                InRouterLink: "/projects/",
+                InRouterLink: "/planning/projects/",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Organization", "Organization.OrganizationName"),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdiction.Organization.OrganizationName"),

@@ -1,0 +1,55 @@
+<main class="site">
+    <section class="hero">
+        <div class="hero__photo">
+            <img src="/assets/main/home_image2.png" />
+        </div>
+        <div class="hero__actions card">
+            <ng-container *ngIf="currentUser$ | async as currentUser; else notSignedIn">
+                <div class="card-header"><h3 class="card-title">Quick Actions</h3></div>
+                <div class="card-body">
+                    <div class="hero__btns">
+                        <div class="hero__btns-wrapper">
+                            <a class="btn btn-primary" [routerLink]="['/planning']">Planning Module</a>
+                        </div>
+                        <div class="hero__btns-wrapper">
+                            <a class="btn btn-primary" [routerLink]="['/trash']">Trash Module</a>
+                        </div>
+                        <div class="hero__btns-wrapper">
+                            <a class="btn btn-primary" href="{{ ocstBaseUrl() }}">OCST Home</a>
+                        </div>
+                        <div class="hero__btns-wrapper">
+                            <a class="btn btn-primary" href="{{ requestSupportUrl() }}">Request Support</a>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-template #notSignedIn>
+                <div class="card-header"><h3 class="card-title">Welcome.</h3></div>
+                <div class="card-body">
+                    <p class="mb-2">Log in to view your Account. Create an Account if you don't have one yet.</p>
+                    <div class="hero__btns">
+                        <div class="hero__btns-wrapper">
+                            <a (click)="login()" class="btn btn-primary">Login</a>
+                        </div>
+                        <div class="hero__btns-wrapper">
+                            <a (click)="createAccount()" class="btn btn-primary">Create Account</a>
+                        </div>
+                    </div>
+                    <hr />
+                    <div>
+                        <small style="font-size: 11px">
+                            Need help logging in? <br />
+                            <a href="{{ forgotPasswordUrl() }}">Forgot Password</a> | <a href="{{ forgotUsernameUrl() }}">Forgot Username</a> |
+                            <a href="{{ keystoneSupportUrl() }}">Request Support</a>
+                        </small>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </section>
+    <app-alert-display></app-alert-display>
+    <div class="site__about">
+        <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+    </div>
+</main>
