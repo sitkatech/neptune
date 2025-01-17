@@ -51,7 +51,7 @@
             <li class="nav-item" routerLinkActive="active" *ngIf="!isAuthenticated()">
                 <a href="javascript:void(0);" (click)="login()" routerLinkActive="active">Sign In</a>
             </li>
-            <li class="nav-item dropdown welcomeUser" routerLinkActive="active" *ngIf="isAuthenticated()">
+            <li class="nav-item dropdown welcomeUser" routerLinkActive="active" *ngIf="currentUser$ | async as currentUser">
                 <a
                     href="javascript:void(0);"
                     [dropdownToggle]="userToggle"
@@ -61,7 +61,7 @@
                     aria-haspopup="true"
                     aria-expanded="false">
                     <span class="username nav-link__label">
-                        Welcome {{ getUserName() }}
+                        Welcome {{ currentUser.FirstName }} {{ currentUser.LastName }}
                         <icon icon="AngleDown"></icon>
                     </span>
                 </a>
