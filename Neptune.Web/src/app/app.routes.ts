@@ -9,7 +9,7 @@ import { FieldDefinitionListComponent } from "./pages/field-definition-list/fiel
 import { FieldDefinitionEditComponent } from "./pages/field-definition-edit/field-definition-edit.component";
 import { TrainingComponent } from "./pages/planning-module/training/training.component";
 import { ProjectListComponent } from "./pages/planning-module/projects/project-list/project-list.component";
-import { AboutComponent } from "./pages/planning-module/about/about.component";
+import { PlanningAboutComponent } from "./pages/planning-module/planning-about/planning-about.component";
 import { ProjectWorkflowOutletComponent } from "./pages/planning-module/projects/project-workflow/project-workflow-outlet.component";
 import { JurisdictionManagerOrEditorOnlyGuard } from "./shared/guards/unauthenticated-access/jurisdiction-manager-or-editor-only-guard.guard";
 import { ProjectInstructionsComponent } from "./pages/planning-module/projects/project-workflow/project-instructions/project-instructions.component";
@@ -24,7 +24,7 @@ import { ReviewComponent } from "./pages/planning-module/projects/project-workfl
 import { PlanningMapComponent } from "./pages/planning-module/planning-map/planning-map.component";
 import { OCTAM2Tier2DashboardComponent } from "./pages/planning-module/grant-programs/octa-m2-tier2-dashboard/octa-m2-tier2-dashboard.component";
 import { OCTAGrantReviewerOnlyGuard } from "./shared/guards/unauthenticated-access/octa-grant-reviewer-only.guard";
-import { SiteLayoutComponent } from "./pages/planning-module/site-layout/site-layout.component";
+import { PlanningSiteLayoutComponent } from "./pages/planning-module/planning-site-layout/planning-site-layout.component";
 import { TrashSiteLayoutComponent } from "./pages/trash-module/trash-site-layout/trash-site-layout.component";
 import { TrashHomeComponent } from "./pages/trash-module/trash-home/trash-home.component";
 import { TrashAboutComponent } from "./pages/trash-module/trash-about/trash-about.component";
@@ -39,7 +39,7 @@ export const routes: Routes = [
     {
         path: `planning`,
         title: "Stormwater Tools | Orange County | Planning Module",
-        component: SiteLayoutComponent,
+        component: PlanningSiteLayoutComponent,
         children: [
             { path: "", title: "Home", component: PlanningHomeComponent },
             { path: `labels-and-definitions/:${routeParams.definitionID}`, component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
@@ -90,7 +90,7 @@ export const routes: Routes = [
             },
             { path: "planning-map", component: PlanningMapComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
             { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
-            { path: "about", component: AboutComponent, canActivate: [UnauthenticatedAccessGuard] },
+            { path: "about", component: PlanningAboutComponent, canActivate: [UnauthenticatedAccessGuard] },
         ],
     },
     {

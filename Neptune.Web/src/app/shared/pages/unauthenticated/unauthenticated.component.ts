@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { SiteLayoutComponent } from "../../../pages/planning-module/site-layout/site-layout.component";
+import { PlanningSiteLayoutComponent } from "../../../pages/planning-module/planning-site-layout/planning-site-layout.component";
 import { PageHeaderComponent } from "../../components/page-header/page-header.component";
 
 @Component({
@@ -7,7 +7,7 @@ import { PageHeaderComponent } from "../../components/page-header/page-header.co
     templateUrl: "./unauthenticated.component.html",
     styleUrls: ["./unauthenticated.component.scss"],
     standalone: true,
-    imports: [SiteLayoutComponent, PageHeaderComponent],
+    imports: [PlanningSiteLayoutComponent, PageHeaderComponent],
 })
 export class UnauthenticatedComponent implements OnInit {
     constructor() {}

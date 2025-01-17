@@ -10,13 +10,13 @@ import { HeaderNavComponent } from "../../../shared/components/header-nav/header
 import { Observable } from "rxjs";
 
 @Component({
-    selector: "site-layout",
-    templateUrl: "./site-layout.component.html",
-    styleUrls: ["./site-layout.component.scss"],
+    selector: "planning-site-layout",
+    templateUrl: "./planning-site-layout.component.html",
+    styleUrls: ["./planning-site-layout.component.scss"],
     standalone: true,
     imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, AsyncPipe, DropdownToggleDirective, IconComponent, HeaderNavComponent],
 })
-export class SiteLayoutComponent implements OnInit {
+export class PlanningSiteLayoutComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;
 
     constructor(private authenticationService: AuthenticationService) {}
