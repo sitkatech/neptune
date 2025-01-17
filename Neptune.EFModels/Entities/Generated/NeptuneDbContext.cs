@@ -83,6 +83,8 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreas { get; set; }
 
+    public virtual DbSet<OnlandVisualTrashAssessmentAreaStaging> OnlandVisualTrashAssessmentAreaStagings { get; set; }
+
     public virtual DbSet<OnlandVisualTrashAssessmentObservation> OnlandVisualTrashAssessmentObservations { get; set; }
 
     public virtual DbSet<OnlandVisualTrashAssessmentObservationPhoto> OnlandVisualTrashAssessmentObservationPhotos { get; set; }
@@ -581,6 +583,17 @@ public partial class NeptuneDbContext : DbContext
             entity.HasKey(e => e.OnlandVisualTrashAssessmentAreaID).HasName("PK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID");
 
             entity.HasOne(d => d.StormwaterJurisdiction).WithMany(p => p.OnlandVisualTrashAssessmentAreas).OnDelete(DeleteBehavior.ClientSetNull);
+        });
+
+        modelBuilder.Entity<OnlandVisualTrashAssessmentAreaStaging>(entity =>
+        {
+            entity.HasKey(e => e.OnlandVisualTrashAssessmentAreaStagingID).HasName("PK_OnlandVisualTrashAssessmentAreaStaging_OnlandVisualTrashAssessmentAreaStagingID");
+
+            entity.HasOne(d => d.StormwaterJurisdiction).WithMany(p => p.OnlandVisualTrashAssessmentAreaStagings).OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.UploadedByPerson).WithMany(p => p.OnlandVisualTrashAssessmentAreaStagings)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OnlandVisualTrashAssessmentAreaStaging_Person_UploadedByPersonID_PersonID");
         });
 
         modelBuilder.Entity<OnlandVisualTrashAssessmentObservation>(entity =>
