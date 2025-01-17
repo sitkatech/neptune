@@ -23,7 +23,6 @@
 @using Neptune.Common
 @using Neptune.WebMvc.Common
 @using Neptune.WebMvc.Common.ModalDialog
-@using Neptune.WebMvc.Controllers
 @inherits Neptune.WebMvc.Views.DataHub.Index
 @section JavascriptAndStylesContent
 {
@@ -52,6 +51,10 @@
             color: #464646;
             font-style: italic;
             padding-right: 1rem;
+        }
+
+        .disabled {
+            border: 1px gray solid;
         }
     </style>
 }
@@ -96,28 +99,44 @@
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.TreatmentBMPPage);
                     }
-                    @if (ViewDataTyped.HasManagePermission)
+                    @if (ViewDataTyped.IsAdmin)
                     {
                         <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                        <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     }
-                    <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                        <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                    }
+                    
                     <h3>Delineations</h3>
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.DelineationPage);
                     }
-                    @if (ViewDataTyped.HasManagePermission)
+                    
+                    @if (ViewDataTyped.IsAdmin)
                     {
                         <a href="@ViewDataTyped.UploadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                         <a href="@ViewDataTyped.DownloadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        <a href="@ViewDataTyped.UploadDelineationUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                        <a href="@ViewDataTyped.DownloadDelineationUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     }
 
                     <h3>Field Visits</h3>
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.FieldTripPage);
                     }
-                    @if (ViewDataTyped.HasManagePermission)
+                    @if (ViewDataTyped.IsAdmin)
                     {
                         <a href="@ViewDataTyped.UploadFieldTripUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        <a href="@ViewDataTyped.UploadFieldTripUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                     }
                 </div>
                 <div class="col-md-3 sidebar">
@@ -138,18 +157,39 @@
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.WQMPPage);
                     }
-                    <a href="@ViewDataTyped.UploadWQMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    @if (ViewDataTyped.IsAdmin)
+                    {
+                        <a href="@ViewDataTyped.UploadWQMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        <a href="@ViewDataTyped.UploadWQMPUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    }
 
                     <h3>Simplified BMPs</h3>
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.SimplifiedBMPPage);
                     }
-                    <a href="@ViewDataTyped.UploadSimplifiedBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    @if (ViewDataTyped.IsAdmin)
+                    {
+                        <a href="@ViewDataTyped.UploadSimplifiedBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        <a href="@ViewDataTyped.UploadSimplifiedBMPUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    }
                     <h3>Water Quality Management Plan Locations</h3>
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.WQMPLocationPage);
                     }
-                    <a href="@ViewDataTyped.UploadWQMPLocationsUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    @if (ViewDataTyped.IsAdmin)
+                    {
+                        <a href="@ViewDataTyped.UploadWQMPLocationsUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        <a href="@ViewDataTyped.UploadWQMPLocationsUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    }
                 </div>
                 <div class="col-md-3 sidebar">
                     <h4>Quick Links:</h4>
@@ -165,30 +205,40 @@
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.AssessmentAreaPage);
                     }
-                    @if (ViewDataTyped.HasManagePermission)
+                    @if (ViewDataTyped.IsAdmin)
                     {
-                        @* <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a> *@
                         <a href="@ViewDataTyped.DownloadAssessmentAreasUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        <a href="@ViewDataTyped.DownloadAssessmentAreasUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     }
 
                     <h3>On-land Visual Trash Assessments (OVTAs)</h3>
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.OVTAsPage);
                     }
-                    @if (ViewDataTyped.HasManagePermission)
+                    @if (ViewDataTyped.IsAdmin)
                     {
                         <a href="@ViewDataTyped.UploadOVTAUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                        @* <a href="@ViewDataTyped.DownloadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a> *@
+                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        <a href="@ViewDataTyped.UploadOVTAUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                     }
 
                     <h3>Land Use Blocks</h3>
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.LandUseBlocksPage);
                     }
-                    @if (ViewDataTyped.HasManagePermission)
+                    @if (ViewDataTyped.IsAdmin)
                     {
                         <a href="@ViewDataTyped.UploadLandUseBlocksUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                        <a href="@ViewDataTyped.DownloadLandUseBlocksUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                        <a href="@ViewDataTyped.DownloadLandUseBlocksUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        <a href="@ViewDataTyped.UploadLandUseBlocksUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                        <a href="@ViewDataTyped.DownloadLandUseBlocksUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     }
                 </div>
                 <div class="col-md-3 sidebar">
@@ -209,9 +259,13 @@
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.ParcelPage);
                     }
-                    @if (ViewDataTyped.HasManagePermission)
+                    @if (ViewDataTyped.IsAdmin)
                     {
                         <a href="@ViewDataTyped.ParcelUploadUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        <a href="@ViewDataTyped.ParcelUploadUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                     }
 
                 </div>
