@@ -80,10 +80,10 @@ export class ProjectListComponent implements OnInit {
                 ];
             }),
             this.utilityFunctionsService.createLinkColumnDef("Project ID", "ProjectID", "ProjectID", {
-                InRouterLink: "./projects/",
+                InRouterLink: "/planning/projects/",
             }),
             this.utilityFunctionsService.createLinkColumnDef("Project Name", "ProjectName", "ProjectID", {
-                InRouterLink: "./projects/",
+                InRouterLink: "/planning/projects/",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Organization", "Organization.OrganizationName"),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdiction.Organization.OrganizationName"),
