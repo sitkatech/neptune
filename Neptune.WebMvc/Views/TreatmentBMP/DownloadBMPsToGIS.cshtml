@@ -1,5 +1,5 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="SummaryForMap.cshtml" company="Tahoe Regional Planning Agency">
+<copyright file="DownloadBMPsToGIS.cshtml" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -20,13 +20,17 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*@
 @using Neptune.WebMvc.Views.Shared
 @using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Common.BootstrapWrappers
 @inherits Neptune.WebMvc.Views.TreatmentBMP.DownloadBMPsToGIS
+
+<div class="alert alert-info" role="alert">
+    The file geodatabase will contain @ViewDataTyped.FeatureClassesInExportCount.ToGroupedNumeric() feature classes and a total of @ViewDataTyped.TreatmentBmpsInExportCount.ToGroupedNumeric() BMPs.
+</div>
 
 @{
     ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);
 }
 
 <div>
-    <p>The file geodatabase will contain @ViewDataTyped.FeatureClassesInExportCount.ToGroupedNumeric() feature classes and a total of @ViewDataTyped.TreatmentBmpsInExportCount.ToGroupedNumeric() BMPs.</p>
-    <a class='btn btn-neptune pull-right' style='margin-right:5px;' href="@ViewDataTyped.DownloadBMPInventoryUrl">Download</a>
+    <a class='btn btn-neptune pull-right' style='margin-right:5px;' href="@ViewDataTyped.DownloadBMPInventoryUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
 </div>

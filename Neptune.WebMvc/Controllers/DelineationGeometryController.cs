@@ -121,6 +121,17 @@ namespace Neptune.WebMvc.Controllers
                 // todo: Run MakeValid "update dbo.DelineationStaging set Geometry = Geometry.MakeValid() where Geometry.STIsValid() = 0";
 
                 var validDelineationStagings = delineationStagings.Where(x => x.Geometry is { IsValid: true, Area: > 0 }).ToList();
+
+                var centralizedDelineations = _dbContext.Delineations.AsNoTracking()
+                    .Where(x => x.DelineationTypeID == (int)DelineationTypeEnum.Centralized)
+                    .Include(x => x.TreatmentBMP).Select(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+
+                var centralized = validDelineationStagings.Select(x => x.TreatmentBMPName).Intersect(centralizedDelineations).ToList();
+                if (centralized.Any())
+                {
+                    throw new Exception(
+                        $"This file contains the following treatment BMPs that have centralized delineations: {string.Join(", ", centralized)}. The file is invalid and cannot be uploaded.");
+                }
                 if (validDelineationStagings.Any())
                 {
                     await _dbContext.DelineationStagings.Where(x => x.UploadedByPersonID == CurrentPerson.PersonID).ExecuteDeleteAsync();
@@ -135,6 +146,11 @@ namespace Neptune.WebMvc.Controllers
                 {
                     ModelState.AddModelError("",
                         "The columns in the uploaded file did not match the Delineation schema. The file is invalid and cannot be uploaded.");
+                }
+                else if (e.Message.Contains("Centralized",
+                        StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ModelState.AddModelError("", e.Message);
                 }
                 else
                 {

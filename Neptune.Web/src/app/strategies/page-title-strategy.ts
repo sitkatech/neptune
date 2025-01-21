@@ -12,9 +12,9 @@ export class PageTitleStrategy extends TitleStrategy {
         const titles = this.getTitleHierarchyFromActivatedRouteShapshot(routerState);
         if (titles.length > 0) {
             const fullTitle = titles.join(" - ");
-            this.title.setTitle(`${fullTitle} | Planning Module`);
+            this.title.setTitle(`${fullTitle}`);
         } else {
-            this.title.setTitle(`OCST`);
+            this.title.setTitle(`Stormwater Tools | Orange County`);
         }
     }
 

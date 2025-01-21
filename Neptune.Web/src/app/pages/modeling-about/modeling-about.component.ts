@@ -3,16 +3,16 @@ import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 
 @Component({
-    selector: "about",
-    templateUrl: "./about.component.html",
-    styleUrls: ["./about.component.scss"],
+    selector: "modeling-about",
+    templateUrl: "./modeling-about.component.html",
+    styleUrls: ["./modeling-about.component.scss"],
     standalone: true,
     imports: [PageHeaderComponent],
 })
-export class AboutComponent implements OnInit {
+export class ModelingAboutComponent implements OnInit {
     constructor() {}
 
-    public customRichTextTypeID: number = NeptunePageTypeEnum.HippocampAbout;
+    public customRichTextTypeID: number = NeptunePageTypeEnum.ModelingHomePage;
 
     ngOnInit(): void {}
 }

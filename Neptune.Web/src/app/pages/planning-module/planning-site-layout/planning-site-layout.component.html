@@ -1,0 +1,45 @@
+<header class="site-header">
+    <header-nav moduleTitle="Planning Module"></header-nav>
+
+    <nav class="site-nav">
+        <div class="collapse navbar-collapse" *ngIf="currentUser$ | async as currentUser">
+            <ul class="site-nav__links site-nav__main">
+                <ng-container *ngIf="isAuthenticated() && isNotUnassigned(currentUser)">
+                    <li class="nav-item" routerLinkActive="active">
+                        <a [routerLink]="['/planning/projects']" class="nav-link" role="button"> Projects </a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a [routerLink]="['/planning/planning-map']" class="nav-link" role="button"> Planning Map </a>
+                    </li>
+                </ng-container>
+
+                <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isOCTAGrantReviewer()">
+                    <a
+                        href="javascript:void(0);"
+                        [dropdownToggle]="grantProgramsToggle"
+                        class="nav-link dropdown-toggle"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                        <span class="nav-link__label">
+                            Grant Programs
+                            <icon icon="AngleDown"></icon>
+                        </span>
+                    </a>
+
+                    <div #grantProgramsToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-divider"></div>
+                        <a [routerLink]="['/planning/grant-programs/octa-m2-tier-2']" class="dropdown-item"> OCTA M2 Tier 2 Grant Program </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<main class="site">
+    <div class="site-wrapper">
+        <router-outlet></router-outlet>
+    </div>
+</main>

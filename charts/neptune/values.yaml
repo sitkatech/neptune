@@ -8,7 +8,8 @@ global:
     appInsightsInstrumentationKey: "00000000-0000-0000-0000-000000000000"
   domains:
     api: "api-neptune.aks-qa.sitkatech.com"
-    web: "planning-neptune.aks-qa.sitkatech.com"
+    web: "web-neptune.aks-qa.sitkatech.com"
+    planning: "planning-neptune.aks-qa.sitkatech.com"
     webmvc: "neptune.aks-qa.sitkatech.com"
     geoserver: "geoserver-neptune.aks-qa.sitkatech.com"
     nereid: "neptune-nereid"

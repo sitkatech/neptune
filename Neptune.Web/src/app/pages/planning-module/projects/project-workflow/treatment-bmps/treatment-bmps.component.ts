@@ -164,7 +164,7 @@ export class TreatmentBmpsComponent implements OnInit {
             this.projectService.projectsProjectIDGet(parseInt(projectID)).subscribe((project) => {
                 // redirect to review step if project is shared with OCTA grant program
                 if (project.ShareOCTAM2Tier2Scores) {
-                    this.router.navigateByUrl(`projects/edit/${projectID}/review-and-share`);
+                    this.router.navigateByUrl(`/planning/projects/edit/${projectID}/review-and-share`);
                 } else {
                     this.projectID = parseInt(projectID);
                     this.mapProjectDtoToProject(project);
@@ -444,8 +444,8 @@ export class TreatmentBmpsComponent implements OnInit {
                                 if (continueToNextStep) {
                                     const rerouteURL =
                                         this.projectTreatmentBMPs.length > 0
-                                            ? `projects/edit/${this.projectID}/stormwater-treatments/delineations`
-                                            : `projects/edit/${this.projectID}/attachments`;
+                                            ? `/planning/projects/edit/${this.projectID}/stormwater-treatments/delineations`
+                                            : `/planning/projects/edit/${this.projectID}/attachments`;
                                     this.router.navigateByUrl(rerouteURL).then((x) => {
                                         this.alertService.pushAlert(new Alert("Your Treatment BMP changes have been saved.", AlertContext.Success));
                                     });
