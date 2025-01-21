@@ -9,19 +9,26 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea
 {
     public class BulkUploadOVTAAreasViewData: NeptuneViewData
     {
-        public string TemplateDownloadUrl { get; set; }
+        public string NewGisUploadUrl { get; }
+        public string ApprovedGisUploadUrl { get; }
+        public string DownloadGisUrl { get; }
+
         public IEnumerable<SelectListItem> StormwaterJurisdictions { get; }
 
-
-        public BulkUploadOVTAAreasViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
+        public BulkUploadOVTAAreasViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, string newGisUploadUrl, string approvedGisUploadUrl, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions, string downloadGisUrl) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
-            EntityName = FieldDefinitionType.OnlandVisualTrashAssessment.GetFieldDefinitionLabel();
+            NewGisUploadUrl = newGisUploadUrl;
+            ApprovedGisUploadUrl = approvedGisUploadUrl;
+            DownloadGisUrl = downloadGisUrl;
+            EntityName = FieldDefinitionType.Delineation.FieldDefinitionTypeDisplayName;
             EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
-            PageTitle = "OTVA Area Upload";
+
+            PageTitle = "OVTA Area Upload";
+
             StormwaterJurisdictions =
                 stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
                     .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
-            TemplateDownloadUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.OVTABulkUploadTemplate());
+
         }
     }
 }

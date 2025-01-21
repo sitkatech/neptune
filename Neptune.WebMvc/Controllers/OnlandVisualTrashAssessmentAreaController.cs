@@ -1,14 +1,22 @@
-﻿using System.Globalization;
+﻿using System.Data;
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Neptune.Common;
 using Neptune.Common.DesignByContract;
+using Neptune.Common.GeoSpatial;
+using Neptune.Common.Services.GDAL;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.MvcResults;
+using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
+using Neptune.WebMvc.Services;
 using Neptune.WebMvc.Services.Filters;
+using Neptune.WebMvc.Views.DelineationGeometry;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessment;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessment.MapInitJson;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea;
@@ -22,8 +30,13 @@ namespace Neptune.WebMvc.Controllers
     //[Route("[area]/[controller]/[action]", Name = "[area]_[controller]_[action]")]
     public class OnlandVisualTrashAssessmentAreaController : NeptuneBaseController<OnlandVisualTrashAssessmentAreaController>
     {
-        public OnlandVisualTrashAssessmentAreaController(NeptuneDbContext dbContext, ILogger<OnlandVisualTrashAssessmentAreaController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
+        private readonly AzureBlobStorageService _azureBlobStorageService;
+        private readonly GDALAPIService _gdalApiService;
+
+        public OnlandVisualTrashAssessmentAreaController(NeptuneDbContext dbContext, ILogger<OnlandVisualTrashAssessmentAreaController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, AzureBlobStorageService azureBlobStorageService, GDALAPIService gdalApiService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
+            _azureBlobStorageService = azureBlobStorageService;
+            _gdalApiService = gdalApiService;
         }
 
         [HttpGet("{onlandVisualTrashAssessmentAreaPrimaryKey}")]
@@ -340,12 +353,193 @@ namespace Neptune.WebMvc.Controllers
             BulkUploadOVTAAreasViewModel bulkUploadTrashScreenVisitViewModel)
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadOVTAs);
-            var bulkUploadTrashScreenVisitViewData = new BulkUploadOVTAAreasViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
+            var newGisUploadUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(_linkGenerator, x => x.BulkUploadOVTAAreas());
+            var approveGisUploadUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(_linkGenerator, x => x.ApproveOVTAAreaGisUpload());
+            var bulkUploadTrashScreenVisitViewData = new BulkUploadOVTAAreasViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson,
+                newGisUploadUrl, approveGisUploadUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson), null);
 
             return RazorView<BulkUploadOVTAAreas, BulkUploadOVTAAreasViewData,
                 BulkUploadOVTAAreasViewModel>(bulkUploadTrashScreenVisitViewData,
                 bulkUploadTrashScreenVisitViewModel);
         }
+
+        [HttpPost]
+        [JurisdictionManageFeature]
+        public async Task<IActionResult> BulkUploadOVTAAreas(BulkUploadOVTAAreasViewModel viewModel)
+        {
+            var file = viewModel.FileResourceData;
+            var blobName = Guid.NewGuid().ToString();
+            await _azureBlobStorageService.UploadToBlobStorage(await FileStreamHelpers.StreamToBytes(file), blobName, ".gdb");
+            var featureClassNames = await _gdalApiService.OgrInfoGdbToFeatureClassInfo(file);
+
+            if (featureClassNames.Count == 0)
+            {
+                ModelState.AddModelError("FileResourceData",
+                    "The file geodatabase contained no feature class. Please upload a file geodatabase containing exactly one feature class.");
+            }
+            else if (featureClassNames.Count > 1)
+            {
+                ModelState.AddModelError("FileResourceData",
+                    "The file geodatabase contained more than one feature class. Please upload a file geodatabase containing exactly one feature class.");
+            }
+
+            var featureClassName = featureClassNames.Single().LayerName;
+            //if (!OgrInfoCommandLineRunner.ConfirmAttributeExistsOnFeatureClass(
+            //        new FileInfo(NeptuneWebConfiguration.OgrInfoExecutable),
+            //        gdbFile,
+            //        Ogr2OgrCommandLineRunner.DefaultTimeOut, featureClassName, TreatmentBMPNameField))
+            //{
+            //    errors.Add(new ValidationResult($"The feature class in the file geodatabase does not have an attribute named {TreatmentBMPNameField}. Please double-check the attribute name you entered and try again."));
+            //    return errors;
+            //}
+
+            if (!ModelState.IsValid)
+            {
+                return ViewBulkUploadOTVAAreas(viewModel);
+            }
+
+            try
+            {
+                var columns = new List<string>
+                {
+                    $"{viewModel.StormwaterJurisdictionID} as StormwaterJurisdictionID",
+                    $"OVTAAreaName as AreaName",
+                    $"Description",
+                    $"{CurrentPerson.PersonID} as UploadedByPersonID"
+                };
+
+                var apiRequest = new GdbToGeoJsonRequestDto()
+                {
+                    BlobContainer = AzureBlobStorageService.BlobContainerName,
+                    CanonicalName = blobName,
+                    GdbLayerOutputs = new()
+                    {
+                        new()
+                        {
+                            Columns = columns,
+                            FeatureLayerName = featureClassName,
+                            NumberOfSignificantDigits = 4,
+                            Filter = "",
+                            CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
+                        }
+                    }
+                };
+                var geoJson = await _gdalApiService.Ogr2OgrGdbToGeoJson(apiRequest);
+                var ovtaAreaStagings = await GeoJsonSerializer.DeserializeFromFeatureCollectionWithCCWCheck<OnlandVisualTrashAssessmentAreaStaging>(geoJson,
+                    GeoJsonSerializer.DefaultSerializerOptions, Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+                // todo: Run MakeValid "update dbo.DelineationStaging set Geometry = Geometry.MakeValid() where Geometry.STIsValid() = 0";
+
+                var validOVTAAreaStagings = ovtaAreaStagings.Where(x => x.Geometry is { IsValid: true, Area: > 0 }).ToList();
+                if (validOVTAAreaStagings.Any())
+                {
+                    await _dbContext.OnlandVisualTrashAssessmentAreaStagings.Where(x => x.UploadedByPersonID == CurrentPerson.PersonID).ExecuteDeleteAsync();
+                    _dbContext.OnlandVisualTrashAssessmentAreaStagings.AddRange(validOVTAAreaStagings);
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Contains("Unrecognized field name",
+                        StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ModelState.AddModelError("",
+                        "The columns in the uploaded file did not match the OVTA area schema. The file is invalid and cannot be uploaded.");
+                }
+                else
+                {
+                    ModelState.AddModelError("",
+                        $"There was a problem processing the Feature Class \"{featureClassName}\". The file may be corrupted or invalid.");
+                }
+                return ViewBulkUploadOTVAAreas(viewModel);
+            }
+
+
+            return RedirectToAction(new SitkaRoute<OnlandVisualTrashAssessmentAreaController>(_linkGenerator, x => x.ApproveOVTAAreaGisUpload()));
+        }
+
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public ActionResult ApproveOVTAAreaGisUpload()
+        {
+            var viewModel = new ApproveOVTAAreaGisUploadViewModel();
+            return ViewApproveOVTAAreaGisUpload(viewModel);
+        }
+
+        [HttpPost]
+        [JurisdictionManageFeature]
+        public async Task<ActionResult> ApproveOVTAAreaGisUpload(ApproveOVTAAreaGisUploadViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewBulkUploadOTVAAreas(new BulkUploadOVTAAreasViewModel());
+            }
+
+            var onlandVisualTrashAssessmentAreaStagings = _dbContext.OnlandVisualTrashAssessmentAreaStagings.Where(x => x.UploadedByPersonID == CurrentPerson.PersonID).ToList();
+
+            //// Will break if there are multiple batches of staged uploads, which is precisely what we want to happen. 
+            var stormwaterJurisdictionID = onlandVisualTrashAssessmentAreaStagings.Select(x => x.StormwaterJurisdictionID).Distinct().Single();
+            var stormwaterJurisdiction = StormwaterJurisdictions.GetByID(_dbContext, stormwaterJurisdictionID);
+            var stormwaterJurisdictionName = stormwaterJurisdiction.GetOrganizationDisplayName();
+
+            var ovtaAreaNames = _dbContext.OnlandVisualTrashAssessmentAreas.AsNoTracking()
+                .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID)
+                .Select(x => x.OnlandVisualTrashAssessmentAreaName).ToList();
+
+            var ovtaAreaStaging = _dbContext.OnlandVisualTrashAssessmentAreaStagings.AsNoTracking().Where(x =>
+                x.StormwaterJurisdictionID == stormwaterJurisdictionID &&
+                x.UploadedByPersonID == CurrentPerson.PersonID).ToList();
+
+            var duplicateOVTAAreaNames = ovtaAreaStaging.Select(x => x.AreaName).Intersect(ovtaAreaNames);
+
+            foreach (var ovtaArea in ovtaAreaStaging)
+            {
+                if (duplicateOVTAAreaNames.Contains(ovtaArea.AreaName))
+                {
+                    var existingOVTA = _dbContext.OnlandVisualTrashAssessmentAreas.Single(x =>
+                        x.OnlandVisualTrashAssessmentAreaName == ovtaArea.AreaName &&
+                        x.StormwaterJurisdictionID == stormwaterJurisdictionID);
+
+                    existingOVTA.OnlandVisualTrashAssessmentAreaGeometry = ovtaArea.Geometry;
+                    existingOVTA.OnlandVisualTrashAssessmentAreaGeometry4326 = ovtaArea.Geometry.ProjectTo4326();
+                }
+                else
+                {
+                    var newOVTA = new OnlandVisualTrashAssessmentArea()
+                    {
+                        OnlandVisualTrashAssessmentAreaName = ovtaArea.AreaName,
+                        AssessmentAreaDescription = ovtaArea.Description,
+                        StormwaterJurisdictionID = ovtaArea.StormwaterJurisdictionID,
+                        OnlandVisualTrashAssessmentAreaGeometry = ovtaArea.Geometry,
+                        OnlandVisualTrashAssessmentAreaGeometry4326 = ovtaArea.Geometry.ProjectTo4326()
+                    };
+
+                    _dbContext.OnlandVisualTrashAssessmentAreas.AddRange(newOVTA);
+                }
+            }
+
+            var successfulUploadCount = (int?)ovtaAreaNames.Count;
+
+            SetMessageForDisplay($"{successfulUploadCount} OVTA areas were successfully uploaded for Jurisdiction {stormwaterJurisdictionName}");
+
+            await _dbContext.SaveChangesAsync();
+
+            await _dbContext.OnlandVisualTrashAssessmentAreaStagings.Where(x => x.UploadedByPersonID == CurrentPerson.PersonID).ExecuteDeleteAsync();
+
+            return RedirectToAction(new SitkaRoute<ManagerDashboardController>(_linkGenerator, x => x.Index()));
+        }
+
+        private PartialViewResult ViewApproveOVTAAreaGisUpload(ApproveOVTAAreaGisUploadViewModel viewModel)
+        {
+            var onlandVisualTrashAssessmentAreaStagings = _dbContext.OnlandVisualTrashAssessmentAreaStagings.Include(x => x.StormwaterJurisdiction)
+                .Where(x => x.UploadedByPersonID == CurrentPerson.PersonID).ToList();
+
+            var ovtaAreaUploadGisReportFromStaging = OVTAAreaUploadGisReportJsonResult.GetOVTAAreaUploadGisReportFromStaging(_dbContext, CurrentPerson, onlandVisualTrashAssessmentAreaStagings);
+
+            var viewData = new ApproveOVTAAreaGisUploadViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, ovtaAreaUploadGisReportFromStaging);
+            return RazorPartialView<ApproveOVTAAreaGisUpload, ApproveOVTAAreaGisUploadViewData, ApproveOVTAAreaGisUploadViewModel>(viewData, viewModel);
+
+        }
+
     }
 
 

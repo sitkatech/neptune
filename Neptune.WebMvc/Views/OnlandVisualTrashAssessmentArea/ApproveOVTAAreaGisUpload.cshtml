@@ -1,4 +1,5 @@
 ﻿@inherits Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea.ApproveOVTAAreaGisUpload
+@using Neptune.WebMvc.Common
 @model Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea.ApproveOVTAAreaGisUploadViewModel
 
 @Html.ValidationSummary()
@@ -7,13 +8,13 @@
     <div>
         <div id="uploadGisReport">
             hi
-            @* @if (ViewDataTyped.DelineationUpoadGisReportFromStaging.Errors.Count == 0)
+            @if (ViewDataTyped.OvtaAreaUploadGisReportFromStaging.Errors.Count == 0)
             {
                 <div>
                     <ul>
-                        <li>The Feature Class contains @ViewDataTyped.DelineationUpoadGisReportFromStaging.NumberOfDelineations delineations</li>
-                        <li>@ViewDataTyped.DelineationUpoadGisReportFromStaging.NumberOfDelineationsToBeUpdated Treatment BMPs with existing delineations will be replaced by new delineations from this Feature Class</li>
-                        <li>@ViewDataTyped.DelineationUpoadGisReportFromStaging.NumberOfDelineationsToBeCreated Treatment BMPs that do not currently have delineations will receive new delineations from this Feature Class</li>
+                        <li>The Feature Class contains @ViewDataTyped.OvtaAreaUploadGisReportFromStaging.NumberOfDelineations OVTA Areas</li>
+                        <li>@ViewDataTyped.OvtaAreaUploadGisReportFromStaging.NumberOfDelineationsToBeUpdated OVTA Areas will be replaced by new geometries from this Feature Class</li>
+                        <li>@ViewDataTyped.OvtaAreaUploadGisReportFromStaging.NumberOfDelineationsToBeCreated new OVTA Areas will be created from this Feature Class</li>
 
                     </ul>
                 </div>
@@ -22,17 +23,17 @@
             {
                 <div>
                     <ul>
-                        @foreach (var error in ViewDataTyped.DelineationUpoadGisReportFromStaging.Errors)
+                        @foreach (var error in ViewDataTyped.OvtaAreaUploadGisReportFromStaging.Errors)
                         {
                             <li class="text-danger">@error</li>
                         }
                     </ul>
                 </div>
-            } *@
+            }
         </div>
-        @* <div class="text-right" style="margin-top: 15px;">
-            <button id="submitApproveOVTAAreaGisUpload" type="submit" class="btn btn-neptune" @ViewDataTyped.DelineationUpoadGisReportFromStaging.Errors.Any().ToDisabledOrEmpty()>Accept</button>
-            <a href="@ViewDataTyped.DelineationMapUrl" class="btn btn-neptune">Cancel</a>
-        </div> *@
+        <div class="text-right" style="margin-top: 15px;">
+            <button id="submitApproveOVTAAreaGisUpload" type="submit" class="btn btn-neptune" @ViewDataTyped.OvtaAreaUploadGisReportFromStaging.Errors.Any().ToDisabledOrEmpty()>Accept</button>
+            <a href="@ViewDataTyped.OVTAIndexUrl" class="btn btn-neptune">Cancel</a>
+        </div>
     </div>
 </div>
