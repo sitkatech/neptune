@@ -1,5 +1,5 @@
-﻿@inherits Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea.ApproveOVTAAreaGisUpload
-@using Neptune.WebMvc.Common
+﻿@using Neptune.WebMvc.Common
+@inherits Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea.ApproveOVTAAreaGisUpload
 @model Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea.ApproveOVTAAreaGisUploadViewModel
 
 @Html.ValidationSummary()
@@ -7,14 +7,13 @@
 <div class="formPage" style="padding: 0; margin-top: -10px;">
     <div>
         <div id="uploadGisReport">
-            hi
             @if (ViewDataTyped.OvtaAreaUploadGisReportFromStaging.Errors.Count == 0)
             {
                 <div>
                     <ul>
-                        <li>The Feature Class contains @ViewDataTyped.OvtaAreaUploadGisReportFromStaging.NumberOfDelineations OVTA Areas</li>
-                        <li>@ViewDataTyped.OvtaAreaUploadGisReportFromStaging.NumberOfDelineationsToBeUpdated OVTA Areas will be replaced by new geometries from this Feature Class</li>
-                        <li>@ViewDataTyped.OvtaAreaUploadGisReportFromStaging.NumberOfDelineationsToBeCreated new OVTA Areas will be created from this Feature Class</li>
+                        <li>The Feature Class contains @ViewDataTyped.OvtaAreaUploadGisReportFromStaging.NumberOfOVTAAreas OVTA Areas</li>
+                        <li>@ViewDataTyped.OvtaAreaUploadGisReportFromStaging.NumberOfOVTAAreasToBeUpdated OVTA Areas will be replaced by new geometries from this Feature Class</li>
+                        <li>@ViewDataTyped.OvtaAreaUploadGisReportFromStaging.NumberOfOVTAAreasToBeCreated new OVTA Areas will be created from this Feature Class</li>
 
                     </ul>
                 </div>

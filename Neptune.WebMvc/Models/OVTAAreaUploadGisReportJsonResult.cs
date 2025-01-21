@@ -7,9 +7,9 @@ namespace Neptune.WebMvc.Models;
 public class OVTAAreaUploadGisReportJsonResult
 {
     public int StormwaterJurisdictionID { get; set; }
-    public int? NumberOfDelineations { get; set; }
-    public int? NumberOfDelineationsToBeUpdated { get; set; }
-    public int? NumberOfDelineationsToBeCreated { get; set; }
+    public int? NumberOfOVTAAreas { get; set; }
+    public int? NumberOfOVTAAreasToBeUpdated { get; set; }
+    public int? NumberOfOVTAAreasToBeCreated { get; set; }
     public List<string> Errors { get; set; }
 
     public static OVTAAreaUploadGisReportJsonResult GetOVTAAreaUploadGisReportFromStaging(NeptuneDbContext dbContext, Person person, ICollection<OnlandVisualTrashAssessmentAreaStaging> ovtaAreaStagings)
@@ -22,38 +22,36 @@ public class OVTAAreaUploadGisReportJsonResult
 
         var stormwaterJurisdiction = stormwaterJurisdictions.Single();
 
-        var treatmentBMPNamesInStormwaterJurisdiction = TreatmentBMPs.GetNonPlanningModuleBMPs(dbContext).Where(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).Select(x => x.TreatmentBMPName).ToList();
+        var candidateOVTAAreaNames = ovtaAreaStagings.Select(x => x.AreaName).Distinct().ToList();
 
-        var candidateDelineationNames = ovtaAreaStagings.Select(x => x.AreaName).Distinct().ToList();
-
-        var numberOfDelineations = ovtaAreaStagings.Count;
-        if (candidateDelineationNames.Count != numberOfDelineations)
+        var numberOfOVTAAreas = ovtaAreaStagings.Count;
+        if (candidateOVTAAreaNames.Count != numberOfOVTAAreas)
         {
             errors.Add("The OVTA Area Name must be unique for each feature in the upload.");
         }
 
-        var delineationsWithBadGeometry = ovtaAreaStagings.Where(x => x.Geometry.IsValid == false).ToList();
-        if (delineationsWithBadGeometry.Any())
+        var ovtaAreasWithBadGeometry = ovtaAreaStagings.Where(x => x.Geometry.IsValid == false).ToList();
+        if (ovtaAreasWithBadGeometry.Any())
         {
-            errors.Add("The following Delineations have bad geometries: " + string.Join(", ", delineationsWithBadGeometry.Select(x => x.AreaName)));
+            errors.Add("The following Delineations have bad geometries: " + string.Join(", ", ovtaAreasWithBadGeometry.Select(x => x.AreaName)));
         }
 
 
-        var delineationsToBeUpdated = ovtaAreaStagings.Select(x => x.AreaName).Intersect(dbContext
+        var ovtaAreasToBeUpdated = ovtaAreaStagings.Select(x => x.AreaName).Intersect(dbContext
             .OnlandVisualTrashAssessmentAreas
             .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID)
             .Select(x => x.OnlandVisualTrashAssessmentAreaName));
 
-        var numberOfDelineationsToBeUpdated = delineationsToBeUpdated.Count();
-        var delineationUploadGisReport = new OVTAAreaUploadGisReportJsonResult
+        var numberOfDelineationsToBeUpdated = ovtaAreasToBeUpdated.Count();
+        var ovtaAreaUploadGisReport = new OVTAAreaUploadGisReportJsonResult
         {
             StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID,
-            NumberOfDelineations = numberOfDelineations,
-            NumberOfDelineationsToBeUpdated = numberOfDelineationsToBeUpdated,
-            NumberOfDelineationsToBeCreated = numberOfDelineations - numberOfDelineationsToBeUpdated,
+            NumberOfOVTAAreas = numberOfOVTAAreas,
+            NumberOfOVTAAreasToBeUpdated = numberOfDelineationsToBeUpdated,
+            NumberOfOVTAAreasToBeCreated = numberOfOVTAAreas - numberOfDelineationsToBeUpdated,
             Errors = errors
         };
 
-        return delineationUploadGisReport;
+        return ovtaAreaUploadGisReport;
     }
 }

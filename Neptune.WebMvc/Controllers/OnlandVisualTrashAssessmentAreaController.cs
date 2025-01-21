@@ -1,5 +1,4 @@
-﻿using System.Data;
-using System.Globalization;
+﻿using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -395,7 +394,7 @@ namespace Neptune.WebMvc.Controllers
 
             if (!ModelState.IsValid)
             {
-                return ViewBulkUploadOTVAAreas(viewModel);
+                return ViewUpdateOVTAAreaGeometryErrors(viewModel);
             }
 
             try
@@ -450,7 +449,7 @@ namespace Neptune.WebMvc.Controllers
                     ModelState.AddModelError("",
                         $"There was a problem processing the Feature Class \"{featureClassName}\". The file may be corrupted or invalid.");
                 }
-                return ViewBulkUploadOTVAAreas(viewModel);
+                return ViewUpdateOVTAAreaGeometryErrors(viewModel);
             }
 
 
@@ -489,7 +488,7 @@ namespace Neptune.WebMvc.Controllers
                 x.StormwaterJurisdictionID == stormwaterJurisdictionID &&
                 x.UploadedByPersonID == CurrentPerson.PersonID).ToList();
 
-            var duplicateOVTAAreaNames = ovtaAreaStaging.Select(x => x.AreaName).Intersect(ovtaAreaNames);
+            var duplicateOVTAAreaNames = ovtaAreaStaging.Select(x => x.AreaName).Intersect(ovtaAreaNames).ToList();
 
             foreach (var ovtaArea in ovtaAreaStaging)
             {
@@ -517,7 +516,7 @@ namespace Neptune.WebMvc.Controllers
                 }
             }
 
-            var successfulUploadCount = (int?)ovtaAreaNames.Count;
+            var successfulUploadCount = (int?)ovtaAreaStaging.Count;
 
             SetMessageForDisplay($"{successfulUploadCount} OVTA areas were successfully uploaded for Jurisdiction {stormwaterJurisdictionName}");
 
@@ -538,6 +537,13 @@ namespace Neptune.WebMvc.Controllers
             var viewData = new ApproveOVTAAreaGisUploadViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, ovtaAreaUploadGisReportFromStaging);
             return RazorPartialView<ApproveOVTAAreaGisUpload, ApproveOVTAAreaGisUploadViewData, ApproveOVTAAreaGisUploadViewModel>(viewData, viewModel);
 
+        }
+
+        private PartialViewResult ViewUpdateOVTAAreaGeometryErrors(BulkUploadOVTAAreasViewModel viewModel)
+        {
+            var viewData = new BulkUploadOVTAAreasViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson,
+                null, null, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson), null);
+            return RazorPartialView<UpdateOVTAAreaGeometryErrors, BulkUploadOVTAAreasViewData, BulkUploadOVTAAreasViewModel>(viewData, viewModel);
         }
 
     }
