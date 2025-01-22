@@ -466,7 +466,6 @@ namespace Neptune.WebMvc.Controllers
 
             var onlandVisualTrashAssessmentAreaStagings = _dbContext.OnlandVisualTrashAssessmentAreaStagings.Where(x => x.UploadedByPersonID == CurrentPerson.PersonID).ToList();
 
-            //// Will break if there are multiple batches of staged uploads, which is precisely what we want to happen. 
             var stormwaterJurisdictionID = onlandVisualTrashAssessmentAreaStagings.First().StormwaterJurisdictionID;
             var stormwaterJurisdiction = StormwaterJurisdictions.GetByID(_dbContext, stormwaterJurisdictionID);
             var stormwaterJurisdictionName = stormwaterJurisdiction.GetOrganizationDisplayName();
