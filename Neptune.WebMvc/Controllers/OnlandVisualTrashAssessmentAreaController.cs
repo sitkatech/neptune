@@ -498,7 +498,8 @@ namespace Neptune.WebMvc.Controllers
                         x.OnlandVisualTrashAssessmentAreaName == ovtaArea.AreaName &&
                         x.StormwaterJurisdictionID == stormwaterJurisdictionID);
 
-                    existingOVTA.OnlandVisualTrashAssessmentAreaGeometry = ovtaArea.Geometry;
+                    existingOVTA.AssessmentAreaDescription = ovtaArea.Description;
+                    existingOVTA.OnlandVisualTrashAssessmentAreaGeometry = ovtaArea.Geometry.ProjectTo2771();
                     existingOVTA.OnlandVisualTrashAssessmentAreaGeometry4326 = ovtaArea.Geometry.ProjectTo4326();
                 }
                 else
