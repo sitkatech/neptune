@@ -9,7 +9,6 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessmentArea](
 	[OnlandVisualTrashAssessmentProgressScoreID] [int] NULL CONSTRAINT [FK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentScore_OnlandVisualTrashAssessmentProgressScoreID_OnlandVisualTrash] FOREIGN KEY REFERENCES [dbo].[OnlandVisualTrashAssessmentScore] ([OnlandVisualTrashAssessmentScoreID]),
 	[OnlandVisualTrashAssessmentAreaGeometry4326] [geometry] NULL,
 	[TransectLine4326] [geometry] NULL,
-	CONSTRAINT [AK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID_StormwaterJurisdictionID] UNIQUE([OnlandVisualTrashAssessmentAreaID], [StormwaterJurisdictionID]),
 	CONSTRAINT [AK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaName_StormwaterJurisdictionID] UNIQUE([OnlandVisualTrashAssessmentAreaName], [StormwaterJurisdictionID])
 )
 GO
