@@ -13,10 +13,18 @@
     @if (ViewDataTyped.HasEditPermissions)
     {
         <a class="btn btn-neptune" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Begin OVTA</a>
-        <a class="btn btn-neptune" href="@ViewDataTyped.UploadUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload OVTAs</a>
-        <a class="btn btn-neptune" href="@ViewDataTyped.UploadAreaUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload OVTA Areas</a>
-        <p></p>
-        <a class="btn btn-neptune" href="@ViewDataTyped.ExportUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download OVTA Areas</a>
+
+        <span class="dropdown">
+            <button id="actionsDropdown" class="btn btn-neptune" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="False">
+                More Actions
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" aria-labeledby="actionsDropdown" style="list-style: none; background: #fff;">
+                <li><a href="@ViewDataTyped.UploadUrl">Upload OVTA Assessments</a></li>
+                <li><a href="@ViewDataTyped.UploadAreaUrl">Upload OVTA Areas</a></li>
+                <li><a href="@ViewDataTyped.ExportUrl">Download OVTA Areas</a></li>
+            </ul>
+        </span>
     }
 }
 
