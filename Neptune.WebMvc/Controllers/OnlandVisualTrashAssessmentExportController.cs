@@ -81,7 +81,8 @@ namespace Neptune.WebMvc.Controllers
             var onlandVisualTrashAssessments = OnlandVisualTrashAssessments
                 .ListByStormwaterJurisdictionIDList(_dbContext, stormwaterJurisdictionIDList)
                 .ToLookup(x => x.StormwaterJurisdictionID);
-            var viewData = new ExportAssessmentGeospatialDataViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, neptunePage, stormwaterJurisdictions, _webConfiguration.MapServiceUrl, onlandVisualTrashAssessmentAreas, onlandVisualTrashAssessments);
+            var uploadOVTAAreaUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(_linkGenerator, x => x.BulkUploadOVTAAreas());
+            var viewData = new ExportAssessmentGeospatialDataViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, neptunePage, stormwaterJurisdictions, _webConfiguration.MapServiceUrl, onlandVisualTrashAssessmentAreas, onlandVisualTrashAssessments, uploadOVTAAreaUrl);
             return RazorView<ExportAssessmentGeospatialData, ExportAssessmentGeospatialDataViewData, ExportAssessmentGeospatialDataViewModel>(
                 viewData, viewModel);
         }
