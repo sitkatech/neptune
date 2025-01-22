@@ -8,10 +8,11 @@ api/nereid.service.ts
 api/organization.service.ts
 api/project-document.service.ts
 api/project.service.ts
-api/role.service.ts
 api/stormwater-jurisdiction.service.ts
 api/system-info.service.ts
+api/treatment-bmp-type.service.ts
 api/treatment-bmp.service.ts
+api/user-claims.service.ts
 api/user.service.ts
 configuration.ts
 encoder.ts
@@ -55,7 +56,6 @@ model/project-status-simple-dto.ts
 model/project-upsert-dto.ts
 model/project-workflow-progress-dto-steps.ts
 model/project-workflow-progress-dto.ts
-model/role-simple-dto.ts
 model/stormwater-jurisdiction-dto.ts
 model/system-info-dto.ts
 model/treatment-bmp-display-dto.ts

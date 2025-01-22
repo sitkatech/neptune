@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/customRichText/{customRichTextTypeID}": {
+    "/custom-rich-texts/{customRichTextTypeID}": {
       "get": {
         "tags": [
           "CustomRichText"
@@ -140,7 +140,7 @@
         }
       }
     },
-    "/fieldDefinitions": {
+    "/field-definitions": {
       "get": {
         "tags": [
           "FieldDefinition"
@@ -178,7 +178,7 @@
         }
       }
     },
-    "/fieldDefinitions/{fieldDefinitionTypeID}": {
+    "/field-definitions/{fieldDefinitionTypeID}": {
       "get": {
         "tags": [
           "FieldDefinition"
@@ -275,7 +275,7 @@
         }
       }
     },
-    "/FileResource/{fileResourceGuidAsString}": {
+    "/file-resources/{fileResourceGuidAsString}": {
       "get": {
         "tags": [
           "FileResource"
@@ -289,6 +289,18 @@
               "type": "string"
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/nereid/delta-solve": {
+      "get": {
+        "tags": [
+          "Nereid"
         ],
         "responses": {
           "200": {
@@ -683,6 +695,46 @@
         }
       }
     },
+    "/projects/{projectID}/bounding-box": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/projects/{projectID}/progress": {
       "get": {
         "tags": [
@@ -945,6 +997,155 @@
                 }
               }
             }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/treatment-bmps/as-upsert-dtos": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/treatment-bmps/update-locations": {
+      "put": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -1583,44 +1784,6 @@
         }
       }
     },
-    "/roles": {
-      "get": {
-        "tags": [
-          "Role"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RoleSimpleDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RoleSimpleDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RoleSimpleDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/jurisdictions": {
       "get": {
         "tags": [
@@ -1659,47 +1822,7 @@
         }
       }
     },
-    "/jurisdictions/{projectID}/getBoundingBoxByProjectID": {
-      "get": {
-        "tags": [
-          "StormwaterJurisdiction"
-        ],
-        "parameters": [
-          {
-            "name": "projectID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/BoundingBoxDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BoundingBoxDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BoundingBoxDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/jurisdictions/boundingBox": {
+    "/jurisdictions/bounding-box": {
       "get": {
         "tags": [
           "StormwaterJurisdiction"
@@ -1750,55 +1873,6 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SystemInfoDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/treatment-bmps/{projectID}/getByProjectID": {
-      "get": {
-        "tags": [
-          "TreatmentBMP"
-        ],
-        "parameters": [
-          {
-            "name": "projectID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
-                  }
                 }
               }
             }
@@ -1958,45 +2032,7 @@
         }
       }
     },
-    "/treatmentBMPTypes": {
-      "get": {
-        "tags": [
-          "TreatmentBMP"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPTypeWithModelingAttributesDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPTypeWithModelingAttributesDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPTypeWithModelingAttributesDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/treatmentBMPs/{treatmentBMPID}/treatmentBMPType/{treatmentBMPTypeID}": {
+    "/treatment-bmps/{treatmentBMPID}/treatment-bmp-types/{treatmentBMPTypeID}": {
       "put": {
         "tags": [
           "TreatmentBMP"
@@ -2048,7 +2084,7 @@
         }
       }
     },
-    "/treatmentBMPModelingAttributeDropdownItems": {
+    "/treatment-bmps/modeling-attribute-dropdown-items": {
       "get": {
         "tags": [
           "TreatmentBMP"
@@ -2086,109 +2122,7 @@
         }
       }
     },
-    "/treatmentBMPs/{projectID}/updateLocations": {
-      "put": {
-        "tags": [
-          "TreatmentBMP"
-        ],
-        "parameters": [
-          {
-            "name": "projectID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
-                }
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
-                }
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/treatmentBMPs/{projectID}": {
-      "put": {
-        "tags": [
-          "TreatmentBMP"
-        ],
-        "parameters": [
-          {
-            "name": "projectID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
-                }
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
-                }
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/treatmentBMPs/{treatmentBMPID}/upstreamRSBCatchmentGeoJSON": {
+    "/treatment-bmps/{treatmentBMPID}/upstreamRSBCatchmentGeoJSON": {
       "get": {
         "tags": [
           "TreatmentBMP"
@@ -2221,6 +2155,44 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GeometryGeoJSONAndAreaDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmp-types": {
+      "get": {
+        "tags": [
+          "TreatmentBMPType"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeWithModelingAttributesDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeWithModelingAttributesDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeWithModelingAttributesDto"
+                  }
                 }
               }
             }
@@ -2355,7 +2327,7 @@
     "/user-claims/{globalID}": {
       "get": {
         "tags": [
-          "User"
+          "UserClaims"
         ],
         "parameters": [
           {
@@ -4365,32 +4337,6 @@
             },
             "additionalProperties": false,
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "RoleSimpleDto": {
-        "type": "object",
-        "properties": {
-          "RoleID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "RoleName": {
-            "type": "string",
-            "nullable": true
-          },
-          "RoleDisplayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "RoleDescription": {
-            "type": "string",
-            "nullable": true
-          },
-          "PeopleWithRoleCount": {
-            "type": "integer",
-            "format": "int32"
           }
         },
         "additionalProperties": false

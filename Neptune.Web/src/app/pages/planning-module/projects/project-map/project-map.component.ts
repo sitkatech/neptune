@@ -8,7 +8,6 @@ import { TreatmentBMPModelingAttributeDropdownItemDto } from "src/app/shared/gen
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
-import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
 import { TreatmentBMPModelingTypeEnum } from "src/app/shared/generated/enum/treatment-b-m-p-modeling-type-enum";
@@ -25,6 +24,7 @@ import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leafl
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
+import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
 
 declare var $: any;
 
@@ -98,7 +98,7 @@ export class ProjectMapComponent implements OnInit {
     constructor(
         private projectService: ProjectService,
         private treatmentBMPService: TreatmentBMPService,
-        private stormwaterJurisdictionService: StormwaterJurisdictionService,
+        private treatmentBMPTypeService: TreatmentBMPTypeService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService
     ) {}
@@ -108,9 +108,9 @@ export class ProjectMapComponent implements OnInit {
             forkJoin({
                 treatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsGet(this.projectID),
                 delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
-                boundingBox: this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID),
-                treatmentBMPTypes: this.treatmentBMPService.treatmentBMPTypesGet(),
-                modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBMPModelingAttributeDropdownItemsGet(),
+                boundingBox: this.projectService.projectsProjectIDBoundingBoxGet(this.projectID),
+                treatmentBMPTypes: this.treatmentBMPTypeService.treatmentBmpTypesGet(),
+                modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBmpsModelingAttributeDropdownItemsGet(),
             }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
                 this.projectTreatmentBMPs = treatmentBMPs;
                 this.delineations = delineations;

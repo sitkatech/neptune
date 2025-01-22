@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { PersonDto } from '../model/person-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -28,7 +29,7 @@ import { ApiService } from '../../services';
 @Injectable({
   providedIn: 'root'
 })
-export class FileResourceService {
+export class UserClaimsService {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();
@@ -63,23 +64,26 @@ export class FileResourceService {
     /**
      * 
      * 
-     * @param fileResourceGuidAsString 
+     * @param globalID 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public fileResourcesFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public fileResourcesFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public fileResourcesFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public fileResourcesFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public userClaimsGlobalIDGet(globalID: string, observe?: 'body', reportProgress?: boolean): Observable<PersonDto>;
+    public userClaimsGlobalIDGet(globalID: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PersonDto>>;
+    public userClaimsGlobalIDGet(globalID: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PersonDto>>;
+    public userClaimsGlobalIDGet(globalID: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (fileResourceGuidAsString === null || fileResourceGuidAsString === undefined) {
-            throw new Error('Required parameter fileResourceGuidAsString was null or undefined when calling fileResourcesFileResourceGuidAsStringGet.');
+        if (globalID === null || globalID === undefined) {
+            throw new Error('Required parameter globalID was null or undefined when calling userClaimsGlobalIDGet.');
         }
 
         let headers = this.defaultHeaders;
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
         ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected != undefined) {
@@ -90,7 +94,7 @@ export class FileResourceService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<any>(`${this.basePath}/file-resources/${encodeURIComponent(String(fileResourceGuidAsString))}`,
+        return this.httpClient.get<PersonDto>(`${this.basePath}/user-claims/${encodeURIComponent(String(globalID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

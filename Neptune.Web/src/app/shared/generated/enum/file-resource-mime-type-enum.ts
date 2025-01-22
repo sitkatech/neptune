@@ -2,6 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Source Table: [dbo].[FileResourceMimeType]
 
+import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
+import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+
 export enum FileResourceMimeTypeEnum {
   PDF = 1,
   WordDOCX = 2,
@@ -21,3 +24,24 @@ export enum FileResourceMimeTypeEnum {
   CSS = 16,
   ZIP = 17
 }
+
+export const FileResourceMimeTypes: LookupTableEntry[]  = [
+  { Name: "PDF", DisplayName: "PDF", Value: 1 },
+  { Name: "Word (DOCX)", DisplayName: "Word (DOCX)", Value: 2 },
+  { Name: "Excel (XLSX)", DisplayName: "Excel (XLSX)", Value: 3 },
+  { Name: "X-PNG", DisplayName: "X-PNG", Value: 4 },
+  { Name: "PNG", DisplayName: "PNG", Value: 5 },
+  { Name: "TIFF", DisplayName: "TIFF", Value: 6 },
+  { Name: "BMP", DisplayName: "BMP", Value: 7 },
+  { Name: "GIF", DisplayName: "GIF", Value: 8 },
+  { Name: "JPEG", DisplayName: "JPEG", Value: 9 },
+  { Name: "PJPEG", DisplayName: "PJPEG", Value: 10 },
+  { Name: "Powerpoint (PPTX)", DisplayName: "Powerpoint (PPTX)", Value: 11 },
+  { Name: "Powerpoint (PPT)", DisplayName: "Powerpoint (PPT)", Value: 12 },
+  { Name: "Excel (XLS)", DisplayName: "Excel (XLS)", Value: 13 },
+  { Name: "Word (DOC)", DisplayName: "Word (DOC)", Value: 14 },
+  { Name: "x-Excel (XLSX)", DisplayName: "x-Excel (XLSX)", Value: 15 },
+  { Name: "CSS", DisplayName: "CSS", Value: 16 },
+  { Name: "ZIP", DisplayName: "ZIP", Value: 17 }
+];
+export const FileResourceMimeTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...FileResourceMimeTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];

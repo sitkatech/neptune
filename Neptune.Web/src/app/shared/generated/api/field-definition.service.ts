@@ -94,7 +94,7 @@ export class FieldDefinitionService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<FieldDefinitionDto>(`${this.basePath}/fieldDefinitions/${encodeURIComponent(String(fieldDefinitionTypeID))}`,
+        return this.httpClient.get<FieldDefinitionDto>(`${this.basePath}/field-definitions/${encodeURIComponent(String(fieldDefinitionTypeID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -146,7 +146,7 @@ export class FieldDefinitionService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.put<FieldDefinitionDto>(`${this.basePath}/fieldDefinitions/${encodeURIComponent(String(fieldDefinitionTypeID))}`,
+        return this.httpClient.put<FieldDefinitionDto>(`${this.basePath}/field-definitions/${encodeURIComponent(String(fieldDefinitionTypeID))}`,
             fieldDefinitionDto,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -185,7 +185,7 @@ export class FieldDefinitionService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<FieldDefinitionDto>>(`${this.basePath}/fieldDefinitions`,
+        return this.httpClient.get<Array<FieldDefinitionDto>>(`${this.basePath}/field-definitions`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

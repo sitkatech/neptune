@@ -13,7 +13,6 @@ import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
-import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { DelineationTypeEnum } from "src/app/shared/generated/enum/delineation-type-enum";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
@@ -145,7 +144,6 @@ export class DelineationsComponent implements OnInit {
 
     constructor(
         private treatmentBMPService: TreatmentBMPService,
-        private stormwaterJurisdictionService: StormwaterJurisdictionService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService,
         private route: ActivatedRoute,
@@ -172,7 +170,7 @@ export class DelineationsComponent implements OnInit {
         this.boundingBox$ = this.route.params.pipe(
             switchMap((params) => {
                 this.projectID = parseInt(params[routeParams.projectID]);
-                return this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID);
+                return this.projectService.projectsProjectIDBoundingBoxGet(this.projectID);
             })
         );
         this.compileService.configure(this.appRef);
@@ -489,7 +487,7 @@ export class DelineationsComponent implements OnInit {
         var updatedDelineations = this.delineations.filter((x) => x.Geometry != null);
         forkJoin({
             delineations: this.projectService.projectsProjectIDDelineationsPut(this.projectID, updatedDelineations),
-            treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDUpdateLocationsPut(this.projectID, this.projectTreatmentBMPs),
+            treatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsUpdateLocationsPut(this.projectID, this.projectTreatmentBMPs),
         }).subscribe(
             ({ delineations, treatmentBMPs }) => {
                 window.scroll(0, 0);
@@ -536,7 +534,7 @@ export class DelineationsComponent implements OnInit {
     }
 
     public getUpstreamRSBCatchmentForTreatmentBMP(treatmentBMPID: number) {
-        this.treatmentBMPService.treatmentBMPsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID).subscribe((result) => {
+        this.treatmentBMPService.treatmentBmpsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID).subscribe((result) => {
             let currentDelineationForTreatmentBMP = this.delineations.find((x) => x.TreatmentBMPID == treatmentBMPID);
             if (currentDelineationForTreatmentBMP == null) {
                 currentDelineationForTreatmentBMP = new DelineationUpsertDto({

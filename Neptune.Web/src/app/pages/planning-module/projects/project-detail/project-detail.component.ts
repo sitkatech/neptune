@@ -71,7 +71,7 @@ export class ProjectDetailComponent implements OnInit {
         this.modeledResultsData$ = this.currentProject$.pipe(
             switchMap((project) => {
                 return combineLatest({
-                    treatmentBMPs$: this.treatmentBMPService.treatmentBmpsProjectIDGetByProjectIDGet(project.ProjectID),
+                    treatmentBMPs$: this.projectService.projectsProjectIDTreatmentBmpsAsUpsertDtosGet(project.ProjectID),
                     delineations$: this.projectService.projectsProjectIDDelineationsGet(project.ProjectID),
                     projectNetworkSolveHistories$: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(project.ProjectID),
                 });

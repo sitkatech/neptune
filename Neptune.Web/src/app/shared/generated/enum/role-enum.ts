@@ -2,6 +2,9 @@
 //  This file is generated. Your changes will be lost.
 //  Source Table: [dbo].[Role]
 
+import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
+import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+
 export enum RoleEnum {
   Admin = 1,
   Unassigned = 3,
@@ -9,3 +12,12 @@ export enum RoleEnum {
   JurisdictionManager = 5,
   JurisdictionEditor = 6
 }
+
+export const Roles: LookupTableEntry[]  = [
+  { Name: "Admin", DisplayName: "Administrator", Value: 1 },
+  { Name: "Unassigned", DisplayName: "Unassigned", Value: 3 },
+  { Name: "SitkaAdmin", DisplayName: "Sitka Administrator", Value: 4 },
+  { Name: "JurisdictionManager", DisplayName: "Jurisdication Manager", Value: 5 },
+  { Name: "JurisdictionEditor", DisplayName: "Jurisdication Editor", Value: 6 }
+];
+export const RolesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...Roles.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];

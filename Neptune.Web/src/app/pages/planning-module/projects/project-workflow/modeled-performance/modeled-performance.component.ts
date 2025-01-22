@@ -7,11 +7,10 @@ import { AlertService } from "src/app/shared/services/alert.service";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import * as L from "leaflet";
 import "leaflet.fullscreen";
-import { combineLatest, forkJoin, map, Observable, pipe, switchMap, tap } from "rxjs";
+import { combineLatest, map, Observable, pipe, switchMap, tap } from "rxjs";
 import { environment } from "src/environments/environment";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
-import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { ProjectNetworkSolveHistoryStatusTypeEnum } from "src/app/shared/generated/enum/project-network-solve-history-status-type-enum";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { GrantScoresComponent } from "src/app/pages/planning-module/projects/grant-scores/grant-scores.component";
@@ -93,7 +92,6 @@ export class ModeledPerformanceComponent implements OnInit {
         private projectService: ProjectService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService,
-        private stormwaterJurisdictionService: StormwaterJurisdictionService,
         private route: ActivatedRoute,
         private router: Router,
         private alertService: AlertService
@@ -139,7 +137,7 @@ export class ModeledPerformanceComponent implements OnInit {
 
         this.boundingBox$ = this.project$.pipe(
             switchMap((project) => {
-                return this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(project.ProjectID);
+                return this.projectService.projectsProjectIDBoundingBoxGet(project.ProjectID);
             })
         );
 

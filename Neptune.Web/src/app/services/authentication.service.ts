@@ -12,6 +12,7 @@ import { PersonCreateDto } from "../shared/generated/model/person-create-dto";
 import { PersonDto } from "../shared/generated/model/person-dto";
 import { UserService } from "../shared/generated/api/user.service";
 import { RoleEnum } from "../shared/generated/enum/role-enum";
+import { UserClaimsService } from "../shared/generated/api/user-claims.service";
 
 @Injectable({
     providedIn: "root",
@@ -29,6 +30,7 @@ export class AuthenticationService {
         private oauthService: OAuthService,
         private cookieStorageService: CookieStorageService,
         private userService: UserService,
+        private userClaimsService: UserClaimsService,
         private alertService: AlertService
     ) {
         this.oauthService.events.pipe(filter((e) => ["discovery_document_loaded"].includes(e.type))).subscribe((e) => {
@@ -66,7 +68,7 @@ export class AuthenticationService {
     private getUser(claims: any) {
         var globalID = claims["sub"];
 
-        this.userService.userClaimsGlobalIDGet(globalID).subscribe(
+        this.userClaimsService.userClaimsGlobalIDGet(globalID).subscribe(
             (result) => {
                 this.updateUser(result);
             },

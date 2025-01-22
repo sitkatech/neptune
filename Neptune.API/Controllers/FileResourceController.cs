@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 namespace Neptune.API.Controllers
 {
     [ApiController]
+    [Route("file-resources")]
     public class FileResourceController(
         NeptuneDbContext dbContext,
         ILogger<FileResourceController> logger,
@@ -19,7 +20,7 @@ namespace Neptune.API.Controllers
         AzureBlobStorageService azureBlobStorageService)
         : SitkaController<FileResourceController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        [HttpGet("FileResource/{fileResourceGuidAsString}")]
+        [HttpGet("{fileResourceGuidAsString}")]
         public async Task<IActionResult> DisplayResource(string fileResourceGuidAsString)
         {
             var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out var fileResourceGuid);
