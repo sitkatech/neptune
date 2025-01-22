@@ -36,7 +36,7 @@
                 Use this form on the right to bulk upload Onland Visual Treatment Assessment Areas. Requirements:
             </p>
             <ul>
-                <li>A single ArcGIS file geodatabase containing only onland visual treatment asseessment area features</li>
+                <li>A single ArcGIS file geodatabase containing only onland visual treatment assessment area features</li>
                 <li>The file geodatabase (.gdb) must be contained within a compressed zip file (.zip)</li>
                 <li>The zip file must contain only one file geodatabase and no other data.</li>
                 <li>The file geodatabase must contain only one feature class</li>
@@ -58,6 +58,15 @@
                         </div>
                         <div class="col-md-6">
                             @Html.DropDownListFor(x => x.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictions, new Dictionary<string, object> { { "class", "form-control" } })
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            @Html.LabelWithSugarFor(x => x.AreaName)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(x => x.AreaName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.AreaName)
                         </div>
                     </div>
                     <div class="row form-group">

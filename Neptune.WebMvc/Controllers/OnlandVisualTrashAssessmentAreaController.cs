@@ -343,7 +343,7 @@ namespace Neptune.WebMvc.Controllers
         [JurisdictionManageFeature]
         public ActionResult BulkUploadOVTAAreas()
         {
-            var bulkUploadTrashScreenVisitViewModel = new BulkUploadOVTAAreasViewModel();
+            var bulkUploadTrashScreenVisitViewModel = new BulkUploadOVTAAreasViewModel() { AreaName = "OVTAAreaName" };
 
             return ViewBulkUploadOTVAAreas(bulkUploadTrashScreenVisitViewModel);
         }
@@ -402,7 +402,7 @@ namespace Neptune.WebMvc.Controllers
                 var columns = new List<string>
                 {
                     $"{viewModel.StormwaterJurisdictionID} as StormwaterJurisdictionID",
-                    $"OVTAAreaName as AreaName",
+                    $"{viewModel.AreaName} as AreaName",
                     $"Description",
                     $"{CurrentPerson.PersonID} as UploadedByPersonID"
                 };
@@ -524,7 +524,7 @@ namespace Neptune.WebMvc.Controllers
 
             await _dbContext.OnlandVisualTrashAssessmentAreaStagings.Where(x => x.UploadedByPersonID == CurrentPerson.PersonID).ExecuteDeleteAsync();
 
-            return RedirectToAction(new SitkaRoute<ManagerDashboardController>(_linkGenerator, x => x.Index()));
+            return RedirectToAction(new SitkaRoute<OnlandVisualTrashAssessmentController>(_linkGenerator, x => x.Index()));
         }
 
         private PartialViewResult ViewApproveOVTAAreaGisUpload(ApproveOVTAAreaGisUploadViewModel viewModel)

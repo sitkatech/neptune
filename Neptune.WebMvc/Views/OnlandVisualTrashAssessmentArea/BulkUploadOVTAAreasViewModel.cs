@@ -13,5 +13,10 @@ public class BulkUploadOVTAAreasViewModel : FormViewModel
     public IFormFile FileResourceData { get; set; }
 
     [Required]
+    [DisplayName("Stormwater Jurisdiction")]
     public int StormwaterJurisdictionID { get; set; }
+
+    [Required]
+    [DisplayName("OVTA Area Name")]
+    public string AreaName { get; set; }
 }

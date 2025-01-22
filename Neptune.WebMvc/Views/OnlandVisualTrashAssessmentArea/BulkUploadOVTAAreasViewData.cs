@@ -20,7 +20,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea
             NewGisUploadUrl = newGisUploadUrl;
             ApprovedGisUploadUrl = approvedGisUploadUrl;
             DownloadGisUrl = downloadGisUrl;
-            EntityName = FieldDefinitionType.Delineation.FieldDefinitionTypeDisplayName;
+            EntityName = FieldDefinitionType.OnlandVisualTrashAssessment.FieldDefinitionTypeDisplayName;
             EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
 
             PageTitle = "OVTA Area Upload";
