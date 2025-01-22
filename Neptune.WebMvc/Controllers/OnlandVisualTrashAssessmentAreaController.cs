@@ -351,11 +351,11 @@ namespace Neptune.WebMvc.Controllers
         private ViewResult ViewBulkUploadOTVAAreas(
             BulkUploadOVTAAreasViewModel bulkUploadTrashScreenVisitViewModel)
         {
-            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadOVTAs);
             var newGisUploadUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(_linkGenerator, x => x.BulkUploadOVTAAreas());
             var approveGisUploadUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(_linkGenerator, x => x.ApproveOVTAAreaGisUpload());
+            var downloadOVTAAreaUrl = SitkaRoute<OnlandVisualTrashAssessmentExportController>.BuildUrlFromExpression(_linkGenerator, x => x.ExportAssessmentGeospatialData());
             var bulkUploadTrashScreenVisitViewData = new BulkUploadOVTAAreasViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson,
-                newGisUploadUrl, approveGisUploadUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson), null);
+                newGisUploadUrl, approveGisUploadUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson), downloadOVTAAreaUrl);
 
             return RazorView<BulkUploadOVTAAreas, BulkUploadOVTAAreasViewData,
                 BulkUploadOVTAAreasViewModel>(bulkUploadTrashScreenVisitViewData,

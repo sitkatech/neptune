@@ -3,6 +3,7 @@
 @using Neptune.WebMvc.Views.OnlandVisualTrashAssessmentExport
 @using Neptune.WebMvc.Views.Shared
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Neptune.WebMvc.Common.BootstrapWrappers
 @inherits Neptune.WebMvc.Views.OnlandVisualTrashAssessmentExport.ExportAssessmentGeospatialData
 @model Neptune.WebMvc.Views.OnlandVisualTrashAssessmentExport.ExportAssessmentGeospatialDataViewModel
 
@@ -21,6 +22,11 @@
 
 @{
     ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);
+}
+
+@section RightOfPageTitle
+{
+    <a class="btn btn-warning headerButtonText observationTypeButton" href="@ViewDataTyped.UploadOVTAAreaUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload OVTA Areas</a>
 }
 
 <form method="post" enctype="multipart/form-data">
