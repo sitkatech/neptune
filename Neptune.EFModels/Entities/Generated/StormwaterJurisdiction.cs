@@ -31,6 +31,9 @@ public partial class StormwaterJurisdiction
     public virtual ICollection<LandUseBlock> LandUseBlocks { get; set; } = new List<LandUseBlock>();
 
     [InverseProperty("StormwaterJurisdiction")]
+    public virtual ICollection<OnlandVisualTrashAssessmentAreaStaging> OnlandVisualTrashAssessmentAreaStagings { get; set; } = new List<OnlandVisualTrashAssessmentAreaStaging>();
+
+    [InverseProperty("StormwaterJurisdiction")]
     public virtual ICollection<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreas { get; set; } = new List<OnlandVisualTrashAssessmentArea>();
 
     [InverseProperty("StormwaterJurisdiction")]

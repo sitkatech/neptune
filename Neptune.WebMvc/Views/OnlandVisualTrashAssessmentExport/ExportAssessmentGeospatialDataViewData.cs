@@ -13,22 +13,24 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessmentExport
         public string MapServiceUrl { get; }
         public ILookup<int, EFModels.Entities.OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreas { get; }
         public ILookup<int, EFModels.Entities.OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; }
+        public string UploadOVTAAreaUrl { get; }
 
         public ExportAssessmentGeospatialDataViewData(HttpContext httpContext, LinkGenerator linkGenerator,
             Person currentPerson, WebConfiguration webConfiguration, EFModels.Entities.NeptunePage neptunePage,
             List<StormwaterJurisdiction> stormwaterJurisdictions, string mapServiceUrl,
             ILookup<int, EFModels.Entities.OnlandVisualTrashAssessmentArea> onlandVisualTrashAssessmentAreas,
-            ILookup<int, EFModels.Entities.OnlandVisualTrashAssessment> onlandVisualTrashAssessments) : base(httpContext, linkGenerator, currentPerson, webConfiguration, neptunePage)
+            ILookup<int, EFModels.Entities.OnlandVisualTrashAssessment> onlandVisualTrashAssessments, string uploadOVTAAreaUrl) : base(httpContext, linkGenerator, currentPerson, webConfiguration, neptunePage)
         {
             MapServiceUrl = mapServiceUrl;
             OnlandVisualTrashAssessmentAreas = onlandVisualTrashAssessmentAreas;
             OnlandVisualTrashAssessments = onlandVisualTrashAssessments;
             EntityName = "On-land Visual Trash Assessment";
             EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
-            PageTitle = "Export Geospatial Data";
+            PageTitle = "Download OVTA Areas";
             StormwaterJurisdictions =
                 stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
                     .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
+            UploadOVTAAreaUrl=uploadOVTAAreaUrl;
         }
     }
 }

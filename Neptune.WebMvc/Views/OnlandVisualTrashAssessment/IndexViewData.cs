@@ -18,6 +18,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
         public string NewUrl { get; }
         public string ExportUrl { get; }
         public string UploadUrl { get; }
+        public string UploadAreaUrl { get; }
         public bool HasManagePermissions { get; }
         public bool HasEditPermissions { get; }
 
@@ -50,6 +51,8 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
             HasEditPermissions = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             UploadUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator,
                 x => x.BulkUploadOTVAs());
+            UploadAreaUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(linkGenerator,
+                x => x.BulkUploadOVTAAreas());
         }
     }
 }
