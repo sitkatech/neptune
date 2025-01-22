@@ -14,6 +14,7 @@ import { ProjectDocumentService } from './api/project-document.service';
 import { StormwaterJurisdictionService } from './api/stormwater-jurisdiction.service';
 import { SystemInfoService } from './api/system-info.service';
 import { TreatmentBMPService } from './api/treatment-bmp.service';
+import { TreatmentBMPTypeService } from './api/treatment-bmp-type.service';
 import { UserService } from './api/user.service';
 
 @NgModule({
@@ -32,6 +33,7 @@ import { UserService } from './api/user.service';
     StormwaterJurisdictionService,
     SystemInfoService,
     TreatmentBMPService,
+    TreatmentBMPTypeService,
     UserService,
      ]
 })

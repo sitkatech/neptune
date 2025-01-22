@@ -489,7 +489,7 @@ export class DelineationsComponent implements OnInit {
         var updatedDelineations = this.delineations.filter((x) => x.Geometry != null);
         forkJoin({
             delineations: this.projectService.projectsProjectIDDelineationsPut(this.projectID, updatedDelineations),
-            treatmentBMPs: this.treatmentBMPService.treatmentBMPsProjectIDUpdateLocationsPut(this.projectID, this.projectTreatmentBMPs),
+            treatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsUpdateLocationsPut(this.projectID, this.projectTreatmentBMPs),
         }).subscribe(
             ({ delineations, treatmentBMPs }) => {
                 window.scroll(0, 0);
@@ -536,7 +536,7 @@ export class DelineationsComponent implements OnInit {
     }
 
     public getUpstreamRSBCatchmentForTreatmentBMP(treatmentBMPID: number) {
-        this.treatmentBMPService.treatmentBMPsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID).subscribe((result) => {
+        this.treatmentBMPService.treatmentBmpsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID).subscribe((result) => {
             let currentDelineationForTreatmentBMP = this.delineations.find((x) => x.TreatmentBMPID == treatmentBMPID);
             if (currentDelineationForTreatmentBMP == null) {
                 currentDelineationForTreatmentBMP = new DelineationUpsertDto({

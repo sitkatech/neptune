@@ -25,6 +25,7 @@ import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leafl
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
+import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
 
 declare var $: any;
 
@@ -98,6 +99,7 @@ export class ProjectMapComponent implements OnInit {
     constructor(
         private projectService: ProjectService,
         private treatmentBMPService: TreatmentBMPService,
+        private treatmentBMPTypeService: TreatmentBMPTypeService,
         private stormwaterJurisdictionService: StormwaterJurisdictionService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService
@@ -109,8 +111,8 @@ export class ProjectMapComponent implements OnInit {
                 treatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsGet(this.projectID),
                 delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                 boundingBox: this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID),
-                treatmentBMPTypes: this.treatmentBMPService.treatmentBMPTypesGet(),
-                modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBMPModelingAttributeDropdownItemsGet(),
+                treatmentBMPTypes: this.treatmentBMPTypeService.treatmentBmpTypesGet(),
+                modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBmpsModelingAttributeDropdownItemsGet(),
             }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
                 this.projectTreatmentBMPs = treatmentBMPs;
                 this.delineations = delineations;

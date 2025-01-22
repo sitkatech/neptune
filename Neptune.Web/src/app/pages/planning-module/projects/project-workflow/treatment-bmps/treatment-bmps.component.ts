@@ -45,6 +45,7 @@ import { ProjectWorkflowProgressService } from "src/app/shared/services/project-
 import { routeParams } from "src/app/app.routes";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
+import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
 
 @Component({
     selector: "treatment-bmps",
@@ -122,6 +123,7 @@ export class TreatmentBmpsComponent implements OnInit {
         private cdr: ChangeDetectorRef,
         private projectService: ProjectService,
         private treatmentBMPService: TreatmentBMPService,
+        private treatmentBMPTypeService: TreatmentBMPTypeService,
         private stormwaterJurisdictionService: StormwaterJurisdictionService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService,
@@ -171,8 +173,8 @@ export class TreatmentBmpsComponent implements OnInit {
                     forkJoin({
                         projectTreatmentBMPs: this.treatmentBMPService.treatmentBmpsProjectIDGetByProjectIDGet(this.projectID),
                         delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
-                        treatmentBMPTypes: this.treatmentBMPService.treatmentBMPTypesGet(),
-                        modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBMPModelingAttributeDropdownItemsGet(),
+                        treatmentBMPTypes: this.treatmentBMPTypeService.treatmentBmpTypesGet(),
+                        modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBmpsModelingAttributeDropdownItemsGet(),
                     }).subscribe(({ projectTreatmentBMPs, delineations, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
                         this.originalDoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
                         this.projectTreatmentBMPs = projectTreatmentBMPs;
@@ -374,7 +376,7 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     public changeTreatmentBMPType(treatmentBMPType: number) {
-        this.treatmentBMPService.treatmentBMPsTreatmentBMPIDTreatmentBMPTypeTreatmentBMPTypeIDPut(this.selectedTreatmentBMP.TreatmentBMPID, treatmentBMPType).subscribe((temp) => {
+        this.treatmentBMPService.treatmentBmpsTreatmentBMPIDTreatmentBmpTypesTreatmentBMPTypeIDPut(this.selectedTreatmentBMP.TreatmentBMPID, treatmentBMPType).subscribe((temp) => {
             this.closeEditTreatmentBMPTypeModal();
             this.selectedTreatmentBMP.TreatmentBMPTypeID = treatmentBMPType;
             this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = temp;
@@ -428,7 +430,7 @@ export class TreatmentBmpsComponent implements OnInit {
 
         this.projectService.projectsProjectIDUpdatePost(this.projectID, this.project).subscribe(
             () => {
-                this.treatmentBMPService.treatmentBMPsProjectIDPut(this.projectID, this.projectTreatmentBMPs).subscribe(
+                this.projectService.projectsProjectIDTreatmentBmpsPut(this.projectID, this.projectTreatmentBMPs).subscribe(
                     () => {
                         this.isLoadingSubmit = false;
                         this.projectWorkflowProgressService.updateProgress(this.projectID);
