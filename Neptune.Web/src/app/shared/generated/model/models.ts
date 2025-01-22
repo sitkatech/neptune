@@ -37,7 +37,6 @@ export * from '././project-status-simple-dto';
 export * from '././project-upsert-dto';
 export * from '././project-workflow-progress-dto';
 export * from '././project-workflow-progress-dto-steps';
-export * from '././role-simple-dto';
 export * from '././stormwater-jurisdiction-dto';
 export * from '././system-info-dto';
 export * from '././treatment-bmp-display-dto';

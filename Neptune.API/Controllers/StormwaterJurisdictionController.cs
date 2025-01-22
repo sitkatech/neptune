@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 namespace Neptune.API.Controllers
 {
     [ApiController]
+    [Route("jurisdictions")]
     public class StormwaterJurisdictionController(
         NeptuneDbContext dbContext,
         ILogger<StormwaterJurisdictionController> logger,
@@ -17,7 +18,7 @@ namespace Neptune.API.Controllers
         IOptions<NeptuneConfiguration> neptuneConfiguration)
         : SitkaController<StormwaterJurisdictionController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        [HttpGet("jurisdictions")]
+        [HttpGet]
         [JurisdictionEditFeature]
         public ActionResult<List<StormwaterJurisdictionDto>> ListByPersonID()
         {
@@ -26,7 +27,7 @@ namespace Neptune.API.Controllers
             return Ok(stormwaterJurisdictionSimpleDtos);
         }
 
-        [HttpGet("jurisdictions/{projectID}/getBoundingBoxByProjectID")]
+        [HttpGet("{projectID}/getBoundingBoxByProjectID")]
         [UserViewFeature]
         public ActionResult<BoundingBoxDto> GetBoundingBoxByProjectID([FromRoute] int projectID)
         {
@@ -35,7 +36,7 @@ namespace Neptune.API.Controllers
             return Ok(boundingBoxDto);
         }
 
-        [HttpGet("jurisdictions/boundingBox")]
+        [HttpGet("bounding-box")]
         [UserViewFeature]
         public ActionResult<BoundingBoxDto> GetBoundingBoxByPersonID()
         {

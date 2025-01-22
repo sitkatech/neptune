@@ -297,6 +297,18 @@
         }
       }
     },
+    "/nereid/delta-solve": {
+      "get": {
+        "tags": [
+          "Nereid"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/nereid/health": {
       "get": {
         "tags": [
@@ -1583,44 +1595,6 @@
         }
       }
     },
-    "/roles": {
-      "get": {
-        "tags": [
-          "Role"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RoleSimpleDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RoleSimpleDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RoleSimpleDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/jurisdictions": {
       "get": {
         "tags": [
@@ -1699,7 +1673,7 @@
         }
       }
     },
-    "/jurisdictions/boundingBox": {
+    "/jurisdictions/bounding-box": {
       "get": {
         "tags": [
           "StormwaterJurisdiction"
@@ -4365,32 +4339,6 @@
             },
             "additionalProperties": false,
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "RoleSimpleDto": {
-        "type": "object",
-        "properties": {
-          "RoleID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "RoleName": {
-            "type": "string",
-            "nullable": true
-          },
-          "RoleDisplayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "RoleDescription": {
-            "type": "string",
-            "nullable": true
-          },
-          "PeopleWithRoleCount": {
-            "type": "integer",
-            "format": "int32"
           }
         },
         "additionalProperties": false

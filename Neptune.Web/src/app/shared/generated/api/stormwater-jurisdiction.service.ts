@@ -90,7 +90,7 @@ export class StormwaterJurisdictionService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<BoundingBoxDto>(`${this.basePath}/jurisdictions/boundingBox`,
+        return this.httpClient.get<BoundingBoxDto>(`${this.basePath}/jurisdictions/bounding-box`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
