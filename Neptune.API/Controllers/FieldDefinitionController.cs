@@ -11,6 +11,7 @@ using Neptune.Models.DataTransferObjects;
 namespace Neptune.API.Controllers
 {
     [ApiController]
+    [Route("field-definitions")]
     public class FieldDefinitionController(
         NeptuneDbContext dbContext,
         ILogger<FieldDefinitionController> logger,
@@ -18,7 +19,7 @@ namespace Neptune.API.Controllers
         IOptions<NeptuneConfiguration> neptuneConfiguration)
         : SitkaController<FieldDefinitionController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        [HttpGet("/fieldDefinitions")]
+        [HttpGet]
         public ActionResult<List<FieldDefinitionDto>> List()
         {
             var fieldDefinitionDtos = FieldDefinitions.List(DbContext);
@@ -26,14 +27,14 @@ namespace Neptune.API.Controllers
         }
 
 
-        [HttpGet("fieldDefinitions/{fieldDefinitionTypeID}")]
+        [HttpGet("{fieldDefinitionTypeID}")]
         public ActionResult<FieldDefinitionDto> Get([FromRoute] int fieldDefinitionTypeID)
         {
             var fieldDefinitionDto = FieldDefinitions.GetByFieldDefinitionTypeID(DbContext, fieldDefinitionTypeID);
             return RequireNotNullThrowNotFound(fieldDefinitionDto, "FieldDefinition", fieldDefinitionTypeID);
         }
 
-        [HttpPut("fieldDefinitions/{fieldDefinitionTypeID}")]
+        [HttpPut("{fieldDefinitionTypeID}")]
         [AdminFeature]
         public async Task<ActionResult<FieldDefinitionDto>> Update([FromRoute] int fieldDefinitionTypeID,
             [FromBody] FieldDefinitionDto fieldDefinitionUpdateDto)

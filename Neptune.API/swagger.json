@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/customRichText/{customRichTextTypeID}": {
+    "/custom-rich-texts/{customRichTextTypeID}": {
       "get": {
         "tags": [
           "CustomRichText"
@@ -140,7 +140,7 @@
         }
       }
     },
-    "/fieldDefinitions": {
+    "/field-definitions": {
       "get": {
         "tags": [
           "FieldDefinition"
@@ -178,7 +178,7 @@
         }
       }
     },
-    "/fieldDefinitions/{fieldDefinitionTypeID}": {
+    "/field-definitions/{fieldDefinitionTypeID}": {
       "get": {
         "tags": [
           "FieldDefinition"
@@ -275,7 +275,7 @@
         }
       }
     },
-    "/FileResource/{fileResourceGuidAsString}": {
+    "/file-resources/{fileResourceGuidAsString}": {
       "get": {
         "tags": [
           "FileResource"
@@ -695,6 +695,46 @@
         }
       }
     },
+    "/projects/{projectID}/bounding-box": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/projects/{projectID}/progress": {
       "get": {
         "tags": [
@@ -1006,6 +1046,55 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/projects/{projectID}/treatment-bmps/as-upsert-dtos": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1733,46 +1822,6 @@
         }
       }
     },
-    "/jurisdictions/{projectID}/getBoundingBoxByProjectID": {
-      "get": {
-        "tags": [
-          "StormwaterJurisdiction"
-        ],
-        "parameters": [
-          {
-            "name": "projectID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/BoundingBoxDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BoundingBoxDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BoundingBoxDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/jurisdictions/bounding-box": {
       "get": {
         "tags": [
@@ -1824,55 +1873,6 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SystemInfoDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/treatment-bmps/{projectID}/getByProjectID": {
-      "get": {
-        "tags": [
-          "TreatmentBMP"
-        ],
-        "parameters": [
-          {
-            "name": "projectID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPUpsertDto"
-                  }
                 }
               }
             }
@@ -2327,7 +2327,7 @@
     "/user-claims/{globalID}": {
       "get": {
         "tags": [
-          "User"
+          "UserClaims"
         ],
         "parameters": [
           {

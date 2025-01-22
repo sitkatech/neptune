@@ -78,6 +78,15 @@ namespace Neptune.API.Controllers
             return Forbid();
         }
 
+        [HttpGet("{projectID}/bounding-box")]
+        [UserViewFeature]
+        public ActionResult<BoundingBoxDto> GetBoundingBoxByProjectID([FromRoute] int projectID)
+        {
+            var stormwaterJurisdictionID = Projects.GetByIDWithChangeTracking(DbContext, projectID).StormwaterJurisdictionID;
+            var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByJurisdictionID(DbContext, stormwaterJurisdictionID);
+            return Ok(boundingBoxDto);
+        }
+
         [HttpGet("{projectID}/progress")]
         [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
@@ -157,9 +166,18 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public ActionResult<List<TreatmentBMPDisplayDto>> ListTreatmentBMPsByProjectID([FromRoute] int projectID)
         {
-            var featureCollection = TreatmentBMPs.ListByProjectIDsAsDisplayDto(DbContext, [projectID]);
-            return Ok(featureCollection);
+            var treatmentBMPDisplayDtos = TreatmentBMPs.ListByProjectIDsAsDisplayDto(DbContext, [projectID]);
+            return Ok(treatmentBMPDisplayDtos);
         }
+
+        [HttpGet("{projectID}/treatment-bmps/as-upsert-dtos")]
+        [UserViewFeature]
+        public ActionResult<List<TreatmentBMPUpsertDto>> GetByProjectID([FromRoute] int projectID)
+        {
+            var treatmentBMPUpsertDtos = TreatmentBMPs.ListByProjectIDAsUpsertDto(DbContext, projectID);
+            return Ok(treatmentBMPUpsertDtos);
+        }
+
 
         [HttpPut("{projectID}/treatment-bmps/update-locations")]
         [JurisdictionEditFeature]

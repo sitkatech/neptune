@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { BoundingBoxDto } from '../model/bounding-box-dto';
 import { DelineationDto } from '../model/delineation-dto';
 import { DelineationUpsertDto } from '../model/delineation-upsert-dto';
 import { ProblemDetails } from '../model/problem-details';
@@ -469,6 +470,49 @@ export class ProjectService {
 
         return this.httpClient.post<any>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/attachments`,
             convertFormParamsToString ? formParams.toString() : formParams,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param projectID 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public projectsProjectIDBoundingBoxGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<BoundingBoxDto>;
+    public projectsProjectIDBoundingBoxGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<BoundingBoxDto>>;
+    public projectsProjectIDBoundingBoxGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<BoundingBoxDto>>;
+    public projectsProjectIDBoundingBoxGet(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (projectID === null || projectID === undefined) {
+            throw new Error('Required parameter projectID was null or undefined when calling projectsProjectIDBoundingBoxGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<BoundingBoxDto>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/bounding-box`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -945,6 +989,49 @@ export class ProjectService {
         ];
 
         return this.httpClient.get<Array<TreatmentBMPHRUCharacteristicsSummarySimpleDto>>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/treatment-bmp-hru-characteristics`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param projectID 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public projectsProjectIDTreatmentBmpsAsUpsertDtosGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPUpsertDto>>;
+    public projectsProjectIDTreatmentBmpsAsUpsertDtosGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPUpsertDto>>>;
+    public projectsProjectIDTreatmentBmpsAsUpsertDtosGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPUpsertDto>>>;
+    public projectsProjectIDTreatmentBmpsAsUpsertDtosGet(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (projectID === null || projectID === undefined) {
+            throw new Error('Required parameter projectID was null or undefined when calling projectsProjectIDTreatmentBmpsAsUpsertDtosGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<TreatmentBMPUpsertDto>>(`${this.basePath}/projects/${encodeURIComponent(String(projectID))}/treatment-bmps/as-upsert-dtos`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

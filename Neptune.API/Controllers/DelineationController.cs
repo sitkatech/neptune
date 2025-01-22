@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 namespace Neptune.API.Controllers
 {
     [ApiController]
+    [Route("delineations")]
     public class DelineationController(
         NeptuneDbContext dbContext,
         ILogger<DelineationController> logger,
@@ -17,7 +18,7 @@ namespace Neptune.API.Controllers
         IOptions<NeptuneConfiguration> neptuneConfiguration)
         : SitkaController<DelineationController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        [HttpGet("delineations")]
+        [HttpGet]
         [JurisdictionEditFeature]
         public ActionResult<List<DelineationDto>> List()
         {

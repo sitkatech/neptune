@@ -8,7 +8,6 @@ import { TreatmentBMPModelingAttributeDropdownItemDto } from "src/app/shared/gen
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
-import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
 import { TreatmentBMPModelingTypeEnum } from "src/app/shared/generated/enum/treatment-b-m-p-modeling-type-enum";
@@ -100,7 +99,6 @@ export class ProjectMapComponent implements OnInit {
         private projectService: ProjectService,
         private treatmentBMPService: TreatmentBMPService,
         private treatmentBMPTypeService: TreatmentBMPTypeService,
-        private stormwaterJurisdictionService: StormwaterJurisdictionService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService
     ) {}
@@ -110,7 +108,7 @@ export class ProjectMapComponent implements OnInit {
             forkJoin({
                 treatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsGet(this.projectID),
                 delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
-                boundingBox: this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID),
+                boundingBox: this.projectService.projectsProjectIDBoundingBoxGet(this.projectID),
                 treatmentBMPTypes: this.treatmentBMPTypeService.treatmentBmpTypesGet(),
                 modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBmpsModelingAttributeDropdownItemsGet(),
             }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {

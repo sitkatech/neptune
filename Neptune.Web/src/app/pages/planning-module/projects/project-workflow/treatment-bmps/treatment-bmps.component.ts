@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { forkJoin, Observable, switchMap } from "rxjs";
-import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
 import { TimeOfConcentrationEnum } from "src/app/shared/generated/enum/time-of-concentration-enum";
@@ -124,7 +123,6 @@ export class TreatmentBmpsComponent implements OnInit {
         private projectService: ProjectService,
         private treatmentBMPService: TreatmentBMPService,
         private treatmentBMPTypeService: TreatmentBMPTypeService,
-        private stormwaterJurisdictionService: StormwaterJurisdictionService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService,
         private modalService: ModalService,
@@ -146,7 +144,7 @@ export class TreatmentBmpsComponent implements OnInit {
         this.boundingBox$ = this.route.params.pipe(
             switchMap((params) => {
                 this.projectID = parseInt(params[routeParams.projectID]);
-                return this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID);
+                return this.projectService.projectsProjectIDBoundingBoxGet(this.projectID);
             })
         );
         this.compileService.configure(this.appRef);
@@ -171,7 +169,7 @@ export class TreatmentBmpsComponent implements OnInit {
                     this.projectID = parseInt(projectID);
                     this.mapProjectDtoToProject(project);
                     forkJoin({
-                        projectTreatmentBMPs: this.treatmentBMPService.treatmentBmpsProjectIDGetByProjectIDGet(this.projectID),
+                        projectTreatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsAsUpsertDtosGet(this.projectID),
                         delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                         treatmentBMPTypes: this.treatmentBMPTypeService.treatmentBmpTypesGet(),
                         modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBmpsModelingAttributeDropdownItemsGet(),
@@ -434,7 +432,7 @@ export class TreatmentBmpsComponent implements OnInit {
                     () => {
                         this.isLoadingSubmit = false;
                         this.projectWorkflowProgressService.updateProgress(this.projectID);
-                        this.treatmentBMPService.treatmentBmpsProjectIDGetByProjectIDGet(this.projectID).subscribe(
+                        this.projectService.projectsProjectIDTreatmentBmpsAsUpsertDtosGet(this.projectID).subscribe(
                             (treatmentBMPs) => {
                                 this.projectTreatmentBMPs = treatmentBMPs;
                                 this.originalTreatmentBMPs = JSON.stringify(treatmentBMPs);

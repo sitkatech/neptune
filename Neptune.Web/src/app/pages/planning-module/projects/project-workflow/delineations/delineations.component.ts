@@ -13,7 +13,6 @@ import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
-import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { DelineationTypeEnum } from "src/app/shared/generated/enum/delineation-type-enum";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
@@ -145,7 +144,6 @@ export class DelineationsComponent implements OnInit {
 
     constructor(
         private treatmentBMPService: TreatmentBMPService,
-        private stormwaterJurisdictionService: StormwaterJurisdictionService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService,
         private route: ActivatedRoute,
@@ -172,7 +170,7 @@ export class DelineationsComponent implements OnInit {
         this.boundingBox$ = this.route.params.pipe(
             switchMap((params) => {
                 this.projectID = parseInt(params[routeParams.projectID]);
-                return this.stormwaterJurisdictionService.jurisdictionsProjectIDGetBoundingBoxByProjectIDGet(this.projectID);
+                return this.projectService.projectsProjectIDBoundingBoxGet(this.projectID);
             })
         );
         this.compileService.configure(this.appRef);

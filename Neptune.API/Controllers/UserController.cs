@@ -15,6 +15,7 @@ using Neptune.Models.DataTransferObjects.Person;
 namespace Neptune.API.Controllers
 {
     [ApiController]
+    [Route("users")]
     public class UserController(
         NeptuneDbContext dbContext,
         ILogger<UserController> logger,
@@ -23,7 +24,7 @@ namespace Neptune.API.Controllers
         SitkaSmtpClientService sitkaSmtpClientService)
         : SitkaController<UserController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        [HttpPost("users")]
+        [HttpPost]
         [LoggedInUnclassifiedFeature]
         public async Task<ActionResult<PersonDto>> CreateUser([FromBody] PersonCreateDto personCreateDto)
         {
@@ -50,7 +51,7 @@ namespace Neptune.API.Controllers
             return Ok(user);
         }
 
-        [HttpGet("users")]
+        [HttpGet]
         [UserViewFeature]
         public ActionResult<List<PersonSimpleDto>> List()
         {
@@ -58,32 +59,12 @@ namespace Neptune.API.Controllers
             return Ok(userList);
         }
 
-        [HttpGet("users/{personID}")]
+        [HttpGet("{personID}")]
         [UserViewDetailFeature]
         public ActionResult<PersonDto> GetByPersonID([FromRoute] int personID)
         {
             var userDto = People.GetByIDAsDto(DbContext, personID);
             return RequireNotNullThrowNotFound(userDto, "User", personID);
-        }
-
-        [HttpGet("user-claims/{globalID}")]
-        public ActionResult<PersonDto> GetByGlobalID([FromRoute] string globalID)
-        {
-            var isValidGuid = Guid.TryParse(globalID, out var globalIDAsGuid);
-            if (!isValidGuid)
-            {
-                return BadRequest();
-            }
-
-            var userDto = People.GetByGuidAsDto(DbContext, globalIDAsGuid);
-            if (userDto == null)
-            {
-                var notFoundMessage = $"User with GUID {globalIDAsGuid} does not exist!";
-                Logger.LogError(notFoundMessage);
-                return NotFound(notFoundMessage);
-            }
-
-            return Ok(userDto);
         }
 
         private MailMessage GenerateUserCreatedEmail(PersonDto person)

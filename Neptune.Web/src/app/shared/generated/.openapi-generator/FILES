@@ -12,6 +12,7 @@ api/stormwater-jurisdiction.service.ts
 api/system-info.service.ts
 api/treatment-bmp-type.service.ts
 api/treatment-bmp.service.ts
+api/user-claims.service.ts
 api/user.service.ts
 configuration.ts
 encoder.ts

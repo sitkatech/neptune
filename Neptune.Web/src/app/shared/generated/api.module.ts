@@ -16,6 +16,7 @@ import { SystemInfoService } from './api/system-info.service';
 import { TreatmentBMPService } from './api/treatment-bmp.service';
 import { TreatmentBMPTypeService } from './api/treatment-bmp-type.service';
 import { UserService } from './api/user.service';
+import { UserClaimsService } from './api/user-claims.service';
 
 @NgModule({
   imports:      [],
@@ -35,6 +36,7 @@ import { UserService } from './api/user.service';
     TreatmentBMPService,
     TreatmentBMPTypeService,
     UserService,
+    UserClaimsService,
      ]
 })
 export class ApiModule {

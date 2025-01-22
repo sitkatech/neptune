@@ -22,7 +22,6 @@ import { GeometryGeoJSONAndAreaDto } from '../model/geometry-geo-json-and-area-d
 import { IFeature } from '../model/i-feature';
 import { TreatmentBMPDisplayDto } from '../model/treatment-bmp-display-dto';
 import { TreatmentBMPModelingAttributeDropdownItemDto } from '../model/treatment-bmp-modeling-attribute-dropdown-item-dto';
-import { TreatmentBMPUpsertDto } from '../model/treatment-bmp-upsert-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -208,49 +207,6 @@ export class TreatmentBMPService {
         ];
 
         return this.httpClient.get<Array<TreatmentBMPDisplayDto>>(`${this.basePath}/treatment-bmps/planned-projects`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param projectID 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public treatmentBmpsProjectIDGetByProjectIDGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPUpsertDto>>;
-    public treatmentBmpsProjectIDGetByProjectIDGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPUpsertDto>>>;
-    public treatmentBmpsProjectIDGetByProjectIDGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPUpsertDto>>>;
-    public treatmentBmpsProjectIDGetByProjectIDGet(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (projectID === null || projectID === undefined) {
-            throw new Error('Required parameter projectID was null or undefined when calling treatmentBmpsProjectIDGetByProjectIDGet.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'text/plain',
-            'application/json',
-            'text/json',
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<Array<TreatmentBMPUpsertDto>>(`${this.basePath}/treatment-bmps/${encodeURIComponent(String(projectID))}/getByProjectID`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

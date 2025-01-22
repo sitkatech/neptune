@@ -19,14 +19,6 @@ namespace Neptune.API.Controllers
         IOptions<NeptuneConfiguration> neptuneConfiguration)
         : SitkaController<TreatmentBMPController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        [HttpGet("{projectID}/getByProjectID")]
-        [UserViewFeature]
-        public ActionResult<List<TreatmentBMPUpsertDto>> GetByProjectID([FromRoute] int projectID)
-        {
-            var treatmentBMPUpsertDtos = TreatmentBMPs.ListByProjectIDAsUpsertDto(DbContext, projectID);
-            return Ok(treatmentBMPUpsertDtos);
-        }
-
         [HttpGet]
         [JurisdictionEditFeature]
         public ActionResult<List<TreatmentBMPDisplayDto>> ListByPersonID()
