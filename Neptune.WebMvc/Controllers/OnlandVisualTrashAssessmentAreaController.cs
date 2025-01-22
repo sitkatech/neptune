@@ -383,14 +383,6 @@ namespace Neptune.WebMvc.Controllers
             }
 
             var featureClassName = featureClassNames.Single().LayerName;
-            //if (!OgrInfoCommandLineRunner.ConfirmAttributeExistsOnFeatureClass(
-            //        new FileInfo(NeptuneWebConfiguration.OgrInfoExecutable),
-            //        gdbFile,
-            //        Ogr2OgrCommandLineRunner.DefaultTimeOut, featureClassName, TreatmentBMPNameField))
-            //{
-            //    errors.Add(new ValidationResult($"The feature class in the file geodatabase does not have an attribute named {TreatmentBMPNameField}. Please double-check the attribute name you entered and try again."));
-            //    return errors;
-            //}
 
             if (!ModelState.IsValid)
             {
@@ -426,7 +418,6 @@ namespace Neptune.WebMvc.Controllers
                 var geoJson = await _gdalApiService.Ogr2OgrGdbToGeoJson(apiRequest);
                 var ovtaAreaStagings = await GeoJsonSerializer.DeserializeFromFeatureCollectionWithCCWCheck<OnlandVisualTrashAssessmentAreaStaging>(geoJson,
                     GeoJsonSerializer.DefaultSerializerOptions, Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
-                // todo: Run MakeValid "update dbo.DelineationStaging set Geometry = Geometry.MakeValid() where Geometry.STIsValid() = 0";
 
                 var validOVTAAreaStagings = ovtaAreaStagings.Where(x => x.Geometry is { IsValid: true, Area: > 0 }).ToList();
                 if (validOVTAAreaStagings.Any())
@@ -476,7 +467,7 @@ namespace Neptune.WebMvc.Controllers
             var onlandVisualTrashAssessmentAreaStagings = _dbContext.OnlandVisualTrashAssessmentAreaStagings.Where(x => x.UploadedByPersonID == CurrentPerson.PersonID).ToList();
 
             //// Will break if there are multiple batches of staged uploads, which is precisely what we want to happen. 
-            var stormwaterJurisdictionID = onlandVisualTrashAssessmentAreaStagings.Select(x => x.StormwaterJurisdictionID).Distinct().Single();
+            var stormwaterJurisdictionID = onlandVisualTrashAssessmentAreaStagings.First().StormwaterJurisdictionID;
             var stormwaterJurisdiction = StormwaterJurisdictions.GetByID(_dbContext, stormwaterJurisdictionID);
             var stormwaterJurisdictionName = stormwaterJurisdiction.GetOrganizationDisplayName();
 
@@ -488,11 +479,9 @@ namespace Neptune.WebMvc.Controllers
                 x.StormwaterJurisdictionID == stormwaterJurisdictionID &&
                 x.UploadedByPersonID == CurrentPerson.PersonID).ToList();
 
-            var duplicateOVTAAreaNames = ovtaAreaStaging.Select(x => x.AreaName).Intersect(ovtaAreaNames).ToList();
-
             foreach (var ovtaArea in ovtaAreaStaging)
             {
-                if (duplicateOVTAAreaNames.Contains(ovtaArea.AreaName))
+                if (ovtaAreaNames.Contains(ovtaArea.AreaName))
                 {
                     var existingOVTA = _dbContext.OnlandVisualTrashAssessmentAreas.Single(x =>
                         x.OnlandVisualTrashAssessmentAreaName == ovtaArea.AreaName &&

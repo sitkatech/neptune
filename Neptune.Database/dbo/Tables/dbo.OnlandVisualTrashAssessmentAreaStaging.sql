@@ -5,7 +5,6 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessmentAreaStaging](
 	[Geometry] [geometry] NOT NULL,
 	[Description] [varchar](500) NULL,
 	[UploadedByPersonID] [int] NOT NULL CONSTRAINT [FK_OnlandVisualTrashAssessmentAreaStaging_Person_UploadedByPersonID_PersonID] FOREIGN KEY REFERENCES [dbo].[Person] ([PersonID]),
-	CONSTRAINT [AK_OnlandVisualTrashAssessmentAreaStaging_OnlandVisualTrashAssessmentAreaStagingID_StormwaterJurisdictionID] UNIQUE([OnlandVisualTrashAssessmentAreaStagingID], [StormwaterJurisdictionID]),
 	CONSTRAINT [AK_OnlandVisualTrashAssessmentAreaStaging_OnlandVisualTrashAssessmentAreaStagingName_StormwaterJurisdictionID] UNIQUE([AreaName], [StormwaterJurisdictionID])
 )
 GO
