@@ -18,7 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { OnlandVisualTrashAssessmentSimpleDto } from '../model/onland-visual-trash-assessment-simple-dto';
+import { OnlandVisualTrashAssessmentGridDto } from '../model/onland-visual-trash-assessment-grid-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -65,9 +65,9 @@ export class OnlandVisualTrashAssessmentService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public onlandVisualTrashAssessmentsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<OnlandVisualTrashAssessmentSimpleDto>>;
-    public onlandVisualTrashAssessmentsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<OnlandVisualTrashAssessmentSimpleDto>>>;
-    public onlandVisualTrashAssessmentsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<OnlandVisualTrashAssessmentSimpleDto>>>;
+    public onlandVisualTrashAssessmentsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<OnlandVisualTrashAssessmentGridDto>>;
+    public onlandVisualTrashAssessmentsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<OnlandVisualTrashAssessmentGridDto>>>;
+    public onlandVisualTrashAssessmentsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<OnlandVisualTrashAssessmentGridDto>>>;
     public onlandVisualTrashAssessmentsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -87,7 +87,7 @@ export class OnlandVisualTrashAssessmentService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<OnlandVisualTrashAssessmentSimpleDto>>(`${this.basePath}/onland-visual-trash-assessments`,
+        return this.httpClient.get<Array<OnlandVisualTrashAssessmentGridDto>>(`${this.basePath}/onland-visual-trash-assessments`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

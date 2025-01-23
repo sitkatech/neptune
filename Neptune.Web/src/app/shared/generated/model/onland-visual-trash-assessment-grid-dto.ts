@@ -11,46 +11,40 @@
  */
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class OnlandVisualTrashAssessmentSimpleDto { 
+export class OnlandVisualTrashAssessmentGridDto { 
     OnlandVisualTrashAssessmentID?: number;
-    CreatedByPersonID?: number;
+    CreatedByPersonFullName?: string;
     CreatedDate?: string;
     OnlandVisualTrashAssessmentAreaID?: number;
+    OnlandVisualTrashAssessmentAreaName?: string;
     Notes?: string;
     StormwaterJurisdictionID?: number;
-    AssessingNewArea?: boolean;
-    OnlandVisualTrashAssessmentStatusID?: number;
-    IsDraftGeometryManuallyRefined?: boolean;
-    OnlandVisualTrashAssessmentScoreID?: number;
+    StormwaterJurisdictionName?: string;
+    OnlandVisualTrashAssessmentStatusName?: string;
+    OnlandVisualTrashAssessmentScoreName?: string;
     CompletedDate?: string;
-    DraftAreaName?: string;
-    DraftAreaDescription?: string;
-    IsTransectBackingAssessment?: boolean;
-    IsProgressAssessment?: boolean;
+    IsProgressAssessment?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
 }
 
-export interface OnlandVisualTrashAssessmentSimpleDtoForm { 
+export interface OnlandVisualTrashAssessmentGridDtoForm { 
     OnlandVisualTrashAssessmentID?: FormControl<number>;
-    CreatedByPersonID?: FormControl<number>;
+    CreatedByPersonFullName?: FormControl<string>;
     CreatedDate?: FormControl<string>;
     OnlandVisualTrashAssessmentAreaID?: FormControl<number>;
+    OnlandVisualTrashAssessmentAreaName?: FormControl<string>;
     Notes?: FormControl<string>;
     StormwaterJurisdictionID?: FormControl<number>;
-    AssessingNewArea?: FormControl<boolean>;
-    OnlandVisualTrashAssessmentStatusID?: FormControl<number>;
-    IsDraftGeometryManuallyRefined?: FormControl<boolean>;
-    OnlandVisualTrashAssessmentScoreID?: FormControl<number>;
+    StormwaterJurisdictionName?: FormControl<string>;
+    OnlandVisualTrashAssessmentStatusName?: FormControl<string>;
+    OnlandVisualTrashAssessmentScoreName?: FormControl<string>;
     CompletedDate?: FormControl<string>;
-    DraftAreaName?: FormControl<string>;
-    DraftAreaDescription?: FormControl<string>;
-    IsTransectBackingAssessment?: FormControl<boolean>;
-    IsProgressAssessment?: FormControl<boolean>;
+    IsProgressAssessment?: FormControl<string>;
 }
 
-export class OnlandVisualTrashAssessmentSimpleDtoFormControls { 
+export class OnlandVisualTrashAssessmentGridDtoFormControls { 
     public static OnlandVisualTrashAssessmentID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
@@ -61,7 +55,7 @@ export class OnlandVisualTrashAssessmentSimpleDtoFormControls {
             ],
         }
     );
-    public static CreatedByPersonID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static CreatedByPersonFullName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -91,6 +85,16 @@ export class OnlandVisualTrashAssessmentSimpleDtoFormControls {
             ],
         }
     );
+    public static OnlandVisualTrashAssessmentAreaName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static Notes = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
@@ -111,7 +115,7 @@ export class OnlandVisualTrashAssessmentSimpleDtoFormControls {
             ],
         }
     );
-    public static AssessingNewArea = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
+    public static StormwaterJurisdictionName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -121,7 +125,7 @@ export class OnlandVisualTrashAssessmentSimpleDtoFormControls {
             ],
         }
     );
-    public static OnlandVisualTrashAssessmentStatusID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static OnlandVisualTrashAssessmentStatusName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -131,17 +135,7 @@ export class OnlandVisualTrashAssessmentSimpleDtoFormControls {
             ],
         }
     );
-    public static IsDraftGeometryManuallyRefined = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static OnlandVisualTrashAssessmentScoreID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static OnlandVisualTrashAssessmentScoreName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -161,37 +155,7 @@ export class OnlandVisualTrashAssessmentSimpleDtoFormControls {
             ],
         }
     );
-    public static DraftAreaName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static DraftAreaDescription = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static IsTransectBackingAssessment = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static IsProgressAssessment = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
+    public static IsProgressAssessment = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

@@ -525,7 +525,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentSimpleDto"
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
                   }
                 }
               },
@@ -533,7 +533,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentSimpleDto"
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
                   }
                 }
               },
@@ -541,7 +541,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentSimpleDto"
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
                   }
                 }
               }
@@ -3064,16 +3064,16 @@
         },
         "additionalProperties": false
       },
-      "OnlandVisualTrashAssessmentSimpleDto": {
+      "OnlandVisualTrashAssessmentGridDto": {
         "type": "object",
         "properties": {
           "OnlandVisualTrashAssessmentID": {
             "type": "integer",
             "format": "int32"
           },
-          "CreatedByPersonID": {
-            "type": "integer",
-            "format": "int32"
+          "CreatedByPersonFullName": {
+            "type": "string",
+            "nullable": true
           },
           "CreatedDate": {
             "type": "string",
@@ -3084,6 +3084,10 @@
             "format": "int32",
             "nullable": true
           },
+          "OnlandVisualTrashAssessmentAreaName": {
+            "type": "string",
+            "nullable": true
+          },
           "Notes": {
             "type": "string",
             "nullable": true
@@ -3092,21 +3096,16 @@
             "type": "integer",
             "format": "int32"
           },
-          "AssessingNewArea": {
-            "type": "boolean",
+          "StormwaterJurisdictionName": {
+            "type": "string",
             "nullable": true
           },
-          "OnlandVisualTrashAssessmentStatusID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "IsDraftGeometryManuallyRefined": {
-            "type": "boolean",
+          "OnlandVisualTrashAssessmentStatusName": {
+            "type": "string",
             "nullable": true
           },
-          "OnlandVisualTrashAssessmentScoreID": {
-            "type": "integer",
-            "format": "int32",
+          "OnlandVisualTrashAssessmentScoreName": {
+            "type": "string",
             "nullable": true
           },
           "CompletedDate": {
@@ -3114,19 +3113,9 @@
             "format": "date-time",
             "nullable": true
           },
-          "DraftAreaName": {
-            "type": "string",
-            "nullable": true
-          },
-          "DraftAreaDescription": {
-            "type": "string",
-            "nullable": true
-          },
-          "IsTransectBackingAssessment": {
-            "type": "boolean"
-          },
           "IsProgressAssessment": {
-            "type": "boolean"
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
