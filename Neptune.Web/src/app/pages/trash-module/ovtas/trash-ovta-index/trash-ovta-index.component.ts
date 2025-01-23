@@ -7,10 +7,10 @@ import { PageHeaderComponent } from "src/app/shared/components/page-header/page-
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { ColDef } from "ag-grid-community";
-import { OnlandVisualTrashAssessmentAreaSimpleDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-simple-dto";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { OnlandVisualTrashAssessmentGridDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-grid-dto";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
+import { OnlandVisualTrashAssessmentAreaGridDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-grid-dto";
 
 @Component({
     selector: "trash-ovta-index",
@@ -21,8 +21,9 @@ import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-
 })
 export class TrashOvtaIndexComponent {
     public onlandVisualTrashAssessments$: Observable<OnlandVisualTrashAssessmentGridDto[]>;
-    public onlandVisualTrashAssessmentAreas$: Observable<OnlandVisualTrashAssessmentAreaSimpleDto[]>;
-    public columnDefs: ColDef[];
+    public onlandVisualTrashAssessmentAreas$: Observable<OnlandVisualTrashAssessmentAreaGridDto[]>;
+    public ovtaColumnDefs: ColDef[];
+    public ovtaAreaColumnDefs: ColDef[];
     public customRichTextID = NeptunePageTypeEnum.OVTAIndex;
 
     constructor(
@@ -32,15 +33,38 @@ export class TrashOvtaIndexComponent {
     ) {}
 
     ngOnInit(): void {
-        this.columnDefs = [
+        this.ovtaColumnDefs = [
             this.utilityFunctionsService.createBasicColumnDef("Assessment Area Name", "OnlandVisualTrashAssessmentAreaName"),
-            this.utilityFunctionsService.createBasicColumnDef("Assessment Score", "OnlandVisualTrashAssessmentScoreName"),
+            this.utilityFunctionsService.createBasicColumnDef("Assessment Score", "OnlandVisualTrashAssessmentScoreName", { FieldDefinitionType: "AssessmentScore" }),
             this.utilityFunctionsService.createBasicColumnDef("Assessment Type", "IsProgressAssessment", { CustomDropdownFilterField: "IsProgressAssessment" }),
             this.utilityFunctionsService.createDateColumnDef("Last Assessment Date", "CompletedDate", "short"),
-            this.utilityFunctionsService.createBasicColumnDef("Status", "OnlandVisualTrashAssessmentStatusName"),
-            this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName", { CustomDropdownFilterField: "StormwaterJurisdictionName" }),
+            this.utilityFunctionsService.createBasicColumnDef("Status", "OnlandVisualTrashAssessmentStatusName", {
+                CustomDropdownFilterField: "OnlandVisualTrashAssessmentStatusName",
+            }),
+            this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName", {
+                CustomDropdownFilterField: "StormwaterJurisdictionName",
+                FieldDefinitionType: "Jurisdiction",
+            }),
             this.utilityFunctionsService.createBasicColumnDef("Created By", "CreatedByPersonFullName"),
             this.utilityFunctionsService.createDateColumnDef("Created On", "CreatedDate", "short"),
+        ];
+        this.ovtaAreaColumnDefs = [
+            this.utilityFunctionsService.createBasicColumnDef("Assessment Area Name", "OnlandVisualTrashAssessmentAreaName"),
+            this.utilityFunctionsService.createBasicColumnDef("Baseline Score", "OnlandVisualTrashAssessmentBaselineScoreName", {
+                CustomDropdownFilterField: "OnlandVisualTrashAssessmentBaselineScoreName",
+                FieldDefinitionType: "BaselineScore",
+            }),
+            this.utilityFunctionsService.createBasicColumnDef("Progress Score", "OnlandVisualTrashAssessmentProgressScoreName", {
+                CustomDropdownFilterField: "OnlandVisualTrashAssessmentProgressScoreName",
+                FieldDefinitionType: "ProgressScore",
+            }),
+            this.utilityFunctionsService.createBasicColumnDef("Number of Assessments Completed", "NumberOfAssessmentsCompleted"),
+            this.utilityFunctionsService.createDateColumnDef("Last Assessment Date", "LastAssessmentDate", "short"),
+            this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName", {
+                CustomDropdownFilterField: "StormwaterJurisdictionName",
+                FieldDefinitionType: "Jurisdiction",
+            }),
+            this.utilityFunctionsService.createBasicColumnDef("Description", "AssessmentAreaDescription"),
         ];
         this.onlandVisualTrashAssessments$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsGet();
         this.onlandVisualTrashAssessmentAreas$ = this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasGet();

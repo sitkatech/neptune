@@ -563,7 +563,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaSimpleDto"
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaGridDto"
                   }
                 }
               },
@@ -571,7 +571,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaSimpleDto"
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaGridDto"
                   }
                 }
               },
@@ -579,7 +579,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaSimpleDto"
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaGridDto"
                   }
                 }
               }
@@ -3032,7 +3032,7 @@
         ],
         "type": "string"
       },
-      "OnlandVisualTrashAssessmentAreaSimpleDto": {
+      "OnlandVisualTrashAssessmentAreaGridDto": {
         "type": "object",
         "properties": {
           "OnlandVisualTrashAssessmentAreaID": {
@@ -3045,20 +3045,32 @@
           },
           "StormwaterJurisdictionID": {
             "type": "integer",
-            "format": "int32"
-          },
-          "OnlandVisualTrashAssessmentBaselineScoreID": {
-            "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentBaselineScoreName": {
+            "type": "string",
             "nullable": true
           },
           "AssessmentAreaDescription": {
             "type": "string",
             "nullable": true
           },
-          "OnlandVisualTrashAssessmentProgressScoreID": {
+          "OnlandVisualTrashAssessmentProgressScoreName": {
+            "type": "string",
+            "nullable": true
+          },
+          "NumberOfAssessmentsCompleted": {
             "type": "integer",
-            "format": "int32",
+            "format": "int32"
+          },
+          "LastAssessmentDate": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           }
         },

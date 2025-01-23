@@ -22,11 +22,11 @@ public class OnlandVisualTrashAssessmentAreaController(
 {
     [HttpGet]
     [JurisdictionEditFeature]
-    public ActionResult<List<OnlandVisualTrashAssessmentAreaSimpleDto>> ListByStormwaterJurisdictionID()
+    public ActionResult<List<OnlandVisualTrashAssessmentAreaGridDto>> ListByStormwaterJurisdictionID()
     {
         var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(DbContext, CallingUser.PersonID);
         var onlandVisualTrashAssessmentAreaSimpleDtos = OnlandVisualTrashAssessmentAreas
-            .ListByStormwaterJurisdictionIDList(dbContext, stormwaterJurisdictionIDs).Select(x => x.AsSimpleDto());
+            .ListByStormwaterJurisdictionIDList(dbContext, stormwaterJurisdictionIDs).Select(x => x.AsGridDto()).ToList();
         return Ok(onlandVisualTrashAssessmentAreaSimpleDtos);
     }
 }

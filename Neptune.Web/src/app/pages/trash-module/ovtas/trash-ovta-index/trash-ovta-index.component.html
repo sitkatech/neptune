@@ -6,8 +6,20 @@
         *ngIf="onlandVisualTrashAssessments$ | async as onlandVisualTrashAssessments"
         height="800px"
         [rowData]="onlandVisualTrashAssessments"
-        [columnDefs]="columnDefs"
+        [columnDefs]="ovtaColumnDefs"
         downloadFileName="field-definitions"
         [pagination]="true"
         [sizeColumnsToFitGrid]="true"></neptune-grid>
+
+    <div *ngIf="onlandVisualTrashAssessmentAreas$ | async as onlandVisualTrashAssessmentAreas">
+        <h2 class="text-primary mt-4 mb-2">Onland Visual Trash Assessment Areas</h2>
+
+        <neptune-grid
+            height="800px"
+            [rowData]="onlandVisualTrashAssessmentAreas"
+            [columnDefs]="ovtaAreaColumnDefs"
+            downloadFileName="field-definitions"
+            [pagination]="true"
+            [sizeColumnsToFitGrid]="true"></neptune-grid>
+    </div>
 </div>

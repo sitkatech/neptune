@@ -11,28 +11,34 @@
  */
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class OnlandVisualTrashAssessmentAreaSimpleDto { 
+export class OnlandVisualTrashAssessmentAreaGridDto { 
     OnlandVisualTrashAssessmentAreaID?: number;
     OnlandVisualTrashAssessmentAreaName?: string;
     StormwaterJurisdictionID?: number;
-    OnlandVisualTrashAssessmentBaselineScoreID?: number;
+    StormwaterJurisdictionName?: string;
+    OnlandVisualTrashAssessmentBaselineScoreName?: string;
     AssessmentAreaDescription?: string;
-    OnlandVisualTrashAssessmentProgressScoreID?: number;
+    OnlandVisualTrashAssessmentProgressScoreName?: string;
+    NumberOfAssessmentsCompleted?: number;
+    LastAssessmentDate?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
 }
 
-export interface OnlandVisualTrashAssessmentAreaSimpleDtoForm { 
+export interface OnlandVisualTrashAssessmentAreaGridDtoForm { 
     OnlandVisualTrashAssessmentAreaID?: FormControl<number>;
     OnlandVisualTrashAssessmentAreaName?: FormControl<string>;
     StormwaterJurisdictionID?: FormControl<number>;
-    OnlandVisualTrashAssessmentBaselineScoreID?: FormControl<number>;
+    StormwaterJurisdictionName?: FormControl<string>;
+    OnlandVisualTrashAssessmentBaselineScoreName?: FormControl<string>;
     AssessmentAreaDescription?: FormControl<string>;
-    OnlandVisualTrashAssessmentProgressScoreID?: FormControl<number>;
+    OnlandVisualTrashAssessmentProgressScoreName?: FormControl<string>;
+    NumberOfAssessmentsCompleted?: FormControl<number>;
+    LastAssessmentDate?: FormControl<string>;
 }
 
-export class OnlandVisualTrashAssessmentAreaSimpleDtoFormControls { 
+export class OnlandVisualTrashAssessmentAreaGridDtoFormControls { 
     public static OnlandVisualTrashAssessmentAreaID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
@@ -63,7 +69,17 @@ export class OnlandVisualTrashAssessmentAreaSimpleDtoFormControls {
             ],
         }
     );
-    public static OnlandVisualTrashAssessmentBaselineScoreID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static StormwaterJurisdictionName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static OnlandVisualTrashAssessmentBaselineScoreName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -83,7 +99,27 @@ export class OnlandVisualTrashAssessmentAreaSimpleDtoFormControls {
             ],
         }
     );
-    public static OnlandVisualTrashAssessmentProgressScoreID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static OnlandVisualTrashAssessmentProgressScoreName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static NumberOfAssessmentsCompleted = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static LastAssessmentDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
