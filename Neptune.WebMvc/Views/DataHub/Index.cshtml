@@ -107,7 +107,7 @@
                     @if (ViewDataTyped.IsManagerOrEditor)
                     {
                         <a href="@ViewDataTyped.UploadTreatmentBMPUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                        <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                        <a href="@ViewDataTyped.DownloadTreatmentBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     }
                     
                     <h3>Delineations</h3>
@@ -122,8 +122,8 @@
                     }
                     @if (ViewDataTyped.IsManagerOrEditor)
                     {
-                        <a href="@ViewDataTyped.UploadDelineationUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                        <a href="@ViewDataTyped.DownloadDelineationUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                        <a href="@ViewDataTyped.UploadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                        <a href="@ViewDataTyped.DownloadDelineationUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     }
 
                     <h3>Field Visits</h3>
@@ -136,7 +136,7 @@
                     }
                     @if (ViewDataTyped.IsManagerOrEditor)
                     {
-                        <a href="@ViewDataTyped.UploadFieldTripUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                        <a href="@ViewDataTyped.UploadFieldTripUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                     }
                 </div>
                 <div class="col-md-3 sidebar">
@@ -205,40 +205,28 @@
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.AssessmentAreaPage);
                     }
-                    @if (ViewDataTyped.IsAdmin)
+                    @if (ViewDataTyped.HasManagePermission)
                     {
                         <a href="@ViewDataTyped.DownloadAssessmentAreasUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
-                    }
-                    @if (ViewDataTyped.IsManagerOrEditor)
-                    {
-                        <a href="@ViewDataTyped.DownloadAssessmentAreasUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     }
 
                     <h3>On-land Visual Trash Assessments (OVTAs)</h3>
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.OVTAsPage);
                     }
-                    @if (ViewDataTyped.IsAdmin)
+                    @if (ViewDataTyped.HasManagePermission)
                     {
                         <a href="@ViewDataTyped.UploadOVTAUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                    }
-                    @if (ViewDataTyped.IsManagerOrEditor)
-                    {
-                        <a href="@ViewDataTyped.UploadOVTAUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                     }
 
                     <h3>Land Use Blocks</h3>
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.LandUseBlocksPage);
                     }
-                    @if (ViewDataTyped.IsAdmin)
+                    @if (ViewDataTyped.HasManagePermission)
                     {
                         <a href="@ViewDataTyped.UploadLandUseBlocksUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                        <a href="@ViewDataTyped.DownloadLandUseBlocksUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>                    }
-                    @if (ViewDataTyped.IsManagerOrEditor)
-                    {
-                        <a href="@ViewDataTyped.UploadLandUseBlocksUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                        <a href="@ViewDataTyped.DownloadLandUseBlocksUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                        <a href="@ViewDataTyped.DownloadLandUseBlocksUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     }
                 </div>
                 <div class="col-md-3 sidebar">
@@ -288,9 +276,13 @@
                     <span class="lastUpdated">
                         Last Updated: @ViewDataTyped.LastUpdatedRegionalSubbasins.ToStringDateTimeNoLeadingZeros()
                     </span>
-                    @if (ViewDataTyped.HasManagePermission)
+                    @if (ViewDataTyped.IsAdmin)
                     {
                         @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")} Refresh", ViewDataTyped.RegionalSubbasinRefreshUrl, "Refresh Regional Subbasins From OC Survey", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
+                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")} Refresh", ViewDataTyped.RegionalSubbasinRefreshUrl, "Refresh Regional Subbasins From OC Survey", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "disabled" }, null, null)
                     }
 
                     <h3>HRU Characteristics</h3>
@@ -300,9 +292,13 @@
                     <span class="lastUpdated">
                         Last Updated: @ViewDataTyped.LastUpdatedHRUCharacteristics
                     </span>
-                    @if (ViewDataTyped.HasManagePermission)
+                    @if (ViewDataTyped.IsAdmin)
                     {
                         @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")} Refresh", ViewDataTyped.LandUseStatisticsRefreshUrl, "Refresh HRU Characteristics From OC Survey", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
+                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")} Refresh", ViewDataTyped.LandUseStatisticsRefreshUrl, "Refresh Regional Subbasins From OC Survey", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "disabled" }, null, null)
                     }
 
                     <h3>Model Basins</h3>
@@ -312,9 +308,13 @@
                     <span class="lastUpdated">
                         Last Updated: @ViewDataTyped.LastUpdatedModalBasins.ToStringDateTimeNoLeadingZeros()
                     </span>
-                    @if (ViewDataTyped.HasManagePermission)
+                    @if (ViewDataTyped.IsAdmin)
                     {
                         @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")} Refresh", ViewDataTyped.ModelBasinsRefreshUrl, "Refresh Model Basins From OC Survey", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
+                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")} Refresh", ViewDataTyped.ModelBasinsRefreshUrl, "Refresh Regional Subbasins From OC Survey", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "disabled" }, null, null)
                     }
                     <h3>Precipitation Zones</h3>
                     @{
@@ -323,9 +323,13 @@
                     <span class="lastUpdated">
                         Last Updated: @ViewDataTyped.LastUpdatedPrecipitationZones.ToStringDateTimeNoLeadingZeros()
                     </span>
-                    @if (ViewDataTyped.HasManagePermission)
+                    @if (ViewDataTyped.IsAdmin)
                     {
                         @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")} Refresh", ViewDataTyped.PrecipitationZonesRefreshUrl, "Refresh Precipitation Zones From OC Survey", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
+                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-refresh")} Refresh", ViewDataTyped.PrecipitationZonesRefreshUrl, "Refresh Regional Subbasins From OC Survey", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "disabled" }, null, null)
                     }
                 </div>
                 <div class="col-md-3 sidebar">
