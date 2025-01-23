@@ -750,6 +750,12 @@ public class AzureBlobStorageService
         return downloadResult.Value;
     }
 
+    public async Task<bool> ExistsFromBlobStorage(string canonicalName)
+    {
+        var blobClient = _blobContainerClient.GetBlobClient(canonicalName);
+        return await blobClient.ExistsAsync();
+    }
+
     public async Task DownloadBlobToFileAsync(string canonicalName, string localFilePath)
     {
         var blobClient = _blobContainerClient.GetBlobClient(canonicalName);
