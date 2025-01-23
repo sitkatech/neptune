@@ -32,6 +32,7 @@ import { PLanningHomeComponent as PlanningHomeComponent } from "./pages/planning
 import { SiteLayoutComponent } from "./pages/site-layout/site-layout.component";
 import { AboutComponent } from "./pages/about/about.component";
 import { ModelingAboutComponent } from "./pages/modeling-about/modeling-about.component";
+import { TrashOvtaIndexComponent } from "./pages/trash-module/ovtas/trash-ovta-index/trash-ovta-index.component";
 
 export const routeParams = {
     definitionID: "definitionID",
@@ -101,6 +102,7 @@ export const routes: Routes = [
         children: [
             { path: "", title: "Home", component: TrashHomeComponent },
             { path: "about", component: TrashAboutComponent, canActivate: [UnauthenticatedAccessGuard] },
+            { path: "onland-visual-trash-assessment", component: TrashOvtaIndexComponent, canActivate: [UnauthenticatedAccessGuard] },
         ],
     },
 

@@ -8,6 +8,8 @@ import { DelineationService } from './api/delineation.service';
 import { FieldDefinitionService } from './api/field-definition.service';
 import { FileResourceService } from './api/file-resource.service';
 import { NereidService } from './api/nereid.service';
+import { OnlandVisualTrashAssessmentService } from './api/onland-visual-trash-assessment.service';
+import { OnlandVisualTrashAssessmentAreaService } from './api/onland-visual-trash-assessment-area.service';
 import { OrganizationService } from './api/organization.service';
 import { ProjectService } from './api/project.service';
 import { ProjectDocumentService } from './api/project-document.service';
@@ -28,6 +30,8 @@ import { UserClaimsService } from './api/user-claims.service';
     FieldDefinitionService,
     FileResourceService,
     NereidService,
+    OnlandVisualTrashAssessmentService,
+    OnlandVisualTrashAssessmentAreaService,
     OrganizationService,
     ProjectService,
     ProjectDocumentService,
