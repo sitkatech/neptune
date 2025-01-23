@@ -75,6 +75,9 @@ public partial class Person
     [InverseProperty("Person")]
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
+    [InverseProperty("UploadedByPerson")]
+    public virtual ICollection<OnlandVisualTrashAssessmentAreaStaging> OnlandVisualTrashAssessmentAreaStagings { get; set; } = new List<OnlandVisualTrashAssessmentAreaStaging>();
+
     [InverseProperty("CreatedByPerson")]
     public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; } = new List<OnlandVisualTrashAssessment>();
 
