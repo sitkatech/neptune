@@ -128,11 +128,11 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
             this.utilityFunctionsService.createLinkColumnDef("Project Name", "ProjectName", "ProjectID", {
                 InRouterLink: "/planning/projects/",
             }),
-            this.utilityFunctionsService.createBasicColumnDef("Project Description", "ProjectDescription"),
             this.utilityFunctionsService.createBasicColumnDef("Organization", "Organization.OrganizationName"),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdiction.Organization.OrganizationName"),
+            this.utilityFunctionsService.createBasicColumnDef("Project Description", "ProjectDescription", { MaxWidth: 250 }),
             this.utilityFunctionsService.createDateColumnDef("Last Shared On", "OCTAM2Tier2ScoresLastSharedDate", "short", { Width: 140 }),
-            this.utilityFunctionsService.createDecimalColumnDef("Area Treated (ac)", "AreaTreatedAcres"),
+            this.utilityFunctionsService.createDecimalColumnDef("Area Treated (ac)", "AreaTreatedAcres", { Width: 90 }),
             this.utilityFunctionsService.createDecimalColumnDef("Impervious Area Treated (ac)", "ImperviousAreaTreatedAcres", { Width: 220 }),
             this.utilityFunctionsService.createDecimalColumnDef("SEA Score", "SEA", { Width: 90 }),
             this.utilityFunctionsService.createDecimalColumnDef("TPI Score", "TPI", { Width: 90 }),
