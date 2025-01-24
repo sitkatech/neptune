@@ -1,1 +1,50 @@
-<p>trash-ovta-area-detail works!</p>
+<ng-container *ngIf="onlandVisualTrashAssessmentArea$ | async as onlandVisualTrashAssessmentArea">
+    <page-header [pageTitle]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName"> </page-header>
+    <app-alert-display></app-alert-display>
+
+    <div class="grid-12 mt-2 mb-3">
+        <div class="card g-col-6">
+            <div class="card-header">Details</div>
+            <div class="card-body">
+                <dl class="grid-12">
+                    <dt class="g-col-4">Assessment Area</dt>
+                    <dd class="g-col-8">
+                        {{ onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName }}
+                    </dd>
+                    <dt class="g-col-4">Jurisdiction</dt>
+                    <dd class="g-col-8">
+                        {{ onlandVisualTrashAssessmentArea.StormwaterJurisdictionName }}
+                    </dd>
+                    <dt class="g-col-4">Last Assessment Date</dt>
+                    <dd class="g-col-8">
+                        {{ onlandVisualTrashAssessmentArea.LastAssessmentDate | date : "MM/dd/yyyy" }}
+                    </dd>
+                    <dt class="g-col-4"><field-definition fieldDefinitionType="BaselineScore"></field-definition></dt>
+                    <dd class="g-col-8">
+                        {{ onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreName }}
+                    </dd>
+                    <dt class="g-col-4"><field-definition fieldDefinitionType="ProgressScore"></field-definition></dt>
+                    <dd class="g-col-8">
+                        {{ onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreName ?? "No completed assessments" }}
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="card g-col-6">
+            <div class="card-header">Location</div>
+            <div class="card-body"></div>
+        </div>
+        <div class="card g-col-12">
+            <div class="card-header">Assessments</div>
+            <div class="card-body">
+                <neptune-grid
+                    height="800px"
+                    [rowData]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments"
+                    [columnDefs]="ovtaColumnDefs"
+                    downloadFileName="field-definitions"
+                    [pagination]="true"
+                    [sizeColumnsToFitGrid]="true"></neptune-grid>
+            </div>
+        </div>
+    </div>
+</ng-container>

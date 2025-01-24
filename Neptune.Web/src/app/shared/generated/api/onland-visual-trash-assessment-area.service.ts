@@ -131,7 +131,7 @@ export class OnlandVisualTrashAssessmentAreaService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<OnlandVisualTrashAssessmentAreaDetailDto>(`${this.basePath}/onland-visual-trash-assessments/${encodeURIComponent(String(onlandVisualTrashAssessmentAreaID))}`,
+        return this.httpClient.get<OnlandVisualTrashAssessmentAreaDetailDto>(`${this.basePath}/onland-visual-trash-assessment-areas/${encodeURIComponent(String(onlandVisualTrashAssessmentAreaID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
