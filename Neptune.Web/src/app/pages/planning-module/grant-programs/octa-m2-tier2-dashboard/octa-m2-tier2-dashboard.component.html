@@ -146,21 +146,21 @@
                 [downloadFileName]="'OCTA-M2-Tier2-projects'"
                 (selectionChanged)="onSelectionChanged()"
                 (gridReady)="onGridReady($event)">
-                <div customGridActionsRight>
-                    <div class="btn-group">
-                        <button
-                            class="btn btn-outline-primary btn-sm dropdown-toggle"
-                            type="button"
-                            id="dropdownMenuButton"
-                            data-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false">
-                            <i class="fas fa-download mr-2"></i>Download
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" (click)="downloadProjectModelResults()">Project List with Model Results</a>
-                            <a class="dropdown-item" (click)="downloadTreatmentBMPModelResults()">Treatment BMP List with Model Results</a>
-                        </div>
+                <div customGridActionsRight class="custom-grid-actions">
+                    <a
+                        href="javascript:void(0);"
+                        [dropdownToggle]="downloadMenuToggle"
+                        class="btn btn-sm btn-outline-primary dropdown-toggle"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                        <i class="fas fa-download mr-2"></i>Download
+                    </a>
+
+                    <div #downloadMenuToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" (click)="downloadProjectModelResults()">Project List with Model Results</a>
+                        <a class="dropdown-item" (click)="downloadTreatmentBMPModelResults()">Treatment BMP List with Model Results</a>
                     </div>
                 </div>
             </neptune-grid>

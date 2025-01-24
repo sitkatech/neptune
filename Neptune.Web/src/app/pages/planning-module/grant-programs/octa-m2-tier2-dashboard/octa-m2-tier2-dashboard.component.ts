@@ -38,6 +38,7 @@ import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leafl
 import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
+import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
 
 @Component({
     selector: "octa-m2-tier2-dashboard",
@@ -68,6 +69,7 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
         StormwaterNetworkLayerComponent,
         AsyncPipe,
         InventoriedBMPsLayerComponent,
+        DropdownToggleDirective,
     ],
 })
 export class OCTAM2Tier2DashboardComponent implements OnInit {
