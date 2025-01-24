@@ -8,7 +8,6 @@ using NetTopologySuite.Geometries;
 namespace Neptune.EFModels.Entities;
 
 [Table("OnlandVisualTrashAssessmentAreaStaging")]
-[Index("OnlandVisualTrashAssessmentAreaStagingID", "StormwaterJurisdictionID", Name = "AK_OnlandVisualTrashAssessmentAreaStaging_OnlandVisualTrashAssessmentAreaStagingID_StormwaterJurisdictionID", IsUnique = true)]
 [Index("AreaName", "StormwaterJurisdictionID", Name = "AK_OnlandVisualTrashAssessmentAreaStaging_OnlandVisualTrashAssessmentAreaStagingName_StormwaterJurisdictionID", IsUnique = true)]
 public partial class OnlandVisualTrashAssessmentAreaStaging
 {
