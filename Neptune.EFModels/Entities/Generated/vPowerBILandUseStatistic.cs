@@ -9,8 +9,6 @@ namespace Neptune.EFModels.Entities;
 [Keyless]
 public partial class vPowerBILandUseStatistic
 {
-    public int PrimaryKey { get; set; }
-
     public int HRUCharacteristicID { get; set; }
 
     [StringLength(5)]
