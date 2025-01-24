@@ -3260,10 +3260,13 @@
             "type": "string",
             "nullable": true
           },
-          "PreliminarySourceIdentificationType": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto"
+          "PreliminarySourceIdentificationTypeDictionary": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             },
             "nullable": true
           },
@@ -3351,28 +3354,6 @@
           "ObservationDatetime": {
             "type": "string",
             "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto": {
-        "type": "object",
-        "properties": {
-          "OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "OnlandVisualTrashAssessmentID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "PreliminarySourceIdentificationTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ExplanationIfTypeIsOther": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false

@@ -40,7 +40,7 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
             OnlandVisualTrashAssessmentScoreName = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScore?.OnlandVisualTrashAssessmentScoreDisplayName,
             CompletedDate = onlandVisualTrashAssessment.CompletedDate,
             IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment ? "Progress" : "Baseline",
-            PreliminarySourceIdentificationType = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(x => x.AsSimpleDto()).ToList(),
+            PreliminarySourceIdentificationTypeDictionary = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.GroupBy(x => x.PreliminarySourceIdentificationType.PreliminarySourceIdentificationCategory.PreliminarySourceIdentificationCategoryDisplayName).ToDictionary(x => x.Key.ToString(), x => x.Select(x => x.PreliminarySourceIdentificationType.PreliminarySourceIdentificationTypeDisplayName).ToList()),
             Observations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.AsSimpleDto()).ToList()
         };
         return dto;

@@ -33,10 +33,14 @@ import { SiteLayoutComponent } from "./pages/site-layout/site-layout.component";
 import { AboutComponent } from "./pages/about/about.component";
 import { ModelingAboutComponent } from "./pages/modeling-about/modeling-about.component";
 import { TrashOvtaIndexComponent } from "./pages/trash-module/ovtas/trash-ovta-index/trash-ovta-index.component";
+import { TrashOvtaAreaDetailComponent } from "./pages/trash-module/ovtas/trash-ovta-area-detail/trash-ovta-area-detail.component";
+import { TrashOvtaDetailComponent } from "./pages/trash-module/ovtas/trash-ovta-detail/trash-ovta-detail.component";
 
 export const routeParams = {
     definitionID: "definitionID",
     projectID: "projectID",
+    onlandVisualTrashAssessmentID: "onlandVisualTrashAssessmentID",
+    onlandVisualTrashAssessmentAreaID: "onlandVisualTrashAssessmentAreaID",
 };
 
 export const routes: Routes = [
@@ -102,7 +106,19 @@ export const routes: Routes = [
         children: [
             { path: "", title: "Home", component: TrashHomeComponent },
             { path: "about", component: TrashAboutComponent, canActivate: [UnauthenticatedAccessGuard] },
-            { path: "onland-visual-trash-assessment", component: TrashOvtaIndexComponent, canActivate: [UnauthenticatedAccessGuard] },
+            {
+                path: "onland-visual-trash-assessment",
+                children: [
+                    { path: "", component: TrashOvtaIndexComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: `:${routeParams.onlandVisualTrashAssessmentID}`, component: TrashOvtaDetailComponent, canActivate: [UnauthenticatedAccessGuard] },
+                ],
+            },
+
+            {
+                path: `onland-visual-trash-assessment-area/:${routeParams.onlandVisualTrashAssessmentAreaID}`,
+                component: TrashOvtaAreaDetailComponent,
+                canActivate: [UnauthenticatedAccessGuard],
+            },
         ],
     },
 

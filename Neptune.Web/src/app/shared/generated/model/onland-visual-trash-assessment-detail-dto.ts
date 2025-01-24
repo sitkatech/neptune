@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto } from '././onland-visual-trash-assessment-preliminary-source-identification-type-simple-dto';
 import { OnlandVisualTrashAssessmentObservationSimpleDto } from '././onland-visual-trash-assessment-observation-simple-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
@@ -26,7 +25,7 @@ export class OnlandVisualTrashAssessmentDetailDto {
     OnlandVisualTrashAssessmentScoreName?: string;
     CompletedDate?: string;
     IsProgressAssessment?: string;
-    PreliminarySourceIdentificationType?: Array<OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto>;
+    PreliminarySourceIdentificationTypeDictionary?: { [key: string]: Array<string>; };
     Observations?: Array<OnlandVisualTrashAssessmentObservationSimpleDto>;
     constructor(obj?: any) {
         Object.assign(this, obj);
@@ -46,7 +45,7 @@ export interface OnlandVisualTrashAssessmentDetailDtoForm {
     OnlandVisualTrashAssessmentScoreName?: FormControl<string>;
     CompletedDate?: FormControl<string>;
     IsProgressAssessment?: FormControl<string>;
-    PreliminarySourceIdentificationType?: FormControl<Array<OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto>>;
+    PreliminarySourceIdentificationTypeDictionary?: FormControl<{ [key: string]: Array<string>; }>;
     Observations?: FormControl<Array<OnlandVisualTrashAssessmentObservationSimpleDto>>;
 }
 
@@ -171,7 +170,7 @@ export class OnlandVisualTrashAssessmentDetailDtoFormControls {
             ],
         }
     );
-    public static PreliminarySourceIdentificationType = (value: FormControlState<Array<OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto>> | Array<OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeSimpleDto>>(
+    public static PreliminarySourceIdentificationTypeDictionary = (value: FormControlState<{ [key: string]: Array<string>; }> | { [key: string]: Array<string>; } = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<{ [key: string]: Array<string>; }>(
         value,
         formControlOptions ?? 
         {

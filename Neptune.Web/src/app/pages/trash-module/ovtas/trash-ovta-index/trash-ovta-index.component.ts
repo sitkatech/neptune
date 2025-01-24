@@ -34,6 +34,7 @@ export class TrashOvtaIndexComponent {
 
     ngOnInit(): void {
         this.ovtaColumnDefs = [
+            this.utilityFunctionsService.createLinkColumnDef("Assessment ID", "OnlandVisualTrashAssessmentID", "OnlandVisualTrashAssessmentID"),
             this.utilityFunctionsService.createBasicColumnDef("Assessment Area Name", "OnlandVisualTrashAssessmentAreaName"),
             this.utilityFunctionsService.createBasicColumnDef("Assessment Score", "OnlandVisualTrashAssessmentScoreName", { FieldDefinitionType: "AssessmentScore" }),
             this.utilityFunctionsService.createBasicColumnDef("Assessment Type", "IsProgressAssessment", { CustomDropdownFilterField: "IsProgressAssessment" }),
