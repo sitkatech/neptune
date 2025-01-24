@@ -1,7 +1,6 @@
 Create view dbo.vPowerBILandUseStatistic
 as
 select
-	hru.HRUCharacteristicID as PrimaryKey,
 	hru.HRUCharacteristicID,
 	hru.HydrologicSoilGroup,
 	hru.SlopePercentage,
