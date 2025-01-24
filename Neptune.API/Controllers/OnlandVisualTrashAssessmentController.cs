@@ -27,4 +27,12 @@ public class OnlandVisualTrashAssessmentController(
         var ovtaGridDtos = OnlandVisualTrashAssessments.ListByStormwaterJurisdictionIDAsGridDto(DbContext, stormwaterJurisdictionIDs);
         return Ok(ovtaGridDtos);
     }
+
+    [HttpGet("{onlandVisualTrashAssessmentID}")]
+    [JurisdictionEditFeature]
+    public ActionResult<OnlandVisualTrashAssessmentDetailDto> GetByID([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var ovtaDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsDetailDto();
+        return Ok(ovtaDto);
+    }
 }

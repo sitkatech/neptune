@@ -39,8 +39,12 @@ model/neptune-page-dto.ts
 model/neptune-page-type-simple-dto.ts
 model/nts-geometry-services.ts
 model/ogc-geometry-type.ts
-model/onland-visual-trash-assessment-area-simple-dto.ts
+model/onland-visual-trash-assessment-area-detail-dto.ts
+model/onland-visual-trash-assessment-area-grid-dto.ts
+model/onland-visual-trash-assessment-detail-dto.ts
 model/onland-visual-trash-assessment-grid-dto.ts
+model/onland-visual-trash-assessment-observation-simple-dto.ts
+model/onland-visual-trash-assessment-preliminary-source-identification-type-simple-dto.ts
 model/ordinates.ts
 model/organization-simple-dto.ts
 model/person-create-dto.ts

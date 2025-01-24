@@ -29,4 +29,12 @@ public class OnlandVisualTrashAssessmentAreaController(
             .ListByStormwaterJurisdictionIDList(dbContext, stormwaterJurisdictionIDs).Select(x => x.AsGridDto()).ToList();
         return Ok(onlandVisualTrashAssessmentAreaSimpleDtos);
     }
+
+    [HttpGet("{onlandVisualTrashAssessmentAreaID}")]
+    [JurisdictionEditFeature]
+    public ActionResult<OnlandVisualTrashAssessmentAreaDetailDto> GetByID([FromRoute] int onlandVisualTrashAssessmentAreaID)
+    {
+        var areaDetailDto = OnlandVisualTrashAssessmentAreas.GetByID(DbContext, onlandVisualTrashAssessmentAreaID).AsDetailDto();
+        return Ok(areaDetailDto);
+    }
 }
