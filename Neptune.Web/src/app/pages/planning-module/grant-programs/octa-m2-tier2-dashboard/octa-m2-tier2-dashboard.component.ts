@@ -126,14 +126,14 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
 
         this.columnDefs = [
             this.utilityFunctionsService.createLinkColumnDef("Project Name", "ProjectName", "ProjectID", {
-                InRouterLink: "/projects/",
+                InRouterLink: "/planning/projects/",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Project Description", "ProjectDescription"),
             this.utilityFunctionsService.createBasicColumnDef("Organization", "Organization.OrganizationName"),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdiction.Organization.OrganizationName"),
             this.utilityFunctionsService.createDateColumnDef("Last Shared On", "OCTAM2Tier2ScoresLastSharedDate", "short", { Width: 140 }),
-            this.utilityFunctionsService.createDecimalColumnDef("Area Treated (ac)", "Area"),
-            this.utilityFunctionsService.createDecimalColumnDef("Impervious Area Treated (ac)", "ImperviousArea", { Width: 220 }),
+            this.utilityFunctionsService.createDecimalColumnDef("Area Treated (ac)", "AreaTreatedAcres"),
+            this.utilityFunctionsService.createDecimalColumnDef("Impervious Area Treated (ac)", "ImperviousAreaTreatedAcres", { Width: 220 }),
             this.utilityFunctionsService.createDecimalColumnDef("SEA Score", "SEA", { Width: 90 }),
             this.utilityFunctionsService.createDecimalColumnDef("TPI Score", "TPI", { Width: 90 }),
             this.utilityFunctionsService.createDecimalColumnDef("Dry Weather WQLRI", "DryWeatherWQLRI"),
@@ -163,6 +163,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         }).pipe(
             tap((data) => {
                 this.projects = data.Projects;
+                console.log(this.projects);
                 this.treatmentBMPs = data.TreatmentBMPs;
                 this.delineations = data.Delineations;
                 this.initializePanes();
