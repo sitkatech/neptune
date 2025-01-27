@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Geometry } from '././geometry';
 import { OnlandVisualTrashAssessmentObservationSimpleDto } from '././onland-visual-trash-assessment-observation-simple-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
@@ -27,6 +28,9 @@ export class OnlandVisualTrashAssessmentDetailDto {
     IsProgressAssessment?: string;
     PreliminarySourceIdentificationTypeDictionary?: { [key: string]: Array<string>; };
     Observations?: Array<OnlandVisualTrashAssessmentObservationSimpleDto>;
+    TransectGeometry?: Geometry;
+    ObservationGeometries?: Array<Geometry>;
+    AssessmentAreaGeometry?: Geometry;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -47,6 +51,9 @@ export interface OnlandVisualTrashAssessmentDetailDtoForm {
     IsProgressAssessment?: FormControl<string>;
     PreliminarySourceIdentificationTypeDictionary?: FormControl<{ [key: string]: Array<string>; }>;
     Observations?: FormControl<Array<OnlandVisualTrashAssessmentObservationSimpleDto>>;
+    TransectGeometry?: FormControl<Geometry>;
+    ObservationGeometries?: FormControl<Array<Geometry>>;
+    AssessmentAreaGeometry?: FormControl<Geometry>;
 }
 
 export class OnlandVisualTrashAssessmentDetailDtoFormControls { 
@@ -181,6 +188,36 @@ export class OnlandVisualTrashAssessmentDetailDtoFormControls {
         }
     );
     public static Observations = (value: FormControlState<Array<OnlandVisualTrashAssessmentObservationSimpleDto>> | Array<OnlandVisualTrashAssessmentObservationSimpleDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<OnlandVisualTrashAssessmentObservationSimpleDto>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TransectGeometry = (value: FormControlState<Geometry> | Geometry = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Geometry>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ObservationGeometries = (value: FormControlState<Array<Geometry>> | Array<Geometry> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<Geometry>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static AssessmentAreaGeometry = (value: FormControlState<Geometry> | Geometry = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Geometry>(
         value,
         formControlOptions ?? 
         {

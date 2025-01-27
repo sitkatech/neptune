@@ -1,4 +1,6 @@
-﻿namespace Neptune.Models.DataTransferObjects;
+﻿using NetTopologySuite.Geometries;
+
+namespace Neptune.Models.DataTransferObjects;
 
 public class OnlandVisualTrashAssessmentDetailDto
 {
@@ -16,4 +18,7 @@ public class OnlandVisualTrashAssessmentDetailDto
     public string IsProgressAssessment { get; set; }
     public Dictionary<string, List<string>> PreliminarySourceIdentificationTypeDictionary { get; set; }
     public List<OnlandVisualTrashAssessmentObservationSimpleDto> Observations { get; set; }
+    public Geometry TransectGeometry { get; set; }
+    public List<Geometry?> ObservationGeometries { get; set; }
+    public Geometry AssessmentAreaGeometry { get; set; }
 }

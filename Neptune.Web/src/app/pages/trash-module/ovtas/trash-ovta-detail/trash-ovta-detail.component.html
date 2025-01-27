@@ -57,14 +57,11 @@
             </div>
         </div>
         <div class="card g-col-6">
-            <div class="card-header">Observations</div>
+            <div class="card-header">Map</div>
             <div class="card-body">
-                <dl class="grid-12" *ngFor="let item of onlandVisualTrashAssessment.Observations">
-                    <dd class="g-col-12">
-                        <img [src]="getUrl()" style="width: 500px; height: 600px" />
-                        {{ item.Note ?? "No notes" }}
-                    </dd>
-                </dl>
+                <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="400px" [showLegend]="false" [style.cursor]="true ? 'crosshair' : ''">
+                    <ovta-observation-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></ovta-observation-layer>
+                </neptune-map>
             </div>
         </div>
     </div>

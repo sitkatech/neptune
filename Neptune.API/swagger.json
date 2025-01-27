@@ -3409,6 +3409,19 @@
               "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationSimpleDto"
             },
             "nullable": true
+          },
+          "TransectGeometry": {
+            "$ref": "#/components/schemas/Geometry"
+          },
+          "ObservationGeometries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Geometry"
+            },
+            "nullable": true
+          },
+          "AssessmentAreaGeometry": {
+            "$ref": "#/components/schemas/Geometry"
           }
         },
         "additionalProperties": false
