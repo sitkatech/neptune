@@ -13,6 +13,7 @@ api/project-document.service.ts
 api/project.service.ts
 api/stormwater-jurisdiction.service.ts
 api/system-info.service.ts
+api/trash-generating-unit.service.ts
 api/treatment-bmp-type.service.ts
 api/treatment-bmp.service.ts
 api/user-claims.service.ts
@@ -67,6 +68,7 @@ model/project-workflow-progress-dto-steps.ts
 model/project-workflow-progress-dto.ts
 model/stormwater-jurisdiction-dto.ts
 model/system-info-dto.ts
+model/trash-generating-unit-grid-dto.ts
 model/treatment-bmp-display-dto.ts
 model/treatment-bmp-modeling-attribute-definition-dto.ts
 model/treatment-bmp-modeling-attribute-dropdown-item-dto.ts

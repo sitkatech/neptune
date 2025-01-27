@@ -2074,6 +2074,44 @@
         }
       }
     },
+    "/trash-generating-units": {
+      "get": {
+        "tags": [
+          "TrashGeneratingUnit"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrashGeneratingUnitGridDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrashGeneratingUnitGridDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrashGeneratingUnitGridDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/treatment-bmps": {
       "get": {
         "tags": [
@@ -4898,6 +4936,123 @@
           "CompilationDateTime": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TrashGeneratingUnitGridDto": {
+        "type": "object",
+        "properties": {
+          "TrashGeneratingUnitID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TrashCaptureEffectivenessBMP": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "TrashCaptureStatusBMP": {
+            "type": "string",
+            "nullable": true
+          },
+          "TrashGeneratingUnitArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "BaselineLoadingRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "LandUseType": {
+            "type": "string",
+            "nullable": true
+          },
+          "CurrentLoadingRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PriorityLandUseTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentAreaID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentAreaName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentAreaBaselineScore": {
+            "type": "string",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TrashCaptureStatusWQMP": {
+            "type": "string",
+            "nullable": true
+          },
+          "TrashCaptureEffectivenessWQMP": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LastUpdateDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "MedianHouseholdIncomeResidential": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "MedianHouseholdIncomeRetail": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PermitClass": {
+            "type": "string",
+            "nullable": true
+          },
+          "LandUseForTGR": {
+            "type": "string",
+            "nullable": true
+          },
+          "TrashGenerationRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Area": {
+            "type": "number",
+            "format": "double"
+          },
+          "LoadingRateDelta": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false

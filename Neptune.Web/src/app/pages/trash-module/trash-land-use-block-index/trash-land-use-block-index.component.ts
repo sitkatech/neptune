@@ -1,13 +1,13 @@
 import { Component } from "@angular/core";
-import { PageHeaderComponent } from "../shared/components/page-header/page-header.component";
-import { AlertDisplayComponent } from "../shared/components/alert-display/alert-display.component";
+import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
+import { AlertDisplayComponent } from "../../../shared/components/alert-display/alert-display.component";
 import { Observable } from "rxjs";
-import { LandUseBlockService } from "../shared/generated/api/land-use-block.service";
-import { UtilityFunctionsService } from "../services/utility-functions.service";
+import { LandUseBlockService } from "../../../shared/generated/api/land-use-block.service";
+import { UtilityFunctionsService } from "../../../services/utility-functions.service";
 import { ColDef } from "ag-grid-community";
-import { NeptuneGridComponent } from "../shared/components/neptune-grid/neptune-grid.component";
+import { NeptuneGridComponent } from "../../../shared/components/neptune-grid/neptune-grid.component";
 import { AsyncPipe, NgIf } from "@angular/common";
-import { LandUseBlockGridDto } from "../shared/generated/model/land-use-block-grid-dto";
+import { LandUseBlockGridDto } from "../../../shared/generated/model/land-use-block-grid-dto";
 
 @Component({
     selector: "trash-land-use-block-index",
