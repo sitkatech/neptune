@@ -23,7 +23,7 @@ public static class AuthenticationHelper
             return homeUrl;
         }
         // Strip the main url to get only the value of the returnUrl parameter
-        var loginUrlToStrip = "/Account/Login?returnUrl=";
+        var loginUrlToStrip = "/Account/LogOn?returnUrl=";
         var parameterOnly = decodedUrlString.Replace(loginUrlToStrip, "");
         // Now decode content of returnUrl argument
         return HttpUtility.UrlDecode(parameterOnly);
