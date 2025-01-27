@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { environment } from "src/environments/environment";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { PersonDto } from "src/app/shared/generated/model/person-dto";
 import { RoleEnum } from "src/app/shared/generated/enum/role-enum";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
@@ -15,7 +15,7 @@ import { Observable } from "rxjs";
     templateUrl: "./trash-home.component.html",
     styleUrls: ["./trash-home.component.scss"],
     standalone: true,
-    imports: [NgIf, AlertDisplayComponent, CustomRichTextComponent, AsyncPipe],
+    imports: [NgIf, AlertDisplayComponent, CustomRichTextComponent, AsyncPipe, RouterLink],
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;

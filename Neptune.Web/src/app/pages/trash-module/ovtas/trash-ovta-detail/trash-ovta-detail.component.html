@@ -1,5 +1,5 @@
 <ng-container *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
-    <page-header [pageTitle]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName" [preTitle]="onlandVisualTrashAssessment.CompletedDate"> </page-header>
+    <page-header [pageTitle]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName"> </page-header>
     <app-alert-display></app-alert-display>
 
     <div class="grid-12 mt-2 mb-3">
@@ -41,6 +41,17 @@
                     <dt class="g-col-4">{{ preliminarySourceIdentificationType.key }}</dt>
                     <dd class="g-col-8">
                         {{ preliminarySourceIdentificationType.value }}
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="card g-col-6">
+            <div class="card-header">Observations</div>
+            <div class="card-body">
+                <dl class="grid-12" *ngFor="let item of onlandVisualTrashAssessment.Observations">
+                    <dd class="g-col-12">
+                        <img [src]="getUrl()" style="width: 500px; height: 600px" />
+                        {{ item.Note ?? "No notes" }}
                     </dd>
                 </dl>
             </div>
