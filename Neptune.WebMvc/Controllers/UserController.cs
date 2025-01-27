@@ -47,7 +47,7 @@ namespace Neptune.WebMvc.Controllers
         [UserEditFeature]
         public ViewResult Index()
         {
-            var keystoneRegisterUserUrl = $"{_webConfiguration.KeystoneRegisterUrl}?ClientID={_webConfiguration.KeystoneOpenIDClientID}&RedirectUrl={HttpUtility.UrlEncode(SitkaRoute<AccountController>.BuildUrlFromExpression(_linkGenerator, x => x.Login()))}";
+            var keystoneRegisterUserUrl = $"{_webConfiguration.KeystoneRegisterUrl}?ClientID={_webConfiguration.KeystoneOpenIDClientID}&RedirectUrl={HttpUtility.UrlEncode(SitkaRoute<AccountController>.BuildUrlFromExpression(_linkGenerator, x => x.LogOn()))}";
             var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, keystoneRegisterUserUrl);
             return RazorView<Views.User.Index, IndexViewData>(viewData);
         }

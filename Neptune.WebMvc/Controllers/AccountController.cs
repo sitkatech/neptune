@@ -47,7 +47,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [Authorize]
-        public ActionResult Login()
+        public ActionResult LogOn()
         {
             var rawReturnUrl = HttpContext.Request.Cookies["NeptuneReturnURL"];
             var returnUrl = AuthenticationHelper.SanitizeReturnUrlForLogin(rawReturnUrl, HomeUrl);
