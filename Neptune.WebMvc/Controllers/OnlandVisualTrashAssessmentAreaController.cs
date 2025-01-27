@@ -15,7 +15,6 @@ using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Services;
 using Neptune.WebMvc.Services.Filters;
-using Neptune.WebMvc.Views.DelineationGeometry;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessment;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessment.MapInitJson;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea;
