@@ -29,6 +29,9 @@ public class TotalNetworkSolveJob(
         var networkSolveResult = await nereidService.TotalNetworkSolve(DbContext, false);
         await CreateNereidResultsAsJsonFileAndPostToBlobStorage(networkSolveResultBaseline.NereidResults, BaselineModelResultsFileName);
         await CreateNereidResultsAsJsonFileAndPostToBlobStorage(networkSolveResult.NereidResults, ModelResultsFileName);
+
+        // clear out old nereid logs
+        await DbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteOldNereidLogs");
     }
 
     private async Task CreateNereidResultsAsJsonFileAndPostToBlobStorage(IEnumerable<NereidResult> nereidResults, string blobFilename)
