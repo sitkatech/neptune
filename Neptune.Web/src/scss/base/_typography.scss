@@ -1,7 +1,7 @@
 @use "/src/scss/abstracts" as *;
 
 body {
-    font-family: $overpass;
+    font-family: $lato;
     line-height: 1;
 }
 
@@ -10,7 +10,7 @@ a {
 }
 
 button {
-    font-family: $overpass;
+    font-family: $lato;
 }
 
 .site-footer a {
