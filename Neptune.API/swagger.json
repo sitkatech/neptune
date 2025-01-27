@@ -297,6 +297,44 @@
         }
       }
     },
+    "/land-use-block": {
+      "get": {
+        "tags": [
+          "LandUseBlock"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LandUseBlockGridDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LandUseBlockGridDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LandUseBlockGridDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/nereid/delta-solve": {
       "get": {
         "tags": [
@@ -3026,6 +3064,63 @@
           },
           "Attributes": {
             "$ref": "#/components/schemas/IAttributesTable"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LandUseBlockGridDto": {
+        "type": "object",
+        "properties": {
+          "LandUseBlockID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PriorityLandUseTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LandUseDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "TrashGenerationRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "LandUseForTGR": {
+            "type": "string",
+            "nullable": true
+          },
+          "MedianHouseholdIncomeResidential": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "MedianHouseholdIncomeRetail": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PermitTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Area": {
+            "type": "number",
+            "format": "double"
+          },
+          "TrashGeneratingArea": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
