@@ -3406,22 +3406,12 @@
           "Observations": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationSimpleDto"
+              "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationWithPhotoDto"
             },
             "nullable": true
           },
-          "TransectGeometry": {
-            "$ref": "#/components/schemas/Geometry"
-          },
-          "ObservationGeometries": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Geometry"
-            },
-            "nullable": true
-          },
-          "AssessmentAreaGeometry": {
-            "$ref": "#/components/schemas/Geometry"
+          "BoundingBox": {
+            "$ref": "#/components/schemas/BoundingBoxDto"
           }
         },
         "additionalProperties": false
@@ -3482,7 +3472,7 @@
         },
         "additionalProperties": false
       },
-      "OnlandVisualTrashAssessmentObservationSimpleDto": {
+      "OnlandVisualTrashAssessmentObservationWithPhotoDto": {
         "type": "object",
         "properties": {
           "OnlandVisualTrashAssessmentObservationID": {
@@ -3500,6 +3490,10 @@
           "ObservationDatetime": {
             "type": "string",
             "format": "date-time"
+          },
+          "FileResourceGUID": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

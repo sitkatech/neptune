@@ -11,24 +11,26 @@
  */
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class OnlandVisualTrashAssessmentObservationSimpleDto { 
+export class OnlandVisualTrashAssessmentObservationWithPhotoDto { 
     OnlandVisualTrashAssessmentObservationID?: number;
     OnlandVisualTrashAssessmentID?: number;
     Note?: string;
     ObservationDatetime?: string;
+    FileResourceGUID?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
 }
 
-export interface OnlandVisualTrashAssessmentObservationSimpleDtoForm { 
+export interface OnlandVisualTrashAssessmentObservationWithPhotoDtoForm { 
     OnlandVisualTrashAssessmentObservationID?: FormControl<number>;
     OnlandVisualTrashAssessmentID?: FormControl<number>;
     Note?: FormControl<string>;
     ObservationDatetime?: FormControl<string>;
+    FileResourceGUID?: FormControl<string>;
 }
 
-export class OnlandVisualTrashAssessmentObservationSimpleDtoFormControls { 
+export class OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls { 
     public static OnlandVisualTrashAssessmentObservationID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
@@ -60,6 +62,16 @@ export class OnlandVisualTrashAssessmentObservationSimpleDtoFormControls {
         }
     );
     public static ObservationDatetime = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FileResourceGUID = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

@@ -41,10 +41,8 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
             CompletedDate = onlandVisualTrashAssessment.CompletedDate,
             IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment ? "Progress" : "Baseline",
             PreliminarySourceIdentificationTypeDictionary = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.GroupBy(x => x.PreliminarySourceIdentificationType.PreliminarySourceIdentificationCategory.PreliminarySourceIdentificationCategoryDisplayName).ToDictionary(x => x.Key.ToString(), x => x.Select(x => x.PreliminarySourceIdentificationType.PreliminarySourceIdentificationTypeDisplayName).ToList()),
-            Observations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.AsSimpleDto()).ToList(),
-            TransectGeometry = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.TransectLine4326,
-            ObservationGeometries = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.LocationPoint4326).ToList(),
-            AssessmentAreaGeometry = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry4326
+            Observations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.AsPhotoDto()).ToList(),
+            BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry()),
         };
         return dto;
     }

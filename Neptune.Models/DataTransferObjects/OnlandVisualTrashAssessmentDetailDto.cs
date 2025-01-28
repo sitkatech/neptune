@@ -17,8 +17,6 @@ public class OnlandVisualTrashAssessmentDetailDto
     public DateTime? CompletedDate { get; set; }
     public string IsProgressAssessment { get; set; }
     public Dictionary<string, List<string>> PreliminarySourceIdentificationTypeDictionary { get; set; }
-    public List<OnlandVisualTrashAssessmentObservationSimpleDto> Observations { get; set; }
-    public Geometry TransectGeometry { get; set; }
-    public List<Geometry?> ObservationGeometries { get; set; }
-    public Geometry AssessmentAreaGeometry { get; set; }
+    public List<OnlandVisualTrashAssessmentObservationWithPhotoDto> Observations { get; set; }
+    public BoundingBoxDto BoundingBox { get; set; }
 }

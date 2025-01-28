@@ -50,7 +50,7 @@
             <div class="card-body">
                 <dl class="grid-12" *ngFor="let item of onlandVisualTrashAssessment.Observations">
                     <dd class="g-col-12">
-                        <img [src]="getUrl()" style="width: 500px; height: 600px" />
+                        <img [src]="getUrl(item.FileResourceGUID)" style="width: 500px; height: 600px" />
                         {{ item.Note ?? "No notes" }}
                     </dd>
                 </dl>
@@ -59,8 +59,15 @@
         <div class="card g-col-6">
             <div class="card-header">Map</div>
             <div class="card-body">
-                <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="400px" [showLegend]="false" [style.cursor]="true ? 'crosshair' : ''">
-                    <ovta-observation-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></ovta-observation-layer>
+                <neptune-map
+                    (onMapLoad)="handleMapReady($event)"
+                    mapHeight="400px"
+                    [showLegend]="false"
+                    [boundingBox]="onlandVisualTrashAssessment.BoundingBox"
+                    [style.cursor]="true ? 'crosshair' : ''">
+                    <ovta-area-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></ovta-area-layer>
+                    <ovta-observation-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></ovta-observation-layer>
+                    <transect-line-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="15"></transect-line-layer>
                 </neptune-map>
             </div>
         </div>

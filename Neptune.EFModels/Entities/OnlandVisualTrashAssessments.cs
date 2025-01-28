@@ -34,6 +34,9 @@ public static class OnlandVisualTrashAssessments
     public static OnlandVisualTrashAssessment GetByID(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID)
     {
         var onlandVisualTrashAssessment = GetImpl(dbContext).AsNoTracking()
+            .Include(x => x.OnlandVisualTrashAssessmentObservations)
+            .ThenInclude(x => x.OnlandVisualTrashAssessmentObservationPhotos)
+            .ThenInclude(x => x.FileResource)
             .SingleOrDefault(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
         Check.RequireNotNull(onlandVisualTrashAssessment, $"OnlandVisualTrashAssessment with ID {onlandVisualTrashAssessmentID} not found!");
         return onlandVisualTrashAssessment;

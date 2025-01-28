@@ -9,8 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Geometry } from '././geometry';
-import { OnlandVisualTrashAssessmentObservationSimpleDto } from '././onland-visual-trash-assessment-observation-simple-dto';
+import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from '././onland-visual-trash-assessment-observation-with-photo-dto';
+import { BoundingBoxDto } from '././bounding-box-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class OnlandVisualTrashAssessmentDetailDto { 
@@ -27,10 +27,8 @@ export class OnlandVisualTrashAssessmentDetailDto {
     CompletedDate?: string;
     IsProgressAssessment?: string;
     PreliminarySourceIdentificationTypeDictionary?: { [key: string]: Array<string>; };
-    Observations?: Array<OnlandVisualTrashAssessmentObservationSimpleDto>;
-    TransectGeometry?: Geometry;
-    ObservationGeometries?: Array<Geometry>;
-    AssessmentAreaGeometry?: Geometry;
+    Observations?: Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>;
+    BoundingBox?: BoundingBoxDto;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -50,10 +48,8 @@ export interface OnlandVisualTrashAssessmentDetailDtoForm {
     CompletedDate?: FormControl<string>;
     IsProgressAssessment?: FormControl<string>;
     PreliminarySourceIdentificationTypeDictionary?: FormControl<{ [key: string]: Array<string>; }>;
-    Observations?: FormControl<Array<OnlandVisualTrashAssessmentObservationSimpleDto>>;
-    TransectGeometry?: FormControl<Geometry>;
-    ObservationGeometries?: FormControl<Array<Geometry>>;
-    AssessmentAreaGeometry?: FormControl<Geometry>;
+    Observations?: FormControl<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>>;
+    BoundingBox?: FormControl<BoundingBoxDto>;
 }
 
 export class OnlandVisualTrashAssessmentDetailDtoFormControls { 
@@ -187,7 +183,7 @@ export class OnlandVisualTrashAssessmentDetailDtoFormControls {
             ],
         }
     );
-    public static Observations = (value: FormControlState<Array<OnlandVisualTrashAssessmentObservationSimpleDto>> | Array<OnlandVisualTrashAssessmentObservationSimpleDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<OnlandVisualTrashAssessmentObservationSimpleDto>>(
+    public static Observations = (value: FormControlState<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>> | Array<OnlandVisualTrashAssessmentObservationWithPhotoDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>>(
         value,
         formControlOptions ?? 
         {
@@ -197,27 +193,7 @@ export class OnlandVisualTrashAssessmentDetailDtoFormControls {
             ],
         }
     );
-    public static TransectGeometry = (value: FormControlState<Geometry> | Geometry = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Geometry>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static ObservationGeometries = (value: FormControlState<Array<Geometry>> | Array<Geometry> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<Geometry>>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static AssessmentAreaGeometry = (value: FormControlState<Geometry> | Geometry = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Geometry>(
+    public static BoundingBox = (value: FormControlState<BoundingBoxDto> | BoundingBoxDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<BoundingBoxDto>(
         value,
         formControlOptions ?? 
         {

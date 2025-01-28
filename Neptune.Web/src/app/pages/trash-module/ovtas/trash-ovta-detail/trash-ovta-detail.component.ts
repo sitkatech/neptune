@@ -14,6 +14,8 @@ import { FieldDefinitionComponent } from "../../../../shared/components/field-de
 import { environment } from "src/environments/environment";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import { OvtaObservationLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-observation-layer/ovta-observation-layer.component";
+import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
+import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 
 @Component({
     selector: "trash-ovta-detail",
@@ -29,6 +31,8 @@ import { OvtaObservationLayerComponent } from "../../../../shared/components/lea
         KeyValuePipe,
         NeptuneMapComponent,
         OvtaObservationLayerComponent,
+        OvtaAreaLayerComponent,
+        TransectLineLayerComponent,
     ],
     templateUrl: "./trash-ovta-detail.component.html",
     styleUrl: "./trash-ovta-detail.component.scss",
@@ -50,8 +54,8 @@ export class TrashOvtaDetailComponent {
         );
     }
 
-    getUrl() {
-        return environment.ocStormwaterToolsBaseUrl + "/FileResource/DisplayResource/2e1fd388-ab1e-45aa-950d-a47ea1bcb7f8";
+    getUrl(fileResourceGUID) {
+        return environment.ocStormwaterToolsBaseUrl + "/FileResource/DisplayResource/" + fileResourceGUID;
     }
 
     public handleMapReady(event: NeptuneMapInitEvent): void {
