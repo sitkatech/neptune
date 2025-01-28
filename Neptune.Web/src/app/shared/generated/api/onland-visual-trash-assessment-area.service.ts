@@ -27,7 +27,9 @@ import { catchError } from 'rxjs/operators';
 import { ApiService } from '../../services';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class OnlandVisualTrashAssessmentAreaService {
 
     protected basePath = 'http://localhost';
