@@ -1,4 +1,4 @@
-import { Component, OnChanges } from "@angular/core";
+import { Component, Input, OnChanges } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { MapLayerBase } from "../map-layer-base.component";
 import * as L from "leaflet";
@@ -14,16 +14,21 @@ export class OvtaObservationLayerComponent extends MapLayerBase implements OnCha
     constructor() {
         super();
     }
+    @Input() public ovtaID: number;
     public wmsOptions: L.WMSOptions;
     public layer;
 
     ngAfterViewInit(): void {
         this.wmsOptions = {
-            layers: "	OCStormwater:ObservationPointExport",
+            layers: "OCStormwater:ObservationPointExport",
             transparent: true,
             format: "image/png",
             tiled: true,
         };
+
+        if (this.ovtaID) {
+            this.wmsOptions.cql_filter = `AssessmentID = ${this.ovtaID}`;
+        }
 
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
         this.initLayer();
