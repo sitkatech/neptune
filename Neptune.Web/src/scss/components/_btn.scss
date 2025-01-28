@@ -105,24 +105,24 @@
 
     &-primary {
         color: $white;
-        border: 1px solid darken($teal-800, 4%);
-        text-shadow: 0px 1px 2px rgba($teal-800, 0.8);
-        background: linear-gradient(0deg, lighten($teal-800, 2%) 0%, lighten($teal-800, 0%) 100%);
+        border: 1px solid darken($primary, 4%);
+        text-shadow: 0px 1px 2px rgba($primary, 0.8);
+        background: linear-gradient(0deg, lighten($primary, 2%) 0%, lighten($primary, 0%) 100%);
 
         &:hover {
             color: $white;
-            background: linear-gradient(0deg, darken($teal-800, 0%) 0%, darken($teal-800, 2%) 100%);
+            background: linear-gradient(0deg, darken($primary, 0%) 0%, darken($primary, 2%) 100%);
         }
 
         &-outline {
             background: $white;
-            color: $teal-800;
-            border: 1px solid $teal-800;
+            color: $primary;
+            border: 1px solid $primary;
 
             &:hover {
-                background: $teal-800;
+                background: $primary;
                 color: $white;
-                border: 1px solid $teal-800;
+                border: 1px solid $primary;
                 svg path {
                     fill: $white;
                 }
