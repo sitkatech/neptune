@@ -39,8 +39,21 @@
                     [showLegend]="false"
                     [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox"
                     [style.cursor]="true ? 'crosshair' : ''">
-                    <ovta-area-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></ovta-area-layer>
-                    <transect-line-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="15"></transect-line-layer>
+                    <ovta-area-layer
+                        *ngIf="mapIsReady"
+                        [displayOnLoad]="true"
+                        [map]="map"
+                        [layerControl]="layerControl"
+                        [sortOrder]="10"
+                        [ovtaAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
+                    <transect-line-layer
+                        *ngIf="mapIsReady"
+                        [displayOnLoad]="true"
+                        [map]="map"
+                        [layerControl]="layerControl"
+                        [sortOrder]="15"
+                        [jurisdictionID]="onlandVisualTrashAssessmentArea.StormwaterJurisdictionID"
+                        [ovtaAreaName]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName"></transect-line-layer>
                 </neptune-map>
             </div>
         </div>
