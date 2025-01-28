@@ -9,19 +9,28 @@ import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-t
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { Observable } from "rxjs";
+import { BtnGroupRadioInputComponent } from "../../../shared/components/inputs/btn-group-radio-input/btn-group-radio-input.component";
+import { NeptuneMapComponent } from "../../../shared/components/leaflet/neptune-map/neptune-map.component";
 
 @Component({
     selector: "trash-home",
     templateUrl: "./trash-home.component.html",
     styleUrls: ["./trash-home.component.scss"],
     standalone: true,
-    imports: [NgIf, AlertDisplayComponent, CustomRichTextComponent, AsyncPipe, RouterLink],
+    imports: [NgIf, AlertDisplayComponent, CustomRichTextComponent, AsyncPipe, RouterLink, BtnGroupRadioInputComponent, NeptuneMapComponent],
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;
     public currentUser$: Observable<PersonDto>;
 
     public richTextTypeID: number = NeptunePageTypeEnum.TrashHomePage;
+
+    public activeTab: string = "Area-Based Results";
+    public tabs = [
+        { label: "Area-Based Results", value: "Area-Based Results" },
+        { label: "Load-Based Results", value: "Load-Based Results" },
+        { label: "OVTA-Based Results", value: "OVTA-Based Results" },
+    ];
 
     constructor(private authenticationService: AuthenticationService, private router: Router, private route: ActivatedRoute) {}
 
@@ -99,5 +108,13 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
 
     public ocstBaseUrl(): string {
         return environment.ocStormwaterToolsBaseUrl;
+    }
+
+    public setActiveTab(event) {
+        this.activeTab = event;
+        if (this.activeTab === "Area-Based Results") {
+        } else if (this.activeTab === "Load-Based Results") {
+        } else if (this.activeTab === "OVTA-Based Results") {
+        }
     }
 }
