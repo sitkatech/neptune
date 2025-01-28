@@ -46,7 +46,6 @@ export class TrashOvtaIndexComponent {
             }),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName", {
                 CustomDropdownFilterField: "StormwaterJurisdictionName",
-                FieldDefinitionType: "Jurisdiction",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Created By", "CreatedByPersonFullName"),
             this.utilityFunctionsService.createDateColumnDef("Created On", "CreatedDate", "short"),
@@ -57,17 +56,14 @@ export class TrashOvtaIndexComponent {
             }),
             this.utilityFunctionsService.createBasicColumnDef("Baseline Score", "OnlandVisualTrashAssessmentBaselineScoreName", {
                 CustomDropdownFilterField: "OnlandVisualTrashAssessmentBaselineScoreName",
-                FieldDefinitionType: "BaselineScore",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Progress Score", "OnlandVisualTrashAssessmentProgressScoreName", {
                 CustomDropdownFilterField: "OnlandVisualTrashAssessmentProgressScoreName",
-                FieldDefinitionType: "ProgressScore",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Number of Assessments Completed", "NumberOfAssessmentsCompleted"),
             this.utilityFunctionsService.createDateColumnDef("Last Assessment Date", "LastAssessmentDate", "short"),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName", {
                 CustomDropdownFilterField: "StormwaterJurisdictionName",
-                FieldDefinitionType: "Jurisdiction",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Description", "AssessmentAreaDescription"),
         ];
