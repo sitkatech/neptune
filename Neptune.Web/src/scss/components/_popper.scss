@@ -45,13 +45,14 @@
         border-radius: 0.5rem;
         z-index: 2;
         font-size: $type-size-150;
+        border: 1px solid $gray-200;
 
         &-header {
-            background: white;
+            background: $gray-100;
             border-bottom: 1px solid rgba(0, 0, 0, 0.15);
             padding: 0.5rem 1rem;
-            border-top-left-radius: 0.25rem;
-            border-top-right-radius: 0.25rem;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
         }
 
         .btn-edit {
@@ -59,10 +60,11 @@
         }
 
         &-body {
-            padding: 1rem 1rem 0.5rem 1rem;
+            padding: 1rem;
             background: white;
-            border-bottom-left-radius: 0.25rem;
-            border-bottom-right-radius: 0.25rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            text-align: left;
         }
     }
 }

@@ -19,7 +19,7 @@
 
         padding: 1rem 1.25rem;
         margin-bottom: 0;
-        background-color: $teal-600;
+        background-color: $gray-600;
         border-bottom: 1px solid rgba(0, 0, 0, 0.125);
         color: $white;
         font-weight: 700;
@@ -63,7 +63,7 @@
 
     .card-body {
         .card-header {
-            background-color: $teal-800;
+            background-color: $gray-500;
         }
     }
 }
