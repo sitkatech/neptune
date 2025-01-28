@@ -5,6 +5,8 @@
     font-size: $type-size-200;
     color: $white;
     padding: 2rem;
+    position: fixed;
+    bottom: 0;
 
     .credits {
         @include desktop-small {
