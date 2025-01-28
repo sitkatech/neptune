@@ -1,10 +1,9 @@
 import { Component } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { Observable, switchMap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { OnlandVisualTrashAssessmentAreaDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-detail-dto";
-import { environment } from "src/environments/environment";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 import { AsyncPipe, DatePipe, NgIf } from "@angular/common";
@@ -12,11 +11,28 @@ import { FieldDefinitionComponent } from "../../../../shared/components/field-de
 import { NeptuneGridComponent } from "../../../../shared/components/neptune-grid/neptune-grid.component";
 import { ColDef } from "ag-grid-community";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
+import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
+import * as L from "leaflet";
+import "leaflet-draw";
+import "leaflet.fullscreen";
+import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
+import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 
 @Component({
     selector: "trash-ovta-area-detail",
     standalone: true,
-    imports: [PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, DatePipe, FieldDefinitionComponent, NeptuneGridComponent],
+    imports: [
+        PageHeaderComponent,
+        AlertDisplayComponent,
+        NgIf,
+        AsyncPipe,
+        DatePipe,
+        FieldDefinitionComponent,
+        NeptuneGridComponent,
+        NeptuneMapComponent,
+        TransectLineLayerComponent,
+        OvtaAreaLayerComponent,
+    ],
     templateUrl: "./trash-ovta-area-detail.component.html",
     styleUrl: "./trash-ovta-area-detail.component.scss",
 })
@@ -24,11 +40,14 @@ export class TrashOvtaAreaDetailComponent {
     public onlandVisualTrashAssessmentArea$: Observable<OnlandVisualTrashAssessmentAreaDetailDto>;
     public ovtaColumnDefs: ColDef[];
 
+    public map: L.Map;
+    public mapIsReady: boolean = false;
+    public layerControl: L.Control.Layers;
+
     constructor(
         private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService,
         private utilityFunctionsService: UtilityFunctionsService,
-        private route: ActivatedRoute,
-        private router: Router
+        private route: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
@@ -56,7 +75,9 @@ export class TrashOvtaAreaDetailComponent {
         );
     }
 
-    getUrl() {
-        return environment.ocStormwaterToolsBaseUrl + "/FileResource/DisplayResource/2e1fd388-ab1e-45aa-950d-a47ea1bcb7f8";
+    public handleMapReady(event: NeptuneMapInitEvent): void {
+        this.map = event.map;
+        this.layerControl = event.layerControl;
+        this.mapIsReady = true;
     }
 }

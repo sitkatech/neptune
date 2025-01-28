@@ -32,7 +32,17 @@
         </div>
         <div class="card g-col-6">
             <div class="card-header">Location</div>
-            <div class="card-body"></div>
+            <div class="card-body">
+                <neptune-map
+                    (onMapLoad)="handleMapReady($event)"
+                    mapHeight="400px"
+                    [showLegend]="false"
+                    [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox"
+                    [style.cursor]="true ? 'crosshair' : ''">
+                    <ovta-area-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></ovta-area-layer>
+                    <transect-line-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="15"></transect-line-layer>
+                </neptune-map>
+            </div>
         </div>
         <div class="card g-col-12">
             <div class="card-header">Assessments</div>

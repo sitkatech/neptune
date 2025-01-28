@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { OnlandVisualTrashAssessmentGridDto } from '././onland-visual-trash-assessment-grid-dto';
+import { BoundingBoxDto } from '././bounding-box-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class OnlandVisualTrashAssessmentAreaDetailDto { 
@@ -23,6 +24,7 @@ export class OnlandVisualTrashAssessmentAreaDetailDto {
     NumberOfAssessmentsCompleted?: number;
     LastAssessmentDate?: string;
     OnlandVisualTrashAssessments?: Array<OnlandVisualTrashAssessmentGridDto>;
+    BoundingBox?: BoundingBoxDto;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -39,6 +41,7 @@ export interface OnlandVisualTrashAssessmentAreaDetailDtoForm {
     NumberOfAssessmentsCompleted?: FormControl<number>;
     LastAssessmentDate?: FormControl<string>;
     OnlandVisualTrashAssessments?: FormControl<Array<OnlandVisualTrashAssessmentGridDto>>;
+    BoundingBox?: FormControl<BoundingBoxDto>;
 }
 
 export class OnlandVisualTrashAssessmentAreaDetailDtoFormControls { 
@@ -133,6 +136,16 @@ export class OnlandVisualTrashAssessmentAreaDetailDtoFormControls {
         }
     );
     public static OnlandVisualTrashAssessments = (value: FormControlState<Array<OnlandVisualTrashAssessmentGridDto>> | Array<OnlandVisualTrashAssessmentGridDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<OnlandVisualTrashAssessmentGridDto>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static BoundingBox = (value: FormControlState<BoundingBoxDto> | BoundingBoxDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<BoundingBoxDto>(
         value,
         formControlOptions ?? 
         {
