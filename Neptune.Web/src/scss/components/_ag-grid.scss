@@ -107,6 +107,14 @@
         color: $orange-default;
     }
 
+    .ag-icon-filter:after {
+        font-family: "FontAwesome";
+        font-size: 0.75rem;
+        content: "\f0b0" !important;
+        display: block;
+        color: #fff;
+    }
+
     .ag-icon-asc:before,
     .ag-icon-desc:before,
     .ag-icon-menu:before {
@@ -145,7 +153,7 @@
 
     .btn {
         display: block;
-        font-family: $overpass;
+        font-family: $lato;
         font-size: 0.9375rem;
         font-weight: 400;
         line-height: 1em;

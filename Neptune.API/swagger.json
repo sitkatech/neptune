@@ -297,6 +297,44 @@
         }
       }
     },
+    "/land-use-blocks": {
+      "get": {
+        "tags": [
+          "LandUseBlock"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LandUseBlockGridDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LandUseBlockGridDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LandUseBlockGridDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/nereid/delta-solve": {
       "get": {
         "tags": [
@@ -508,6 +546,162 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/onland-visual-trash-assessments": {
+      "get": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}": {
+      "get": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/onland-visual-trash-assessment-areas": {
+      "get": {
+        "tags": [
+          "OnlandVisualTrashAssessmentArea"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaGridDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaGridDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaGridDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/onland-visual-trash-assessment-areas/{onlandVisualTrashAssessmentAreaID}": {
+      "get": {
+        "tags": [
+          "OnlandVisualTrashAssessmentArea"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentAreaID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaDetailDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaDetailDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaDetailDto"
+                }
+              }
+            }
           }
         }
       }
@@ -1880,6 +2074,44 @@
         }
       }
     },
+    "/trash-generating-units": {
+      "get": {
+        "tags": [
+          "TrashGeneratingUnit"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrashGeneratingUnitGridDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrashGeneratingUnitGridDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrashGeneratingUnitGridDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/treatment-bmps": {
       "get": {
         "tags": [
@@ -2874,6 +3106,63 @@
         },
         "additionalProperties": false
       },
+      "LandUseBlockGridDto": {
+        "type": "object",
+        "properties": {
+          "LandUseBlockID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PriorityLandUseTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LandUseDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "TrashGenerationRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "LandUseForTGR": {
+            "type": "string",
+            "nullable": true
+          },
+          "MedianHouseholdIncomeResidential": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "MedianHouseholdIncomeRetail": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PermitTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Area": {
+            "type": "number",
+            "format": "double"
+          },
+          "TrashGeneratingArea": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
       "NeptunePageDto": {
         "type": "object",
         "properties": {
@@ -2955,6 +3244,262 @@
           "TIN"
         ],
         "type": "string"
+      },
+      "OnlandVisualTrashAssessmentAreaDetailDto": {
+        "type": "object",
+        "properties": {
+          "OnlandVisualTrashAssessmentAreaID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OnlandVisualTrashAssessmentAreaName": {
+            "type": "string",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentBaselineScoreName": {
+            "type": "string",
+            "nullable": true
+          },
+          "AssessmentAreaDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentProgressScoreName": {
+            "type": "string",
+            "nullable": true
+          },
+          "NumberOfAssessmentsCompleted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LastAssessmentDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
+            },
+            "nullable": true
+          },
+          "BoundingBox": {
+            "$ref": "#/components/schemas/BoundingBoxDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OnlandVisualTrashAssessmentAreaGridDto": {
+        "type": "object",
+        "properties": {
+          "OnlandVisualTrashAssessmentAreaID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OnlandVisualTrashAssessmentAreaName": {
+            "type": "string",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentBaselineScoreName": {
+            "type": "string",
+            "nullable": true
+          },
+          "AssessmentAreaDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentProgressScoreName": {
+            "type": "string",
+            "nullable": true
+          },
+          "NumberOfAssessmentsCompleted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LastAssessmentDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OnlandVisualTrashAssessmentDetailDto": {
+        "type": "object",
+        "properties": {
+          "OnlandVisualTrashAssessmentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CreatedByPersonFullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "CreatedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "OnlandVisualTrashAssessmentAreaID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentAreaName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentStatusName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentScoreName": {
+            "type": "string",
+            "nullable": true
+          },
+          "CompletedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "IsProgressAssessment": {
+            "type": "string",
+            "nullable": true
+          },
+          "PreliminarySourceIdentificationTypeDictionary": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          },
+          "Observations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationWithPhotoDto"
+            },
+            "nullable": true
+          },
+          "BoundingBox": {
+            "$ref": "#/components/schemas/BoundingBoxDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OnlandVisualTrashAssessmentGridDto": {
+        "type": "object",
+        "properties": {
+          "OnlandVisualTrashAssessmentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CreatedByPersonFullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "CreatedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "OnlandVisualTrashAssessmentAreaID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentAreaName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentStatusName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentScoreName": {
+            "type": "string",
+            "nullable": true
+          },
+          "CompletedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "IsProgressAssessment": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OnlandVisualTrashAssessmentObservationWithPhotoDto": {
+        "type": "object",
+        "properties": {
+          "OnlandVisualTrashAssessmentObservationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OnlandVisualTrashAssessmentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Note": {
+            "type": "string",
+            "nullable": true
+          },
+          "ObservationDatetime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "FileResourceGUID": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
       "Ordinates": {
         "enum": [
@@ -4401,6 +4946,123 @@
           "CompilationDateTime": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TrashGeneratingUnitGridDto": {
+        "type": "object",
+        "properties": {
+          "TrashGeneratingUnitID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TrashCaptureEffectivenessBMP": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "TrashCaptureStatusBMP": {
+            "type": "string",
+            "nullable": true
+          },
+          "TrashGeneratingUnitArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "BaselineLoadingRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "LandUseType": {
+            "type": "string",
+            "nullable": true
+          },
+          "CurrentLoadingRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PriorityLandUseTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentAreaID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentAreaName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentAreaBaselineScore": {
+            "type": "string",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TrashCaptureStatusWQMP": {
+            "type": "string",
+            "nullable": true
+          },
+          "TrashCaptureEffectivenessWQMP": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LastUpdateDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "MedianHouseholdIncomeResidential": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "MedianHouseholdIncomeRetail": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PermitClass": {
+            "type": "string",
+            "nullable": true
+          },
+          "LandUseForTGR": {
+            "type": "string",
+            "nullable": true
+          },
+          "TrashGenerationRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Area": {
+            "type": "number",
+            "format": "double"
+          },
+          "LoadingRateDelta": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false

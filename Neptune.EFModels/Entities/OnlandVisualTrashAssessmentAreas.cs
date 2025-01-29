@@ -28,7 +28,10 @@ public static class OnlandVisualTrashAssessmentAreas
 
     public static OnlandVisualTrashAssessmentArea GetByID(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentAreaID)
     {
-        var onlandVisualTrashAssessmentArea = GetImpl(dbContext).AsNoTracking()
+        var onlandVisualTrashAssessmentArea = GetImpl(dbContext)
+            .Include(x => x.OnlandVisualTrashAssessments)
+            .ThenInclude(x => x.CreatedByPerson)
+            .AsNoTracking()
             .SingleOrDefault(x => x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentAreaID);
         Check.RequireNotNull(onlandVisualTrashAssessmentArea, $"OnlandVisualTrashAssessmentArea with ID {onlandVisualTrashAssessmentAreaID} not found!");
         return onlandVisualTrashAssessmentArea;
@@ -57,6 +60,6 @@ public static class OnlandVisualTrashAssessmentAreas
 
     public static List<OnlandVisualTrashAssessmentArea> ListByStormwaterJurisdictionIDList(NeptuneDbContext dbContext, IEnumerable<int> stormwaterJurisdictionIDList)
     {
-        return GetImpl(dbContext).AsNoTracking().Where(x => stormwaterJurisdictionIDList.Contains(x.StormwaterJurisdictionID)).OrderBy(x => x.OnlandVisualTrashAssessmentAreaName).ToList();
+        return GetImpl(dbContext).Include(x => x.OnlandVisualTrashAssessments).AsNoTracking().Where(x => stormwaterJurisdictionIDList.Contains(x.StormwaterJurisdictionID)).OrderBy(x => x.OnlandVisualTrashAssessmentAreaName).ToList();
     }
 }

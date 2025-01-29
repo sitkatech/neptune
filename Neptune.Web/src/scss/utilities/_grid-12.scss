@@ -2,7 +2,7 @@
 
 .grid-12 {
     display: grid;
-    gap: 2rem;
+    gap: 1rem;
     align-items: start;
 
     @include desktop-medium {

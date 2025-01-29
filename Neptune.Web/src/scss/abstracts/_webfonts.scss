@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100..900;1,100..900&Overpass+Mono:wght@400;700&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
 /*
 
     OVERPASS
@@ -13,10 +12,9 @@
 
 */
 
-$overpass: "Overpass", sans-serif;
-$overpass-mono: "Overpass Mono", monospace;
+$lato: "Lato", sans-serif;
 
 $header-nav-link-font-weight: inherit;
 
-$font-family-sans-serif: $overpass;
+$font-family-sans-serif: $lato;
 $font-size: 16px;
