@@ -127,7 +127,7 @@ export const routes: Routes = [
                 children: [
                     { path: "", component: TrashOvtaAreaIndexComponent, canActivate: [UnauthenticatedAccessGuard] },
                     {
-                        path: `onland-visual-trash-assessment-area/:${routeParams.onlandVisualTrashAssessmentAreaID}`,
+                        path: `:${routeParams.onlandVisualTrashAssessmentAreaID}`,
                         component: TrashOvtaAreaDetailComponent,
                         canActivate: [UnauthenticatedAccessGuard],
                     },
