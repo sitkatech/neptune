@@ -37,6 +37,7 @@ import { TrashOvtaAreaDetailComponent } from "./pages/trash-module/ovtas/trash-o
 import { TrashOvtaDetailComponent } from "./pages/trash-module/ovtas/trash-ovta-detail/trash-ovta-detail.component";
 import { TrashLandUseBlockIndexComponent } from "./pages/trash-module/trash-land-use-block-index/trash-land-use-block-index.component";
 import { TrashTrashGeneratingUnitIndexComponent } from "./pages/trash-module/trash-trash-generating-unit-index/trash-trash-generating-unit-index.component";
+import { TrashOvtaAreaIndexComponent } from "./pages/trash-module/ovtas/trash-ovta-area-index/trash-ovta-area-index.component";
 
 export const routeParams = {
     definitionID: "definitionID",
@@ -122,9 +123,15 @@ export const routes: Routes = [
             },
 
             {
-                path: `onland-visual-trash-assessment-area/:${routeParams.onlandVisualTrashAssessmentAreaID}`,
-                component: TrashOvtaAreaDetailComponent,
-                canActivate: [UnauthenticatedAccessGuard],
+                path: "onland-visual-trash-assessment-area",
+                children: [
+                    { path: "", component: TrashOvtaAreaIndexComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    {
+                        path: `onland-visual-trash-assessment-area/:${routeParams.onlandVisualTrashAssessmentAreaID}`,
+                        component: TrashOvtaAreaDetailComponent,
+                        canActivate: [UnauthenticatedAccessGuard],
+                    },
+                ],
             },
             {
                 path: "trash-generating-unit",
