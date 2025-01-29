@@ -1,10 +1,423 @@
-.homepageJumbotronImage {
-    background-size: cover;
-    background-position: center center;
-    height: 300px;
+@use "/src/scss/abstracts" as *;
+
+.admin-nav {
+    color: white;
+    //  height: 5rem;
+    //        padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__wrapper {
+        @include desktop-medium-max {
+            padding: 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 7777;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            max-width: 30rem;
+            background-color: $primary;
+            outline: 0;
+            transform: translateX(-30rem);
+            transition: transform 0.3s ease-in-out;
+            visibility: hidden;
+
+            &.active {
+                visibility: visible;
+                transform: translateX(0);
+            }
+        }
+
+        @include desktop-medium {
+            padding: 0.5rem;
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    &__close {
+        background: transparent;
+        border: none;
+        color: $white;
+        font-size: $type-size-400;
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 1rem;
+
+        @include desktop-medium {
+            display: none;
+        }
+    }
+
+    &__links {
+        @include desktop-medium {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    &__utilities {
+        margin-top: 2rem;
+        border-top: 1px solid white;
+        padding-top: 2rem;
+
+        @include desktop-medium {
+            padding-top: 0;
+            margin-left: auto;
+            margin-top: 0;
+            border-top: none;
+        }
+
+        .nav-link {
+            color: $primary;
+
+            &__label {
+                color: $primary;
+            }
+        }
+    }
+
+    &__main {
+        .nav-link {
+            color: $teal-800;
+
+            &__label {
+                color: $teal-800;
+                margin-right: 2rem;
+            }
+        }
+    }
+
+    a.navbar-brand {
+        font-size: $type-size-400;
+    }
 }
 
-#homepageJumbotronImage1 {
-    background-image: url("/assets/main/home_image.png");
-    background-position: right 0 bottom -130px;
+.site-nav {
+    background-color: $primary;
+    color: $white;
+    height: 2rem;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__wrapper {
+        @include desktop-medium-max {
+            padding: 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 7777;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            max-width: 30rem;
+            background-color: $primary;
+            outline: 0;
+            transform: translateX(-30rem);
+            transition: transform 0.3s ease-in-out;
+            visibility: hidden;
+
+            &.active {
+                visibility: visible;
+                transform: translateX(0);
+            }
+        }
+
+        @include desktop-medium {
+            padding-top: 0.5rem;
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    &__close {
+        background: transparent;
+        border: none;
+        color: $white;
+        font-size: $type-size-400;
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 1rem;
+
+        @include desktop-medium {
+            display: none;
+        }
+    }
+
+    &__links {
+        @include desktop-medium {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    &__utilities {
+        margin-top: 2rem;
+        border-top: 1px solid white;
+        padding-top: 2rem;
+
+        @include desktop-medium {
+            padding-top: 0;
+            margin-left: auto;
+            margin-top: 0;
+            border-top: none;
+        }
+    }
+}
+
+.hamburger-btn {
+    padding: 0;
+    margin-left: auto;
+    background: transparent;
+    margin: 0;
+    border: none;
+    display: block;
+
+    @include desktop-medium {
+        display: none;
+    }
+
+    svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        max-width: 2rem;
+        max-height: 2rem;
+        fill: white;
+    }
+}
+
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+
+    &-item {
+        & + .nav-item {
+            margin-top: 1rem;
+            border-top: 2px solid rgba(white, 0.05);
+            padding-top: 1.5rem;
+
+            @include desktop-medium {
+                margin-top: 0;
+                margin-left: 3rem;
+                border-top: none;
+                padding-top: 0;
+            }
+        }
+
+        .username {
+            text-transform: none;
+            letter-spacing: 0;
+        }
+    }
+
+    &-link {
+        display: flex;
+        gap: $spacing-200;
+        align-items: center;
+        font-size: $type-size-200;
+        line-height: 1em;
+        color: $white;
+
+        icon {
+            width: 1rem;
+            height: 1rem;
+            transform: translateY(-1px);
+
+            ::ng-deep svg {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        &__label {
+            display: inline-block;
+            transition: all 200ms ease;
+            position: relative;
+
+            &::after {
+                transition: all 200ms ease;
+                content: "";
+                display: block;
+                width: 100%;
+                height: 2px;
+                background: transparent;
+                position: absolute;
+                left: 0;
+                bottom: -4px;
+            }
+        }
+
+        &:hover {
+            color: $white;
+            text-decoration: none;
+
+            .nav-link__label {
+                &::after {
+                    background: $white;
+                }
+            }
+        }
+
+        &.disabled {
+            pointer-events: none;
+            cursor: default;
+        }
+    }
+}
+
+.dropdown-toggle {
+    .nav-link__label {
+        display: inline-flex;
+        align-items: center;
+        gap: $spacing-200;
+
+        icon {
+            display: block;
+            width: 11px;
+            height: 6px;
+            transform: translateY(-6px);
+
+            ::ng-deep svg {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+}
+
+.hero {
+    display: grid;
+
+    &__photo {
+        z-index: 0;
+        grid-column: 1;
+        grid-row: 1;
+        aspect-ratio: 4 / 3;
+
+        @include tablet {
+            aspect-ratio: 16 / 9;
+        }
+
+        @include desktop-medium {
+            aspect-ratio: unset;
+            max-height: clamp(20rem, 70vh, 48rem);
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-position: top center;
+            object-fit: cover;
+        }
+    }
+
+    &__info {
+        z-index: 2;
+        grid-column: 1;
+        grid-row: 1;
+        align-self: end;
+        color: white;
+        padding: 2rem;
+    }
+
+    &__name {
+        background: $secondary;
+        display: inline-block;
+        padding: 0.75rem 0.75rem 0.375rem 0.75rem;
+        font-size: $type-size-200;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: bold;
+        line-height: 1;
+    }
+
+    &__title {
+        font-size: $type-size-600;
+        font-weight: 900;
+
+        @include desktop-medium {
+            font-size: $type-size-800;
+        }
+
+        .line {
+            background: $primary;
+            display: inline-block;
+            padding: 0.75rem 0.5rem 0.5rem;
+
+            @include tablet {
+                padding: 1.25rem 1rem 1rem;
+            }
+
+            &-2 {
+                padding-top: 0;
+                padding-bottom: 0.375rem;
+
+                @include tablet {
+                    padding-bottom: 0.5rem;
+                }
+            }
+        }
+    }
+
+    &__actions {
+        background: $white;
+        box-shadow: $shadow-200;
+        margin: 2rem;
+
+        @include desktop-small {
+            grid-column: 1;
+            grid-row: 1;
+            z-index: 3;
+            max-width: 24rem;
+            width: 50%;
+            align-self: end;
+            justify-self: end;
+        }
+
+        .card-header {
+            border-top-color: transparent;
+            background-color: transparent;
+        }
+
+        .card-title {
+            font-weight: 500;
+            color: $primary;
+        }
+    }
+
+    &__btns {
+        display: grid;
+        gap: 1rem;
+
+        &-wrapper {
+            text-align: center;
+            .btn {
+                display: block;
+            }
+        }
+    }
+}
+
+.alert-container {
+    padding: $spacing-700;
+    max-width: 94rem;
+}
+
+.site__about {
+    padding: 2rem;
 }

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Hangfire;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -18,20 +17,17 @@ using Neptune.Jobs.Services;
 
 namespace Neptune.API.Controllers
 {
-    public class NereidController : SitkaController<NereidController>
+    [ApiController]
+    [Route("nereid")]
+    public class NereidController(
+        NeptuneDbContext dbContext,
+        ILogger<NereidController> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration,
+        NereidService nereidService)
+        : SitkaController<NereidController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        private readonly NereidService _nereidService;
-
-        public NereidController(NeptuneDbContext dbContext,
-            ILogger<NereidController> logger,
-            KeystoneService keystoneService,
-            IOptions<NeptuneConfiguration> neptuneConfiguration,
-            NereidService nereidService) : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-            _nereidService = nereidService;
-        }
-
-        [HttpGet]
+        [HttpGet("delta-solve")]
         [SitkaAdminFeature]
         public IActionResult DeltaSolve()
         {
@@ -39,17 +35,17 @@ namespace Neptune.API.Controllers
             return Ok("En-queued");
         }
 
-        [HttpGet("nereid/health")]
+        [HttpGet("health")]
         public async Task<IActionResult> HealthCheck()
         {
-            var healthCheck = await _nereidService.HealthCheck();
+            var healthCheck = await nereidService.HealthCheck();
             return Ok(healthCheck);
         }
 
-        [HttpGet("nereid/config")]
+        [HttpGet("config")]
         public async Task<IActionResult> ConfigCheck()
         {
-            var configCheck = await _nereidService.ConfigCheck();
+            var configCheck = await nereidService.ConfigCheck();
             return Ok(configCheck);
         }
 
@@ -60,7 +56,7 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins
         /// </summary>
         /// <returns></returns>
-        [HttpGet("nereid/validate")]
+        [HttpGet("validate")]
         [SitkaAdminFeature]
         public async Task<IActionResult> ValidateNetworkGraph()
         {
@@ -69,11 +65,11 @@ namespace Neptune.API.Controllers
 
             stopwatch.Start();
             var buildGraphStartTime = stopwatch.Elapsed;
-            var graph = _nereidService.BuildTotalNetworkGraph(_dbContext);
+            var graph = nereidService.BuildTotalNetworkGraph(DbContext);
             var buildGraphEndTime = stopwatch.Elapsed;
 
             var validateCallStartTime = stopwatch.Elapsed;
-            var networkValidatorResult = await _nereidService.RunJobAtNereid<Graph, NetworkValidatorResult>(graph, networkValidatorUrl, graph.Nodes, null);
+            var networkValidatorResult = await nereidService.RunJobAtNereid<Graph, NetworkValidatorResult>(graph, networkValidatorUrl, graph.Nodes, null);
 
             var validateCallEndTime = stopwatch.Elapsed;
 
@@ -97,7 +93,7 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("nereid/subgraph")]
+        [HttpGet("subgraph")]
         [SitkaAdminFeature]
         public async Task<IActionResult> Subgraph()
         {
@@ -106,13 +102,13 @@ namespace Neptune.API.Controllers
             stopwatch.Start();
 
             var buildGraphStartTime = stopwatch.Elapsed;
-            var graph = _nereidService.BuildTotalNetworkGraph(_dbContext);
+            var graph = nereidService.BuildTotalNetworkGraph(DbContext);
             var buildGraphEndTime = stopwatch.Elapsed;
 
             var subgraphRequestObject = new NereidSubgraphRequestObject(graph, new List<Node> { new Node("BMP_39") });
             var subgraphCallStartTime = stopwatch.Elapsed;
 
-            var subgraphResult = await _nereidService.RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
+            var subgraphResult = await nereidService.RunJobAtNereid<NereidSubgraphRequestObject, SubgraphResult>(subgraphRequestObject,
                 subgraphUrl, subgraphRequestObject.Nodes, null);
             var subgraphCallEndTime = stopwatch.Elapsed;
 
@@ -136,7 +132,7 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins
         /// </summary>
         /// <returns></returns>
-        [HttpGet("nereid/solution-sequence")]
+        [HttpGet("solution-sequence")]
         [SitkaAdminFeature]
         public async Task<IActionResult> SolutionSequence()
         {
@@ -145,13 +141,13 @@ namespace Neptune.API.Controllers
             stopwatch.Start();
 
             var buildGraphStartTime = stopwatch.Elapsed;
-            var graph = _nereidService.BuildTotalNetworkGraph(_dbContext);
+            var graph = nereidService.BuildTotalNetworkGraph(DbContext);
             var buildGraphEndTime = stopwatch.Elapsed;
 
             var solutionSequenceRequestObject = new SolutionSequenceRequest(graph);
 
             var subgraphCallStartTime = stopwatch.Elapsed;
-            var solutionSequenceResult = await _nereidService.RunJobAtNereid<SolutionSequenceRequest, SolutionSequenceResult>(solutionSequenceRequestObject, solutionSequenceUrl, graph.Nodes, null);
+            var solutionSequenceResult = await nereidService.RunJobAtNereid<SolutionSequenceRequest, SolutionSequenceResult>(solutionSequenceRequestObject, solutionSequenceUrl, graph.Nodes, null);
             var subgraphCallEndTime = stopwatch.Elapsed;
 
             stopwatch.Stop();
@@ -173,7 +169,7 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins
         /// </summary>
         /// <returns></returns>
-        [HttpGet("nereid/land-surface-loading")]
+        [HttpGet("land-surface-loading")]
         [SitkaAdminFeature]
         public async Task<IActionResult> Loading()
         {
@@ -183,12 +179,12 @@ namespace Neptune.API.Controllers
 
             stopwatch.Start();
             var buildLoadingInputStartTime = stopwatch.Elapsed;
-            var vNereidLoadingInputs = _dbContext.vNereidLoadingInputs.Where(x => regionalSubbasinsForTest.Contains(x.RegionalSubbasinID)).ToList();
+            var vNereidLoadingInputs = DbContext.vNereidLoadingInputs.Where(x => regionalSubbasinsForTest.Contains(x.RegionalSubbasinID)).ToList();
             var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest(vNereidLoadingInputs, false);
             var buildLoadingInputEndTime = stopwatch.Elapsed;
             stopwatch.Stop();
 
-            var responseObject = await _nereidService.RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, new List<Node>(), null);
+            var responseObject = await nereidService.RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, new List<Node>(), null);
 
             var returnValue = new
             {
@@ -205,7 +201,7 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins
         /// </summary>
         /// <returns></returns>
-        [HttpGet("nereid/land-surface-loading-baseline")]
+        [HttpGet("land-surface-loading-baseline")]
         [SitkaAdminFeature]
         public async Task<IActionResult> BaselineLoading()
         {
@@ -215,12 +211,12 @@ namespace Neptune.API.Controllers
 
             stopwatch.Start();
             var buildLoadingInputStartTime = stopwatch.Elapsed;
-            var vNereidLoadingInputs = _dbContext.vNereidLoadingInputs.Where(x => regionalSubbasinsForTest.Contains(x.RegionalSubbasinID)).ToList();
+            var vNereidLoadingInputs = DbContext.vNereidLoadingInputs.Where(x => regionalSubbasinsForTest.Contains(x.RegionalSubbasinID)).ToList();
             var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest(vNereidLoadingInputs, true);
             var buildLoadingInputEndTime = stopwatch.Elapsed;
             stopwatch.Stop();
 
-            var responseObject = await _nereidService.RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, new List<Node>(), null);
+            var responseObject = await nereidService.RunJobAtNereid<LandSurfaceLoadingRequest, object>(landSurfaceLoadingRequest, landSurfaceLoadingUrl, new List<Node>(), null);
 
             var returnValue = new
             {
@@ -238,15 +234,15 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("nereid/treatment-facility-validate")]
+        [HttpGet("treatment-facility-validate")]
         [SitkaAdminFeature]
         public async Task<IActionResult> TreatmentFacility()
         {
-            var modelingTreatmentBMPs = TreatmentBMPs.ListModelingTreatmentBMPs(_dbContext);
-            var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext);
+            var modelingTreatmentBMPs = TreatmentBMPs.ListModelingTreatmentBMPs(DbContext);
+            var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(DbContext);
 
-            var modelBasins = _dbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
-            var precipitationZones = _dbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
+            var modelBasins = DbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
+            var precipitationZones = DbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
 
             var treatmentFacilities = modelingTreatmentBMPs
                 .Where(x => x.IsFullyParameterized(delineations[x.TreatmentBMPID]))
@@ -257,7 +253,7 @@ namespace Neptune.API.Controllers
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var treatmentFacilityUrl = "api/v1/treatment_facility/validate?state=ca&region=oc";
-            var responseObject = await _nereidService.RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable, treatmentFacilityUrl, new List<Node>(), null);
+            var responseObject = await nereidService.RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable, treatmentFacilityUrl, new List<Node>(), null);
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
 
             return Ok(new
@@ -274,22 +270,22 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("nereid/treatment-facility-validate/{treatmentBMPID}")]
+        [HttpGet("treatment-facility-validate/{treatmentBMPID}")]
         [SitkaAdminFeature]
         public async Task<IActionResult> ValidateTreatmentFacility([FromRoute] int treatmentBMPID)
         {
             const string treatmentFacilityUrl = "api/v1/treatment_facility/validate?state=ca&region=oc";
-            var modelBasins = _dbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
-            var precipitationZones = _dbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
-            var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext);
+            var modelBasins = DbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
+            var precipitationZones = DbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
+            var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(DbContext);
 
-            var treatmentFacility = TreatmentBMPs.GetByID(_dbContext, treatmentBMPID).ToTreatmentFacility(delineations, true, modelBasins, precipitationZones);
+            var treatmentFacility = TreatmentBMPs.GetByID(DbContext, treatmentBMPID).ToTreatmentFacility(delineations, true, modelBasins, precipitationZones);
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = new List<TreatmentFacility> {treatmentFacility} };
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var responseObject = await _nereidService.RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable, treatmentFacilityUrl, new List<Node>(), null);
+            var responseObject = await nereidService.RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable, treatmentFacilityUrl, new List<Node>(), null);
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
 
             return Ok(
@@ -308,21 +304,21 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("nereid/no-treatment-facility-validate")]
+        [HttpGet("no-treatment-facility-validate")]
         [SitkaAdminFeature]
         public async Task<IActionResult> NoTreatmentFacility()
         {
             const string treatmentFacilityUrl = "api/v1/treatment_facility/validate?state=ca&region=oc";
-            var modelBasins = _dbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
-            var precipitationZones = _dbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
-            var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext);
-            var treatmentFacilities = _dbContext.TreatmentBMPs
+            var modelBasins = DbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
+            var precipitationZones = DbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
+            var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(DbContext);
+            var treatmentFacilities = DbContext.TreatmentBMPs
                 .Where(x => x.TreatmentBMPID == 9974).ToList().Select(x => x.ToTreatmentFacility(delineations, true, modelBasins, precipitationZones)).ToList();
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = treatmentFacilities };
             try
             {
-                var responseObject = await _nereidService.RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable,
+                var responseObject = await nereidService.RunJobAtNereid<TreatmentFacilityTable, object>(treatmentFacilityTable,
                     treatmentFacilityUrl, new List<Node>(), null);
                 return Ok(
                     new
@@ -350,13 +346,13 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins
         /// </summary>
         /// <returns></returns>
-        [HttpGet("nereid/treatment-sites")]
+        [HttpGet("treatment-sites")]
         [SitkaAdminFeature]
         public IActionResult TreatmentSiteTable()
         {
-            var waterQualityManagementPlanNodes = _nereidService.GetWaterQualityManagementPlanNodes(_dbContext);
+            var waterQualityManagementPlanNodes = nereidService.GetWaterQualityManagementPlanNodes(DbContext);
 
-            var list = _dbContext.QuickBMPs.Include(x => x.TreatmentBMPType).AsNoTracking()
+            var list = DbContext.QuickBMPs.Include(x => x.TreatmentBMPType).AsNoTracking()
                 .Where(y => y.TreatmentBMPType.IsAnalyzedInModelingModule).ToList().Join(
                     waterQualityManagementPlanNodes, x => x.WaterQualityManagementPlanID,
                     x => x.WaterQualityManagementPlanID, (bmp, node) => new { bmp, node }).ToList();
@@ -377,14 +373,14 @@ namespace Neptune.API.Controllers
             return Ok(treatmentSiteTable);
         }
 
-        [HttpGet("nereid/treatment-facilities")]
+        [HttpGet("treatment-facilities")]
         [SitkaAdminFeature]
         public IActionResult TreatmentFacilityTable()
         {
-            var modelBasins = _dbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
-            var precipitationZones = _dbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
-            var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext);
-            var treatmentFacilities = TreatmentBMPs.ListModelingTreatmentBMPs(_dbContext)
+            var modelBasins = DbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
+            var precipitationZones = DbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
+            var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(DbContext);
+            var treatmentFacilities = TreatmentBMPs.ListModelingTreatmentBMPs(DbContext)
                 .ToList()
                 .Select(x => x.ToTreatmentFacility(delineations, false, modelBasins, precipitationZones)).ToList();
 
@@ -393,20 +389,20 @@ namespace Neptune.API.Controllers
         }
 
 
-        [HttpGet("nereid/land-surface-table")]
+        [HttpGet("land-surface-table")]
         [SitkaAdminFeature]
         public IActionResult LandSurfaceTable()
         {
-            var vNereidLoadingInputs = _dbContext.vNereidLoadingInputs.ToList();
+            var vNereidLoadingInputs = DbContext.vNereidLoadingInputs.ToList();
             var landSurfaceLoadingRequest = new LandSurfaceLoadingRequest(vNereidLoadingInputs, false);
             return Ok(landSurfaceLoadingRequest);
         }
 
-        [HttpGet("nereid/total-network-graph")]
+        [HttpGet("total-network-graph")]
         [SitkaAdminFeature]
         public IActionResult NetworkTable()
         {
-            var graph = _nereidService.BuildTotalNetworkGraph(_dbContext);
+            var graph = nereidService.BuildTotalNetworkGraph(DbContext);
             return Ok(graph);
         }
 
@@ -418,30 +414,30 @@ namespace Neptune.API.Controllers
         /// Available only to Sitka Admins.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("nereid/solution-test-case")]
+        [HttpGet("solution-test-case")]
         [SitkaAdminFeature]
         public async Task<IActionResult> SolutionTestCase()
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var graph = _nereidService.BuildTotalNetworkGraph(_dbContext);
+            var graph = nereidService.BuildTotalNetworkGraph(DbContext);
 
             // this subgraph is 23 nodes deep
             var single = graph.Nodes.Single(x => x.ID == "RSB_42");
             var subgraph = graph.GetUpstreamSubgraph(single);
 
-            var allLoadingInputs = _dbContext.vNereidLoadingInputs.ToList();
-            var allModelingBMPs = TreatmentBMPs.ListModelingTreatmentBMPs(_dbContext).ToList();
-            var allWQMPNodes = _nereidService.GetWaterQualityManagementPlanNodes(_dbContext).ToList();
-            var allModelingQuickBMPs = _dbContext.QuickBMPs.AsNoTracking().Include(x => x.TreatmentBMPType).Include(x => x.WaterQualityManagementPlan)
+            var allLoadingInputs = DbContext.vNereidLoadingInputs.ToList();
+            var allModelingBMPs = TreatmentBMPs.ListModelingTreatmentBMPs(DbContext).ToList();
+            var allWQMPNodes = nereidService.GetWaterQualityManagementPlanNodes(DbContext).ToList();
+            var allModelingQuickBMPs = DbContext.QuickBMPs.AsNoTracking().Include(x => x.TreatmentBMPType).Include(x => x.WaterQualityManagementPlan)
                 .Where(x => x.PercentOfSiteTreated != null && x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList();
 
-            var modelBasins = _dbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
-            var precipitationZones = _dbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
+            var modelBasins = DbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
+            var precipitationZones = DbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
 
-            var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext);
-            var responseContent = await _nereidService.SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWQMPNodes, allModelingQuickBMPs, true, modelBasins, precipitationZones, delineations, null, null);
+            var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(DbContext);
+            var responseContent = await nereidService.SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWQMPNodes, allModelingQuickBMPs, true, modelBasins, precipitationZones, delineations, null, null);
 
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
             stopwatch.Stop();
@@ -454,17 +450,17 @@ namespace Neptune.API.Controllers
         /// Testing purposes only; Sitka Admins only.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("nereid/delta-solve-test")]
+        [HttpGet("delta-solve-test")]
         [SitkaAdminFeature]
         public async Task<IActionResult> DeltaSolveTest()
         {
-            var dirtyModelNodes = _dbContext.DirtyModelNodes.ToList();
+            var dirtyModelNodes = DbContext.DirtyModelNodes.ToList();
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             try
             {
-                var networkSolveResult = await _nereidService.DeltaSolve(_dbContext, dirtyModelNodes, true);
+                var networkSolveResult = await nereidService.DeltaSolve(DbContext, dirtyModelNodes, true);
                 var deltaSolveTime = stopwatch.ElapsedMilliseconds;
                 stopwatch.Stop();
 

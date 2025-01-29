@@ -81,23 +81,10 @@ namespace Neptune.EFModels.Entities
                    RoleID == Role.SitkaAdmin.RoleID || RoleID == Role.JurisdictionEditor.RoleID;
         }
 
-
-
-        /// <summary>
-        /// All role names of BOTH types used by Keystone not for user display 
-        /// </summary>
-        public IEnumerable<string> RoleNames
+        public bool IsJurisdictionEditorOrManager()
         {
-            get
-            {
-                if (IsAnonymousUser())
-                {
-                    // the presence of roles switches you from being IsAuthenticated or not
-                    return new List<string>();
-                }
-                var roleNames = new List<string> {Role.RoleName};
-                return roleNames;
-            }
+            return RoleID == Role.JurisdictionManager.RoleID || 
+                   RoleID == Role.JurisdictionEditor.RoleID;
         }
 
         public bool IsAnonymousOrUnassigned()

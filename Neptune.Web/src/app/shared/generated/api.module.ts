@@ -7,14 +7,20 @@ import { CustomRichTextService } from './api/custom-rich-text.service';
 import { DelineationService } from './api/delineation.service';
 import { FieldDefinitionService } from './api/field-definition.service';
 import { FileResourceService } from './api/file-resource.service';
+import { LandUseBlockService } from './api/land-use-block.service';
 import { NereidService } from './api/nereid.service';
+import { OnlandVisualTrashAssessmentService } from './api/onland-visual-trash-assessment.service';
+import { OnlandVisualTrashAssessmentAreaService } from './api/onland-visual-trash-assessment-area.service';
 import { OrganizationService } from './api/organization.service';
 import { ProjectService } from './api/project.service';
-import { RoleService } from './api/role.service';
+import { ProjectDocumentService } from './api/project-document.service';
 import { StormwaterJurisdictionService } from './api/stormwater-jurisdiction.service';
 import { SystemInfoService } from './api/system-info.service';
+import { TrashGeneratingUnitService } from './api/trash-generating-unit.service';
 import { TreatmentBMPService } from './api/treatment-bmp.service';
+import { TreatmentBMPTypeService } from './api/treatment-bmp-type.service';
 import { UserService } from './api/user.service';
+import { UserClaimsService } from './api/user-claims.service';
 
 @NgModule({
   imports:      [],
@@ -25,14 +31,20 @@ import { UserService } from './api/user.service';
     DelineationService,
     FieldDefinitionService,
     FileResourceService,
+    LandUseBlockService,
     NereidService,
+    OnlandVisualTrashAssessmentService,
+    OnlandVisualTrashAssessmentAreaService,
     OrganizationService,
     ProjectService,
-    RoleService,
+    ProjectDocumentService,
     StormwaterJurisdictionService,
     SystemInfoService,
+    TrashGeneratingUnitService,
     TreatmentBMPService,
+    TreatmentBMPTypeService,
     UserService,
+    UserClaimsService,
      ]
 })
 export class ApiModule {

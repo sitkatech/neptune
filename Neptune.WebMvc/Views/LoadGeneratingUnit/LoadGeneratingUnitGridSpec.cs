@@ -40,12 +40,12 @@ namespace Neptune.WebMvc.Views.LoadGeneratingUnit
                 ? new HtmlString("N/A")
                 : UrlTemplate.MakeHrefString(
                     treatmentBMPDetailUrlTemplate.ParameterReplace(x.TreatmentBMPID.Value),
-                    x.TreatmentBMPName), 250, DhtmlxGridColumnFilterType.Text);
+                    x.TreatmentBMPName), 225, DhtmlxGridColumnFilterType.Text);
             Add("Water Quality Management Plan", x => x.WaterQualityManagementPlanID == null
                 ? new HtmlString("N/A")
                 : UrlTemplate.MakeHrefString(
                     wqmpDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID.Value),
-                    x.WaterQualityManagementPlanName), 250, DhtmlxGridColumnFilterType.Text);
+                    x.WaterQualityManagementPlanName), 225, DhtmlxGridColumnFilterType.Text);
             Add("Regional Subbasin", x => x.RegionalSubbasinID == null
                 ? new HtmlString("N/A")
                 : UrlTemplate.MakeHrefString(
@@ -53,6 +53,7 @@ namespace Neptune.WebMvc.Views.LoadGeneratingUnit
                     x.RegionalSubbasinName), 225, DhtmlxGridColumnFilterType.Text);
             Add("Model Basin", x => x.ModelBasinKey, 100, DhtmlxGridColumnFormatType.Integer);
             Add("Date HRU Requested", x => x.DateHRURequested, 150, DhtmlxGridColumnFormatType.DateTime);
+            Add("Is Empty?", x => x.IsEmptyResponseFromHRUService.ToYesNo(), 75, DhtmlxGridColumnFilterType.SelectFilterStrict);
         }
     }
 }

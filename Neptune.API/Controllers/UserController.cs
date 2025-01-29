@@ -9,26 +9,24 @@ using System.Collections.Generic;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Neptune.Models.DataTransferObjects;
-using Microsoft.Extensions.DependencyInjection;
-using Neptune.Common;
 using Neptune.Common.Email;
 using Neptune.Models.DataTransferObjects.Person;
 
 namespace Neptune.API.Controllers
 {
     [ApiController]
-    public class UserController : SitkaController<UserController>
+    [Route("users")]
+    public class UserController(
+        NeptuneDbContext dbContext,
+        ILogger<UserController> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration,
+        SitkaSmtpClientService sitkaSmtpClientService)
+        : SitkaController<UserController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        private readonly SitkaSmtpClientService _sitkaSmtpClientService;
-
-        public UserController(NeptuneDbContext dbContext, ILogger<UserController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration, SitkaSmtpClientService sitkaSmtpClientService) : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-            _sitkaSmtpClientService = sitkaSmtpClientService;
-        }
-
-        [HttpPost("users")]
+        [HttpPost]
         [LoggedInUnclassifiedFeature]
-        public ActionResult<PersonDto> CreateUser([FromBody] PersonCreateDto personCreateDto)
+        public async Task<ActionResult<PersonDto>> CreateUser([FromBody] PersonCreateDto personCreateDto)
         {
             // Validate request body; all fields required in Dto except Org Name and Phone
             if (personCreateDto == null)
@@ -36,57 +34,37 @@ namespace Neptune.API.Controllers
                 return BadRequest();
             }
 
-            var validationMessages = People.ValidateCreateUnassignedPerson(_dbContext, personCreateDto);
+            var validationMessages = People.ValidateCreateUnassignedPerson(DbContext, personCreateDto);
             validationMessages.ForEach(vm => { ModelState.AddModelError(vm.Type, vm.Message); });
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var user = People.CreateUnassignedPerson(_dbContext, personCreateDto);
+            var user = People.CreateUnassignedPerson(DbContext, personCreateDto);
 
             var mailMessage = GenerateUserCreatedEmail(user);
             SitkaSmtpClientService.AddCcRecipientsToEmail(mailMessage,
-                        People.GetEmailAddressesForAdminsThatReceiveSupportEmails(_dbContext));
-            SendEmailMessage(mailMessage);
+                        People.GetEmailAddressesForAdminsThatReceiveSupportEmails(DbContext));
+            await SendEmailMessage(mailMessage);
 
             return Ok(user);
         }
 
-        [HttpGet("users")]
+        [HttpGet]
         [UserViewFeature]
         public ActionResult<List<PersonSimpleDto>> List()
         {
-            var userList = People.ListAsSimpleDto(_dbContext);
+            var userList = People.ListAsSimpleDto(DbContext);
             return Ok(userList);
         }
 
-        [HttpGet("users/{personID}")]
+        [HttpGet("{personID}")]
         [UserViewDetailFeature]
         public ActionResult<PersonDto> GetByPersonID([FromRoute] int personID)
         {
-            var userDto = People.GetByIDAsDto(_dbContext, personID);
+            var userDto = People.GetByIDAsDto(DbContext, personID);
             return RequireNotNullThrowNotFound(userDto, "User", personID);
-        }
-
-        [HttpGet("user-claims/{globalID}")]
-        public ActionResult<PersonDto> GetByGlobalID([FromRoute] string globalID)
-        {
-            var isValidGuid = Guid.TryParse(globalID, out var globalIDAsGuid);
-            if (!isValidGuid)
-            {
-                return BadRequest();
-            }
-
-            var userDto = People.GetByGuidAsDto(_dbContext, globalIDAsGuid);
-            if (userDto == null)
-            {
-                var notFoundMessage = $"User with GUID {globalIDAsGuid} does not exist!";
-                _logger.LogError(notFoundMessage);
-                return NotFound(notFoundMessage);
-            }
-
-            return Ok(userDto);
         }
 
         private MailMessage GenerateUserCreatedEmail(PersonDto person)
@@ -99,7 +77,7 @@ namespace Neptune.API.Controllers
     <strong>Phone:</strong> {person.Phone}<br />
     <br />
     <p>
-        You may want to <a href=""{_neptuneConfiguration.OcStormwaterToolsBaseUrl}/Detail/{person.PersonID}"">assign this user a role</a> and associate them with a jurisdiction to allow them to use the site. Or you can leave the user with Unassigned roles if they don't need special privileges.
+        You may want to <a href=""{NeptuneConfiguration.OcStormwaterToolsBaseUrl}/Detail/{person.PersonID}"">assign this user a role</a> and associate them with a jurisdiction to allow them to use the site. Or you can leave the user with Unassigned roles if they don't need special privileges.
     </p>
     <br />
     <br />
@@ -108,7 +86,7 @@ namespace Neptune.API.Controllers
     LOGIN: {person.LoginName}<br />
     <br />
     </div>
-    {_sitkaSmtpClientService.GetSupportNotificationEmailSignature()}
+    {sitkaSmtpClientService.GetSupportNotificationEmailSignature()}
 </div>
 ";
 
@@ -118,16 +96,16 @@ namespace Neptune.API.Controllers
                 Body = $"Hello,<br /><br />{messageBody}",
             };
 
-            mailMessage.To.Add(_sitkaSmtpClientService.GetDefaultEmailFrom());
+            mailMessage.To.Add(sitkaSmtpClientService.GetDefaultEmailFrom());
             return mailMessage;
         }
 
         private async Task SendEmailMessage(MailMessage mailMessage)
         {
             mailMessage.IsBodyHtml = true;
-            mailMessage.From = _sitkaSmtpClientService.GetDefaultEmailFrom();
-            mailMessage.ReplyToList.Add(_neptuneConfiguration.DoNotReplyEmail);
-            await _sitkaSmtpClientService.Send(mailMessage);
+            mailMessage.From = sitkaSmtpClientService.GetDefaultEmailFrom();
+            mailMessage.ReplyToList.Add(NeptuneConfiguration.DoNotReplyEmail);
+            await sitkaSmtpClientService.Send(mailMessage);
         }
     }
 }

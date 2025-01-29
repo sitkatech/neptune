@@ -1,0 +1,21 @@
+<header class="site-header">
+    <header-nav moduleTitle="Trash Module"></header-nav>
+
+    <nav class="site-nav">
+        <div class="collapse navbar-collapse" *ngIf="currentUser$ | async as currentUser">
+            <ul class="site-nav__links site-nav__main">
+                <ng-container *ngIf="isAuthenticated() && isNotUnassigned(currentUser)">
+                    <li class="nav-item" routerLinkActive="active">
+                        <a [routerLink]="['/trash/onland-visual-trash-assessment']" class="nav-link" role="button"> OVTAs </a>
+                    </li>
+                </ng-container>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<main class="site">
+    <div class="site-wrapper">
+        <router-outlet></router-outlet>
+    </div>
+</main>

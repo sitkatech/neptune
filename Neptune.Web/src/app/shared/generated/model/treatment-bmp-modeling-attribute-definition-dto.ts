@@ -10,10 +10,39 @@
  * Do not edit the class manually.
  */
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class TreatmentBMPModelingAttributeDefinitionDto { 
     ModelingAttributeName?: string;
     Units?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface TreatmentBMPModelingAttributeDefinitionDtoForm { 
+    ModelingAttributeName?: FormControl<string>;
+    Units?: FormControl<string>;
+}
+
+export class TreatmentBMPModelingAttributeDefinitionDtoFormControls { 
+    public static ModelingAttributeName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Units = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

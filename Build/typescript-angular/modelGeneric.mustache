@@ -1,3 +1,4 @@
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{ {{>modelGenericAdditionalProperties}}
 {{#vars}}
     {{#description}}
@@ -10,4 +11,46 @@ export class {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{ {{>model
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}{{>modelGenericEnums}}
+
+export interface {{classname}}Form { {{>modelGenericAdditionalProperties}}
+{{#vars}}
+    {{name}}{{^required}}?{{/required}}: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}FormControl<{{{datatype}}}>{{/isEnum}};
+{{/vars}}
+}{{>modelGenericEnums}}
+
+export class {{classname}}FormControls { {{>modelGenericAdditionalProperties}}
+{{#vars}}
+    public static {{name}} = (value: FormControlState<{{{datatype}}}> | {{{datatype}}} = {{{defaultValue}}}, formControlOptions?: FormControlOptions | null) => new FormControl<{{{datatype}}}>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: {{required}},
+            validators: 
+            [
+                {{#required}}
+                Validators.required,
+                {{/required}}
+                {{#minLength}}
+                Validators.minLength({{minLength}}),
+                {{/minLength}}
+                {{#maxLength}}
+                Validators.maxLength({{maxLength}}),
+                {{/maxLength}}
+                {{#minimum}}
+                Validators.min({{minimum}}),
+                {{/minimum}}
+                {{#maximum}}
+                Validators.max({{maximum}}),
+                {{/maximum}}
+                {{#isEmail}}
+                Validators.email,
+                {{/isEmail}}
+                {{#pattern}}
+                Validators.pattern({{pattern}}),
+                {{/pattern}}
+            ],
+        }
+    );
+{{/vars}}
 }{{>modelGenericEnums}}

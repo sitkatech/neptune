@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class ProjectNetworkSolveHistorySimpleDto { 
     ProjectNetworkSolveHistoryID?: number;
     ProjectID?: number;
@@ -20,4 +21,76 @@ export class ProjectNetworkSolveHistorySimpleDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface ProjectNetworkSolveHistorySimpleDtoForm { 
+    ProjectNetworkSolveHistoryID?: FormControl<number>;
+    ProjectID?: FormControl<number>;
+    RequestedByPersonID?: FormControl<number>;
+    ProjectNetworkSolveHistoryStatusTypeID?: FormControl<number>;
+    LastUpdated?: FormControl<string>;
+    ErrorMessage?: FormControl<string>;
+}
+
+export class ProjectNetworkSolveHistorySimpleDtoFormControls { 
+    public static ProjectNetworkSolveHistoryID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ProjectID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static RequestedByPersonID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ProjectNetworkSolveHistoryStatusTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static LastUpdated = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ErrorMessage = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

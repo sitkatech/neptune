@@ -1,0 +1,9 @@
+@use "/src/scss/abstracts" as *;
+
+workflow-body {
+    h3 {
+        color: $teal-800;
+        padding-bottom: $spacing-300;
+        border-bottom: 1px solid $gray-light;
+    }
+}

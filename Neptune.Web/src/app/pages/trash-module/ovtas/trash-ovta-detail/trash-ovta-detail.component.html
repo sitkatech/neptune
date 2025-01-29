@@ -1,0 +1,89 @@
+<ng-container *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
+    <page-header [pageTitle]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName"> </page-header>
+    <app-alert-display></app-alert-display>
+
+    <div class="grid-12 mt-2 mb-3">
+        <div class="card g-col-6">
+            <div class="card-header">Assessment Summary</div>
+            <div class="card-body">
+                <dl class="grid-12">
+                    <dt class="g-col-4">Assessment Area</dt>
+                    <dd class="g-col-8">
+                        {{ onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName }}
+                    </dd>
+                    <dt class="g-col-4">Assessment Date</dt>
+                    <dd class="g-col-8">
+                        {{ onlandVisualTrashAssessment.CompletedDate | date : "MM/dd/yyyy" }}
+                    </dd>
+                    <dt class="g-col-4">Assessment Type</dt>
+                    <dd class="g-col-8">
+                        {{ onlandVisualTrashAssessment.IsProgressAssessment }}
+                    </dd>
+                    <dt class="g-col-4"><field-definition fieldDefinitionType="AssessmentScore"></field-definition></dt>
+                    <dd class="g-col-8">
+                        {{ onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreName }}
+                    </dd>
+                    <dt class="g-col-4">Jurisdiction</dt>
+                    <dd class="g-col-8">
+                        {{ onlandVisualTrashAssessment.StormwaterJurisdictionName }}
+                    </dd>
+                    <dt class="g-col-4">Notes</dt>
+                    <dd class="g-col-8">
+                        {{ onlandVisualTrashAssessment.Notes }}
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="card g-col-6">
+            <div class="card-header">Preliminary Source Identification</div>
+            <div class="card-body">
+                <dl class="grid-12" *ngFor="let preliminarySourceIdentificationType of onlandVisualTrashAssessment.PreliminarySourceIdentificationTypeDictionary | keyvalue">
+                    <dt class="g-col-4">{{ preliminarySourceIdentificationType.key }}</dt>
+                    <dd class="g-col-8">
+                        {{ preliminarySourceIdentificationType.value }}
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="card g-col-6">
+            <div class="card-header">Observations</div>
+            <div class="card-body">
+                <dl class="grid-12" *ngFor="let item of onlandVisualTrashAssessment.Observations">
+                    <dd class="g-col-12">
+                        <img [src]="getUrl(item.FileResourceGUID)" style="width: 500px; height: 600px" />
+                        {{ item.Note ?? "No notes" }}
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="card g-col-6">
+            <div class="card-header">Map</div>
+            <div class="card-body">
+                <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="400px" [showLegend]="false" [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
+                    <ovta-area-layer
+                        *ngIf="mapIsReady"
+                        [displayOnLoad]="true"
+                        [map]="map"
+                        [layerControl]="layerControl"
+                        [sortOrder]="10"
+                        [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
+                    <ovta-observation-layer
+                        *ngIf="mapIsReady"
+                        [displayOnLoad]="true"
+                        [map]="map"
+                        [layerControl]="layerControl"
+                        [sortOrder]="20"
+                        [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></ovta-observation-layer>
+                    <transect-line-layer
+                        *ngIf="mapIsReady"
+                        [displayOnLoad]="true"
+                        [map]="map"
+                        [layerControl]="layerControl"
+                        [sortOrder]="15"
+                        [ovtaAreaName]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName"
+                        [jurisdictionID]="onlandVisualTrashAssessment.StormwaterJurisdictionID"></transect-line-layer>
+                </neptune-map>
+            </div>
+        </div>
+    </div>
+</ng-container>

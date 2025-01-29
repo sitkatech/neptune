@@ -1,0 +1,169 @@
+<page-header [customRichTextTypeID]="customRichTextTypeID" pageTitle="OCTA M2 Tier 2 Grant Program"></page-header>
+
+<section class="content-section">
+    <app-alert-display></app-alert-display>
+
+    <div class="grid-12">
+        <div class="g-col-3" [style.height]="mapHeight">
+            <div class="card">
+                <div class="card-header card-header-dropdown" [expandCollapse]="filterBodyLocation" [startOpen]="true">
+                    <h3 class="card-title">Map Overlay</h3>
+                    <icon icon="AngleDown"></icon>
+                </div>
+                <div class="card-body-dropdown" #filterBodyLocation>
+                    <div class="dropdown-container">
+                        <ng-select
+                            [(ngModel)]="selectedPrioritizationMetric"
+                            [items]="prioritizationMetrics"
+                            bindLabel="key"
+                            [clearable]="false"
+                            (change)="applyPrioritizationMetricOverlay()">
+                        </ng-select>
+
+                        <div class="choropleth mt-2" *ngIf="selectedPrioritizationMetric != PrioritizationMetric.NoMetric">
+                            <ng-container [ngSwitch]="selectedPrioritizationMetric.toString()">
+                                <p *ngSwitchCase="'Strategically Effective Area Score'"><field-definition [fieldDefinitionType]="'SEAScore'"></field-definition></p>
+                                <p class="text-center" *ngSwitchCase="'Transportation Nexus Score'">
+                                    <field-definition [fieldDefinitionType]="'TPIScore'"></field-definition>
+                                </p>
+                                <p class="text-center" *ngSwitchCase="'Receiving Water Score'">
+                                    <field-definition [fieldDefinitionType]="'ReceivingWaterScore'"></field-definition>
+                                </p>
+                                <p class="text-center" *ngSwitchCase="'Land Use Based Water Quality Need Score'">
+                                    <field-definition [fieldDefinitionType]="'LandUseBasedWaterQualityScore'"></field-definition>
+                                </p>
+                                <p class="text-center" *ngSwitchDefault></p>
+                            </ng-container>
+                            <h4>Legend</h4>
+                            <ul class="legend">
+                                <li *ngFor="let legendColor of selectedPrioritizationMetric.legendColors; index as i">
+                                    <i [style.background]="legendColor"></i>
+                                    <span class="legend-text">{{ selectedPrioritizationMetric.legendValues[i] }}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">Selected Project</h3>
+                </div>
+                <div *ngIf="selectedProject; else noProjectSelected" class="card-body">
+                    <div class="flex-between">
+                        <div class="content-section">Project</div>
+                        <div class="flex-end">
+                            <a [routerLink]="['/planning/projects', selectedProject.ProjectID]" class="btn btn-sm btn-primary ml-auto">View Project Details</a>
+                        </div>
+                    </div>
+                    <dl class="grid-12 mt-3">
+                        <dt class="g-col-4">Name</dt>
+                        <dd class="g-col-8">
+                            {{ selectedProject.ProjectName }}
+                        </dd>
+
+                        <dt class="g-col-4">Jurisdiction</dt>
+                        <dd class="g-col-8">
+                            {{ selectedProject.StormwaterJurisdiction.Organization.OrganizationName }}
+                        </dd>
+                    </dl>
+                    <ng-container *ngIf="selectedTreatmentBMP != null">
+                        <hr />
+                        <div class="content-section">Selected BMP</div>
+                        <dl class="grid-12 mt-2">
+                            <dt class="g-col-4">Name</dt>
+                            <dd class="g-col-8">
+                                {{ selectedTreatmentBMP.TreatmentBMPName }}
+                            </dd>
+
+                            <dt class="g-col-4">
+                                <field-definition fieldDefinitionType="TreatmentBMPType" [labelOverride]="'Type'"> </field-definition>
+                            </dt>
+                            <dd class="g-col-8">
+                                {{ selectedTreatmentBMP.TreatmentBMPTypeName }}
+                            </dd>
+
+                            <dt class="g-col-4">Status</dt>
+                            <dd class="g-col-8">
+                                {{ selectedProject.ProjectStatus.ProjectStatusDisplayName }}
+                            </dd>
+                            <ng-container *ngIf="selectedDelineation != null">
+                                <strong>Delineation</strong>
+                                <dt class="g-col-4">
+                                    <field-definition fieldDefinitionType="Area"></field-definition>
+                                </dt>
+                                <dd class="g-col-8">{{ selectedDelineation.DelineationArea }} ac</dd>
+
+                                <dt class="g-col-4">
+                                    <field-definition fieldDefinitionType="DelineationType" [labelOverride]="'Type'"></field-definition>
+                                </dt>
+                                <dd class="g-col-8">
+                                    {{ selectedDelineation.DelineationTypeName }}
+                                </dd>
+                            </ng-container>
+                        </dl>
+                    </ng-container>
+                    <ng-container *ngIf="relatedTreatmentBMPs.length != 0">
+                        <hr />
+                        <div class="content-section">Other BMPs</div>
+                        <dl class="grid-12 mt-2">
+                            <ng-container *ngFor="let bmp of getRelatedBMPsToShow()">
+                                <dt class="g-col-4 mb-1">
+                                    <button class="btn btn-primary btn-sm" (click)="selectTreatmentBMPImpl(bmp.TreatmentBMPID)">Select</button>
+                                </dt>
+                                <dd class="g-col-8 mb-1">
+                                    {{ bmp.TreatmentBMPName }}
+                                </dd>
+                            </ng-container>
+                            <div class="col font-italic" *ngIf="getRelatedBMPsToShow().length == 0">There are no other BMPs associated with this project.</div>
+                        </dl>
+                    </ng-container>
+                </div>
+                <ng-template #noProjectSelected>
+                    <div class="card-body">
+                        Select a Treatment BMP on the map to see information about the Treatment BMP, its Project and related Treatment BMPs, and Delineation if present.
+                        Alternatively, select a row in the grid below to bring up the selected project and choose a BMP from the populated panel.
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+        <div class="g-col-9">
+            <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false" *ngIf="boundingBox$ | async as boundingBox" [boundingBox]="boundingBox">
+                <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
+                <stormwater-network-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></stormwater-network-layer>
+                <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
+                <wqmps-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-layer>
+                <delineations-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></delineations-layer>
+                <inventoried-bmps-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></inventoried-bmps-layer>
+            </neptune-map>
+            <neptune-grid
+                *ngIf="octaM2Tier2MapInitData$ | async"
+                height="700px"
+                [rowData]="projects"
+                [columnDefs]="columnDefs"
+                rowSelection="single"
+                [downloadFileName]="'OCTA-M2-Tier2-projects'"
+                (selectionChanged)="onSelectionChanged()"
+                (gridReady)="onGridReady($event)">
+                <div customGridActionsRight class="custom-grid-actions">
+                    <a
+                        href="javascript:void(0);"
+                        [dropdownToggle]="downloadMenuToggle"
+                        class="btn btn-sm btn-outline-primary dropdown-toggle"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                        <i class="fas fa-chevron-down mr-2"></i>Download
+                    </a>
+
+                    <div #downloadMenuToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" (click)="downloadProjectModelResults()">Project List with Model Results</a>
+                        <a class="dropdown-item" (click)="downloadTreatmentBMPModelResults()">Treatment BMP List with Model Results</a>
+                    </div>
+                </div>
+            </neptune-grid>
+        </div>
+    </div>
+</section>

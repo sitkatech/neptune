@@ -1,0 +1,64 @@
+<ng-container *ngIf="progress$ | async as progressDto">
+    <div class="sidebar-header">
+        <h5 class="sidebar-title">
+            <div>
+                <p>Project Name: &nbsp;</p>
+                <div *ngIf="progressDto?.ProjectID; then hasName; else noName"></div>
+                <ng-template #hasName>
+                    <p>
+                        <strong>{{ progressDto.ProjectName }}</strong>
+                    </p>
+                </ng-template>
+                <ng-template #noName>
+                    <p><strong>Project Name Here</strong></p>
+                </ng-template>
+            </div>
+        </h5>
+    </div>
+
+    <workflow-nav>
+        <workflow-nav-item
+            [navRouterLink]="['instructions']"
+            [complete]="progressDto.Steps.Instructions.Completed"
+            [disabled]="progressDto.Steps.Instructions.Disabled"
+            [required]="false">
+            Instructions
+        </workflow-nav-item>
+        <workflow-nav-item [navRouterLink]="['project-basics']" [complete]="progressDto.Steps.BasicInfo.Completed" [disabled]="progressDto.Steps.BasicInfo.Disabled">
+            Basic Information
+        </workflow-nav-item>
+        <workflow-nav-item
+            [navRouterLink]="['stormwater-treatments', 'treatment-bmps']"
+            [complete]="progressDto.Steps.TreatmentBMPs.Completed"
+            [disabled]="progressDto.Steps.TreatmentBMPs.Disabled">
+            Treatment BMPs
+        </workflow-nav-item>
+        <workflow-nav-item
+            [navRouterLink]="['stormwater-treatments', 'delineations']"
+            [complete]="progressDto.Steps.Delineations.Completed"
+            [disabled]="progressDto.Steps.Delineations.Disabled">
+            Delineations
+        </workflow-nav-item>
+        <workflow-nav-item
+            [navRouterLink]="['stormwater-treatments', 'modeled-performance-and-metrics']"
+            [complete]="progressDto.Steps.ModeledPerformanceAndGrantMetrics.Completed"
+            [disabled]="progressDto.Steps.ModeledPerformanceAndGrantMetrics.Disabled">
+            Modeled Performance and Grant Metrics
+        </workflow-nav-item>
+        <workflow-nav-item
+            [navRouterLink]="['attachments']"
+            [complete]="progressDto.Steps.Attachments.Completed"
+            [disabled]="progressDto.Steps.Attachments.Disabled"
+            [required]="false">
+            Attachments
+        </workflow-nav-item>
+        <workflow-nav-item
+            [navRouterLink]="['review-and-share']"
+            [complete]="true"
+            [complete]="progressDto.Steps.ReviewAndShare.Completed"
+            [disabled]="progressDto.Steps.ReviewAndShare.Disabled"
+            [required]="false">
+            Review and Share
+        </workflow-nav-item>
+    </workflow-nav>
+</ng-container>

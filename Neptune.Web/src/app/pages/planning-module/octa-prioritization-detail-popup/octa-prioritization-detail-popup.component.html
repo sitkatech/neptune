@@ -1,0 +1,43 @@
+<h3>Basics</h3>
+<dl class="grid-12 mb-0">
+    <dt class="g-col-6">Catch IDN</dt>
+    <dd class="g-col-6">
+        {{ feature.properties.CatchIDN }}
+    </dd>
+    <dt class="g-col-6">Watershed</dt>
+    <dd class="g-col-6">
+        {{ feature.properties.Watershed }}
+    </dd>
+</dl>
+<h3>Prioritization Metrics</h3>
+<dl class="grid-12 mb-0">
+    <dt class="g-col-8">Transportation Nexus</dt>
+    <dd class="g-col-4">
+        {{ feature.properties.TransportationNexusScore | number : "0.0-2" }}
+    </dd>
+    <dt class="g-col-8">Land Use Based Water Quality Need</dt>
+    <dd class="g-col-4">
+        {{ feature.properties.LandUseBasedWaterQualityNeedScore | number : "0.0-2" }}
+    </dd>
+    <dt class="g-col-8">Receiving Water</dt>
+    <dd class="g-col-4">
+        {{ feature.properties.ReceivingWaterScore | number : "0.0-2" }}
+    </dd>
+    <dt class="g-col-8">Strategically Effective Area</dt>
+    <dd class="g-col-4">
+        {{ feature.properties.StrategicallyEffectiveAreaScore | number : "0.0-2" }}
+    </dd>
+</dl>
+<h3>Pollutant Contribution Percentages</h3>
+<dl class="grid-12 mb-0">
+    <dt class="g-col-6">Bacteria</dt>
+    <dd class="g-col-6">{{ feature.properties.PC_BAC_PCT }}%</dd>
+    <dt class="g-col-6">Metals</dt>
+    <dd class="g-col-6">{{ feature.properties.PC_MET_PCT }}%</dd>
+    <dt class="g-col-6">Nutrients</dt>
+    <dd class="g-col-6">{{ feature.properties.PC_NUT_PCT }}%</dd>
+    <dt class="g-col-6">Sediment (TSS)</dt>
+    <dd class="g-col-6">{{ feature.properties.PC_TSS_PCT }}%</dd>
+    <dt class="g-col-6">Volume</dt>
+    <dd class="g-col-6">{{ feature.properties.PC_VOL_PCT }}%</dd>
+</dl>

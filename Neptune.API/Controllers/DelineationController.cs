@@ -10,18 +10,19 @@ using Microsoft.Extensions.Options;
 namespace Neptune.API.Controllers
 {
     [ApiController]
-    public class DelineationController : SitkaController<DelineationController>
+    [Route("delineations")]
+    public class DelineationController(
+        NeptuneDbContext dbContext,
+        ILogger<DelineationController> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<DelineationController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        public DelineationController(NeptuneDbContext dbContext, ILogger<DelineationController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration) : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-        }
-
-        [HttpGet("delineations")]
+        [HttpGet]
         [JurisdictionEditFeature]
         public ActionResult<List<DelineationDto>> List()
         {
-            var person = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var delineationsUpsertDtos = Delineations.ListByPersonIDAsDto(_dbContext, person.PersonID);
+            var delineationsUpsertDtos = Delineations.ListByPersonIDAsDto(DbContext, CallingUser.PersonID);
             return Ok(delineationsUpsertDtos);
         }
     }

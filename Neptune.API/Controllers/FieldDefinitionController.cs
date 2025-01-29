@@ -11,33 +11,35 @@ using Neptune.Models.DataTransferObjects;
 namespace Neptune.API.Controllers
 {
     [ApiController]
-    public class FieldDefinitionController : SitkaController<FieldDefinitionController>
+    [Route("field-definitions")]
+    public class FieldDefinitionController(
+        NeptuneDbContext dbContext,
+        ILogger<FieldDefinitionController> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<FieldDefinitionController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        public FieldDefinitionController(NeptuneDbContext dbContext, ILogger<FieldDefinitionController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration) : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-        }
-
-        [HttpGet("/fieldDefinitions")]
+        [HttpGet]
         public ActionResult<List<FieldDefinitionDto>> List()
         {
-            var fieldDefinitionDtos = FieldDefinitions.List(_dbContext);
+            var fieldDefinitionDtos = FieldDefinitions.List(DbContext);
             return fieldDefinitionDtos;
         }
 
 
-        [HttpGet("fieldDefinitions/{fieldDefinitionTypeID}")]
+        [HttpGet("{fieldDefinitionTypeID}")]
         public ActionResult<FieldDefinitionDto> Get([FromRoute] int fieldDefinitionTypeID)
         {
-            var fieldDefinitionDto = FieldDefinitions.GetByFieldDefinitionTypeID(_dbContext, fieldDefinitionTypeID);
+            var fieldDefinitionDto = FieldDefinitions.GetByFieldDefinitionTypeID(DbContext, fieldDefinitionTypeID);
             return RequireNotNullThrowNotFound(fieldDefinitionDto, "FieldDefinition", fieldDefinitionTypeID);
         }
 
-        [HttpPut("fieldDefinitions/{fieldDefinitionTypeID}")]
+        [HttpPut("{fieldDefinitionTypeID}")]
         [AdminFeature]
         public async Task<ActionResult<FieldDefinitionDto>> Update([FromRoute] int fieldDefinitionTypeID,
             [FromBody] FieldDefinitionDto fieldDefinitionUpdateDto)
         {
-            var fieldDefinitionDto = EFModels.Entities.FieldDefinitions.GetByFieldDefinitionTypeID(_dbContext, fieldDefinitionTypeID);
+            var fieldDefinitionDto = EFModels.Entities.FieldDefinitions.GetByFieldDefinitionTypeID(DbContext, fieldDefinitionTypeID);
             if (ThrowNotFound(fieldDefinitionDto, "FieldDefinition", fieldDefinitionTypeID, out var actionResult))
             {
                 return actionResult;
@@ -48,7 +50,7 @@ namespace Neptune.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var updatedFieldDefinitionDto = await FieldDefinitions.Update(_dbContext, fieldDefinitionTypeID, fieldDefinitionUpdateDto);
+            var updatedFieldDefinitionDto = await FieldDefinitions.Update(DbContext, fieldDefinitionTypeID, fieldDefinitionUpdateDto);
             return Ok(updatedFieldDefinitionDto);
         }
     }

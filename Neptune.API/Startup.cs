@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Neptune.API.Services;
 using Neptune.API.Services.Filter;
+using Neptune.API.Services.Middleware;
 using Neptune.Common.Email;
 using Neptune.Common.JsonConverters;
 using Neptune.Common.Services;
@@ -71,8 +72,7 @@ namespace Neptune.API
             services.Configure<NeptuneJobConfiguration>(Configuration);
             services.Configure<SendGridConfiguration>(Configuration);
             var configuration = Configuration.Get<NeptuneConfiguration>();
-
-            var keystoneHost = configuration.KeystoneOpenIDUrl;
+            services.AddSingleton(Configuration);
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -88,7 +88,7 @@ namespace Neptune.API
                         options.TokenValidationParameters.ValidateIssuer = false;
                     }
                     options.TokenValidationParameters.ValidateAudience = false;
-                    options.Authority = keystoneHost;
+                    options.Authority = configuration.KeystoneOpenIDUrl;
                     options.RequireHttpsMetadata = false;
                     options.SecurityTokenValidators.Clear();
                     options.SecurityTokenValidators.Add(new JwtSecurityTokenHandler
@@ -107,7 +107,54 @@ namespace Neptune.API
                     x.UseNetTopologySuite();
                 });
             });
+            services.AddTransient(s => new KeystoneService(s.GetService<IHttpContextAccessor>(), configuration.KeystoneOpenIDUrl));
 
+            AddExternalHttpClientServices(services, configuration);
+
+            services.AddScoped<AzureBlobStorageService>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext);
+            services.AddScoped(s => UserContext.GetUserFromHttpContext(s.GetService<NeptuneDbContext>(), s.GetService<IHttpContextAccessor>().HttpContext));
+
+            #region Sendgrid
+            services.AddSendGrid(options => { options.ApiKey = configuration.SendGridApiKey; });
+            services.AddSingleton<SitkaSmtpClientService>();
+            #endregion
+
+            #region Hangfire
+            services.AddHangfire(x => x
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(configuration.DatabaseConnectionString, new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
+
+            services.AddHangfireServer(x =>
+            {
+                x.WorkerCount = 1;
+            });
+            #endregion
+
+            #region Swagger
+            // Base swagger services
+            services.AddSwaggerGen(options =>
+            {
+                // extra options here if you wanted
+            });
+            #endregion
+
+            services.AddHealthChecks().AddDbContextCheck<NeptuneDbContext>();
+        }
+
+        private static void AddExternalHttpClientServices(IServiceCollection services, NeptuneConfiguration configuration)
+        {
             services.AddHttpClient<NereidService>(c =>
             {
                 c.BaseAddress = new Uri(configuration.NereidUrl);
@@ -163,47 +210,6 @@ namespace Neptune.API
 
                 return httpClientHandler;
             });
-
-
-            services.AddTransient(s => new KeystoneService(s.GetService<IHttpContextAccessor>(), keystoneHost));
-
-            services.AddSendGrid(options => { options.ApiKey = configuration.SendGridApiKey; });
-            services.AddSingleton<SitkaSmtpClientService>();
-
-            services.AddHttpContextAccessor();
-            services.AddScoped<AzureBlobStorageService>();
-            services.AddControllers();
-
-            #region Hangfire
-            services.AddHangfire(x => x
-                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-                .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings()
-                .UseSqlServerStorage(configuration.DatabaseConnectionString, new SqlServerStorageOptions
-                {
-                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-                    QueuePollInterval = TimeSpan.Zero,
-                    UseRecommendedIsolationLevel = true,
-                    DisableGlobalLocks = true
-                }));
-
-            services.AddHangfireServer(x =>
-            {
-                x.WorkerCount = 1;
-            });
-            #endregion
-
-
-            #region Swagger
-            // Base swagger services
-            services.AddSwaggerGen(options =>
-            {
-                // extra options here if you wanted
-            });
-            #endregion
-
-            services.AddHealthChecks().AddDbContextCheck<NeptuneDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -226,7 +232,6 @@ namespace Neptune.API
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseMiddleware<ExceptionMiddleware>();
             app.UseRouting();
             app.UseCors(policy =>
             {
@@ -239,6 +244,8 @@ namespace Neptune.API
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseMiddleware<EntityNotFoundMiddleware>();
+            app.UseMiddleware<LogHelper>();
 
             #region Hangfire
             app.UseHangfireDashboard("/hangfire", new DashboardOptions()

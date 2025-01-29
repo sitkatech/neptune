@@ -8,16 +8,19 @@ using Microsoft.Extensions.Options;
 
 namespace Neptune.API.Controllers
 {
-    public class OrganizationController : SitkaController<OrganizationController>
+    [ApiController]
+    [Route("organizations")]
+    public class OrganizationController(
+        NeptuneDbContext dbContext,
+        ILogger<OrganizationController> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<OrganizationController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        public OrganizationController(NeptuneDbContext dbContext, ILogger<OrganizationController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration) : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-        }
-
-        [HttpGet("organizations")]
+        [HttpGet]
         public ActionResult<List<OrganizationSimpleDto>> List()
         {
-            var organizationSimpleDtos = Organizations.ListAsSimpleDtos(_dbContext);
+            var organizationSimpleDtos = Organizations.ListAsSimpleDtos(DbContext);
             return Ok(organizationSimpleDtos);
         }
     }

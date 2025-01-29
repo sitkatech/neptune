@@ -11,6 +11,7 @@
  */
 import { TreatmentBMPModelingAttributeDefinitionDto } from '././treatment-bmp-modeling-attribute-definition-dto';
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class TreatmentBMPTypeWithModelingAttributesDto { 
     TreatmentBMPTypeID?: number;
     TreatmentBMPTypeName?: string;
@@ -19,4 +20,54 @@ export class TreatmentBMPTypeWithModelingAttributesDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface TreatmentBMPTypeWithModelingAttributesDtoForm { 
+    TreatmentBMPTypeID?: FormControl<number>;
+    TreatmentBMPTypeName?: FormControl<string>;
+    TreatmentBMPModelingTypeID?: FormControl<number>;
+    TreatmentBMPModelingAttributes?: FormControl<Array<TreatmentBMPModelingAttributeDefinitionDto>>;
+}
+
+export class TreatmentBMPTypeWithModelingAttributesDtoFormControls { 
+    public static TreatmentBMPTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPTypeName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPModelingTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPModelingAttributes = (value: FormControlState<Array<TreatmentBMPModelingAttributeDefinitionDto>> | Array<TreatmentBMPModelingAttributeDefinitionDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<TreatmentBMPModelingAttributeDefinitionDto>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

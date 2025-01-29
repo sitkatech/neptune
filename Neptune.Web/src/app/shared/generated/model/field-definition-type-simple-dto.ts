@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class FieldDefinitionTypeSimpleDto { 
     FieldDefinitionTypeID?: number;
     FieldDefinitionTypeName?: string;
@@ -17,4 +18,43 @@ export class FieldDefinitionTypeSimpleDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface FieldDefinitionTypeSimpleDtoForm { 
+    FieldDefinitionTypeID?: FormControl<number>;
+    FieldDefinitionTypeName?: FormControl<string>;
+    FieldDefinitionTypeDisplayName?: FormControl<string>;
+}
+
+export class FieldDefinitionTypeSimpleDtoFormControls { 
+    public static FieldDefinitionTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FieldDefinitionTypeName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FieldDefinitionTypeDisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

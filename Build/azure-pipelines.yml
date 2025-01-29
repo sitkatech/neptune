@@ -13,7 +13,6 @@ variables:
   keyVaultName: 'neptune-keyvault-$(Environment)'
   storageAccountName: 'neptuneapp$(Environment)'
   storageAccountNameProd: 'neptuneappprod'
-  # storageAccountNameDev: 'neptuneappdev'
 
   databaseName: 'NeptuneDB'
   databaseEdition: 'Standard'
@@ -23,7 +22,8 @@ variables:
 
   # define these in the pipelines:
   # domainApi: 'api-neptune.esa-$(Environment).sitkatech.com'
-  # domainWeb: 'neptune-planning.esa-$(Environment).sitkatech.com'
+  # domainWeb: 'neptune-web.esa-$(Environment).sitkatech.com'
+  # domainPlanning: 'neptune-planning.esa-$(Environment).sitkatech.com'
   # domainGeoserver: 'geoserver-neptune.esa-$(Environment).sitkatech.com'
   # domainWebMvc: 'neptune.esa-$(Environment).sitkatech.com'
 
@@ -270,6 +270,11 @@ stages:
           -var "dbServerName=$(kv-dbServerName)" 
           -var "datadogApiKey=$(kv-datadogApiKey)" 
           -var "datadogAppKey=$(kv-datadogAppKey)" 
+          -var "domainApi=$(domainApi)" 
+          -var "domainWeb=$(domainWeb)" 
+          -var "environment=$(Environment)" 
+          -var "domainGeoserver=$(domainGeoserver)" 
+          -var "domainWebMvc=$(domainWebMvc)" 
           -var "databaseName=$(databaseName)" 
           -var "databaseEdition=$(databaseEdition)" 
           -var "databaseTier=$(databaseTier)" 
@@ -279,12 +284,7 @@ stages:
           -var "databaseResourceGroup=$(kv-databaseResourceGroup)" 
           -var "sqlApiUsername=$(sqlApiUsername)" 
           -var "sqlGeoserverUsername=$(sqlGeoserverUsername)" 
-          -var "domainWeb=$(domainWeb)" 
-          -var "domainApi=$(domainApi)" 
-          -var "domainWebMvc=$(domainWebMvc)" 
-          -var "domainGeoserver=$(domainGeoserver)" 
-          -var "environment=$(Environment)" 
-          -var "storageAccountNameDev=$(storageAccountNameDev)" 
+          -var "storageAccountDevApplicationName=$(storageAccountDevApplicationName)" 
           -var "team=$(team)" 
           -var "projectNumber=$(projectNumber)" 
           -var "elasticPoolName=$(kv-elasticPoolName)" 
@@ -376,7 +376,6 @@ stages:
       variables: 
         APPLICATION_STORAGE_ACCOUNT_KEY: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.APPLICATION_STORAGE_ACCOUNT_KEY'] ]
       steps:
-
       - template: azure-pipelines/templates/blob-storage-restore/blob-storage-restore.yml@BuildTemplates 
         parameters:
           subscription: '$(azureSubscription)'
@@ -386,7 +385,6 @@ stages:
           toStorageAccountName: '$(storageAccountName)'
           toStorageAccountKey: '$(APPLICATION_STORAGE_ACCOUNT_KEY)'
             
-
 - stage: DeployDB
   displayName: Deploy Database 
   dependsOn: DeployTerraform
@@ -663,17 +661,18 @@ stages:
               overrideValues: |
                 global.domains.api="$(domainApi)"
                 global.domains.web="$(domainWeb)"
-                global.domains.webmvc="$(domainWebMvc)"
                 global.domains.geoserver="$(domainGeoserver)"
+                global.domains.webmvc="$(domainWebMvc)"
+                global.domains.planning="$(domainPlanning)"
                 global.env.name="$(Environment)"
-                global.env.dbServer=$(kv-dbServerName).database.windows.net
-                global.env.databaseName=$(databaseName)
-                global.env.sqlUsername=$(sqlApiUsername)
-                global.env.sqlGeoserverUsername=$(sqlGeoserverUsername)
                 global.secrets.geoserverSqlServerPassword="$(SQL_GEOSERVER_PASSWORD)"
                 global.secrets.geoserverAdminPassword="$(GEOSERVER_ADMIN_PASSWORD)"
                 global.secrets.applicationStorageAccountName="$(storageAccountName)"
                 global.secrets.applicationStorageAccountKey="$(APPLICATION_STORAGE_ACCOUNT_KEY)"
+                global.env.dbServer=$(kv-dbServerName).database.windows.net
+                global.env.databaseName=$(databaseName)
+                global.env.sqlUsername=$(sqlApiUsername)
+                global.env.sqlGeoserverUsername=$(sqlGeoserverUsername)
                 global.secrets.hangfirePassword="$(HANGFIRE_PASSWORD)"
                 global.secrets.keystoneOpenIDClientSecret="$(keystoneOpenIDClientSecret)"
                 global.secrets.recaptchaV3SiteKey="$(recaptchaV3SiteKey)"

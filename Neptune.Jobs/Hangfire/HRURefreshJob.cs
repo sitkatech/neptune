@@ -1,6 +1,7 @@
 ﻿using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Jobs.EsriAsynchronousJob;
 using Neptune.Jobs.Services;
@@ -8,18 +9,14 @@ using System.Diagnostics;
 
 namespace Neptune.Jobs.Hangfire;
 
-public class HRURefreshJob
+public class HRURefreshJob(
+    IOptions<NeptuneJobConfiguration> configuration,
+    ILogger<HRURefreshJob> logger,
+    NeptuneDbContext dbContext,
+    OCGISService ocgisService)
+    : BlobStorageWritingJob<HRURefreshJob>(configuration, logger, dbContext)
 {
-    private readonly ILogger<HRURefreshJob> _logger;
-    private readonly NeptuneDbContext _dbContext;
-    private readonly OCGISService _ocgisService;
-
-    public HRURefreshJob(ILogger<HRURefreshJob> logger, NeptuneDbContext dbContext, OCGISService ocgisService)
-    {
-        _logger = logger;
-        _dbContext = dbContext;
-        _ocgisService = ocgisService;
-    }
+    public const string LandUseStatisticsFileName = "LandUseStatistics.json";
 
     public async Task RunJob(int? maxTimeAllowed)
     {
@@ -32,27 +29,27 @@ public class HRURefreshJob
         var stopwatch = new Stopwatch();
         stopwatch.Start();
 
-        var loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit = _dbContext.vLoadGeneratingUnitUpdateCandidates.ToList().GroupBy(x => x.SpatialGridUnitID);
+        var loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit = DbContext.vLoadGeneratingUnitUpdateCandidates.ToList().GroupBy(x => x.SpatialGridUnitID);
 
         foreach (var group in loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit.OrderByDescending(x => x.Count()))
         {
             try
             {
                 var loadGeneratingUnitIDs = group.Select(x => x.PrimaryKey);
-                await _dbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
+                await DbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
                         .Contains(x.LoadGeneratingUnitID))
                     .ExecuteUpdateAsync(x => x.SetProperty(y => y.DateHRURequested, DateTime.UtcNow));
-                var hruResponseResult = await ProcessHRUsForLGUs(group, _ocgisService, false);
+                var hruResponseResult = await ProcessHRUsForLGUs(group, ocgisService, false);
 
                 var hruResponseFeatures = hruResponseResult.HRUResponseFeatures;
                 if (!hruResponseFeatures.Any())
                 {
                     var lguIDsWithProblems = hruResponseResult.LoadGeneratingUnitIDs;
-                    await _dbContext.LoadGeneratingUnits.Where(x =>
+                    await DbContext.LoadGeneratingUnits.Where(x =>
                             lguIDsWithProblems.Contains(x.LoadGeneratingUnitID))
                         .ExecuteUpdateAsync(x => x.SetProperty(y => y.IsEmptyResponseFromHRUService, true));
 
-                    _logger.LogWarning($"No data for LGUs with these IDs: {string.Join(", ", lguIDsWithProblems)}");
+                    Logger.LogWarning($"No data for LGUs with these IDs: {string.Join(", ", lguIDsWithProblems)}");
                 }
 
                 var hruCharacteristics = hruResponseFeatures.Select(x =>
@@ -64,13 +61,13 @@ public class HRURefreshJob
                     SetHRUCharacteristicProperties(x, hruCharacteristic);
                     return hruCharacteristic;
                 });
-                _dbContext.HRUCharacteristics.AddRange(hruCharacteristics);
-                await _dbContext.SaveChangesAsync();
+                DbContext.HRUCharacteristics.AddRange(hruCharacteristics);
+                await DbContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
                 // this batch failed, but we don't want to give up the whole job.
-                _logger.LogWarning(ex.Message);
+                Logger.LogWarning(ex.Message);
             }
 
             if (maxTimeAllowed.HasValue && stopwatch.Elapsed.Minutes > maxTimeAllowed.Value)
@@ -84,6 +81,12 @@ public class HRURefreshJob
             }
         }
 
+        if (!maxTimeAllowed.HasValue)
+        {
+            // this implies a full hru refresh was run; let's go ahead and cache the hru results
+            var list = DbContext.vPowerBILandUseStatistics.ToList();
+            await SerializeAndUploadToBlobStorage(list, LandUseStatisticsFileName);
+        }
         ExecuteNetworkSolveJobIfNeeded();
 
         stopwatch.Stop();
@@ -103,11 +106,11 @@ public class HRURefreshJob
     private void ExecuteNetworkSolveJobIfNeeded()
     {
         var updatedRegionalSubbasins =
-            _dbContext.RegionalSubbasins.AsNoTracking().Where(x => x.LastUpdate != null).ToList();
+            DbContext.RegionalSubbasins.AsNoTracking().Where(x => x.LastUpdate != null).ToList();
         var lastRegionalSubbasinUpdateDate = updatedRegionalSubbasins.Any()
             ? updatedRegionalSubbasins.Max(x => x.LastUpdate.Value)
             : DateTime.MinValue;
-        var updatedNereidResults = _dbContext.NereidResults.AsNoTracking().Where(x => x.LastUpdate != null).ToList();
+        var updatedNereidResults = DbContext.NereidResults.AsNoTracking().Where(x => x.LastUpdate != null).ToList();
         var lastNereidResultUpdateDate = updatedNereidResults.Any()
             ? updatedNereidResults.Max(x => x.LastUpdate.Value)
             : DateTime.MinValue;
@@ -116,7 +119,7 @@ public class HRURefreshJob
         {
             BackgroundJob.Enqueue<TotalNetworkSolveScheduledBackgroundJob>(x => x.RunJob(null));
         }
-        else if (_dbContext.DirtyModelNodes.AsNoTracking().Any())
+        else if (DbContext.DirtyModelNodes.AsNoTracking().Any())
         {
             BackgroundJob.Enqueue<DeltaSolveJob>(x => x.RunJob());
         }

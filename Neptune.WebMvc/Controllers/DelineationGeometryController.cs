@@ -121,6 +121,17 @@ namespace Neptune.WebMvc.Controllers
                 // todo: Run MakeValid "update dbo.DelineationStaging set Geometry = Geometry.MakeValid() where Geometry.STIsValid() = 0";
 
                 var validDelineationStagings = delineationStagings.Where(x => x.Geometry is { IsValid: true, Area: > 0 }).ToList();
+
+                var centralizedDelineations = _dbContext.Delineations.AsNoTracking()
+                    .Where(x => x.DelineationTypeID == (int)DelineationTypeEnum.Centralized)
+                    .Include(x => x.TreatmentBMP).Select(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+
+                var centralized = validDelineationStagings.Select(x => x.TreatmentBMPName).Intersect(centralizedDelineations).ToList();
+                if (centralized.Any())
+                {
+                    throw new Exception(
+                        $"This file contains the following treatment BMPs that have centralized delineations: {string.Join(", ", centralized)}. The file is invalid and cannot be uploaded.");
+                }
                 if (validDelineationStagings.Any())
                 {
                     await _dbContext.DelineationStagings.Where(x => x.UploadedByPersonID == CurrentPerson.PersonID).ExecuteDeleteAsync();
@@ -135,6 +146,11 @@ namespace Neptune.WebMvc.Controllers
                 {
                     ModelState.AddModelError("",
                         "The columns in the uploaded file did not match the Delineation schema. The file is invalid and cannot be uploaded.");
+                }
+                else if (e.Message.Contains("Centralized",
+                        StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ModelState.AddModelError("", e.Message);
                 }
                 else
                 {
@@ -180,26 +196,18 @@ namespace Neptune.WebMvc.Controllers
             var stormwaterJurisdiction = _dbContext.StormwaterJurisdictions.Include(x => x.Organization)
                 .Single(x => x.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID)
                 .GetOrganizationDisplayName();
-            var distributedFeatureCollection = new FeatureCollection();
-            var centralizedFeatureCollection = new FeatureCollection();
-            var distributedDelineations = _dbContext.Delineations.Include(x => x.TreatmentBMP)
+            var featureCollection = new FeatureCollection();
+            var delineations = _dbContext.Delineations.Include(x => x.TreatmentBMP)
                     .ThenInclude(x => x.StormwaterJurisdiction)
                         .ThenInclude(x => x.Organization)
                 .Include(x => x.TreatmentBMP)
                     .ThenInclude(x => x.TreatmentBMPType)
                 .Where(x =>
+                        x.TreatmentBMP.ProjectID == null &&
                 x.TreatmentBMP.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID &&
-                x.DelineationTypeID == (int)DelineationTypeEnum.Distributed).ToList();
-            var centralizedDelineations = _dbContext.Delineations.Include(x => x.TreatmentBMP)
-                .ThenInclude(x => x.StormwaterJurisdiction)
-                .ThenInclude(x => x.Organization)
-                .Include(x => x.TreatmentBMP)
-                .ThenInclude(x => x.TreatmentBMPType)
-                .Where(x =>
-                    x.TreatmentBMP.StormwaterJurisdictionID == viewModel.StormwaterJurisdictionID &&
-                    x.DelineationTypeID == (int)DelineationTypeEnum.Centralized).ToList();
+                x.DelineationTypeID == viewModel.DelineationTypeID).ToList();
 
-            foreach (var delineation in distributedDelineations)
+            foreach (var delineation in delineations)
             {
                 var attributesTable = new AttributesTable
                 {
@@ -212,50 +220,27 @@ namespace Neptune.WebMvc.Controllers
                     { "DateOfLastDelineationModification", delineation.DateLastModified },
                     { "DateOfLastDelineationVerification", delineation.DateLastVerified },
                 };
-                distributedFeatureCollection.Add(new Feature(delineation.DelineationGeometry, attributesTable));
+                featureCollection.Add(new Feature(delineation.DelineationGeometry, attributesTable));
             }
-
-            foreach (var delineation in centralizedDelineations)
-            {
-                var attributesTable = new AttributesTable
-                {
-                    { "DelineationID", delineation.DelineationID },
-                    { "TreatmentBMPName", delineation.TreatmentBMP.TreatmentBMPName },
-                    { "Jurisdiction", delineation.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName() },
-                    { "BMPType", delineation.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName },
-                    { "DelineationStatus", delineation.GetDelineationStatus() },
-                    { "DelineationArea", delineation.GetDelineationArea() },
-                    { "DateOfLastDelineationModification", delineation.DateLastModified },
-                    { "DateOfLastDelineationVerification", delineation.DateLastVerified },
-                };
-                centralizedFeatureCollection.Add(new Feature(delineation.DelineationGeometry, attributesTable));
-            }
-
 
             var jurisdictionName = stormwaterJurisdiction.Replace(' ', '-');
+            var delineationTypeName = DelineationType.AllLookupDictionary[(int)viewModel.DelineationTypeID]
+                .DelineationTypeDisplayName;
 
             var gdbInput = new GdbInput()
             {
-                FileContents = GeoJsonSerializer.SerializeToByteArray(distributedFeatureCollection, GeoJsonSerializer.DefaultSerializerOptions),
-                LayerName = "distributed-delineations",
-                CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
-                GeometryTypeName = "POLYGON",
-            };
-
-            var gdbInput2 = new GdbInput()
-            {
-                FileContents = GeoJsonSerializer.SerializeToByteArray(centralizedFeatureCollection, GeoJsonSerializer.DefaultSerializerOptions),
-                LayerName = "centralized-delineations",
+                FileContents = GeoJsonSerializer.SerializeToByteArray(featureCollection, GeoJsonSerializer.DefaultSerializerOptions),
+                LayerName = $"{delineationTypeName.ToLower()}-delineations",
                 CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
                 GeometryTypeName = "POLYGON",
             };
             var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
             {
-                GdbInputs = new List<GdbInput> { gdbInput, gdbInput2 },
+                GdbInputs = new List<GdbInput> { gdbInput },
                 GdbName = $"{jurisdictionName}-delineation-export"
             });
 
-            return File(bytes, "application/zip", $"{jurisdictionName}-delineation-export.gdb.zip");
+            return File(bytes, "application/zip", $"{delineationTypeName.ToLower()}-{jurisdictionName}-delineation-export.gdb.zip");
         }
 
 
@@ -283,7 +268,7 @@ namespace Neptune.WebMvc.Controllers
             var gisUploadUrl = SitkaRoute<DelineationGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateDelineationGeometry());
 
             var viewData = new DownloadDelineationGeometryViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson,
-                newGisUploadUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson), gisUploadUrl);
+                newGisUploadUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson), gisUploadUrl, DelineationType.All);
             return RazorView<DownloadDelineationGeometry, DownloadDelineationGeometryViewData, DownloadDelineationGeometryViewModel>(viewData, viewModel);
         }
 

@@ -2,19 +2,21 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
+using Neptune.Jobs.Hangfire;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Models;
-using Neptune.Common.GeoSpatial;
-using System.Text.Json.Nodes;
+using Neptune.WebMvc.Services;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class PowerBIController : NeptuneBaseController<PowerBIController>
+    public class PowerBIController(
+        NeptuneDbContext dbContext,
+        ILogger<PowerBIController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        AzureBlobStorageService azureBlobStorageService)
+        : NeptuneBaseController<PowerBIController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public PowerBIController(NeptuneDbContext dbContext, ILogger<PowerBIController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet("{webServiceToken}")]
         [WebServiceNameAndDescription("Treatment Facility Parameterization",
                                             "This table can be joined to the ‘Treatment Facility Attributes’ table to indicate " +
@@ -174,10 +176,9 @@ namespace Neptune.WebMvc.Controllers
                                                 "<br/>" +
                                                 "The PowerBI file uses the ID columns(TreatmentBMPID, WaterQualityManagementPlanID) to group these slivers into pivot " +
                                                 "tables to report total area treated, land use composition and % impervious.")]
-        public JsonResult LandUseStatistics([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
+        public async Task<IActionResult> LandUseStatistics([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
-            var data = _dbContext.vPowerBILandUseStatistics.ToList();
-            return Json(data);
+            return await DisplayFileResource(HRURefreshJob.LandUseStatisticsFileName);
         }
 
         [HttpGet("{webServiceToken}")]
@@ -202,39 +203,39 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet("{webServiceToken}")]
-        [WebServiceNameAndDescriptionAttribute("Model Results", "Returns all pollutant runoff/reduction model results for all nodes in South Orange County.")]
-        public JsonResult ModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
+        [WebServiceNameAndDescriptionAttribute("Model Results",
+            "Returns all pollutant runoff/reduction model results for all nodes in South Orange County.")]
+        public async Task<IActionResult> ModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
-            var jobjects = _dbContext.NereidResults.Where(x=> !x.IsBaselineCondition).ToList()
-                .Select(x =>
-                {
-                    var jobject = GeoJsonSerializer.Deserialize<JsonObject>(x.FullResponse);
-                    jobject["TreatmentBMPID"] = x.TreatmentBMPID;
-                    jobject["WaterQualityManagementPlanID"] = x.WaterQualityManagementPlanID;
-                    jobject["DelineationID"] = x.DelineationID;
-                    jobject["RegionalSubbasinID"] = x.RegionalSubbasinID;
-                    return jobject;
-                }).ToList();
+            return await DisplayFileResource(TotalNetworkSolveJob.ModelResultsFileName);
+        }
 
-            return Json(jobjects);
+        private async Task<IActionResult> DisplayFileResource(string fileName)
+        {
+            if (await azureBlobStorageService.ExistsFromBlobStorage(fileName))
+            {
+                var contentDisposition = new System.Net.Mime.ContentDisposition
+                {
+                    FileName = fileName,
+                    Inline = false
+                };
+                Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+
+                var blobDownloadResult = await azureBlobStorageService.DownloadBlobFromBlobStorage(fileName);
+
+                return File(blobDownloadResult.Content.ToArray(), blobDownloadResult.Details.ContentType);
+            }
+            // Unhappy path - return an HTTP 404
+            // ---------------------------------
+            _logger.LogError($"File {fileName} Not Found. It may have been deleted.");
+            return new NotFoundResult();
         }
 
         [HttpGet("{webServiceToken}")]
         [WebServiceNameAndDescriptionAttribute("Baseline Model Results", "Returns all pollutant runoff/reduction model results for all nodes in South Orange County in the Baseline Condition.")]
-        public JsonResult BaselineModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
+        public async Task<IActionResult> BaselineModelResults([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
-            var jobjects = _dbContext.NereidResults.Where(x=> x.IsBaselineCondition).ToList()
-                .Select(x =>
-                {
-                    var jobject = GeoJsonSerializer.Deserialize<JsonObject>(x.FullResponse);
-                    jobject["TreatmentBMPID"] = x.TreatmentBMPID;
-                    jobject["WaterQualityManagementPlanID"] = x.WaterQualityManagementPlanID;
-                    jobject["DelineationID"] = x.DelineationID;
-                    jobject["RegionalSubbasinID"] = x.RegionalSubbasinID;
-                    return jobject;
-                }).ToList();
-
-            return Json(jobjects);
+            return await DisplayFileResource(TotalNetworkSolveJob.BaselineModelResultsFileName);
         }
     }
 

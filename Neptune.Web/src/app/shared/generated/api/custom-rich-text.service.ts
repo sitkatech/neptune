@@ -68,13 +68,13 @@ export class CustomRichTextService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public customRichTextCustomRichTextTypeIDGet(customRichTextTypeID: number, observe?: 'body', reportProgress?: boolean): Observable<NeptunePageDto>;
-    public customRichTextCustomRichTextTypeIDGet(customRichTextTypeID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NeptunePageDto>>;
-    public customRichTextCustomRichTextTypeIDGet(customRichTextTypeID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NeptunePageDto>>;
-    public customRichTextCustomRichTextTypeIDGet(customRichTextTypeID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public customRichTextsCustomRichTextTypeIDGet(customRichTextTypeID: number, observe?: 'body', reportProgress?: boolean): Observable<NeptunePageDto>;
+    public customRichTextsCustomRichTextTypeIDGet(customRichTextTypeID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NeptunePageDto>>;
+    public customRichTextsCustomRichTextTypeIDGet(customRichTextTypeID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NeptunePageDto>>;
+    public customRichTextsCustomRichTextTypeIDGet(customRichTextTypeID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (customRichTextTypeID === null || customRichTextTypeID === undefined) {
-            throw new Error('Required parameter customRichTextTypeID was null or undefined when calling customRichTextCustomRichTextTypeIDGet.');
+            throw new Error('Required parameter customRichTextTypeID was null or undefined when calling customRichTextsCustomRichTextTypeIDGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -94,7 +94,7 @@ export class CustomRichTextService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<NeptunePageDto>(`${this.basePath}/customRichText/${encodeURIComponent(String(customRichTextTypeID))}`,
+        return this.httpClient.get<NeptunePageDto>(`${this.basePath}/custom-rich-texts/${encodeURIComponent(String(customRichTextTypeID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -112,13 +112,13 @@ export class CustomRichTextService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public customRichTextCustomRichTextTypeIDPut(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe?: 'body', reportProgress?: boolean): Observable<NeptunePageDto>;
-    public customRichTextCustomRichTextTypeIDPut(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NeptunePageDto>>;
-    public customRichTextCustomRichTextTypeIDPut(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NeptunePageDto>>;
-    public customRichTextCustomRichTextTypeIDPut(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public customRichTextsCustomRichTextTypeIDPut(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe?: 'body', reportProgress?: boolean): Observable<NeptunePageDto>;
+    public customRichTextsCustomRichTextTypeIDPut(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NeptunePageDto>>;
+    public customRichTextsCustomRichTextTypeIDPut(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NeptunePageDto>>;
+    public customRichTextsCustomRichTextTypeIDPut(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (customRichTextTypeID === null || customRichTextTypeID === undefined) {
-            throw new Error('Required parameter customRichTextTypeID was null or undefined when calling customRichTextCustomRichTextTypeIDPut.');
+            throw new Error('Required parameter customRichTextTypeID was null or undefined when calling customRichTextsCustomRichTextTypeIDPut.');
         }
 
 
@@ -146,7 +146,7 @@ export class CustomRichTextService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.put<NeptunePageDto>(`${this.basePath}/customRichText/${encodeURIComponent(String(customRichTextTypeID))}`,
+        return this.httpClient.put<NeptunePageDto>(`${this.basePath}/custom-rich-texts/${encodeURIComponent(String(customRichTextTypeID))}`,
             neptunePageDto,
             {
                 withCredentials: this.configuration.withCredentials,

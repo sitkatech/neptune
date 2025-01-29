@@ -1,0 +1,37 @@
+<div>
+    <page-header pageTitle="Projects" [customRichTextTypeID]="richTextTypeID"></page-header>
+
+    <div class="page-body">
+        <div class="all-users">
+            <neptune-grid
+                height="700px"
+                [rowData]="projects"
+                [columnDefs]="projectColumnDefs"
+                rowSelection="single"
+                (gridReady)="onGridReady($event)"
+                [pagination]="true"
+                downloadFileName="projects">
+                <div customGridActionsRight class="custom-grid-actions">
+                    <a class="btn btn-sm btn-primary" [routerLink]="['/planning/projects/new']"> <i class="fa fa-plus"></i> &nbsp; Add New Project </a>
+                    <a
+                        href="javascript:void(0);"
+                        [dropdownToggle]="downloadMenuToggle"
+                        class="btn btn-sm btn-outline-primary dropdown-toggle"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                        <i class="fas fa-chevron-down mr-2"></i>Download
+                    </a>
+
+                    <div #downloadMenuToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a href="javascript:void(0);" class="dropdown-item" (click)="downloadProjectModelResults()">Project List with Model Results</a>
+                        <a href="javascript:void(0);" class="dropdown-item" (click)="downloadTreatmentBMPModelResults()">BMP List with Model Results</a>
+                        <a class="dropdown-item" [href]="downloadTreatmentBMPDelineationShapefile()">BMP Delineation Shapefile</a>
+                        <a class="dropdown-item" [href]="downloadTreatmentBMPLocationPointShapefile()">BMP Location Points Shapefile</a>
+                    </div>
+                </div>
+            </neptune-grid>
+        </div>
+    </div>
+</div>

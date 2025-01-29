@@ -1,31 +1,51 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.Jobs.Services;
+using System.Text.Json.Nodes;
 
 namespace Neptune.Jobs.Hangfire;
 
-public class TotalNetworkSolveJob
+public class TotalNetworkSolveJob(
+    IOptions<NeptuneJobConfiguration> configuration,
+    ILogger<TotalNetworkSolveJob> logger,
+    NeptuneDbContext dbContext,
+    NereidService nereidService)
+    : BlobStorageWritingJob<TotalNetworkSolveJob>(configuration, logger, dbContext)
 {
-    private readonly ILogger<TotalNetworkSolveJob> _logger;
-    private readonly NeptuneDbContext _dbContext;
-    private readonly NereidService _nereidService;
-
-    public TotalNetworkSolveJob(ILogger<TotalNetworkSolveJob> logger, NeptuneDbContext dbContext, NereidService nereidService)
-    {
-        _logger = logger;
-        _dbContext = dbContext;
-        _nereidService = nereidService;
-    }
+    public const string ModelResultsFileName = "ModelResults.json";
+    public const string BaselineModelResultsFileName = "BaselineModelResults.json";
 
     public async Task RunJob()
     {
         // clear out all dirty nodes since the whole network is being run.
-        await _dbContext.DirtyModelNodes.ExecuteDeleteAsync();
+        await DbContext.DirtyModelNodes.ExecuteDeleteAsync();
         // clear out all the nereid results since we are rerunning it for the whole network
-        await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteNereidResults");
+        await DbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteNereidResults");
 
-        await _nereidService.TotalNetworkSolve(_dbContext, true);
-        await _nereidService.TotalNetworkSolve(_dbContext, false);
+        var networkSolveResultBaseline = await nereidService.TotalNetworkSolve(DbContext, true);
+        var networkSolveResult = await nereidService.TotalNetworkSolve(DbContext, false);
+        await CreateNereidResultsAsJsonFileAndPostToBlobStorage(networkSolveResultBaseline.NereidResults, BaselineModelResultsFileName);
+        await CreateNereidResultsAsJsonFileAndPostToBlobStorage(networkSolveResult.NereidResults, ModelResultsFileName);
+
+        // clear out old nereid logs
+        await DbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteOldNereidLogs");
+    }
+
+    private async Task CreateNereidResultsAsJsonFileAndPostToBlobStorage(IEnumerable<NereidResult> nereidResults, string blobFilename)
+    {
+        var list = nereidResults.Select(x =>
+        {
+            var jsonObject = GeoJsonSerializer.Deserialize<JsonObject>(x.FullResponse);
+            jsonObject["TreatmentBMPID"] = x.TreatmentBMPID;
+            jsonObject["WaterQualityManagementPlanID"] = x.WaterQualityManagementPlanID;
+            jsonObject["DelineationID"] = x.DelineationID;
+            jsonObject["RegionalSubbasinID"] = x.RegionalSubbasinID;
+            return jsonObject;
+        }).ToList();
+
+        await SerializeAndUploadToBlobStorage(list, blobFilename);
     }
 }

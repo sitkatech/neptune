@@ -19,10 +19,9 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GeometryGeoJSONAndAreaDto } from '../model/geometry-geo-json-and-area-dto';
+import { IFeature } from '../model/i-feature';
 import { TreatmentBMPDisplayDto } from '../model/treatment-bmp-display-dto';
 import { TreatmentBMPModelingAttributeDropdownItemDto } from '../model/treatment-bmp-modeling-attribute-dropdown-item-dto';
-import { TreatmentBMPTypeWithModelingAttributesDto } from '../model/treatment-bmp-type-with-modeling-attributes-dto';
-import { TreatmentBMPUpsertDto } from '../model/treatment-bmp-upsert-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -71,10 +70,10 @@ export class TreatmentBMPService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treatmentBMPModelingAttributeDropdownItemsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPModelingAttributeDropdownItemDto>>;
-    public treatmentBMPModelingAttributeDropdownItemsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPModelingAttributeDropdownItemDto>>>;
-    public treatmentBMPModelingAttributeDropdownItemsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPModelingAttributeDropdownItemDto>>>;
-    public treatmentBMPModelingAttributeDropdownItemsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public treatmentBmpsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPDisplayDto>>;
+    public treatmentBmpsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPDisplayDto>>>;
+    public treatmentBmpsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPDisplayDto>>>;
+    public treatmentBmpsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -93,7 +92,7 @@ export class TreatmentBMPService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<TreatmentBMPModelingAttributeDropdownItemDto>>(`${this.basePath}/treatmentBMPModelingAttributeDropdownItems`,
+        return this.httpClient.get<Array<TreatmentBMPDisplayDto>>(`${this.basePath}/treatment-bmps`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -109,10 +108,10 @@ export class TreatmentBMPService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treatmentBMPTypesGet(observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPTypeWithModelingAttributesDto>>;
-    public treatmentBMPTypesGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPTypeWithModelingAttributesDto>>>;
-    public treatmentBMPTypesGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPTypeWithModelingAttributesDto>>>;
-    public treatmentBMPTypesGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public treatmentBmpsModelingAttributeDropdownItemsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPModelingAttributeDropdownItemDto>>;
+    public treatmentBmpsModelingAttributeDropdownItemsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPModelingAttributeDropdownItemDto>>>;
+    public treatmentBmpsModelingAttributeDropdownItemsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPModelingAttributeDropdownItemDto>>>;
+    public treatmentBmpsModelingAttributeDropdownItemsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -131,7 +130,7 @@ export class TreatmentBMPService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<TreatmentBMPTypeWithModelingAttributesDto>>(`${this.basePath}/treatmentBMPTypes`,
+        return this.httpClient.get<Array<TreatmentBMPModelingAttributeDropdownItemDto>>(`${this.basePath}/treatment-bmps/modeling-attribute-dropdown-items`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -147,10 +146,10 @@ export class TreatmentBMPService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treatmentBMPsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPDisplayDto>>;
-    public treatmentBMPsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPDisplayDto>>>;
-    public treatmentBMPsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPDisplayDto>>>;
-    public treatmentBMPsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public treatmentBmpsOctaM2Tier2GrantProgramGet(observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPDisplayDto>>;
+    public treatmentBmpsOctaM2Tier2GrantProgramGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPDisplayDto>>>;
+    public treatmentBmpsOctaM2Tier2GrantProgramGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPDisplayDto>>>;
+    public treatmentBmpsOctaM2Tier2GrantProgramGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -169,7 +168,7 @@ export class TreatmentBMPService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<TreatmentBMPDisplayDto>>(`${this.basePath}/treatmentBMPs`,
+        return this.httpClient.get<Array<TreatmentBMPDisplayDto>>(`${this.basePath}/treatment-bmps/octa-m2-tier2-grant-program`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -182,18 +181,13 @@ export class TreatmentBMPService {
     /**
      * 
      * 
-     * @param projectID 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treatmentBMPsProjectIDGetByProjectIDGet(projectID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPUpsertDto>>;
-    public treatmentBMPsProjectIDGetByProjectIDGet(projectID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPUpsertDto>>>;
-    public treatmentBMPsProjectIDGetByProjectIDGet(projectID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPUpsertDto>>>;
-    public treatmentBMPsProjectIDGetByProjectIDGet(projectID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (projectID === null || projectID === undefined) {
-            throw new Error('Required parameter projectID was null or undefined when calling treatmentBMPsProjectIDGetByProjectIDGet.');
-        }
+    public treatmentBmpsPlannedProjectsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPDisplayDto>>;
+    public treatmentBmpsPlannedProjectsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPDisplayDto>>>;
+    public treatmentBmpsPlannedProjectsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPDisplayDto>>>;
+    public treatmentBmpsPlannedProjectsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -212,107 +206,7 @@ export class TreatmentBMPService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<TreatmentBMPUpsertDto>>(`${this.basePath}/treatmentBMPs/${encodeURIComponent(String(projectID))}/getByProjectID`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param projectID 
-     * @param treatmentBMPUpsertDto 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public treatmentBMPsProjectIDPut(projectID: number, treatmentBMPUpsertDto?: Array<TreatmentBMPUpsertDto>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public treatmentBMPsProjectIDPut(projectID: number, treatmentBMPUpsertDto?: Array<TreatmentBMPUpsertDto>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public treatmentBMPsProjectIDPut(projectID: number, treatmentBMPUpsertDto?: Array<TreatmentBMPUpsertDto>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public treatmentBMPsProjectIDPut(projectID: number, treatmentBMPUpsertDto?: Array<TreatmentBMPUpsertDto>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (projectID === null || projectID === undefined) {
-            throw new Error('Required parameter projectID was null or undefined when calling treatmentBMPsProjectIDPut.');
-        }
-
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/_*+json',
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.put<any>(`${this.basePath}/treatmentBMPs/${encodeURIComponent(String(projectID))}`,
-            treatmentBMPUpsertDto,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param projectID 
-     * @param treatmentBMPDisplayDto 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public treatmentBMPsProjectIDUpdateLocationsPut(projectID: number, treatmentBMPDisplayDto?: Array<TreatmentBMPDisplayDto>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public treatmentBMPsProjectIDUpdateLocationsPut(projectID: number, treatmentBMPDisplayDto?: Array<TreatmentBMPDisplayDto>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public treatmentBMPsProjectIDUpdateLocationsPut(projectID: number, treatmentBMPDisplayDto?: Array<TreatmentBMPDisplayDto>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public treatmentBMPsProjectIDUpdateLocationsPut(projectID: number, treatmentBMPDisplayDto?: Array<TreatmentBMPDisplayDto>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (projectID === null || projectID === undefined) {
-            throw new Error('Required parameter projectID was null or undefined when calling treatmentBMPsProjectIDUpdateLocationsPut.');
-        }
-
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/_*+json',
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.put<any>(`${this.basePath}/treatmentBMPs/${encodeURIComponent(String(projectID))}/updateLocations`,
-            treatmentBMPDisplayDto,
+        return this.httpClient.get<Array<TreatmentBMPDisplayDto>>(`${this.basePath}/treatment-bmps/planned-projects`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -330,17 +224,17 @@ export class TreatmentBMPService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treatmentBMPsTreatmentBMPIDTreatmentBMPTypeTreatmentBMPTypeIDPut(treatmentBMPID: number, treatmentBMPTypeID: number, observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public treatmentBMPsTreatmentBMPIDTreatmentBMPTypeTreatmentBMPTypeIDPut(treatmentBMPID: number, treatmentBMPTypeID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public treatmentBMPsTreatmentBMPIDTreatmentBMPTypeTreatmentBMPTypeIDPut(treatmentBMPID: number, treatmentBMPTypeID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public treatmentBMPsTreatmentBMPIDTreatmentBMPTypeTreatmentBMPTypeIDPut(treatmentBMPID: number, treatmentBMPTypeID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public treatmentBmpsTreatmentBMPIDTreatmentBmpTypesTreatmentBMPTypeIDPut(treatmentBMPID: number, treatmentBMPTypeID: number, observe?: 'body', reportProgress?: boolean): Observable<number>;
+    public treatmentBmpsTreatmentBMPIDTreatmentBmpTypesTreatmentBMPTypeIDPut(treatmentBMPID: number, treatmentBMPTypeID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
+    public treatmentBmpsTreatmentBMPIDTreatmentBmpTypesTreatmentBMPTypeIDPut(treatmentBMPID: number, treatmentBMPTypeID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
+    public treatmentBmpsTreatmentBMPIDTreatmentBmpTypesTreatmentBMPTypeIDPut(treatmentBMPID: number, treatmentBMPTypeID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (treatmentBMPID === null || treatmentBMPID === undefined) {
-            throw new Error('Required parameter treatmentBMPID was null or undefined when calling treatmentBMPsTreatmentBMPIDTreatmentBMPTypeTreatmentBMPTypeIDPut.');
+            throw new Error('Required parameter treatmentBMPID was null or undefined when calling treatmentBmpsTreatmentBMPIDTreatmentBmpTypesTreatmentBMPTypeIDPut.');
         }
 
         if (treatmentBMPTypeID === null || treatmentBMPTypeID === undefined) {
-            throw new Error('Required parameter treatmentBMPTypeID was null or undefined when calling treatmentBMPsTreatmentBMPIDTreatmentBMPTypeTreatmentBMPTypeIDPut.');
+            throw new Error('Required parameter treatmentBMPTypeID was null or undefined when calling treatmentBmpsTreatmentBMPIDTreatmentBmpTypesTreatmentBMPTypeIDPut.');
         }
 
         let headers = this.defaultHeaders;
@@ -360,7 +254,7 @@ export class TreatmentBMPService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.put<number>(`${this.basePath}/treatmentBMPs/${encodeURIComponent(String(treatmentBMPID))}/treatmentBMPType/${encodeURIComponent(String(treatmentBMPTypeID))}`,
+        return this.httpClient.put<number>(`${this.basePath}/treatment-bmps/${encodeURIComponent(String(treatmentBMPID))}/treatment-bmp-types/${encodeURIComponent(String(treatmentBMPTypeID))}`,
             null,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -378,13 +272,13 @@ export class TreatmentBMPService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treatmentBMPsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID: number, observe?: 'body', reportProgress?: boolean): Observable<GeometryGeoJSONAndAreaDto>;
-    public treatmentBMPsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeometryGeoJSONAndAreaDto>>;
-    public treatmentBMPsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeometryGeoJSONAndAreaDto>>;
-    public treatmentBMPsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public treatmentBmpsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID: number, observe?: 'body', reportProgress?: boolean): Observable<GeometryGeoJSONAndAreaDto>;
+    public treatmentBmpsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeometryGeoJSONAndAreaDto>>;
+    public treatmentBmpsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeometryGeoJSONAndAreaDto>>;
+    public treatmentBmpsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (treatmentBMPID === null || treatmentBMPID === undefined) {
-            throw new Error('Required parameter treatmentBMPID was null or undefined when calling treatmentBMPsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet.');
+            throw new Error('Required parameter treatmentBMPID was null or undefined when calling treatmentBmpsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -404,7 +298,45 @@ export class TreatmentBMPService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<GeometryGeoJSONAndAreaDto>(`${this.basePath}/treatmentBMPs/${encodeURIComponent(String(treatmentBMPID))}/upstreamRSBCatchmentGeoJSON`,
+        return this.httpClient.get<GeometryGeoJSONAndAreaDto>(`${this.basePath}/treatment-bmps/${encodeURIComponent(String(treatmentBMPID))}/upstreamRSBCatchmentGeoJSON`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public treatmentBmpsVerifiedFeatureCollectionGet(observe?: 'body', reportProgress?: boolean): Observable<Array<IFeature>>;
+    public treatmentBmpsVerifiedFeatureCollectionGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<IFeature>>>;
+    public treatmentBmpsVerifiedFeatureCollectionGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<IFeature>>>;
+    public treatmentBmpsVerifiedFeatureCollectionGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<IFeature>>(`${this.basePath}/treatment-bmps/verified/feature-collection`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

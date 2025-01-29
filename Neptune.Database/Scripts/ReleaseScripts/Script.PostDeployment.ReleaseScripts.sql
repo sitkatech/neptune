@@ -16,4 +16,10 @@ GO
 GO
 :r ".\004 - Add neptune page for upload ovtas.sql"
 GO
+:r ".\005 - Add neptune page for WQMP APN upload.sql"
+GO
+:r ".\006 - Add neptune pages for data hub.sql"
+GO
+:r ".\007 - Add neptune page Export BMP Inventory to GIS.sql"
+GO
 

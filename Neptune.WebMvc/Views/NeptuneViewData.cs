@@ -104,7 +104,8 @@ namespace Neptune.WebMvc.Views
                 BuildProgramInfoMenu(currentPerson),
                 BuildDashboardMenu(currentPerson),
                 BuildDelineationMenu(currentPerson),
-                BuildManageMenu(CurrentPerson)
+                BuildDataHubMenu(currentPerson),
+                BuildManageMenu(currentPerson)
             };
 
             TopLevelLtInfoMenuItems.ForEach(x => x.ExtraTopLevelMenuCssClasses = new List<string> { "navigation-root-item" });
@@ -120,6 +121,11 @@ namespace Neptune.WebMvc.Views
             delineationMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(LinkGenerator, x => x.DelineationReconciliationReport()), currentPerson, "Delineation Reconciliation Report", "Group1"));
 
             return delineationMenu;
+        }
+
+        private LtInfoMenuItem BuildDataHubMenu(Person currentPerson)
+        {
+            return new LtInfoMenuItem(SitkaRoute<DataHubController>.BuildUrlFromExpression(LinkGenerator, x => x.Index()), "Data Hub", currentPerson.IsManagerOrAdmin(), true, null);
         }
 
         private LtInfoMenuItem BuildBMPInventoryMenu(Person currentPerson)
@@ -148,12 +154,6 @@ namespace Neptune.WebMvc.Views
             programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPAssessmentObservationTypeController>(LinkGenerator, x => x.Index()), currentPerson, "Observation Types", "Group1"));
             programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPTypeController>(LinkGenerator ,x => x.Index()), currentPerson, "Treatment BMP Types", "Group1"));
             programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FundingSourceController>(LinkGenerator, x => x.Index()), currentPerson, "Funding Sources", "Group1"));
-
-            if (new JurisdictionEditFeature().HasPermissionByPerson(currentPerson))
-            {
-                programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(
-                new SitkaRoute<WebServicesController>(x => x.Index(), SitkaRouteSecurity.SSL, LinkGenerator), currentPerson, "Web Services", "Group 2"));
-            }
 
             return programInfoMenu;
         }

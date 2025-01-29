@@ -174,7 +174,7 @@ var builder = WebApplication.CreateBuilder(args);
             options.DefaultScheme = "Cookies";
             options.DefaultChallengeScheme = "Keystone";
         })
-        .AddCookie("Cookies")
+        .AddCookie("Cookies", options => { options.Cookie.Name = $"Neptune{builder.Environment.EnvironmentName}"; })
         .AddOpenIdConnect("Keystone", options =>
         {
             options.Authority = configuration.KeystoneOpenIDUrl;

@@ -67,13 +67,13 @@ export class FileResourceService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public fileResourceFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public fileResourceFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public fileResourceFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public fileResourceFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public fileResourcesFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public fileResourcesFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public fileResourcesFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public fileResourcesFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (fileResourceGuidAsString === null || fileResourceGuidAsString === undefined) {
-            throw new Error('Required parameter fileResourceGuidAsString was null or undefined when calling fileResourceFileResourceGuidAsStringGet.');
+            throw new Error('Required parameter fileResourceGuidAsString was null or undefined when calling fileResourcesFileResourceGuidAsStringGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -90,7 +90,7 @@ export class FileResourceService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<any>(`${this.basePath}/FileResource/${encodeURIComponent(String(fileResourceGuidAsString))}`,
+        return this.httpClient.get<any>(`${this.basePath}/file-resources/${encodeURIComponent(String(fileResourceGuidAsString))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

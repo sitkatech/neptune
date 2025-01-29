@@ -1,0 +1,69 @@
+<div class="map-wrapper">
+    <div class="form-group">
+        <div class="field">
+            <div class="search-container">
+                <div class="search-prepend">
+                    <i class="fa" [class.fa-search]="!isSearching" [class.fa-spinner]="isSearching" [class.spin-animation]="isSearching"></i>
+                </div>
+                <input
+                    onkeydown="return event.key != 'Enter';"
+                    (keyup.enter)="selectCurrent($event)"
+                    type="text"
+                    name="NominatimSearch"
+                    placeholder="Search locations"
+                    [formControl]="searchString"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="none"
+                    spellcheck="false" />
+                <div class="search-append">
+                    <button class="clear" (click)="clearSearch()" *ngIf="searchString.value">
+                        <i class="fa fa-times-circle"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="search-results" *ngIf="searchResults$ | async as searchResults">
+                <ul *ngIf="!isSearching">
+                    <li *ngFor="let result of searchResults.features" [id]="'Location_' + result.id">
+                        <button (click)="selectCurrent(result)">
+                            <div class="button-head">
+                                <strong class="wa-name" [innerHTML]="result.properties.display_name"></strong>
+                            </div>
+                        </button>
+                    </li>
+
+                    <li *ngIf="searchResults?.features?.length == 0 && searchString.value && searchString.value.length > 1" class="p-3">No results</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div [id]="mapID" [style.height]="mapHeight">
+        <div class="legend leaflet-control-layers leaflet-control-layers-expanded" [id]="legendID" *ngIf="showLegend">
+            <a class="leaflet-control-layers-toggle">
+                <icon icon="MapLegend" (click)="legendToggle()"></icon>
+            </a>
+            <div class="leaflet-control-layers-list">
+                <div *ngFor="let legendItem of legendItems" class="legend-item">
+                    <h4>{{ legendItem.Title }}</h4>
+                    <img
+                        src="{{ legendItem.WmsUrl }}REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=25&HEIGHT=25&LAYER={{
+                            legendItem.WmsLayerName
+                        }}&legend_options=fontSize:10"
+                        alt="{{ legendItem.Title }} Legend" />
+                </div>
+                <div class="leaflet-control-layers-close-button-wrapper">
+                    <a [href]="" (click)="legendToggle()">Close</a>
+                </div>
+            </div>
+        </div>
+        <ng-content></ng-content>
+    </div>
+    <div class="map-footer">
+        <i style="margin-left: auto"></i>
+        <div class="attribution">
+            &copy;
+            <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
+            contributors
+        </div>
+    </div>
+</div>

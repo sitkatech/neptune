@@ -1,0 +1,16 @@
+@use "/src/scss/abstracts" as *;
+
+dl {
+    &.section-spacer {
+        display: block;
+        margin: 2rem 0;
+    }
+
+    dt {
+        font-weight: bold;
+        font-size: 1rem;
+        text-align: right;
+        padding-bottom: 0.5rem;
+        margin-bottom: 0;
+    }
+}

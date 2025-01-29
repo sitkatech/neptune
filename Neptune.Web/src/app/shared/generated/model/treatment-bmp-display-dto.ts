@@ -11,6 +11,7 @@
  */
 import { TreatmentBMPModelingAttributeSimpleDto } from '././treatment-bmp-modeling-attribute-simple-dto';
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class TreatmentBMPDisplayDto { 
     TreatmentBMPID?: number;
     TreatmentBMPName?: string;
@@ -27,4 +28,142 @@ export class TreatmentBMPDisplayDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface TreatmentBMPDisplayDtoForm { 
+    TreatmentBMPID?: FormControl<number>;
+    TreatmentBMPName?: FormControl<string>;
+    TreatmentBMPTypeName?: FormControl<string>;
+    DisplayName?: FormControl<string>;
+    Longitude?: FormControl<number>;
+    Latitude?: FormControl<number>;
+    ProjectID?: FormControl<number>;
+    InventoryIsVerified?: FormControl<boolean>;
+    IsFullyParameterized?: FormControl<boolean>;
+    TreatmentBMPModelingAttribute?: FormControl<TreatmentBMPModelingAttributeSimpleDto>;
+    WatershedName?: FormControl<string>;
+    Notes?: FormControl<string>;
+}
+
+export class TreatmentBMPDisplayDtoFormControls { 
+    public static TreatmentBMPID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPTypeName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static DisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Longitude = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Latitude = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ProjectID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static InventoryIsVerified = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static IsFullyParameterized = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPModelingAttribute = (value: FormControlState<TreatmentBMPModelingAttributeSimpleDto> | TreatmentBMPModelingAttributeSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<TreatmentBMPModelingAttributeSimpleDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static WatershedName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Notes = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

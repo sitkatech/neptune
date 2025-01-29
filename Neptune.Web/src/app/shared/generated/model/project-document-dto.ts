@@ -11,6 +11,7 @@
  */
 import { FileResourceSimpleDto } from '././file-resource-simple-dto';
 
+import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class ProjectDocumentDto { 
     ProjectDocumentID?: number;
     FileResourceID?: number;
@@ -22,4 +23,87 @@ export class ProjectDocumentDto {
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
+}
+
+export interface ProjectDocumentDtoForm { 
+    ProjectDocumentID?: FormControl<number>;
+    FileResourceID?: FormControl<number>;
+    ProjectID?: FormControl<number>;
+    DisplayName?: FormControl<string>;
+    UploadDate?: FormControl<string>;
+    DocumentDescription?: FormControl<string>;
+    FileResource?: FormControl<FileResourceSimpleDto>;
+}
+
+export class ProjectDocumentDtoFormControls { 
+    public static ProjectDocumentID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FileResourceID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ProjectID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static DisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static UploadDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static DocumentDescription = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FileResource = (value: FormControlState<FileResourceSimpleDto> | FileResourceSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<FileResourceSimpleDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
 }

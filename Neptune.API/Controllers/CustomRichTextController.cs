@@ -9,24 +9,26 @@ using Neptune.Models.DataTransferObjects;
 namespace Neptune.API.Controllers
 {
     [ApiController]
-    public class CustomRichTextController : SitkaController<CustomRichTextController>
+    [Route("custom-rich-texts")]
+    public class CustomRichTextController(
+        NeptuneDbContext dbContext,
+        ILogger<CustomRichTextController> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<CustomRichTextController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        public CustomRichTextController(NeptuneDbContext dbContext, ILogger<CustomRichTextController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration) : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-        }
-
-        [HttpGet("customRichText/{customRichTextTypeID}")]
+        [HttpGet("{customRichTextTypeID}")]
         public ActionResult<NeptunePageDto> GetCustomRichText([FromRoute] int customRichTextTypeID)
         {
-            var customRichTextDto = NeptunePages.GetByNeptunePageTypeID(_dbContext, customRichTextTypeID);
+            var customRichTextDto = NeptunePages.GetByNeptunePageTypeID(DbContext, customRichTextTypeID);
             return RequireNotNullThrowNotFound(customRichTextDto, "CustomRichText", customRichTextTypeID);
         }
 
-        [HttpPut("customRichText/{customRichTextTypeID}")]
+        [HttpPut("{customRichTextTypeID}")]
         [AdminFeature]
         public ActionResult<NeptunePageDto> UpdateCustomRichText([FromRoute] int customRichTextTypeID, [FromBody] NeptunePageDto customRichTextUpdateDto)
         {
-            var customRichTextDto = NeptunePages.GetByNeptunePageTypeID(_dbContext, customRichTextTypeID);
+            var customRichTextDto = NeptunePages.GetByNeptunePageTypeID(DbContext, customRichTextTypeID);
             if (ThrowNotFound(customRichTextDto, "CustomRichText", customRichTextTypeID, out var actionResult))
             {
                 return actionResult;
@@ -38,7 +40,7 @@ namespace Neptune.API.Controllers
             }
 
             var updatedCustomRichTextDto =
-                NeptunePages.UpdateNeptunePage(_dbContext, customRichTextTypeID, customRichTextUpdateDto);
+                NeptunePages.UpdateNeptunePage(DbContext, customRichTextTypeID, customRichTextUpdateDto);
             return Ok(updatedCustomRichTextDto);
         }
     }

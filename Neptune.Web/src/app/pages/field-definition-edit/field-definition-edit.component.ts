@@ -9,15 +9,16 @@ import { FieldDefinitionService } from "src/app/shared/generated/api/field-defin
 import { EditorComponent, EditorModule, TINYMCE_SCRIPT_SRC } from "@tinymce/tinymce-angular";
 import TinyMCEHelpers from "src/app/shared/helpers/tiny-mce-helpers";
 import { FormsModule } from "@angular/forms";
-import { AlertDisplayComponent } from "../../shared/components/alert-display/alert-display.component";
+import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { NgIf } from "@angular/common";
+import { PageHeaderComponent } from "../../shared/components/page-header/page-header.component";
 
 @Component({
-    selector: "hippocamp-field-definition-edit",
+    selector: "field-definition-edit",
     templateUrl: "./field-definition-edit.component.html",
     styleUrls: ["./field-definition-edit.component.scss"],
     standalone: true,
-    imports: [NgIf, RouterLink, AlertDisplayComponent, EditorModule, FormsModule],
+    imports: [NgIf, RouterLink, AlertDisplayComponent, EditorModule, FormsModule, PageHeaderComponent],
     providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }],
 })
 export class FieldDefinitionEditComponent implements OnInit {
@@ -71,7 +72,7 @@ export class FieldDefinitionEditComponent implements OnInit {
         this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDPut(this.fieldDefinition.FieldDefinitionType.FieldDefinitionTypeID, this.fieldDefinition).subscribe(
             (response) => {
                 this.isLoadingSubmit = false;
-                this.router.navigateByUrl("/labels-and-definitions").then((x) => {
+                this.router.navigateByUrl("/planning/labels-and-definitions").then((x) => {
                     this.alertService.pushAlert(
                         new Alert(`The definition for ${this.fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName} was successfully updated.`, AlertContext.Success)
                     );

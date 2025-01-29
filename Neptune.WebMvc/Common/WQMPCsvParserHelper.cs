@@ -33,7 +33,7 @@ namespace Neptune.WebMvc.Common
             var optionalFields = new List<string> { "Maintenance Contact Name", "Maintenance Contact Organization", "Maintenance Contact Phone",
                 "Maintenance Contact Address 1", "Maintenance Contact Address 2", "Maintenance Contact City", "Maintenance Contact State", "Maintenance Contact Zip",
                 "Permit Term", "Hydromodification Controls Apply", "Approval Date", "Date of Construction", "Hydrologic Subarea", "Record Number", "Recorded WQMP Area (Acres)",
-                "Trash Capture Effectiveness"
+                "Trash Capture Effectiveness", "Modeling Approach"
             };
 
             try
@@ -63,7 +63,6 @@ namespace Neptune.WebMvc.Common
                 if (currentWQMP != null)
                 {
                     wqmpsToUpload.Add(currentWQMP);
-                    errorList.AddRange(currentErrorList);
                 }
 
                 errorList.AddRange(currentErrorList);
@@ -233,7 +232,7 @@ namespace Neptune.WebMvc.Common
                 }
                 else
                 {
-                    wqmp.ApprovalDate = approvalDateParsed;
+                    wqmp.ApprovalDate = approvalDateParsed.ConvertTimeFromPSTToUTC();
                 }
             }
 
@@ -248,7 +247,7 @@ namespace Neptune.WebMvc.Common
                 }
                 else
                 {
-                    wqmp.DateOfConstruction = constructionDateParsed;
+                    wqmp.DateOfConstruction = constructionDateParsed.ConvertTimeFromPSTToUTC();
                 }
             }
 
@@ -277,6 +276,14 @@ namespace Neptune.WebMvc.Common
             if (trashCaptureEffectiveness.HasValue)
             {
                 wqmp.TrashCaptureEffectiveness = trashCaptureEffectiveness;
+            }
+
+            var modelingApproachID = FindLookupValue(row, fieldsDict, "Modeling Approach", rowNumber,
+                errorList, WaterQualityManagementPlanModelingApproach.All, x => x.WaterQualityManagementPlanModelingApproachDisplayName,
+                x => x.WaterQualityManagementPlanModelingApproachID, true, false);
+            if (modelingApproachID.HasValue)
+            {
+                wqmp.WaterQualityManagementPlanModelingApproachID = modelingApproachID.Value;
             }
 
             //End of Optional Fields

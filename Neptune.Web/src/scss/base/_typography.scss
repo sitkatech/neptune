@@ -1,0 +1,19 @@
+@use "/src/scss/abstracts" as *;
+
+body {
+    font-family: $lato;
+    line-height: 1;
+}
+
+a {
+    color: $teal-800;
+}
+
+button {
+    font-family: $lato;
+}
+
+.site-footer a {
+    color: $white;
+    text-decoration: underline;
+}
