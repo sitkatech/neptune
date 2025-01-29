@@ -39,12 +39,12 @@
 <!-- <div>
     <btn-group-radio-input [options]="tabs" (change)="setActiveTab($event)" [default]="activeTab" [showIcons]="true"></btn-group-radio-input>
     <div [hidden]="activeTab !== 'Area-Based Results'">
-        <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="1000px" [showLegend]="false" [style.cursor]="true ? 'crosshair' : ''">
+        <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="1000px" [showLegend]="false">
             <ovta-area-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></ovta-area-layer>
         </neptune-map>
     </div>
     <div [hidden]="activeTab !== 'Load-Based Results'"></div>
     <div [hidden]="activeTab !== 'OVTA-Based Results'">
-        <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="1000px" [showLegend]="false" [style.cursor]="true ? 'crosshair' : ''"> </neptune-map>
+        <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="1000px" [showLegend]="false"> </neptune-map>
     </div>
 </div> -->

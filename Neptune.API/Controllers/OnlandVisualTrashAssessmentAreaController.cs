@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
+using Neptune.API.Services.Attributes;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
@@ -22,19 +23,20 @@ public class OnlandVisualTrashAssessmentAreaController(
 {
     [HttpGet]
     [JurisdictionEditFeature]
-    public ActionResult<List<OnlandVisualTrashAssessmentAreaGridDto>> ListByStormwaterJurisdictionID()
+    public ActionResult<List<OnlandVisualTrashAssessmentAreaGridDto>> ListForCallingUser()
     {
         var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(DbContext, CallingUser.PersonID);
-        var onlandVisualTrashAssessmentAreaSimpleDtos = OnlandVisualTrashAssessmentAreas
+        var onlandVisualTrashAssessmentAreaGridDtos = OnlandVisualTrashAssessmentAreas
             .ListByStormwaterJurisdictionIDList(dbContext, stormwaterJurisdictionIDs).Select(x => x.AsGridDto()).ToList();
-        return Ok(onlandVisualTrashAssessmentAreaSimpleDtos);
+        return Ok(onlandVisualTrashAssessmentAreaGridDtos);
     }
 
     [HttpGet("{onlandVisualTrashAssessmentAreaID}")]
     [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
     public ActionResult<OnlandVisualTrashAssessmentAreaDetailDto> GetByID([FromRoute] int onlandVisualTrashAssessmentAreaID)
     {
-        var areaDetailDto = OnlandVisualTrashAssessmentAreas.GetByID(DbContext, onlandVisualTrashAssessmentAreaID).AsDetailDto();
-        return Ok(areaDetailDto);
+        var onlandVisualTrashAssessmentAreaDetailDto = OnlandVisualTrashAssessmentAreas.GetByID(DbContext, onlandVisualTrashAssessmentAreaID).AsDetailDto();
+        return Ok(onlandVisualTrashAssessmentAreaDetailDto);
     }
 }

@@ -59,12 +59,7 @@
         <div class="card g-col-6">
             <div class="card-header">Map</div>
             <div class="card-body">
-                <neptune-map
-                    (onMapLoad)="handleMapReady($event)"
-                    mapHeight="400px"
-                    [showLegend]="false"
-                    [boundingBox]="onlandVisualTrashAssessment.BoundingBox"
-                    [style.cursor]="true ? 'crosshair' : ''">
+                <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="400px" [showLegend]="false" [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
                     <ovta-area-layer
                         *ngIf="mapIsReady"
                         [displayOnLoad]="true"

@@ -38,6 +38,6 @@ export class TrashLandUseBlockIndexComponent {
             this.utilityFunctionsService.createBasicColumnDef("Permit Type", "PermitTypeName"),
             this.utilityFunctionsService.createBasicColumnDef("Land Use for TGR", "LandUseForTGR"),
         ];
-        this.landUseBlock$ = this.landUseBlockService.landUseBlockGet();
+        this.landUseBlock$ = this.landUseBlockService.landUseBlocksGet();
     }
 }

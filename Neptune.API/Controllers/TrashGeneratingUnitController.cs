@@ -20,7 +20,7 @@ public class TrashGeneratingUnitController(
 {
     [HttpGet]
     [JurisdictionEditFeature]
-    public ActionResult<List<TrashGeneratingUnitGridDto>> ListByPersonID()
+    public ActionResult<List<TrashGeneratingUnitGridDto>> ListForCallingUser()
     {
         var trashGeneratingUnitGridDtos = TrashGeneratingUnits.List(DbContext, CallingUser);
         return Ok(trashGeneratingUnitGridDtos);
