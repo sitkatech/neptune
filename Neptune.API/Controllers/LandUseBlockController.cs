@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace Neptune.API.Controllers;
 
 [ApiController]
-[Route("land-use-block")]
+[Route("land-use-blocks")]
 public class LandUseBlockController(
     NeptuneDbContext dbContext,
     ILogger<LandUseBlockController> logger,

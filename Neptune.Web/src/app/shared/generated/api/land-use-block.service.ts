@@ -67,10 +67,10 @@ export class LandUseBlockService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public landUseBlockGet(observe?: 'body', reportProgress?: boolean): Observable<Array<LandUseBlockGridDto>>;
-    public landUseBlockGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<LandUseBlockGridDto>>>;
-    public landUseBlockGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<LandUseBlockGridDto>>>;
-    public landUseBlockGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public landUseBlocksGet(observe?: 'body', reportProgress?: boolean): Observable<Array<LandUseBlockGridDto>>;
+    public landUseBlocksGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<LandUseBlockGridDto>>>;
+    public landUseBlocksGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<LandUseBlockGridDto>>>;
+    public landUseBlocksGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -89,7 +89,7 @@ export class LandUseBlockService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<LandUseBlockGridDto>>(`${this.basePath}/land-use-block`,
+        return this.httpClient.get<Array<LandUseBlockGridDto>>(`${this.basePath}/land-use-blocks`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

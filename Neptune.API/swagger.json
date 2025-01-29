@@ -297,7 +297,7 @@
         }
       }
     },
-    "/land-use-block": {
+    "/land-use-blocks": {
       "get": {
         "tags": [
           "LandUseBlock"
