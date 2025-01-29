@@ -57,17 +57,13 @@
                 </neptune-map>
             </div>
         </div>
-        <div class="card g-col-12">
-            <div class="card-header">Assessments</div>
-            <div class="card-body">
-                <neptune-grid
-                    height="800px"
-                    [rowData]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments"
-                    [columnDefs]="ovtaColumnDefs"
-                    downloadFileName="field-definitions"
-                    [pagination]="true"
-                    [sizeColumnsToFitGrid]="true"></neptune-grid>
-            </div>
-        </div>
+        <h3>Onland Visual Trash Assessments</h3>
+        <neptune-grid
+            height="800px"
+            [rowData]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments"
+            [columnDefs]="ovtaColumnDefs"
+            downloadFileName="field-definitions"
+            [pagination]="true"
+            [sizeColumnsToFitGrid]="true"></neptune-grid>
     </div>
 </ng-container>

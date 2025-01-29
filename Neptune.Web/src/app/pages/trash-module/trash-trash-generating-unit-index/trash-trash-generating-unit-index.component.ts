@@ -27,7 +27,7 @@ export class TrashTrashGeneratingUnitIndexComponent {
             this.utilityFunctionsService.createBasicColumnDef("Trash Generating Unit ID", "TrashGeneratingUnitID"),
             this.utilityFunctionsService.createBasicColumnDef("Land Use Type", "PriorityLandUseTypeDisplayName", { FieldDefinitionType: "LandUseType" }),
             this.utilityFunctionsService.createLinkColumnDef("Governing OVTA Area", "OnlandVisualTrashAssessmentAreaName", "OnlandVisualTrashAssessmentAreaID", {
-                InRouterLink: "../onland-visual-trash-assessment-area",
+                InRouterLink: "../onland-visual-trash-assessment-area/",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Governing OVTA Area Baseline Score", "OnlandVisualTrashAssessmentAreaBaselineScore"),
             this.utilityFunctionsService.createBasicColumnDef("Governing Treatment BMP", ""),
