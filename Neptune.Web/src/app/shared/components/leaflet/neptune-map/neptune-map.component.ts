@@ -9,17 +9,25 @@ import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.ser
 import { BoundingBoxDto } from "src/app/shared/generated/model/models";
 import { IconComponent } from "../../icon/icon.component";
 import { NominatimService } from "src/app/shared/services/nominatim.service";
-import { Observable, Subject, catchError, debounceTime, distinctUntilChanged, filter, map, of, switchMap, tap } from "rxjs";
+import { Observable, Subject, catchError, debounce, debounceTime, distinctUntilChanged, filter, map, of, pipe, switchMap, tap, timer } from "rxjs";
 import { NgSelectComponent, NgSelectModule } from "@ng-select/ng-select";
-import { FormsModule } from "@angular/forms";
+import { FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from "@angular/forms";
 import { LegendItem } from "src/app/shared/models/legend-item";
+import { Feature, FeatureCollection } from "geojson";
 
 @Component({
     selector: "neptune-map",
     standalone: true,
-    imports: [CommonModule, IconComponent, NgSelectModule, FormsModule],
+    imports: [CommonModule, IconComponent, NgSelectModule, FormsModule, ReactiveFormsModule],
     templateUrl: "./neptune-map.component.html",
     styleUrls: ["./neptune-map.component.scss"],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: NeptuneMapComponent,
+        },
+    ],
 })
 export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(NgSelectComponent) ngSelectComponent: NgSelectComponent;
@@ -39,11 +47,11 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     public legendControl: Control;
     public legendItems: LegendItem[] = [];
 
-    public searchString$: Observable<any>;
-    public searchResults$ = new Subject<string>();
-    public searchString: string = null;
-    public isSearching: boolean;
-    public searchLoading = false;
+    public allSearchResults: Feature[] = [];
+    public searchString = new FormControl({ value: null, disabled: false });
+    public searchResults$: Observable<FeatureCollection>;
+    public isSearching: boolean = false;
+    private searchCleared: boolean = false;
 
     constructor(public nominatimService: NominatimService, public leafletHelperService: LeafletHelperService) {}
 
@@ -112,34 +120,46 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.map.fullscreenControl.getContainer().classList.add("leaflet-custom-controls");
 
-        this.searchString$ = this.searchResults$.pipe(
-            filter((searchTerm) => searchTerm != null),
-            distinctUntilChanged(),
-            tap((searchTerm) => {
-                this.searchLoading = true;
-                this.searchString = searchTerm;
+        this.searchResults$ = this.searchString.valueChanges.pipe(
+            debounce((x) => {
+                // debounce search to 500ms when the user is typing in the search
+                this.isSearching = true;
+                if (this.searchString.value) {
+                    return timer(800);
+                } else {
+                    // don't debounce when the user has cleared the search
+                    return timer(800);
+                }
             }),
-            debounceTime(800),
-            switchMap((searchTerm) =>
-                this.nominatimService.makeNominatimRequest(searchTerm).pipe(
-                    map((x) => x.features.map((y) => y.properties.display_name)),
-                    catchError(() => of([])),
-                    tap(() => (this.searchLoading = false))
-                )
-            )
+            switchMap((searchString) => {
+                this.isSearching = true;
+                if (this.searchCleared && !searchString) {
+                    return of({ features: [] });
+                }
+                this.searchCleared = false;
+                return this.nominatimService.makeNominatimRequest(searchString);
+            }),
+            tap((x: FeatureCollection) => {
+                this.isSearching = false;
+                this.allSearchResults = x?.features ?? [];
+            })
         );
     }
 
-    public makeNominatimRequest(searchValue) {
-        this.nominatimService.makeNominatimRequest(searchValue).subscribe((response) => {
-            this.map.fitBounds(
-                [
-                    [response.features[0].bbox[1], response.features[0].bbox[0]],
-                    [response.features[0].bbox[3], response.features[0].bbox[2]],
-                ],
-                null
-            );
-        });
+    clearSearch() {
+        this.searchString.reset();
+        this.searchCleared = true;
+    }
+
+    public selectCurrent(selectedFeature): void {
+        this.map.fitBounds(
+            [
+                [selectedFeature.bbox[1], selectedFeature.bbox[0]],
+                [selectedFeature.bbox[3], selectedFeature.bbox[2]],
+            ],
+            null
+        );
+        this.clearSearch();
     }
 
     private createLegendItems(): LegendItem[] {
