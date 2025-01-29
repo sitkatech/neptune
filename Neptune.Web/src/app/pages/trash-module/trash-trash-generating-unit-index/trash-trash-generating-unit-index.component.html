@@ -2,9 +2,9 @@
 
 <div class="page-body">
     <neptune-grid
-        *ngIf="trashGeneratingUnit$ | async as trashGeneratingUnit"
+        *ngIf="trashGeneratingUnits$ | async as trashGeneratingUnits"
         height="800px"
-        [rowData]="trashGeneratingUnit"
+        [rowData]="trashGeneratingUnits"
         [columnDefs]="trashGeneratingUnitsColumnDefs"
         downloadFileName="trash-generating-units"
         [pagination]="true"

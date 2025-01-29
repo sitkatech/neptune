@@ -2,9 +2,9 @@
 
 <div class="page-body">
     <neptune-grid
-        *ngIf="landUseBlock$ | async as landUseBlock"
+        *ngIf="landUseBlocks$ | async as landUseBlocks"
         height="800px"
-        [rowData]="landUseBlock"
+        [rowData]="landUseBlocks"
         [columnDefs]="landUseBlockColumnDefs"
         downloadFileName="land-use-blocks"
         [pagination]="true"

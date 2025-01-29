@@ -17,7 +17,7 @@ import { TrashGeneratingUnitGridDto } from "../../../shared/generated/model/tras
     styleUrl: "./trash-trash-generating-unit-index.component.scss",
 })
 export class TrashTrashGeneratingUnitIndexComponent {
-    public trashGeneratingUnit$: Observable<TrashGeneratingUnitGridDto[]>;
+    public trashGeneratingUnits$: Observable<TrashGeneratingUnitGridDto[]>;
     public trashGeneratingUnitsColumnDefs: ColDef[];
 
     constructor(private trashGeneratingUnitService: TrashGeneratingUnitService, private utilityFunctionsService: UtilityFunctionsService) {}
@@ -50,6 +50,6 @@ export class TrashTrashGeneratingUnitIndexComponent {
             this.utilityFunctionsService.createBasicColumnDef("Land Use Default TGR", "TrashGenerationRate"),
             this.utilityFunctionsService.createDateColumnDef("Last Updated Date", "LastUpdateDate", "MM/dd/yyyy"),
         ];
-        this.trashGeneratingUnit$ = this.trashGeneratingUnitService.trashGeneratingUnitsGet();
+        this.trashGeneratingUnits$ = this.trashGeneratingUnitService.trashGeneratingUnitsGet();
     }
 }

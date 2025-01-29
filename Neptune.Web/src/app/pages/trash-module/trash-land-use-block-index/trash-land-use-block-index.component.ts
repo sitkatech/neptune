@@ -17,7 +17,7 @@ import { LandUseBlockGridDto } from "../../../shared/generated/model/land-use-bl
     styleUrl: "./trash-land-use-block-index.component.scss",
 })
 export class TrashLandUseBlockIndexComponent {
-    public landUseBlock$: Observable<LandUseBlockGridDto[]>;
+    public landUseBlocks$: Observable<LandUseBlockGridDto[]>;
     public landUseBlockColumnDefs: ColDef[];
 
     constructor(private landUseBlockService: LandUseBlockService, private utilityFunctionsService: UtilityFunctionsService) {}
@@ -38,6 +38,6 @@ export class TrashLandUseBlockIndexComponent {
             this.utilityFunctionsService.createBasicColumnDef("Permit Type", "PermitTypeName"),
             this.utilityFunctionsService.createBasicColumnDef("Land Use for TGR", "LandUseForTGR"),
         ];
-        this.landUseBlock$ = this.landUseBlockService.landUseBlocksGet();
+        this.landUseBlocks$ = this.landUseBlockService.landUseBlocksGet();
     }
 }
