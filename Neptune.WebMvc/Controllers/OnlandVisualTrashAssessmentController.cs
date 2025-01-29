@@ -655,12 +655,12 @@ namespace Neptune.WebMvc.Controllers
             {
                 foreach (DataRow row in dataTableFromExcel.Rows)
                 {
-                    var rowJurisdiction = row["Jurisdicition Name"].ToString();
+                    var rowJurisdiction = row["Jurisdiction Name"].ToString();
                     if (!rowJurisdiction.IsNullOrEmpty() && !stormwaterJurisdictionsPersonCanView.Select(x => x.Organization.OrganizationName)
                             .Contains(rowJurisdiction))
                     {
                         SetErrorForDisplay(
-                            $"You attempted to upload a spreadsheet containing BMPs in Jurisdiction {rowJurisdiction}, which you do not have permission to manage.");
+                            $"You attempted to upload a spreadsheet containing OVTAs in Jurisdiction {rowJurisdiction}, which you do not have permission to manage.");
                         return ViewBulkUploadOTVAs(viewModel);
                     }
                 }
