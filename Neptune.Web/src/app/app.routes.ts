@@ -52,6 +52,12 @@ export const routes: Routes = [
         component: PlanningSiteLayoutComponent,
         children: [
             { path: "", title: "Home", component: PlanningHomeComponent },
+            { path: "about", component: PlanningAboutComponent, canActivate: [UnauthenticatedAccessGuard] },
+            {
+                path: "grant-programs",
+                canActivate: [UnauthenticatedAccessGuard, OCTAGrantReviewerOnlyGuard],
+                children: [{ path: "octa-m2-tier-2", component: OCTAM2Tier2DashboardComponent }],
+            },
             {
                 path: "projects",
                 canActivate: [UnauthenticatedAccessGuard],
@@ -91,14 +97,8 @@ export const routes: Routes = [
                     { path: `:${routeParams.projectID}`, component: ProjectDetailComponent },
                 ],
             },
-            {
-                path: "grant-programs",
-                canActivate: [UnauthenticatedAccessGuard, OCTAGrantReviewerOnlyGuard],
-                children: [{ path: "octa-m2-tier-2", component: OCTAM2Tier2DashboardComponent }],
-            },
             { path: "planning-map", component: PlanningMapComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
             { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
-            { path: "about", component: PlanningAboutComponent, canActivate: [UnauthenticatedAccessGuard] },
         ],
     },
     {
