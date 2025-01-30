@@ -656,11 +656,11 @@ namespace Neptune.WebMvc.Controllers
                 foreach (DataRow row in dataTableFromExcel.Rows)
                 {
                     var rowJurisdiction = row["Jurisdiction Name"].ToString();
-                    if (!stormwaterJurisdictionsPersonCanView.Select(x => x.Organization.OrganizationName)
+                    if (!rowJurisdiction.IsNullOrEmpty() && !stormwaterJurisdictionsPersonCanView.Select(x => x.Organization.OrganizationName)
                             .Contains(rowJurisdiction))
                     {
                         SetErrorForDisplay(
-                            $"You attempted to upload a spreadsheet containing BMPs in Jurisdiction {rowJurisdiction}, which you do not have permission to manage.");
+                            $"You attempted to upload a spreadsheet containing OVTAs in Jurisdiction {rowJurisdiction}, which you do not have permission to manage.");
                         return ViewBulkUploadOTVAs(viewModel);
                     }
                 }
@@ -719,11 +719,11 @@ namespace Neptune.WebMvc.Controllers
                                         continue;
                                     }
                                     var id = PreliminarySourceIdentificationType.All.SingleOrDefault(x =>
-                                        x.PreliminarySourceIdentificationTypeDisplayName == identificationType.Trim() 
-                                        && x.PreliminarySourceIdentificationCategory.PreliminarySourceIdentificationCategoryDisplayName == category);
+                                        x.PreliminarySourceIdentificationTypeDisplayName.Trim() == identificationType
+                                        && x.PreliminarySourceIdentificationCategory.PreliminarySourceIdentificationCategoryDisplayName.Trim() == category);
                                     if (id == null)
                                     {
-                                        errors.Add($"{identificationType.Trim()} is not a valid Preliminary Source Identification Type for {category} in row {i + 1}");
+                                        errors.Add($"{identificationType} is not a valid Preliminary Source Identification Type for {category} in row {i + 1}");
                                         continue;
                                     }
                                     assessmentPreliminarySourceIdentificationTypes.Add(new OnlandVisualTrashAssessmentPreliminarySourceIdentificationType()
@@ -756,7 +756,7 @@ namespace Neptune.WebMvc.Controllers
                     }
                     catch (InvalidOperationException ioe)
                     {
-                        errors.Add(ioe.Message);
+                        errors.Add(ioe.Message + $" (row {i})");
                     }
                 }
             }

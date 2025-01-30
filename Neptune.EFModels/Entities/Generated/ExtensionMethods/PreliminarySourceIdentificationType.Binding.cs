@@ -204,7 +204,7 @@ namespace Neptune.EFModels.Entities
     public partial class PreliminarySourceIdentificationTypeTrashDispersal : PreliminarySourceIdentificationType
     {
         private PreliminarySourceIdentificationTypeTrashDispersal(int preliminarySourceIdentificationTypeID, string preliminarySourceIdentificationTypeName, string preliminarySourceIdentificationTypeDisplayName, int preliminarySourceIdentificationCategoryID) : base(preliminarySourceIdentificationTypeID, preliminarySourceIdentificationTypeName, preliminarySourceIdentificationTypeDisplayName, preliminarySourceIdentificationCategoryID) {}
-        public static readonly PreliminarySourceIdentificationTypeTrashDispersal Instance = new PreliminarySourceIdentificationTypeTrashDispersal(6, @"TrashDispersal", @"Dispersal of household trash and recyclables before, during, and after collection ", 2);
+        public static readonly PreliminarySourceIdentificationTypeTrashDispersal Instance = new PreliminarySourceIdentificationTypeTrashDispersal(6, @"TrashDispersal", @"Dispersal of household trash and recyclables around the collection process", 2);
     }
 
     public partial class PreliminarySourceIdentificationTypeInadequateWasteContainerManagementOther : PreliminarySourceIdentificationType

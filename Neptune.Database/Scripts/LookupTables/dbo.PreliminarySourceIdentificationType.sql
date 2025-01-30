@@ -5,7 +5,7 @@ USING (VALUES
 (3,'Uncovered Loads', 'UncoveredLoads', 1),
 (4,'Vehicles (Other)', 'VehiclesOther', 1),
 (5,'Overflowing or uncovered receptacles/dumpsters', 'OverflowingReceptacles', 2),
-(6,'Dispersal of household trash and recyclables before, during, and after collection ', 'TrashDispersal', 2),
+(6,'Dispersal of household trash and recyclables around the collection process', 'TrashDispersal', 2),
 (7,'Inadequate Waste Container Management (Other)', 'InadequateWasteContainerManagementOther', 2),
 (8,'Restaurants', 'Restaurants', 3),
 (9,'Convenience Stores', 'ConvenienceStores', 3),
