@@ -60,6 +60,7 @@ export var IconInterface:
     | "StepIncomplete"
     | "SupportLogo"
     | "Transactions"
+    | "Upload"
     | "User"
     | "Users"
     | "VerticalMap"
