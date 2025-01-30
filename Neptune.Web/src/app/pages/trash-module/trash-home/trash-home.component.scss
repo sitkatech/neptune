@@ -81,13 +81,12 @@
 
         @include desktop-small {
             grid-column: 1;
-            grid-row: 1;
-            z-index: 3;
+            grid-row: 3;
+            z-index: 7;
             max-width: 24rem;
             width: 50%;
             align-self: end;
-            justify-self: end;
-            transform: translateY(6rem);
+            justify-self: center;
         }
 
         .card-header {
@@ -112,9 +111,6 @@
             }
         }
     }
-}
-.common-tasks {
-    text-align: center;
 }
 
 .alert-container {
