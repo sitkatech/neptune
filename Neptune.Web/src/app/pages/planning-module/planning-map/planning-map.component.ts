@@ -255,6 +255,7 @@ export class PlanningMapComponent implements OnInit {
         let selectedTreatmentBMP = this.treatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
         this.selectedTreatmentBMP = selectedTreatmentBMP;
         this.selectProjectImpl(selectedTreatmentBMP.ProjectID);
+        console.log(this.plannedProjectTreatmentBMPsLayer);
         this.plannedProjectTreatmentBMPsLayer.eachLayer((layer) => {
             if (!layer.feature.properties.DefaultZIndexOffset) {
                 layer.feature.properties.DefaultZIndexOffset = layer._zIndex;
