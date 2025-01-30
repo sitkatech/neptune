@@ -120,13 +120,16 @@ export class TrashOvtaDetailComponent {
 
         let selectedObservation = observations.find((x) => x.OnlandVisualTrashAssessmentObservationID == observationID);
         this.selectedOVTAObservation = selectedObservation;
-        console.log(this.ovtaObservationLayer);
         this.ovtaObservationLayer.eachLayer((layer) => {
-            if (!layer.feature.properties.DefaultZIndexOffset) {
-                layer.feature.properties.DefaultZIndexOffset = layer._zIndex;
+            if (layer.feature.properties.OnlandVisualTrashAssessmentObservationID == this.selectedOVTAObservation.OnlandVisualTrashAssessmentObservationID) {
+                if (!layer.feature.properties.DefaultZIndexOffset) {
+                    layer.feature.properties.DefaultZIndexOffset = layer._zIndex;
+                }
+                layer.setZIndexOffset(10000);
+                layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-red.png"));
+            } else {
+                layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-violet.png"));
             }
-            layer.setZIndexOffset(10000);
-            layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-red.png"));
         });
     }
 }

@@ -47,19 +47,22 @@
         </div>
         <div class="card g-col-6">
             <div class="card-header">Observations</div>
-            <div class="card-body">
-                <dl class="grid-12" *ngFor="let item of onlandVisualTrashAssessment.Observations">
-                    <dd
-                        class="g-col-12"
+            <div class="card-body observations">
+                <div class="grid-12" *ngFor="let item of onlandVisualTrashAssessment.Observations">
+                    <div
+                        [id]="item.OnlandVisualTrashAssessmentObservationID"
+                        class="g-col-12 mb-4"
                         [ngClass]="{
                             'selected-observation':
                                 selectedOVTAObservation != null && selectedOVTAObservation.OnlandVisualTrashAssessmentObservationID == item.OnlandVisualTrashAssessmentObservationID
                         }"
                         (click)="selectOVTAObservationImpl(onlandVisualTrashAssessment.Observations, item.OnlandVisualTrashAssessmentObservationID)">
                         <img [src]="getUrl(item.FileResourceGUID)" style="width: 400px; height: 500px" />
-                        {{ item.Note ?? "No notes" }}
-                    </dd>
-                </dl>
+                        <div class="mt-2">
+                            {{ item.Note ?? "No note provided" }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card g-col-6">
