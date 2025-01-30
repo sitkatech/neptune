@@ -1,61 +1,64 @@
 <h1 class="mt-4 mb-4">OCST Trash Module</h1>
 <app-alert-display></app-alert-display>
 
-<custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
+<div class="grid-12">
+    <custom-rich-text class="g-col-8" [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
 
-<div class="hero__actions card">
-    <ng-container *ngIf="currentUser$ | async as currentUser; else notSignedIn">
-        <div class="card-header"><h3 class="card-title">Quick Actions</h3></div>
-        <div class="card-body">
-            <div class="hero__btns">
-                <div class="hero__btns-wrapper">
-                    <a class="btn btn-primary" [href]="[ocstBaseUrl() + '/OnlandVisualTrashAssessment/Instructions/-1']">Begin OVTA</a>
-                </div>
-                <div class="hero__btns-wrapper">
-                    <a class="btn btn-primary" [routerLink]="['onland-visual-trash-assessment']">View All OVTAs</a>
-                </div>
-                <div class="hero__btns-wrapper">
-                    <a class="btn btn-primary" [routerLink]="['onland-visual-trash-assessment-area']">View All OVTA Areas</a>
-                </div>
-                <div class="hero__btns-wrapper">
-                    <a class="btn btn-primary" [href]="[ocstBaseUrl() + '/TreatmentBMP/New']">Add a BMP</a>
-                </div>
-                <div class="hero__btns-wrapper">
-                    <a class="btn btn-primary" [href]="[ocstBaseUrl() + '/TreatmentBMP/FindABMP']">Record a BMP Visit</a>
-                </div>
-                <div class="hero__btns-wrapper">
-                    <a class="btn btn-primary" href="{{ ocstBaseUrl() }}">OCST Home</a>
-                </div>
-                <div class="hero__btns-wrapper">
-                    <a class="btn btn-primary" href="{{ requestSupportUrl() }}">Request Support</a>
+    <div class="hero__actions card g-col-4">
+        <ng-container *ngIf="currentUser$ | async as currentUser; else notSignedIn">
+            <div class="card-header"><h3 class="card-title">Quick Actions</h3></div>
+            <div class="card-body">
+                <div class="hero__btns">
+                    <div class="hero__btns-wrapper">
+                        <a class="btn btn-primary" [href]="[ocstBaseUrl() + '/OnlandVisualTrashAssessment/Instructions/-1']">Begin OVTA</a>
+                    </div>
+                    <div class="hero__btns-wrapper">
+                        <a class="btn btn-primary" [routerLink]="['onland-visual-trash-assessment']">View All OVTAs</a>
+                    </div>
+                    <div class="hero__btns-wrapper">
+                        <a class="btn btn-primary" [routerLink]="['onland-visual-trash-assessment-area']">View All OVTA Areas</a>
+                    </div>
+                    <div class="hero__btns-wrapper">
+                        <a class="btn btn-primary" [href]="[ocstBaseUrl() + '/TreatmentBMP/New']">Add a BMP</a>
+                    </div>
+                    <div class="hero__btns-wrapper">
+                        <a class="btn btn-primary" [href]="[ocstBaseUrl() + '/TreatmentBMP/FindABMP']">Record a BMP Visit</a>
+                    </div>
+                    <div class="hero__btns-wrapper">
+                        <a class="btn btn-primary" href="{{ ocstBaseUrl() }}">OCST Home</a>
+                    </div>
+                    <div class="hero__btns-wrapper">
+                        <a class="btn btn-primary" href="{{ requestSupportUrl() }}">Request Support</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </ng-container>
+        </ng-container>
 
-    <ng-template #notSignedIn>
-        <div class="card-header"><h3 class="card-title">Welcome.</h3></div>
-        <div class="card-body">
-            <p class="mb-2">Log in to view your Account. Create an Account if you don't have one yet.</p>
-            <div class="hero__btns">
-                <div class="hero__btns-wrapper">
-                    <a (click)="login()" class="btn btn-primary">Login</a>
+        <ng-template #notSignedIn>
+            <div class="card-header"><h3 class="card-title">Welcome.</h3></div>
+            <div class="card-body">
+                <p class="mb-2">Log in to view your Account. Create an Account if you don't have one yet.</p>
+                <div class="hero__btns">
+                    <div class="hero__btns-wrapper">
+                        <a (click)="login()" class="btn btn-primary">Login</a>
+                    </div>
+                    <div class="hero__btns-wrapper">
+                        <a (click)="createAccount()" class="btn btn-primary">Create Account</a>
+                    </div>
                 </div>
-                <div class="hero__btns-wrapper">
-                    <a (click)="createAccount()" class="btn btn-primary">Create Account</a>
+                <hr />
+                <div>
+                    <small style="font-size: 11px">
+                        Need help logging in? <br />
+                        <a href="{{ forgotPasswordUrl() }}">Forgot Password</a> | <a href="{{ forgotUsernameUrl() }}">Forgot Username</a> |
+                        <a href="{{ keystoneSupportUrl() }}">Request Support</a>
+                    </small>
                 </div>
             </div>
-            <hr />
-            <div>
-                <small style="font-size: 11px">
-                    Need help logging in? <br />
-                    <a href="{{ forgotPasswordUrl() }}">Forgot Password</a> | <a href="{{ forgotUsernameUrl() }}">Forgot Username</a> |
-                    <a href="{{ keystoneSupportUrl() }}">Request Support</a>
-                </small>
-            </div>
-        </div>
-    </ng-template>
+        </ng-template>
+    </div>
 </div>
+
 <!-- <div>
     <btn-group-radio-input [options]="tabs" (change)="setActiveTab($event)" [default]="activeTab" [showIcons]="true"></btn-group-radio-input>
     <div [hidden]="activeTab !== 'Area-Based Results'">
