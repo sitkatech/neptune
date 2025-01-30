@@ -1,4 +1,9 @@
-<page-header pageTitle="On-Land Visual Trash Assessments" [customRichTextTypeID]="customRichTextID"></page-header>
+<page-header pageTitle="On-Land Visual Trash Assessments" [customRichTextTypeID]="customRichTextID" [templateRight]="templateRight"></page-header>
+
+<ng-template #templateRight>
+    <a class="float-right btn btn-primary mr-2" [href]="url + '/OnlandVisualTrashAssessment/BulkUploadOTVAs'"> <icon [icon]="'Upload'"></icon> Upload OVTAs </a>
+</ng-template>
+
 <app-alert-display></app-alert-display>
 
 <div class="page-body" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">

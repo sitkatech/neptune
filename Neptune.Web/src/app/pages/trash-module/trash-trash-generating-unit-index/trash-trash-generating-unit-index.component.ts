@@ -25,7 +25,7 @@ export class TrashTrashGeneratingUnitIndexComponent {
     ngOnInit() {
         this.trashGeneratingUnitsColumnDefs = [
             this.utilityFunctionsService.createBasicColumnDef("Trash Generating Unit ID", "TrashGeneratingUnitID"),
-            this.utilityFunctionsService.createBasicColumnDef("Land Use Type", "PriorityLandUseTypeDisplayName", { FieldDefinitionType: "LandUseType" }),
+            this.utilityFunctionsService.createBasicColumnDef("Land Use Type", "PriorityLandUseTypeDisplayName"),
             this.utilityFunctionsService.createLinkColumnDef("Governing OVTA Area", "OnlandVisualTrashAssessmentAreaName", "OnlandVisualTrashAssessmentAreaID", {
                 InRouterLink: "../onland-visual-trash-assessment-area/",
             }),
@@ -34,7 +34,6 @@ export class TrashTrashGeneratingUnitIndexComponent {
             this.utilityFunctionsService.createBasicColumnDef("Governing WQMP", "WaterQualityManagementPlanName"),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName", {
                 CustomDropdownFilterField: "StormwaterJurisdictionName",
-                FieldDefinitionType: "Jurisdiction",
             }),
             this.utilityFunctionsService.createDecimalColumnDef("Area", "Area"),
             this.utilityFunctionsService.createDecimalColumnDef("Baseline Loading Rate", "BaselineLoadingRate"),

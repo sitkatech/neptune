@@ -9,11 +9,13 @@ import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated
 import { OnlandVisualTrashAssessmentAreaGridDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-grid-dto";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
+import { environment } from "src/environments/environment";
+import { IconComponent } from "../../../../shared/components/icon/icon.component";
 
 @Component({
     selector: "trash-ovta-area-index",
     standalone: true,
-    imports: [NeptuneGridComponent, PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, LoadingDirective],
+    imports: [NeptuneGridComponent, PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, LoadingDirective, IconComponent],
     templateUrl: "./trash-ovta-area-index.component.html",
     styleUrl: "./trash-ovta-area-index.component.scss",
 })
@@ -21,6 +23,7 @@ export class TrashOvtaAreaIndexComponent {
     public onlandVisualTrashAssessmentAreas$: Observable<OnlandVisualTrashAssessmentAreaGridDto[]>;
     public ovtaAreaColumnDefs: ColDef[];
     public isLoading: boolean = true;
+    public url = environment.ocStormwaterToolsBaseUrl;
 
     constructor(private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService, private utilityFunctionsService: UtilityFunctionsService) {}
 
