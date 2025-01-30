@@ -719,11 +719,11 @@ namespace Neptune.WebMvc.Controllers
                                         continue;
                                     }
                                     var id = PreliminarySourceIdentificationType.All.SingleOrDefault(x =>
-                                        x.PreliminarySourceIdentificationTypeDisplayName == identificationType.Trim() 
-                                        && x.PreliminarySourceIdentificationCategory.PreliminarySourceIdentificationCategoryDisplayName == category);
+                                        x.PreliminarySourceIdentificationTypeDisplayName.Trim() == identificationType
+                                        && x.PreliminarySourceIdentificationCategory.PreliminarySourceIdentificationCategoryDisplayName.Trim() == category);
                                     if (id == null)
                                     {
-                                        errors.Add($"{identificationType.Trim()} is not a valid Preliminary Source Identification Type for {category} in row {i + 1}");
+                                        errors.Add($"{identificationType} is not a valid Preliminary Source Identification Type for {category} in row {i + 1}");
                                         continue;
                                     }
                                     assessmentPreliminarySourceIdentificationTypes.Add(new OnlandVisualTrashAssessmentPreliminarySourceIdentificationType()
@@ -756,7 +756,7 @@ namespace Neptune.WebMvc.Controllers
                     }
                     catch (InvalidOperationException ioe)
                     {
-                        errors.Add(ioe.Message);
+                        errors.Add(ioe.Message + $" (row {i})");
                     }
                 }
             }
