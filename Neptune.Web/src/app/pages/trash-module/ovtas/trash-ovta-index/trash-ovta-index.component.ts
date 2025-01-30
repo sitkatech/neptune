@@ -32,7 +32,9 @@ export class TrashOvtaIndexComponent {
             this.utilityFunctionsService.createLinkColumnDef("Assessment Area Name", "OnlandVisualTrashAssessmentAreaName", "OnlandVisualTrashAssessmentAreaID", {
                 InRouterLink: "../onland-visual-trash-assessment-area/",
             }),
-            this.utilityFunctionsService.createBasicColumnDef("Assessment Score", "OnlandVisualTrashAssessmentScoreName"),
+            this.utilityFunctionsService.createBasicColumnDef("Assessment Score", "OnlandVisualTrashAssessmentScoreName", {
+                CustomDropdownFilterField: "OnlandVisualTrashAssessmentScoreName",
+            }),
             this.utilityFunctionsService.createBasicColumnDef("Assessment Type", "IsProgressAssessment", { CustomDropdownFilterField: "IsProgressAssessment" }),
             this.utilityFunctionsService.createDateColumnDef("Last Assessment Date", "CompletedDate", "short"),
             this.utilityFunctionsService.createBasicColumnDef("Status", "OnlandVisualTrashAssessmentStatusName", {
