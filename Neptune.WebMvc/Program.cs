@@ -21,6 +21,7 @@ using Neptune.Jobs.Services;
 using Serilog;
 using Serilog.Core;
 using LogHelper = Neptune.WebMvc.Services.Logging.LogHelper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -171,10 +172,10 @@ var builder = WebApplication.CreateBuilder(args);
     JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
     services.AddAuthentication(options =>
         {
-            options.DefaultScheme = "Cookies";
+            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = "Keystone";
         })
-        .AddCookie("Cookies", options => { options.Cookie.Name = $"Neptune{builder.Environment.EnvironmentName}"; })
+        .AddCookie()
         .AddOpenIdConnect("Keystone", options =>
         {
             options.Authority = configuration.KeystoneOpenIDUrl;

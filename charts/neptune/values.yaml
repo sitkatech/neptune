@@ -39,6 +39,8 @@ api:
   resources: 
     requests:
       memory: "1G"
+    limits:
+      memory: "8G"
   serviceAccount:
     # Specifies whether a service account should be created
     create: true
@@ -62,9 +64,8 @@ api:
     port: 80
   ingress:
     enabled: true
-    className: ""
+    className: "azure-application-gateway"
     annotations:
-      kubernetes.io/ingress.class: azure/application-gateway
       cert-manager.io/cluster-issuer: letsencrypt
       acme.cert-manager.io/http01-edit-in-place: "true"
       appgw.ingress.kubernetes.io/ssl-redirect: "true"
@@ -94,6 +95,8 @@ web:
   resources: 
     requests:
       memory: "1G"
+    limits:
+      memory: "2G"
   serviceAccount:
     # Specifies whether a service account should be created
     create: true
@@ -117,9 +120,8 @@ web:
     port: 80
   ingress:
     enabled: true
-    className: ""
+    className: "azure-application-gateway"
     annotations:
-      kubernetes.io/ingress.class: azure/application-gateway
       cert-manager.io/cluster-issuer: letsencrypt
       acme.cert-manager.io/http01-edit-in-place: "true"
       appgw.ingress.kubernetes.io/ssl-redirect: "true"
@@ -149,6 +151,8 @@ webmvc:
   resources: 
     requests:
       memory: "8G"
+    limits:
+      memory: "12G"
   serviceAccount:
     # Specifies whether a service account should be created
     create: true
@@ -172,9 +176,8 @@ webmvc:
     port: 80
   ingress:
     enabled: true
-    className: ""
+    className: "azure-application-gateway"
     annotations:
-      kubernetes.io/ingress.class: azure/application-gateway
       cert-manager.io/cluster-issuer: letsencrypt
       acme.cert-manager.io/http01-edit-in-place: "true"
       appgw.ingress.kubernetes.io/ssl-redirect: "true"
@@ -206,6 +209,8 @@ geoserver:
   resources: 
     requests:
       memory: "1G"
+    limits:
+      memory: "4G"
   serviceAccount:
     # Specifies whether a service account should be created
     create: true
@@ -229,9 +234,8 @@ geoserver:
     port: 80
   ingress:
     enabled: true
-    className: ""
+    className: "azure-application-gateway"
     annotations:
-      kubernetes.io/ingress.class: azure/application-gateway
       cert-manager.io/cluster-issuer: letsencrypt
       acme.cert-manager.io/http01-edit-in-place: "true"
       appgw.ingress.kubernetes.io/ssl-redirect: "true"
