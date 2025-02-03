@@ -27,7 +27,6 @@ import { OCTAGrantReviewerOnlyGuard } from "./shared/guards/unauthenticated-acce
 import { PlanningSiteLayoutComponent } from "./pages/planning-module/planning-site-layout/planning-site-layout.component";
 import { TrashSiteLayoutComponent } from "./pages/trash-module/trash-site-layout/trash-site-layout.component";
 import { TrashHomeComponent } from "./pages/trash-module/trash-home/trash-home.component";
-import { TrashAboutComponent } from "./pages/trash-module/trash-about/trash-about.component";
 import { PLanningHomeComponent as PlanningHomeComponent } from "./pages/planning-module/planning-home/planning-home/planning-home.component";
 import { SiteLayoutComponent } from "./pages/site-layout/site-layout.component";
 import { AboutComponent } from "./pages/about/about.component";
@@ -108,7 +107,6 @@ export const routes: Routes = [
         component: TrashSiteLayoutComponent,
         children: [
             { path: "", title: "Home", component: TrashHomeComponent },
-            { path: "about", component: TrashAboutComponent, canActivate: [UnauthenticatedAccessGuard] },
             {
                 path: "land-use-block",
                 component: TrashLandUseBlockIndexComponent,

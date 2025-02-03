@@ -76,7 +76,6 @@ export class TrashOvtaDetailComponent {
             this.layerControl.removeLayer(this.ovtaObservationLayer);
         }
         const ovtaObservationGeoJSON = this.mapObservationsToGeoJson(observations);
-        console.log(ovtaObservationGeoJSON);
         this.ovtaObservationLayer = new L.GeoJSON(ovtaObservationGeoJSON, {
             pointToLayer: (feature, latlng) => {
                 return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
