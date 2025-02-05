@@ -10,13 +10,17 @@
 <app-alert-display></app-alert-display>
 
 <div class="page-body" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
-    <div *ngIf="onlandVisualTrashAssessmentAreas$ | async as onlandVisualTrashAssessmentAreas">
-        <neptune-grid
-            height="800px"
-            [rowData]="onlandVisualTrashAssessmentAreas"
-            [columnDefs]="ovtaAreaColumnDefs"
-            downloadFileName="onland-visual-trash-assessment-areas"
-            [pagination]="true"
-            [sizeColumnsToFitGrid]="true"></neptune-grid>
-    </div>
+    <hybrid-map-grid
+        [rowData]="onlandVisualTrashAssessmentAreas$ | async"
+        [columnDefs]="ovtaAreaColumnDefs"
+        downloadFileName="test"
+        entityIDField="OnlandVisualTrashAssessmentAreaID"
+        (onMapLoad)="handleMapReady($event)"
+        [selectedValue]="ovtaAreaID"
+        (selectedValueChange)="onSelectedOVTAAreaChanged($event)">
+        <div mapLayers *ngIf="true">
+            <ovta-area-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></ovta-area-layer>
+        </div>
+        <div headerActions></div>
+    </hybrid-map-grid>
 </div>

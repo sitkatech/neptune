@@ -1,8 +1,10 @@
-import { Component, Input, OnChanges } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChange } from "@angular/core";
 import * as L from "leaflet";
 import { environment } from "src/environments/environment";
 import { MapLayerBase } from "../map-layer-base.component";
 import { CommonModule } from "@angular/common";
+import { WfsService } from "src/app/shared/services/wfs.service";
+import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 
 @Component({
     selector: "ovta-area-layer",
@@ -11,7 +13,7 @@ import { CommonModule } from "@angular/common";
     templateUrl: "./ovta-area-layer.component.html",
     styleUrl: "./ovta-area-layer.component.scss",
 })
-export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges {
+export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     constructor() {
         super();
     }
