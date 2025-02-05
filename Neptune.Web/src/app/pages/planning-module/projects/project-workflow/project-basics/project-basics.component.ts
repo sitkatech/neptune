@@ -150,7 +150,7 @@ export class ProjectBasicsComponent implements OnInit {
                 this.isLoadingSubmit = false;
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Your project was successfully created.", AlertContext.Success));
-                this.projectWorkflowProgressService.updateProgress(this.projectID);
+                this.projectWorkflowProgressService.updateProgress(response.ProjectID);
                 this.formGroup.patchValue(response);
                 this.formGroup.markAsPristine();
                 if (andContinue) {
