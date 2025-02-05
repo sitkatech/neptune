@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { combineLatest, map, Observable, of, pipe, switchMap, tap } from "rxjs";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
-import { ProjectUpsertDtoForm, ProjectUpsertDtoFormControls } from "src/app/shared/generated/model/models";
+import { OrganizationSimpleDto, PersonDto, ProjectUpsertDtoForm, ProjectUpsertDtoFormControls } from "src/app/shared/generated/model/models";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { OrganizationService } from "src/app/shared/generated/api/organization.service";
@@ -12,7 +12,7 @@ import { UserService } from "src/app/shared/generated/api/user.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { ProjectDto } from "src/app/shared/generated/model/models";
 import { NgSelectModule } from "@ng-select/ng-select";
-import { FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgIf, AsyncPipe } from "@angular/common";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
@@ -22,13 +22,26 @@ import { FormFieldComponent, FormFieldType } from "src/app/shared/components/for
 import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component";
 import { ProjectWorkflowProgressService } from "src/app/shared/services/project-workflow-progress.service";
 import { AuthenticationService } from "src/app/services/authentication.service";
+import { SelectDropDownModule } from "ngx-select-dropdown";
+import { ConsoleService } from "@ng-select/ng-select/lib/console.service";
 
 @Component({
     selector: "project-basics",
     templateUrl: "./project-basics.component.html",
     styleUrls: ["./project-basics.component.scss"],
     standalone: true,
-    imports: [NgIf, AsyncPipe, ReactiveFormsModule, FormsModule, FormFieldComponent, NgSelectModule, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent],
+    imports: [
+        NgIf,
+        AsyncPipe,
+        ReactiveFormsModule,
+        FormsModule,
+        FormFieldComponent,
+        NgSelectModule,
+        PageHeaderComponent,
+        WorkflowBodyComponent,
+        AlertDisplayComponent,
+        SelectDropDownModule,
+    ],
 })
 export class ProjectBasicsComponent implements OnInit {
     public FormFieldType = FormFieldType;
@@ -43,6 +56,34 @@ export class ProjectBasicsComponent implements OnInit {
     public customRichTextTypeID: number = NeptunePageTypeEnum.HippocampProjectBasics;
     public originalProjectModel: string;
     public projectBasicInfo$: Observable<ProjectDto>;
+
+    public orgDropdownConfig = {
+        search: true,
+        height: "320px",
+        placeholder: "Select an organization",
+        searchFn: (option: SelectDropdownOption) => option.Label,
+        displayFn: (option: SelectDropdownOption) => option.Label,
+    };
+
+    public contactDropdownConfig = {
+        search: true,
+        height: "320px",
+        placeholder: "Select an contact",
+        searchFn: (option: SelectDropdownOption) => option.Label,
+        displayFn: (option: SelectDropdownOption) => option.Label,
+    };
+
+    public jurisdictionDropdownConfig = {
+        search: true,
+        height: "320px",
+        placeholder: "Select an jurisdiction",
+        searchFn: (option: SelectDropdownOption) => option.Label,
+        displayFn: (option: SelectDropdownOption) => option.Label,
+    };
+
+    public selectedOrg: FormControl = new FormControl();
+    public selectedContact: FormControl = new FormControl();
+    public selectedJurisdiction: FormControl = new FormControl();
 
     public formGroup: FormGroup<ProjectUpsertDtoForm> = new FormGroup<any>({
         ProjectName: ProjectUpsertDtoFormControls.ProjectName(),
@@ -94,6 +135,12 @@ export class ProjectBasicsComponent implements OnInit {
                         this.formGroup.controls.AdditionalContactInformation.setValue(value.Project.AdditionalContactInformation);
                         this.formGroup.controls.CalculateOCTAM2Tier2Scores.setValue(value.Project.CalculateOCTAM2Tier2Scores);
                         this.isLoadingSubmit = false;
+                        this.selectedOrg.setValue({ Value: value.Project.OrganizationID, Label: value.Project.Organization.OrganizationName });
+                        this.selectedContact.setValue({ Value: value.Project.PrimaryContactPersonID, Label: value.Project.PrimaryContactPerson.FullName });
+                        this.selectedJurisdiction.setValue({
+                            Value: value.Project.StormwaterJurisdictionID,
+                            Label: value.Project.StormwaterJurisdiction.Organization.OrganizationName,
+                        });
                     } else {
                         this.formGroup.controls.PrimaryContactPersonID.setValue(value.CurrentUser.PersonID);
                     }
@@ -131,6 +178,18 @@ export class ProjectBasicsComponent implements OnInit {
         );
     }
 
+    public onOrgSelected(event: any) {
+        this.formGroup.controls.OrganizationID.patchValue(event.Value);
+    }
+
+    public onContactSelected(event: any) {
+        this.formGroup.controls.PrimaryContactPersonID.patchValue(event.Value);
+    }
+
+    public onJurisdictionSelected(event: any) {
+        this.formGroup.controls.StormwaterJurisdictionID.patchValue(event.Value);
+    }
+
     public save(andContinue: boolean = false) {
         this.isLoadingSubmit = true;
         if (this.projectID) {
@@ -139,7 +198,7 @@ export class ProjectBasicsComponent implements OnInit {
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Your project was successfully updated.", AlertContext.Success));
                 this.projectWorkflowProgressService.updateProgress(this.projectID);
-                this.formGroup.patchValue(response);
+                //this.formGroup.patchValue(response);
                 this.formGroup.markAsPristine();
                 if (andContinue) {
                     this.router.navigate(["../stormwater-treatments/treatment-bmps"], { relativeTo: this.route });

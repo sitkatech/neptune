@@ -11,27 +11,30 @@
                 [required]="false"
                 [type]="FormFieldType.Textarea"></form-field>
             <h3 class="mt-4">Project Contact Information</h3>
-            <form-field
-                class="g-col-12"
-                *ngIf="organizationOptions$ | async as organizationOptions"
-                [formInputOptions]="organizationOptions"
-                [formControl]="formGroup.controls.OrganizationID"
-                [fieldLabel]="'Project Owner'"
-                [type]="FormFieldType.Select"></form-field>
-            <form-field
-                class="g-col-12"
-                *ngIf="stormwaterJurisdictionOptions$ | async as stormwaterJurisdictionOptions"
-                [formInputOptions]="stormwaterJurisdictionOptions"
-                [formControl]="formGroup.controls.StormwaterJurisdictionID"
-                [fieldLabel]="'Jurisdiction'"
-                [type]="FormFieldType.Select"></form-field>
-            <form-field
-                class="g-col-12"
-                *ngIf="userOptions$ | async as userOptions"
-                [formInputOptions]="userOptions"
-                [formControl]="formGroup.controls.PrimaryContactPersonID"
-                [fieldLabel]="'Primary Contact'"
-                [type]="FormFieldType.Select"></form-field>
+            <div class="field-label required">Project Owner</div>
+            <ngx-select-dropdown
+                [multiple]="false"
+                [config]="orgDropdownConfig"
+                name="selectedOrg"
+                [formControl]="selectedOrg"
+                (ngModelChange)="onOrgSelected($event)"
+                [options]="organizationOptions$ | async"></ngx-select-dropdown>
+            <div class="field-label required">Jurisdiction</div>
+            <ngx-select-dropdown
+                [multiple]="false"
+                [config]="jurisdictionDropdownConfig"
+                name="selectedJurisdiction"
+                [formControl]="selectedJurisdiction"
+                (ngModelChange)="onJurisdictionSelected($event)"
+                [options]="stormwaterJurisdictionOptions$ | async"></ngx-select-dropdown>
+            <div class="field-label required">Primary Contact</div>
+            <ngx-select-dropdown
+                [multiple]="false"
+                [config]="contactDropdownConfig"
+                name="selectedContact"
+                [formControl]="selectedContact"
+                (ngModelChange)="onContactSelected($event)"
+                [options]="userOptions$ | async"></ngx-select-dropdown>
             <form-field
                 class="g-col-12"
                 [formControl]="formGroup.controls.AdditionalContactInformation"
