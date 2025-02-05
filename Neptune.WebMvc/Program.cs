@@ -175,7 +175,15 @@ var builder = WebApplication.CreateBuilder(args);
             options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = "Keystone";
         })
-        .AddCookie()
+        .AddCookie(opt =>
+        {
+            opt.Cookie.HttpOnly = true;
+            opt.Cookie.SameSite = SameSiteMode.Lax;
+            //if (!builder.Environment.IsDevelopment())
+            //{
+            //    opt.Cookie.Domain = ".ocstormwatertools.org";
+            //}
+        })
         .AddOpenIdConnect("Keystone", options =>
         {
             options.Authority = configuration.KeystoneOpenIDUrl;
