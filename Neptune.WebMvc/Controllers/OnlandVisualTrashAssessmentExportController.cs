@@ -68,7 +68,7 @@ namespace Neptune.WebMvc.Controllers
             });
 
 
-            return File(bytes, "application/zip", $"ovta-export-{jurisdictionName}.gdb.zip");
+            return File(bytes, "application/zip", $"ovta-export-{jurisdictionName}.zip");
         }
 
         private ViewResult ViewExportAssessmentGeospatialData(ExportAssessmentGeospatialDataViewModel viewModel)

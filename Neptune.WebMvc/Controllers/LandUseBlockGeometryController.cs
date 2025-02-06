@@ -239,7 +239,7 @@ namespace Neptune.WebMvc.Controllers
                 GdbName = $"{jurisdictionName}-land-use-blocks-export"
             });
 
-            return File(bytes, "application/zip", $"{jurisdictionName}-land-use-block.gdb.zip");
+            return File(bytes, "application/zip", $"{jurisdictionName}-land-use-block.zip");
         }
 
         private ViewResult ViewDownloadLandUseBlockGeometry(DownloadLandUseBlockGeometryViewModel viewModel)
