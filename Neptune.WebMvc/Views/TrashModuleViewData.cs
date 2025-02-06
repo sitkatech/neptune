@@ -21,7 +21,8 @@ namespace Neptune.WebMvc.Views
             TopLevelLtInfoMenuItems = new List<LtInfoMenuItem>
             {
                 BuildOVTAMenu(CurrentPerson),
-                BuildResultsMenu(CurrentPerson)
+                BuildResultsMenu(CurrentPerson),
+                BuildDataHubMenu(CurrentPerson)
             };
 
             if (!CurrentPerson.IsAnonymousOrUnassigned())
@@ -48,6 +49,11 @@ namespace Neptune.WebMvc.Views
         private LtInfoMenuItem BuildResultsMenu(Person currentPerson)
         {
             return new LtInfoMenuItem(SitkaRoute<TrashHomeController>.BuildUrlFromExpression(LinkGenerator, x => x.Index()), "Results", true, true, null);
+        }
+
+        private LtInfoMenuItem BuildDataHubMenu(Person currentPerson)
+        {
+            return new LtInfoMenuItem(SitkaRoute<DataHubController>.BuildUrlFromExpression(LinkGenerator, x => x.Index()), "Data Hub", currentPerson.IsManagerOrAdmin(), true, null);
         }
 
         private LtInfoMenuItem BuildManageMenu(Person currentPerson)
