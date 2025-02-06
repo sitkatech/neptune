@@ -4,6 +4,9 @@
     <nav class="site-nav">
         <div class="collapse navbar-collapse" *ngIf="currentUser$ | async as currentUser">
             <ul class="site-nav__links site-nav__main">
+                <li class="nav-item" routerLinkActive="active">
+                    <a [href]="siteUrl + '/DataHub/Index'" class="nav-link" role="button"> Data Hub </a>
+                </li>
                 <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAdministrator(currentUser)">
                     <a
                         href="javascript:void(0);"
