@@ -1,4 +1,6 @@
-﻿namespace Neptune.Models.DataTransferObjects;
+﻿using NetTopologySuite.Geometries;
+
+namespace Neptune.Models.DataTransferObjects;
 
 public class OnlandVisualTrashAssessmentObservationWithPhotoDto
 {
@@ -7,4 +9,6 @@ public class OnlandVisualTrashAssessmentObservationWithPhotoDto
     public string Note { get; set; }
     public DateTime ObservationDatetime { get; set; }
     public string FileResourceGUID { get; set; }
+    public double Longitude { get; set; }
+    public double Latitude { get; set; }
 }

@@ -3497,6 +3497,14 @@
           "FileResourceGUID": {
             "type": "string",
             "nullable": true
+          },
+          "Longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "Latitude": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false

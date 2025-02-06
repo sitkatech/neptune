@@ -1,0 +1,110 @@
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ColDef, GridApi, GridReadyEvent } from "ag-grid-community";
+import { AgGridAngular } from "ag-grid-angular";
+import { Map, layerControl } from "leaflet";
+import { LoadingDirective } from "../../directives/loading.directive";
+import { IconComponent } from "../icon/icon.component";
+import { CommonModule } from "@angular/common";
+import { NeptuneGridHeaderComponent } from "../neptune-grid-header/neptune-grid-header.component";
+import { NeptuneGridComponent } from "../neptune-grid/neptune-grid.component";
+import { NeptuneMapComponent, NeptuneMapInitEvent } from "../leaflet/neptune-map/neptune-map.component";
+
+@Component({
+    selector: "hybrid-map-grid",
+    standalone: true,
+    imports: [LoadingDirective, IconComponent, CommonModule, NeptuneGridHeaderComponent, NeptuneGridComponent, NeptuneMapComponent],
+    templateUrl: "./hybrid-map-grid.component.html",
+    styleUrl: "./hybrid-map-grid.component.scss",
+})
+export class HybridMapGridComponent {
+    @Input() rowData: any[];
+    @Input() columnDefs: ColDef[];
+    @Input() downloadFileName: string;
+    @Input() selectedValue: number = null;
+    @Input() entityIDField: string = "";
+    @Input() mapHeight: string = "720px";
+
+    @Output() onMapLoad: EventEmitter<NeptuneMapInitEvent> = new EventEmitter();
+    @Output() selectedValueChange: EventEmitter<number> = new EventEmitter<number>();
+    public gridApi: GridApi;
+    public gridRef: AgGridAngular;
+
+    public selectedPanel: "Grid" | "Hybrid" | "Map" = "Hybrid";
+
+    public map: Map;
+    public layerControl: layerControl;
+    public bounds: any;
+    public mapIsReady: boolean = false;
+
+    public isLoading: boolean = true;
+    public firstLoad: boolean = true;
+
+    ngOnChanges(changes: any): void {
+        if (changes.selectedValue) {
+            if (changes.selectedValue.previousValue == changes.selectedValue.currentValue) return;
+            this.selectedValue = changes.selectedValue.currentValue;
+            this.onMapSelectionChanged(this.selectedValue);
+        }
+    }
+
+    public toggleSelectedPanel(selectedPanel: "Grid" | "Hybrid" | "Map") {
+        this.selectedPanel = selectedPanel;
+
+        // resizing map to fit new container width; timeout needed to ensure new width has registered before running invalidtaeSize()
+        setTimeout(() => {
+            this.map.invalidateSize(true);
+
+            if (this.layerControl && this.bounds) {
+                this.map.fitBounds(this.bounds);
+            }
+        }, 300);
+
+        // if no map is visible, turn of grid selection
+        if (selectedPanel == "Grid") {
+            this.gridApi.setGridOption("rowSelection", null);
+            this.selectedValue = undefined;
+        } else {
+            this.gridApi.setGridOption("rowSelection", "single");
+        }
+    }
+
+    public handleMapReady(event: NeptuneMapInitEvent) {
+        this.map = event.map;
+        this.mapIsReady = true;
+
+        this.onMapLoad.emit(event);
+    }
+
+    public onGridReady(event: GridReadyEvent) {
+        this.gridApi = event.api;
+    }
+
+    public onGridRefReady(gridRef: AgGridAngular) {
+        this.gridRef = gridRef;
+    }
+
+    public onGridSelectionChanged() {
+        const selectedNodes = this.gridApi.getSelectedNodes();
+
+        this.selectedValue = selectedNodes.length > 0 ? selectedNodes[0].data[this.entityIDField] : null;
+        this.gridApi.forEachNode((node, index) => {
+            if (node.data[this.entityIDField] == this.selectedValue) {
+                node.setSelected(true, true);
+                this.gridApi.ensureIndexVisible(index, "top");
+            }
+        });
+        this.selectedValueChange.emit(this.selectedValue);
+    }
+
+    public onMapSelectionChanged(selectedWaterAccountID: number) {
+        this.selectedValue = selectedWaterAccountID;
+
+        this.gridApi.forEachNode((node, index) => {
+            if (node.data[this.entityIDField] == selectedWaterAccountID) {
+                node.setSelected(true, true);
+                this.gridApi.ensureIndexVisible(index, "top");
+            }
+        });
+        return this.selectedValue;
+    }
+}

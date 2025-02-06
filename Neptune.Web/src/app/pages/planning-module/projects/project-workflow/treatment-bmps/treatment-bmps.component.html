@@ -49,7 +49,7 @@
                         <label class="field-label required"><field-definition fieldDefinitionType="TreatmentBMPType"></field-definition></label>
                         <div *ngIf="selectedTreatmentBMP.TreatmentBMPID > 0; else treatmentBMPTypeSelect">
                             {{ getTypeNameByTypeID(selectedTreatmentBMP.TreatmentBMPTypeID) }}
-                            <button class="btn btn-sm btn-outline-primary ml-2" (click)="openEditTreatmentBMPTypeModal()">Change Type</button>
+                            <button class="btn btn-sm btn-secondary l-2" (click)="openEditTreatmentBMPTypeModal()">Change Type</button>
                         </div>
                         <ng-template #treatmentBMPTypeSelect>
                             <select name="type" [(ngModel)]="selectedTreatmentBMP.TreatmentBMPTypeID" (change)="updateModelingTypeOnTypeChange($event)" required>

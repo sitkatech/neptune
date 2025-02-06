@@ -1,0 +1,10 @@
+@use "/src/scss/abstracts" as *;
+
+.selected-observation {
+    background-color: $yellow-default;
+}
+
+.observations {
+    max-height: 550px;
+    overflow-x: scroll;
+}

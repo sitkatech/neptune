@@ -77,17 +77,14 @@
     &__actions {
         background: $white;
         box-shadow: $shadow-200;
-        margin: 2rem;
+        margin: 0rem 1rem;
 
         @include desktop-small {
-            grid-column: 1;
-            grid-row: 1;
-            z-index: 3;
+            z-index: 7;
             max-width: 24rem;
             width: 50%;
             align-self: end;
-            justify-self: end;
-            transform: translateY(6rem);
+            justify-self: center;
         }
 
         .card-header {
@@ -112,9 +109,6 @@
             }
         }
     }
-}
-.common-tasks {
-    text-align: center;
 }
 
 .alert-container {

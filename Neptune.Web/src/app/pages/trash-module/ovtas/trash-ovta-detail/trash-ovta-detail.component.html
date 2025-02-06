@@ -47,19 +47,32 @@
         </div>
         <div class="card g-col-6">
             <div class="card-header">Observations</div>
-            <div class="card-body">
-                <dl class="grid-12" *ngFor="let item of onlandVisualTrashAssessment.Observations">
-                    <dd class="g-col-12">
-                        <img [src]="getUrl(item.FileResourceGUID)" style="width: 500px; height: 600px" />
-                        {{ item.Note ?? "No notes" }}
-                    </dd>
-                </dl>
+            <div class="card-body observations">
+                <div class="grid-12" *ngFor="let item of onlandVisualTrashAssessment.Observations">
+                    <div
+                        [id]="item.OnlandVisualTrashAssessmentObservationID"
+                        class="g-col-12 mb-4"
+                        [ngClass]="{
+                            'selected-observation':
+                                selectedOVTAObservation != null && selectedOVTAObservation.OnlandVisualTrashAssessmentObservationID == item.OnlandVisualTrashAssessmentObservationID
+                        }"
+                        (click)="selectOVTAObservationImpl(onlandVisualTrashAssessment.Observations, item.OnlandVisualTrashAssessmentObservationID)">
+                        <img [src]="getUrl(item.FileResourceGUID)" style="width: 400px; height: 500px" />
+                        <div class="mt-2">
+                            {{ item.Note ?? "No note provided" }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card g-col-6">
             <div class="card-header">Map</div>
             <div class="card-body">
-                <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="400px" [showLegend]="false" [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
+                <neptune-map
+                    (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment.Observations)"
+                    mapHeight="400px"
+                    [showLegend]="false"
+                    [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
                     <ovta-area-layer
                         *ngIf="mapIsReady"
                         [displayOnLoad]="true"
@@ -67,13 +80,6 @@
                         [layerControl]="layerControl"
                         [sortOrder]="10"
                         [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
-                    <ovta-observation-layer
-                        *ngIf="mapIsReady"
-                        [displayOnLoad]="true"
-                        [map]="map"
-                        [layerControl]="layerControl"
-                        [sortOrder]="20"
-                        [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></ovta-observation-layer>
                     <transect-line-layer
                         *ngIf="mapIsReady"
                         [displayOnLoad]="true"

@@ -17,6 +17,8 @@ export class OnlandVisualTrashAssessmentObservationWithPhotoDto {
     Note?: string;
     ObservationDatetime?: string;
     FileResourceGUID?: string;
+    Longitude?: number;
+    Latitude?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -28,6 +30,8 @@ export interface OnlandVisualTrashAssessmentObservationWithPhotoDtoForm {
     Note?: FormControl<string>;
     ObservationDatetime?: FormControl<string>;
     FileResourceGUID?: FormControl<string>;
+    Longitude?: FormControl<number>;
+    Latitude?: FormControl<number>;
 }
 
 export class OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls { 
@@ -72,6 +76,26 @@ export class OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls {
         }
     );
     public static FileResourceGUID = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Longitude = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Latitude = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

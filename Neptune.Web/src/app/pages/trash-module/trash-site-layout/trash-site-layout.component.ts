@@ -5,13 +5,15 @@ import { AsyncPipe, NgIf } from "@angular/common";
 import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { HeaderNavComponent } from "../../../shared/components/header-nav/header-nav.component";
 import { Observable } from "rxjs";
+import { IconComponent } from "../../../shared/components/icon/icon.component";
+import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
 
 @Component({
     selector: "trash-site-layout",
     templateUrl: "./trash-site-layout.component.html",
     styleUrls: ["./trash-site-layout.component.scss"],
     standalone: true,
-    imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, AsyncPipe, HeaderNavComponent],
+    imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, AsyncPipe, HeaderNavComponent, IconComponent, DropdownToggleDirective],
 })
 export class TrashSiteLayoutComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;

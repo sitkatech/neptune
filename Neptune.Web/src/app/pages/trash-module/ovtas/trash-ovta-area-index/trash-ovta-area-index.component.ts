@@ -9,11 +9,17 @@ import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated
 import { OnlandVisualTrashAssessmentAreaGridDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-grid-dto";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
+import { environment } from "src/environments/environment";
+import { IconComponent } from "../../../../shared/components/icon/icon.component";
+import { HybridMapGridComponent } from "../../../../shared/components/hybrid-map-grid/hybrid-map-grid.component";
+import { NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
+import { Map, layerControl } from "leaflet";
+import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 
 @Component({
     selector: "trash-ovta-area-index",
     standalone: true,
-    imports: [NeptuneGridComponent, PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, LoadingDirective],
+    imports: [NeptuneGridComponent, PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, LoadingDirective, IconComponent, HybridMapGridComponent, OvtaAreaLayerComponent],
     templateUrl: "./trash-ovta-area-index.component.html",
     styleUrl: "./trash-ovta-area-index.component.scss",
 })
@@ -21,6 +27,13 @@ export class TrashOvtaAreaIndexComponent {
     public onlandVisualTrashAssessmentAreas$: Observable<OnlandVisualTrashAssessmentAreaGridDto[]>;
     public ovtaAreaColumnDefs: ColDef[];
     public isLoading: boolean = true;
+    public url = environment.ocStormwaterToolsBaseUrl;
+    public ovtaAreaID: number;
+
+    public map: Map;
+    public layerControl: layerControl;
+    public bounds: any;
+    public mapIsReady: boolean = false;
 
     constructor(private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService, private utilityFunctionsService: UtilityFunctionsService) {}
 
@@ -41,5 +54,20 @@ export class TrashOvtaAreaIndexComponent {
             this.utilityFunctionsService.createBasicColumnDef("Description", "AssessmentAreaDescription"),
         ];
         this.onlandVisualTrashAssessmentAreas$ = this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasGet().pipe(tap((x) => (this.isLoading = false)));
+    }
+
+    public handleMapReady(event: NeptuneMapInitEvent) {
+        this.map = event.map;
+        this.layerControl = event.layerControl;
+        this.mapIsReady = true;
+
+        //this.cdr.detectChanges();
+    }
+
+    public onSelectedOVTAAreaChanged(selectedOVTAAreaID) {
+        if (this.ovtaAreaID == selectedOVTAAreaID) return;
+
+        this.ovtaAreaID = selectedOVTAAreaID;
+        return this.ovtaAreaID;
     }
 }

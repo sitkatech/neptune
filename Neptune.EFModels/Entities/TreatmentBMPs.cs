@@ -343,14 +343,14 @@ namespace Neptune.EFModels.Entities
             return GetImpl(dbContext).Where(x => treatmentBMPIDList.Contains(x.TreatmentBMPID)).ToList();
         }
 
-        public static int ChangeTreatmentBMPType(NeptuneDbContext dbContext, int treatmentBMPID, int treatmentBMPTypeID)
+        public static int? ChangeTreatmentBMPType(NeptuneDbContext dbContext, int treatmentBMPID, int treatmentBMPTypeID)
         {
             dbContext.Database.ExecuteSqlRaw(
                 "EXECUTE dbo.pTreatmentBMPUpdateTreatmentBMPType @treatmentBMPID={0}, @treatmentBMPTypeID={1}",
                 treatmentBMPID, treatmentBMPTypeID);
             var treatmentBMPModelingType = dbContext.TreatmentBMPTypes
-                .Single(x => x.TreatmentBMPTypeID == treatmentBMPTypeID).TreatmentBMPModelingTypeID;
-            return (int)treatmentBMPModelingType;
+                .SingleOrDefault(x => x.TreatmentBMPTypeID == treatmentBMPTypeID).TreatmentBMPModelingTypeID;
+            return treatmentBMPModelingType;
         }
 
         public static TreatmentBMP GetByTreatmentBMPID(NeptuneDbContext dbContext, int treatmentBMPID)

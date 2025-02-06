@@ -12,7 +12,9 @@ public static partial class OnlandVisualTrashAssessmentObservationExtensionMetho
             OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentID,
             Note = onlandVisualTrashAssessmentObservation.Note,
             ObservationDatetime = onlandVisualTrashAssessmentObservation.ObservationDatetime,
-            FileResourceGUID = onlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault()?.FileResource.FileResourceGUID.ToString()
+            FileResourceGUID = onlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault()?.FileResource.FileResourceGUID.ToString(),
+            Longitude = onlandVisualTrashAssessmentObservation.LocationPoint4326.Coordinate.X,
+            Latitude = onlandVisualTrashAssessmentObservation.LocationPoint4326.Coordinate.Y
         };
         return dto;
     }

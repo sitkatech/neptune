@@ -5,8 +5,26 @@
         <div class="collapse navbar-collapse" *ngIf="currentUser$ | async as currentUser">
             <ul class="site-nav__links site-nav__main">
                 <ng-container *ngIf="isAuthenticated() && isNotUnassigned(currentUser)">
-                    <li class="nav-item" routerLinkActive="active">
-                        <a [routerLink]="['/trash/onland-visual-trash-assessment']" class="nav-link" role="button"> OVTAs </a>
+                    <li class="nav-item dropdown" routerLinkActive="active">
+                        <a
+                            href="javascript:void(0);"
+                            [dropdownToggle]="grantProgramsToggle"
+                            class="nav-link dropdown-toggle"
+                            role="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                            <span class="nav-link__label">
+                                OVTAs
+                                <icon icon="AngleDown"></icon>
+                            </span>
+                        </a>
+
+                        <div #grantProgramsToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-divider"></div>
+                            <a [routerLink]="['/trash/onland-visual-trash-assessment']" class="dropdown-item"> OVTAs </a>
+                            <a [routerLink]="['/trash/onland-visual-trash-assessment-area']" class="dropdown-item"> OVTA Areas </a>
+                        </div>
                     </li>
                 </ng-container>
             </ul>
