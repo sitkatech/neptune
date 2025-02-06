@@ -223,6 +223,22 @@ namespace Neptune.WebMvc.Controllers
                 featureCollection.Add(new Feature(delineation.DelineationGeometry, attributesTable));
             }
 
+            if (featureCollection.Count == 0)
+            {
+                var attributesTable = new AttributesTable
+                {
+                    { "DelineationID", null },
+                    { "TreatmentBMPName", null },
+                    { "Jurisdiction", null },
+                    { "BMPType", null },
+                    { "DelineationStatus", null },
+                    { "DelineationArea", null },
+                    { "DateOfLastDelineationModification", null },
+                    { "DateOfLastDelineationVerification", null },
+                };
+                featureCollection.Add(new Feature(null, attributesTable));
+            }
+
             var jurisdictionName = stormwaterJurisdiction.Replace(' ', '-');
             var delineationTypeName = DelineationType.AllLookupDictionary[(int)viewModel.DelineationTypeID]
                 .DelineationTypeDisplayName;

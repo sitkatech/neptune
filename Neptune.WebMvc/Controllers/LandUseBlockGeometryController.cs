@@ -221,6 +221,26 @@ namespace Neptune.WebMvc.Controllers
                 featureCollection.Add(feature);
             }
 
+            if (featureCollection.Count == 0)
+            {
+                var attributesTable = new AttributesTable
+                {
+                    { "LandUseBlockID", null },
+                    { "PriorityLandUseType", null},
+                    { "BlockArea", null },
+                    { "LandUseDescription", null },
+                    { "TrashGenerationRate", null },
+                    { "TrashResultsArea", null },
+                    { "LandUseForTGR", null },
+                    { "MedianHouseholdIncomeRetail", null },
+                    { "MedianHouseholdIncomeResidential", null },
+                    { "StormwaterJurisdiction", null },
+                    { "PermitType", null }
+                };
+                var feature = new Feature(null, attributesTable);
+                featureCollection.Add(feature);
+            }
+
             await GeoJsonSerializer.SerializeAsGeoJsonToStream(featureCollection,
                 GeoJsonSerializer.DefaultSerializerOptions, stream);
 

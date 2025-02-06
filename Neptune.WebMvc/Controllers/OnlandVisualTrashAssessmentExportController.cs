@@ -7,6 +7,7 @@ using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessmentExport;
+using NetTopologySuite.Algorithm;
 using NetTopologySuite.Features;
 
 namespace Neptune.WebMvc.Controllers
@@ -50,6 +51,17 @@ namespace Neptune.WebMvc.Controllers
                     { "CreatedOn", area.OnlandVisualTrashAssessments?.MaxBy(x => x.CreatedDate)?.CreatedDate }
                 };
                 areaFeatureCollection.Add(new Feature(area.OnlandVisualTrashAssessmentAreaGeometry, attributesTable));
+            }
+
+            if (areaFeatureCollection.Count == 0)
+            {
+                var attributesTable = new AttributesTable
+                {
+                    { "OVTAAreaName", null },
+                    { "Description", null },
+                    { "CreatedOn", null }
+                };
+                areaFeatureCollection.Add(new Feature(null, attributesTable));
             }
 
             var gdbInput = new GdbInput()
