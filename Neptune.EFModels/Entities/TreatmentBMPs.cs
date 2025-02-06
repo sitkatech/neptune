@@ -349,11 +349,11 @@ namespace Neptune.EFModels.Entities
                 "EXECUTE dbo.pTreatmentBMPUpdateTreatmentBMPType @treatmentBMPID={0}, @treatmentBMPTypeID={1}",
                 treatmentBMPID, treatmentBMPTypeID);
             var treatmentBMPModelingType = dbContext.TreatmentBMPTypes
-                .SingleOrDefault(x => x.TreatmentBMPTypeID == treatmentBMPTypeID).TreatmentBMPModelingTypeID;
+                .SingleOrDefault(x => x.TreatmentBMPTypeID == treatmentBMPTypeID)?.TreatmentBMPModelingTypeID;
             return treatmentBMPModelingType;
         }
 
-        public static TreatmentBMP GetByTreatmentBMPID(NeptuneDbContext dbContext, int treatmentBMPID)
+        public static TreatmentBMP? GetByTreatmentBMPID(NeptuneDbContext dbContext, int treatmentBMPID)
         {
             return dbContext.TreatmentBMPs.SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
         }
