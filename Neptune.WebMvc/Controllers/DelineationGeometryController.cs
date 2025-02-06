@@ -237,7 +237,7 @@ namespace Neptune.WebMvc.Controllers
             var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
             {
                 GdbInputs = new List<GdbInput> { gdbInput },
-                GdbName = $"{jurisdictionName}-delineation-export"
+                GdbName = $"{delineationTypeName.ToLower()}-{jurisdictionName}-delineation-export"
             });
 
             return File(bytes, "application/zip", $"{delineationTypeName.ToLower()}-{jurisdictionName}-delineation-export.gdb.zip");
