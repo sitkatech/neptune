@@ -683,6 +683,7 @@ stages:
                 api.image.repository="$(kv-containerRegistry)/neptune/api"
                 web.image.tag="$(Build.BuildNumber)-$(environment)"
                 web.image.repository="$(kv-containerRegistry)/neptune/web"
+                geoserver.image.repository="$(kv-containerRegistry)/kartoza/geoserver"
                 webmvc.image.tag="$(Build.BuildNumber)-$(environment)"
                 webmvc.image.repository="$(kv-containerRegistry)/neptune/webmvc"
                 gdalapi.image.tag="$(Build.BuildNumber)-$(environment)"
