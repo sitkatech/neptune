@@ -309,7 +309,9 @@ namespace Neptune.WebMvc.Controllers
 
             // Will break if there are multiple batches of staged uploads, which is precisely what we want to happen. 
             var stormwaterJurisdictionID = delineationStagings.Select(x => x.StormwaterJurisdictionID).Distinct().Single();
-            var stormwaterJurisdiction = StormwaterJurisdictions.GetByID(_dbContext, stormwaterJurisdictionID);
+            var stormwaterJurisdiction = _dbContext.StormwaterJurisdictions.Include(x => x.Organization)
+                .Include(x => x.TreatmentBMPs).ThenInclude(x => x.Delineation)
+                .Single(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID);
             var stormwaterJurisdictionName = stormwaterJurisdiction.GetOrganizationDisplayName();
                                                         
             // Starting from the treatment BMP is kind of backwards, conceptually, but it's easier to read and write
