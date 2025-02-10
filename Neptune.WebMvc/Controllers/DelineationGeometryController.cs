@@ -223,6 +223,22 @@ namespace Neptune.WebMvc.Controllers
                 featureCollection.Add(new Feature(delineation.DelineationGeometry, attributesTable));
             }
 
+            if (featureCollection.Count == 0)
+            {
+                var attributesTable = new AttributesTable
+                {
+                    { "DelineationID", null },
+                    { "TreatmentBMPName", null },
+                    { "Jurisdiction", null },
+                    { "BMPType", null },
+                    { "DelineationStatus", null },
+                    { "DelineationArea", null },
+                    { "DateOfLastDelineationModification", null },
+                    { "DateOfLastDelineationVerification", null },
+                };
+                featureCollection.Add(new Feature(null, attributesTable));
+            }
+
             var jurisdictionName = stormwaterJurisdiction.Replace(' ', '-');
             var delineationTypeName = DelineationType.AllLookupDictionary[(int)viewModel.DelineationTypeID]
                 .DelineationTypeDisplayName;
@@ -237,10 +253,10 @@ namespace Neptune.WebMvc.Controllers
             var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
             {
                 GdbInputs = new List<GdbInput> { gdbInput },
-                GdbName = $"{jurisdictionName}-delineation-export"
+                GdbName = $"{delineationTypeName.ToLower()}-{jurisdictionName}-delineation-export"
             });
 
-            return File(bytes, "application/zip", $"{delineationTypeName.ToLower()}-{jurisdictionName}-delineation-export.gdb.zip");
+            return File(bytes, "application/zip", $"{delineationTypeName.ToLower()}-{jurisdictionName}-delineation-export.zip");
         }
 
 
@@ -293,7 +309,9 @@ namespace Neptune.WebMvc.Controllers
 
             // Will break if there are multiple batches of staged uploads, which is precisely what we want to happen. 
             var stormwaterJurisdictionID = delineationStagings.Select(x => x.StormwaterJurisdictionID).Distinct().Single();
-            var stormwaterJurisdiction = StormwaterJurisdictions.GetByID(_dbContext, stormwaterJurisdictionID);
+            var stormwaterJurisdiction = _dbContext.StormwaterJurisdictions.Include(x => x.Organization)
+                .Include(x => x.TreatmentBMPs).ThenInclude(x => x.Delineation)
+                .Single(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID);
             var stormwaterJurisdictionName = stormwaterJurisdiction.GetOrganizationDisplayName();
                                                         
             // Starting from the treatment BMP is kind of backwards, conceptually, but it's easier to read and write

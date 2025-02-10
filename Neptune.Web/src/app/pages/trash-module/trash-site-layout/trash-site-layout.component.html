@@ -5,6 +5,9 @@
         <div class="collapse navbar-collapse" *ngIf="currentUser$ | async as currentUser">
             <ul class="site-nav__links site-nav__main">
                 <ng-container *ngIf="isAuthenticated() && isNotUnassigned(currentUser)">
+                    <li class="nav-item" routerLinkActive="active">
+                        <a [href]="siteUrl + '/DataHub/Index'" class="nav-link" role="button"> Data Hub </a>
+                    </li>
                     <li class="nav-item dropdown" routerLinkActive="active">
                         <a
                             href="javascript:void(0);"
@@ -25,6 +28,12 @@
                             <a [routerLink]="['/trash/onland-visual-trash-assessment']" class="dropdown-item"> OVTAs </a>
                             <a [routerLink]="['/trash/onland-visual-trash-assessment-area']" class="dropdown-item"> OVTA Areas </a>
                         </div>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a class="nav-link" role="button" [routerLink]="['/trash/land-use-block']"> Land Use Blocks </a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a class="nav-link" role="button" [routerLink]="['/trash/trash-generating-unit']"> Trash Generating Units </a>
                     </li>
                 </ng-container>
             </ul>

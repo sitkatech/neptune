@@ -7,6 +7,7 @@ using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessmentExport;
+using NetTopologySuite.Algorithm;
 using NetTopologySuite.Features;
 
 namespace Neptune.WebMvc.Controllers
@@ -52,6 +53,17 @@ namespace Neptune.WebMvc.Controllers
                 areaFeatureCollection.Add(new Feature(area.OnlandVisualTrashAssessmentAreaGeometry, attributesTable));
             }
 
+            if (areaFeatureCollection.Count == 0)
+            {
+                var attributesTable = new AttributesTable
+                {
+                    { "OVTAAreaName", null },
+                    { "Description", null },
+                    { "CreatedOn", null }
+                };
+                areaFeatureCollection.Add(new Feature(null, attributesTable));
+            }
+
             var gdbInput = new GdbInput()
             {
                 FileContents = GeoJsonSerializer.SerializeToByteArray(areaFeatureCollection, GeoJsonSerializer.DefaultSerializerOptions),
@@ -68,7 +80,7 @@ namespace Neptune.WebMvc.Controllers
             });
 
 
-            return File(bytes, "application/zip", $"ovta-export-{jurisdictionName}.gdb.zip");
+            return File(bytes, "application/zip", $"ovta-export-{jurisdictionName}.zip");
         }
 
         private ViewResult ViewExportAssessmentGeospatialData(ExportAssessmentGeospatialDataViewModel viewModel)

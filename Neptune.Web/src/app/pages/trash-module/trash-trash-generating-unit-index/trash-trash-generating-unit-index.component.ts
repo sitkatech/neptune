@@ -1,24 +1,26 @@
 import { AsyncPipe, NgIf } from "@angular/common";
 import { Component } from "@angular/core";
 import { ColDef } from "ag-grid-community";
-import { Observable } from "rxjs";
+import { Observable, tap } from "rxjs";
 import { UtilityFunctionsService } from "../../../services/utility-functions.service";
 import { AlertDisplayComponent } from "../../../shared/components/alert-display/alert-display.component";
 import { NeptuneGridComponent } from "../../../shared/components/neptune-grid/neptune-grid.component";
 import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
 import { TrashGeneratingUnitService } from "../../../shared/generated/api/trash-generating-unit.service";
 import { TrashGeneratingUnitGridDto } from "../../../shared/generated/model/trash-generating-unit-grid-dto";
+import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 
 @Component({
     selector: "trash-trash-generating-unit-index",
     standalone: true,
-    imports: [PageHeaderComponent, AlertDisplayComponent, NeptuneGridComponent, AsyncPipe, NgIf],
+    imports: [PageHeaderComponent, AlertDisplayComponent, NeptuneGridComponent, AsyncPipe, NgIf, LoadingDirective],
     templateUrl: "./trash-trash-generating-unit-index.component.html",
     styleUrl: "./trash-trash-generating-unit-index.component.scss",
 })
 export class TrashTrashGeneratingUnitIndexComponent {
     public trashGeneratingUnits$: Observable<TrashGeneratingUnitGridDto[]>;
     public trashGeneratingUnitsColumnDefs: ColDef[];
+    public isLoading = true;
 
     constructor(private trashGeneratingUnitService: TrashGeneratingUnitService, private utilityFunctionsService: UtilityFunctionsService) {}
 
@@ -49,6 +51,6 @@ export class TrashTrashGeneratingUnitIndexComponent {
             this.utilityFunctionsService.createBasicColumnDef("Land Use Default TGR", "TrashGenerationRate"),
             this.utilityFunctionsService.createDateColumnDef("Last Updated Date", "LastUpdateDate", "MM/dd/yyyy"),
         ];
-        this.trashGeneratingUnits$ = this.trashGeneratingUnitService.trashGeneratingUnitsGet();
+        this.trashGeneratingUnits$ = this.trashGeneratingUnitService.trashGeneratingUnitsGet().pipe(tap((x) => (this.isLoading = false)));
     }
 }

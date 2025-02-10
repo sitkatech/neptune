@@ -18,6 +18,7 @@ import { Observable } from "rxjs";
 })
 export class SiteLayoutComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;
+    public siteUrl = environment.ocStormwaterToolsBaseUrl;
 
     constructor(private authenticationService: AuthenticationService) {}
 
