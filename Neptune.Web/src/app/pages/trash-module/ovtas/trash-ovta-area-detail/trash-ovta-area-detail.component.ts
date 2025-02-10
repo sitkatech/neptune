@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { Observable, switchMap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
@@ -32,6 +32,7 @@ import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/la
         NeptuneMapComponent,
         TransectLineLayerComponent,
         OvtaAreaLayerComponent,
+        RouterLink,
     ],
     templateUrl: "./trash-ovta-area-detail.component.html",
     styleUrl: "./trash-ovta-area-detail.component.scss",
