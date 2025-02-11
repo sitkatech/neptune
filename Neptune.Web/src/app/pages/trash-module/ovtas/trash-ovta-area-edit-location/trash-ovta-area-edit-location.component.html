@@ -1,0 +1,23 @@
+<page-header [customRichTextTypeID]="customRichTextTypeID" pageTitle="Edit OVTA Area Location"></page-header>
+
+<div class="page-body" *ngIf="onlandVisualTrashAssessmentArea$ | async as onlandVisualTrashAssessmentArea">
+    <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false" [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
+        <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
+        <ovta-area-layer
+            *ngIf="mapIsReady"
+            [displayOnLoad]="true"
+            [map]="map"
+            [layerControl]="layerControl"
+            [sortOrder]="15"
+            [ovtaAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
+        <transect-line-layer
+            *ngIf="mapIsReady"
+            [displayOnLoad]="true"
+            [map]="map"
+            [layerControl]="layerControl"
+            [sortOrder]="20"
+            [ovtaAreaName]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName"
+            [jurisdictionID]="onlandVisualTrashAssessmentArea.StormwaterJurisdictionID"></transect-line-layer>
+        <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></parcel-layer>
+    </neptune-map>
+</div>

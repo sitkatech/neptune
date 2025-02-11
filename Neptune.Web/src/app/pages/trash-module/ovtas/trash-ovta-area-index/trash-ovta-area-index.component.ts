@@ -13,12 +13,12 @@ import { IconComponent } from "../../../../shared/components/icon/icon.component
 import { HybridMapGridComponent } from "../../../../shared/components/hybrid-map-grid/hybrid-map-grid.component";
 import { NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { Map, layerControl } from "leaflet";
-import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
+import { SelectedOvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/selected-ovta-area-layer/selected-ovta-area-layer.component";
 
 @Component({
     selector: "trash-ovta-area-index",
     standalone: true,
-    imports: [PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, LoadingDirective, IconComponent, HybridMapGridComponent, OvtaAreaLayerComponent],
+    imports: [PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, LoadingDirective, IconComponent, HybridMapGridComponent, SelectedOvtaAreaLayerComponent],
     templateUrl: "./trash-ovta-area-index.component.html",
     styleUrl: "./trash-ovta-area-index.component.scss",
 })

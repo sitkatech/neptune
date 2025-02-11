@@ -9,7 +9,7 @@ import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.ser
 import { BoundingBoxDto } from "src/app/shared/generated/model/models";
 import { IconComponent } from "../../icon/icon.component";
 import { NominatimService } from "src/app/shared/services/nominatim.service";
-import { Observable, Subject, catchError, debounce, debounceTime, distinctUntilChanged, filter, map, of, pipe, switchMap, tap, timer } from "rxjs";
+import { Observable, debounce, of, switchMap, tap, timer } from "rxjs";
 import { NgSelectComponent, NgSelectModule } from "@ng-select/ng-select";
 import { FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from "@angular/forms";
 import { LegendItem } from "src/app/shared/models/legend-item";

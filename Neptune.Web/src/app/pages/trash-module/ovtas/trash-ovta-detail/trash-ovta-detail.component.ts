@@ -13,10 +13,10 @@ import { PageHeaderComponent } from "../../../../shared/components/page-header/p
 import { FieldDefinitionComponent } from "../../../../shared/components/field-definition/field-definition.component";
 import { environment } from "src/environments/environment";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
-import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
+import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 
 @Component({
     selector: "trash-ovta-detail",
@@ -49,7 +49,7 @@ export class TrashOvtaDetailComponent {
 
     private ovtaObservationOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px'> Observations";
 
-    constructor(private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService, private route: ActivatedRoute, private router: Router) {}
+    constructor(private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService, private route: ActivatedRoute) {}
 
     ngOnInit(): void {
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
