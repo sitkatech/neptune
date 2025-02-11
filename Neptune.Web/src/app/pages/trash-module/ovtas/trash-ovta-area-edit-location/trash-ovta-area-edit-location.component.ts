@@ -14,10 +14,10 @@ import { Observable, switchMap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { OnlandVisualTrashAssessmentAreaDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-detail-dto";
-import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { WqmpsLayerComponent } from "../../../../shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
+import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 
 @Component({
     selector: "trash-ovta-area-edit-location",

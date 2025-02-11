@@ -11,7 +11,6 @@ import { AsyncPipe, NgIf } from "@angular/common";
 import { Observable } from "rxjs";
 import { BtnGroupRadioInputComponent } from "../../../shared/components/inputs/btn-group-radio-input/btn-group-radio-input.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../shared/components/leaflet/neptune-map/neptune-map.component";
-import { OvtaAreaLayerComponent } from "../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 import * as L from "leaflet";
 import "leaflet-draw";
 import "leaflet.fullscreen";
@@ -21,7 +20,7 @@ import "leaflet.fullscreen";
     templateUrl: "./trash-home.component.html",
     styleUrls: ["./trash-home.component.scss"],
     standalone: true,
-    imports: [NgIf, AlertDisplayComponent, CustomRichTextComponent, AsyncPipe, RouterLink, BtnGroupRadioInputComponent, NeptuneMapComponent, OvtaAreaLayerComponent],
+    imports: [NgIf, AlertDisplayComponent, CustomRichTextComponent, AsyncPipe, RouterLink, BtnGroupRadioInputComponent, NeptuneMapComponent],
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;
