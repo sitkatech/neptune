@@ -19,7 +19,15 @@
         [selectedValue]="ovtaAreaID"
         (selectedValueChange)="onSelectedOVTAAreaChanged($event)">
         <div mapLayers *ngIf="true">
-            <ovta-area-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></ovta-area-layer>
+            <ovta-area-layer
+                *ngIf="mapIsReady"
+                [displayOnLoad]="true"
+                [map]="map"
+                [layerControl]="layerControl"
+                [sortOrder]="10"
+                [selectedOVTAAreaID]="ovtaAreaID"
+                (layerBoundsCalculated)="handleLayerBoundsCalculated($event)"
+                (ovtaAreaSelected)="onSelectedOVTAAreaChanged($event)"></ovta-area-layer>
         </div>
         <div headerActions></div>
     </hybrid-map-grid>

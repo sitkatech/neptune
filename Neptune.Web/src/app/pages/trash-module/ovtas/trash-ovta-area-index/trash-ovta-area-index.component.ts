@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { NeptuneGridComponent } from "../../../../shared/components/neptune-grid/neptune-grid.component";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 import { ColDef } from "ag-grid-community";
@@ -19,7 +18,7 @@ import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/la
 @Component({
     selector: "trash-ovta-area-index",
     standalone: true,
-    imports: [NeptuneGridComponent, PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, LoadingDirective, IconComponent, HybridMapGridComponent, OvtaAreaLayerComponent],
+    imports: [PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, LoadingDirective, IconComponent, HybridMapGridComponent, OvtaAreaLayerComponent],
     templateUrl: "./trash-ovta-area-index.component.html",
     styleUrl: "./trash-ovta-area-index.component.scss",
 })
@@ -60,8 +59,6 @@ export class TrashOvtaAreaIndexComponent {
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
-
-        //this.cdr.detectChanges();
     }
 
     public onSelectedOVTAAreaChanged(selectedOVTAAreaID) {
@@ -69,5 +66,9 @@ export class TrashOvtaAreaIndexComponent {
 
         this.ovtaAreaID = selectedOVTAAreaID;
         return this.ovtaAreaID;
+    }
+
+    public handleLayerBoundsCalculated(bounds: any) {
+        this.bounds = bounds;
     }
 }
