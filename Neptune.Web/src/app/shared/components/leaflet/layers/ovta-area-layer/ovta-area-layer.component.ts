@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChange } from "@angular/core";
 import * as L from "leaflet";
-import { environment } from "src/environments/environment";
 import { MapLayerBase } from "../map-layer-base.component";
 import { CommonModule } from "@angular/common";
 import { WfsService } from "src/app/shared/services/wfs.service";
@@ -24,11 +23,44 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges, A
 
     public layer: L.featureGroup;
 
-    private defaultStyle = {
-        color: "#3388ff",
-        weight: 2,
-        opacity: 0.65,
-        fillOpacity: 0.1,
+    private styleDictionary = {
+        "A": {
+            color: "#00FF00",
+            weight: 2,
+            opacity: 0.65,
+            fillOpacity: 0.1,
+            graphicFill: "Slash",
+        },
+        "B": {
+            color: "#ebc400",
+            weight: 2,
+            opacity: 0.65,
+            fillOpacity: 0.1,
+        },
+        "C": {
+            color: "#FF7F7F",
+            weight: 2,
+            opacity: 0.65,
+            fillOpacity: 0.1,
+        },
+        "D": {
+            color: "#c500ff",
+            weight: 2,
+            opacity: 0.65,
+            fillOpacity: 0.1,
+        },
+        "Not Assessed": {
+            color: "#808080",
+            weight: 2,
+            opacity: 0.65,
+            fillOpacity: 0.1,
+        },
+        "null": {
+            color: "#808080",
+            weight: 2,
+            opacity: 0.65,
+            fillOpacity: 0.1,
+        },
     };
 
     private highlightStyle = {
@@ -80,7 +112,7 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges, A
 
             Object.keys(featuresGroupedByOVTAAreaID).forEach((ovtaAreaID) => {
                 const geoJson = L.geoJSON(featuresGroupedByOVTAAreaID[ovtaAreaID], {
-                    style: this.defaultStyle,
+                    style: this.styleDictionary[featuresGroupedByOVTAAreaID[ovtaAreaID][0].properties.Score],
                 });
                 geoJson.on("mouseover", (e) => {
                     geoJson.setStyle({ fillOpacity: 0.5 });
@@ -110,9 +142,6 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges, A
     }
 
     private highlightSelectedOVTAArea() {
-        // clear styles
-        this.layer.setStyle(this.defaultStyle);
-
         this.layer.eachLayer((layer) => {
             // skip if well layer
             if (layer.options?.icon) return;
@@ -121,6 +150,8 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges, A
             if (geoJsonLayers[0].feature.properties.OVTAAreaID == this.selectedOVTAAreaID) {
                 layer.setStyle(this.highlightStyle);
                 this.map.fitBounds(layer.getBounds());
+            } else {
+                layer.setStyle(this.styleDictionary[geoJsonLayers[0].feature.properties.Score]);
             }
         });
     }
