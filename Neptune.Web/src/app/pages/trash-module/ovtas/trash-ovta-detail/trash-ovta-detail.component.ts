@@ -49,7 +49,7 @@ export class TrashOvtaDetailComponent {
 
     private ovtaObservationOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px'> Observations";
 
-    constructor(private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService, private route: ActivatedRoute, private router: Router) {}
+    constructor(private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService, private route: ActivatedRoute) {}
 
     ngOnInit(): void {
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
