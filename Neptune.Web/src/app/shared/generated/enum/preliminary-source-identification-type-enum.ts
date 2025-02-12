@@ -30,7 +30,7 @@ export const PreliminarySourceIdentificationTypes: LookupTableEntry[]  = [
   { Name: "UncoveredLoads", DisplayName: "Uncovered Loads", Value: 3 },
   { Name: "VehiclesOther", DisplayName: "Vehicles (Other)", Value: 4 },
   { Name: "OverflowingReceptacles", DisplayName: "Overflowing or uncovered receptacles/dumpsters", Value: 5 },
-  { Name: "TrashDispersal", DisplayName: "Dispersal of household trash and recyclables before, during, and after collection ", Value: 6 },
+  { Name: "TrashDispersal", DisplayName: "Dispersal of household trash and recyclables around the collection process", Value: 6 },
   { Name: "InadequateWasteContainerManagementOther", DisplayName: "Inadequate Waste Container Management (Other)", Value: 7 },
   { Name: "Restaurants", DisplayName: "Restaurants", Value: 8 },
   { Name: "ConvenienceStores", DisplayName: "Convenience Stores", Value: 9 },
