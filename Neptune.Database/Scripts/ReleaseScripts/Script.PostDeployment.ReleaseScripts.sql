@@ -22,4 +22,6 @@ GO
 GO
 :r ".\007 - Add neptune page Export BMP Inventory to GIS.sql"
 GO
+:r ".\008 - add neptune page for wqmp modeling options.sql"
+GO
 

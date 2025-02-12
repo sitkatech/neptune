@@ -88,7 +88,8 @@ export enum NeptunePageTypeEnum {
   ModelBasinsDataHub = 83,
   PrecipitationZonesDataHub = 84,
   ParcelUploadDataHub = 85,
-  ExportBMPInventoryToGIS = 86
+  ExportBMPInventoryToGIS = 86,
+  WQMPModelingOptions = 87
 }
 
 export const NeptunePageTypes: LookupTableEntry[]  = [
@@ -174,6 +175,7 @@ export const NeptunePageTypes: LookupTableEntry[]  = [
   { Name: "ModelBasinsDataHub", DisplayName: "Model Basins Data Hub", Value: 83 },
   { Name: "PrecipitationZonesDataHub", DisplayName: "Precipitation Zones Data Hub", Value: 84 },
   { Name: "ParcelUploadDataHub", DisplayName: "Parcel Upload Data Hub", Value: 85 },
-  { Name: "ExportBMPInventoryToGIS", DisplayName: "Export BMP Inventory to GIS", Value: 86 }
+  { Name: "ExportBMPInventoryToGIS", DisplayName: "Export BMP Inventory to GIS", Value: 86 },
+  { Name: "WQMPModelingOptions", DisplayName: "WQMP Modeling Options", Value: 87 }
 ];
 export const NeptunePageTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...NeptunePageTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];

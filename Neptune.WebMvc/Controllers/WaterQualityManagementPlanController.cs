@@ -21,8 +21,7 @@ using Neptune.WebMvc.Services.Filters;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using Neptune.Common.Email;
-using DocumentFormat.OpenXml.Wordprocessing;
-using DocumentFormat.OpenXml.InkML;
+
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -1043,6 +1042,15 @@ The WQMP Boundaries for Stormwater Jurisdiction {stormwaterJurisdiction} were su
                 StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
             return RazorView<UploadWqmpBoundaryFromAPNs, UploadWqmpBoundaryFromAPNsViewData, UploadWqmpBoundaryFromAPNsViewModel>(viewData,
                 viewModel);
+        }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public ViewResult WqmpModelingOptions()
+        {
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WQMPModelingOptions);
+            var viewData = new WqmpModelingOptionsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
+            return RazorView<WqmpModelingOptions, WqmpModelingOptionsViewData>(viewData);
         }
     }
 }
