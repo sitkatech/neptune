@@ -101,10 +101,16 @@
         display: block;
     }
 
-    .ag-icon-filter:before {
+    .ag-icon-filter::before {
+        content: "";
+    }
+
+    .ag-filter-active .ag-icon-filter:before {
         font-family: "FontAwesome";
         content: "*";
-        color: $orange-default;
+        color: $neptune-orange;
+        position: relative;
+        left: -10px;
     }
 
     .ag-icon-filter:after {

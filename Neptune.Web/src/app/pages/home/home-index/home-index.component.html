@@ -5,8 +5,8 @@
         </div>
         <div class="hero__actions card">
             <ng-container *ngIf="currentUser$ | async as currentUser; else notSignedIn">
-                <div class="card-header"><h3 class="card-title">Quick Actions</h3></div>
                 <div class="card-body">
+                    <h3 class="card-title">Quick Actions</h3>
                     <div class="hero__btns">
                         <div class="hero__btns-wrapper">
                             <a class="btn btn-primary" [routerLink]="['/planning']">Planning Module</a>
@@ -25,30 +25,85 @@
             </ng-container>
 
             <ng-template #notSignedIn>
-                <div class="card-header"><h3 class="card-title">Welcome.</h3></div>
                 <div class="card-body">
-                    <p class="mb-2">Log in to view your Account. Create an Account if you don't have one yet.</p>
+                    <h3 class="card-title">Welcome</h3>
+                    <p class="card-subtitle">Sign in to access the OC Stormwater Tools.<br/>Create an account if you don't have one yet.</p>
                     <div class="hero__btns">
                         <div class="hero__btns-wrapper">
-                            <a (click)="login()" class="btn btn-primary">Login</a>
+                            <a (click)="login()" class="btn btn-primary">Sign In</a>
                         </div>
                         <div class="hero__btns-wrapper">
                             <a (click)="createAccount()" class="btn btn-primary">Create Account</a>
                         </div>
                     </div>
-                    <hr />
-                    <div>
-                        <small style="font-size: 11px">
-                            Need help logging in? <br />
-                            <a href="{{ forgotPasswordUrl() }}">Forgot Password</a> | <a href="{{ forgotUsernameUrl() }}">Forgot Username</a> |
-                            <a href="{{ keystoneSupportUrl() }}">Request Support</a>
-                        </small>
-                    </div>
+                </div>
+                <div class="card-footer">
+                    <p> Need help logging in?</p>
+                    <a href="{{ forgotPasswordUrl() }}">Forgot Password</a> | <a href="{{ forgotUsernameUrl() }}">Forgot Username</a> |
+                    <a href="{{ keystoneSupportUrl() }}">Request Support</a>
                 </div>
             </ng-template>
         </div>
     </section>
     <app-alert-display></app-alert-display>
+
+    <div class="data-section">
+        <div class="data-section__header">
+            <icon icon="Data"></icon>
+            <h2>Data and Tools</h2>
+        </div>
+        <p>
+            The Platform brings together a wide collection of datasets that<br />
+            allow users to find and evaluate riparian conditions.
+        </p>
+        <div class="data-section-cards">
+            <div class="card">
+                <div class="card-header">Inventory Module</div>
+                <div class="card-body">
+                    <ul>
+                        <li><a href="{{ ocstBaseUrl() }}/TreatmentBMP/Index">BMP List</a></li>
+                        <li><a href="{{ ocstBaseUrl() }}/TreatmentBMP/FindABMP">BMP Map</a></li>
+                        <li><a href="{{ ocstBaseUrl() }}/WaterQualityManagementPlan/Index">WQMP List</a></li>
+                        <li><a href="{{ ocstBaseUrl() }}/Delineation/DelineationMap">Delineation Map</a></li>
+                        <li><a href="{{ ocstBaseUrl() }}/DataHub/Index">Data Hub</a></li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="card">
+                <div class="card-header">Modeling Module</div>
+                <div class="card-body">
+                    <ul>
+                        <li><a routerLink="/modeling">About Modeling Performance</a></li>
+                        <li><a href="{{ ocstBaseUrl() }}/TreatmentBMP/ViewTreatmentBMPModelingAttributes">Modeling Attributes</a></li>
+                        <li><a href="{{ ocstBaseUrl() }}/Home/AboutModelingBMPPerformance">Calculations for Planned Projects</a></li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="card">
+                <div class="card-header">Trash Module</div>
+                <div class="card-body">
+                    <ul>
+                        <li><a href="{{ ocstBaseUrl() }}/Trash/Home/Index">Results</a></li>
+                        <li><a href="{{ ocstBaseUrl() }}/OnlandVisualTrashAssessment/Index">View All OVTAs</a></li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="card">
+                <div class="card-header">Planning Module</div>
+                <div class="card-body">
+                    <ul>
+                        <li><a routerLink="/planning/projects">Project List</a></li>
+                        <li><a routerLink="/planning/planning-map">Planning Map</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
     <div class="site__about">
         <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
     </div>
