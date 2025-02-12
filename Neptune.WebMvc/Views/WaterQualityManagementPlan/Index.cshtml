@@ -15,23 +15,33 @@
 {
     @if (ViewDataTyped.CurrentPersonCanCreate)
     {
-        <div class="pull-right" style="margin-left: 1em;">
             @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")} Add Plan", ViewDataTyped.NewWaterQualityManagementPlanUrl, string.Format("Create New {0}", FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string> {"btn btn-neptune"}, true)
-        </div>
     }
     @if (ViewDataTyped.CurrentPerson.IsAdministrator())
     {
-        <div class="pull-right" style="margin-left: 1em;">
-            <a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadWQMPUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Bulk Upload WQMPs</a>
-        </div>
-        <br/>
-        <div class="pull-right" style="margin-left: 1em;">
-            <a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadSimplifiedBMPs">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Bulk Upload Simplified BMPs</a>
-        </div>
-        <br />
-        <div class="pull-right" style="margin-left: 1em;">
-            <a class="btn btn-neptune" href="@ViewDataTyped.BulkWqmpBoundaryFromAPNs">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Bulk Upload WQMP Boundaries From APNs</a>
-        </div>
+        <span class="dropdown">
+            <button id="actionsDropdown" class="btn btn-neptune" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="False">
+                More Actions
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" aria-labeledby="actionsDropdown" style="list-style: none; background: #fff;">
+                <li><a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadWQMPUrl"> Bulk Upload WQMPs</a></li>
+                <li><a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadSimplifiedBMPs"> Bulk Upload Simplified BMPs</a></li>
+                <li><a class="btn btn-neptune" href="@ViewDataTyped.BulkWqmpBoundaryFromAPNs"> Bulk Upload WQMP Boundaries From APNs</a></li>
+            </ul>
+        </span>
+    }
+    @if (ViewDataTyped.CurrentPerson.IsJurisdictionEditorOrManager())
+    {
+        <span class="dropdown">
+            <button id="actionsDropdown" class="btn btn-neptune" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="False">
+                More Actions
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" aria-labeledby="actionsDropdown" style="list-style: none; background: #fff;">
+                <li><a class="btn btn-neptune" href="@ViewDataTyped.BulkWqmpBoundaryFromAPNs"> Bulk Upload WQMP Boundaries From APNs</a></li>
+            </ul>
+        </span>
     }
 }
 

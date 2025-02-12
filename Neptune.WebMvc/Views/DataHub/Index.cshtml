@@ -182,13 +182,9 @@
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.WQMPLocationPage);
                     }
-                    @if (ViewDataTyped.IsAdmin)
+                    @if (ViewDataTyped.HasManagePermission)
                     {
                         <a href="@ViewDataTyped.UploadWQMPLocationsUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                    }
-                    @if (ViewDataTyped.IsManagerOrEditor)
-                    {
-                        <a href="@ViewDataTyped.UploadWQMPLocationsUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                     }
                 </div>
                 <div class="col-md-3 sidebar">
