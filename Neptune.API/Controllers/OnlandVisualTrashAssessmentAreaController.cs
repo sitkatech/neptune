@@ -43,9 +43,9 @@ public class OnlandVisualTrashAssessmentAreaController(
     [HttpPost]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
-    public ActionResult<OnlandVisualTrashAssessmentAreaDetailDto> Update([FromBody] OnlandVisualTrashAssessmentAreaDetailDto onlandVisualTrashAssessmentAreaDto)
+    public ActionResult Update([FromBody] OnlandVisualTrashAssessmentAreaDetailDto onlandVisualTrashAssessmentAreaDto)
     {
-        var onlandVisualTrashAssessmentAreaDetailDto = OnlandVisualTrashAssessmentAreas.Update(DbContext, onlandVisualTrashAssessmentAreaDto).AsDetailDto();
-        return Ok(onlandVisualTrashAssessmentAreaDetailDto);
+        OnlandVisualTrashAssessmentAreas.Update(DbContext, onlandVisualTrashAssessmentAreaDto);
+        return Ok();
     }
 }

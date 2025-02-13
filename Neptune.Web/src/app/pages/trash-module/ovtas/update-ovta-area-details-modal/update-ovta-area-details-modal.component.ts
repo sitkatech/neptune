@@ -13,6 +13,7 @@ import { ModalService } from "src/app/shared/services/modal/modal.service";
 import { NgIf } from "@angular/common";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { OnlandVisualTrashAssessmentDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-detail-dto";
+import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 
 @Component({
     selector: "update-ovta-area-details-modal",
@@ -27,11 +28,16 @@ export class UpdateOvtaAreaDetailsModalComponent implements OnInit {
     public modalContext: UpdateOvtaAreaModalContext;
 
     public formGroup = new FormGroup<OnlandVisualTrashAssessmentAreaDetailDtoForm>({
+        OnlandVisualTrashAssessmentAreaID: OnlandVisualTrashAssessmentAreaDetailDtoFormControls.OnlandVisualTrashAssessmentAreaID(),
         OnlandVisualTrashAssessmentAreaName: OnlandVisualTrashAssessmentAreaDetailDtoFormControls.OnlandVisualTrashAssessmentAreaName(),
         AssessmentAreaDescription: OnlandVisualTrashAssessmentAreaDetailDtoFormControls.AssessmentAreaDescription(),
+        StormwaterJurisdictionName: OnlandVisualTrashAssessmentAreaDetailDtoFormControls.StormwaterJurisdictionName(),
+        LastAssessmentDate: OnlandVisualTrashAssessmentAreaDetailDtoFormControls.LastAssessmentDate(),
+        OnlandVisualTrashAssessmentBaselineScoreName: OnlandVisualTrashAssessmentAreaDetailDtoFormControls.OnlandVisualTrashAssessmentBaselineScoreName(),
+        OnlandVisualTrashAssessmentProgressScoreName: OnlandVisualTrashAssessmentAreaDetailDtoFormControls.OnlandVisualTrashAssessmentProgressScoreName(),
     });
 
-    constructor(private modalService: ModalService, private alertService: AlertService) {}
+    constructor(private modalService: ModalService, private alertService: AlertService, private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService) {}
 
     ngOnInit(): void {
         if (this.modalContext.OvtaAreaDto) {
@@ -41,29 +47,7 @@ export class UpdateOvtaAreaDetailsModalComponent implements OnInit {
 
     save(): void {
         let upsertDto = this.formGroup.value as OnlandVisualTrashAssessmentAreaDetailDto;
-        // if (this.isNewReportingPeriod) {
-        //     this.addOrEditSubscription = this.reportingPeriodService.geographiesGeographyIDReportingPeriodsPost(this.modalContext.GeographyID, upsertDto).subscribe(
-        //         (response) => {
-        //             this.modalService.close(this.modalComponentRef, response);
-        //         }
-        //         // (error) => {
-        //         //     //MK 2/3/2025: App Alert Display is on the parent page, not sure it makes sense to have it here as well.
-        //         //     this.modalService.close(this.modalComponentRef, null);
-        //         // }
-        //     );
-        // } else {
-        //     this.addOrEditSubscription = this.reportingPeriodService
-        //         .geographiesGeographyIDReportingPeriodsReportingPeriodIDPut(this.modalContext.GeographyID, this.modalContext.ReportingPeriod.ReportingPeriodID, upsertDto)
-        //         .subscribe(
-        //             (response) => {
-        //                 this.modalService.close(this.modalComponentRef, response);
-        //             }
-        //             // (error) => {
-        //             //     //MK 2/3/2025: App Alert Display is on the parent page, not sure it makes sense to have it here as well.
-        //             //     this.modalService.close(this.modalComponentRef, null);
-        //             // }
-        //         );
-        // }
+        this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasPost(upsertDto).subscribe(() => this.modalService.close(this.modalComponentRef, upsertDto));
     }
 
     cancel(): void {

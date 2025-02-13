@@ -49,7 +49,7 @@ public static class OnlandVisualTrashAssessmentAreas
 
     }
 
-    public static OnlandVisualTrashAssessmentArea Update(NeptuneDbContext dbContext,
+    public static void Update(NeptuneDbContext dbContext,
         OnlandVisualTrashAssessmentAreaDetailDto ovtaAreaDto)
     {
         var assessmentArea = dbContext.OnlandVisualTrashAssessmentAreas.SingleOrDefault(x =>
@@ -61,8 +61,6 @@ public static class OnlandVisualTrashAssessmentAreas
         }
         
         dbContext.SaveChangesAsync();
-        
-        return assessmentArea;
     }
 
     public static OnlandVisualTrashAssessmentArea GetByIDForFeatureContextCheck(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentAreaID)

@@ -690,24 +690,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaDetailDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaDetailDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaDetailDto"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
