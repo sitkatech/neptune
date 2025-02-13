@@ -33,6 +33,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         public QuickBMPGridSpec QuickBMPGridSpec { get; }
         public string QuickBMPGridName { get; }
         public string QuickBMPGridDataUrl { get; }
+        public string WqmpModelingApproachUrl { get; }
         public IEnumerable<IGrouping<int, SourceControlBMP>> SourceControlBMPs { get; }
         public Dictionary<int, EFModels.Entities.Delineation?> TreatmentBMPDelineationsDict { get; }
 
@@ -92,6 +93,9 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             CurrentPersonCanManageWaterQualityManagementPlans = new WaterQualityManagementPlanManageFeature()
                 .HasPermission(currentPerson, waterQualityManagementPlan)
                 .HasPermission;
+            WqmpModelingApproachUrl =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator,
+                    x => x.WqmpModelingOptions());
 
             EditUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>

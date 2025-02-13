@@ -24,4 +24,6 @@ GO
 GO
 :r ".\008 - Add neptune page for new home page.sql"
 GO
+:r ".\009 - add neptune page for wqmp modeling options.sql"
+GO
 
