@@ -36,6 +36,7 @@ namespace Neptune.WebMvc.Views.Shared
         public IEnumerable<NeptuneArea> NeptuneAreas { get; }
         public string CurrentPersonDetailUrl { get; }
         public string PlanningModuleUrl { get; }
+        public string ModelingModuleUrl { get; }
         public readonly string HomeUrl;
 
         public NeptuneArea NeptuneArea { get; }
