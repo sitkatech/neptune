@@ -9,18 +9,19 @@ import { AlertDisplayComponent } from "src/app/shared/components/alert-display/a
 import { AsyncPipe, NgIf } from "@angular/common";
 import { Observable } from "rxjs";
 import { HeaderNavComponent } from "../../../shared/components/header-nav/header-nav.component";
+import { IconComponent } from "src/app/shared/components/icon/icon.component";
 
 @Component({
     selector: "app-home-index",
     templateUrl: "./home-index.component.html",
     styleUrls: ["./home-index.component.scss"],
     standalone: true,
-    imports: [NgIf, AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe, HeaderNavComponent],
+    imports: [NgIf, AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe, HeaderNavComponent, IconComponent],
 })
 export class HomeIndexComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;
 
-    public customRichTextTypeID: number = NeptunePageTypeEnum.HomePage;
+    public customRichTextTypeID: number = NeptunePageTypeEnum.SPAHomePage;
 
     constructor(private authenticationService: AuthenticationService, private router: Router, private route: ActivatedRoute) {}
 

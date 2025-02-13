@@ -28,6 +28,7 @@ export var IconInterface:
     | "CircleCheckmark"
     | "CircleX"
     | "Configure"
+    | "Data"
     | "DataLayers"
     | "Delete"
     | "Download"

@@ -8,7 +8,7 @@ import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { AsyncPipe, NgIf } from "@angular/common";
-import { Observable } from "rxjs";
+import { Observable, tap } from "rxjs";
 
 @Component({
     selector: "planning-home",
