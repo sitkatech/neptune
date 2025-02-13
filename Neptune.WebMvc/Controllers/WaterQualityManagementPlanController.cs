@@ -1045,7 +1045,6 @@ The WQMP Boundaries for Stormwater Jurisdiction {stormwaterJurisdiction} were su
         }
 
         [HttpGet]
-        [NeptuneAdminFeature]
         public ViewResult WqmpModelingOptions()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WQMPModelingOptions);
