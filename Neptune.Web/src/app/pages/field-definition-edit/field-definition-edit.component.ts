@@ -72,7 +72,7 @@ export class FieldDefinitionEditComponent implements OnInit {
         this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDPut(this.fieldDefinition.FieldDefinitionType.FieldDefinitionTypeID, this.fieldDefinition).subscribe(
             (response) => {
                 this.isLoadingSubmit = false;
-                this.router.navigateByUrl("/planning/labels-and-definitions").then((x) => {
+                this.router.navigateByUrl("/labels-and-definitions").then((x) => {
                     this.alertService.pushAlert(
                         new Alert(`The definition for ${this.fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName} was successfully updated.`, AlertContext.Success)
                     );

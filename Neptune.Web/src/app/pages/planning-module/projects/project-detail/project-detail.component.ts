@@ -97,7 +97,7 @@ export class ProjectDetailComponent implements OnInit {
     }
 
     getWorkflowLink(project: ProjectDto) {
-        return `/planning/projects/edit/${project.ProjectID}` + (project.ShareOCTAM2Tier2Scores ? "/review-and-share" : "");
+        return `/projects/edit/${project.ProjectID}` + (project.ShareOCTAM2Tier2Scores ? "/review-and-share" : "");
     }
 
     makeProjectCopy(project: ProjectDto) {
@@ -112,7 +112,7 @@ export class ProjectDetailComponent implements OnInit {
                     this.isCopyingProject = true;
                     this.projectService.projectsProjectIDCopyPost(project.ProjectID).subscribe(
                         (newProjectID) => {
-                            this.router.navigateByUrl(`/planning/projects/${newProjectID}`).then(() => {
+                            this.router.navigateByUrl(`/projects/${newProjectID}`).then(() => {
                                 this.alertService.pushAlert(new Alert("Project successfully copied.", AlertContext.Success));
                             });
                         },

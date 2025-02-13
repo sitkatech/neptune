@@ -125,7 +125,7 @@ export class ProjectBasicsComponent implements OnInit {
                     if (value.Project.ProjectID) {
                         // redirect to review step if project is shared with OCTA grant program
                         if (value.Project.ShareOCTAM2Tier2Scores) {
-                            this.router.navigateByUrl(`/planning/projects/edit/${value.Project.ProjectID}/review-and-share`);
+                            this.router.navigateByUrl(`/projects/edit/${value.Project.ProjectID}/review-and-share`);
                         }
                         this.formGroup.controls.ProjectName.setValue(value.Project.ProjectName);
                         this.formGroup.controls.ProjectDescription.setValue(value.Project.ProjectDescription);
