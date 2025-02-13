@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <h3 class="section-title">
+        <span>Update OVTA Area Details</span>
+    </h3>
+    <button type="button" class="close" (click)="cancel()">
+        <i class="fa fa-times-circle"></i>
+    </button>
+</div>
+
+<div class="modal-body grid-12">
+    <app-alert-display></app-alert-display>
+
+    <form class="form grid-12" [formGroup]="formGroup">
+        <form-field
+            class="g-col-12"
+            [formControl]="formGroup.controls.OnlandVisualTrashAssessmentAreaName"
+            fieldLabel="Assessment Area Name"
+            placeholder="Name"
+            [required]="true"
+            [type]="FormFieldType.Text"></form-field>
+        <form-field
+            class="g-col-12"
+            [formControl]="formGroup.controls.AssessmentAreaDescription"
+            fieldLabel="Assessment Area Description"
+            placeholder="Description"
+            [required]="false"
+            [type]="FormFieldType.Textarea"></form-field>
+        <!-- <form-field
+            class="g-col-6"
+            [formControl]="formGroup.controls.ReadyForAccountHolders"
+            fieldLabel="Ready For Account Holders"
+            [required]="false"
+            [type]="FormFieldType.Check"></form-field>
+
+        <form-field class="g-col-6" [formControl]="formGroup.controls.StartDate" fieldLabel="Start Date" [required]="true" [type]="FormFieldType.Date"></form-field>
+        <form-field class="g-col-6" [formControl]="endDateControl" fieldLabel="End Date" [required]="true" [type]="FormFieldType.Date"></form-field> -->
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" (click)="save()" [disabled]="formGroup.invalid">Save</button>
+    <button class="btn btn-primary-outline" (click)="cancel()">Cancel</button>
+</div>

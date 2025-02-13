@@ -17,6 +17,8 @@ import "leaflet-draw";
 import "leaflet.fullscreen";
 import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
+import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/services/modal/modal.service";
+import { UpdateOvtaAreaDetailsModalComponent, UpdateOvtaAreaModalContext } from "../update-ovta-area-details-modal/update-ovta-area-details-modal.component";
 
 @Component({
     selector: "trash-ovta-area-detail",
@@ -48,7 +50,8 @@ export class TrashOvtaAreaDetailComponent {
     constructor(
         private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService,
         private utilityFunctionsService: UtilityFunctionsService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private modalService: ModalService
     ) {}
 
     ngOnInit(): void {
@@ -81,5 +84,17 @@ export class TrashOvtaAreaDetailComponent {
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
+    }
+
+    updateOVTAAreaDetails(ovtaAreaDto: OnlandVisualTrashAssessmentAreaDetailDto) {
+        this.modalService
+            .open(UpdateOvtaAreaDetailsModalComponent, null, { CloseOnClickOut: false, TopLayer: false, ModalSize: ModalSizeEnum.Medium, ModalTheme: ModalThemeEnum.Light }, {
+                OvtaAreaDto: ovtaAreaDto,
+            } as UpdateOvtaAreaModalContext)
+            .instance.result.then((result) => {
+                // if (result) {
+                //     this.refreshReportingPeriodsTrigger.next();
+                // }
+            });
     }
 }

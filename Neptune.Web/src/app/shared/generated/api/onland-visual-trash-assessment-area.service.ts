@@ -143,4 +143,52 @@ export class OnlandVisualTrashAssessmentAreaService {
         ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
     }
 
+    /**
+     * 
+     * 
+     * @param onlandVisualTrashAssessmentAreaDetailDto 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public onlandVisualTrashAssessmentAreasPost(onlandVisualTrashAssessmentAreaDetailDto?: OnlandVisualTrashAssessmentAreaDetailDto, observe?: 'body', reportProgress?: boolean): Observable<OnlandVisualTrashAssessmentAreaDetailDto>;
+    public onlandVisualTrashAssessmentAreasPost(onlandVisualTrashAssessmentAreaDetailDto?: OnlandVisualTrashAssessmentAreaDetailDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OnlandVisualTrashAssessmentAreaDetailDto>>;
+    public onlandVisualTrashAssessmentAreasPost(onlandVisualTrashAssessmentAreaDetailDto?: OnlandVisualTrashAssessmentAreaDetailDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OnlandVisualTrashAssessmentAreaDetailDto>>;
+    public onlandVisualTrashAssessmentAreasPost(onlandVisualTrashAssessmentAreaDetailDto?: OnlandVisualTrashAssessmentAreaDetailDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/_*+json',
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<OnlandVisualTrashAssessmentAreaDetailDto>(`${this.basePath}/onland-visual-trash-assessment-areas`,
+            onlandVisualTrashAssessmentAreaDetailDto,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
 }

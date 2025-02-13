@@ -4,7 +4,7 @@
 
     <div class="grid-12 mt-2 mb-3">
         <div class="card g-col-6">
-            <div class="card-header">Details</div>
+            <div class="card-header flex-between">Details <button class="btn btn-primary" (click)="updateOVTAAreaDetails(onlandVisualTrashAssessmentArea)">Edit</button></div>
             <div class="card-body">
                 <dl class="grid-12">
                     <dt class="g-col-4">Assessment Area</dt>
@@ -35,7 +35,7 @@
                 Location
                 <!-- <button class="btn btn-primary" [routerLink]="['edit-location']">Edit</button> -->
             </div>
-            <div class="card-body">
+            <div class="card-body map">
                 <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="400px" [showLegend]="false" [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
                     <ovta-area-layer
                         *ngIf="mapIsReady"

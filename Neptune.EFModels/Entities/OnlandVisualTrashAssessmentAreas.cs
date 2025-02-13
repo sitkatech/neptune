@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities;
 
@@ -46,6 +47,22 @@ public static class OnlandVisualTrashAssessmentAreas
     {
         return GetImpl(dbContext).AsNoTracking().ToList().OrderBy(x => x.OnlandVisualTrashAssessmentAreaName).ToList();
 
+    }
+
+    public static OnlandVisualTrashAssessmentArea Update(NeptuneDbContext dbContext,
+        OnlandVisualTrashAssessmentAreaDetailDto ovtaAreaDto)
+    {
+        var assessmentArea = dbContext.OnlandVisualTrashAssessmentAreas.SingleOrDefault(x =>
+            x.OnlandVisualTrashAssessmentAreaID == ovtaAreaDto.OnlandVisualTrashAssessmentAreaID);
+        if (assessmentArea != null)
+        {
+            assessmentArea.OnlandVisualTrashAssessmentAreaName = ovtaAreaDto.OnlandVisualTrashAssessmentAreaName;
+            assessmentArea.AssessmentAreaDescription = ovtaAreaDto.AssessmentAreaDescription;
+        }
+        
+        dbContext.SaveChangesAsync();
+        
+        return assessmentArea;
     }
 
     public static OnlandVisualTrashAssessmentArea GetByIDForFeatureContextCheck(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentAreaID)
