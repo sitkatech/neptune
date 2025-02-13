@@ -28,15 +28,15 @@
                 <div #moduleSwitcherToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                     <a href="{{ ocStormwaterToolsMainUrl() }}" class="dropdown-item" target="_blank"> OC Stormwater Tools Home </a>
                     <div class="dropdown-divider"></div>
-                    <a [routerLink]="['/modeling']" class="dropdown-item">
+                    <a href="{{ ocStormwaterToolsMainUrl() }}/Home/Modeling" class="dropdown-item">
                         <img src="assets/main/icons/modelingIcon.png" style="height: 35px; padding-right: 15px" />
                         Modeling Module
                     </a>
-                    <a [routerLink]="['/planning']" class="dropdown-item">
+                    <a [routerLink]="['/']" class="dropdown-item">
                         <img src="assets/main/icons/planningIcon.png" style="height: 35px; padding-right: 15px" />
                         Planning Module
                     </a>
-                    <a [routerLink]="['/trash']" class="dropdown-item">
+                    <a href="{{ ocStormwaterToolsMainUrl() }}/Trash/Home/Index" class="dropdown-item">
                         <img src="assets/main/icons/trashIcon.png" style="height: 35px; padding-right: 15px" />
                         Trash Module
                     </a>
