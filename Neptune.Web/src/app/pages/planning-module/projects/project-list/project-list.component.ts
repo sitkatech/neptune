@@ -69,7 +69,7 @@ export class ProjectListComponent implements OnInit {
         this.projectColumnDefs = [
             this.utilityFunctionsService.createActionsColumnDef((params: any) => {
                 return [
-                    { ActionName: "View", ActionHandler: () => this.router.navigate(["planning", "projects", params.data.ProjectID]) },
+                    { ActionName: "View", ActionHandler: () => this.router.navigate(["projects", params.data.ProjectID]) },
                     {
                         ActionName: "Edit",
                         ActionIcon: "fas fa-edit",
