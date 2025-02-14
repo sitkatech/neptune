@@ -43,17 +43,20 @@ export class TrashOvtaDetailComponent {
     public ovtaObservationLayer: L.GeoJSON<any>;
     public selectedOVTAObservation: OnlandVisualTrashAssessmentObservationWithPhotoDto;
 
+    public ovtaAreaID: number;
+
     public map: L.Map;
     public mapIsReady: boolean = false;
     public layerControl: L.Control.Layers;
 
     private ovtaObservationOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px'> Observations";
 
-    constructor(private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService, private route: ActivatedRoute) {}
+    constructor(private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService, private route: ActivatedRoute, private router: Router) {}
 
     ngOnInit(): void {
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
             switchMap((params) => {
+                this.ovtaAreaID = params[routeParams.onlandVisualTrashAssessmentAreaID];
                 return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(params[routeParams.onlandVisualTrashAssessmentID]);
             })
         );
@@ -126,6 +129,10 @@ export class TrashOvtaDetailComponent {
                 }
                 layer.setZIndexOffset(10000);
                 layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-red.png"));
+                console.log(layer.feature.properties.OnlandVisualTrashAssessmentObservationID);
+                // this.router.navigate([`/trash/onland-visual-trash-assessment-area/${this.ovtaAreaID}`], {
+                //     //fragment: `${layer.feature.properties.OnlandVisualTrashAssessmentObservationID}`,
+                // });
             } else {
                 layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-violet.png"));
             }
