@@ -628,6 +628,46 @@
         }
       }
     },
+    "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/progress": {
+      "get": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentWorkflowProgressDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentWorkflowProgressDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentWorkflowProgressDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/onland-visual-trash-assessment-areas": {
       "get": {
         "tags": [
@@ -3505,6 +3545,66 @@
           "Latitude": {
             "type": "number",
             "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OnlandVisualTrashAssessmentStatusSimpleDto": {
+        "type": "object",
+        "properties": {
+          "OnlandVisualTrashAssessmentStatusID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OnlandVisualTrashAssessmentStatusName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentStatusDisplayName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OnlandVisualTrashAssessmentWorkflowProgressDto": {
+        "type": "object",
+        "properties": {
+          "OnlandVisualTrashAssessmentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OnlandVisualTrashAssessmentName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentStatus": {
+            "$ref": "#/components/schemas/OnlandVisualTrashAssessmentStatusSimpleDto"
+          },
+          "Steps": {
+            "type": "object",
+            "properties": {
+              "Instructions": {
+                "$ref": "#/components/schemas/WorkflowStepStatus"
+              },
+              "InitiateOvta": {
+                "$ref": "#/components/schemas/WorkflowStepStatus"
+              },
+              "RecordObservations": {
+                "$ref": "#/components/schemas/WorkflowStepStatus"
+              },
+              "AddOrRemoveParcels": {
+                "$ref": "#/components/schemas/WorkflowStepStatus"
+              },
+              "RefineAssessmentArea": {
+                "$ref": "#/components/schemas/WorkflowStepStatus"
+              },
+              "ReviewAndFinalize": {
+                "$ref": "#/components/schemas/WorkflowStepStatus"
+              }
+            },
+            "additionalProperties": false,
+            "nullable": true
           }
         },
         "additionalProperties": false

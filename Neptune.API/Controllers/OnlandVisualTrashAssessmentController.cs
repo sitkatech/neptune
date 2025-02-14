@@ -8,6 +8,7 @@ using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using System.Collections.Generic;
 using System.Linq;
+using Neptune.EFModels.Workflows;
 
 namespace Neptune.API.Controllers;
 
@@ -36,5 +37,15 @@ public class OnlandVisualTrashAssessmentController(
     {
         var onlandVisualTrashAssessmentDetailDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsDetailDto();
         return Ok(onlandVisualTrashAssessmentDetailDto);
+    }
+
+    [HttpGet("{onlandVisualTrashAssessmentID}/progress")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public ActionResult<OnlandVisualTrashAssessmentWorkflowProgress.OnlandVisualTrashAssessmentWorkflowProgressDto> GetWorkflowProgress([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessment = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID);
+        var onlandVisualTrashAssessmentProgressDto = OnlandVisualTrashAssessmentWorkflowProgress.GetProgress(onlandVisualTrashAssessment);
+        return Ok(onlandVisualTrashAssessmentProgressDto);
     }
 }
