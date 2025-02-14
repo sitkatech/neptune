@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Models;
+using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.DataHub;
 using Index = Neptune.WebMvc.Views.DataHub.Index;
 using IndexViewData = Neptune.WebMvc.Views.DataHub.IndexViewData;
@@ -16,6 +17,7 @@ public class DataHubController : NeptuneBaseController<DataHubController>
     {
     }
 
+    [NeptuneViewFeature]
     [HttpGet]
     public ViewResult Index()
     {
