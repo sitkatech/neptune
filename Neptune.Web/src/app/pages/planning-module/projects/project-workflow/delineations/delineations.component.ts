@@ -196,10 +196,10 @@ export class DelineationsComponent implements OnInit {
             }).subscribe(({ project, treatmentBMPs, delineations }) => {
                 // redirect to review step if project is shared with OCTA grant program
                 if (project.ShareOCTAM2Tier2Scores) {
-                    this.router.navigateByUrl(`/projects/edit/${projectID}/review-and-share`);
+                    this.router.navigateByUrl(`/planning/projects/edit/${projectID}/review-and-share`);
                 }
                 if (treatmentBMPs.length == 0) {
-                    this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
+                    this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}`);
                 }
 
                 this.projectTreatmentBMPs = treatmentBMPs;
@@ -500,7 +500,7 @@ export class DelineationsComponent implements OnInit {
                     this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
 
                     if (continueToNextStep) {
-                        this.router.navigateByUrl(`/projects/edit/${this.projectID}/stormwater-treatments/modeled-performance-and-metrics`).then((x) => {
+                        this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}/stormwater-treatments/modeled-performance-and-metrics`).then((x) => {
                             this.alertService.pushAlert(new Alert("Your Delineation changes have been saved.", AlertContext.Success, true));
                         });
                         return;

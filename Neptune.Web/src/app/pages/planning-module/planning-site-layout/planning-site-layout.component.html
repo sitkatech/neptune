@@ -9,10 +9,10 @@
                         <a [href]="siteUrl + '/DataHub/Index'" class="nav-link" role="button"> Data Hub </a>
                     </li>
                     <li class="nav-item" routerLinkActive="active">
-                        <a [routerLink]="['/projects']" class="nav-link" role="button"> Projects </a>
+                        <a [routerLink]="['/planning/projects']" class="nav-link" role="button"> Projects </a>
                     </li>
                     <li class="nav-item" routerLinkActive="active">
-                        <a [routerLink]="['/planning-map']" class="nav-link" role="button"> Planning Map </a>
+                        <a [routerLink]="['/planning/planning-map']" class="nav-link" role="button"> Planning Map </a>
                     </li>
                 </ng-container>
 
@@ -33,7 +33,7 @@
 
                     <div #grantProgramsToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <div class="dropdown-divider"></div>
-                        <a [routerLink]="['/grant-programs/octa-m2-tier-2']" class="dropdown-item"> OCTA M2 Tier 2 Grant Program </a>
+                        <a [routerLink]="['/planning/grant-programs/octa-m2-tier-2']" class="dropdown-item"> OCTA M2 Tier 2 Grant Program </a>
                     </div>
                 </li>
             </ul>

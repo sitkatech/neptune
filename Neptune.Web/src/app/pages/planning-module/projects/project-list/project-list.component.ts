@@ -69,20 +69,21 @@ export class ProjectListComponent implements OnInit {
         this.projectColumnDefs = [
             this.utilityFunctionsService.createActionsColumnDef((params: any) => {
                 return [
-                    { ActionName: "View", ActionHandler: () => this.router.navigate(["projects", params.data.ProjectID]) },
+                    { ActionName: "View", ActionHandler: () => this.router.navigate(["planning", "projects", params.data.ProjectID]) },
                     {
                         ActionName: "Edit",
                         ActionIcon: "fas fa-edit",
-                        ActionHandler: () => this.router.navigateByUrl(`/projects/edit/${params.data.ProjectID + (params.data.ShareOCTAM2Tier2Scores ? "/review-and-share" : "")}`),
+                        ActionHandler: () =>
+                            this.router.navigateByUrl(`/planning/projects/edit/${params.data.ProjectID + (params.data.ShareOCTAM2Tier2Scores ? "/review-and-share" : "")}`),
                     },
                     { ActionName: "Delete", ActionIcon: "fa fa-trash text-danger", ActionHandler: () => this.deleteModal(params) },
                 ];
             }),
             this.utilityFunctionsService.createLinkColumnDef("Project ID", "ProjectID", "ProjectID", {
-                InRouterLink: "/projects/",
+                InRouterLink: "/planning/projects/",
             }),
             this.utilityFunctionsService.createLinkColumnDef("Project Name", "ProjectName", "ProjectID", {
-                InRouterLink: "/projects/",
+                InRouterLink: "/planning/projects/",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Organization", "Organization.OrganizationName"),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdiction.Organization.OrganizationName"),

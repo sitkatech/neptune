@@ -28,9 +28,9 @@ export class ProjectInstructionsComponent implements OnInit {
 
     continueToNextStep() {
         if (this.projectID) {
-            this.router.navigateByUrl(`/projects/edit/${this.projectID}/project-basics`);
+            this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}/project-basics`);
         } else {
-            this.router.navigateByUrl(`/projects/new/project-basics`);
+            this.router.navigateByUrl(`/planning/projects/new/project-basics`);
         }
     }
 }
