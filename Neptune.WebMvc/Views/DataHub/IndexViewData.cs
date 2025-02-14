@@ -36,6 +36,7 @@ namespace Neptune.WebMvc.Views.DataHub
         public string UploadWQMPUrl { get; }
         public string UploadSimplifiedBMPUrl { get; }
         public string UploadWQMPLocationsUrl { get; }
+        public string UploadAssessmentAreasUrl { get; }
         public string DownloadAssessmentAreasUrl { get; }
         public string UploadOVTAUrl { get; }
         public string UploadLandUseBlocksUrl { get; }
@@ -105,6 +106,7 @@ namespace Neptune.WebMvc.Views.DataHub
             UploadWQMPUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.UploadWqmps());
             UploadSimplifiedBMPUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.UploadSimplifiedBMPs());
             UploadWQMPLocationsUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.UploadWqmpBoundaryFromAPNs());
+            UploadAssessmentAreasUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(linkGenerator, x => x.BulkUploadOVTAAreas());
             DownloadAssessmentAreasUrl = SitkaRoute<OnlandVisualTrashAssessmentExportController>.BuildUrlFromExpression(linkGenerator, x => x.ExportAssessmentGeospatialData());
             UploadOVTAUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.BulkUploadOTVAs());
             UploadLandUseBlocksUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(linkGenerator, x => x.UpdateLandUseBlockGeometry());
