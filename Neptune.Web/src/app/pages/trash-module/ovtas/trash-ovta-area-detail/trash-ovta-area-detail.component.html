@@ -37,7 +37,7 @@
         <div class="card g-col-6" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
             <div class="card-header">
                 Location
-                <!-- <button class="btn btn-primary" [routerLink]="['edit-location']">Edit</button> -->
+                <button class="btn btn-primary" [routerLink]="['edit-location']">Edit</button>
             </div>
             <div class="card-body map">
                 <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="400px" [showLegend]="false" [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">

@@ -15,9 +15,8 @@ import { routeParams } from "src/app/app.routes";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { OnlandVisualTrashAssessmentAreaDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-detail-dto";
 import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
-import { WqmpsLayerComponent } from "../../../../shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
-import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
+import { SelectParcelLayerComponent } from "../../../../shared/components/leaflet/layers/select-parcel-layer/select-parcel-layer.component";
 
 @Component({
     selector: "trash-ovta-area-edit-location",
@@ -30,8 +29,7 @@ import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers
         AsyncPipe,
         OvtaAreaLayerComponent,
         TransectLineLayerComponent,
-        WqmpsLayerComponent,
-        ParcelLayerComponent,
+        SelectParcelLayerComponent,
     ],
     templateUrl: "./trash-ovta-area-edit-location.component.html",
     styleUrl: "./trash-ovta-area-edit-location.component.scss",

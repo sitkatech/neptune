@@ -43,7 +43,7 @@ export class TrashOvtaDetailComponent {
     public ovtaObservationLayer: L.GeoJSON<any>;
     public selectedOVTAObservation: OnlandVisualTrashAssessmentObservationWithPhotoDto;
 
-    public ovtaAreaID: number;
+    public ovtaID: number;
 
     public map: L.Map;
     public mapIsReady: boolean = false;
@@ -56,7 +56,7 @@ export class TrashOvtaDetailComponent {
     ngOnInit(): void {
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
             switchMap((params) => {
-                this.ovtaAreaID = params[routeParams.onlandVisualTrashAssessmentAreaID];
+                this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
                 return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(params[routeParams.onlandVisualTrashAssessmentID]);
             })
         );
@@ -129,10 +129,15 @@ export class TrashOvtaDetailComponent {
                 }
                 layer.setZIndexOffset(10000);
                 layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-red.png"));
-                console.log(layer.feature.properties.OnlandVisualTrashAssessmentObservationID);
-                // this.router.navigate([`/trash/onland-visual-trash-assessment-area/${this.ovtaAreaID}`], {
-                //     //fragment: `${layer.feature.properties.OnlandVisualTrashAssessmentObservationID}`,
+                // this.router.navigate([`/trash/onland-visual-trash-assessment/${this.ovtaID}`], {
+                //     fragment: `${layer.feature.properties.OnlandVisualTrashAssessmentObservationID}`,
                 // });
+                this.router.navigate([], {
+                    relativeTo: this.route,
+                    fragment: `${layer.feature.properties.OnlandVisualTrashAssessmentObservationID}`,
+                    queryParamsHandling: "preserve",
+                    replaceUrl: true,
+                });
             } else {
                 layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-violet.png"));
             }

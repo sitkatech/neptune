@@ -2,22 +2,37 @@
 
 <div class="page-body" *ngIf="onlandVisualTrashAssessmentArea$ | async as onlandVisualTrashAssessmentArea">
     <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false" [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
-        <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
+        <select-parcel-layer
+            *ngIf="false"
+            [displayOnLoad]="true"
+            [map]="map"
+            [layerControl]="layerControl"
+            [sortOrder]="10"
+            [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox"></select-parcel-layer>
+        <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></land-use-block-layer>
         <ovta-area-layer
-            *ngIf="mapIsReady"
+            *ngIf="false"
             [displayOnLoad]="true"
             [map]="map"
             [layerControl]="layerControl"
             [sortOrder]="15"
             [ovtaAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
         <transect-line-layer
-            *ngIf="mapIsReady"
+            *ngIf="false"
             [displayOnLoad]="true"
             [map]="map"
             [layerControl]="layerControl"
-            [sortOrder]="20"
+            [sortOrder]="30"
             [ovtaAreaName]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName"
             [jurisdictionID]="onlandVisualTrashAssessmentArea.StormwaterJurisdictionID"></transect-line-layer>
-        <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></parcel-layer>
     </neptune-map>
+    <div class="flex-between">
+        <button class="btn btn-primary">Reset Map Zoom</button>
+        <button class="btn btn-primary">Pick Parcels</button>
+    </div>
+    <hr />
+    <div class="flex-end">
+        <button class="btn btn-primary">Save</button>
+        <button class="btn btn-primary">Cancel</button>
+    </div>
 </div>
