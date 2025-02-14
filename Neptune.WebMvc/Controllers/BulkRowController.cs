@@ -24,8 +24,6 @@ using Neptune.WebMvc.Security;
 using LtInfo.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Neptune.Common;
-using Neptune.EFModels;
 using Neptune.EFModels.Entities;
 using Neptune.EFModels.Nereid;
 using Neptune.WebMvc.Common.MvcResults;
