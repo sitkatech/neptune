@@ -102,48 +102,48 @@ export const routes: Routes = [
             { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
         ],
     },
-    // {
-    //     path: `trash`,
-    //     title: "Stormwater Tools | Orange County | Trash Module",
-    //     component: TrashSiteLayoutComponent,
-    //     children: [
-    //         { path: "", title: "Home", component: TrashHomeComponent },
-    //         {
-    //             path: "land-use-block",
-    //             component: TrashLandUseBlockIndexComponent,
-    //             canActivate: [UnauthenticatedAccessGuard],
-    //         },
-    //         {
-    //             path: "onland-visual-trash-assessment",
-    //             children: [
-    //                 { path: "", component: TrashOvtaIndexComponent, canActivate: [UnauthenticatedAccessGuard] },
-    //                 { path: `:${routeParams.onlandVisualTrashAssessmentID}`, component: TrashOvtaDetailComponent, canActivate: [UnauthenticatedAccessGuard] },
-    //             ],
-    //         },
+    {
+        path: `trash`,
+        title: "Stormwater Tools | Orange County | Trash Module",
+        component: TrashSiteLayoutComponent,
+        children: [
+            { path: "", title: "Home", component: TrashHomeComponent },
+            {
+                path: "land-use-block",
+                component: TrashLandUseBlockIndexComponent,
+                canActivate: [UnauthenticatedAccessGuard],
+            },
+            {
+                path: "onland-visual-trash-assessment",
+                children: [
+                    { path: "", component: TrashOvtaIndexComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: `:${routeParams.onlandVisualTrashAssessmentID}`, component: TrashOvtaDetailComponent, canActivate: [UnauthenticatedAccessGuard] },
+                ],
+            },
 
-    //         {
-    //             path: "onland-visual-trash-assessment-area",
-    //             children: [
-    //                 { path: "", component: TrashOvtaAreaIndexComponent, canActivate: [UnauthenticatedAccessGuard] },
-    //                 {
-    //                     path: `:${routeParams.onlandVisualTrashAssessmentAreaID}`,
-    //                     component: TrashOvtaAreaDetailComponent,
-    //                     canActivate: [UnauthenticatedAccessGuard],
-    //                 },
-    //                 {
-    //                     path: `:${routeParams.onlandVisualTrashAssessmentAreaID}/edit-location`,
-    //                     component: TrashOvtaAreaEditLocationComponent,
-    //                     canActivate: [UnauthenticatedAccessGuard],
-    //                 },
-    //             ],
-    //         },
-    //         {
-    //             path: "trash-generating-unit",
-    //             component: TrashTrashGeneratingUnitIndexComponent,
-    //             canActivate: [UnauthenticatedAccessGuard],
-    //         },
-    //     ],
-    // },
+            {
+                path: "onland-visual-trash-assessment-area",
+                children: [
+                    { path: "", component: TrashOvtaAreaIndexComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    {
+                        path: `:${routeParams.onlandVisualTrashAssessmentAreaID}`,
+                        component: TrashOvtaAreaDetailComponent,
+                        canActivate: [UnauthenticatedAccessGuard],
+                    },
+                    {
+                        path: `:${routeParams.onlandVisualTrashAssessmentAreaID}/edit-location`,
+                        component: TrashOvtaAreaEditLocationComponent,
+                        canActivate: [UnauthenticatedAccessGuard],
+                    },
+                ],
+            },
+            {
+                path: "trash-generating-unit",
+                component: TrashTrashGeneratingUnitIndexComponent,
+                canActivate: [UnauthenticatedAccessGuard],
+            },
+        ],
+    },
 
     { path: "create-user-callback", component: CreateUserCallbackComponent },
     { path: "signin-oidc", component: LoginCallbackComponent },

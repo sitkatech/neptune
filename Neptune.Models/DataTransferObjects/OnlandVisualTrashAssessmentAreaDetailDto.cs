@@ -11,6 +11,5 @@ public class OnlandVisualTrashAssessmentAreaDetailDto
     public string? OnlandVisualTrashAssessmentProgressScoreName { get; set; }
     public int NumberOfAssessmentsCompleted { get; set; }
     public DateTime? LastAssessmentDate { get; set; }
-    public List<OnlandVisualTrashAssessmentGridDto> OnlandVisualTrashAssessments { get; set; }
     public BoundingBoxDto BoundingBox { get; set; }
 }

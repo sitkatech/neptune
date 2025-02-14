@@ -30,8 +30,6 @@ public static class OnlandVisualTrashAssessmentAreas
     public static OnlandVisualTrashAssessmentArea GetByID(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentAreaID)
     {
         var onlandVisualTrashAssessmentArea = GetImpl(dbContext)
-            .Include(x => x.OnlandVisualTrashAssessments)
-            .ThenInclude(x => x.CreatedByPerson)
             .AsNoTracking()
             .SingleOrDefault(x => x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentAreaID);
         Check.RequireNotNull(onlandVisualTrashAssessmentArea, $"OnlandVisualTrashAssessmentArea with ID {onlandVisualTrashAssessmentAreaID} not found!");

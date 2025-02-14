@@ -628,6 +628,55 @@
         }
       }
     },
+    "/onland-visual-trash-assessments/onland-visual-trash-assessment-areas/{onlandVisualTrashAssessmentAreaID}": {
+      "get": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentAreaID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/onland-visual-trash-assessment-areas": {
       "get": {
         "tags": [
@@ -3313,13 +3362,6 @@
           "LastAssessmentDate": {
             "type": "string",
             "format": "date-time",
-            "nullable": true
-          },
-          "OnlandVisualTrashAssessments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
-            },
             "nullable": true
           },
           "BoundingBox": {
