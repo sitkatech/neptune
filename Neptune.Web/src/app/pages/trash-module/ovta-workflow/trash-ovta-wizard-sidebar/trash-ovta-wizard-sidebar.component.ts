@@ -29,7 +29,6 @@ export class TrashOvtaWizardSidebarComponent {
         this.progress$ = this.ovtaProgressService.progressObservable$.pipe(
             tap((x) => {
                 this.submitted = false;
-                console.log(x);
             })
         );
         this.ovtaProgressService.getProgress(this.ovtaID);

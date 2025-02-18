@@ -93,4 +93,23 @@ public static class OnlandVisualTrashAssessments
         return ListByOnlandVisualTrashAssessmentAreaID(dbContext, onlandVisualTrashAssessmentAreaID.Value).SingleOrDefault(x =>
             x.IsTransectBackingAssessment);
     }
+
+    public static async Task<OnlandVisualTrashAssessmentSimpleDto> CreateNew(NeptuneDbContext dbContext, OnlandVisualTrashAssessmentSimpleDto dto, PersonDto currentUser)
+    {
+        var onlandVisualTrashAssessment = new OnlandVisualTrashAssessment()
+        {
+            CreatedByPersonID = currentUser.PersonID,
+            AssessingNewArea = dto.AssessingNewArea,
+            CreatedDate = DateTime.UtcNow,
+            OnlandVisualTrashAssessmentAreaID = dto.OnlandVisualTrashAssessmentAreaID,
+            StormwaterJurisdictionID = dto.StormwaterJurisdictionID,
+            OnlandVisualTrashAssessmentStatusID = (int)OnlandVisualTrashAssessmentStatusEnum.InProgress
+        };
+
+        await dbContext.AddAsync(onlandVisualTrashAssessment);
+        await dbContext.SaveChangesAsync();
+        await dbContext.Entry(onlandVisualTrashAssessment).ReloadAsync();
+        
+        return onlandVisualTrashAssessment.AsSimpleDto();
+    }
 }

@@ -1,1 +1,24 @@
-<p>trash-initiate-ovta works!</p>
+<page-header pageTitle="Initiate OVTA"></page-header>
+<div class="page-body grid-12">
+    <i class="copy copy-2">Are you reassessing a previously-assessed area, or assessing a new area for the first time?</i>
+    <div class="form-group">
+        <div class="g-col-3 control-label"></div>
+        <form-field class="g-col-6" [formControl]="selectedAreaType" [formInputOptions]="layerIsOnByDefaultOptions" [type]="FormFieldType.Radio"></form-field>
+        <field-definition [fieldDefinitionType]="'Jurisdiction'"></field-definition>
+        <ngx-select-dropdown
+            [multiple]="false"
+            [config]="jurisdictionDropdownConfig"
+            name="selectedJurisdiction"
+            [formControl]="selectedJurisdiction"
+            [options]="stormwaterJurisdictionOptions$ | async"></ngx-select-dropdown>
+    </div>
+    <div [hidden]="selectedAreaType.getRawValue() == null || selectedAreaType.getRawValue()">
+        <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="500px" [showLegend]="false"></neptune-map>
+    </div>
+</div>
+<div class="page-footer">
+    <button class="btn btn-primary mr-2" (click)="save()" [disabled]="selectedAreaType.invalid || selectedJurisdiction.invalid || isLoadingSubmit">Save</button>
+    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="selectedAreaType.invalid || selectedJurisdiction.invalid || isLoadingSubmit">
+        Save & Continue
+    </button>
+</div>

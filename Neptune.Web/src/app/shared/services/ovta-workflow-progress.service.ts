@@ -15,16 +15,15 @@ export class OvtaWorkflowProgressService {
 
     constructor(private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService, private route: ActivatedRoute, private router: Router) {}
 
-    updateProgress(projectID: number): void {
+    updateProgress(ovtaID: number): void {
         this.progressSubscription.unsubscribe();
-        this.getProgress(projectID);
+        this.getProgress(ovtaID);
     }
 
-    getProgress(projectID: number) {
-        console.log(projectID);
-        if (projectID) {
+    getProgress(ovtaID: number) {
+        if (ovtaID) {
             this.progressSubscription = this.onlandVisualTrashAssessmentService
-                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDProgressGet(projectID)
+                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDProgressGet(ovtaID)
                 .subscribe((response) => {
                     console.log(response);
                     this.progressSubject.next(response);
@@ -34,11 +33,11 @@ export class OvtaWorkflowProgressService {
                 new OnlandVisualTrashAssessmentWorkflowProgressDto({
                     Steps: {
                         Instructions: { Completed: true, Disabled: false },
-                        InitiateOvta: { Completed: true, Disabled: false },
-                        RecordObservations: { Completed: true, Disabled: false },
-                        AddOrRemoveParcels: { Completed: true, Disabled: false },
-                        RefineAssessmentArea: { Completed: true, Disabled: false },
-                        ReviewAndFinalize: { Completed: true, Disabled: false },
+                        InitiateOvta: { Completed: false, Disabled: false },
+                        RecordObservations: { Completed: false, Disabled: false },
+                        AddOrRemoveParcels: { Completed: false, Disabled: false },
+                        RefineAssessmentArea: { Completed: false, Disabled: false },
+                        ReviewAndFinalize: { Completed: false, Disabled: false },
                     },
                 })
             );

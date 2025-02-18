@@ -55,7 +55,7 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
             case OnlandVisualTrashAssessmentWorkflowStep.Instructions:
                 return true;
             case OnlandVisualTrashAssessmentWorkflowStep.InitiateOvta:
-                break;
+                return OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentID > 0;
             case OnlandVisualTrashAssessmentWorkflowStep.RecordObservations:
                 break;
             case OnlandVisualTrashAssessmentWorkflowStep.AddOrRemoveParcels:
@@ -81,7 +81,7 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
                 return OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentID > 0;
 
             case OnlandVisualTrashAssessmentWorkflowStep.InitiateOvta:
-                break;
+                return OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentID == 0;
             case OnlandVisualTrashAssessmentWorkflowStep.RecordObservations:
                 break;
             case OnlandVisualTrashAssessmentWorkflowStep.AddOrRemoveParcels:

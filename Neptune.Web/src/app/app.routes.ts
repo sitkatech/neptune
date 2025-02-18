@@ -134,6 +134,15 @@ export const routes: Routes = [
                     { path: "", redirectTo: "instructions", pathMatch: "full" },
                     { path: "instructions", component: TrashOvtaInstructionsComponent, canActivate: [UnauthenticatedAccessGuard] },
                     { path: "initiate-ovta", component: TrashInitiateOvtaComponent, canActivate: [UnauthenticatedAccessGuard] },
+                ],
+            },
+            {
+                path: `onland-visual-trash-assessment/edit/:${routeParams.onlandVisualTrashAssessmentID}`,
+                component: TrashOvtaWorkflowOutletComponent,
+                children: [
+                    { path: "", redirectTo: "instructions", pathMatch: "full" },
+                    { path: "instructions", component: TrashOvtaInstructionsComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "initiate-ovta", component: TrashInitiateOvtaComponent, canActivate: [UnauthenticatedAccessGuard] },
                     { path: "record-observations", component: TrashOvtaRecordObservationsComponent, canActivate: [UnauthenticatedAccessGuard] },
                     { path: "add-or-remove-parcels", component: TrashOvtaAddRemoveParcelsComponent, canActivate: [UnauthenticatedAccessGuard] },
                     { path: "refine-assessment-area", component: TrashOvtaRefineAssessmentAreaComponent, canActivate: [UnauthenticatedAccessGuard] },

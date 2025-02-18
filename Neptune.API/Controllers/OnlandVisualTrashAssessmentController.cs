@@ -8,6 +8,7 @@ using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Neptune.EFModels.Workflows;
 
 namespace Neptune.API.Controllers;
@@ -47,5 +48,13 @@ public class OnlandVisualTrashAssessmentController(
         var onlandVisualTrashAssessment = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID);
         var onlandVisualTrashAssessmentProgressDto = OnlandVisualTrashAssessmentWorkflowProgress.GetProgress(onlandVisualTrashAssessment);
         return Ok(onlandVisualTrashAssessmentProgressDto);
+    }
+
+    [HttpPost]
+    [JurisdictionEditFeature]
+    public async Task<OnlandVisualTrashAssessmentSimpleDto> CreateNew([FromBody] OnlandVisualTrashAssessmentSimpleDto dto)
+    {
+        var onlandVisualTrashAssessment = await OnlandVisualTrashAssessments.CreateNew(DbContext, dto, CallingUser);
+        return onlandVisualTrashAssessment;
     }
 }
