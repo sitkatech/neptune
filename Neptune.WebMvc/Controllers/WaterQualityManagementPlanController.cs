@@ -38,7 +38,6 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [NeptuneViewFeature]
         public ViewResult Index()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WaterQualityMaintenancePlan);
@@ -50,7 +49,6 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [NeptuneViewFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs> WaterQualityManagementPlanIndexGridData()
         {
             var gridSpec = new IndexGridSpec(_linkGenerator, CurrentPerson);
