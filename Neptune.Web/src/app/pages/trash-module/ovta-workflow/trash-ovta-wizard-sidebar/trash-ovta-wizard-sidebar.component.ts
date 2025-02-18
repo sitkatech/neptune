@@ -26,10 +26,8 @@ export class TrashOvtaWizardSidebarComponent {
         this.projectID = this.route.snapshot.paramMap.get(routeParams.onlandVisualTrashAssessmentID)
             ? parseInt(this.route.snapshot.paramMap.get(routeParams.onlandVisualTrashAssessmentID))
             : null;
-        console.log(this.projectID);
         this.progress$ = this.ovtaProgressService.progressObservable$.pipe(
             tap((x) => {
-                console.log(x);
                 this.submitted = false;
             })
         );
