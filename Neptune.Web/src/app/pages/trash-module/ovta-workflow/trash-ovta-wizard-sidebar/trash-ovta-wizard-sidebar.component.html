@@ -15,41 +15,32 @@
             [required]="false">
             Instructions
         </workflow-nav-item>
-        <!-- <workflow-nav-item [navRouterLink]="['project-basics']" [complete]="progressDto.Steps.BasicInfo.Completed" [disabled]="progressDto.Steps.BasicInfo.Disabled">
-            Basic Information
+        <workflow-nav-item [navRouterLink]="['initiate-ovta']" [complete]="progressDto.Steps.InitiateOvta.Completed" [disabled]="progressDto.Steps.InitiateOvta.Disabled">
+            Initiate OVTA
         </workflow-nav-item>
         <workflow-nav-item
-            [navRouterLink]="['stormwater-treatments', 'treatment-bmps']"
-            [complete]="progressDto.Steps.TreatmentBMPs.Completed"
-            [disabled]="progressDto.Steps.TreatmentBMPs.Disabled">
-            Treatment BMPs
+            [navRouterLink]="['record-observations']"
+            [complete]="progressDto.Steps.RecordObservations.Completed"
+            [disabled]="progressDto.Steps.RecordObservations.Disabled">
+            Record Observations
         </workflow-nav-item>
         <workflow-nav-item
-            [navRouterLink]="['stormwater-treatments', 'delineations']"
-            [complete]="progressDto.Steps.Delineations.Completed"
-            [disabled]="progressDto.Steps.Delineations.Disabled">
-            Delineations
+            [navRouterLink]="['initiate-ovta']"
+            [complete]="progressDto.Steps.AddOrRemoveParcels.Completed"
+            [disabled]="progressDto.Steps.AddOrRemoveParcels.Disabled">
+            Add or Remove Parcels
         </workflow-nav-item>
         <workflow-nav-item
-            [navRouterLink]="['stormwater-treatments', 'modeled-performance-and-metrics']"
-            [complete]="progressDto.Steps.ModeledPerformanceAndGrantMetrics.Completed"
-            [disabled]="progressDto.Steps.ModeledPerformanceAndGrantMetrics.Disabled">
-            Modeled Performance and Grant Metrics
+            [navRouterLink]="['initiate-ovta']"
+            [complete]="progressDto.Steps.RefineAssessmentArea.Completed"
+            [disabled]="progressDto.Steps.RefineAssessmentArea.Disabled">
+            Refine Assessment Area
         </workflow-nav-item>
         <workflow-nav-item
-            [navRouterLink]="['attachments']"
-            [complete]="progressDto.Steps.Attachments.Completed"
-            [disabled]="progressDto.Steps.Attachments.Disabled"
-            [required]="false">
-            Attachments
+            [navRouterLink]="['review-and-finalize']"
+            [complete]="progressDto.Steps.ReviewAndFinalize.Completed"
+            [disabled]="progressDto.Steps.ReviewAndFinalize.Disabled">
+            Review and Finalize
         </workflow-nav-item>
-        <workflow-nav-item
-            [navRouterLink]="['review-and-share']"
-            [complete]="true"
-            [complete]="progressDto.Steps.ReviewAndShare.Completed"
-            [disabled]="progressDto.Steps.ReviewAndShare.Disabled"
-            [required]="false">
-            Review and Share
-        </workflow-nav-item> -->
     </workflow-nav>
 </ng-container>

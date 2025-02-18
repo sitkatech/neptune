@@ -18,19 +18,20 @@ import { OnlandVisualTrashAssessmentWorkflowProgressDto } from "src/app/shared/g
 export class TrashOvtaWizardSidebarComponent {
     public submitted: boolean = false;
     public progress$: Observable<OnlandVisualTrashAssessmentWorkflowProgressDto>;
-    public projectID: number;
+    public ovtaID: number;
 
     constructor(private route: ActivatedRoute, private ovtaProgressService: OvtaWorkflowProgressService) {}
 
     ngOnInit() {
-        this.projectID = this.route.snapshot.paramMap.get(routeParams.onlandVisualTrashAssessmentID)
+        this.ovtaID = this.route.snapshot.paramMap.get(routeParams.onlandVisualTrashAssessmentID)
             ? parseInt(this.route.snapshot.paramMap.get(routeParams.onlandVisualTrashAssessmentID))
             : null;
         this.progress$ = this.ovtaProgressService.progressObservable$.pipe(
             tap((x) => {
                 this.submitted = false;
+                console.log(x);
             })
         );
-        this.ovtaProgressService.getProgress(this.projectID);
+        this.ovtaProgressService.getProgress(this.ovtaID);
     }
 }

@@ -34,6 +34,11 @@ export class OvtaWorkflowProgressService {
                 new OnlandVisualTrashAssessmentWorkflowProgressDto({
                     Steps: {
                         Instructions: { Completed: true, Disabled: false },
+                        InitiateOvta: { Completed: true, Disabled: false },
+                        RecordObservations: { Completed: true, Disabled: false },
+                        AddOrRemoveParcels: { Completed: true, Disabled: false },
+                        RefineAssessmentArea: { Completed: true, Disabled: false },
+                        ReviewAndFinalize: { Completed: true, Disabled: false },
                     },
                 })
             );

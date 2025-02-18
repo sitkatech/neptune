@@ -40,6 +40,11 @@ import { TrashOvtaAreaIndexComponent } from "./pages/trash-module/ovtas/trash-ov
 import { TrashOvtaAreaEditLocationComponent } from "./pages/trash-module/ovtas/trash-ovta-area-edit-location/trash-ovta-area-edit-location.component";
 import { TrashOvtaWorkflowOutletComponent } from "./pages/trash-module/ovta-workflow/trash-ovta-workflow-outlet/trash-ovta-workflow-outlet.component";
 import { TrashOvtaInstructionsComponent } from "./pages/trash-module/ovta-workflow/trash-ovta-instructions/trash-ovta-instructions.component";
+import { TrashInitiateOvtaComponent } from "./pages/trash-module/ovta-workflow/trash-initiate-ovta/trash-initiate-ovta.component";
+import { TrashOvtaRecordObservationsComponent } from "./pages/trash-module/ovta-workflow/trash-ovta-record-observations/trash-ovta-record-observations.component";
+import { TrashOvtaReviewAndFinalizeComponent } from "./pages/trash-module/ovta-workflow/trash-ovta-review-and-finalize/trash-ovta-review-and-finalize.component";
+import { TrashOvtaAddRemoveParcelsComponent } from "./pages/trash-module/ovta-workflow/trash-ovta-add-remove-parcels/trash-ovta-add-remove-parcels.component";
+import { TrashOvtaRefineAssessmentAreaComponent } from "./pages/trash-module/ovta-workflow/trash-ovta-refine-assessment-area/trash-ovta-refine-assessment-area.component";
 
 export const routeParams = {
     definitionID: "definitionID",
@@ -128,6 +133,11 @@ export const routes: Routes = [
                 children: [
                     { path: "", redirectTo: "instructions", pathMatch: "full" },
                     { path: "instructions", component: TrashOvtaInstructionsComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "initiate-ovta", component: TrashInitiateOvtaComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "record-observations", component: TrashOvtaRecordObservationsComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "add-or-remove-parcels", component: TrashOvtaAddRemoveParcelsComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "refine-assessment-area", component: TrashOvtaRefineAssessmentAreaComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "review-and-finalize", component: TrashOvtaReviewAndFinalizeComponent, canActivate: [UnauthenticatedAccessGuard] },
                 ],
             },
 
