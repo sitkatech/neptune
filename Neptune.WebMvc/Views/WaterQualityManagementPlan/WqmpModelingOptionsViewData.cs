@@ -1,12 +1,6 @@
 ﻿using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Controllers;
-using Neptune.WebMvc.Models;
-using System.Globalization;
-using Microsoft.AspNetCore.Html;
 using Neptune.EFModels.Entities;
-using Neptune.WebMvc.Security;
-using Neptune.WebMvc.Views.Shared.HRUCharacteristics;
-using Neptune.WebMvc.Views.Shared.ModeledPerformance;
 
 namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
 {
