@@ -647,6 +647,8 @@ public partial class NeptuneDbContext : DbContext
         modelBuilder.Entity<Parcel>(entity =>
         {
             entity.HasKey(e => e.ParcelID).HasName("PK_Parcel_ParcelID");
+
+            entity.Property(e => e.LastUpdate).HasDefaultValue(new DateTime(2023, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
         });
 
         modelBuilder.Entity<ParcelGeometry>(entity =>
@@ -659,10 +661,6 @@ public partial class NeptuneDbContext : DbContext
         modelBuilder.Entity<ParcelStaging>(entity =>
         {
             entity.HasKey(e => e.ParcelStagingID).HasName("PK_ParcelStaging_ParcelStagingID");
-
-            entity.HasOne(d => d.UploadedByPerson).WithMany(p => p.ParcelStagings)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ParcelStaging_Person_UploadedByPersonID_PersonID");
         });
 
         modelBuilder.Entity<Person>(entity =>
