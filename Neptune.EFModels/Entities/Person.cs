@@ -123,10 +123,6 @@ namespace Neptune.EFModels.Entities
                 onlandVisualTrashAssessment.CreatedByPersonID = SystemPersonID;
             }
             
-            foreach (var parcelStaging in dbContext.ParcelStagings.Where(x => x.UploadedByPersonID == PersonID).ToList())
-            {
-                parcelStaging.UploadedByPersonID = SystemPersonID;
-            }
             foreach (var project in dbContext.Projects.Where(x => x.CreatePersonID == PersonID 
                                                                   || x.PrimaryContactPersonID == PersonID 
                                                                   || x.UpdatePersonID == PersonID).ToList())

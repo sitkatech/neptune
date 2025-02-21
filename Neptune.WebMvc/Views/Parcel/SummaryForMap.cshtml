@@ -27,9 +27,6 @@
             <dt>@Html.Label("APN")</dt>
             <dd>@ViewDataTyped.Parcel.ParcelNumber</dd>
                     
-            <dt>@Html.Label("Owner Name")</dt>
-            <dd>@ViewDataTyped.Parcel.OwnerName</dd>
-        
             <dt>@Html.Label("Address") </dt>
             <dd>
                 @if (ViewDataTyped.Parcel.HasValidAddress())
@@ -41,9 +38,6 @@
                     <span class="systemText">Address not available</span>
                 }
             </dd>
-        
-            <dt>@Html.Label("Reported Land Use") </dt>
-            <dd>@ViewDataTyped.Parcel.LandUse</dd>        
         </dl>
     </div>
 </div>

@@ -14,8 +14,13 @@ begin
 
     set identity_insert dbo.Parcel on
 
-    insert into dbo.Parcel(ParcelID, ParcelNumber, ParcelAddress, ParcelAreaInAcres)
-    select ps.ParcelStagingID, ps.ParcelNumber, case when len(ps.ParcelAddress) = 0 then null else ps.ParcelAddress end, ps.ParcelStagingAreaSquareFeet / 43560
+    insert into dbo.Parcel(ParcelID, ParcelNumber, ParcelAddress, ParcelCityState, ParcelZipCode, ParcelAreaInAcres, LastUpdate)
+    select ps.ParcelStagingID, ps.ParcelNumber
+    , case when len(ps.ParcelAddress) = 0 then null else ps.ParcelAddress end
+    , case when len(ps.ParcelCityState) = 0 then null else ps.ParcelCityState end
+    , case when len(ps.ParcelZipCode) = 0 then null else ps.ParcelZipCode end
+    , ps.ParcelAreaInSquareFeet / 43560
+    , GETUTCDATE()
     from dbo.ParcelStaging ps
     where len(ps.ParcelNumber) > 0 and ps.[Geometry].STIsValid() = 1
     order by ps.ParcelStagingID, ps.ParcelNumber

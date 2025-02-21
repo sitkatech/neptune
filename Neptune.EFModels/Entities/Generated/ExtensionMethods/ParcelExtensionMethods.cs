@@ -15,14 +15,11 @@ namespace Neptune.EFModels.Entities
             {
                 ParcelID = parcel.ParcelID,
                 ParcelNumber = parcel.ParcelNumber,
-                OwnerName = parcel.OwnerName,
-                ParcelStreetNumber = parcel.ParcelStreetNumber,
                 ParcelAddress = parcel.ParcelAddress,
+                ParcelCityState = parcel.ParcelCityState,
                 ParcelZipCode = parcel.ParcelZipCode,
-                LandUse = parcel.LandUse,
-                SquareFeetHome = parcel.SquareFeetHome,
-                SquareFeetLot = parcel.SquareFeetLot,
-                ParcelAreaInAcres = parcel.ParcelAreaInAcres
+                ParcelAreaInAcres = parcel.ParcelAreaInAcres,
+                LastUpdate = parcel.LastUpdate
             };
             return dto;
         }
