@@ -58,5 +58,11 @@
     "inputFiles": [
       "wwwroot/ScriptsCustom/Maps/NeptuneMaps.StormwaterSearch.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/ScriptsCustom/Maps/NeptuneMaps.ParcelSearch.min.js",
+    "inputFiles": [
+      "wwwroot/ScriptsCustom/Maps/NeptuneMaps.ParcelSearch.js"
+    ]
   }
 ]

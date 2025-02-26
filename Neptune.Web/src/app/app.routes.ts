@@ -48,7 +48,7 @@ export const routeParams = {
 
 export const routes: Routes = [
     {
-        path: ``,
+        path: `planning`,
         title: "Stormwater Tools | Orange County | Planning Module",
         component: PlanningSiteLayoutComponent,
         children: [

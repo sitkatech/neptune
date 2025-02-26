@@ -9,13 +9,10 @@ namespace Neptune.Models.DataTransferObjects
     {
         public int ParcelID { get; set; }
         public string ParcelNumber { get; set; }
-        public string OwnerName { get; set; }
-        public string ParcelStreetNumber { get; set; }
         public string ParcelAddress { get; set; }
+        public string ParcelCityState { get; set; }
         public string ParcelZipCode { get; set; }
-        public string LandUse { get; set; }
-        public int? SquareFeetHome { get; set; }
-        public int? SquareFeetLot { get; set; }
         public double ParcelAreaInAcres { get; set; }
+        public DateTime LastUpdate { get; set; }
     }
 }

@@ -36,15 +36,17 @@ namespace Neptune.WebMvc.Views.DataHub
         public string UploadWQMPUrl { get; }
         public string UploadSimplifiedBMPUrl { get; }
         public string UploadWQMPLocationsUrl { get; }
+        public string UploadAssessmentAreasUrl { get; }
         public string DownloadAssessmentAreasUrl { get; }
         public string UploadOVTAUrl { get; }
         public string UploadLandUseBlocksUrl { get; }
         public string DownloadLandUseBlocksUrl { get; }
-        public string ParcelUploadUrl { get; }
+        public string ParcelRefreshUrl { get; }
         public string RegionalSubbasinRefreshUrl { get; }
         public string LandUseStatisticsRefreshUrl { get; }
         public string ModelBasinsRefreshUrl { get; }
         public string PrecipitationZonesRefreshUrl { get; }
+        public DateTime? LastUpdatedParcels { get; }
         public DateTime? LastUpdatedRegionalSubbasins { get; }
         public DateTime? LastUpdatedHRUCharacteristics { get; }
         public DateTime? LastUpdatedModalBasins { get; }
@@ -65,7 +67,7 @@ namespace Neptune.WebMvc.Views.DataHub
 
         public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator,
             WebConfiguration webConfiguration, Person currentPerson, WebServiceToken webServiceAccessToken,
-            List<WebServiceDocumentation> serviceDocumentationList, DateTime? lastUpdatedRegionalSubbasin,
+            List<WebServiceDocumentation> serviceDocumentationList, DateTime? lastUpdatedParcels, DateTime? lastUpdatedRegionalSubbasins,
             DateTime? lastUpdatedDateModelBasins, DateTime? lastUpdatedDatePrecipitationZones,
             DateTime? lastUpdatedDateHRUCharacteristics, EFModels.Entities.NeptunePage treatmentBMPPage, EFModels.Entities.NeptunePage delineationPage,
             EFModels.Entities.NeptunePage fieldTripPage, EFModels.Entities.NeptunePage wqmpPage, 
@@ -105,17 +107,19 @@ namespace Neptune.WebMvc.Views.DataHub
             UploadWQMPUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.UploadWqmps());
             UploadSimplifiedBMPUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.UploadSimplifiedBMPs());
             UploadWQMPLocationsUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.UploadWqmpBoundaryFromAPNs());
+            UploadAssessmentAreasUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(linkGenerator, x => x.BulkUploadOVTAAreas());
             DownloadAssessmentAreasUrl = SitkaRoute<OnlandVisualTrashAssessmentExportController>.BuildUrlFromExpression(linkGenerator, x => x.ExportAssessmentGeospatialData());
             UploadOVTAUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.BulkUploadOTVAs());
             UploadLandUseBlocksUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(linkGenerator, x => x.UpdateLandUseBlockGeometry());
             DownloadLandUseBlocksUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(linkGenerator, x => x.DownloadLandUseBlockGeometry());
-            ParcelUploadUrl = SitkaRoute<ParcelLayerUploadController>.BuildUrlFromExpression(linkGenerator, x => x.UpdateParcelLayerGeometry());
+            ParcelRefreshUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(linkGenerator, x => x.RefreshParcelsFromOCSurvey());
             RegionalSubbasinRefreshUrl = SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshFromOCSurvey());
             LandUseStatisticsRefreshUrl = SitkaRoute<HRUCharacteristicController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshHRUCharacteristics());
             ModelBasinsRefreshUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshModelBasinsFromOCSurvey());
             PrecipitationZonesRefreshUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RefreshPrecipitationZonesFromOCSurvey());
 
-            LastUpdatedRegionalSubbasins = lastUpdatedRegionalSubbasin;
+            LastUpdatedParcels = lastUpdatedParcels;
+            LastUpdatedRegionalSubbasins = lastUpdatedRegionalSubbasins;
             LastUpdatedHRUCharacteristics = lastUpdatedDateHRUCharacteristics;
             LastUpdatedModalBasins = lastUpdatedDateModelBasins;
             LastUpdatedPrecipitationZones = lastUpdatedDatePrecipitationZones;

@@ -9,7 +9,7 @@
 
         public string GetParcelAddress()
         {
-            return $"{ParcelAddress}{(!string.IsNullOrWhiteSpace(ParcelZipCode) ? $", {ParcelZipCode}" : "")}";
+            return $"{ParcelAddress}{(!string.IsNullOrWhiteSpace(ParcelCityState) ? $", {ParcelCityState}" : "")}{(!string.IsNullOrWhiteSpace(ParcelZipCode) ? $", {ParcelZipCode}" : "")}";
         }
     }
 }

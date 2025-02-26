@@ -88,9 +88,6 @@ public partial class Person
     [InverseProperty("PrimaryContactPerson")]
     public virtual ICollection<Organization> Organizations { get; set; } = new List<Organization>();
 
-    [InverseProperty("UploadedByPerson")]
-    public virtual ICollection<ParcelStaging> ParcelStagings { get; set; } = new List<ParcelStaging>();
-
     [InverseProperty("CreatePerson")]
     public virtual ICollection<Project> ProjectCreatePeople { get; set; } = new List<Project>();
 

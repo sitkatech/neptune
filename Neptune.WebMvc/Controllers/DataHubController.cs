@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Models;
+using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.DataHub;
 using Index = Neptune.WebMvc.Views.DataHub.Index;
 using IndexViewData = Neptune.WebMvc.Views.DataHub.IndexViewData;
@@ -16,6 +17,7 @@ public class DataHubController : NeptuneBaseController<DataHubController>
     {
     }
 
+    [NeptuneViewFeature]
     [HttpGet]
     public ViewResult Index()
     {
@@ -35,6 +37,7 @@ public class DataHubController : NeptuneBaseController<DataHubController>
         var precipitationZonesPage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.PrecipitationZonesDataHub);
         
         
+        var lastUpdatedDateParcels = _dbContext.Parcels.MaxBy(x => x.LastUpdate)?.LastUpdate;
         var lastUpdatedDateRegionalSubbasin = _dbContext.RegionalSubbasins.MaxBy(x => x.LastUpdate)?.LastUpdate;
         var lastUpdatedDateHRUCharacteristics = _dbContext.HRUCharacteristics.MaxBy(x => x.LastUpdated)?.LastUpdated;
         var lastUpdatedDateModelBasins = _dbContext.ModelBasins.MaxBy(x => x.LastUpdate)?.LastUpdate;
@@ -43,7 +46,7 @@ public class DataHubController : NeptuneBaseController<DataHubController>
         var serviceDocumentationList = allMethods.Select(c => new WebServiceDocumentation(c, _dbContext, _linkGenerator)).OrderBy(x => x.Name).ToList();
         var webServiceAccessToken = new WebServiceToken(_dbContext, CurrentPerson.WebServiceAccessToken.ToString());
         var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson,
-            webServiceAccessToken, serviceDocumentationList, lastUpdatedDateRegionalSubbasin,
+            webServiceAccessToken, serviceDocumentationList, lastUpdatedDateParcels, lastUpdatedDateRegionalSubbasin,
             lastUpdatedDateModelBasins, lastUpdatedDatePrecipitationZones, lastUpdatedDateHRUCharacteristics,
             treatmentBMPPage, delineationPage, fieldTripPage, wqmpPage, simplifiedBMPPage, wqmpLocationPage, assessmentAreaPage,
             ovtasPage, landUseBlocksPage, parcelPage, regionalSubbasinsPage, landUseStatisticsPage, modelBasinsPage, precipitationZonesPage);

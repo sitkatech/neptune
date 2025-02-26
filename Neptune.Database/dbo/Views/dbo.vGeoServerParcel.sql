@@ -4,11 +4,8 @@ select
 	p.ParcelID,
 	p.ParcelNumber,
 	pg.Geometry4326 as ParcelGeometry,
-	p.OwnerName,
-	p.ParcelStreetNumber,
 	p.ParcelAddress,
 	p.ParcelZipCode,
-	p.LandUse,
 	isnull(p.ParcelAreaInAcres, 0) as ParcelArea,
 	Case when WQMPCount is null then 0 else WQMPCount end as WQMPCount
 from dbo.Parcel p 

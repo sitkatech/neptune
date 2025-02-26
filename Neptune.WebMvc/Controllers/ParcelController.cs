@@ -1,15 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
+using Neptune.Jobs.Services;
 using Neptune.Models.DataTransferObjects;
 using Neptune.WebMvc.Common;
+using Neptune.WebMvc.Common.Models;
+using Neptune.WebMvc.Common.MvcResults;
 using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Services.Filters;
 using Neptune.WebMvc.Views.Parcel;
+using Neptune.WebMvc.Views.Shared;
 using NetTopologySuite.Features;
 
 namespace Neptune.WebMvc.Controllers
@@ -28,9 +33,7 @@ namespace Neptune.WebMvc.Controllers
             var findParcelByAddressUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(_linkGenerator, x => x.FindByAddress(null));
             var findParcelByAPNUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(_linkGenerator, x => x.FindByAPN(null));
             var parcelMapServiceUrl = _webConfiguration.MapServiceUrl;
-            var parcelSummaryForMapUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(_linkGenerator, x => x.SummaryForMap(null));
-            var parcelLayerUploadUrl =
-                SitkaRoute<ParcelLayerUploadController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateParcelLayerGeometry(null));
+            var parcelSummaryForMapUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(_linkGenerator, x => x.SummaryForMap(ModelObjectHelpers.NotYetAssignedID)).Replace("/-1", "");
             var mapInitJson = GetMapInitJson();
 
             var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson,
@@ -40,8 +43,7 @@ namespace Neptune.WebMvc.Controllers
                 findParcelByAddressUrl,
                 findParcelByAPNUrl,
                 parcelMapServiceUrl,
-                parcelSummaryForMapUrl,
-                parcelLayerUploadUrl);
+                parcelSummaryForMapUrl);
             return RazorView<Views.Parcel.Index, IndexViewData>(viewData);
         }
 
@@ -55,9 +57,9 @@ namespace Neptune.WebMvc.Controllers
             return mapInitJson;
         }
 
-        [HttpGet("{term}")]
+        [HttpGet]
         [NeptuneViewFeature]
-        public JsonResult FindByAddress(string term)
+        public JsonResult FindByAddress([FromQuery] string term)
         {
             var searchString = term.Trim();
             var allParcelsMatchingSearchString =
@@ -88,9 +90,9 @@ namespace Neptune.WebMvc.Controllers
             return Json(listItems);
         }
 
-        [HttpGet("{term}")]
+        [HttpGet]
         [NeptuneViewFeature]
-        public JsonResult FindByAPN(string term)
+        public JsonResult FindByAPN([FromQuery] string term)
         {
             var searchString = term.Trim();
             var allParcelsMatchingSearchString =
@@ -105,7 +107,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [NeptuneViewFeature]        
+        [NeptuneViewFeature]
         public JsonResult FindSimpleByAPN([FromQuery] string term)
         {
             var searchString = term.Trim();
@@ -120,11 +122,12 @@ namespace Neptune.WebMvc.Controllers
             return Json(listItems);
         }
 
-        [HttpGet("{parcelNumber}")]
+        [HttpGet("{parcelPrimaryKey}")]
         [NeptuneViewFeature]
-        public PartialViewResult SummaryForMap(string parcelNumber)
+        [ValidateEntityExistsAndPopulateParameterFilter("parcelPrimaryKey")]
+        public PartialViewResult SummaryForMap([FromRoute] ParcelPrimaryKey parcelPrimaryKey)
         {
-            var parcel = Parcels.GetParcelByParcelNumber(_dbContext, parcelNumber);
+            var parcel = parcelPrimaryKey.EntityObject;
             var viewData = new SummaryForMapViewData(CurrentPerson, parcel);
             return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
         }
@@ -153,6 +156,34 @@ namespace Neptune.WebMvc.Controllers
             var unionOfParcels = ParcelGeometries.UnionAggregateByParcelIDs(_dbContext, viewModel.ParcelIDs);
             var featureCollection = unionOfParcels.MultiPolygonToFeatureCollection();
             return featureCollection;
+        }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public PartialViewResult RefreshParcelsFromOCSurvey()
+        {
+            return ViewRefreshParcelsFromOCSurvey(new ConfirmDialogFormViewModel());
+        }
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult RefreshParcelsFromOCSurvey(ConfirmDialogFormViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewRefreshParcelsFromOCSurvey(viewModel);
+            }
+
+            BackgroundJob.Enqueue<OCGISService>(x => x.RefreshParcels());
+            SetMessageForDisplay("Parcels refresh will run in the background.");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewRefreshParcelsFromOCSurvey(ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = "Are you sure you want to refresh the Parcels layer from OC Survey?<br /><br />This can take a little while to run.";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
     }
 }
