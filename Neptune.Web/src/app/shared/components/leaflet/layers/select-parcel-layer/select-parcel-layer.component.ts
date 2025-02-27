@@ -4,6 +4,7 @@ import * as L from "leaflet";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
+import { environment } from "src/environments/environment";
 
 @Component({
     selector: "select-parcel-layer",
@@ -20,6 +21,7 @@ export class SelectParcelLayerComponent extends MapLayerBase implements OnChange
     @Output() ovtaAreaSelected = new EventEmitter<number>();
 
     public isLoading: boolean = false;
+    public wmsOptions: L.WMSOptions;
 
     public layer: L.featureGroup;
 
@@ -28,6 +30,17 @@ export class SelectParcelLayerComponent extends MapLayerBase implements OnChange
         weight: 2,
         opacity: 0.65,
         fillOpacity: 0.1,
+    };
+    private wqmpStyle = {
+        color: "#ff6ba9",
+        weight: 2,
+        opacity: 0.9,
+        fillOpacity: 0.1,
+    };
+    private noWQMPsStyle = {
+        color: "#bbbbbb",
+        weight: 1,
+        opacity: 0.7,
     };
 
     constructor(private wfsService: WfsService, private groupByPipe: GroupByPipe) {
@@ -38,7 +51,7 @@ export class SelectParcelLayerComponent extends MapLayerBase implements OnChange
         if (changes.selectedOVTAAreaID) {
             if (changes.selectedOVTAAreaID.previousValue == changes.selectedOVTAAreaID.currentValue) return;
             this.selectedOVTAAreaID = changes.selectedOVTAAreaID.currentValue;
-            this.highlightSelectedOVTAArea();
+            this.highlightSelectedParcel();
         } else if (Object.values(changes).some((x: SimpleChange) => x.firstChange === false)) {
             this.updateLayer();
         }
@@ -51,36 +64,32 @@ export class SelectParcelLayerComponent extends MapLayerBase implements OnChange
 
     private updateLayer() {
         this.isLoading = true;
-        //this.layer.clearLayers();
+        this.layer.clearLayers();
 
-        this.addOVTAAreasToLayer();
+        this.addParcelsToLayer();
 
         this.layer.addTo(this.map);
         this.isLoading = false;
     }
 
-    private addOVTAAreasToLayer() {
-        console.log(this.boundingBox);
-        const bbox = this.boundingBox != null ? `bbox(ParcelGeometry,${this.boundingBox.Left},${this.boundingBox.Top},${this.boundingBox.Right},${this.boundingBox.Bottom})` : null;
-        console.log(bbox);
-        this.wfsService.getGeoserverWFSLayer("OCStormwater:Parcels", "ParcelID in (1,2)", "ParcelID").subscribe((response) => {
-            // console.log(response);
+    private addParcelsToLayer() {
+        const bbox = this.boundingBox != null ? `${this.boundingBox.Bottom},${this.boundingBox.Right},${this.boundingBox.Top},${this.boundingBox.Left}` : null;
+        this.wfsService.getGeoserverWFSLayer("OCStormwater:Parcels", "", "ParcelID", bbox).subscribe((response) => {
             if (response.length == 0) return;
-            const featuresGroupedByOVTAAreaID = this.groupByPipe.transform(response, "properties.ParcelID");
-            Object.keys(featuresGroupedByOVTAAreaID).forEach((ovtaAreaID) => {
-                const geoJson = L.geoJSON(featuresGroupedByOVTAAreaID[ovtaAreaID], {
-                    style: this.highlightStyle, //this.styleDictionary[featuresGroupedByOVTAAreaID[ovtaAreaID][0].properties.Score],
+            const featuresGroupedByParcelID = this.groupByPipe.transform(response, "properties.ParcelID");
+            Object.keys(featuresGroupedByParcelID).forEach((parcelID) => {
+                const geoJson = L.geoJSON(featuresGroupedByParcelID[parcelID], {
+                    style: featuresGroupedByParcelID[parcelID][0].properties.WQMPCount > 0 ? this.wqmpStyle : this.noWQMPsStyle,
                 });
-                console.log(geoJson);
-                // geoJson.on("mouseover", (e) => {
-                //     geoJson.setStyle({ fillOpacity: 0.5 });
-                // });
-                // geoJson.on("mouseout", (e) => {
-                //     geoJson.setStyle({ fillOpacity: 0.1 });
-                // });
-                // geoJson.on("click", (e) => {
-                //     this.onOVTAAreaSelected(Number(ovtaAreaID));
-                // });
+                geoJson.on("mouseover", (e) => {
+                    geoJson.setStyle({ fillOpacity: 0.5 });
+                });
+                geoJson.on("mouseout", (e) => {
+                    geoJson.setStyle({ fillOpacity: 0.1 });
+                });
+                geoJson.on("click", (e) => {
+                    this.onParcelSelected(Number(parcelID));
+                });
                 geoJson.addTo(this.layer);
             });
             const bounds = this.layer.getBounds();
@@ -89,24 +98,28 @@ export class SelectParcelLayerComponent extends MapLayerBase implements OnChange
         });
     }
 
-    private onOVTAAreaSelected(ovtaAreaID: number) {
-        this.selectedOVTAAreaID = ovtaAreaID;
-        this.highlightSelectedOVTAArea();
+    private onParcelSelected(parcelID: number) {
+        this.selectedOVTAAreaID = parcelID;
+        this.highlightSelectedParcel();
 
-        this.ovtaAreaSelected.emit(ovtaAreaID);
+        this.ovtaAreaSelected.emit(parcelID);
     }
 
-    private highlightSelectedOVTAArea() {
+    private highlightSelectedParcel() {
         this.layer.eachLayer((layer) => {
             // skip if well layer
             if (layer.options?.icon) return;
 
             const geoJsonLayers = layer.getLayers();
-            if (geoJsonLayers[0].feature.properties.OVTAAreaID == this.selectedOVTAAreaID) {
-                layer.setStyle(this.highlightStyle);
+            if (geoJsonLayers[0].feature.properties.ParcelID == this.selectedOVTAAreaID) {
+                if (geoJsonLayers[0].options.color == this.highlightStyle.color) {
+                    layer.setStyle(geoJsonLayers[0].feature.properties.WQMPCount > 0 ? this.wqmpStyle : this.noWQMPsStyle);
+                    console.log(geoJsonLayers[0].options.color);
+                } else {
+                    layer.setStyle(this.highlightStyle);
+                }
+
                 this.map.fitBounds(layer.getBounds());
-            } else {
-                //layer.setStyle(this.styleDictionary[geoJsonLayers[0].feature.properties.Score]);
             }
         });
     }

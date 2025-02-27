@@ -42,6 +42,7 @@ export class TrashOvtaAreaEditLocationComponent {
     public map: L.Map;
     public layerControl: L.Control.Layers;
     public mapIsReady = false;
+    public bounds: any;
 
     constructor(private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService, private route: ActivatedRoute) {}
 
@@ -59,5 +60,9 @@ export class TrashOvtaAreaEditLocationComponent {
                 );
             })
         );
+    }
+
+    public handleLayerBoundsCalculated(bounds: any) {
+        this.bounds = bounds;
     }
 }

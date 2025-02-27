@@ -42,7 +42,7 @@ export class WfsService {
         });
     }
 
-    public getGeoserverWFSLayer(layer: string, cqlFilter: string, valueReference: string): Observable<number[]> {
+    public getGeoserverWFSLayer(layer: string, cqlFilter: string, valueReference: string, bbox: string = ""): Observable<number[]> {
         const cqlFilters = [];
 
         if (cqlFilter) {
@@ -60,7 +60,8 @@ export class WfsService {
             .set("typeName", layer)
             .set("outputFormat", "application/json")
             .set("valueReference", valueReference)
-            .set("cql_filter", cqlFiltersCombined);
+            .set("bbox", bbox);
+
         return this.http.post(url, wfsParams).pipe(
             map((rawData: any) => {
                 return rawData.features;

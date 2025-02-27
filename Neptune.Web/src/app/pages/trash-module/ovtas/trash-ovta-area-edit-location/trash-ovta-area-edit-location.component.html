@@ -3,22 +3,23 @@
 <div class="page-body" *ngIf="onlandVisualTrashAssessmentArea$ | async as onlandVisualTrashAssessmentArea">
     <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false" [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
         <select-parcel-layer
-            *ngIf="false"
+            *ngIf="mapIsReady"
             [displayOnLoad]="true"
             [map]="map"
             [layerControl]="layerControl"
             [sortOrder]="10"
-            [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox"></select-parcel-layer>
+            [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox"
+            (layerBoundsCalculated)="handleLayerBoundsCalculated($event)"></select-parcel-layer>
         <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></land-use-block-layer>
         <ovta-area-layer
-            *ngIf="false"
+            *ngIf="mapIsReady"
             [displayOnLoad]="true"
             [map]="map"
             [layerControl]="layerControl"
             [sortOrder]="15"
             [ovtaAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
         <transect-line-layer
-            *ngIf="false"
+            *ngIf="mapIsReady"
             [displayOnLoad]="true"
             [map]="map"
             [layerControl]="layerControl"
