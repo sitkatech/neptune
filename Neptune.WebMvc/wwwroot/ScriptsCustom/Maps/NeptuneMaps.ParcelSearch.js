@@ -67,7 +67,7 @@ NeptuneMaps.ParcelSearch.prototype.selectParcelByWFS = function (customParams) {
                 },
                 onEachFeature: function (feature, layer) {
                     jQuery("#parcelAddressFinder").val(feature.properties.ParcelAddress);
-                    SitkaAjax.load(jQuery("#parcelAddressResultDetails"), self.parcelSummaryUrl + "/" + feature.properties.ParcelNumber);
+                    SitkaAjax.load(jQuery("#parcelAddressResultDetails"), self.parcelSummaryUrl + "/" + feature.properties.ParcelID);
                     $('.typeahead').typeahead('val', '');
                 }
             }).addTo(self.map);

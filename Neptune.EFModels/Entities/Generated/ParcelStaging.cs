@@ -20,35 +20,17 @@ public partial class ParcelStaging
     [Column(TypeName = "geometry")]
     public Geometry Geometry { get; set; } = null!;
 
-    public double ParcelStagingAreaSquareFeet { get; set; }
-
-    [StringLength(100)]
-    [Unicode(false)]
-    public string? OwnerName { get; set; }
-
-    [StringLength(10)]
-    [Unicode(false)]
-    public string? ParcelStreetNumber { get; set; }
+    public double ParcelAreaInSquareFeet { get; set; }
 
     [StringLength(150)]
     [Unicode(false)]
     public string? ParcelAddress { get; set; }
 
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? ParcelCityState { get; set; }
+
     [StringLength(5)]
     [Unicode(false)]
     public string? ParcelZipCode { get; set; }
-
-    [StringLength(4)]
-    [Unicode(false)]
-    public string? LandUse { get; set; }
-
-    public int? SquareFeetHome { get; set; }
-
-    public int? SquareFeetLot { get; set; }
-
-    public int UploadedByPersonID { get; set; }
-
-    [ForeignKey("UploadedByPersonID")]
-    [InverseProperty("ParcelStagings")]
-    public virtual Person UploadedByPerson { get; set; } = null!;
 }

@@ -1,27 +1,40 @@
-﻿using System.Net.Http.Json;
+﻿using System.Collections;
+using System.Globalization;
+using System.Net.Http.Json;
+using System.Net.Mail;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using Azure.Storage.Blobs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Neptune.Common.Email;
 using Neptune.Common.GeoSpatial;
+using Neptune.Common.JsonConverters;
 using Neptune.Common.Services;
 using Neptune.EFModels.Entities;
 using Neptune.Jobs.EsriAsynchronousJob;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.IO.Converters;
 
 namespace Neptune.Jobs.Services;
 
-public class OCGISService : BaseAPIService<OCGISService>
+public class OCGISService(
+    HttpClient httpClient,
+    ILogger<OCGISService> logger,
+    NeptuneDbContext dbContext,
+    IOptions<NeptuneJobConfiguration> neptuneJobConfiguration,
+    SitkaSmtpClientService sitkaSmtpClientService)
+    : BaseAPIService<OCGISService>(httpClient, logger, "OCGIS Service")
 {
     private const int MAX_RETRIES = 3;
     private const string HRUServiceEndPoint = "Environmental_Resources/HRUSummary/GPServer/HRUSummary";
+    private const string ParcelFileName = "ParcelsFromOC.json";
 
-    private readonly NeptuneDbContext _dbContext;
 
-    public OCGISService(HttpClient httpClient, ILogger<OCGISService> logger, NeptuneDbContext dbContext) : base(httpClient, logger, "OCGIS Service")
-    {
-        _dbContext = dbContext;
-    }
+    protected readonly BlobContainerClient BlobContainerClient = new BlobServiceClient(neptuneJobConfiguration.Value.AzureBlobStorageConnectionString).GetBlobContainerClient("file-resource");
 
     /*
     AutoDelineateServiceUrl=        https://ocgis.com/arcpub/rest/services/Flood/GlobalStormwaterDelineation/GPServer/Global%20Stormwater%20Delineation/
@@ -30,12 +43,13 @@ public class OCGISService : BaseAPIService<OCGISService>
     ModelBasinServiceUrl=           https://ocgis.com/arcpub/rest/services/Environmental_Resources/Hydrologic_Response_Unit/MapServer/7/query
     PrecipitationZoneServiceUrl=    https://ocgis.com/arcpub/rest/services/Environmental_Resources/Hydrologic_Response_Unit/MapServer/3/query
     OCTAPrioritizationServiceUrl=   https://ocgis.com/arcpub/rest/services/Environmental_Resources/Hydrologic_Response_Unit/MapServer/8/query
+    ParcelServiceUrl = https://ocgis.com/arcpub/rest/services/LegalLotsAttributeOpenData/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson
      */
 
     public async Task RefreshSubbasins()
     {
-        _dbContext.Database.SetCommandTimeout(30000);
-        await _dbContext.RegionalSubbasinStagings.ExecuteDeleteAsync();
+        dbContext.Database.SetCommandTimeout(30000);
+        await dbContext.RegionalSubbasinStagings.ExecuteDeleteAsync();
         var regionalSubbasinFromEsris = await RetrieveRegionalSubbasins();
         var regionalSubbasinStagings = regionalSubbasinFromEsris.Select(x =>
             {
@@ -51,33 +65,33 @@ public class OCGISService : BaseAPIService<OCGISService>
                 };
             })
             .ToList();
-        _dbContext.RegionalSubbasinStagings.AddRange(regionalSubbasinStagings);
-        await _dbContext.SaveChangesAsync();
-        await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
-        await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pUpdateRegionalSubbasinLiveFromStaging");
+        dbContext.RegionalSubbasinStagings.AddRange(regionalSubbasinStagings);
+        await dbContext.SaveChangesAsync();
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pUpdateRegionalSubbasinLiveFromStaging");
         
         // reproject to 4326
-        foreach (var regionalSubbasin in _dbContext.RegionalSubbasins)
+        foreach (var regionalSubbasin in dbContext.RegionalSubbasins)
         {
             regionalSubbasin.CatchmentGeometry4326 = regionalSubbasin.CatchmentGeometry.ProjectTo4326();
         }
 
         // Watershed table is made up from the dissolves/ aggregation of the Regional Subbasins feature layer, so we need to update it when Regional Subbasins are updated
-        foreach (var watershed in _dbContext.Watersheds)
+        foreach (var watershed in dbContext.Watersheds)
         {
             watershed.WatershedGeometry4326 = watershed.WatershedGeometry.ProjectTo4326();
         }
-        await _dbContext.SaveChangesAsync();
-        await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pWatershedMakeValid");
-        await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdateWatershed");
-        await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pUpdateRegionalSubbasinIntersectionCache");
-        await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDelineationMarkThoseThatHaveDiscrepancies");
+        await dbContext.SaveChangesAsync();
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pWatershedMakeValid");
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdateWatershed");
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pUpdateRegionalSubbasinIntersectionCache");
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDelineationMarkThoseThatHaveDiscrepancies");
     }
 
     public async Task RefreshPrecipitationZones()
     {
-        _dbContext.Database.SetCommandTimeout(30000);
-        await _dbContext.PrecipitationZoneStagings.ExecuteDeleteAsync();
+        dbContext.Database.SetCommandTimeout(30000);
+        await dbContext.PrecipitationZoneStagings.ExecuteDeleteAsync();
         var precipitationZoneFromEsris = await RetrievePrecipitationZones();
         var precipitationZoneStagings = precipitationZoneFromEsris.Select(x =>
             {
@@ -91,39 +105,39 @@ public class OCGISService : BaseAPIService<OCGISService>
                 };
             })
             .ToList();
-        _dbContext.PrecipitationZoneStagings.AddRange(precipitationZoneStagings);
-        await _dbContext.SaveChangesAsync();
-        await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pPrecipitationZoneUpdateFromStaging");
-        await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdatePrecipitationZone");
+        dbContext.PrecipitationZoneStagings.AddRange(precipitationZoneStagings);
+        await dbContext.SaveChangesAsync();
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pPrecipitationZoneUpdateFromStaging");
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdatePrecipitationZone");
     }
 
     public async Task RefreshModelBasins()
     {
-        _dbContext.Database.SetCommandTimeout(30000);
-        await _dbContext.ModelBasinStagings.ExecuteDeleteAsync();
-        var modelBasinFromEsris = await RetrieveModelBasins();
-        var modelBasinStagings = modelBasinFromEsris.Select(x =>
+        dbContext.Database.SetCommandTimeout(30000);
+        await dbContext.ModelBasinStagings.ExecuteDeleteAsync();
+        var parcelFromEsris = await RetrieveModelBasins();
+        var parcelStagings = parcelFromEsris.Select(x =>
         {
-            var modelBasinGeometry = x.Geometry;
-            modelBasinGeometry.SRID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID;
+            var parcelGeometry = x.Geometry;
+            parcelGeometry.SRID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID;
             return new ModelBasinStaging()
             {
-                ModelBasinGeometry = modelBasinGeometry,
+                ModelBasinGeometry = parcelGeometry,
                 ModelBasinKey = x.ModelBasinKey,
                 ModelBasinState = x.ModelBasinState,
                 ModelBasinRegion = x.ModelBasinRegion
             };
         }).ToList();
-        _dbContext.ModelBasinStagings.AddRange(modelBasinStagings);
-        await _dbContext.SaveChangesAsync();
-        await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pModelBasinUpdateFromStaging");
-        await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdateModelBasin");
+        dbContext.ModelBasinStagings.AddRange(parcelStagings);
+        await dbContext.SaveChangesAsync();
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pModelBasinUpdateFromStaging");
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdateModelBasin");
     }
 
     public async Task RefreshOCTAPrioritizations()
     {
-        _dbContext.Database.SetCommandTimeout(30000);
-        await _dbContext.OCTAPrioritizationStagings.ExecuteDeleteAsync();
+        dbContext.Database.SetCommandTimeout(30000);
+        await dbContext.OCTAPrioritizationStagings.ExecuteDeleteAsync();
         var octaPrioritizationFromEsris = await RetrieveOCTAPrioritizations();
         var octaPrioritizationStagings = octaPrioritizationFromEsris.Select(x =>
         {
@@ -149,20 +163,67 @@ public class OCGISService : BaseAPIService<OCGISService>
                 PC_TSS_PCT = x.PC_TSS_PCT
             };
         }).ToList();
-        _dbContext.OCTAPrioritizationStagings.AddRange(octaPrioritizationStagings);
-        await _dbContext.SaveChangesAsync();
-        await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pOCTAPrioritizationUpdateFromStaging");
-        foreach (var octaPrioritization in _dbContext.OCTAPrioritizations)
+        dbContext.OCTAPrioritizationStagings.AddRange(octaPrioritizationStagings);
+        await dbContext.SaveChangesAsync();
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pOCTAPrioritizationUpdateFromStaging");
+        foreach (var octaPrioritization in dbContext.OCTAPrioritizations)
         {
             octaPrioritization.OCTAPrioritizationGeometry4326 = octaPrioritization.OCTAPrioritizationGeometry.ProjectTo4326();
         }
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
+    }
+
+    public async Task RefreshParcels()
+    {
+        dbContext.Database.SetCommandTimeout(30000);
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pParcelStagingDelete");
+
+        var parcelFromEsris = await RetrieveParcels();
+        var parcelStagings = parcelFromEsris.Select(x =>
+        {
+            var parcelGeometry = x.Geometry;
+            parcelGeometry.SRID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID;
+            return new ParcelStaging()
+            {
+                Geometry = parcelGeometry,
+                ParcelNumber = x.ParcelNumber,
+                ParcelAreaInSquareFeet = x.ParcelAreaInSquareFeet,
+                ParcelAddress = x.ParcelAddress,
+                ParcelCityState = x.ParcelCityState,
+                ParcelZipCode = x.ParcelZipCode
+
+            };
+        }).ToList();
+        dbContext.ParcelStagings.AddRange(parcelStagings);
+        await dbContext.SaveChangesAsync();
+
+        if (parcelStagings.Count > 0)
+        {
+            // first wipe the dependent WQMPParcel table, then wipe the old parcels
+            await dbContext.Database.ExecuteSqlRawAsync("EXECUTE dbo.pParcelUpdateFromStaging");
+
+            // we need to get the 4326 representation of the geometry; unfortunately can't do it in sql
+            var parcels = dbContext.ParcelGeometries.ToList();
+            parcels.AsParallel().ForAll(x => x.Geometry4326 = x.GeometryNative.ProjectTo4326());
+            await dbContext.SaveChangesAsync();
+        }
+    }
+
+    public async Task<List<ParcelFromEsri>> RetrieveParcels()
+    {
+        //https://ocgis.com/arcpub/rest/services/LegalLotsAttributeOpenData/FeatureServer/0/query?where=AssessmentNo+is+not+null&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=LegalLotID%2CAssessmentNo%2CSiteAddress%2CShape__Area&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&gdbVersion=&historicMoment=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=xyFootprint&resultOffset=&resultRecordCount=&returnTrueCurves=false&returnExceededLimitFeatures=false&quantizationParameters=&returnCentroid=false&timeReferenceUnknownClient=false&sqlFormat=none&resultType=&featureEncoding=esriDefault&datumTransformation=&f=geojson
+        const string serviceName = "Parcel";
+        var featureCollection = await RetrieveFeatureCollectionFromArcServer("LegalLotsAttributeOpenData/FeatureServer/0/query", "AssessmentNo is not null", "LegalLotID,AssessmentNo,SiteAddress,SiteCityState,SiteZip5,Shape__Area");
+        var result = GeoJsonSerializer.DeserializeFromFeatureCollection<ParcelFromEsri>(featureCollection);
+        await SerializeAndUploadToBlobStorage(featureCollection, ParcelFileName);
+        //ThrowIfNotUnique(result.GroupBy(x => x.ParcelKey), serviceName);
+        return result;
     }
 
     public async Task<List<OCTAPrioritizationFromEsri>> RetrieveOCTAPrioritizations()
     {
         const string serviceName = "OCTA Prioritization";
-        var featureCollection = await RetrieveFeatureCollectionFromArcServer("Environmental_Resources/Hydrologic_Response_Unit/MapServer/8/query", serviceName);
+        var featureCollection = await RetrieveFeatureCollectionFromArcServer("Environmental_Resources/Hydrologic_Response_Unit/MapServer/8/query");
         var result = GeoJsonSerializer.DeserializeFromFeatureCollection<OCTAPrioritizationFromEsri>(featureCollection, GeoJsonSerializer.CreateGeoJSONSerializerOptions(1));
         ThrowIfNotUnique(result.GroupBy(x => x.OCTAPrioritizationKey), serviceName);
         return result;
@@ -171,7 +232,7 @@ public class OCGISService : BaseAPIService<OCGISService>
     public async Task<List<ModelBasinFromEsri>> RetrieveModelBasins()
     {
         const string serviceName = "Model Basin";
-        var featureCollection = await RetrieveFeatureCollectionFromArcServer("Environmental_Resources/Hydrologic_Response_Unit/MapServer/7/query", serviceName);
+        var featureCollection = await RetrieveFeatureCollectionFromArcServer("Environmental_Resources/Hydrologic_Response_Unit/MapServer/7/query");
         var result = GeoJsonSerializer.DeserializeFromFeatureCollection<ModelBasinFromEsri>(featureCollection);
         ThrowIfNotUnique(result.GroupBy(x => x.ModelBasinKey), serviceName);
         return result;
@@ -180,7 +241,7 @@ public class OCGISService : BaseAPIService<OCGISService>
     public async Task<List<RegionalSubbasinFromEsri>> RetrieveRegionalSubbasins()
     {
         const string serviceName = "Regional Subbasin";
-        var featureCollection = await RetrieveFeatureCollectionFromArcServer("Environmental_Resources/RegionalSubbasins/MapServer/0/query", serviceName);
+        var featureCollection = await RetrieveFeatureCollectionFromArcServer("Environmental_Resources/RegionalSubbasins/MapServer/0/query");
         var result = GeoJsonSerializer.DeserializeFromFeatureCollection<RegionalSubbasinFromEsri>(featureCollection);
         ThrowIfNotUnique(result.GroupBy(x => x.OCSurveyCatchmentID), serviceName);
 
@@ -201,10 +262,10 @@ public class OCGISService : BaseAPIService<OCGISService>
         return result;
     }
 
-    public async Task<List<PrecipitationZoneFromEsri>> RetrievePrecipitationZones()
+    public async Task<List<PrecipitationZoneFromEsri>> RetrievePrecipitationZones() 
     {
         const string serviceName = "Precipitation Zone";
-        var featureCollection = await RetrieveFeatureCollectionFromArcServer("Environmental_Resources/Hydrologic_Response_Unit/MapServer/3/query", serviceName);
+        var featureCollection = await RetrieveFeatureCollectionFromArcServer("Environmental_Resources/Hydrologic_Response_Unit/MapServer/3/query");
         var result = GeoJsonSerializer.DeserializeFromFeatureCollection<PrecipitationZoneFromEsri>(featureCollection, GeoJsonSerializer.CreateGeoJSONSerializerOptions(2));
         ThrowIfNotUnique(result.GroupBy(x => x.PrecipitationZoneKey), serviceName);
         return result;
@@ -377,7 +438,12 @@ public class OCGISService : BaseAPIService<OCGISService>
         }
     }
 
-    private async Task<FeatureCollection> RetrieveFeatureCollectionFromArcServer(string url, string serviceName)
+    private async Task<FeatureCollection> RetrieveFeatureCollectionFromArcServer(string url)
+    {
+        return await RetrieveFeatureCollectionFromArcServer(url, "1=1", "*");
+    }
+
+    private async Task<FeatureCollection> RetrieveFeatureCollectionFromArcServer(string url, string filterCriteria, string outFields)
     {
         var collectedFeatureCollection = new FeatureCollection();
         var resultOffset = 0;
@@ -387,10 +453,10 @@ public class OCGISService : BaseAPIService<OCGISService>
         {
             var keyValuePairs = new List<KeyValuePair<string, string>>
             {
-                new("where", "1=1"),
+                new("where", filterCriteria),
                 new("geometryType", "esriGeometryEnvelope"),
                 new("spatialRel", "esriSpatialRelIntersects"),
-                new("outFields", "*"),
+                new("outFields", outFields),
                 new("outSR", "2771"),
                 new("returnGeometry", "true"),
                 new("returnTrueCurves", "false"),
@@ -432,9 +498,39 @@ public class OCGISService : BaseAPIService<OCGISService>
                 }
             }
         }
-
         return collectedFeatureCollection;
     }
+
+    public async Task SerializeAndUploadToBlobStorage(IEnumerable list, string blobName)
+    {
+        var blobClient = BlobContainerClient.GetBlobClient(blobName);
+
+        try
+        {
+            var stream = new MemoryStream();
+            var jsonSerializerOptions = new JsonSerializerOptions
+            {
+                ReadCommentHandling = JsonCommentHandling.Skip,
+                DefaultIgnoreCondition = JsonIgnoreCondition.Never,
+                WriteIndented = false,
+                NumberHandling = JsonNumberHandling.AllowReadingFromString,
+                PropertyNameCaseInsensitive = false,
+                PropertyNamingPolicy = null,
+            };
+            jsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory());
+            jsonSerializerOptions.Converters.Add(new DateTimeConverter());
+            jsonSerializerOptions.Converters.Add(new DoubleConverter(4));
+            jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            await GeoJsonSerializer.SerializeToStream(list, jsonSerializerOptions, stream);
+            stream.Position = 0;
+            await blobClient.UploadAsync(stream, overwrite: true);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError("Failed to write to blob storage; Exception details: " + ex.Message);
+        }
+    }
+
 
     public class OCTAPrioritizationFromEsri : IHasGeometry
     {
@@ -478,6 +574,23 @@ public class OCGISService : BaseAPIService<OCGISService>
         public string ModelBasinState { get; set; }
         [JsonPropertyName("REGION")]
         public string ModelBasinRegion { get; set; }
+    }
+
+    public class ParcelFromEsri : IHasGeometry
+    {
+        public Geometry Geometry { get; set; }
+        [JsonPropertyName("LegalLotID")]
+        public int ParcelKey { get; set; }
+        [JsonPropertyName("AssessmentNo")]
+        public string ParcelNumber { get; set; }
+        [JsonPropertyName("SiteAddress")]
+        public string ParcelAddress { get; set; }
+        [JsonPropertyName("Shape__Area")]
+        public double ParcelAreaInSquareFeet { get; set; }
+        [JsonPropertyName("SiteCityState")]
+        public string ParcelCityState { get; set; }
+        [JsonPropertyName("SiteZip5")]
+        public string ParcelZipCode { get; set; }
     }
 
     public class PrecipitationZoneFromEsri : IHasGeometry

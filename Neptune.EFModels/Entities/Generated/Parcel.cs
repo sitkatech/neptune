@@ -16,31 +16,22 @@ public partial class Parcel
     [Unicode(false)]
     public string? ParcelNumber { get; set; }
 
-    [StringLength(100)]
-    [Unicode(false)]
-    public string? OwnerName { get; set; }
-
-    [StringLength(10)]
-    [Unicode(false)]
-    public string? ParcelStreetNumber { get; set; }
-
     [StringLength(150)]
     [Unicode(false)]
     public string? ParcelAddress { get; set; }
+
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? ParcelCityState { get; set; }
 
     [StringLength(5)]
     [Unicode(false)]
     public string? ParcelZipCode { get; set; }
 
-    [StringLength(4)]
-    [Unicode(false)]
-    public string? LandUse { get; set; }
-
-    public int? SquareFeetHome { get; set; }
-
-    public int? SquareFeetLot { get; set; }
-
     public double ParcelAreaInAcres { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime LastUpdate { get; set; }
 
     [InverseProperty("Parcel")]
     public virtual ParcelGeometry? ParcelGeometry { get; set; }

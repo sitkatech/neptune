@@ -21,7 +21,6 @@
 @using Neptune.WebMvc.Views.Shared
 @using Neptune.EFModels.Entities
 @using Neptune.WebMvc.Common
-@using Neptune.WebMvc.Common.BootstrapWrappers
 @inherits Neptune.WebMvc.Views.Parcel.Index
 
 @section JavascriptAndStylesContent
@@ -41,11 +40,6 @@
     </style>
 
 
-}
-
-@section RightOfPageTitle
-{
-    <a class="btn btn-neptune" href="@ViewDataTyped.ParcelLayerUploadUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Upload New Parcel Layer</a>
 }
 
 <div>

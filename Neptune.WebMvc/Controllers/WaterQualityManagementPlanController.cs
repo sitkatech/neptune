@@ -38,7 +38,6 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
         public ViewResult Index()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WaterQualityMaintenancePlan);
@@ -50,7 +49,6 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs> WaterQualityManagementPlanIndexGridData()
         {
             var gridSpec = new IndexGridSpec(_linkGenerator, CurrentPerson);
@@ -83,7 +81,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
+        [NeptuneViewFeature]
         public GridJsonNetJObjectResult<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerificationGridData()
         {
             var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForWQMPs(_dbContext, CurrentPerson);
@@ -1048,7 +1046,6 @@ The WQMP Boundaries for Stormwater Jurisdiction {stormwaterJurisdiction} were su
         }
 
         [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
         public ViewResult WqmpModelingOptions()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WQMPModelingOptions);
