@@ -1,5 +1,4 @@
 ﻿namespace Neptune.Models.DataTransferObjects;
-
 public class OnlandVisualTrashAssessmentAreaDetailDto
 {
     public int OnlandVisualTrashAssessmentAreaID { get; set; }

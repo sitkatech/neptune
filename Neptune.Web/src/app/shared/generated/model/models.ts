@@ -26,6 +26,7 @@ export * from '././onland-visual-trash-assessment-grid-dto';
 export * from '././onland-visual-trash-assessment-observation-with-photo-dto';
 export * from '././ordinates';
 export * from '././organization-simple-dto';
+export * from '././parcel-geometry-simple-dto';
 export * from '././person-create-dto';
 export * from '././person-dto';
 export * from '././person-simple-dto';

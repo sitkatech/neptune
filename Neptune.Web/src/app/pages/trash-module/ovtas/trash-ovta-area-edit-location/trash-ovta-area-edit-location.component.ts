@@ -9,7 +9,7 @@ import "leaflet-loading";
 import "leaflet.markercluster";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { AsyncPipe, NgIf } from "@angular/common";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, switchMap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
@@ -44,7 +44,11 @@ export class TrashOvtaAreaEditLocationComponent {
     public mapIsReady = false;
     public bounds: any;
 
-    constructor(private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService, private route: ActivatedRoute) {}
+    public selectedParcels: number[] = [];
+
+    public canPickParcels: boolean = false;
+
+    constructor(private router: Router, private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService, private route: ActivatedRoute) {}
 
     public handleMapReady(event: NeptuneMapInitEvent): void {
         this.map = event.map;
@@ -64,5 +68,17 @@ export class TrashOvtaAreaEditLocationComponent {
 
     public handleLayerBoundsCalculated(bounds: any) {
         this.bounds = bounds;
+    }
+
+    public setSelectedParcels(event) {
+        this.selectedParcels = event;
+    }
+
+    public save(ovtaAreaID) {
+        this.onlandVisualTrashAssessmentAreaService
+            .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost(ovtaAreaID, this.selectedParcels)
+            .subscribe((x) => {
+                this.router.navigate(["../"], { relativeTo: this.route });
+            });
     }
 }

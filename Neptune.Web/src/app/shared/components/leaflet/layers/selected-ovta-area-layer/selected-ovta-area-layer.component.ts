@@ -101,7 +101,7 @@ export class SelectedOvtaAreaLayerComponent extends MapLayerBase implements OnCh
     private addOVTAAreasToLayer() {
         let cql_filter = ``;
 
-        this.wfsService.getGeoserverWFSLayer("OCStormwater:AssessmentAreaExport", cql_filter, "OVTAAreaID").subscribe((response) => {
+        this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:AssessmentAreaExport", cql_filter, "OVTAAreaID").subscribe((response) => {
             if (response.length == 0) return;
 
             const featuresGroupedByOVTAAreaID = this.groupByPipe.transform(response, "properties.OVTAAreaID");

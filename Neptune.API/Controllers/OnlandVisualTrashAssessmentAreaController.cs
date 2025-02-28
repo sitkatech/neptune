@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -7,8 +8,11 @@ using Microsoft.Extensions.Options;
 using Neptune.API.Services;
 using Neptune.API.Services.Attributes;
 using Neptune.API.Services.Authorization;
+using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using NetTopologySuite.Features;
+using NetTopologySuite.Geometries;
 
 namespace Neptune.API.Controllers;
 
@@ -47,5 +51,28 @@ public class OnlandVisualTrashAssessmentAreaController(
     {
         OnlandVisualTrashAssessmentAreas.Update(DbContext, onlandVisualTrashAssessmentAreaDto);
         return Ok();
+    }
+
+    [HttpGet("{onlandVisualTrashAssessmentAreaID}/parcel-geometries")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
+    public ActionResult<List<ParcelGeometrySimpleDto>> GetParcelGeometries([FromRoute] int onlandVisualTrashAssessmentAreaID)
+    {
+        var visualTrashAssessmentArea = OnlandVisualTrashAssessmentAreas.GetByID(DbContext, onlandVisualTrashAssessmentAreaID);
+        var geometries = ParcelGeometries.GetIntersected(dbContext,
+            visualTrashAssessmentArea.TransectLine).Select(x => x.AsSimpleDto()).ToList();
+        return Ok(geometries);
+    }
+
+    [HttpPost("{onlandVisualTrashAssessmentAreaID}/parcel-geometries")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
+    public async Task UpdateOnlandVisualTrashAssessmentWithParcels([FromRoute] int onlandVisualTrashAssessmentAreaID, [FromBody] List<int> parcelIDs)
+    {
+        var onlandVisualTrashAssessmentArea = dbContext.OnlandVisualTrashAssessmentAreas.Single(x =>
+            x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentAreaID);
+        onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry = ParcelGeometries.UnionAggregateByParcelIDs(dbContext, parcelIDs);
+        onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry4326 = ParcelGeometries.UnionAggregate4326ByParcelIDs(dbContext, parcelIDs);
+        await dbContext.SaveChangesAsync();
     }
 }

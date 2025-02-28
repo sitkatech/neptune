@@ -9,6 +9,8 @@
             [layerControl]="layerControl"
             [sortOrder]="10"
             [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox"
+            [ovtaAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"
+            (parcelsSelected)="setSelectedParcels($event)"
             (layerBoundsCalculated)="handleLayerBoundsCalculated($event)"></select-parcel-layer>
         <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></land-use-block-layer>
         <ovta-area-layer
@@ -33,7 +35,7 @@
     </div>
     <hr />
     <div class="flex-end">
-        <button class="btn btn-primary">Save</button>
+        <button class="btn btn-primary" (click)="save(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID)">Save</button>
         <button class="btn btn-primary">Cancel</button>
     </div>
 </div>
