@@ -9,7 +9,7 @@ import "leaflet-loading";
 import "leaflet.markercluster";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { AsyncPipe, NgIf } from "@angular/common";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { Observable, switchMap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
@@ -30,6 +30,7 @@ import { SelectParcelLayerComponent } from "../../../../shared/components/leafle
         OvtaAreaLayerComponent,
         TransectLineLayerComponent,
         SelectParcelLayerComponent,
+        RouterLink,
     ],
     templateUrl: "./trash-ovta-area-edit-location.component.html",
     styleUrl: "./trash-ovta-area-edit-location.component.scss",
