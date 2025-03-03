@@ -23,13 +23,22 @@ export class SelectParcelLayerComponent extends MapLayerBase implements OnChange
     public isLoading: boolean = false;
     public wmsOptions: L.WMSOptions;
     selectedParcelIDs: number[] = [];
+    public isPerformingDrawAction: boolean = false;
+    public drawMapClicked: boolean = false;
 
     public layer: L.featureGroup;
     public drawnItems: L.featureGroup;
     public drawControl: L.Control;
+    public editableDelineationFeatureGroup: L.FeatureGroup = new L.FeatureGroup();
 
     private highlightStyle = {
         color: "#fcfc12",
+        weight: 2,
+        opacity: 0.65,
+        fillOpacity: 0.1,
+    };
+    private testStyle = {
+        color: "#000",
         weight: 2,
         opacity: 0.65,
         fillOpacity: 0.1,
@@ -44,6 +53,32 @@ export class SelectParcelLayerComponent extends MapLayerBase implements OnChange
         color: "#bbbbbb",
         weight: 1,
         opacity: 0.7,
+    };
+
+    private defaultDrawControlSpec: L.Control.DrawConstructorOptions = {
+        polyline: false,
+        rectangle: false,
+        circle: false,
+        marker: false,
+        circlemarker: false,
+        polygon: {
+            allowIntersection: false, // Restricts shapes to simple polygons
+            drawError: {
+                color: "#E1E100", // Color the shape will turn when intersects
+                message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
+            },
+        },
+    };
+    private defaultEditControlSpec: L.Control.DrawConstructorOptions = {
+        featureGroup: this.editableDelineationFeatureGroup,
+        remove: true,
+        poly: {
+            allowIntersection: false, // Restricts shapes to simple polygons
+            drawError: {
+                color: "#E1E100", // Color the shape will turn when intersects
+                message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
+            },
+        },
     };
 
     constructor(private wfsService: WfsService, private groupByPipe: GroupByPipe, private ovtaAreaService: OnlandVisualTrashAssessmentAreaService) {
@@ -62,16 +97,69 @@ export class SelectParcelLayerComponent extends MapLayerBase implements OnChange
 
     ngAfterViewInit(): void {
         this.setupLayer();
-        // this.drawnItems = new L.FeatureGroup();
-        // var drawOptions = this.getDrawOptions(this.layer);
-        // this.drawControl = new L.Control.Draw(drawOptions);
-        // this.map.addControl(this.drawControl);
-
-        // // this.map.on("draw:created", function (e) {
-        //     console.log("Hello");
-        //     console.log(e);
-        // });
         this.updateLayer();
+    }
+
+    public setControl(): void {
+        this.drawnItems = L.geoJSON();
+        this.drawnItems.addTo(this.map);
+        L.EditToolbar.Delete.include({
+            removeAllLayers: false,
+        });
+
+        this.map
+            .on(L.Draw.Event.CREATED, (event) => {
+                this.isPerformingDrawAction = false;
+                const layer = (event as L.DrawEvents.Created).layer;
+                console.log("created");
+                this.drawnItems.addLayer(layer);
+                this.selectFeatureImpl();
+            })
+            .on(L.Draw.Event.EDITED, (event) => {
+                this.isPerformingDrawAction = false;
+                const layers = (event as L.DrawEvents.Edited).layers;
+                console.log("edited");
+                this.drawnItems.addLayer(layers);
+                this.selectFeatureImpl();
+            })
+            .on(L.Draw.Event.DELETED, (event) => {
+                this.isPerformingDrawAction = false;
+                const layers = (event as L.DrawEvents.Deleted).layers;
+                // layers.eachLayer((layer) => {
+                //     var delineationUpsertDto = this.delineations.find((x) => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID);
+                //     delineationUpsertDto.Geometry = null;
+                //     delineationUpsertDto.DelineationArea = null;
+                // });
+                // this.resetDelineationFeatureGroups();
+                this.selectFeatureImpl();
+            })
+            .on(L.Draw.Event.DRAWSTART, () => {
+                // if (this.selectedDelineation != null && this.selectedDelineation.DelineationTypeID == DelineationTypeEnum.Centralized) {
+                this.editableDelineationFeatureGroup.clearLayers();
+                console.log("drawstart");
+                // }
+            })
+            .on(L.Draw.Event.TOOLBAROPENED, () => {
+                this.isPerformingDrawAction = true;
+                console.log("toolbar opened");
+                // this.preStartEditingEditableDelineationFeatureGroup = JSON.stringify(this.editableDelineationFeatureGroup.getLayers().map((x) => x.getLatLngs()));
+            })
+            .on(L.Draw.Event.TOOLBARCLOSED, () => {
+                this.isPerformingDrawAction = false;
+                console.log("toolbar closed");
+                // this.preStartEditingEditableDelineationFeatureGroup = "";
+            });
+        this.addOrRemoveDrawControl(true);
+    }
+
+    public selectFeatureImpl() {
+        if (this.isPerformingDrawAction) {
+            return;
+        }
+
+        this.drawControl.remove();
+        this.drawnItems.setStyle(this.testStyle).bringToFront();
+        this.addOrRemoveDrawControl(true);
     }
 
     private updateLayer() {
@@ -91,6 +179,7 @@ export class SelectParcelLayerComponent extends MapLayerBase implements OnChange
                 const geoJson = L.geoJSON(response, { style: this.highlightStyle });
                 geoJson.addTo(this.layer);
                 this.selectedParcelIDs = parcels.map((x) => x.ParcelID);
+                this.setControl();
                 const bounds = this.layer.getBounds();
 
                 this.map.fitBounds(bounds);
@@ -126,6 +215,26 @@ export class SelectParcelLayerComponent extends MapLayerBase implements OnChange
         });
     }
 
+    public addOrRemoveDrawControl(turnOn: boolean) {
+        if (turnOn) {
+            var drawOptions = {
+                draw: Object.assign({}, this.defaultDrawControlSpec),
+                edit: Object.assign({}, this.defaultEditControlSpec),
+            };
+            console.log(this.selectedParcelIDs.length);
+            if (this.selectedParcelIDs.length > 0 || this.drawMapClicked) {
+                drawOptions.edit = false;
+            } else {
+                drawOptions.draw = false;
+                drawOptions.edit.edit = false;
+            }
+            this.drawControl = new L.Control.Draw(drawOptions);
+            this.drawControl.addTo(this.map);
+            return;
+        }
+        this.drawControl.remove();
+    }
+
     private onParcelSelected(parcelID: number) {
         if (this.selectedParcelIDs.length > 0 && this.selectedParcelIDs.find((x) => x == parcelID)) {
             this.selectedParcelIDs = this.selectedParcelIDs.filter((x) => x != parcelID);
@@ -158,33 +267,5 @@ export class SelectParcelLayerComponent extends MapLayerBase implements OnChange
     private setupLayer() {
         this.layer = L.geoJSON();
         this.initLayer();
-    }
-
-    private getDrawOptions(editableFeatureGroup) {
-        var options = {
-            position: "topleft",
-            draw: {
-                polyline: false,
-                polygon: {
-                    allowIntersection: false, // Restricts shapes to simple polygons
-                    drawError: {
-                        color: "#e1e100", // Color the shape will turn when intersects
-                        message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
-                    },
-                },
-                circle: false, // Turns off this drawing tool
-                rectangle: false,
-                marker: false,
-            },
-            edit: {
-                featureGroup: editableFeatureGroup, //REQUIRED!!
-                edit: {
-                    maintainColor: true,
-                    opacity: 0.3,
-                },
-                remove: true,
-            },
-        };
-        return options;
     }
 }
