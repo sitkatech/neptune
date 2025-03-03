@@ -1,1 +1,12 @@
-<p>trash-ovta-record-observations works!</p>
+<page-header pageTitle="Record Observations"></page-header>
+<div class="page-body grid-12">
+    <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="500px" [showLegend]="false">
+        <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
+    </neptune-map>
+</div>
+<div class="page-footer">
+    <!-- <button class="btn btn-primary mr-2" (click)="save()" [disabled]="selectedAreaType.invalid || selectedJurisdiction.invalid || isLoadingSubmit">Save</button>
+    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="selectedAreaType.invalid || selectedJurisdiction.invalid || isLoadingSubmit">
+        Save & Continue
+    </button> -->
+</div>

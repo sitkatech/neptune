@@ -81,36 +81,18 @@ export class TrashInitiateOvtaComponent {
 
     public save(andContinue: boolean = false) {
         this.isLoadingSubmit = true;
-        // if (this.projectID) {
-        //     this.projectService.projectsProjectIDUpdatePost(this.projectID, this.formGroup.getRawValue()).subscribe((response) => {
-        //         this.isLoadingSubmit = false;
-        //         this.alertService.clearAlerts();
-        //         this.alertService.pushAlert(new Alert("Your project was successfully updated.", AlertContext.Success));
-        //         this.projectWorkflowProgressService.updateProgress(this.projectID);
-        //         //this.formGroup.patchValue(response);
-        //         this.formGroup.markAsPristine();
-        //         if (andContinue) {
-        //             this.router.navigate(["../stormwater-treatments/treatment-bmps"], { relativeTo: this.route });
-        //         }
-        //     });
-        // } else {
         var dto = new OnlandVisualTrashAssessmentSimpleDto();
         dto.AssessingNewArea = this.selectedAreaType.getRawValue();
         dto.OnlandVisualTrashAssessmentAreaID = 1;
         dto.StormwaterJurisdictionID = this.selectedJurisdiction.getRawValue().Value;
         this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPost(dto).subscribe((response) => {
             this.isLoadingSubmit = false;
-            console.log(response);
             this.alertService.clearAlerts();
             this.alertService.pushAlert(new Alert("Your ovta was successfully created.", AlertContext.Success));
             this.ovtaWorkflowProgressService.updateProgress(response.OnlandVisualTrashAssessmentID);
-            // this.formGroup.patchValue(response);
-            // this.formGroup.markAsPristine();
             if (andContinue) {
                 this.router.navigate([`../../edit/${response.OnlandVisualTrashAssessmentID}/record-observations`], { relativeTo: this.route });
             }
         });
-        // }
-        // }
     }
 }
