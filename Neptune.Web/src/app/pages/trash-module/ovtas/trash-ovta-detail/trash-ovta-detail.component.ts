@@ -1,6 +1,6 @@
 import { AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgFor, NgIf } from "@angular/common";
 import { Component } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import * as L from "leaflet";
 import "leaflet-draw";
 import "leaflet.fullscreen";
@@ -34,6 +34,7 @@ import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers
         OvtaAreaLayerComponent,
         TransectLineLayerComponent,
         NgClass,
+        RouterLink,
     ],
     templateUrl: "./trash-ovta-detail.component.html",
     styleUrl: "./trash-ovta-detail.component.scss",

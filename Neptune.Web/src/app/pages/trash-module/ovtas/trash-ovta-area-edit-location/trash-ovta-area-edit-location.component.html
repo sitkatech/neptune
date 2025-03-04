@@ -1,25 +1,31 @@
-<page-header [customRichTextTypeID]="customRichTextTypeID" pageTitle="Edit OVTA Area Location"></page-header>
+<page-header [customRichTextTypeID]="customRichTextTypeID" [templateAbove]="templateAbove" pageTitle="Edit OVTA Area Location">
+    <ng-template #templateAbove>
+        <div class="back">
+            <a [routerLink]="['../']" class="back__link">Back to OVTA Area</a>
+        </div>
+    </ng-template>
+</page-header>
 
 <div class="page-body" *ngIf="onlandVisualTrashAssessmentArea$ | async as onlandVisualTrashAssessmentArea">
     <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false" [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
-        <select-parcel-layer
+        <!-- <select-parcel-layer
             *ngIf="mapIsReady"
-            [displayOnLoad]="true"
+            [displayOnLoad]="false"
             [map]="map"
             [layerControl]="layerControl"
             [sortOrder]="10"
             [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox"
             [ovtaAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"
             (parcelsSelected)="setSelectedParcels($event)"
-            (layerBoundsCalculated)="handleLayerBoundsCalculated($event)"></select-parcel-layer>
+            (layerBoundsCalculated)="handleLayerBoundsCalculated($event)"></select-parcel-layer> -->
         <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></land-use-block-layer>
-        <ovta-area-layer
+        <editable-ovta-area-layer
             *ngIf="mapIsReady"
-            [displayOnLoad]="false"
+            [displayOnLoad]="true"
             [map]="map"
             [layerControl]="layerControl"
             [sortOrder]="15"
-            [ovtaAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
+            [selectedOVTAAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"></editable-ovta-area-layer>
         <transect-line-layer
             *ngIf="mapIsReady"
             [displayOnLoad]="true"

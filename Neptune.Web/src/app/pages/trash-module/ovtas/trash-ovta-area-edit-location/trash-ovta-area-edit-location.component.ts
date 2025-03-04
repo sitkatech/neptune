@@ -17,6 +17,7 @@ import { OnlandVisualTrashAssessmentAreaDetailDto } from "src/app/shared/generat
 import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 import { SelectParcelLayerComponent } from "../../../../shared/components/leaflet/layers/select-parcel-layer/select-parcel-layer.component";
+import { EditableOvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/editable-ovta-area-layer/editable-ovta-area-layer.component";
 
 @Component({
     selector: "trash-ovta-area-edit-location",
@@ -31,6 +32,7 @@ import { SelectParcelLayerComponent } from "../../../../shared/components/leafle
         TransectLineLayerComponent,
         SelectParcelLayerComponent,
         RouterLink,
+        EditableOvtaAreaLayerComponent,
     ],
     templateUrl: "./trash-ovta-area-edit-location.component.html",
     styleUrl: "./trash-ovta-area-edit-location.component.scss",
