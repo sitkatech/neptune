@@ -15,13 +15,14 @@ import { routeParams } from "src/app/app.routes";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { OnlandVisualTrashAssessmentAreaDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-detail-dto";
 import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
-import { SelectParcelLayerComponent } from "../../../../shared/components/leaflet/layers/select-parcel-layer/select-parcel-layer.component";
 import { OnlandVisualTrashAssessmentAreaGeometryDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-geometry-dto";
+import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
+import { WfsService } from "src/app/shared/services/wfs.service";
 
 @Component({
     selector: "trash-ovta-area-edit-location",
     standalone: true,
-    imports: [PageHeaderComponent, NeptuneMapComponent, LandUseBlockLayerComponent, NgIf, AsyncPipe, TransectLineLayerComponent, SelectParcelLayerComponent, RouterLink],
+    imports: [PageHeaderComponent, NeptuneMapComponent, LandUseBlockLayerComponent, NgIf, AsyncPipe, TransectLineLayerComponent, RouterLink],
     templateUrl: "./trash-ovta-area-edit-location.component.html",
     styleUrl: "./trash-ovta-area-edit-location.component.scss",
 })
@@ -35,9 +36,10 @@ export class TrashOvtaAreaEditLocationComponent {
     public mapIsReady = false;
     public bounds: any;
 
-    public selectedParcels: number[] = [];
+    public selectedParcelIDs: number[] = [];
 
     public canPickParcels: boolean = false;
+    public buttonText = "Pick Parcels";
 
     public isPerformingDrawAction: boolean = false;
     public drawMapClicked: boolean = false;
@@ -50,6 +52,24 @@ export class TrashOvtaAreaEditLocationComponent {
         color: "blue",
         fillOpacity: 0.2,
         opacity: 0,
+    };
+
+    private highlightStyle = {
+        color: "#fcfc12",
+        weight: 2,
+        opacity: 0.65,
+        fillOpacity: 0.1,
+    };
+    private wqmpStyle = {
+        color: "#ff6ba9",
+        weight: 2,
+        opacity: 0.9,
+        fillOpacity: 0.1,
+    };
+    private noWQMPsStyle = {
+        color: "#bbbbbb",
+        weight: 1,
+        opacity: 0.7,
     };
 
     private defaultDrawControlSpec: L.Control.DrawConstructorOptions = {
@@ -81,7 +101,13 @@ export class TrashOvtaAreaEditLocationComponent {
         },
     };
 
-    constructor(private router: Router, private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService, private route: ActivatedRoute) {}
+    constructor(
+        private router: Router,
+        private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService,
+        private route: ActivatedRoute,
+        private wfsService: WfsService,
+        private groupByPipe: GroupByPipe
+    ) {}
 
     public handleMapReady(event: NeptuneMapInitEvent, geometry): void {
         this.map = event.map;
@@ -108,7 +134,7 @@ export class TrashOvtaAreaEditLocationComponent {
     }
 
     public setSelectedParcels(event) {
-        this.selectedParcels = event;
+        this.selectedParcelIDs = event;
     }
 
     public save(ovtaAreaID) {
@@ -117,9 +143,8 @@ export class TrashOvtaAreaEditLocationComponent {
         this.layer.eachLayer((layer) => {
             ovtaGeometryDto.Geometry = JSON.stringify(layer.toGeoJSON());
         });
-        ovtaGeometryDto.ParcelIDs = this.selectedParcels;
+        ovtaGeometryDto.ParcelIDs = this.selectedParcelIDs;
         ovtaGeometryDto.OnlandVisualTrashAssessmentAreaID = ovtaAreaID;
-        console.log(ovtaGeometryDto);
         this.onlandVisualTrashAssessmentAreaService
             .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost(ovtaAreaID, ovtaGeometryDto)
             .subscribe((x) => {
@@ -208,5 +233,88 @@ export class TrashOvtaAreaEditLocationComponent {
         } else {
             featureGroup.addLayer(layer);
         }
+    }
+
+    public setCanPickParcels(ovtaAreaID, boundingBox, geometry) {
+        this.canPickParcels = !this.canPickParcels;
+        this.layer.clearLayers();
+        if (this.canPickParcels) {
+            this.drawControl.remove();
+            this.addOVTAAreaToLayer(ovtaAreaID);
+            this.addParcelsToLayer(boundingBox);
+            this.buttonText = "Draw OVTA Areas";
+        } else {
+            this.addFeatureCollectionToFeatureGroup(JSON.parse(geometry), this.layer);
+            this.addOrRemoveDrawControl(true);
+            this.buttonText = "Pick Parcels";
+        }
+        const bounds = this.layer.getBounds();
+        this.map.fitBounds(bounds);
+    }
+
+    public resetZoom() {
+        const bounds = this.layer.getBounds();
+        this.map.fitBounds(bounds);
+    }
+
+    private addOVTAAreaToLayer(ovtaAreaID) {
+        this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesGet(ovtaAreaID).subscribe((parcels) => {
+            this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:Parcels", `ParcelID in (${parcels.map((x) => x.ParcelID)})`, "ParcelID").subscribe((response) => {
+                const geoJson = L.geoJSON(response, { style: this.highlightStyle });
+                geoJson.addTo(this.layer);
+                this.selectedParcelIDs = parcels.map((x) => x.ParcelID);
+            });
+        });
+    }
+
+    private addParcelsToLayer(boundingBox) {
+        const bbox = boundingBox != null ? `${boundingBox.Bottom},${boundingBox.Right},${boundingBox.Top},${boundingBox.Left}` : null;
+        this.wfsService.getGeoserverWFSLayer("OCStormwater:Parcels", "ParcelID", bbox).subscribe((response) => {
+            if (response.length == 0) return;
+            const featuresGroupedByParcelID = this.groupByPipe.transform(response, "properties.ParcelID");
+            Object.keys(featuresGroupedByParcelID).forEach((parcelID) => {
+                const geoJson = L.geoJSON(featuresGroupedByParcelID[parcelID], {
+                    style: featuresGroupedByParcelID[parcelID][0].properties.WQMPCount > 0 ? this.wqmpStyle : this.noWQMPsStyle,
+                });
+                geoJson.on("mouseover", (e) => {
+                    geoJson.setStyle({ fillOpacity: 0.5 });
+                });
+                geoJson.on("mouseout", (e) => {
+                    geoJson.setStyle({ fillOpacity: 0.1 });
+                });
+
+                geoJson.on("click", (e) => {
+                    this.onParcelSelected(Number(parcelID));
+                });
+                geoJson.addTo(this.layer);
+            });
+        });
+    }
+
+    private onParcelSelected(parcelID: number) {
+        if (this.selectedParcelIDs.length > 0 && this.selectedParcelIDs.find((x) => x == parcelID)) {
+            this.selectedParcelIDs = this.selectedParcelIDs.filter((x) => x != parcelID);
+        } else {
+            this.selectedParcelIDs.push(parcelID);
+        }
+        this.highlightSelectedParcel(parcelID);
+    }
+
+    private highlightSelectedParcel(parcelID) {
+        this.layer.eachLayer((layer) => {
+            // skip if well layer
+            if (layer.options?.icon) return;
+
+            const geoJsonLayers = layer.getLayers();
+            if (geoJsonLayers[0].feature.properties.ParcelID == parcelID) {
+                if (geoJsonLayers[0].options.color == this.highlightStyle.color) {
+                    layer.setStyle(geoJsonLayers[0].feature.properties.WQMPCount > 0 ? this.wqmpStyle : this.noWQMPsStyle);
+                } else {
+                    layer.setStyle(this.highlightStyle);
+                }
+
+                this.map.fitBounds(layer.getBounds());
+            }
+        });
     }
 }

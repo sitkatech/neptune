@@ -12,16 +12,6 @@
         [mapHeight]="mapHeight"
         [showLegend]="false"
         [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
-        <!-- <select-parcel-layer
-            *ngIf="mapIsReady"
-            [displayOnLoad]="false"
-            [map]="map"
-            [layerControl]="layerControl"
-            [sortOrder]="10"
-            [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox"
-            [ovtaAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"
-            (parcelsSelected)="setSelectedParcels($event)"
-            (layerBoundsCalculated)="handleLayerBoundsCalculated($event)"></select-parcel-layer> -->
         <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></land-use-block-layer>
         <transect-line-layer
             *ngIf="mapIsReady"
@@ -32,10 +22,20 @@
             [ovtaAreaName]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName"
             [jurisdictionID]="onlandVisualTrashAssessmentArea.StormwaterJurisdictionID"></transect-line-layer>
     </neptune-map>
-    <!-- <div class="flex-between">
-        <button class="btn btn-primary">Reset Map Zoom</button>
-        <button class="btn btn-primary">Pick Parcels</button>
-    </div> -->
+    <div class="flex-between">
+        <button class="btn btn-primary" (click)="resetZoom()">Reset Map Zoom</button>
+        <button
+            class="btn btn-primary"
+            (click)="
+                setCanPickParcels(
+                    onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID,
+                    onlandVisualTrashAssessmentArea.BoundingBox,
+                    onlandVisualTrashAssessmentArea.Geometry
+                )
+            ">
+            {{ buttonText }}
+        </button>
+    </div>
     <hr />
     <div class="flex-end">
         <button class="btn btn-primary" (click)="save(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID)">Save</button>
