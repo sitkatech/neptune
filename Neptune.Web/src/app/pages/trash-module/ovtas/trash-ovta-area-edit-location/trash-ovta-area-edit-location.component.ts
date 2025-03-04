@@ -158,12 +158,6 @@ export class TrashOvtaAreaEditLocationComponent {
                 draw: Object.assign({}, this.defaultDrawControlSpec),
                 edit: Object.assign({}, this.defaultEditControlSpec),
             };
-            // if (this.layer._layers == null) {
-            //     drawOptions.edit = false;
-            // } else {
-            //     //drawOptions.draw = false;
-            //     // drawOptions.edit.edit = false;
-            // }
             this.drawControl = new L.Control.Draw(drawOptions);
             this.map.addControl(this.drawControl);
             return;
