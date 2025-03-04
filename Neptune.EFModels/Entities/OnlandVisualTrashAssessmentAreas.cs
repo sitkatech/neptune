@@ -90,7 +90,6 @@ public static class OnlandVisualTrashAssessmentAreas
         }
         else
         {
-            //var geometries = WktAndAnnotations.Select(x => GeometryHelper.FromWKT(x.Wkt, Proj4NetHelper.WEB_MERCATOR));
             var newGeometry4326 = GeoJsonSerializer.Deserialize<IFeature>(onlandVisualTrashAssessmentAreaGeometryDto.Geometry);
             newGeometry4326.Geometry.SRID = Proj4NetHelper.WEB_MERCATOR;
 
