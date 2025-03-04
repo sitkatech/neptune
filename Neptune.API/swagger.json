@@ -851,29 +851,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaGeometryDto"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaGeometryDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaGeometryDto"
               }
             }
           }
@@ -3467,6 +3455,35 @@
           },
           "BoundingBox": {
             "$ref": "#/components/schemas/BoundingBoxDto"
+          },
+          "Geometry": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OnlandVisualTrashAssessmentAreaGeometryDto": {
+        "type": "object",
+        "properties": {
+          "OnlandVisualTrashAssessmentAreaID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ParcelIDs": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "Geometry": {
+            "type": "string",
+            "nullable": true
+          },
+          "UsingParcels": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

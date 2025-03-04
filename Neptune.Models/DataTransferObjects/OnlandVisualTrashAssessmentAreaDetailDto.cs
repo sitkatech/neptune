@@ -1,4 +1,7 @@
-﻿namespace Neptune.Models.DataTransferObjects;
+﻿using NetTopologySuite.Geometries;
+
+namespace Neptune.Models.DataTransferObjects;
+
 public class OnlandVisualTrashAssessmentAreaDetailDto
 {
     public int OnlandVisualTrashAssessmentAreaID { get; set; }
@@ -11,4 +14,5 @@ public class OnlandVisualTrashAssessmentAreaDetailDto
     public int NumberOfAssessmentsCompleted { get; set; }
     public DateTime? LastAssessmentDate { get; set; }
     public BoundingBoxDto BoundingBox { get; set; }
+    public string Geometry { get; set; }
 }

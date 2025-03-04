@@ -2,17 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
 using Neptune.API.Services.Attributes;
 using Neptune.API.Services.Authorization;
-using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
-using NetTopologySuite.Features;
-using NetTopologySuite.Geometries;
 
 namespace Neptune.API.Controllers;
 
@@ -67,12 +63,9 @@ public class OnlandVisualTrashAssessmentAreaController(
     [HttpPost("{onlandVisualTrashAssessmentAreaID}/parcel-geometries")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
-    public async Task UpdateOnlandVisualTrashAssessmentWithParcels([FromRoute] int onlandVisualTrashAssessmentAreaID, [FromBody] List<int> parcelIDs)
+    public async Task UpdateOnlandVisualTrashAssessmentWithParcels([FromRoute] int onlandVisualTrashAssessmentAreaID, [FromBody] OnlandVisualTrashAssessmentAreaGeometryDto onlandVisualTrashAssessmentAreaGeometryDto)
     {
-        var onlandVisualTrashAssessmentArea = dbContext.OnlandVisualTrashAssessmentAreas.Single(x =>
-            x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentAreaID);
-        onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry = ParcelGeometries.UnionAggregateByParcelIDs(dbContext, parcelIDs);
-        onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry4326 = ParcelGeometries.UnionAggregate4326ByParcelIDs(dbContext, parcelIDs);
+        OnlandVisualTrashAssessmentAreas.UpdateGeometry(dbContext, onlandVisualTrashAssessmentAreaGeometryDto);
         await dbContext.SaveChangesAsync();
     }
 }

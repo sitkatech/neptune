@@ -23,6 +23,7 @@ export class OnlandVisualTrashAssessmentAreaDetailDto {
     NumberOfAssessmentsCompleted?: number;
     LastAssessmentDate?: string;
     BoundingBox?: BoundingBoxDto;
+    Geometry?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -39,6 +40,7 @@ export interface OnlandVisualTrashAssessmentAreaDetailDtoForm {
     NumberOfAssessmentsCompleted?: FormControl<number>;
     LastAssessmentDate?: FormControl<string>;
     BoundingBox?: FormControl<BoundingBoxDto>;
+    Geometry?: FormControl<string>;
 }
 
 export class OnlandVisualTrashAssessmentAreaDetailDtoFormControls { 
@@ -133,6 +135,16 @@ export class OnlandVisualTrashAssessmentAreaDetailDtoFormControls {
         }
     );
     public static BoundingBox = (value: FormControlState<BoundingBoxDto> | BoundingBoxDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<BoundingBoxDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Geometry = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

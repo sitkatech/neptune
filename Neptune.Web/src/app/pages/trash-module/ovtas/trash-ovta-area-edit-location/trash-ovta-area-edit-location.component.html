@@ -7,7 +7,11 @@
 </page-header>
 
 <div class="page-body" *ngIf="onlandVisualTrashAssessmentArea$ | async as onlandVisualTrashAssessmentArea">
-    <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false" [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
+    <neptune-map
+        (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessmentArea.Geometry)"
+        [mapHeight]="mapHeight"
+        [showLegend]="false"
+        [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
         <!-- <select-parcel-layer
             *ngIf="mapIsReady"
             [displayOnLoad]="false"
@@ -19,13 +23,6 @@
             (parcelsSelected)="setSelectedParcels($event)"
             (layerBoundsCalculated)="handleLayerBoundsCalculated($event)"></select-parcel-layer> -->
         <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></land-use-block-layer>
-        <editable-ovta-area-layer
-            *ngIf="mapIsReady"
-            [displayOnLoad]="true"
-            [map]="map"
-            [layerControl]="layerControl"
-            [sortOrder]="15"
-            [selectedOVTAAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"></editable-ovta-area-layer>
         <transect-line-layer
             *ngIf="mapIsReady"
             [displayOnLoad]="true"

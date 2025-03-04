@@ -19,6 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { OnlandVisualTrashAssessmentAreaDetailDto } from '../model/onland-visual-trash-assessment-area-detail-dto';
+import { OnlandVisualTrashAssessmentAreaGeometryDto } from '../model/onland-visual-trash-assessment-area-geometry-dto';
 import { OnlandVisualTrashAssessmentAreaGridDto } from '../model/onland-visual-trash-assessment-area-grid-dto';
 import { ParcelGeometrySimpleDto } from '../model/parcel-geometry-simple-dto';
 
@@ -191,14 +192,14 @@ export class OnlandVisualTrashAssessmentAreaService {
      * 
      * 
      * @param onlandVisualTrashAssessmentAreaID 
-     * @param requestBody 
+     * @param onlandVisualTrashAssessmentAreaGeometryDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost(onlandVisualTrashAssessmentAreaID: number, requestBody?: Array<number>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost(onlandVisualTrashAssessmentAreaID: number, requestBody?: Array<number>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost(onlandVisualTrashAssessmentAreaID: number, requestBody?: Array<number>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost(onlandVisualTrashAssessmentAreaID: number, requestBody?: Array<number>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost(onlandVisualTrashAssessmentAreaID: number, onlandVisualTrashAssessmentAreaGeometryDto?: OnlandVisualTrashAssessmentAreaGeometryDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost(onlandVisualTrashAssessmentAreaID: number, onlandVisualTrashAssessmentAreaGeometryDto?: OnlandVisualTrashAssessmentAreaGeometryDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost(onlandVisualTrashAssessmentAreaID: number, onlandVisualTrashAssessmentAreaGeometryDto?: OnlandVisualTrashAssessmentAreaGeometryDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost(onlandVisualTrashAssessmentAreaID: number, onlandVisualTrashAssessmentAreaGeometryDto?: OnlandVisualTrashAssessmentAreaGeometryDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (onlandVisualTrashAssessmentAreaID === null || onlandVisualTrashAssessmentAreaID === undefined) {
             throw new Error('Required parameter onlandVisualTrashAssessmentAreaID was null or undefined when calling onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost.');
@@ -227,7 +228,7 @@ export class OnlandVisualTrashAssessmentAreaService {
         }
 
         return this.httpClient.post<any>(`${this.basePath}/onland-visual-trash-assessment-areas/${encodeURIComponent(String(onlandVisualTrashAssessmentAreaID))}/parcel-geometries`,
-            requestBody,
+            onlandVisualTrashAssessmentAreaGeometryDto,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -35,6 +35,7 @@ public static partial class OnlandVisualTrashAssessmentAreaExtensionMethods
             NumberOfAssessmentsCompleted = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Count,
             LastAssessmentDate = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Select(x => x.CompletedDate).Max(),
             BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry4326),
+            Geometry = onlandVisualTrashAssessmentArea.GetGeometry4326GeoJson()
         };
         return dto;
     }

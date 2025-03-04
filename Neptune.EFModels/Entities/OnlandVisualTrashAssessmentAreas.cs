@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
+using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
+using NetTopologySuite.Features;
 
 namespace Neptune.EFModels.Entities;
 
@@ -74,5 +76,27 @@ public static class OnlandVisualTrashAssessmentAreas
     public static List<OnlandVisualTrashAssessmentArea> ListByStormwaterJurisdictionIDList(NeptuneDbContext dbContext, IEnumerable<int> stormwaterJurisdictionIDList)
     {
         return GetImpl(dbContext).Include(x => x.OnlandVisualTrashAssessments).AsNoTracking().Where(x => stormwaterJurisdictionIDList.Contains(x.StormwaterJurisdictionID)).OrderBy(x => x.OnlandVisualTrashAssessmentAreaName).ToList();
+    }
+
+    public static void UpdateGeometry(NeptuneDbContext dbContext, OnlandVisualTrashAssessmentAreaGeometryDto onlandVisualTrashAssessmentAreaGeometryDto)
+    {
+        var onlandVisualTrashAssessmentArea = dbContext.OnlandVisualTrashAssessmentAreas.Single(x =>
+            x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentAreaGeometryDto.OnlandVisualTrashAssessmentAreaID);
+        if (onlandVisualTrashAssessmentAreaGeometryDto.UsingParcels)
+        {
+            // since this is parcel picks, we don't need to reproject; the parcels are already in the correct system (State Plane)
+            onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry = ParcelGeometries.UnionAggregateByParcelIDs(dbContext, onlandVisualTrashAssessmentAreaGeometryDto.ParcelIDs);
+            onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry4326 = ParcelGeometries.UnionAggregate4326ByParcelIDs(dbContext, onlandVisualTrashAssessmentAreaGeometryDto.ParcelIDs);
+        }
+        else
+        {
+            //var geometries = WktAndAnnotations.Select(x => GeometryHelper.FromWKT(x.Wkt, Proj4NetHelper.WEB_MERCATOR));
+            var newGeometry4326 = GeoJsonSerializer.Deserialize<IFeature>(onlandVisualTrashAssessmentAreaGeometryDto.Geometry);
+            newGeometry4326.Geometry.SRID = Proj4NetHelper.WEB_MERCATOR;
+
+            // since this is coming from the browser, we have to transform to State Plane
+            onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry4326 = newGeometry4326.Geometry;
+            onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry = newGeometry4326.Geometry.ProjectTo2771();
+        }
     }
 }
