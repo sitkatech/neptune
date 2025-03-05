@@ -1,11 +1,16 @@
 <ng-container *ngIf="currentProject$ | async as project">
-    <page-header [pageTitle]="project.ProjectName" [templateRight]="templateRight"> </page-header>
+    <page-header [pageTitle]="project.ProjectName" [templateRight]="templateRight" [templateAbove]="templateAbove"> </page-header>
     <ng-template #templateRight>
         <a [routerLink]="getWorkflowLink(project)" class="btn btn-primary mr-2">Edit</a>
         <a (click)="makeProjectCopy(project)" class="btn btn-primary-outline" [class.disabled]="isCopyingProject">
             <span *ngIf="isCopyingProject" class="fa fa-spinner loading-spinner"></span>
             Copy Project
         </a>
+    </ng-template>
+    <ng-template #templateAbove>
+        <div class="back">
+            <a [routerLink]="['../']" class="back__link">Back to Project Grid</a>
+        </div>
     </ng-template>
     <app-alert-display></app-alert-display>
 

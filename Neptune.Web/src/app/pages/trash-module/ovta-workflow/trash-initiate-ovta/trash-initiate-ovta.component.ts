@@ -166,7 +166,7 @@ export class TrashInitiateOvtaComponent {
     private addOVTAAreasToLayer() {
         let cql_filter = ``;
 
-        this.wfsService.getGeoserverWFSLayer("OCStormwater:AssessmentAreaExport", cql_filter, "OVTAAreaID").subscribe((response) => {
+        this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:AssessmentAreaExport", cql_filter, "OVTAAreaID").subscribe((response) => {
             if (response.length == 0) return;
 
             const featuresGroupedByOVTAAreaID = this.groupByPipe.transform(response, "properties.OVTAAreaID");
@@ -191,9 +191,11 @@ export class TrashInitiateOvtaComponent {
     }
 
     private getStormwaterJurisdictionBounds(jurisdictionID) {
-        this.wfsService.getGeoserverWFSLayer("OCStormwater:Jurisdictions", `StormwaterJurisdictionID = ${jurisdictionID}`, "StormwaterJurisdictionID").subscribe((response) => {
-            this.map.fitBounds(L.geoJson(response).getBounds());
-        });
+        this.wfsService
+            .getGeoserverWFSLayerWithCQLFilter("OCStormwater:Jurisdictions", `StormwaterJurisdictionID = ${jurisdictionID}`, "StormwaterJurisdictionID")
+            .subscribe((response) => {
+                this.map.fitBounds(L.geoJson(response).getBounds());
+            });
     }
 
     public onJurisdictionSelected(event: any) {

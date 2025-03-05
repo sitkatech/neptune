@@ -42,14 +42,7 @@ export class WfsService {
         });
     }
 
-    public getGeoserverWFSLayer(layer: string, cqlFilter: string, valueReference: string) {
-        const cqlFilters = [];
-
-        if (cqlFilter) {
-            cqlFilters.push(`${cqlFilter}`);
-        }
-        const cqlFiltersCombined = cqlFilters.join(" and ");
-
+    public getGeoserverWFSLayer(layer: string, valueReference: string, bbox: string = ""): Observable<number[]> {
         const url: string = `${environment.geoserverMapServiceUrl}/ows`;
         const wfsParams = new HttpParams()
             .set("responseType", "json")
@@ -60,7 +53,28 @@ export class WfsService {
             .set("typeName", layer)
             .set("outputFormat", "application/json")
             .set("valueReference", valueReference)
-            .set("cql_filter", cqlFiltersCombined);
+            .set("bbox", bbox);
+
+        return this.http.post(url, wfsParams).pipe(
+            map((rawData: any) => {
+                return rawData.features;
+            })
+        );
+    }
+
+    public getGeoserverWFSLayerWithCQLFilter(layer: string, cqlFilter: string, valueReference: string): Observable<number[]> {
+        const url: string = `${environment.geoserverMapServiceUrl}/ows`;
+        const wfsParams = new HttpParams()
+            .set("responseType", "json")
+            .set("service", "wfs")
+            .set("version", "2.0")
+            .set("request", "GetFeature")
+            .set("SrsName", "EPSG:4326")
+            .set("typeName", layer)
+            .set("outputFormat", "application/json")
+            .set("valueReference", valueReference)
+            .set("cql_filter", cqlFilter);
+
         return this.http.post(url, wfsParams).pipe(
             map((rawData: any) => {
                 return rawData.features;
