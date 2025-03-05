@@ -54,9 +54,9 @@ public class OnlandVisualTrashAssessmentAreaController(
     [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
     public ActionResult<List<ParcelGeometrySimpleDto>> GetParcelGeometries([FromRoute] int onlandVisualTrashAssessmentAreaID)
     {
-        var visualTrashAssessmentArea = OnlandVisualTrashAssessmentAreas.GetByID(DbContext, onlandVisualTrashAssessmentAreaID);
+        var onlandVisualTrashAssessmentArea = OnlandVisualTrashAssessmentAreas.GetByID(DbContext, onlandVisualTrashAssessmentAreaID);
         var geometries = ParcelGeometries.GetIntersected(dbContext,
-            visualTrashAssessmentArea.TransectLine).Select(x => x.AsSimpleDto()).ToList();
+            onlandVisualTrashAssessmentArea.TransectLine).Select(x => x.AsSimpleDto()).ToList();
         return Ok(geometries);
     }
 

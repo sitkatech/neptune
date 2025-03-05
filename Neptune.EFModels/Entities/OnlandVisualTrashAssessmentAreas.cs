@@ -52,12 +52,12 @@ public static class OnlandVisualTrashAssessmentAreas
     public static void Update(NeptuneDbContext dbContext,
         OnlandVisualTrashAssessmentAreaDetailDto ovtaAreaDto)
     {
-        var assessmentArea = dbContext.OnlandVisualTrashAssessmentAreas.SingleOrDefault(x =>
+        var onlandVisualTrashAssessmentArea = dbContext.OnlandVisualTrashAssessmentAreas.SingleOrDefault(x =>
             x.OnlandVisualTrashAssessmentAreaID == ovtaAreaDto.OnlandVisualTrashAssessmentAreaID);
-        if (assessmentArea != null)
+        if (onlandVisualTrashAssessmentArea != null)
         {
-            assessmentArea.OnlandVisualTrashAssessmentAreaName = ovtaAreaDto.OnlandVisualTrashAssessmentAreaName;
-            assessmentArea.AssessmentAreaDescription = ovtaAreaDto.AssessmentAreaDescription;
+            onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName = ovtaAreaDto.OnlandVisualTrashAssessmentAreaName;
+            onlandVisualTrashAssessmentArea.AssessmentAreaDescription = ovtaAreaDto.AssessmentAreaDescription;
         }
         
         dbContext.SaveChangesAsync();
@@ -90,7 +90,7 @@ public static class OnlandVisualTrashAssessmentAreas
         }
         else
         {
-            var newGeometry4326 = GeoJsonSerializer.Deserialize<IFeature>(onlandVisualTrashAssessmentAreaGeometryDto.Geometry);
+            var newGeometry4326 = GeoJsonSerializer.Deserialize<IFeature>(onlandVisualTrashAssessmentAreaGeometryDto.GeometryAsGeoJson);
             newGeometry4326.Geometry.SRID = Proj4NetHelper.WEB_MERCATOR;
 
             // since this is coming from the browser, we have to transform to State Plane
