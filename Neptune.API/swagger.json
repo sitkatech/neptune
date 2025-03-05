@@ -3478,7 +3478,7 @@
             },
             "nullable": true
           },
-          "Geometry": {
+          "GeometryAsGeoJson": {
             "type": "string",
             "nullable": true
           },

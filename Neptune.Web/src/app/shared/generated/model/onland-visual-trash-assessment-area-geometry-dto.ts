@@ -14,7 +14,7 @@ import { FormControl, FormControlOptions, FormControlState, Validators } from "@
 export class OnlandVisualTrashAssessmentAreaGeometryDto { 
     OnlandVisualTrashAssessmentAreaID?: number;
     ParcelIDs?: Array<number>;
-    Geometry?: string;
+    GeometryAsGeoJson?: string;
     UsingParcels?: boolean;
     constructor(obj?: any) {
         Object.assign(this, obj);
@@ -24,7 +24,7 @@ export class OnlandVisualTrashAssessmentAreaGeometryDto {
 export interface OnlandVisualTrashAssessmentAreaGeometryDtoForm { 
     OnlandVisualTrashAssessmentAreaID?: FormControl<number>;
     ParcelIDs?: FormControl<Array<number>>;
-    Geometry?: FormControl<string>;
+    GeometryAsGeoJson?: FormControl<string>;
     UsingParcels?: FormControl<boolean>;
 }
 
@@ -49,7 +49,7 @@ export class OnlandVisualTrashAssessmentAreaGeometryDtoFormControls {
             ],
         }
     );
-    public static Geometry = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+    public static GeometryAsGeoJson = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

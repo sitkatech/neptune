@@ -141,7 +141,7 @@ export class TrashOvtaAreaEditLocationComponent {
         var ovtaGeometryDto = new OnlandVisualTrashAssessmentAreaGeometryDto();
         ovtaGeometryDto.UsingParcels = this.canPickParcels;
         this.layer.eachLayer((layer) => {
-            ovtaGeometryDto.Geometry = JSON.stringify(layer.toGeoJSON());
+            ovtaGeometryDto.GeometryAsGeoJson = JSON.stringify(layer.toGeoJSON());
         });
         ovtaGeometryDto.ParcelIDs = this.selectedParcelIDs;
         ovtaGeometryDto.OnlandVisualTrashAssessmentAreaID = ovtaAreaID;
