@@ -42,7 +42,7 @@ export class WfsService {
         });
     }
 
-    public getGeoserverWFSLayer(layer: string, cqlFilter: string, valueReference: string): Observable<number[]> {
+    public getGeoserverWFSLayer(layer: string, cqlFilter: string, valueReference: string) {
         const cqlFilters = [];
 
         if (cqlFilter) {
