@@ -50,6 +50,14 @@ public class OnlandVisualTrashAssessmentController(
         return Ok(onlandVisualTrashAssessmentProgressDto);
     }
 
+    [HttpGet("preliminary-source-identification-type")]
+    [JurisdictionEditFeature]
+    public async Task<OnlandVisualTrashAssessmentSimpleDto> GetPreliminarySourceIdentificationTypes([FromBody] OnlandVisualTrashAssessmentSimpleDto dto)
+    {
+        var onlandVisualTrashAssessment = await OnlandVisualTrashAssessments.CreateNew(DbContext, dto, CallingUser);
+        return onlandVisualTrashAssessment;
+    }
+
     [HttpPost]
     [JurisdictionEditFeature]
     public async Task<OnlandVisualTrashAssessmentSimpleDto> CreateNew([FromBody] OnlandVisualTrashAssessmentSimpleDto dto)

@@ -158,7 +158,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
                         OnlandVisualTrashAssessmentID = OnlandVisualTrashAssessmentID.GetValueOrDefault(),
                         PreliminarySourceIdentificationTypeID =
                             x.PreliminarySourceIdentificationTypeID.GetValueOrDefault(),
-                        ExplanationIfTypeIsOther = x.ExplanationIfTypeIsOther
+                        ExplanationIfTypeIsOther = x. ExplanationIfTypeIsOther
                     }).ToList();
 
             await dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.AddRangeAsync(onlandVisualTrashAssessmentPreliminarySourceIdentificationTypesToUpdate);

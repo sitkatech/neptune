@@ -20,7 +20,7 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
         return new OnlandVisualTrashAssessmentWorkflowProgressDto
         {
             OnlandVisualTrashAssessmentID = OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
-            OnlandVisualTrashAssessmentName = OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName,
+            OnlandVisualTrashAssessmentName = OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName,
             OnlandVisualTrashAssessmentStatus = OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus.AsSimpleDto(),
             Steps = Enum.GetValuesAsUnderlyingType<OnlandVisualTrashAssessmentWorkflowStep>().Cast<OnlandVisualTrashAssessmentWorkflowStep>()
                 .ToDictionary(x => x, y => new ProjectWorkflowProgress.WorkflowStepStatus()
@@ -57,7 +57,9 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
             case OnlandVisualTrashAssessmentWorkflowStep.InitiateOvta:
                 return OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentID > 0;
             case OnlandVisualTrashAssessmentWorkflowStep.RecordObservations:
-                break;
+                return (OnlandVisualTrashAssessment.AssessingNewArea != null &&
+                        (bool)OnlandVisualTrashAssessment.AssessingNewArea) && OnlandVisualTrashAssessment
+                    .OnlandVisualTrashAssessmentObservations.ToList().Count > 0;
             case OnlandVisualTrashAssessmentWorkflowStep.AddOrRemoveParcels:
                 break;
             case OnlandVisualTrashAssessmentWorkflowStep.RefineAssessmentArea:
@@ -83,7 +85,8 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
             case OnlandVisualTrashAssessmentWorkflowStep.InitiateOvta:
                 return OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentID == 0;
             case OnlandVisualTrashAssessmentWorkflowStep.RecordObservations:
-                break;
+                return OnlandVisualTrashAssessment.AssessingNewArea != null &&
+                        (bool)OnlandVisualTrashAssessment.AssessingNewArea;
             case OnlandVisualTrashAssessmentWorkflowStep.AddOrRemoveParcels:
                 break;
             case OnlandVisualTrashAssessmentWorkflowStep.RefineAssessmentArea:

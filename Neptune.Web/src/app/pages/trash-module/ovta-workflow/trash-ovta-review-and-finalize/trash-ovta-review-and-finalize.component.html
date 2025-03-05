@@ -1,1 +1,40 @@
-<p>trash-ovta-review-and-finalize works!</p>
+<page-header pageTitle="Review and Finalize"></page-header>
+<div class="page-body">
+    <form class="form" [formGroup]="formGroup">
+        <div class="grid-12">
+            <form-field
+                class="g-col-12"
+                [formControl]="formGroup.controls.OnlandVisualTrashAssessmentAreaName"
+                fieldLabel="Assessment Area Name"
+                [required]="true"
+                [type]="FormFieldType.Text"></form-field>
+            <form-field
+                class="g-col-12"
+                [formControl]="formGroup.controls.AssessmentAreaDescription"
+                fieldLabel="Assessment Area Description"
+                [required]="false"
+                [type]="FormFieldType.Textarea"></form-field>
+            <form-field
+                class="g-col-6"
+                [formControl]="formGroup.controls.LastAssessmentDate"
+                fieldLabel="Assessment Date"
+                [required]="false"
+                [type]="FormFieldType.Date"></form-field>
+            <form-field
+                class="g-col-6"
+                [formControl]="formGroup.controls.OnlandVisualTrashAssessmentBaselineScoreName"
+                fieldLabel="Assessment Score"
+                [required]="true"
+                [formInputOptions]="onlandVisualTrashAssessmentScoreDropdown"
+                [type]="FormFieldType.Select"></form-field>
+
+            <hr />
+            <h3>Preliminary Source Identification Type</h3>
+            <div class="copy copy-2">Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</div>
+        </div>
+    </form>
+</div>
+<div class="page-footer">
+    <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
+    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Save & Continue</button>
+</div>

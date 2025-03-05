@@ -714,6 +714,54 @@
         }
       }
     },
+    "/onland-visual-trash-assessments/preliminary-source-identification-type": {
+      "get": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentSimpleDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentSimpleDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentSimpleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentSimpleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentSimpleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentSimpleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/onland-visual-trash-assessments/onland-visual-trash-assessment-areas/{onlandVisualTrashAssessmentAreaID}": {
       "get": {
         "tags": [

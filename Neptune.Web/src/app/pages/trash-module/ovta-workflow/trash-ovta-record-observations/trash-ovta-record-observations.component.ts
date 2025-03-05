@@ -22,4 +22,6 @@ export class TrashOvtaRecordObservationsComponent {
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
     }
+
+    save(andContinue: boolean = false) {}
 }

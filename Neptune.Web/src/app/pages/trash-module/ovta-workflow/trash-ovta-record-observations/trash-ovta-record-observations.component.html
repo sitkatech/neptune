@@ -1,12 +1,13 @@
 <page-header pageTitle="Record Observations"></page-header>
-<div class="page-body grid-12">
-    <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="500px" [showLegend]="false">
-        <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
-    </neptune-map>
+<div class="page-body">
+    <div class="mb-3">
+        <button class="btn btn-primary mr-2" [disabled]="isLoadingSubmit">Record Observation at Current Location</button>
+        <button class="btn btn-primary mr-2" [disabled]="isLoadingSubmit">Add an Observation by clicking the map</button>
+    </div>
+
+    <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="500px" [showLegend]="false"></neptune-map>
 </div>
 <div class="page-footer">
-    <!-- <button class="btn btn-primary mr-2" (click)="save()" [disabled]="selectedAreaType.invalid || selectedJurisdiction.invalid || isLoadingSubmit">Save</button>
-    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="selectedAreaType.invalid || selectedJurisdiction.invalid || isLoadingSubmit">
-        Save & Continue
-    </button> -->
+    <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
+    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Save & Continue</button>
 </div>
