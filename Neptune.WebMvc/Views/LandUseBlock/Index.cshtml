@@ -29,7 +29,7 @@
 
 @section RightOfPageTitle
 {
-    @if (ViewDataTyped.HasManagePermission)
+    @if (ViewDataTyped.HasEditorPermissions)
     {
         <a class="btn btn-neptune" href="@ViewDataTyped.LandUseBlockBulkUploadUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Bulk Upload Land Use Blocks</a>
         <a class="btn btn-neptune" href="@ViewDataTyped.LandUseBlockDownloadUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download Land Use Blocks</a>

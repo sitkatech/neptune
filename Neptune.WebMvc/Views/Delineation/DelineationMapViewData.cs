@@ -17,7 +17,7 @@ namespace Neptune.WebMvc.Views.Delineation
 
             DelineationMapConfig = new DelineationMapConfig(linkGenerator, getStormwaterJurisdictionCqlFilter);
             BulkUploadTreatmentBMPDelineationsUrl = bulkUploadTreatmentBMPDelineationsUrl;
-            HasManagePermission = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
+            HasEditorPermissions = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             DownloadDelineationsUrl=downloadDelineationsUrl;
         }
 
@@ -31,6 +31,6 @@ namespace Neptune.WebMvc.Views.Delineation
         public string BulkUploadTreatmentBMPDelineationsUrl { get; }
         public string DownloadDelineationsUrl { get; }
 
-        public bool HasManagePermission { get; }
+        public bool HasEditorPermissions { get; }
     }
 }
