@@ -985,7 +985,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public ViewResult BulkUploadTrashScreenVisit()
         {
             var bulkUploadTrashScreenVisitViewModel = new BulkUploadTrashScreenVisitViewModel();
@@ -1021,7 +1021,7 @@ namespace Neptune.WebMvc.Controllers
         private const string VOLUME_GAL = "Total Material Volume Removed (gal)";
 
         [HttpPost]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         [RequestSizeLimit(100_000_000_000)]
         [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<IActionResult> BulkUploadTrashScreenVisit(BulkUploadTrashScreenVisitViewModel viewModel)
@@ -1482,7 +1482,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public async Task<FileResult> TrashScreenBulkUploadTemplate()
         {
             var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson).ToList();
