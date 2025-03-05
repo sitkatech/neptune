@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
-import { Observable, switchMap } from "rxjs";
+import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { OnlandVisualTrashAssessmentAreaDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-detail-dto";
@@ -17,6 +17,11 @@ import "leaflet-draw";
 import "leaflet.fullscreen";
 import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
+import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/services/modal/modal.service";
+import { UpdateOvtaAreaDetailsModalComponent, UpdateOvtaAreaModalContext } from "../update-ovta-area-details-modal/update-ovta-area-details-modal.component";
+import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
+import { OnlandVisualTrashAssessmentGridDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-grid-dto";
+import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 
 @Component({
     selector: "trash-ovta-area-detail",
@@ -33,6 +38,7 @@ import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers
         TransectLineLayerComponent,
         OvtaAreaLayerComponent,
         RouterLink,
+        LoadingDirective,
     ],
     templateUrl: "./trash-ovta-area-detail.component.html",
     styleUrl: "./trash-ovta-area-detail.component.scss",
@@ -40,15 +46,24 @@ import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers
 export class TrashOvtaAreaDetailComponent {
     public onlandVisualTrashAssessmentArea$: Observable<OnlandVisualTrashAssessmentAreaDetailDto>;
     public ovtaColumnDefs: ColDef[];
+    public onlandVisualTrashAssessments$: Observable<OnlandVisualTrashAssessmentGridDto[]>;
+
+    public refreshOVTAAreasTrigger: BehaviorSubject<void> = new BehaviorSubject(null);
+    public refreshOVTAAreasTrigger$: Observable<void> = this.refreshOVTAAreasTrigger.asObservable();
 
     public map: L.Map;
     public mapIsReady: boolean = false;
     public layerControl: L.Control.Layers;
 
+    public isLoading: boolean;
+    public isLoadingGrid: boolean = true;
+
     constructor(
         private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService,
+        private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
         private utilityFunctionsService: UtilityFunctionsService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private modalService: ModalService
     ) {}
 
     ngOnInit(): void {
@@ -68,12 +83,32 @@ export class TrashOvtaAreaDetailComponent {
             this.utilityFunctionsService.createBasicColumnDef("Created By", "CreatedByPersonFullName"),
             this.utilityFunctionsService.createDateColumnDef("Created On", "CreatedDate", "short"),
         ];
-        this.onlandVisualTrashAssessmentArea$ = this.route.params.pipe(
+
+        this.onlandVisualTrashAssessmentArea$ = this.refreshOVTAAreasTrigger$.pipe(
+            tap(() => {
+                this.isLoading = true;
+            }),
+            switchMap(() => {
+                return this.route.params.pipe(
+                    switchMap((params) => {
+                        return this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(
+                            params[routeParams.onlandVisualTrashAssessmentAreaID]
+                        );
+                    })
+                );
+            }),
+            tap(() => {
+                this.isLoading = false;
+            })
+        );
+
+        this.onlandVisualTrashAssessments$ = this.route.params.pipe(
             switchMap((params) => {
-                return this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(
+                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(
                     params[routeParams.onlandVisualTrashAssessmentAreaID]
                 );
-            })
+            }),
+            tap(() => (this.isLoadingGrid = false))
         );
     }
 
@@ -81,5 +116,17 @@ export class TrashOvtaAreaDetailComponent {
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
+    }
+
+    updateOVTAAreaDetails(ovtaAreaDto: OnlandVisualTrashAssessmentAreaDetailDto) {
+        this.modalService
+            .open(UpdateOvtaAreaDetailsModalComponent, null, { CloseOnClickOut: false, TopLayer: false, ModalSize: ModalSizeEnum.Medium, ModalTheme: ModalThemeEnum.Light }, {
+                OvtaAreaDto: ovtaAreaDto,
+            } as UpdateOvtaAreaModalContext)
+            .instance.result.then((result) => {
+                if (result) {
+                    this.refreshOVTAAreasTrigger.next();
+                }
+            });
     }
 }

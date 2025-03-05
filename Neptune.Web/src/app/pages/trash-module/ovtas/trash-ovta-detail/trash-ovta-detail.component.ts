@@ -1,6 +1,6 @@
 import { AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgFor, NgIf } from "@angular/common";
 import { Component } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import * as L from "leaflet";
 import "leaflet-draw";
 import "leaflet.fullscreen";
@@ -34,6 +34,7 @@ import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers
         OvtaAreaLayerComponent,
         TransectLineLayerComponent,
         NgClass,
+        RouterLink,
     ],
     templateUrl: "./trash-ovta-detail.component.html",
     styleUrl: "./trash-ovta-detail.component.scss",
@@ -43,17 +44,20 @@ export class TrashOvtaDetailComponent {
     public ovtaObservationLayer: L.GeoJSON<any>;
     public selectedOVTAObservation: OnlandVisualTrashAssessmentObservationWithPhotoDto;
 
+    public ovtaID: number;
+
     public map: L.Map;
     public mapIsReady: boolean = false;
     public layerControl: L.Control.Layers;
 
     private ovtaObservationOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px'> Observations";
 
-    constructor(private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService, private route: ActivatedRoute) {}
+    constructor(private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService, private route: ActivatedRoute, private router: Router) {}
 
     ngOnInit(): void {
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
             switchMap((params) => {
+                this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
                 return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(params[routeParams.onlandVisualTrashAssessmentID]);
             })
         );
@@ -126,6 +130,15 @@ export class TrashOvtaDetailComponent {
                 }
                 layer.setZIndexOffset(10000);
                 layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-red.png"));
+                // this.router.navigate([`/trash/onland-visual-trash-assessment/${this.ovtaID}`], {
+                //     fragment: `${layer.feature.properties.OnlandVisualTrashAssessmentObservationID}`,
+                // });
+                this.router.navigate([], {
+                    relativeTo: this.route,
+                    fragment: `${layer.feature.properties.OnlandVisualTrashAssessmentObservationID}`,
+                    queryParamsHandling: "preserve",
+                    replaceUrl: true,
+                });
             } else {
                 layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-violet.png"));
             }
