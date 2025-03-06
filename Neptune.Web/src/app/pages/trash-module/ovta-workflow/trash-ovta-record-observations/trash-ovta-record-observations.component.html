@@ -18,6 +18,30 @@
             [sortOrder]="10"
             [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer
     ></neptune-map>
+    <div class="card" [hidden]="selectedOVTAObservation == null">
+        <div class="card-header">
+            Selected Observation
+            <a
+                href="javascript:void(0);"
+                [dropdownToggle]="grantProgramsToggle"
+                class="nav-link dropdown-toggle"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+                <i class="fas fa-bars"></i>
+            </a>
+            <div #grantProgramsToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" (click)="editObservationLocation()">Edit Observation Location</button>
+                <button class="dropdown-item" (click)="deleteObservation()">Delete Selected Observation</button>
+            </div>
+        </div>
+        <div class="card-body grid-12">
+            <div class="g-col-6">Hello</div>
+            <div class="g-col-6">Notes {{ selectedOVTAObservation?.Note }}</div>
+        </div>
+    </div>
 </div>
 <div class="page-footer">
     <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
