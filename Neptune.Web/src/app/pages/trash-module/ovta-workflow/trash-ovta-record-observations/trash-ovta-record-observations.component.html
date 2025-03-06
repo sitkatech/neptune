@@ -1,11 +1,23 @@
 <page-header pageTitle="Record Observations"></page-header>
-<div class="page-body">
+<div class="page-body" *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
     <div class="mb-3">
         <button class="btn btn-primary mr-2" [disabled]="isLoadingSubmit">Record Observation at Current Location</button>
-        <button class="btn btn-primary mr-2" [disabled]="isLoadingSubmit">Add an Observation by clicking the map</button>
+        <button class="btn btn-primary mr-2" [disabled]="isLoadingSubmit" (click)="addObservationMarker()">Add an Observation by clicking the map</button>
     </div>
 
-    <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="500px" [showLegend]="false"></neptune-map>
+    <neptune-map
+        (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment.Observations)"
+        mapHeight="500px"
+        [showLegend]="false"
+        [boundingBox]="onlandVisualTrashAssessment.BoundingBox"
+        ><ovta-area-layer
+            *ngIf="mapIsReady"
+            [displayOnLoad]="true"
+            [map]="map"
+            [layerControl]="layerControl"
+            [sortOrder]="10"
+            [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer
+    ></neptune-map>
 </div>
 <div class="page-footer">
     <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>

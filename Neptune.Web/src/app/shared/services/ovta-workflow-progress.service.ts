@@ -25,7 +25,6 @@ export class OvtaWorkflowProgressService {
             this.progressSubscription = this.onlandVisualTrashAssessmentService
                 .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDProgressGet(ovtaID)
                 .subscribe((response) => {
-                    console.log(response);
                     this.progressSubject.next(response);
                 });
         } else {
@@ -35,8 +34,8 @@ export class OvtaWorkflowProgressService {
                         Instructions: { Completed: true, Disabled: false },
                         InitiateOvta: { Completed: false, Disabled: false },
                         RecordObservations: { Completed: false, Disabled: false },
-                        AddOrRemoveParcels: { Completed: false, Disabled: false },
-                        RefineAssessmentArea: { Completed: false, Disabled: false },
+                        // AddOrRemoveParcels: { Completed: false, Disabled: false },
+                        // RefineAssessmentArea: { Completed: false, Disabled: false },
                         ReviewAndFinalize: { Completed: false, Disabled: false },
                     },
                 })

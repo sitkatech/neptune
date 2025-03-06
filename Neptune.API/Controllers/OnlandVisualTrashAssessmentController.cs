@@ -74,4 +74,12 @@ public class OnlandVisualTrashAssessmentController(
         var visualTrashAssessmentGridDtos = OnlandVisualTrashAssessments.ListByOnlandVisualTrashAssessmentAreaID(DbContext, onlandVisualTrashAssessmentAreaID).Select(x => x.AsGridDto());
         return Ok(visualTrashAssessmentGridDtos);
     }
+
+    [HttpPost("{onlandVisualTrashAssessmentID}/observations")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public async Task UpdateObservations([FromRoute] int onlandVisualTrashAssessmentID, [FromBody] List<OnlandVisualTrashAssessmentObservationWithPhotoDto> onlandVisualTrashAssessmentObservationWithPhotoDtos)
+    {
+        await OnlandVisualTrashAssessmentObservations.UpdateObservations(dbContext, onlandVisualTrashAssessmentID, onlandVisualTrashAssessmentObservationWithPhotoDtos);
+    }
 }

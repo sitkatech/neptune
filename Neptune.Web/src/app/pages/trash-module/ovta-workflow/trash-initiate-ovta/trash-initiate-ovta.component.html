@@ -13,6 +13,8 @@
             (ngModelChange)="onJurisdictionSelected($event)"
             [options]="stormwaterJurisdictionOptions$ | async"></ngx-select-dropdown>
     </div>
+
+    <form-field [formControl]="selectedOVTAArea" [type]="FormFieldType.Text" fieldLabel="Selected OVTA Area"></form-field>
     <div [hidden]="selectedAreaType.getRawValue() == null || selectedAreaType.getRawValue()">
         <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="500px" [showLegend]="false">
             <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>

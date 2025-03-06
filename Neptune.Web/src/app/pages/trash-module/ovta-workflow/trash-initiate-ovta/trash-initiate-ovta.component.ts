@@ -53,6 +53,9 @@ export class TrashInitiateOvtaComponent {
     public stormwaterJurisdictionOptions$: Observable<SelectDropdownOption[]>;
     public selectedJurisdiction: FormControl = new FormControl();
     public selectedAreaType: FormControl = new FormControl(false);
+    public selectedOVTAArea: FormControl = new FormControl("");
+    public selectedOVTAAreaID: number;
+    public selectedOVTAAreaName: string = "";
 
     public jurisdictionDropdownConfig = {
         search: true,
@@ -67,44 +70,10 @@ export class TrashInitiateOvtaComponent {
         { Value: true, Label: "Assess new area", Disabled: false },
     ];
 
-    private styleDictionary = {
-        "A": {
-            color: "#00FF00",
-            weight: 2,
-            opacity: 0.65,
-            fillOpacity: 0.1,
-            graphicFill: "Slash",
-        },
-        "B": {
-            color: "#ebc400",
-            weight: 2,
-            opacity: 0.65,
-            fillOpacity: 0.1,
-        },
-        "C": {
-            color: "#FF7F7F",
-            weight: 2,
-            opacity: 0.65,
-            fillOpacity: 0.1,
-        },
-        "D": {
-            color: "#c500ff",
-            weight: 2,
-            opacity: 0.65,
-            fillOpacity: 0.1,
-        },
-        "Not Assessed": {
-            color: "#808080",
-            weight: 2,
-            opacity: 0.65,
-            fillOpacity: 0.1,
-        },
-        "null": {
-            color: "#808080",
-            weight: 2,
-            opacity: 0.65,
-            fillOpacity: 0.1,
-        },
+    private defaultStyle = {
+        color: "blue",
+        fillOpacity: 0.2,
+        opacity: 0,
     };
 
     private highlightStyle = {
@@ -143,6 +112,7 @@ export class TrashInitiateOvtaComponent {
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
+        this.layer.addTo(this.map);
         this.addOVTAAreasToLayer();
     }
 
@@ -150,7 +120,7 @@ export class TrashInitiateOvtaComponent {
         this.isLoadingSubmit = true;
         var dto = new OnlandVisualTrashAssessmentSimpleDto();
         dto.AssessingNewArea = this.selectedAreaType.getRawValue();
-        dto.OnlandVisualTrashAssessmentAreaID = 1;
+        dto.OnlandVisualTrashAssessmentAreaID = this.selectedOVTAAreaID;
         dto.StormwaterJurisdictionID = this.selectedJurisdiction.getRawValue().Value;
         this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPost(dto).subscribe((response) => {
             this.isLoadingSubmit = false;
@@ -168,11 +138,10 @@ export class TrashInitiateOvtaComponent {
 
         this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:AssessmentAreaExport", cql_filter, "OVTAAreaID").subscribe((response) => {
             if (response.length == 0) return;
-
             const featuresGroupedByOVTAAreaID = this.groupByPipe.transform(response, "properties.OVTAAreaID");
             Object.keys(featuresGroupedByOVTAAreaID).forEach((ovtaAreaID) => {
                 const geoJson = L.geoJSON(featuresGroupedByOVTAAreaID[ovtaAreaID], {
-                    style: this.styleDictionary[featuresGroupedByOVTAAreaID[ovtaAreaID][0].properties.Score],
+                    style: this.defaultStyle,
                 });
                 geoJson.on("mouseover", (e) => {
                     geoJson.setStyle({ fillOpacity: 0.5 });
@@ -181,9 +150,9 @@ export class TrashInitiateOvtaComponent {
                     geoJson.setStyle({ fillOpacity: 0.1 });
                 });
 
-                // geoJson.on("click", (e) => {
-                //     this.onOVTAAreaSelected(Number(ovtaAreaID));
-                // });
+                geoJson.on("click", (e) => {
+                    this.onOVTAAreaSelected(Number(ovtaAreaID), featuresGroupedByOVTAAreaID[ovtaAreaID][0].properties.OVTAAreaName);
+                });
 
                 geoJson.addTo(this.layer);
             });
@@ -202,25 +171,25 @@ export class TrashInitiateOvtaComponent {
         this.getStormwaterJurisdictionBounds(event.Value);
     }
 
-    // private onOVTAAreaSelected(ovtaAreaID: number) {
-    //     this.selectedOVTAAreaID = ovtaAreaID;
-    //     this.highlightSelectedOVTAArea();
+    private onOVTAAreaSelected(ovtaAreaID: number, ovtaAreaName: string) {
+        this.selectedOVTAAreaID = ovtaAreaID;
+        this.selectedOVTAAreaName = ovtaAreaName;
+        this.selectedOVTAArea.setValue(this.selectedOVTAAreaName);
+        this.highlightSelectedOVTAArea();
+    }
 
-    //     this.ovtaAreaSelected.emit(ovtaAreaID);
-    // }
+    private highlightSelectedOVTAArea() {
+        this.layer.eachLayer((layer) => {
+            // skip if well layer
+            if (layer.options?.icon) return;
 
-    // private highlightSelectedOVTAArea() {
-    //     this.layer.eachLayer((layer) => {
-    //         // skip if well layer
-    //         if (layer.options?.icon) return;
-
-    //         const geoJsonLayers = layer.getLayers();
-    //         if (geoJsonLayers[0].feature.properties.OVTAAreaID == this.selectedOVTAAreaID) {
-    //             layer.setStyle(this.highlightStyle);
-    //             this.map.fitBounds(layer.getBounds());
-    //         } else {
-    //             layer.setStyle(this.styleDictionary[geoJsonLayers[0].feature.properties.Score]);
-    //         }
-    //     });
-    // }
+            const geoJsonLayers = layer.getLayers();
+            if (geoJsonLayers[0].feature.properties.OVTAAreaID == this.selectedOVTAAreaID) {
+                layer.setStyle(this.highlightStyle);
+                this.map.fitBounds(layer.getBounds());
+            } else {
+                layer.setStyle(this.defaultStyle);
+            }
+        });
+    }
 }
