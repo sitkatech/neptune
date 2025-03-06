@@ -47,7 +47,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public ViewResult UpdateDelineationGeometry()
         {
             var viewModel = new UpdateDelineationGeometryViewModel(){ TreatmentBMPNameField = "TreatmentBMPName" };
@@ -55,7 +55,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpPost]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public async Task<ActionResult> UpdateDelineationGeometry(UpdateDelineationGeometryViewModel viewModel)
         {
             var file = viewModel.FileResourceData;
@@ -181,7 +181,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public ViewResult DownloadDelineationGeometry()
         {
             var viewModel = new DownloadDelineationGeometryViewModel();
@@ -189,7 +189,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpPost]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         [Produces(@"application/zip")]
         public async Task<FileContentResult> DownloadDelineationGeometry(DownloadDelineationGeometryViewModel viewModel)
         {
@@ -289,7 +289,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public ActionResult ApproveDelineationGisUpload()
         {
             var viewModel = new ApproveDelineationGisUploadViewModel();
@@ -297,7 +297,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpPost]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public async Task<ActionResult> ApproveDelineationGisUpload(ApproveDelineationGisUploadViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -347,7 +347,7 @@ namespace Neptune.WebMvc.Controllers
 
             await _dbContext.DelineationStagings.Where(x => x.UploadedByPersonID == CurrentPerson.PersonID).ExecuteDeleteAsync();
 
-            return RedirectToAction(new SitkaRoute<ManagerDashboardController>(_linkGenerator, x => x.Index()));
+            return RedirectToAction(new SitkaRoute<DelineationController>(_linkGenerator, x => x.DelineationMap(null)));
         }
 
         private PartialViewResult ViewApproveDelineationGisUpload(ApproveDelineationGisUploadViewModel viewModel)

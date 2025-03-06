@@ -17,7 +17,7 @@ public class DataHubController : NeptuneBaseController<DataHubController>
     {
     }
 
-    [NeptuneViewFeature]
+    [JurisdictionEditFeature]
     [HttpGet]
     public ViewResult Index()
     {

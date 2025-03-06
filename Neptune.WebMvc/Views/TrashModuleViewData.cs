@@ -53,7 +53,7 @@ namespace Neptune.WebMvc.Views
 
         private LtInfoMenuItem BuildDataHubMenu(Person currentPerson)
         {
-            return new LtInfoMenuItem(SitkaRoute<DataHubController>.BuildUrlFromExpression(LinkGenerator, x => x.Index()), "Data Hub", currentPerson.IsManagerOrAdmin(), true, null);
+            return new LtInfoMenuItem(SitkaRoute<DataHubController>.BuildUrlFromExpression(LinkGenerator, x => x.Index()), "Data Hub", currentPerson.IsJurisdictionEditorOrManager(), true, null);
         }
 
         private LtInfoMenuItem BuildManageMenu(Person currentPerson)

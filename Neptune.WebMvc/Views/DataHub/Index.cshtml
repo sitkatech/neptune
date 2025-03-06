@@ -198,6 +198,11 @@
                         <a href="@ViewDataTyped.UploadAssessmentAreasUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                         <a href="@ViewDataTyped.DownloadAssessmentAreasUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        <a href="@ViewDataTyped.UploadAssessmentAreasUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                        <a href="@ViewDataTyped.DownloadAssessmentAreasUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                    }
 
                     <h3>On-land Visual Trash Assessments (OVTAs)</h3>
                     @{
@@ -206,6 +211,10 @@
                     @if (ViewDataTyped.HasManagePermission)
                     {
                         <a href="@ViewDataTyped.UploadOVTAUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        <a href="@ViewDataTyped.UploadOVTAUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                     }
 
                     <h3>Land Use Blocks</h3>
@@ -216,6 +225,11 @@
                     {
                         <a href="@ViewDataTyped.UploadLandUseBlocksUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                         <a href="@ViewDataTyped.DownloadLandUseBlocksUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                    }
+                    @if (ViewDataTyped.IsManagerOrEditor)
+                    {
+                        <a href="@ViewDataTyped.UploadLandUseBlocksUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                        <a href="@ViewDataTyped.DownloadLandUseBlocksUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     }
                 </div>
                 <div class="col-md-3 sidebar">

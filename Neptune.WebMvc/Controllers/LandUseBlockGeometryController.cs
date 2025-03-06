@@ -54,7 +54,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public ViewResult UpdateLandUseBlockGeometry()
         {
             var viewModel = new UpdateLandUseBlockGeometryViewModel { PersonID = CurrentPerson.PersonID };
@@ -62,7 +62,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public ViewResult DownloadLandUseBlockGeometry()
         {
             var viewModel = new DownloadLandUseBlockGeometryViewModel { PersonID = CurrentPerson.PersonID };
@@ -70,7 +70,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpPost]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public async Task<ActionResult> UpdateLandUseBlockGeometry(UpdateLandUseBlockGeometryViewModel viewModel)
         {
             var file = viewModel.FileResourceData;
@@ -184,7 +184,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpPost]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public async Task<ActionResult> DownloadLandUseBlockGeometry(DownloadLandUseBlockGeometryViewModel viewModel)
         {
             var stormwaterJurisdiction = _dbContext.StormwaterJurisdictions.Include(x => x.Organization)

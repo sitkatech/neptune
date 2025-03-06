@@ -27,7 +27,7 @@
             <ng-template #notSignedIn>
                 <div class="card-body">
                     <h3 class="card-title">Welcome</h3>
-                    <p class="card-subtitle">Sign in to access the OC Stormwater Tools.<br/>Create an account if you don't have one yet.</p>
+                    <p class="card-subtitle">Sign in to access the OC Stormwater Tools.<br />Create an account if you don't have one yet.</p>
                     <div class="hero__btns">
                         <div class="hero__btns-wrapper">
                             <a (click)="login()" class="btn btn-primary">Sign In</a>
@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <p> Need help logging in?</p>
+                    <p>Need help logging in?</p>
                     <a href="{{ forgotPasswordUrl() }}">Forgot Password</a> | <a href="{{ forgotUsernameUrl() }}">Forgot Username</a> |
                     <a href="{{ keystoneSupportUrl() }}">Request Support</a>
                 </div>
@@ -53,7 +53,8 @@
             <h2>Data and Tools</h2>
         </div>
         <p>
-            The Orange County Stormwater Tools website is designed to support stormwater management tracking<br/>and decision making for the County of Orange and Copermittee Cities
+            The Orange County Stormwater Tools website is designed to support stormwater management tracking<br />and decision making for the County of Orange and Copermittee
+            Cities
         </p>
         <div class="data-section-cards">
             <div class="card">
@@ -68,12 +69,9 @@
                     </ul>
                 </div>
             </div>
-    
+
             <div class="card">
-                <div class="card-header">
-                    <img src="assets/main/icons/modelingIcon.png" style="height: 25px; padding-right: 15px" />
-                    Modeling Module
-                </div>
+                <div class="card-header">Modeling Module</div>
                 <div class="card-body">
                     <ul>
                         <li><a routerLink="/modeling">About Modeling Performance</a></li>
@@ -83,7 +81,7 @@
                     </ul>
                 </div>
             </div>
-    
+
             <div class="card">
                 <div class="card-header">Trash Module</div>
                 <div class="card-body">
@@ -93,7 +91,7 @@
                     </ul>
                 </div>
             </div>
-    
+
             <div class="card">
                 <div class="card-header">Planning Module</div>
                 <div class="card-body">
@@ -106,7 +104,6 @@
         </div>
     </div>
 
-    
     <div class="site__about">
         <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
     </div>
