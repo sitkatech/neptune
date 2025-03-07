@@ -42,6 +42,15 @@ public static class OnlandVisualTrashAssessments
         return onlandVisualTrashAssessment;
     }
 
+    public static OnlandVisualTrashAssessmentArea GetOnlandVisualTrashAssessmentAreaByID(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessment = GetImpl(dbContext).AsNoTracking()
+            .SingleOrDefault(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
+        Check.RequireNotNull(onlandVisualTrashAssessment, $"OnlandVisualTrashAssessment with ID {onlandVisualTrashAssessmentID} not found!");
+        return OnlandVisualTrashAssessmentAreas.GetByID(dbContext,
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID);
+    }
+
     public static OnlandVisualTrashAssessment GetByID(NeptuneDbContext dbContext, OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
     {
         return GetByID(dbContext, onlandVisualTrashAssessmentPrimaryKey.PrimaryKeyValue);

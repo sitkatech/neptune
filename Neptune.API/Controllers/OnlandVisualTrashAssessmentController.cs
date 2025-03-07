@@ -40,6 +40,15 @@ public class OnlandVisualTrashAssessmentController(
         return Ok(onlandVisualTrashAssessmentDetailDto);
     }
 
+    [HttpGet("{onlandVisualTrashAssessmentID}/onland-visual-trash-assessment-area")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public ActionResult<OnlandVisualTrashAssessmentAreaDetailDto> GetOnlandVisualTrashAssessmentAreaByID([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessmentAreaDetailDto = OnlandVisualTrashAssessments.GetOnlandVisualTrashAssessmentAreaByID(DbContext, onlandVisualTrashAssessmentID).AsDetailDto();
+        return Ok(onlandVisualTrashAssessmentAreaDetailDto);
+    }
+
     [HttpGet("{onlandVisualTrashAssessmentID}/progress")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]

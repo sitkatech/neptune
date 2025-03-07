@@ -5,22 +5,45 @@ import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/com
 import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { Observable, switchMap } from "rxjs";
-import { ActivatedRoute, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { routeParams } from "src/app/app.routes";
 import { OnlandVisualTrashAssessmentDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-detail-dto";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
-import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
+import {
+    OnlandVisualTrashAssessmentObservationWithPhotoDto,
+    OnlandVisualTrashAssessmentObservationWithPhotoDtoForm,
+    OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls,
+} from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
+import { FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormFieldComponent, FormFieldType } from "../../../../shared/components/form-field/form-field.component";
+import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
+import { AlertService } from "src/app/shared/services/alert.service";
+import { Alert } from "src/app/shared/models/alert";
+import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
 
 @Component({
     selector: "trash-ovta-record-observations",
     standalone: true,
-    imports: [PageHeaderComponent, NeptuneMapComponent, DropdownToggleDirective, OvtaAreaLayerComponent, NgIf, AsyncPipe, RouterLink],
+    imports: [
+        PageHeaderComponent,
+        NeptuneMapComponent,
+        DropdownToggleDirective,
+        OvtaAreaLayerComponent,
+        NgIf,
+        AsyncPipe,
+        FormFieldComponent,
+        ReactiveFormsModule,
+        FormsModule,
+        AlertDisplayComponent,
+    ],
     templateUrl: "./trash-ovta-record-observations.component.html",
     styleUrl: "./trash-ovta-record-observations.component.scss",
 })
 export class TrashOvtaRecordObservationsComponent {
+    public FormFieldType = FormFieldType;
     public map: L.Map;
     public layerControl: L.Control.Layers;
     public mapIsReady = false;
@@ -28,11 +51,25 @@ export class TrashOvtaRecordObservationsComponent {
     public ovtaAreaID: number;
     public ovtaObservationLayer: L.GeoJSON<any>;
     public observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[] = [];
-    public selectedOVTAObservation: OnlandVisualTrashAssessmentObservationWithPhotoDto = null;
+    //public selectedOVTAObservation: OnlandVisualTrashAssessmentObservationWithPhotoDto = null;
+    public selectedOVTAObservation: FormGroup<OnlandVisualTrashAssessmentObservationWithPhotoDtoForm> = new FormGroup<any>({
+        OnlandVisualTrashAssessmentObservationID: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.OnlandVisualTrashAssessmentObservationID(),
+        OnlandVisualTrashAssessmentID: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.OnlandVisualTrashAssessmentID(),
+        Note: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.Note(),
+        FileResourceGUID: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.FileResourceGUID(),
+        Longitude: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.Longitude(),
+        Latitude: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.Latitude(),
+    });
 
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentDetailDto>;
 
-    constructor(private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService, private route: ActivatedRoute) {}
+    constructor(
+        private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
+        private route: ActivatedRoute,
+        private alertService: AlertService,
+        private ovtaWorkflowProgressService: OvtaWorkflowProgressService,
+        private router: Router
+    ) {}
 
     ngOnInit() {
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
@@ -89,7 +126,13 @@ export class TrashOvtaRecordObservationsComponent {
 
     save(andContinue: boolean = false) {
         this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(this.ovtaAreaID, this.observations).subscribe(() => {
-            console.log("hello");
+            this.isLoadingSubmit = false;
+            this.alertService.clearAlerts();
+            this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
+            this.ovtaWorkflowProgressService.updateProgress(this.ovtaAreaID);
+            if (andContinue) {
+                this.router.navigate([`../../${this.ovtaAreaID}/review-and-finalize`], { relativeTo: this.route });
+            }
         });
     }
 
@@ -118,11 +161,15 @@ export class TrashOvtaRecordObservationsComponent {
         if (!this.map.hasLayer(this.ovtaObservationLayer)) {
             this.ovtaObservationLayer.addTo(this.map);
         }
-
         let selectedObservation = observations.find((x) => x.OnlandVisualTrashAssessmentObservationID == observationID);
-        this.selectedOVTAObservation = selectedObservation;
+        this.selectedOVTAObservation.controls.OnlandVisualTrashAssessmentObservationID.setValue(selectedObservation.OnlandVisualTrashAssessmentID);
+        this.selectedOVTAObservation.controls.OnlandVisualTrashAssessmentID.setValue(selectedObservation.OnlandVisualTrashAssessmentID);
+        // this.selectedOVTAObservation.controls.ObservationDatetime.setValue(selectedObservation.ObservationDatetime);
+        this.selectedOVTAObservation.controls.Note.setValue(selectedObservation.Note);
+        this.selectedOVTAObservation.controls.Latitude.setValue(selectedObservation.Latitude);
+        this.selectedOVTAObservation.controls.Longitude.setValue(selectedObservation.Longitude);
         this.ovtaObservationLayer.eachLayer((layer) => {
-            if (layer.feature.properties.OnlandVisualTrashAssessmentObservationID == this.selectedOVTAObservation.OnlandVisualTrashAssessmentObservationID) {
+            if (layer.feature.properties.OnlandVisualTrashAssessmentObservationID == selectedObservation.OnlandVisualTrashAssessmentObservationID) {
                 if (!layer.feature.properties.DefaultZIndexOffset) {
                     layer.feature.properties.DefaultZIndexOffset = layer._zIndex;
                 }
@@ -135,7 +182,6 @@ export class TrashOvtaRecordObservationsComponent {
     }
 
     public editObservationLocation() {
-        console.log("edit");
         this.map.on("click", (e: L.LeafletMouseEvent) => {
             var index = this.observations.findIndex((x) => x === this.selectedOVTAObservation);
             this.observations[index].Latitude = e.latlng.lat;

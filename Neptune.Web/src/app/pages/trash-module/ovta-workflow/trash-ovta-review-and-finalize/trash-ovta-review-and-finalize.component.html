@@ -1,5 +1,5 @@
 <page-header pageTitle="Review and Finalize"></page-header>
-<div class="page-body">
+<div class="page-body" *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
     <form class="form" [formGroup]="formGroup">
         <div class="grid-12">
             <form-field
