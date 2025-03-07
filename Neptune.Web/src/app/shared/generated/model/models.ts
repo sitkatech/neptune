@@ -27,6 +27,7 @@ export * from '././onland-visual-trash-assessment-grid-dto';
 export * from '././onland-visual-trash-assessment-observation-with-photo-dto';
 export * from '././onland-visual-trash-assessment-simple-dto';
 export * from '././onland-visual-trash-assessment-status-simple-dto';
+export * from '././onland-visual-trash-assessment-workflow-dto';
 export * from '././onland-visual-trash-assessment-workflow-progress-dto';
 export * from '././onland-visual-trash-assessment-workflow-progress-dto-steps';
 export * from '././ordinates';
