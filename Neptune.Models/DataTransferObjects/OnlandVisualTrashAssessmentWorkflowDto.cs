@@ -13,6 +13,7 @@ public class OnlandVisualTrashAssessmentWorkflowDto
     public string? Notes { get; set; }
     public DateTime? LastAssessmentDate { get; set; }
     public List<OnlandVisualTrashAssessmentObservationWithPhotoDto> Observations { get; set; }
+    public Dictionary<int, PreliminarySourceIdentificationTypeWorkflowDto> PreliminarySourceIdentificationTypeWorkflowDtos { get; set; }
     public BoundingBoxDto BoundingBox { get; set; }
     public string Geometry { get; set; }
 }

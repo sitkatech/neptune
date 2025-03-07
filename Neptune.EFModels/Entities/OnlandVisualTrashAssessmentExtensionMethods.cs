@@ -61,7 +61,7 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
             AssessmentAreaDescription = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription, 
             IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment, 
             LastAssessmentDate = onlandVisualTrashAssessment.CompletedDate,
-            //PreliminarySourceIdentificationTypeDictionary = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.GroupBy(x => x.PreliminarySourceIdentificationType.PreliminarySourceIdentificationCategory.PreliminarySourceIdentificationCategoryDisplayName).ToDictionary(x => x.Key.ToString(), x => x.Select(x => x.PreliminarySourceIdentificationType.PreliminarySourceIdentificationTypeDisplayName).ToList()),
+            PreliminarySourceIdentificationTypeWorkflowDtos = onlandVisualTrashAssessment.GetPreliminarySourceIdentificationTypeWorkflowDtosForOnlandVisualTrashAssessments(),
             Observations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.AsPhotoDto()).ToList(),
             BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry()),
         };

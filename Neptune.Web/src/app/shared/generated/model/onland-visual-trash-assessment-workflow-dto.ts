@@ -11,6 +11,7 @@
  */
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from '././onland-visual-trash-assessment-observation-with-photo-dto';
 import { BoundingBoxDto } from '././bounding-box-dto';
+import { PreliminarySourceIdentificationTypeWorkflowDto } from '././preliminary-source-identification-type-workflow-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class OnlandVisualTrashAssessmentWorkflowDto { 
@@ -25,6 +26,7 @@ export class OnlandVisualTrashAssessmentWorkflowDto {
     Notes?: string;
     LastAssessmentDate?: string;
     Observations?: Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>;
+    PreliminarySourceIdentificationTypeWorkflowDtos?: { [key: string]: PreliminarySourceIdentificationTypeWorkflowDto; };
     BoundingBox?: BoundingBoxDto;
     Geometry?: string;
     constructor(obj?: any) {
@@ -44,6 +46,7 @@ export interface OnlandVisualTrashAssessmentWorkflowDtoForm {
     Notes?: FormControl<string>;
     LastAssessmentDate?: FormControl<string>;
     Observations?: FormControl<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>>;
+    PreliminarySourceIdentificationTypeWorkflowDtos?: FormControl<{ [key: string]: PreliminarySourceIdentificationTypeWorkflowDto; }>;
     BoundingBox?: FormControl<BoundingBoxDto>;
     Geometry?: FormControl<string>;
 }
@@ -150,6 +153,16 @@ export class OnlandVisualTrashAssessmentWorkflowDtoFormControls {
         }
     );
     public static Observations = (value: FormControlState<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>> | Array<OnlandVisualTrashAssessmentObservationWithPhotoDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static PreliminarySourceIdentificationTypeWorkflowDtos = (value: FormControlState<{ [key: string]: PreliminarySourceIdentificationTypeWorkflowDto; }> | { [key: string]: PreliminarySourceIdentificationTypeWorkflowDto; } = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<{ [key: string]: PreliminarySourceIdentificationTypeWorkflowDto; }>(
         value,
         formControlOptions ?? 
         {

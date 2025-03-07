@@ -39,6 +39,8 @@ export * from '././person-simple-dto';
 export * from '././point';
 export * from '././precision-model';
 export * from '././precision-models';
+export * from '././preliminary-source-identification-type-simple-dto';
+export * from '././preliminary-source-identification-type-workflow-dto';
 export * from '././problem-details';
 export * from '././project-document-dto';
 export * from '././project-document-update-dto';

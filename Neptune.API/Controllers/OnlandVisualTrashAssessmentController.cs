@@ -49,6 +49,14 @@ public class OnlandVisualTrashAssessmentController(
         return Ok(onlandVisualTrashAssessmentWorkflowDto);
     }
 
+    [HttpGet("preliminary-source-identification-types")]
+    [JurisdictionEditFeature]
+    public ActionResult<List<PreliminarySourceIdentificationTypeSimpleDto>> GetPreliminarySourceIdentificationTypes()
+    {
+        var preliminarySourceIdentificationTypeSimpleDtos = OnlandVisualTrashAssessments.GetPreliminarySourceIdentificationTypeSimpleDtos(DbContext);
+        return Ok(preliminarySourceIdentificationTypeSimpleDtos);
+    }
+
     [HttpGet("{onlandVisualTrashAssessmentID}/progress")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
@@ -57,14 +65,6 @@ public class OnlandVisualTrashAssessmentController(
         var onlandVisualTrashAssessment = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID);
         var onlandVisualTrashAssessmentProgressDto = OnlandVisualTrashAssessmentWorkflowProgress.GetProgress(onlandVisualTrashAssessment);
         return Ok(onlandVisualTrashAssessmentProgressDto);
-    }
-
-    [HttpGet("preliminary-source-identification-type")]
-    [JurisdictionEditFeature]
-    public async Task<OnlandVisualTrashAssessmentSimpleDto> GetPreliminarySourceIdentificationTypes([FromBody] OnlandVisualTrashAssessmentSimpleDto dto)
-    {
-        var onlandVisualTrashAssessment = await OnlandVisualTrashAssessments.CreateNew(DbContext, dto, CallingUser);
-        return onlandVisualTrashAssessment;
     }
 
     [HttpPost]

@@ -42,10 +42,31 @@
                 [type]="FormFieldType.Textarea"></form-field>
 
             <hr />
-            <h3>Preliminary Source Identification Type</h3>
-            <div class="copy copy-2">Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</div>
         </div>
     </form>
+    <h3>Preliminary Source Identification Type</h3>
+    <div class="copy copy-2">Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</div>
+    <div *ngIf="preliminarySourceIdentificationTypeSimpleDto$ | async as preliminarySourceIdentificationTypeSimpleDto" class="grid-12 mb-4">
+        <div *ngFor="let item of PreliminarySourceIdentificationCategories" class="g-col-6">
+            <h3 class="mb-2">{{ item.DisplayName }}</h3>
+            <div *ngFor="let type of filterByCategory(preliminarySourceIdentificationTypeSimpleDto, item.Value)" class="flex-start ml-2 mb-2">
+                <!-- <form-field
+                    class="g-col-12"
+                    [id]="type.PreliminarySourceIdentificationTypeID"
+                    [formControl]="formGroup.controls.Notes"
+                    [required]="false"
+                    [checkLabel]="type.PreliminarySourceIdentificationTypeDisplayName"
+                    [type]="FormFieldType.Check"
+                    (change)="onCheckBoxChanged($event)"></form-field> -->
+                <input
+                    type="checkbox"
+                    [id]="type.PreliminarySourceIdentificationTypeID"
+                    [(ngModel)]="formGroup.controls.PreliminarySourceIdentificationTypeWorkflowDtos[type.PreliminarySourceIdentificationTypeID]"
+                    [checked]="true"
+                    (change)="onCheckBoxChanged($event)" />{{ type.PreliminarySourceIdentificationTypeDisplayName }}
+            </div>
+        </div>
+    </div>
     <div class="grid-12">
         <div class="card g-col-6">
             <div class="card-header">Observations</div>

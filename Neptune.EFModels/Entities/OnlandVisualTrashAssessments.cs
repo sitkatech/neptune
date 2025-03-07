@@ -122,22 +122,11 @@ public static class OnlandVisualTrashAssessments
         return onlandVisualTrashAssessment.AsSimpleDto();
     }
 
-    //public static List<PreliminarySourceIdentificationCategoryTypeDto> GetPreliminarySourceIdentificationCategoryTypeDtos(NeptuneDbContext dbContext)
-    //{
-    //    var temp = PreliminarySourceIdentificationCategory.All;
-    //    var temp2 = PreliminarySourceIdentificationType.All.GroupBy(x => x.PreliminarySourceIdentificationCategoryID);
-    //    var temp3 = new List<PreliminarySourceIdentificationCategoryTypeDto>();
-    //    //foreach (var t in temp2)
-    //    //{
-    //    //    temp3.Add(new PreliminarySourceIdentificationCategoryTypeDto()
-    //    //    {
-    //    //        PreliminarySourceIdentificationCategoryID = t.Key,
-    //    //        PreliminarySourceIdentificationCategoryName = t.Single(x => x.PreliminarySourceIdentificationCategory.PreliminarySourceIdentificationCategoryName),
-    //    //        PreliminarySourceIdentificationCategoryDisplayName = t.Single(x => x.PreliminarySourceIdentificationCategory.PreliminarySourceIdentificationCategoryDisplayName),
-    //    //    });
-    //    //}
+    public static List<PreliminarySourceIdentificationTypeSimpleDto> GetPreliminarySourceIdentificationTypeSimpleDtos(NeptuneDbContext dbContext)
+    {
+        var preliminarySourceIdentificationTypeSimpleDtos = PreliminarySourceIdentificationType.AllAsSimpleDto;
 
-    //    return temp3;
-    //}
+        return preliminarySourceIdentificationTypeSimpleDtos;
+    }
 
 }
