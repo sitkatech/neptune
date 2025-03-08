@@ -9,6 +9,8 @@ export class MapLayerBase implements IMapLayer, OnDestroy {
     @Input() layerControl: any;
     @Input() displayOnLoad: boolean = false;
     @Input() sortOrder: number;
+    @Input() indexOfDisabledLayerControl: number = null;
+
     @ViewChild("layerName") layerTemplate!: TemplateRef<any>;
     layer: any;
 
@@ -35,6 +37,9 @@ export class MapLayerBase implements IMapLayer, OnDestroy {
             if (this.displayOnLoad) {
                 this.map.addLayer(this.layer);
             }
+            if(this.indexOfDisabledLayerControl != null){
+                this.disableCheckboxInLayerControl(this.indexOfDisabledLayerControl)
+            }
         }
     }
 
@@ -54,6 +59,10 @@ export class MapLayerBase implements IMapLayer, OnDestroy {
             );
         }
         return inputsAreValid;
+    }
+
+    disableCheckboxInLayerControl(index: number = 0): void{
+        document.querySelectorAll('[type = "checkbox"].leaflet-control-layers-selector')[index]["disabled"] = true;
     }
 }
 

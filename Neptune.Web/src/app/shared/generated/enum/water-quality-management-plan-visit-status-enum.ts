@@ -14,4 +14,4 @@ export const WaterQualityManagementPlanVisitStatuses: LookupTableEntry[]  = [
   { Name: "Initial Annual Verification", DisplayName: "Initial Annual Verification", Value: 1 },
   { Name: "Follow-up Verification", DisplayName: "Follow-up Verification", Value: 2 }
 ];
-export const WaterQualityManagementPlanVisitStatusesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...WaterQualityManagementPlanVisitStatuses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const WaterQualityManagementPlanVisitStatusesAsSelectDropdownOptions = WaterQualityManagementPlanVisitStatuses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

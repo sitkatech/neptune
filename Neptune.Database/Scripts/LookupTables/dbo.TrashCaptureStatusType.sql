@@ -1,6 +1,6 @@
 MERGE INTO dbo.TrashCaptureStatusType AS Target
 USING (VALUES
-(1, 'Full', 'Full', 10, 1, '18AF18'),
+(1, 'Full', 'Full', 10, 1, 'E83521'),
 (2, 'Partial', 'Partial (>5mm but less than full sizing)', 20, 2, '5289FF'),
 (3, 'None', 'No Trash Capture', 30, 3, '3D3D3E'),
 (4, 'NotProvided', 'Not Provided', 40, 4, '878688')

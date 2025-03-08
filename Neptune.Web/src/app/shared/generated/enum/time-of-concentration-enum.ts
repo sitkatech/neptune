@@ -24,4 +24,4 @@ export const TimeOfConcentrations: LookupTableEntry[]  = [
   { Name: "FortyFiveMinutes", DisplayName: "45", Value: 6 },
   { Name: "SixtyMinutes", DisplayName: "60", Value: 7 }
 ];
-export const TimeOfConcentrationsAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...TimeOfConcentrations.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const TimeOfConcentrationsAsSelectDropdownOptions = TimeOfConcentrations.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

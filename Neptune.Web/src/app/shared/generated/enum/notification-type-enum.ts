@@ -12,4 +12,4 @@ export enum NotificationTypeEnum {
 export const NotificationTypes: LookupTableEntry[]  = [
   { Name: "Custom", DisplayName: "Custom Notification", Value: 1 }
 ];
-export const NotificationTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...NotificationTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const NotificationTypesAsSelectDropdownOptions = NotificationTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

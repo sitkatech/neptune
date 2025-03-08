@@ -27,6 +27,8 @@ export class DelineationsLayerComponent extends MapLayerBase implements OnChange
         };
 
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
+        this.layer["layerName"] = "Inventoried BMP Delineations";
+        this.layer["legendImageSource"] = "./assets/main/map-legend-images/delineationVerified.png";
         this.initLayer();
     }
 }

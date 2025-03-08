@@ -28,7 +28,6 @@ namespace Neptune.API.Controllers
         }
 
         [HttpGet("verified/feature-collection")]
-        [JurisdictionEditFeature]
         public ActionResult<FeatureCollection> ListInventoryVerifiedTreatmentBMPsAsFeatureCollection()
         {
             var featureCollection = TreatmentBMPs.ListInventoryIsVerifiedByPersonAsFeatureCollection(DbContext, CallingUser);

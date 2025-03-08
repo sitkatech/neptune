@@ -117,6 +117,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
             this.legendControl = new legendControl({
                 position: this.legendPosition,
             }).addTo(this.map);
+            this.map["showLegend"] = true;
         }
         this.map.fullscreenControl.getContainer().classList.add("leaflet-custom-controls");
 
@@ -169,10 +170,16 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
             // Check if it's an overlay and added to the map
             if (obj.overlay && this.map.hasLayer(obj.layer)) {
                 const legendItem = new LegendItem();
-                legendItem.Title = obj.group ? obj.group.name : obj.name;
-                legendItem.WmsUrl = obj.layer._url;
-                legendItem.WmsLayerName = obj.layer.options.layers;
-                if (!legendItems.some((item) => item.Title === legendItem.Title)) {
+                legendItem.Title = obj.group && obj.group.name ? obj.group.name : obj.layer.layerName;
+                if (obj.layer.legendImageSource){
+                    legendItem.ImageSource = obj.layer.legendImageSource
+                } else {
+                    legendItem.WmsUrl = obj.layer._url;
+                    legendItem.WmsLayerName = obj.layer.options.layers;
+                    legendItem.WmsLayerStyle = obj.layer.wmsParams.styles;
+                }
+                
+                if (legendItem.Title && !legendItems.some((item) => item.Title === legendItem.Title)) {
                     legendItems.push(legendItem);
                 }
             }

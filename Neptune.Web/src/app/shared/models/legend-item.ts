@@ -4,4 +4,6 @@ export class LegendItem {
     WmsUrl: string;
     WmsLayerName: string;
     Color: string;
+    ImageSource: string;
+    WmsLayerStyle: string;
 }
