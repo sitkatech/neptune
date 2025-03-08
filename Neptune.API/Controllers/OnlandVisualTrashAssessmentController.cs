@@ -75,6 +75,13 @@ public class OnlandVisualTrashAssessmentController(
         return onlandVisualTrashAssessment;
     }
 
+    [HttpPut]
+    [JurisdictionEditFeature]
+    public async Task Update([FromBody] OnlandVisualTrashAssessmentWorkflowDto dto)
+    {
+        await OnlandVisualTrashAssessments.Update(DbContext, dto);
+    }
+
     [HttpGet("onland-visual-trash-assessment-areas/{onlandVisualTrashAssessmentAreaID}")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]

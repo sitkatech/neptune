@@ -122,6 +122,39 @@ public static class OnlandVisualTrashAssessments
         return onlandVisualTrashAssessment.AsSimpleDto();
     }
 
+    public static async Task Update(NeptuneDbContext dbContext, OnlandVisualTrashAssessmentWorkflowDto dto)
+    {
+        var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments
+            .Include(x => x.OnlandVisualTrashAssessmentArea)
+            .Include(x => x.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes).Single(x =>
+            x.OnlandVisualTrashAssessmentID == dto.OnlandVisualTrashAssessmentID);
+
+        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID =
+            (int)OnlandVisualTrashAssessmentStatusEnum.Complete;
+        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName = dto.OnlandVisualTrashAssessmentAreaName;
+        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription = dto.AssessmentAreaDescription;
+        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = dto.OnlandVisualTrashAssessmentBaselineScoreID;
+        onlandVisualTrashAssessment.IsProgressAssessment = dto.IsProgressAssessment ?? false;
+        onlandVisualTrashAssessment.CompletedDate = DateTime.UtcNow;
+        onlandVisualTrashAssessment.Notes = dto.Notes;
+
+        //await dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes
+        //    .Where(x => x.OnlandVisualTrashAssessmentID == dto.OnlandVisualTrashAssessmentID).ExecuteDeleteAsync();
+        //onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes =
+        //    (from key in dto.PreliminarySourceIdentificationTypeWorkflowDtos.Keys
+        //        where dto.PreliminarySourceIdentificationTypeWorkflowDtos[key].IsInOnlandAssessmentArea
+        //        select new OnlandVisualTrashAssessmentPreliminarySourceIdentificationType()
+        //        {
+        //            OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
+        //            PreliminarySourceIdentificationTypeID = dto.PreliminarySourceIdentificationTypeWorkflowDtos[key]
+        //                .PreliminarySourceIdentificationTypeID
+        //        }).ToList();
+
+
+        await dbContext.SaveChangesAsync();
+
+    }
+
     public static List<PreliminarySourceIdentificationTypeSimpleDto> GetPreliminarySourceIdentificationTypeSimpleDtos(NeptuneDbContext dbContext)
     {
         var preliminarySourceIdentificationTypeSimpleDtos = PreliminarySourceIdentificationType.AllAsSimpleDto;

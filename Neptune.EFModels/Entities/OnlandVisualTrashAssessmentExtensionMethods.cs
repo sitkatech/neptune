@@ -52,7 +52,7 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
         var dto = new OnlandVisualTrashAssessmentWorkflowDto()
         {
             OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
-            OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID,
+            OnlandVisualTrashAssessmentAreaID = (int)onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID,
             OnlandVisualTrashAssessmentAreaName = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName,
             Notes = onlandVisualTrashAssessment.Notes,
             StormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID,

@@ -632,6 +632,35 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentWorkflowDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentWorkflowDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentWorkflowDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}": {
@@ -4008,8 +4037,7 @@
           },
           "OnlandVisualTrashAssessmentAreaID": {
             "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "format": "int32"
           },
           "OnlandVisualTrashAssessmentAreaName": {
             "type": "string",

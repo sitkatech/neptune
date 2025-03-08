@@ -22,6 +22,10 @@ import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/la
 import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { PreliminarySourceIdentificationTypeSimpleDto } from "src/app/shared/generated/model/preliminary-source-identification-type-simple-dto";
 import { PreliminarySourceIdentificationCategories } from "src/app/shared/generated/enum/preliminary-source-identification-category-enum";
+import { AlertService } from "src/app/shared/services/alert.service";
+import { Alert } from "src/app/shared/models/alert";
+import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
 
 @Component({
     selector: "trash-ovta-review-and-finalize",
@@ -82,7 +86,13 @@ export class TrashOvtaReviewAndFinalizeComponent {
         PreliminarySourceIdentificationTypeWorkflowDtos: OnlandVisualTrashAssessmentWorkflowDtoFormControls.PreliminarySourceIdentificationTypeWorkflowDtos(),
     });
 
-    constructor(private route: ActivatedRoute, private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService, private router: Router) {}
+    constructor(
+        private route: ActivatedRoute,
+        private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
+        private router: Router,
+        private ovtaWorkflowProgressService: OvtaWorkflowProgressService,
+        private alertService: AlertService
+    ) {}
 
     ngOnInit(): void {
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
@@ -93,6 +103,9 @@ export class TrashOvtaReviewAndFinalizeComponent {
             }),
             tap((ovta) => {
                 console.log(ovta);
+                this.ovtaID = ovta.OnlandVisualTrashAssessmentID;
+                this.formGroup.controls.OnlandVisualTrashAssessmentID.setValue(ovta.OnlandVisualTrashAssessmentID);
+                this.formGroup.controls.OnlandVisualTrashAssessmentAreaID.setValue(ovta.OnlandVisualTrashAssessmentAreaID);
                 this.formGroup.controls.OnlandVisualTrashAssessmentAreaName.setValue(ovta.OnlandVisualTrashAssessmentAreaName);
                 this.formGroup.controls.AssessmentAreaDescription.setValue(ovta.AssessmentAreaDescription);
                 this.formGroup.controls.LastAssessmentDate.setValue(ovta.LastAssessmentDate);
@@ -100,7 +113,6 @@ export class TrashOvtaReviewAndFinalizeComponent {
                 this.formGroup.controls.IsProgressAssessment.setValue(ovta.IsProgressAssessment);
                 this.formGroup.controls.Notes.setValue(ovta.Notes);
                 this.formGroup.controls.PreliminarySourceIdentificationTypeWorkflowDtos.setValue(ovta.PreliminarySourceIdentificationTypeWorkflowDtos);
-                console.log(this.formGroup.controls.PreliminarySourceIdentificationTypeWorkflowDtos.value[1]);
             })
         );
         this.preliminarySourceIdentificationTypeSimpleDto$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPreliminarySourceIdentificationTypesGet();
@@ -120,6 +132,14 @@ export class TrashOvtaReviewAndFinalizeComponent {
 
     save(andContinue: boolean = false) {
         console.log(this.formGroup.getRawValue());
+        this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPut(this.formGroup.getRawValue()).subscribe(() => {
+            this.alertService.clearAlerts();
+            this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
+            this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
+            if (andContinue) {
+                this.router.navigate([`../../../${this.ovtaID}`], { relativeTo: this.route });
+            }
+        });
     }
 
     public handleMapReady(event: NeptuneMapInitEvent, observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[]): void {
