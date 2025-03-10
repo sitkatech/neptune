@@ -64,11 +64,6 @@ export class TrashOvtaRecordObservationsComponent {
 
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentObservationUpsertDto[]>;
 
-    public displayErrors: any = {};
-    public displayFileErrors: boolean = false;
-    public invalidFields: Array<string> = [];
-    private acceptedFileTypes: Array<string> = ["JPG", "PNG"];
-    public fileName: string;
     public onlandVisualTrashAssessmentArea$: Observable<OnlandVisualTrashAssessmentDetailDto>;
 
     constructor(
@@ -138,7 +133,6 @@ export class TrashOvtaRecordObservationsComponent {
             },
             onEachFeature: (feature, layer) => {
                 layer.on("click", (e) => {
-                    console.log(feature);
                     this.selectOVTAObservationImpl(feature.geometry.coordinates);
                 });
             },
@@ -148,13 +142,11 @@ export class TrashOvtaRecordObservationsComponent {
     }
 
     save(andContinue: boolean = false) {
-        console.log(this.observations);
         if (this.selectedOVTAObservation.controls.Latitude.getRawValue() != null) {
             let selectedObservationIndex = this.observations.findIndex(
                 (x) => x.Latitude == this.selectedOVTAObservation.controls.Latitude.getRawValue() && x.Longitude == this.selectedOVTAObservation.controls.Longitude.getRawValue()
             );
             this.observations[selectedObservationIndex] = this.selectedOVTAObservation.getRawValue();
-            console.log(this.observations);
         }
         this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(this.ovtaID, this.observations).subscribe(() => {
             this.isLoadingSubmit = false;
@@ -189,7 +181,6 @@ export class TrashOvtaRecordObservationsComponent {
     }
 
     public selectOVTAObservationImpl(latlng: number[]) {
-        console.log(latlng);
         if (!this.map.hasLayer(this.ovtaObservationLayer)) {
             this.ovtaObservationLayer.addTo(this.map);
         }
@@ -198,13 +189,10 @@ export class TrashOvtaRecordObservationsComponent {
                 (x) => x.Latitude == this.selectedOVTAObservation.controls.Latitude.getRawValue() && x.Longitude == this.selectedOVTAObservation.controls.Longitude.getRawValue()
             );
             selectedObservation = this.selectedOVTAObservation.getRawValue();
-            console.log(selectedObservation);
         }
 
         let newObservation = this.observations.find((x) => x.Latitude == latlng[1] && x.Longitude == latlng[0]);
-        //this.selectedOVTAObservation.controls.OnlandVisualTrashAssessmentObservationID.setValue(newObservation.OnlandVisualTrashAssessmentID);
         this.selectedOVTAObservation.controls.OnlandVisualTrashAssessmentID.setValue(newObservation.OnlandVisualTrashAssessmentID);
-        // this.selectedOVTAObservation.controls.ObservationDatetime.setValue(selectedObservation.ObservationDatetime);
         this.selectedOVTAObservation.controls.Note.setValue(newObservation.Note);
         this.selectedOVTAObservation.controls.Latitude.setValue(newObservation.Latitude);
         this.selectedOVTAObservation.controls.Longitude.setValue(newObservation.Longitude);
@@ -224,7 +212,6 @@ export class TrashOvtaRecordObservationsComponent {
 
     public editObservationLocation() {
         this.map.on("click", (e: L.LeafletMouseEvent) => {
-            console.log(e.latlng);
             var index = this.observations.findIndex(
                 (x) => x.Latitude == this.selectedOVTAObservation.controls.Latitude.getRawValue() && x.Longitude == this.selectedOVTAObservation.controls.Longitude.getRawValue()
             );
@@ -243,21 +230,20 @@ export class TrashOvtaRecordObservationsComponent {
         this.addObservationPointsLayersToMap();
     }
 
+    public goToCurrentLocation() {
+        this.map.locate({ setView: true }).on("locationerror", function (e) {
+            console.log(e);
+            alert("Location access has been denied.");
+        });
+    }
+
     public getFile() {
         if (typeof this.uploadFormField.getRawValue() != typeof "string") {
             this.onlandVisualTrashAssessmentService
                 .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoStagingPost(this.ovtaID, this.uploadFormField.getRawValue())
                 .subscribe((response) => {
                     this.selectedOVTAObservation.controls.FileResourceID.setValue(response.FileResourceID);
-                    console.log(this.selectedOVTAObservation.getRawValue());
                 });
         }
-    }
-    public openFileUpload() {
-        this.fileUpload.nativeElement.click();
-    }
-
-    public isFieldInvalid(fieldName: string) {
-        return this.invalidFields.indexOf(fieldName) > -1;
     }
 }

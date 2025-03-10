@@ -110,6 +110,7 @@ public class OnlandVisualTrashAssessmentController(
                 Longitude = x.LocationPoint4326.Coordinate[0],
                 Latitude = x.LocationPoint4326.Coordinate[1],
                 Note = x.Note,
+                FileResourceID = x.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault()?.FileResourceID,
             });
 
         return Ok(visualTrashAssessmentObservationUpsertDtos);
