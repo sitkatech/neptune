@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { OnlandVisualTrashAssessmentGridDto } from '././onland-visual-trash-assessment-grid-dto';
 import { BoundingBoxDto } from '././bounding-box-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
@@ -23,8 +22,8 @@ export class OnlandVisualTrashAssessmentAreaDetailDto {
     OnlandVisualTrashAssessmentProgressScoreName?: string;
     NumberOfAssessmentsCompleted?: number;
     LastAssessmentDate?: string;
-    OnlandVisualTrashAssessments?: Array<OnlandVisualTrashAssessmentGridDto>;
     BoundingBox?: BoundingBoxDto;
+    Geometry?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -40,8 +39,8 @@ export interface OnlandVisualTrashAssessmentAreaDetailDtoForm {
     OnlandVisualTrashAssessmentProgressScoreName?: FormControl<string>;
     NumberOfAssessmentsCompleted?: FormControl<number>;
     LastAssessmentDate?: FormControl<string>;
-    OnlandVisualTrashAssessments?: FormControl<Array<OnlandVisualTrashAssessmentGridDto>>;
     BoundingBox?: FormControl<BoundingBoxDto>;
+    Geometry?: FormControl<string>;
 }
 
 export class OnlandVisualTrashAssessmentAreaDetailDtoFormControls { 
@@ -135,7 +134,7 @@ export class OnlandVisualTrashAssessmentAreaDetailDtoFormControls {
             ],
         }
     );
-    public static OnlandVisualTrashAssessments = (value: FormControlState<Array<OnlandVisualTrashAssessmentGridDto>> | Array<OnlandVisualTrashAssessmentGridDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<OnlandVisualTrashAssessmentGridDto>>(
+    public static BoundingBox = (value: FormControlState<BoundingBoxDto> | BoundingBoxDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<BoundingBoxDto>(
         value,
         formControlOptions ?? 
         {
@@ -145,7 +144,7 @@ export class OnlandVisualTrashAssessmentAreaDetailDtoFormControls {
             ],
         }
     );
-    public static BoundingBox = (value: FormControlState<BoundingBoxDto> | BoundingBoxDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<BoundingBoxDto>(
+    public static Geometry = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

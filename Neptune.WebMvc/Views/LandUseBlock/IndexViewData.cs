@@ -10,7 +10,7 @@ namespace Neptune.WebMvc.Views.LandUseBlock
         public LandUseBlockGridSpec GridSpec { get; }
         public string GridName { get; }
         public string GridDataUrl { get; }
-        public bool HasManagePermission { get; }
+        public bool HasEditorPermissions { get; }
 
         public string LandUseBlockBulkUploadUrl { get; } 
         public string LandUseBlockDownloadUrl { get; } 
@@ -22,7 +22,7 @@ namespace Neptune.WebMvc.Views.LandUseBlock
             GridSpec = new LandUseBlockGridSpec(linkGenerator) { ObjectNameSingular = "Land Use Block", ObjectNamePlural = "Land Use Blocks", SaveFiltersInCookie = true };
             GridName = "landUseBlockGrid";
             GridDataUrl = SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(linkGenerator, x => x.LandUseBlockGridJsonData());
-            HasManagePermission = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
+            HasEditorPermissions = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             LandUseBlockBulkUploadUrl = landUseBlockBulkUploadUrl;
             LandUseBlockDownloadUrl = landUseBlockDownloadUrl;
         }

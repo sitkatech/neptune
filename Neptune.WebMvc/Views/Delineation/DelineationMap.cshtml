@@ -53,7 +53,7 @@
 
 @section RightOfPageTitle
 {
-    @if (ViewDataTyped.HasManagePermission)
+    @if (ViewDataTyped.HasEditorPermissions)
     {
         <a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadTreatmentBMPDelineationsUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Bulk Upload Treatment BMP Delineations</a>
         <a class="btn btn-neptune" href="@ViewDataTyped.DownloadDelineationsUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download GDB</a>

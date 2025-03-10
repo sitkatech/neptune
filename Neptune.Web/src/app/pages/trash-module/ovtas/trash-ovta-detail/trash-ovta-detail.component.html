@@ -1,5 +1,11 @@
 <ng-container *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
-    <page-header [pageTitle]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName"> </page-header>
+    <page-header [pageTitle]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName" [templateAbove]="templateAbove"
+        ><ng-template #templateAbove>
+            <div class="back">
+                <a [routerLink]="['../']" class="back__link">Back to OVTA Grid</a>
+            </div>
+        </ng-template></page-header
+    >
     <app-alert-display></app-alert-display>
 
     <div class="grid-12 mt-2 mb-3">
