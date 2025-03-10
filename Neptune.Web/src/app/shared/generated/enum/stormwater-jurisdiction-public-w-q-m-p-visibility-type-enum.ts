@@ -16,4 +16,4 @@ export const StormwaterJurisdictionPublicWQMPVisibilityTypes: LookupTableEntry[]
   { Name: "ActiveOnly", DisplayName: "Active Only", Value: 2 },
   { Name: "None", DisplayName: "None", Value: 3 }
 ];
-export const StormwaterJurisdictionPublicWQMPVisibilityTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...StormwaterJurisdictionPublicWQMPVisibilityTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const StormwaterJurisdictionPublicWQMPVisibilityTypesAsSelectDropdownOptions = StormwaterJurisdictionPublicWQMPVisibilityTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

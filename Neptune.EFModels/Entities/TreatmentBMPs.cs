@@ -109,6 +109,9 @@ namespace Neptune.EFModels.Entities
                     //{ "StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdictionID },
                     //{ "Latitude", treatmentBMP.LocationPoint4326?.Coordinate.Y},
                     //{ "Longitude", treatmentBMP.LocationPoint4326?.Coordinate.Z},
+                    { "FeatureColor", treatmentBMP.TrashCaptureStatusType.FeatureColorOnTrashModuleMap() },
+                    { "TrashCaptureStatusTypeID", treatmentBMP.TrashCaptureStatusTypeID },
+                    { "StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdictionID }
                 };
                 var feature = new Feature(treatmentBMP.LocationPoint4326, attributesTable);
                 featureCollection.Add(feature);
@@ -138,6 +141,13 @@ namespace Neptune.EFModels.Entities
             return AsFeatureCollection(treatmentBmps.Where(x => x.ProjectID == null && x.InventoryIsVerified).ToList());
         }
 
+        public static FeatureCollection ListInventoryIsVerifiedByTrashCaptureStatusIDAsFeatureCollection(NeptuneDbContext dbContext,
+            PersonDto person, int trashCaptureStatusTypeID)
+        {
+            var treatmentBmps = ListByPerson(dbContext, person);
+            return AsFeatureCollection(treatmentBmps.Where(x => x.ProjectID == null && x.InventoryIsVerified && x.TrashCaptureStatusTypeID == trashCaptureStatusTypeID).ToList());
+        }
+
         public static List<TreatmentBMPDisplayDto> ListWithProjectByPerson(NeptuneDbContext dbContext, PersonDto person)
         {
             var treatmentBmps = ListByPerson(dbContext, person);
@@ -152,19 +162,18 @@ namespace Neptune.EFModels.Entities
                 .ToList();
         }
 
-        private static List<TreatmentBMP> ListByPerson(NeptuneDbContext dbContext, PersonDto person)
+        private static List<TreatmentBMP> ListByPerson(NeptuneDbContext dbContext, PersonDto? person)
         {
-            var personID = person.PersonID;
             List<TreatmentBMP> treatmentBmps;
-            if (person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin)
+            if (person == null || !(person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin))
             {
-                treatmentBmps = GetTreatmentBMPsDisplayOnlyImpl(dbContext).ToList();
+                var jurisdictionIDs = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(dbContext, person?.PersonID);
+                treatmentBmps = GetTreatmentBMPsDisplayOnlyImpl(dbContext)
+                    .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID)).ToList();
             }
             else
             {
-                var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
-                treatmentBmps = GetTreatmentBMPsDisplayOnlyImpl(dbContext)
-                    .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID)).ToList();
+                treatmentBmps = GetTreatmentBMPsDisplayOnlyImpl(dbContext).ToList();
             }
 
             return treatmentBmps;

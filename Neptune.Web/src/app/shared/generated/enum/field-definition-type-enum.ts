@@ -290,4 +290,4 @@ export const FieldDefinitionTypes: LookupTableEntry[]  = [
   { Name: "LandUseType", DisplayName: "Land Use Type", Value: 140 },
   { Name: "LandUseDescription", DisplayName: "Land Use Description", Value: 141 }
 ];
-export const FieldDefinitionTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...FieldDefinitionTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const FieldDefinitionTypesAsSelectDropdownOptions = FieldDefinitionTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

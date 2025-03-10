@@ -36,4 +36,4 @@ export const ObservationTypeSpecifications: LookupTableEntry[]  = [
   { Name: "PercentValue_SpecificTargetValue_DiscreteThresholdValue", DisplayName: " PercentValue_SpecificTargetValue_DiscreteThresholdValue", Value: 18 },
   { Name: "PercentValue_SpecificTargetValue_PercentFromBenchmark", DisplayName: " PercentValue_SpecificTargetValue_PercentFromBenchmark", Value: 19 }
 ];
-export const ObservationTypeSpecificationsAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...ObservationTypeSpecifications.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const ObservationTypeSpecificationsAsSelectDropdownOptions = ObservationTypeSpecifications.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

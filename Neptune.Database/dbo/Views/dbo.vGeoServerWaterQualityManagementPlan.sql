@@ -12,7 +12,9 @@ Select
 		when w.TrashCaptureEffectiveness is Null then 0
 		else w.TrashCaptureEffectiveness
 	end, 0.0) as TrashCaptureEffectiveness,
-	tcs.TrashCaptureStatusTypeDisplayName
+	tcs.TrashCaptureStatusTypeDisplayName,
+	tcs.TrashCaptureStatusTypeID,
+	CONCAT('#',tcs.TrashCaptureStatusTypeColorCode) as TrashCaptureStatusTypeColorCode
 From
 	dbo.WaterQualityManagementPlan w
     left join dbo.WaterQualityManagementPlanBoundary wqmpb on w.WaterQualityManagementPlanID = wqmpb.WaterQualityManagementPlanID

@@ -42,4 +42,4 @@ export const PreliminarySourceIdentificationTypes: LookupTableEntry[]  = [
   { Name: "Homelessencampments", DisplayName: "Homeless encampments", Value: 15 },
   { Name: "IllegalDumpingOther", DisplayName: "Illegal Dumping (Other)", Value: 16 }
 ];
-export const PreliminarySourceIdentificationTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...PreliminarySourceIdentificationTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const PreliminarySourceIdentificationTypesAsSelectDropdownOptions = PreliminarySourceIdentificationTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

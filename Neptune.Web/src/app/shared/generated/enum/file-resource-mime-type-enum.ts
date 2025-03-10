@@ -44,4 +44,4 @@ export const FileResourceMimeTypes: LookupTableEntry[]  = [
   { Name: "CSS", DisplayName: "CSS", Value: 16 },
   { Name: "ZIP", DisplayName: "ZIP", Value: 17 }
 ];
-export const FileResourceMimeTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...FileResourceMimeTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const FileResourceMimeTypesAsSelectDropdownOptions = FileResourceMimeTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

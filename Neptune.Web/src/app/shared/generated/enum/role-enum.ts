@@ -20,4 +20,4 @@ export const Roles: LookupTableEntry[]  = [
   { Name: "JurisdictionManager", DisplayName: "Jurisdication Manager", Value: 5 },
   { Name: "JurisdictionEditor", DisplayName: "Jurisdication Editor", Value: 6 }
 ];
-export const RolesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...Roles.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const RolesAsSelectDropdownOptions = Roles.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

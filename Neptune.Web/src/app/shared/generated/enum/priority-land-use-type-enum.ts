@@ -24,4 +24,4 @@ export const PriorityLandUseTypes: LookupTableEntry[]  = [
   { Name: "Public Transportation Stations", DisplayName: "Public Transportation Stations", Value: 6 },
   { Name: "ALU", DisplayName: "ALU", Value: 7 }
 ];
-export const PriorityLandUseTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...PriorityLandUseTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const PriorityLandUseTypesAsSelectDropdownOptions = PriorityLandUseTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

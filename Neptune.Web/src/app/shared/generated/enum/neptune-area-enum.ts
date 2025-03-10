@@ -18,4 +18,4 @@ export const NeptuneAreas: LookupTableEntry[]  = [
   { Name: "Modeling", DisplayName: "Modeling Module", Value: 3 },
   { Name: "Planning", DisplayName: "Planning Module", Value: 4 }
 ];
-export const NeptuneAreasAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...NeptuneAreas.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const NeptuneAreasAsSelectDropdownOptions = NeptuneAreas.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

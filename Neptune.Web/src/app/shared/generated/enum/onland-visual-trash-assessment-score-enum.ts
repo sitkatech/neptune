@@ -18,4 +18,4 @@ export const OnlandVisualTrashAssessmentScores: LookupTableEntry[]  = [
   { Name: "C", DisplayName: "C", Value: 3 },
   { Name: "D", DisplayName: "D", Value: 4 }
 ];
-export const OnlandVisualTrashAssessmentScoresAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...OnlandVisualTrashAssessmentScores.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const OnlandVisualTrashAssessmentScoresAsSelectDropdownOptions = OnlandVisualTrashAssessmentScores.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

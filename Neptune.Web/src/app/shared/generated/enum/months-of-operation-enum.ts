@@ -16,4 +16,4 @@ export const MonthsOfOperations: LookupTableEntry[]  = [
   { Name: "Winter", DisplayName: "Winter", Value: 2 },
   { Name: "Both", DisplayName: "Both", Value: 3 }
 ];
-export const MonthsOfOperationsAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...MonthsOfOperations.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const MonthsOfOperationsAsSelectDropdownOptions = MonthsOfOperations.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

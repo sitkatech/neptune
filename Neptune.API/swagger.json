@@ -2183,10 +2183,88 @@
         }
       }
     },
+    "/jurisdictions/user-viewable": {
+      "get": {
+        "tags": [
+          "StormwaterJurisdiction"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/jurisdictions/bounding-box": {
       "get": {
         "tags": [
           "StormwaterJurisdiction"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jurisdictions/{jurisdictionID}/bounding-box": {
+      "get": {
+        "tags": [
+          "StormwaterJurisdiction"
+        ],
+        "parameters": [
+          {
+            "name": "jurisdictionID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -2272,6 +2350,126 @@
                   "items": {
                     "$ref": "#/components/schemas/TrashGeneratingUnitGridDto"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trash-results-by-jurisdiction/{jurisdictionID}/area-based-results-calculations": {
+      "get": {
+        "tags": [
+          "TrashGeneratingUnitByStormwaterJurisdiction"
+        ],
+        "parameters": [
+          {
+            "name": "jurisdictionID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AreaBasedAcreCalculationsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AreaBasedAcreCalculationsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AreaBasedAcreCalculationsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trash-results-by-jurisdiction/{jurisdictionID}/ovta-based-results-calculations": {
+      "get": {
+        "tags": [
+          "TrashGeneratingUnitByStormwaterJurisdiction"
+        ],
+        "parameters": [
+          {
+            "name": "jurisdictionID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OVTAResultsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OVTAResultsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OVTAResultsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trash-results-by-jurisdiction/{jurisdictionID}/load-based-results-calculations": {
+      "get": {
+        "tags": [
+          "TrashGeneratingUnitByStormwaterJurisdiction"
+        ],
+        "parameters": [
+          {
+            "name": "jurisdictionID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadResultsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadResultsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadResultsDto"
                 }
               }
             }
@@ -2765,6 +2963,32 @@
   },
   "components": {
     "schemas": {
+      "AreaBasedAcreCalculationsDto": {
+        "type": "object",
+        "properties": {
+          "FullTrashCaptureAcreage": {
+            "type": "number",
+            "format": "double"
+          },
+          "EquivalentAreaAcreage": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalAcresCaptured": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalPLUAcres": {
+            "type": "number",
+            "format": "double"
+          },
+          "PercentTreated": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
       "BoundingBoxDto": {
         "type": "object",
         "properties": {
@@ -3330,6 +3554,32 @@
         },
         "additionalProperties": false
       },
+      "LoadResultsDto": {
+        "type": "object",
+        "properties": {
+          "LoadFullCapture": {
+            "type": "number",
+            "format": "double"
+          },
+          "LoadPartialCapture": {
+            "type": "number",
+            "format": "double"
+          },
+          "LoadOVTA": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalAchieved": {
+            "type": "number",
+            "format": "double"
+          },
+          "TargetLoadReduction": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
       "NeptunePageDto": {
         "type": "object",
         "properties": {
@@ -3387,6 +3637,44 @@
           },
           "DefaultPrecisionModel": {
             "$ref": "#/components/schemas/PrecisionModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OVTAResultsDto": {
+        "type": "object",
+        "properties": {
+          "PLUSumAcresWhereOVTAIsA": {
+            "type": "number",
+            "format": "double"
+          },
+          "PLUSumAcresWhereOVTAIsB": {
+            "type": "number",
+            "format": "double"
+          },
+          "PLUSumAcresWhereOVTAIsC": {
+            "type": "number",
+            "format": "double"
+          },
+          "PLUSumAcresWhereOVTAIsD": {
+            "type": "number",
+            "format": "double"
+          },
+          "ALUSumAcresWhereOVTAIsA": {
+            "type": "number",
+            "format": "double"
+          },
+          "ALUSumAcresWhereOVTAIsB": {
+            "type": "number",
+            "format": "double"
+          },
+          "ALUSumAcresWhereOVTAIsC": {
+            "type": "number",
+            "format": "double"
+          },
+          "ALUSumAcresWhereOVTAIsD": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false

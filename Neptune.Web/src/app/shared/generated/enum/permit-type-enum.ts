@@ -22,4 +22,4 @@ export const PermitTypes: LookupTableEntry[]  = [
   { Name: "CalTransMS4", DisplayName: "CalTrans MS4", Value: 5 },
   { Name: "Other", DisplayName: "Other", Value: 6 }
 ];
-export const PermitTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...PermitTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const PermitTypesAsSelectDropdownOptions = PermitTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

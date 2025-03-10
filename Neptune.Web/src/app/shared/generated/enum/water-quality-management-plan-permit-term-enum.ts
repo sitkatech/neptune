@@ -28,4 +28,4 @@ export const WaterQualityManagementPlanPermitTerms: LookupTableEntry[]  = [
   { Name: "SouthOCFourthTerm2009", DisplayName: "South OC 4th Term - 2009 (2013 Model WQMP, TGD, and 2012 HMP)", Value: 8 },
   { Name: "SouthOCFithTerm2015", DisplayName: "South OC 5th Term - 2015 (2017 Model WQMP, TGD, and HMP)", Value: 9 }
 ];
-export const WaterQualityManagementPlanPermitTermsAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...WaterQualityManagementPlanPermitTerms.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const WaterQualityManagementPlanPermitTermsAsSelectDropdownOptions = WaterQualityManagementPlanPermitTerms.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

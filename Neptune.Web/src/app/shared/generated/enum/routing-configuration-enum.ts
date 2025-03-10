@@ -14,4 +14,4 @@ export const RoutingConfigurations: LookupTableEntry[]  = [
   { Name: "Online", DisplayName: "Online", Value: 1 },
   { Name: "Offline", DisplayName: "Offline", Value: 2 }
 ];
-export const RoutingConfigurationsAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...RoutingConfigurations.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const RoutingConfigurationsAsSelectDropdownOptions = RoutingConfigurations.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

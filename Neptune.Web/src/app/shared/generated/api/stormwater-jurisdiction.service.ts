@@ -138,4 +138,85 @@ export class StormwaterJurisdictionService {
         ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
     }
 
+    /**
+     * 
+     * 
+     * @param jurisdictionID 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public jurisdictionsJurisdictionIDBoundingBoxGet(jurisdictionID: number, observe?: 'body', reportProgress?: boolean): Observable<BoundingBoxDto>;
+    public jurisdictionsJurisdictionIDBoundingBoxGet(jurisdictionID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<BoundingBoxDto>>;
+    public jurisdictionsJurisdictionIDBoundingBoxGet(jurisdictionID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<BoundingBoxDto>>;
+    public jurisdictionsJurisdictionIDBoundingBoxGet(jurisdictionID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (jurisdictionID === null || jurisdictionID === undefined) {
+            throw new Error('Required parameter jurisdictionID was null or undefined when calling jurisdictionsJurisdictionIDBoundingBoxGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<BoundingBoxDto>(`${this.basePath}/jurisdictions/${encodeURIComponent(String(jurisdictionID))}/bounding-box`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public jurisdictionsUserViewableGet(observe?: 'body', reportProgress?: boolean): Observable<Array<StormwaterJurisdictionDto>>;
+    public jurisdictionsUserViewableGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<StormwaterJurisdictionDto>>>;
+    public jurisdictionsUserViewableGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<StormwaterJurisdictionDto>>>;
+    public jurisdictionsUserViewableGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<StormwaterJurisdictionDto>>(`${this.basePath}/jurisdictions/user-viewable`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
 }

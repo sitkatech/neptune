@@ -18,4 +18,4 @@ export const WaterQualityManagementPlanDocumentTypes: LookupTableEntry[]  = [
   { Name: "OMPlan", DisplayName: "O&M Plan", Value: 3 },
   { Name: "Other", DisplayName: "Other", Value: 4 }
 ];
-export const WaterQualityManagementPlanDocumentTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...WaterQualityManagementPlanDocumentTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const WaterQualityManagementPlanDocumentTypesAsSelectDropdownOptions = WaterQualityManagementPlanDocumentTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

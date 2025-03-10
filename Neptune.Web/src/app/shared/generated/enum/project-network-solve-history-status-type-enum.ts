@@ -16,4 +16,4 @@ export const ProjectNetworkSolveHistoryStatusTypes: LookupTableEntry[]  = [
   { Name: "Succeeded", DisplayName: "Succeeded", Value: 2 },
   { Name: "Failed", DisplayName: "Failed", Value: 3 }
 ];
-export const ProjectNetworkSolveHistoryStatusTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...ProjectNetworkSolveHistoryStatusTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const ProjectNetworkSolveHistoryStatusTypesAsSelectDropdownOptions = ProjectNetworkSolveHistoryStatusTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

@@ -16,4 +16,4 @@ export const FieldVisitTypes: LookupTableEntry[]  = [
   { Name: "WetWeather", DisplayName: "Wet Weather", Value: 2 },
   { Name: "PostStormAssessment", DisplayName: "Post-Storm Assessment", Value: 3 }
 ];
-export const FieldVisitTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...FieldVisitTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const FieldVisitTypesAsSelectDropdownOptions = FieldVisitTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

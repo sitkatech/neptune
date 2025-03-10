@@ -14,4 +14,4 @@ export const CustomAttributeTypePurposes: LookupTableEntry[]  = [
   { Name: "OtherDesignAttributes", DisplayName: "Other Design Attributes", Value: 2 },
   { Name: "Maintenance", DisplayName: "Maintenance Attributes", Value: 3 }
 ];
-export const CustomAttributeTypePurposesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...CustomAttributeTypePurposes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const CustomAttributeTypePurposesAsSelectDropdownOptions = CustomAttributeTypePurposes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

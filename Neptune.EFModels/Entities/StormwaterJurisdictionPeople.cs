@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities;
 
@@ -34,6 +35,30 @@ public static class StormwaterJurisdictionPeople
     public static StormwaterJurisdictionPerson GetByID(NeptuneDbContext dbContext, StormwaterJurisdictionPersonPrimaryKey stormwaterJurisdictionPersonPrimaryKey)
     {
         return GetByID(dbContext, stormwaterJurisdictionPersonPrimaryKey.PrimaryKeyValue);
+    }
+
+    public static List<int> ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(NeptuneDbContext dbContext, int? personID)
+    {
+        var personDto = personID.HasValue ? People.GetByIDAsDto(dbContext, personID.Value) : null;
+        return ListViewableStormwaterJurisdictionIDsByPersonDtoForBMPs(dbContext, personDto);
+    }
+
+    public static List<int> ListViewableStormwaterJurisdictionIDsByPersonDtoForBMPs(NeptuneDbContext dbContext, PersonDto? personDto)
+    {
+        if (personDto == null || personDto.RoleID == (int)RoleEnum.Unassigned)
+        {
+            return StormwaterJurisdictions.List(dbContext)
+                .Where(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeID ==
+                            (int)StormwaterJurisdictionPublicBMPVisibilityTypeEnum.VerifiedOnly)
+                .Select(x => x.StormwaterJurisdictionID).ToList();
+        }
+
+        if (personDto.RoleID == (int)RoleEnum.Admin || personDto.RoleID == (int)RoleEnum.SitkaAdmin)
+        {
+            return dbContext.StormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID).ToList();
+        }
+
+        return GetImpl(dbContext).AsNoTracking().Where(x => x.PersonID == personDto.PersonID).Select(x => x.StormwaterJurisdictionID).ToList();
     }
 
     public static IEnumerable<int> ListViewableStormwaterJurisdictionIDsByPersonForBMPs(NeptuneDbContext dbContext, Person person)

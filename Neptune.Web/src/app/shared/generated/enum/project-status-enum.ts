@@ -12,4 +12,4 @@ export enum ProjectStatusEnum {
 export const ProjectStatuses: LookupTableEntry[]  = [
   { Name: "Draft", DisplayName: "Draft", Value: 1 }
 ];
-export const ProjectStatusesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...ProjectStatuses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const ProjectStatusesAsSelectDropdownOptions = ProjectStatuses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

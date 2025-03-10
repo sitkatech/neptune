@@ -14,4 +14,4 @@ export const WaterQualityManagementPlanVerifyTypes: LookupTableEntry[]  = [
   { Name: "Jurisdiction Performed", DisplayName: "Jurisdiction Performed", Value: 1 },
   { Name: "Self Certification", DisplayName: "Self Certification", Value: 2 }
 ];
-export const WaterQualityManagementPlanVerifyTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...WaterQualityManagementPlanVerifyTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const WaterQualityManagementPlanVerifyTypesAsSelectDropdownOptions = WaterQualityManagementPlanVerifyTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

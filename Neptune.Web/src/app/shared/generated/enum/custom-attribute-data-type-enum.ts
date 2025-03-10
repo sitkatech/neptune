@@ -22,4 +22,4 @@ export const CustomAttributeDataTypes: LookupTableEntry[]  = [
   { Name: "PickFromList", DisplayName: "Pick One from List", Value: 5 },
   { Name: "MultiSelect", DisplayName: "Select Many from List", Value: 6 }
 ];
-export const CustomAttributeDataTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...CustomAttributeDataTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const CustomAttributeDataTypesAsSelectDropdownOptions = CustomAttributeDataTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

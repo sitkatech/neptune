@@ -14,4 +14,4 @@ export const DryWeatherFlowOverrides: LookupTableEntry[]  = [
   { Name: "No", DisplayName: "No - As Modeled", Value: 1 },
   { Name: "Yes", DisplayName: "Yes - DWF Effectively Eliminated", Value: 2 }
 ];
-export const DryWeatherFlowOverridesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...DryWeatherFlowOverrides.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const DryWeatherFlowOverridesAsSelectDropdownOptions = DryWeatherFlowOverrides.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

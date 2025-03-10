@@ -48,4 +48,4 @@ export const HRUCharacteristicLandUseCodes: LookupTableEntry[]  = [
   { Name: "OSVAC", DisplayName: "Open Space - Vacant Land", Value: 18 },
   { Name: "WATER", DisplayName: "Water", Value: 19 }
 ];
-export const HRUCharacteristicLandUseCodesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...HRUCharacteristicLandUseCodes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const HRUCharacteristicLandUseCodesAsSelectDropdownOptions = HRUCharacteristicLandUseCodes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

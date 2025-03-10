@@ -14,4 +14,4 @@ export const OnlandVisualTrashAssessmentStatuses: LookupTableEntry[]  = [
   { Name: "InProgress", DisplayName: "In Progress", Value: 1 },
   { Name: "Complete", DisplayName: "Complete", Value: 2 }
 ];
-export const OnlandVisualTrashAssessmentStatusesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...OnlandVisualTrashAssessmentStatuses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const OnlandVisualTrashAssessmentStatusesAsSelectDropdownOptions = OnlandVisualTrashAssessmentStatuses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

@@ -14,4 +14,4 @@ export const WaterQualityManagementPlanVerifyStatuses: LookupTableEntry[]  = [
   { Name: "Verify Adequate O&M of WQMP", DisplayName: "Verify Adequate O&M of WQMP", Value: 1 },
   { Name: "Deficiencies are Present and Follow-up is Required", DisplayName: "Deficiencies are Present and Follow-up is Required", Value: 2 }
 ];
-export const WaterQualityManagementPlanVerifyStatusesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...WaterQualityManagementPlanVerifyStatuses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const WaterQualityManagementPlanVerifyStatusesAsSelectDropdownOptions = WaterQualityManagementPlanVerifyStatuses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

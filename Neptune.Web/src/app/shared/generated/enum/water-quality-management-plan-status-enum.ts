@@ -14,4 +14,4 @@ export const WaterQualityManagementPlanStatuses: LookupTableEntry[]  = [
   { Name: "Active", DisplayName: "Active", Value: 1 },
   { Name: "Inactive", DisplayName: "Inactive", Value: 2 }
 ];
-export const WaterQualityManagementPlanStatusesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...WaterQualityManagementPlanStatuses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const WaterQualityManagementPlanStatusesAsSelectDropdownOptions = WaterQualityManagementPlanStatuses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

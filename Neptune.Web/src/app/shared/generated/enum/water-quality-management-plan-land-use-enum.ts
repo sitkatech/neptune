@@ -28,4 +28,4 @@ export const WaterQualityManagementPlanLandUses: LookupTableEntry[]  = [
   { Name: "Park", DisplayName: "Park", Value: 8 },
   { Name: "Mixed", DisplayName: "Mixed", Value: 9 }
 ];
-export const WaterQualityManagementPlanLandUsesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...WaterQualityManagementPlanLandUses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const WaterQualityManagementPlanLandUsesAsSelectDropdownOptions = WaterQualityManagementPlanLandUses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));
