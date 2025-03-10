@@ -27,7 +27,7 @@ export class TrashGeneratingUnitLoadsLayerComponent extends MapLayerBase impleme
             styles: this.style,
         };
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
-        this.layer["layerName"] = "Loading rate (gal/ac/year)";
+
         this.initLayer();
     }
 }

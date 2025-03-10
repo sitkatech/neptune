@@ -37,29 +37,29 @@ import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers
 import { TrashGeneratingUnitLoadsLayerComponent } from "src/app/shared/components/leaflet/layers/trash-generating-unit-loads-layer/trash-generating-unit-loads-layer.component";
 import { TrashGeneratingUnitByStormwaterJurisdictionService } from "src/app/shared/generated/api/trash-generating-unit-by-stormwater-jurisdiction.service";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
+import { ParcelLayerComponent } from "../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 
 @Component({
     selector: "trash-home",
     templateUrl: "./trash-home.component.html",
     styleUrls: ["./trash-home.component.scss"],
     standalone: true,
-    imports: [NgIf, AlertDisplayComponent, CustomRichTextComponent, AsyncPipe, RouterLink, NeptuneMapComponent, 
-        RegionalSubbasinsLayerComponent,
-        DelineationsLayerComponent,
-        JurisdictionsLayerComponent,
-        InventoriedBMPsTrashCaptureLayerComponent,
-        WqmpsTrashCaptureLayerComponent,
-        LandUseBlockLayerComponent,
-        TrashGeneratingUnitLayerComponent,
-        TrashGeneratingUnitLoadsLayerComponent,
-        OvtaAreaLayerComponent,
-        NgSelectModule,
-        FormsModule, ReactiveFormsModule,
-        FieldDefinitionComponent,
-        SelectDropDownModule,
-        DecimalPipe,
-        LoadingDirective
-    ],
+    imports: [NgIf, AlertDisplayComponent, CustomRichTextComponent, AsyncPipe, RouterLink, NeptuneMapComponent,
+    RegionalSubbasinsLayerComponent,
+    DelineationsLayerComponent,
+    JurisdictionsLayerComponent,
+    InventoriedBMPsTrashCaptureLayerComponent,
+    WqmpsTrashCaptureLayerComponent,
+    LandUseBlockLayerComponent,
+    TrashGeneratingUnitLayerComponent,
+    TrashGeneratingUnitLoadsLayerComponent,
+    OvtaAreaLayerComponent,
+    NgSelectModule,
+    FormsModule, ReactiveFormsModule,
+    FieldDefinitionComponent,
+    SelectDropDownModule,
+    DecimalPipe,
+    LoadingDirective, ParcelLayerComponent],
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;

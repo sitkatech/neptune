@@ -27,8 +27,6 @@ export class LandUseBlockLayerComponent extends MapLayerBase implements OnChange
         };
 
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
-        this.layer["layerName"] = "Land Use Blocks";
-        this.layer["legendImageSource"] = "./assets/main/map-legend-images/landUseBlocks.png";
         this.initLayer();
     }
 }

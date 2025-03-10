@@ -73,8 +73,6 @@ export class InventoriedBMPsTrashCaptureLayerComponent extends MapLayerBase impl
                     },
                 });
                 this.layer.addLayer(inventoriedTreatmentBMPsLayer);
-                this.layer["layerName"] = "BMPs";
-                this.layer["legendImageSource"] = "./assets/main/map-legend-images/bmpTrashCaptureLegend.png";
                 this.initLayer();
             })
         );

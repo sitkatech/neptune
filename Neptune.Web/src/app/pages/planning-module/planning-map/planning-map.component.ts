@@ -108,7 +108,7 @@ export class PlanningMapComponent implements OnInit {
         fillOpacity: 0.2,
         opacity: 1,
     };
-    private plannedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px'> Project BMPs";
+    private plannedTreatmentBMPOverlayName = "Project BMPs";
 
     public columnDefs: ColDef[];
     public paginationPageSize: number = 100;
@@ -215,6 +215,7 @@ export class PlanningMapComponent implements OnInit {
                 });
             },
         });
+        this.plannedProjectTreatmentBMPsLayer["legendHtml"] = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px'>";
         this.plannedProjectTreatmentBMPsLayer.sortOrder = 100;
         this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
         this.layerControl.addOverlay(this.plannedProjectTreatmentBMPsLayer, this.plannedTreatmentBMPOverlayName);

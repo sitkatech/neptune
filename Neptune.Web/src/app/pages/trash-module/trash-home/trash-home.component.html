@@ -229,17 +229,18 @@
     <div>
         <div>
             <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="1000px" [showLegend]="true" *ngIf="boundingBox$ | async as boundingBox" [boundingBox]="boundingBox">
-                <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10" [indexOfDisabledLayerControl]="0"></land-use-block-layer>
-                <delineations-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20" [indexOfDisabledLayerControl]="0"></delineations-layer>
-                <inventoried-bmps-trash-capture-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="30" [indexOfDisabledLayerControl]="0"></inventoried-bmps-trash-capture-layer>
-                <wqmps-trash-capture-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40" [indexOfDisabledLayerControl]="0"></wqmps-trash-capture-layer>
-                <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="50" [indexOfDisabledLayerControl]="0"></jurisdictions-layer>
-                <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60" [indexOfDisabledLayerControl]="0"></regional-subbasins-layer>
+                <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
+                <delineations-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></delineations-layer>
+                <inventoried-bmps-trash-capture-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></inventoried-bmps-trash-capture-layer>
+                <wqmps-trash-capture-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-trash-capture-layer>
+                <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></jurisdictions-layer>
+                <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></regional-subbasins-layer>
+                <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></parcel-layer>
                 
-                <trash-generating-unit-layer *ngIf="mapIsReady && currentResultType == 'Area-Based Results'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [indexOfDisabledLayerControl]="0"></trash-generating-unit-layer>
-                <trash-generating-unit-loads-layer *ngIf="mapIsReady && currentResultType == 'Load-Based Results (Current)'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [style]="'current_load'" [indexOfDisabledLayerControl]="0"></trash-generating-unit-loads-layer>
-                <trash-generating-unit-loads-layer *ngIf="mapIsReady && currentResultType == 'Load-Based (Net Change)'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [style]="'delta_load'" [indexOfDisabledLayerControl]="0"></trash-generating-unit-loads-layer>
-                <ovta-area-layer *ngIf="mapIsReady && currentResultType == 'OVTA-Based Results'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [indexOfDisabledLayerControl]="0"></ovta-area-layer>
+                <trash-generating-unit-layer *ngIf="mapIsReady && currentResultType == 'Area-Based Results'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1"></trash-generating-unit-layer>
+                <trash-generating-unit-loads-layer *ngIf="mapIsReady && currentResultType == 'Load-Based Results (Current)'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [style]="'current_load'"></trash-generating-unit-loads-layer>
+                <trash-generating-unit-loads-layer *ngIf="mapIsReady && currentResultType == 'Load-Based (Net Change)'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [style]="'delta_load'"></trash-generating-unit-loads-layer>
+                <ovta-area-layer *ngIf="mapIsReady && currentResultType == 'OVTA-Based Results'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1"></ovta-area-layer>
             </neptune-map>
         </div>
     </div> 

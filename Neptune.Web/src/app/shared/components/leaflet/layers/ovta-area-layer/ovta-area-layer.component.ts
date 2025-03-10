@@ -31,8 +31,6 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges, A
             this.wmsOptions.cql_filter = `OVTAAreaID = ${this.ovtaAreaID}`;
         }
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
-        this.layer["layerName"] = "Assessment Area";
-        this.layer["legendImageSource"] = "./assets/main/map-legend-images/ovtaLegend.png";
         this.initLayer();
     }
 }

@@ -26,8 +26,6 @@ export class TrashGeneratingUnitLayerComponent extends MapLayerBase implements O
             styles: "tgu_style",
         };
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
-        this.layer["layerName"] = "Area-Based Results";
-        this.layer["legendImageSource"] = "./assets/main/map-legend-images/tguLegend.png";
         this.initLayer();
     }
 }

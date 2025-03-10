@@ -9,9 +9,9 @@ export class MapLayerBase implements IMapLayer, OnDestroy {
     @Input() layerControl: any;
     @Input() displayOnLoad: boolean = false;
     @Input() sortOrder: number;
-    @Input() indexOfDisabledLayerControl: number = null;
 
     @ViewChild("layerName") layerTemplate!: TemplateRef<any>;
+    @ViewChild("legend") lengendTemplate!: TemplateRef<any>;
     layer: any;
 
     constructor() {}
@@ -29,16 +29,22 @@ export class MapLayerBase implements IMapLayer, OnDestroy {
         if (this.checkForMissingInputs()) {
             const viewRef = this.layerTemplate.createEmbeddedView(null);
             viewRef.detectChanges();
-            const layerHtml = viewRef.rootNodes[0].outerHTML;
+            const layerHtml = viewRef.rootNodes[0].innerText;
             if (this.sortOrder) {
                 this.layer.sortOrder = this.sortOrder;
             }
+            if(this.lengendTemplate){
+                const legendViewRef = this.lengendTemplate.createEmbeddedView(null);
+                if(legendViewRef){
+                    legendViewRef.detectChanges();
+                    const legendHtml = legendViewRef.rootNodes[0].outerHTML;
+                    this.layer["legendHtml"] = legendHtml;
+                }
+            }
+
             this.layerControl.addOverlay(this.layer, layerHtml);
             if (this.displayOnLoad) {
                 this.map.addLayer(this.layer);
-            }
-            if(this.indexOfDisabledLayerControl != null){
-                this.disableCheckboxInLayerControl(this.indexOfDisabledLayerControl)
             }
         }
     }
@@ -59,10 +65,6 @@ export class MapLayerBase implements IMapLayer, OnDestroy {
             );
         }
         return inputsAreValid;
-    }
-
-    disableCheckboxInLayerControl(index: number = 0): void{
-        document.querySelectorAll('[type = "checkbox"].leaflet-control-layers-selector')[index]["disabled"] = true;
     }
 }
 

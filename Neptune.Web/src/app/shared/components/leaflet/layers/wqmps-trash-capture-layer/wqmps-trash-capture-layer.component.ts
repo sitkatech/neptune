@@ -30,8 +30,6 @@ export class WqmpsTrashCaptureLayerComponent extends MapLayerBase implements OnC
             styles: "wqmp_trash_capture_status"
         };
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
-        this.layer["layerName"] = "WQMPs";
-        this.layer["legendImageSource"] = "./assets/main/map-legend-images/wqmpTrashCaptureLegend.png";
         this.initLayer();
     }
 

@@ -14,6 +14,7 @@ import { NgSelectComponent, NgSelectModule } from "@ng-select/ng-select";
 import { FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from "@angular/forms";
 import { LegendItem } from "src/app/shared/models/legend-item";
 import { Feature, FeatureCollection } from "geojson";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
     selector: "neptune-map",
@@ -53,7 +54,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     public isSearching: boolean = false;
     private searchCleared: boolean = false;
 
-    constructor(public nominatimService: NominatimService, public leafletHelperService: LeafletHelperService) {}
+    constructor(public nominatimService: NominatimService, public leafletHelperService: LeafletHelperService, private sanitizer: DomSanitizer) {}
 
     ngAfterViewInit(): void {
         const mapOptions: MapOptions = {
@@ -170,16 +171,16 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
             // Check if it's an overlay and added to the map
             if (obj.overlay && this.map.hasLayer(obj.layer)) {
                 const legendItem = new LegendItem();
-                legendItem.Title = obj.group && obj.group.name ? obj.group.name : obj.layer.layerName;
-                if (obj.layer.legendImageSource){
-                    legendItem.ImageSource = obj.layer.legendImageSource
-                } else {
+                legendItem.Title = obj.group && obj.group.name ? obj.group.name : obj.name;
+                if (obj.layer.legendHtml){
+                    legendItem.LengendHtml = this.sanitizer.bypassSecurityTrustHtml(obj.layer.legendHtml);
+                } else if (obj.layer._url) {
                     legendItem.WmsUrl = obj.layer._url;
                     legendItem.WmsLayerName = obj.layer.options.layers;
                     legendItem.WmsLayerStyle = obj.layer.wmsParams.styles;
                 }
                 
-                if (legendItem.Title && !legendItems.some((item) => item.Title === legendItem.Title)) {
+                if (legendItem.Title && (legendItem.LengendHtml || legendItem.WmsUrl) && !legendItems.some((item) => item.Title === legendItem.Title)) {
                     legendItems.push(legendItem);
                 }
             }
