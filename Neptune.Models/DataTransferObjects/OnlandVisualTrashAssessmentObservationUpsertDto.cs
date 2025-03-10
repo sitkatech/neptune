@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-
-namespace Neptune.Models.DataTransferObjects;
+﻿namespace Neptune.Models.DataTransferObjects;
 
 public class OnlandVisualTrashAssessmentObservationUpsertDto
 {

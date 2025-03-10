@@ -121,50 +121,7 @@ public class OnlandVisualTrashAssessmentController(
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
     public async Task UpdateObservations([FromRoute] int onlandVisualTrashAssessmentID, [FromBody] List<OnlandVisualTrashAssessmentObservationUpsertDto> onlandVisualTrashAssessmentObservationUpsertDtos)
     {
-        var currentObservations = dbContext.OnlandVisualTrashAssessmentObservations
-            .Include(x => x.OnlandVisualTrashAssessmentObservationPhotos)
-            .Where(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID).ToList();
-
-        await dbContext.OnlandVisualTrashAssessmentObservationPhotos
-            .Include(x => x.OnlandVisualTrashAssessmentObservation).Where(x =>
-                x.OnlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentID ==
-                onlandVisualTrashAssessmentID &&
-                currentObservations.Select(y => y.OnlandVisualTrashAssessmentObservationID)
-                    .Contains(x.OnlandVisualTrashAssessmentObservationID)).ExecuteDeleteAsync();
-        await dbContext.OnlandVisualTrashAssessmentObservations.Where(x =>
-            x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID && currentObservations
-                .Select(y => y.OnlandVisualTrashAssessmentObservationID)
-                .Contains(x.OnlandVisualTrashAssessmentObservationID)).ExecuteDeleteAsync();
-
-        foreach (var onlandVisualTrashAssessmentObservationUpsertDto in onlandVisualTrashAssessmentObservationUpsertDtos)
-        {
-            var onlandVisualTrashAssessmentObservationPhoto = new OnlandVisualTrashAssessmentObservationPhoto();
-
-            if (onlandVisualTrashAssessmentObservationUpsertDto.FileResourceID != null)
-            {
-                onlandVisualTrashAssessmentObservationPhoto.FileResourceID =
-                    (int)onlandVisualTrashAssessmentObservationUpsertDto.FileResourceID;
-            }
-            
-
-            var onlandVisualTrashAssessmentObservation = new OnlandVisualTrashAssessmentObservation()
-            {
-                OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID,
-                Note = onlandVisualTrashAssessmentObservationUpsertDto.Note,
-                ObservationDatetime = onlandVisualTrashAssessmentObservationUpsertDto.ObservationDatetime ?? DateTime.UtcNow,
-                LocationPoint4326 = GeometryHelper.CreateLocationPoint4326FromLatLong(onlandVisualTrashAssessmentObservationUpsertDto.Latitude, onlandVisualTrashAssessmentObservationUpsertDto.Longitude),
-                LocationPoint = GeometryHelper.CreateLocationPoint4326FromLatLong(onlandVisualTrashAssessmentObservationUpsertDto.Latitude, onlandVisualTrashAssessmentObservationUpsertDto.Longitude).ProjectTo2771(),
-                OnlandVisualTrashAssessmentObservationPhotos = [onlandVisualTrashAssessmentObservationPhoto]
-            };
-
-            
-            DbContext.OnlandVisualTrashAssessmentObservations.Add(onlandVisualTrashAssessmentObservation);
-        }
-
-        await dbContext.OnlandVisualTrashAssessmentObservationPhotoStagings
-            .Where(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID).ExecuteDeleteAsync();
-        
-        await DbContext.SaveChangesAsync();
+        await OnlandVisualTrashAssessmentObservations.Update(dbContext, onlandVisualTrashAssessmentID, onlandVisualTrashAssessmentObservationUpsertDtos);
     }
 
     [HttpPost("{onlandVisualTrashAssessmentID}/observation-photo-staging")]

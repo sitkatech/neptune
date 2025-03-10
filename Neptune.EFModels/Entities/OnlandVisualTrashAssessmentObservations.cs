@@ -48,9 +48,8 @@ namespace Neptune.EFModels.Entities
             return GetImpl(dbContext).AsNoTracking().Where(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID).OrderBy(x => x.ObservationDatetime).ToList();
         }
 
-        public static async Task UpdateObservations(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID,
-            List<OnlandVisualTrashAssessmentObservationWithPhotoDto>
-                onlandVisualTrashAssessmentObservationWithPhotoDtos)
+        public static async Task Update(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID,
+        List<OnlandVisualTrashAssessmentObservationUpsertDto> onlandVisualTrashAssessmentObservationUpsertDtos)
         {
             var currentObservations = dbContext.OnlandVisualTrashAssessmentObservations
                 .Include(x => x.OnlandVisualTrashAssessmentObservationPhotos)
@@ -67,17 +66,34 @@ namespace Neptune.EFModels.Entities
                     .Select(y => y.OnlandVisualTrashAssessmentObservationID)
                     .Contains(x.OnlandVisualTrashAssessmentObservationID)).ExecuteDeleteAsync();
 
-            var updatedObservations = onlandVisualTrashAssessmentObservationWithPhotoDtos.Select(x =>
-                new OnlandVisualTrashAssessmentObservation()
+            foreach (var onlandVisualTrashAssessmentObservationUpsertDto in onlandVisualTrashAssessmentObservationUpsertDtos)
+            {
+                var onlandVisualTrashAssessmentObservationPhoto = new OnlandVisualTrashAssessmentObservationPhoto();
+
+                if (onlandVisualTrashAssessmentObservationUpsertDto.FileResourceID != null)
+                {
+                    onlandVisualTrashAssessmentObservationPhoto.FileResourceID =
+                        (int)onlandVisualTrashAssessmentObservationUpsertDto.FileResourceID;
+                }
+
+
+                var onlandVisualTrashAssessmentObservation = new OnlandVisualTrashAssessmentObservation()
                 {
                     OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID,
-                    Note = x.Note,
-                    ObservationDatetime = x.ObservationDatetime ?? DateTime.UtcNow,
-                    LocationPoint4326 = GeometryHelper.CreateLocationPoint4326FromLatLong(x.Latitude, x.Longitude),
-                    LocationPoint = GeometryHelper.CreateLocationPoint4326FromLatLong(x.Latitude, x.Longitude).ProjectTo2771(),
-                    //add photo
-                });
-            await dbContext.OnlandVisualTrashAssessmentObservations.AddRangeAsync(updatedObservations);
+                    Note = onlandVisualTrashAssessmentObservationUpsertDto.Note,
+                    ObservationDatetime = onlandVisualTrashAssessmentObservationUpsertDto.ObservationDatetime ?? DateTime.UtcNow,
+                    LocationPoint4326 = GeometryHelper.CreateLocationPoint4326FromLatLong(onlandVisualTrashAssessmentObservationUpsertDto.Latitude, onlandVisualTrashAssessmentObservationUpsertDto.Longitude),
+                    LocationPoint = GeometryHelper.CreateLocationPoint4326FromLatLong(onlandVisualTrashAssessmentObservationUpsertDto.Latitude, onlandVisualTrashAssessmentObservationUpsertDto.Longitude).ProjectTo2771(),
+                    OnlandVisualTrashAssessmentObservationPhotos = [onlandVisualTrashAssessmentObservationPhoto]
+                };
+
+
+                dbContext.OnlandVisualTrashAssessmentObservations.Add(onlandVisualTrashAssessmentObservation);
+            }
+
+            await dbContext.OnlandVisualTrashAssessmentObservationPhotoStagings
+                .Where(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID).ExecuteDeleteAsync();
+
             await dbContext.SaveChangesAsync();
         }
     }
