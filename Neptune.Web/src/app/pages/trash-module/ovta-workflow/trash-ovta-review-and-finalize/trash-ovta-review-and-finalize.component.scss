@@ -3,3 +3,10 @@
 .selected-observation {
     background-color: $yellow-default;
 }
+.observation {
+    padding: 1rem;
+}
+.observations {
+    max-height: 550px;
+    overflow-x: scroll;
+}

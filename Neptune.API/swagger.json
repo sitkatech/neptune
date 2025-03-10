@@ -871,6 +871,53 @@
       }
     },
     "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/observations": {
+      "get": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationUpsertDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationUpsertDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationUpsertDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "OnlandVisualTrashAssessment"
@@ -892,7 +939,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationWithPhotoDto"
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationUpsertDto"
                 }
               }
             },
@@ -900,7 +947,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationWithPhotoDto"
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationUpsertDto"
                 }
               }
             },
@@ -908,7 +955,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationWithPhotoDto"
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationUpsertDto"
                 }
               }
             }
@@ -917,6 +964,66 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/observation-photo-staging": {
+      "post": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "413": {
+            "description": "Content Too Large",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
           }
         }
       }
@@ -3908,6 +4015,43 @@
         },
         "additionalProperties": false
       },
+      "OnlandVisualTrashAssessmentObservationUpsertDto": {
+        "type": "object",
+        "properties": {
+          "OnlandVisualTrashAssessmentObservationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Note": {
+            "type": "string",
+            "nullable": true
+          },
+          "ObservationDatetime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "FileResourceID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "Latitude": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
       "OnlandVisualTrashAssessmentObservationWithPhotoDto": {
         "type": "object",
         "properties": {
@@ -4081,10 +4225,11 @@
             },
             "nullable": true
           },
-          "PreliminarySourceIdentificationTypeWorkflowDtos": {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/PreliminarySourceIdentificationTypeWorkflowDto"
+          "PreliminarySourceIdentificationTypeIDs": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
             },
             "nullable": true
           },
@@ -4599,27 +4744,6 @@
           "PreliminarySourceIdentificationCategoryID": {
             "type": "integer",
             "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PreliminarySourceIdentificationTypeWorkflowDto": {
-        "type": "object",
-        "properties": {
-          "PreliminarySourceIdentificationTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "PreliminarySourceIdentificationTypeDisplayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "PreliminarySourceIdentificationCategoryTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "IsInOnlandAssessmentArea": {
-            "type": "boolean"
           }
         },
         "additionalProperties": false

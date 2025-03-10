@@ -50,20 +50,20 @@
         <div *ngFor="let item of PreliminarySourceIdentificationCategories" class="g-col-6">
             <h3 class="mb-2">{{ item.DisplayName }}</h3>
             <div *ngFor="let type of filterByCategory(preliminarySourceIdentificationTypeSimpleDto, item.Value)" class="flex-start ml-2 mb-2">
-                <!-- <form-field
+                <form-field
                     class="g-col-12"
                     [id]="type.PreliminarySourceIdentificationTypeID"
-                    [formControl]="formGroup.controls.Notes"
+                    [formControl]="formGroup.controls.PreliminarySourceIdentificationTypeIDs"
                     [required]="false"
                     [checkLabel]="type.PreliminarySourceIdentificationTypeDisplayName"
                     [type]="FormFieldType.Check"
-                    (change)="onCheckBoxChanged($event)"></form-field> -->
-                <input
+                    (change)="onCheckBoxChanged($event)"></form-field>
+                <!-- <input
                     type="checkbox"
                     [id]="type.PreliminarySourceIdentificationTypeID"
                     [(ngModel)]="formGroup.controls.PreliminarySourceIdentificationTypeWorkflowDtos[type.PreliminarySourceIdentificationTypeID]"
                     [checked]="true"
-                    (change)="onCheckBoxChanged($event)" />{{ type.PreliminarySourceIdentificationTypeDisplayName }}
+                    (change)="onCheckBoxChanged($event)" />{{ type.PreliminarySourceIdentificationTypeDisplayName }} -->
             </div>
         </div>
     </div>
@@ -74,13 +74,14 @@
                 <div class="grid-12" *ngFor="let item of onlandVisualTrashAssessment.Observations">
                     <div
                         [id]="item.OnlandVisualTrashAssessmentObservationID"
-                        class="g-col-12 mb-4"
+                        class="g-col-12 mb-4 observation"
                         [ngClass]="{
                             'selected-observation':
                                 selectedOVTAObservation != null && selectedOVTAObservation.OnlandVisualTrashAssessmentObservationID == item.OnlandVisualTrashAssessmentObservationID
                         }"
                         (click)="selectOVTAObservationImpl(onlandVisualTrashAssessment.Observations, item.OnlandVisualTrashAssessmentObservationID)">
-                        <img [src]="getUrl(item.FileResourceGUID)" *ngIf="item.FileResourceGUID" style="width: 400px; height: 500px" />
+                        <img [src]="getUrl(item.FileResourceGUID)" *ngIf="item.FileResourceGUID; else noImage" style="width: 400px; height: 500px" />
+                        <ng-template #noImage> <i>No photo provided</i></ng-template>
                         <div class="mt-2">
                             {{ item.Note ?? "No note provided" }}
                         </div>

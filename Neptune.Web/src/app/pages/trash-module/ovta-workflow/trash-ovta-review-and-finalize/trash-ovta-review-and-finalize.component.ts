@@ -72,7 +72,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
 
     public formGroup: FormGroup<OnlandVisualTrashAssessmentWorkflowDtoForm> = new FormGroup<any>({
         OnlandVisualTrashAssessmentID: OnlandVisualTrashAssessmentWorkflowDtoFormControls.OnlandVisualTrashAssessmentID(),
-        OnlandVisualTrashAssessmentAreaID: OnlandVisualTrashAssessmentWorkflowDtoFormControls.OnlandVisualTrashAssessmentAreaID(-1),
+        OnlandVisualTrashAssessmentAreaID: OnlandVisualTrashAssessmentWorkflowDtoFormControls.OnlandVisualTrashAssessmentAreaID(),
         OnlandVisualTrashAssessmentAreaName: OnlandVisualTrashAssessmentWorkflowDtoFormControls.OnlandVisualTrashAssessmentAreaName(),
         StormwaterJurisdictionID: OnlandVisualTrashAssessmentWorkflowDtoFormControls.StormwaterJurisdictionID(),
         StormwaterJurisdictionName: OnlandVisualTrashAssessmentWorkflowDtoFormControls.StormwaterJurisdictionName(),
@@ -83,7 +83,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
         Notes: OnlandVisualTrashAssessmentWorkflowDtoFormControls.Notes(),
         BoundingBox: OnlandVisualTrashAssessmentWorkflowDtoFormControls.BoundingBox(),
         Geometry: OnlandVisualTrashAssessmentWorkflowDtoFormControls.Geometry(),
-        PreliminarySourceIdentificationTypeWorkflowDtos: OnlandVisualTrashAssessmentWorkflowDtoFormControls.PreliminarySourceIdentificationTypeWorkflowDtos(),
+        PreliminarySourceIdentificationTypeIDs: OnlandVisualTrashAssessmentWorkflowDtoFormControls.PreliminarySourceIdentificationTypeIDs(),
     });
 
     constructor(
@@ -108,11 +108,12 @@ export class TrashOvtaReviewAndFinalizeComponent {
                 this.formGroup.controls.OnlandVisualTrashAssessmentAreaID.setValue(ovta.OnlandVisualTrashAssessmentAreaID);
                 this.formGroup.controls.OnlandVisualTrashAssessmentAreaName.setValue(ovta.OnlandVisualTrashAssessmentAreaName);
                 this.formGroup.controls.AssessmentAreaDescription.setValue(ovta.AssessmentAreaDescription);
-                this.formGroup.controls.LastAssessmentDate.setValue(ovta.LastAssessmentDate);
+                this.formGroup.controls.LastAssessmentDate.setValue(new Date(ovta.LastAssessmentDate).toISOString().split("T")[0]);
                 this.formGroup.controls.OnlandVisualTrashAssessmentBaselineScoreID.setValue(ovta.OnlandVisualTrashAssessmentBaselineScoreID);
                 this.formGroup.controls.IsProgressAssessment.setValue(ovta.IsProgressAssessment);
                 this.formGroup.controls.Notes.setValue(ovta.Notes);
-                this.formGroup.controls.PreliminarySourceIdentificationTypeWorkflowDtos.setValue(ovta.PreliminarySourceIdentificationTypeWorkflowDtos);
+                this.formGroup.controls.PreliminarySourceIdentificationTypeIDs.setValue(ovta.PreliminarySourceIdentificationTypeIDs);
+                console.log(this.formGroup.getRawValue());
             })
         );
         this.preliminarySourceIdentificationTypeSimpleDto$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPreliminarySourceIdentificationTypesGet();
@@ -202,8 +203,8 @@ export class TrashOvtaReviewAndFinalizeComponent {
     public onCheckBoxChanged(event) {
         console.log(event.target.id);
         console.log(event.target.checked);
-        this.formGroup.controls.PreliminarySourceIdentificationTypeWorkflowDtos.getRawValue()[event.target.id].IsInOnlandAssessmentArea =
-            !this.formGroup.controls.PreliminarySourceIdentificationTypeWorkflowDtos.getRawValue()[event.target.id].IsInOnlandAssessmentArea;
+        // this.formGroup.controls.PreliminarySourceIdentificationTypeWorkflowDtos.getRawValue()[event.target.id].IsInOnlandAssessmentArea =
+        //     !this.formGroup.controls.PreliminarySourceIdentificationTypeWorkflowDtos.getRawValue()[event.target.id].IsInOnlandAssessmentArea;
     }
 
     private mapObservationsToGeoJson(observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[]) {

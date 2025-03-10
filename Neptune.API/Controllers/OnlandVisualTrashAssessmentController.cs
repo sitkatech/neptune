@@ -10,6 +10,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Neptune.EFModels.Workflows;
+using Microsoft.EntityFrameworkCore;
+using Neptune.Common.GeoSpatial;
+using System;
+using Microsoft.AspNetCore.Http;
 
 namespace Neptune.API.Controllers;
 
@@ -19,7 +23,8 @@ public class OnlandVisualTrashAssessmentController(
     NeptuneDbContext dbContext,
     ILogger<OnlandVisualTrashAssessmentController> logger,
     KeystoneService keystoneService,
-    IOptions<NeptuneConfiguration> neptuneConfiguration)
+    IOptions<NeptuneConfiguration> neptuneConfiguration,
+    AzureBlobStorageService azureBlobStorageService)
     : SitkaController<OnlandVisualTrashAssessmentController>(dbContext, logger, keystoneService, neptuneConfiguration)
 {
     [HttpGet]
@@ -91,11 +96,102 @@ public class OnlandVisualTrashAssessmentController(
         return Ok(visualTrashAssessmentGridDtos);
     }
 
+    [HttpGet("{onlandVisualTrashAssessmentID}/observations")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public ActionResult<List<OnlandVisualTrashAssessmentObservationUpsertDto>> GetObservations([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var visualTrashAssessmentObservationUpsertDtos = OnlandVisualTrashAssessmentObservations
+            .ListByOnlandVisualTrashAssessmentID(dbContext, onlandVisualTrashAssessmentID)
+            .Select(x => new OnlandVisualTrashAssessmentObservationUpsertDto()
+            {
+                OnlandVisualTrashAssessmentObservationID = x.OnlandVisualTrashAssessmentObservationID,
+                OnlandVisualTrashAssessmentID = x.OnlandVisualTrashAssessmentID,
+                Longitude = x.LocationPoint4326.Coordinate[0],
+                Latitude = x.LocationPoint4326.Coordinate[1],
+                Note = x.Note,
+            });
+
+        return Ok(visualTrashAssessmentObservationUpsertDtos);
+    }
+
     [HttpPost("{onlandVisualTrashAssessmentID}/observations")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
-    public async Task UpdateObservations([FromRoute] int onlandVisualTrashAssessmentID, [FromBody] List<OnlandVisualTrashAssessmentObservationWithPhotoDto> onlandVisualTrashAssessmentObservationWithPhotoDtos)
+    public async Task UpdateObservations([FromRoute] int onlandVisualTrashAssessmentID, [FromBody] List<OnlandVisualTrashAssessmentObservationUpsertDto> onlandVisualTrashAssessmentObservationUpsertDtos)
     {
-        await OnlandVisualTrashAssessmentObservations.UpdateObservations(dbContext, onlandVisualTrashAssessmentID, onlandVisualTrashAssessmentObservationWithPhotoDtos);
+        var currentObservations = dbContext.OnlandVisualTrashAssessmentObservations
+            .Include(x => x.OnlandVisualTrashAssessmentObservationPhotos)
+            .Where(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID).ToList();
+
+        await dbContext.OnlandVisualTrashAssessmentObservationPhotos
+            .Include(x => x.OnlandVisualTrashAssessmentObservation).Where(x =>
+                x.OnlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentID ==
+                onlandVisualTrashAssessmentID &&
+                currentObservations.Select(y => y.OnlandVisualTrashAssessmentObservationID)
+                    .Contains(x.OnlandVisualTrashAssessmentObservationID)).ExecuteDeleteAsync();
+        await dbContext.OnlandVisualTrashAssessmentObservations.Where(x =>
+            x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID && currentObservations
+                .Select(y => y.OnlandVisualTrashAssessmentObservationID)
+                .Contains(x.OnlandVisualTrashAssessmentObservationID)).ExecuteDeleteAsync();
+
+        foreach (var onlandVisualTrashAssessmentObservationUpsertDto in onlandVisualTrashAssessmentObservationUpsertDtos)
+        {
+            var onlandVisualTrashAssessmentObservationPhoto = new OnlandVisualTrashAssessmentObservationPhoto();
+
+            if (onlandVisualTrashAssessmentObservationUpsertDto.FileResourceID != null)
+            {
+                onlandVisualTrashAssessmentObservationPhoto.FileResourceID =
+                    (int)onlandVisualTrashAssessmentObservationUpsertDto.FileResourceID;
+            }
+            
+
+            var onlandVisualTrashAssessmentObservation = new OnlandVisualTrashAssessmentObservation()
+            {
+                OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID,
+                Note = onlandVisualTrashAssessmentObservationUpsertDto.Note,
+                ObservationDatetime = onlandVisualTrashAssessmentObservationUpsertDto.ObservationDatetime ?? DateTime.UtcNow,
+                LocationPoint4326 = GeometryHelper.CreateLocationPoint4326FromLatLong(onlandVisualTrashAssessmentObservationUpsertDto.Latitude, onlandVisualTrashAssessmentObservationUpsertDto.Longitude),
+                LocationPoint = GeometryHelper.CreateLocationPoint4326FromLatLong(onlandVisualTrashAssessmentObservationUpsertDto.Latitude, onlandVisualTrashAssessmentObservationUpsertDto.Longitude).ProjectTo2771(),
+                OnlandVisualTrashAssessmentObservationPhotos = [onlandVisualTrashAssessmentObservationPhoto]
+            };
+
+            
+            DbContext.OnlandVisualTrashAssessmentObservations.Add(onlandVisualTrashAssessmentObservation);
+        }
+
+        await dbContext.OnlandVisualTrashAssessmentObservationPhotoStagings
+            .Where(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID).ExecuteDeleteAsync();
+        
+        await DbContext.SaveChangesAsync();
     }
+
+    [HttpPost("{onlandVisualTrashAssessmentID}/observation-photo-staging")]
+    [JurisdictionEditFeature]
+    [RequestSizeLimit(30 * 1024 * 1024)]
+    [RequestFormLimits(MultipartBodyLengthLimit = 30 * 1024 * 1024), ProducesResponseType(StatusCodes.Status413RequestEntityTooLarge)]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public async Task<OnlandVisualTrashAssessmentObservationPhotoStagingSimpleDto> StageObservationPhoto([FromRoute]
+        int onlandVisualTrashAssessmentID, [FromForm] OnlandVisualTrashAssessmentObservationPhotoDto file)
+    {
+
+        var fileResource =
+            await HttpUtilities.MakeFileResourceFromFormFile(file.file, DbContext,
+                HttpContext, azureBlobStorageService);
+        var onlandVisualTrashAssessmentObservationPhotoStaging = new OnlandVisualTrashAssessmentObservationPhotoStaging
+        {
+            FileResource = fileResource,
+            OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID
+        };
+        await dbContext.OnlandVisualTrashAssessmentObservationPhotoStagings.AddAsync(onlandVisualTrashAssessmentObservationPhotoStaging);
+        await dbContext.SaveChangesAsync();
+
+        return  new OnlandVisualTrashAssessmentObservationPhotoStagingSimpleDto()
+        {
+            OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID,
+            OnlandVisualTrashAssessmentObservationPhotoStagingID = onlandVisualTrashAssessmentObservationPhotoStaging.OnlandVisualTrashAssessmentObservationPhotoStagingID,
+            FileResourceID = onlandVisualTrashAssessmentObservationPhotoStaging.FileResourceID//onlandVisualTrashAssessmentObservationPhotoStaging.FileResource.GetFileResourceUrl()
+        };
+    }
+
 }

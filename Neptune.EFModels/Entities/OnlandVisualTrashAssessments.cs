@@ -37,6 +37,7 @@ public static class OnlandVisualTrashAssessments
             .Include(x => x.OnlandVisualTrashAssessmentObservations)
             .ThenInclude(x => x.OnlandVisualTrashAssessmentObservationPhotos)
             .ThenInclude(x => x.FileResource)
+            .Include(x => x.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes)
             .SingleOrDefault(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
         Check.RequireNotNull(onlandVisualTrashAssessment, $"OnlandVisualTrashAssessment with ID {onlandVisualTrashAssessmentID} not found!");
         return onlandVisualTrashAssessment;
@@ -135,20 +136,20 @@ public static class OnlandVisualTrashAssessments
         onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription = dto.AssessmentAreaDescription;
         onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = dto.OnlandVisualTrashAssessmentBaselineScoreID;
         onlandVisualTrashAssessment.IsProgressAssessment = dto.IsProgressAssessment ?? false;
-        onlandVisualTrashAssessment.CompletedDate = DateTime.UtcNow;
+        onlandVisualTrashAssessment.CompletedDate = dto.LastAssessmentDate;
         onlandVisualTrashAssessment.Notes = dto.Notes;
 
         //await dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes
         //    .Where(x => x.OnlandVisualTrashAssessmentID == dto.OnlandVisualTrashAssessmentID).ExecuteDeleteAsync();
         //onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes =
         //    (from key in dto.PreliminarySourceIdentificationTypeWorkflowDtos.Keys
-        //        where dto.PreliminarySourceIdentificationTypeWorkflowDtos[key].IsInOnlandAssessmentArea
-        //        select new OnlandVisualTrashAssessmentPreliminarySourceIdentificationType()
-        //        {
-        //            OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
-        //            PreliminarySourceIdentificationTypeID = dto.PreliminarySourceIdentificationTypeWorkflowDtos[key]
-        //                .PreliminarySourceIdentificationTypeID
-        //        }).ToList();
+        //     where dto.PreliminarySourceIdentificationTypeWorkflowDtos[key].IsInOnlandAssessmentArea
+        //     select new OnlandVisualTrashAssessmentPreliminarySourceIdentificationType()
+        //     {
+        //         OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
+        //         PreliminarySourceIdentificationTypeID = dto.PreliminarySourceIdentificationTypeWorkflowDtos[key]
+        //             .PreliminarySourceIdentificationTypeID
+        //     }).ToList();
 
 
         await dbContext.SaveChangesAsync();

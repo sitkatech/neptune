@@ -1,4 +1,5 @@
 ﻿using Neptune.Models.DataTransferObjects;
+using Neptune.WebMvc.Common;
 
 namespace Neptune.EFModels.Entities;
 
@@ -57,11 +58,11 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
             Notes = onlandVisualTrashAssessment.Notes,
             StormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID,
             StormwaterJurisdictionName = onlandVisualTrashAssessment.StormwaterJurisdiction.GetOrganizationDisplayName(), 
-            OnlandVisualTrashAssessmentBaselineScoreID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID, 
+            OnlandVisualTrashAssessmentBaselineScoreID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID, 
             AssessmentAreaDescription = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription, 
             IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment, 
             LastAssessmentDate = onlandVisualTrashAssessment.CompletedDate,
-            PreliminarySourceIdentificationTypeWorkflowDtos = onlandVisualTrashAssessment.GetPreliminarySourceIdentificationTypeWorkflowDtosForOnlandVisualTrashAssessments(),
+            PreliminarySourceIdentificationTypeIDs = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(x => x.PreliminarySourceIdentificationTypeID).ToList(),
             Observations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.AsPhotoDto()).ToList(),
             BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry()),
         };
