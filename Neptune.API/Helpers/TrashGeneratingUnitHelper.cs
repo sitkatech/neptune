@@ -10,51 +10,12 @@ namespace Neptune.API.Helpers;
 
 public static class TrashGeneratingUnitHelper
 {
-    private const decimal FullTrashCaptureLoading = 2.5m;
+    public const decimal FullTrashCaptureLoading = 2.5m;
 
-    public static double LoadBasedFullCapture(NeptuneDbContext dbContext, StormwaterJurisdiction jurisdiction)
-    {
-        var vTrashGeneratingUnitLoadStatistics = dbContext.vTrashGeneratingUnitLoadStatistics.Where(x =>
-            x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID
-            && x.IsFullTrashCapture);
-
-        return vTrashGeneratingUnitLoadStatistics.Any()
-            ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
-                x.Area * (double)(x.BaselineLoadingRate - FullTrashCaptureLoading) *
-                Constants.SquareMetersToAcres)
-            : 0;
-    }
-
-    public static double LoadBasedPartialCapture(NeptuneDbContext dbContext, StormwaterJurisdiction jurisdiction)
-    {
-        var vTrashGeneratingUnitLoadStatistics = dbContext.vTrashGeneratingUnitLoadStatistics.Where(x =>
-            x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID && x.IsPartialTrashCapture);
-
-        return vTrashGeneratingUnitLoadStatistics.Any()
-            ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
-                x.Area * (double)(x.BaselineLoadingRate - x.CurrentLoadingRate) *
-                Constants.SquareMetersToAcres)
-            : 0;
-    }
-
-    public static double LoadBasedOVTAProgressScores(NeptuneDbContext dbContext, StormwaterJurisdiction jurisdiction)
-    {
-        var vTrashGeneratingUnitLoadStatistics =
-            dbContext.vTrashGeneratingUnitLoadStatistics.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID
-                && x.HasBaselineScore == true && x.HasProgressScore == true);
-
-        return vTrashGeneratingUnitLoadStatistics.Any()
-            ? vTrashGeneratingUnitLoadStatistics.Sum(x =>
-                x.Area * (double)(x.BaselineLoadingRate - x.ProgressLoadingRate) *
-                Constants.SquareMetersToAcres)
-            : 0;
-    }
-
-    public static double TargetLoadReduction(NeptuneDbContext dbContext, StormwaterJurisdiction jurisdiction)
+    public static double TargetLoadReduction(NeptuneDbContext dbContext, int stormwaterJurisdictionID)
     {
         var landUseBlocks = dbContext.LandUseBlocks.AsNoTracking().Where(x => x.PermitTypeID == (int)PermitTypeEnum.PhaseIMS4 &&
-            x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID && x.PriorityLandUseTypeID != (int)PriorityLandUseTypeEnum.ALU);
+            x.StormwaterJurisdictionID == stormwaterJurisdictionID && x.PriorityLandUseTypeID != (int)PriorityLandUseTypeEnum.ALU);
 
         return landUseBlocks.Any()
             ? landUseBlocks.Sum(x =>
@@ -70,8 +31,7 @@ public static class TrashGeneratingUnitHelper
             x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID ==
             (int)OnlandVisualTrashAssessmentScoreEnum.A &&
             !x.IsFullTrashCapture() &&
-            // This is how to check "PLU == true"
-            x.LandUseBlock.PriorityLandUseTypeID != (int)PriorityLandUseTypeEnum.ALU
+            x.IsPLU()
         ).GetArea();
     }
 
@@ -79,8 +39,7 @@ public static class TrashGeneratingUnitHelper
     {
         return trashGeneratingUnits.Where(x =>
             x.IsFullTrashCapture() &&
-            // This is how to check "PLU == true"
-            x.LandUseBlock.PriorityLandUseTypeID != (int)PriorityLandUseTypeEnum.ALU
+            x.IsPLU()
         ).GetArea();
     }
 
@@ -96,6 +55,12 @@ public static class TrashGeneratingUnitHelper
             (int)TrashCaptureStatusTypeEnum.Full ||
             trashGeneratingUnit.WaterQualityManagementPlan?.TrashCaptureStatusTypeID ==
             (int)TrashCaptureStatusTypeEnum.Full);
+    }
+    
+    public static bool IsPLU(this TrashGeneratingUnit trashGeneratingUnit)
+    {
+        // This is how to check "PLU == true"
+        return trashGeneratingUnit.LandUseBlock?.PriorityLandUseTypeID != (int)PriorityLandUseTypeEnum.ALU;
     }
 
     // OVTA-based calculations
@@ -146,8 +111,7 @@ public static class TrashGeneratingUnitHelper
         return trashGeneratingUnits.Where(x =>
             x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID ==
             onlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentScoreID &&
-            // This is how to check "PLU == true"
-            x.LandUseBlock.PriorityLandUseTypeID == (int)PriorityLandUseTypeEnum.ALU).GetArea();
+            x.IsPLU()).GetArea();
     }
 
     private static double GetPriorityOVTAScoreAcreageImpl(List<TrashGeneratingUnit> trashGeneratingUnits,
@@ -156,7 +120,6 @@ public static class TrashGeneratingUnitHelper
         return trashGeneratingUnits.Where(x =>
             x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID ==
             onlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentScoreID &&
-            // This is how to check "PLU == true"
-            x.LandUseBlock.PriorityLandUseTypeID != (int)PriorityLandUseTypeEnum.ALU).GetArea();
+            x.IsPLU()).GetArea();
     }
 }

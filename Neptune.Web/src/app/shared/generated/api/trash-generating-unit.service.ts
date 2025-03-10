@@ -18,9 +18,6 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { AreaBasedAcreCalculationsDto } from '../model/area-based-acre-calculations-dto';
-import { LoadResultsDto } from '../model/load-results-dto';
-import { OVTAResultsDto } from '../model/ovta-results-dto';
 import { TrashGeneratingUnitGridDto } from '../model/trash-generating-unit-grid-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -67,49 +64,6 @@ export class TrashGeneratingUnitService {
     /**
      * 
      * 
-     * @param jurisdictionID 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public trashGeneratingUnitsAreaBasedResultsCalculationsJurisdictionIDGet(jurisdictionID: number, observe?: 'body', reportProgress?: boolean): Observable<AreaBasedAcreCalculationsDto>;
-    public trashGeneratingUnitsAreaBasedResultsCalculationsJurisdictionIDGet(jurisdictionID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AreaBasedAcreCalculationsDto>>;
-    public trashGeneratingUnitsAreaBasedResultsCalculationsJurisdictionIDGet(jurisdictionID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AreaBasedAcreCalculationsDto>>;
-    public trashGeneratingUnitsAreaBasedResultsCalculationsJurisdictionIDGet(jurisdictionID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (jurisdictionID === null || jurisdictionID === undefined) {
-            throw new Error('Required parameter jurisdictionID was null or undefined when calling trashGeneratingUnitsAreaBasedResultsCalculationsJurisdictionIDGet.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'text/plain',
-            'application/json',
-            'text/json',
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<AreaBasedAcreCalculationsDto>(`${this.basePath}/trash-generating-units/area-based-results-calculations/${encodeURIComponent(String(jurisdictionID))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -136,92 +90,6 @@ export class TrashGeneratingUnitService {
         ];
 
         return this.httpClient.get<Array<TrashGeneratingUnitGridDto>>(`${this.basePath}/trash-generating-units`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param jurisdictionID 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public trashGeneratingUnitsLoadBasedResultsCalculationsJurisdictionIDGet(jurisdictionID: number, observe?: 'body', reportProgress?: boolean): Observable<LoadResultsDto>;
-    public trashGeneratingUnitsLoadBasedResultsCalculationsJurisdictionIDGet(jurisdictionID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<LoadResultsDto>>;
-    public trashGeneratingUnitsLoadBasedResultsCalculationsJurisdictionIDGet(jurisdictionID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<LoadResultsDto>>;
-    public trashGeneratingUnitsLoadBasedResultsCalculationsJurisdictionIDGet(jurisdictionID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (jurisdictionID === null || jurisdictionID === undefined) {
-            throw new Error('Required parameter jurisdictionID was null or undefined when calling trashGeneratingUnitsLoadBasedResultsCalculationsJurisdictionIDGet.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'text/plain',
-            'application/json',
-            'text/json',
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<LoadResultsDto>(`${this.basePath}/trash-generating-units/load-based-results-calculations/${encodeURIComponent(String(jurisdictionID))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param jurisdictionID 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public trashGeneratingUnitsOvtaBasedResultsCalculationsJurisdictionIDGet(jurisdictionID: number, observe?: 'body', reportProgress?: boolean): Observable<OVTAResultsDto>;
-    public trashGeneratingUnitsOvtaBasedResultsCalculationsJurisdictionIDGet(jurisdictionID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OVTAResultsDto>>;
-    public trashGeneratingUnitsOvtaBasedResultsCalculationsJurisdictionIDGet(jurisdictionID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OVTAResultsDto>>;
-    public trashGeneratingUnitsOvtaBasedResultsCalculationsJurisdictionIDGet(jurisdictionID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (jurisdictionID === null || jurisdictionID === undefined) {
-            throw new Error('Required parameter jurisdictionID was null or undefined when calling trashGeneratingUnitsOvtaBasedResultsCalculationsJurisdictionIDGet.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'text/plain',
-            'application/json',
-            'text/json',
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<OVTAResultsDto>(`${this.basePath}/trash-generating-units/ovta-based-results-calculations/${encodeURIComponent(String(jurisdictionID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

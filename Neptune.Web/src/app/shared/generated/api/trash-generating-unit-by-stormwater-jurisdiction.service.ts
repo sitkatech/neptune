@@ -18,8 +18,9 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { BoundingBoxDto } from '../model/bounding-box-dto';
-import { StormwaterJurisdictionDto } from '../model/stormwater-jurisdiction-dto';
+import { AreaBasedAcreCalculationsDto } from '../model/area-based-acre-calculations-dto';
+import { LoadResultsDto } from '../model/load-results-dto';
+import { OVTAResultsDto } from '../model/ovta-results-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -30,7 +31,7 @@ import { ApiService } from '../../services';
 @Injectable({
   providedIn: 'root'
 })
-export class StormwaterJurisdictionService {
+export class TrashGeneratingUnitByStormwaterJurisdictionService {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();
@@ -65,13 +66,18 @@ export class StormwaterJurisdictionService {
     /**
      * 
      * 
+     * @param jurisdictionID 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public jurisdictionsBoundingBoxGet(observe?: 'body', reportProgress?: boolean): Observable<BoundingBoxDto>;
-    public jurisdictionsBoundingBoxGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<BoundingBoxDto>>;
-    public jurisdictionsBoundingBoxGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<BoundingBoxDto>>;
-    public jurisdictionsBoundingBoxGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'body', reportProgress?: boolean): Observable<AreaBasedAcreCalculationsDto>;
+    public trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AreaBasedAcreCalculationsDto>>;
+    public trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AreaBasedAcreCalculationsDto>>;
+    public trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(jurisdictionID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (jurisdictionID === null || jurisdictionID === undefined) {
+            throw new Error('Required parameter jurisdictionID was null or undefined when calling trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet.');
+        }
 
         let headers = this.defaultHeaders;
 
@@ -90,45 +96,7 @@ export class StormwaterJurisdictionService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<BoundingBoxDto>(`${this.basePath}/jurisdictions/bounding-box`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public jurisdictionsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<StormwaterJurisdictionDto>>;
-    public jurisdictionsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<StormwaterJurisdictionDto>>>;
-    public jurisdictionsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<StormwaterJurisdictionDto>>>;
-    public jurisdictionsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'text/plain',
-            'application/json',
-            'text/json',
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<Array<StormwaterJurisdictionDto>>(`${this.basePath}/jurisdictions`,
+        return this.httpClient.get<AreaBasedAcreCalculationsDto>(`${this.basePath}/trash-results-by-jurisdiction/${encodeURIComponent(String(jurisdictionID))}/area-based-results-calculations`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -145,13 +113,13 @@ export class StormwaterJurisdictionService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public jurisdictionsJurisdictionIDBoundingBoxGet(jurisdictionID: number, observe?: 'body', reportProgress?: boolean): Observable<BoundingBoxDto>;
-    public jurisdictionsJurisdictionIDBoundingBoxGet(jurisdictionID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<BoundingBoxDto>>;
-    public jurisdictionsJurisdictionIDBoundingBoxGet(jurisdictionID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<BoundingBoxDto>>;
-    public jurisdictionsJurisdictionIDBoundingBoxGet(jurisdictionID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'body', reportProgress?: boolean): Observable<LoadResultsDto>;
+    public trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<LoadResultsDto>>;
+    public trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<LoadResultsDto>>;
+    public trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(jurisdictionID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jurisdictionID === null || jurisdictionID === undefined) {
-            throw new Error('Required parameter jurisdictionID was null or undefined when calling jurisdictionsJurisdictionIDBoundingBoxGet.');
+            throw new Error('Required parameter jurisdictionID was null or undefined when calling trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -171,7 +139,7 @@ export class StormwaterJurisdictionService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<BoundingBoxDto>(`${this.basePath}/jurisdictions/${encodeURIComponent(String(jurisdictionID))}/bounding-box`,
+        return this.httpClient.get<LoadResultsDto>(`${this.basePath}/trash-results-by-jurisdiction/${encodeURIComponent(String(jurisdictionID))}/load-based-results-calculations`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -184,13 +152,18 @@ export class StormwaterJurisdictionService {
     /**
      * 
      * 
+     * @param jurisdictionID 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public jurisdictionsUserViewableGet(observe?: 'body', reportProgress?: boolean): Observable<Array<StormwaterJurisdictionDto>>;
-    public jurisdictionsUserViewableGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<StormwaterJurisdictionDto>>>;
-    public jurisdictionsUserViewableGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<StormwaterJurisdictionDto>>>;
-    public jurisdictionsUserViewableGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'body', reportProgress?: boolean): Observable<OVTAResultsDto>;
+    public trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OVTAResultsDto>>;
+    public trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OVTAResultsDto>>;
+    public trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(jurisdictionID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (jurisdictionID === null || jurisdictionID === undefined) {
+            throw new Error('Required parameter jurisdictionID was null or undefined when calling trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet.');
+        }
 
         let headers = this.defaultHeaders;
 
@@ -209,7 +182,7 @@ export class StormwaterJurisdictionService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<StormwaterJurisdictionDto>>(`${this.basePath}/jurisdictions/user-viewable`,
+        return this.httpClient.get<OVTAResultsDto>(`${this.basePath}/trash-results-by-jurisdiction/${encodeURIComponent(String(jurisdictionID))}/ovta-based-results-calculations`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

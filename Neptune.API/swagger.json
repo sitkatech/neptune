@@ -2183,7 +2183,7 @@
         }
       }
     },
-    "/jurisdictions/viewableByPerson": {
+    "/jurisdictions/user-viewable": {
       "get": {
         "tags": [
           "StormwaterJurisdiction"
@@ -2357,10 +2357,10 @@
         }
       }
     },
-    "/trash-generating-units/area-based-results-calculations/{jurisdictionID}": {
+    "/trash-results-by-jurisdiction/{jurisdictionID}/area-based-results-calculations": {
       "get": {
         "tags": [
-          "TrashGeneratingUnit"
+          "TrashGeneratingUnitByStormwaterJurisdiction"
         ],
         "parameters": [
           {
@@ -2397,10 +2397,10 @@
         }
       }
     },
-    "/trash-generating-units/ovta-based-results-calculations/{jurisdictionID}": {
+    "/trash-results-by-jurisdiction/{jurisdictionID}/ovta-based-results-calculations": {
       "get": {
         "tags": [
-          "TrashGeneratingUnit"
+          "TrashGeneratingUnitByStormwaterJurisdiction"
         ],
         "parameters": [
           {
@@ -2437,10 +2437,10 @@
         }
       }
     },
-    "/trash-generating-units/load-based-results-calculations/{jurisdictionID}": {
+    "/trash-results-by-jurisdiction/{jurisdictionID}/load-based-results-calculations": {
       "get": {
         "tags": [
-          "TrashGeneratingUnit"
+          "TrashGeneratingUnitByStormwaterJurisdiction"
         ],
         "parameters": [
           {

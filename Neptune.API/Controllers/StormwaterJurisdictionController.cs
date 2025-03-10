@@ -28,7 +28,7 @@ namespace Neptune.API.Controllers
         }
 
 
-        [HttpGet("viewableByPerson")]
+        [HttpGet("user-viewable")]
         public ActionResult<List<StormwaterJurisdictionDto>> ListViewableStormwaterJurisdictionIDsByPersonID()
         {
             var stormwaterJurisdictionIDs = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(DbContext, CallingUser?.PersonID);

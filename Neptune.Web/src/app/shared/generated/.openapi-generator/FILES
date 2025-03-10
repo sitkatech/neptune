@@ -13,6 +13,7 @@ api/project-document.service.ts
 api/project.service.ts
 api/stormwater-jurisdiction.service.ts
 api/system-info.service.ts
+api/trash-generating-unit-by-stormwater-jurisdiction.service.ts
 api/trash-generating-unit.service.ts
 api/treatment-bmp-type.service.ts
 api/treatment-bmp.service.ts

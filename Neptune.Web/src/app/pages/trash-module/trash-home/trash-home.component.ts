@@ -35,6 +35,8 @@ import { WqmpsTrashCaptureLayerComponent } from "src/app/shared/components/leafl
 import { LegendItem } from "src/app/shared/models/legend-item";
 import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 import { TrashGeneratingUnitLoadsLayerComponent } from "src/app/shared/components/leaflet/layers/trash-generating-unit-loads-layer/trash-generating-unit-loads-layer.component";
+import { TrashGeneratingUnitByStormwaterJurisdictionService } from "src/app/shared/generated/api/trash-generating-unit-by-stormwater-jurisdiction.service";
+import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 
 @Component({
     selector: "trash-home",
@@ -56,6 +58,7 @@ import { TrashGeneratingUnitLoadsLayerComponent } from "src/app/shared/component
         FieldDefinitionComponent,
         SelectDropDownModule,
         DecimalPipe,
+        LoadingDirective
     ],
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
@@ -73,20 +76,22 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     private stormwaterJurisdictionSubject = new BehaviorSubject<StormwaterJurisdictionDto | null>(null);
     public stormwaterJurisdiction$ = this.stormwaterJurisdictionSubject.asObservable();
 
-    public activeTab: string = "Area-Based Results";
-    public tabs = ["Area-Based Results" , "Load-Based Results (Current)", "Load-Based (Net Change)", "OVTA-Based Results" , "No Metric, Map Overlay"  ];
+    public currentResultType: string = "Area-Based Results";
+    public resultTypes = ["Area-Based Results" , "Load-Based Results (Current)", "Load-Based (Net Change)", "OVTA-Based Results" , "No Metric, Map Overlay"  ];
 
     public areaBasedAcreCalculationsDto$: Observable<AreaBasedAcreCalculationsDto>
     public loadResultsDto$: Observable<LoadResultsDto>
     public ovtaResultsDto$: Observable<OVTAResultsDto>
     public boundingBox$: Observable<BoundingBoxDto>
+    
+    public isLoading: boolean
 
     constructor(
         private authenticationService: AuthenticationService, 
         private router: Router, 
         private route: ActivatedRoute,
         private stormwaterJurisdictionService: StormwaterJurisdictionService,
-        private trashGeneratingUnitService: TrashGeneratingUnitService,
+        private trashResultsByJurisdictionService: TrashGeneratingUnitByStormwaterJurisdictionService,
         private leafletHelperService: LeafletHelperService
 
     ) {}
@@ -114,7 +119,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
             }
         });
         
-        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.jurisdictionsViewableByPersonGet().pipe(
+        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.jurisdictionsUserViewableGet().pipe(
             tap((x) => {
                 this.stormwaterJurisdictionSubject.next(x[0])
                 this.currentStormwaterJurisdiction = x[0]
@@ -124,19 +129,38 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
 
 
         this.areaBasedAcreCalculationsDto$ =  this.stormwaterJurisdiction$.pipe(
+            tap(() => {
+                this.isLoading = true;
+            }),
             switchMap((x) => {
-                return this.trashGeneratingUnitService.trashGeneratingUnitsAreaBasedResultsCalculationsJurisdictionIDGet(x.StormwaterJurisdictionID);
+                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+            }),
+            tap(() => {
+                this.isLoading = false;
             }));
         
         this.loadResultsDto$ = this.stormwaterJurisdiction$.pipe(
+            tap(() => {
+                this.isLoading = true;
+            }),
             switchMap((x) => {
-                return this.trashGeneratingUnitService.trashGeneratingUnitsLoadBasedResultsCalculationsJurisdictionIDGet(x.StormwaterJurisdictionID);
+                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+            }),
+            tap(() => {
+                this.isLoading = false;
             }));
         
         this.ovtaResultsDto$ = this.stormwaterJurisdiction$.pipe(
+            tap(() => {
+                this.isLoading = true;
+            }),
             switchMap((x) => {
-                return this.trashGeneratingUnitService.trashGeneratingUnitsOvtaBasedResultsCalculationsJurisdictionIDGet(x.StormwaterJurisdictionID);
-            }));
+                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+            }),
+            tap(() => {
+                this.isLoading = false;
+            })
+        );
                 
         this.boundingBox$ = this.stormwaterJurisdiction$.pipe(
             switchMap((x) => {

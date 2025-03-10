@@ -79,16 +79,14 @@
                     <div class="content-section">Toggle Results and Map Layer:</div>
                     <div class="dropdown-container">
                         <ng-select
-                            [(ngModel)]="activeTab"
-                           
-                            [items]="tabs"
-                          
+                            [(ngModel)]="currentResultType"
+                            [items]="resultTypes"
                             [clearable]="false">
                         </ng-select>
                     </div>
                 </div>
                 <div class="g-col-9">
-                    <div id="areaBasedCalculationControlTemplate" *ngIf="activeTab == 'Area-Based Results'">
+                    <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="areaBasedCalculationControlTemplate" *ngIf="currentResultType == 'Area-Based Results'">
                         <table class="table  table-responsive table-condensed areaBasedCalculationControlTable" *ngIf="areaBasedAcreCalculationsDto$ | async as areaBasedAcreCalculationsDto">
                             <tbody>
                                 <tr>
@@ -136,7 +134,7 @@
                             </tfoot>
                         </table>
                     </div>
-                    <div id="LoadBasedResultsControlTemplate" *ngIf="activeTab == 'Load-Based Results (Current)' || activeTab == 'Load-Based (Net Change)'">
+                    <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="LoadBasedResultsControlTemplate" *ngIf="currentResultType == 'Load-Based Results (Current)' || currentResultType == 'Load-Based (Net Change)'">
                         <table class="table table-responsive table-condensed loadBasedCalculationControlTable" *ngIf="loadResultsDto$ | async as loadResultsDto">
                             <tbody>
                                 <tr>
@@ -173,7 +171,7 @@
                             </tfoot>
                         </table>
                     </div>
-                    <div id="OVTABasedResultsControlTemplate" *ngIf="activeTab == 'OVTA-Based Results'">
+                    <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="OVTABasedResultsControlTemplate" *ngIf="currentResultType == 'OVTA-Based Results'">
                         <table class="table areaBasedCalculationControlTable" *ngIf="ovtaResultsDto$ | async as ovtaResultsDto">
                             <thead>
                                 <tr>
@@ -238,10 +236,10 @@
                 <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="50" [indexOfDisabledLayerControl]="0"></jurisdictions-layer>
                 <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60" [indexOfDisabledLayerControl]="0"></regional-subbasins-layer>
                 
-                <trash-generating-unit-layer *ngIf="mapIsReady && activeTab == 'Area-Based Results'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [indexOfDisabledLayerControl]="0"></trash-generating-unit-layer>
-                <trash-generating-unit-loads-layer *ngIf="mapIsReady && activeTab == 'Load-Based Results (Current)'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [style]="'current_load'" [indexOfDisabledLayerControl]="0"></trash-generating-unit-loads-layer>
-                <trash-generating-unit-loads-layer *ngIf="mapIsReady && activeTab == 'Load-Based (Net Change)'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [style]="'delta_load'" [indexOfDisabledLayerControl]="0"></trash-generating-unit-loads-layer>
-                <ovta-area-layer *ngIf="mapIsReady && activeTab == 'OVTA-Based Results'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [indexOfDisabledLayerControl]="0"></ovta-area-layer>
+                <trash-generating-unit-layer *ngIf="mapIsReady && currentResultType == 'Area-Based Results'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [indexOfDisabledLayerControl]="0"></trash-generating-unit-layer>
+                <trash-generating-unit-loads-layer *ngIf="mapIsReady && currentResultType == 'Load-Based Results (Current)'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [style]="'current_load'" [indexOfDisabledLayerControl]="0"></trash-generating-unit-loads-layer>
+                <trash-generating-unit-loads-layer *ngIf="mapIsReady && currentResultType == 'Load-Based (Net Change)'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [style]="'delta_load'" [indexOfDisabledLayerControl]="0"></trash-generating-unit-loads-layer>
+                <ovta-area-layer *ngIf="mapIsReady && currentResultType == 'OVTA-Based Results'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [indexOfDisabledLayerControl]="0"></ovta-area-layer>
             </neptune-map>
         </div>
     </div> 
