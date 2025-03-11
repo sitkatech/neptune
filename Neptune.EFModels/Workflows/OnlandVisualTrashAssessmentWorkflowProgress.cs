@@ -61,15 +61,18 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
                         (bool)OnlandVisualTrashAssessment.AssessingNewArea) && OnlandVisualTrashAssessment
                     .OnlandVisualTrashAssessmentObservations.ToList().Count > 0;
             case OnlandVisualTrashAssessmentWorkflowStep.AddOrRemoveParcels:
-                break;
+                return OnlandVisualTrashAssessment.DraftGeometry != null || (OnlandVisualTrashAssessment.AssessingNewArea.HasValue && !OnlandVisualTrashAssessment.AssessingNewArea.Value);
             case OnlandVisualTrashAssessmentWorkflowStep.RefineAssessmentArea:
-                break;
+                return OnlandVisualTrashAssessment.DraftGeometry != null || (OnlandVisualTrashAssessment.AssessingNewArea.HasValue && !OnlandVisualTrashAssessment.AssessingNewArea.Value);
             case OnlandVisualTrashAssessmentWorkflowStep.ReviewAndFinalize:
-                break;
+                return OnlandVisualTrashAssessment is
+                {
+                    OnlandVisualTrashAssessmentID: > 0, OnlandVisualTrashAssessmentObservations.Count: > 0,
+                    CompletedDate: not null
+                };
             default:
                 throw new ArgumentOutOfRangeException(nameof(wellRegistryWorkflowStep), wellRegistryWorkflowStep, null);
         }
-        return false;
     }
 
     public static bool WorkflowStepActive(OnlandVisualTrashAssessment OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentWorkflowStep wellRegistryWorkflowStep)
@@ -85,12 +88,11 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
             case OnlandVisualTrashAssessmentWorkflowStep.InitiateOvta:
                 return OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentID == 0;
             case OnlandVisualTrashAssessmentWorkflowStep.RecordObservations:
-                return OnlandVisualTrashAssessment.AssessingNewArea != null &&
-                        (bool)OnlandVisualTrashAssessment.AssessingNewArea;
+                return OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentID > 0;
             case OnlandVisualTrashAssessmentWorkflowStep.AddOrRemoveParcels:
-                break;
+                return OnlandVisualTrashAssessment is { OnlandVisualTrashAssessmentID: > 0, AssessingNewArea: true };
             case OnlandVisualTrashAssessmentWorkflowStep.RefineAssessmentArea:
-                break;
+                return OnlandVisualTrashAssessment is { OnlandVisualTrashAssessmentID: > 0, AssessingNewArea: true };
             default:
                 throw new ArgumentOutOfRangeException(nameof(wellRegistryWorkflowStep), wellRegistryWorkflowStep, null);
         }
