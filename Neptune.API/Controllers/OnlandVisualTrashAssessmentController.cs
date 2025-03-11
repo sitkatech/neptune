@@ -111,6 +111,7 @@ public class OnlandVisualTrashAssessmentController(
                 Latitude = x.LocationPoint4326.Coordinate[1],
                 Note = x.Note,
                 FileResourceID = x.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault()?.FileResourceID,
+                FileResourceGUID = x.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault()?.FileResource.GetFileResourceGUIDAsString(),
             });
 
         return Ok(visualTrashAssessmentObservationUpsertDtos);
@@ -129,7 +130,7 @@ public class OnlandVisualTrashAssessmentController(
     [RequestSizeLimit(30 * 1024 * 1024)]
     [RequestFormLimits(MultipartBodyLengthLimit = 30 * 1024 * 1024), ProducesResponseType(StatusCodes.Status413RequestEntityTooLarge)]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
-    public async Task<OnlandVisualTrashAssessmentObservationPhotoStagingSimpleDto> StageObservationPhoto([FromRoute]
+    public async Task<OnlandVisualTrashAssessmentObservationPhotoStagingDto> StageObservationPhoto([FromRoute]
         int onlandVisualTrashAssessmentID, [FromForm] OnlandVisualTrashAssessmentObservationPhotoDto file)
     {
 
@@ -143,13 +144,40 @@ public class OnlandVisualTrashAssessmentController(
         };
         await dbContext.OnlandVisualTrashAssessmentObservationPhotoStagings.AddAsync(onlandVisualTrashAssessmentObservationPhotoStaging);
         await dbContext.SaveChangesAsync();
+        await dbContext.OnlandVisualTrashAssessmentObservationPhotoStagings
+            .Entry(onlandVisualTrashAssessmentObservationPhotoStaging).ReloadAsync();
 
-        return  new OnlandVisualTrashAssessmentObservationPhotoStagingSimpleDto()
+        return  new OnlandVisualTrashAssessmentObservationPhotoStagingDto()
         {
             OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID,
             OnlandVisualTrashAssessmentObservationPhotoStagingID = onlandVisualTrashAssessmentObservationPhotoStaging.OnlandVisualTrashAssessmentObservationPhotoStagingID,
-            FileResourceID = onlandVisualTrashAssessmentObservationPhotoStaging.FileResourceID//onlandVisualTrashAssessmentObservationPhotoStaging.FileResource.GetFileResourceUrl()
+            FileResourceID = onlandVisualTrashAssessmentObservationPhotoStaging.FileResourceID,
+            FileResourceGUID = onlandVisualTrashAssessmentObservationPhotoStaging.FileResource.GetFileResourceGUIDAsString(),
+            PhotoStagingID = onlandVisualTrashAssessmentObservationPhotoStaging.OnlandVisualTrashAssessmentObservationPhotoStagingID
         };
     }
 
+    [HttpPost("{onlandVisualTrashAssessmentID}/observation-photo/delete")]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public async Task DeleteObservationPhoto([FromRoute] int onlandVisualTrashAssessmentID,
+        [FromBody] OnlandVisualTrashAssessmentObservationPhotoStagingDto onlandVisualTrashAssessmentObservationPhotoStaging)
+    {
+        //await dbContext.FileResources
+        //    .Where(x => x.FileResourceID == onlandVisualTrashAssessmentObservationPhotoStaging.FileResourceID)
+        //    .ExecuteDeleteAsync();
+        if (onlandVisualTrashAssessmentObservationPhotoStaging.PhotoStagingID != null)
+        {
+            await dbContext.OnlandVisualTrashAssessmentObservationPhotoStagings.Where(x =>
+                    x.OnlandVisualTrashAssessmentObservationPhotoStagingID ==
+                    onlandVisualTrashAssessmentObservationPhotoStaging
+                        .OnlandVisualTrashAssessmentObservationPhotoStagingID)
+                .ExecuteDeleteAsync();
+        }
+        else
+        {
+            await dbContext.OnlandVisualTrashAssessmentObservationPhotos.Where(x =>
+                x.OnlandVisualTrashAssessmentObservationID == onlandVisualTrashAssessmentObservationPhotoStaging
+                    .OnlandVisualTrashAssessmentObservationID).ExecuteDeleteAsync();
+        }
+    }
 }

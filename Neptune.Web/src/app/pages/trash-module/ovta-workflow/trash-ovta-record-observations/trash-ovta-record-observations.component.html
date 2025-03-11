@@ -41,7 +41,7 @@
         </div>
         <div class="card-body grid-12">
             <div class="field g-col-6">
-                <div class="file-upload-wrapper pb-2">
+                <div class="file-upload-wrapper pb-2" *ngIf="selectedOVTAObservation.controls.FileResourceGUID.getRawValue() == null; else hasPhoto">
                     <form-field
                         [formControl]="uploadFormField"
                         [uploadFileAccepts]="'.jpeg, .jpg, .png'"
@@ -49,6 +49,10 @@
                         [type]="FormFieldType.File"
                         (change)="getFile()"></form-field>
                 </div>
+                <ng-template #hasPhoto>
+                    <img [src]="getUrl(selectedOVTAObservation.controls.FileResourceGUID.getRawValue())" style="width: 200px; height: 300px" />
+                    <div><button class="btn btn-primary mt-2" (click)="deletePhotoFromSelectedObservation()">Delete Photo</button></div>
+                </ng-template>
             </div>
             <div class="g-col-6">
                 <form class="form" [formGroup]="selectedOVTAObservation">

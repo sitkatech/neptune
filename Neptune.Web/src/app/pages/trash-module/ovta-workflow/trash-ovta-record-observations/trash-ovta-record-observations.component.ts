@@ -23,6 +23,8 @@ import {
     OnlandVisualTrashAssessmentObservationUpsertDtoForm,
     OnlandVisualTrashAssessmentObservationUpsertDtoFormControls,
 } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-upsert-dto";
+import { environment } from "src/environments/environment";
+import { OnlandVisualTrashAssessmentObservationPhotoStagingDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-photo-staging-dto";
 
 @Component({
     selector: "trash-ovta-record-observations",
@@ -58,6 +60,7 @@ export class TrashOvtaRecordObservationsComponent {
         OnlandVisualTrashAssessmentID: OnlandVisualTrashAssessmentObservationUpsertDtoFormControls.OnlandVisualTrashAssessmentID(),
         Note: OnlandVisualTrashAssessmentObservationUpsertDtoFormControls.Note(),
         FileResourceID: OnlandVisualTrashAssessmentObservationUpsertDtoFormControls.FileResourceID(),
+        FileResourceGUID: OnlandVisualTrashAssessmentObservationUpsertDtoFormControls.FileResourceGUID(),
         Longitude: OnlandVisualTrashAssessmentObservationUpsertDtoFormControls.Longitude(),
         Latitude: OnlandVisualTrashAssessmentObservationUpsertDtoFormControls.Latitude(),
     });
@@ -197,6 +200,8 @@ export class TrashOvtaRecordObservationsComponent {
         this.selectedOVTAObservation.controls.Latitude.setValue(newObservation.Latitude);
         this.selectedOVTAObservation.controls.Longitude.setValue(newObservation.Longitude);
         this.selectedOVTAObservation.controls.FileResourceID.setValue(newObservation.FileResourceID);
+        this.selectedOVTAObservation.controls.FileResourceGUID.setValue(newObservation.FileResourceGUID);
+        this.selectedOVTAObservation.controls.OnlandVisualTrashAssessmentObservationID.setValue(newObservation.OnlandVisualTrashAssessmentObservationID);
         this.ovtaObservationLayer.eachLayer((layer) => {
             if (layer.feature.geometry.coordinates[0] == newObservation.Longitude && layer.feature.geometry.coordinates[1] == newObservation.Latitude) {
                 if (!layer.feature.properties.DefaultZIndexOffset) {
@@ -243,7 +248,29 @@ export class TrashOvtaRecordObservationsComponent {
                 .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoStagingPost(this.ovtaID, this.uploadFormField.getRawValue())
                 .subscribe((response) => {
                     this.selectedOVTAObservation.controls.FileResourceID.setValue(response.FileResourceID);
+                    this.selectedOVTAObservation.controls.FileResourceGUID.setValue(response.FileResourceGUID);
+                    this.selectedOVTAObservation.controls.PhotoStagingID.setValue(response.PhotoStagingID);
                 });
         }
+    }
+
+    public getUrl(fileResourceGUID) {
+        return environment.ocStormwaterToolsBaseUrl + "/FileResource/DisplayResource/" + fileResourceGUID;
+    }
+
+    public deletePhotoFromSelectedObservation() {
+        var onlandVisualTrashAssessmentObservationPhotoStagingDto = new OnlandVisualTrashAssessmentObservationPhotoStagingDto();
+        onlandVisualTrashAssessmentObservationPhotoStagingDto.FileResourceGUID = this.selectedOVTAObservation.controls.FileResourceGUID.getRawValue();
+        onlandVisualTrashAssessmentObservationPhotoStagingDto.FileResourceID = this.selectedOVTAObservation.controls.FileResourceID.getRawValue();
+        onlandVisualTrashAssessmentObservationPhotoStagingDto.OnlandVisualTrashAssessmentObservationID =
+            this.selectedOVTAObservation.controls.OnlandVisualTrashAssessmentObservationID.getRawValue();
+        onlandVisualTrashAssessmentObservationPhotoStagingDto.FileResourceGUID = this.selectedOVTAObservation.controls.FileResourceGUID.getRawValue();
+        this.onlandVisualTrashAssessmentService
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoDeletePost(this.ovtaID, onlandVisualTrashAssessmentObservationPhotoStagingDto)
+            .subscribe((x) => {
+                this.selectedOVTAObservation.controls.FileResourceID.setValue(null);
+                this.selectedOVTAObservation.controls.FileResourceGUID.setValue(null);
+                this.selectedOVTAObservation.controls.PhotoStagingID.setValue(null);
+            });
     }
 }

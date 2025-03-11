@@ -17,6 +17,8 @@ export class OnlandVisualTrashAssessmentObservationUpsertDto {
     Note?: string;
     ObservationDatetime?: string;
     FileResourceID?: number;
+    FileResourceGUID?: string;
+    PhotoStagingID?: number;
     Longitude?: number;
     Latitude?: number;
     constructor(obj?: any) {
@@ -30,6 +32,8 @@ export interface OnlandVisualTrashAssessmentObservationUpsertDtoForm {
     Note?: FormControl<string>;
     ObservationDatetime?: FormControl<string>;
     FileResourceID?: FormControl<number>;
+    FileResourceGUID?: FormControl<string>;
+    PhotoStagingID?: FormControl<number>;
     Longitude?: FormControl<number>;
     Latitude?: FormControl<number>;
 }
@@ -76,6 +80,26 @@ export class OnlandVisualTrashAssessmentObservationUpsertDtoFormControls {
         }
     );
     public static FileResourceID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FileResourceGUID = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static PhotoStagingID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

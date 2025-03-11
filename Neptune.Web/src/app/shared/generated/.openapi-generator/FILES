@@ -47,6 +47,7 @@ model/onland-visual-trash-assessment-area-geometry-dto.ts
 model/onland-visual-trash-assessment-area-grid-dto.ts
 model/onland-visual-trash-assessment-detail-dto.ts
 model/onland-visual-trash-assessment-grid-dto.ts
+model/onland-visual-trash-assessment-observation-photo-staging-dto.ts
 model/onland-visual-trash-assessment-observation-upsert-dto.ts
 model/onland-visual-trash-assessment-observation-with-photo-dto.ts
 model/onland-visual-trash-assessment-simple-dto.ts
