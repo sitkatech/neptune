@@ -19,7 +19,8 @@
             (change)="onJurisdictionSelected($event)"
             [type]="FormFieldType.Select"></form-field>
 
-        <div [hidden]="formGroup.controls.AssessingNewArea.value === true || !formGroup.controls.StormwaterJurisdictionID.value">
+        <!-- <div [hidden]="formGroup.controls.AssessingNewArea.value === true || !formGroup.controls.StormwaterJurisdictionID.value"> -->
+        <div>
             <form-field [formControl]="selectedOVTAArea" [type]="FormFieldType.Text" fieldLabel="Selected OVTA Area"></form-field>
             <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="500px" [showLegend]="false">
                 <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>

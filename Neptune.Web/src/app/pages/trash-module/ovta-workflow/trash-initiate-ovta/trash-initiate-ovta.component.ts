@@ -150,7 +150,6 @@ export class TrashInitiateOvtaComponent {
     }
 
     public onJurisdictionSelected(event: any) {
-        console.log(event);
         this.getStormwaterJurisdictionBounds(event.Value);
     }
 
@@ -158,6 +157,7 @@ export class TrashInitiateOvtaComponent {
         this.selectedOVTAAreaID = ovtaAreaID;
         this.selectedOVTAAreaName = ovtaAreaName;
         this.selectedOVTAArea.setValue(this.selectedOVTAAreaName);
+        this.formGroup.controls.OnlandVisualTrashAssessmentAreaID.patchValue(ovtaAreaID);
         this.highlightSelectedOVTAArea();
     }
 
