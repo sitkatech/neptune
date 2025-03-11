@@ -235,7 +235,6 @@
                 <wqmps-trash-capture-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-trash-capture-layer>
                 <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></jurisdictions-layer>
                 <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></regional-subbasins-layer>
-                <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></parcel-layer>
                 
                 <trash-generating-unit-layer *ngIf="mapIsReady && currentResultType == 'Area-Based Results'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1"></trash-generating-unit-layer>
                 <trash-generating-unit-loads-layer *ngIf="mapIsReady && currentResultType == 'Load-Based Results (Current)'"  [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="1" [style]="'current_load'"></trash-generating-unit-loads-layer>
