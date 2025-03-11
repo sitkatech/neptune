@@ -821,55 +821,6 @@
         }
       }
     },
-    "/onland-visual-trash-assessments/onland-visual-trash-assessment-areas/{onlandVisualTrashAssessmentAreaID}": {
-      "get": {
-        "tags": [
-          "OnlandVisualTrashAssessment"
-        ],
-        "parameters": [
-          {
-            "name": "onlandVisualTrashAssessmentAreaID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/observations": {
       "get": {
         "tags": [
@@ -1170,6 +1121,55 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaDetailDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/onland-visual-trash-assessment-areas/onland-visual-trash-assessment-areas/{onlandVisualTrashAssessmentAreaID}": {
+      "get": {
+        "tags": [
+          "OnlandVisualTrashAssessmentArea"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentAreaID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OnlandVisualTrashAssessmentGridDto"
+                  }
                 }
               }
             }

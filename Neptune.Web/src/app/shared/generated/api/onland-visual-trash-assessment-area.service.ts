@@ -21,6 +21,7 @@ import { Observable }                                        from 'rxjs';
 import { OnlandVisualTrashAssessmentAreaDetailDto } from '../model/onland-visual-trash-assessment-area-detail-dto';
 import { OnlandVisualTrashAssessmentAreaGeometryDto } from '../model/onland-visual-trash-assessment-area-geometry-dto';
 import { OnlandVisualTrashAssessmentAreaGridDto } from '../model/onland-visual-trash-assessment-area-grid-dto';
+import { OnlandVisualTrashAssessmentGridDto } from '../model/onland-visual-trash-assessment-grid-dto';
 import { ParcelGeometrySimpleDto } from '../model/parcel-geometry-simple-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -229,6 +230,49 @@ export class OnlandVisualTrashAssessmentAreaService {
 
         return this.httpClient.post<any>(`${this.basePath}/onland-visual-trash-assessment-areas/${encodeURIComponent(String(onlandVisualTrashAssessmentAreaID))}/parcel-geometries`,
             onlandVisualTrashAssessmentAreaGeometryDto,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param onlandVisualTrashAssessmentAreaID 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(onlandVisualTrashAssessmentAreaID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<OnlandVisualTrashAssessmentGridDto>>;
+    public onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(onlandVisualTrashAssessmentAreaID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<OnlandVisualTrashAssessmentGridDto>>>;
+    public onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(onlandVisualTrashAssessmentAreaID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<OnlandVisualTrashAssessmentGridDto>>>;
+    public onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(onlandVisualTrashAssessmentAreaID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (onlandVisualTrashAssessmentAreaID === null || onlandVisualTrashAssessmentAreaID === undefined) {
+            throw new Error('Required parameter onlandVisualTrashAssessmentAreaID was null or undefined when calling onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<OnlandVisualTrashAssessmentGridDto>>(`${this.basePath}/onland-visual-trash-assessment-areas/onland-visual-trash-assessment-areas/${encodeURIComponent(String(onlandVisualTrashAssessmentAreaID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

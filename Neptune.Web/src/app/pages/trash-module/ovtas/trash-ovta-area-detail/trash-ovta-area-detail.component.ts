@@ -117,7 +117,7 @@ export class TrashOvtaAreaDetailComponent {
 
         this.onlandVisualTrashAssessments$ = this.route.params.pipe(
             switchMap((params) => {
-                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(
+                return this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(
                     params[routeParams.onlandVisualTrashAssessmentAreaID]
                 );
             }),

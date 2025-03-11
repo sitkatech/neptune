@@ -51,20 +51,12 @@ namespace Neptune.EFModels.Entities
         public static async Task Update(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID,
         List<OnlandVisualTrashAssessmentObservationUpsertDto> onlandVisualTrashAssessmentObservationUpsertDtos)
         {
-            var currentObservations = dbContext.OnlandVisualTrashAssessmentObservations
-                .Include(x => x.OnlandVisualTrashAssessmentObservationPhotos)
-                .Where(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID).ToList();
-
             await dbContext.OnlandVisualTrashAssessmentObservationPhotos
                 .Include(x => x.OnlandVisualTrashAssessmentObservation).Where(x =>
                     x.OnlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentID ==
-                    onlandVisualTrashAssessmentID &&
-                    currentObservations.Select(y => y.OnlandVisualTrashAssessmentObservationID)
-                        .Contains(x.OnlandVisualTrashAssessmentObservationID)).ExecuteDeleteAsync();
+                    onlandVisualTrashAssessmentID).ExecuteDeleteAsync();
             await dbContext.OnlandVisualTrashAssessmentObservations.Where(x =>
-                x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID && currentObservations
-                    .Select(y => y.OnlandVisualTrashAssessmentObservationID)
-                    .Contains(x.OnlandVisualTrashAssessmentObservationID)).ExecuteDeleteAsync();
+                x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID).ExecuteDeleteAsync();
 
             foreach (var onlandVisualTrashAssessmentObservationUpsertDto in onlandVisualTrashAssessmentObservationUpsertDtos)
             {
@@ -76,17 +68,16 @@ namespace Neptune.EFModels.Entities
                         (int)onlandVisualTrashAssessmentObservationUpsertDto.FileResourceID;
                 }
 
-
+                var locationPoint4326FromLatLong = GeometryHelper.CreateLocationPoint4326FromLatLong(onlandVisualTrashAssessmentObservationUpsertDto.Latitude, onlandVisualTrashAssessmentObservationUpsertDto.Longitude);
                 var onlandVisualTrashAssessmentObservation = new OnlandVisualTrashAssessmentObservation()
                 {
                     OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID,
                     Note = onlandVisualTrashAssessmentObservationUpsertDto.Note,
                     ObservationDatetime = onlandVisualTrashAssessmentObservationUpsertDto.ObservationDatetime ?? DateTime.UtcNow,
-                    LocationPoint4326 = GeometryHelper.CreateLocationPoint4326FromLatLong(onlandVisualTrashAssessmentObservationUpsertDto.Latitude, onlandVisualTrashAssessmentObservationUpsertDto.Longitude),
-                    LocationPoint = GeometryHelper.CreateLocationPoint4326FromLatLong(onlandVisualTrashAssessmentObservationUpsertDto.Latitude, onlandVisualTrashAssessmentObservationUpsertDto.Longitude).ProjectTo2771(),
+                    LocationPoint4326 = locationPoint4326FromLatLong,
+                    LocationPoint = locationPoint4326FromLatLong.ProjectTo2771(),
                     OnlandVisualTrashAssessmentObservationPhotos = [onlandVisualTrashAssessmentObservationPhoto]
                 };
-
 
                 dbContext.OnlandVisualTrashAssessmentObservations.Add(onlandVisualTrashAssessmentObservation);
             }
