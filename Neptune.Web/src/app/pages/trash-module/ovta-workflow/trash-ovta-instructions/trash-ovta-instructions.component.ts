@@ -2,7 +2,9 @@ import { Component } from "@angular/core";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { CustomRichTextComponent } from "../../../../shared/components/custom-rich-text/custom-rich-text.component";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { switchMap } from "rxjs";
+import { routeParams } from "src/app/app.routes";
 
 @Component({
     selector: "trash-ovta-instructions",
@@ -13,9 +15,16 @@ import { Router } from "@angular/router";
 })
 export class TrashOvtaInstructionsComponent {
     public rteID = NeptunePageTypeEnum.OVTAInstructions;
-    constructor(private router: Router) {}
+    constructor(private router: Router, private route: ActivatedRoute) {}
 
     continueToNextStep() {
-        this.router.navigateByUrl("/trash/onland-visual-trash-assessment/new/initiate-ovta");
+        var ovtaID = this.route.snapshot.paramMap.get(routeParams.onlandVisualTrashAssessmentID)
+            ? parseInt(this.route.snapshot.paramMap.get(routeParams.onlandVisualTrashAssessmentID))
+            : null;
+        if (ovtaID != null) {
+            this.router.navigateByUrl(`/trash/onland-visual-trash-assessment/edit/${ovtaID}/initiate-ovta`);
+        } else {
+            this.router.navigateByUrl("/trash/onland-visual-trash-assessment/new/initiate-ovta");
+        }
     }
 }
