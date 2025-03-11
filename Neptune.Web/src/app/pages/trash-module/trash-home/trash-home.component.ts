@@ -7,8 +7,8 @@ import { RoleEnum } from "src/app/shared/generated/enum/role-enum";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
-import { AsyncPipe, DecimalPipe, NgFor, NgIf } from "@angular/common";
-import { BehaviorSubject, map, Observable, switchMap, tap } from "rxjs";
+import { AsyncPipe, DecimalPipe, NgIf } from "@angular/common";
+import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import * as L from "leaflet";
 import "leaflet-draw";
@@ -23,7 +23,6 @@ import { FormsModule, ReactiveFormsModule  } from "@angular/forms";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { SelectDropDownModule } from "ngx-select-dropdown";
-import { TrashGeneratingUnitService } from "src/app/shared/generated/api/trash-generating-unit.service";
 import { AreaBasedAcreCalculationsDto } from "src/app/shared/generated/model/area-based-acre-calculations-dto";
 import { LoadResultsDto } from "src/app/shared/generated/model/load-results-dto";
 import { OVTAResultsDto } from "src/app/shared/generated/model/ovta-results-dto";
@@ -32,12 +31,10 @@ import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto"
 import { StormwaterJurisdictionDto } from "src/app/shared/generated/model/models";
 import { InventoriedBMPsTrashCaptureLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-trash-capture-layer/inventoried-bmps-trash-capture-layer.component";
 import { WqmpsTrashCaptureLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-trash-capture-layer/wqmps-trash-capture-layer.component";
-import { LegendItem } from "src/app/shared/models/legend-item";
 import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 import { TrashGeneratingUnitLoadsLayerComponent } from "src/app/shared/components/leaflet/layers/trash-generating-unit-loads-layer/trash-generating-unit-loads-layer.component";
 import { TrashGeneratingUnitByStormwaterJurisdictionService } from "src/app/shared/generated/api/trash-generating-unit-by-stormwater-jurisdiction.service";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
-import { ParcelLayerComponent } from "../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 
 @Component({
     selector: "trash-home",
@@ -59,7 +56,7 @@ import { ParcelLayerComponent } from "../../../shared/components/leaflet/layers/
     FieldDefinitionComponent,
     SelectDropDownModule,
     DecimalPipe,
-    LoadingDirective, ParcelLayerComponent],
+    LoadingDirective],
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;
@@ -67,6 +64,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
 
     public richTextTypeID: number = NeptunePageTypeEnum.TrashHomePage;
 
+    public mapHeight = window.innerHeight - window.innerHeight * 0.2 + "px";
     public map: L.Map;
     public mapIsReady: boolean = false;
     public layerControl: L.Control.Layers;

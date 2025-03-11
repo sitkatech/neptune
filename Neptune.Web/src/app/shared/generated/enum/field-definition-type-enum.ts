@@ -145,7 +145,12 @@ export enum FieldDefinitionTypeEnum {
   ReceivingWaterScore = 138,
   NumberOfIndividualBMPs = 139,
   LandUseType = 140,
-  LandUseDescription = 141
+  LandUseDescription = 141,
+  OVTAScoreEquivalentCalculation = 142,
+  BaselineLoadingRate = 143,
+  CurrentLoadingRate = 144,
+  BMPTrashTreatmentStatus = 145,
+  WQMPTrashTreatmentStatus = 146
 }
 
 export const FieldDefinitionTypes: LookupTableEntry[]  = [
@@ -288,6 +293,11 @@ export const FieldDefinitionTypes: LookupTableEntry[]  = [
   { Name: "ReceivingWaterScore", DisplayName: "Receiving Water Score", Value: 138 },
   { Name: "NumberOfIndividualBMPs", DisplayName: "# of Individual BMPs", Value: 139 },
   { Name: "LandUseType", DisplayName: "Land Use Type", Value: 140 },
-  { Name: "LandUseDescription", DisplayName: "Land Use Description", Value: 141 }
+  { Name: "LandUseDescription", DisplayName: "Land Use Description", Value: 141 },
+  { Name: "OVTAScoreEquivalentCalculation", DisplayName: "OVTA Score Equivalent Calculation", Value: 142 },
+  { Name: "BaselineLoadingRate", DisplayName: "Baseline Loading Rate", Value: 143 },
+  { Name: "CurrentLoadingRate", DisplayName: "Current Loading Rate", Value: 144 },
+  { Name: "BMPTrashTreatmentStatus", DisplayName: "BMP Trash Treatment Status", Value: 145 },
+  { Name: "WQMPTrashTreatmentStatus", DisplayName: "WQMP Trash Treatment Status", Value: 146 }
 ];
 export const FieldDefinitionTypesAsSelectDropdownOptions = FieldDefinitionTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));
