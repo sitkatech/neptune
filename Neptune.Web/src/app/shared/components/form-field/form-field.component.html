@@ -76,7 +76,15 @@
                 {{ fieldLabel }}
             </label>
 
-            <select-dropdown *ngIf="formInputOptions; else noOptionsProvided" [formInputOptions]="formInputOptions" [formControl]="formControl"></select-dropdown>
+            <ng-select
+                class="custom"
+                *ngIf="formInputOptions; else noOptionsProvided"
+                [items]="formInputOptions"
+                [formControl]="formControl"
+                [multiple]="multiple"
+                bindLabel="Label"
+                bindValue="Value"></ng-select>
+
             <ng-template #noOptionsProvided>
                 <span class="text-danger"> No "formInputOptions" were provided to this form field component </span>
             </ng-template>
