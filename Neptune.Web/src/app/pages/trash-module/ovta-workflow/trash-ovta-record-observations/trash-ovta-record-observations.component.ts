@@ -25,6 +25,7 @@ import {
 } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-upsert-dto";
 import { environment } from "src/environments/environment";
 import { OnlandVisualTrashAssessmentObservationPhotoStagingDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-photo-staging-dto";
+import { OnlandVisualTrashAssessmentWorkflowDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-workflow-dto";
 
 @Component({
     selector: "trash-ovta-record-observations",
@@ -45,7 +46,6 @@ import { OnlandVisualTrashAssessmentObservationPhotoStagingDto } from "src/app/s
     styleUrl: "./trash-ovta-record-observations.component.scss",
 })
 export class TrashOvtaRecordObservationsComponent {
-    @ViewChild("fileUpload") fileUpload: any;
     public FormFieldType = FormFieldType;
     public map: L.Map;
     public layerControl: L.Control.Layers;
@@ -65,9 +65,9 @@ export class TrashOvtaRecordObservationsComponent {
         Latitude: OnlandVisualTrashAssessmentObservationUpsertDtoFormControls.Latitude(),
     });
 
-    public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentObservationUpsertDto[]>;
+    public onlandVisualTrashAssessmentObservations$: Observable<OnlandVisualTrashAssessmentObservationUpsertDto[]>;
 
-    public onlandVisualTrashAssessmentArea$: Observable<OnlandVisualTrashAssessmentDetailDto>;
+    public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentWorkflowDto>;
 
     constructor(
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
@@ -79,7 +79,7 @@ export class TrashOvtaRecordObservationsComponent {
     ) {}
 
     ngOnInit() {
-        this.onlandVisualTrashAssessment$ = this.route.params.pipe(
+        this.onlandVisualTrashAssessmentObservations$ = this.route.params.pipe(
             switchMap((params) => {
                 this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
                 return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsGet(
@@ -87,9 +87,11 @@ export class TrashOvtaRecordObservationsComponent {
                 );
             })
         );
-        this.onlandVisualTrashAssessmentArea$ = this.route.params.pipe(
+        this.onlandVisualTrashAssessment$ = this.route.params.pipe(
             switchMap((params) => {
-                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(params[routeParams.onlandVisualTrashAssessmentID]);
+                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDWorkflowGet(
+                    params[routeParams.onlandVisualTrashAssessmentID]
+                );
             })
         );
     }
@@ -156,8 +158,15 @@ export class TrashOvtaRecordObservationsComponent {
             this.alertService.clearAlerts();
             this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
             this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
+
             if (andContinue) {
-                this.router.navigate([`../../${this.ovtaID}/review-and-finalize`], { relativeTo: this.route });
+                this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDProgressGet(this.ovtaID).subscribe((response) => {
+                    if (response.Steps.RefineAssessmentArea.Disabled) {
+                        this.router.navigate([`../../${this.ovtaID}/review-and-finalize`], { relativeTo: this.route });
+                    } else {
+                        this.router.navigate([`../../${this.ovtaID}/add-or-remove-parcels`], { relativeTo: this.route });
+                    }
+                });
             }
         });
     }

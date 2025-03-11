@@ -54,6 +54,15 @@ public class OnlandVisualTrashAssessmentController(
         return Ok(onlandVisualTrashAssessmentWorkflowDto);
     }
 
+    [HttpGet("{onlandVisualTrashAssessmentID}/add-or-remove-parcel")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public ActionResult<OnlandVisualTrashAssessmentAddRemoveParcelsDto> GetByIDForAddOrRemoveParcel([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessmentAddRemoveParcelsDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsAddRemoveParcelDto();
+        return Ok(onlandVisualTrashAssessmentAddRemoveParcelsDto);
+    }
+
     [HttpGet("preliminary-source-identification-types")]
     [JurisdictionEditFeature]
     public ActionResult<List<PreliminarySourceIdentificationTypeSimpleDto>> GetPreliminarySourceIdentificationTypes()
@@ -174,6 +183,15 @@ public class OnlandVisualTrashAssessmentController(
                     .OnlandVisualTrashAssessmentObservationID).ExecuteDeleteAsync();
         }
 
+        return Ok();
+    }
+
+    [HttpPost("{onlandVisualTrashAssessmentID}/parcel-geometries")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
+    public async Task<ActionResult> UpdateOnlandVisualTrashAssessmentWithParcels([FromRoute] int onlandVisualTrashAssessmentID, [FromBody] List<int> parcelIDs)
+    {
+        await OnlandVisualTrashAssessments.UpdateGeometry(dbContext, onlandVisualTrashAssessmentID, parcelIDs);
         return Ok();
     }
 }

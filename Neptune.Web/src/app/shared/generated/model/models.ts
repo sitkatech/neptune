@@ -22,6 +22,7 @@ export * from '././neptune-page-type-simple-dto';
 export * from '././nts-geometry-services';
 export * from '././ovta-results-dto';
 export * from '././ogc-geometry-type';
+export * from '././onland-visual-trash-assessment-add-remove-parcels-dto';
 export * from '././onland-visual-trash-assessment-area-detail-dto';
 export * from '././onland-visual-trash-assessment-area-geometry-dto';
 export * from '././onland-visual-trash-assessment-area-grid-dto';

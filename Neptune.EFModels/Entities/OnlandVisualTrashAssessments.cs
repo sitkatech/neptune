@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
+using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
+using NetTopologySuite.Features;
 
 namespace Neptune.EFModels.Entities;
 
@@ -38,6 +40,8 @@ public static class OnlandVisualTrashAssessments
             .ThenInclude(x => x.OnlandVisualTrashAssessmentObservationPhotos)
             .ThenInclude(x => x.FileResource)
             .Include(x => x.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes)
+            .Include(x => x.StormwaterJurisdiction)
+            .ThenInclude(x => x.StormwaterJurisdictionGeometry)
             .SingleOrDefault(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
         Check.RequireNotNull(onlandVisualTrashAssessment, $"OnlandVisualTrashAssessment with ID {onlandVisualTrashAssessmentID} not found!");
         return onlandVisualTrashAssessment;
@@ -161,6 +165,15 @@ public static class OnlandVisualTrashAssessments
         var preliminarySourceIdentificationTypeSimpleDtos = PreliminarySourceIdentificationType.AllAsSimpleDto;
 
         return preliminarySourceIdentificationTypeSimpleDtos;
+    }
+
+    public static async Task UpdateGeometry(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID, List<int> parcelIDs)
+    {
+        var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments.Single(x =>
+            x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
+        onlandVisualTrashAssessment.DraftGeometry = ParcelGeometries.UnionAggregate4326ByParcelIDs(dbContext, parcelIDs);
+
+        await dbContext.SaveChangesAsync();
     }
 
 }
