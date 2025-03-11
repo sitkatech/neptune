@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ActivatedRoute, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
@@ -63,11 +63,24 @@ export class TrashOvtaAreaDetailComponent {
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
         private utilityFunctionsService: UtilityFunctionsService,
         private route: ActivatedRoute,
-        private modalService: ModalService
+        private modalService: ModalService,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
         this.ovtaColumnDefs = [
+            this.utilityFunctionsService.createActionsColumnDef((params: any) => {
+                return [
+                    { ActionName: "View", ActionHandler: () => this.router.navigate(["trash", "onland-visual-trash-assessment", params.data.OnlandVisualTrashAssessmentID]) },
+                    {
+                        ActionName: "Edit",
+                        ActionIcon: "fas fa-edit",
+                        ActionHandler: () =>
+                            this.router.navigateByUrl(`/trash/onland-visual-trash-assessment/edit/${params.data.OnlandVisualTrashAssessmentID}/record-observations`),
+                    },
+                    //{ ActionName: "Delete", ActionIcon: "fa fa-trash text-danger", ActionHandler: () => this.deleteModal(params) },
+                ];
+            }),
             this.utilityFunctionsService.createLinkColumnDef("Assessment ID", "OnlandVisualTrashAssessmentID", "OnlandVisualTrashAssessmentID", {
                 InRouterLink: "../../onland-visual-trash-assessment/",
             }),
