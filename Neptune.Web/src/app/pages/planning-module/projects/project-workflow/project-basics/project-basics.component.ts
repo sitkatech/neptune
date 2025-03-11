@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { combineLatest, map, Observable, of, pipe, switchMap, tap } from "rxjs";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
-import { OrganizationSimpleDto, PersonDto, ProjectUpsertDtoForm, ProjectUpsertDtoFormControls } from "src/app/shared/generated/model/models";
+import { ProjectUpsertDtoForm, ProjectUpsertDtoFormControls } from "src/app/shared/generated/model/models";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { OrganizationService } from "src/app/shared/generated/api/organization.service";
@@ -12,35 +12,23 @@ import { UserService } from "src/app/shared/generated/api/user.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { ProjectDto } from "src/app/shared/generated/model/models";
 import { NgSelectModule } from "@ng-select/ng-select";
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgIf, AsyncPipe } from "@angular/common";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { routeParams } from "src/app/app.routes";
 import { FormFieldComponent, FormFieldType } from "src/app/shared/components/form-field/form-field.component";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component";
+import { SelectDropdownOption } from "src/app/shared/components//form-field/form-field.component";
 import { ProjectWorkflowProgressService } from "src/app/shared/services/project-workflow-progress.service";
 import { AuthenticationService } from "src/app/services/authentication.service";
-import { SelectDropDownModule } from "ngx-select-dropdown";
 
 @Component({
     selector: "project-basics",
     templateUrl: "./project-basics.component.html",
     styleUrls: ["./project-basics.component.scss"],
     standalone: true,
-    imports: [
-        NgIf,
-        AsyncPipe,
-        ReactiveFormsModule,
-        FormsModule,
-        FormFieldComponent,
-        NgSelectModule,
-        PageHeaderComponent,
-        WorkflowBodyComponent,
-        AlertDisplayComponent,
-        SelectDropDownModule,
-    ],
+    imports: [NgIf, AsyncPipe, ReactiveFormsModule, FormsModule, FormFieldComponent, NgSelectModule, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent],
 })
 export class ProjectBasicsComponent implements OnInit {
     public FormFieldType = FormFieldType;
@@ -55,34 +43,6 @@ export class ProjectBasicsComponent implements OnInit {
     public customRichTextTypeID: number = NeptunePageTypeEnum.HippocampProjectBasics;
     public originalProjectModel: string;
     public projectBasicInfo$: Observable<ProjectDto>;
-
-    public orgDropdownConfig = {
-        search: true,
-        height: "320px",
-        placeholder: "Select an organization",
-        searchFn: (option: SelectDropdownOption) => option.Label,
-        displayFn: (option: SelectDropdownOption) => option.Label,
-    };
-
-    public contactDropdownConfig = {
-        search: true,
-        height: "320px",
-        placeholder: "Select an contact",
-        searchFn: (option: SelectDropdownOption) => option.Label,
-        displayFn: (option: SelectDropdownOption) => option.Label,
-    };
-
-    public jurisdictionDropdownConfig = {
-        search: true,
-        height: "320px",
-        placeholder: "Select an jurisdiction",
-        searchFn: (option: SelectDropdownOption) => option.Label,
-        displayFn: (option: SelectDropdownOption) => option.Label,
-    };
-
-    public selectedOrg: FormControl = new FormControl();
-    public selectedContact: FormControl = new FormControl();
-    public selectedJurisdiction: FormControl = new FormControl();
 
     public formGroup: FormGroup<ProjectUpsertDtoForm> = new FormGroup<any>({
         ProjectName: ProjectUpsertDtoFormControls.ProjectName(),
@@ -134,12 +94,6 @@ export class ProjectBasicsComponent implements OnInit {
                         this.formGroup.controls.AdditionalContactInformation.setValue(value.Project.AdditionalContactInformation);
                         this.formGroup.controls.CalculateOCTAM2Tier2Scores.setValue(value.Project.CalculateOCTAM2Tier2Scores);
                         this.isLoadingSubmit = false;
-                        this.selectedOrg.setValue({ Value: value.Project.OrganizationID, Label: value.Project.Organization.OrganizationName });
-                        this.selectedContact.setValue({ Value: value.Project.PrimaryContactPersonID, Label: value.Project.PrimaryContactPerson.FullName });
-                        this.selectedJurisdiction.setValue({
-                            Value: value.Project.StormwaterJurisdictionID,
-                            Label: value.Project.StormwaterJurisdiction.Organization.OrganizationName,
-                        });
                     } else {
                         this.formGroup.controls.PrimaryContactPersonID.setValue(value.CurrentUser.PersonID);
                     }
@@ -153,14 +107,12 @@ export class ProjectBasicsComponent implements OnInit {
         this.organizationOptions$ = this.organizationService.organizationsGet().pipe(
             map((list) => {
                 let options = list.map((x) => ({ Value: x.OrganizationID, Label: x.OrganizationName } as SelectDropdownOption));
-                options = [{ Value: null, Label: "- Select -", Disabled: true }, ...options]; // insert an empty option at the front
                 return options;
             })
         );
         this.userOptions$ = this.userService.usersGet().pipe(
             map((list) => {
                 let options = list.map((x) => ({ Value: x.PersonID, Label: x.FullName } as SelectDropdownOption));
-                options = [{ Value: null, Label: "- Select -", Disabled: true }, ...options]; // insert an empty option at the front
                 return options;
             })
         );
@@ -171,22 +123,9 @@ export class ProjectBasicsComponent implements OnInit {
                 }
 
                 let options = list.map((x) => ({ Value: x.StormwaterJurisdictionID, Label: x.Organization.OrganizationName } as SelectDropdownOption));
-                options = [{ Value: null, Label: "- Select -", Disabled: true }, ...options]; // insert an empty option at the front
                 return options;
             })
         );
-    }
-
-    public onOrgSelected(event: any) {
-        this.formGroup.controls.OrganizationID.patchValue(event.Value);
-    }
-
-    public onContactSelected(event: any) {
-        this.formGroup.controls.PrimaryContactPersonID.patchValue(event.Value);
-    }
-
-    public onJurisdictionSelected(event: any) {
-        this.formGroup.controls.StormwaterJurisdictionID.patchValue(event.Value);
     }
 
     public save(andContinue: boolean = false) {

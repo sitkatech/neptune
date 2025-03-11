@@ -11,30 +11,27 @@
                 [required]="false"
                 [type]="FormFieldType.Textarea"></form-field>
             <h3 class="mt-4">Project Contact Information</h3>
-            <div class="field-label required">Project Owner</div>
-            <ngx-select-dropdown
-                [multiple]="false"
-                [config]="orgDropdownConfig"
-                name="selectedOrg"
-                [formControl]="selectedOrg"
-                (ngModelChange)="onOrgSelected($event)"
-                [options]="organizationOptions$ | async"></ngx-select-dropdown>
-            <div class="field-label required">Jurisdiction</div>
-            <ngx-select-dropdown
-                [multiple]="false"
-                [config]="jurisdictionDropdownConfig"
-                name="selectedJurisdiction"
-                [formControl]="selectedJurisdiction"
-                (ngModelChange)="onJurisdictionSelected($event)"
-                [options]="stormwaterJurisdictionOptions$ | async"></ngx-select-dropdown>
-            <div class="field-label required">Primary Contact</div>
-            <ngx-select-dropdown
-                [multiple]="false"
-                [config]="contactDropdownConfig"
-                name="selectedContact"
-                [formControl]="selectedContact"
-                (ngModelChange)="onContactSelected($event)"
-                [options]="userOptions$ | async"></ngx-select-dropdown>
+            <form-field
+                *ngIf="organizationOptions$ | async as organizationOptions"
+                [required]="true"
+                [formControl]="formGroup.controls.OrganizationID"
+                fieldLabel="Project Owner"
+                [formInputOptions]="organizationOptions"
+                [type]="FormFieldType.Select"></form-field>
+            <form-field
+                *ngIf="stormwaterJurisdictionOptions$ | async as stormwaterJurisdictionOptions"
+                [required]="true"
+                [formControl]="formGroup.controls.StormwaterJurisdictionID"
+                fieldLabel="Jurisdiction"
+                [formInputOptions]="stormwaterJurisdictionOptions"
+                [type]="FormFieldType.Select"></form-field>
+            <form-field
+                *ngIf="userOptions$ | async as userOptions"
+                [required]="true"
+                [formControl]="formGroup.controls.PrimaryContactPersonID"
+                fieldLabel="Primary Contact"
+                [formInputOptions]="userOptions"
+                [type]="FormFieldType.Select"></form-field>
             <form-field
                 class="g-col-12"
                 [formControl]="formGroup.controls.AdditionalContactInformation"

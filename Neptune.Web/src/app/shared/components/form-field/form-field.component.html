@@ -83,7 +83,8 @@
                 [formControl]="formControl"
                 [multiple]="multiple"
                 bindLabel="Label"
-                bindValue="Value"></ng-select>
+                bindValue="Value"
+                (change)="onNgSelectChange($event)"></ng-select>
 
             <ng-template #noOptionsProvided>
                 <span class="text-danger"> No "formInputOptions" were provided to this form field component </span>
