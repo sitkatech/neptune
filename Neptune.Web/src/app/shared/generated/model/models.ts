@@ -1,3 +1,4 @@
+export * from '././area-based-acre-calculations-dto';
 export * from '././bounding-box-dto';
 export * from '././coordinate';
 export * from '././coordinate-sequence';
@@ -15,9 +16,11 @@ export * from '././geometry-geo-json-and-area-dto';
 export * from '././i-attributes-table';
 export * from '././i-feature';
 export * from '././land-use-block-grid-dto';
+export * from '././load-results-dto';
 export * from '././neptune-page-dto';
 export * from '././neptune-page-type-simple-dto';
 export * from '././nts-geometry-services';
+export * from '././ovta-results-dto';
 export * from '././ogc-geometry-type';
 export * from '././onland-visual-trash-assessment-area-detail-dto';
 export * from '././onland-visual-trash-assessment-area-geometry-dto';

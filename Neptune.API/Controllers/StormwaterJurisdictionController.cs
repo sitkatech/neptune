@@ -27,6 +27,15 @@ namespace Neptune.API.Controllers
             return Ok(stormwaterJurisdictionSimpleDtos);
         }
 
+
+        [HttpGet("user-viewable")]
+        public ActionResult<List<StormwaterJurisdictionDto>> ListViewableStormwaterJurisdictionIDsByPersonID()
+        {
+            var stormwaterJurisdictionIDs = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(DbContext, CallingUser?.PersonID);
+            var stormwaterJurisdictionSimpleDtos = StormwaterJurisdictions.ListByIDsAsDto(DbContext, stormwaterJurisdictionIDs);
+            return Ok(stormwaterJurisdictionSimpleDtos);
+        }
+
         [HttpGet("bounding-box")]
         [UserViewFeature]
         public ActionResult<BoundingBoxDto> GetBoundingBoxByPersonID()
@@ -34,5 +43,13 @@ namespace Neptune.API.Controllers
             var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByPersonID(DbContext, CallingUser.PersonID);
             return Ok(boundingBoxDto);
         }
+
+        [HttpGet("{jurisdictionID}/bounding-box")]
+        public ActionResult<BoundingBoxDto> GetBoundingBoxByProjectID([FromRoute] int jurisdictionID)
+        {
+            var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByJurisdictionID(DbContext, jurisdictionID);
+            return Ok(boundingBoxDto);
+        }
+
     }
 }

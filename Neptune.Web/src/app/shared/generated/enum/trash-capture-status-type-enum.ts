@@ -18,4 +18,4 @@ export const TrashCaptureStatusTypes: LookupTableEntry[]  = [
   { Name: "None", DisplayName: "No Trash Capture", Value: 3 },
   { Name: "NotProvided", DisplayName: "Not Provided", Value: 4 }
 ];
-export const TrashCaptureStatusTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...TrashCaptureStatusTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const TrashCaptureStatusTypesAsSelectDropdownOptions = TrashCaptureStatusTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

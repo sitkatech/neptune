@@ -28,4 +28,4 @@ export const StormwaterBreadCrumbEntities: LookupTableEntry[]  = [
   { Name: "Parcel", DisplayName: "Parcel", Value: 9 },
   { Name: "OnlandVisualTrashAssessment", DisplayName: "Onland Visual Trash Assessment", Value: 10 }
 ];
-export const StormwaterBreadCrumbEntitiesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...StormwaterBreadCrumbEntities.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const StormwaterBreadCrumbEntitiesAsSelectDropdownOptions = StormwaterBreadCrumbEntities.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

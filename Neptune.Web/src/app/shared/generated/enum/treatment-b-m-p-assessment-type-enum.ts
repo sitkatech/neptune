@@ -14,4 +14,4 @@ export const TreatmentBMPAssessmentTypes: LookupTableEntry[]  = [
   { Name: "Initial", DisplayName: "Initial", Value: 1 },
   { Name: "PostMaintenance", DisplayName: "Post-Maintenance", Value: 2 }
 ];
-export const TreatmentBMPAssessmentTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...TreatmentBMPAssessmentTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const TreatmentBMPAssessmentTypesAsSelectDropdownOptions = TreatmentBMPAssessmentTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

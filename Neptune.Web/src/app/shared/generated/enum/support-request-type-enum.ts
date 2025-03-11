@@ -24,4 +24,4 @@ export const SupportRequestTypes: LookupTableEntry[]  = [
   { Name: "Other", DisplayName: "Other", Value: 6 },
   { Name: "RequestToChangeUserAccountPrivileges", DisplayName: "Request to change user account privileges", Value: 7 }
 ];
-export const SupportRequestTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...SupportRequestTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const SupportRequestTypesAsSelectDropdownOptions = SupportRequestTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

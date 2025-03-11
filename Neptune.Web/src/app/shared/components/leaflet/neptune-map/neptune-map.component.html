@@ -45,10 +45,11 @@
             <div class="leaflet-control-layers-list">
                 <div *ngFor="let legendItem of legendItems" class="legend-item">
                     <h4>{{ legendItem.Title }}</h4>
-                    <img
+                    <div *ngIf="legendItem.LengendHtml" [innerHTML]="legendItem.LengendHtml" ></div>
+                    <img *ngIf="legendItem.WmsUrl"
                         src="{{ legendItem.WmsUrl }}REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=25&HEIGHT=25&LAYER={{
                             legendItem.WmsLayerName
-                        }}&legend_options=fontSize:10"
+                        }}&legend_options=fontSize:12&style={{legendItem.WmsLayerStyle}}"
                         alt="{{ legendItem.Title }} Legend" />
                 </div>
                 <div class="leaflet-control-layers-close-button-wrapper">

@@ -138,6 +138,11 @@ export class LeafletHelperService {
                 maxZoom: 22,
                 maxNativeZoom: 18,
             }),
+            Hillshade: L.tileLayer("https://wtb.maptiles.arcgis.com/arcgis/rest/services/World_Topo_Base/MapServer/tile/{z}/{y}/{x}'", {
+                attribution: "Hillshade",
+                maxZoom: 22,
+                maxNativeZoom: 18,
+            }),
         };
     }
 }
