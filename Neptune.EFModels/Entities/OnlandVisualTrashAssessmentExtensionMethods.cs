@@ -53,13 +53,13 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
         var dto = new OnlandVisualTrashAssessmentWorkflowDto()
         {
             OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
-            OnlandVisualTrashAssessmentAreaID = (int)onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID,
+            OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID,
             OnlandVisualTrashAssessmentAreaName = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName,
             Notes = onlandVisualTrashAssessment.Notes,
             StormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID,
             StormwaterJurisdictionName = onlandVisualTrashAssessment.StormwaterJurisdiction.GetOrganizationDisplayName(), 
             OnlandVisualTrashAssessmentBaselineScoreID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID, 
-            AssessmentAreaDescription = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription, 
+            AssessmentAreaDescription = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.AssessmentAreaDescription, 
             IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment, 
             LastAssessmentDate = onlandVisualTrashAssessment.CompletedDate,
             PreliminarySourceIdentificationTypeIDs = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(x => x.PreliminarySourceIdentificationTypeID).ToList(),

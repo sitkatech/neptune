@@ -151,6 +151,7 @@ export class TrashOvtaRecordObservationsComponent {
             );
             this.observations[selectedObservationIndex] = this.selectedOVTAObservation.getRawValue();
         }
+        console.log(this.observations);
         this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(this.ovtaID, this.observations).subscribe(() => {
             this.isLoadingSubmit = false;
             this.alertService.clearAlerts();
@@ -193,7 +194,7 @@ export class TrashOvtaRecordObservationsComponent {
             );
             selectedObservation = this.selectedOVTAObservation.getRawValue();
         }
-
+        console.log(this.observations);
         let newObservation = this.observations.find((x) => x.Latitude == latlng[1] && x.Longitude == latlng[0]);
         this.selectedOVTAObservation.controls.OnlandVisualTrashAssessmentID.setValue(newObservation.OnlandVisualTrashAssessmentID);
         this.selectedOVTAObservation.controls.Note.setValue(newObservation.Note);
