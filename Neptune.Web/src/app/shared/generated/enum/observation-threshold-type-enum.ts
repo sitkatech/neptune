@@ -16,4 +16,4 @@ export const ObservationThresholdTypes: LookupTableEntry[]  = [
   { Name: "RelativeToBenchmark", DisplayName: "Threshold is a relative percent of the benchmark value", Value: 2 },
   { Name: "None", DisplayName: "None", Value: 3 }
 ];
-export const ObservationThresholdTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...ObservationThresholdTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const ObservationThresholdTypesAsSelectDropdownOptions = ObservationThresholdTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

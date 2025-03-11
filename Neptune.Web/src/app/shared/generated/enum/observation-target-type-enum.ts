@@ -18,4 +18,4 @@ export const ObservationTargetTypes: LookupTableEntry[]  = [
   { Name: "Low", DisplayName: "Lower observed values result in higher score", Value: 3 },
   { Name: "SpecificValue", DisplayName: "Observed values exactly equal to the benchmark result in highest score", Value: 4 }
 ];
-export const ObservationTargetTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...ObservationTargetTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const ObservationTargetTypesAsSelectDropdownOptions = ObservationTargetTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

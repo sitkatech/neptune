@@ -14,4 +14,4 @@ export const MaintenanceRecordTypes: LookupTableEntry[]  = [
   { Name: "Routine", DisplayName: "Routine", Value: 1 },
   { Name: "Corrective", DisplayName: "Corrective", Value: 2 }
 ];
-export const MaintenanceRecordTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...MaintenanceRecordTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const MaintenanceRecordTypesAsSelectDropdownOptions = MaintenanceRecordTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

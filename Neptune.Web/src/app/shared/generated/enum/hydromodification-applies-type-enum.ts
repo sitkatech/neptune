@@ -14,4 +14,4 @@ export const HydromodificationAppliesTypes: LookupTableEntry[]  = [
   { Name: "Applicable ", DisplayName: "Applicable", Value: 1 },
   { Name: "Exempt", DisplayName: "Exempt", Value: 2 }
 ];
-export const HydromodificationAppliesTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...HydromodificationAppliesTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const HydromodificationAppliesTypesAsSelectDropdownOptions = HydromodificationAppliesTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

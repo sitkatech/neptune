@@ -14,4 +14,4 @@ export const DelineationTypes: LookupTableEntry[]  = [
   { Name: "Centralized", DisplayName: "Centralized", Value: 1 },
   { Name: "Distributed", DisplayName: "Distributed", Value: 2 }
 ];
-export const DelineationTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...DelineationTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const DelineationTypesAsSelectDropdownOptions = DelineationTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

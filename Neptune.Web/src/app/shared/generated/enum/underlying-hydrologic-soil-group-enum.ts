@@ -20,4 +20,4 @@ export const UnderlyingHydrologicSoilGroups: LookupTableEntry[]  = [
   { Name: "D", DisplayName: "D", Value: 4 },
   { Name: "Liner", DisplayName: "Liner", Value: 5 }
 ];
-export const UnderlyingHydrologicSoilGroupsAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...UnderlyingHydrologicSoilGroups.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const UnderlyingHydrologicSoilGroupsAsSelectDropdownOptions = UnderlyingHydrologicSoilGroups.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

@@ -28,4 +28,10 @@ public partial class vGeoServerWaterQualityManagementPlan
     [StringLength(100)]
     [Unicode(false)]
     public string? TrashCaptureStatusTypeDisplayName { get; set; }
+
+    public int TrashCaptureStatusTypeID { get; set; }
+
+    [StringLength(7)]
+    [Unicode(false)]
+    public string TrashCaptureStatusTypeColorCode { get; set; } = null!;
 }

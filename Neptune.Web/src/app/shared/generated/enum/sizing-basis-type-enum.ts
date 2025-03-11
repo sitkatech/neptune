@@ -18,4 +18,4 @@ export const SizingBasisTypes: LookupTableEntry[]  = [
   { Name: "Other", DisplayName: "Other (less than Water Quality)", Value: 3 },
   { Name: "NotProvided", DisplayName: "Not Provided", Value: 4 }
 ];
-export const SizingBasisTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...SizingBasisTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const SizingBasisTypesAsSelectDropdownOptions = SizingBasisTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

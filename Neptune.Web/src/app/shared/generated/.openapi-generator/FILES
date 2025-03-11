@@ -13,6 +13,7 @@ api/project-document.service.ts
 api/project.service.ts
 api/stormwater-jurisdiction.service.ts
 api/system-info.service.ts
+api/trash-generating-unit-by-stormwater-jurisdiction.service.ts
 api/trash-generating-unit.service.ts
 api/treatment-bmp-type.service.ts
 api/treatment-bmp.service.ts
@@ -20,6 +21,7 @@ api/user-claims.service.ts
 api/user.service.ts
 configuration.ts
 encoder.ts
+model/area-based-acre-calculations-dto.ts
 model/bounding-box-dto.ts
 model/coordinate-sequence-factory.ts
 model/coordinate-sequence.ts
@@ -37,6 +39,7 @@ model/geometry.ts
 model/i-attributes-table.ts
 model/i-feature.ts
 model/land-use-block-grid-dto.ts
+model/load-results-dto.ts
 model/models.ts
 model/neptune-page-dto.ts
 model/neptune-page-type-simple-dto.ts
@@ -50,6 +53,7 @@ model/onland-visual-trash-assessment-grid-dto.ts
 model/onland-visual-trash-assessment-observation-with-photo-dto.ts
 model/ordinates.ts
 model/organization-simple-dto.ts
+model/ovta-results-dto.ts
 model/parcel-geometry-simple-dto.ts
 model/person-create-dto.ts
 model/person-dto.ts

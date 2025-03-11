@@ -16,4 +16,4 @@ export const ObservationTypeCollectionMethods: LookupTableEntry[]  = [
   { Name: "PassFail", DisplayName: "Pass/Fail Observation", Value: 3 },
   { Name: "Percentage", DisplayName: "Percent-based Observation", Value: 4 }
 ];
-export const ObservationTypeCollectionMethodsAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...ObservationTypeCollectionMethods.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const ObservationTypeCollectionMethodsAsSelectDropdownOptions = ObservationTypeCollectionMethods.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

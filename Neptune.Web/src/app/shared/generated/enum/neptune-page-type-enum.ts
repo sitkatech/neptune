@@ -180,4 +180,4 @@ export const NeptunePageTypes: LookupTableEntry[]  = [
   { Name: "SPAHomePage", DisplayName: "SPA Home Page", Value: 87 },
   { Name: "WQMPModelingOptions", DisplayName: "WQMP Modeling Options", Value: 88 }
 ];
-export const NeptunePageTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...NeptunePageTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const NeptunePageTypesAsSelectDropdownOptions = NeptunePageTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

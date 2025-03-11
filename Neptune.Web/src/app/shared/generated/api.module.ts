@@ -17,6 +17,7 @@ import { ProjectDocumentService } from './api/project-document.service';
 import { StormwaterJurisdictionService } from './api/stormwater-jurisdiction.service';
 import { SystemInfoService } from './api/system-info.service';
 import { TrashGeneratingUnitService } from './api/trash-generating-unit.service';
+import { TrashGeneratingUnitByStormwaterJurisdictionService } from './api/trash-generating-unit-by-stormwater-jurisdiction.service';
 import { TreatmentBMPService } from './api/treatment-bmp.service';
 import { TreatmentBMPTypeService } from './api/treatment-bmp-type.service';
 import { UserService } from './api/user.service';
@@ -41,6 +42,7 @@ import { UserClaimsService } from './api/user-claims.service';
     StormwaterJurisdictionService,
     SystemInfoService,
     TrashGeneratingUnitService,
+    TrashGeneratingUnitByStormwaterJurisdictionService,
     TreatmentBMPService,
     TreatmentBMPTypeService,
     UserService,
