@@ -1,0 +1,46 @@
+<ng-container *ngIf="progress$ | async as progressDto">
+    <div class="sidebar-header">
+        <h5 class="sidebar-title">
+            <div>
+                <p>Create OVTA</p>
+            </div>
+        </h5>
+    </div>
+
+    <workflow-nav>
+        <workflow-nav-item
+            [navRouterLink]="['instructions']"
+            [complete]="progressDto.Steps.Instructions.Completed"
+            [disabled]="progressDto.Steps.Instructions.Disabled"
+            [required]="false">
+            Instructions
+        </workflow-nav-item>
+        <workflow-nav-item [navRouterLink]="['initiate-ovta']" [complete]="progressDto.Steps.InitiateOvta.Completed" [disabled]="progressDto.Steps.InitiateOvta.Disabled">
+            Initiate OVTA
+        </workflow-nav-item>
+        <workflow-nav-item
+            [navRouterLink]="['record-observations']"
+            [complete]="progressDto.Steps.RecordObservations.Completed"
+            [disabled]="progressDto.Steps.RecordObservations.Disabled">
+            Record Observations
+        </workflow-nav-item>
+        <!-- <workflow-nav-item
+            [navRouterLink]="['initiate-ovta']"
+            [complete]="progressDto.Steps.AddOrRemoveParcels.Completed"
+            [disabled]="progressDto.Steps.AddOrRemoveParcels.Disabled">
+            Add or Remove Parcels
+        </workflow-nav-item>
+        <workflow-nav-item
+            [navRouterLink]="['initiate-ovta']"
+            [complete]="progressDto.Steps.RefineAssessmentArea.Completed"
+            [disabled]="progressDto.Steps.RefineAssessmentArea.Disabled">
+            Refine Assessment Area
+        </workflow-nav-item> -->
+        <workflow-nav-item
+            [navRouterLink]="['review-and-finalize']"
+            [complete]="progressDto.Steps.ReviewAndFinalize.Completed"
+            [disabled]="progressDto.Steps.ReviewAndFinalize.Disabled">
+            Review and Finalize
+        </workflow-nav-item>
+    </workflow-nav>
+</ng-container>

@@ -23,7 +23,6 @@ import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dr
 import { ProjectWorkflowProgressService } from "src/app/shared/services/project-workflow-progress.service";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { SelectDropDownModule } from "ngx-select-dropdown";
-import { ConsoleService } from "@ng-select/ng-select/lib/console.service";
 
 @Component({
     selector: "project-basics",

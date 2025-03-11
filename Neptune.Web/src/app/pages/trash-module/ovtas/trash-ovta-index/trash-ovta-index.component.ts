@@ -12,11 +12,12 @@ import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 import { environment } from "src/environments/environment";
 import { IconComponent } from "../../../../shared/components/icon/icon.component";
+import { RouterLink } from "@angular/router";
 
 @Component({
     selector: "trash-ovta-index",
     standalone: true,
-    imports: [NeptuneGridComponent, PageHeaderComponent, AlertDisplayComponent, AsyncPipe, NgIf, LoadingDirective, IconComponent],
+    imports: [NeptuneGridComponent, PageHeaderComponent, AlertDisplayComponent, AsyncPipe, NgIf, LoadingDirective, IconComponent, RouterLink],
     templateUrl: "./trash-ovta-index.component.html",
     styleUrl: "./trash-ovta-index.component.scss",
 })
