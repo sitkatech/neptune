@@ -57,11 +57,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
         marker: false,
         circlemarker: false,
         polygon: {
-            allowIntersection: false, // Restricts shapes to simple polygons
-            drawError: {
-                color: "#E1E100", // Color the shape will turn when intersects
-                message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
-            },
+            allowIntersection: true, // Restricts shapes to simple polygons
         },
     };
     private defaultEditControlSpec: L.Control.DrawConstructorOptions = {
@@ -71,11 +67,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
             featureGroup: this.layer,
         },
         poly: {
-            allowIntersection: false, // Restricts shapes to simple polygons
-            // drawError: {
-            //     color: "#E1E100", // Color the shape will turn when intersects
-            //     message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
-            // },
+            allowIntersection: true, // Restricts shapes to simple polygons
         },
     };
 
@@ -86,17 +78,6 @@ export class TrashOvtaRefineAssessmentAreaComponent {
         private alertService: AlertService,
         private ovtaWorkflowProgressService: OvtaWorkflowProgressService
     ) {}
-
-    public handleMapReady(event: NeptuneMapInitEvent, geometry): void {
-        this.map = event.map;
-        this.layerControl = event.layerControl;
-        console.log(geometry);
-        this.addFeatureCollectionToFeatureGroup(JSON.parse(geometry), this.layer);
-        this.setControl();
-
-        this.layer.addTo(this.map);
-        this.mapIsReady = true;
-    }
 
     ngOnInit(): void {
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
@@ -109,8 +90,14 @@ export class TrashOvtaRefineAssessmentAreaComponent {
         );
     }
 
-    public handleLayerBoundsCalculated(bounds: any) {
-        this.bounds = bounds;
+    public handleMapReady(event: NeptuneMapInitEvent, geometry): void {
+        this.map = event.map;
+        this.layerControl = event.layerControl;
+        this.addFeatureCollectionToFeatureGroup(JSON.parse(geometry), this.layer);
+        this.setControl();
+
+        this.layer.addTo(this.map);
+        this.mapIsReady = true;
     }
 
     public save(andContinue = false) {
@@ -123,7 +110,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
 
         this.onlandVisualTrashAssessmentService
             .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(this.ovtaID, onlandVisualTrashAssessmentRefineArea)
-            .subscribe((response) => {
+            .subscribe(() => {
                 this.isLoadingSubmit = false;
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
@@ -189,26 +176,16 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     }
 
     public addFeatureCollectionToFeatureGroup(featureJsons: any, featureGroup: L.FeatureGroup) {
-        L.geoJson(featureJsons, {
-            onEachFeature: (feature, layer) => {
-                console.log(feature);
-                this.addLayersToFeatureGroup(layer, featureGroup);
-            },
-        });
-    }
-
-    private addLayersToFeatureGroup(layer: any, featureGroup: L.FeatureGroup) {
-        if (layer.getLayers) {
-            layer.getLayers().forEach((l) => {
-                featureGroup.addLayer(l);
+        console.log(featureJsons);
+        if (featureJsons.geometry.type === "MultiPolygon") {
+            featureJsons.geometry.coordinates.forEach(function (shapeCoords, i) {
+                var polygon = { type: "Polygon", coordinates: shapeCoords };
+                L.geoJson(polygon, {
+                    onEachFeature: function (feature, layer) {
+                        featureGroup.addLayer(layer);
+                    },
+                });
             });
-        } else {
-            featureGroup.addLayer(layer);
         }
-    }
-
-    public resetZoom() {
-        const bounds = this.layer.getBounds();
-        this.map.fitBounds(bounds);
     }
 }

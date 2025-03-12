@@ -30,7 +30,6 @@ export class OvtaObservationLayerComponent extends MapLayerBase implements OnCha
             .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationLocationsGet(this.ovtaID)
             .pipe(
                 tap((locations) => {
-                    console.log(locations);
                     const ovtaObservationGeoJSON = this.mapObservationsToGeoJson(locations);
                     this.layer = new L.GeoJSON(ovtaObservationGeoJSON, {
                         pointToLayer: (feature, latlng) => {
@@ -38,7 +37,6 @@ export class OvtaObservationLayerComponent extends MapLayerBase implements OnCha
                         },
                     });
                     this.layer.sortOrder = 100;
-                    // this.layer.addTo(this.map);
                     this.initLayer();
                 })
             );
