@@ -2,16 +2,18 @@ import { Component } from "@angular/core";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FormFieldComponent, FormFieldType, FormInputOption } from "src/app/shared/components/form-field/form-field.component";
-import { SelectDropDownModule } from "ngx-select-dropdown";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component";
+import { SelectDropdownOption } from "src/app/shared/components//form-field/form-field.component";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { Observable, map } from "rxjs";
 import { AsyncPipe, NgIf } from "@angular/common";
-import { FieldDefinitionComponent } from "../../../../shared/components/field-definition/field-definition.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import * as L from "leaflet";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
-import { OnlandVisualTrashAssessmentSimpleDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-simple-dto";
+import {
+    OnlandVisualTrashAssessmentSimpleDto,
+    OnlandVisualTrashAssessmentSimpleDtoForm,
+    OnlandVisualTrashAssessmentSimpleDtoFormControls,
+} from "src/app/shared/generated/model/onland-visual-trash-assessment-simple-dto";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
@@ -25,19 +27,7 @@ import { ParcelLayerComponent } from "../../../../shared/components/leaflet/laye
 @Component({
     selector: "trash-initiate-ovta",
     standalone: true,
-    imports: [
-        PageHeaderComponent,
-        ReactiveFormsModule,
-        FormsModule,
-        FormFieldComponent,
-        SelectDropDownModule,
-        AsyncPipe,
-        FieldDefinitionComponent,
-        NeptuneMapComponent,
-        LandUseBlockLayerComponent,
-        NgIf,
-        ParcelLayerComponent,
-    ],
+    imports: [PageHeaderComponent, ReactiveFormsModule, FormsModule, FormFieldComponent, AsyncPipe, NeptuneMapComponent, LandUseBlockLayerComponent, NgIf, ParcelLayerComponent],
     templateUrl: "./trash-initiate-ovta.component.html",
     styleUrl: "./trash-initiate-ovta.component.scss",
 })
@@ -51,19 +41,9 @@ export class TrashInitiateOvtaComponent {
     public layer: L.featureGroup = new L.featureGroup();
 
     public stormwaterJurisdictionOptions$: Observable<SelectDropdownOption[]>;
-    public selectedJurisdiction: FormControl = new FormControl();
-    public selectedAreaType: FormControl = new FormControl(false);
     public selectedOVTAArea: FormControl = new FormControl("");
     public selectedOVTAAreaID: number;
     public selectedOVTAAreaName: string = "";
-
-    public jurisdictionDropdownConfig = {
-        search: true,
-        height: "320px",
-        placeholder: "Select an jurisdiction",
-        searchFn: (option: SelectDropdownOption) => option.Label,
-        displayFn: (option: SelectDropdownOption) => option.Label,
-    };
 
     public layerIsOnByDefaultOptions: FormInputOption[] = [
         { Value: false, Label: "Reassess existing area", Disabled: false },
@@ -83,6 +63,12 @@ export class TrashInitiateOvtaComponent {
         fillOpacity: 0.1,
     };
 
+    public formGroup: FormGroup<OnlandVisualTrashAssessmentSimpleDtoForm> = new FormGroup<any>({
+        AssessingNewArea: OnlandVisualTrashAssessmentSimpleDtoFormControls.AssessingNewArea(),
+        OnlandVisualTrashAssessmentAreaID: OnlandVisualTrashAssessmentSimpleDtoFormControls.OnlandVisualTrashAssessmentAreaID(),
+        StormwaterJurisdictionID: OnlandVisualTrashAssessmentSimpleDtoFormControls.StormwaterJurisdictionID(),
+    });
+
     constructor(
         private stormwaterJurisdictionService: StormwaterJurisdictionService,
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
@@ -95,6 +81,7 @@ export class TrashInitiateOvtaComponent {
     ) {}
 
     ngOnInit() {
+        this.formGroup.controls.AssessingNewArea.patchValue(false);
         this.stormwaterJurisdictionOptions$ = this.stormwaterJurisdictionService.jurisdictionsGet().pipe(
             map((list) => {
                 if (list.length == 1) {
@@ -102,7 +89,6 @@ export class TrashInitiateOvtaComponent {
                 }
 
                 let options = list.map((x) => ({ Value: x.StormwaterJurisdictionID, Label: x.Organization.OrganizationName } as SelectDropdownOption));
-                options = [{ Value: null, Label: "- Select -", Disabled: true }, ...options]; // insert an empty option at the front
                 return options;
             })
         );
@@ -118,11 +104,7 @@ export class TrashInitiateOvtaComponent {
 
     public save(andContinue: boolean = false) {
         this.isLoadingSubmit = true;
-        var dto = new OnlandVisualTrashAssessmentSimpleDto();
-        dto.AssessingNewArea = this.selectedAreaType.getRawValue();
-        dto.OnlandVisualTrashAssessmentAreaID = this.selectedOVTAAreaID;
-        dto.StormwaterJurisdictionID = this.selectedJurisdiction.getRawValue().Value;
-        this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPost(dto).subscribe((response) => {
+        this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPost(this.formGroup.getRawValue()).subscribe((response) => {
             this.isLoadingSubmit = false;
             this.alertService.clearAlerts();
             this.alertService.pushAlert(new Alert("Your ovta was successfully created.", AlertContext.Success));
@@ -159,7 +141,7 @@ export class TrashInitiateOvtaComponent {
         });
     }
 
-    private getStormwaterJurisdictionBounds(jurisdictionID) {
+    private getStormwaterJurisdictionBounds(jurisdictionID: number) {
         this.wfsService
             .getGeoserverWFSLayerWithCQLFilter("OCStormwater:Jurisdictions", `StormwaterJurisdictionID = ${jurisdictionID}`, "StormwaterJurisdictionID")
             .subscribe((response) => {
@@ -175,6 +157,7 @@ export class TrashInitiateOvtaComponent {
         this.selectedOVTAAreaID = ovtaAreaID;
         this.selectedOVTAAreaName = ovtaAreaName;
         this.selectedOVTAArea.setValue(this.selectedOVTAAreaName);
+        this.formGroup.controls.OnlandVisualTrashAssessmentAreaID.patchValue(ovtaAreaID);
         this.highlightSelectedOVTAArea();
     }
 

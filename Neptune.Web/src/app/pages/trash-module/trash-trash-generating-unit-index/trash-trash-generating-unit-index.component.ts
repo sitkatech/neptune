@@ -26,7 +26,7 @@ export class TrashTrashGeneratingUnitIndexComponent {
 
     ngOnInit() {
         this.trashGeneratingUnitsColumnDefs = [
-            this.utilityFunctionsService.createBasicColumnDef("Trash Generating Unit ID", "TrashGeneratingUnitID"),
+            this.utilityFunctionsService.createBasicColumnDef("Trash Analysis Area ID", "TrashGeneratingUnitID"),
             this.utilityFunctionsService.createBasicColumnDef("Land Use Type", "PriorityLandUseTypeDisplayName"),
             this.utilityFunctionsService.createLinkColumnDef("Governing OVTA Area", "OnlandVisualTrashAssessmentAreaName", "OnlandVisualTrashAssessmentAreaID", {
                 InRouterLink: "../onland-visual-trash-assessment-area/",

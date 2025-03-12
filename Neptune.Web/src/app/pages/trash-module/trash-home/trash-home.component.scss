@@ -276,6 +276,7 @@
 
 .areaBasedCalculationControlTable {
     margin-bottom: 0;
+    border: none;
 }
 
 .font25 {
@@ -298,7 +299,7 @@
     text-align: center;
 }
 
-table td + td {
+table.areaBasedCalculationControlTable td + td {
     border-left: 1px solid rgb(204, 204, 204);
 }
 
@@ -317,6 +318,7 @@ table td + td {
 }
 
 .loadBasedResultsColumn {
+    font-weight: bold;
     border: none;
     border-top: none !important;
     border-bottom: none !important;
@@ -329,6 +331,7 @@ loadBasedResultsColumn p {
 
 .loadBasedCalculationControlTable {
     margin-bottom: 0;
+    border: none;
 }
 
     .loadBasedCalculationControlTable tfoot tr th {
@@ -363,4 +366,5 @@ loadBasedResultsColumn p {
     font-size: 9pt;
     font-style: italic;
     margin-bottom: 0;
+    text-align: end;
 }
