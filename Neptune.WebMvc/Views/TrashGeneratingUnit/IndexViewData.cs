@@ -11,9 +11,9 @@ namespace Neptune.WebMvc.Views.TrashGeneratingUnit
         public string GridDataUrl { get; }
         public IndexViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, WebConfiguration webConfiguration) : base (httpContext, linkGenerator, currentPerson, webConfiguration)
         {
-            EntityName = "Trash Generating Unit";
+            EntityName = "Trash Analysis Area";
             PageTitle = "Index";
-            GridSpec = new TrashGeneratingUnitGridSpec(linkGenerator) { ObjectNameSingular = "Trash Generating Unit", ObjectNamePlural = "Trash Generating Units", SaveFiltersInCookie = true };
+            GridSpec = new TrashGeneratingUnitGridSpec(linkGenerator) { ObjectNameSingular = "Trash Analysis Area", ObjectNamePlural = "Trash Analysis Areas", SaveFiltersInCookie = true };
             GridName = "absoluteUnitsGrid";
             GridDataUrl = SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(linkGenerator, x => x.TrashGeneratingUnitGridJsonData());
         }
