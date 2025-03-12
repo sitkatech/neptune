@@ -28,6 +28,7 @@ export * from '././onland-visual-trash-assessment-area-geometry-dto';
 export * from '././onland-visual-trash-assessment-area-grid-dto';
 export * from '././onland-visual-trash-assessment-detail-dto';
 export * from '././onland-visual-trash-assessment-grid-dto';
+export * from '././onland-visual-trash-assessment-observation-location-dto';
 export * from '././onland-visual-trash-assessment-observation-photo-staging-dto';
 export * from '././onland-visual-trash-assessment-observation-upsert-dto';
 export * from '././onland-visual-trash-assessment-observation-with-photo-dto';

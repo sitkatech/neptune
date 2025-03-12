@@ -11,8 +11,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Neptune.EFModels.Workflows;
 using Microsoft.EntityFrameworkCore;
-using Neptune.Common.GeoSpatial;
-using System;
 using Microsoft.AspNetCore.Http;
 
 namespace Neptune.API.Controllers;
@@ -125,6 +123,23 @@ public class OnlandVisualTrashAssessmentController(
             });
 
         return Ok(visualTrashAssessmentObservationUpsertDtos);
+    }
+
+    [HttpGet("{onlandVisualTrashAssessmentID}/observation-locations")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public ActionResult<List<OnlandVisualTrashAssessmentObservationLocationDto>> GetObservationLocations([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessmentObservationLocationDtos = OnlandVisualTrashAssessmentObservations
+            .ListByOnlandVisualTrashAssessmentID(dbContext, onlandVisualTrashAssessmentID)
+            .Select(x => new OnlandVisualTrashAssessmentObservationLocationDto() {
+                OnlandVisualTrashAssessmentObservationID = x.OnlandVisualTrashAssessmentObservationID,
+                OnlandVisualTrashAssessmentID = x.OnlandVisualTrashAssessmentID,
+                Longitude = x.LocationPoint4326.Coordinate[0],
+                Latitude = x.LocationPoint4326.Coordinate[1],
+            });
+
+        return Ok(onlandVisualTrashAssessmentObservationLocationDtos);
     }
 
     [HttpPost("{onlandVisualTrashAssessmentID}/observations")]

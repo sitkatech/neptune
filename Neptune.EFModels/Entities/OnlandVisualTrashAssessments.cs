@@ -121,6 +121,29 @@ public static class OnlandVisualTrashAssessments
             OnlandVisualTrashAssessmentStatusID = (int)OnlandVisualTrashAssessmentStatusEnum.InProgress
         };
 
+        if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID.HasValue)
+        {
+            var transectBackingAssessment = GetTransectBackingAssessment(dbContext,
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID);
+
+            // ensure the area to which this assessment is assigned ends up with only one transect-backing assessment
+            if (transectBackingAssessment != null)
+            {
+                if (transectBackingAssessment.OnlandVisualTrashAssessmentID != onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)
+                {
+                    onlandVisualTrashAssessment.IsTransectBackingAssessment = false;
+                }
+            }
+            else
+            {
+                onlandVisualTrashAssessment.IsTransectBackingAssessment = true;
+            }
+        }
+        else
+        {
+            onlandVisualTrashAssessment.IsTransectBackingAssessment = false;
+        }
+
         await dbContext.AddAsync(onlandVisualTrashAssessment);
         await dbContext.SaveChangesAsync();
         await dbContext.Entry(onlandVisualTrashAssessment).ReloadAsync();
