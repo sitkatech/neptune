@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Subject, ReplaySubject, Observable, Subscription } from "rxjs";
 import { OnlandVisualTrashAssessmentService } from "../generated/api/onland-visual-trash-assessment.service";
 import { OnlandVisualTrashAssessmentWorkflowProgressDto } from "../generated/model/onland-visual-trash-assessment-workflow-progress-dto";
+import { ConsoleService } from "@ng-select/ng-select/lib/console.service";
 
 @Injectable({
     providedIn: "root",
@@ -33,10 +34,10 @@ export class OvtaWorkflowProgressService {
                     Steps: {
                         Instructions: { Completed: true, Disabled: false },
                         InitiateOvta: { Completed: false, Disabled: false },
-                        RecordObservations: { Completed: false, Disabled: false },
-                        // AddOrRemoveParcels: { Completed: false, Disabled: false },
-                        // RefineAssessmentArea: { Completed: false, Disabled: false },
-                        ReviewAndFinalize: { Completed: false, Disabled: false },
+                        RecordObservations: { Completed: false, Disabled: true },
+                        AddOrRemoveParcels: { Completed: false, Disabled: true },
+                        RefineAssessmentArea: { Completed: false, Disabled: true },
+                        ReviewAndFinalize: { Completed: false, Disabled: true },
                     },
                 })
             );

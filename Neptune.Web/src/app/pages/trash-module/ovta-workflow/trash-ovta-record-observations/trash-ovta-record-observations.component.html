@@ -1,24 +1,24 @@
 <page-header pageTitle="Record Observations"></page-header>
 <app-alert-display></app-alert-display>
-<div class="page-body" *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessmentObservations">
+<div class="page-body" *ngIf="onlandVisualTrashAssessmentObservations$ | async as onlandVisualTrashAssessmentObservations">
     <div class="mb-3">
         <button class="btn btn-primary mr-2" [disabled]="isLoadingSubmit" (click)="goToCurrentLocation()">Record Observation at Current Location</button>
         <button class="btn btn-primary mr-2" [disabled]="isLoadingSubmit" (click)="addObservationMarker()">Add an Observation by clicking the map</button>
     </div>
 
     <neptune-map
-        *ngIf="onlandVisualTrashAssessmentArea$ | async as onlandVisualTrashAssessmentArea"
+        *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment"
         (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessmentObservations)"
         mapHeight="500px"
         [showLegend]="false"
-        [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox"
+        [boundingBox]="onlandVisualTrashAssessment.BoundingBox"
         ><ovta-area-layer
             *ngIf="mapIsReady"
             [displayOnLoad]="true"
             [map]="map"
             [layerControl]="layerControl"
             [sortOrder]="10"
-            [ovtaAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer
+            [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer
     ></neptune-map>
     <div class="card" [hidden]="selectedOVTAObservation && selectedOVTAObservation.getRawValue().Longitude == undefined">
         <div class="card-header">
@@ -56,7 +56,7 @@
             </div>
             <div class="g-col-6">
                 <form class="form" [formGroup]="selectedOVTAObservation">
-                    <form-field [formControl]="selectedOVTAObservation.controls.Note" fieldLabel="Notes" [required]="true" [type]="FormFieldType.Textarea"></form-field>
+                    <form-field [formControl]="selectedOVTAObservation.controls.Note" fieldLabel="Notes" [type]="FormFieldType.Textarea"></form-field>
                 </form>
             </div>
         </div>

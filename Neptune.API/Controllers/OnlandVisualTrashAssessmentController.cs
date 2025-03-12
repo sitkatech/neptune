@@ -54,6 +54,15 @@ public class OnlandVisualTrashAssessmentController(
         return Ok(onlandVisualTrashAssessmentWorkflowDto);
     }
 
+    [HttpGet("{onlandVisualTrashAssessmentID}/add-or-remove-parcel")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public ActionResult<OnlandVisualTrashAssessmentAddRemoveParcelsDto> GetByIDForAddOrRemoveParcel([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessmentAddRemoveParcelsDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsAddRemoveParcelDto();
+        return Ok(onlandVisualTrashAssessmentAddRemoveParcelsDto);
+    }
+
     [HttpGet("preliminary-source-identification-types")]
     [JurisdictionEditFeature]
     public ActionResult<List<PreliminarySourceIdentificationTypeSimpleDto>> GetPreliminarySourceIdentificationTypes()
@@ -70,6 +79,15 @@ public class OnlandVisualTrashAssessmentController(
         var onlandVisualTrashAssessment = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID);
         var onlandVisualTrashAssessmentProgressDto = OnlandVisualTrashAssessmentWorkflowProgress.GetProgress(onlandVisualTrashAssessment);
         return Ok(onlandVisualTrashAssessmentProgressDto);
+    }
+
+    [HttpGet("{onlandVisualTrashAssessmentID}/refine-area")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public ActionResult<OnlandVisualTrashAssessmentRefineAreaDto> GetByIDForRefineArea([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessmentRefineAreaDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsRefineAreaDto();
+        return Ok(onlandVisualTrashAssessmentRefineAreaDto);
     }
 
     [HttpPost]
@@ -174,6 +192,25 @@ public class OnlandVisualTrashAssessmentController(
                     .OnlandVisualTrashAssessmentObservationID).ExecuteDeleteAsync();
         }
 
+        return Ok();
+    }
+
+    [HttpPost("{onlandVisualTrashAssessmentID}/parcel-geometries")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public async Task<ActionResult> UpdateOnlandVisualTrashAssessmentWithParcels([FromRoute] int onlandVisualTrashAssessmentID, [FromBody] List<int> parcelIDs)
+    {
+        await OnlandVisualTrashAssessments.UpdateGeometry(dbContext, onlandVisualTrashAssessmentID, parcelIDs);
+        return Ok();
+    }
+
+    [HttpPost("{onlandVisualTrashAssessmentID}/refine-area")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public async Task<ActionResult> UpdateOnlandVisualTrashAssessmentWithRefinedArea([FromRoute] int onlandVisualTrashAssessmentID, OnlandVisualTrashAssessmentRefineAreaDto onlandVisualTrashAssessmentRefineAreaDto)
+    {
+        await OnlandVisualTrashAssessments.UpdateGeometry(dbContext, onlandVisualTrashAssessmentID,
+            onlandVisualTrashAssessmentRefineAreaDto);
         return Ok();
     }
 }

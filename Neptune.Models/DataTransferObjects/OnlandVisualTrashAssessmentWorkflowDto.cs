@@ -3,7 +3,7 @@
 public class OnlandVisualTrashAssessmentWorkflowDto
 {
     public int OnlandVisualTrashAssessmentID { get; set; }
-    public int OnlandVisualTrashAssessmentAreaID { get; set; }
+    public int? OnlandVisualTrashAssessmentAreaID { get; set; }
     public string? OnlandVisualTrashAssessmentAreaName { get; set; }
     public int? StormwaterJurisdictionID { get; set; }
     public string? StormwaterJurisdictionName { get; set; }

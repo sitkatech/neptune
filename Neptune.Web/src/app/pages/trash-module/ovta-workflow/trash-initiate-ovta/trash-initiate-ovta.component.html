@@ -12,6 +12,7 @@
 
         <form-field
             *ngIf="stormwaterJurisdictionOptions$ | async as stormwaterJurisdictionOptions"
+            class="mb-4"
             [required]="true"
             [formControl]="formGroup.controls.StormwaterJurisdictionID"
             [fieldDefinitionName]="'Jurisdiction'"
@@ -21,7 +22,7 @@
 
         <!-- <div [hidden]="formGroup.controls.AssessingNewArea.value === true || !formGroup.controls.StormwaterJurisdictionID.value"> -->
         <div>
-            <form-field [formControl]="selectedOVTAArea" [type]="FormFieldType.Text" fieldLabel="Selected OVTA Area"></form-field>
+            <form-field class="mb-4" [formControl]="selectedOVTAArea" [type]="FormFieldType.Text" fieldLabel="Selected OVTA Area"></form-field>
             <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="500px" [showLegend]="false">
                 <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
                 <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></parcel-layer>

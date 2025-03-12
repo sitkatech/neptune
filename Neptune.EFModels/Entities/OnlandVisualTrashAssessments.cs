@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
+using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
+using NetTopologySuite.Features;
+using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities;
 
@@ -38,6 +41,8 @@ public static class OnlandVisualTrashAssessments
             .ThenInclude(x => x.OnlandVisualTrashAssessmentObservationPhotos)
             .ThenInclude(x => x.FileResource)
             .Include(x => x.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes)
+            .Include(x => x.StormwaterJurisdiction)
+            .ThenInclude(x => x.StormwaterJurisdictionGeometry)
             .SingleOrDefault(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
         Check.RequireNotNull(onlandVisualTrashAssessment, $"OnlandVisualTrashAssessment with ID {onlandVisualTrashAssessmentID} not found!");
         return onlandVisualTrashAssessment;
@@ -127,11 +132,37 @@ public static class OnlandVisualTrashAssessments
     {
         var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments
             .Include(x => x.OnlandVisualTrashAssessmentArea)
-            .Include(x => x.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes).Single(x =>
+            .Include(x => x.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes)
+            .Include(onlandVisualTrashAssessment => onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations)
+            .Single(x =>
             x.OnlandVisualTrashAssessmentID == dto.OnlandVisualTrashAssessmentID);
 
+        if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID == null)
+        {
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea()
+            {
+                OnlandVisualTrashAssessmentAreaName = dto.OnlandVisualTrashAssessmentAreaName,
+                OnlandVisualTrashAssessmentBaselineScoreID = dto.OnlandVisualTrashAssessmentBaselineScoreID,
+                OnlandVisualTrashAssessmentAreaGeometry4326 = onlandVisualTrashAssessment.DraftGeometry.ProjectTo4326(),
+                OnlandVisualTrashAssessmentAreaGeometry = onlandVisualTrashAssessment.DraftGeometry.ProjectTo2771(),
+                AssessmentAreaDescription = dto.AssessmentAreaDescription,
+                StormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID,
+            };
+        }
+
+        if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine == null &&
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Count >= 2)
+        {
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine =
+                GetTransect(onlandVisualTrashAssessment).ProjectTo2771();
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine4326 =
+                GetTransect(onlandVisualTrashAssessment).ProjectTo4326();
+        }
+
+        onlandVisualTrashAssessment.DraftGeometry = null;
         onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID =
             (int)OnlandVisualTrashAssessmentStatusEnum.Complete;
+        onlandVisualTrashAssessment.AssessingNewArea = false;
         onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName = dto.OnlandVisualTrashAssessmentAreaName;
         onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription = dto.AssessmentAreaDescription;
         onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = dto.OnlandVisualTrashAssessmentBaselineScoreID;
@@ -161,6 +192,47 @@ public static class OnlandVisualTrashAssessments
         var preliminarySourceIdentificationTypeSimpleDtos = PreliminarySourceIdentificationType.AllAsSimpleDto;
 
         return preliminarySourceIdentificationTypeSimpleDtos;
+    }
+
+    public static async Task UpdateGeometry(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID, List<int> parcelIDs)
+    {
+        var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments.Single(x =>
+            x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
+        onlandVisualTrashAssessment.DraftGeometry = ParcelGeometries.UnionAggregate4326ByParcelIDs(dbContext, parcelIDs);
+
+        await dbContext.SaveChangesAsync();
+    }
+
+    public static async Task UpdateGeometry(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID, OnlandVisualTrashAssessmentRefineAreaDto onlandVisualTrashAssessmentRefineAreaDto)
+    {
+        var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments.Single(x =>
+            x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentRefineAreaDto.OnlandVisualTrashAssessmentID);
+
+        var newGeometry4326 = GeoJsonSerializer.Deserialize<IFeature>(onlandVisualTrashAssessmentRefineAreaDto.GeometryAsGeoJson);
+        newGeometry4326.Geometry.SRID = Proj4NetHelper.WEB_MERCATOR;
+
+        // since this is coming from the browser, we have to transform to State Plane
+        onlandVisualTrashAssessment.DraftGeometry = newGeometry4326.Geometry;
+        onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = newGeometry4326.Equals(onlandVisualTrashAssessment.DraftGeometry);
+        await dbContext.SaveChangesAsync();
+    }
+
+    private static Geometry GetTransect(OnlandVisualTrashAssessment ovta)
+    {
+        if (ovta.OnlandVisualTrashAssessmentObservations.Count > 1)
+        {
+            var points = string.Join(",",
+                ovta.OnlandVisualTrashAssessmentObservations.OrderBy(x => x.ObservationDatetime)
+                    .Select(x => x.LocationPoint).ToList().Select(x => $"{x.Coordinate.X} {x.Coordinate.Y}")
+                    .ToList());
+
+            var linestring = $"LINESTRING ({points})";
+
+            // the transect is going to be in 2771 because it was generated from points in 2771
+            return GeometryHelper.FromWKT(linestring, Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+        }
+
+        return null;
     }
 
 }

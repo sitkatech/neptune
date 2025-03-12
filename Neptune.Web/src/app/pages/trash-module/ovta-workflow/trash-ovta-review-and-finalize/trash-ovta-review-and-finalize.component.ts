@@ -102,7 +102,6 @@ export class TrashOvtaReviewAndFinalizeComponent {
                 );
             }),
             tap((ovta) => {
-                console.log(ovta);
                 this.ovtaID = ovta.OnlandVisualTrashAssessmentID;
                 this.formGroup.controls.OnlandVisualTrashAssessmentID.setValue(ovta.OnlandVisualTrashAssessmentID);
                 this.formGroup.controls.OnlandVisualTrashAssessmentAreaID.setValue(ovta.OnlandVisualTrashAssessmentAreaID);
@@ -113,7 +112,6 @@ export class TrashOvtaReviewAndFinalizeComponent {
                 this.formGroup.controls.IsProgressAssessment.setValue(ovta.IsProgressAssessment);
                 this.formGroup.controls.Notes.setValue(ovta.Notes);
                 this.formGroup.controls.PreliminarySourceIdentificationTypeIDs.setValue(ovta.PreliminarySourceIdentificationTypeIDs);
-                console.log(this.formGroup.getRawValue());
             })
         );
         this.preliminarySourceIdentificationTypeSimpleDto$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPreliminarySourceIdentificationTypesGet();

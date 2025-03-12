@@ -53,20 +53,62 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
         var dto = new OnlandVisualTrashAssessmentWorkflowDto()
         {
             OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
-            OnlandVisualTrashAssessmentAreaID = (int)onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID,
+            OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID,
             OnlandVisualTrashAssessmentAreaName = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName,
             Notes = onlandVisualTrashAssessment.Notes,
             StormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID,
             StormwaterJurisdictionName = onlandVisualTrashAssessment.StormwaterJurisdiction.GetOrganizationDisplayName(), 
             OnlandVisualTrashAssessmentBaselineScoreID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID, 
-            AssessmentAreaDescription = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription, 
+            AssessmentAreaDescription = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.AssessmentAreaDescription, 
             IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment, 
             LastAssessmentDate = onlandVisualTrashAssessment.CompletedDate,
             PreliminarySourceIdentificationTypeIDs = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(x => x.PreliminarySourceIdentificationTypeID).ToList(),
             Observations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.AsPhotoDto()).ToList(),
-            BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry()),
+        };
+        if (onlandVisualTrashAssessment.DraftGeometry != null ||
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID != null)
+        {
+            dto.BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry());
+        }
+        else if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Count > 0) 
+        {
+            dto.BoundingBox =
+                new BoundingBoxDto(
+                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations
+                        .Select(x => x.LocationPoint4326));
+        }
+        else
+        {
+            dto.BoundingBox =
+                new BoundingBoxDto(
+                    onlandVisualTrashAssessment.StormwaterJurisdiction.StormwaterJurisdictionGeometry.Geometry4326);
+        }
+        return dto;
+    }
+
+    public static OnlandVisualTrashAssessmentAddRemoveParcelsDto AsAddRemoveParcelDto(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+    {
+        var dto = new OnlandVisualTrashAssessmentAddRemoveParcelsDto()
+        {
+            OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
+            OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID,
+            StormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID,
+            BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.LocationPoint4326)),
         };
         return dto;
     }
+
+    public static OnlandVisualTrashAssessmentRefineAreaDto AsRefineAreaDto(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+    {
+        var dto = new OnlandVisualTrashAssessmentRefineAreaDto()
+        {
+            OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
+            OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID,
+            BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry()),
+            GeometryAsGeoJson = onlandVisualTrashAssessment.GetGeometry4326GeoJson()
+        };
+        return dto;
+    }
+
 
 }

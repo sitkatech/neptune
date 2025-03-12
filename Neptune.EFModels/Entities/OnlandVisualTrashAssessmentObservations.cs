@@ -60,13 +60,7 @@ namespace Neptune.EFModels.Entities
 
             foreach (var onlandVisualTrashAssessmentObservationUpsertDto in onlandVisualTrashAssessmentObservationUpsertDtos)
             {
-                var onlandVisualTrashAssessmentObservationPhoto = new OnlandVisualTrashAssessmentObservationPhoto();
-
-                if (onlandVisualTrashAssessmentObservationUpsertDto.FileResourceID != null)
-                {
-                    onlandVisualTrashAssessmentObservationPhoto.FileResourceID =
-                        (int)onlandVisualTrashAssessmentObservationUpsertDto.FileResourceID;
-                }
+                
 
                 var locationPoint4326FromLatLong = GeometryHelper.CreateLocationPoint4326FromLatLong(onlandVisualTrashAssessmentObservationUpsertDto.Latitude, onlandVisualTrashAssessmentObservationUpsertDto.Longitude);
                 var onlandVisualTrashAssessmentObservation = new OnlandVisualTrashAssessmentObservation()
@@ -76,8 +70,18 @@ namespace Neptune.EFModels.Entities
                     ObservationDatetime = onlandVisualTrashAssessmentObservationUpsertDto.ObservationDatetime ?? DateTime.UtcNow,
                     LocationPoint4326 = locationPoint4326FromLatLong,
                     LocationPoint = locationPoint4326FromLatLong.ProjectTo2771(),
-                    OnlandVisualTrashAssessmentObservationPhotos = [onlandVisualTrashAssessmentObservationPhoto]
                 };
+
+
+                if (onlandVisualTrashAssessmentObservationUpsertDto.FileResourceID != null)
+                {
+                    var onlandVisualTrashAssessmentObservationPhoto = new OnlandVisualTrashAssessmentObservationPhoto
+                        {
+                            FileResourceID = (int)onlandVisualTrashAssessmentObservationUpsertDto.FileResourceID
+                        };
+
+                    onlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentObservationPhotos = [onlandVisualTrashAssessmentObservationPhoto];
+                }
 
                 dbContext.OnlandVisualTrashAssessmentObservations.Add(onlandVisualTrashAssessmentObservation);
             }
