@@ -4,10 +4,10 @@ import { TinyMceConfigPipe } from "src/app/shared/pipes/tiny-mce-config.pipe";
 import { RequiredPipe } from "src/app/shared/pipes/required.pipe";
 import { InputErrorsComponent } from "src/app/shared/components/inputs/input-errors/input-errors.component";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
-import { SelectDropdownComponent } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component";
 import { EditorComponent, TINYMCE_SCRIPT_SRC } from "@tinymce/tinymce-angular";
 import { NgSwitch, NgSwitchCase, NgIf, NgFor } from "@angular/common";
 import { NgxMaskDirective, provideNgxMask } from "ngx-mask";
+import { NgSelectModule } from "@ng-select/ng-select";
 
 @Component({
     selector: "form-field",
@@ -34,12 +34,12 @@ import { NgxMaskDirective, provideNgxMask } from "ngx-mask";
         ReactiveFormsModule,
         NgIf,
         EditorComponent,
-        SelectDropdownComponent,
         NgFor,
         FieldDefinitionComponent,
         InputErrorsComponent,
         RequiredPipe,
         TinyMceConfigPipe,
+        NgSelectModule,
     ],
 })
 export class FormFieldComponent {
@@ -49,7 +49,6 @@ export class FormFieldComponent {
     @Input() fieldLabel: string = "";
     @Input() placeholder: string = "";
     @Input() type: FormFieldType = FormFieldType.Text;
-    @Input() formInputOptions: FormInputOption[];
     @Input() toggleTrue: string = "On";
     @Input() toggleFalse: string = "Off";
     @Input() checkLabel: string;
@@ -58,6 +57,11 @@ export class FormFieldComponent {
     @Input() fieldDefinitionName: string;
     @Input() toggleHeight: string = "";
     @Input() mask: string;
+
+    // for select dropdown
+    @Input() formInputOptions: FormInputOption[];
+    @Input() multiple: boolean = false;
+
     /**
      * comma separated list of file types: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#accept
      */
@@ -103,6 +107,10 @@ export class FormFieldComponent {
         const fileUploadInput = this.fileUploadField.nativeElement;
         fileUploadInput.click();
     }
+
+    onNgSelectChange(event: any): void {
+        this.change.emit(event);
+    }
 }
 
 export enum FormFieldType {
@@ -124,3 +132,5 @@ export interface FormInputOption {
     Disabled: boolean | null | undefined;
     Group?: string | null | undefined;
 }
+
+export interface SelectDropdownOption extends FormInputOption {}

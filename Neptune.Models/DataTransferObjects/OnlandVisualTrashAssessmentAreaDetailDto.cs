@@ -1,6 +1,4 @@
-﻿using NetTopologySuite.Geometries;
-
-namespace Neptune.Models.DataTransferObjects;
+﻿namespace Neptune.Models.DataTransferObjects;
 
 public class OnlandVisualTrashAssessmentAreaDetailDto
 {

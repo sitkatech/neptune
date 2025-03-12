@@ -19,10 +19,9 @@ import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leafl
 import { LandUseBlockLayerComponent } from "src/app/shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { TrashGeneratingUnitLayerComponent } from "src/app/shared/components/leaflet/layers/trash-generating-unit-layer/trash-generating-unit-layer.component";
 import { NgSelectModule } from "@ng-select/ng-select";
-import { FormsModule, ReactiveFormsModule  } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
-import { SelectDropDownModule } from "ngx-select-dropdown";
 import { AreaBasedAcreCalculationsDto } from "src/app/shared/generated/model/area-based-acre-calculations-dto";
 import { LoadResultsDto } from "src/app/shared/generated/model/load-results-dto";
 import { OVTAResultsDto } from "src/app/shared/generated/model/ovta-results-dto";
@@ -41,22 +40,29 @@ import { LoadingDirective } from "src/app/shared/directives/loading.directive";
     templateUrl: "./trash-home.component.html",
     styleUrls: ["./trash-home.component.scss"],
     standalone: true,
-    imports: [NgIf, AlertDisplayComponent, CustomRichTextComponent, AsyncPipe, RouterLink, NeptuneMapComponent,
-    RegionalSubbasinsLayerComponent,
-    DelineationsLayerComponent,
-    JurisdictionsLayerComponent,
-    InventoriedBMPsTrashCaptureLayerComponent,
-    WqmpsTrashCaptureLayerComponent,
-    LandUseBlockLayerComponent,
-    TrashGeneratingUnitLayerComponent,
-    TrashGeneratingUnitLoadsLayerComponent,
-    OvtaAreaLayerComponent,
-    NgSelectModule,
-    FormsModule, ReactiveFormsModule,
-    FieldDefinitionComponent,
-    SelectDropDownModule,
-    DecimalPipe,
-    LoadingDirective],
+    imports: [
+        NgIf,
+        AlertDisplayComponent,
+        CustomRichTextComponent,
+        AsyncPipe,
+        RouterLink,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        DelineationsLayerComponent,
+        JurisdictionsLayerComponent,
+        InventoriedBMPsTrashCaptureLayerComponent,
+        WqmpsTrashCaptureLayerComponent,
+        LandUseBlockLayerComponent,
+        TrashGeneratingUnitLayerComponent,
+        TrashGeneratingUnitLoadsLayerComponent,
+        OvtaAreaLayerComponent,
+        NgSelectModule,
+        FormsModule,
+        ReactiveFormsModule,
+        FieldDefinitionComponent,
+        DecimalPipe,
+        LoadingDirective,
+    ],
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;
@@ -75,23 +81,22 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     public stormwaterJurisdiction$ = this.stormwaterJurisdictionSubject.asObservable();
 
     public currentResultType: string = "Area-Based Results";
-    public resultTypes = ["Area-Based Results" , "Load-Based Results (Current)", "Load-Based (Net Change)", "OVTA-Based Results" , "No Metric, Map Overlay"  ];
+    public resultTypes = ["Area-Based Results", "Load-Based Results (Current)", "Load-Based (Net Change)", "OVTA-Based Results", "No Metric, Map Overlay"];
 
-    public areaBasedAcreCalculationsDto$: Observable<AreaBasedAcreCalculationsDto>
-    public loadResultsDto$: Observable<LoadResultsDto>
-    public ovtaResultsDto$: Observable<OVTAResultsDto>
-    public boundingBox$: Observable<BoundingBoxDto>
-    
-    public isLoading: boolean
+    public areaBasedAcreCalculationsDto$: Observable<AreaBasedAcreCalculationsDto>;
+    public loadResultsDto$: Observable<LoadResultsDto>;
+    public ovtaResultsDto$: Observable<OVTAResultsDto>;
+    public boundingBox$: Observable<BoundingBoxDto>;
+
+    public isLoading: boolean;
 
     constructor(
-        private authenticationService: AuthenticationService, 
-        private router: Router, 
+        private authenticationService: AuthenticationService,
+        private router: Router,
         private route: ActivatedRoute,
         private stormwaterJurisdictionService: StormwaterJurisdictionService,
         private trashResultsByJurisdictionService: TrashGeneratingUnitByStormwaterJurisdictionService,
         private leafletHelperService: LeafletHelperService
-
     ) {}
 
     public ngOnInit(): void {
@@ -116,17 +121,15 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        
+
         this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.jurisdictionsUserViewableGet().pipe(
             tap((x) => {
-                this.stormwaterJurisdictionSubject.next(x[0])
-                this.currentStormwaterJurisdiction = x[0]
+                this.stormwaterJurisdictionSubject.next(x[0]);
+                this.currentStormwaterJurisdiction = x[0];
             })
-            
         );
 
-
-        this.areaBasedAcreCalculationsDto$ =  this.stormwaterJurisdiction$.pipe(
+        this.areaBasedAcreCalculationsDto$ = this.stormwaterJurisdiction$.pipe(
             tap(() => {
                 this.isLoading = true;
             }),
@@ -135,8 +138,9 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
             }),
             tap(() => {
                 this.isLoading = false;
-            }));
-        
+            })
+        );
+
         this.loadResultsDto$ = this.stormwaterJurisdiction$.pipe(
             tap(() => {
                 this.isLoading = true;
@@ -146,8 +150,9 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
             }),
             tap(() => {
                 this.isLoading = false;
-            }));
-        
+            })
+        );
+
         this.ovtaResultsDto$ = this.stormwaterJurisdiction$.pipe(
             tap(() => {
                 this.isLoading = true;
@@ -159,16 +164,17 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
             })
         );
-                
+
         this.boundingBox$ = this.stormwaterJurisdiction$.pipe(
             switchMap((x) => {
                 return this.stormwaterJurisdictionService.jurisdictionsJurisdictionIDBoundingBoxGet(x.StormwaterJurisdictionID);
             }),
             tap((boundingBox) => {
-                if(this.mapIsReady){
+                if (this.mapIsReady) {
                     this.leafletHelperService.fitMapToBoundingBox(this.map, boundingBox);
                 }
-            }));
+            })
+        );
     }
 
     public handleMapReady(event: NeptuneMapInitEvent): void {
@@ -232,6 +238,4 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     public ocstBaseUrl(): string {
         return environment.ocStormwaterToolsBaseUrl;
     }
-
-
 }

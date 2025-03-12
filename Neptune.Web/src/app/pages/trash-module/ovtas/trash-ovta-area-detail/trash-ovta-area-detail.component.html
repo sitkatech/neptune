@@ -66,7 +66,11 @@
             </div>
         </div>
         <div [loadingSpinner]="{ isLoading: isLoadingGrid, loadingHeight: 100 }">
-            <h3>Onland Visual Trash Assessments</h3>
+            <div class="flex-between mb-3">
+                <h3>Onland Visual Trash Assessments</h3>
+                <a class="float-right btn btn-primary mr-2" [routerLink]="['new/instructions']">Begin OVTA</a>
+            </div>
+
             <neptune-grid
                 height="800px"
                 [rowData]="onlandVisualTrashAssessments$ | async"

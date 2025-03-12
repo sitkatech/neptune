@@ -1,0 +1,123 @@
+<page-header pageTitle="Review and Finalize"></page-header>
+<div class="page-body" *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
+    <form class="form" [formGroup]="formGroup">
+        <div class="grid-12">
+            <form-field
+                class="g-col-12"
+                [formControl]="formGroup.controls.OnlandVisualTrashAssessmentAreaName"
+                fieldLabel="Assessment Area Name"
+                [required]="true"
+                [type]="FormFieldType.Text"></form-field>
+            <form-field
+                class="g-col-12"
+                [formControl]="formGroup.controls.AssessmentAreaDescription"
+                fieldLabel="Assessment Area Description"
+                [required]="false"
+                [type]="FormFieldType.Textarea"></form-field>
+            <form-field
+                class="g-col-12"
+                fieldLabel="Assessment Type"
+                [formControl]="formGroup.controls.IsProgressAssessment"
+                [formInputOptions]="ProgressScoreOptions"
+                [type]="FormFieldType.Radio"></form-field>
+
+            <form-field
+                class="g-col-6"
+                [formControl]="formGroup.controls.LastAssessmentDate"
+                fieldLabel="Assessment Date"
+                [required]="false"
+                [type]="FormFieldType.Date"></form-field>
+            <form-field
+                class="g-col-6"
+                [formControl]="formGroup.controls.OnlandVisualTrashAssessmentBaselineScoreID"
+                fieldLabel="Assessment Score"
+                [required]="true"
+                [formInputOptions]="onlandVisualTrashAssessmentScoreDropdown"
+                [type]="FormFieldType.Select"></form-field>
+            <form-field
+                class="g-col-12"
+                [formControl]="formGroup.controls.Notes"
+                fieldLabel="Comments and Additional Information"
+                [required]="false"
+                [type]="FormFieldType.Textarea"></form-field>
+
+            <hr />
+        </div>
+    </form>
+    <h3>Preliminary Source Identification Type</h3>
+    <div class="copy copy-2">Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</div>
+    <div *ngIf="preliminarySourceIdentificationTypeSimpleDto$ | async as preliminarySourceIdentificationTypeSimpleDto" class="grid-12 mb-4">
+        <div *ngFor="let item of PreliminarySourceIdentificationCategories" class="g-col-6">
+            <h3 class="mb-2">{{ item.DisplayName }}</h3>
+            <div *ngFor="let type of filterByCategory(preliminarySourceIdentificationTypeSimpleDto, item.Value)" class="flex-start ml-2 mb-2">
+                <form-field
+                    class="g-col-12"
+                    [id]="type.PreliminarySourceIdentificationTypeID"
+                    [formControl]="formGroup.controls.PreliminarySourceIdentificationTypeIDs"
+                    [required]="false"
+                    [checkLabel]="type.PreliminarySourceIdentificationTypeDisplayName"
+                    [type]="FormFieldType.Check"
+                    (change)="onCheckBoxChanged($event)"></form-field>
+                <!-- <input
+                    type="checkbox"
+                    [id]="type.PreliminarySourceIdentificationTypeID"
+                    [(ngModel)]="formGroup.controls.PreliminarySourceIdentificationTypeWorkflowDtos[type.PreliminarySourceIdentificationTypeID]"
+                    [checked]="true"
+                    (change)="onCheckBoxChanged($event)" />{{ type.PreliminarySourceIdentificationTypeDisplayName }} -->
+            </div>
+        </div>
+    </div>
+    <div class="grid-12">
+        <div class="card g-col-6">
+            <div class="card-header">Observations</div>
+            <div class="card-body observations">
+                <div class="grid-12" *ngFor="let item of onlandVisualTrashAssessment.Observations">
+                    <div
+                        [id]="item.OnlandVisualTrashAssessmentObservationID"
+                        class="g-col-12 mb-4 observation"
+                        [ngClass]="{
+                            'selected-observation':
+                                selectedOVTAObservation != null && selectedOVTAObservation.OnlandVisualTrashAssessmentObservationID == item.OnlandVisualTrashAssessmentObservationID
+                        }"
+                        (click)="selectOVTAObservationImpl(onlandVisualTrashAssessment.Observations, item.OnlandVisualTrashAssessmentObservationID)">
+                        <img [src]="getUrl(item.FileResourceGUID)" *ngIf="item.FileResourceGUID; else noImage" style="width: 400px; height: 500px" />
+                        <ng-template #noImage> <i>No photo provided</i></ng-template>
+                        <div class="mt-2">
+                            {{ item.Note ?? "No note provided" }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card g-col-6">
+            <div class="card-header">Map</div>
+            <div class="card-body">
+                <neptune-map
+                    (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment.Observations)"
+                    mapHeight="400px"
+                    [showLegend]="false"
+                    [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
+                    <ovta-area-layer
+                        *ngIf="mapIsReady"
+                        [displayOnLoad]="true"
+                        [map]="map"
+                        [layerControl]="layerControl"
+                        [sortOrder]="10"
+                        [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
+                    <transect-line-layer
+                        *ngIf="mapIsReady"
+                        [displayOnLoad]="true"
+                        [map]="map"
+                        [layerControl]="layerControl"
+                        [sortOrder]="15"
+                        [ovtaAreaName]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName"
+                        [jurisdictionID]="onlandVisualTrashAssessment.StormwaterJurisdictionID"></transect-line-layer>
+                </neptune-map>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-footer">
+    <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
+    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Save & Continue</button>
+</div>

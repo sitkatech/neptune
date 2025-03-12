@@ -1,0 +1,35 @@
+<page-header pageTitle="Initiate OVTA"></page-header>
+<div class="page-body grid-12">
+    <form class="form" [formGroup]="formGroup">
+        <div class="form-group">
+            <div class="g-col-3 control-label"><i class="copy copy-2">Are you reassessing a previously-assessed area, or assessing a new area for the first time?</i></div>
+            <form-field
+                class="g-col-9"
+                [formControl]="formGroup.controls.AssessingNewArea"
+                [formInputOptions]="layerIsOnByDefaultOptions"
+                [type]="FormFieldType.Radio"></form-field>
+        </div>
+
+        <form-field
+            *ngIf="stormwaterJurisdictionOptions$ | async as stormwaterJurisdictionOptions"
+            [required]="true"
+            [formControl]="formGroup.controls.StormwaterJurisdictionID"
+            [fieldDefinitionName]="'Jurisdiction'"
+            [formInputOptions]="stormwaterJurisdictionOptions"
+            (change)="onJurisdictionSelected($event)"
+            [type]="FormFieldType.Select"></form-field>
+
+        <!-- <div [hidden]="formGroup.controls.AssessingNewArea.value === true || !formGroup.controls.StormwaterJurisdictionID.value"> -->
+        <div>
+            <form-field [formControl]="selectedOVTAArea" [type]="FormFieldType.Text" fieldLabel="Selected OVTA Area"></form-field>
+            <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="500px" [showLegend]="false">
+                <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
+                <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></parcel-layer>
+            </neptune-map>
+        </div>
+    </form>
+</div>
+<div class="page-footer">
+    <button class="btn btn-primary mr-2" (click)="save()" [disabled]="formGroup.invalid || isLoadingSubmit">Save</button>
+    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="formGroup.invalid || isLoadingSubmit">Save & Continue</button>
+</div>

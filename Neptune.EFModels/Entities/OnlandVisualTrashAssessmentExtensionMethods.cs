@@ -1,4 +1,5 @@
 ﻿using Neptune.Models.DataTransferObjects;
+using Neptune.WebMvc.Common;
 
 namespace Neptune.EFModels.Entities;
 
@@ -41,6 +42,27 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
             CompletedDate = onlandVisualTrashAssessment.CompletedDate,
             IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment ? "Progress" : "Baseline",
             PreliminarySourceIdentificationTypeDictionary = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.GroupBy(x => x.PreliminarySourceIdentificationType.PreliminarySourceIdentificationCategory.PreliminarySourceIdentificationCategoryDisplayName).ToDictionary(x => x.Key.ToString(), x => x.Select(x => x.PreliminarySourceIdentificationType.PreliminarySourceIdentificationTypeDisplayName).ToList()),
+            Observations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.AsPhotoDto()).ToList(),
+            BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry()),
+        };
+        return dto;
+    }
+
+    public static OnlandVisualTrashAssessmentWorkflowDto AsWorkflowDto(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+    {
+        var dto = new OnlandVisualTrashAssessmentWorkflowDto()
+        {
+            OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
+            OnlandVisualTrashAssessmentAreaID = (int)onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID,
+            OnlandVisualTrashAssessmentAreaName = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName,
+            Notes = onlandVisualTrashAssessment.Notes,
+            StormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID,
+            StormwaterJurisdictionName = onlandVisualTrashAssessment.StormwaterJurisdiction.GetOrganizationDisplayName(), 
+            OnlandVisualTrashAssessmentBaselineScoreID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID, 
+            AssessmentAreaDescription = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription, 
+            IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment, 
+            LastAssessmentDate = onlandVisualTrashAssessment.CompletedDate,
+            PreliminarySourceIdentificationTypeIDs = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(x => x.PreliminarySourceIdentificationTypeID).ToList(),
             Observations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.AsPhotoDto()).ToList(),
             BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry()),
         };
