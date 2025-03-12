@@ -67,7 +67,7 @@ namespace Neptune.WebMvc.Views
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<OrganizationController>(LinkGenerator, x => x.Index()), currentPerson, $"{FieldDefinitionType.Organization.GetFieldDefinitionLabelPluralized()}", "Group1"));
 
 
-            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TrashGeneratingUnitController>(LinkGenerator, x => x.Index()), currentPerson, "Trash Generating Units", "Group3"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TrashGeneratingUnitController>(LinkGenerator, x => x.Index()), currentPerson, "Trash Analysis Areas", "Group3"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<LandUseBlockController>(LinkGenerator, x => x.Index()), currentPerson, "Land Use Blocks", "Group3"));
 
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HRUCharacteristicController>(LinkGenerator, x => x.Index()), currentPerson, "HRU Characteristics", "Group4"));

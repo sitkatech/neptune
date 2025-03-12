@@ -1,4 +1,4 @@
-<page-header pageTitle="Trash Generating Unit"></page-header> <app-alert-display></app-alert-display>
+<page-header pageTitle="Trash Analysis Area"></page-header> <app-alert-display></app-alert-display>
 
 <div class="page-body" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
     <neptune-grid
@@ -6,7 +6,7 @@
         height="800px"
         [rowData]="trashGeneratingUnits"
         [columnDefs]="trashGeneratingUnitsColumnDefs"
-        downloadFileName="trash-generating-units"
+        downloadFileName="trash-analysis-areas"
         [pagination]="true"
         [sizeColumnsToFitGrid]="true"></neptune-grid>
 </div>

@@ -19,7 +19,7 @@ namespace Neptune.WebMvc.Views.TrashGeneratingUnit
             var wqmpDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));
 
-            Add("Trash Generating Unit ID", x => x.TrashGeneratingUnitID.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
+            Add("Trash Analysis Area ID", x => x.TrashGeneratingUnitID.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
             Add("Land Use Type", x => x.PriorityLandUseTypeDisplayName ?? "Not Priority Land Use", 140, DhtmlxGridColumnFilterType.Text);
             
             Add("Governing OVTA Area", x => x.OnlandVisualTrashAssessmentAreaID != null ? UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.OnlandVisualTrashAssessmentAreaID.Value), x.OnlandVisualTrashAssessmentAreaName, x.OnlandVisualTrashAssessmentAreaName) : new HtmlString(""), 255, DhtmlxGridColumnFilterType.Html);

@@ -70,7 +70,6 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
 
     public richTextTypeID: number = NeptunePageTypeEnum.TrashHomePage;
 
-    public mapHeight = window.innerHeight - window.innerHeight * 0.2 + "px";
     public map: L.Map;
     public mapIsReady: boolean = false;
     public layerControl: L.Control.Layers;
