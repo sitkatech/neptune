@@ -26,7 +26,7 @@ export class InventoriedBMPsTrashCaptureLayerComponent extends MapLayerBase impl
 
             return new L.DivIcon({
                 html: "<div><span>" + childCount + "</span></div>",
-                className: "marker-cluster",
+                className: "treatment-bmp-cluster",
                 iconSize: new L.Point(40, 40),
             });
         },
