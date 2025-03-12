@@ -98,4 +98,17 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
         return dto;
     }
 
+    public static OnlandVisualTrashAssessmentRefineAreaDto AsRefineAreaDto(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+    {
+        var dto = new OnlandVisualTrashAssessmentRefineAreaDto()
+        {
+            OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
+            OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID,
+            BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry()),
+            GeometryAsGeoJson = onlandVisualTrashAssessment.GetGeometry4326GeoJson()
+        };
+        return dto;
+    }
+
+
 }

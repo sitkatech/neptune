@@ -176,4 +176,18 @@ public static class OnlandVisualTrashAssessments
         await dbContext.SaveChangesAsync();
     }
 
+    public static async Task UpdateGeometry(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID, OnlandVisualTrashAssessmentRefineAreaDto onlandVisualTrashAssessmentRefineAreaDto)
+    {
+        var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments.Single(x =>
+            x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentRefineAreaDto.OnlandVisualTrashAssessmentID);
+
+        var newGeometry4326 = GeoJsonSerializer.Deserialize<IFeature>(onlandVisualTrashAssessmentRefineAreaDto.GeometryAsGeoJson);
+        newGeometry4326.Geometry.SRID = Proj4NetHelper.WEB_MERCATOR;
+
+        // since this is coming from the browser, we have to transform to State Plane
+        onlandVisualTrashAssessment.DraftGeometry = newGeometry4326.Geometry;
+        onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = newGeometry4326.Equals(onlandVisualTrashAssessment.DraftGeometry);
+        await dbContext.SaveChangesAsync();
+    }
+
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
+using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities;
@@ -19,6 +20,17 @@ public partial class OnlandVisualTrashAssessment
     public Geometry? GetOnlandVisualTrashAssessmentGeometry()
     {
         return OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaGeometry4326 ?? DraftGeometry?.ProjectTo4326();
+    }
+
+    public string GetGeometry4326GeoJson()
+    {
+        var attributesTable = new AttributesTable
+        {
+            { "OnlandVisualTrashAssessmentID", OnlandVisualTrashAssessmentID },
+        };
+
+        var feature = new Feature(GetOnlandVisualTrashAssessmentGeometry(), attributesTable);
+        return GeoJsonSerializer.Serialize(feature);
     }
 
     public Dictionary<int, PreliminarySourceIdentificationTypeWorkflowDto>
