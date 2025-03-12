@@ -15,6 +15,10 @@ import { OvtaObservationLayerComponent } from "../../../../shared/components/lea
 import { AsyncPipe, NgIf } from "@angular/common";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { OnlandVisualTrashAssessmentRefineAreaDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-refine-area-dto";
+import { AlertService } from "src/app/shared/services/alert.service";
+import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
+import { Alert } from "src/app/shared/models/alert";
+import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 
 @Component({
     selector: "trash-ovta-refine-assessment-area",
@@ -68,18 +72,25 @@ export class TrashOvtaRefineAssessmentAreaComponent {
         },
         poly: {
             allowIntersection: false, // Restricts shapes to simple polygons
-            drawError: {
-                color: "#E1E100", // Color the shape will turn when intersects
-                message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
-            },
+            // drawError: {
+            //     color: "#E1E100", // Color the shape will turn when intersects
+            //     message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
+            // },
         },
     };
 
-    constructor(private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService, private route: ActivatedRoute, private router: Router) {}
+    constructor(
+        private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
+        private route: ActivatedRoute,
+        private router: Router,
+        private alertService: AlertService,
+        private ovtaWorkflowProgressService: OvtaWorkflowProgressService
+    ) {}
 
     public handleMapReady(event: NeptuneMapInitEvent, geometry): void {
         this.map = event.map;
         this.layerControl = event.layerControl;
+        console.log(geometry);
         this.addFeatureCollectionToFeatureGroup(JSON.parse(geometry), this.layer);
         this.setControl();
 
@@ -114,6 +125,9 @@ export class TrashOvtaRefineAssessmentAreaComponent {
             .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(this.ovtaID, onlandVisualTrashAssessmentRefineArea)
             .subscribe((response) => {
                 this.isLoadingSubmit = false;
+                this.alertService.clearAlerts();
+                this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
+                this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
                 if (andContinue) {
                     this.router.navigate([`../../${this.ovtaID}/review-and-finalize`], { relativeTo: this.route });
                 }
@@ -177,10 +191,8 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     public addFeatureCollectionToFeatureGroup(featureJsons: any, featureGroup: L.FeatureGroup) {
         L.geoJson(featureJsons, {
             onEachFeature: (feature, layer) => {
+                console.log(feature);
                 this.addLayersToFeatureGroup(layer, featureGroup);
-                layer.on("click", (e) => {
-                    this.selectFeatureImpl();
-                });
             },
         });
     }

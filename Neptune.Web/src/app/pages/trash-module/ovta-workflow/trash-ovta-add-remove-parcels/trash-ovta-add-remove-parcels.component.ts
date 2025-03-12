@@ -13,6 +13,10 @@ import { AsyncPipe, NgIf } from "@angular/common";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 import { OvtaObservationLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-observation-layer/ovta-observation-layer.component";
 import { OnlandVisualTrashAssessmentAddRemoveParcelsDto, OnlandVisualTrashAssessmentDetailDto } from "src/app/shared/generated/model/models";
+import { Alert } from "src/app/shared/models/alert";
+import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { AlertService } from "src/app/shared/services/alert.service";
+import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
 
 @Component({
     selector: "trash-ovta-add-remove-parcels",
@@ -53,7 +57,9 @@ export class TrashOvtaAddRemoveParcelsComponent {
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
         private route: ActivatedRoute,
         private wfsService: WfsService,
-        private groupByPipe: GroupByPipe
+        private groupByPipe: GroupByPipe,
+        private alertService: AlertService,
+        private ovtaWorkflowProgressService: OvtaWorkflowProgressService
     ) {}
 
     public handleMapReady(event: NeptuneMapInitEvent, boundingBox): void {
@@ -88,6 +94,9 @@ export class TrashOvtaAddRemoveParcelsComponent {
         this.onlandVisualTrashAssessmentService
             .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDParcelGeometriesPost(this.ovtaID, this.selectedParcelIDs)
             .subscribe((response) => {
+                this.alertService.clearAlerts();
+                this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
+                this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
                 if (andContinue) {
                     this.router.navigate([`../../${this.ovtaID}/refine-assessment-area`], { relativeTo: this.route });
                 }
@@ -107,7 +116,7 @@ export class TrashOvtaAddRemoveParcelsComponent {
             const featuresGroupedByParcelID = this.groupByPipe.transform(response, "properties.ParcelID");
             Object.keys(featuresGroupedByParcelID).forEach((parcelID) => {
                 const geoJson = L.geoJSON(featuresGroupedByParcelID[parcelID], {
-                    style: this.defaultStyle, //featuresGroupedByParcelID[parcelID][0].properties.WQMPCount > 0 ? this.wqmpStyle : this.noWQMPsStyle,
+                    style: this.defaultStyle,
                 });
                 geoJson.on("mouseover", (e) => {
                     geoJson.setStyle({ fillOpacity: 0.5 });

@@ -1,4 +1,7 @@
 <div class="field">
+    <ng-container *ngIf="fieldDefinitionName">
+        <field-definition [fieldDefinitionType]="fieldDefinitionName"></field-definition>
+    </ng-container>
     <ng-container [ngSwitch]="type">
         <!-- Text -->
         <ng-container *ngSwitchCase="FormFieldType.Text">
@@ -132,9 +135,5 @@
             </div>
         </ng-container>
     </ng-container>
-    <ng-container *ngIf="fieldDefinitionName">
-        <field-definition [fieldDefinitionType]="fieldDefinitionName"></field-definition>
-    </ng-container>
-
     <input-errors [validateFormControl]="formControl"></input-errors>
 </div>

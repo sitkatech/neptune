@@ -113,7 +113,7 @@ export class TrashOvtaRecordObservationsComponent {
     public addObservationMarker() {
         this.map.on("click", (e: L.LeafletMouseEvent) => {
             this.addObservation(e.latlng);
-            this.addObservationPointsLayersToMap();
+
             this.map.off("click");
         });
     }
@@ -124,6 +124,7 @@ export class TrashOvtaRecordObservationsComponent {
         observation.Latitude = latlng.lat;
         observation.Longitude = latlng.lng;
         this.observations = this.observations.concat(observation);
+        this.addObservationPointsLayersToMap();
     }
 
     public addObservationPointsLayersToMap(): void {
@@ -197,12 +198,13 @@ export class TrashOvtaRecordObservationsComponent {
             this.ovtaObservationLayer.addTo(this.map);
         }
         if (this.selectedOVTAObservation.controls.Latitude.getRawValue() != null) {
-            let selectedObservation = this.observations.find(
+            let selectedObservationID = this.observations.findIndex(
                 (x) => x.Latitude == this.selectedOVTAObservation.controls.Latitude.getRawValue() && x.Longitude == this.selectedOVTAObservation.controls.Longitude.getRawValue()
             );
-            selectedObservation = this.selectedOVTAObservation.getRawValue();
+            this.observations[selectedObservationID] = this.selectedOVTAObservation.getRawValue();
         }
         let newObservation = this.observations.find((x) => x.Latitude == latlng[1] && x.Longitude == latlng[0]);
+        //this.uploadFormField.setValue(null);
         this.selectedOVTAObservation.controls.OnlandVisualTrashAssessmentID.setValue(newObservation.OnlandVisualTrashAssessmentID);
         this.selectedOVTAObservation.controls.Note.setValue(newObservation.Note);
         this.selectedOVTAObservation.controls.Latitude.setValue(newObservation.Latitude);
@@ -236,10 +238,11 @@ export class TrashOvtaRecordObservationsComponent {
     }
 
     public deleteObservation() {
-        this.observations = this.observations.filter(
-            (x) => x.Latitude != this.selectedOVTAObservation.controls.Latitude.getRawValue() && x.Longitude != this.selectedOVTAObservation.controls.Longitude.getRawValue()
+        const index = this.observations.findIndex(
+            (x) => x.Latitude == this.selectedOVTAObservation.controls.Latitude.getRawValue() && x.Longitude == this.selectedOVTAObservation.controls.Longitude.getRawValue()
         );
-        this.selectedOVTAObservation = null;
+        this.observations.splice(index, 1);
+        this.selectedOVTAObservation.setValue = null;
         this.addObservationPointsLayersToMap();
     }
 

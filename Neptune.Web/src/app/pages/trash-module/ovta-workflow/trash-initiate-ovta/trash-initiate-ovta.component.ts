@@ -110,7 +110,7 @@ export class TrashInitiateOvtaComponent {
             this.alertService.pushAlert(new Alert("Your ovta was successfully created.", AlertContext.Success));
             this.ovtaWorkflowProgressService.updateProgress(response.OnlandVisualTrashAssessmentID);
             if (andContinue) {
-                this.router.navigate([`../../${response.OnlandVisualTrashAssessmentID}/record-observations`], { relativeTo: this.route });
+                this.router.navigate([`../../edit/${response.OnlandVisualTrashAssessmentID}/record-observations`], { relativeTo: this.route });
             }
         });
     }

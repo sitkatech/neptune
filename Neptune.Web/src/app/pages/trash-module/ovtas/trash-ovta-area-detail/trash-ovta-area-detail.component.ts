@@ -19,7 +19,6 @@ import { TransectLineLayerComponent } from "../../../../shared/components/leafle
 import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/services/modal/modal.service";
 import { UpdateOvtaAreaDetailsModalComponent, UpdateOvtaAreaModalContext } from "../update-ovta-area-details-modal/update-ovta-area-details-modal.component";
-import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 import { OnlandVisualTrashAssessmentGridDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-grid-dto";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 
@@ -60,7 +59,6 @@ export class TrashOvtaAreaDetailComponent {
 
     constructor(
         private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService,
-        private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
         private utilityFunctionsService: UtilityFunctionsService,
         private route: ActivatedRoute,
         private modalService: ModalService,

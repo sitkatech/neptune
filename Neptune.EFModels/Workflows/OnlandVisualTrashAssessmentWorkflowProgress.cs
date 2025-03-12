@@ -57,8 +57,7 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
             case OnlandVisualTrashAssessmentWorkflowStep.InitiateOvta:
                 return OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentID > 0;
             case OnlandVisualTrashAssessmentWorkflowStep.RecordObservations:
-                return (OnlandVisualTrashAssessment.AssessingNewArea != null &&
-                        (bool)OnlandVisualTrashAssessment.AssessingNewArea) && OnlandVisualTrashAssessment
+                return (OnlandVisualTrashAssessment.AssessingNewArea != null) && OnlandVisualTrashAssessment
                     .OnlandVisualTrashAssessmentObservations.ToList().Count > 0;
             case OnlandVisualTrashAssessmentWorkflowStep.AddOrRemoveParcels:
                 return OnlandVisualTrashAssessment.DraftGeometry != null || (OnlandVisualTrashAssessment.AssessingNewArea.HasValue && !OnlandVisualTrashAssessment.AssessingNewArea.Value);
