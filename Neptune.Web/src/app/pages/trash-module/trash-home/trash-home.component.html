@@ -1,42 +1,38 @@
-<h1 class="mt-4 mb-4">OCST Trash Module</h1>
-<app-alert-display></app-alert-display>
-
-<div class="grid-12">
-    <custom-rich-text class="g-col-8" [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
-    <div class="hero__actions card g-col-4">
+<div class="grid-12 page-wrapper">
+    <div class="g-col-8">
+        <app-alert-display></app-alert-display>
+        <h1 class="text-primary mt-4 mb-4">Trash Module</h1>
+        <custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
+    </div>
+    
+    <div class="g-col-4">
         <ng-container *ngIf="currentUser$ | async as currentUser; else notSignedIn">
-            <div class="card-header"><h3 class="card-title">Quick Actions</h3></div>
-            <div class="card-body">
-                <div class="hero__btns">
-                    <div class="hero__btns-wrapper">
-                        <a class="float-right btn btn-primary mr-2" [routerLink]="['onland-visual-trash-assessment/new/instructions']">Begin OVTA</a>
-                    </div>
-                    <div class="hero__btns-wrapper">
-                        <a class="btn btn-primary" [routerLink]="['onland-visual-trash-assessment-area']">View All OVTA Areas</a>
+            <div class="card sign-in-card">
+                <div class="card-header">Quick Actions</div>
+                <div class="card-body">
+                    <div class="hero__btns">
+                        <div class="hero__btns-wrapper">
+                            <a class="float-right btn btn-primary" [routerLink]="['onland-visual-trash-assessment/new/instructions']">Begin OVTA</a>
+                        </div>
+                        <div class="hero__btns-wrapper">
+                            <a class="btn btn-primary" [routerLink]="['onland-visual-trash-assessment-area']">View All OVTA Areas</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </ng-container>
-
         <ng-template #notSignedIn>
-            <div class="card-header"><h3 class="card-title">Welcome.</h3></div>
-            <div class="card-body">
-                <p class="mb-2">Log in to view your Account. Create an Account if you don't have one yet.</p>
-                <div class="hero__btns">
-                    <div class="hero__btns-wrapper">
-                        <a (click)="login()" class="btn btn-primary">Login</a>
-                    </div>
-                    <div class="hero__btns-wrapper">
-                        <a (click)="createAccount()" class="btn btn-primary">Create Account</a>
-                    </div>
+            <div class="card sign-in-card">
+                <div class="card-header">Welcome</div>
+                <div class="card-body">
+                    <p class="mb-2">Log in to view your Account. Create an Account if you don't have one yet.</p>
+                    <a (click)="login()" class="btn btn-primary">Login</a>
+                    <a (click)="createAccount()" class="btn btn-primary">Create Account</a>
                 </div>
-                <hr />
-                <div>
-                    <small style="font-size: 11px">
-                        Need help logging in? <br />
-                        <a href="{{ forgotPasswordUrl() }}">Forgot Password</a> | <a href="{{ forgotUsernameUrl() }}">Forgot Username</a> |
-                        <a href="{{ keystoneSupportUrl() }}">Request Support</a>
-                    </small>
+                <div class="card-footer">
+                    <p> Need help logging in?</p>
+                    <a href="{{ forgotPasswordUrl() }}">Forgot Password</a> | <a href="{{ forgotUsernameUrl() }}">Forgot Username</a> |
+                    <a href="{{ keystoneSupportUrl() }}">Request Support</a>
                 </div>
             </div>
         </ng-template>
@@ -48,185 +44,175 @@
         <div class="card mt-4">
             <div class="card-body">
                 <div class="grid-12">
-                    <div class="g-col-2"></div>
-                    <div class="g-col-1 content-section" style="text-align: right;">Jurisdiction</div>
-                    <div class="g-col-2">
-                        <div class="dropdown-container">
-                            <ng-select
-                                [(ngModel)]="currentStormwaterJurisdiction.StormwaterJurisdictionID"
-                                (change)="onJurisdictionSelected($event)"
-                                [items]="stormwaterJurisdictions"
-                                bindLabel="Organization.OrganizationName"
-                                bindValue="StormwaterJurisdictionID"
-                                [clearable]="false">
-                            </ng-select>
-                        </div>
-                    </div>
-                    <div class="g-col-1 content-section" style="text-align: right;"> Viewing</div>
-                    <div class="g-col-2">
-                       
-                        <div class="dropdown-container">
-                            <ng-select
-                                [(ngModel)]="currentResultType"
-                                [items]="resultTypes"
-                                [clearable]="false">
-                            </ng-select>
-                        </div>
-                    </div>
-                    <div class="g-col-2"></div>
-                </div>
-                <hr>
-                <div class="grid-12 mt-4">
-                    <div class="g-col-3"></div>
-                    <div class="g-col-9">
+                    <div class="g-col-6">
                         <div class="grid-12">
-                            <div class="g-col-2"></div>
-                            <div class="g-col-8">
-                                <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="areaBasedCalculationControlTemplate" *ngIf="currentResultType == 'Area-Based Results'">
-                                    <table class="table areaBasedCalculationControlTable" *ngIf="areaBasedAcreCalculationsDto$ | async as areaBasedAcreCalculationsDto">
-                                        <tbody>
-                                            <tr>
-                                                <td class="TGUColumn">
-                                                    <div id="fullTrashCapture" class="font25" style="color: rgb(76, 146, 76)">{{areaBasedAcreCalculationsDto.FullTrashCaptureAcreage | number : "1.0-0"}}</div>
-                                                    <p class="greyLabel">acres</p>
-                                                </td>
-                                                <td class="TGUColumn">
-                                                    <div id="equivalentArea" class="font25" style="color: rgb(140, 200, 10)">{{areaBasedAcreCalculationsDto.EquivalentAreaAcreage | number : "1.0-0"}}</div>
-                                                    <p class="greyLabel">acres via OVTA "A"</p>
-                                                </td>
-                                                <td class="TGUColumn">
-                                                    <div class="grid-12">
-                                                    <!-- <div class="col-sm-5 col-xs-12" style=""> -->
-                                                        <div class="g-col-5">
-                                                            <div id="totalAcresCaptured" class="font25" style="color: rgb(76, 146, 76);">{{areaBasedAcreCalculationsDto.TotalAcresCaptured | number : "1.0-0"}}</div>
-                                                            <p class="greyLabel">acres captured</p>
-                                                        </div>
-                                                        <!-- <div class="col-sm-1 col-xs-12 table-of"> -->
-                                                        <div class="g-col-1 table-of">
-                                                            <strong> of </strong>
-                                                        </div>
-                                                        <!-- <div class="col-sm-5 col-xs-12" style=""> -->
-                                                        <div class="g-col-5">
-                                                            <div id="totalPLUAcres" class="font25">{{areaBasedAcreCalculationsDto.TotalPLUAcres | number : "1.0-0"}}</div>
-                                                            <p class="greyLabel">total PLU acres</p>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td class="TGUColumn" style="width: 20%">
-                                                    <strong>Full Trash Capture</strong>
-                                                </td>
-                                                <td class="TGUColumn" style="border-left: none; width:20%">
-                                                    <strong>Equivalent Area</strong>
-                                                </td>
-                                                <td class="TGUColumn" style="border-left: none; width:60%">
-                                                    <strong>Total Full Capture Equivalent</strong>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                                <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="LoadBasedResultsControlTemplate" *ngIf="currentResultType == 'Load-Based Results (Current)' || currentResultType == 'Load-Based (Net Change)'">
-                                    <table class="table loadBasedCalculationControlTable" *ngIf="loadResultsDto$ | async as loadResultsDto">
-                                        <tbody>
-                                            <tr>
-                                                <td class="loadBasedResultsColumn" style="width: 18%">
-                                                    <div id="viaFullTrashCapture" class="font25 loadBased-lightblue bold">{{loadResultsDto.LoadFullCapture | number : "1.0-0"}}</div>
-                                                    <p class="text-normal greyLabel" style="font-weight: normal"><field-definition fieldDefinitionType="ViaFullCapture"> </field-definition></p>
-                                                </td>
-                                                <td class="loadBasedResultsColumn" style="width: 21%">
-                                                    <div id="viaPartialTrashCapture" class="font25 loadBased-lightblue bold">{{loadResultsDto.LoadPartialCapture | number : "1.0-0"}}</div>
-                                                    <p class="text-normal greyLabel" ><field-definition fieldDefinitionType="ViaPartialCapture"> </field-definition></p>
-                                                </td>
-                                                <td class="loadBasedResultsColumn" style="width: 21%">
-                                                    <div id="viaOVTAScore" class="font25 loadBased-lightblue bold">{{loadResultsDto.LoadOVTA | number : "1.0-0"}}</div>
-                                                    <p class="text-normal greyLabel" >
-                                                        <field-definition fieldDefinitionType="ViaOVTAScore"> </field-definition>
-                                                    </p>
-                                                </td>
-                                                <td class="loadBasedResultsColumn">
-                                                    <div id="totalAchieved" class="font25 loadBased-blue bold">{{loadResultsDto.TotalAchieved | number : "1.0-0"}}</div>
-                                                    <p class="text-normal greyLabel" ><field-definition fieldDefinitionType="TotalAchieved"> </field-definition></p>
-                                                </td>
-                                                <td class="loadBasedResultsColumn" style="border-left: 1px solid rgb(204, 204, 204);">
-                                                    <div id="targetLoadReduction" class="font25 loadBased-red bold">{{loadResultsDto.TargetLoadReduction | number : "1.0-0"}}</div>
-                                                    <p><field-definition fieldDefinitionType="TargetLoadReduction"> </field-definition></p>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="5">
-                                                    <p class="gpy">gallons per year</p>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                                <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="OVTABasedResultsControlTemplate" *ngIf="currentResultType == 'OVTA-Based Results'">
-                                    <table class="table areaBasedCalculationControlTable" *ngIf="ovtaResultsDto$ | async as ovtaResultsDto">
-                                        <thead>
-                                            <tr>
-                                                <td class="ovtaResults font15 inline-display">
-                                                </td>
-                                                <td class="ovtaResults font15" style="width: 10%">A</td>
-                                                <td class="ovtaResults font15" style="width: 10%">B</td>
-                                                <td class="ovtaResults font15" style="width: 10%">C</td>
-                                                <td class="ovtaResults font15" style="width: 10%">D</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="font15" style="border: none">
-                                                    <div>Priority Land Use Area (acres)</div>
-                                                </td>
-                                                <td class="ovtaResults font15">
-                                                    <div id="PLUIsA" style="color: rgb(74,222,0)">{{ovtaResultsDto.PLUSumAcresWhereOVTAIsA | number : "1.0-0"}}</div>
-                                                </td>
-                                                <td class="ovtaResults font15">
-                                                    <div id="PLUIsB" style="color: rgb(255,216,0)">{{ovtaResultsDto.PLUSumAcresWhereOVTAIsB | number : "1.0-0"}}</div>
-                                                </td>
-                                                <td class="ovtaResults font15">
-                                                    <div id="PLUIsC" style="color: rgb(255,127,127)">{{ovtaResultsDto.PLUSumAcresWhereOVTAIsC | number : "1.0-0"}}</div>
-                                                </td>
-                                                <td class="ovtaResults font15">
-                                                    <div id="PLUIsD" style="color: rgb(197,0,255)">{{ovtaResultsDto.PLUSumAcresWhereOVTAIsD | number : "1.0-0"}}</div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="font15" style="border: none">
-                                                    <div>Alternate Land Use Area (acres)</div>
-                                                </td>
-                                                <td class="ovtaResults font15">
-                                                    <div id="ALUIsA" style="color: rgb(74,222,0)">{{ovtaResultsDto.ALUSumAcresWhereOVTAIsA | number : "1.0-0"}}</div>
-                                                </td>
-                                                <td class="ovtaResults font15">
-                                                    <div id="ALUIsB" style="color: rgb(255,216,0)">{{ovtaResultsDto.ALUSumAcresWhereOVTAIsB | number : "1.0-0"}}</div>
-                                                </td>
-                                                <td class="ovtaResults font15">
-                                                    <div id="ALUIsC" style="color: rgb(255,127,127)">{{ovtaResultsDto.ALUSumAcresWhereOVTAIsC | number : "1.0-0"}}</div>
-                                                </td>
-                                                <td class="ovtaResults font15">
-                                                    <div id="ALUIsD" style="color: rgb(197,0,255)">{{ovtaResultsDto.ALUSumAcresWhereOVTAIsD | number : "1.0-0"}}</div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                            <div class="g-col-2 content-section">Jurisdiction</div>
+                            <div class="g-col-10">
+                                <div class="dropdown-container">
+                                    <ng-select
+                                        [(ngModel)]="currentStormwaterJurisdiction.StormwaterJurisdictionID"
+                                        (change)="onJurisdictionSelected($event)"
+                                        [items]="stormwaterJurisdictions"
+                                        bindLabel="Organization.OrganizationName"
+                                        bindValue="StormwaterJurisdictionID"
+                                        [clearable]="false">
+                                    </ng-select>
                                 </div>
                             </div>
-                            <div class="g-col-2"></div>
+                            <div class="g-col-2 content-section">Viewing</div>
+                            <div class="g-col-10">
+                                <div class="dropdown-container">
+                                    <ng-select
+                                        [(ngModel)]="currentResultType"
+                                        [items]="resultTypes"
+                                        [clearable]="false">
+                                    </ng-select>
+                                </div>
+                            </div>
                         </div>
-                        
+                    </div>
+                    <div class="g-col-6">
+                        <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="areaBasedCalculationControlTemplate" *ngIf="currentResultType == 'Area-Based Results'">
+                            <table class="table areaBasedCalculationControlTable" *ngIf="areaBasedAcreCalculationsDto$ | async as areaBasedAcreCalculationsDto">
+                                <tbody>
+                                    <tr>
+                                        <td class="TGUColumn">
+                                            <div id="fullTrashCapture" class="font25" style="color: rgb(76, 146, 76)">{{areaBasedAcreCalculationsDto.FullTrashCaptureAcreage | number : "1.0-0"}}</div>
+                                            <p class="greyLabel">acres</p>
+                                        </td>
+                                        <td class="TGUColumn">
+                                            <div id="equivalentArea" class="font25" style="color: rgb(140, 200, 10)">{{areaBasedAcreCalculationsDto.EquivalentAreaAcreage | number : "1.0-0"}}</div>
+                                            <p class="greyLabel">acres via OVTA "A"</p>
+                                        </td>
+                                        <td class="TGUColumn">
+                                            <div class="grid-12">
+                                            <!-- <div class="col-sm-5 col-xs-12" style=""> -->
+                                                <div class="g-col-5">
+                                                    <div id="totalAcresCaptured" class="font25" style="color: rgb(76, 146, 76);">{{areaBasedAcreCalculationsDto.TotalAcresCaptured | number : "1.0-0"}}</div>
+                                                    <p class="greyLabel">acres captured</p>
+                                                </div>
+                                                <!-- <div class="col-sm-1 col-xs-12 table-of"> -->
+                                                <div class="g-col-1 table-of">
+                                                    <strong> of </strong>
+                                                </div>
+                                                <!-- <div class="col-sm-5 col-xs-12" style=""> -->
+                                                <div class="g-col-5">
+                                                    <div id="totalPLUAcres" class="font25">{{areaBasedAcreCalculationsDto.TotalPLUAcres | number : "1.0-0"}}</div>
+                                                    <p class="greyLabel">total PLU acres</p>
+                                                </div>
+                                            </div>
+                                            
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td class="TGUColumn" style="width: 20%">
+                                            <strong>Full Trash Capture</strong>
+                                        </td>
+                                        <td class="TGUColumn" style="border-left: none; width:20%">
+                                            <strong>Equivalent Area</strong>
+                                        </td>
+                                        <td class="TGUColumn" style="border-left: none; width:60%">
+                                            <strong>Total Full Capture Equivalent</strong>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="LoadBasedResultsControlTemplate" *ngIf="currentResultType == 'Load-Based Results (Current)' || currentResultType == 'Load-Based (Net Change)'">
+                            <table class="table loadBasedCalculationControlTable" *ngIf="loadResultsDto$ | async as loadResultsDto">
+                                <tbody>
+                                    <tr>
+                                        <td class="loadBasedResultsColumn" style="width: 18%">
+                                            <div id="viaFullTrashCapture" class="font25 loadBased-lightblue bold">{{loadResultsDto.LoadFullCapture | number : "1.0-0"}}</div>
+                                            <p class="text-normal greyLabel" style="font-weight: normal"><field-definition fieldDefinitionType="ViaFullCapture"> </field-definition></p>
+                                        </td>
+                                        <td class="loadBasedResultsColumn" style="width: 21%">
+                                            <div id="viaPartialTrashCapture" class="font25 loadBased-lightblue bold">{{loadResultsDto.LoadPartialCapture | number : "1.0-0"}}</div>
+                                            <p class="text-normal greyLabel" ><field-definition fieldDefinitionType="ViaPartialCapture"> </field-definition></p>
+                                        </td>
+                                        <td class="loadBasedResultsColumn" style="width: 21%">
+                                            <div id="viaOVTAScore" class="font25 loadBased-lightblue bold">{{loadResultsDto.LoadOVTA | number : "1.0-0"}}</div>
+                                            <p class="text-normal greyLabel" >
+                                                <field-definition fieldDefinitionType="ViaOVTAScore"> </field-definition>
+                                            </p>
+                                        </td>
+                                        <td class="loadBasedResultsColumn">
+                                            <div id="totalAchieved" class="font25 loadBased-blue bold">{{loadResultsDto.TotalAchieved | number : "1.0-0"}}</div>
+                                            <p class="text-normal greyLabel" ><field-definition fieldDefinitionType="TotalAchieved"> </field-definition></p>
+                                        </td>
+                                        <td class="loadBasedResultsColumn" style="border-left: 1px solid rgb(204, 204, 204);">
+                                            <div id="targetLoadReduction" class="font25 loadBased-red bold">{{loadResultsDto.TargetLoadReduction | number : "1.0-0"}}</div>
+                                            <p><field-definition fieldDefinitionType="TargetLoadReduction"> </field-definition></p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="5">
+                                            <p class="gpy">gallons per year</p>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="OVTABasedResultsControlTemplate" *ngIf="currentResultType == 'OVTA-Based Results'">
+                            <table class="table areaBasedCalculationControlTable" *ngIf="ovtaResultsDto$ | async as ovtaResultsDto">
+                                <thead>
+                                    <tr>
+                                        <td class="font15" style="font-weight: bold; padding-left: .75rem;">
+                                            <div>Score</div>
+                                        </td>
+                                        <td class="ovtaResults font15" style="width: 10%">A</td>
+                                        <td class="ovtaResults font15" style="width: 10%">B</td>
+                                        <td class="ovtaResults font15" style="width: 10%">C</td>
+                                        <td class="ovtaResults font15" style="width: 10%">D</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="font15" style="border: none">
+                                            <div>Priority Land Use Area (acres)</div>
+                                        </td>
+                                        <td class="ovtaResults font15">
+                                            <div id="PLUIsA" style="color: rgb(74,222,0)">{{ovtaResultsDto.PLUSumAcresWhereOVTAIsA | number : "1.0-0"}}</div>
+                                        </td>
+                                        <td class="ovtaResults font15">
+                                            <div id="PLUIsB" style="color: rgb(255,216,0)">{{ovtaResultsDto.PLUSumAcresWhereOVTAIsB | number : "1.0-0"}}</div>
+                                        </td>
+                                        <td class="ovtaResults font15">
+                                            <div id="PLUIsC" style="color: rgb(255,127,127)">{{ovtaResultsDto.PLUSumAcresWhereOVTAIsC | number : "1.0-0"}}</div>
+                                        </td>
+                                        <td class="ovtaResults font15">
+                                            <div id="PLUIsD" style="color: rgb(197,0,255)">{{ovtaResultsDto.PLUSumAcresWhereOVTAIsD | number : "1.0-0"}}</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font15" style="border: none">
+                                            <div>Alternate Land Use Area (acres)</div>
+                                        </td>
+                                        <td class="ovtaResults font15">
+                                            <div id="ALUIsA" style="color: rgb(74,222,0)">{{ovtaResultsDto.ALUSumAcresWhereOVTAIsA | number : "1.0-0"}}</div>
+                                        </td>
+                                        <td class="ovtaResults font15">
+                                            <div id="ALUIsB" style="color: rgb(255,216,0)">{{ovtaResultsDto.ALUSumAcresWhereOVTAIsB | number : "1.0-0"}}</div>
+                                        </td>
+                                        <td class="ovtaResults font15">
+                                            <div id="ALUIsC" style="color: rgb(255,127,127)">{{ovtaResultsDto.ALUSumAcresWhereOVTAIsC | number : "1.0-0"}}</div>
+                                        </td>
+                                        <td class="ovtaResults font15">
+                                            <div id="ALUIsD" style="color: rgb(197,0,255)">{{ovtaResultsDto.ALUSumAcresWhereOVTAIsD | number : "1.0-0"}}</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
+                
             </div>
          </div>
-        
-        
         <div class="grid-12 mt-4">
             <div class="g-col-3" >
                 <div class="card">
