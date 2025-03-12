@@ -21,12 +21,7 @@
                 [formInputOptions]="ProgressScoreOptions"
                 [type]="FormFieldType.Radio"></form-field>
 
-            <form-field
-                class="g-col-6"
-                [formControl]="formGroup.controls.LastAssessmentDate"
-                fieldLabel="Assessment Date"
-                [required]="false"
-                [type]="FormFieldType.Date"></form-field>
+            <form-field class="g-col-6" [formControl]="formGroup.controls.AssessmentDate" fieldLabel="Assessment Date" [required]="false" [type]="FormFieldType.Date"></form-field>
             <form-field
                 class="g-col-6"
                 [formControl]="formGroup.controls.OnlandVisualTrashAssessmentBaselineScoreID"
@@ -97,13 +92,6 @@
                     mapHeight="400px"
                     [showLegend]="false"
                     [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
-                    <ovta-area-layer
-                        *ngIf="mapIsReady"
-                        [displayOnLoad]="true"
-                        [map]="map"
-                        [layerControl]="layerControl"
-                        [sortOrder]="10"
-                        [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
                     <transect-line-layer
                         *ngIf="mapIsReady"
                         [displayOnLoad]="true"

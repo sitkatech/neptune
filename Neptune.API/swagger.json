@@ -783,6 +783,46 @@
         }
       }
     },
+    "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/review-and-finalize": {
+      "get": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentReviewAndFinalizeDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentReviewAndFinalizeDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentReviewAndFinalizeDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/onland-visual-trash-assessments/preliminary-source-identification-types": {
       "get": {
         "tags": [
@@ -930,6 +970,37 @@
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/OnlandVisualTrashAssessmentRefineAreaDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/onland-visual-trash-assessments/review-and-finalize": {
+      "put": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentReviewAndFinalizeDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentReviewAndFinalizeDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentReviewAndFinalizeDto"
               }
             }
           }
@@ -4747,6 +4818,78 @@
             "$ref": "#/components/schemas/BoundingBoxDto"
           },
           "GeometryAsGeoJson": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OnlandVisualTrashAssessmentReviewAndFinalizeDto": {
+        "type": "object",
+        "properties": {
+          "OnlandVisualTrashAssessmentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OnlandVisualTrashAssessmentAreaID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentAreaName": {
+            "type": "string",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentBaselineScoreID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentStatusID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "AssessmentAreaDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsProgressAssessment": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "Notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "AssessmentDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Observations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationWithPhotoDto"
+            },
+            "nullable": true
+          },
+          "PreliminarySourceIdentificationTypeIDs": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "BoundingBox": {
+            "$ref": "#/components/schemas/BoundingBoxDto"
+          },
+          "Geometry": {
             "type": "string",
             "nullable": true
           }

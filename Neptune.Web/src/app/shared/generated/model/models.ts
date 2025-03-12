@@ -33,6 +33,7 @@ export * from '././onland-visual-trash-assessment-observation-photo-staging-dto'
 export * from '././onland-visual-trash-assessment-observation-upsert-dto';
 export * from '././onland-visual-trash-assessment-observation-with-photo-dto';
 export * from '././onland-visual-trash-assessment-refine-area-dto';
+export * from '././onland-visual-trash-assessment-review-and-finalize-dto';
 export * from '././onland-visual-trash-assessment-simple-dto';
 export * from '././onland-visual-trash-assessment-status-simple-dto';
 export * from '././onland-visual-trash-assessment-workflow-dto';

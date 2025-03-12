@@ -61,6 +61,15 @@ public class OnlandVisualTrashAssessmentController(
         return Ok(onlandVisualTrashAssessmentAddRemoveParcelsDto);
     }
 
+    [HttpGet("{onlandVisualTrashAssessmentID}/review-and-finalize")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public ActionResult<OnlandVisualTrashAssessmentReviewAndFinalizeDto> GetByIDForReviewAndFinalize([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessmentReviewAndFinalizeDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsReviewAndFinalizeDto();
+        return Ok(onlandVisualTrashAssessmentReviewAndFinalizeDto);
+    }
+
     [HttpGet("preliminary-source-identification-types")]
     [JurisdictionEditFeature]
     public ActionResult<List<PreliminarySourceIdentificationTypeSimpleDto>> GetPreliminarySourceIdentificationTypes()
@@ -101,6 +110,21 @@ public class OnlandVisualTrashAssessmentController(
     public async Task<ActionResult> Update([FromBody] OnlandVisualTrashAssessmentWorkflowDto dto)
     {
         await OnlandVisualTrashAssessments.Update(DbContext, dto);
+        return Ok();
+    }
+
+    [HttpPut("review-and-finalize")]
+    [JurisdictionEditFeature]
+    public async Task<ActionResult> UpdateReviewAndFinalize([FromBody] OnlandVisualTrashAssessmentReviewAndFinalizeDto dto)
+    {
+        if (dto.OnlandVisualTrashAssessmentStatusID == (int)OnlandVisualTrashAssessmentStatusEnum.InProgress)
+        {
+            await OnlandVisualTrashAssessments.SaveDraftOnlandVisualTrashAssessment(dbContext, dto);
+        }
+        else
+        {
+            await OnlandVisualTrashAssessments.CompleteOnlandVisualTrashAssessment(dbContext, dto);
+        }
         return Ok();
     }
 

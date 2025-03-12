@@ -176,7 +176,6 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     }
 
     public addFeatureCollectionToFeatureGroup(featureJsons: any, featureGroup: L.FeatureGroup) {
-        console.log(featureJsons);
         if (featureJsons.geometry.type === "MultiPolygon") {
             featureJsons.geometry.coordinates.forEach(function (shapeCoords, i) {
                 var polygon = { type: "Polygon", coordinates: shapeCoords };
