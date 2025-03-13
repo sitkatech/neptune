@@ -1,6 +1,6 @@
 <page-header pageTitle="Refine Assessment Area"></page-header>
 <app-alert-display></app-alert-display>
-<div class="page-body">
+<div class="page-body" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
     <div class="copy copy-2 mb-3">
         You may click or tap the edit button (<i class="fas fa-edit"></i>) on the map below to adjust the Assessment Area's vertices. You may drag vertices to move them, or click
         or tap vertices to delete them. Note that it may be necessary to zoom the map to see individual vertices that are close together (e.g. there may be many closely-placed

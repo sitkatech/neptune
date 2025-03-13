@@ -26,11 +26,25 @@ import {
 } from "src/app/shared/generated/model/onland-visual-trash-assessment-review-and-finalize-dto";
 import { OnlandVisualTrashAssessmentStatusEnum } from "src/app/shared/generated/enum/onland-visual-trash-assessment-status-enum";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
+import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 
 @Component({
     selector: "trash-ovta-review-and-finalize",
     standalone: true,
-    imports: [PageHeaderComponent, FormFieldComponent, ReactiveFormsModule, NgIf, AsyncPipe, FormsModule, NgFor, NgClass, NeptuneMapComponent, NgFor, AlertDisplayComponent],
+    imports: [
+        PageHeaderComponent,
+        FormFieldComponent,
+        ReactiveFormsModule,
+        NgIf,
+        AsyncPipe,
+        FormsModule,
+        NgFor,
+        NgClass,
+        NeptuneMapComponent,
+        NgFor,
+        AlertDisplayComponent,
+        LoadingDirective,
+    ],
     templateUrl: "./trash-ovta-review-and-finalize.component.html",
     styleUrl: "./trash-ovta-review-and-finalize.component.scss",
 })
@@ -40,6 +54,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
     public PreliminarySourceIdentificationCategories = PreliminarySourceIdentificationCategories;
     public ovtaObservationLayer: L.GeoJSON<any>;
     public selectedOVTAObservation: OnlandVisualTrashAssessmentObservationWithPhotoDto;
+    public isLoadingMap: boolean = false;
 
     public ovtaID: number;
 
@@ -95,6 +110,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
     ) {}
 
     ngOnInit(): void {
+        this.isLoadingMap = true;
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
             switchMap((params) => {
                 return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizeGet(
@@ -124,6 +140,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
         this.addFeatureCollectionToFeatureGroup(JSON.parse(transectLine), this.transectLineLayer, this.transectLineStyle);
         this.transectLineLayer.addTo(this.map);
         this.addObservationPointsLayersToMap(observations);
+        this.isLoadingMap = false;
     }
 
     filterByCategory(preliminarySourceIdentificationTypeSimpleDto, categoryID) {

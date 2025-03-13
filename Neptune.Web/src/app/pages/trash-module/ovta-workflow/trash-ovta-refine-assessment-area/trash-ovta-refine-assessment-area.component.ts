@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable, switchMap } from "rxjs";
+import { Observable, switchMap, tap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { NeptuneMapInitEvent, NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
@@ -19,17 +19,19 @@ import { AlertService } from "src/app/shared/services/alert.service";
 import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 
 @Component({
     selector: "trash-ovta-refine-assessment-area",
     standalone: true,
-    imports: [PageHeaderComponent, NeptuneMapComponent, AlertDisplayComponent, OvtaObservationLayerComponent, AsyncPipe, NgIf],
+    imports: [PageHeaderComponent, NeptuneMapComponent, AlertDisplayComponent, OvtaObservationLayerComponent, AsyncPipe, NgIf, LoadingDirective],
     templateUrl: "./trash-ovta-refine-assessment-area.component.html",
     styleUrl: "./trash-ovta-refine-assessment-area.component.scss",
 })
 export class TrashOvtaRefineAssessmentAreaComponent {
     public customRichTextTypeID = NeptunePageTypeEnum.EditOVTAArea;
     public ovtaID: number;
+    public isLoading: boolean = false;
 
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentRefineAreaDto>;
     public mapHeight = window.innerHeight - window.innerHeight * 0.4 + "px";
@@ -88,13 +90,15 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     ) {}
 
     ngOnInit(): void {
+        this.isLoading = true;
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
             switchMap((params) => {
                 this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
                 return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaGet(
                     params[routeParams.onlandVisualTrashAssessmentID]
                 );
-            })
+            }),
+            tap(() => (this.isLoading = false))
         );
     }
 

@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 import { Router, ActivatedRoute } from "@angular/router";
-import { Observable, switchMap } from "rxjs";
+import { Observable, switchMap, tap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { NeptuneMapInitEvent, NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
@@ -16,11 +16,12 @@ import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
+import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 
 @Component({
     selector: "trash-ovta-add-remove-parcels",
     standalone: true,
-    imports: [PageHeaderComponent, AlertDisplayComponent, NeptuneMapComponent, AsyncPipe, NgIf, OvtaObservationLayerComponent],
+    imports: [PageHeaderComponent, AlertDisplayComponent, NeptuneMapComponent, AsyncPipe, NgIf, OvtaObservationLayerComponent, LoadingDirective],
     templateUrl: "./trash-ovta-add-remove-parcels.component.html",
     styleUrl: "./trash-ovta-add-remove-parcels.component.scss",
 })
@@ -33,6 +34,7 @@ export class TrashOvtaAddRemoveParcelsComponent {
     public bounds: any;
     public ovtaID: number;
     public isLoadingSubmit = false;
+    public isLoading: boolean = false;
 
     public selectedParcelIDs: number[] = [];
 
@@ -70,13 +72,15 @@ export class TrashOvtaAddRemoveParcelsComponent {
     ) {}
 
     ngOnInit(): void {
+        this.isLoading = true;
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
             switchMap((params) => {
                 this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
                 return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAddOrRemoveParcelGet(
                     params[routeParams.onlandVisualTrashAssessmentID]
                 );
-            })
+            }),
+            tap(() => (this.isLoading = false))
         );
     }
 

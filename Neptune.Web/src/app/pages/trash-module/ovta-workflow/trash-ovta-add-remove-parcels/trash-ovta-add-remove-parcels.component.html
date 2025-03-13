@@ -1,6 +1,6 @@
 <page-header pageTitle="Add or Remove Parcels"></page-header>
 <app-alert-display></app-alert-display>
-<div class="page-body" *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
+<div class="page-body" *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
     <div *ngIf="!onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined; else isManuallyRefined">
         <div class="copy copy-2 mb-3">Click the map to add or remove parcels from the Assessment Area. Note that it may be necessary to zoom the map to see APNs on the map.</div>
         <neptune-map
