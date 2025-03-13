@@ -121,6 +121,29 @@ public static class OnlandVisualTrashAssessments
             OnlandVisualTrashAssessmentStatusID = (int)OnlandVisualTrashAssessmentStatusEnum.InProgress
         };
 
+        if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID.HasValue)
+        {
+            var transectBackingAssessment = GetTransectBackingAssessment(dbContext,
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID);
+
+            // ensure the area to which this assessment is assigned ends up with only one transect-backing assessment
+            if (transectBackingAssessment != null)
+            {
+                if (transectBackingAssessment.OnlandVisualTrashAssessmentID != onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)
+                {
+                    onlandVisualTrashAssessment.IsTransectBackingAssessment = false;
+                }
+            }
+            else
+            {
+                onlandVisualTrashAssessment.IsTransectBackingAssessment = true;
+            }
+        }
+        else
+        {
+            onlandVisualTrashAssessment.IsTransectBackingAssessment = false;
+        }
+
         await dbContext.AddAsync(onlandVisualTrashAssessment);
         await dbContext.SaveChangesAsync();
         await dbContext.Entry(onlandVisualTrashAssessment).ReloadAsync();
@@ -187,11 +210,91 @@ public static class OnlandVisualTrashAssessments
 
     }
 
+    public static async Task CompleteOnlandVisualTrashAssessment(NeptuneDbContext dbContext, OnlandVisualTrashAssessmentReviewAndFinalizeDto dto)
+    {
+        var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments
+            .Include(x => x.OnlandVisualTrashAssessmentArea)
+            .Include(x => x.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes)
+            .Include(onlandVisualTrashAssessment => onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations)
+            .Single(x =>
+            x.OnlandVisualTrashAssessmentID == dto.OnlandVisualTrashAssessmentID);
+
+        if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID == null)
+        {
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea()
+            {
+                OnlandVisualTrashAssessmentAreaName = dto.OnlandVisualTrashAssessmentAreaName,
+                OnlandVisualTrashAssessmentBaselineScoreID = dto.OnlandVisualTrashAssessmentBaselineScoreID,
+                OnlandVisualTrashAssessmentAreaGeometry4326 = onlandVisualTrashAssessment.DraftGeometry.ProjectTo4326(),
+                OnlandVisualTrashAssessmentAreaGeometry = onlandVisualTrashAssessment.DraftGeometry.ProjectTo2771(),
+                AssessmentAreaDescription = dto.AssessmentAreaDescription,
+                StormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID,
+            };
+        }
+
+        if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine == null &&
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Count >= 2)
+        {
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine =
+                GetTransect(onlandVisualTrashAssessment).ProjectTo2771();
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine4326 =
+                GetTransect(onlandVisualTrashAssessment).ProjectTo4326();
+        }
+
+        onlandVisualTrashAssessment.DraftGeometry = null;
+        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID =
+            (int)OnlandVisualTrashAssessmentStatusEnum.Complete;
+        onlandVisualTrashAssessment.AssessingNewArea = false;
+        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName = dto.OnlandVisualTrashAssessmentAreaName;
+        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription = dto.AssessmentAreaDescription;
+        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = dto.OnlandVisualTrashAssessmentBaselineScoreID;
+        onlandVisualTrashAssessment.IsProgressAssessment = dto.IsProgressAssessment ?? false;
+        onlandVisualTrashAssessment.CompletedDate = dto.AssessmentDate;
+        onlandVisualTrashAssessment.Notes = dto.Notes;
+
+        await dbContext.SaveChangesAsync();
+
+    }
+
+    public static async Task SaveDraftOnlandVisualTrashAssessment(NeptuneDbContext dbContext, OnlandVisualTrashAssessmentReviewAndFinalizeDto dto)
+    {
+        var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments
+            .Include(x => x.OnlandVisualTrashAssessmentArea)
+            .Include(onlandVisualTrashAssessment => onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations)
+            .Single(x =>
+            x.OnlandVisualTrashAssessmentID == dto.OnlandVisualTrashAssessmentID);
+
+
+        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID =
+            (int)OnlandVisualTrashAssessmentStatusEnum.InProgress;
+        onlandVisualTrashAssessment.AssessingNewArea = true;
+        onlandVisualTrashAssessment.DraftAreaName = dto.OnlandVisualTrashAssessmentAreaName;
+        onlandVisualTrashAssessment.DraftAreaDescription = dto.AssessmentAreaDescription;
+        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = dto.OnlandVisualTrashAssessmentBaselineScoreID;
+        onlandVisualTrashAssessment.IsProgressAssessment = dto.IsProgressAssessment ?? false;
+        onlandVisualTrashAssessment.CompletedDate = dto.AssessmentDate;
+        onlandVisualTrashAssessment.Notes = dto.Notes;
+
+        await dbContext.SaveChangesAsync();
+
+    }
+
+
     public static List<PreliminarySourceIdentificationTypeSimpleDto> GetPreliminarySourceIdentificationTypeSimpleDtos(NeptuneDbContext dbContext)
     {
         var preliminarySourceIdentificationTypeSimpleDtos = PreliminarySourceIdentificationType.AllAsSimpleDto;
 
         return preliminarySourceIdentificationTypeSimpleDtos;
+    }
+
+    public static async Task RefreshParcels(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments.Single(x =>
+            x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
+        onlandVisualTrashAssessment.DraftGeometry = null;
+        onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = false;
+
+        await dbContext.SaveChangesAsync();
     }
 
     public static async Task UpdateGeometry(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID, List<int> parcelIDs)
@@ -212,9 +315,20 @@ public static class OnlandVisualTrashAssessments
         newGeometry4326.Geometry.SRID = Proj4NetHelper.WEB_MERCATOR;
 
         // since this is coming from the browser, we have to transform to State Plane
+        onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = !newGeometry4326.Equals(onlandVisualTrashAssessment.DraftGeometry);
         onlandVisualTrashAssessment.DraftGeometry = newGeometry4326.Geometry;
-        onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = newGeometry4326.Equals(onlandVisualTrashAssessment.DraftGeometry);
         await dbContext.SaveChangesAsync();
+    }
+
+    public static string GetTransectLine4326GeoJson(OnlandVisualTrashAssessment ovta)
+    {
+        var attributesTable = new AttributesTable
+        {
+            { "OnlandVisualTrashAssessmentID", ovta.OnlandVisualTrashAssessmentID },
+        };
+
+        var feature = new Feature(GetTransect(ovta).ProjectTo4326(), attributesTable);
+        return GeoJsonSerializer.Serialize(feature);
     }
 
     private static Geometry GetTransect(OnlandVisualTrashAssessment ovta)

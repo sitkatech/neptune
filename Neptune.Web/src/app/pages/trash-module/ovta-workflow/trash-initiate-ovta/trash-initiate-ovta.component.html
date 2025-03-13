@@ -1,5 +1,5 @@
 <page-header pageTitle="Initiate OVTA"></page-header>
-<div class="page-body grid-12">
+<div class="page-body grid-12" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
     <form class="form" [formGroup]="formGroup">
         <div class="form-group">
             <div class="g-col-3 control-label"><i class="copy copy-2">Are you reassessing a previously-assessed area, or assessing a new area for the first time?</i></div>

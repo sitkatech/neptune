@@ -11,8 +11,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Neptune.EFModels.Workflows;
 using Microsoft.EntityFrameworkCore;
-using Neptune.Common.GeoSpatial;
-using System;
 using Microsoft.AspNetCore.Http;
 
 namespace Neptune.API.Controllers;
@@ -63,6 +61,15 @@ public class OnlandVisualTrashAssessmentController(
         return Ok(onlandVisualTrashAssessmentAddRemoveParcelsDto);
     }
 
+    [HttpGet("{onlandVisualTrashAssessmentID}/review-and-finalize")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public ActionResult<OnlandVisualTrashAssessmentReviewAndFinalizeDto> GetByIDForReviewAndFinalize([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessmentReviewAndFinalizeDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsReviewAndFinalizeDto();
+        return Ok(onlandVisualTrashAssessmentReviewAndFinalizeDto);
+    }
+
     [HttpGet("preliminary-source-identification-types")]
     [JurisdictionEditFeature]
     public ActionResult<List<PreliminarySourceIdentificationTypeSimpleDto>> GetPreliminarySourceIdentificationTypes()
@@ -106,6 +113,21 @@ public class OnlandVisualTrashAssessmentController(
         return Ok();
     }
 
+    [HttpPut("review-and-finalize")]
+    [JurisdictionEditFeature]
+    public async Task<ActionResult> UpdateReviewAndFinalize([FromBody] OnlandVisualTrashAssessmentReviewAndFinalizeDto dto)
+    {
+        if (dto.OnlandVisualTrashAssessmentStatusID == (int)OnlandVisualTrashAssessmentStatusEnum.InProgress)
+        {
+            await OnlandVisualTrashAssessments.SaveDraftOnlandVisualTrashAssessment(dbContext, dto);
+        }
+        else
+        {
+            await OnlandVisualTrashAssessments.CompleteOnlandVisualTrashAssessment(dbContext, dto);
+        }
+        return Ok();
+    }
+
     [HttpGet("{onlandVisualTrashAssessmentID}/observations")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
@@ -125,6 +147,23 @@ public class OnlandVisualTrashAssessmentController(
             });
 
         return Ok(visualTrashAssessmentObservationUpsertDtos);
+    }
+
+    [HttpGet("{onlandVisualTrashAssessmentID}/observation-locations")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public ActionResult<List<OnlandVisualTrashAssessmentObservationLocationDto>> GetObservationLocations([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessmentObservationLocationDtos = OnlandVisualTrashAssessmentObservations
+            .ListByOnlandVisualTrashAssessmentID(dbContext, onlandVisualTrashAssessmentID)
+            .Select(x => new OnlandVisualTrashAssessmentObservationLocationDto() {
+                OnlandVisualTrashAssessmentObservationID = x.OnlandVisualTrashAssessmentObservationID,
+                OnlandVisualTrashAssessmentID = x.OnlandVisualTrashAssessmentID,
+                Longitude = x.LocationPoint4326.Coordinate[0],
+                Latitude = x.LocationPoint4326.Coordinate[1],
+            });
+
+        return Ok(onlandVisualTrashAssessmentObservationLocationDtos);
     }
 
     [HttpPost("{onlandVisualTrashAssessmentID}/observations")]
@@ -211,6 +250,15 @@ public class OnlandVisualTrashAssessmentController(
     {
         await OnlandVisualTrashAssessments.UpdateGeometry(dbContext, onlandVisualTrashAssessmentID,
             onlandVisualTrashAssessmentRefineAreaDto);
+        return Ok();
+    }
+
+    [HttpPost("{onlandVisualTrashAssessmentID}/refresh-parcels")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public async Task<ActionResult> RefreshOnlandVisualTrashAssessmentParcels([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        await OnlandVisualTrashAssessments.RefreshParcels(dbContext, onlandVisualTrashAssessmentID);
         return Ok();
     }
 }

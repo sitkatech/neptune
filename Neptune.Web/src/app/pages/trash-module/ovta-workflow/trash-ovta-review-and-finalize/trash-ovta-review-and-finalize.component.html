@@ -1,4 +1,5 @@
 <page-header pageTitle="Review and Finalize"></page-header>
+<app-alert-display></app-alert-display>
 <div class="page-body" *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
     <form class="form" [formGroup]="formGroup">
         <div class="grid-12">
@@ -21,12 +22,7 @@
                 [formInputOptions]="ProgressScoreOptions"
                 [type]="FormFieldType.Radio"></form-field>
 
-            <form-field
-                class="g-col-6"
-                [formControl]="formGroup.controls.LastAssessmentDate"
-                fieldLabel="Assessment Date"
-                [required]="false"
-                [type]="FormFieldType.Date"></form-field>
+            <form-field class="g-col-6" [formControl]="formGroup.controls.AssessmentDate" fieldLabel="Assessment Date" [required]="false" [type]="FormFieldType.Date"></form-field>
             <form-field
                 class="g-col-6"
                 [formControl]="formGroup.controls.OnlandVisualTrashAssessmentBaselineScoreID"
@@ -89,29 +85,21 @@
                 </div>
             </div>
         </div>
-        <div class="card g-col-6">
+        <div class="card g-col-6" [loadingSpinner]="{ isLoading: isLoadingMap, loadingHeight: 100 }">
             <div class="card-header">Map</div>
             <div class="card-body">
                 <neptune-map
-                    (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment.Observations)"
+                    (onMapLoad)="
+                        handleMapReady(
+                            $event,
+                            onlandVisualTrashAssessment.Observations,
+                            onlandVisualTrashAssessment.GeometryAsGeoJson,
+                            onlandVisualTrashAssessment.TransectLineAsGeoJson
+                        )
+                    "
                     mapHeight="400px"
                     [showLegend]="false"
                     [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
-                    <ovta-area-layer
-                        *ngIf="mapIsReady"
-                        [displayOnLoad]="true"
-                        [map]="map"
-                        [layerControl]="layerControl"
-                        [sortOrder]="10"
-                        [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
-                    <transect-line-layer
-                        *ngIf="mapIsReady"
-                        [displayOnLoad]="true"
-                        [map]="map"
-                        [layerControl]="layerControl"
-                        [sortOrder]="15"
-                        [ovtaAreaName]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName"
-                        [jurisdictionID]="onlandVisualTrashAssessment.StormwaterJurisdictionID"></transect-line-layer>
                 </neptune-map>
             </div>
         </div>
@@ -119,5 +107,5 @@
 </div>
 <div class="page-footer">
     <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
-    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Save & Continue</button>
+    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Finalize</button>
 </div>

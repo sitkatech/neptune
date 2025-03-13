@@ -16,8 +16,10 @@ export class OnlandVisualTrashAssessmentAddRemoveParcelsDto {
     OnlandVisualTrashAssessmentID?: number;
     OnlandVisualTrashAssessmentAreaID?: number;
     StormwaterJurisdictionID?: number;
+    IsDraftGeometryManuallyRefined?: boolean;
     CompletedDate?: string;
     BoundingBox?: BoundingBoxDto;
+    TransectLineAsGeoJson?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -27,8 +29,10 @@ export interface OnlandVisualTrashAssessmentAddRemoveParcelsDtoForm {
     OnlandVisualTrashAssessmentID?: FormControl<number>;
     OnlandVisualTrashAssessmentAreaID?: FormControl<number>;
     StormwaterJurisdictionID?: FormControl<number>;
+    IsDraftGeometryManuallyRefined?: FormControl<boolean>;
     CompletedDate?: FormControl<string>;
     BoundingBox?: FormControl<BoundingBoxDto>;
+    TransectLineAsGeoJson?: FormControl<string>;
 }
 
 export class OnlandVisualTrashAssessmentAddRemoveParcelsDtoFormControls { 
@@ -62,6 +66,16 @@ export class OnlandVisualTrashAssessmentAddRemoveParcelsDtoFormControls {
             ],
         }
     );
+    public static IsDraftGeometryManuallyRefined = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static CompletedDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
@@ -73,6 +87,16 @@ export class OnlandVisualTrashAssessmentAddRemoveParcelsDtoFormControls {
         }
     );
     public static BoundingBox = (value: FormControlState<BoundingBoxDto> | BoundingBoxDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<BoundingBoxDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TransectLineAsGeoJson = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

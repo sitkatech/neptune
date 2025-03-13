@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable, switchMap } from "rxjs";
+import { Observable, switchMap, tap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { NeptuneMapInitEvent, NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
@@ -19,17 +19,19 @@ import { AlertService } from "src/app/shared/services/alert.service";
 import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 
 @Component({
     selector: "trash-ovta-refine-assessment-area",
     standalone: true,
-    imports: [PageHeaderComponent, NeptuneMapComponent, AlertDisplayComponent, OvtaObservationLayerComponent, AsyncPipe, NgIf],
+    imports: [PageHeaderComponent, NeptuneMapComponent, AlertDisplayComponent, OvtaObservationLayerComponent, AsyncPipe, NgIf, LoadingDirective],
     templateUrl: "./trash-ovta-refine-assessment-area.component.html",
     styleUrl: "./trash-ovta-refine-assessment-area.component.scss",
 })
 export class TrashOvtaRefineAssessmentAreaComponent {
     public customRichTextTypeID = NeptunePageTypeEnum.EditOVTAArea;
     public ovtaID: number;
+    public isLoading: boolean = false;
 
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentRefineAreaDto>;
     public mapHeight = window.innerHeight - window.innerHeight * 0.4 + "px";
@@ -43,11 +45,19 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     public drawControl: L.Control;
     public isPerformingDrawAction: boolean = false;
     public layer: L.FeatureGroup = new L.FeatureGroup();
+    public transectLineLayer: L.FeatureGroup = new L.FeatureGroup();
 
     private defaultStyle = {
         color: "blue",
         fillOpacity: 0.2,
         opacity: 0,
+    };
+
+    private transectLineStyle = {
+        color: "#f70a0a",
+        weight: 2,
+        opacity: 0.65,
+        fillOpacity: 0.1,
     };
 
     private defaultDrawControlSpec: L.Control.DrawConstructorOptions = {
@@ -57,11 +67,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
         marker: false,
         circlemarker: false,
         polygon: {
-            allowIntersection: false, // Restricts shapes to simple polygons
-            drawError: {
-                color: "#E1E100", // Color the shape will turn when intersects
-                message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
-            },
+            allowIntersection: true, // Restricts shapes to simple polygons
         },
     };
     private defaultEditControlSpec: L.Control.DrawConstructorOptions = {
@@ -71,11 +77,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
             featureGroup: this.layer,
         },
         poly: {
-            allowIntersection: false, // Restricts shapes to simple polygons
-            // drawError: {
-            //     color: "#E1E100", // Color the shape will turn when intersects
-            //     message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
-            // },
+            allowIntersection: true, // Restricts shapes to simple polygons
         },
     };
 
@@ -87,30 +89,30 @@ export class TrashOvtaRefineAssessmentAreaComponent {
         private ovtaWorkflowProgressService: OvtaWorkflowProgressService
     ) {}
 
-    public handleMapReady(event: NeptuneMapInitEvent, geometry): void {
-        this.map = event.map;
-        this.layerControl = event.layerControl;
-        console.log(geometry);
-        this.addFeatureCollectionToFeatureGroup(JSON.parse(geometry), this.layer);
-        this.setControl();
-
-        this.layer.addTo(this.map);
-        this.mapIsReady = true;
-    }
-
     ngOnInit(): void {
+        this.isLoading = true;
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
             switchMap((params) => {
                 this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
                 return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaGet(
                     params[routeParams.onlandVisualTrashAssessmentID]
                 );
-            })
+            }),
+            tap(() => (this.isLoading = false))
         );
     }
 
-    public handleLayerBoundsCalculated(bounds: any) {
-        this.bounds = bounds;
+    public handleMapReady(event: NeptuneMapInitEvent, geometry, transectLine): void {
+        this.map = event.map;
+        this.layerControl = event.layerControl;
+        this.addFeatureCollectionToFeatureGroup(JSON.parse(geometry), this.layer);
+        this.addFeatureCollectionToFeatureGroup(JSON.parse(transectLine), this.transectLineLayer);
+        this.transectLineLayer.setStyle(this.transectLineStyle);
+        this.setControl();
+
+        this.layer.addTo(this.map);
+        this.transectLineLayer.addTo(this.map);
+        this.mapIsReady = true;
     }
 
     public save(andContinue = false) {
@@ -123,7 +125,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
 
         this.onlandVisualTrashAssessmentService
             .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(this.ovtaID, onlandVisualTrashAssessmentRefineArea)
-            .subscribe((response) => {
+            .subscribe(() => {
                 this.isLoadingSubmit = false;
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
@@ -189,26 +191,27 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     }
 
     public addFeatureCollectionToFeatureGroup(featureJsons: any, featureGroup: L.FeatureGroup) {
-        L.geoJson(featureJsons, {
-            onEachFeature: (feature, layer) => {
-                console.log(feature);
-                this.addLayersToFeatureGroup(layer, featureGroup);
-            },
-        });
-    }
-
-    private addLayersToFeatureGroup(layer: any, featureGroup: L.FeatureGroup) {
-        if (layer.getLayers) {
-            layer.getLayers().forEach((l) => {
-                featureGroup.addLayer(l);
+        if (featureJsons.geometry.type === "MultiPolygon") {
+            featureJsons.geometry.coordinates.forEach(function (shapeCoords, i) {
+                var polygon = { type: "Polygon", coordinates: shapeCoords };
+                L.geoJson(polygon, {
+                    onEachFeature: function (feature, layer) {
+                        featureGroup.addLayer(layer);
+                    },
+                });
             });
         } else {
-            featureGroup.addLayer(layer);
+            L.geoJson(featureJsons, {
+                onEachFeature: (feature, layer) => {
+                    if (layer.getLayers) {
+                        layer.getLayers().forEach((l) => {
+                            featureGroup.addLayer(l);
+                        });
+                    } else {
+                        featureGroup.addLayer(layer);
+                    }
+                },
+            });
         }
-    }
-
-    public resetZoom() {
-        const bounds = this.layer.getBounds();
-        this.map.fitBounds(bounds);
     }
 }
