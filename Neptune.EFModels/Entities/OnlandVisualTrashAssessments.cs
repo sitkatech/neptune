@@ -310,6 +310,17 @@ public static class OnlandVisualTrashAssessments
         await dbContext.SaveChangesAsync();
     }
 
+    public static string GetTransectLine4326GeoJson(OnlandVisualTrashAssessment ovta)
+    {
+        var attributesTable = new AttributesTable
+        {
+            { "OnlandVisualTrashAssessmentID", ovta.OnlandVisualTrashAssessmentID },
+        };
+
+        var feature = new Feature(GetTransect(ovta).ProjectTo4326(), attributesTable);
+        return GeoJsonSerializer.Serialize(feature);
+    }
+
     private static Geometry GetTransect(OnlandVisualTrashAssessment ovta)
     {
         if (ovta.OnlandVisualTrashAssessmentObservations.Count > 1)

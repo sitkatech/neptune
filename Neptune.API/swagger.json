@@ -4410,6 +4410,10 @@
           },
           "BoundingBox": {
             "$ref": "#/components/schemas/BoundingBoxDto"
+          },
+          "TransectLineAsGeoJson": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4816,6 +4820,10 @@
           },
           "BoundingBox": {
             "$ref": "#/components/schemas/BoundingBoxDto"
+          },
+          "TransectLineAsGeoJson": {
+            "type": "string",
+            "nullable": true
           },
           "GeometryAsGeoJson": {
             "type": "string",

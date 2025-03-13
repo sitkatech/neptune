@@ -28,6 +28,7 @@ import {
     OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls,
 } from "src/app/shared/generated/model/onland-visual-trash-assessment-review-and-finalize-dto";
 import { OnlandVisualTrashAssessmentStatusEnum } from "src/app/shared/generated/enum/onland-visual-trash-assessment-status-enum";
+import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 
 @Component({
     selector: "trash-ovta-review-and-finalize",
@@ -45,6 +46,7 @@ import { OnlandVisualTrashAssessmentStatusEnum } from "src/app/shared/generated/
         OvtaAreaLayerComponent,
         TransectLineLayerComponent,
         NgFor,
+        AlertDisplayComponent,
     ],
     templateUrl: "./trash-ovta-review-and-finalize.component.html",
     styleUrl: "./trash-ovta-review-and-finalize.component.scss",

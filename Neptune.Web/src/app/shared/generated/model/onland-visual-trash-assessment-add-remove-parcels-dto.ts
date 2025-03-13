@@ -18,6 +18,7 @@ export class OnlandVisualTrashAssessmentAddRemoveParcelsDto {
     StormwaterJurisdictionID?: number;
     CompletedDate?: string;
     BoundingBox?: BoundingBoxDto;
+    TransectLineAsGeoJson?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -29,6 +30,7 @@ export interface OnlandVisualTrashAssessmentAddRemoveParcelsDtoForm {
     StormwaterJurisdictionID?: FormControl<number>;
     CompletedDate?: FormControl<string>;
     BoundingBox?: FormControl<BoundingBoxDto>;
+    TransectLineAsGeoJson?: FormControl<string>;
 }
 
 export class OnlandVisualTrashAssessmentAddRemoveParcelsDtoFormControls { 
@@ -73,6 +75,16 @@ export class OnlandVisualTrashAssessmentAddRemoveParcelsDtoFormControls {
         }
     );
     public static BoundingBox = (value: FormControlState<BoundingBoxDto> | BoundingBoxDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<BoundingBoxDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TransectLineAsGeoJson = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

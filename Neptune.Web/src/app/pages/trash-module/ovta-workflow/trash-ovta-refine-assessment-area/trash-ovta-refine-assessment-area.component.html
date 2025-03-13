@@ -12,7 +12,7 @@
     </div>
     <neptune-map
         *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment"
-        (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment.GeometryAsGeoJson)"
+        (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment.GeometryAsGeoJson, onlandVisualTrashAssessment.TransectLineAsGeoJson)"
         mapHeight="500px"
         [showLegend]="false"
         [boundingBox]="onlandVisualTrashAssessment.BoundingBox">

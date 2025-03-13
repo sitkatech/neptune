@@ -7,4 +7,5 @@ public class OnlandVisualTrashAssessmentAddRemoveParcelsDto
     public int StormwaterJurisdictionID { get; set; }
     public DateTime? CompletedDate { get; set; }
     public BoundingBoxDto BoundingBox { get; set; }
+    public string? TransectLineAsGeoJson { get; set; }
 }
