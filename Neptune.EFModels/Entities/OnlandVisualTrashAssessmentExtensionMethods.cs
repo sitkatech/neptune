@@ -128,7 +128,9 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
             OnlandVisualTrashAssessmentStatusID = (int)OnlandVisualTrashAssessmentStatusEnum.InProgress,
             PreliminarySourceIdentificationTypeIDs = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(x => x.PreliminarySourceIdentificationTypeID).ToList(),
             Observations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.AsPhotoDto()).ToList(),
-            BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry())
+            BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry()),
+            TransectLineAsGeoJson = OnlandVisualTrashAssessments.GetTransectLine4326GeoJson(onlandVisualTrashAssessment),
+            GeometryAsGeoJson = onlandVisualTrashAssessment.GetGeometry4326GeoJson()
         };
         return dto;
     }

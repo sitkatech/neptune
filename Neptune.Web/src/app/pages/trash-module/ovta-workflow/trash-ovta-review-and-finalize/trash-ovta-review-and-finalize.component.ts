@@ -5,17 +5,14 @@ import { PageHeaderComponent } from "../../../../shared/components/page-header/p
 import { FormFieldComponent, FormFieldType, FormInputOption } from "../../../../shared/components/form-field/form-field.component";
 import { OnlandVisualTrashAssessmentScoresAsSelectDropdownOptions } from "src/app/shared/generated/enum/onland-visual-trash-assessment-score-enum";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable, map, switchMap, tap } from "rxjs";
+import { Observable, switchMap, tap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { AsyncPipe, NgClass, NgFor, NgIf } from "@angular/common";
 import * as L from "leaflet";
-import { OnlandVisualTrashAssessmentWorkflowDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-workflow-dto";
 import { NeptuneMapInitEvent, NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { environment } from "src/environments/environment";
-import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
-import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { PreliminarySourceIdentificationTypeSimpleDto } from "src/app/shared/generated/model/preliminary-source-identification-type-simple-dto";
 import { PreliminarySourceIdentificationCategories } from "src/app/shared/generated/enum/preliminary-source-identification-category-enum";
 import { AlertService } from "src/app/shared/services/alert.service";
@@ -33,21 +30,7 @@ import { AlertDisplayComponent } from "../../../../shared/components/alert-displ
 @Component({
     selector: "trash-ovta-review-and-finalize",
     standalone: true,
-    imports: [
-        PageHeaderComponent,
-        FormFieldComponent,
-        ReactiveFormsModule,
-        NgIf,
-        AsyncPipe,
-        FormsModule,
-        NgFor,
-        NgClass,
-        NeptuneMapComponent,
-        OvtaAreaLayerComponent,
-        TransectLineLayerComponent,
-        NgFor,
-        AlertDisplayComponent,
-    ],
+    imports: [PageHeaderComponent, FormFieldComponent, ReactiveFormsModule, NgIf, AsyncPipe, FormsModule, NgFor, NgClass, NeptuneMapComponent, NgFor, AlertDisplayComponent],
     templateUrl: "./trash-ovta-review-and-finalize.component.html",
     styleUrl: "./trash-ovta-review-and-finalize.component.scss",
 })
@@ -63,6 +46,20 @@ export class TrashOvtaReviewAndFinalizeComponent {
     public map: L.Map;
     public mapIsReady: boolean = false;
     public layerControl: L.Control.Layers;
+    public transectLineLayer: L.FeatureGroup = new L.FeatureGroup();
+
+    private defaultStyle = {
+        color: "blue",
+        fillOpacity: 0.2,
+        opacity: 0,
+    };
+
+    private transectLineStyle = {
+        color: "#f70a0a",
+        weight: 2,
+        opacity: 0.65,
+        fillOpacity: 0.1,
+    };
 
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentReviewAndFinalizeDto>;
     public preliminarySourceIdentificationTypeSimpleDto$: Observable<PreliminarySourceIdentificationTypeSimpleDto[]>;
@@ -85,7 +82,6 @@ export class TrashOvtaReviewAndFinalizeComponent {
         IsProgressAssessment: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.IsProgressAssessment(),
         Notes: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.Notes(),
         BoundingBox: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.BoundingBox(),
-        Geometry: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.Geometry(),
         PreliminarySourceIdentificationTypeIDs: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.PreliminarySourceIdentificationTypeIDs(),
         OnlandVisualTrashAssessmentStatusID: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.OnlandVisualTrashAssessmentStatusID(),
     });
@@ -120,6 +116,15 @@ export class TrashOvtaReviewAndFinalizeComponent {
         );
         this.preliminarySourceIdentificationTypeSimpleDto$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPreliminarySourceIdentificationTypesGet();
     }
+    public handleMapReady(event: NeptuneMapInitEvent, observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[], geometry, transectLine): void {
+        this.map = event.map;
+        this.layerControl = event.layerControl;
+        this.mapIsReady = true;
+        this.addFeatureCollectionToFeatureGroup(JSON.parse(geometry), this.transectLineLayer, this.defaultStyle);
+        this.addFeatureCollectionToFeatureGroup(JSON.parse(transectLine), this.transectLineLayer, this.transectLineStyle);
+        this.transectLineLayer.addTo(this.map);
+        this.addObservationPointsLayersToMap(observations);
+    }
 
     filterByCategory(preliminarySourceIdentificationTypeSimpleDto, categoryID) {
         return preliminarySourceIdentificationTypeSimpleDto.filter((x) => x.PreliminarySourceIdentificationCategoryID == categoryID);
@@ -134,7 +139,6 @@ export class TrashOvtaReviewAndFinalizeComponent {
     }
 
     save(andContinue: boolean = false) {
-        console.log(this.formGroup.getRawValue());
         this.formGroup.controls.OnlandVisualTrashAssessmentStatusID.setValue(
             andContinue ? OnlandVisualTrashAssessmentStatusEnum.Complete : OnlandVisualTrashAssessmentStatusEnum.InProgress
         );
@@ -148,11 +152,19 @@ export class TrashOvtaReviewAndFinalizeComponent {
         });
     }
 
-    public handleMapReady(event: NeptuneMapInitEvent, observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[]): void {
-        this.map = event.map;
-        this.layerControl = event.layerControl;
-        this.mapIsReady = true;
-        this.addObservationPointsLayersToMap(observations);
+    public addFeatureCollectionToFeatureGroup(featureJsons: any, featureGroup: L.FeatureGroup, style) {
+        L.geoJson(featureJsons, {
+            onEachFeature: (feature, layer) => {
+                layer.setStyle(style);
+                if (layer.getLayers) {
+                    layer.getLayers().forEach((l) => {
+                        featureGroup.addLayer(l);
+                    });
+                } else {
+                    featureGroup.addLayer(layer);
+                }
+            },
+        });
     }
 
     public addObservationPointsLayersToMap(observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[]): void {

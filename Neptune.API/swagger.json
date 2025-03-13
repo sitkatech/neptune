@@ -4897,7 +4897,11 @@
           "BoundingBox": {
             "$ref": "#/components/schemas/BoundingBoxDto"
           },
-          "Geometry": {
+          "TransectLineAsGeoJson": {
+            "type": "string",
+            "nullable": true
+          },
+          "GeometryAsGeoJson": {
             "type": "string",
             "nullable": true
           }

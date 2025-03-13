@@ -89,18 +89,17 @@
             <div class="card-header">Map</div>
             <div class="card-body">
                 <neptune-map
-                    (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment.Observations)"
+                    (onMapLoad)="
+                        handleMapReady(
+                            $event,
+                            onlandVisualTrashAssessment.Observations,
+                            onlandVisualTrashAssessment.GeometryAsGeoJson,
+                            onlandVisualTrashAssessment.TransectLineAsGeoJson
+                        )
+                    "
                     mapHeight="400px"
                     [showLegend]="false"
                     [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
-                    <transect-line-layer
-                        *ngIf="mapIsReady"
-                        [displayOnLoad]="true"
-                        [map]="map"
-                        [layerControl]="layerControl"
-                        [sortOrder]="15"
-                        [ovtaAreaName]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName"
-                        [jurisdictionID]="onlandVisualTrashAssessment.StormwaterJurisdictionID"></transect-line-layer>
                 </neptune-map>
             </div>
         </div>

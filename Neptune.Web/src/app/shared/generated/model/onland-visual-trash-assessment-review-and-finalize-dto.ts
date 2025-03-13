@@ -27,7 +27,8 @@ export class OnlandVisualTrashAssessmentReviewAndFinalizeDto {
     Observations?: Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>;
     PreliminarySourceIdentificationTypeIDs?: Array<number>;
     BoundingBox?: BoundingBoxDto;
-    Geometry?: string;
+    TransectLineAsGeoJson?: string;
+    GeometryAsGeoJson?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -47,7 +48,8 @@ export interface OnlandVisualTrashAssessmentReviewAndFinalizeDtoForm {
     Observations?: FormControl<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>>;
     PreliminarySourceIdentificationTypeIDs?: FormControl<Array<number>>;
     BoundingBox?: FormControl<BoundingBoxDto>;
-    Geometry?: FormControl<string>;
+    TransectLineAsGeoJson?: FormControl<string>;
+    GeometryAsGeoJson?: FormControl<string>;
 }
 
 export class OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls { 
@@ -181,7 +183,17 @@ export class OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls {
             ],
         }
     );
-    public static Geometry = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+    public static TransectLineAsGeoJson = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static GeometryAsGeoJson = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

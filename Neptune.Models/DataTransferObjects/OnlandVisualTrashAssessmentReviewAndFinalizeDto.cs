@@ -15,5 +15,6 @@ public class OnlandVisualTrashAssessmentReviewAndFinalizeDto
     public List<OnlandVisualTrashAssessmentObservationWithPhotoDto> Observations { get; set; }
     public List<int> PreliminarySourceIdentificationTypeIDs { get; set; }
     public BoundingBoxDto BoundingBox { get; set; }
-    public string Geometry { get; set; }
+    public string TransectLineAsGeoJson { get; set; }
+    public string GeometryAsGeoJson { get; set; }
 }
