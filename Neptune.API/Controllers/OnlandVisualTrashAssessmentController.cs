@@ -252,4 +252,13 @@ public class OnlandVisualTrashAssessmentController(
             onlandVisualTrashAssessmentRefineAreaDto);
         return Ok();
     }
+
+    [HttpPost("{onlandVisualTrashAssessmentID}/refresh-parcels")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public async Task<ActionResult> RefreshOnlandVisualTrashAssessmentParcels([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        await OnlandVisualTrashAssessments.RefreshParcels(dbContext, onlandVisualTrashAssessmentID);
+        return Ok();
+    }
 }

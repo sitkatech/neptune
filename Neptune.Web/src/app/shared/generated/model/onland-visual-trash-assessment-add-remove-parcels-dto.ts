@@ -16,6 +16,7 @@ export class OnlandVisualTrashAssessmentAddRemoveParcelsDto {
     OnlandVisualTrashAssessmentID?: number;
     OnlandVisualTrashAssessmentAreaID?: number;
     StormwaterJurisdictionID?: number;
+    IsDraftGeometryManuallyRefined?: boolean;
     CompletedDate?: string;
     BoundingBox?: BoundingBoxDto;
     TransectLineAsGeoJson?: string;
@@ -28,6 +29,7 @@ export interface OnlandVisualTrashAssessmentAddRemoveParcelsDtoForm {
     OnlandVisualTrashAssessmentID?: FormControl<number>;
     OnlandVisualTrashAssessmentAreaID?: FormControl<number>;
     StormwaterJurisdictionID?: FormControl<number>;
+    IsDraftGeometryManuallyRefined?: FormControl<boolean>;
     CompletedDate?: FormControl<string>;
     BoundingBox?: FormControl<BoundingBoxDto>;
     TransectLineAsGeoJson?: FormControl<string>;
@@ -55,6 +57,16 @@ export class OnlandVisualTrashAssessmentAddRemoveParcelsDtoFormControls {
         }
     );
     public static StormwaterJurisdictionID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static IsDraftGeometryManuallyRefined = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
         value,
         formControlOptions ?? 
         {

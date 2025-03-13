@@ -1,22 +1,32 @@
 <page-header pageTitle="Add or Remove Parcels"></page-header>
 <app-alert-display></app-alert-display>
-<div class="page-body">
-    <div class="copy copy-2 mb-3">Click the map to add or remove parcels from the Assessment Area. Note that it may be necessary to zoom the map to see APNs on the map.</div>
-    <neptune-map
-        *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment"
-        (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment.BoundingBox, onlandVisualTrashAssessment.TransectLineAsGeoJson)"
-        mapHeight="500px"
-        [showLegend]="false"
-        [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
-        <ovta-observation-layer
-            *ngIf="mapIsReady"
-            [displayOnLoad]="true"
-            [map]="map"
-            [layerControl]="layerControl"
-            [sortOrder]="10"
-            [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></ovta-observation-layer>
-    </neptune-map>
+<div class="page-body" *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
+    <div *ngIf="!onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined; else isManuallyRefined">
+        <div class="copy copy-2 mb-3">Click the map to add or remove parcels from the Assessment Area. Note that it may be necessary to zoom the map to see APNs on the map.</div>
+        <neptune-map
+            (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment.BoundingBox, onlandVisualTrashAssessment.TransectLineAsGeoJson)"
+            mapHeight="500px"
+            [showLegend]="false"
+            [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
+            <ovta-observation-layer
+                *ngIf="mapIsReady"
+                [displayOnLoad]="true"
+                [map]="map"
+                [layerControl]="layerControl"
+                [sortOrder]="10"
+                [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></ovta-observation-layer>
+        </neptune-map>
+    </div>
 
+    <ng-template #isManuallyRefined>
+        <div>
+            <i
+                >The Assessment Area has been manually refined. Click "Continue" to use the manually-refined assessment area, or use the button below to refresh the list of parcels
+                from the assessment transect.</i
+            >
+        </div>
+    </ng-template>
+    <button class="btn btn-primary mt-4" (click)="refreshParcels()">Refresh Assessment Area Based on Observations</button>
     <div class="page-footer">
         <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
         <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Save & Continue</button>

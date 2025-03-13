@@ -1315,6 +1315,29 @@
         }
       }
     },
+    "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/refresh-parcels": {
+      "post": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/onland-visual-trash-assessment-areas": {
       "get": {
         "tags": [
@@ -4402,6 +4425,9 @@
           "StormwaterJurisdictionID": {
             "type": "integer",
             "format": "int32"
+          },
+          "IsDraftGeometryManuallyRefined": {
+            "type": "boolean"
           },
           "CompletedDate": {
             "type": "string",

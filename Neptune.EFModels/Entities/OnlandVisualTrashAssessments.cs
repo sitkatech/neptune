@@ -287,6 +287,16 @@ public static class OnlandVisualTrashAssessments
         return preliminarySourceIdentificationTypeSimpleDtos;
     }
 
+    public static async Task RefreshParcels(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments.Single(x =>
+            x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
+        onlandVisualTrashAssessment.DraftGeometry = null;
+        onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = false;
+
+        await dbContext.SaveChangesAsync();
+    }
+
     public static async Task UpdateGeometry(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID, List<int> parcelIDs)
     {
         var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments.Single(x =>
@@ -305,8 +315,8 @@ public static class OnlandVisualTrashAssessments
         newGeometry4326.Geometry.SRID = Proj4NetHelper.WEB_MERCATOR;
 
         // since this is coming from the browser, we have to transform to State Plane
+        onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = !newGeometry4326.Equals(onlandVisualTrashAssessment.DraftGeometry);
         onlandVisualTrashAssessment.DraftGeometry = newGeometry4326.Geometry;
-        onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = newGeometry4326.Equals(onlandVisualTrashAssessment.DraftGeometry);
         await dbContext.SaveChangesAsync();
     }
 

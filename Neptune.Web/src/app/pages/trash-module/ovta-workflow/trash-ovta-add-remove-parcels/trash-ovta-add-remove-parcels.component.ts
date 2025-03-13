@@ -110,6 +110,19 @@ export class TrashOvtaAddRemoveParcelsComponent {
         });
     }
 
+    public refreshParcels() {
+        this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefreshParcelsPost(this.ovtaID).subscribe(() => {
+            this.onlandVisualTrashAssessment$ = this.route.params.pipe(
+                switchMap((params) => {
+                    this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
+                    return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAddOrRemoveParcelGet(
+                        params[routeParams.onlandVisualTrashAssessmentID]
+                    );
+                })
+            );
+        });
+    }
+
     public resetZoom() {
         const bounds = this.layer.getBounds();
         this.map.fitBounds(bounds);
