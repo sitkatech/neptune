@@ -160,10 +160,6 @@
                 <ogc:PropertyName>TrashCaptureStatus</ogc:PropertyName>
                 <ogc:Literal>Full</ogc:Literal>
               </ogc:PropertyIsEqualTo> 
-              <ogc:PropertyIsNotEqualTo>
-                <ogc:PropertyName>NoDataProvided</ogc:PropertyName>
-                <ogc:Literal>1</ogc:Literal>
-              </ogc:PropertyIsNotEqualTo>
               <ogc:PropertyIsEqualTo>
                 <ogc:Function name="in2">
                   <ogc:Function name="geometryType">
@@ -196,10 +192,6 @@
                 <ogc:PropertyName>TrashCaptureStatus</ogc:PropertyName>
                 <ogc:Literal>Full</ogc:Literal>
               </ogc:PropertyIsNotEqualTo> 
-              <ogc:PropertyIsNotEqualTo>
-                <ogc:PropertyName>NoDataProvided</ogc:PropertyName>
-                <ogc:Literal>1</ogc:Literal>
-              </ogc:PropertyIsNotEqualTo>                            
               <ogc:PropertyIsEqualTo>
                 <ogc:Function name="in2">
                   <ogc:Function name="geometryType">
@@ -396,10 +388,6 @@
                 <ogc:PropertyName>TrashCaptureStatus</ogc:PropertyName>
                 <ogc:Literal>Full</ogc:Literal>
               </ogc:PropertyIsEqualTo> 
-              <ogc:PropertyIsNotEqualTo>
-                <ogc:PropertyName>NoDataProvided</ogc:PropertyName>
-                <ogc:Literal>1</ogc:Literal>
-              </ogc:PropertyIsNotEqualTo>                            
               <ogc:PropertyIsEqualTo>
                 <ogc:Function name="in3">
                   <ogc:Function name="geometryType">
@@ -437,10 +425,6 @@
                 <ogc:PropertyName>TrashCaptureStatus</ogc:PropertyName>
                 <ogc:Literal>Full</ogc:Literal>
               </ogc:PropertyIsNotEqualTo> 
-              <ogc:PropertyIsNotEqualTo>
-                <ogc:PropertyName>NoDataProvided</ogc:PropertyName>
-                <ogc:Literal>1</ogc:Literal>
-              </ogc:PropertyIsNotEqualTo>
               <ogc:PropertyIsEqualTo>
                 <ogc:Function name="in3">
                   <ogc:Function name="geometryType">

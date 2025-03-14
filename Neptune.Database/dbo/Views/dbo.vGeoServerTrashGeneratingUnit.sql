@@ -45,22 +45,14 @@ from dbo.TrashGeneratingUnit4326 tgu
 	        where rownumber = 1
     ) ovtaad
 		on tgu.OnlandVisualTrashAssessmentAreaID = ovtaad.OnlandVisualTrashAssessmentAreaID
-	left join dbo.Delineation d
-		on tgu.DelineationID = d.DelineationID
-	left join dbo.TreatmentBMP tbmp
-		on d.TreatmentBMPID = tbmp.TreatmentBMPID
-	left join dbo.TrashCaptureStatusType tcs
-		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
-	left join dbo.LandUseBlock lub
-		on lub.LandUseBlockID = tgu.LandUseBlockID
-	left join dbo.PriorityLandUseType plut
-		on lub.PriorityLandUseTypeID = plut.PriorityLandUseTypeID
-	left join dbo.StormwaterJurisdiction sj
-		on tgu.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
-	left join dbo.Organization o
-		on o.OrganizationID = sj.OrganizationID
-	left join dbo.WaterQualityManagementPlan wqmp
-		on tgu.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
+	left join dbo.Delineation d on tgu.DelineationID = d.DelineationID
+	left join dbo.TreatmentBMP tbmp on d.TreatmentBMPID = tbmp.TreatmentBMPID
+	left join dbo.TrashCaptureStatusType tcs on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
+	left join dbo.LandUseBlock lub on lub.LandUseBlockID = tgu.LandUseBlockID
+	left join dbo.PriorityLandUseType plut on lub.PriorityLandUseTypeID = plut.PriorityLandUseTypeID
+	join dbo.StormwaterJurisdiction sj on tgu.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
+	join dbo.Organization o on o.OrganizationID = sj.OrganizationID
+	left join dbo.WaterQualityManagementPlan wqmp on tgu.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
 WHERE tgu.TrashGeneratingUnit4326Geometry.STGeometryType() in ('POLYGON', 'MULTIPOLYGON')
 and lub.PermitTypeID = 1
 Go
