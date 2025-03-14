@@ -14,6 +14,7 @@ import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers
 import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
 import { environment } from "src/environments/environment";
+import { ActivatedRoute, Router } from "@angular/router";
 
 declare var $: any;
 
@@ -57,7 +58,7 @@ export class ObservationsMapComponent {
 
     public ovtaObservationLayer: L.GeoJSON<any>;
 
-    constructor() {}
+    constructor(private router: Router, private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
         console.log(this.onlandVisualTrashAssessmentObservations);
@@ -127,6 +128,12 @@ export class ObservationsMapComponent {
                 }
                 layer.setZIndexOffset(10000);
                 layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-red.png"));
+                this.router.navigate([], {
+                    relativeTo: this.route,
+                    fragment: `${layer.feature.properties.OnlandVisualTrashAssessmentObservationID}`,
+                    queryParamsHandling: "preserve",
+                    replaceUrl: true,
+                });
             } else {
                 layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-violet.png"));
             }

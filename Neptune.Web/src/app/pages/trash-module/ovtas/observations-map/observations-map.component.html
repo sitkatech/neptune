@@ -2,6 +2,7 @@
     <div class="g-col-4" [style.height]="mapHeight" style="overflow-y: auto">
         <ul class="list-group">
             <li
+                [id]="onlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentObservationID"
                 class="list-group-item font-weight-bold"
                 *ngFor="let onlandVisualTrashAssessmentObservation of onlandVisualTrashAssessmentObservations"
                 [class.selected]="
@@ -12,7 +13,7 @@
                 <img
                     [src]="getFileResourceUrl(onlandVisualTrashAssessmentObservation.FileResourceGUID)"
                     *ngIf="onlandVisualTrashAssessmentObservation.FileResourceGUID; else noImage"
-                    style="width: 400px; height: 500px" />
+                    style="width: 300px" />
                 <ng-template #noImage> <i>No photo provided</i></ng-template>
                 <div class="mt-2">
                     {{ onlandVisualTrashAssessmentObservation.Note ?? "No note provided" }}
