@@ -19,12 +19,13 @@ import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
 import {
-    OnlandVisualTrashAssessmentObservationUpsertDto,
-    OnlandVisualTrashAssessmentObservationUpsertDtoForm,
-    OnlandVisualTrashAssessmentObservationUpsertDtoFormControls,
-} from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-upsert-dto";
+    OnlandVisualTrashAssessmentObservationWithPhotoDto,
+    OnlandVisualTrashAssessmentObservationWithPhotoDtoForm,
+    OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls,
+} from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
 import { environment } from "src/environments/environment";
 import { OnlandVisualTrashAssessmentObservationPhotoStagingDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-photo-staging-dto";
+import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/generated/api/onland-visual-trash-assessment-observation.service";
 
 @Component({
     selector: "trash-ovta-record-observations",
@@ -52,24 +53,25 @@ export class TrashOvtaRecordObservationsComponent {
     public isLoadingSubmit = false;
     public ovtaID: number;
     public ovtaObservationLayer: L.GeoJSON<any>;
-    public observations: OnlandVisualTrashAssessmentObservationUpsertDto[] = [];
+    public observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[] = [];
     public uploadFormField: FormControl<Blob> = new FormControl<Blob>(null);
-    public selectedOVTAObservation: FormGroup<OnlandVisualTrashAssessmentObservationUpsertDtoForm> = new FormGroup<any>({
-        OnlandVisualTrashAssessmentObservationID: OnlandVisualTrashAssessmentObservationUpsertDtoFormControls.OnlandVisualTrashAssessmentObservationID(),
-        OnlandVisualTrashAssessmentID: OnlandVisualTrashAssessmentObservationUpsertDtoFormControls.OnlandVisualTrashAssessmentID(),
-        Note: OnlandVisualTrashAssessmentObservationUpsertDtoFormControls.Note(),
-        FileResourceID: OnlandVisualTrashAssessmentObservationUpsertDtoFormControls.FileResourceID(),
-        FileResourceGUID: OnlandVisualTrashAssessmentObservationUpsertDtoFormControls.FileResourceGUID(),
-        Longitude: OnlandVisualTrashAssessmentObservationUpsertDtoFormControls.Longitude(),
-        Latitude: OnlandVisualTrashAssessmentObservationUpsertDtoFormControls.Latitude(),
+    public selectedOVTAObservation: FormGroup<OnlandVisualTrashAssessmentObservationWithPhotoDtoForm> = new FormGroup<any>({
+        OnlandVisualTrashAssessmentObservationID: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.OnlandVisualTrashAssessmentObservationID(),
+        OnlandVisualTrashAssessmentID: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.OnlandVisualTrashAssessmentID(),
+        Note: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.Note(),
+        FileResourceID: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.FileResourceID(),
+        FileResourceGUID: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.FileResourceGUID(),
+        Longitude: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.Longitude(),
+        Latitude: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.Latitude(),
     });
 
-    public onlandVisualTrashAssessmentObservations$: Observable<OnlandVisualTrashAssessmentObservationUpsertDto[]>;
+    public onlandVisualTrashAssessmentObservations$: Observable<OnlandVisualTrashAssessmentObservationWithPhotoDto[]>;
 
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentDetailDto>;
 
     constructor(
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
+        private onlandVisualTrashAssessmentObservationService: OnlandVisualTrashAssessmentObservationService,
         private route: ActivatedRoute,
         private alertService: AlertService,
         private ovtaWorkflowProgressService: OvtaWorkflowProgressService,
@@ -81,9 +83,7 @@ export class TrashOvtaRecordObservationsComponent {
         this.onlandVisualTrashAssessmentObservations$ = this.route.params.pipe(
             switchMap((params) => {
                 this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
-                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsGet(
-                    params[routeParams.onlandVisualTrashAssessmentID]
-                );
+                return this.onlandVisualTrashAssessmentObservationService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsGet(this.ovtaID);
             })
         );
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
@@ -97,7 +97,7 @@ export class TrashOvtaRecordObservationsComponent {
         this.cdr.detach();
     }
 
-    public handleMapReady(event: NeptuneMapInitEvent, observations: OnlandVisualTrashAssessmentObservationUpsertDto[]): void {
+    public handleMapReady(event: NeptuneMapInitEvent, observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[]): void {
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
@@ -116,7 +116,7 @@ export class TrashOvtaRecordObservationsComponent {
     }
 
     public addObservation(latlng) {
-        var observation = new OnlandVisualTrashAssessmentObservationUpsertDto();
+        var observation = new OnlandVisualTrashAssessmentObservationWithPhotoDto();
         observation.OnlandVisualTrashAssessmentID = this.ovtaID;
         observation.Latitude = latlng.lat;
         observation.Longitude = latlng.lng;
@@ -151,22 +151,24 @@ export class TrashOvtaRecordObservationsComponent {
             );
             this.observations[selectedObservationIndex] = this.selectedOVTAObservation.getRawValue();
         }
-        this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(this.ovtaID, this.observations).subscribe(() => {
-            this.isLoadingSubmit = false;
-            this.alertService.clearAlerts();
-            this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
-            this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
+        this.onlandVisualTrashAssessmentObservationService
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(this.ovtaID, this.observations)
+            .subscribe(() => {
+                this.isLoadingSubmit = false;
+                this.alertService.clearAlerts();
+                this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
+                this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
 
-            if (andContinue) {
-                this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDProgressGet(this.ovtaID).subscribe((response) => {
-                    if (response.Steps.RefineAssessmentArea.Disabled) {
-                        this.router.navigate([`../../${this.ovtaID}/review-and-finalize`], { relativeTo: this.route });
-                    } else {
-                        this.router.navigate([`../../${this.ovtaID}/add-or-remove-parcels`], { relativeTo: this.route });
-                    }
-                });
-            }
-        });
+                if (andContinue) {
+                    this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDProgressGet(this.ovtaID).subscribe((response) => {
+                        if (response.Steps.RefineAssessmentArea.Disabled) {
+                            this.router.navigate([`../../${this.ovtaID}/review-and-finalize`], { relativeTo: this.route });
+                        } else {
+                            this.router.navigate([`../../${this.ovtaID}/add-or-remove-parcels`], { relativeTo: this.route });
+                        }
+                    });
+                }
+            });
     }
 
     private mapObservationsToGeoJson() {
@@ -252,12 +254,11 @@ export class TrashOvtaRecordObservationsComponent {
 
     public getFile() {
         if (typeof this.uploadFormField.getRawValue() != typeof "string") {
-            this.onlandVisualTrashAssessmentService
-                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoStagingPost(this.ovtaID, this.uploadFormField.getRawValue())
+            this.onlandVisualTrashAssessmentObservationService
+                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotoPost(this.ovtaID, this.uploadFormField.getRawValue())
                 .subscribe((response) => {
                     this.selectedOVTAObservation.controls.FileResourceID.setValue(response.FileResourceID);
                     this.selectedOVTAObservation.controls.FileResourceGUID.setValue(response.FileResourceGUID);
-                    this.selectedOVTAObservation.controls.PhotoStagingID.setValue(response.PhotoStagingID);
                 });
         }
     }
@@ -273,12 +274,11 @@ export class TrashOvtaRecordObservationsComponent {
         onlandVisualTrashAssessmentObservationPhotoStagingDto.OnlandVisualTrashAssessmentObservationID =
             this.selectedOVTAObservation.controls.OnlandVisualTrashAssessmentObservationID.getRawValue();
         onlandVisualTrashAssessmentObservationPhotoStagingDto.FileResourceGUID = this.selectedOVTAObservation.controls.FileResourceGUID.getRawValue();
-        this.onlandVisualTrashAssessmentService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoDelete(this.ovtaID, onlandVisualTrashAssessmentObservationPhotoStagingDto)
+        this.onlandVisualTrashAssessmentObservationService
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotoDelete(this.ovtaID, onlandVisualTrashAssessmentObservationPhotoStagingDto)
             .subscribe((x) => {
                 this.selectedOVTAObservation.controls.FileResourceID.setValue(null);
                 this.selectedOVTAObservation.controls.FileResourceGUID.setValue(null);
-                this.selectedOVTAObservation.controls.PhotoStagingID.setValue(null);
             });
     }
 }

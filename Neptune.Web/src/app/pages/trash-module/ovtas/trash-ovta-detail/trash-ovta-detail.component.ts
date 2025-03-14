@@ -8,8 +8,9 @@ import { OnlandVisualTrashAssessmentDetailDto } from "src/app/shared/generated/m
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { FieldDefinitionComponent } from "../../../../shared/components/field-definition/field-definition.component";
-import { environment } from "src/environments/environment";
 import { ObservationsMapComponent } from "../observations-map/observations-map.component";
+import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
+import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/generated/api/onland-visual-trash-assessment-observation.service";
 
 @Component({
     selector: "trash-ovta-detail",
@@ -20,16 +21,28 @@ import { ObservationsMapComponent } from "../observations-map/observations-map.c
 })
 export class TrashOvtaDetailComponent {
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentDetailDto>;
+    public onlandVisualTrashAssessmentObservations$: Observable<OnlandVisualTrashAssessmentObservationWithPhotoDto[]>;
 
     public ovtaID: number;
 
-    constructor(private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService, private route: ActivatedRoute, private router: Router) {}
+    constructor(
+        private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
+        private onlandVisualTrashAssessmentObservationService: OnlandVisualTrashAssessmentObservationService,
+        private route: ActivatedRoute
+    ) {}
 
     ngOnInit(): void {
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
             switchMap((params) => {
                 this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
                 return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(params[routeParams.onlandVisualTrashAssessmentID]);
+            })
+        );
+        this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessment$.pipe(
+            switchMap((onlandVisualTrashAssessment) => {
+                return this.onlandVisualTrashAssessmentObservationService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsGet(
+                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID
+                );
             })
         );
     }

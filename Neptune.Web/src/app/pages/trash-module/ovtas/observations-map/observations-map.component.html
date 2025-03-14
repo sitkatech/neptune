@@ -20,34 +20,23 @@
                 </div>
             </li>
         </ul>
-
-        <!-- <div class="grid-12" *ngFor="let item of onlandVisualTrashAssessmentObservations">
-            <div
-                [id]="item.OnlandVisualTrashAssessmentObservationID"
-                class="g-col-12 mb-4"
-                [ngClass]="{
-                    'selected-observation':
-                        selectedOnlandVisualTrashAssessmentObservation != null &&
-                        selectedOnlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentObservationID == item.OnlandVisualTrashAssessmentObservationID
-                }"
-                (click)="selectOnlandVisualTrashAssessmentObservation(item.OnlandVisualTrashAssessmentObservationID)"></div>
-        </div> -->
     </div>
     <div class="g-col-8">
         <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false" [boundingBox]="boundingBox">
+            <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
             <ovta-area-layer
                 *ngIf="mapIsReady"
                 [displayOnLoad]="true"
                 [map]="map"
                 [layerControl]="layerControl"
-                [sortOrder]="10"
+                [sortOrder]="20"
                 [ovtaAreaID]="onlandVisualTrashAssessmentAreaID"></ovta-area-layer>
             <transect-line-layer
                 *ngIf="mapIsReady"
                 [displayOnLoad]="true"
                 [map]="map"
                 [layerControl]="layerControl"
-                [sortOrder]="15"
+                [sortOrder]="25"
                 [ovtaAreaName]="onlandVisualTrashAssessmentAreaName"
                 [jurisdictionID]="jurisdictionID"></transect-line-layer>
         </neptune-map>

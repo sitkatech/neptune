@@ -1,13 +1,8 @@
-import { ApplicationRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import * as L from "leaflet";
 import "leaflet.fullscreen";
-import { forkJoin } from "rxjs";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
-import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
-import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
-import { ProjectService } from "src/app/shared/generated/api/project.service";
-import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
 import { NgIf, NgFor, NgClass } from "@angular/common";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
@@ -15,6 +10,7 @@ import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/la
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
 import { environment } from "src/environments/environment";
 import { ActivatedRoute, Router } from "@angular/router";
+import { LandUseBlockLayerComponent } from "src/app/shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 
 declare var $: any;
 
@@ -24,18 +20,16 @@ declare var $: any;
     templateUrl: "./observations-map.component.html",
     styleUrls: ["./observations-map.component.scss"],
     standalone: true,
-    imports: [NgIf, NgFor, NgClass, NeptuneMapComponent, OvtaAreaLayerComponent, TransectLineLayerComponent],
+    imports: [NgIf, NgFor, NgClass, NeptuneMapComponent, OvtaAreaLayerComponent, TransectLineLayerComponent, LandUseBlockLayerComponent],
 })
 export class ObservationsMapComponent {
     @Input("observations") onlandVisualTrashAssessmentObservations: Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>;
     @Input() jurisdictionID: number;
     @Input() onlandVisualTrashAssessmentAreaID: number;
     @Input() onlandVisualTrashAssessmentAreaName: string;
-    @Input() boundingBox: BoundingBoxDto;
+    public boundingBox: BoundingBoxDto;
 
     public mapIsReady: boolean = false;
-    public visibleOnlandVisualTrashAssessmentObservationStyle: string = "onlandVisualTrashAssessmentObservation_purple_outline_only";
-    public selectedOnlandVisualTrashAssessmentObservationStyle: string = "onlandVisualTrashAssessmentObservation_yellow";
     public mapHeight: string = "750px";
 
     @Output()
@@ -49,8 +43,6 @@ export class ObservationsMapComponent {
 
     public map: L.Map;
     public layerControl: L.Control.Layers;
-    public selectedListItem: number;
-    public selectedListItemDetails: { [key: string]: any } = {};
     public selectedObjectMarker: L.Layer;
     public selectedOnlandVisualTrashAssessmentObservation: OnlandVisualTrashAssessmentObservationWithPhotoDto;
     public onlandVisualTrashAssessmentObservationsLayer: L.GeoJSON<any>;
@@ -59,10 +51,6 @@ export class ObservationsMapComponent {
     public ovtaObservationLayer: L.GeoJSON<any>;
 
     constructor(private router: Router, private route: ActivatedRoute) {}
-
-    public ngOnInit(): void {
-        console.log(this.onlandVisualTrashAssessmentObservations);
-    }
 
     public handleMapReady(event: NeptuneMapInitEvent): void {
         this.map = event.map;
@@ -88,6 +76,7 @@ export class ObservationsMapComponent {
             },
         });
         this.ovtaObservationLayer.sortOrder = 100;
+        this.map.fitBounds(this.ovtaObservationLayer.getBounds());
         this.ovtaObservationLayer.addTo(this.map);
         this.layerControl.addOverlay(this.ovtaObservationLayer, this.ovtaObservationOverlayName);
     }
@@ -138,17 +127,6 @@ export class ObservationsMapComponent {
                 layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-violet.png"));
             }
         });
-    }
-
-    private clearSelectedItem() {
-        if (this.selectedListItem) {
-            this.selectedListItem = null;
-            this.selectedListItemDetails = {};
-            if (this.selectedObjectMarker) {
-                this.map.removeLayer(this.selectedObjectMarker);
-            }
-            this.selectedObjectMarker = null;
-        }
     }
 
     public getFileResourceUrl(fileResourceGUID) {

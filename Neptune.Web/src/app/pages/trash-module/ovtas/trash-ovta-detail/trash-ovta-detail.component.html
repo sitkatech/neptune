@@ -43,20 +43,20 @@
         <div class="card g-col-6">
             <div class="card-header">Preliminary Source Identification</div>
             <div class="card-body">
-                <dl class="grid-12" *ngFor="let preliminarySourceIdentificationType of onlandVisualTrashAssessment.PreliminarySourceIdentificationTypeDictionary | keyvalue">
+                <!-- <dl class="grid-12" *ngFor="let preliminarySourceIdentificationType of onlandVisualTrashAssessment.PreliminarySourceIdentificationTypeDictionary | keyvalue">
                     <dt class="g-col-4">{{ preliminarySourceIdentificationType.key }}</dt>
                     <dd class="g-col-8">
                         {{ preliminarySourceIdentificationType.value }}
                     </dd>
-                </dl>
+                </dl> -->
             </div>
         </div>
         <div class="card g-col-12">
             <div class="card-header">Observations</div>
             <div class="card-body">
                 <observations-map
-                    [observations]="onlandVisualTrashAssessment.Observations"
-                    [boundingBox]="onlandVisualTrashAssessment.BoundingBox"
+                    *ngIf="onlandVisualTrashAssessmentObservations$ | async as onlandVisualTrashAssessmentObservations"
+                    [observations]="onlandVisualTrashAssessmentObservations"
                     [onlandVisualTrashAssessmentAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"
                     [onlandVisualTrashAssessmentAreaName]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName"
                     [jurisdictionID]="onlandVisualTrashAssessment.StormwaterJurisdictionID">

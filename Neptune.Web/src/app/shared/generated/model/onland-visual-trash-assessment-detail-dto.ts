@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from '././onland-visual-trash-assessment-observation-with-photo-dto';
 import { BoundingBoxDto } from '././bounding-box-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
@@ -26,8 +25,6 @@ export class OnlandVisualTrashAssessmentDetailDto {
     OnlandVisualTrashAssessmentScoreName?: string;
     CompletedDate?: string;
     IsProgressAssessment?: string;
-    PreliminarySourceIdentificationTypeDictionary?: { [key: string]: Array<string>; };
-    Observations?: Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>;
     BoundingBox?: BoundingBoxDto;
     constructor(obj?: any) {
         Object.assign(this, obj);
@@ -47,8 +44,6 @@ export interface OnlandVisualTrashAssessmentDetailDtoForm {
     OnlandVisualTrashAssessmentScoreName?: FormControl<string>;
     CompletedDate?: FormControl<string>;
     IsProgressAssessment?: FormControl<string>;
-    PreliminarySourceIdentificationTypeDictionary?: FormControl<{ [key: string]: Array<string>; }>;
-    Observations?: FormControl<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>>;
     BoundingBox?: FormControl<BoundingBoxDto>;
 }
 
@@ -164,26 +159,6 @@ export class OnlandVisualTrashAssessmentDetailDtoFormControls {
         }
     );
     public static IsProgressAssessment = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static PreliminarySourceIdentificationTypeDictionary = (value: FormControlState<{ [key: string]: Array<string>; }> | { [key: string]: Array<string>; } = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<{ [key: string]: Array<string>; }>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static Observations = (value: FormControlState<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>> | Array<OnlandVisualTrashAssessmentObservationWithPhotoDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>>(
         value,
         formControlOptions ?? 
         {

@@ -28,6 +28,8 @@ import { OnlandVisualTrashAssessmentStatusEnum } from "src/app/shared/generated/
 import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
+import { ObservationsMapComponent } from "../../ovtas/observations-map/observations-map.component";
+import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/generated/api/onland-visual-trash-assessment-observation.service";
 
 @Component({
     selector: "trash-ovta-review-and-finalize",
@@ -41,7 +43,7 @@ import { LoadingDirective } from "src/app/shared/directives/loading.directive";
         FormsModule,
         NgFor,
         NgClass,
-        NeptuneMapComponent,
+        ObservationsMapComponent,
         NgFor,
         WorkflowBodyComponent,
         AlertDisplayComponent,
@@ -79,6 +81,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
     };
 
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentReviewAndFinalizeDto>;
+    public onlandVisualTrashAssessmentObservations$: Observable<OnlandVisualTrashAssessmentObservationWithPhotoDto[]>;
     public preliminarySourceIdentificationTypeSimpleDto$: Observable<PreliminarySourceIdentificationTypeSimpleDto[]>;
 
     public onlandVisualTrashAssessmentScoreDropdown = OnlandVisualTrashAssessmentScoresAsSelectDropdownOptions;
@@ -105,6 +108,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
     constructor(
         private route: ActivatedRoute,
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
+        private onlandVisualTrashAssessmentObservationService: OnlandVisualTrashAssessmentObservationService,
         private router: Router,
         private ovtaWorkflowProgressService: OvtaWorkflowProgressService,
         private alertService: AlertService
@@ -131,6 +135,15 @@ export class TrashOvtaReviewAndFinalizeComponent {
                 this.formGroup.controls.PreliminarySourceIdentificationTypeIDs.setValue(ovta.PreliminarySourceIdentificationTypeIDs);
             })
         );
+
+        this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessment$.pipe(
+            switchMap((onlandVisualTrashAssessment) => {
+                return this.onlandVisualTrashAssessmentObservationService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsGet(
+                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID
+                );
+            })
+        );
+
         this.preliminarySourceIdentificationTypeSimpleDto$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPreliminarySourceIdentificationTypesGet();
     }
 

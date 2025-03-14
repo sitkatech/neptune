@@ -49,7 +49,7 @@ namespace Neptune.EFModels.Entities
         }
 
         public static async Task Update(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID,
-        List<OnlandVisualTrashAssessmentObservationUpsertDto> onlandVisualTrashAssessmentObservationUpsertDtos)
+        List<OnlandVisualTrashAssessmentObservationWithPhotoDto> onlandVisualTrashAssessmentObservationUpsertDtos)
         {
             await dbContext.OnlandVisualTrashAssessmentObservationPhotos
                 .Include(x => x.OnlandVisualTrashAssessmentObservation).Where(x =>
@@ -60,8 +60,6 @@ namespace Neptune.EFModels.Entities
 
             foreach (var onlandVisualTrashAssessmentObservationUpsertDto in onlandVisualTrashAssessmentObservationUpsertDtos)
             {
-                
-
                 var locationPoint4326FromLatLong = GeometryHelper.CreateLocationPoint4326FromLatLong(onlandVisualTrashAssessmentObservationUpsertDto.Latitude, onlandVisualTrashAssessmentObservationUpsertDto.Longitude);
                 var onlandVisualTrashAssessmentObservation = new OnlandVisualTrashAssessmentObservation()
                 {

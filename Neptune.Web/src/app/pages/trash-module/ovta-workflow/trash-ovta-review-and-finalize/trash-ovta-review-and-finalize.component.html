@@ -57,47 +57,15 @@
             </label>
         </div>
     </div>
-    <!-- <div class="grid-12">
-        <div class="card g-col-6">
-            <div class="card-header">Observations</div>
-            <div class="card-body observations">
-                <div class="grid-12" *ngFor="let item of onlandVisualTrashAssessment.Observations">
-                    <div
-                        [id]="item.OnlandVisualTrashAssessmentObservationID"
-                        class="g-col-12 mb-4 observation"
-                        [ngClass]="{
-                            'selected-observation':
-                                selectedOVTAObservation != null && selectedOVTAObservation.OnlandVisualTrashAssessmentObservationID == item.OnlandVisualTrashAssessmentObservationID
-                        }"
-                        (click)="selectOVTAObservationImpl(onlandVisualTrashAssessment.Observations, item.OnlandVisualTrashAssessmentObservationID)">
-                        <img [src]="getUrl(item.FileResourceGUID)" *ngIf="item.FileResourceGUID; else noImage" style="width: 400px; height: 500px" />
-                        <ng-template #noImage> <i>No photo provided</i></ng-template>
-                        <div class="mt-2">
-                            {{ item.Note ?? "No note provided" }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card g-col-6" [loadingSpinner]="{ isLoading: isLoadingMap, loadingHeight: 100 }">
-            <div class="card-header">Map</div>
-            <div class="card-body">
-                <neptune-map
-                    (onMapLoad)="
-                        handleMapReady(
-                            $event,
-                            onlandVisualTrashAssessment.Observations,
-                            onlandVisualTrashAssessment.GeometryAsGeoJson,
-                            onlandVisualTrashAssessment.TransectLineAsGeoJson
-                        )
-                    "
-                    mapHeight="400px"
-                    [showLegend]="false"
-                    [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
-                </neptune-map>
-            </div>
-        </div>
-    </div> -->
+
+    <h3>Observations</h3>
+    <observations-map
+        *ngIf="onlandVisualTrashAssessmentObservations$ | async as onlandVisualTrashAssessmentObservations"
+        [observations]="onlandVisualTrashAssessmentObservations"
+        [onlandVisualTrashAssessmentAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"
+        [onlandVisualTrashAssessmentAreaName]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName"
+        [jurisdictionID]="onlandVisualTrashAssessment.StormwaterJurisdictionID">
+    </observations-map>
 </workflow-body>
 <div class="page-footer">
     <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>

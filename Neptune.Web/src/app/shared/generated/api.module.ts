@@ -11,6 +11,7 @@ import { LandUseBlockService } from './api/land-use-block.service';
 import { NereidService } from './api/nereid.service';
 import { OnlandVisualTrashAssessmentService } from './api/onland-visual-trash-assessment.service';
 import { OnlandVisualTrashAssessmentAreaService } from './api/onland-visual-trash-assessment-area.service';
+import { OnlandVisualTrashAssessmentObservationService } from './api/onland-visual-trash-assessment-observation.service';
 import { OrganizationService } from './api/organization.service';
 import { ProjectService } from './api/project.service';
 import { ProjectDocumentService } from './api/project-document.service';
@@ -36,6 +37,7 @@ import { UserClaimsService } from './api/user-claims.service';
     NereidService,
     OnlandVisualTrashAssessmentService,
     OnlandVisualTrashAssessmentAreaService,
+    OnlandVisualTrashAssessmentObservationService,
     OrganizationService,
     ProjectService,
     ProjectDocumentService,

@@ -7,6 +7,7 @@ api/file-resource.service.ts
 api/land-use-block.service.ts
 api/nereid.service.ts
 api/onland-visual-trash-assessment-area.service.ts
+api/onland-visual-trash-assessment-observation.service.ts
 api/onland-visual-trash-assessment.service.ts
 api/organization.service.ts
 api/project-document.service.ts
@@ -53,7 +54,6 @@ model/onland-visual-trash-assessment-detail-dto.ts
 model/onland-visual-trash-assessment-grid-dto.ts
 model/onland-visual-trash-assessment-observation-location-dto.ts
 model/onland-visual-trash-assessment-observation-photo-staging-dto.ts
-model/onland-visual-trash-assessment-observation-upsert-dto.ts
 model/onland-visual-trash-assessment-observation-with-photo-dto.ts
 model/onland-visual-trash-assessment-refine-area-dto.ts
 model/onland-visual-trash-assessment-review-and-finalize-dto.ts

@@ -36,15 +36,14 @@ public static class OnlandVisualTrashAssessments
 
     public static OnlandVisualTrashAssessment GetByID(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID)
     {
-        var onlandVisualTrashAssessment = GetImpl(dbContext).AsNoTracking()
-            .Include(x => x.OnlandVisualTrashAssessmentObservations)
-            .ThenInclude(x => x.OnlandVisualTrashAssessmentObservationPhotos)
-            .ThenInclude(x => x.FileResource)
-            .Include(x => x.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes)
+        var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments
             .Include(x => x.StormwaterJurisdiction)
-            .ThenInclude(x => x.StormwaterJurisdictionGeometry)
-            .SingleOrDefault(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
-        Check.RequireNotNull(onlandVisualTrashAssessment, $"OnlandVisualTrashAssessment with ID {onlandVisualTrashAssessmentID} not found!");
+            .ThenInclude(x => x.Organization)
+            .Include(x => x.OnlandVisualTrashAssessmentArea)
+            .Include(x => x.OnlandVisualTrashAssessmentObservations)
+            .Include(x => x.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes)
+            .Include(x => x.CreatedByPerson).AsNoTracking()
+            .Single(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
         return onlandVisualTrashAssessment;
     }
 
@@ -59,7 +58,15 @@ public static class OnlandVisualTrashAssessments
 
     public static OnlandVisualTrashAssessment GetByID(NeptuneDbContext dbContext, OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
     {
-        return GetByID(dbContext, onlandVisualTrashAssessmentPrimaryKey.PrimaryKeyValue);
+        var onlandVisualTrashAssessment = GetImpl(dbContext).AsNoTracking()
+            .Include(x => x.OnlandVisualTrashAssessmentObservations)
+            .ThenInclude(x => x.OnlandVisualTrashAssessmentObservationPhotos)
+            .ThenInclude(x => x.FileResource)
+            .Include(x => x.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes)
+            .Include(x => x.StormwaterJurisdiction)
+            .ThenInclude(x => x.StormwaterJurisdictionGeometry)
+            .Single(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentPrimaryKey.PrimaryKeyValue);
+        return onlandVisualTrashAssessment;
     }
 
     public static List<OnlandVisualTrashAssessment> List(NeptuneDbContext dbContext)

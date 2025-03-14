@@ -1,12 +1,11 @@
 import { Component, Input, OnChanges } from "@angular/core";
-import { environment } from "src/environments/environment";
 import { MapLayerBase } from "../map-layer-base.component";
 import * as L from "leaflet";
-import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 import { Observable, tap } from "rxjs";
 import { OnlandVisualTrashAssessmentObservationLocationDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-location-dto";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { AsyncPipe, NgIf } from "@angular/common";
+import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/generated/api/onland-visual-trash-assessment-observation.service";
 
 @Component({
     selector: "ovta-observation-layer",
@@ -19,15 +18,15 @@ export class OvtaObservationLayerComponent extends MapLayerBase implements OnCha
     @Input() ovtaID: number;
 
     public onlandVisualTrashAssessmentObservations$: Observable<OnlandVisualTrashAssessmentObservationLocationDto[]>;
-    constructor(private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService) {
+    constructor(private onlandVisualTrashAssessmentObservationService: OnlandVisualTrashAssessmentObservationService) {
         super();
     }
     public wmsOptions: L.WMSOptions;
     public layer;
 
     ngOnInit() {
-        this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessmentService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationLocationsGet(this.ovtaID)
+        this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessmentObservationService
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsFeatureCollectionGet(this.ovtaID)
             .pipe(
                 tap((locations) => {
                     const ovtaObservationGeoJSON = this.mapObservationsToGeoJson(locations);
