@@ -43,12 +43,26 @@
         <div class="card g-col-6">
             <div class="card-header">Preliminary Source Identification</div>
             <div class="card-body">
-                <!-- <dl class="grid-12" *ngFor="let preliminarySourceIdentificationType of onlandVisualTrashAssessment.PreliminarySourceIdentificationTypeDictionary | keyvalue">
-                    <dt class="g-col-4">{{ preliminarySourceIdentificationType.key }}</dt>
-                    <dd class="g-col-8">
-                        {{ preliminarySourceIdentificationType.value }}
-                    </dd>
-                </dl> -->
+                <div class="mb-2" *ngFor="let preliminarySourceIdentificationCategory of PreliminarySourceIdentificationCategories">
+                    <h4>{{ preliminarySourceIdentificationCategory.DisplayName }}</h4>
+                    <ul
+                        *ngIf="
+                            onlandVisualTrashAssessment.PreliminarySourceIdentificationsByCategory[preliminarySourceIdentificationCategory.Value]?.length > 0;
+                            else noPreliminarySources
+                        ">
+                        <li
+                            *ngFor="
+                                let preliminarySourceIdentification of onlandVisualTrashAssessment.PreliminarySourceIdentificationsByCategory[
+                                    preliminarySourceIdentificationCategory.Value
+                                ]
+                            ">
+                            {{ preliminarySourceIdentification }}
+                        </li>
+                    </ul>
+                </div>
+                <ng-template #noPreliminarySources>
+                    <i>No Preliminary Sources identified.</i>
+                </ng-template>
             </div>
         </div>
         <div class="card g-col-12">

@@ -11,6 +11,7 @@ import { FieldDefinitionComponent } from "../../../../shared/components/field-de
 import { ObservationsMapComponent } from "../observations-map/observations-map.component";
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
 import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/generated/api/onland-visual-trash-assessment-observation.service";
+import { PreliminarySourceIdentificationCategories } from "src/app/shared/generated/enum/preliminary-source-identification-category-enum";
 
 @Component({
     selector: "trash-ovta-detail",
@@ -22,6 +23,7 @@ import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/ge
 export class TrashOvtaDetailComponent {
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentDetailDto>;
     public onlandVisualTrashAssessmentObservations$: Observable<OnlandVisualTrashAssessmentObservationWithPhotoDto[]>;
+    public PreliminarySourceIdentificationCategories = PreliminarySourceIdentificationCategories;
 
     public ovtaID: number;
 

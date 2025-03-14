@@ -26,6 +26,7 @@ export class OnlandVisualTrashAssessmentDetailDto {
     CompletedDate?: string;
     IsProgressAssessment?: string;
     BoundingBox?: BoundingBoxDto;
+    PreliminarySourceIdentificationsByCategory?: { [key: string]: Array<string>; };
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -45,6 +46,7 @@ export interface OnlandVisualTrashAssessmentDetailDtoForm {
     CompletedDate?: FormControl<string>;
     IsProgressAssessment?: FormControl<string>;
     BoundingBox?: FormControl<BoundingBoxDto>;
+    PreliminarySourceIdentificationsByCategory?: FormControl<{ [key: string]: Array<string>; }>;
 }
 
 export class OnlandVisualTrashAssessmentDetailDtoFormControls { 
@@ -169,6 +171,16 @@ export class OnlandVisualTrashAssessmentDetailDtoFormControls {
         }
     );
     public static BoundingBox = (value: FormControlState<BoundingBoxDto> | BoundingBoxDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<BoundingBoxDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static PreliminarySourceIdentificationsByCategory = (value: FormControlState<{ [key: string]: Array<string>; }> | { [key: string]: Array<string>; } = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<{ [key: string]: Array<string>; }>(
         value,
         formControlOptions ?? 
         {

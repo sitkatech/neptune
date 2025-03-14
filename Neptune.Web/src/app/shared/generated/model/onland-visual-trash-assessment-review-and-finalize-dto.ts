@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto } from '././onland-visual-trash-assessment-preliminary-source-identification-upsert-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class OnlandVisualTrashAssessmentReviewAndFinalizeDto { 
@@ -24,7 +25,7 @@ export class OnlandVisualTrashAssessmentReviewAndFinalizeDto {
     IsProgressAssessment?: boolean;
     Notes?: string;
     AssessmentDate?: string;
-    PreliminarySourceIdentificationTypeIDs?: Array<number>;
+    PreliminarySourceIdentifications?: Array<OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto>;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -43,7 +44,7 @@ export interface OnlandVisualTrashAssessmentReviewAndFinalizeDtoForm {
     IsProgressAssessment?: FormControl<boolean>;
     Notes?: FormControl<string>;
     AssessmentDate?: FormControl<string>;
-    PreliminarySourceIdentificationTypeIDs?: FormControl<Array<number>>;
+    PreliminarySourceIdentifications?: FormControl<Array<OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto>>;
 }
 
 export class OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls { 
@@ -167,7 +168,7 @@ export class OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls {
             ],
         }
     );
-    public static PreliminarySourceIdentificationTypeIDs = (value: FormControlState<Array<number>> | Array<number> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<number>>(
+    public static PreliminarySourceIdentifications = (value: FormControlState<Array<OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto>> | Array<OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto>>(
         value,
         formControlOptions ?? 
         {

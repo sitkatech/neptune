@@ -41,6 +41,10 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
             CompletedDate = onlandVisualTrashAssessment.CompletedDate,
             IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment ? "Progress" : "Baseline",
         };
+        dto.PreliminarySourceIdentificationsByCategory = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.GroupBy(x => x.PreliminarySourceIdentificationType.PreliminarySourceIdentificationCategoryID).ToDictionary(x => x.Key.ToString(), x => x.Select(y => 
+            !string.IsNullOrWhiteSpace(y.ExplanationIfTypeIsOther) ? $"Other: {y.ExplanationIfTypeIsOther}"
+                :
+            y.PreliminarySourceIdentificationType.PreliminarySourceIdentificationTypeDisplayName).ToList());
         return dto;
     }
 
@@ -85,9 +89,27 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
             AssessingNewArea = onlandVisualTrashAssessment.AssessingNewArea ?? false,
             IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment,
             AssessmentDate = DateTime.UtcNow,
-            OnlandVisualTrashAssessmentStatusID = (int)OnlandVisualTrashAssessmentStatusEnum.InProgress,
-            PreliminarySourceIdentificationTypeIDs = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(x => x.PreliminarySourceIdentificationTypeID).ToList(),
+            OnlandVisualTrashAssessmentStatusID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID,
         };
+
+        var selectedPreliminarySourceIdentifications = onlandVisualTrashAssessment
+            .OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes
+            .Select(x => new OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto
+            {
+                Selected = true,
+                PreliminarySourceIdentificationTypeID = x.PreliminarySourceIdentificationTypeID,
+                ExplanationIfTypeIsOther = x.ExplanationIfTypeIsOther
+            }).ToList();
+
+        var notSelectedPreliminarySourceIdentifications = PreliminarySourceIdentificationType.All.Except(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(x => x.PreliminarySourceIdentificationType)).Select(x => new OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto
+        {
+            Selected = false,
+            PreliminarySourceIdentificationTypeID = x.PreliminarySourceIdentificationTypeID
+
+        });
+        selectedPreliminarySourceIdentifications.AddRange(notSelectedPreliminarySourceIdentifications);
+
+        dto.PreliminarySourceIdentifications = selectedPreliminarySourceIdentifications;
         return dto;
     }
 

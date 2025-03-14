@@ -4557,6 +4557,16 @@
           },
           "BoundingBox": {
             "$ref": "#/components/schemas/BoundingBoxDto"
+          },
+          "PreliminarySourceIdentificationsByCategory": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4712,6 +4722,23 @@
         },
         "additionalProperties": false
       },
+      "OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto": {
+        "type": "object",
+        "properties": {
+          "Selected": {
+            "type": "boolean"
+          },
+          "PreliminarySourceIdentificationTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ExplanationIfTypeIsOther": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "OnlandVisualTrashAssessmentRefineAreaDto": {
         "type": "object",
         "properties": {
@@ -4791,11 +4818,10 @@
             "format": "date-time",
             "nullable": true
           },
-          "PreliminarySourceIdentificationTypeIDs": {
+          "PreliminarySourceIdentifications": {
             "type": "array",
             "items": {
-              "type": "integer",
-              "format": "int32"
+              "$ref": "#/components/schemas/OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto"
             },
             "nullable": true
           }

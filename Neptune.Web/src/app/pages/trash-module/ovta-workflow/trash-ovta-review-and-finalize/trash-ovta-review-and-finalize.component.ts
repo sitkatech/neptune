@@ -1,18 +1,14 @@
 import { Component } from "@angular/core";
-import { FormArray, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
-import { FormFieldComponent, FormFieldType, FormInputOption, SelectDropdownOption } from "../../../../shared/components/form-field/form-field.component";
+import { FormFieldComponent, FormFieldType, FormInputOption } from "../../../../shared/components/form-field/form-field.component";
 import { OnlandVisualTrashAssessmentScoresAsSelectDropdownOptions } from "src/app/shared/generated/enum/onland-visual-trash-assessment-score-enum";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable, map, switchMap, tap } from "rxjs";
+import { Observable, switchMap, tap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { AsyncPipe, NgClass, NgFor, NgIf } from "@angular/common";
-import * as L from "leaflet";
-import { NeptuneMapInitEvent, NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
-import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
-import { environment } from "src/environments/environment";
 import { PreliminarySourceIdentificationTypeSimpleDto } from "src/app/shared/generated/model/preliminary-source-identification-type-simple-dto";
 import { PreliminarySourceIdentificationCategories } from "src/app/shared/generated/enum/preliminary-source-identification-category-enum";
 import { AlertService } from "src/app/shared/services/alert.service";
@@ -56,29 +52,8 @@ export class TrashOvtaReviewAndFinalizeComponent {
     public isLoadingSubmit = false;
     public FormFieldType = FormFieldType;
     public PreliminarySourceIdentificationCategories = PreliminarySourceIdentificationCategories;
-    public ovtaObservationLayer: L.GeoJSON<any>;
-    public selectedOVTAObservation: OnlandVisualTrashAssessmentObservationWithPhotoDto;
-    public isLoadingMap: boolean = false;
 
     public ovtaID: number;
-
-    public map: L.Map;
-    public mapIsReady: boolean = false;
-    public layerControl: L.Control.Layers;
-    public transectLineLayer: L.FeatureGroup = new L.FeatureGroup();
-
-    private defaultStyle = {
-        color: "blue",
-        fillOpacity: 0.2,
-        opacity: 0,
-    };
-
-    private transectLineStyle = {
-        color: "#f70a0a",
-        weight: 2,
-        opacity: 0.65,
-        fillOpacity: 0.1,
-    };
 
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentReviewAndFinalizeDto>;
     public onlandVisualTrashAssessmentObservations$: Observable<OnlandVisualTrashAssessmentObservationWithPhotoDto[]>;
@@ -101,7 +76,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
         OnlandVisualTrashAssessmentScoreID: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.OnlandVisualTrashAssessmentScoreID(),
         IsProgressAssessment: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.IsProgressAssessment(),
         Notes: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.Notes(),
-        PreliminarySourceIdentificationTypeIDs: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.PreliminarySourceIdentificationTypeIDs(),
+        PreliminarySourceIdentifications: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.PreliminarySourceIdentifications(),
         OnlandVisualTrashAssessmentStatusID: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.OnlandVisualTrashAssessmentStatusID(),
     });
 
@@ -115,7 +90,6 @@ export class TrashOvtaReviewAndFinalizeComponent {
     ) {}
 
     ngOnInit(): void {
-        this.isLoadingMap = true;
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
             switchMap((params) => {
                 return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizeGet(
@@ -132,7 +106,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
                 this.formGroup.controls.OnlandVisualTrashAssessmentScoreID.setValue(ovta.OnlandVisualTrashAssessmentScoreID);
                 this.formGroup.controls.IsProgressAssessment.setValue(ovta.IsProgressAssessment);
                 this.formGroup.controls.Notes.setValue(ovta.Notes);
-                this.formGroup.controls.PreliminarySourceIdentificationTypeIDs.setValue(ovta.PreliminarySourceIdentificationTypeIDs);
+                this.formGroup.controls.PreliminarySourceIdentifications.setValue(ovta.PreliminarySourceIdentifications);
             })
         );
 
@@ -147,39 +121,25 @@ export class TrashOvtaReviewAndFinalizeComponent {
         this.preliminarySourceIdentificationTypeSimpleDto$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPreliminarySourceIdentificationTypesGet();
     }
 
-    public handleMapReady(event: NeptuneMapInitEvent, observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[], geometry, transectLine): void {
-        this.map = event.map;
-        this.layerControl = event.layerControl;
-        this.mapIsReady = true;
-        this.addFeatureCollectionToFeatureGroup(JSON.parse(geometry), this.transectLineLayer, this.defaultStyle);
-        this.addFeatureCollectionToFeatureGroup(JSON.parse(transectLine), this.transectLineLayer, this.transectLineStyle);
-        this.transectLineLayer.addTo(this.map);
-        this.addObservationPointsLayersToMap(observations);
-        this.isLoadingMap = false;
+    isPreliminarySourceIdentificationTypeSelected(preliminarySourceIdentificationTypeID: number): boolean {
+        const formArray = this.formGroup.controls.PreliminarySourceIdentifications.getRawValue();
+        const found = formArray.findIndex((x) => x.PreliminarySourceIdentificationTypeID === preliminarySourceIdentificationTypeID && x.Selected) >= 0;
+        return found;
     }
 
     filterByCategory(preliminarySourceIdentificationTypeSimpleDto, categoryID) {
         return preliminarySourceIdentificationTypeSimpleDto.filter((x) => x.PreliminarySourceIdentificationCategoryID == categoryID);
     }
 
-    onPreliminarySourceIdentificationCategoryChange(event: any) {
-        const formArray = this.formGroup.controls.PreliminarySourceIdentificationTypeIDs.getRawValue();
-
+    onPreliminarySourceIdentificationTypeChange(event: any) {
+        const formArray = this.formGroup.controls.PreliminarySourceIdentifications.getRawValue();
+        const preliminarySourceIdentificationType = formArray.find((x) => x.PreliminarySourceIdentificationTypeID === parseInt(event.target.value));
         /* Selected */
         if (event.target.checked) {
-            // Add a new control in the arrayForm
-            formArray.push(event.target.value);
+            preliminarySourceIdentificationType.Selected = true;
         } else {
             /* unselected */
-            // find the unselected element
-            formArray.splice(formArray.indexOf(event.target.value));
-        }
-    }
-    getUrl(fileResourceGUID) {
-        if (fileResourceGUID) {
-            return environment.ocStormwaterToolsBaseUrl + "/FileResource/DisplayResource/" + fileResourceGUID;
-        } else {
-            return null;
+            preliminarySourceIdentificationType.Selected = false;
         }
     }
 
@@ -197,88 +157,5 @@ export class TrashOvtaReviewAndFinalizeComponent {
                     this.router.navigate([`../../../${this.ovtaID}`], { relativeTo: this.route });
                 }
             });
-    }
-
-    public addFeatureCollectionToFeatureGroup(featureJsons: any, featureGroup: L.FeatureGroup, style) {
-        L.geoJson(featureJsons, {
-            onEachFeature: (feature, layer) => {
-                layer.setStyle(style);
-                if (layer.getLayers) {
-                    layer.getLayers().forEach((l) => {
-                        featureGroup.addLayer(l);
-                    });
-                } else {
-                    featureGroup.addLayer(layer);
-                }
-            },
-        });
-    }
-
-    public addObservationPointsLayersToMap(observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[]): void {
-        if (this.ovtaObservationLayer) {
-            this.map.removeLayer(this.ovtaObservationLayer);
-            this.layerControl.removeLayer(this.ovtaObservationLayer);
-        }
-        const ovtaObservationGeoJSON = this.mapObservationsToGeoJson(observations);
-        this.ovtaObservationLayer = new L.GeoJSON(ovtaObservationGeoJSON, {
-            pointToLayer: (feature, latlng) => {
-                return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
-            },
-            onEachFeature: (feature, layer) => {
-                layer.on("click", (e) => {
-                    this.selectOVTAObservationImpl(observations, feature.properties.OnlandVisualTrashAssessmentObservationID);
-                });
-            },
-        });
-        this.ovtaObservationLayer.sortOrder = 100;
-        this.ovtaObservationLayer.addTo(this.map);
-        //this.layerControl.addOverlay(this.ovtaObservationLayer, this.ovtaObservationOverlayName);
-    }
-
-    public selectOVTAObservationImpl(observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[], observationID: number) {
-        if (!this.map.hasLayer(this.ovtaObservationLayer)) {
-            this.ovtaObservationLayer.addTo(this.map);
-        }
-
-        let selectedObservation = observations.find((x) => x.OnlandVisualTrashAssessmentObservationID == observationID);
-        this.selectedOVTAObservation = selectedObservation;
-        this.ovtaObservationLayer.eachLayer((layer) => {
-            if (layer.feature.properties.OnlandVisualTrashAssessmentObservationID == this.selectedOVTAObservation.OnlandVisualTrashAssessmentObservationID) {
-                if (!layer.feature.properties.DefaultZIndexOffset) {
-                    layer.feature.properties.DefaultZIndexOffset = layer._zIndex;
-                }
-                layer.setZIndexOffset(10000);
-                layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-red.png"));
-                this.router.navigate([], {
-                    relativeTo: this.route,
-                    fragment: `${layer.feature.properties.OnlandVisualTrashAssessmentObservationID}`,
-                    queryParamsHandling: "preserve",
-                    replaceUrl: true,
-                });
-            } else {
-                layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-violet.png"));
-            }
-        });
-    }
-
-    private mapObservationsToGeoJson(observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[]) {
-        return {
-            type: "FeatureCollection",
-            features: observations.map((x) => {
-                let observationGeoJson = {
-                    type: "Feature",
-                    geometry: {
-                        type: "Point",
-                        coordinates: [x.Longitude ?? 0, x.Latitude ?? 0],
-                    },
-                    properties: {
-                        OnlandVisualTrashAssessmentObservationID: x.OnlandVisualTrashAssessmentObservationID,
-                        Latitude: x.Latitude,
-                        Longitude: x.Longitude,
-                    },
-                };
-                return observationGeoJson;
-            }),
-        };
     }
 }

@@ -243,24 +243,23 @@ public static class OnlandVisualTrashAssessments
             await dbContext.SaveChangesAsync();
         }
 
-        //await dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Where(x =>
-        //        x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)
-        //    .ExecuteDeleteAsync();
+        await dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Where(x =>
+                x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)
+            .ExecuteDeleteAsync();
 
-        //var onlandVisualTrashAssessmentPreliminarySourceIdentificationTypesToUpdate =
-        //    dto.PreliminarySourceIdentifications
-        //        //.Where(x => x.Has)
-        //        .Select(x =>
-        //            new OnlandVisualTrashAssessmentPreliminarySourceIdentificationType
-        //            {
-        //                OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID,
-        //                PreliminarySourceIdentificationTypeID =
-        //                    x.PreliminarySourceIdentificationTypeID,
-        //                ExplanationIfTypeIsOther = x.ExplanationIfTypeIsOther
-        //            }).ToList();
+        var onlandVisualTrashAssessmentPreliminarySourceIdentificationTypesToUpdate =
+            dto.PreliminarySourceIdentifications
+                .Where(x => x.Selected)
+                .Select(x => new OnlandVisualTrashAssessmentPreliminarySourceIdentificationType
+                {
+                    OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID,
+                    PreliminarySourceIdentificationTypeID =
+                        x.PreliminarySourceIdentificationTypeID,
+                    ExplanationIfTypeIsOther = string.IsNullOrWhiteSpace(x.ExplanationIfTypeIsOther) ? null : x.ExplanationIfTypeIsOther
+                }).ToList();
 
-        //await dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.AddRangeAsync(onlandVisualTrashAssessmentPreliminarySourceIdentificationTypesToUpdate);
-        //await dbContext.SaveChangesAsync();
+        await dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.AddRangeAsync(onlandVisualTrashAssessmentPreliminarySourceIdentificationTypesToUpdate);
+        await dbContext.SaveChangesAsync();
     }
 
     public static List<PreliminarySourceIdentificationTypeSimpleDto> GetPreliminarySourceIdentificationTypeSimpleDtos(NeptuneDbContext dbContext)

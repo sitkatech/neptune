@@ -1,4 +1,6 @@
-﻿namespace Neptune.Models.DataTransferObjects;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Neptune.Models.DataTransferObjects;
 
 public class OnlandVisualTrashAssessmentReviewAndFinalizeDto
 {
@@ -14,5 +16,5 @@ public class OnlandVisualTrashAssessmentReviewAndFinalizeDto
     public bool? IsProgressAssessment { get; set; }
     public string? Notes { get; set; }
     public DateTime? AssessmentDate { get; set; }
-    public List<int> PreliminarySourceIdentificationTypeIDs { get; set; }
+    public List<OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto> PreliminarySourceIdentifications { get; set; }
 }

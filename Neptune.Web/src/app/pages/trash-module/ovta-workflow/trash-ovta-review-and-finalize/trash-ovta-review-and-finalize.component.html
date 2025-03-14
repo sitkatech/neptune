@@ -43,17 +43,27 @@
         </div>
     </form>
     <h3>Preliminary Source Identification Type</h3>
-    <div class="copy copy-2">Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</div>
+    <div class="mt-2 copy copy-3">Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</div>
     <div *ngIf="preliminarySourceIdentificationTypeSimpleDto$ | async as preliminarySourceIdentificationTypeSimpleDto" class="grid-12 mb-4">
-        <div *ngFor="let item of PreliminarySourceIdentificationCategories" class="g-col-6">
-            <h3 class="mb-2">{{ item.DisplayName }}</h3>
-            <label *ngFor="let formInputOption of filterByCategory(preliminarySourceIdentificationTypeSimpleDto, item.Value); let i = index">
+        <div *ngFor="let preliminarySourceIdentificationCategory of PreliminarySourceIdentificationCategories" class="mt-4 g-col-6">
+            <h4 class="mb-2">{{ preliminarySourceIdentificationCategory.DisplayName }}</h4>
+            <label
+                *ngFor="
+                    let preliminarySourceIdentificationType of filterByCategory(preliminarySourceIdentificationTypeSimpleDto, preliminarySourceIdentificationCategory.Value);
+                    let i = index
+                ">
                 <input
                     type="checkbox"
-                    [value]="formInputOption.PreliminarySourceIdentificationTypeID"
-                    [checked]="formGroup.controls.PreliminarySourceIdentificationTypeIDs.getRawValue().includes(formInputOption.PreliminarySourceIdentificationTypeID)"
-                    (change)="onPreliminarySourceIdentificationCategoryChange($event)" />
-                {{ formInputOption.PreliminarySourceIdentificationTypeDisplayName }}
+                    [value]="preliminarySourceIdentificationType.PreliminarySourceIdentificationTypeID"
+                    [checked]="isPreliminarySourceIdentificationTypeSelected(preliminarySourceIdentificationType.PreliminarySourceIdentificationTypeID)"
+                    (change)="onPreliminarySourceIdentificationTypeChange($event)" />
+                {{
+                    preliminarySourceIdentificationType.PreliminarySourceIdentificationTypeDisplayName.indexOf("Other") >= 0
+                        ? "Other"
+                        : preliminarySourceIdentificationType.PreliminarySourceIdentificationTypeDisplayName
+                }}
+
+                <input type="text" *ngIf="preliminarySourceIdentificationType.PreliminarySourceIdentificationTypeDisplayName.indexOf('Other') >= 0" />
             </label>
         </div>
     </div>
