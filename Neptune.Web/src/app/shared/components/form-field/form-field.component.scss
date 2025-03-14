@@ -31,3 +31,10 @@
         transform: scale(150%);
     }
 }
+
+.checkbox-list-options {
+    display: flex;
+    gap: $spacing-400;
+    align-items: center;
+    height: $spacing-700;
+}

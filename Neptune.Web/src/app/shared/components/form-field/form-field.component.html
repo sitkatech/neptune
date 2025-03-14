@@ -2,7 +2,16 @@
     <ng-container *ngIf="fieldDefinitionName">
         <field-definition [fieldDefinitionType]="fieldDefinitionName"></field-definition>
     </ng-container>
-    <ng-container [ngSwitch]="type">
+    <ng-template #readOnlyDisplay>
+        <div class="field-label" [class.required]="formControl | isRequired">
+            {{ fieldLabel }}
+        </div>
+        <div>
+            <span>{{ formControl.getRawValue() }}</span>
+            <span *ngIf="units" class="units">{{ units }}</span>
+        </div>
+    </ng-template>
+    <ng-container *ngIf="!readOnly; else readOnlyDisplay" [ngSwitch]="type">
         <!-- Text -->
         <ng-container *ngSwitchCase="FormFieldType.Text">
             <div class="field-label" [class.required]="formControl | isRequired">

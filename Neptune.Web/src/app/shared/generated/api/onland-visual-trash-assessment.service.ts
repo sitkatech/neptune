@@ -27,7 +27,6 @@ import { OnlandVisualTrashAssessmentObservationUpsertDto } from '../model/onland
 import { OnlandVisualTrashAssessmentRefineAreaDto } from '../model/onland-visual-trash-assessment-refine-area-dto';
 import { OnlandVisualTrashAssessmentReviewAndFinalizeDto } from '../model/onland-visual-trash-assessment-review-and-finalize-dto';
 import { OnlandVisualTrashAssessmentSimpleDto } from '../model/onland-visual-trash-assessment-simple-dto';
-import { OnlandVisualTrashAssessmentWorkflowDto } from '../model/onland-visual-trash-assessment-workflow-dto';
 import { OnlandVisualTrashAssessmentWorkflowProgressDto } from '../model/onland-visual-trash-assessment-workflow-progress-dto';
 import { PreliminarySourceIdentificationTypeSimpleDto } from '../model/preliminary-source-identification-type-simple-dto';
 import { ProblemDetails } from '../model/problem-details';
@@ -248,13 +247,13 @@ export class OnlandVisualTrashAssessmentService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoDeletePost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationPhotoStagingDto?: OnlandVisualTrashAssessmentObservationPhotoStagingDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoDeletePost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationPhotoStagingDto?: OnlandVisualTrashAssessmentObservationPhotoStagingDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoDeletePost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationPhotoStagingDto?: OnlandVisualTrashAssessmentObservationPhotoStagingDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoDeletePost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationPhotoStagingDto?: OnlandVisualTrashAssessmentObservationPhotoStagingDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoDelete(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationPhotoStagingDto?: OnlandVisualTrashAssessmentObservationPhotoStagingDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoDelete(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationPhotoStagingDto?: OnlandVisualTrashAssessmentObservationPhotoStagingDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoDelete(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationPhotoStagingDto?: OnlandVisualTrashAssessmentObservationPhotoStagingDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoDelete(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationPhotoStagingDto?: OnlandVisualTrashAssessmentObservationPhotoStagingDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (onlandVisualTrashAssessmentID === null || onlandVisualTrashAssessmentID === undefined) {
-            throw new Error('Required parameter onlandVisualTrashAssessmentID was null or undefined when calling onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoDeletePost.');
+            throw new Error('Required parameter onlandVisualTrashAssessmentID was null or undefined when calling onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoDelete.');
         }
 
 
@@ -279,8 +278,7 @@ export class OnlandVisualTrashAssessmentService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<any>(`${this.basePath}/onland-visual-trash-assessments/${encodeURIComponent(String(onlandVisualTrashAssessmentID))}/observation-photo/delete`,
-            onlandVisualTrashAssessmentObservationPhotoStagingDto,
+        return this.httpClient.delete<any>(`${this.basePath}/onland-visual-trash-assessments/${encodeURIComponent(String(onlandVisualTrashAssessmentID))}/observation-photo`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -722,25 +720,24 @@ export class OnlandVisualTrashAssessmentService {
      * 
      * 
      * @param onlandVisualTrashAssessmentID 
+     * @param onlandVisualTrashAssessmentReviewAndFinalizeDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDWorkflowGet(onlandVisualTrashAssessmentID: number, observe?: 'body', reportProgress?: boolean): Observable<OnlandVisualTrashAssessmentWorkflowDto>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDWorkflowGet(onlandVisualTrashAssessmentID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OnlandVisualTrashAssessmentWorkflowDto>>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDWorkflowGet(onlandVisualTrashAssessmentID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OnlandVisualTrashAssessmentWorkflowDto>>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDWorkflowGet(onlandVisualTrashAssessmentID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizePost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentReviewAndFinalizeDto?: OnlandVisualTrashAssessmentReviewAndFinalizeDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizePost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentReviewAndFinalizeDto?: OnlandVisualTrashAssessmentReviewAndFinalizeDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizePost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentReviewAndFinalizeDto?: OnlandVisualTrashAssessmentReviewAndFinalizeDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizePost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentReviewAndFinalizeDto?: OnlandVisualTrashAssessmentReviewAndFinalizeDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (onlandVisualTrashAssessmentID === null || onlandVisualTrashAssessmentID === undefined) {
-            throw new Error('Required parameter onlandVisualTrashAssessmentID was null or undefined when calling onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDWorkflowGet.');
+            throw new Error('Required parameter onlandVisualTrashAssessmentID was null or undefined when calling onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizePost.');
         }
+
 
         let headers = this.defaultHeaders;
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
-            'text/plain',
-            'application/json',
-            'text/json',
         ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected != undefined) {
@@ -749,9 +746,17 @@ export class OnlandVisualTrashAssessmentService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/_*+json',
         ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
 
-        return this.httpClient.get<OnlandVisualTrashAssessmentWorkflowDto>(`${this.basePath}/onland-visual-trash-assessments/${encodeURIComponent(String(onlandVisualTrashAssessmentID))}/workflow`,
+        return this.httpClient.post<any>(`${this.basePath}/onland-visual-trash-assessments/${encodeURIComponent(String(onlandVisualTrashAssessmentID))}/review-and-finalize`,
+            onlandVisualTrashAssessmentReviewAndFinalizeDto,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -838,96 +843,6 @@ export class OnlandVisualTrashAssessmentService {
         ];
 
         return this.httpClient.get<Array<PreliminarySourceIdentificationTypeSimpleDto>>(`${this.basePath}/onland-visual-trash-assessments/preliminary-source-identification-types`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param onlandVisualTrashAssessmentWorkflowDto 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public onlandVisualTrashAssessmentsPut(onlandVisualTrashAssessmentWorkflowDto?: OnlandVisualTrashAssessmentWorkflowDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public onlandVisualTrashAssessmentsPut(onlandVisualTrashAssessmentWorkflowDto?: OnlandVisualTrashAssessmentWorkflowDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public onlandVisualTrashAssessmentsPut(onlandVisualTrashAssessmentWorkflowDto?: OnlandVisualTrashAssessmentWorkflowDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public onlandVisualTrashAssessmentsPut(onlandVisualTrashAssessmentWorkflowDto?: OnlandVisualTrashAssessmentWorkflowDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/_*+json',
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.put<any>(`${this.basePath}/onland-visual-trash-assessments`,
-            onlandVisualTrashAssessmentWorkflowDto,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param onlandVisualTrashAssessmentReviewAndFinalizeDto 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public onlandVisualTrashAssessmentsReviewAndFinalizePut(onlandVisualTrashAssessmentReviewAndFinalizeDto?: OnlandVisualTrashAssessmentReviewAndFinalizeDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public onlandVisualTrashAssessmentsReviewAndFinalizePut(onlandVisualTrashAssessmentReviewAndFinalizeDto?: OnlandVisualTrashAssessmentReviewAndFinalizeDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public onlandVisualTrashAssessmentsReviewAndFinalizePut(onlandVisualTrashAssessmentReviewAndFinalizeDto?: OnlandVisualTrashAssessmentReviewAndFinalizeDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public onlandVisualTrashAssessmentsReviewAndFinalizePut(onlandVisualTrashAssessmentReviewAndFinalizeDto?: OnlandVisualTrashAssessmentReviewAndFinalizeDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/_*+json',
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.put<any>(`${this.basePath}/onland-visual-trash-assessments/review-and-finalize`,
-            onlandVisualTrashAssessmentReviewAndFinalizeDto,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

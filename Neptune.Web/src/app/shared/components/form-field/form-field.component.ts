@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { FormControl, NG_VALUE_ACCESSOR, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormControl, NG_VALUE_ACCESSOR, FormsModule, ReactiveFormsModule, FormArray } from "@angular/forms";
 import { TinyMceConfigPipe } from "src/app/shared/pipes/tiny-mce-config.pipe";
 import { RequiredPipe } from "src/app/shared/pipes/required.pipe";
 import { InputErrorsComponent } from "src/app/shared/components/inputs/input-errors/input-errors.component";
@@ -61,6 +61,8 @@ export class FormFieldComponent {
     // for select dropdown
     @Input() formInputOptions: FormInputOption[];
     @Input() multiple: boolean = false;
+
+    @Input() readOnly: boolean = false;
 
     /**
      * comma separated list of file types: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#accept

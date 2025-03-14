@@ -98,4 +98,20 @@ public static class OnlandVisualTrashAssessmentAreas
             onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry = newGeometry4326.Geometry.ProjectTo2771();
         }
     }
+
+    public static OnlandVisualTrashAssessmentScore? CalculateScoreFromBackingData(
+        List<Entities.OnlandVisualTrashAssessment> onlandVisualTrashAssessments, bool calculateProgressScore)
+    {
+        var completedAndIsProgressAssessment = onlandVisualTrashAssessments.Where(x => x.OnlandVisualTrashAssessmentStatusID == (int)
+            OnlandVisualTrashAssessmentStatusEnum.Complete && x.IsProgressAssessment == calculateProgressScore).ToList();
+
+        if (!completedAndIsProgressAssessment.Any())
+        {
+            return null;
+        }
+
+        var average = completedAndIsProgressAssessment.Average(x => x.OnlandVisualTrashAssessmentScore.NumericValue);
+        var round = (int)Math.Round(average);
+        return OnlandVisualTrashAssessmentScore.All.SingleOrDefault(x => x.NumericValue == round);
+    }
 }

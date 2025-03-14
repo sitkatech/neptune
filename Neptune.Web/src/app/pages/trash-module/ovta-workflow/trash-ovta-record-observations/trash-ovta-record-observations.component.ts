@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component } from "@angular/core";
 import * as L from "leaflet";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 import { AsyncPipe, NgIf } from "@angular/common";
-import { Observable, delay, switchMap } from "rxjs";
+import { Observable, switchMap } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { routeParams } from "src/app/app.routes";
 import { OnlandVisualTrashAssessmentDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-detail-dto";
@@ -25,7 +25,6 @@ import {
 } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-upsert-dto";
 import { environment } from "src/environments/environment";
 import { OnlandVisualTrashAssessmentObservationPhotoStagingDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-photo-staging-dto";
-import { OnlandVisualTrashAssessmentWorkflowDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-workflow-dto";
 
 @Component({
     selector: "trash-ovta-record-observations",
@@ -67,7 +66,7 @@ export class TrashOvtaRecordObservationsComponent {
 
     public onlandVisualTrashAssessmentObservations$: Observable<OnlandVisualTrashAssessmentObservationUpsertDto[]>;
 
-    public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentWorkflowDto>;
+    public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentDetailDto>;
 
     constructor(
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
@@ -89,9 +88,7 @@ export class TrashOvtaRecordObservationsComponent {
         );
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
             switchMap((params) => {
-                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDWorkflowGet(
-                    params[routeParams.onlandVisualTrashAssessmentID]
-                );
+                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(params[routeParams.onlandVisualTrashAssessmentID]);
             })
         );
     }
@@ -277,7 +274,7 @@ export class TrashOvtaRecordObservationsComponent {
             this.selectedOVTAObservation.controls.OnlandVisualTrashAssessmentObservationID.getRawValue();
         onlandVisualTrashAssessmentObservationPhotoStagingDto.FileResourceGUID = this.selectedOVTAObservation.controls.FileResourceGUID.getRawValue();
         this.onlandVisualTrashAssessmentService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoDeletePost(this.ovtaID, onlandVisualTrashAssessmentObservationPhotoStagingDto)
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationPhotoDelete(this.ovtaID, onlandVisualTrashAssessmentObservationPhotoStagingDto)
             .subscribe((x) => {
                 this.selectedOVTAObservation.controls.FileResourceID.setValue(null);
                 this.selectedOVTAObservation.controls.FileResourceGUID.setValue(null);

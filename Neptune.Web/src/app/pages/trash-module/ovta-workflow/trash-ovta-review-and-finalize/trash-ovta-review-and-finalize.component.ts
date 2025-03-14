@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
-import { FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormArray, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
-import { FormFieldComponent, FormFieldType, FormInputOption } from "../../../../shared/components/form-field/form-field.component";
+import { FormFieldComponent, FormFieldType, FormInputOption, SelectDropdownOption } from "../../../../shared/components/form-field/form-field.component";
 import { OnlandVisualTrashAssessmentScoresAsSelectDropdownOptions } from "src/app/shared/generated/enum/onland-visual-trash-assessment-score-enum";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable, switchMap, tap } from "rxjs";
+import { Observable, map, switchMap, tap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { AsyncPipe, NgClass, NgFor, NgIf } from "@angular/common";
 import * as L from "leaflet";
@@ -25,6 +25,7 @@ import {
     OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls,
 } from "src/app/shared/generated/model/onland-visual-trash-assessment-review-and-finalize-dto";
 import { OnlandVisualTrashAssessmentStatusEnum } from "src/app/shared/generated/enum/onland-visual-trash-assessment-status-enum";
+import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 
@@ -42,6 +43,7 @@ import { LoadingDirective } from "src/app/shared/directives/loading.directive";
         NgClass,
         NeptuneMapComponent,
         NgFor,
+        WorkflowBodyComponent,
         AlertDisplayComponent,
         LoadingDirective,
     ],
@@ -93,10 +95,9 @@ export class TrashOvtaReviewAndFinalizeComponent {
         StormwaterJurisdictionID: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.StormwaterJurisdictionID(),
         AssessmentAreaDescription: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.AssessmentAreaDescription(),
         AssessmentDate: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.AssessmentDate(),
-        OnlandVisualTrashAssessmentBaselineScoreID: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.OnlandVisualTrashAssessmentBaselineScoreID(),
+        OnlandVisualTrashAssessmentScoreID: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.OnlandVisualTrashAssessmentScoreID(),
         IsProgressAssessment: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.IsProgressAssessment(),
         Notes: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.Notes(),
-        BoundingBox: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.BoundingBox(),
         PreliminarySourceIdentificationTypeIDs: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.PreliminarySourceIdentificationTypeIDs(),
         OnlandVisualTrashAssessmentStatusID: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.OnlandVisualTrashAssessmentStatusID(),
     });
@@ -124,7 +125,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
                 this.formGroup.controls.OnlandVisualTrashAssessmentAreaName.setValue(ovta.OnlandVisualTrashAssessmentAreaName);
                 this.formGroup.controls.AssessmentAreaDescription.setValue(ovta.AssessmentAreaDescription);
                 this.formGroup.controls.AssessmentDate.setValue(new Date(ovta.AssessmentDate).toISOString().split("T")[0]);
-                this.formGroup.controls.OnlandVisualTrashAssessmentBaselineScoreID.setValue(ovta.OnlandVisualTrashAssessmentBaselineScoreID);
+                this.formGroup.controls.OnlandVisualTrashAssessmentScoreID.setValue(ovta.OnlandVisualTrashAssessmentScoreID);
                 this.formGroup.controls.IsProgressAssessment.setValue(ovta.IsProgressAssessment);
                 this.formGroup.controls.Notes.setValue(ovta.Notes);
                 this.formGroup.controls.PreliminarySourceIdentificationTypeIDs.setValue(ovta.PreliminarySourceIdentificationTypeIDs);
@@ -132,6 +133,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
         );
         this.preliminarySourceIdentificationTypeSimpleDto$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPreliminarySourceIdentificationTypesGet();
     }
+
     public handleMapReady(event: NeptuneMapInitEvent, observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[], geometry, transectLine): void {
         this.map = event.map;
         this.layerControl = event.layerControl;
@@ -147,6 +149,19 @@ export class TrashOvtaReviewAndFinalizeComponent {
         return preliminarySourceIdentificationTypeSimpleDto.filter((x) => x.PreliminarySourceIdentificationCategoryID == categoryID);
     }
 
+    onPreliminarySourceIdentificationCategoryChange(event: any) {
+        const formArray = this.formGroup.controls.PreliminarySourceIdentificationTypeIDs.getRawValue();
+
+        /* Selected */
+        if (event.target.checked) {
+            // Add a new control in the arrayForm
+            formArray.push(event.target.value);
+        } else {
+            /* unselected */
+            // find the unselected element
+            formArray.splice(formArray.indexOf(event.target.value));
+        }
+    }
     getUrl(fileResourceGUID) {
         if (fileResourceGUID) {
             return environment.ocStormwaterToolsBaseUrl + "/FileResource/DisplayResource/" + fileResourceGUID;
@@ -159,14 +174,16 @@ export class TrashOvtaReviewAndFinalizeComponent {
         this.formGroup.controls.OnlandVisualTrashAssessmentStatusID.setValue(
             andContinue ? OnlandVisualTrashAssessmentStatusEnum.Complete : OnlandVisualTrashAssessmentStatusEnum.InProgress
         );
-        this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsReviewAndFinalizePut(this.formGroup.getRawValue()).subscribe(() => {
-            this.alertService.clearAlerts();
-            this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
-            this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
-            if (andContinue) {
-                this.router.navigate([`../../../${this.ovtaID}`], { relativeTo: this.route });
-            }
-        });
+        this.onlandVisualTrashAssessmentService
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizePost(this.ovtaID, this.formGroup.getRawValue())
+            .subscribe(() => {
+                this.alertService.clearAlerts();
+                this.alertService.pushAlert(new Alert("Assessment successfully updated.", AlertContext.Success));
+                this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
+                if (andContinue) {
+                    this.router.navigate([`../../../${this.ovtaID}`], { relativeTo: this.route });
+                }
+            });
     }
 
     public addFeatureCollectionToFeatureGroup(featureJsons: any, featureGroup: L.FeatureGroup, style) {
@@ -229,13 +246,6 @@ export class TrashOvtaReviewAndFinalizeComponent {
                 layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-violet.png"));
             }
         });
-    }
-
-    public onCheckBoxChanged(event) {
-        console.log(event.target.id);
-        console.log(event.target.checked);
-        // this.formGroup.controls.PreliminarySourceIdentificationTypeWorkflowDtos.getRawValue()[event.target.id].IsInOnlandAssessmentArea =
-        //     !this.formGroup.controls.PreliminarySourceIdentificationTypeWorkflowDtos.getRawValue()[event.target.id].IsInOnlandAssessmentArea;
     }
 
     private mapObservationsToGeoJson(observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[]) {

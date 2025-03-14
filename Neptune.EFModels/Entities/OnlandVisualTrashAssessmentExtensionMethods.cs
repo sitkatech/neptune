@@ -1,5 +1,4 @@
 ﻿using Neptune.Models.DataTransferObjects;
-using Neptune.WebMvc.Common;
 
 namespace Neptune.EFModels.Entities;
 
@@ -48,44 +47,6 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
         return dto;
     }
 
-    public static OnlandVisualTrashAssessmentWorkflowDto AsWorkflowDto(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
-    {
-        var dto = new OnlandVisualTrashAssessmentWorkflowDto()
-        {
-            OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
-            OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID,
-            OnlandVisualTrashAssessmentAreaName = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName,
-            Notes = onlandVisualTrashAssessment.Notes,
-            StormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID,
-            StormwaterJurisdictionName = onlandVisualTrashAssessment.StormwaterJurisdiction.GetOrganizationDisplayName(), 
-            OnlandVisualTrashAssessmentBaselineScoreID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID, 
-            AssessmentAreaDescription = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.AssessmentAreaDescription, 
-            IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment, 
-            LastAssessmentDate = onlandVisualTrashAssessment.CompletedDate,
-            PreliminarySourceIdentificationTypeIDs = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(x => x.PreliminarySourceIdentificationTypeID).ToList(),
-            Observations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.AsPhotoDto()).ToList(),
-        };
-        if (onlandVisualTrashAssessment.DraftGeometry != null ||
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID != null)
-        {
-            dto.BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry());
-        }
-        else if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Count > 0) 
-        {
-            dto.BoundingBox =
-                new BoundingBoxDto(
-                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations
-                        .Select(x => x.LocationPoint4326));
-        }
-        else
-        {
-            dto.BoundingBox =
-                new BoundingBoxDto(
-                    onlandVisualTrashAssessment.StormwaterJurisdiction.StormwaterJurisdictionGeometry.Geometry4326);
-        }
-        return dto;
-    }
-
     public static OnlandVisualTrashAssessmentAddRemoveParcelsDto AsAddRemoveParcelDto(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
     {
         var dto = new OnlandVisualTrashAssessmentAddRemoveParcelsDto()
@@ -122,16 +83,17 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
             OnlandVisualTrashAssessmentAreaName = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null ? onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName : onlandVisualTrashAssessment.DraftAreaName,
             Notes = onlandVisualTrashAssessment.Notes,
             StormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID,
-            OnlandVisualTrashAssessmentBaselineScoreID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID,
+            OnlandVisualTrashAssessmentScoreID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID,
             AssessmentAreaDescription = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null ? onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription : onlandVisualTrashAssessment.DraftAreaDescription,
+            AssessingNewArea = onlandVisualTrashAssessment.AssessingNewArea ?? false,
             IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment,
             AssessmentDate = DateTime.UtcNow,
             OnlandVisualTrashAssessmentStatusID = (int)OnlandVisualTrashAssessmentStatusEnum.InProgress,
             PreliminarySourceIdentificationTypeIDs = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(x => x.PreliminarySourceIdentificationTypeID).ToList(),
-            Observations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.AsPhotoDto()).ToList(),
-            BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry()),
-            TransectLineAsGeoJson = OnlandVisualTrashAssessments.GetTransectLine4326GeoJson(onlandVisualTrashAssessment),
-            GeometryAsGeoJson = onlandVisualTrashAssessment.GetGeometry4326GeoJson()
+            //Observations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.AsPhotoDto()).ToList(),
+            //BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry()),
+            //TransectLineAsGeoJson = OnlandVisualTrashAssessments.GetTransectLine4326GeoJson(onlandVisualTrashAssessment),
+            //GeometryAsGeoJson = onlandVisualTrashAssessment.GetGeometry4326GeoJson()
         };
         return dto;
     }

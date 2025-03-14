@@ -34,6 +34,14 @@ public class OnlandVisualTrashAssessmentController(
         return Ok(onlandVisualTrashAssessmentGridDtos);
     }
 
+    [HttpPost]
+    [JurisdictionEditFeature]
+    public async Task<ActionResult<OnlandVisualTrashAssessmentSimpleDto>> CreateNew([FromBody] OnlandVisualTrashAssessmentSimpleDto dto)
+    {
+        var onlandVisualTrashAssessment = await OnlandVisualTrashAssessments.CreateNew(DbContext, dto, CallingUser);
+        return Ok(onlandVisualTrashAssessment);
+    }
+
     [HttpGet("{onlandVisualTrashAssessmentID}")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
@@ -41,15 +49,6 @@ public class OnlandVisualTrashAssessmentController(
     {
         var onlandVisualTrashAssessmentDetailDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsDetailDto();
         return Ok(onlandVisualTrashAssessmentDetailDto);
-    }
-
-    [HttpGet("{onlandVisualTrashAssessmentID}/workflow")]
-    [JurisdictionEditFeature]
-    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
-    public ActionResult<OnlandVisualTrashAssessmentWorkflowDto> GetByIDForWorkflow([FromRoute] int onlandVisualTrashAssessmentID)
-    {
-        var onlandVisualTrashAssessmentWorkflowDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsWorkflowDto();
-        return Ok(onlandVisualTrashAssessmentWorkflowDto);
     }
 
     [HttpGet("{onlandVisualTrashAssessmentID}/add-or-remove-parcel")]
@@ -68,6 +67,15 @@ public class OnlandVisualTrashAssessmentController(
     {
         var onlandVisualTrashAssessmentReviewAndFinalizeDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsReviewAndFinalizeDto();
         return Ok(onlandVisualTrashAssessmentReviewAndFinalizeDto);
+    }
+
+    [HttpPost("{onlandVisualTrashAssessmentID}/review-and-finalize")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public async Task<ActionResult> UpdateReviewAndFinalize([FromRoute] int onlandVisualTrashAssessmentID, [FromBody] OnlandVisualTrashAssessmentReviewAndFinalizeDto dto)
+    {
+        await OnlandVisualTrashAssessments.Update(dbContext, onlandVisualTrashAssessmentID, dto);
+        return Ok();
     }
 
     [HttpGet("preliminary-source-identification-types")]
@@ -95,37 +103,6 @@ public class OnlandVisualTrashAssessmentController(
     {
         var onlandVisualTrashAssessmentRefineAreaDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsRefineAreaDto();
         return Ok(onlandVisualTrashAssessmentRefineAreaDto);
-    }
-
-    [HttpPost]
-    [JurisdictionEditFeature]
-    public async Task<ActionResult<OnlandVisualTrashAssessmentSimpleDto>> CreateNew([FromBody] OnlandVisualTrashAssessmentSimpleDto dto)
-    {
-        var onlandVisualTrashAssessment = await OnlandVisualTrashAssessments.CreateNew(DbContext, dto, CallingUser);
-        return Ok(onlandVisualTrashAssessment);
-    }
-
-    [HttpPut]
-    [JurisdictionEditFeature]
-    public async Task<ActionResult> Update([FromBody] OnlandVisualTrashAssessmentWorkflowDto dto)
-    {
-        await OnlandVisualTrashAssessments.Update(DbContext, dto);
-        return Ok();
-    }
-
-    [HttpPut("review-and-finalize")]
-    [JurisdictionEditFeature]
-    public async Task<ActionResult> UpdateReviewAndFinalize([FromBody] OnlandVisualTrashAssessmentReviewAndFinalizeDto dto)
-    {
-        if (dto.OnlandVisualTrashAssessmentStatusID == (int)OnlandVisualTrashAssessmentStatusEnum.InProgress)
-        {
-            await OnlandVisualTrashAssessments.SaveDraftOnlandVisualTrashAssessment(dbContext, dto);
-        }
-        else
-        {
-            await OnlandVisualTrashAssessments.CompleteOnlandVisualTrashAssessment(dbContext, dto);
-        }
-        return Ok();
     }
 
     [HttpGet("{onlandVisualTrashAssessmentID}/observations")]
@@ -208,7 +185,7 @@ public class OnlandVisualTrashAssessmentController(
         return Ok(onlandVisualTrashAssessmentObservationPhotoStagingDto);
     }
 
-    [HttpPost("{onlandVisualTrashAssessmentID}/observation-photo/delete")]
+    [HttpDelete("{onlandVisualTrashAssessmentID}/observation-photo")]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
     public async Task<ActionResult> DeleteObservationPhoto([FromRoute] int onlandVisualTrashAssessmentID,
         [FromBody] OnlandVisualTrashAssessmentObservationPhotoStagingDto onlandVisualTrashAssessmentObservationPhotoStaging)

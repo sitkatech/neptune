@@ -1,6 +1,6 @@
 <page-header pageTitle="Review and Finalize"></page-header>
-<app-alert-display></app-alert-display>
-<div class="page-body" *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
+<workflow-body [showLoadingSpinner]="isLoadingSubmit" *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
+    <app-alert-display></app-alert-display>
     <form class="form" [formGroup]="formGroup">
         <div class="grid-12">
             <form-field
@@ -8,12 +8,14 @@
                 [formControl]="formGroup.controls.OnlandVisualTrashAssessmentAreaName"
                 fieldLabel="Assessment Area Name"
                 [required]="true"
+                [readOnly]="!onlandVisualTrashAssessment.AssessingNewArea"
                 [type]="FormFieldType.Text"></form-field>
             <form-field
                 class="g-col-12"
                 [formControl]="formGroup.controls.AssessmentAreaDescription"
                 fieldLabel="Assessment Area Description"
                 [required]="false"
+                [readOnly]="!onlandVisualTrashAssessment.AssessingNewArea"
                 [type]="FormFieldType.Textarea"></form-field>
             <form-field
                 class="g-col-12"
@@ -25,7 +27,7 @@
             <form-field class="g-col-6" [formControl]="formGroup.controls.AssessmentDate" fieldLabel="Assessment Date" [required]="false" [type]="FormFieldType.Date"></form-field>
             <form-field
                 class="g-col-6"
-                [formControl]="formGroup.controls.OnlandVisualTrashAssessmentBaselineScoreID"
+                [formControl]="formGroup.controls.OnlandVisualTrashAssessmentScoreID"
                 fieldLabel="Assessment Score"
                 [required]="true"
                 [formInputOptions]="onlandVisualTrashAssessmentScoreDropdown"
@@ -45,25 +47,17 @@
     <div *ngIf="preliminarySourceIdentificationTypeSimpleDto$ | async as preliminarySourceIdentificationTypeSimpleDto" class="grid-12 mb-4">
         <div *ngFor="let item of PreliminarySourceIdentificationCategories" class="g-col-6">
             <h3 class="mb-2">{{ item.DisplayName }}</h3>
-            <div *ngFor="let type of filterByCategory(preliminarySourceIdentificationTypeSimpleDto, item.Value)" class="flex-start ml-2 mb-2">
-                <form-field
-                    class="g-col-12"
-                    [id]="type.PreliminarySourceIdentificationTypeID"
-                    [formControl]="formGroup.controls.PreliminarySourceIdentificationTypeIDs"
-                    [required]="false"
-                    [checkLabel]="type.PreliminarySourceIdentificationTypeDisplayName"
-                    [type]="FormFieldType.Check"
-                    (change)="onCheckBoxChanged($event)"></form-field>
-                <!-- <input
+            <label *ngFor="let formInputOption of filterByCategory(preliminarySourceIdentificationTypeSimpleDto, item.Value); let i = index">
+                <input
                     type="checkbox"
-                    [id]="type.PreliminarySourceIdentificationTypeID"
-                    [(ngModel)]="formGroup.controls.PreliminarySourceIdentificationTypeWorkflowDtos[type.PreliminarySourceIdentificationTypeID]"
-                    [checked]="true"
-                    (change)="onCheckBoxChanged($event)" />{{ type.PreliminarySourceIdentificationTypeDisplayName }} -->
-            </div>
+                    [value]="formInputOption.PreliminarySourceIdentificationTypeID"
+                    [checked]="formGroup.controls.PreliminarySourceIdentificationTypeIDs.getRawValue().includes(formInputOption.PreliminarySourceIdentificationTypeID)"
+                    (change)="onPreliminarySourceIdentificationCategoryChange($event)" />
+                {{ formInputOption.PreliminarySourceIdentificationTypeDisplayName }}
+            </label>
         </div>
     </div>
-    <div class="grid-12">
+    <!-- <div class="grid-12">
         <div class="card g-col-6">
             <div class="card-header">Observations</div>
             <div class="card-body observations">
@@ -103,8 +97,8 @@
                 </neptune-map>
             </div>
         </div>
-    </div>
-</div>
+    </div> -->
+</workflow-body>
 <div class="page-footer">
     <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
     <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Finalize</button>

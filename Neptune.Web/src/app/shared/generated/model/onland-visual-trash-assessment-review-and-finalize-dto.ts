@@ -9,50 +9,54 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from '././onland-visual-trash-assessment-observation-with-photo-dto';
-import { BoundingBoxDto } from '././bounding-box-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class OnlandVisualTrashAssessmentReviewAndFinalizeDto { 
+    Finalize?: boolean;
     OnlandVisualTrashAssessmentID?: number;
     OnlandVisualTrashAssessmentAreaID?: number;
     OnlandVisualTrashAssessmentAreaName?: string;
     StormwaterJurisdictionID?: number;
-    OnlandVisualTrashAssessmentBaselineScoreID?: number;
+    OnlandVisualTrashAssessmentScoreID?: number;
     OnlandVisualTrashAssessmentStatusID?: number;
     AssessmentAreaDescription?: string;
+    AssessingNewArea?: boolean;
     IsProgressAssessment?: boolean;
     Notes?: string;
     AssessmentDate?: string;
-    Observations?: Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>;
     PreliminarySourceIdentificationTypeIDs?: Array<number>;
-    BoundingBox?: BoundingBoxDto;
-    TransectLineAsGeoJson?: string;
-    GeometryAsGeoJson?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
 }
 
 export interface OnlandVisualTrashAssessmentReviewAndFinalizeDtoForm { 
+    Finalize?: FormControl<boolean>;
     OnlandVisualTrashAssessmentID?: FormControl<number>;
     OnlandVisualTrashAssessmentAreaID?: FormControl<number>;
     OnlandVisualTrashAssessmentAreaName?: FormControl<string>;
     StormwaterJurisdictionID?: FormControl<number>;
-    OnlandVisualTrashAssessmentBaselineScoreID?: FormControl<number>;
+    OnlandVisualTrashAssessmentScoreID?: FormControl<number>;
     OnlandVisualTrashAssessmentStatusID?: FormControl<number>;
     AssessmentAreaDescription?: FormControl<string>;
+    AssessingNewArea?: FormControl<boolean>;
     IsProgressAssessment?: FormControl<boolean>;
     Notes?: FormControl<string>;
     AssessmentDate?: FormControl<string>;
-    Observations?: FormControl<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>>;
     PreliminarySourceIdentificationTypeIDs?: FormControl<Array<number>>;
-    BoundingBox?: FormControl<BoundingBoxDto>;
-    TransectLineAsGeoJson?: FormControl<string>;
-    GeometryAsGeoJson?: FormControl<string>;
 }
 
 export class OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls { 
+    public static Finalize = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static OnlandVisualTrashAssessmentID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
@@ -93,7 +97,7 @@ export class OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls {
             ],
         }
     );
-    public static OnlandVisualTrashAssessmentBaselineScoreID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static OnlandVisualTrashAssessmentScoreID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
@@ -114,6 +118,16 @@ export class OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls {
         }
     );
     public static AssessmentAreaDescription = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static AssessingNewArea = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
         value,
         formControlOptions ?? 
         {
@@ -153,47 +167,7 @@ export class OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls {
             ],
         }
     );
-    public static Observations = (value: FormControlState<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>> | Array<OnlandVisualTrashAssessmentObservationWithPhotoDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
     public static PreliminarySourceIdentificationTypeIDs = (value: FormControlState<Array<number>> | Array<number> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<number>>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static BoundingBox = (value: FormControlState<BoundingBoxDto> | BoundingBoxDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<BoundingBoxDto>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static TransectLineAsGeoJson = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static GeometryAsGeoJson = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

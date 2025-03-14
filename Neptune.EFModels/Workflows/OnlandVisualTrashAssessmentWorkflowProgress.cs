@@ -15,18 +15,18 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
         ReviewAndFinalize
     }
 
-    public static OnlandVisualTrashAssessmentWorkflowProgressDto GetProgress(OnlandVisualTrashAssessment OnlandVisualTrashAssessment)
+    public static OnlandVisualTrashAssessmentWorkflowProgressDto GetProgress(OnlandVisualTrashAssessment onlandVisualTrashAssessment)
     {
         return new OnlandVisualTrashAssessmentWorkflowProgressDto
         {
-            OnlandVisualTrashAssessmentID = OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
-            OnlandVisualTrashAssessmentName = OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName,
-            OnlandVisualTrashAssessmentStatus = OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus.AsSimpleDto(),
+            OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
+            OnlandVisualTrashAssessmentName = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName,
+            OnlandVisualTrashAssessmentStatus = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus.AsSimpleDto(),
             Steps = Enum.GetValuesAsUnderlyingType<OnlandVisualTrashAssessmentWorkflowStep>().Cast<OnlandVisualTrashAssessmentWorkflowStep>()
                 .ToDictionary(x => x, y => new ProjectWorkflowProgress.WorkflowStepStatus()
                 {
-                    Completed = WorkflowStepComplete(OnlandVisualTrashAssessment, y),
-                    Disabled = !WorkflowStepActive(OnlandVisualTrashAssessment, y),
+                    Completed = WorkflowStepComplete(onlandVisualTrashAssessment, y),
+                    Disabled = !WorkflowStepActive(onlandVisualTrashAssessment, y),
                 })
         };
     }
