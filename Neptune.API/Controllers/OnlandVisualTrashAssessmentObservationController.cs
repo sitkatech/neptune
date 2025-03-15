@@ -53,9 +53,9 @@ public class OnlandVisualTrashAssessmentObservationController(
     [HttpPost]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
-    public async Task<ActionResult> UpdateObservations([FromRoute] int onlandVisualTrashAssessmentID, [FromBody] List<OnlandVisualTrashAssessmentObservationWithPhotoDto> onlandVisualTrashAssessmentObservationUpsertDtos)
+    public async Task<ActionResult> UpdateObservations([FromRoute] int onlandVisualTrashAssessmentID, [FromBody] OnlandVisualTrashAssessmentObservationsUpsertDto onlandVisualTrashAssessmentObservationsUpsertDto)
     {
-        await OnlandVisualTrashAssessmentObservations.Update(DbContext, onlandVisualTrashAssessmentID, onlandVisualTrashAssessmentObservationUpsertDtos);
+        await OnlandVisualTrashAssessmentObservations.Update(DbContext, onlandVisualTrashAssessmentID, onlandVisualTrashAssessmentObservationsUpsertDto.Observations);
         return Ok();
     }
 
@@ -81,39 +81,27 @@ public class OnlandVisualTrashAssessmentObservationController(
         await DbContext.OnlandVisualTrashAssessmentObservationPhotoStagings
             .Entry(onlandVisualTrashAssessmentObservationPhotoStaging).ReloadAsync();
 
-        var onlandVisualTrashAssessmentObservationPhotoStagingDto = new OnlandVisualTrashAssessmentObservationPhotoStagingDto()
+        var onlandVisualTrashAssessmentObservationPhotoStagingDto = new OnlandVisualTrashAssessmentObservationPhotoStagingDto
         {
             OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID,
             OnlandVisualTrashAssessmentObservationPhotoStagingID = onlandVisualTrashAssessmentObservationPhotoStaging.OnlandVisualTrashAssessmentObservationPhotoStagingID,
             FileResourceID = onlandVisualTrashAssessmentObservationPhotoStaging.FileResourceID,
             FileResourceGUID = onlandVisualTrashAssessmentObservationPhotoStaging.FileResource.GetFileResourceGUIDAsString(),
-            PhotoStagingID = onlandVisualTrashAssessmentObservationPhotoStaging.OnlandVisualTrashAssessmentObservationPhotoStagingID
         };
         return Ok(onlandVisualTrashAssessmentObservationPhotoStagingDto);
     }
 
-    [HttpDelete("observation-photo")]
-    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
-    public async Task<ActionResult> DeleteObservationPhoto([FromRoute] int onlandVisualTrashAssessmentID,
-        [FromBody] OnlandVisualTrashAssessmentObservationPhotoStagingDto onlandVisualTrashAssessmentObservationPhotoStaging)
+    [HttpDelete("observation-photos/{fileResourceID}")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(FileResource), "fileResourceID")]
+    public async Task<ActionResult> DeleteObservationPhoto([FromRoute]
+        int onlandVisualTrashAssessmentID, [FromRoute] int fileResourceID)
     {
-        //await dbContext.FileResources
-        //    .Where(x => x.FileResourceID == onlandVisualTrashAssessmentObservationPhotoStaging.FileResourceID)
-        //    .ExecuteDeleteAsync();
-        if (onlandVisualTrashAssessmentObservationPhotoStaging.PhotoStagingID != null)
-        {
-            await DbContext.OnlandVisualTrashAssessmentObservationPhotoStagings.Where(x =>
-                    x.OnlandVisualTrashAssessmentObservationPhotoStagingID ==
-                    onlandVisualTrashAssessmentObservationPhotoStaging
-                        .OnlandVisualTrashAssessmentObservationPhotoStagingID)
-                .ExecuteDeleteAsync();
-        }
-        else
-        {
-            await DbContext.OnlandVisualTrashAssessmentObservationPhotos.Where(x =>
-                x.OnlandVisualTrashAssessmentObservationID == onlandVisualTrashAssessmentObservationPhotoStaging
-                    .OnlandVisualTrashAssessmentObservationID).ExecuteDeleteAsync();
-        }
+        await DbContext.OnlandVisualTrashAssessmentObservationPhotoStagings.Where(x =>
+                x.FileResourceID == fileResourceID && x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID)
+            .ExecuteDeleteAsync();
+        await DbContext.OnlandVisualTrashAssessmentObservationPhotos.Include(x => x.OnlandVisualTrashAssessmentObservation).Where(x =>
+            x.FileResourceID == fileResourceID && x.OnlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID).ExecuteDeleteAsync();
 
         return Ok();
     }

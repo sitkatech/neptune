@@ -1,17 +1,17 @@
-import { ChangeDetectorRef, Component } from "@angular/core";
+import { Component } from "@angular/core";
 import * as L from "leaflet";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
-import { AsyncPipe, NgIf } from "@angular/common";
-import { Observable, switchMap } from "rxjs";
+import { AsyncPipe, NgFor, NgIf } from "@angular/common";
+import { Observable, switchMap, tap } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { routeParams } from "src/app/app.routes";
 import { OnlandVisualTrashAssessmentDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-detail-dto";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FormFieldComponent, FormFieldType } from "../../../../shared/components/form-field/form-field.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 import { AlertService } from "src/app/shared/services/alert.service";
@@ -21,11 +21,10 @@ import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workfl
 import {
     OnlandVisualTrashAssessmentObservationWithPhotoDto,
     OnlandVisualTrashAssessmentObservationWithPhotoDtoForm,
-    OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls,
 } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
 import { environment } from "src/environments/environment";
-import { OnlandVisualTrashAssessmentObservationPhotoStagingDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-photo-staging-dto";
 import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/generated/api/onland-visual-trash-assessment-observation.service";
+import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
 
 @Component({
     selector: "trash-ovta-record-observations",
@@ -36,11 +35,13 @@ import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/ge
         DropdownToggleDirective,
         OvtaAreaLayerComponent,
         NgIf,
+        NgFor,
         AsyncPipe,
         FormFieldComponent,
         ReactiveFormsModule,
         FormsModule,
         AlertDisplayComponent,
+        WorkflowBodyComponent,
     ],
     templateUrl: "./trash-ovta-record-observations.component.html",
     styleUrl: "./trash-ovta-record-observations.component.scss",
@@ -53,17 +54,13 @@ export class TrashOvtaRecordObservationsComponent {
     public isLoadingSubmit = false;
     public ovtaID: number;
     public ovtaObservationLayer: L.GeoJSON<any>;
-    public observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[] = [];
     public uploadFormField: FormControl<Blob> = new FormControl<Blob>(null);
-    public selectedOVTAObservation: FormGroup<OnlandVisualTrashAssessmentObservationWithPhotoDtoForm> = new FormGroup<any>({
-        OnlandVisualTrashAssessmentObservationID: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.OnlandVisualTrashAssessmentObservationID(),
-        OnlandVisualTrashAssessmentID: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.OnlandVisualTrashAssessmentID(),
-        Note: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.Note(),
-        FileResourceID: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.FileResourceID(),
-        FileResourceGUID: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.FileResourceGUID(),
-        Longitude: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.Longitude(),
-        Latitude: OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls.Latitude(),
+    public formGroup: FormGroup<OnlandVisualTrashAssessmentObservationsUpsertDtoCustomForm> = new FormGroup<OnlandVisualTrashAssessmentObservationsUpsertDtoCustomForm>({
+        Observations: new FormArray<FormGroup<OnlandVisualTrashAssessmentObservationWithPhotoDtoForm>>([]),
     });
+
+    public selectedOnlandVisualTrashAssessmentObservationID: number;
+    public newObservationIDIndex: number = -1;
 
     public onlandVisualTrashAssessmentObservations$: Observable<OnlandVisualTrashAssessmentObservationWithPhotoDto[]>;
 
@@ -76,52 +73,73 @@ export class TrashOvtaRecordObservationsComponent {
         private alertService: AlertService,
         private ovtaWorkflowProgressService: OvtaWorkflowProgressService,
         private router: Router,
-        private cdr: ChangeDetectorRef
+        private formBuilder: FormBuilder
     ) {}
 
     ngOnInit() {
-        this.onlandVisualTrashAssessmentObservations$ = this.route.params.pipe(
-            switchMap((params) => {
-                this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
-                return this.onlandVisualTrashAssessmentObservationService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsGet(this.ovtaID);
-            })
-        );
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
             switchMap((params) => {
+                this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
                 return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(params[routeParams.onlandVisualTrashAssessmentID]);
             })
         );
+        this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessment$.pipe(
+            switchMap((onlandVisualTrashAssessment) => {
+                return this.onlandVisualTrashAssessmentObservationService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsGet(
+                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID
+                );
+            }),
+            tap((onlandVisualTrashAssessmentObservations) => {
+                const formArray = this.formGroup.controls.Observations as FormArray;
+                onlandVisualTrashAssessmentObservations.forEach((onlandVisualTrashAssessmentObservation) => {
+                    let observation = this.formBuilder.group<OnlandVisualTrashAssessmentObservationWithPhotoDto>({
+                        OnlandVisualTrashAssessmentObservationID: onlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentObservationID,
+                        OnlandVisualTrashAssessmentID: onlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentID,
+                        Note: onlandVisualTrashAssessmentObservation.Note,
+                        Latitude: onlandVisualTrashAssessmentObservation.Latitude,
+                        Longitude: onlandVisualTrashAssessmentObservation.Longitude,
+                        FileResourceID: onlandVisualTrashAssessmentObservation.FileResourceID,
+                        FileResourceGUID: onlandVisualTrashAssessmentObservation.FileResourceGUID,
+                    });
+
+                    formArray.push(observation);
+                });
+            })
+        );
     }
 
-    ngOnDestroy() {
-        this.cdr.detach();
-    }
-
-    public handleMapReady(event: NeptuneMapInitEvent, observations: OnlandVisualTrashAssessmentObservationWithPhotoDto[]): void {
+    public handleMapReady(event: NeptuneMapInitEvent): void {
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
-        this.observations = observations;
-        if (observations.length > 0) {
+        if (this.formGroup.controls.Observations.length > 0) {
             this.addObservationPointsLayersToMap();
+            this.map.fitBounds(this.ovtaObservationLayer.getBounds());
         }
     }
 
     public addObservationMarker() {
         this.map.on("click", (e: L.LeafletMouseEvent) => {
             this.addObservation(e.latlng);
-
             this.map.off("click");
         });
     }
 
-    public addObservation(latlng) {
-        var observation = new OnlandVisualTrashAssessmentObservationWithPhotoDto();
-        observation.OnlandVisualTrashAssessmentID = this.ovtaID;
-        observation.Latitude = latlng.lat;
-        observation.Longitude = latlng.lng;
-        this.observations = this.observations.concat(observation);
+    public addObservation(latlng: L.latlng) {
+        let observation = this.formBuilder.group<OnlandVisualTrashAssessmentObservationWithPhotoDto>({
+            OnlandVisualTrashAssessmentObservationID: this.newObservationIDIndex,
+            OnlandVisualTrashAssessmentID: this.ovtaID,
+            Note: null,
+            Latitude: latlng.lat,
+            Longitude: latlng.lng,
+            FileResourceID: null,
+            FileResourceGUID: null,
+        });
+        const formArray = this.formGroup.controls.Observations as FormArray;
+        formArray.push(observation);
+        this.selectedOnlandVisualTrashAssessmentObservationID = observation.controls.OnlandVisualTrashAssessmentObservationID.value;
         this.addObservationPointsLayersToMap();
+        this.newObservationIDIndex--;
     }
 
     public addObservationPointsLayersToMap(): void {
@@ -132,11 +150,17 @@ export class TrashOvtaRecordObservationsComponent {
         const ovtaObservationGeoJSON = this.mapObservationsToGeoJson();
         this.ovtaObservationLayer = new L.GeoJSON(ovtaObservationGeoJSON, {
             pointToLayer: (feature, latlng) => {
-                return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
+                return L.marker(latlng, {
+                    icon:
+                        feature.properties.OnlandVisualTrashAssessmentObservationID === this.selectedOnlandVisualTrashAssessmentObservationID
+                            ? MarkerHelper.selectedMarker
+                            : MarkerHelper.treatmentBMPMarker,
+                });
             },
             onEachFeature: (feature, layer) => {
                 layer.on("click", (e) => {
-                    this.selectOVTAObservationImpl(feature.geometry.coordinates);
+                    this.selectedOnlandVisualTrashAssessmentObservationID = feature.properties.OnlandVisualTrashAssessmentObservationID;
+                    this.selectOnlandVisualTrashAssessmentObservation();
                 });
             },
         });
@@ -145,14 +169,8 @@ export class TrashOvtaRecordObservationsComponent {
     }
 
     save(andContinue: boolean = false) {
-        if (this.selectedOVTAObservation.controls.Latitude.getRawValue() != null) {
-            let selectedObservationIndex = this.observations.findIndex(
-                (x) => x.Latitude == this.selectedOVTAObservation.controls.Latitude.getRawValue() && x.Longitude == this.selectedOVTAObservation.controls.Longitude.getRawValue()
-            );
-            this.observations[selectedObservationIndex] = this.selectedOVTAObservation.getRawValue();
-        }
         this.onlandVisualTrashAssessmentObservationService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(this.ovtaID, this.observations)
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(this.ovtaID, this.formGroup.value)
             .subscribe(() => {
                 this.isLoadingSubmit = false;
                 this.alertService.clearAlerts();
@@ -174,7 +192,7 @@ export class TrashOvtaRecordObservationsComponent {
     private mapObservationsToGeoJson() {
         return {
             type: "FeatureCollection",
-            features: this.observations.map((x) => {
+            features: this.formGroup.controls.Observations.value.map((x) => {
                 let observationGeoJson = {
                     type: "Feature",
                     geometry: {
@@ -192,73 +210,46 @@ export class TrashOvtaRecordObservationsComponent {
         };
     }
 
-    public selectOVTAObservationImpl(latlng: number[]) {
-        if (!this.map.hasLayer(this.ovtaObservationLayer)) {
-            this.ovtaObservationLayer.addTo(this.map);
-        }
-        if (this.selectedOVTAObservation.controls.Latitude.getRawValue() != null) {
-            let selectedObservationID = this.observations.findIndex(
-                (x) => x.Latitude == this.selectedOVTAObservation.controls.Latitude.getRawValue() && x.Longitude == this.selectedOVTAObservation.controls.Longitude.getRawValue()
-            );
-            this.observations[selectedObservationID] = this.selectedOVTAObservation.getRawValue();
-        }
-        let newObservation = this.observations.find((x) => x.Latitude == latlng[1] && x.Longitude == latlng[0]);
-        //this.uploadFormField.setValue(null);
-        this.selectedOVTAObservation.controls.OnlandVisualTrashAssessmentID.setValue(newObservation.OnlandVisualTrashAssessmentID);
-        this.selectedOVTAObservation.controls.Note.setValue(newObservation.Note);
-        this.selectedOVTAObservation.controls.Latitude.setValue(newObservation.Latitude);
-        this.selectedOVTAObservation.controls.Longitude.setValue(newObservation.Longitude);
-        this.selectedOVTAObservation.controls.FileResourceID.setValue(newObservation.FileResourceID);
-        this.selectedOVTAObservation.controls.FileResourceGUID.setValue(newObservation.FileResourceGUID);
-        this.selectedOVTAObservation.controls.OnlandVisualTrashAssessmentObservationID.setValue(newObservation.OnlandVisualTrashAssessmentObservationID);
+    public selectOnlandVisualTrashAssessmentObservation() {
         this.ovtaObservationLayer.eachLayer((layer) => {
-            if (layer.feature.geometry.coordinates[0] == newObservation.Longitude && layer.feature.geometry.coordinates[1] == newObservation.Latitude) {
-                if (!layer.feature.properties.DefaultZIndexOffset) {
-                    layer.feature.properties.DefaultZIndexOffset = layer._zIndex;
-                }
-                layer.setZIndexOffset(10000);
-                layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-red.png"));
+            if (layer.feature.properties.OnlandVisualTrashAssessmentObservationID === this.selectedOnlandVisualTrashAssessmentObservationID) {
+                layer.setIcon(MarkerHelper.selectedMarker);
             } else {
-                layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-violet.png"));
+                layer.setIcon(MarkerHelper.treatmentBMPMarker);
             }
         });
     }
 
-    public editObservationLocation() {
+    public editObservationLocation(index: number) {
         this.map.on("click", (e: L.LeafletMouseEvent) => {
-            var index = this.observations.findIndex(
-                (x) => x.Latitude == this.selectedOVTAObservation.controls.Latitude.getRawValue() && x.Longitude == this.selectedOVTAObservation.controls.Longitude.getRawValue()
-            );
-            this.observations[index].Latitude = e.latlng.lat;
-            this.observations[index].Longitude = e.latlng.lng;
+            const observation = this.formGroup.controls.Observations.controls[index].value;
+            observation.Latitude = e.latlng.lat;
+            observation.Longitude = e.latlng.lng;
             this.addObservationPointsLayersToMap();
             this.map.off("click");
         });
     }
 
-    public deleteObservation() {
-        const index = this.observations.findIndex(
-            (x) => x.Latitude == this.selectedOVTAObservation.controls.Latitude.getRawValue() && x.Longitude == this.selectedOVTAObservation.controls.Longitude.getRawValue()
-        );
-        this.observations.splice(index, 1);
-        this.selectedOVTAObservation.setValue = null;
+    public deleteObservation(index: number) {
+        this.formGroup.controls.Observations.removeAt(index);
+        this.selectedOnlandVisualTrashAssessmentObservationID = null;
         this.addObservationPointsLayersToMap();
     }
 
     public goToCurrentLocation() {
         this.map.locate({ setView: true }).on("locationerror", function (e) {
-            console.log(e);
             alert("Location access has been denied.");
         });
     }
 
-    public getFile() {
-        if (typeof this.uploadFormField.getRawValue() != typeof "string") {
+    public getFile(index: number) {
+        if (typeof this.uploadFormField.value != typeof "string") {
             this.onlandVisualTrashAssessmentObservationService
-                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotoPost(this.ovtaID, this.uploadFormField.getRawValue())
+                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotoPost(this.ovtaID, this.uploadFormField.value)
                 .subscribe((response) => {
-                    this.selectedOVTAObservation.controls.FileResourceID.setValue(response.FileResourceID);
-                    this.selectedOVTAObservation.controls.FileResourceGUID.setValue(response.FileResourceGUID);
+                    const observation = this.formGroup.controls.Observations.controls[index].value;
+                    observation.FileResourceID = response.FileResourceID;
+                    observation.FileResourceGUID = response.FileResourceGUID;
                 });
         }
     }
@@ -267,18 +258,19 @@ export class TrashOvtaRecordObservationsComponent {
         return environment.ocStormwaterToolsBaseUrl + "/FileResource/DisplayResource/" + fileResourceGUID;
     }
 
-    public deletePhotoFromSelectedObservation() {
-        var onlandVisualTrashAssessmentObservationPhotoStagingDto = new OnlandVisualTrashAssessmentObservationPhotoStagingDto();
-        onlandVisualTrashAssessmentObservationPhotoStagingDto.FileResourceGUID = this.selectedOVTAObservation.controls.FileResourceGUID.getRawValue();
-        onlandVisualTrashAssessmentObservationPhotoStagingDto.FileResourceID = this.selectedOVTAObservation.controls.FileResourceID.getRawValue();
-        onlandVisualTrashAssessmentObservationPhotoStagingDto.OnlandVisualTrashAssessmentObservationID =
-            this.selectedOVTAObservation.controls.OnlandVisualTrashAssessmentObservationID.getRawValue();
-        onlandVisualTrashAssessmentObservationPhotoStagingDto.FileResourceGUID = this.selectedOVTAObservation.controls.FileResourceGUID.getRawValue();
-        this.onlandVisualTrashAssessmentObservationService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotoDelete(this.ovtaID, onlandVisualTrashAssessmentObservationPhotoStagingDto)
-            .subscribe((x) => {
-                this.selectedOVTAObservation.controls.FileResourceID.setValue(null);
-                this.selectedOVTAObservation.controls.FileResourceGUID.setValue(null);
-            });
+    public deletePhotoFromSelectedObservation(index: number) {
+        const observation = this.formGroup.controls.Observations.controls[index].value;
+        if (observation.FileResourceID) {
+            this.onlandVisualTrashAssessmentObservationService
+                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotosFileResourceIDDelete(this.ovtaID, observation.FileResourceID)
+                .subscribe((x) => {
+                    observation.FileResourceID = null;
+                    observation.FileResourceGUID = null;
+                });
+        }
     }
+}
+
+export class OnlandVisualTrashAssessmentObservationsUpsertDtoCustomForm {
+    Observations: FormArray<FormGroup<OnlandVisualTrashAssessmentObservationWithPhotoDtoForm>>;
 }

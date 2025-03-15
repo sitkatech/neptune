@@ -53,8 +53,8 @@ model/onland-visual-trash-assessment-area-grid-dto.ts
 model/onland-visual-trash-assessment-detail-dto.ts
 model/onland-visual-trash-assessment-grid-dto.ts
 model/onland-visual-trash-assessment-observation-location-dto.ts
-model/onland-visual-trash-assessment-observation-photo-staging-dto.ts
 model/onland-visual-trash-assessment-observation-with-photo-dto.ts
+model/onland-visual-trash-assessment-observations-upsert-dto.ts
 model/onland-visual-trash-assessment-preliminary-source-identification-upsert-dto.ts
 model/onland-visual-trash-assessment-refine-area-dto.ts
 model/onland-visual-trash-assessment-review-and-finalize-dto.ts

@@ -1341,26 +1341,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationWithPhotoDto"
-                }
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationsUpsertDto"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationWithPhotoDto"
-                }
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationsUpsertDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationWithPhotoDto"
-                }
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationsUpsertDto"
               }
             }
           }
@@ -1479,7 +1470,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/observations/observation-photos/{fileResourceID}": {
       "delete": {
         "tags": [
           "OnlandVisualTrashAssessmentObservation"
@@ -1493,27 +1486,17 @@
               "type": "integer",
               "format": "int32"
             }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationPhotoStagingDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationPhotoStagingDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationPhotoStagingDto"
-              }
+          },
+          {
+            "name": "fileResourceID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -4650,38 +4633,6 @@
         },
         "additionalProperties": false
       },
-      "OnlandVisualTrashAssessmentObservationPhotoStagingDto": {
-        "type": "object",
-        "properties": {
-          "OnlandVisualTrashAssessmentObservationPhotoStagingID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "FileResourceID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "OnlandVisualTrashAssessmentID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "FileResourceGUID": {
-            "type": "string",
-            "nullable": true
-          },
-          "PhotoStagingID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "OnlandVisualTrashAssessmentObservationID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "OnlandVisualTrashAssessmentObservationWithPhotoDto": {
         "type": "object",
         "properties": {
@@ -4718,6 +4669,19 @@
           "Latitude": {
             "type": "number",
             "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OnlandVisualTrashAssessmentObservationsUpsertDto": {
+        "type": "object",
+        "properties": {
+          "Observations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OnlandVisualTrashAssessmentObservationWithPhotoDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false

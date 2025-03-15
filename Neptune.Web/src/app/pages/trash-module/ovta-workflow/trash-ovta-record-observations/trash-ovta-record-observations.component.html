@@ -1,18 +1,18 @@
 <page-header pageTitle="Record Observations"></page-header>
-<app-alert-display></app-alert-display>
-<div class="page-body" *ngIf="onlandVisualTrashAssessmentObservations$ | async as onlandVisualTrashAssessmentObservations">
+<workflow-body [showLoadingSpinner]="isLoadingSubmit" *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
+    <app-alert-display></app-alert-display>
     <div class="mb-3">
         <button class="btn btn-primary mr-2" [disabled]="isLoadingSubmit" (click)="goToCurrentLocation()">Record Observation at Current Location</button>
         <button class="btn btn-primary mr-2" [disabled]="isLoadingSubmit" (click)="addObservationMarker()">Add an Observation by clicking the map</button>
     </div>
 
     <neptune-map
-        *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment"
-        (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessmentObservations)"
+        *ngIf="onlandVisualTrashAssessmentObservations$ | async"
+        (onMapLoad)="handleMapReady($event)"
         mapHeight="500px"
         [showLegend]="false"
-        [boundingBox]="onlandVisualTrashAssessment.BoundingBox"
-        ><ovta-area-layer
+        [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
+        <ovta-area-layer
             *ngIf="mapIsReady"
             [displayOnLoad]="true"
             [map]="map"
@@ -20,49 +20,53 @@
             [sortOrder]="10"
             [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer
     ></neptune-map>
-    <div class="card" [hidden]="selectedOVTAObservation && selectedOVTAObservation.getRawValue().Longitude == undefined">
-        <div class="card-header">
-            Selected Observation
-            <a
-                href="javascript:void(0);"
-                [dropdownToggle]="grantProgramsToggle"
-                class="nav-link dropdown-toggle"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false">
-                <i class="fas fa-bars"></i>
-            </a>
-            <div #grantProgramsToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <div class="dropdown-divider"></div>
-                <button class="dropdown-item" (click)="editObservationLocation()">Edit Observation Location</button>
-                <button class="dropdown-item" (click)="deleteObservation()">Delete Selected Observation</button>
-            </div>
-        </div>
-        <div class="card-body grid-12">
-            <div class="field g-col-6">
-                <div class="file-upload-wrapper pb-2" *ngIf="selectedOVTAObservation.controls.FileResourceGUID.getRawValue() == null; else hasPhoto">
-                    <form-field
-                        [formControl]="uploadFormField"
-                        [uploadFileAccepts]="'.jpeg, .jpg, .png'"
-                        fieldLabel="Files"
-                        [type]="FormFieldType.File"
-                        (change)="getFile()"></form-field>
+
+    <form [formGroup]="formGroup">
+        <ng-container formArrayName="Observations" *ngFor="let control of formGroup.controls.Observations.controls; let i = index">
+            <div class="card" *ngIf="selectedOnlandVisualTrashAssessmentObservationID === control.controls.OnlandVisualTrashAssessmentObservationID.value">
+                <div class="card-header">
+                    Selected Observation
+                    <a
+                        href="javascript:void(0);"
+                        [dropdownToggle]="observationDropdownMenu"
+                        class="nav-link dropdown-toggle"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                        <i class="fas fa-bars"></i>
+                    </a>
+                    <div #observationDropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" (click)="editObservationLocation(i)">Edit Observation Location</button>
+                        <button class="dropdown-item" (click)="deleteObservation(i)">Delete Selected Observation</button>
+                    </div>
                 </div>
-                <ng-template #hasPhoto>
-                    <img [src]="getUrl(selectedOVTAObservation.controls.FileResourceGUID.getRawValue())" style="width: 200px; height: 300px" />
-                    <div><button class="btn btn-primary mt-2" (click)="deletePhotoFromSelectedObservation()">Delete Photo</button></div>
-                </ng-template>
+                <div class="card-body grid-12">
+                    <div class="field g-col-6">
+                        {{ control.controls.FileResourceGUID.value }}
+                        <div class="file-upload-wrapper pb-2" *ngIf="control.controls.FileResourceGUID.value == null; else hasPhoto">
+                            <form-field
+                                [formControl]="uploadFormField"
+                                [uploadFileAccepts]="'.jpeg, .jpg, .png'"
+                                fieldLabel="Files"
+                                [type]="FormFieldType.File"
+                                (change)="getFile(i)"></form-field>
+                        </div>
+                        <ng-template #hasPhoto>
+                            <img [src]="getUrl(control.controls.FileResourceGUID.value)" style="width: 300px; height: 250px" />
+                            <div><button class="btn btn-primary mt-2" (click)="deletePhotoFromSelectedObservation(i)">Delete Photo</button></div>
+                        </ng-template>
+                    </div>
+                    <div class="g-col-6">
+                        <form-field [formControl]="control.controls.Note" fieldLabel="Notes" [type]="FormFieldType.Textarea"></form-field>
+                    </div>
+                </div>
             </div>
-            <div class="g-col-6">
-                <form class="form" [formGroup]="selectedOVTAObservation">
-                    <form-field [formControl]="selectedOVTAObservation.controls.Note" fieldLabel="Notes" [type]="FormFieldType.Textarea"></form-field>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="page-footer">
-        <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
-        <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Save & Continue</button>
-    </div>
+        </ng-container>
+    </form>
+</workflow-body>
+<div class="page-footer">
+    <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
+    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Save & Continue</button>
 </div>
