@@ -225,6 +225,7 @@ export class TrashOvtaRecordObservationsComponent {
             const observation = this.formGroup.controls.Observations.controls[index].value;
             observation.Latitude = e.latlng.lat;
             observation.Longitude = e.latlng.lng;
+            this.formGroup.controls.Observations.controls[index].patchValue(observation);
             this.addObservationPointsLayersToMap();
             this.map.off("click");
         });
@@ -244,12 +245,15 @@ export class TrashOvtaRecordObservationsComponent {
 
     public getFile(index: number) {
         if (typeof this.uploadFormField.value != typeof "string") {
+            this.isLoadingSubmit = true;
             this.onlandVisualTrashAssessmentObservationService
                 .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotoPost(this.ovtaID, this.uploadFormField.value)
                 .subscribe((response) => {
                     const observation = this.formGroup.controls.Observations.controls[index].value;
                     observation.FileResourceID = response.FileResourceID;
                     observation.FileResourceGUID = response.FileResourceGUID;
+                    this.formGroup.controls.Observations.controls[index].patchValue(observation);
+                    this.isLoadingSubmit = false;
                 });
         }
     }
@@ -266,6 +270,7 @@ export class TrashOvtaRecordObservationsComponent {
                 .subscribe((x) => {
                     observation.FileResourceID = null;
                     observation.FileResourceGUID = null;
+                    this.formGroup.controls.Observations.controls[index].patchValue(observation);
                 });
         }
     }
