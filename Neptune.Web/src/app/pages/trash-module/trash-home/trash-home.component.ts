@@ -7,7 +7,7 @@ import { RoleEnum } from "src/app/shared/generated/enum/role-enum";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
-import { AsyncPipe, DecimalPipe, NgIf } from "@angular/common";
+import { AsyncPipe, DatePipe, DecimalPipe, NgIf } from "@angular/common";
 import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import * as L from "leaflet";
@@ -27,13 +27,15 @@ import { LoadResultsDto } from "src/app/shared/generated/model/load-results-dto"
 import { OVTAResultsDto } from "src/app/shared/generated/model/ovta-results-dto";
 import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
-import { StormwaterJurisdictionDto } from "src/app/shared/generated/model/models";
+import { StormwaterJurisdictionDto, TrashGeneratingUnitDto } from "src/app/shared/generated/model/models";
 import { InventoriedBMPsTrashCaptureLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-trash-capture-layer/inventoried-bmps-trash-capture-layer.component";
 import { WqmpsTrashCaptureLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-trash-capture-layer/wqmps-trash-capture-layer.component";
 import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 import { TrashGeneratingUnitLoadsLayerComponent } from "src/app/shared/components/leaflet/layers/trash-generating-unit-loads-layer/trash-generating-unit-loads-layer.component";
 import { TrashGeneratingUnitByStormwaterJurisdictionService } from "src/app/shared/generated/api/trash-generating-unit-by-stormwater-jurisdiction.service";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
+import { WfsService } from "src/app/shared/services/wfs.service";
+import { TrashGeneratingUnitService } from "src/app/shared/generated/api/trash-generating-unit.service";
 
 @Component({
     selector: "trash-home",
@@ -61,6 +63,7 @@ import { LoadingDirective } from "src/app/shared/directives/loading.directive";
         ReactiveFormsModule,
         FieldDefinitionComponent,
         DecimalPipe,
+        DatePipe,
         LoadingDirective,
     ],
 })
@@ -89,13 +92,17 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
 
     public isLoading: boolean;
 
+    public tguDto$: Observable<TrashGeneratingUnitDto>;
+
     constructor(
         private authenticationService: AuthenticationService,
         private router: Router,
         private route: ActivatedRoute,
         private stormwaterJurisdictionService: StormwaterJurisdictionService,
         private trashResultsByJurisdictionService: TrashGeneratingUnitByStormwaterJurisdictionService,
-        private leafletHelperService: LeafletHelperService
+        private leafletHelperService: LeafletHelperService,
+        private wfsService: WfsService,
+        private trashGeneratingUnitService: TrashGeneratingUnitService
     ) {}
 
     public ngOnInit(): void {
@@ -180,10 +187,27 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
+
+        this.registerClickEvents();
     }
 
     public onJurisdictionSelected(selectedJurisdiction: StormwaterJurisdictionDto) {
         this.stormwaterJurisdictionSubject.next(selectedJurisdiction);
+    }
+
+    public registerClickEvents(): void {
+        const wfsService = this.wfsService;
+        const self = this;
+        this.map.on("click", (event: L.LeafletMouseEvent): void => {
+            wfsService.getTrashGeneratingUnitByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((tguFeatureCollection: L.FeatureCollection) => {
+                if(tguFeatureCollection.features.length == 0){
+                    this.tguDto$ = null;
+                }
+                tguFeatureCollection.features.forEach((feature: L.Feature) => {
+                    this.tguDto$ = this.trashGeneratingUnitService.trashGeneratingUnitsTrashGeneratingUnitIDGet(feature.properties.TrashGeneratingUnitID);
+                });
+            });
+        });
     }
 
     ngOnDestroy(): void {

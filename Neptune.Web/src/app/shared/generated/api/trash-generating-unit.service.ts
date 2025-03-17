@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { TrashGeneratingUnitDto } from '../model/trash-generating-unit-dto';
 import { TrashGeneratingUnitGridDto } from '../model/trash-generating-unit-grid-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -90,6 +91,49 @@ export class TrashGeneratingUnitService {
         ];
 
         return this.httpClient.get<Array<TrashGeneratingUnitGridDto>>(`${this.basePath}/trash-generating-units`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param trashGeneratingUnitID 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public trashGeneratingUnitsTrashGeneratingUnitIDGet(trashGeneratingUnitID: number, observe?: 'body', reportProgress?: boolean): Observable<TrashGeneratingUnitDto>;
+    public trashGeneratingUnitsTrashGeneratingUnitIDGet(trashGeneratingUnitID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<TrashGeneratingUnitDto>>;
+    public trashGeneratingUnitsTrashGeneratingUnitIDGet(trashGeneratingUnitID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<TrashGeneratingUnitDto>>;
+    public trashGeneratingUnitsTrashGeneratingUnitIDGet(trashGeneratingUnitID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (trashGeneratingUnitID === null || trashGeneratingUnitID === undefined) {
+            throw new Error('Required parameter trashGeneratingUnitID was null or undefined when calling trashGeneratingUnitsTrashGeneratingUnitIDGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<TrashGeneratingUnitDto>(`${this.basePath}/trash-generating-units/${encodeURIComponent(String(trashGeneratingUnitID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

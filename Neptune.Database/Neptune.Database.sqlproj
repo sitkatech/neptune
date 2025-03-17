@@ -308,7 +308,6 @@
     <Build Include="dbo\Views\dbo.vGeoServerRegionalSubbasin.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerTransectLineExport.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerTrashGeneratingUnit.sql" />
-    <Build Include="dbo\Views\dbo.vGeoServerTrashGeneratingUnitLoad.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerWaterQualityManagementPlan.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerWatershed.sql" />
     <Build Include="dbo\Views\dbo.vModelingResultUnitConversion.sql" />
