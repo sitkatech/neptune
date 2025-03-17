@@ -1,8 +1,8 @@
 <div class="grid-12" *ngIf="onlandVisualTrashAssessmentObservations?.length > 0; else noOnlandVisualTrashAssessmentObservations">
-    <div class="g-col-4" [style.height]="mapHeight" style="overflow-y: auto">
+    <div class="g-col-4" [style.height]="mapHeight" style="overflow-y: auto" #ovtaObservations>
         <ul class="list-group">
             <li
-                [id]="onlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentObservationID"
+                [id]="'ovtaObservation' + onlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentObservationID"
                 class="list-group-item font-weight-bold"
                 *ngFor="let onlandVisualTrashAssessmentObservation of onlandVisualTrashAssessmentObservations"
                 [class.selected]="

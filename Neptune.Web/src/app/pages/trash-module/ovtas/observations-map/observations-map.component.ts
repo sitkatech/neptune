@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import * as L from "leaflet";
 import "leaflet.fullscreen";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
-import { NgIf, NgFor, NgClass } from "@angular/common";
+import { NgIf, NgFor } from "@angular/common";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
@@ -20,9 +20,10 @@ declare var $: any;
     templateUrl: "./observations-map.component.html",
     styleUrls: ["./observations-map.component.scss"],
     standalone: true,
-    imports: [NgIf, NgFor, NgClass, NeptuneMapComponent, OvtaAreaLayerComponent, TransectLineLayerComponent, LandUseBlockLayerComponent],
+    imports: [NgIf, NgFor, NeptuneMapComponent, OvtaAreaLayerComponent, TransectLineLayerComponent, LandUseBlockLayerComponent],
 })
 export class ObservationsMapComponent {
+    @ViewChild("ovtaObservations") ovtaObservations: ElementRef;
     @Input("observations") onlandVisualTrashAssessmentObservations: Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>;
     @Input() jurisdictionID: number;
     @Input() onlandVisualTrashAssessmentAreaID: number;
@@ -117,12 +118,9 @@ export class ObservationsMapComponent {
                 }
                 layer.setZIndexOffset(10000);
                 layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-red.png"));
-                this.router.navigate([], {
-                    relativeTo: this.route,
-                    fragment: `${layer.feature.properties.OnlandVisualTrashAssessmentObservationID}`,
-                    queryParamsHandling: "preserve",
-                    replaceUrl: true,
-                });
+                this.ovtaObservations.nativeElement
+                    .querySelector(`#ovtaObservation${layer.feature.properties.OnlandVisualTrashAssessmentObservationID}`)
+                    .scrollIntoView({ behavior: "smooth", block: "start" });
             } else {
                 layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-violet.png"));
             }
