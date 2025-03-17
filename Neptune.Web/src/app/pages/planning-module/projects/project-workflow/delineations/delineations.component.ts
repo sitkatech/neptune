@@ -33,8 +33,6 @@ import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/compone
 import { routeParams } from "src/app/app.routes";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 
-declare var $: any;
-
 @Component({
     selector: "delineations",
     templateUrl: "./delineations.component.html",
@@ -439,9 +437,15 @@ export class DelineationsComponent implements OnInit {
                 return;
             }
             if (this.selectedDelineation?.Geometry != null && this.selectedDelineation?.DelineationTypeID != DelineationTypeEnum.Centralized) {
-                $(".leaflet-draw-edit-edit").get(0).click();
+                const button = document.querySelector(".leaflet-draw-edit-edit") as HTMLButtonElement;
+                if (button) {
+                    button.click();
+                }
             } else {
-                $(".leaflet-draw-draw-polygon").get(0).click();
+                const button = document.querySelector(".leaflet-draw-draw-polygon") as HTMLButtonElement;
+                if (button) {
+                    button.click();
+                }
             }
         }
         this.drawMapClicked = false;
@@ -554,7 +558,7 @@ export class DelineationsComponent implements OnInit {
             this.save();
         }
         this.isEditingLocation = !this.isEditingLocation;
-        $(".leaflet-interactive").css("cursor", "crosshair");
+        document.querySelector(".leaflet-interactive").setAttribute("style", "cursor: crosshair");
         this.updateTreatmentBMPsLayer();
     }
 

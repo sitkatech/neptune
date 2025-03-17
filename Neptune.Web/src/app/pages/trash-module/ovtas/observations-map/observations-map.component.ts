@@ -12,8 +12,6 @@ import { environment } from "src/environments/environment";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LandUseBlockLayerComponent } from "src/app/shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 
-declare var $: any;
-
 //This component could use a fair amount of cleanup. It should likely be sent in the treatment bmps and delineations instead of grabbing them itself
 @Component({
     selector: "observations-map",
