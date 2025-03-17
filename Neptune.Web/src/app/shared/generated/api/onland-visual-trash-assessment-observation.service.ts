@@ -19,8 +19,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { OnlandVisualTrashAssessmentObservationLocationDto } from '../model/onland-visual-trash-assessment-observation-location-dto';
-import { OnlandVisualTrashAssessmentObservationPhotoStagingDto } from '../model/onland-visual-trash-assessment-observation-photo-staging-dto';
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from '../model/onland-visual-trash-assessment-observation-with-photo-dto';
+import { OnlandVisualTrashAssessmentObservationsUpsertDto } from '../model/onland-visual-trash-assessment-observations-upsert-dto';
 import { ProblemDetails } from '../model/problem-details';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -154,55 +154,6 @@ export class OnlandVisualTrashAssessmentObservationService {
      * 
      * 
      * @param onlandVisualTrashAssessmentID 
-     * @param onlandVisualTrashAssessmentObservationPhotoStagingDto 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotoDelete(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationPhotoStagingDto?: OnlandVisualTrashAssessmentObservationPhotoStagingDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotoDelete(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationPhotoStagingDto?: OnlandVisualTrashAssessmentObservationPhotoStagingDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotoDelete(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationPhotoStagingDto?: OnlandVisualTrashAssessmentObservationPhotoStagingDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotoDelete(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationPhotoStagingDto?: OnlandVisualTrashAssessmentObservationPhotoStagingDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (onlandVisualTrashAssessmentID === null || onlandVisualTrashAssessmentID === undefined) {
-            throw new Error('Required parameter onlandVisualTrashAssessmentID was null or undefined when calling onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotoDelete.');
-        }
-
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/_*+json',
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.delete<any>(`${this.basePath}/onland-visual-trash-assessments/${encodeURIComponent(String(onlandVisualTrashAssessmentID))}/observations/observation-photo`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param onlandVisualTrashAssessmentID 
      * @param file 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -268,14 +219,59 @@ export class OnlandVisualTrashAssessmentObservationService {
      * 
      * 
      * @param onlandVisualTrashAssessmentID 
-     * @param onlandVisualTrashAssessmentObservationWithPhotoDto 
+     * @param fileResourceID 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationWithPhotoDto?: Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationWithPhotoDto?: Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationWithPhotoDto?: Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationWithPhotoDto?: Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotosFileResourceIDDelete(onlandVisualTrashAssessmentID: number, fileResourceID: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotosFileResourceIDDelete(onlandVisualTrashAssessmentID: number, fileResourceID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotosFileResourceIDDelete(onlandVisualTrashAssessmentID: number, fileResourceID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotosFileResourceIDDelete(onlandVisualTrashAssessmentID: number, fileResourceID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (onlandVisualTrashAssessmentID === null || onlandVisualTrashAssessmentID === undefined) {
+            throw new Error('Required parameter onlandVisualTrashAssessmentID was null or undefined when calling onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotosFileResourceIDDelete.');
+        }
+
+        if (fileResourceID === null || fileResourceID === undefined) {
+            throw new Error('Required parameter fileResourceID was null or undefined when calling onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotosFileResourceIDDelete.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.delete<any>(`${this.basePath}/onland-visual-trash-assessments/${encodeURIComponent(String(onlandVisualTrashAssessmentID))}/observations/observation-photos/${encodeURIComponent(String(fileResourceID))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param onlandVisualTrashAssessmentID 
+     * @param onlandVisualTrashAssessmentObservationsUpsertDto 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationsUpsertDto?: OnlandVisualTrashAssessmentObservationsUpsertDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationsUpsertDto?: OnlandVisualTrashAssessmentObservationsUpsertDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationsUpsertDto?: OnlandVisualTrashAssessmentObservationsUpsertDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentObservationsUpsertDto?: OnlandVisualTrashAssessmentObservationsUpsertDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (onlandVisualTrashAssessmentID === null || onlandVisualTrashAssessmentID === undefined) {
             throw new Error('Required parameter onlandVisualTrashAssessmentID was null or undefined when calling onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost.');
@@ -304,7 +300,7 @@ export class OnlandVisualTrashAssessmentObservationService {
         }
 
         return this.httpClient.post<any>(`${this.basePath}/onland-visual-trash-assessments/${encodeURIComponent(String(onlandVisualTrashAssessmentID))}/observations`,
-            onlandVisualTrashAssessmentObservationWithPhotoDto,
+            onlandVisualTrashAssessmentObservationsUpsertDto,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

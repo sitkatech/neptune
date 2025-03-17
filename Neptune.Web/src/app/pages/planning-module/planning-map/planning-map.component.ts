@@ -38,8 +38,6 @@ import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wq
 import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 
-declare var $: any;
-
 @Component({
     selector: "planning-map",
     templateUrl: "./planning-map.component.html",

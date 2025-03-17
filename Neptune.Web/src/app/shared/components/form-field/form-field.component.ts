@@ -102,6 +102,7 @@ export class FormFieldComponent {
     }
 
     onFileChange(event: any): void {
+        console.log(event.target.files[0]);
         this.value = event.target.files[0];
     }
 

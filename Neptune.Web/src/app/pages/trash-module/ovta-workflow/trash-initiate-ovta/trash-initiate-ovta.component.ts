@@ -4,7 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angul
 import { FormFieldComponent, FormFieldType, FormInputOption } from "src/app/shared/components/form-field/form-field.component";
 import { SelectDropdownOption } from "src/app/shared/components//form-field/form-field.component";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
-import { Observable, map, tap } from "rxjs";
+import { BehaviorSubject, Observable, map, tap } from "rxjs";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import * as L from "leaflet";
@@ -24,6 +24,9 @@ import { WfsService } from "src/app/shared/services/wfs.service";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
+import { StormwaterJurisdictionDto } from "src/app/shared/generated/model/stormwater-jurisdiction-dto";
+import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
+import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 
 @Component({
     selector: "trash-initiate-ovta",
@@ -39,6 +42,8 @@ import { LoadingDirective } from "src/app/shared/directives/loading.directive";
         NgIf,
         ParcelLayerComponent,
         LoadingDirective,
+        WorkflowBodyComponent,
+        AlertDisplayComponent,
     ],
     templateUrl: "./trash-initiate-ovta.component.html",
     styleUrl: "./trash-initiate-ovta.component.scss",
@@ -54,6 +59,7 @@ export class TrashInitiateOvtaComponent {
     public layer: L.featureGroup = new L.featureGroup();
 
     public stormwaterJurisdictionOptions$: Observable<SelectDropdownOption[]>;
+
     public selectedOVTAArea: FormControl = new FormControl("");
     public selectedOVTAAreaID: number;
     public selectedOVTAAreaName: string = "";
@@ -94,18 +100,19 @@ export class TrashInitiateOvtaComponent {
     ) {}
 
     ngOnInit() {
-        this.isLoading = true;
         this.formGroup.controls.AssessingNewArea.patchValue(false);
         this.stormwaterJurisdictionOptions$ = this.stormwaterJurisdictionService.jurisdictionsGet().pipe(
             map((list) => {
+                const defaultJurisdiction = list[0];
+                this.formGroup.controls.StormwaterJurisdictionID.patchValue(defaultJurisdiction.StormwaterJurisdictionID);
+                this.getStormwaterJurisdictionBounds(defaultJurisdiction.StormwaterJurisdictionID);
                 if (list.length == 1) {
-                    return [{ Value: list[0].StormwaterJurisdictionID, Label: list[0].Organization.OrganizationName, Disabled: false }];
+                    return [{ Value: defaultJurisdiction.StormwaterJurisdictionID, Label: defaultJurisdiction.Organization.OrganizationName, Disabled: false }];
                 }
 
                 let options = list.map((x) => ({ Value: x.StormwaterJurisdictionID, Label: x.Organization.OrganizationName } as SelectDropdownOption));
                 return options;
-            }),
-            tap(() => (this.isLoading = false))
+            })
         );
     }
 

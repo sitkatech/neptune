@@ -38,13 +38,11 @@
                 fieldLabel="Comments and Additional Information"
                 [required]="false"
                 [type]="FormFieldType.Textarea"></form-field>
-
-            <hr />
         </div>
     </form>
-    <h3>Preliminary Source Identification Type</h3>
+    <h3 class="mt-4">Preliminary Source Identification Type</h3>
     <div class="mt-2 copy copy-3">Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</div>
-    <div *ngIf="preliminarySourceIdentificationTypeSimpleDto$ | async as preliminarySourceIdentificationTypeSimpleDto" class="grid-12 mb-4">
+    <div *ngIf="preliminarySourceIdentificationTypeSimpleDto$ | async as preliminarySourceIdentificationTypeSimpleDto" class="grid-12 mb-4 preliminary-sources">
         <div *ngFor="let preliminarySourceIdentificationCategory of PreliminarySourceIdentificationCategories" class="mt-4 g-col-6">
             <h4 class="mb-2">{{ preliminarySourceIdentificationCategory.DisplayName }}</h4>
             <label
