@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { FormFieldComponent, FormFieldType, FormInputOption } from "../../../../shared/components/form-field/form-field.component";
@@ -7,9 +7,8 @@ import { OnlandVisualTrashAssessmentScoresAsSelectDropdownOptions } from "src/ap
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, switchMap, tap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
-import { AsyncPipe, NgClass, NgFor, NgIf } from "@angular/common";
+import { AsyncPipe, NgFor, NgIf } from "@angular/common";
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
-import { PreliminarySourceIdentificationTypeSimpleDto } from "src/app/shared/generated/model/preliminary-source-identification-type-simple-dto";
 import { PreliminarySourceIdentificationCategories } from "src/app/shared/generated/enum/preliminary-source-identification-category-enum";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { Alert } from "src/app/shared/models/alert";
@@ -17,15 +16,17 @@ import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
 import {
     OnlandVisualTrashAssessmentReviewAndFinalizeDto,
-    OnlandVisualTrashAssessmentReviewAndFinalizeDtoForm,
     OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls,
 } from "src/app/shared/generated/model/onland-visual-trash-assessment-review-and-finalize-dto";
 import { OnlandVisualTrashAssessmentStatusEnum } from "src/app/shared/generated/enum/onland-visual-trash-assessment-status-enum";
 import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
-import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 import { ObservationsMapComponent } from "../../ovtas/observations-map/observations-map.component";
 import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/generated/api/onland-visual-trash-assessment-observation.service";
+import {
+    OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto,
+    OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDtoForm,
+} from "src/app/shared/generated/model/onland-visual-trash-assessment-preliminary-source-identification-upsert-dto";
 
 @Component({
     selector: "trash-ovta-review-and-finalize",
@@ -38,12 +39,10 @@ import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/ge
         AsyncPipe,
         FormsModule,
         NgFor,
-        NgClass,
         ObservationsMapComponent,
         NgFor,
         WorkflowBodyComponent,
         AlertDisplayComponent,
-        LoadingDirective,
     ],
     templateUrl: "./trash-ovta-review-and-finalize.component.html",
     styleUrl: "./trash-ovta-review-and-finalize.component.scss",
@@ -57,7 +56,6 @@ export class TrashOvtaReviewAndFinalizeComponent {
 
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentReviewAndFinalizeDto>;
     public onlandVisualTrashAssessmentObservations$: Observable<OnlandVisualTrashAssessmentObservationWithPhotoDto[]>;
-    public preliminarySourceIdentificationTypeSimpleDto$: Observable<PreliminarySourceIdentificationTypeSimpleDto[]>;
 
     public onlandVisualTrashAssessmentScoreDropdown = OnlandVisualTrashAssessmentScoresAsSelectDropdownOptions;
 
@@ -66,7 +64,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
         { Value: true, Label: "Progress", Disabled: false },
     ];
 
-    public formGroup: FormGroup<OnlandVisualTrashAssessmentReviewAndFinalizeDtoForm> = new FormGroup<any>({
+    public formGroup: FormGroup<OnlandVisualTrashAssessmentReviewAndFinalizeDtoCustomForm> = new FormGroup<OnlandVisualTrashAssessmentReviewAndFinalizeDtoCustomForm>({
         OnlandVisualTrashAssessmentID: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.OnlandVisualTrashAssessmentID(),
         OnlandVisualTrashAssessmentAreaID: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.OnlandVisualTrashAssessmentAreaID(),
         OnlandVisualTrashAssessmentAreaName: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.OnlandVisualTrashAssessmentAreaName(),
@@ -76,7 +74,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
         OnlandVisualTrashAssessmentScoreID: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.OnlandVisualTrashAssessmentScoreID(),
         IsProgressAssessment: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.IsProgressAssessment(),
         Notes: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.Notes(),
-        PreliminarySourceIdentifications: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.PreliminarySourceIdentifications(),
+        PreliminarySourceIdentifications: new FormArray<FormGroup<OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDtoForm>>([]),
         OnlandVisualTrashAssessmentStatusID: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.OnlandVisualTrashAssessmentStatusID(),
     });
 
@@ -86,7 +84,8 @@ export class TrashOvtaReviewAndFinalizeComponent {
         private onlandVisualTrashAssessmentObservationService: OnlandVisualTrashAssessmentObservationService,
         private router: Router,
         private ovtaWorkflowProgressService: OvtaWorkflowProgressService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private formBuilder: FormBuilder
     ) {}
 
     ngOnInit(): void {
@@ -95,7 +94,10 @@ export class TrashOvtaReviewAndFinalizeComponent {
                 return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizeGet(
                     params[routeParams.onlandVisualTrashAssessmentID]
                 );
-            }),
+            })
+        );
+
+        this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessment$.pipe(
             tap((ovta) => {
                 this.ovtaID = ovta.OnlandVisualTrashAssessmentID;
                 this.formGroup.controls.OnlandVisualTrashAssessmentID.setValue(ovta.OnlandVisualTrashAssessmentID);
@@ -106,40 +108,49 @@ export class TrashOvtaReviewAndFinalizeComponent {
                 this.formGroup.controls.OnlandVisualTrashAssessmentScoreID.setValue(ovta.OnlandVisualTrashAssessmentScoreID);
                 this.formGroup.controls.IsProgressAssessment.setValue(ovta.IsProgressAssessment);
                 this.formGroup.controls.Notes.setValue(ovta.Notes);
-                this.formGroup.controls.PreliminarySourceIdentifications.setValue(ovta.PreliminarySourceIdentifications);
-            })
-        );
+                const formArray = this.formGroup.controls.PreliminarySourceIdentifications as FormArray;
+                ovta.PreliminarySourceIdentifications.forEach((x) => {
+                    let preliminarySourceIdenitfication = this.formBuilder.group<OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDtoForm>({
+                        Selected: new FormControl(x.Selected),
+                        PreliminarySourceIdentificationCategoryID: new FormControl(x.PreliminarySourceIdentificationCategoryID),
+                        PreliminarySourceIdentificationTypeID: new FormControl(x.PreliminarySourceIdentificationTypeID),
+                        PreliminarySourceIdentificationTypeName: new FormControl(x.PreliminarySourceIdentificationTypeName),
+                        IsOther: new FormControl(x.IsOther),
+                        ExplanationIfTypeIsOther: new FormControl({ value: x.ExplanationIfTypeIsOther, disabled: x.IsOther && !x.Selected }),
+                    });
 
-        this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessment$.pipe(
+                    formArray.push(preliminarySourceIdenitfication);
+                });
+            }),
             switchMap((onlandVisualTrashAssessment) => {
                 return this.onlandVisualTrashAssessmentObservationService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsGet(
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID
                 );
             })
         );
-
-        this.preliminarySourceIdentificationTypeSimpleDto$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPreliminarySourceIdentificationTypesGet();
     }
 
-    isPreliminarySourceIdentificationTypeSelected(preliminarySourceIdentificationTypeID: number): boolean {
-        const formArray = this.formGroup.controls.PreliminarySourceIdentifications.getRawValue();
-        const found = formArray.findIndex((x) => x.PreliminarySourceIdentificationTypeID === preliminarySourceIdentificationTypeID && x.Selected) >= 0;
-        return found;
+    filterByCategory(
+        onlandVisualTrashAssessmentPreliminarySourceIdentifications: FormGroup<OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDtoForm>[],
+        preliminarySourceIdentificationCategoryID: number
+    ) {
+        const preliminarySourceIdentifications = onlandVisualTrashAssessmentPreliminarySourceIdentifications.filter(
+            (x) => x.controls.PreliminarySourceIdentificationCategoryID.value === preliminarySourceIdentificationCategoryID
+        );
+        return preliminarySourceIdentifications;
     }
 
-    filterByCategory(preliminarySourceIdentificationTypeSimpleDto, categoryID) {
-        return preliminarySourceIdentificationTypeSimpleDto.filter((x) => x.PreliminarySourceIdentificationCategoryID == categoryID);
-    }
-
-    onPreliminarySourceIdentificationTypeChange(event: any) {
-        const formArray = this.formGroup.controls.PreliminarySourceIdentifications.getRawValue();
-        const preliminarySourceIdentificationType = formArray.find((x) => x.PreliminarySourceIdentificationTypeID === parseInt(event.target.value));
-        /* Selected */
-        if (event.target.checked) {
-            preliminarySourceIdentificationType.Selected = true;
-        } else {
-            /* unselected */
-            preliminarySourceIdentificationType.Selected = false;
+    onPreliminarySourceIdentificationTypeChange(event: any, otherTextBox: FormControl<string>) {
+        if (event.target.value === "IsOther") {
+            if (event.target.checked) {
+                otherTextBox.enable();
+                otherTextBox.setValidators([Validators.required]);
+                otherTextBox.updateValueAndValidity();
+            } else {
+                otherTextBox.disable();
+                otherTextBox.setValidators(null);
+                otherTextBox.updateValueAndValidity();
+            }
         }
     }
 
@@ -158,4 +169,18 @@ export class TrashOvtaReviewAndFinalizeComponent {
                 }
             });
     }
+}
+
+export class OnlandVisualTrashAssessmentReviewAndFinalizeDtoCustomForm {
+    OnlandVisualTrashAssessmentID: FormControl<number>;
+    OnlandVisualTrashAssessmentAreaID: FormControl<number>;
+    OnlandVisualTrashAssessmentAreaName: FormControl<string>;
+    StormwaterJurisdictionID: FormControl<number>;
+    AssessmentAreaDescription: FormControl<string>;
+    AssessmentDate: FormControl<string>;
+    OnlandVisualTrashAssessmentScoreID: FormControl<number>;
+    IsProgressAssessment: FormControl<boolean>;
+    Notes: FormControl<string>;
+    OnlandVisualTrashAssessmentStatusID: FormControl<number>;
+    PreliminarySourceIdentifications: FormArray<FormGroup<OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDtoForm>>;
 }

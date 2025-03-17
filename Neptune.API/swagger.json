@@ -4736,6 +4736,17 @@
             "type": "integer",
             "format": "int32"
           },
+          "PreliminarySourceIdentificationTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PreliminarySourceIdentificationCategoryID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IsOther": {
+            "type": "boolean"
+          },
           "ExplanationIfTypeIsOther": {
             "type": "string",
             "nullable": true

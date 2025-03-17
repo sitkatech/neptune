@@ -39,32 +39,25 @@
                 [required]="false"
                 [type]="FormFieldType.Textarea"></form-field>
         </div>
-    </form>
-    <h3 class="mt-4">Preliminary Source Identification Type</h3>
-    <div class="mt-2 copy copy-3">Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</div>
-    <div *ngIf="preliminarySourceIdentificationTypeSimpleDto$ | async as preliminarySourceIdentificationTypeSimpleDto" class="grid-12 mb-4 preliminary-sources">
-        <div *ngFor="let preliminarySourceIdentificationCategory of PreliminarySourceIdentificationCategories" class="mt-4 g-col-6">
-            <h4 class="mb-2">{{ preliminarySourceIdentificationCategory.DisplayName }}</h4>
-            <label
-                *ngFor="
-                    let preliminarySourceIdentificationType of filterByCategory(preliminarySourceIdentificationTypeSimpleDto, preliminarySourceIdentificationCategory.Value);
-                    let i = index
-                ">
-                <input
-                    type="checkbox"
-                    [value]="preliminarySourceIdentificationType.PreliminarySourceIdentificationTypeID"
-                    [checked]="isPreliminarySourceIdentificationTypeSelected(preliminarySourceIdentificationType.PreliminarySourceIdentificationTypeID)"
-                    (change)="onPreliminarySourceIdentificationTypeChange($event)" />
-                {{
-                    preliminarySourceIdentificationType.PreliminarySourceIdentificationTypeDisplayName.indexOf("Other") >= 0
-                        ? "Other"
-                        : preliminarySourceIdentificationType.PreliminarySourceIdentificationTypeDisplayName
-                }}
-
-                <input type="text" *ngIf="preliminarySourceIdentificationType.PreliminarySourceIdentificationTypeDisplayName.indexOf('Other') >= 0" />
-            </label>
+        <h3 class="mt-4">Preliminary Source Identification Type</h3>
+        <div class="mt-2 copy copy-3">Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</div>
+        <div class="grid-12 mb-4 preliminary-sources">
+            <div *ngFor="let preliminarySourceIdentificationCategory of PreliminarySourceIdentificationCategories" class="mt-4 g-col-6">
+                <h4 class="mb-2">{{ preliminarySourceIdentificationCategory.DisplayName }}</h4>
+                <label
+                    formArrayName="PreliminarySourceIdentifications"
+                    *ngFor="let control of filterByCategory(formGroup.controls.PreliminarySourceIdentifications.controls, preliminarySourceIdentificationCategory.Value)">
+                    <input
+                        type="checkbox"
+                        [formControl]="control.controls.Selected"
+                        [value]="control.controls.IsOther.value ? 'IsOther' : 'Regular'"
+                        (change)="onPreliminarySourceIdentificationTypeChange($event, control.controls.ExplanationIfTypeIsOther)" />
+                    {{ control.controls.IsOther.value ? "Other" : control.controls.PreliminarySourceIdentificationTypeName.value }}
+                    <input type="text" *ngIf="control.controls.IsOther.value" [formControl]="control.controls.ExplanationIfTypeIsOther" />
+                </label>
+            </div>
         </div>
-    </div>
+    </form>
 
     <h3>Observations</h3>
     <observations-map
@@ -76,6 +69,6 @@
     </observations-map>
 </workflow-body>
 <div class="page-footer">
-    <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
-    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Finalize</button>
+    <button class="btn btn-primary mr-2" (click)="save()" [disabled]="formGroup.invalid || isLoadingSubmit">Save</button>
+    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="formGroup.invalid || isLoadingSubmit">Finalize</button>
 </div>

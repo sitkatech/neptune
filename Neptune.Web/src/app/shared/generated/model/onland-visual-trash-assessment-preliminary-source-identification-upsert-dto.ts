@@ -14,6 +14,9 @@ import { FormControl, FormControlOptions, FormControlState, Validators } from "@
 export class OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto { 
     Selected?: boolean;
     PreliminarySourceIdentificationTypeID?: number;
+    PreliminarySourceIdentificationTypeName?: string;
+    PreliminarySourceIdentificationCategoryID?: number;
+    IsOther?: boolean;
     ExplanationIfTypeIsOther?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
@@ -23,6 +26,9 @@ export class OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto
 export interface OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDtoForm { 
     Selected?: FormControl<boolean>;
     PreliminarySourceIdentificationTypeID?: FormControl<number>;
+    PreliminarySourceIdentificationTypeName?: FormControl<string>;
+    PreliminarySourceIdentificationCategoryID?: FormControl<number>;
+    IsOther?: FormControl<boolean>;
     ExplanationIfTypeIsOther?: FormControl<string>;
 }
 
@@ -38,6 +44,36 @@ export class OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto
         }
     );
     public static PreliminarySourceIdentificationTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static PreliminarySourceIdentificationTypeName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static PreliminarySourceIdentificationCategoryID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static IsOther = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
         value,
         formControlOptions ?? 
         {
