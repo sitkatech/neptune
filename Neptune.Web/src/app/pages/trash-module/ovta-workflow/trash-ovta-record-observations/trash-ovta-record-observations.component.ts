@@ -25,6 +25,7 @@ import {
 import { environment } from "src/environments/environment";
 import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/generated/api/onland-visual-trash-assessment-observation.service";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
+import { WfsService } from "src/app/shared/services/wfs.service";
 
 @Component({
     selector: "trash-ovta-record-observations",
@@ -53,6 +54,7 @@ export class TrashOvtaRecordObservationsComponent {
     public mapIsReady = false;
     public isLoadingSubmit = false;
     public ovtaID: number;
+    private stormwaterJurisdictionID: number;
     public ovtaObservationLayer: L.GeoJSON<any>;
     public uploadFormField: FormControl<Blob> = new FormControl<Blob>(null);
     public formGroup: FormGroup<OnlandVisualTrashAssessmentObservationsUpsertDtoCustomForm> = new FormGroup<OnlandVisualTrashAssessmentObservationsUpsertDtoCustomForm>({
@@ -73,6 +75,7 @@ export class TrashOvtaRecordObservationsComponent {
         private alertService: AlertService,
         private ovtaWorkflowProgressService: OvtaWorkflowProgressService,
         private router: Router,
+        private wfsService: WfsService,
         private formBuilder: FormBuilder
     ) {}
 
@@ -85,6 +88,7 @@ export class TrashOvtaRecordObservationsComponent {
         );
         this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessment$.pipe(
             switchMap((onlandVisualTrashAssessment) => {
+                this.stormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID;
                 return this.onlandVisualTrashAssessmentObservationService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsGet(
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID
                 );
@@ -115,6 +119,12 @@ export class TrashOvtaRecordObservationsComponent {
         if (this.formGroup.controls.Observations.length > 0) {
             this.addObservationPointsLayersToMap();
             this.map.fitBounds(this.ovtaObservationLayer.getBounds());
+        } else {
+            this.wfsService
+                .getGeoserverWFSLayerWithCQLFilter("OCStormwater:Jurisdictions", `StormwaterJurisdictionID = ${this.stormwaterJurisdictionID}`, "StormwaterJurisdictionID")
+                .subscribe((response) => {
+                    this.map.fitBounds(L.geoJson(response).getBounds());
+                });
         }
     }
 
@@ -126,6 +136,7 @@ export class TrashOvtaRecordObservationsComponent {
     }
 
     public addObservation(latlng: L.latlng) {
+        this.uploadFormField.reset();
         let observation = this.formBuilder.group<OnlandVisualTrashAssessmentObservationWithPhotoDto>({
             OnlandVisualTrashAssessmentObservationID: this.newObservationIDIndex,
             OnlandVisualTrashAssessmentID: this.ovtaID,
@@ -211,6 +222,7 @@ export class TrashOvtaRecordObservationsComponent {
     }
 
     public selectOnlandVisualTrashAssessmentObservation() {
+        this.uploadFormField.reset();
         this.ovtaObservationLayer.eachLayer((layer) => {
             if (layer.feature.properties.OnlandVisualTrashAssessmentObservationID === this.selectedOnlandVisualTrashAssessmentObservationID) {
                 layer.setIcon(MarkerHelper.selectedMarker);
