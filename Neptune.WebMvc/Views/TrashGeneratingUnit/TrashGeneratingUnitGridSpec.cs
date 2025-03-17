@@ -31,7 +31,7 @@ namespace Neptune.WebMvc.Views.TrashGeneratingUnit
             Add("Governing WQMP", x => x.WaterQualityManagementPlanID != null ?
                 UrlTemplate.MakeHrefString(wqmpDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID.Value), x.WaterQualityManagementPlanName) : new HtmlString(""), 190, DhtmlxGridColumnFilterType.Html);
             Add("Stormwater Jurisdiction", x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 170, DhtmlxGridColumnFilterType.Html);
-            Add("Area", x => ((x.TrashGeneratingUnitArea ?? 0) * Constants.SquareMetersToAcres).ToString("F12", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
+            Add("Area", x => (x.Area * Constants.SquareMetersToAcres).ToString("F12", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
             Add("Baseline Loading Rate", x => x.BaselineLoadingRate, 100, DhtmlxGridColumnFormatType.Decimal);
 
             Add("Current Loading Rate", x => x.CurrentLoadingRate, 100, DhtmlxGridColumnFormatType.Decimal);

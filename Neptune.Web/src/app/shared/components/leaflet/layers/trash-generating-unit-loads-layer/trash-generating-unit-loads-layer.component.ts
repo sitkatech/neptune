@@ -20,7 +20,7 @@ export class TrashGeneratingUnitLoadsLayerComponent extends MapLayerBase impleme
 
     ngAfterViewInit(): void {
         this.wmsOptions = {
-            layers: "OCStormwater:TrashGeneratingUnitLoads",
+            layers: "OCStormwater:TrashGeneratingUnits",
             transparent: true,
             format: "image/png",
             tiled: true,

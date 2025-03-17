@@ -61,6 +61,7 @@ export * from '././project-workflow-progress-dto';
 export * from '././project-workflow-progress-dto-steps';
 export * from '././stormwater-jurisdiction-dto';
 export * from '././system-info-dto';
+export * from '././trash-generating-unit-dto';
 export * from '././trash-generating-unit-grid-dto';
 export * from '././treatment-bmp-display-dto';
 export * from '././treatment-bmphru-characteristics-summary-simple-dto';

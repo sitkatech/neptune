@@ -36,7 +36,6 @@ Select
 	end as CurrentLoadingRate,
 	ProgressLoadingRate,
 	DelineationIsVerified,
-	LastUpdateDate as LastCalculatedDate,
 	PriorityLandUseTypeDisplayName,
 	OnlandVisualTrashAssessmentAreaID,
 	WaterQualityManagementPlanID,
@@ -56,6 +55,8 @@ Select
     TrashGenerationRate,
     TrashCaptureStatus,
 	AssessmentScore,
+	MostRecentAssessmentDate,
+	CompletedAssessmentCount,
 	IsPriorityLandUse -- ALUs are not PLUs
 
 From (
@@ -132,6 +133,8 @@ From (
 		    else 'NotProvided'
 	    end as TrashCaptureStatus,
 	    case when ovtaad.MostRecentAssessmentScore is null then 'NotProvided' else ovtaad.MostRecentAssessmentScore end as AssessmentScore,
+	    ovtaad.MostRecentAssessmentDate,
+		ovtac.CompletedAssessmentCount,
 	    Case when tgu.LandUseBlockID is null then 0 when plut.PriorityLandUseTypeName = 'ALU' then 0 else 1 end as IsPriorityLandUse -- ALUs are not PLUs
 
 	From
@@ -176,9 +179,17 @@ From (
 	            join dbo.OnlandVisualTrashAssessmentScore score on score.OnlandVisualTrashAssessmentScoreID = q.OnlandVisualTrashAssessmentScoreID
 	            where rownumber = 1
         ) ovtaad on tgu.OnlandVisualTrashAssessmentAreaID = ovtaad.OnlandVisualTrashAssessmentAreaID
+
+		left join 
+		(
+			Select
+				OnlandVisualTrashAssessmentAreaID,
+				count (*) as CompletedAssessmentCount
+			from dbo.OnlandVisualTrashAssessment ovta
+			group by OnlandVisualTrashAssessmentAreaID
+		) ovtac on tgu.OnlandVisualTrashAssessmentAreaID = ovtac.OnlandVisualTrashAssessmentAreaID
 	Where 
 		tgu.LandUseBlockID is not null
-		and (lub.TrashGenerationRate is not null or scoreBaseline.TrashGenerationRate is not null)
 		and lub.PermitTypeID = 1
 		and tgu4326.TrashGeneratingUnit4326Geometry.STGeometryType() in ('POLYGON', 'MULTIPOLYGON')
 ) subq
