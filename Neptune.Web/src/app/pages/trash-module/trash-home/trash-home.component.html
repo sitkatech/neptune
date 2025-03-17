@@ -239,12 +239,12 @@
                             <hr>
                         
                             <dt class="g-col-5">BMP</dt>
-                            <dd class="g-col-7">{{tguDto.TreatmentBMPName}}</dd>
-                            <dt class="g-col-5"> <field-definition fieldDefinitionType="BMPTrashTreatmentStatus" labelOverride="BMP Status"></field-definition></dt>
+                            <dd class="g-col-7"><a href="{{ ocstBaseUrl() }}/TreatmentBMP/Detail/{{ tguDto.TreatmentBMPID}}">{{tguDto.TreatmentBMPName}}</a></dd>
+                            <dt class="g-col-5"><field-definition fieldDefinitionType="BMPTrashTreatmentStatus" labelOverride="BMP Status"></field-definition></dt>
                             <dd class="g-col-7">{{tguDto.TrashCaptureStatusBMP}}</dd>
 
                             <dt class="g-col-5">WQMP</dt>
-                            <dd class="g-col-7">{{tguDto.WaterQualityManagementPlanName}}</dd>
+                            <dd class="g-col-7"><a href="{{ ocstBaseUrl() }}/WaterQualityManagementPlan/Detail/{{ tguDto.WaterQualityManagementPlanID}}">{{tguDto.WaterQualityManagementPlanName}}</a></dd>
                             <dt class="g-col-5"><field-definition fieldDefinitionType="WQMPTrashTreatmentStatus" labelOverride="WQMP Status"></field-definition></dt>
                             <dd class="g-col-7">{{tguDto.TrashCaptureStatusWQMP}}</dd>
 

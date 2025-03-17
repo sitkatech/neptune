@@ -6492,6 +6492,11 @@
             "format": "int32",
             "nullable": true
           },
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "TreatmentBMPName": {
             "type": "string",
             "nullable": true
