@@ -35,6 +35,28 @@
                     <li class="nav-item" routerLinkActive="active">
                         <a class="nav-link" role="button" [routerLink]="['/trash/trash-generating-unit']"> Trash Analysis Areas </a>
                     </li>
+                    <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAdministrator(currentUser) || isJurisdicionManager(currentUser)">
+                        <a
+                            href="javascript:void(0);"
+                            [dropdownToggle]="manageToggle"
+                            class="nav-link dropdown-toggle"
+                            role="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                            <span class="nav-link__label">
+                                Manage
+                                <icon icon="AngleDown"></icon>
+                            </span>
+                        </a>
+    
+                        <div #manageToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-divider"></div>
+                            <a href="{{ usersListUrl() }}" class="dropdown-item" *ngIf="isAdministrator(currentUser) || isJurisdicionManager(currentUser)"> Users </a>
+                            <a href="{{ organizationsIndexUrl() }}" class="dropdown-item" *ngIf="isAdministrator(currentUser)"> Organizations </a>
+                            <a [routerLink]="['/labels-and-definitions']" class="dropdown-item" *ngIf="isAdministrator(currentUser)"> Labels and Definitions </a>
+                        </div>
+                    </li>
                 </ng-container>
             </ul>
         </div>

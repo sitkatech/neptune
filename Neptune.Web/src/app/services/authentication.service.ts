@@ -184,6 +184,11 @@ export class AuthenticationService {
         return this.currentUser.IsOCTAGrantReviewer;
     }
 
+    public isUserAJurisdictionManager(user: PersonDto): boolean {
+        const role = user ? user.RoleID : null;
+        return role === RoleEnum.JurisdictionManager;
+    }
+
     public isUserUnassigned(user: PersonDto): boolean {
         const role = user ? user.RoleID : null;
         return role === RoleEnum.Unassigned;

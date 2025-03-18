@@ -238,6 +238,11 @@
             text-transform: none;
             letter-spacing: 0;
         }
+
+        .dropdown-item{
+            padding: 5px 20px;
+            font-weight: bold;
+        }
     }
 
     &-link {
