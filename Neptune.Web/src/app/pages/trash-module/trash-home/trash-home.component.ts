@@ -81,6 +81,12 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     public currentStormwaterJurisdiction: StormwaterJurisdictionDto;
     private stormwaterJurisdictionSubject = new BehaviorSubject<StormwaterJurisdictionDto | null>(null);
     public stormwaterJurisdiction$ = this.stormwaterJurisdictionSubject.asObservable();
+    public selectedStormwaterJurisdictionLayer: L.GeoJSON<any>;
+    private selectedJurisdictionStyle = {
+        color: "#FF6C2D",
+        weight: 4,
+        fill: false,
+    };
 
     public currentResultType: string = "Area-Based Results";
     public resultTypes = ["Area-Based Results", "Load-Based Results (Current)", "Load-Based (Net Change)", "OVTA-Based Results", "No Metric, Map Overlay"];
@@ -93,6 +99,13 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     public isLoading: boolean;
 
     public tguDto$: Observable<TrashGeneratingUnitDto>;
+    public tguLayer: L.GeoJSON<any>;
+    private highlightStyle = {
+        color: "#fcfc12",
+        weight: 2,
+        opacity: 0.65,
+        fillOpacity: 0.1,
+    };
 
     constructor(
         private authenticationService: AuthenticationService,
@@ -172,6 +185,15 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         );
 
         this.boundingBox$ = this.stormwaterJurisdiction$.pipe(
+            tap((x) => {
+                this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:Jurisdictions", `StormwaterJurisdictionID = ${x.StormwaterJurisdictionID}`, "StormwaterJurisdictionID").subscribe((response) => {
+                    if (this.selectedStormwaterJurisdictionLayer){
+                        this.map.removeLayer(this.selectedStormwaterJurisdictionLayer);
+                    }
+                    this.selectedStormwaterJurisdictionLayer = L.geoJSON(response, { style: this.selectedJurisdictionStyle });
+                    this.selectedStormwaterJurisdictionLayer.addTo(this.map);
+                });
+            }),
             switchMap((x) => {
                 return this.stormwaterJurisdictionService.jurisdictionsJurisdictionIDBoundingBoxGet(x.StormwaterJurisdictionID);
             }),
@@ -202,9 +224,23 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
             wfsService.getTrashGeneratingUnitByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((tguFeatureCollection: L.FeatureCollection) => {
                 if(tguFeatureCollection.features.length == 0){
                     this.tguDto$ = null;
+                    if (this.tguLayer) {
+                        this.map.removeLayer(this.tguLayer);
+                    }
                 }
                 tguFeatureCollection.features.forEach((feature: L.Feature) => {
                     this.tguDto$ = this.trashGeneratingUnitService.trashGeneratingUnitsTrashGeneratingUnitIDGet(feature.properties.TrashGeneratingUnitID);
+                    const geoJson = L.geoJSON(feature, {
+                        style: this.highlightStyle
+                    });
+                    if (this.tguLayer) {
+                        this.map.removeLayer(this.tguLayer);
+                    }
+                    this.tguLayer = L.geoJSON(feature, {
+                        style: this.highlightStyle
+                    });
+                    //this.map.fitBounds(this.tguLayer.getBounds());
+                    this.tguLayer.addTo(this.map);
                 });
             });
         });
