@@ -6476,6 +6476,10 @@
             "type": "string",
             "nullable": true
           },
+          "TreatmentBMPTypeName": {
+            "type": "string",
+            "nullable": true
+          },
           "TrashCaptureStatusBMP": {
             "type": "string",
             "nullable": true
@@ -6490,7 +6494,8 @@
           },
           "BaselineLoadingRate": {
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "LandUseType": {
             "type": "string",
@@ -6588,7 +6593,8 @@
           },
           "BaselineLoadingRate": {
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "LandUseType": {
             "type": "string",

@@ -15,6 +15,8 @@ Select
 	TrashGeneratingUnitID,
 	TreatmentBMPID,
 	TreatmentBMPName,
+	TreatmentBMPTypeID,
+	TreatmentBMPTypeName,
     TrashGeneratingUnitGeometry,
 	Area,
 	StormwaterJurisdictionID,
@@ -64,6 +66,8 @@ From (
 		TrashGeneratingUnitID,
 		tbmp.TreatmentBMPID,
 		tbmp.TreatmentBMPName,
+		tbmpt.TreatmentBMPTypeID,
+		tbmpt.TreatmentBMPTypeName,
         tgu4326.TrashGeneratingUnit4326Geometry as TrashGeneratingUnitGeometry,
         IsNull(tgu.TrashGeneratingUnitGeometry.STArea(), 0) as Area,
 		tgu.StormwaterJurisdictionID,
@@ -83,12 +87,10 @@ From (
 			when area.OnlandVisualTrashAssessmentProgressScoreID is null then 0
 			else 1
 		end as HasProgressScore,
-		IsNull(
-			Case
-				when scoreBaseline.TrashGenerationRate is null then lub.TrashGenerationRate
-				else scoreBaseline.TrashGenerationRate
-			end, 0
-		) as BaselineLoadingRate,
+		Case
+			when scoreBaseline.TrashGenerationRate is null then lub.TrashGenerationRate
+			else scoreBaseline.TrashGenerationRate
+		end	as BaselineLoadingRate,
 		case
 			when (tbmp.TrashCaptureStatusTypeID = 1 and d.IsVerified = 1) or wqmp.TrashCaptureStatusTypeID = 1 then 1
 			else 0
@@ -150,6 +152,7 @@ From (
 		left join dbo.LandUseBlock lub on tgu.LandUseBlockID = lub.LandUseBlockID
 		left join dbo.Delineation d on tgu.DelineationID = d.DelineationID
 		left join dbo.TreatmentBMP tbmp on d.TreatmentBMPID = tbmp.TreatmentBMPID
+		left join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
 		left join dbo.WaterQualityManagementPlan wqmp on tgu.WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID
 		left join dbo.TrashCaptureStatusType tcs on tbmp.TrashCaptureStatusTypeID = tcs.TrashCaptureStatusTypeID
 		left join dbo.PriorityLandUseType plut on lub.PriorityLandUseTypeID = plut.PriorityLandUseTypeID

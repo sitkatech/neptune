@@ -16,6 +16,7 @@ export class TrashGeneratingUnitDto {
     TrashCaptureEffectivenessBMP?: number;
     TreatmentBMPID?: number;
     TreatmentBMPName?: string;
+    TreatmentBMPTypeName?: string;
     TrashCaptureStatusBMP?: string;
     StormwaterJurisdictionID?: number;
     StormwaterJurisdictionName?: string;
@@ -44,6 +45,7 @@ export interface TrashGeneratingUnitDtoForm {
     TrashCaptureEffectivenessBMP?: FormControl<number>;
     TreatmentBMPID?: FormControl<number>;
     TreatmentBMPName?: FormControl<string>;
+    TreatmentBMPTypeName?: FormControl<string>;
     TrashCaptureStatusBMP?: FormControl<string>;
     StormwaterJurisdictionID?: FormControl<number>;
     StormwaterJurisdictionName?: FormControl<string>;
@@ -96,6 +98,16 @@ export class TrashGeneratingUnitDtoFormControls {
         }
     );
     public static TreatmentBMPName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPTypeName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
