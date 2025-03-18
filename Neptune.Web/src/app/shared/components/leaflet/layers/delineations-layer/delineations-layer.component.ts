@@ -14,6 +14,7 @@ export class DelineationsLayerComponent extends MapLayerBase implements OnChange
     constructor() {
         super();
     }
+    @Input() isAnalyzedInModelingModule: boolean = true;
     public wmsOptions: L.WMSOptions;
     public layer;
 
@@ -23,7 +24,7 @@ export class DelineationsLayerComponent extends MapLayerBase implements OnChange
             transparent: true,
             format: "image/png",
             tiled: true,
-            cql_filter: "DelineationStatus = 'Verified' AND IsAnalyzedInModelingModule = 1",
+            cql_filter: this.isAnalyzedInModelingModule ?  "DelineationStatus = 'Verified' AND IsAnalyzedInModelingModule = 1" : "DelineationStatus = 'Verified'",
         };
 
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);

@@ -36,6 +36,7 @@ public class TrashGeneratingUnitController(
                 TrashGeneratingUnitID = x.TrashGeneratingUnitID,
                 TrashCaptureEffectivenessBMP = x.TrashCaptureEffectivenessBMP,
                 TreatmentBMPName = x.TreatmentBMPName,
+                TreatmentBMPTypeName = x.TreatmentBMPTypeName,
                 TreatmentBMPID = x.TreatmentBMPID,
                 TrashCaptureStatusBMP = x.TrashCaptureStatusBMP,
                 StormwaterJurisdictionID = x.StormwaterJurisdictionID,
