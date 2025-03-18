@@ -4,13 +4,12 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angul
 import { FormFieldComponent, FormFieldType, FormInputOption } from "src/app/shared/components/form-field/form-field.component";
 import { SelectDropdownOption } from "src/app/shared/components//form-field/form-field.component";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
-import { BehaviorSubject, Observable, map, tap } from "rxjs";
+import { Observable, map } from "rxjs";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import * as L from "leaflet";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 import {
-    OnlandVisualTrashAssessmentSimpleDto,
     OnlandVisualTrashAssessmentSimpleDtoForm,
     OnlandVisualTrashAssessmentSimpleDtoFormControls,
 } from "src/app/shared/generated/model/onland-visual-trash-assessment-simple-dto";
@@ -23,8 +22,6 @@ import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
-import { LoadingDirective } from "src/app/shared/directives/loading.directive";
-import { StormwaterJurisdictionDto } from "src/app/shared/generated/model/stormwater-jurisdiction-dto";
 import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 
@@ -41,7 +38,6 @@ import { AlertDisplayComponent } from "../../../../shared/components/alert-displ
         LandUseBlockLayerComponent,
         NgIf,
         ParcelLayerComponent,
-        LoadingDirective,
         WorkflowBodyComponent,
         AlertDisplayComponent,
     ],

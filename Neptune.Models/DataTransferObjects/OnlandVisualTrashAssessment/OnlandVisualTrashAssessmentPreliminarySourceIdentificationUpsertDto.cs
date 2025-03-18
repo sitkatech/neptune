@@ -2,26 +2,11 @@
 
 public class OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto
 {
-    //// create a simple from an answer provided on an OVTA
-    //public OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto(OnlandVisualTrashAssessmentPreliminarySourceIdentificationType onlandVisualTrashAssessmentPreliminarySourceIdentificationType)
-    //{
-    //    Has = true;
-    //    PreliminarySourceIdentificationTypeID =
-    //        onlandVisualTrashAssessmentPreliminarySourceIdentificationType.PreliminarySourceIdentificationTypeID;
-    //    ExplanationIfTypeIsOther =
-    //        onlandVisualTrashAssessmentPreliminarySourceIdentificationType.ExplanationIfTypeIsOther;
-    //}
-
-    //// create a simple from the platonic form
-    //public OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto(PreliminarySourceIdentificationType onlandVisualTrashAssessmentPreliminarySourceIdentificationType)
-    //{
-    //    Has = false;
-    //    PreliminarySourceIdentificationTypeID =
-    //        onlandVisualTrashAssessmentPreliminarySourceIdentificationType.PreliminarySourceIdentificationTypeID;
-    //}
-
     public bool Selected { get; set; }
     public int PreliminarySourceIdentificationTypeID { get; set; }
+    public string PreliminarySourceIdentificationTypeName { get; set; }
+    public int PreliminarySourceIdentificationCategoryID { get; set; }
+    public bool IsOther { get; set; }
     public string ExplanationIfTypeIsOther { get; set; }
 
     //public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

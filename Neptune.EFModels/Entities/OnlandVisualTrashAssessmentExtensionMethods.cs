@@ -98,18 +98,24 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
             {
                 Selected = true,
                 PreliminarySourceIdentificationTypeID = x.PreliminarySourceIdentificationTypeID,
+                PreliminarySourceIdentificationTypeName = x.PreliminarySourceIdentificationType.PreliminarySourceIdentificationTypeDisplayName,
+                PreliminarySourceIdentificationCategoryID = x.PreliminarySourceIdentificationType.PreliminarySourceIdentificationCategoryID,
+                IsOther = x.PreliminarySourceIdentificationType.IsOther(),
                 ExplanationIfTypeIsOther = x.ExplanationIfTypeIsOther
             }).ToList();
 
-        var notSelectedPreliminarySourceIdentifications = PreliminarySourceIdentificationType.All.Except(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(x => x.PreliminarySourceIdentificationType)).Select(x => new OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto
+        var notSelectedPreliminarySourceIdentifications = PreliminarySourceIdentificationType.All.Where(x => !onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(y => y.PreliminarySourceIdentificationTypeID).Contains(x.PreliminarySourceIdentificationTypeID)).Select(x => new OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto
         {
             Selected = false,
-            PreliminarySourceIdentificationTypeID = x.PreliminarySourceIdentificationTypeID
+            PreliminarySourceIdentificationTypeID = x.PreliminarySourceIdentificationTypeID,
+            PreliminarySourceIdentificationTypeName = x.PreliminarySourceIdentificationTypeDisplayName,
+            PreliminarySourceIdentificationCategoryID = x.PreliminarySourceIdentificationCategoryID,
+            IsOther = x.IsOther(),
 
         });
         selectedPreliminarySourceIdentifications.AddRange(notSelectedPreliminarySourceIdentifications);
 
-        dto.PreliminarySourceIdentifications = selectedPreliminarySourceIdentifications;
+        dto.PreliminarySourceIdentifications = selectedPreliminarySourceIdentifications.OrderBy(x => x.IsOther).ThenBy(x => x.PreliminarySourceIdentificationTypeName).ToList();
         return dto;
     }
 
