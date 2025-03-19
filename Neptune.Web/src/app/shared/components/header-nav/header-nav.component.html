@@ -6,46 +6,50 @@
 </div>
 
 <nav class="admin-nav">
-    <div class="admin-nav__wrapper" #mobileAdminToggle>
-        <a [routerLink]="['/']">
-            <img src="assets/main/logos/hippocamp_logo.png" class="navbarLogo" alt="Orange County Stormwater Tools" style="height: 100px" />
-        </a>
-        <ul class="admin-nav__links admin-nav__main">
-            <li class="nav-item dropdown moduleSwitcher" routerLinkActive="active">
-                <a
-                    href="javascript:void(0);"
-                    [dropdownToggle]="moduleSwitcherToggle"
-                    class="dropdown-toggle nav-link"
-                    role="button"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false">
-                    <span class="nav-link__label">
-                        <icon icon="AngleDown"></icon>
-                    </span>
-                </a>
-
-                <div #moduleSwitcherToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a href="{{ ocStormwaterToolsMainUrl() }}" class="dropdown-item" target="_blank"> OC Stormwater Tools Home </a>
-                    <div class="dropdown-divider"></div>
-                    <a [routerLink]="['/modeling']" class="dropdown-item">
-                        <img src="assets/main/icons/modelingIcon.png" style="height: 35px; padding-right: 15px" />
-                        Modeling Module
+    <div class="admin-nav__wrapper">
+       
+        <div class="admin-nav__logo-wrapper">
+            <a [routerLink]="['/']">
+                <img src="assets/main/logos/hippocamp_logo.png" class="navbarLogo" alt="Orange County Stormwater Tools" style="height: 100px" />
+            </a>
+            <ul class="admin-nav__links admin-nav__main">
+                <li class="nav-item dropdown moduleSwitcher" routerLinkActive="active">
+                    <a
+                        href="javascript:void(0);"
+                        [dropdownToggle]="moduleSwitcherToggle"
+                        class="dropdown-toggle nav-link"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                        <span class="nav-link__label">
+                            <icon icon="AngleDown"></icon>
+                        </span>
                     </a>
-                    <a [routerLink]="['/planning']" class="dropdown-item">
-                        <img src="assets/main/icons/planningIcon.png" style="height: 35px; padding-right: 15px" />
-                        Planning Module
-                    </a>
-                    <a [routerLink]="['/trash']" class="dropdown-item">
-                        <img src="assets/main/icons/trashIcon.png" style="height: 35px; padding-right: 15px" />
-                        Trash Module
-                    </a>
-                </div>
-            </li>
-            <li class="admin-nav__item home">
-                <a [routerLink]="['./']" routerLinkActive="active" class="navbar-brand"> {{ moduleTitle }} </a>
-            </li>
-        </ul>
+    
+                    <div #moduleSwitcherToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a href="{{ ocStormwaterToolsMainUrl() }}" class="dropdown-item" target="_blank"> OC Stormwater Tools Home </a>
+                        <div class="dropdown-divider"></div>
+                        <a [routerLink]="['/modeling']" class="dropdown-item">
+                            <img src="assets/main/icons/modelingIcon.png" style="height: 35px; padding-right: 15px" />
+                            Modeling Module
+                        </a>
+                        <a [routerLink]="['/planning']" class="dropdown-item">
+                            <img src="assets/main/icons/planningIcon.png" style="height: 35px; padding-right: 15px" />
+                            Planning Module
+                        </a>
+                        <a [routerLink]="['/trash']" class="dropdown-item">
+                            <img src="assets/main/icons/trashIcon.png" style="height: 35px; padding-right: 15px" />
+                            Trash Module
+                        </a>
+                    </div>
+                </li>
+                <li class="admin-nav__item home">
+                    <a [routerLink]="['./']" routerLinkActive="active" class="navbar-brand"> {{ moduleTitle }} </a>
+                </li>
+            </ul>
+        </div>
+        
 
         <ul class="admin-nav__links admin-nav__utilities">
             <li class="nav-item" routerLinkActive="active" *ngIf="!isAuthenticated()">
