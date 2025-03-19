@@ -15,6 +15,7 @@ Select
 	LoadingRateDelta,
 	LandUseBlockID,
 	TrashCaptureStatus,
+	TrashCaptureStatusSortOrder,
 	AssessmentScore,
 	IsPriorityLandUse -- ALUs are not PLUs
 from dbo.vTrashGeneratingUnitLoadStatistic

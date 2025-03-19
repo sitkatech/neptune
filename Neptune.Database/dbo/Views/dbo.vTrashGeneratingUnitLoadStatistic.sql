@@ -56,6 +56,7 @@ Select
     TrashCaptureEffectivenessWQMP,
     TrashGenerationRate,
     TrashCaptureStatus,
+	TrashCaptureStatusSortOrder,
 	AssessmentScore,
 	MostRecentAssessmentDate,
 	CompletedAssessmentCount,
@@ -134,6 +135,12 @@ From (
 		    when tbmp.TrashCaptureStatusTypeID = 3 or wqmp.TrashCaptureStatusTypeID = 3 then 'None'
 		    else 'NotProvided'
 	    end as TrashCaptureStatus,
+		case
+		    when tbmp.TrashCaptureStatusTypeID = 1 or wqmp.TrashCaptureStatusTypeID = 1 then 1
+		    when tbmp.TrashCaptureStatusTypeID = 2 or wqmp.TrashCaptureStatusTypeID = 2 then 2
+		    when tbmp.TrashCaptureStatusTypeID = 3 or wqmp.TrashCaptureStatusTypeID = 3 then 3
+		    else 4
+	    end as TrashCaptureStatusSortOrder,
 	    case when ovtaad.MostRecentAssessmentScore is null then 'NotProvided' else ovtaad.MostRecentAssessmentScore end as AssessmentScore,
 	    ovtaad.MostRecentAssessmentDate,
 		ovtac.CompletedAssessmentCount,

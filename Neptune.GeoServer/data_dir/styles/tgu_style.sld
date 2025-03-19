@@ -33,7 +33,7 @@
           <PolygonSymbolizer>
             <Fill>
               <CssParameter name="fill">#006400</CssParameter>
-              <CssParameter name="fill-opacity">.7</CssParameter>
+              <CssParameter name="fill-opacity">.8</CssParameter>
             </Fill>
           </PolygonSymbolizer>
         </Rule>
@@ -65,7 +65,7 @@
           <PolygonSymbolizer>
             <Fill>
               <CssParameter name="fill">#b3ffbb</CssParameter>
-              <CssParameter name="fill-opacity">.7</CssParameter>
+              <CssParameter name="fill-opacity">.8</CssParameter>
             </Fill>
           </PolygonSymbolizer>
         </Rule>
@@ -211,6 +211,7 @@
             </Fill>
           </PolygonSymbolizer>
         </Rule>
+        <VendorOption name="sortBy">IsPriorityLandUse, TrashCaptureStatusSortOrder D, AssessmentScore D</VendorOption>
       </FeatureTypeStyle>
       <FeatureTypeStyle>
         <Rule>
@@ -449,6 +450,7 @@
             </Stroke>
           </LineSymbolizer>
         </Rule>
+        <VendorOption name="sortBy">IsPriorityLandUse, TrashCaptureStatusSortOrder D, AssessmentScore D</VendorOption>
       </FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>
