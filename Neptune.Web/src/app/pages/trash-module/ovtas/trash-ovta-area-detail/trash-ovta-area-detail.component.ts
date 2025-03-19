@@ -138,16 +138,16 @@ export class TrashOvtaAreaDetailComponent {
         this.mapIsReady = true;
     }
 
-    public addNewOVTA(ovtaAreaDto: OnlandVisualTrashAssessmentAreaDetailDto) {
-        const modalContents = `<p>You are about to begin a new OVTA for Assessment Area: ${ovtaAreaDto.OnlandVisualTrashAssessmentAreaName}. 
+    public addNewOVTA(onlandVisualTrashAssessmentAreaID: number, onlandVisualTrashAssessmentAreaName: string, stormwaterJurisdictionID: number) {
+        const modalContents = `<p>You are about to begin a new OVTA for Assessment Area: ${onlandVisualTrashAssessmentAreaName}. 
         This will create a new Assessment record and allow you to start entering Assessment Observations on the next page.</p>`;
         this.confirmService
             .confirm({ buttonClassYes: "btn-primary", buttonTextYes: "Continue", buttonTextNo: "Cancel", title: "Add New OVTA", message: modalContents })
             .then((confirmed) => {
                 if (confirmed) {
                     var onlandVisualTrashAssessmentSimpleDto = new OnlandVisualTrashAssessmentSimpleDto();
-                    onlandVisualTrashAssessmentSimpleDto.OnlandVisualTrashAssessmentAreaID = ovtaAreaDto.OnlandVisualTrashAssessmentAreaID;
-                    onlandVisualTrashAssessmentSimpleDto.StormwaterJurisdictionID = ovtaAreaDto.StormwaterJurisdictionID;
+                    onlandVisualTrashAssessmentSimpleDto.OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID;
+                    onlandVisualTrashAssessmentSimpleDto.StormwaterJurisdictionID = stormwaterJurisdictionID;
                     onlandVisualTrashAssessmentSimpleDto.AssessingNewArea = false;
                     this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPost(onlandVisualTrashAssessmentSimpleDto).subscribe((response) => {
                         this.alertService.clearAlerts();
