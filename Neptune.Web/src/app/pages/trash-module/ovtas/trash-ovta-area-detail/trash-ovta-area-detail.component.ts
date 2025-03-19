@@ -124,7 +124,7 @@ export class TrashOvtaAreaDetailComponent {
 
         this.onlandVisualTrashAssessments$ = this.route.params.pipe(
             switchMap((params) => {
-                return this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(
+                return this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDOnlandVisualTrashAssessmentsGet(
                     params[routeParams.onlandVisualTrashAssessmentAreaID]
                 );
             }),
@@ -161,10 +161,14 @@ export class TrashOvtaAreaDetailComponent {
     updateOVTAAreaDetails(ovtaAreaDto: OnlandVisualTrashAssessmentAreaDetailDto) {
         this.modalService
             .open(UpdateOvtaAreaDetailsModalComponent, null, { CloseOnClickOut: false, TopLayer: false, ModalSize: ModalSizeEnum.Medium, ModalTheme: ModalThemeEnum.Light }, {
-                OvtaAreaDto: ovtaAreaDto,
+                OnlandVisualTrashAssessmentAreaID: ovtaAreaDto.OnlandVisualTrashAssessmentAreaID,
+                OnlandVisualTrashAssessmentAreaName: ovtaAreaDto.OnlandVisualTrashAssessmentAreaName,
+                AssessmentAreaDescription: ovtaAreaDto.AssessmentAreaDescription,
             } as UpdateOvtaAreaModalContext)
             .instance.result.then((result) => {
                 if (result) {
+                    this.alertService.clearAlerts();
+                    this.alertService.pushAlert(new Alert("Successfully updated OVTA area.", AlertContext.Success));
                     this.refreshOVTAAreasTrigger.next();
                 }
             });

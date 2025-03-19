@@ -1129,35 +1129,6 @@
             }
           }
         }
-      },
-      "post": {
-        "tags": [
-          "OnlandVisualTrashAssessmentArea"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaDetailDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaDetailDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaDetailDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
       }
     },
     "/onland-visual-trash-assessment-areas/{onlandVisualTrashAssessmentAreaID}": {
@@ -1198,9 +1169,49 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "OnlandVisualTrashAssessmentArea"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentAreaID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaSimpleDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaSimpleDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaSimpleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
-    "/onland-visual-trash-assessment-areas/onland-visual-trash-assessment-areas/{onlandVisualTrashAssessmentAreaID}": {
+    "/onland-visual-trash-assessment-areas/{onlandVisualTrashAssessmentAreaID}/onland-visual-trash-assessments": {
       "get": {
         "tags": [
           "OnlandVisualTrashAssessmentArea"
@@ -4580,6 +4591,38 @@
           "LastAssessmentDate": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OnlandVisualTrashAssessmentAreaSimpleDto": {
+        "type": "object",
+        "properties": {
+          "OnlandVisualTrashAssessmentAreaID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OnlandVisualTrashAssessmentAreaName": {
+            "type": "string",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OnlandVisualTrashAssessmentBaselineScoreID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "AssessmentAreaDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentProgressScoreID": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },

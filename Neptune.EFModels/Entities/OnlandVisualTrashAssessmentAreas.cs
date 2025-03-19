@@ -49,18 +49,17 @@ public static class OnlandVisualTrashAssessmentAreas
 
     }
 
-    public static void Update(NeptuneDbContext dbContext,
-        OnlandVisualTrashAssessmentAreaDetailDto ovtaAreaDto)
+    public static async Task Update(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentAreaID, OnlandVisualTrashAssessmentAreaSimpleDto ovtaAreaDto)
     {
-        var onlandVisualTrashAssessmentArea = dbContext.OnlandVisualTrashAssessmentAreas.SingleOrDefault(x =>
-            x.OnlandVisualTrashAssessmentAreaID == ovtaAreaDto.OnlandVisualTrashAssessmentAreaID);
+        var onlandVisualTrashAssessmentArea = await dbContext.OnlandVisualTrashAssessmentAreas.SingleOrDefaultAsync(x =>
+            x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentAreaID);
         if (onlandVisualTrashAssessmentArea != null)
         {
             onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName = ovtaAreaDto.OnlandVisualTrashAssessmentAreaName;
             onlandVisualTrashAssessmentArea.AssessmentAreaDescription = ovtaAreaDto.AssessmentAreaDescription;
         }
         
-        dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 
     public static OnlandVisualTrashAssessmentArea GetByIDForFeatureContextCheck(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentAreaID)

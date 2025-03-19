@@ -26,6 +26,7 @@ export * from '././onland-visual-trash-assessment-add-remove-parcels-dto';
 export * from '././onland-visual-trash-assessment-area-detail-dto';
 export * from '././onland-visual-trash-assessment-area-geometry-dto';
 export * from '././onland-visual-trash-assessment-area-grid-dto';
+export * from '././onland-visual-trash-assessment-area-simple-dto';
 export * from '././onland-visual-trash-assessment-detail-dto';
 export * from '././onland-visual-trash-assessment-grid-dto';
 export * from '././onland-visual-trash-assessment-observation-location-dto';

@@ -10,7 +10,7 @@
     <neptune-map
         (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessmentArea.Geometry)"
         [mapHeight]="mapHeight"
-        [showLegend]="false"
+        [showLegend]="true"
         [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
         <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></land-use-block-layer>
         <transect-line-layer
