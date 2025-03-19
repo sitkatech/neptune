@@ -50,7 +50,7 @@
                             <div class="g-col-10">
                                 <div class="dropdown-container">
                                     <ng-select
-                                        [(ngModel)]="currentStormwaterJurisdiction.StormwaterJurisdictionID"
+                                        [ngModel]="currentStormwaterJurisdiction.StormwaterJurisdictionID"
                                         (change)="onJurisdictionSelected($event)"
                                         [items]="stormwaterJurisdictions"
                                         bindLabel="Organization.OrganizationName"
