@@ -217,7 +217,7 @@ public static class OnlandVisualTrashAssessments
 
             if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine == null && onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Count >= 2)
             {
-                var transect = GetTransect(onlandVisualTrashAssessment);
+                var transect = GetTransectLine(onlandVisualTrashAssessment);
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine = transect;
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine4326 = transect.ProjectTo4326();
                 onlandVisualTrashAssessment.IsTransectBackingAssessment = true;
@@ -283,7 +283,7 @@ public static class OnlandVisualTrashAssessments
     {
         var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments.Single(x =>
             x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
-        onlandVisualTrashAssessment.DraftGeometry = ParcelGeometries.UnionAggregate4326ByParcelIDs(dbContext, parcelIDs);
+        onlandVisualTrashAssessment.DraftGeometry = ParcelGeometries.UnionAggregateByParcelIDs(dbContext, parcelIDs);
 
         await dbContext.SaveChangesAsync();
     }
@@ -293,42 +293,92 @@ public static class OnlandVisualTrashAssessments
         var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments.Single(x =>
             x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentRefineAreaDto.OnlandVisualTrashAssessmentID);
 
-        var newGeometry4326 = GeoJsonSerializer.Deserialize<IFeature>(onlandVisualTrashAssessmentRefineAreaDto.GeometryAsGeoJson);
-        newGeometry4326.Geometry.SRID = Proj4NetHelper.WEB_MERCATOR;
+        var newGeometry = GeoJsonSerializer.Deserialize<IFeature>(onlandVisualTrashAssessmentRefineAreaDto.GeometryAsGeoJson);
+        newGeometry.Geometry.SRID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID;
 
         // since this is coming from the browser, we have to transform to State Plane
-        onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = !newGeometry4326.Equals(onlandVisualTrashAssessment.DraftGeometry);
-        onlandVisualTrashAssessment.DraftGeometry = newGeometry4326.Geometry;
+        onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = !newGeometry.Equals(onlandVisualTrashAssessment.DraftGeometry);
+        onlandVisualTrashAssessment.DraftGeometry = newGeometry.Geometry;
         await dbContext.SaveChangesAsync();
     }
 
-    public static string GetTransectLine4326GeoJson(OnlandVisualTrashAssessment ovta)
+    public static FeatureCollection GetTransectLine4326GeoJson(ICollection<OnlandVisualTrashAssessmentObservation> onlandVisualTrashAssessmentObservations)
     {
-        var attributesTable = new AttributesTable
+        var featureCollection = new FeatureCollection();
+        var transectLine4326 = GetTransectLine4326(onlandVisualTrashAssessmentObservations);
+        if (transectLine4326 != null)
         {
-            { "OnlandVisualTrashAssessmentID", ovta.OnlandVisualTrashAssessmentID },
-        };
-
-        var feature = new Feature(GetTransect(ovta).ProjectTo4326(), attributesTable);
-        return GeoJsonSerializer.Serialize(feature);
+            var attributesTable = new AttributesTable { { "OnlandVisualTrashAssessmentID", onlandVisualTrashAssessmentObservations.First().OnlandVisualTrashAssessmentID } };
+            var feature = new Feature(transectLine4326, attributesTable);
+            featureCollection.Add(feature);
+        }
+        return featureCollection;
     }
 
-    private static Geometry GetTransect(OnlandVisualTrashAssessment ovta)
+    private static Geometry? GetTransectLine(OnlandVisualTrashAssessment ovta)
     {
-        if (ovta.OnlandVisualTrashAssessmentObservations.Count > 1)
+        return GetTransectLine(ovta.OnlandVisualTrashAssessmentObservations);
+    }
+
+    private static Geometry? GetTransectLine4326(OnlandVisualTrashAssessment ovta)
+    {
+        return GetTransectLine4326(ovta.OnlandVisualTrashAssessmentObservations);
+    }
+
+    public static Geometry? GetTransectLine4326(ICollection<OnlandVisualTrashAssessmentObservation> onlandVisualTrashAssessmentObservations)
+    {
+        return GetTransectLine(onlandVisualTrashAssessmentObservations)?.ProjectTo4326();
+    }
+
+    public static Geometry? GetTransectLine(ICollection<OnlandVisualTrashAssessmentObservation> onlandVisualTrashAssessmentObservations)
+    {
+        if (onlandVisualTrashAssessmentObservations.Count > 1)
         {
             var points = string.Join(",",
-                ovta.OnlandVisualTrashAssessmentObservations.OrderBy(x => x.ObservationDatetime)
+                onlandVisualTrashAssessmentObservations.OrderBy(x => x.ObservationDatetime)
                     .Select(x => x.LocationPoint).ToList().Select(x => $"{x.Coordinate.X} {x.Coordinate.Y}")
                     .ToList());
 
             var linestring = $"LINESTRING ({points})";
-
-            // the transect is going to be in 2771 because it was generated from points in 2771
             return GeometryHelper.FromWKT(linestring, Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
         }
 
         return null;
+    }
+
+    public static IQueryable<ParcelGeometry> GetParcelsViaTransect(this OnlandVisualTrashAssessment ovta,
+        NeptuneDbContext dbContext)
+    {
+        if (!ovta.OnlandVisualTrashAssessmentObservations.Any())
+        {
+            return new List<ParcelGeometry>().AsQueryable();
+        }
+
+        var transect = ovta.OnlandVisualTrashAssessmentObservations.Count == 1
+            ? ovta.OnlandVisualTrashAssessmentObservations.Single().LocationPoint // don't attempt to calculate the transect
+            : GetTransectLine(ovta.OnlandVisualTrashAssessmentObservations);
+
+        return ParcelGeometries.GetIntersected(dbContext, transect);
+    }
+
+    public static List<int> GetParcelIDsForAddOrRemoveParcels(
+        this OnlandVisualTrashAssessment onlandVisualTrashAssessment, NeptuneDbContext dbContext)
+    {
+        if (onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined.GetValueOrDefault())
+        {
+            return new List<int>();
+        }
+
+        // NP 8/22 these are supposed to be in 2771 already, but due to a b*g somewhere, some of them have 4326 as their SRID even though the coords are 2771...
+        var draftGeometry = onlandVisualTrashAssessment.DraftGeometry;//.FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
+
+        // ... and the wrong SRID would cause this next lookup to fail bigly 
+        var parcelIDs = draftGeometry == null
+            ? onlandVisualTrashAssessment.GetParcelsViaTransect(dbContext).Select(x => x.ParcelID)
+            : dbContext.ParcelGeometries.AsNoTracking()
+                .Where(x => draftGeometry.Contains(x.GeometryNative)).Select(x => x.ParcelID);
+
+        return parcelIDs.ToList();
     }
 
 }

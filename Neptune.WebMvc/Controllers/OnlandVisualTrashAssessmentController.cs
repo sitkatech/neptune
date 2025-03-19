@@ -272,7 +272,7 @@ namespace Neptune.WebMvc.Controllers
         public ViewResult AddOrRemoveParcels([FromRoute] OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
             var onlandVisualTrashAssessment = OnlandVisualTrashAssessments.GetByID(_dbContext, onlandVisualTrashAssessmentPrimaryKey);
-            var parcelIDs = onlandVisualTrashAssessment.GetParcelIDsForAddOrRemoveParcels(_dbContext);
+            var parcelIDs = OnlandVisualTrashAssessments.GetParcelIDsForAddOrRemoveParcels(onlandVisualTrashAssessment, _dbContext);
             var viewModel = new AddOrRemoveParcelsViewModel(parcelIDs);
             return ViewAddOrRemoveParcels(onlandVisualTrashAssessment, viewModel);
         }

@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { BoundingBoxDto } from '././bounding-box-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class OnlandVisualTrashAssessmentDetailDto { 
@@ -25,7 +24,6 @@ export class OnlandVisualTrashAssessmentDetailDto {
     OnlandVisualTrashAssessmentScoreName?: string;
     CompletedDate?: string;
     IsProgressAssessment?: string;
-    BoundingBox?: BoundingBoxDto;
     PreliminarySourceIdentificationsByCategory?: { [key: string]: Array<string>; };
     constructor(obj?: any) {
         Object.assign(this, obj);
@@ -45,7 +43,6 @@ export interface OnlandVisualTrashAssessmentDetailDtoForm {
     OnlandVisualTrashAssessmentScoreName?: FormControl<string>;
     CompletedDate?: FormControl<string>;
     IsProgressAssessment?: FormControl<string>;
-    BoundingBox?: FormControl<BoundingBoxDto>;
     PreliminarySourceIdentificationsByCategory?: FormControl<{ [key: string]: Array<string>; }>;
 }
 
@@ -161,16 +158,6 @@ export class OnlandVisualTrashAssessmentDetailDtoFormControls {
         }
     );
     public static IsProgressAssessment = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static BoundingBox = (value: FormControlState<BoundingBoxDto> | BoundingBoxDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<BoundingBoxDto>(
         value,
         formControlOptions ?? 
         {

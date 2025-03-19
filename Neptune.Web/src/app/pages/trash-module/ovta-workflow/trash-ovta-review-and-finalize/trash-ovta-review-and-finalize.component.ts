@@ -23,10 +23,7 @@ import { WorkflowBodyComponent } from "../../../../shared/components/workflow-bo
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 import { ObservationsMapComponent } from "../../ovtas/observations-map/observations-map.component";
 import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/generated/api/onland-visual-trash-assessment-observation.service";
-import {
-    OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto,
-    OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDtoForm,
-} from "src/app/shared/generated/model/onland-visual-trash-assessment-preliminary-source-identification-upsert-dto";
+import { OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDtoForm } from "src/app/shared/generated/model/onland-visual-trash-assessment-preliminary-source-identification-upsert-dto";
 
 @Component({
     selector: "trash-ovta-review-and-finalize",

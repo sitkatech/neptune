@@ -9,6 +9,8 @@ using Neptune.Models.DataTransferObjects;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Neptune.EFModels.Workflows;
+using System.Linq;
+using NetTopologySuite.Features;
 
 namespace Neptune.API.Controllers;
 
@@ -47,13 +49,32 @@ public class OnlandVisualTrashAssessmentController(
         return Ok(onlandVisualTrashAssessmentDetailDto);
     }
 
-    [HttpGet("{onlandVisualTrashAssessmentID}/add-or-remove-parcel")]
+    [HttpGet("{onlandVisualTrashAssessmentID}/transect-line-as-feature-collection")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public ActionResult<FeatureCollection> GetTransectLineAsFeatureCollection([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessmentObservations = OnlandVisualTrashAssessmentObservations.ListByOnlandVisualTrashAssessmentID(DbContext, onlandVisualTrashAssessmentID);
+        var transectLine4326GeoJson = OnlandVisualTrashAssessments.GetTransectLine4326GeoJson(onlandVisualTrashAssessmentObservations);
+        return Ok(transectLine4326GeoJson);
+    }
+
+    [HttpGet("{onlandVisualTrashAssessmentID}/parcels")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
     public ActionResult<OnlandVisualTrashAssessmentAddRemoveParcelsDto> GetByIDForAddOrRemoveParcel([FromRoute] int onlandVisualTrashAssessmentID)
     {
-        var onlandVisualTrashAssessmentAddRemoveParcelsDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsAddRemoveParcelDto();
+        var onlandVisualTrashAssessmentAddRemoveParcelsDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsAddRemoveParcelDto(DbContext);
         return Ok(onlandVisualTrashAssessmentAddRemoveParcelsDto);
+    }
+
+    [HttpPost("{onlandVisualTrashAssessmentID}/parcels")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public async Task<ActionResult> UpdateOnlandVisualTrashAssessmentWithParcels([FromRoute] int onlandVisualTrashAssessmentID, [FromBody] List<int> parcelIDs)
+    {
+        await OnlandVisualTrashAssessments.UpdateGeometry(dbContext, onlandVisualTrashAssessmentID, parcelIDs);
+        return Ok();
     }
 
     [HttpGet("{onlandVisualTrashAssessmentID}/review-and-finalize")]
@@ -101,31 +122,22 @@ public class OnlandVisualTrashAssessmentController(
         return Ok(onlandVisualTrashAssessmentRefineAreaDto);
     }
 
-    [HttpPost("{onlandVisualTrashAssessmentID}/parcel-geometries")]
-    [JurisdictionEditFeature]
-    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
-    public async Task<ActionResult> UpdateOnlandVisualTrashAssessmentWithParcels([FromRoute] int onlandVisualTrashAssessmentID, [FromBody] List<int> parcelIDs)
-    {
-        await OnlandVisualTrashAssessments.UpdateGeometry(dbContext, onlandVisualTrashAssessmentID, parcelIDs);
-        return Ok();
-    }
-
     [HttpPost("{onlandVisualTrashAssessmentID}/refine-area")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
     public async Task<ActionResult> UpdateOnlandVisualTrashAssessmentWithRefinedArea([FromRoute] int onlandVisualTrashAssessmentID, OnlandVisualTrashAssessmentRefineAreaDto onlandVisualTrashAssessmentRefineAreaDto)
     {
-        await OnlandVisualTrashAssessments.UpdateGeometry(dbContext, onlandVisualTrashAssessmentID,
-            onlandVisualTrashAssessmentRefineAreaDto);
+        await OnlandVisualTrashAssessments.UpdateGeometry(dbContext, onlandVisualTrashAssessmentID, onlandVisualTrashAssessmentRefineAreaDto);
         return Ok();
     }
 
     [HttpPost("{onlandVisualTrashAssessmentID}/refresh-parcels")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
-    public async Task<ActionResult> RefreshOnlandVisualTrashAssessmentParcels([FromRoute] int onlandVisualTrashAssessmentID)
+    public async Task<ActionResult<OnlandVisualTrashAssessmentAddRemoveParcelsDto>> RefreshOnlandVisualTrashAssessmentParcels([FromRoute] int onlandVisualTrashAssessmentID)
     {
         await OnlandVisualTrashAssessments.RefreshParcels(dbContext, onlandVisualTrashAssessmentID);
-        return Ok();
+        var onlandVisualTrashAssessmentAddRemoveParcelsDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsAddRemoveParcelDto(dbContext);
+        return Ok(onlandVisualTrashAssessmentAddRemoveParcelsDto);
     }
 }

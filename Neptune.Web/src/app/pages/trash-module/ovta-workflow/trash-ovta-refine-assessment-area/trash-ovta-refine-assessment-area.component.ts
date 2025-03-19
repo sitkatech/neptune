@@ -45,19 +45,11 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     public drawControl: L.Control;
     public isPerformingDrawAction: boolean = false;
     public layer: L.FeatureGroup = new L.FeatureGroup();
-    public transectLineLayer: L.FeatureGroup = new L.FeatureGroup();
 
     private defaultStyle = {
         color: "blue",
         fillOpacity: 0.2,
         opacity: 0,
-    };
-
-    private transectLineStyle = {
-        color: "#f70a0a",
-        weight: 2,
-        opacity: 0.65,
-        fillOpacity: 0.1,
     };
 
     private defaultDrawControlSpec: L.Control.DrawConstructorOptions = {
@@ -102,16 +94,13 @@ export class TrashOvtaRefineAssessmentAreaComponent {
         );
     }
 
-    public handleMapReady(event: NeptuneMapInitEvent, geometry, transectLine): void {
+    public handleMapReady(event: NeptuneMapInitEvent, geometry): void {
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.addFeatureCollectionToFeatureGroup(JSON.parse(geometry), this.layer);
-        this.addFeatureCollectionToFeatureGroup(JSON.parse(transectLine), this.transectLineLayer);
-        this.transectLineLayer.setStyle(this.transectLineStyle);
         this.setControl();
 
         this.layer.addTo(this.map);
-        this.transectLineLayer.addTo(this.map);
         this.mapIsReady = true;
     }
 

@@ -16,7 +16,6 @@ export class OnlandVisualTrashAssessmentRefineAreaDto {
     OnlandVisualTrashAssessmentID?: number;
     OnlandVisualTrashAssessmentAreaID?: number;
     BoundingBox?: BoundingBoxDto;
-    TransectLineAsGeoJson?: string;
     GeometryAsGeoJson?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
@@ -27,7 +26,6 @@ export interface OnlandVisualTrashAssessmentRefineAreaDtoForm {
     OnlandVisualTrashAssessmentID?: FormControl<number>;
     OnlandVisualTrashAssessmentAreaID?: FormControl<number>;
     BoundingBox?: FormControl<BoundingBoxDto>;
-    TransectLineAsGeoJson?: FormControl<string>;
     GeometryAsGeoJson?: FormControl<string>;
 }
 
@@ -53,16 +51,6 @@ export class OnlandVisualTrashAssessmentRefineAreaDtoFormControls {
         }
     );
     public static BoundingBox = (value: FormControlState<BoundingBoxDto> | BoundingBoxDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<BoundingBoxDto>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static TransectLineAsGeoJson = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnChanges } from "@angular/core";
+import { AfterViewInit, Component, Input, OnChanges } from "@angular/core";
 import * as L from "leaflet";
 import { environment } from "src/environments/environment";
 import { MapLayerBase } from "../map-layer-base.component";
@@ -11,6 +11,8 @@ import { MapLayerBase } from "../map-layer-base.component";
     styleUrl: "./parcel-layer.component.scss",
 })
 export class ParcelLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
+    @Input() styles: string = "parcel";
+
     constructor() {
         super();
     }
@@ -23,6 +25,7 @@ export class ParcelLayerComponent extends MapLayerBase implements OnChanges, Aft
             transparent: true,
             format: "image/png",
             tiled: true,
+            styles: this.styles,
         };
 
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);

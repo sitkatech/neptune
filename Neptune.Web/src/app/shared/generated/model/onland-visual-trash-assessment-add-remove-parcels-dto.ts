@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { BoundingBoxDto } from '././bounding-box-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class OnlandVisualTrashAssessmentAddRemoveParcelsDto { 
@@ -17,9 +16,7 @@ export class OnlandVisualTrashAssessmentAddRemoveParcelsDto {
     OnlandVisualTrashAssessmentAreaID?: number;
     StormwaterJurisdictionID?: number;
     IsDraftGeometryManuallyRefined?: boolean;
-    CompletedDate?: string;
-    BoundingBox?: BoundingBoxDto;
-    TransectLineAsGeoJson?: string;
+    SelectedParcelIDs?: Array<number>;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -30,9 +27,7 @@ export interface OnlandVisualTrashAssessmentAddRemoveParcelsDtoForm {
     OnlandVisualTrashAssessmentAreaID?: FormControl<number>;
     StormwaterJurisdictionID?: FormControl<number>;
     IsDraftGeometryManuallyRefined?: FormControl<boolean>;
-    CompletedDate?: FormControl<string>;
-    BoundingBox?: FormControl<BoundingBoxDto>;
-    TransectLineAsGeoJson?: FormControl<string>;
+    SelectedParcelIDs?: FormControl<Array<number>>;
 }
 
 export class OnlandVisualTrashAssessmentAddRemoveParcelsDtoFormControls { 
@@ -76,27 +71,7 @@ export class OnlandVisualTrashAssessmentAddRemoveParcelsDtoFormControls {
             ],
         }
     );
-    public static CompletedDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static BoundingBox = (value: FormControlState<BoundingBoxDto> | BoundingBoxDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<BoundingBoxDto>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static TransectLineAsGeoJson = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+    public static SelectedParcelIDs = (value: FormControlState<Array<number>> | Array<number> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<number>>(
         value,
         formControlOptions ?? 
         {

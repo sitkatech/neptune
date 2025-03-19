@@ -1,14 +1,14 @@
 <featureType>
   <id>FeatureTypeInfoImpl-8c7db4:16b9f1ddcfc:-2c10</id>
-  <name>TransectLineExport</name>
-  <nativeName>vGeoServerTransectLineExport</nativeName>
+  <name>TransectLine</name>
+  <nativeName>vGeoServerTransectLine</nativeName>
   <namespace>
     <id>NamespaceInfoImpl--4c8be7a1:15d76abd161:-7ffe</id>
   </namespace>
-  <title>vGeoServerTransectLineExport</title>
+  <title>vGeoServerTransectLine</title>
   <keywords>
     <string>features</string>
-    <string>vGeoServerTransectLineExport</string>
+    <string>vGeoServerTransectLine</string>
   </keywords>
   <nativeCRS>GEOGCS[&quot;WGS 84&quot;, 
   DATUM[&quot;World Geodetic System 1984&quot;, 
