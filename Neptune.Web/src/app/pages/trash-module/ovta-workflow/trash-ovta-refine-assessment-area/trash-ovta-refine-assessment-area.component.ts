@@ -20,11 +20,27 @@ import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workfl
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
+import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
+import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
+import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
+import { TransectLineLayerByOvtaComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer-by-ovta/transect-line-layer-by-ovta.component";
 
 @Component({
     selector: "trash-ovta-refine-assessment-area",
     standalone: true,
-    imports: [PageHeaderComponent, NeptuneMapComponent, AlertDisplayComponent, OvtaObservationLayerComponent, AsyncPipe, NgIf, LoadingDirective],
+    imports: [
+        PageHeaderComponent,
+        NeptuneMapComponent,
+        AlertDisplayComponent,
+        OvtaObservationLayerComponent,
+        AsyncPipe,
+        NgIf,
+        LoadingDirective,
+        WorkflowBodyComponent,
+        LandUseBlockLayerComponent,
+        ParcelLayerComponent,
+        TransectLineLayerByOvtaComponent,
+    ],
     templateUrl: "./trash-ovta-refine-assessment-area.component.html",
     styleUrl: "./trash-ovta-refine-assessment-area.component.scss",
 })
@@ -117,7 +133,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
             .subscribe(() => {
                 this.isLoadingSubmit = false;
                 this.alertService.clearAlerts();
-                this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
+                this.alertService.pushAlert(new Alert("Successfully updated Assessment Area.", AlertContext.Success));
                 this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
                 if (andContinue) {
                     this.router.navigate([`../../${this.ovtaID}/review-and-finalize`], { relativeTo: this.route });

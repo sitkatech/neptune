@@ -294,7 +294,8 @@ public static class OnlandVisualTrashAssessments
             x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentRefineAreaDto.OnlandVisualTrashAssessmentID);
 
         var newGeometry = GeoJsonSerializer.Deserialize<IFeature>(onlandVisualTrashAssessmentRefineAreaDto.GeometryAsGeoJson);
-        newGeometry.Geometry.SRID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID;
+        newGeometry.Geometry.SRID = Proj4NetHelper.WEB_MERCATOR;
+        newGeometry.Geometry = newGeometry.Geometry.ProjectTo2771();
 
         // since this is coming from the browser, we have to transform to State Plane
         onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = !newGeometry.Equals(onlandVisualTrashAssessment.DraftGeometry);
