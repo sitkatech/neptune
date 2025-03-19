@@ -112,11 +112,11 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
         var vTrashGeneratingUnitLoadStatistics =
             DbContext.vTrashGeneratingUnitLoadStatistics.Where(x => x.StormwaterJurisdictionID == jurisdictionID);
 
-        var viaFullCapture = vTrashGeneratingUnitLoadStatistics.Where(x => x.IsFullTrashCapture).Sum(x =>
+        var viaFullCapture = vTrashGeneratingUnitLoadStatistics.Where(x => x.IsFullTrashCapture && x.BaselineLoadingRate.HasValue).Sum(x =>
             x.Area * (double)(x.BaselineLoadingRate - TrashGeneratingUnitHelper.FullTrashCaptureLoading) * Constants.SquareMetersToAcres);
-        var viaPartialCapture = vTrashGeneratingUnitLoadStatistics.Where(x => x.IsPartialTrashCapture).Sum(x => 
+        var viaPartialCapture = vTrashGeneratingUnitLoadStatistics.Where(x => x.IsPartialTrashCapture && x.BaselineLoadingRate.HasValue).Sum(x => 
             x.Area * (double)(x.BaselineLoadingRate - x.CurrentLoadingRate) * Constants.SquareMetersToAcres);
-        var viaOVTAs = vTrashGeneratingUnitLoadStatistics.Where(x => x.HasBaselineScore == true && x.HasProgressScore == true).Sum(x =>
+        var viaOVTAs = vTrashGeneratingUnitLoadStatistics.Where(x => x.HasBaselineScore == true && x.HasProgressScore == true && x.BaselineLoadingRate.HasValue).Sum(x =>
             x.Area * (double)(x.BaselineLoadingRate - x.ProgressLoadingRate) * Constants.SquareMetersToAcres);
 
         var totalAchieved = viaFullCapture + viaPartialCapture + viaOVTAs;

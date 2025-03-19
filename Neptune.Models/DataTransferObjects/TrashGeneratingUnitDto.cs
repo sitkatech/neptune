@@ -10,10 +10,11 @@ public class TrashGeneratingUnitDto
     public int? TrashCaptureEffectivenessBMP { get; set; }
     public int? TreatmentBMPID { get; set; }
     public string TreatmentBMPName { get; set; }
+    public string TreatmentBMPTypeName { get; set; }
     public string? TrashCaptureStatusBMP { get; set; }
     public int StormwaterJurisdictionID { get; set; }
     public string StormwaterJurisdictionName { get; set; } = null!;
-    public decimal BaselineLoadingRate { get; set; }
+    public decimal? BaselineLoadingRate { get; set; }
     public string? LandUseType { get; set; }
     public decimal? CurrentLoadingRate { get; set; }
     public int? OnlandVisualTrashAssessmentAreaID { get; set; }

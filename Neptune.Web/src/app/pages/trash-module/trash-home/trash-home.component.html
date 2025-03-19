@@ -220,7 +220,7 @@
                         <h3 class="card-title">Selected Feature</h3>
                     </div>
                     <div class="card-body" *ngIf="tguDto$ | async as tguDto">
-                        <dl class="grid-12 mt-3">
+                        <dl class="grid-12 mt-3" style="row-gap: normal;">
                             <dt class="g-col-5">Analysis Area ID</dt>
                             <dd class="g-col-7">{{tguDto.TrashGeneratingUnitID}}</dd>
                             
@@ -231,15 +231,17 @@
                             <dd class="g-col-7">{{tguDto.CurrentLoadingRate}}  gal/yr</dd>
                             
                             <dt class="g-col-5"><field-definition fieldDefinitionType="BaselineLoadingRate"></field-definition></dt>
-                            <dd class="g-col-7">{{tguDto.BaselineLoadingRate}} gal/yr</dd>
+                            <dd class="g-col-7">{{tguDto.BaselineLoadingRate}}{{tguDto.BaselineLoadingRate != null ? " gal/yr": ""}}</dd>
                             
                             <dt class="g-col-5">Jurisdiction</dt>
                             <dd class="g-col-7">{{tguDto.StormwaterJurisdictionName}}</dd>
-                            
+                            <div class="font-italic" style="text-align: right;">Last Calculated Date:  {{tguDto.LastUpdateDate | date: "shortDate"}}</div>
                             <hr>
                         
                             <dt class="g-col-5">BMP</dt>
                             <dd class="g-col-7"><a href="{{ ocstBaseUrl() }}/TreatmentBMP/Detail/{{ tguDto.TreatmentBMPID}}">{{tguDto.TreatmentBMPName}}</a></dd>
+                            <dt class="g-col-5">BMP Type</dt>
+                            <dd class="g-col-7">{{tguDto.TreatmentBMPTypeName}}</dd>
                             <dt class="g-col-5"><field-definition fieldDefinitionType="BMPTrashTreatmentStatus" labelOverride="BMP Status"></field-definition></dt>
                             <dd class="g-col-7">{{tguDto.TrashCaptureStatusBMP}}</dd>
 
@@ -248,6 +250,8 @@
                             <dt class="g-col-5"><field-definition fieldDefinitionType="WQMPTrashTreatmentStatus" labelOverride="WQMP Status"></field-definition></dt>
                             <dd class="g-col-7">{{tguDto.TrashCaptureStatusWQMP}}</dd>
 
+                            <dt class="g-col-5">OVTA Area</dt>
+                            <dd class="g-col-7"><a [routerLink]="['/trash/onland-visual-trash-assessment-area', tguDto.OnlandVisualTrashAssessmentAreaID]" >{{tguDto.OnlandVisualTrashAssessmentAreaName}}</a></dd>
                             <dt class="g-col-5"><field-definition fieldDefinitionType="OVTAScoreEquivalentCalculation" labelOverride="OVTA Score"></field-definition></dt>
                             <dd class="g-col-7">{{tguDto.AssessmentScore}}</dd>
                             <dt class="g-col-5"># of Assessments</dt>
@@ -267,7 +271,7 @@
             <div class="g-col-9">
                 <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="1000px" [showLegend]="true" *ngIf="boundingBox$ | async as boundingBox" [boundingBox]="boundingBox">
                     <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
-                    <delineations-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></delineations-layer>
+                    <delineations-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20" [isAnalyzedInModelingModule]="false"></delineations-layer>
                     <inventoried-bmps-trash-capture-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></inventoried-bmps-trash-capture-layer>
                     <wqmps-trash-capture-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-trash-capture-layer>
                     <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></jurisdictions-layer>

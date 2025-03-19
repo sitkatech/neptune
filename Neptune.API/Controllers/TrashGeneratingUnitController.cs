@@ -7,6 +7,7 @@ using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using System.Collections.Generic;
 using System.Linq;
+using Neptune.Common;
 
 namespace Neptune.API.Controllers;
 
@@ -36,6 +37,7 @@ public class TrashGeneratingUnitController(
                 TrashGeneratingUnitID = x.TrashGeneratingUnitID,
                 TrashCaptureEffectivenessBMP = x.TrashCaptureEffectivenessBMP,
                 TreatmentBMPName = x.TreatmentBMPName,
+                TreatmentBMPTypeName = x.TreatmentBMPTypeName,
                 TreatmentBMPID = x.TreatmentBMPID,
                 TrashCaptureStatusBMP = x.TrashCaptureStatusBMP,
                 StormwaterJurisdictionID = x.StormwaterJurisdictionID,
@@ -51,7 +53,7 @@ public class TrashGeneratingUnitController(
                 TrashCaptureStatusWQMP = x.TrashCaptureStatusWQMP,
                 TrashCaptureEffectivenessWQMP = x.TrashCaptureEffectivenessWQMP,
                 LastUpdateDate = x.LastUpdateDate,
-                Area = x.Area,
+                Area = x.Area * Constants.SquareMetersToAcres,
                 AssessmentScore = x.AssessmentScore != "NotProvided" ? x.AssessmentScore : string.Empty,
                 AssessmentDate = x.MostRecentAssessmentDate,
                 CompletedAssessmentCount = x.CompletedAssessmentCount

@@ -18,6 +18,12 @@ public partial class vTrashGeneratingUnitLoadStatistic
     [Unicode(false)]
     public string? TreatmentBMPName { get; set; }
 
+    public int? TreatmentBMPTypeID { get; set; }
+
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? TreatmentBMPTypeName { get; set; }
+
     [Column(TypeName = "geometry")]
     public Geometry TrashGeneratingUnitGeometry { get; set; } = null!;
 
@@ -32,7 +38,7 @@ public partial class vTrashGeneratingUnitLoadStatistic
     public string OrganizationName { get; set; } = null!;
 
     [Column(TypeName = "decimal(4, 1)")]
-    public decimal BaselineLoadingRate { get; set; }
+    public decimal? BaselineLoadingRate { get; set; }
 
     public bool IsFullTrashCapture { get; set; }
 
