@@ -145,15 +145,29 @@ export class TrashOvtaAreaDetailComponent {
             .confirm({ buttonClassYes: "btn-primary", buttonTextYes: "Continue", buttonTextNo: "Cancel", title: "Add New OVTA", message: modalContents })
             .then((confirmed) => {
                 if (confirmed) {
-                    var a = new OnlandVisualTrashAssessmentSimpleDto();
-                    a.OnlandVisualTrashAssessmentAreaID = ovtaAreaDto.OnlandVisualTrashAssessmentAreaID;
-                    a.StormwaterJurisdictionID = ovtaAreaDto.StormwaterJurisdictionID;
-                    a.AssessingNewArea = false;
-                    this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPost(a).subscribe((response) => {
+                    var onlandVisualTrashAssessmentSimpleDto = new OnlandVisualTrashAssessmentSimpleDto();
+                    onlandVisualTrashAssessmentSimpleDto.OnlandVisualTrashAssessmentAreaID = ovtaAreaDto.OnlandVisualTrashAssessmentAreaID;
+                    onlandVisualTrashAssessmentSimpleDto.StormwaterJurisdictionID = ovtaAreaDto.StormwaterJurisdictionID;
+                    onlandVisualTrashAssessmentSimpleDto.AssessingNewArea = false;
+                    this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPost(onlandVisualTrashAssessmentSimpleDto).subscribe((response) => {
                         this.alertService.clearAlerts();
                         this.alertService.pushAlert(new Alert("Your OVTA was successfully created.", AlertContext.Success));
                         this.router.navigate([`/trash/onland-visual-trash-assessments/edit/${response.OnlandVisualTrashAssessmentID}/record-observations`]);
                     });
+                }
+            });
+    }
+
+    public editLocation(assessmentsCount: number) {
+        const modalContents =
+            assessmentsCount < 2
+                ? `<p>Any changes you make to the Assessment Area will apply to all future assessments.</p>`
+                : `<p>Any changes you make to the Assessment Area will apply to the ${assessmentsCount} Assessments associated with this area. Proceed?</p>`;
+        this.confirmService
+            .confirm({ buttonClassYes: "btn-primary", buttonTextYes: "Continue", buttonTextNo: "Cancel", title: "Edit Location", message: modalContents })
+            .then((confirmed) => {
+                if (confirmed) {
+                    this.router.navigate(["edit-location"], { relativeTo: this.route });
                 }
             });
     }
@@ -168,7 +182,7 @@ export class TrashOvtaAreaDetailComponent {
             .instance.result.then((result) => {
                 if (result) {
                     this.alertService.clearAlerts();
-                    this.alertService.pushAlert(new Alert("Successfully updated OVTA area.", AlertContext.Success));
+                    this.alertService.pushAlert(new Alert("Successfully updated Assessment Area.", AlertContext.Success));
                     this.refreshOVTAAreasTrigger.next();
                 }
             });

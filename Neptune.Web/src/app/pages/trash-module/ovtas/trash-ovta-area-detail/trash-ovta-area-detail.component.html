@@ -13,8 +13,8 @@
     </page-header>
     <app-alert-display></app-alert-display>
 
-    <div class="grid-12 mt-2 mb-3">
-        <div class="card g-col-6" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
+    <div class="grid-12 mt-2 mb-3" *ngIf="onlandVisualTrashAssessments$ | async as onlandVisualTrashAssessments">
+        <div class="card g-col-6">
             <div class="card-header flex-between">Details <button class="btn btn-primary" (click)="updateOVTAAreaDetails(onlandVisualTrashAssessmentArea)">Edit</button></div>
             <div class="card-body">
                 <dl class="grid-12">
@@ -48,7 +48,7 @@
         <div class="card g-col-6" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
             <div class="card-header flex-between">
                 Location
-                <button class="btn btn-primary" [routerLink]="['edit-location']">Edit</button>
+                <a class="btn btn-primary" (click)="editLocation(onlandVisualTrashAssessments.length)">Edit</a>
             </div>
             <div class="card-body map">
                 <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="400px" [showLegend]="false" [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
@@ -73,7 +73,7 @@
         <div [loadingSpinner]="{ isLoading: isLoadingGrid, loadingHeight: 100 }">
             <neptune-grid
                 height="800px"
-                [rowData]="onlandVisualTrashAssessments$ | async"
+                [rowData]="onlandVisualTrashAssessments"
                 [columnDefs]="ovtaColumnDefs"
                 downloadFileName="onland-visual-trash-assessments"
                 [pagination]="true"
