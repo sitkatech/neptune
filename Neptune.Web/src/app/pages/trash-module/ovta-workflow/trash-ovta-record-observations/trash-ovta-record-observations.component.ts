@@ -60,7 +60,6 @@ export class TrashOvtaRecordObservationsComponent {
     public mapIsReady = false;
     public isLoadingSubmit = false;
     public ovtaID: number;
-    private stormwaterJurisdictionID: number;
     public ovtaObservationLayer: L.GeoJSON<any>;
     public uploadFormField: FormControl<Blob> = new FormControl<Blob>(null);
     public formGroup: FormGroup<OnlandVisualTrashAssessmentObservationsUpsertDtoCustomForm> = new FormGroup<OnlandVisualTrashAssessmentObservationsUpsertDtoCustomForm>({
@@ -94,7 +93,6 @@ export class TrashOvtaRecordObservationsComponent {
         );
         this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessment$.pipe(
             switchMap((onlandVisualTrashAssessment) => {
-                this.stormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID;
                 return this.onlandVisualTrashAssessmentObservationService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsGet(
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID
                 );
@@ -118,16 +116,30 @@ export class TrashOvtaRecordObservationsComponent {
         );
     }
 
-    public handleMapReady(event: NeptuneMapInitEvent): void {
+    public handleMapReady(event: NeptuneMapInitEvent, onlandVisualTrashAssessment: OnlandVisualTrashAssessmentDetailDto): void {
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
         if (this.formGroup.controls.Observations.length > 0) {
             this.addObservationPointsLayersToMap();
             this.map.fitBounds(this.ovtaObservationLayer.getBounds());
+        } else if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID !== null) {
+            this.wfsService
+                .getGeoserverWFSLayerWithCQLFilter(
+                    "OCStormwater:OnlandVisualTrashAssessmentAreas",
+                    `OnlandVisualTrashAssessmentAreaID = ${onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID}`,
+                    "OnlandVisualTrashAssessmentAreaID"
+                )
+                .subscribe((response) => {
+                    this.map.fitBounds(L.geoJson(response).getBounds());
+                });
         } else {
             this.wfsService
-                .getGeoserverWFSLayerWithCQLFilter("OCStormwater:Jurisdictions", `StormwaterJurisdictionID = ${this.stormwaterJurisdictionID}`, "StormwaterJurisdictionID")
+                .getGeoserverWFSLayerWithCQLFilter(
+                    "OCStormwater:Jurisdictions",
+                    `StormwaterJurisdictionID = ${onlandVisualTrashAssessment.StormwaterJurisdictionID}`,
+                    "StormwaterJurisdictionID"
+                )
                 .subscribe((response) => {
                     this.map.fitBounds(L.geoJson(response).getBounds());
                 });

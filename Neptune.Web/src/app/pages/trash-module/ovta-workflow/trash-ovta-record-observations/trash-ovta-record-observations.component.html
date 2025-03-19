@@ -6,7 +6,7 @@
         <button class="btn btn-primary mr-2" [disabled]="isLoadingSubmit" (click)="addObservationMarker()">Add an Observation by clicking the map</button>
     </div>
 
-    <neptune-map *ngIf="onlandVisualTrashAssessmentObservations$ | async" (onMapLoad)="handleMapReady($event)" mapHeight="750px" [showLegend]="true">
+    <neptune-map *ngIf="onlandVisualTrashAssessmentObservations$ | async" (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment)" mapHeight="750px" [showLegend]="true">
         <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
         <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="15" styles="parcel_alt"></parcel-layer>
         <ovta-area-layer

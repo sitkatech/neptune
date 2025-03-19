@@ -116,19 +116,19 @@ export const routes: Routes = [
         children: [
             { path: "", title: "Home", component: TrashHomeComponent },
             {
-                path: "land-use-block",
+                path: "land-use-blocks",
                 component: TrashLandUseBlockIndexComponent,
                 canActivate: [UnauthenticatedAccessGuard],
             },
             {
-                path: "onland-visual-trash-assessment",
+                path: "onland-visual-trash-assessments",
                 children: [
                     { path: "", component: TrashOvtaIndexComponent, canActivate: [UnauthenticatedAccessGuard] },
                     { path: `:${routeParams.onlandVisualTrashAssessmentID}`, component: TrashOvtaDetailComponent, canActivate: [UnauthenticatedAccessGuard] },
                 ],
             },
             {
-                path: "onland-visual-trash-assessment/new",
+                path: "onland-visual-trash-assessments/new",
                 component: TrashOvtaWorkflowOutletComponent,
                 children: [
                     { path: "", redirectTo: "instructions", pathMatch: "full" },
@@ -137,7 +137,7 @@ export const routes: Routes = [
                 ],
             },
             {
-                path: `onland-visual-trash-assessment/edit/:${routeParams.onlandVisualTrashAssessmentID}`,
+                path: `onland-visual-trash-assessments/edit/:${routeParams.onlandVisualTrashAssessmentID}`,
                 component: TrashOvtaWorkflowOutletComponent,
                 children: [
                     { path: "", redirectTo: "instructions", pathMatch: "full" },
@@ -151,7 +151,7 @@ export const routes: Routes = [
             },
 
             {
-                path: "onland-visual-trash-assessment-area",
+                path: "onland-visual-trash-assessment-areas",
                 children: [
                     { path: "", component: TrashOvtaAreaIndexComponent, canActivate: [UnauthenticatedAccessGuard] },
                     {
@@ -167,7 +167,7 @@ export const routes: Routes = [
                 ],
             },
             {
-                path: "trash-generating-unit",
+                path: "trash-generating-units",
                 component: TrashTrashGeneratingUnitIndexComponent,
                 canActivate: [UnauthenticatedAccessGuard],
             },

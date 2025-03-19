@@ -12,10 +12,10 @@
                 <div class="card-body">
                     <div class="hero__btns">
                         <div class="hero__btns-wrapper">
-                            <a class="float-right btn btn-primary" [routerLink]="['onland-visual-trash-assessment/new/instructions']">Add New OVTA</a>
+                            <a class="float-right btn btn-primary" [routerLink]="['onland-visual-trash-assessments/new/instructions']">Add New OVTA</a>
                         </div>
                         <div class="hero__btns-wrapper">
-                            <a class="btn btn-primary" [routerLink]="['onland-visual-trash-assessment-area']">View All OVTA Areas</a>
+                            <a class="btn btn-primary" [routerLink]="['onland-visual-trash-assessment-areas']">View All OVTA Areas</a>
                         </div>
                     </div>
                 </div>
@@ -268,7 +268,7 @@
 
                             <dt class="g-col-5">OVTA Area</dt>
                             <dd class="g-col-7">
-                                <a [routerLink]="['/trash/onland-visual-trash-assessment-area', tguDto.OnlandVisualTrashAssessmentAreaID]">{{
+                                <a [routerLink]="['/trash/onland-visual-trash-assessment-areas', tguDto.OnlandVisualTrashAssessmentAreaID]">{{
                                     tguDto.OnlandVisualTrashAssessmentAreaName
                                 }}</a>
                             </dd>
