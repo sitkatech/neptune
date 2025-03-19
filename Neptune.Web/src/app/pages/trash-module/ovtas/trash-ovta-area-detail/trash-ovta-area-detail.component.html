@@ -1,11 +1,16 @@
 <ng-container *ngIf="onlandVisualTrashAssessmentArea$ | async as onlandVisualTrashAssessmentArea">
-    <page-header [pageTitle]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName" [templateAbove]="templateAbove">
+    <page-header [pageTitle]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName" [templateRight]="templateRight" [templateAbove]="templateAbove">
         <ng-template #templateAbove>
             <div class="back">
                 <a [routerLink]="['../']" class="back__link">Back to OVTA Area Grid</a>
             </div>
-        </ng-template></page-header
-    >
+        </ng-template>
+        <ng-template #templateRight>
+            <div class="flex-between mb-3">
+                <a class="btn btn-primary mr-2" [routerLink]="['new/instructions']">Add New OVTA</a>
+            </div>
+        </ng-template>
+    </page-header>
     <app-alert-display></app-alert-display>
 
     <div class="grid-12 mt-2 mb-3">
@@ -64,12 +69,8 @@
                 </neptune-map>
             </div>
         </div>
+        <h3>Onland Visual Trash Assessments</h3>
         <div [loadingSpinner]="{ isLoading: isLoadingGrid, loadingHeight: 100 }">
-            <div class="flex-between mb-3">
-                <h3>Onland Visual Trash Assessments</h3>
-                <a class="float-right btn btn-primary mr-2" [routerLink]="['new/instructions']">Begin OVTA</a>
-            </div>
-
             <neptune-grid
                 height="800px"
                 [rowData]="onlandVisualTrashAssessments$ | async"
