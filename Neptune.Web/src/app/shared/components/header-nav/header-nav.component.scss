@@ -51,6 +51,17 @@
                 color: $primary;
             }
         }
+
+        .dropdown-menu {
+            position: absolute;
+            z-index: 1111;
+            top: 2rem;
+           
+            background: white;
+            width: 16rem;
+            border-radius: 0.25rem;
+            box-shadow: $shadow-100;
+        }
     }
 
     &__main {
@@ -59,17 +70,32 @@
 
             &__label {
                 color: $teal-800;
-                margin-right: 2rem;
+                margin-left: 2rem;
             }
         }
        
         .dropdown-menu {
             top: 3.5rem;
+            position: absolute;
+            z-index: 1111;
+            background: white;
+            width: 16rem;
+            border-radius: 0.25rem;
+            box-shadow: $shadow-100;
+
+            &-right { 
+                left: unset;
+                right: 0;
+            }
         }
     }
 
     &__logo-wrapper{
         display: flex;
+    }
+
+    &__item{
+        margin-left: 1rem;
     }
 
     a.navbar-brand {
