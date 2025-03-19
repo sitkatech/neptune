@@ -81,6 +81,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     public currentStormwaterJurisdiction: StormwaterJurisdictionDto;
     private stormwaterJurisdictionSubject = new BehaviorSubject<StormwaterJurisdictionDto | null>(null);
     public stormwaterJurisdiction$ = this.stormwaterJurisdictionSubject.asObservable();
+    
     public selectedStormwaterJurisdictionLayer: L.GeoJSON<any>;
     private selectedJurisdictionStyle = {
         color: "#FF6C2D",
@@ -186,13 +187,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
 
         this.boundingBox$ = this.stormwaterJurisdiction$.pipe(
             tap((x) => {
-                this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:Jurisdictions", `StormwaterJurisdictionID = ${x.StormwaterJurisdictionID}`, "StormwaterJurisdictionID").subscribe((response) => {
-                    if (this.selectedStormwaterJurisdictionLayer){
-                        this.map.removeLayer(this.selectedStormwaterJurisdictionLayer);
-                    }
-                    this.selectedStormwaterJurisdictionLayer = L.geoJSON(response, { style: this.selectedJurisdictionStyle });
-                    this.selectedStormwaterJurisdictionLayer.addTo(this.map);
-                });
+                this.addSelectedJurisdictionLayer(x.StormwaterJurisdictionID);
             }),
             switchMap((x) => {
                 return this.stormwaterJurisdictionService.jurisdictionsJurisdictionIDBoundingBoxGet(x.StormwaterJurisdictionID);
@@ -211,6 +206,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         this.mapIsReady = true;
 
         this.registerClickEvents();
+        this.addSelectedJurisdictionLayer(this.currentStormwaterJurisdiction.StormwaterJurisdictionID);
     }
 
     public onJurisdictionSelected(selectedJurisdiction: StormwaterJurisdictionDto) {
@@ -243,6 +239,19 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                     this.tguLayer.addTo(this.map);
                 });
             });
+        });
+    }
+
+    public addSelectedJurisdictionLayer(stormwaterJurisdictionID: number){
+        this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:Jurisdictions", `StormwaterJurisdictionID = ${stormwaterJurisdictionID}`, "StormwaterJurisdictionID").subscribe((response) => {
+            if(this.mapIsReady){
+                if (this.selectedStormwaterJurisdictionLayer){
+                    this.map.removeLayer(this.selectedStormwaterJurisdictionLayer);
+                }
+                this.selectedStormwaterJurisdictionLayer = L.geoJSON(response, { style: this.selectedJurisdictionStyle });
+                this.selectedStormwaterJurisdictionLayer.addTo(this.map);
+            }
+            
         });
     }
 
