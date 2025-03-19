@@ -27,7 +27,7 @@ public class OnlandVisualTrashAssessmentAreaController(
     {
         var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(DbContext, CallingUser.PersonID);
         var onlandVisualTrashAssessmentAreaGridDtos = OnlandVisualTrashAssessmentAreas
-            .ListByStormwaterJurisdictionIDList(dbContext, stormwaterJurisdictionIDs).Select(x => x.AsGridDto()).ToList();
+            .ListByStormwaterJurisdictionIDList(DbContext, stormwaterJurisdictionIDs).Select(x => x.AsGridDto()).ToList();
         return Ok(onlandVisualTrashAssessmentAreaGridDtos);
     }
 
@@ -40,7 +40,16 @@ public class OnlandVisualTrashAssessmentAreaController(
         return Ok(onlandVisualTrashAssessmentAreaDetailDto);
     }
 
-    [HttpGet("onland-visual-trash-assessment-areas/{onlandVisualTrashAssessmentAreaID}")]
+    [HttpPut("{onlandVisualTrashAssessmentAreaID}")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
+    public async Task<ActionResult> Update([FromRoute] int onlandVisualTrashAssessmentAreaID, [FromBody] OnlandVisualTrashAssessmentAreaSimpleDto onlandVisualTrashAssessmentAreaDto)
+    {
+        await OnlandVisualTrashAssessmentAreas.Update(DbContext, onlandVisualTrashAssessmentAreaID, onlandVisualTrashAssessmentAreaDto);
+        return Ok();
+    }
+
+    [HttpGet("{onlandVisualTrashAssessmentAreaID}/onland-visual-trash-assessments")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
     public ActionResult<List<OnlandVisualTrashAssessmentGridDto>> GetByAreaID([FromRoute] int onlandVisualTrashAssessmentAreaID)
@@ -49,22 +58,13 @@ public class OnlandVisualTrashAssessmentAreaController(
         return Ok(visualTrashAssessmentGridDtos);
     }
 
-    [HttpPost]
-    [JurisdictionEditFeature]
-    [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
-    public ActionResult Update([FromBody] OnlandVisualTrashAssessmentAreaDetailDto onlandVisualTrashAssessmentAreaDto)
-    {
-        OnlandVisualTrashAssessmentAreas.Update(DbContext, onlandVisualTrashAssessmentAreaDto);
-        return Ok();
-    }
-
     [HttpGet("{onlandVisualTrashAssessmentAreaID}/parcel-geometries")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
     public ActionResult<List<ParcelGeometrySimpleDto>> GetParcelGeometries([FromRoute] int onlandVisualTrashAssessmentAreaID)
     {
         var onlandVisualTrashAssessmentArea = OnlandVisualTrashAssessmentAreas.GetByID(DbContext, onlandVisualTrashAssessmentAreaID);
-        var geometries = ParcelGeometries.GetIntersected(dbContext,
+        var geometries = ParcelGeometries.GetIntersected(DbContext,
             onlandVisualTrashAssessmentArea.TransectLine).Select(x => x.AsSimpleDto()).ToList();
         return Ok(geometries);
     }
@@ -74,8 +74,8 @@ public class OnlandVisualTrashAssessmentAreaController(
     [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
     public async Task<ActionResult> UpdateOnlandVisualTrashAssessmentWithParcels([FromRoute] int onlandVisualTrashAssessmentAreaID, [FromBody] OnlandVisualTrashAssessmentAreaGeometryDto onlandVisualTrashAssessmentAreaGeometryDto)
     {
-        OnlandVisualTrashAssessmentAreas.UpdateGeometry(dbContext, onlandVisualTrashAssessmentAreaGeometryDto);
-        await dbContext.SaveChangesAsync();
+        OnlandVisualTrashAssessmentAreas.UpdateGeometry(DbContext, onlandVisualTrashAssessmentAreaGeometryDto);
+        await DbContext.SaveChangesAsync();
         return Ok();
     }
 }

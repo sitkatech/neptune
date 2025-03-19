@@ -7,7 +7,6 @@ using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Views.OnlandVisualTrashAssessmentExport;
-using NetTopologySuite.Algorithm;
 using NetTopologySuite.Features;
 
 namespace Neptune.WebMvc.Controllers

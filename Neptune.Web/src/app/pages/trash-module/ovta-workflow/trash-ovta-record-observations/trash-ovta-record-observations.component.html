@@ -6,20 +6,24 @@
         <button class="btn btn-primary mr-2" [disabled]="isLoadingSubmit" (click)="addObservationMarker()">Add an Observation by clicking the map</button>
     </div>
 
-    <neptune-map
-        *ngIf="onlandVisualTrashAssessmentObservations$ | async"
-        (onMapLoad)="handleMapReady($event)"
-        mapHeight="500px"
-        [showLegend]="false"
-        [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
+    <neptune-map *ngIf="onlandVisualTrashAssessmentObservations$ | async" (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment)" mapHeight="750px" [showLegend]="true">
+        <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
+        <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="15" styles="parcel_alt"></parcel-layer>
         <ovta-area-layer
             *ngIf="mapIsReady"
             [displayOnLoad]="true"
             [map]="map"
             [layerControl]="layerControl"
-            [sortOrder]="10"
-            [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer
-    ></neptune-map>
+            [sortOrder]="20"
+            [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
+        <transect-line-layer-by-ovta
+            *ngIf="mapIsReady"
+            [displayOnLoad]="true"
+            [map]="map"
+            [layerControl]="layerControl"
+            [sortOrder]="25"
+            [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></transect-line-layer-by-ovta>
+    </neptune-map>
 
     <form [formGroup]="formGroup">
         <ng-container formArrayName="Observations" *ngFor="let control of formGroup.controls.Observations.controls; let i = index">

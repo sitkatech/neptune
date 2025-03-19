@@ -674,7 +674,56 @@
         }
       }
     },
-    "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/add-or-remove-parcel": {
+    "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/transect-line-as-feature-collection": {
+      "get": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IFeature"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IFeature"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IFeature"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/parcels": {
       "get": {
         "tags": [
           "OnlandVisualTrashAssessment"
@@ -710,6 +759,58 @@
                 }
               }
             }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -952,60 +1053,6 @@
         }
       }
     },
-    "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/parcel-geometries": {
-      "post": {
-        "tags": [
-          "OnlandVisualTrashAssessment"
-        ],
-        "parameters": [
-          {
-            "name": "onlandVisualTrashAssessmentID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/refresh-parcels": {
       "post": {
         "tags": [
@@ -1024,7 +1071,24 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAddRemoveParcelsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAddRemoveParcelsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAddRemoveParcelsDto"
+                }
+              }
+            }
           }
         }
       }
@@ -1063,35 +1127,6 @@
                 }
               }
             }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "OnlandVisualTrashAssessmentArea"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaDetailDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaDetailDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaDetailDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }
@@ -1134,9 +1169,49 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "OnlandVisualTrashAssessmentArea"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentAreaID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaSimpleDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaSimpleDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentAreaSimpleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
-    "/onland-visual-trash-assessment-areas/onland-visual-trash-assessment-areas/{onlandVisualTrashAssessmentAreaID}": {
+    "/onland-visual-trash-assessment-areas/{onlandVisualTrashAssessmentAreaID}/onland-visual-trash-assessments": {
       "get": {
         "tags": [
           "OnlandVisualTrashAssessmentArea"
@@ -4390,16 +4465,12 @@
           "IsDraftGeometryManuallyRefined": {
             "type": "boolean"
           },
-          "CompletedDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "BoundingBox": {
-            "$ref": "#/components/schemas/BoundingBoxDto"
-          },
-          "TransectLineAsGeoJson": {
-            "type": "string",
+          "SelectedParcelIDs": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
             "nullable": true
           }
         },
@@ -4525,6 +4596,38 @@
         },
         "additionalProperties": false
       },
+      "OnlandVisualTrashAssessmentAreaSimpleDto": {
+        "type": "object",
+        "properties": {
+          "OnlandVisualTrashAssessmentAreaID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OnlandVisualTrashAssessmentAreaName": {
+            "type": "string",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OnlandVisualTrashAssessmentBaselineScoreID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "AssessmentAreaDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentProgressScoreID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "OnlandVisualTrashAssessmentDetailDto": {
         "type": "object",
         "properties": {
@@ -4577,9 +4680,6 @@
           "IsProgressAssessment": {
             "type": "string",
             "nullable": true
-          },
-          "BoundingBox": {
-            "$ref": "#/components/schemas/BoundingBoxDto"
           },
           "PreliminarySourceIdentificationsByCategory": {
             "type": "object",
@@ -4768,10 +4868,6 @@
           },
           "BoundingBox": {
             "$ref": "#/components/schemas/BoundingBoxDto"
-          },
-          "TransectLineAsGeoJson": {
-            "type": "string",
-            "nullable": true
           },
           "GeometryAsGeoJson": {
             "type": "string",

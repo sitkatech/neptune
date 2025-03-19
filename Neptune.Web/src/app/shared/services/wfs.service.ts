@@ -96,4 +96,19 @@ export class WfsService {
             },
         });
     }
+
+    public getParcelByCoordinate(longitude: number, latitude: number): Observable<FeatureCollection> {
+        const url: string = `${environment.geoserverMapServiceUrl}/wms`;
+        return this.http.get<FeatureCollection>(url, {
+            params: {
+                service: "WFS",
+                version: "2.0",
+                request: "GetFeature",
+                outputFormat: "application/json",
+                SrsName: "EPSG:4326",
+                typeName: "Parcels",
+                cql_filter: `intersects(ParcelGeometry, POINT(${latitude} ${longitude}))`,
+            },
+        });
+    }
 }

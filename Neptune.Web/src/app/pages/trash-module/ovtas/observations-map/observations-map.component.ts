@@ -6,11 +6,11 @@ import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { NgIf, NgFor } from "@angular/common";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
-import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
 import { environment } from "src/environments/environment";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LandUseBlockLayerComponent } from "src/app/shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
+import { TransectLineLayerByOvtaComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer-by-ovta/transect-line-layer-by-ovta.component";
 
 //This component could use a fair amount of cleanup. It should likely be sent in the treatment bmps and delineations instead of grabbing them itself
 @Component({
@@ -18,14 +18,13 @@ import { LandUseBlockLayerComponent } from "src/app/shared/components/leaflet/la
     templateUrl: "./observations-map.component.html",
     styleUrls: ["./observations-map.component.scss"],
     standalone: true,
-    imports: [NgIf, NgFor, NeptuneMapComponent, OvtaAreaLayerComponent, TransectLineLayerComponent, LandUseBlockLayerComponent],
+    imports: [NgIf, NgFor, NeptuneMapComponent, OvtaAreaLayerComponent, LandUseBlockLayerComponent, TransectLineLayerByOvtaComponent],
 })
 export class ObservationsMapComponent {
     @ViewChild("ovtaObservations") ovtaObservations: ElementRef;
     @Input("observations") onlandVisualTrashAssessmentObservations: Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>;
-    @Input() jurisdictionID: number;
+    @Input() onlandVisualTrashAssessmentID: number;
     @Input() onlandVisualTrashAssessmentAreaID: number;
-    @Input() onlandVisualTrashAssessmentAreaName: string;
     public boundingBox: BoundingBoxDto;
 
     public mapIsReady: boolean = false;

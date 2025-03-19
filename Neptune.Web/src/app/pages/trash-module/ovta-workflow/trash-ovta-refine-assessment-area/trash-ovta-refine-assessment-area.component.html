@@ -1,6 +1,6 @@
 <page-header pageTitle="Refine Assessment Area"></page-header>
-<app-alert-display></app-alert-display>
-<div class="page-body" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
+<workflow-body *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
+    <app-alert-display></app-alert-display>
     <div class="copy copy-2 mb-3">
         You may click or tap the edit button (<i class="fas fa-edit"></i>) on the map below to adjust the Assessment Area's vertices. You may drag vertices to move them, or click
         or tap vertices to delete them. Note that it may be necessary to zoom the map to see individual vertices that are close together (e.g. there may be many closely-placed
@@ -11,22 +11,29 @@
         </p>
     </div>
     <neptune-map
-        *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment"
-        (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment.GeometryAsGeoJson, onlandVisualTrashAssessment.TransectLineAsGeoJson)"
-        mapHeight="500px"
-        [showLegend]="false"
+        (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment.GeometryAsGeoJson)"
+        mapHeight="750px"
+        [showLegend]="true"
         [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
+        <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
+        <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></parcel-layer>
         <ovta-observation-layer
             *ngIf="mapIsReady"
             [displayOnLoad]="true"
             [map]="map"
             [layerControl]="layerControl"
-            [sortOrder]="10"
+            [sortOrder]="30"
             [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></ovta-observation-layer>
+        <transect-line-layer-by-ovta
+            *ngIf="mapIsReady"
+            [displayOnLoad]="true"
+            [map]="map"
+            [layerControl]="layerControl"
+            [sortOrder]="25"
+            [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></transect-line-layer-by-ovta>
     </neptune-map>
-
-    <div class="page-footer">
-        <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
-        <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Save & Continue</button>
-    </div>
+</workflow-body>
+<div class="page-footer">
+    <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
+    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Save & Continue</button>
 </div>

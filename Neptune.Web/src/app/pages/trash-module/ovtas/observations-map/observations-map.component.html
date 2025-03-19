@@ -31,14 +31,13 @@
                 [layerControl]="layerControl"
                 [sortOrder]="20"
                 [ovtaAreaID]="onlandVisualTrashAssessmentAreaID"></ovta-area-layer>
-            <transect-line-layer
+            <transect-line-layer-by-ovta
                 *ngIf="mapIsReady"
                 [displayOnLoad]="true"
                 [map]="map"
                 [layerControl]="layerControl"
                 [sortOrder]="25"
-                [ovtaAreaName]="onlandVisualTrashAssessmentAreaName"
-                [jurisdictionID]="jurisdictionID"></transect-line-layer>
+                [ovtaID]="onlandVisualTrashAssessmentID"></transect-line-layer-by-ovta>
         </neptune-map>
     </div>
 </div>

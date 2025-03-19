@@ -50,6 +50,7 @@ model/onland-visual-trash-assessment-add-remove-parcels-dto.ts
 model/onland-visual-trash-assessment-area-detail-dto.ts
 model/onland-visual-trash-assessment-area-geometry-dto.ts
 model/onland-visual-trash-assessment-area-grid-dto.ts
+model/onland-visual-trash-assessment-area-simple-dto.ts
 model/onland-visual-trash-assessment-detail-dto.ts
 model/onland-visual-trash-assessment-grid-dto.ts
 model/onland-visual-trash-assessment-observation-location-dto.ts

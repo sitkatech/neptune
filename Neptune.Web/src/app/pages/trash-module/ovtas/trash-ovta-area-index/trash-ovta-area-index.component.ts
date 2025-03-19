@@ -14,22 +14,18 @@ import { HybridMapGridComponent } from "../../../../shared/components/hybrid-map
 import { NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { Map, layerControl } from "leaflet";
 import { SelectedOvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/selected-ovta-area-layer/selected-ovta-area-layer.component";
-import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
+import { Router } from "@angular/router";
+import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
+import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
+import { OnlandVisualTrashAssessmentSimpleDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-simple-dto";
+import { Alert } from "src/app/shared/models/alert";
+import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { AlertService } from "src/app/shared/services/alert.service";
 
 @Component({
     selector: "trash-ovta-area-index",
     standalone: true,
-    imports: [
-        PageHeaderComponent,
-        AlertDisplayComponent,
-        NgIf,
-        AsyncPipe,
-        LoadingDirective,
-        IconComponent,
-        HybridMapGridComponent,
-        SelectedOvtaAreaLayerComponent,
-        LandUseBlockLayerComponent,
-    ],
+    imports: [PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, LoadingDirective, IconComponent, HybridMapGridComponent, SelectedOvtaAreaLayerComponent],
     templateUrl: "./trash-ovta-area-index.component.html",
     styleUrl: "./trash-ovta-area-index.component.scss",
 })
@@ -45,10 +41,27 @@ export class TrashOvtaAreaIndexComponent {
     public bounds: any;
     public mapIsReady: boolean = false;
 
-    constructor(private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService, private utilityFunctionsService: UtilityFunctionsService) {}
+    constructor(
+        private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
+        private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService,
+        private utilityFunctionsService: UtilityFunctionsService,
+        private router: Router,
+        private alertService: AlertService,
+        private confirmService: ConfirmService
+    ) {}
 
     ngOnInit(): void {
         this.ovtaAreaColumnDefs = [
+            this.utilityFunctionsService.createActionsColumnDef((params: any) => {
+                return [
+                    { ActionName: "View", ActionHandler: () => this.router.navigate(["trash", "onland-visual-trash-assessments", params.data.OnlandVisualTrashAssessmentID]) },
+                    {
+                        ActionName: "Add New OVTA",
+                        ActionHandler: () =>
+                            this.addNewOVTA(params.data.OnlandVisualTrashAssessmentAreaID, params.data.OnlandVisualTrashAssessmentAreaName, params.data.StormwaterJurisdictionID),
+                    },
+                ];
+            }),
             this.utilityFunctionsService.createLinkColumnDef("Assessment Area Name", "OnlandVisualTrashAssessmentAreaName", "OnlandVisualTrashAssessmentAreaID"),
             this.utilityFunctionsService.createBasicColumnDef("Baseline Score", "OnlandVisualTrashAssessmentBaselineScoreName", {
                 CustomDropdownFilterField: "OnlandVisualTrashAssessmentBaselineScoreName",
@@ -81,5 +94,25 @@ export class TrashOvtaAreaIndexComponent {
 
     public handleLayerBoundsCalculated(bounds: any) {
         this.bounds = bounds;
+    }
+
+    public addNewOVTA(onlandVisualTrashAssessmentAreaID: number, onlandVisualTrashAssessmentAreaName: string, stormwaterJurisdictionID: number) {
+        const modalContents = `<p>You are about to begin a new OVTA for Assessment Area: ${onlandVisualTrashAssessmentAreaName}. 
+            This will create a new Assessment record and allow you to start entering Assessment Observations on the next page.</p>`;
+        this.confirmService
+            .confirm({ buttonClassYes: "btn-primary", buttonTextYes: "Continue", buttonTextNo: "Cancel", title: "Add New OVTA", message: modalContents })
+            .then((confirmed) => {
+                if (confirmed) {
+                    var onlandVisualTrashAssessmentSimpleDto = new OnlandVisualTrashAssessmentSimpleDto();
+                    onlandVisualTrashAssessmentSimpleDto.OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID;
+                    onlandVisualTrashAssessmentSimpleDto.StormwaterJurisdictionID = stormwaterJurisdictionID;
+                    onlandVisualTrashAssessmentSimpleDto.AssessingNewArea = false;
+                    this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPost(onlandVisualTrashAssessmentSimpleDto).subscribe((response) => {
+                        this.alertService.clearAlerts();
+                        this.alertService.pushAlert(new Alert("Your OVTA was successfully created.", AlertContext.Success));
+                        this.router.navigate([`/trash/onland-visual-trash-assessments/edit/${response.OnlandVisualTrashAssessmentID}/record-observations`]);
+                    });
+                }
+            });
     }
 }

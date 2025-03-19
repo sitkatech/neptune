@@ -16,46 +16,43 @@ import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
-import { LoadingDirective } from "src/app/shared/directives/loading.directive";
+import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
+import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
+import { TransectLineLayerByOvtaComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer-by-ovta/transect-line-layer-by-ovta.component";
+import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 
 @Component({
     selector: "trash-ovta-add-remove-parcels",
     standalone: true,
-    imports: [PageHeaderComponent, AlertDisplayComponent, NeptuneMapComponent, AsyncPipe, NgIf, OvtaObservationLayerComponent, LoadingDirective],
+    imports: [
+        PageHeaderComponent,
+        AlertDisplayComponent,
+        NeptuneMapComponent,
+        AsyncPipe,
+        NgIf,
+        OvtaObservationLayerComponent,
+        LandUseBlockLayerComponent,
+        WorkflowBodyComponent,
+        TransectLineLayerByOvtaComponent,
+        ParcelLayerComponent,
+    ],
     templateUrl: "./trash-ovta-add-remove-parcels.component.html",
     styleUrl: "./trash-ovta-add-remove-parcels.component.scss",
 })
 export class TrashOvtaAddRemoveParcelsComponent {
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentAddRemoveParcelsDto>;
-    public mapHeight = window.innerHeight - window.innerHeight * 0.4 + "px";
     public map: L.Map;
     public layerControl: L.Control.Layers;
     public mapIsReady = false;
-    public bounds: any;
     public ovtaID: number;
     public isLoadingSubmit = false;
     public isLoading: boolean = false;
 
     public selectedParcelIDs: number[] = [];
-
-    public layer: L.FeatureGroup = new L.FeatureGroup();
-    public transectLineLayer: L.FeatureGroup = new L.FeatureGroup();
-
-    private defaultStyle = {
-        color: "blue",
-        fillOpacity: 0.2,
-        opacity: 0,
-    };
+    public selectedParcelsLayer: L.GeoJSON<any>;
 
     private highlightStyle = {
         color: "#fcfc12",
-        weight: 2,
-        opacity: 0.65,
-        fillOpacity: 0.1,
-    };
-
-    private transectLineStyle = {
-        color: "#f70a0a",
         weight: 2,
         opacity: 0.65,
         fillOpacity: 0.1,
@@ -66,7 +63,6 @@ export class TrashOvtaAddRemoveParcelsComponent {
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
         private route: ActivatedRoute,
         private wfsService: WfsService,
-        private groupByPipe: GroupByPipe,
         private alertService: AlertService,
         private ovtaWorkflowProgressService: OvtaWorkflowProgressService
     ) {}
@@ -75,36 +71,56 @@ export class TrashOvtaAddRemoveParcelsComponent {
         this.isLoading = true;
         this.onlandVisualTrashAssessment$ = this.route.params.pipe(
             switchMap((params) => {
-                this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
-                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAddOrRemoveParcelGet(
+                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDParcelsGet(
                     params[routeParams.onlandVisualTrashAssessmentID]
                 );
             }),
-            tap(() => (this.isLoading = false))
+            tap((ovta) => {
+                this.ovtaID = ovta.OnlandVisualTrashAssessmentID;
+                this.selectedParcelIDs = ovta.SelectedParcelIDs;
+                this.isLoading = false;
+            })
         );
     }
 
-    public handleMapReady(event: NeptuneMapInitEvent, boundingBox, transectLineGeometry): void {
+    public handleMapReady(event: NeptuneMapInitEvent): void {
         this.map = event.map;
         this.layerControl = event.layerControl;
-        this.addTransectLine(transectLineGeometry);
-        this.addParcelsToLayer(boundingBox);
+        this.addSelectedParcelsToMap();
 
-        this.layer.addTo(this.map);
-        this.transectLineLayer.addTo(this.map);
+        this.map.on("click", (event: L.LeafletMouseEvent): void => {
+            this.wfsService.getParcelByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((parcelsFeatureCollection: L.FeatureCollection) => {
+                parcelsFeatureCollection.features.forEach((feature: L.Feature) => {
+                    const parcelID = feature.properties.ParcelID;
+                    if (this.selectedParcelIDs.includes(parcelID)) {
+                        this.selectedParcelIDs.splice(this.selectedParcelIDs.indexOf(parcelID), 1);
+                    } else {
+                        this.selectedParcelIDs.push(parcelID);
+                    }
+                });
+
+                this.addSelectedParcelsToMap();
+            });
+        });
+
         this.mapIsReady = true;
     }
 
-    public handleLayerBoundsCalculated(bounds: any) {
-        this.bounds = bounds;
-    }
-
-    public setSelectedParcels(event) {
-        this.selectedParcelIDs = event;
+    private addSelectedParcelsToMap() {
+        if (this.selectedParcelsLayer) {
+            this.map.removeLayer(this.selectedParcelsLayer);
+        }
+        if (this.selectedParcelIDs.length > 0) {
+            this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:Parcels", `ParcelID in (${this.selectedParcelIDs.join(",")})`, "ParcelID").subscribe((response) => {
+                this.selectedParcelsLayer = L.geoJSON(response, { style: this.highlightStyle });
+                this.selectedParcelsLayer.addTo(this.map);
+                this.map.fitBounds(this.selectedParcelsLayer.getBounds());
+            });
+        }
     }
 
     public save(andContinue: boolean = false) {
-        this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDParcelGeometriesPost(this.ovtaID, this.selectedParcelIDs).subscribe(() => {
+        this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDParcelsPost(this.ovtaID, this.selectedParcelIDs).subscribe(() => {
             this.alertService.clearAlerts();
             this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
             this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
@@ -115,91 +131,9 @@ export class TrashOvtaAddRemoveParcelsComponent {
     }
 
     public refreshParcels() {
-        this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefreshParcelsPost(this.ovtaID).subscribe(() => {
-            this.onlandVisualTrashAssessment$ = this.route.params.pipe(
-                switchMap((params) => {
-                    this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
-                    return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAddOrRemoveParcelGet(
-                        params[routeParams.onlandVisualTrashAssessmentID]
-                    );
-                })
-            );
-        });
-    }
-
-    public resetZoom() {
-        const bounds = this.layer.getBounds();
-        this.map.fitBounds(bounds);
-    }
-
-    private addTransectLine(transectLine) {
-        this.addFeatureCollectionToFeatureGroup(JSON.parse(transectLine), this.transectLineLayer);
-    }
-
-    private addParcelsToLayer(boundingBox) {
-        const bbox = boundingBox != null ? `${boundingBox.Bottom},${boundingBox.Right},${boundingBox.Top},${boundingBox.Left}` : null;
-        this.wfsService.getGeoserverWFSLayer("OCStormwater:Parcels", "ParcelID", bbox).subscribe((response) => {
-            if (response.length == 0) return;
-            const featuresGroupedByParcelID = this.groupByPipe.transform(response, "properties.ParcelID");
-            Object.keys(featuresGroupedByParcelID).forEach((parcelID) => {
-                const geoJson = L.geoJSON(featuresGroupedByParcelID[parcelID], {
-                    style: this.defaultStyle,
-                });
-                geoJson.on("mouseover", (e) => {
-                    geoJson.setStyle({ fillOpacity: 0.5 });
-                });
-                geoJson.on("mouseout", (e) => {
-                    geoJson.setStyle({ fillOpacity: 0.1 });
-                });
-
-                geoJson.on("click", (e) => {
-                    this.onParcelSelected(Number(parcelID));
-                });
-                geoJson.addTo(this.layer);
-            });
-            const bounds = this.layer.getBounds();
-            this.map.fitBounds(bounds);
-        });
-    }
-
-    private onParcelSelected(parcelID: number) {
-        if (this.selectedParcelIDs.length > 0 && this.selectedParcelIDs.find((x) => x == parcelID)) {
-            this.selectedParcelIDs = this.selectedParcelIDs.filter((x) => x != parcelID);
-        } else {
-            this.selectedParcelIDs.push(parcelID);
-        }
-        this.highlightSelectedParcel(parcelID);
-    }
-
-    private highlightSelectedParcel(parcelID) {
-        this.layer.eachLayer((layer) => {
-            if (layer.options?.icon) return;
-
-            const geoJsonLayers = layer.getLayers();
-            if (geoJsonLayers[0].feature.properties.ParcelID == parcelID) {
-                if (geoJsonLayers[0].options.color == this.highlightStyle.color) {
-                    layer.setStyle(this.defaultStyle);
-                } else {
-                    layer.setStyle(this.highlightStyle);
-                }
-
-                this.map.fitBounds(layer.getBounds());
-            }
-        });
-    }
-
-    public addFeatureCollectionToFeatureGroup(featureJsons: any, featureGroup: L.FeatureGroup) {
-        L.geoJson(featureJsons, {
-            onEachFeature: (feature, layer) => {
-                layer.setStyle(this.transectLineStyle);
-                if (layer.getLayers) {
-                    layer.getLayers().forEach((l) => {
-                        featureGroup.addLayer(l);
-                    });
-                } else {
-                    featureGroup.addLayer(layer);
-                }
-            },
+        this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefreshParcelsPost(this.ovtaID).subscribe((ovta) => {
+            this.selectedParcelIDs = ovta.SelectedParcelIDs;
+            this.addSelectedParcelsToMap();
         });
     }
 }

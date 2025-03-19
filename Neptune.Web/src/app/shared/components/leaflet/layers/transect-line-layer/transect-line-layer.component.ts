@@ -14,23 +14,22 @@ export class TransectLineLayerComponent extends MapLayerBase implements OnChange
     constructor() {
         super();
     }
-    @Input() ovtaAreaName: string;
-    @Input() jurisdictionID: number;
-    public wmsOptions: L.WMSOptions;
+
+    @Input() ovtaAreaID: number;
     public layer;
+    private wmsOptions: L.WMSOptions;
 
     ngAfterViewInit(): void {
         this.wmsOptions = {
-            layers: "OCStormwater:TransectLineExport",
+            layers: "OCStormwater:TransectLine",
             transparent: true,
             format: "image/png",
             tiled: true,
         };
 
-        if (this.ovtaAreaName && this.jurisdictionID) {
-            this.wmsOptions.cql_filter = `OVTAAreaName = '${this.ovtaAreaName}' and JurisID = ${this.jurisdictionID}`;
+        if (this.ovtaAreaID) {
+            this.wmsOptions.cql_filter = `OnlandVisualTrashAssessmentAreaID = '${this.ovtaAreaID}'`;
         }
-
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
         this.initLayer();
     }

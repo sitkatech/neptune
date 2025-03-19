@@ -48,7 +48,8 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
         return dto;
     }
 
-    public static OnlandVisualTrashAssessmentAddRemoveParcelsDto AsAddRemoveParcelDto(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+    public static OnlandVisualTrashAssessmentAddRemoveParcelsDto AsAddRemoveParcelDto(
+        this OnlandVisualTrashAssessment onlandVisualTrashAssessment, NeptuneDbContext dbContext)
     {
         var dto = new OnlandVisualTrashAssessmentAddRemoveParcelsDto()
         {
@@ -56,8 +57,7 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
             OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID,
             StormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID,
             IsDraftGeometryManuallyRefined = onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined ?? false,
-            BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Select(x => x.LocationPoint4326)),
-            TransectLineAsGeoJson = OnlandVisualTrashAssessments.GetTransectLine4326GeoJson(onlandVisualTrashAssessment)
+            SelectedParcelIDs = onlandVisualTrashAssessment.GetParcelIDsForAddOrRemoveParcels(dbContext)
         };
         return dto;
     }
@@ -69,7 +69,6 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
             OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
             OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID,
             BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessment.GetOnlandVisualTrashAssessmentGeometry()),
-            TransectLineAsGeoJson = OnlandVisualTrashAssessments.GetTransectLine4326GeoJson(onlandVisualTrashAssessment),
             GeometryAsGeoJson = onlandVisualTrashAssessment.GetGeometry4326GeoJson()
         };
         return dto;

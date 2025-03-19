@@ -14,6 +14,5 @@ public class OnlandVisualTrashAssessmentDetailDto
     public string OnlandVisualTrashAssessmentScoreName { get; set; }
     public DateTime? CompletedDate { get; set; }
     public string IsProgressAssessment { get; set; }
-    public BoundingBoxDto BoundingBox { get; set; }
     public Dictionary<string, List<string>> PreliminarySourceIdentificationsByCategory { get; set; }
 }

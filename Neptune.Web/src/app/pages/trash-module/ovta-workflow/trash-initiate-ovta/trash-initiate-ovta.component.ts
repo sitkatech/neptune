@@ -125,7 +125,7 @@ export class TrashInitiateOvtaComponent {
         this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPost(this.formGroup.getRawValue()).subscribe((response) => {
             this.isLoadingSubmit = false;
             this.alertService.clearAlerts();
-            this.alertService.pushAlert(new Alert("Your ovta was successfully created.", AlertContext.Success));
+            this.alertService.pushAlert(new Alert("Your OVTA was successfully created.", AlertContext.Success));
             this.ovtaWorkflowProgressService.updateProgress(response.OnlandVisualTrashAssessmentID);
             if (andContinue) {
                 this.router.navigate([`../../edit/${response.OnlandVisualTrashAssessmentID}/record-observations`], { relativeTo: this.route });
@@ -136,27 +136,29 @@ export class TrashInitiateOvtaComponent {
     private addOVTAAreasToLayer() {
         let cql_filter = ``;
 
-        this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:AssessmentAreaExport", cql_filter, "OVTAAreaID").subscribe((response) => {
-            if (response.length == 0) return;
-            const featuresGroupedByOVTAAreaID = this.groupByPipe.transform(response, "properties.OVTAAreaID");
-            Object.keys(featuresGroupedByOVTAAreaID).forEach((ovtaAreaID) => {
-                const geoJson = L.geoJSON(featuresGroupedByOVTAAreaID[ovtaAreaID], {
-                    style: this.defaultStyle,
-                });
-                geoJson.on("mouseover", (e) => {
-                    geoJson.setStyle({ fillOpacity: 0.5 });
-                });
-                geoJson.on("mouseout", (e) => {
-                    geoJson.setStyle({ fillOpacity: 0.1 });
-                });
+        this.wfsService
+            .getGeoserverWFSLayerWithCQLFilter("OCStormwater:OnlandVisualTrashAssessmentAreas", cql_filter, "OnlandVisualTrashAssessmentAreaID")
+            .subscribe((response) => {
+                if (response.length == 0) return;
+                const featuresGroupedByOVTAAreaID = this.groupByPipe.transform(response, "properties.OnlandVisualTrashAssessmentAreaID");
+                Object.keys(featuresGroupedByOVTAAreaID).forEach((ovtaAreaID) => {
+                    const geoJson = L.geoJSON(featuresGroupedByOVTAAreaID[ovtaAreaID], {
+                        style: this.defaultStyle,
+                    });
+                    geoJson.on("mouseover", (e) => {
+                        geoJson.setStyle({ fillOpacity: 0.5 });
+                    });
+                    geoJson.on("mouseout", (e) => {
+                        geoJson.setStyle({ fillOpacity: 0.1 });
+                    });
 
-                geoJson.on("click", (e) => {
-                    this.onOVTAAreaSelected(Number(ovtaAreaID), featuresGroupedByOVTAAreaID[ovtaAreaID][0].properties.OVTAAreaName);
-                });
+                    geoJson.on("click", (e) => {
+                        this.onOVTAAreaSelected(Number(ovtaAreaID), featuresGroupedByOVTAAreaID[ovtaAreaID][0].properties.OnlandVisualTrashAssessmentAreaName);
+                    });
 
-                geoJson.addTo(this.layer);
+                    geoJson.addTo(this.layer);
+                });
             });
-        });
     }
 
     private getStormwaterJurisdictionBounds(jurisdictionID: number) {

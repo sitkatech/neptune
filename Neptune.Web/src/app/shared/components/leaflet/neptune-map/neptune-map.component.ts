@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Control, LeafletEvent, Map, MapOptions, DomUtil, ControlPosition } from "leaflet";
 import * as L from "leaflet";
@@ -10,7 +10,7 @@ import { BoundingBoxDto } from "src/app/shared/generated/model/models";
 import { IconComponent } from "../../icon/icon.component";
 import { NominatimService } from "src/app/shared/services/nominatim.service";
 import { Observable, debounce, of, switchMap, tap, timer } from "rxjs";
-import { NgSelectComponent, NgSelectModule } from "@ng-select/ng-select";
+import { NgSelectModule } from "@ng-select/ng-select";
 import { FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from "@angular/forms";
 import { LegendItem } from "src/app/shared/models/legend-item";
 import { Feature, FeatureCollection } from "geojson";
@@ -31,8 +31,7 @@ import { DomSanitizer } from "@angular/platform-browser";
     ],
 })
 export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild(NgSelectComponent) ngSelectComponent: NgSelectComponent;
-    public mapID: string = crypto.randomUUID();
+    public mapID: string = "map_" + Date.now().toString(36) + Math.random().toString(36).substring(13);
     public legendID: string = this.mapID + "Legend";
     public map: Map;
     public tileLayers: { [key: string]: any } = LeafletHelperService.GetDefaultTileLayers();
@@ -59,7 +58,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     ngAfterViewInit(): void {
         const mapOptions: MapOptions = {
             minZoom: 6,
-            maxZoom: 20,
+            maxZoom: 18,
             layers: [this.tileLayers[this.selectedTileLayer]],
             fullscreenControl: true,
             fullscreenControlOptions: {
