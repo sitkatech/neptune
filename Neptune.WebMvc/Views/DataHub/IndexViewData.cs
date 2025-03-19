@@ -131,10 +131,10 @@ namespace Neptune.WebMvc.Views.DataHub
             BMPTypesUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             
             WQMPListUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
-           
-            OVTAListUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
-            TrashGeneratingUnitsAuditListUrl = SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
-            LandUseBlocksUrl = SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+
+            OVTAListUrl = $"{webConfiguration.PlanningModuleBaseUrl}/trash/onland-visual-trash-assessment";
+            TrashGeneratingUnitsAuditListUrl = $"{webConfiguration.PlanningModuleBaseUrl}/trash/trash-generating-unit";
+            LandUseBlocksUrl = $"{webConfiguration.PlanningModuleBaseUrl}/trash/land-use-block";
             
             ParcelMapUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             

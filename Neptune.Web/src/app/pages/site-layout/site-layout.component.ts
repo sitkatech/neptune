@@ -34,6 +34,10 @@ export class SiteLayoutComponent implements OnInit {
         return this.authenticationService.isUserAnAdministrator(currentUser);
     }
 
+    public isJurisdicionManager(currentUser: PersonDto): boolean {
+        return this.authenticationService.isUserAJurisdictionManager(currentUser);
+    }
+
     public isNotUnassigned(currentUser: PersonDto): boolean {
         if (!currentUser) {
             return false;
