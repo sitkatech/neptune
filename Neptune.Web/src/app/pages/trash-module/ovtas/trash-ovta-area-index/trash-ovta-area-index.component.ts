@@ -14,22 +14,11 @@ import { HybridMapGridComponent } from "../../../../shared/components/hybrid-map
 import { NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { Map, layerControl } from "leaflet";
 import { SelectedOvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/selected-ovta-area-layer/selected-ovta-area-layer.component";
-import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 
 @Component({
     selector: "trash-ovta-area-index",
     standalone: true,
-    imports: [
-        PageHeaderComponent,
-        AlertDisplayComponent,
-        NgIf,
-        AsyncPipe,
-        LoadingDirective,
-        IconComponent,
-        HybridMapGridComponent,
-        SelectedOvtaAreaLayerComponent,
-        LandUseBlockLayerComponent,
-    ],
+    imports: [PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, LoadingDirective, IconComponent, HybridMapGridComponent, SelectedOvtaAreaLayerComponent],
     templateUrl: "./trash-ovta-area-index.component.html",
     styleUrl: "./trash-ovta-area-index.component.scss",
 })
