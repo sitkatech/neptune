@@ -5,12 +5,12 @@ import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto"
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { NgIf, NgFor } from "@angular/common";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
-import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
 import { environment } from "src/environments/environment";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LandUseBlockLayerComponent } from "src/app/shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { TransectLineLayerByOvtaComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer-by-ovta/transect-line-layer-by-ovta.component";
+import { OvtaAreaLayerForWorkflowComponent } from "../../../../shared/components/leaflet/layers/ovta-area-for-workflow-layer/ovta-area-for-workflow-layer.component";
 
 //This component could use a fair amount of cleanup. It should likely be sent in the treatment bmps and delineations instead of grabbing them itself
 @Component({
@@ -18,7 +18,7 @@ import { TransectLineLayerByOvtaComponent } from "../../../../shared/components/
     templateUrl: "./observations-map.component.html",
     styleUrls: ["./observations-map.component.scss"],
     standalone: true,
-    imports: [NgIf, NgFor, NeptuneMapComponent, OvtaAreaLayerComponent, LandUseBlockLayerComponent, TransectLineLayerByOvtaComponent],
+    imports: [NgIf, NgFor, NeptuneMapComponent, LandUseBlockLayerComponent, TransectLineLayerByOvtaComponent, OvtaAreaLayerForWorkflowComponent],
 })
 export class ObservationsMapComponent {
     @ViewChild("ovtaObservations") ovtaObservations: ElementRef;

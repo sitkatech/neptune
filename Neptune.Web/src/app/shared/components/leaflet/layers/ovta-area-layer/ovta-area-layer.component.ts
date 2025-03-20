@@ -15,7 +15,6 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges, A
     constructor() {
         super();
     }
-    @Input() ovtaAreaID: number;
     public wmsOptions: L.WMSOptions;
     public layer;
 
@@ -27,9 +26,6 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges, A
             tiled: true,
         };
 
-        if (this.ovtaAreaID) {
-            this.wmsOptions.cql_filter = `OnlandVisualTrashAssessmentAreaID = ${this.ovtaAreaID}`;
-        }
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
         this.initLayer();
     }

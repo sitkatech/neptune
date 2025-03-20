@@ -24,13 +24,13 @@
     <div class="g-col-8">
         <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false" [boundingBox]="boundingBox">
             <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
-            <ovta-area-layer
+            <ovta-area-for-workflow-layer
                 *ngIf="mapIsReady"
                 [displayOnLoad]="true"
                 [map]="map"
                 [layerControl]="layerControl"
                 [sortOrder]="20"
-                [ovtaAreaID]="onlandVisualTrashAssessmentAreaID"></ovta-area-layer>
+                [ovtaAreaID]="onlandVisualTrashAssessmentAreaID"></ovta-area-for-workflow-layer>
             <transect-line-layer-by-ovta
                 *ngIf="mapIsReady"
                 [displayOnLoad]="true"

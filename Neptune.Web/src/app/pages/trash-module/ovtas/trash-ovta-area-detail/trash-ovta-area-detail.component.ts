@@ -16,7 +16,6 @@ import * as L from "leaflet";
 import "leaflet-draw";
 import "leaflet.fullscreen";
 import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
-import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/services/modal/modal.service";
 import { UpdateOvtaAreaDetailsModalComponent, UpdateOvtaAreaModalContext } from "../update-ovta-area-details-modal/update-ovta-area-details-modal.component";
 import { OnlandVisualTrashAssessmentGridDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-grid-dto";
@@ -42,7 +41,6 @@ import { OvtaAreaLayerForWorkflowComponent } from "../../../../shared/components
         NeptuneGridComponent,
         NeptuneMapComponent,
         TransectLineLayerComponent,
-        OvtaAreaLayerComponent,
         RouterLink,
         LoadingDirective,
         OvtaAreaLayerForWorkflowComponent,
