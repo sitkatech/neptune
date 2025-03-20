@@ -30,7 +30,7 @@ import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto"
 import { StormwaterJurisdictionDto, TrashGeneratingUnitDto } from "src/app/shared/generated/model/models";
 import { InventoriedBMPsTrashCaptureLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-trash-capture-layer/inventoried-bmps-trash-capture-layer.component";
 import { WqmpsTrashCaptureLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-trash-capture-layer/wqmps-trash-capture-layer.component";
-import { OvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
+import { OvtaAreasLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-areas-layer/ovta-areas-layer.component";
 import { TrashGeneratingUnitLoadsLayerComponent } from "src/app/shared/components/leaflet/layers/trash-generating-unit-loads-layer/trash-generating-unit-loads-layer.component";
 import { TrashGeneratingUnitByStormwaterJurisdictionService } from "src/app/shared/generated/api/trash-generating-unit-by-stormwater-jurisdiction.service";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
@@ -57,7 +57,7 @@ import { TrashGeneratingUnitService } from "src/app/shared/generated/api/trash-g
         LandUseBlockLayerComponent,
         TrashGeneratingUnitLayerComponent,
         TrashGeneratingUnitLoadsLayerComponent,
-        OvtaAreaLayerComponent,
+        OvtaAreasLayerComponent,
         NgSelectModule,
         FormsModule,
         ReactiveFormsModule,
@@ -81,7 +81,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     public currentStormwaterJurisdiction: StormwaterJurisdictionDto;
     private stormwaterJurisdictionSubject = new BehaviorSubject<StormwaterJurisdictionDto | null>(null);
     public stormwaterJurisdiction$ = this.stormwaterJurisdictionSubject.asObservable();
-    
+
     public selectedStormwaterJurisdictionLayer: L.GeoJSON<any>;
     private selectedJurisdictionStyle = {
         color: "#FF6C2D",
@@ -222,52 +222,53 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         const self = this;
         this.map.on("click", (event: L.LeafletMouseEvent): void => {
             wfsService.getTrashGeneratingUnitByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((tguFeatureCollection: L.FeatureCollection) => {
-                if(tguFeatureCollection.features.length == 0){
+                if (tguFeatureCollection.features.length == 0) {
                     this.tguDto$ = null;
                     if (this.tguLayer) {
                         this.map.removeLayer(this.tguLayer);
                     }
                 }
                 var featuresInRenderedOrder = tguFeatureCollection.features
-                .sort((a, b) => {
-                    if (a.properties.IsPriorityLandUse > b.properties.IsPriorityLandUse) {
-                        return 1;
-                    }
-                    if (b.properties.IsPriorityLandUse > a.properties.IsPriorityLandUse) {
-                        return -1;
-                    }
-                    return 0;
-                })
-                .sort((a, b) => {
-                    // sort by AssessmentScore descending
-                    if (a.properties.AssessmentScore < b.properties.AssessmentScore) {
-                        return 1;
-                    }
-                    if (b.properties.AssessmentScore < a.properties.AssessmentScore) {
-                        return -1;
-                    }
-                    return 0;
-                }).sort((a, b) => {
-                    // sort by TrashCaptureStatusSortOrder descending
-                    if (a.properties.TrashCaptureStatusSortOrder < b.properties.TrashCaptureStatusSortOrder) {
-                        return 1;
-                    }
-                    if (b.properties.TrashCaptureStatusSortOrder < a.properties.TrashCaptureStatusSortOrder) {
-                        return -1;
-                    }
-                    return 0;
-                });
-                
+                    .sort((a, b) => {
+                        if (a.properties.IsPriorityLandUse > b.properties.IsPriorityLandUse) {
+                            return 1;
+                        }
+                        if (b.properties.IsPriorityLandUse > a.properties.IsPriorityLandUse) {
+                            return -1;
+                        }
+                        return 0;
+                    })
+                    .sort((a, b) => {
+                        // sort by AssessmentScore descending
+                        if (a.properties.AssessmentScore < b.properties.AssessmentScore) {
+                            return 1;
+                        }
+                        if (b.properties.AssessmentScore < a.properties.AssessmentScore) {
+                            return -1;
+                        }
+                        return 0;
+                    })
+                    .sort((a, b) => {
+                        // sort by TrashCaptureStatusSortOrder descending
+                        if (a.properties.TrashCaptureStatusSortOrder < b.properties.TrashCaptureStatusSortOrder) {
+                            return 1;
+                        }
+                        if (b.properties.TrashCaptureStatusSortOrder < a.properties.TrashCaptureStatusSortOrder) {
+                            return -1;
+                        }
+                        return 0;
+                    });
+
                 featuresInRenderedOrder.forEach((feature: L.Feature) => {
                     this.tguDto$ = this.trashGeneratingUnitService.trashGeneratingUnitsTrashGeneratingUnitIDGet(feature.properties.TrashGeneratingUnitID);
                     const geoJson = L.geoJSON(feature, {
-                        style: this.highlightStyle
+                        style: this.highlightStyle,
                     });
                     if (this.tguLayer) {
                         this.map.removeLayer(this.tguLayer);
                     }
                     this.tguLayer = L.geoJSON(feature, {
-                        style: this.highlightStyle
+                        style: this.highlightStyle,
                     });
                     //this.map.fitBounds(this.tguLayer.getBounds());
                     this.tguLayer.addTo(this.map);
@@ -276,17 +277,18 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         });
     }
 
-    public addSelectedJurisdictionLayer(stormwaterJurisdictionID: number){
-        this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:Jurisdictions", `StormwaterJurisdictionID = ${stormwaterJurisdictionID}`, "StormwaterJurisdictionID").subscribe((response) => {
-            if(this.mapIsReady){
-                if (this.selectedStormwaterJurisdictionLayer){
-                    this.map.removeLayer(this.selectedStormwaterJurisdictionLayer);
+    public addSelectedJurisdictionLayer(stormwaterJurisdictionID: number) {
+        this.wfsService
+            .getGeoserverWFSLayerWithCQLFilter("OCStormwater:Jurisdictions", `StormwaterJurisdictionID = ${stormwaterJurisdictionID}`, "StormwaterJurisdictionID")
+            .subscribe((response) => {
+                if (this.mapIsReady) {
+                    if (this.selectedStormwaterJurisdictionLayer) {
+                        this.map.removeLayer(this.selectedStormwaterJurisdictionLayer);
+                    }
+                    this.selectedStormwaterJurisdictionLayer = L.geoJSON(response, { style: this.selectedJurisdictionStyle });
+                    this.selectedStormwaterJurisdictionLayer.addTo(this.map);
                 }
-                this.selectedStormwaterJurisdictionLayer = L.geoJSON(response, { style: this.selectedJurisdictionStyle });
-                this.selectedStormwaterJurisdictionLayer.addTo(this.map);
-            }
-            
-        });
+            });
     }
 
     ngOnDestroy(): void {

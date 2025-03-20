@@ -43,7 +43,7 @@
     <div *ngIf="stormwaterJurisdictions$ | async as stormwaterJurisdictions">
         <div class="card mt-4">
             <div class="card-body">
-                <div class="grid-12"  style="row-gap: normal">
+                <div class="grid-12" style="row-gap: normal">
                     <div class="g-col-6">
                         <div class="grid-12">
                             <div class="g-col-2 content-section">Jurisdiction</div>
@@ -220,9 +220,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="g-col-12 font-italic" *ngIf="lastUpdateDate$ | async as lastUpdateDate">
-                        Last Calculated Date: {{ lastUpdateDate | date : "shortDate" }}
-                    </div>
+                    <div class="g-col-12 font-italic" *ngIf="lastUpdateDate$ | async as lastUpdateDate">Last Calculated Date: {{ lastUpdateDate | date : "shortDate" }}</div>
                 </div>
             </div>
         </div>
@@ -331,12 +329,12 @@
                         [layerControl]="layerControl"
                         [sortOrder]="1"
                         [style]="'delta_load'"></trash-generating-unit-loads-layer>
-                    <ovta-area-layer
+                    <ovta-areas-layer
                         *ngIf="mapIsReady && currentResultType == 'OVTA-Based Results'"
                         [displayOnLoad]="true"
                         [map]="map"
                         [layerControl]="layerControl"
-                        [sortOrder]="1"></ovta-area-layer>
+                        [sortOrder]="1"></ovta-areas-layer>
                 </neptune-map>
             </div>
         </div>

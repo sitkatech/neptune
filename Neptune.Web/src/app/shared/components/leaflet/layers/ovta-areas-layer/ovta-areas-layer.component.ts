@@ -5,13 +5,13 @@ import * as L from "leaflet";
 import { CommonModule } from "@angular/common";
 
 @Component({
-    selector: "ovta-area-layer",
+    selector: "ovta-areas-layer",
     standalone: true,
     imports: [CommonModule],
-    templateUrl: "./ovta-area-layer.component.html",
-    styleUrl: "./ovta-area-layer.component.scss",
+    templateUrl: "./ovta-areas-layer.component.html",
+    styleUrl: "./ovta-areas-layer.component.scss",
 })
-export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
+export class OvtaAreasLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     constructor() {
         super();
     }
