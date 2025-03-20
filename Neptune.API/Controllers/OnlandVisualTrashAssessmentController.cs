@@ -84,8 +84,9 @@ public class OnlandVisualTrashAssessmentController(
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
     public ActionResult<FeatureCollection> GetTransectLineAsFeatureCollection([FromRoute] int onlandVisualTrashAssessmentID)
     {
-        var onlandVisualTrashAssessmentObservations = OnlandVisualTrashAssessmentObservations.ListByOnlandVisualTrashAssessmentID(DbContext, onlandVisualTrashAssessmentID);
-        var transectLine4326GeoJson = OnlandVisualTrashAssessments.GetTransectLine4326GeoJson(onlandVisualTrashAssessmentObservations);
+        var onlandVisualTrashAssessment = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID);
+        var onlandVisualTrashAssessmentObservations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations;
+        var transectLine4326GeoJson = OnlandVisualTrashAssessments.GetTransectLine4326GeoJson(onlandVisualTrashAssessment);
         return Ok(transectLine4326GeoJson);
     }
 

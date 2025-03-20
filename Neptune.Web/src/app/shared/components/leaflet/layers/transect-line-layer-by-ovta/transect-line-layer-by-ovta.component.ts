@@ -22,10 +22,8 @@ export class TransectLineLayerByOvtaComponent extends MapLayerBase implements On
     public layer;
 
     private transectLineStyle = {
-        color: "#f70a0a",
+        color: "#ff42ff",
         weight: 2,
-        opacity: 0.65,
-        fillOpacity: 0.1,
     };
 
     public transectLines$: Observable<IFeature[]>;

@@ -26,18 +26,16 @@ export class OvtaAreaLayerForWorkflowComponent extends MapLayerBase implements O
     }
 
     ngAfterViewInit(): void {
-        if (this.ovtaAreaID) {
-            let cql_filter = `OnlandVisualTrashAssessmentAreaID = ${this.ovtaAreaID}`;
+        let cql_filter = `OnlandVisualTrashAssessmentAreaID = ${this.ovtaAreaID}`;
 
-            this.wfsService
-                .getGeoserverWFSLayerWithCQLFilter("OCStormwater:OnlandVisualTrashAssessmentAreas", cql_filter, "OnlandVisualTrashAssessmentAreaID")
-                .subscribe((response) => {
-                    if (response.length == 0) return;
-                    this.layer = new L.GeoJSON(response, {
-                        style: this.defaultStyle,
-                    });
-                    this.initLayer();
+        this.wfsService
+            .getGeoserverWFSLayerWithCQLFilter("OCStormwater:OnlandVisualTrashAssessmentAreas", cql_filter, "OnlandVisualTrashAssessmentAreaID")
+            .subscribe((response) => {
+                if (response.length == 0) return;
+                this.layer = new L.GeoJSON(response, {
+                    style: this.defaultStyle,
                 });
-        }
+                this.initLayer();
+            });
     }
 }

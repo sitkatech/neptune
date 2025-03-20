@@ -122,6 +122,8 @@ public partial class vTrashGeneratingUnitLoadStatistic
     [Unicode(false)]
     public string TrashCaptureStatus { get; set; } = null!;
 
+    public int TrashCaptureStatusSortOrder { get; set; }
+
     [StringLength(100)]
     [Unicode(false)]
     public string? AssessmentScore { get; set; }

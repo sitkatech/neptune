@@ -47,15 +47,6 @@ public static class OnlandVisualTrashAssessments
         return onlandVisualTrashAssessment;
     }
 
-    public static OnlandVisualTrashAssessmentArea GetOnlandVisualTrashAssessmentAreaByID(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID)
-    {
-        var onlandVisualTrashAssessment = GetImpl(dbContext).AsNoTracking()
-            .SingleOrDefault(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
-        Check.RequireNotNull(onlandVisualTrashAssessment, $"OnlandVisualTrashAssessment with ID {onlandVisualTrashAssessmentID} not found!");
-        return OnlandVisualTrashAssessmentAreas.GetByID(dbContext,
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID);
-    }
-
     public static OnlandVisualTrashAssessment GetByID(NeptuneDbContext dbContext, OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
     {
         var onlandVisualTrashAssessment = GetImpl(dbContext).AsNoTracking()
@@ -303,16 +294,33 @@ public static class OnlandVisualTrashAssessments
         await dbContext.SaveChangesAsync();
     }
 
-    public static FeatureCollection GetTransectLine4326GeoJson(ICollection<OnlandVisualTrashAssessmentObservation> onlandVisualTrashAssessmentObservations)
+    public static FeatureCollection GetTransectLine4326GeoJson(OnlandVisualTrashAssessment onlandVisualTrashAssessment)
     {
-        var featureCollection = new FeatureCollection();
-        var transectLine4326 = GetTransectLine4326(onlandVisualTrashAssessmentObservations);
-        if (transectLine4326 != null)
+        var attributesTable = new AttributesTable
         {
-            var attributesTable = new AttributesTable { { "OnlandVisualTrashAssessmentID", onlandVisualTrashAssessmentObservations.First().OnlandVisualTrashAssessmentID } };
-            var feature = new Feature(transectLine4326, attributesTable);
+            {
+                "OnlandVisualTrashAssessmentID", onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID
+            }
+        };
+        var featureCollection = new FeatureCollection();
+        if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.TransectLine4326 != null)
+        {
+            var feature = new Feature(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine4326, attributesTable);
             featureCollection.Add(feature);
         }
+        else
+        {
+
+            var onlandVisualTrashAssessmentObservations =
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations;
+            var transectLine4326 = GetTransectLine4326(onlandVisualTrashAssessmentObservations);
+            if (transectLine4326 != null)
+            {
+                var feature = new Feature(transectLine4326, attributesTable);
+                featureCollection.Add(feature);
+            }
+        }
+
         return featureCollection;
     }
 
