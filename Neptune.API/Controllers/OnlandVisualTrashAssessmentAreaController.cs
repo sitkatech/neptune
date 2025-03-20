@@ -85,8 +85,8 @@ public class OnlandVisualTrashAssessmentAreaController(
     [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
     public ActionResult<FeatureCollection> GetAreaAsFeatureCollection([FromRoute] int onlandVisualTrashAssessmentAreaID)
     {
-        var transectLine4326GeoJson = OnlandVisualTrashAssessmentAreas.GetAssessmentAreaByIDAsFeatureCollection(DbContext, onlandVisualTrashAssessmentAreaID);
-        return Ok(transectLine4326GeoJson);
+        var featureCollection = OnlandVisualTrashAssessmentAreas.GetAssessmentAreaByIDAsFeatureCollection(DbContext, onlandVisualTrashAssessmentAreaID);
+        return Ok(featureCollection);
     }
 
     [HttpGet("{onlandVisualTrashAssessmentAreaID}/transect-line-as-feature-collection")]
@@ -94,7 +94,7 @@ public class OnlandVisualTrashAssessmentAreaController(
     [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
     public ActionResult<FeatureCollection> GetTransectLineAsFeatureCollection([FromRoute] int onlandVisualTrashAssessmentAreaID)
     {
-        var transectLine4326GeoJson = OnlandVisualTrashAssessmentAreas.GetTransectLineByIDAsFeatureCollection(DbContext, onlandVisualTrashAssessmentAreaID);
-        return Ok(transectLine4326GeoJson);
+        var featureCollection = OnlandVisualTrashAssessmentAreas.GetTransectLineByIDAsFeatureCollection(DbContext, onlandVisualTrashAssessmentAreaID);
+        return Ok(featureCollection);
     }
 }
