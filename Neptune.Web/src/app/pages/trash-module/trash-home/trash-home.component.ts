@@ -108,6 +108,9 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         fillOpacity: 0.1,
     };
 
+    private lastUpdateDateSubject = new BehaviorSubject<string | null>(null);
+    public lastUpdateDate$ = this.lastUpdateDateSubject.asObservable()
+
     constructor(
         private authenticationService: AuthenticationService,
         private router: Router,
@@ -154,7 +157,11 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 this.isLoading = true;
             }),
             switchMap((x) => {
-                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(x.StormwaterJurisdictionID).pipe(
+                    tap((x) => {
+                        this.lastUpdateDateSubject.next(x.LastUpdateDate);
+                    })
+                );
             }),
             tap(() => {
                 this.isLoading = false;
@@ -166,7 +173,11 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 this.isLoading = true;
             }),
             switchMap((x) => {
-                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(x.StormwaterJurisdictionID).pipe(
+                    tap((x) => {
+                        this.lastUpdateDateSubject.next(x.LastUpdateDate);
+                    })
+                );
             }),
             tap(() => {
                 this.isLoading = false;
@@ -178,7 +189,11 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 this.isLoading = true;
             }),
             switchMap((x) => {
-                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(x.StormwaterJurisdictionID).pipe(
+                    tap((x) => {
+                        this.lastUpdateDateSubject.next(x.LastUpdateDate);
+                    })
+                );
             }),
             tap(() => {
                 this.isLoading = false;

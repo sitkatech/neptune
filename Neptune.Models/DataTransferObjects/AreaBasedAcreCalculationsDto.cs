@@ -9,5 +9,6 @@
 
         public double PercentTreated { get; set; }
 
+        public DateTime? LastUpdateDate { get; set; }
     }
 }

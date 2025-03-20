@@ -10,5 +10,6 @@
         public double ALUSumAcresWhereOVTAIsB { get; set; }
         public double ALUSumAcresWhereOVTAIsC { get; set; }
         public double ALUSumAcresWhereOVTAIsD { get; set; }
+        public DateTime? LastUpdateDate { get; set; }
     }
 }

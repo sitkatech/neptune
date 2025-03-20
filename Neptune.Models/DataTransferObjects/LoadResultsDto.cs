@@ -7,5 +7,6 @@
         public double LoadOVTA { get; set; }
         public double TotalAchieved { get; set; }
         public double TargetLoadReduction { get; set; }
+        public DateTime? LastUpdateDate { get; set; }
     }
 }

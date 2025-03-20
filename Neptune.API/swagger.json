@@ -3731,6 +3731,11 @@
           "PercentTreated": {
             "type": "number",
             "format": "double"
+          },
+          "LastUpdateDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4322,6 +4327,11 @@
           "TargetLoadReduction": {
             "type": "number",
             "format": "double"
+          },
+          "LastUpdateDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4421,6 +4431,11 @@
           "ALUSumAcresWhereOVTAIsD": {
             "type": "number",
             "format": "double"
+          },
+          "LastUpdateDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         },
         "additionalProperties": false

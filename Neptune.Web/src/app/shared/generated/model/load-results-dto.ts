@@ -17,6 +17,7 @@ export class LoadResultsDto {
     LoadOVTA?: number;
     TotalAchieved?: number;
     TargetLoadReduction?: number;
+    LastUpdateDate?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -28,6 +29,7 @@ export interface LoadResultsDtoForm {
     LoadOVTA?: FormControl<number>;
     TotalAchieved?: FormControl<number>;
     TargetLoadReduction?: FormControl<number>;
+    LastUpdateDate?: FormControl<string>;
 }
 
 export class LoadResultsDtoFormControls { 
@@ -72,6 +74,16 @@ export class LoadResultsDtoFormControls {
         }
     );
     public static TargetLoadReduction = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static LastUpdateDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

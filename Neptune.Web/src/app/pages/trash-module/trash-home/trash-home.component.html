@@ -43,7 +43,7 @@
     <div *ngIf="stormwaterJurisdictions$ | async as stormwaterJurisdictions">
         <div class="card mt-4">
             <div class="card-body">
-                <div class="grid-12">
+                <div class="grid-12"  style="row-gap: normal">
                     <div class="g-col-6">
                         <div class="grid-12">
                             <div class="g-col-2 content-section">Jurisdiction</div>
@@ -220,6 +220,9 @@
                             </table>
                         </div>
                     </div>
+                    <div class="g-col-12 font-italic" *ngIf="lastUpdateDate$ | async as lastUpdateDate">
+                        Last Calculated Date: {{ lastUpdateDate | date : "shortDate" }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -245,7 +248,7 @@
 
                             <dt class="g-col-5">Jurisdiction</dt>
                             <dd class="g-col-7">{{ tguDto.StormwaterJurisdictionName }}</dd>
-                            <div class="font-italic" style="text-align: right">Last Calculated Date: {{ tguDto.LastUpdateDate | date : "shortDate" }}</div>
+
                             <hr />
 
                             <dt class="g-col-5">BMP</dt>
