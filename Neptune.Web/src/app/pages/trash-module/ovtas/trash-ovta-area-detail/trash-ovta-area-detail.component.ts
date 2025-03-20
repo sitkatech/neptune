@@ -27,6 +27,7 @@ import { OnlandVisualTrashAssessmentSimpleDto } from "src/app/shared/generated/m
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { OvtaAreaLayerForWorkflowComponent } from "../../../../shared/components/leaflet/layers/ovta-area-for-workflow-layer/ovta-area-for-workflow-layer.component";
+import { OnlandVisualTrashAssessmentStatusEnum } from "src/app/shared/generated/enum/onland-visual-trash-assessment-status-enum";
 
 @Component({
     selector: "trash-ovta-area-detail",
@@ -71,7 +72,8 @@ export class TrashOvtaAreaDetailComponent {
         private alertService: AlertService,
         private modalService: ModalService,
         private confirmService: ConfirmService,
-        private router: Router
+        private router: Router,
+        private datePipe: DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -186,5 +188,22 @@ export class TrashOvtaAreaDetailComponent {
                     this.refreshOVTAAreasTrigger.next();
                 }
             });
+    }
+
+    public getLastAssessmentDate(onlandVisualTrashAssessments: OnlandVisualTrashAssessmentGridDto[]): string {
+        const completedAssessments = onlandVisualTrashAssessments.filter((x) => x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatusEnum.Complete);
+        if (completedAssessments.length > 0) {
+            const latestAssessmentDate = completedAssessments.sort((a, b) => {
+                if (a.CompletedDate > b.CompletedDate) {
+                    return 1;
+                }
+                if (b.CompletedDate > a.CompletedDate) {
+                    return -1;
+                }
+                return 0;
+            })[0].CompletedDate;
+            return this.datePipe.transform(latestAssessmentDate, "MM/dd/yyyy");
+        }
+        return "No completed assessments";
     }
 }

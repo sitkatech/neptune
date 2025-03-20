@@ -20,6 +20,7 @@ export class OnlandVisualTrashAssessmentGridDto {
     Notes?: string;
     StormwaterJurisdictionID?: number;
     StormwaterJurisdictionName?: string;
+    OnlandVisualTrashAssessmentStatusID?: number;
     OnlandVisualTrashAssessmentStatusName?: string;
     OnlandVisualTrashAssessmentScoreName?: string;
     CompletedDate?: string;
@@ -38,6 +39,7 @@ export interface OnlandVisualTrashAssessmentGridDtoForm {
     Notes?: FormControl<string>;
     StormwaterJurisdictionID?: FormControl<number>;
     StormwaterJurisdictionName?: FormControl<string>;
+    OnlandVisualTrashAssessmentStatusID?: FormControl<number>;
     OnlandVisualTrashAssessmentStatusName?: FormControl<string>;
     OnlandVisualTrashAssessmentScoreName?: FormControl<string>;
     CompletedDate?: FormControl<string>;
@@ -116,6 +118,16 @@ export class OnlandVisualTrashAssessmentGridDtoFormControls {
         }
     );
     public static StormwaterJurisdictionName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static OnlandVisualTrashAssessmentStatusID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

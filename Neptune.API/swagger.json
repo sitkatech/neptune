@@ -4717,6 +4717,10 @@
             "type": "string",
             "nullable": true
           },
+          "OnlandVisualTrashAssessmentStatusID": {
+            "type": "integer",
+            "format": "int32"
+          },
           "OnlandVisualTrashAssessmentStatusName": {
             "type": "string",
             "nullable": true
@@ -4782,6 +4786,10 @@
           "StormwaterJurisdictionName": {
             "type": "string",
             "nullable": true
+          },
+          "OnlandVisualTrashAssessmentStatusID": {
+            "type": "integer",
+            "format": "int32"
           },
           "OnlandVisualTrashAssessmentStatusName": {
             "type": "string",

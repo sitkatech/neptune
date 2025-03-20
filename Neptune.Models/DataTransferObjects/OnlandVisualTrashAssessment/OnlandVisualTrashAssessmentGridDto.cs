@@ -10,6 +10,7 @@ public class OnlandVisualTrashAssessmentGridDto
     public string Notes { get; set; }
     public int StormwaterJurisdictionID { get; set; }
     public string StormwaterJurisdictionName { get; set; }
+    public int OnlandVisualTrashAssessmentStatusID { get; set; }
     public string OnlandVisualTrashAssessmentStatusName { get; set; }
     public string OnlandVisualTrashAssessmentScoreName { get; set; }
     public DateTime? CompletedDate { get; set; }

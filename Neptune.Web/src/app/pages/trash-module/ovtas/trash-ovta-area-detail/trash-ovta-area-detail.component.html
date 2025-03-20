@@ -38,7 +38,7 @@
                     </dd>
                     <dt class="g-col-4">Last Assessment Date</dt>
                     <dd class="g-col-8">
-                        {{ onlandVisualTrashAssessmentArea.LastAssessmentDate | date : "MM/dd/yyyy" }}
+                        {{ getLastAssessmentDate(onlandVisualTrashAssessments) }}
                     </dd>
                     <dt class="g-col-4"><field-definition fieldDefinitionType="BaselineScore"></field-definition></dt>
                     <dd class="g-col-8">
