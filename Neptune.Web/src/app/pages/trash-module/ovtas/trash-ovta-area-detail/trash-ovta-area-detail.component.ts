@@ -26,8 +26,8 @@ import { AlertService } from "src/app/shared/services/alert.service";
 import { OnlandVisualTrashAssessmentSimpleDto } from "src/app/shared/generated/model/models";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
-import { OvtaAreaLayerForWorkflowComponent } from "../../../../shared/components/leaflet/layers/ovta-area-for-workflow-layer/ovta-area-for-workflow-layer.component";
 import { OnlandVisualTrashAssessmentStatusEnum } from "src/app/shared/generated/enum/onland-visual-trash-assessment-status-enum";
+import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 
 @Component({
     selector: "trash-ovta-area-detail",
@@ -37,14 +37,13 @@ import { OnlandVisualTrashAssessmentStatusEnum } from "src/app/shared/generated/
         AlertDisplayComponent,
         NgIf,
         AsyncPipe,
-        DatePipe,
         FieldDefinitionComponent,
         NeptuneGridComponent,
         NeptuneMapComponent,
         TransectLineLayerComponent,
         RouterLink,
         LoadingDirective,
-        OvtaAreaLayerForWorkflowComponent,
+        OvtaAreaLayerComponent,
     ],
     templateUrl: "./trash-ovta-area-detail.component.html",
     styleUrl: "./trash-ovta-area-detail.component.scss",

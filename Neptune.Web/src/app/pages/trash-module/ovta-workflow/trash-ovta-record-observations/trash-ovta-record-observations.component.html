@@ -9,13 +9,13 @@
     <neptune-map *ngIf="onlandVisualTrashAssessmentObservations$ | async" (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment)" mapHeight="750px" [showLegend]="true">
         <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
         <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="15" styles="parcel_alt"></parcel-layer>
-        <ovta-area-for-workflow-layer
+        <ovta-area-layer
             *ngIf="mapIsReady && onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"
             [displayOnLoad]="true"
             [map]="map"
             [layerControl]="layerControl"
-            [sortOrder]="20"
-            [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-for-workflow-layer>
+            [sortOrder]="10"
+            [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
         <transect-line-layer-by-ovta
             *ngIf="mapIsReady"
             [displayOnLoad]="true"

@@ -113,4 +113,43 @@ public static class OnlandVisualTrashAssessmentAreas
         var round = (int)Math.Round(average);
         return OnlandVisualTrashAssessmentScore.All.SingleOrDefault(x => x.NumericValue == round);
     }
+
+    public static FeatureCollection GetAssessmentAreaByIDAsFeatureCollection(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentAreaID)
+    {
+        var onlandVisualTrashAssessmentArea = dbContext.OnlandVisualTrashAssessmentAreas.AsNoTracking()
+            .Single(x => x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentAreaID);
+        var attributesTable = new AttributesTable
+        {
+            {
+                "OnlandVisualTrashAssessmentAreaID", onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID
+            }
+        };
+        var featureCollection = new FeatureCollection();
+        if (onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry4326 != null)
+        {
+            var feature = new Feature(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry4326, attributesTable);
+            featureCollection.Add(feature);
+        }
+ 
+        return featureCollection;
+    }
+    public static FeatureCollection GetTransectLineByIDAsFeatureCollection(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentAreaID)
+    {
+        var onlandVisualTrashAssessmentArea = dbContext.OnlandVisualTrashAssessmentAreas.AsNoTracking()
+            .Single(x => x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentAreaID);
+        var attributesTable = new AttributesTable
+        {
+            {
+                "OnlandVisualTrashAssessmentAreaID", onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID
+            }
+        };
+        var featureCollection = new FeatureCollection();
+        if (onlandVisualTrashAssessmentArea.TransectLine4326 != null)
+        {
+            var feature = new Feature(onlandVisualTrashAssessmentArea.TransectLine4326, attributesTable);
+            featureCollection.Add(feature);
+        }
+ 
+        return featureCollection;
+    }
 }

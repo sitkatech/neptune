@@ -9,6 +9,7 @@ using Neptune.API.Services.Attributes;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using NetTopologySuite.Features;
 
 namespace Neptune.API.Controllers;
 
@@ -77,5 +78,23 @@ public class OnlandVisualTrashAssessmentAreaController(
         OnlandVisualTrashAssessmentAreas.UpdateGeometry(DbContext, onlandVisualTrashAssessmentAreaGeometryDto);
         await DbContext.SaveChangesAsync();
         return Ok();
+    }
+
+    [HttpGet("{onlandVisualTrashAssessmentAreaID}/area-as-feature-collection")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
+    public ActionResult<FeatureCollection> GetAreaAsFeatureCollection([FromRoute] int onlandVisualTrashAssessmentAreaID)
+    {
+        var transectLine4326GeoJson = OnlandVisualTrashAssessmentAreas.GetAssessmentAreaByIDAsFeatureCollection(DbContext, onlandVisualTrashAssessmentAreaID);
+        return Ok(transectLine4326GeoJson);
+    }
+
+    [HttpGet("{onlandVisualTrashAssessmentAreaID}/transect-line-as-feature-collection")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
+    public ActionResult<FeatureCollection> GetTransectLineAsFeatureCollection([FromRoute] int onlandVisualTrashAssessmentAreaID)
+    {
+        var transectLine4326GeoJson = OnlandVisualTrashAssessmentAreas.GetTransectLineByIDAsFeatureCollection(DbContext, onlandVisualTrashAssessmentAreaID);
+        return Ok(transectLine4326GeoJson);
     }
 }

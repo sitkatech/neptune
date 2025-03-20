@@ -28,7 +28,7 @@ import { WfsService } from "src/app/shared/services/wfs.service";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 import { TransectLineLayerByOvtaComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer-by-ovta/transect-line-layer-by-ovta.component";
-import { OvtaAreaLayerForWorkflowComponent } from "src/app/shared/components/leaflet/layers/ovta-area-for-workflow-layer/ovta-area-for-workflow-layer.component";
+import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 
 @Component({
     selector: "trash-ovta-record-observations",
@@ -37,7 +37,6 @@ import { OvtaAreaLayerForWorkflowComponent } from "src/app/shared/components/lea
         PageHeaderComponent,
         NeptuneMapComponent,
         DropdownToggleDirective,
-        OvtaAreaLayerForWorkflowComponent,
         NgIf,
         NgFor,
         AsyncPipe,
@@ -49,6 +48,7 @@ import { OvtaAreaLayerForWorkflowComponent } from "src/app/shared/components/lea
         LandUseBlockLayerComponent,
         ParcelLayerComponent,
         TransectLineLayerByOvtaComponent,
+        OvtaAreaLayerComponent,
     ],
     templateUrl: "./trash-ovta-record-observations.component.html",
     styleUrl: "./trash-ovta-record-observations.component.scss",

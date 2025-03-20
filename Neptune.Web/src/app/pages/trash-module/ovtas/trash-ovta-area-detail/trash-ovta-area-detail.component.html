@@ -61,14 +61,14 @@
                 <a class="btn btn-primary" (click)="editLocation(onlandVisualTrashAssessments.length)">Edit</a>
             </div>
             <div class="card-body map">
-                <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="400px" [showLegend]="false" [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
-                    <ovta-area-for-workflow-layer
+                <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="400px" [showLegend]="true" [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
+                    <ovta-area-layer
                         *ngIf="mapIsReady"
                         [displayOnLoad]="true"
                         [map]="map"
                         [layerControl]="layerControl"
                         [sortOrder]="10"
-                        [ovtaAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"></ovta-area-for-workflow-layer>
+                        [ovtaAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
                     <transect-line-layer
                         *ngIf="mapIsReady"
                         [displayOnLoad]="true"

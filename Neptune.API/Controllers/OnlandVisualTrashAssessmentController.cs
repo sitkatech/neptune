@@ -76,7 +76,6 @@ public class OnlandVisualTrashAssessmentController(
         return Ok();
     }
 
-
     [HttpGet("{onlandVisualTrashAssessmentID}/transect-line-as-feature-collection")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
