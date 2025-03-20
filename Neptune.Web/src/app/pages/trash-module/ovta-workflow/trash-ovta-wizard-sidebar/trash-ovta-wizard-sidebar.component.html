@@ -5,7 +5,7 @@
                 <p>
                     Onland Visual Trash Assessment
                     <a
-                        *ngIf="progressDto?.OnlandVisualTrashAssessmentStatus.OnlandVisualTrashAssessmentStatusID != OnlandVisualTrashAssessmentStatus.Complete"
+                        *ngIf="progressDto?.OnlandVisualTrashAssessmentStatus?.OnlandVisualTrashAssessmentStatusID != OnlandVisualTrashAssessmentStatus.Complete"
                         class="ml-2 delete"
                         (click)="deleteOVTA(progressDto.OnlandVisualTrashAssessmentID, progressDto.CreatedDate)">
                         Delete
