@@ -70,7 +70,8 @@
 
             &__label {
                 color: $teal-800;
-                margin-left: 2rem;
+                margin-right: 2rem;
+                margin-left: 0.5rem;
             }
         }
        
@@ -92,10 +93,6 @@
 
     &__logo-wrapper{
         display: flex;
-    }
-
-    &__item{
-        margin-left: 1rem;
     }
 
     a.navbar-brand {

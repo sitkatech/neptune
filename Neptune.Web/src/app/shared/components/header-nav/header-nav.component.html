@@ -13,9 +13,7 @@
                 <img src="assets/main/logos/hippocamp_logo.png" class="navbarLogo" alt="Orange County Stormwater Tools" style="height: 100px" />
             </a>
             <ul class="admin-nav__links admin-nav__main">
-                <li class="admin-nav__item home">
-                    <a [routerLink]="['./']" routerLinkActive="active" class="navbar-brand"> {{ moduleTitle }} </a>
-                </li>
+                
                 <li class="nav-item dropdown moduleSwitcher" routerLinkActive="active">
                     <a
                         href="javascript:void(0);"
@@ -47,7 +45,9 @@
                         </a>
                     </div>
                 </li>
-               
+                <li class="admin-nav__item home">
+                    <a [routerLink]="['./']" routerLinkActive="active" class="navbar-brand"> {{ moduleTitle }} </a>
+                </li>
             </ul>
         </div>
         
