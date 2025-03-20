@@ -14,5 +14,5 @@ data:
   GEOSERVER_ADMIN_USER: "geomaster"
   GEOSERVER_ADMIN_PASSWORD_FILE: "/app/secrets/geoserverAdminPassword"
   GEOSERVER_CONFIG_DIRECTORY: "/app/config"
-  INITIAL_MEMORY: "1G"
-  MAXIMUM_MEMORY: "2G"
+  INITIAL_MEMORY: "4G"
+  MAXIMUM_MEMORY: "8G"

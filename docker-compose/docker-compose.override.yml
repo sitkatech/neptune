@@ -92,7 +92,7 @@ services:
 
   geoserver:
     container_name: neptune_geoserver
-    image: kartoza/geoserver:2.25.2
+    image: kartoza/geoserver:2.26.1
     environment:
       - ENABLE_JSONP=true
       - CATALINA_OPTS=-DALLOW_ENV_PARAMETRIZATION=true
@@ -103,6 +103,8 @@ services:
       - SAMPLE_DATA=false
       - GEOSERVER_ADMIN_USER=admin
       - GEOSERVER_ADMIN_PASSWORD=${GeoserverAdminPassword}
+      - INITIAL_MEMORY=4G
+      - MAXIMUM_MEMORY=8G
     ports:
       - 127.0.0.1:8780:8080
     volumes:
