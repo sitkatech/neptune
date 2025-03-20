@@ -20,7 +20,6 @@ export class OVTAResultsDto {
     ALUSumAcresWhereOVTAIsB?: number;
     ALUSumAcresWhereOVTAIsC?: number;
     ALUSumAcresWhereOVTAIsD?: number;
-    LastUpdateDate?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -35,7 +34,6 @@ export interface OVTAResultsDtoForm {
     ALUSumAcresWhereOVTAIsB?: FormControl<number>;
     ALUSumAcresWhereOVTAIsC?: FormControl<number>;
     ALUSumAcresWhereOVTAIsD?: FormControl<number>;
-    LastUpdateDate?: FormControl<string>;
 }
 
 export class OVTAResultsDtoFormControls { 
@@ -110,16 +108,6 @@ export class OVTAResultsDtoFormControls {
         }
     );
     public static ALUSumAcresWhereOVTAIsD = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static LastUpdateDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

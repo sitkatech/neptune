@@ -108,8 +108,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         fillOpacity: 0.1,
     };
 
-    private lastUpdateDateSubject = new BehaviorSubject<string | null>(null);
-    public lastUpdateDate$ = this.lastUpdateDateSubject.asObservable()
+    public lastUpdateDate$: Observable<string>;
 
     constructor(
         private authenticationService: AuthenticationService,
@@ -152,16 +151,14 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
             })
         );
 
+        this.lastUpdateDate$ = this.trashGeneratingUnitService.trashGeneratingUnitsLastUpdateDateGet();
+
         this.areaBasedAcreCalculationsDto$ = this.stormwaterJurisdiction$.pipe(
             tap(() => {
                 this.isLoading = true;
             }),
             switchMap((x) => {
-                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(x.StormwaterJurisdictionID).pipe(
-                    tap((x) => {
-                        this.lastUpdateDateSubject.next(x.LastUpdateDate);
-                    })
-                );
+                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
             }),
             tap(() => {
                 this.isLoading = false;
@@ -173,11 +170,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 this.isLoading = true;
             }),
             switchMap((x) => {
-                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(x.StormwaterJurisdictionID).pipe(
-                    tap((x) => {
-                        this.lastUpdateDateSubject.next(x.LastUpdateDate);
-                    })
-                );
+                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
             }),
             tap(() => {
                 this.isLoading = false;
@@ -189,11 +182,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 this.isLoading = true;
             }),
             switchMap((x) => {
-                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(x.StormwaterJurisdictionID).pipe(
-                    tap((x) => {
-                        this.lastUpdateDateSubject.next(x.LastUpdateDate);
-                    })
-                );
+                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
             }),
             tap(() => {
                 this.isLoading = false;

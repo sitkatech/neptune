@@ -3103,6 +3103,38 @@
         }
       }
     },
+    "/trash-generating-units/last-update-date": {
+      "get": {
+        "tags": [
+          "TrashGeneratingUnit"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/trash-results-by-jurisdiction/{jurisdictionID}/area-based-results-calculations": {
       "get": {
         "tags": [
@@ -3731,11 +3763,6 @@
           "PercentTreated": {
             "type": "number",
             "format": "double"
-          },
-          "LastUpdateDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4327,11 +4354,6 @@
           "TargetLoadReduction": {
             "type": "number",
             "format": "double"
-          },
-          "LastUpdateDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4431,11 +4453,6 @@
           "ALUSumAcresWhereOVTAIsD": {
             "type": "number",
             "format": "double"
-          },
-          "LastUpdateDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
           }
         },
         "additionalProperties": false

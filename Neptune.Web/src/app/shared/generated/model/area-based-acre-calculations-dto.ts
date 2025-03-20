@@ -17,7 +17,6 @@ export class AreaBasedAcreCalculationsDto {
     TotalAcresCaptured?: number;
     TotalPLUAcres?: number;
     PercentTreated?: number;
-    LastUpdateDate?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -29,7 +28,6 @@ export interface AreaBasedAcreCalculationsDtoForm {
     TotalAcresCaptured?: FormControl<number>;
     TotalPLUAcres?: FormControl<number>;
     PercentTreated?: FormControl<number>;
-    LastUpdateDate?: FormControl<string>;
 }
 
 export class AreaBasedAcreCalculationsDtoFormControls { 
@@ -74,16 +72,6 @@ export class AreaBasedAcreCalculationsDtoFormControls {
         }
     );
     public static PercentTreated = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static LastUpdateDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

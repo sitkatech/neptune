@@ -28,7 +28,6 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
     public ActionResult<AreaBasedAcreCalculationsDto> GetAreaBasedResultsCalculations([FromRoute] int jurisdictionID)
     {
         var trashGeneratingUnits = GetRelevantTrashGeneratingUnitsForCalculations(jurisdictionID);
-        var lastUpdateDate = DbContext.vTrashGeneratingUnitLoadStatistics.FirstOrDefault()?.LastUpdateDate;
 
         var fullTrashCapture = trashGeneratingUnits.FullTrashCaptureAcreage();
 
@@ -48,8 +47,7 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
             EquivalentAreaAcreage = equivalentArea,
             TotalAcresCaptured = totalAcresCaptured,
             TotalPLUAcres = totalPLUAcres,
-            PercentTreated = percentTreated,
-            LastUpdateDate = lastUpdateDate
+            PercentTreated = percentTreated
         };
         return Ok(areaBasedAcreCalculationsDto);
     }
@@ -74,7 +72,6 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
     public ActionResult<OVTAResultsDto> GetOVTABasedResultsCalculations([FromRoute] int jurisdictionID)
     {
         var trashGeneratingUnits = GetRelevantTrashGeneratingUnitsForCalculations(jurisdictionID);
-        var lastUpdateDate = DbContext.vTrashGeneratingUnitLoadStatistics.FirstOrDefault()?.LastUpdateDate;
 
         var sumPLUAcresWhereOVTAIsA = trashGeneratingUnits.PriorityOVTAScoreAAcreage();
 
@@ -102,8 +99,7 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
             ALUSumAcresWhereOVTAIsA = sumALUAcresWhereOVTAIsA,
             ALUSumAcresWhereOVTAIsB = sumALUAcresWhereOVTAIsB,
             ALUSumAcresWhereOVTAIsC = sumALUAcresWhereOVTAIsC,
-            ALUSumAcresWhereOVTAIsD = sumALUAcresWhereOVTAIsD,
-            LastUpdateDate = lastUpdateDate
+            ALUSumAcresWhereOVTAIsD = sumALUAcresWhereOVTAIsD
         };
         return Ok(ovtaResultsDto);
     }
@@ -115,7 +111,6 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
     {
         var vTrashGeneratingUnitLoadStatistics =
             DbContext.vTrashGeneratingUnitLoadStatistics.Where(x => x.StormwaterJurisdictionID == jurisdictionID);
-        var lastUpdateDate = DbContext.vTrashGeneratingUnitLoadStatistics.FirstOrDefault()?.LastUpdateDate;
 
         var viaFullCapture = vTrashGeneratingUnitLoadStatistics.Where(x => x.IsFullTrashCapture && x.BaselineLoadingRate.HasValue).Sum(x =>
             x.Area * (double)(x.BaselineLoadingRate - TrashGeneratingUnitHelper.FullTrashCaptureLoading) * Constants.SquareMetersToAcres);
@@ -133,8 +128,7 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
             LoadPartialCapture = viaPartialCapture,
             LoadOVTA = viaOVTAs,
             TotalAchieved = totalAchieved,
-            TargetLoadReduction = targetLoadReduction,
-            LastUpdateDate = lastUpdateDate
+            TargetLoadReduction = targetLoadReduction
         };
         return Ok(loadResultsDto);
     }
