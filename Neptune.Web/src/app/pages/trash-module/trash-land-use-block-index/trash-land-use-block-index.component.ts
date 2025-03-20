@@ -33,12 +33,19 @@ export class TrashLandUseBlockIndexComponent {
     ngOnInit() {
         this.landUseBlockColumnDefs = [
             this.utilityFunctionsService.createBasicColumnDef("Block ID", "LandUseBlockID"),
-            this.utilityFunctionsService.createBasicColumnDef("Land Use Type", "PriorityLandUseTypeName"),
+            this.utilityFunctionsService.createBasicColumnDef("Land Use Type", "PriorityLandUseTypeName", {
+                CustomDropdownFilterField: "PriorityLandUseTypeName",
+            }),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName", {
                 CustomDropdownFilterField: "StormwaterJurisdictionName",
             }),
             this.utilityFunctionsService.createDecimalColumnDef("Block Area", "Area"),
-            this.utilityFunctionsService.createDecimalColumnDef("Trash Generation Rate", "TrashGenerationRate"),
+            this.utilityFunctionsService.createDecimalColumnDef("Trash Generation Rate", "TrashGenerationRate", {
+                CustomDropdownFilterField: "TrashGenerationRate",
+            }),
+            this.utilityFunctionsService.createBasicColumnDef("Land Use Description", "LandUseDescription", {
+                CustomDropdownFilterField: "LandUseDescription",
+            }),
             this.utilityFunctionsService.createDecimalColumnDef("Median Household Income Residential", "MedianHouseholdIncomeResidential"),
             this.utilityFunctionsService.createDecimalColumnDef("Median Household Income Retail", "MedianHouseholdIncomeRetail"),
             this.utilityFunctionsService.createDecimalColumnDef("Trash Results Area", "MedianHouseholdIncomeRetail"),
