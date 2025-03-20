@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
@@ -60,5 +61,12 @@ public class TrashGeneratingUnitController(
             }).FirstOrDefault();
         
         return Ok(trashGeneratingUnitDto);
+    }
+
+    [HttpGet("last-update-date")]
+    public ActionResult<DateTime> GetLastUpdateDate()
+    {
+        var lastUpdateDate = DbContext.vTrashGeneratingUnitLoadStatistics.FirstOrDefault()?.LastUpdateDate;
+        return Ok(lastUpdateDate);
     }
 }

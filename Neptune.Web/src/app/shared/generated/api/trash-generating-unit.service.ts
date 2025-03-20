@@ -103,6 +103,44 @@ export class TrashGeneratingUnitService {
     /**
      * 
      * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public trashGeneratingUnitsLastUpdateDateGet(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public trashGeneratingUnitsLastUpdateDateGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public trashGeneratingUnitsLastUpdateDateGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public trashGeneratingUnitsLastUpdateDateGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<string>(`${this.basePath}/trash-generating-units/last-update-date`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
      * @param trashGeneratingUnitID 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

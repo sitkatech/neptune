@@ -108,6 +108,8 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         fillOpacity: 0.1,
     };
 
+    public lastUpdateDate$: Observable<string>;
+
     constructor(
         private authenticationService: AuthenticationService,
         private router: Router,
@@ -148,6 +150,8 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 this.currentStormwaterJurisdiction = x[0];
             })
         );
+
+        this.lastUpdateDate$ = this.trashGeneratingUnitService.trashGeneratingUnitsLastUpdateDateGet();
 
         this.areaBasedAcreCalculationsDto$ = this.stormwaterJurisdiction$.pipe(
             tap(() => {
