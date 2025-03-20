@@ -83,7 +83,6 @@ public class OnlandVisualTrashAssessmentController(
     public ActionResult<FeatureCollection> GetTransectLineAsFeatureCollection([FromRoute] int onlandVisualTrashAssessmentID)
     {
         var onlandVisualTrashAssessment = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID);
-        var onlandVisualTrashAssessmentObservations = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations;
         var transectLine4326GeoJson = OnlandVisualTrashAssessments.GetTransectLine4326GeoJson(onlandVisualTrashAssessment);
         return Ok(transectLine4326GeoJson);
     }
