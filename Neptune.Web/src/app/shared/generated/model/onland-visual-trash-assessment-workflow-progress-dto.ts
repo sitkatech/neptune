@@ -15,9 +15,11 @@ import { OnlandVisualTrashAssessmentStatusSimpleDto } from '././onland-visual-tr
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class OnlandVisualTrashAssessmentWorkflowProgressDto { 
     OnlandVisualTrashAssessmentID?: number;
-    OnlandVisualTrashAssessmentName?: string;
+    OnlandVisualTrashAssessmentAreaID?: number;
+    OnlandVisualTrashAssessmentAreaName?: string;
     OnlandVisualTrashAssessmentStatus?: OnlandVisualTrashAssessmentStatusSimpleDto;
     Steps?: OnlandVisualTrashAssessmentWorkflowProgressDtoSteps;
+    CreatedDate?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -25,9 +27,11 @@ export class OnlandVisualTrashAssessmentWorkflowProgressDto {
 
 export interface OnlandVisualTrashAssessmentWorkflowProgressDtoForm { 
     OnlandVisualTrashAssessmentID?: FormControl<number>;
-    OnlandVisualTrashAssessmentName?: FormControl<string>;
+    OnlandVisualTrashAssessmentAreaID?: FormControl<number>;
+    OnlandVisualTrashAssessmentAreaName?: FormControl<string>;
     OnlandVisualTrashAssessmentStatus?: FormControl<OnlandVisualTrashAssessmentStatusSimpleDto>;
     Steps?: FormControl<OnlandVisualTrashAssessmentWorkflowProgressDtoSteps>;
+    CreatedDate?: FormControl<string>;
 }
 
 export class OnlandVisualTrashAssessmentWorkflowProgressDtoFormControls { 
@@ -41,7 +45,17 @@ export class OnlandVisualTrashAssessmentWorkflowProgressDtoFormControls {
             ],
         }
     );
-    public static OnlandVisualTrashAssessmentName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+    public static OnlandVisualTrashAssessmentAreaID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static OnlandVisualTrashAssessmentAreaName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -62,6 +76,16 @@ export class OnlandVisualTrashAssessmentWorkflowProgressDtoFormControls {
         }
     );
     public static Steps = (value: FormControlState<OnlandVisualTrashAssessmentWorkflowProgressDtoSteps> | OnlandVisualTrashAssessmentWorkflowProgressDtoSteps = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<OnlandVisualTrashAssessmentWorkflowProgressDtoSteps>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static CreatedDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

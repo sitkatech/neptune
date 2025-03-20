@@ -75,24 +75,6 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
             return null;
         }
 
-        public static OnlandVisualTrashAssessmentScore CalculateProgressScore(List<EFModels.Entities.OnlandVisualTrashAssessment> onlandVisualTrashAssessments)
-        {
-            var completedAndIsProgressAssessment = onlandVisualTrashAssessments.Where(x =>
-                x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete
-                    .OnlandVisualTrashAssessmentStatusID && x.IsProgressAssessment).ToList();
-
-            if (!completedAndIsProgressAssessment.Any())
-            {
-                return null;
-            }
-
-            var average = completedAndIsProgressAssessment.OrderByDescending(x=>x.CompletedDate).Take(3).Average(x=>x.OnlandVisualTrashAssessmentScore.NumericValue);
-
-            var onlandVisualTrashAssessmentScore = OnlandVisualTrashAssessmentScore.All.Single(x => x.NumericValue == Math.Round(average));
-            
-            return onlandVisualTrashAssessmentScore;
-        }
-
         public static LayerGeoJson GetAssessmentAreaLayerGeoJson(this EFModels.Entities.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
             var geoJsonFeatureCollection = new List<EFModels.Entities.OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessmentArea }

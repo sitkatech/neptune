@@ -16,7 +16,7 @@ import { PreliminarySourceIdentificationCategories } from "src/app/shared/genera
 @Component({
     selector: "trash-ovta-detail",
     standalone: true,
-    imports: [NgIf, AsyncPipe, AlertDisplayComponent, PageHeaderComponent, FieldDefinitionComponent, DatePipe, NgFor, KeyValuePipe, ObservationsMapComponent, NgClass, RouterLink],
+    imports: [NgIf, AsyncPipe, AlertDisplayComponent, PageHeaderComponent, FieldDefinitionComponent, DatePipe, NgFor, ObservationsMapComponent, RouterLink],
     templateUrl: "./trash-ovta-detail.component.html",
     styleUrl: "./trash-ovta-detail.component.scss",
 })

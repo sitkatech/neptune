@@ -20,8 +20,10 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
         return new OnlandVisualTrashAssessmentWorkflowProgressDto
         {
             OnlandVisualTrashAssessmentID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
-            OnlandVisualTrashAssessmentName = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName,
+            OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID,
+            OnlandVisualTrashAssessmentAreaName = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName,
             OnlandVisualTrashAssessmentStatus = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus.AsSimpleDto(),
+            CreatedDate = onlandVisualTrashAssessment.CreatedDate,
             Steps = Enum.GetValuesAsUnderlyingType<OnlandVisualTrashAssessmentWorkflowStep>().Cast<OnlandVisualTrashAssessmentWorkflowStep>()
                 .ToDictionary(x => x, y => new ProjectWorkflowProgress.WorkflowStepStatus()
                 {
@@ -31,40 +33,40 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
         };
     }
 
-    public static bool CanSubmit(NeptuneDbContext dbContext, OnlandVisualTrashAssessment OnlandVisualTrashAssessment)
+    public static bool CanSubmit(NeptuneDbContext dbContext, OnlandVisualTrashAssessment onlandVisualTrashAssessment)
     {
         var steps = Enum.GetValuesAsUnderlyingType<OnlandVisualTrashAssessmentWorkflowStep>().Cast<OnlandVisualTrashAssessmentWorkflowStep>();
         foreach (var step in steps)
         {
-            var stepComplete = WorkflowStepComplete(OnlandVisualTrashAssessment, step);
+            var stepComplete = WorkflowStepComplete(onlandVisualTrashAssessment, step);
             if (!stepComplete) return false;
         }
 
         return true;
     }
 
-    public static bool CanDelete(NeptuneDbContext dbContext, OnlandVisualTrashAssessment OnlandVisualTrashAssessment, Person currentUser)
+    public static bool CanDelete(NeptuneDbContext dbContext, OnlandVisualTrashAssessment onlandVisualTrashAssessment, Person currentUser)
     {
-        return currentUser.CanEditJurisdiction(OnlandVisualTrashAssessment.StormwaterJurisdictionID, dbContext);
+        return currentUser.CanEditJurisdiction(onlandVisualTrashAssessment.StormwaterJurisdictionID, dbContext);
     }
 
-    public static bool WorkflowStepComplete(OnlandVisualTrashAssessment OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentWorkflowStep wellRegistryWorkflowStep)
+    public static bool WorkflowStepComplete(OnlandVisualTrashAssessment onlandVisualTrashAssessment, OnlandVisualTrashAssessmentWorkflowStep wellRegistryWorkflowStep)
     {
         switch (wellRegistryWorkflowStep)
         {
             case OnlandVisualTrashAssessmentWorkflowStep.Instructions:
                 return true;
             case OnlandVisualTrashAssessmentWorkflowStep.InitiateOvta:
-                return OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentID > 0;
+                return onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID > 0;
             case OnlandVisualTrashAssessmentWorkflowStep.RecordObservations:
-                return (OnlandVisualTrashAssessment.AssessingNewArea != null) && OnlandVisualTrashAssessment
+                return (onlandVisualTrashAssessment.AssessingNewArea != null) && onlandVisualTrashAssessment
                     .OnlandVisualTrashAssessmentObservations.ToList().Count > 0;
             case OnlandVisualTrashAssessmentWorkflowStep.AddOrRemoveParcels:
-                return OnlandVisualTrashAssessment.DraftGeometry != null || (OnlandVisualTrashAssessment.AssessingNewArea.HasValue && !OnlandVisualTrashAssessment.AssessingNewArea.Value);
+                return onlandVisualTrashAssessment.DraftGeometry != null || (onlandVisualTrashAssessment.AssessingNewArea.HasValue && !onlandVisualTrashAssessment.AssessingNewArea.Value);
             case OnlandVisualTrashAssessmentWorkflowStep.RefineAssessmentArea:
-                return OnlandVisualTrashAssessment.DraftGeometry != null || (OnlandVisualTrashAssessment.AssessingNewArea.HasValue && !OnlandVisualTrashAssessment.AssessingNewArea.Value);
+                return onlandVisualTrashAssessment.DraftGeometry != null || (onlandVisualTrashAssessment.AssessingNewArea.HasValue && !onlandVisualTrashAssessment.AssessingNewArea.Value);
             case OnlandVisualTrashAssessmentWorkflowStep.ReviewAndFinalize:
-                return OnlandVisualTrashAssessment is
+                return onlandVisualTrashAssessment is
                 {
                     OnlandVisualTrashAssessmentID: > 0, OnlandVisualTrashAssessmentObservations.Count: > 0,
                     CompletedDate: not null
@@ -74,7 +76,7 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
         }
     }
 
-    public static bool WorkflowStepActive(OnlandVisualTrashAssessment OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentWorkflowStep wellRegistryWorkflowStep)
+    public static bool WorkflowStepActive(OnlandVisualTrashAssessment onlandVisualTrashAssessment, OnlandVisualTrashAssessmentWorkflowStep wellRegistryWorkflowStep)
     {
         switch (wellRegistryWorkflowStep)
         {
@@ -82,16 +84,16 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
                 return true;
 
             case OnlandVisualTrashAssessmentWorkflowStep.ReviewAndFinalize:
-                return OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentID > 0;
+                return onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID > 0;
 
             case OnlandVisualTrashAssessmentWorkflowStep.InitiateOvta:
-                return OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentID == 0;
+                return onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID == 0;
             case OnlandVisualTrashAssessmentWorkflowStep.RecordObservations:
-                return OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentID > 0;
+                return onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID > 0;
             case OnlandVisualTrashAssessmentWorkflowStep.AddOrRemoveParcels:
-                return OnlandVisualTrashAssessment is { OnlandVisualTrashAssessmentID: > 0, AssessingNewArea: true };
+                return onlandVisualTrashAssessment is { OnlandVisualTrashAssessmentID: > 0, AssessingNewArea: true };
             case OnlandVisualTrashAssessmentWorkflowStep.RefineAssessmentArea:
-                return OnlandVisualTrashAssessment is { OnlandVisualTrashAssessmentID: > 0, AssessingNewArea: true };
+                return onlandVisualTrashAssessment is { OnlandVisualTrashAssessmentID: > 0, AssessingNewArea: true };
             default:
                 throw new ArgumentOutOfRangeException(nameof(wellRegistryWorkflowStep), wellRegistryWorkflowStep, null);
         }
@@ -102,8 +104,10 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
     public class OnlandVisualTrashAssessmentWorkflowProgressDto
     {
         public int OnlandVisualTrashAssessmentID { get; set; }
-        public string OnlandVisualTrashAssessmentName { get; set; }
+        public int? OnlandVisualTrashAssessmentAreaID { get; set; }
+        public string? OnlandVisualTrashAssessmentAreaName { get; set; }
         public OnlandVisualTrashAssessmentStatusSimpleDto OnlandVisualTrashAssessmentStatus { get; set; }
         public Dictionary<OnlandVisualTrashAssessmentWorkflowStep, ProjectWorkflowProgress.WorkflowStepStatus> Steps { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

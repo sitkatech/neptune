@@ -1,0 +1,13 @@
+@use "/src/scss/abstracts" as *;
+
+.sidebar-title {
+    a {
+        color: $teal-700;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    a.delete {
+        font-size: $type-size-150;
+    }
+}

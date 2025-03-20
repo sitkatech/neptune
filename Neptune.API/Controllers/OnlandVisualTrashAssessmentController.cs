@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Neptune.EFModels.Workflows;
 using System.Linq;
 using NetTopologySuite.Features;
+using Microsoft.EntityFrameworkCore;
 
 namespace Neptune.API.Controllers;
 
@@ -48,6 +49,35 @@ public class OnlandVisualTrashAssessmentController(
         var onlandVisualTrashAssessmentDetailDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsDetailDto();
         return Ok(onlandVisualTrashAssessmentDetailDto);
     }
+
+    [HttpDelete("{onlandVisualTrashAssessmentID}")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public async Task<IActionResult> DeleteByID([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessment = OnlandVisualTrashAssessments.GetByIDWithChangeTracking(DbContext, onlandVisualTrashAssessmentID);
+
+        var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea;
+
+        var isProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment;
+        await onlandVisualTrashAssessment.DeleteFull(DbContext);
+
+        if (onlandVisualTrashAssessmentArea != null)
+        {
+            var onlandVisualTrashAssessments = OnlandVisualTrashAssessments.ListByOnlandVisualTrashAssessmentAreaID(DbContext, onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID);
+            onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID = OnlandVisualTrashAssessmentAreas.CalculateScoreFromBackingData(onlandVisualTrashAssessments, false)?.OnlandVisualTrashAssessmentScoreID;
+
+            if (isProgressAssessment)
+            {
+                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID =
+                    OnlandVisualTrashAssessments.CalculateProgressScore(onlandVisualTrashAssessments)
+                        ?.OnlandVisualTrashAssessmentScoreID;
+            }
+
+        }
+        return Ok();
+    }
+
 
     [HttpGet("{onlandVisualTrashAssessmentID}/transect-line-as-feature-collection")]
     [JurisdictionEditFeature]

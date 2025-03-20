@@ -672,6 +672,27 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/transect-line-as-feature-collection": {
@@ -5063,7 +5084,12 @@
             "type": "integer",
             "format": "int32"
           },
-          "OnlandVisualTrashAssessmentName": {
+          "OnlandVisualTrashAssessmentAreaID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentAreaName": {
             "type": "string",
             "nullable": true
           },
@@ -5094,6 +5120,10 @@
             },
             "additionalProperties": false,
             "nullable": true
+          },
+          "CreatedDate": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false

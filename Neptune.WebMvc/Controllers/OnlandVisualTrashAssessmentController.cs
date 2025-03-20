@@ -465,7 +465,7 @@ namespace Neptune.WebMvc.Controllers
                     .OnlandVisualTrashAssessmentScoreID;
 
             onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID =
-                OnlandVisualTrashAssessmentAreaModelExtensions.CalculateProgressScore(onlandVisualTrashAssessments)?
+                OnlandVisualTrashAssessments.CalculateProgressScore(onlandVisualTrashAssessments)?
                     .OnlandVisualTrashAssessmentScoreID;
 
             if (onlandVisualTrashAssessment.IsTransectBackingAssessment)
@@ -571,7 +571,7 @@ namespace Neptune.WebMvc.Controllers
                 if (isProgressAssessment)
                 {
                     onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID =
-                        OnlandVisualTrashAssessmentAreaModelExtensions.CalculateProgressScore(onlandVisualTrashAssessments)
+                        OnlandVisualTrashAssessments.CalculateProgressScore(onlandVisualTrashAssessments)
                             ?.OnlandVisualTrashAssessmentScoreID;
                 }
 

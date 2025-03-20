@@ -382,4 +382,21 @@ public static class OnlandVisualTrashAssessments
         return parcelIDs.ToList();
     }
 
+    public static OnlandVisualTrashAssessmentScore CalculateProgressScore(List<OnlandVisualTrashAssessment> onlandVisualTrashAssessments)
+    {
+        var completedAndIsProgressAssessment = onlandVisualTrashAssessments.Where(x =>
+            x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete
+                .OnlandVisualTrashAssessmentStatusID && x.IsProgressAssessment).ToList();
+
+        if (!completedAndIsProgressAssessment.Any())
+        {
+            return null;
+        }
+
+        var average = completedAndIsProgressAssessment.OrderByDescending(x => x.CompletedDate).Take(3).Average(x => x.OnlandVisualTrashAssessmentScore.NumericValue);
+
+        var onlandVisualTrashAssessmentScore = OnlandVisualTrashAssessmentScore.All.Single(x => x.NumericValue == Math.Round(average));
+
+        return onlandVisualTrashAssessmentScore;
+    }
 }
