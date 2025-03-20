@@ -2,7 +2,7 @@
     <page-header [pageTitle]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName" [templateAbove]="templateAbove"
         ><ng-template #templateAbove>
             <div class="back">
-                <a [routerLink]="['../']" class="back__link">Back to OVTA Grid</a>
+                <a [routerLink]="['../']" class="back__link">OVTA List</a>
             </div>
         </ng-template></page-header
     >
@@ -15,7 +15,9 @@
                 <dl class="grid-12">
                     <dt class="g-col-4">Assessment Area</dt>
                     <dd class="g-col-8">
-                        {{ onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName }}
+                        <a [routerLink]="['/trash/onland-visual-trash-assessment-areas', onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID]">{{
+                            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName
+                        }}</a>
                     </dd>
                     <dt class="g-col-4">Assessment Date</dt>
                     <dd class="g-col-8">
