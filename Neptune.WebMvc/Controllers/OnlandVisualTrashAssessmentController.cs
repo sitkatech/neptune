@@ -476,14 +476,9 @@ namespace Neptune.WebMvc.Controllers
 
                 await _dbContext.SaveChangesAsync();
 
-                var transectLine = OnlandVisualTrashAssessmentAreaModelExtensions.RecomputeTransectLine(onlandVisualTrashAssessments, out var transectBackingAssessment);
+                var transectLine = OnlandVisualTrashAssessmentAreas.RecomputeTransectLine(onlandVisualTrashAssessments);
                 onlandVisualTrashAssessmentArea.TransectLine = transectLine;
                 onlandVisualTrashAssessmentArea.TransectLine4326 = transectLine.ProjectTo4326();
-
-                if (transectBackingAssessment != null)
-                {
-                    transectBackingAssessment.IsTransectBackingAssessment = true;
-                }
             }
 
             await _dbContext.SaveChangesAsync();

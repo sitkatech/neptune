@@ -6,13 +6,18 @@ import { PageHeaderComponent } from "src/app/shared/components/page-header/page-
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { ColDef } from "ag-grid-community";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe, DatePipe, NgIf } from "@angular/common";
 import { OnlandVisualTrashAssessmentGridDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-grid-dto";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 import { environment } from "src/environments/environment";
 import { IconComponent } from "../../../../shared/components/icon/icon.component";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
+import { OnlandVisualTrashAssessmentStatusEnum } from "src/app/shared/generated/enum/onland-visual-trash-assessment-status-enum";
+import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
+import { AlertService } from "src/app/shared/services/alert.service";
+import { Alert } from "src/app/shared/models/alert";
+import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 
 @Component({
     selector: "trash-ovta-index",
@@ -28,10 +33,31 @@ export class TrashOvtaIndexComponent {
     public isLoading: boolean = true;
     public url = environment.ocStormwaterToolsBaseUrl;
 
-    constructor(private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService, private utilityFunctionsService: UtilityFunctionsService) {}
+    constructor(
+        private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
+        private utilityFunctionsService: UtilityFunctionsService,
+        private router: Router,
+        private confirmService: ConfirmService,
+        private alertService: AlertService,
+        private datePipe: DatePipe
+    ) {}
 
     ngOnInit(): void {
         this.ovtaColumnDefs = [
+            this.utilityFunctionsService.createActionsColumnDef((params: any) => {
+                return [
+                    { ActionName: "View", ActionHandler: () => this.router.navigate(["trash", "onland-visual-trash-assessments", params.data.OnlandVisualTrashAssessmentID]) },
+                    {
+                        ActionName: params.data.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatusEnum.Complete ? "Return to Edit" : "Edit",
+                        ActionIcon: "fas fa-edit",
+                        ActionHandler: () =>
+                            params.data.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatusEnum.Complete
+                                ? this.confirmEditOVTA(params.data.OnlandVisualTrashAssessmentID, params.data.CompletedDate)
+                                : this.router.navigateByUrl(`/trash/onland-visual-trash-assessments/edit/${params.data.OnlandVisualTrashAssessmentID}/record-observations`),
+                    },
+                    //{ ActionName: "Delete", ActionIcon: "fa fa-trash text-danger", ActionHandler: () => this.deleteModal(params) },
+                ];
+            }),
             this.utilityFunctionsService.createLinkColumnDef("Assessment ID", "OnlandVisualTrashAssessmentID", "OnlandVisualTrashAssessmentID"),
             this.utilityFunctionsService.createLinkColumnDef("Assessment Area Name", "OnlandVisualTrashAssessmentAreaName", "OnlandVisualTrashAssessmentAreaID", {
                 InRouterLink: "../onland-visual-trash-assessment-areas/",
@@ -51,5 +77,25 @@ export class TrashOvtaIndexComponent {
             this.utilityFunctionsService.createDateColumnDef("Created On", "CreatedDate", "short"),
         ];
         this.onlandVisualTrashAssessments$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsGet().pipe(tap((x) => (this.isLoading = false)));
+    }
+
+    public confirmEditOVTA(onlandVisualTrashAssessmentID: number, completedDate: string) {
+        const modalContents = `<p>This OVTA was finalized on ${this.datePipe.transform(
+            completedDate,
+            "MM/dd/yyyy"
+        )}. Are you sure you want to revert this OVTA to the \"In Progress\" status?</p>`;
+        this.confirmService
+            .confirm({ buttonClassYes: "btn-primary", buttonTextYes: "Continue", buttonTextNo: "Cancel", title: "Return OVTA to Edit", message: modalContents })
+            .then((confirmed) => {
+                if (confirmed) {
+                    this.onlandVisualTrashAssessmentService
+                        .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReturnToEditPost(onlandVisualTrashAssessmentID)
+                        .subscribe((response) => {
+                            this.alertService.clearAlerts();
+                            this.alertService.pushAlert(new Alert('The OVTA was successfully returned to the "In Progress" status.', AlertContext.Success));
+                            this.router.navigateByUrl(`/trash/onland-visual-trash-assessments/edit/${onlandVisualTrashAssessmentID}/record-observations`);
+                        });
+                }
+            });
     }
 }

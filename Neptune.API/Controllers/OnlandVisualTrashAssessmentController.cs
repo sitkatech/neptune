@@ -10,6 +10,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Neptune.EFModels.Workflows;
 using NetTopologySuite.Features;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
+using Neptune.Common.GeoSpatial;
 
 namespace Neptune.API.Controllers;
 
@@ -166,5 +169,46 @@ public class OnlandVisualTrashAssessmentController(
         await OnlandVisualTrashAssessments.RefreshParcels(dbContext, onlandVisualTrashAssessmentID);
         var onlandVisualTrashAssessmentAddRemoveParcelsDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsAddRemoveParcelDto(dbContext);
         return Ok(onlandVisualTrashAssessmentAddRemoveParcelsDto);
+    }
+
+    [HttpPost("{onlandVisualTrashAssessmentID}/return-to-edit")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public async Task<ActionResult> EditStatusToAllowEdit([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessment = OnlandVisualTrashAssessments.GetByIDWithChangeTracking(DbContext, onlandVisualTrashAssessmentID);
+
+        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = OnlandVisualTrashAssessmentStatus.InProgress.OnlandVisualTrashAssessmentStatusID;
+        onlandVisualTrashAssessment.AssessingNewArea = false;
+
+        // update the assessment area scores now that this assessment no longer contributes
+        var onlandVisualTrashAssessments =
+            OnlandVisualTrashAssessments.ListByOnlandVisualTrashAssessmentAreaID(DbContext,
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID.Value);
+        var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea;
+        onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID =
+            OnlandVisualTrashAssessmentAreas.CalculateScoreFromBackingData(onlandVisualTrashAssessments, false)?
+                .OnlandVisualTrashAssessmentScoreID;
+
+        onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID =
+            OnlandVisualTrashAssessments.CalculateProgressScore(onlandVisualTrashAssessments)?
+                .OnlandVisualTrashAssessmentScoreID;
+
+        if (onlandVisualTrashAssessment.IsTransectBackingAssessment)
+        {
+            onlandVisualTrashAssessment.IsTransectBackingAssessment = false;
+            onlandVisualTrashAssessmentArea.TransectLine = null;
+            onlandVisualTrashAssessmentArea.TransectLine4326 = null;
+
+            await DbContext.SaveChangesAsync();
+
+            var transectLine = OnlandVisualTrashAssessmentAreas.RecomputeTransectLine(onlandVisualTrashAssessments);
+            onlandVisualTrashAssessmentArea.TransectLine = transectLine;
+            onlandVisualTrashAssessmentArea.TransectLine4326 = transectLine.ProjectTo4326();
+
+        }
+
+        await DbContext.SaveChangesAsync();
+        return Ok();
     }
 }

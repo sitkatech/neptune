@@ -58,23 +58,6 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
             return null;
         }
 
-        public static Geometry RecomputeTransectLine(List<EFModels.Entities.OnlandVisualTrashAssessment> onlandVisualTrashAssessments,
-            out EFModels.Entities.OnlandVisualTrashAssessment onlandVisualTrashAssessment)
-        {
-            var completedOVTAs = onlandVisualTrashAssessments
-                .Where(x => x.OnlandVisualTrashAssessmentStatusID == (int) OnlandVisualTrashAssessmentStatusEnum.Complete).ToList();
-
-            // new transect should come from the earliest completed assessment
-            if (completedOVTAs.Any())
-            {
-                onlandVisualTrashAssessment = completedOVTAs.MinBy(x => x.CompletedDate);
-                return onlandVisualTrashAssessment.GetTransect();
-            }
-
-            onlandVisualTrashAssessment = null;
-            return null;
-        }
-
         public static LayerGeoJson GetAssessmentAreaLayerGeoJson(this EFModels.Entities.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
             var geoJsonFeatureCollection = new List<EFModels.Entities.OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessmentArea }

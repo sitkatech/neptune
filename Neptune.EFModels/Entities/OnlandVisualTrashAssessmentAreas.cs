@@ -3,6 +3,7 @@ using Neptune.Common.DesignByContract;
 using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
 using NetTopologySuite.Features;
+using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities;
 
@@ -152,4 +153,21 @@ public static class OnlandVisualTrashAssessmentAreas
  
         return featureCollection;
     }
+
+    public static Geometry RecomputeTransectLine(List<OnlandVisualTrashAssessment> onlandVisualTrashAssessments)
+    {
+        var completedOVTAs = onlandVisualTrashAssessments
+            .Where(x => x.OnlandVisualTrashAssessmentStatusID == (int)OnlandVisualTrashAssessmentStatusEnum.Complete).ToList();
+
+        // new transect should come from the earliest completed assessment
+        if (completedOVTAs.Any())
+        {
+            var onlandVisualTrashAssessment = completedOVTAs.MinBy(x => x.CompletedDate);
+            onlandVisualTrashAssessment.IsTransectBackingAssessment = true;
+
+            return OnlandVisualTrashAssessments.GetTransectLine(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations);
+        }
+        return null;
+    }
+
 }
