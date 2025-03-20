@@ -56,18 +56,20 @@ export const routeParams = {
 export const routes: Routes = [
     {
         path: `planning`,
-        title: "Stormwater Tools | Orange County | Planning Module",
+        title: "Stormwater Tools",
         component: PlanningSiteLayoutComponent,
         children: [
             { path: "", title: "Home", component: PlanningHomeComponent },
             { path: "about", component: PlanningAboutComponent, canActivate: [UnauthenticatedAccessGuard] },
             {
                 path: "grant-programs",
+                title: "Grant Program",
                 canActivate: [UnauthenticatedAccessGuard, OCTAGrantReviewerOnlyGuard],
                 children: [{ path: "octa-m2-tier-2", component: OCTAM2Tier2DashboardComponent }],
             },
             {
                 path: "projects",
+                title: "Projects",
                 canActivate: [UnauthenticatedAccessGuard],
                 children: [
                     { path: "", component: ProjectListComponent, canActivate: [JurisdictionManagerOrEditorOnlyGuard] },
@@ -77,8 +79,8 @@ export const routes: Routes = [
                         canActivate: [JurisdictionManagerOrEditorOnlyGuard],
                         children: [
                             { path: "", redirectTo: "instructions", pathMatch: "full" },
-                            { path: "instructions", component: ProjectInstructionsComponent },
-                            { path: "project-basics", component: ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard] },
+                            { path: "instructions", title: "Instructions", component: ProjectInstructionsComponent },
+                            { path: "project-basics", title: "Basics", component: ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard] },
                         ],
                     },
                     {
@@ -87,71 +89,76 @@ export const routes: Routes = [
                         canActivate: [JurisdictionManagerOrEditorOnlyGuard],
                         children: [
                             { path: "", redirectTo: "instructions", pathMatch: "full" },
-                            { path: "instructions", component: ProjectInstructionsComponent },
-                            { path: "project-basics", component: ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard] },
+                            { path: "instructions", title: "Instructions", component: ProjectInstructionsComponent },
+                            { path: "project-basics", title: "Basics", component: ProjectBasicsComponent, canDeactivate: [UnsavedChangesGuard] },
                             {
                                 path: "stormwater-treatments",
                                 children: [
                                     { path: "", redirectTo: "treatment-bmps", pathMatch: "full" },
-                                    { path: "treatment-bmps", component: TreatmentBmpsComponent, canDeactivate: [UnsavedChangesGuard] },
-                                    { path: "delineations", component: DelineationsComponent, canDeactivate: [UnsavedChangesGuard] },
-                                    { path: "modeled-performance-and-metrics", component: ModeledPerformanceComponent },
+                                    { path: "treatment-bmps", title: "Treatment BMPs", component: TreatmentBmpsComponent, canDeactivate: [UnsavedChangesGuard] },
+                                    { path: "delineations", title: "Delineations", component: DelineationsComponent, canDeactivate: [UnsavedChangesGuard] },
+                                    { path: "modeled-performance-and-metrics", title: "Modeled Performance and Metrics", component: ModeledPerformanceComponent },
                                 ],
                             },
-                            { path: "attachments", component: ProjectAttachmentsComponent },
-                            { path: "review-and-share", component: ReviewComponent },
+                            { path: "attachments", title: "Attachments", component: ProjectAttachmentsComponent },
+                            { path: "review-and-share", title: "Review and Share", component: ReviewComponent },
                         ],
                     },
                     { path: `:${routeParams.projectID}`, component: ProjectDetailComponent },
                 ],
             },
-            { path: "planning-map", component: PlanningMapComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
-            { path: "training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
+            { path: "planning-map", title: "Planning Map", component: PlanningMapComponent, canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard] },
+            { path: "training", title: "Training", component: TrainingComponent, canActivate: [UnauthenticatedAccessGuard] },
         ],
     },
     {
         path: `trash`,
-        title: "Stormwater Tools | Orange County | Trash Module",
+        title: "Stormwater Tools",
         component: TrashSiteLayoutComponent,
         children: [
             { path: "", title: "Home", component: TrashHomeComponent },
             {
                 path: "land-use-blocks",
+                title: "Land Use Blocks",
                 component: TrashLandUseBlockIndexComponent,
                 canActivate: [UnauthenticatedAccessGuard],
             },
             {
                 path: "onland-visual-trash-assessments",
+                title: "OVTAs",
                 children: [
-                    { path: "", component: TrashOvtaIndexComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "",  component: TrashOvtaIndexComponent, canActivate: [UnauthenticatedAccessGuard] },
                     { path: `:${routeParams.onlandVisualTrashAssessmentID}`, component: TrashOvtaDetailComponent, canActivate: [UnauthenticatedAccessGuard] },
                 ],
             },
             {
                 path: "onland-visual-trash-assessments/new",
+                title: "OVTAs",
                 component: TrashOvtaWorkflowOutletComponent,
                 children: [
                     { path: "", redirectTo: "instructions", pathMatch: "full" },
-                    { path: "instructions", component: TrashOvtaInstructionsComponent, canActivate: [UnauthenticatedAccessGuard] },
-                    { path: "initiate-ovta", component: TrashInitiateOvtaComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "instructions", title: "Instructions", component: TrashOvtaInstructionsComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "initiate-ovta", title: "Initiate OVTA", component: TrashInitiateOvtaComponent, canActivate: [UnauthenticatedAccessGuard] },
                 ],
             },
             {
                 path: `onland-visual-trash-assessments/edit/:${routeParams.onlandVisualTrashAssessmentID}`,
+                title: "OVTAs",
                 component: TrashOvtaWorkflowOutletComponent,
                 children: [
                     { path: "", redirectTo: "instructions", pathMatch: "full" },
-                    { path: "instructions", component: TrashOvtaInstructionsComponent, canActivate: [UnauthenticatedAccessGuard] },
-                    { path: "initiate-ovta", component: TrashInitiateOvtaComponent, canActivate: [UnauthenticatedAccessGuard] },
-                    { path: "record-observations", component: TrashOvtaRecordObservationsComponent, canActivate: [UnauthenticatedAccessGuard] },
-                    { path: "add-or-remove-parcels", component: TrashOvtaAddRemoveParcelsComponent, canActivate: [UnauthenticatedAccessGuard] },
-                    { path: "refine-assessment-area", component: TrashOvtaRefineAssessmentAreaComponent, canActivate: [UnauthenticatedAccessGuard] },
-                    { path: "review-and-finalize", component: TrashOvtaReviewAndFinalizeComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "instructions", title: "Instructions", component: TrashOvtaInstructionsComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "initiate-ovta", title: "Initiate OVTA", component: TrashInitiateOvtaComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "record-observations", title: "Record Observations", component: TrashOvtaRecordObservationsComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "add-or-remove-parcels", title: "Add or Remove Parcels", component: TrashOvtaAddRemoveParcelsComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "refine-assessment-area", title: "Refine Assessment Area", component: TrashOvtaRefineAssessmentAreaComponent, canActivate: [UnauthenticatedAccessGuard] },
+                    { path: "review-and-finalize", title: "Review and Finalize", component: TrashOvtaReviewAndFinalizeComponent, canActivate: [UnauthenticatedAccessGuard] },
                 ],
             },
 
             {
                 path: "onland-visual-trash-assessment-areas",
+                title: "OVTA Areas",
                 children: [
                     { path: "", component: TrashOvtaAreaIndexComponent, canActivate: [UnauthenticatedAccessGuard] },
                     {
@@ -168,6 +175,7 @@ export const routes: Routes = [
             },
             {
                 path: "trash-generating-units",
+                title: "Trash Analysis Areas",
                 component: TrashTrashGeneratingUnitIndexComponent,
                 canActivate: [UnauthenticatedAccessGuard],
             },
@@ -178,14 +186,14 @@ export const routes: Routes = [
     { path: "signin-oidc", component: LoginCallbackComponent },
     {
         path: ``,
-        title: "Stormwater Tools | Orange County",
+        title: "Stormwater Tools",
         component: SiteLayoutComponent,
         children: [
             { path: "", component: HomeIndexComponent },
             { path: "about", component: AboutComponent },
             { path: "modeling", component: ModelingAboutComponent },
             { path: `labels-and-definitions/:${routeParams.definitionID}`, component: FieldDefinitionEditComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
-            { path: "labels-and-definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
+            { path: "labels-and-definitions", title: "Labels and Definitions", component: FieldDefinitionListComponent, canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard] },
         ],
     },
     { path: "not-found", component: NotFoundComponent },
