@@ -114,7 +114,7 @@ export class ObservationsMapComponent {
                     layer.feature.properties.DefaultZIndexOffset = layer._zIndex;
                 }
                 layer.setZIndexOffset(10000);
-                layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-red.png"));
+                layer.setIcon(MarkerHelper.selectedMarker);
                 this.ovtaObservations.nativeElement
                     .querySelector(`#ovtaObservation${layer.feature.properties.OnlandVisualTrashAssessmentObservationID}`)
                     .scrollIntoView({ behavior: "smooth", block: "start" });
