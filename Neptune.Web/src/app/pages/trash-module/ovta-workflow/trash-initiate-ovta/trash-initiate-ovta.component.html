@@ -27,9 +27,9 @@
         </div>
 
         <div [hidden]="formGroup.controls.AssessingNewArea.value === true">
-            <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="500px" [showLegend]="false">
+            <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="500px" [showLegend]="true">
                 <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
-                <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></parcel-layer>
+                <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20" styles="parcel_alt"></parcel-layer>
             </neptune-map>
         </div>
     </form>

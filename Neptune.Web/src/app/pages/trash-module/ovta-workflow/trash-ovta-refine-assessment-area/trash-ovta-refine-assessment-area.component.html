@@ -16,7 +16,7 @@
         [showLegend]="true"
         [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
         <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
-        <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></parcel-layer>
+        <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20" styles="parcel_alt"></parcel-layer>
         <ovta-observation-layer
             *ngIf="mapIsReady"
             [displayOnLoad]="true"

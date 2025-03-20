@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import * as L from "leaflet";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
-import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
 import { AsyncPipe, NgFor, NgIf } from "@angular/common";
 import { Observable, switchMap, tap } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -29,6 +28,7 @@ import { WfsService } from "src/app/shared/services/wfs.service";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 import { TransectLineLayerByOvtaComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer-by-ovta/transect-line-layer-by-ovta.component";
+import { OvtaAreaLayerForWorkflowComponent } from "src/app/shared/components/leaflet/layers/ovta-area-for-workflow-layer/ovta-area-for-workflow-layer.component";
 
 @Component({
     selector: "trash-ovta-record-observations",
@@ -37,7 +37,7 @@ import { TransectLineLayerByOvtaComponent } from "../../../../shared/components/
         PageHeaderComponent,
         NeptuneMapComponent,
         DropdownToggleDirective,
-        OvtaAreaLayerComponent,
+        OvtaAreaLayerForWorkflowComponent,
         NgIf,
         NgFor,
         AsyncPipe,
