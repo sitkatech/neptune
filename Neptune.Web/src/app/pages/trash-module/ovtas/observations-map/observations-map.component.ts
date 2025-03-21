@@ -9,8 +9,8 @@ import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shar
 import { environment } from "src/environments/environment";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LandUseBlockLayerComponent } from "src/app/shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
-import { TransectLineLayerByOvtaComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer-by-ovta/transect-line-layer-by-ovta.component";
 import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
+import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 
 //This component could use a fair amount of cleanup. It should likely be sent in the treatment bmps and delineations instead of grabbing them itself
 @Component({
@@ -18,13 +18,12 @@ import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/la
     templateUrl: "./observations-map.component.html",
     styleUrls: ["./observations-map.component.scss"],
     standalone: true,
-    imports: [NgIf, NgFor, NeptuneMapComponent, LandUseBlockLayerComponent, TransectLineLayerByOvtaComponent, OvtaAreaLayerComponent],
+    imports: [NgIf, NgFor, NeptuneMapComponent, LandUseBlockLayerComponent, TransectLineLayerComponent, OvtaAreaLayerComponent],
 })
 export class ObservationsMapComponent {
     @ViewChild("ovtaObservations") ovtaObservations: ElementRef;
     @Input("observations") onlandVisualTrashAssessmentObservations: Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>;
     @Input() onlandVisualTrashAssessmentID: number;
-    @Input() onlandVisualTrashAssessmentAreaID: number;
     public boundingBox: BoundingBoxDto;
 
     public mapIsReady: boolean = false;

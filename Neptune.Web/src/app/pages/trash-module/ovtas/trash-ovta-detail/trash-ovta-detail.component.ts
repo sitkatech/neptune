@@ -12,6 +12,11 @@ import { ObservationsMapComponent } from "../observations-map/observations-map.c
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
 import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/generated/api/onland-visual-trash-assessment-observation.service";
 import { PreliminarySourceIdentificationCategories } from "src/app/shared/generated/enum/preliminary-source-identification-category-enum";
+import { OnlandVisualTrashAssessmentStatusEnum } from "src/app/shared/generated/enum/onland-visual-trash-assessment-status-enum";
+import { Alert } from "src/app/shared/models/alert";
+import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { AlertService } from "src/app/shared/services/alert.service";
+import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 
 @Component({
     selector: "trash-ovta-detail",
@@ -30,7 +35,11 @@ export class TrashOvtaDetailComponent {
     constructor(
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
         private onlandVisualTrashAssessmentObservationService: OnlandVisualTrashAssessmentObservationService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private alertService: AlertService,
+        private confirmService: ConfirmService,
+        private router: Router,
+        private datePipe: DatePipe
     ) {}
 
     ngOnInit(): void {
@@ -47,5 +56,29 @@ export class TrashOvtaDetailComponent {
                 );
             })
         );
+    }
+
+    public confirmEditOVTA(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentStatusID: number, completedDate: string) {
+        if (onlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatusEnum.Complete) {
+            const modalContents = `<p>This OVTA was finalized on ${this.datePipe.transform(
+                completedDate,
+                "MM/dd/yyyy"
+            )}. Are you sure you want to revert this OVTA to the \"In Progress\" status?</p>`;
+            this.confirmService
+                .confirm({ buttonClassYes: "btn-primary", buttonTextYes: "Continue", buttonTextNo: "Cancel", title: "Return OVTA to Edit", message: modalContents })
+                .then((confirmed) => {
+                    if (confirmed) {
+                        this.onlandVisualTrashAssessmentService
+                            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReturnToEditPost(onlandVisualTrashAssessmentID)
+                            .subscribe((response) => {
+                                this.alertService.clearAlerts();
+                                this.alertService.pushAlert(new Alert('The OVTA was successfully returned to the "In Progress" status.', AlertContext.Success));
+                                this.router.navigateByUrl(`/trash/onland-visual-trash-assessments/edit/${onlandVisualTrashAssessmentID}/record-observations`);
+                            });
+                    }
+                });
+        } else {
+            this.router.navigateByUrl(`/trash/onland-visual-trash-assessments/edit/${onlandVisualTrashAssessmentID}/record-observations`);
+        }
     }
 }

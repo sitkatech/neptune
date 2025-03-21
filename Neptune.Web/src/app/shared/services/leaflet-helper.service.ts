@@ -145,4 +145,16 @@ export class LeafletHelperService {
             }),
         };
     }
+
+    public static GetDefaultOverlayTileLayers(): { [key: string]: any } {
+        return {
+            "": {
+                "Street Labels": L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}", {
+                    attribution: "Street Labels",
+                    maxZoom: 22,
+                    maxNativeZoom: 18,
+                }),
+            },
+        };
+    }
 }

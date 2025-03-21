@@ -79,6 +79,15 @@ public class OnlandVisualTrashAssessmentController(
         return Ok();
     }
 
+    [HttpGet("{onlandVisualTrashAssessmentID}/area-as-feature-collection")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
+    public ActionResult<FeatureCollection> GetAreaAsFeatureCollection([FromRoute] int onlandVisualTrashAssessmentID)
+    {
+        var featureCollection = OnlandVisualTrashAssessments.GetAssessmentAreaByIDAsFeatureCollection(DbContext, onlandVisualTrashAssessmentID);
+        return Ok(featureCollection);
+    }
+
     [HttpGet("{onlandVisualTrashAssessmentID}/transect-line-as-feature-collection")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
@@ -143,21 +152,12 @@ public class OnlandVisualTrashAssessmentController(
         return Ok(onlandVisualTrashAssessmentProgressDto);
     }
 
-    [HttpGet("{onlandVisualTrashAssessmentID}/refine-area")]
-    [JurisdictionEditFeature]
-    [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
-    public ActionResult<OnlandVisualTrashAssessmentRefineAreaDto> GetByIDForRefineArea([FromRoute] int onlandVisualTrashAssessmentID)
-    {
-        var onlandVisualTrashAssessmentRefineAreaDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsRefineAreaDto();
-        return Ok(onlandVisualTrashAssessmentRefineAreaDto);
-    }
-
     [HttpPost("{onlandVisualTrashAssessmentID}/refine-area")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
-    public async Task<ActionResult> UpdateOnlandVisualTrashAssessmentWithRefinedArea([FromRoute] int onlandVisualTrashAssessmentID, OnlandVisualTrashAssessmentRefineAreaDto onlandVisualTrashAssessmentRefineAreaDto)
+    public async Task<ActionResult> UpdateOnlandVisualTrashAssessmentWithRefinedArea([FromRoute] int onlandVisualTrashAssessmentID, string geometryAsGeoJson)
     {
-        await OnlandVisualTrashAssessments.UpdateGeometry(dbContext, onlandVisualTrashAssessmentID, onlandVisualTrashAssessmentRefineAreaDto);
+        await OnlandVisualTrashAssessments.UpdateGeometry(dbContext, onlandVisualTrashAssessmentID, geometryAsGeoJson);
         return Ok();
     }
 

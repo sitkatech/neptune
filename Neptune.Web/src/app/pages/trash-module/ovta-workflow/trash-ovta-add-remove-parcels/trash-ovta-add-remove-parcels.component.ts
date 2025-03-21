@@ -2,10 +2,9 @@ import { Component } from "@angular/core";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 import { Router, ActivatedRoute } from "@angular/router";
-import { Observable, switchMap, tap } from "rxjs";
+import { Observable, of, switchMap, tap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { NeptuneMapInitEvent, NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
-import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { WfsService } from "src/app/shared/services/wfs.service";
 import * as L from "leaflet";
 import { AsyncPipe, NgIf } from "@angular/common";
@@ -18,7 +17,7 @@ import { AlertService } from "src/app/shared/services/alert.service";
 import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
-import { TransectLineLayerByOvtaComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer-by-ovta/transect-line-layer-by-ovta.component";
+import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 
 @Component({
@@ -33,7 +32,7 @@ import { ParcelLayerComponent } from "../../../../shared/components/leaflet/laye
         OvtaObservationLayerComponent,
         LandUseBlockLayerComponent,
         WorkflowBodyComponent,
-        TransectLineLayerByOvtaComponent,
+        TransectLineLayerComponent,
         ParcelLayerComponent,
     ],
     templateUrl: "./trash-ovta-add-remove-parcels.component.html",
@@ -83,26 +82,11 @@ export class TrashOvtaAddRemoveParcelsComponent {
         );
     }
 
-    public handleMapReady(event: NeptuneMapInitEvent): void {
+    public handleMapReady(event: NeptuneMapInitEvent, onlandVisualTrashAssessment: OnlandVisualTrashAssessmentAddRemoveParcelsDto): void {
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.addSelectedParcelsToMap();
-
-        this.map.on("click", (event: L.LeafletMouseEvent): void => {
-            this.wfsService.getParcelByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((parcelsFeatureCollection: L.FeatureCollection) => {
-                parcelsFeatureCollection.features.forEach((feature: L.Feature) => {
-                    const parcelID = feature.properties.ParcelID;
-                    if (this.selectedParcelIDs.includes(parcelID)) {
-                        this.selectedParcelIDs.splice(this.selectedParcelIDs.indexOf(parcelID), 1);
-                    } else {
-                        this.selectedParcelIDs.push(parcelID);
-                    }
-                });
-
-                this.addSelectedParcelsToMap();
-            });
-        });
-
+        this.enableDisableParcelClickEvent(onlandVisualTrashAssessment);
         this.mapIsReady = true;
     }
 
@@ -134,6 +118,29 @@ export class TrashOvtaAddRemoveParcelsComponent {
         this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefreshParcelsPost(this.ovtaID).subscribe((ovta) => {
             this.selectedParcelIDs = ovta.SelectedParcelIDs;
             this.addSelectedParcelsToMap();
+            this.enableDisableParcelClickEvent(ovta);
+            this.onlandVisualTrashAssessment$ = of(ovta);
         });
+    }
+
+    private enableDisableParcelClickEvent(ovta: OnlandVisualTrashAssessmentAddRemoveParcelsDto) {
+        if (ovta.IsDraftGeometryManuallyRefined) {
+            this.map.off("click");
+        } else {
+            this.map.on("click", (event: L.LeafletMouseEvent): void => {
+                this.wfsService.getParcelByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((parcelsFeatureCollection: L.FeatureCollection) => {
+                    parcelsFeatureCollection.features.forEach((feature: L.Feature) => {
+                        const parcelID = feature.properties.ParcelID;
+                        if (this.selectedParcelIDs.includes(parcelID)) {
+                            this.selectedParcelIDs.splice(this.selectedParcelIDs.indexOf(parcelID), 1);
+                        } else {
+                            this.selectedParcelIDs.push(parcelID);
+                        }
+                    });
+
+                    this.addSelectedParcelsToMap();
+                });
+            });
+        }
     }
 }

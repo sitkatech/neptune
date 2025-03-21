@@ -15,14 +15,14 @@
             [map]="map"
             [layerControl]="layerControl"
             [sortOrder]="10"
-            [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
-        <transect-line-layer-by-ovta
+            [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></ovta-area-layer>
+        <transect-line-layer
             *ngIf="mapIsReady"
             [displayOnLoad]="true"
             [map]="map"
             [layerControl]="layerControl"
             [sortOrder]="25"
-            [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></transect-line-layer-by-ovta>
+            [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></transect-line-layer>
     </neptune-map>
 
     <form [formGroup]="formGroup">

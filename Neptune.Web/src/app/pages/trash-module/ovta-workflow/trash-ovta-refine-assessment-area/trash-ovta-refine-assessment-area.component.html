@@ -11,26 +11,14 @@
         </p>
     </div>
     <neptune-map
-        (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment.GeometryAsGeoJson)"
+        *ngIf="onlandVisualTrashAssessmentArea$ | async as onlandVisualTrashAssessmentArea"
+        (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessmentArea)"
         mapHeight="750px"
-        [showLegend]="true"
-        [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
+        [showLegend]="true">
         <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
         <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20" styles="parcel_alt"></parcel-layer>
-        <ovta-observation-layer
-            *ngIf="mapIsReady"
-            [displayOnLoad]="true"
-            [map]="map"
-            [layerControl]="layerControl"
-            [sortOrder]="30"
-            [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></ovta-observation-layer>
-        <transect-line-layer-by-ovta
-            *ngIf="mapIsReady"
-            [displayOnLoad]="true"
-            [map]="map"
-            [layerControl]="layerControl"
-            [sortOrder]="25"
-            [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></transect-line-layer-by-ovta>
+        <ovta-observation-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30" [ovtaID]="ovtaID"></ovta-observation-layer>
+        <transect-line-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="25" [ovtaID]="ovtaID"></transect-line-layer>
     </neptune-map>
 </workflow-body>
 <div class="page-footer">

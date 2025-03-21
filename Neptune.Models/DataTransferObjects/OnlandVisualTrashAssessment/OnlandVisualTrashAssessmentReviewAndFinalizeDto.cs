@@ -4,7 +4,6 @@ namespace Neptune.Models.DataTransferObjects;
 
 public class OnlandVisualTrashAssessmentReviewAndFinalizeDto
 {
-    public bool Finalize { get; set; }
     public int OnlandVisualTrashAssessmentID { get; set; }
     public int? OnlandVisualTrashAssessmentAreaID { get; set; }
     public string? OnlandVisualTrashAssessmentAreaName { get; set; }
