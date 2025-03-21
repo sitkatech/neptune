@@ -21,6 +21,7 @@ import { OnlandVisualTrashAssessmentSimpleDto } from "src/app/shared/generated/m
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
+import { AuthenticationService } from "src/app/services/authentication.service";
 
 @Component({
     selector: "trash-ovta-area-index",
@@ -47,7 +48,8 @@ export class TrashOvtaAreaIndexComponent {
         private utilityFunctionsService: UtilityFunctionsService,
         private router: Router,
         private alertService: AlertService,
-        private confirmService: ConfirmService
+        private confirmService: ConfirmService,
+        private authenticationService: AuthenticationService
     ) {}
 
     ngOnInit(): void {
@@ -114,5 +116,13 @@ export class TrashOvtaAreaIndexComponent {
                     });
                 }
             });
+    }
+
+    public currentUserHasJurisdictionManagePermission(): boolean {
+        return this.authenticationService.doesCurrentUserHaveJurisdictionManagePermission();
+    }
+
+    public currentUserHasJurisdictionEditPermission(): boolean {
+        return this.authenticationService.doesCurrentUserHaveJurisdictionEditPermission();
     }
 }

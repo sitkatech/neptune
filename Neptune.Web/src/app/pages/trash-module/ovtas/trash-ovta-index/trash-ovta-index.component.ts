@@ -18,6 +18,7 @@ import { ConfirmService } from "src/app/shared/services/confirm/confirm.service"
 import { AlertService } from "src/app/shared/services/alert.service";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { AuthenticationService } from "src/app/services/authentication.service";
 
 @Component({
     selector: "trash-ovta-index",
@@ -39,7 +40,8 @@ export class TrashOvtaIndexComponent {
         private router: Router,
         private confirmService: ConfirmService,
         private alertService: AlertService,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private authenticationService: AuthenticationService
     ) {}
 
     ngOnInit(): void {
@@ -97,5 +99,9 @@ export class TrashOvtaIndexComponent {
                         });
                 }
             });
+    }
+
+    public currentUserHasJurisdictionManagePermission(): boolean {
+        return this.authenticationService.doesCurrentUserHaveJurisdictionManagePermission();
     }
 }

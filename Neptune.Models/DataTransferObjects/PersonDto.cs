@@ -19,4 +19,5 @@ public class PersonDto
     public bool ReceiveRSBRevisionRequestEmails { get; set; }
     public Guid WebServiceAccessToken { get; set; }
     public bool IsOCTAGrantReviewer { get; set; }
+    public bool HasAssignedStormwaterJurisdiction { get; set; }
 }

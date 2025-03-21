@@ -195,12 +195,21 @@
                     }
                     @if (ViewDataTyped.HasManagePermission)
                     {
+                        @* Upload security feature: JurisdictionManageFeature *@
                         <a href="@ViewDataTyped.UploadAssessmentAreasUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                        <a href="@ViewDataTyped.DownloadAssessmentAreasUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     }
-                    @if (ViewDataTyped.IsManagerOrEditor)
+                    else
                     {
                         <a href="@ViewDataTyped.UploadAssessmentAreasUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                    }
+                    
+                    @if (ViewDataTyped.HasNeptuneViewAndRequiresJurisdictionsPermission)
+                    {
+                        @* Download security feature: NeptuneViewAndRequiresJurisdictionsFeature *@
+                        <a href="@ViewDataTyped.DownloadAssessmentAreasUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+                    }
+                    else
+                    {
                         <a href="@ViewDataTyped.DownloadAssessmentAreasUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     }
 
@@ -210,27 +219,33 @@
                     }
                     @if (ViewDataTyped.HasManagePermission)
                     {
+                        @* Upload security feature: JurisdictionManageFeature *@
                         <a href="@ViewDataTyped.UploadOVTAUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                     }
-                    @if (ViewDataTyped.IsManagerOrEditor)
+                    else
                     {
                         <a href="@ViewDataTyped.UploadOVTAUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                     }
+                    
 
                     <h3>Land Use Blocks</h3>
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.LandUseBlocksPage);
                     }
-                    @if (ViewDataTyped.HasManagePermission)
+                    @if (ViewDataTyped.HasJurisdictionEditPermission)
                     {
+                        @* Upload security feature: JurisdictionEditFeature *@
                         <a href="@ViewDataTyped.UploadLandUseBlocksUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
+                        @* Download security feature: JurisdictionEditFeature *@
                         <a href="@ViewDataTyped.DownloadLandUseBlocksUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
                     }
-                    @if (ViewDataTyped.IsManagerOrEditor)
+                    else
                     {
                         <a href="@ViewDataTyped.UploadLandUseBlocksUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                         <a href="@ViewDataTyped.DownloadLandUseBlocksUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-download") Download</a>
+
                     }
+                    
                 </div>
                 <div class="col-md-3 sidebar">
                     <h4>Quick Links:</h4>

@@ -5514,6 +5514,9 @@
           },
           "IsOCTAGrantReviewer": {
             "type": "boolean"
+          },
+          "HasAssignedStormwaterJurisdiction": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

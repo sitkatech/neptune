@@ -12,6 +12,8 @@ namespace Neptune.WebMvc.Views.DataHub
         public bool HasManagePermission { get; }
         public bool IsAdmin { get; }
         public bool IsManagerOrEditor { get; }
+        public bool HasJurisdictionEditPermission { get; }
+        public bool HasNeptuneViewAndRequiresJurisdictionsPermission { get; }
         public readonly WebServiceToken WebServiceAccessToken;
         public readonly List<WebServiceDocumentation> ServiceDocumentationList;
         public ViewPageContentViewData TreatmentBMPPage { get; }
@@ -81,6 +83,9 @@ namespace Neptune.WebMvc.Views.DataHub
             HasManagePermission = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             IsAdmin = currentPerson.IsAdministrator();
             IsManagerOrEditor = currentPerson.IsJurisdictionEditorOrManager();
+            HasJurisdictionEditPermission = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
+            HasNeptuneViewAndRequiresJurisdictionsPermission =
+                new NeptuneViewAndRequiresJurisdictionsFeature().HasPermissionByPerson(currentPerson);
             EntityName = "Data Hub";
             PageTitle = "Index";
             WebServiceAccessToken = webServiceAccessToken;
