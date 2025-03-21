@@ -20,12 +20,11 @@
                     (change)="onJurisdictionSelected($event)"></ng-select>
             </div>
 
-            <div class="field g-col-7">
+            <div class="field g-col-7" [hidden]="formGroup.controls.AssessingNewArea.value === true">
                 <label class="field-label">Selected OVTA Area</label>
 
                 <ng-select
                     class="custom"
-                    [hidden]="formGroup.controls.AssessingNewArea.value === true"
                     [items]="onlandVisualTrashAssessmentAreas$ | async"
                     [minTermLength]="2"
                     [formControl]="formGroup.controls.OnlandVisualTrashAssessmentAreaID"
