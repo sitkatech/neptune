@@ -36,6 +36,9 @@ import { TrashGeneratingUnitByStormwaterJurisdictionService } from "src/app/shar
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { TrashGeneratingUnitService } from "src/app/shared/generated/api/trash-generating-unit.service";
+import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/services/modal/modal.service";
+import { ScoreDescriptionsComponent } from "../ovtas/score-descriptions/score-descriptions.component";
+import { IconComponent } from "src/app/shared/components/icon/icon.component";
 
 @Component({
     selector: "trash-home",
@@ -65,6 +68,7 @@ import { TrashGeneratingUnitService } from "src/app/shared/generated/api/trash-g
         DecimalPipe,
         DatePipe,
         LoadingDirective,
+        IconComponent,
     ],
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
@@ -118,7 +122,8 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         private trashResultsByJurisdictionService: TrashGeneratingUnitByStormwaterJurisdictionService,
         private leafletHelperService: LeafletHelperService,
         private wfsService: WfsService,
-        private trashGeneratingUnitService: TrashGeneratingUnitService
+        private trashGeneratingUnitService: TrashGeneratingUnitService,
+        private modalService: ModalService
     ) {}
 
     public ngOnInit(): void {
@@ -341,5 +346,9 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
 
     public ocstBaseUrl(): string {
         return environment.ocStormwaterToolsBaseUrl;
+    }
+
+    showScoreDefinitions() {
+        this.modalService.open(ScoreDescriptionsComponent, null, { CloseOnClickOut: false, TopLayer: false, ModalSize: ModalSizeEnum.Large, ModalTheme: ModalThemeEnum.Light });
     }
 }

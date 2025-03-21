@@ -1,0 +1,14 @@
+@use "/src/scss/abstracts" as *;
+
+li.list-group-item {
+    padding: $spacing-400;
+    cursor: pointer;
+}
+
+li.list-group-item:hover {
+    background-color: #eee;
+}
+
+li.list-group-item.selected {
+    background-color: #ffff85;
+}

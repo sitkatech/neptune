@@ -25,13 +25,22 @@
                 [type]="FormFieldType.Radio"></form-field>
 
             <form-field class="g-col-6" [formControl]="formGroup.controls.AssessmentDate" fieldLabel="Assessment Date" [required]="false" [type]="FormFieldType.Date"></form-field>
-            <form-field
-                class="g-col-6"
-                [formControl]="formGroup.controls.OnlandVisualTrashAssessmentScoreID"
-                fieldLabel="Assessment Score"
-                [required]="true"
-                [formInputOptions]="onlandVisualTrashAssessmentScoreDropdown"
-                [type]="FormFieldType.Select"></form-field>
+            <div class="field g-col-6">
+                <label class="field-label required">
+                    Assessment Score
+                    <a (click)="showScoreDefinitions()">
+                        <i class="fas fa-question-circle small" style="cursor: help"></i>
+                    </a>
+                </label>
+                <form-field
+                    class="g-col-6"
+                    [formControl]="formGroup.controls.OnlandVisualTrashAssessmentScoreID"
+                    [required]="true"
+                    [formInputOptions]="onlandVisualTrashAssessmentScoreDropdown"
+                    [type]="FormFieldType.Select">
+                </form-field>
+            </div>
+
             <form-field
                 class="g-col-12"
                 [formControl]="formGroup.controls.Notes"

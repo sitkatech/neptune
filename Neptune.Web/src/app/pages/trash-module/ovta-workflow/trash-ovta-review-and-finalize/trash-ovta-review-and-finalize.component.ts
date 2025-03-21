@@ -24,6 +24,8 @@ import { AlertDisplayComponent } from "../../../../shared/components/alert-displ
 import { ObservationsMapComponent } from "../../ovtas/observations-map/observations-map.component";
 import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/generated/api/onland-visual-trash-assessment-observation.service";
 import { OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDtoForm } from "src/app/shared/generated/model/onland-visual-trash-assessment-preliminary-source-identification-upsert-dto";
+import { ScoreDescriptionsComponent } from "../../ovtas/score-descriptions/score-descriptions.component";
+import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/services/modal/modal.service";
 
 @Component({
     selector: "trash-ovta-review-and-finalize",
@@ -82,6 +84,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
         private router: Router,
         private ovtaWorkflowProgressService: OvtaWorkflowProgressService,
         private alertService: AlertService,
+        private modalService: ModalService,
         private formBuilder: FormBuilder
     ) {}
 
@@ -149,6 +152,10 @@ export class TrashOvtaReviewAndFinalizeComponent {
                 otherTextBox.updateValueAndValidity();
             }
         }
+    }
+
+    showScoreDefinitions() {
+        this.modalService.open(ScoreDescriptionsComponent, null, { CloseOnClickOut: false, TopLayer: false, ModalSize: ModalSizeEnum.Large, ModalTheme: ModalThemeEnum.Light });
     }
 
     save(andContinue: boolean = false) {
