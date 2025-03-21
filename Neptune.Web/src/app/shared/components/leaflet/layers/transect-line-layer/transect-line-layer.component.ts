@@ -5,6 +5,7 @@ import { Observable, tap } from "rxjs";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { IFeature } from "src/app/shared/generated/model/i-feature";
 import { AsyncPipe, NgIf } from "@angular/common";
+import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 
 @Component({
     selector: "transect-line-layer",
@@ -14,10 +15,14 @@ import { AsyncPipe, NgIf } from "@angular/common";
     styleUrl: "./transect-line-layer.component.scss",
 })
 export class TransectLineLayerComponent extends MapLayerBase implements OnChanges {
-    constructor(private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService) {
+    constructor(
+        private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
+        private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService
+    ) {
         super();
     }
 
+    @Input() ovtaID: number;
     @Input() ovtaAreaID: number;
     public layer;
 
@@ -29,15 +34,28 @@ export class TransectLineLayerComponent extends MapLayerBase implements OnChange
     public featureCollection$: Observable<IFeature[]>;
 
     ngAfterViewInit(): void {
-        this.featureCollection$ = this.onlandVisualTrashAssessmentAreaService
-            .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDTransectLineAsFeatureCollectionGet(this.ovtaAreaID)
-            .pipe(
-                tap((transectLineFeatureCollection) => {
-                    this.layer = new L.GeoJSON(transectLineFeatureCollection, {
-                        style: this.transectLineStyle,
-                    });
-                    this.initLayer();
-                })
-            );
+        if (this.ovtaID) {
+            this.featureCollection$ = this.onlandVisualTrashAssessmentService
+                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDTransectLineAsFeatureCollectionGet(this.ovtaID)
+                .pipe(
+                    tap((transectLineFeatureCollection) => {
+                        this.layer = new L.GeoJSON(transectLineFeatureCollection, {
+                            style: this.transectLineStyle,
+                        });
+                        this.initLayer();
+                    })
+                );
+        } else if (this.ovtaAreaID) {
+            this.featureCollection$ = this.onlandVisualTrashAssessmentAreaService
+                .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDTransectLineAsFeatureCollectionGet(this.ovtaAreaID)
+                .pipe(
+                    tap((transectLineFeatureCollection) => {
+                        this.layer = new L.GeoJSON(transectLineFeatureCollection, {
+                            style: this.transectLineStyle,
+                        });
+                        this.initLayer();
+                    })
+                );
+        }
     }
 }

@@ -695,6 +695,55 @@
         }
       }
     },
+    "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/area-as-feature-collection": {
+      "get": {
+        "tags": [
+          "OnlandVisualTrashAssessment"
+        ],
+        "parameters": [
+          {
+            "name": "onlandVisualTrashAssessmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IFeature"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IFeature"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IFeature"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/transect-line-as-feature-collection": {
       "get": {
         "tags": [
@@ -995,44 +1044,6 @@
       }
     },
     "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/refine-area": {
-      "get": {
-        "tags": [
-          "OnlandVisualTrashAssessment"
-        ],
-        "parameters": [
-          {
-            "name": "onlandVisualTrashAssessmentID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentRefineAreaDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentRefineAreaDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OnlandVisualTrashAssessmentRefineAreaDto"
-                }
-              }
-            }
-          }
-        }
-      },
       "post": {
         "tags": [
           "OnlandVisualTrashAssessment"
@@ -1046,27 +1057,15 @@
               "type": "integer",
               "format": "int32"
             }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentRefineAreaDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentRefineAreaDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentRefineAreaDto"
-              }
+          },
+          {
+            "name": "geometryAsGeoJson",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -5079,28 +5078,6 @@
             "type": "boolean"
           },
           "ExplanationIfTypeIsOther": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "OnlandVisualTrashAssessmentRefineAreaDto": {
-        "type": "object",
-        "properties": {
-          "OnlandVisualTrashAssessmentID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "OnlandVisualTrashAssessmentAreaID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "BoundingBox": {
-            "$ref": "#/components/schemas/BoundingBoxDto"
-          },
-          "GeometryAsGeoJson": {
             "type": "string",
             "nullable": true
           }

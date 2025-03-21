@@ -13,13 +13,13 @@
                 [layerControl]="layerControl"
                 [sortOrder]="30"
                 [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></ovta-observation-layer>
-            <transect-line-layer-by-ovta
+            <transect-line-layer
                 *ngIf="mapIsReady"
                 [displayOnLoad]="true"
                 [map]="map"
                 [layerControl]="layerControl"
                 [sortOrder]="25"
-                [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></transect-line-layer-by-ovta>
+                [ovtaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID"></transect-line-layer>
         </neptune-map>
     </div>
 

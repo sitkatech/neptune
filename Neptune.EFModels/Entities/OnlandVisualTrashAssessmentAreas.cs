@@ -134,6 +134,7 @@ public static class OnlandVisualTrashAssessmentAreas
  
         return featureCollection;
     }
+
     public static FeatureCollection GetTransectLineByIDAsFeatureCollection(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentAreaID)
     {
         var onlandVisualTrashAssessmentArea = dbContext.OnlandVisualTrashAssessmentAreas.AsNoTracking()

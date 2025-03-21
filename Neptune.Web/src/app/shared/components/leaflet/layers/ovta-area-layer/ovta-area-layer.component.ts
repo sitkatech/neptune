@@ -5,6 +5,7 @@ import { Observable, tap } from "rxjs";
 import { IFeature } from "src/app/shared/generated/model/models";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
+import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 
 @Component({
     selector: "ovta-area-layer",
@@ -14,10 +15,14 @@ import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated
     styleUrl: "./ovta-area-layer.component.scss",
 })
 export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges {
-    constructor(private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService) {
+    constructor(
+        private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
+        private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService
+    ) {
         super();
     }
 
+    @Input() ovtaID: number;
     @Input() ovtaAreaID: number;
     public layer;
 
@@ -27,17 +32,11 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges {
         opacity: 0,
     };
 
-    private transectLineStyle = {
-        color: "#ff42ff",
-        weight: 2,
-    };
-
     public featureCollection$: Observable<IFeature[]>;
 
     ngAfterViewInit(): void {
-        this.featureCollection$ = this.onlandVisualTrashAssessmentAreaService
-            .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDAreaAsFeatureCollectionGet(this.ovtaAreaID)
-            .pipe(
+        if (this.ovtaID) {
+            this.featureCollection$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAreaAsFeatureCollectionGet(this.ovtaID).pipe(
                 tap((transectLineFeatureCollection) => {
                     this.layer = new L.GeoJSON(transectLineFeatureCollection, {
                         style: this.ovtaAreaStyle,
@@ -45,5 +44,17 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges {
                     this.initLayer();
                 })
             );
+        } else if (this.ovtaAreaID) {
+            this.featureCollection$ = this.onlandVisualTrashAssessmentAreaService
+                .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDAreaAsFeatureCollectionGet(this.ovtaAreaID)
+                .pipe(
+                    tap((transectLineFeatureCollection) => {
+                        this.layer = new L.GeoJSON(transectLineFeatureCollection, {
+                            style: this.ovtaAreaStyle,
+                        });
+                        this.initLayer();
+                    })
+                );
+        }
     }
 }

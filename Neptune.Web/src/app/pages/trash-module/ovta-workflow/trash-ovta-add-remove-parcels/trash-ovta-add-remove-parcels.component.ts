@@ -5,7 +5,6 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { Observable, switchMap, tap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { NeptuneMapInitEvent, NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
-import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { WfsService } from "src/app/shared/services/wfs.service";
 import * as L from "leaflet";
 import { AsyncPipe, NgIf } from "@angular/common";
@@ -18,7 +17,7 @@ import { AlertService } from "src/app/shared/services/alert.service";
 import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
-import { TransectLineLayerByOvtaComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer-by-ovta/transect-line-layer-by-ovta.component";
+import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 
 @Component({
@@ -33,7 +32,7 @@ import { ParcelLayerComponent } from "../../../../shared/components/leaflet/laye
         OvtaObservationLayerComponent,
         LandUseBlockLayerComponent,
         WorkflowBodyComponent,
-        TransectLineLayerByOvtaComponent,
+        TransectLineLayerComponent,
         ParcelLayerComponent,
     ],
     templateUrl: "./trash-ovta-add-remove-parcels.component.html",
@@ -114,7 +113,6 @@ export class TrashOvtaAddRemoveParcelsComponent {
             this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:Parcels", `ParcelID in (${this.selectedParcelIDs.join(",")})`, "ParcelID").subscribe((response) => {
                 this.selectedParcelsLayer = L.geoJSON(response, { style: this.highlightStyle });
                 this.selectedParcelsLayer.addTo(this.map);
-                this.map.fitBounds(this.selectedParcelsLayer.getBounds());
             });
         }
     }

@@ -37,9 +37,11 @@ export class OvtaObservationLayerComponent extends MapLayerBase implements OnCha
                     });
                     this.layer.sortOrder = 100;
                     this.initLayer();
+                    this.map.fitBounds(this.layer.getBounds());
                 })
             );
     }
+
     private mapObservationsToGeoJson(locations) {
         return {
             type: "FeatureCollection",

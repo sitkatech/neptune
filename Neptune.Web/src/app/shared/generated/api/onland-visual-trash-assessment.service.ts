@@ -22,7 +22,6 @@ import { IFeature } from '../model/i-feature';
 import { OnlandVisualTrashAssessmentAddRemoveParcelsDto } from '../model/onland-visual-trash-assessment-add-remove-parcels-dto';
 import { OnlandVisualTrashAssessmentDetailDto } from '../model/onland-visual-trash-assessment-detail-dto';
 import { OnlandVisualTrashAssessmentGridDto } from '../model/onland-visual-trash-assessment-grid-dto';
-import { OnlandVisualTrashAssessmentRefineAreaDto } from '../model/onland-visual-trash-assessment-refine-area-dto';
 import { OnlandVisualTrashAssessmentReviewAndFinalizeDto } from '../model/onland-visual-trash-assessment-review-and-finalize-dto';
 import { OnlandVisualTrashAssessmentSimpleDto } from '../model/onland-visual-trash-assessment-simple-dto';
 import { OnlandVisualTrashAssessmentWorkflowProgressDto } from '../model/onland-visual-trash-assessment-workflow-progress-dto';
@@ -98,6 +97,49 @@ export class OnlandVisualTrashAssessmentService {
         ];
 
         return this.httpClient.get<Array<OnlandVisualTrashAssessmentGridDto>>(`${this.basePath}/onland-visual-trash-assessments`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
+    }
+
+    /**
+     * 
+     * 
+     * @param onlandVisualTrashAssessmentID 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAreaAsFeatureCollectionGet(onlandVisualTrashAssessmentID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<IFeature>>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAreaAsFeatureCollectionGet(onlandVisualTrashAssessmentID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<IFeature>>>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAreaAsFeatureCollectionGet(onlandVisualTrashAssessmentID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<IFeature>>>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAreaAsFeatureCollectionGet(onlandVisualTrashAssessmentID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (onlandVisualTrashAssessmentID === null || onlandVisualTrashAssessmentID === undefined) {
+            throw new Error('Required parameter onlandVisualTrashAssessmentID was null or undefined when calling onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAreaAsFeatureCollectionGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json',
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<IFeature>>(`${this.basePath}/onland-visual-trash-assessments/${encodeURIComponent(String(onlandVisualTrashAssessmentID))}/area-as-feature-collection`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -330,63 +372,25 @@ export class OnlandVisualTrashAssessmentService {
      * 
      * 
      * @param onlandVisualTrashAssessmentID 
+     * @param geometryAsGeoJson 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaGet(onlandVisualTrashAssessmentID: number, observe?: 'body', reportProgress?: boolean): Observable<OnlandVisualTrashAssessmentRefineAreaDto>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaGet(onlandVisualTrashAssessmentID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OnlandVisualTrashAssessmentRefineAreaDto>>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaGet(onlandVisualTrashAssessmentID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OnlandVisualTrashAssessmentRefineAreaDto>>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaGet(onlandVisualTrashAssessmentID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (onlandVisualTrashAssessmentID === null || onlandVisualTrashAssessmentID === undefined) {
-            throw new Error('Required parameter onlandVisualTrashAssessmentID was null or undefined when calling onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaGet.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'text/plain',
-            'application/json',
-            'text/json',
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<OnlandVisualTrashAssessmentRefineAreaDto>(`${this.basePath}/onland-visual-trash-assessments/${encodeURIComponent(String(onlandVisualTrashAssessmentID))}/refine-area`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param onlandVisualTrashAssessmentID 
-     * @param onlandVisualTrashAssessmentRefineAreaDto 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentRefineAreaDto?: OnlandVisualTrashAssessmentRefineAreaDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentRefineAreaDto?: OnlandVisualTrashAssessmentRefineAreaDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentRefineAreaDto?: OnlandVisualTrashAssessmentRefineAreaDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(onlandVisualTrashAssessmentID: number, onlandVisualTrashAssessmentRefineAreaDto?: OnlandVisualTrashAssessmentRefineAreaDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(onlandVisualTrashAssessmentID: number, geometryAsGeoJson?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(onlandVisualTrashAssessmentID: number, geometryAsGeoJson?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(onlandVisualTrashAssessmentID: number, geometryAsGeoJson?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(onlandVisualTrashAssessmentID: number, geometryAsGeoJson?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (onlandVisualTrashAssessmentID === null || onlandVisualTrashAssessmentID === undefined) {
             throw new Error('Required parameter onlandVisualTrashAssessmentID was null or undefined when calling onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost.');
         }
 
 
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (geometryAsGeoJson !== undefined && geometryAsGeoJson !== null) {
+            queryParameters = queryParameters.set('geometryAsGeoJson', <any>geometryAsGeoJson);
+        }
+
         let headers = this.defaultHeaders;
 
         // to determine the Accept header
@@ -399,18 +403,12 @@ export class OnlandVisualTrashAssessmentService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/_*+json',
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
 
         return this.httpClient.post<any>(`${this.basePath}/onland-visual-trash-assessments/${encodeURIComponent(String(onlandVisualTrashAssessmentID))}/refine-area`,
-            onlandVisualTrashAssessmentRefineAreaDto,
+            null,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

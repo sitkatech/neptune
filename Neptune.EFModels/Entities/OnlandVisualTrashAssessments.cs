@@ -274,12 +274,12 @@ public static class OnlandVisualTrashAssessments
         await dbContext.SaveChangesAsync();
     }
 
-    public static async Task UpdateGeometry(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID, OnlandVisualTrashAssessmentRefineAreaDto onlandVisualTrashAssessmentRefineAreaDto)
+    public static async Task UpdateGeometry(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID, string geometryAsGeoJson)
     {
         var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments.Single(x =>
-            x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentRefineAreaDto.OnlandVisualTrashAssessmentID);
+            x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
 
-        var newGeometry = GeoJsonSerializer.Deserialize<IFeature>(onlandVisualTrashAssessmentRefineAreaDto.GeometryAsGeoJson);
+        var newGeometry = GeoJsonSerializer.Deserialize<IFeature>(geometryAsGeoJson);
         newGeometry.Geometry.SRID = Proj4NetHelper.WEB_MERCATOR;
         newGeometry.Geometry = newGeometry.Geometry.ProjectTo2771();
 
@@ -401,5 +401,32 @@ public static class OnlandVisualTrashAssessments
         var onlandVisualTrashAssessmentScore = OnlandVisualTrashAssessmentScore.All.Single(x => x.NumericValue == Math.Round(average));
 
         return onlandVisualTrashAssessmentScore;
+    }
+
+    public static FeatureCollection GetAssessmentAreaByIDAsFeatureCollection(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID)
+    {
+        var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments
+            .Include(x => x.OnlandVisualTrashAssessmentArea).AsNoTracking()
+            .Single(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
+        return GetAssessmentAreasFeatureCollection(onlandVisualTrashAssessment);
+    }
+
+    public static FeatureCollection GetAssessmentAreasFeatureCollection(OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+    {
+        var attributesTable = new AttributesTable
+        {
+            { "OnlandVisualTrashAssessmentID", onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID },
+        };
+        var featureCollection = new FeatureCollection();
+        var geometry =
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaGeometry4326 ??
+            onlandVisualTrashAssessment.DraftGeometry?.ProjectTo4326();
+        if (geometry != null)
+        {
+            var feature = new Feature(geometry, attributesTable);
+            featureCollection.Add(feature);
+        }
+
+        return featureCollection;
     }
 }

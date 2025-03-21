@@ -27,8 +27,8 @@ import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/w
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
-import { TransectLineLayerByOvtaComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer-by-ovta/transect-line-layer-by-ovta.component";
 import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
+import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 
 @Component({
     selector: "trash-ovta-record-observations",
@@ -47,7 +47,7 @@ import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/la
         WorkflowBodyComponent,
         LandUseBlockLayerComponent,
         ParcelLayerComponent,
-        TransectLineLayerByOvtaComponent,
+        TransectLineLayerComponent,
         OvtaAreaLayerComponent,
     ],
     templateUrl: "./trash-ovta-record-observations.component.html",
