@@ -58,7 +58,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     ngAfterViewInit(): void {
         const mapOptions: MapOptions = {
             minZoom: 6,
-            maxZoom: 18,
+            maxZoom: 22,
             layers: [this.tileLayers[this.selectedTileLayer]],
             fullscreenControl: true,
             fullscreenControlOptions: {
@@ -76,7 +76,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         this.map.addControl(loadingControl);
 
-        this.layerControl = new L.control.groupedLayers(this.tileLayers, null, { collapsed: false }).addTo(this.map);
+        this.layerControl = new L.control.groupedLayers(this.tileLayers, LeafletHelperService.GetDefaultOverlayTileLayers(), { collapsed: false }).addTo(this.map);
 
         this.map.on("load", (event: LeafletEvent) => {
             this.onMapLoad.emit(new NeptuneMapInitEvent(this.map, this.layerControl));
