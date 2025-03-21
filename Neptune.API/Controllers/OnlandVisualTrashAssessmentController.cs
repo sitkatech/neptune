@@ -178,7 +178,7 @@ public class OnlandVisualTrashAssessmentController(
     {
         var onlandVisualTrashAssessment = OnlandVisualTrashAssessments.GetByIDWithChangeTracking(DbContext, onlandVisualTrashAssessmentID);
 
-        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = OnlandVisualTrashAssessmentStatus.InProgress.OnlandVisualTrashAssessmentStatusID;
+        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = (int) OnlandVisualTrashAssessmentStatusEnum.InProgress;
         onlandVisualTrashAssessment.AssessingNewArea = false;
 
         // update the assessment area scores now that this assessment no longer contributes

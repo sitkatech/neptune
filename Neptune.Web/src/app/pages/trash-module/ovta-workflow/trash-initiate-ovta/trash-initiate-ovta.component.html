@@ -7,23 +7,32 @@
             <form-field [formControl]="formGroup.controls.AssessingNewArea" [formInputOptions]="layerIsOnByDefaultOptions" [type]="FormFieldType.Radio"></form-field>
         </div>
 
-        <div class="grid-12 mb-4">
-            <form-field
-                *ngIf="stormwaterJurisdictionOptions$ | async as stormwaterJurisdictionOptions"
-                class="g-col-5"
-                [required]="true"
-                [formControl]="formGroup.controls.StormwaterJurisdictionID"
-                fieldLabel="Jurisdiction"
-                [formInputOptions]="stormwaterJurisdictionOptions"
-                (change)="onJurisdictionSelected($event)"
-                [type]="FormFieldType.Select"></form-field>
+        <div class="grid-12 mb-4" *ngIf="stormwaterJurisdictions$ | async as stormwaterJurisdictions">
+            <div class="field g-col-5">
+                <label class="field-label">Jurisdiction</label>
 
-            <form-field
-                class="g-col-7"
-                [hidden]="formGroup.controls.AssessingNewArea.value === true"
-                [formControl]="selectedOVTAArea"
-                [type]="FormFieldType.Text"
-                fieldLabel="Selected OVTA Area"></form-field>
+                <ng-select
+                    class="custom"
+                    [items]="stormwaterJurisdictions"
+                    [formControl]="formGroup.controls.StormwaterJurisdictionID"
+                    bindLabel="Organization.OrganizationName"
+                    bindValue="StormwaterJurisdictionID"
+                    (change)="onJurisdictionSelected($event)"></ng-select>
+            </div>
+
+            <div class="field g-col-7">
+                <label class="field-label">Selected OVTA Area</label>
+
+                <ng-select
+                    class="custom"
+                    [hidden]="formGroup.controls.AssessingNewArea.value === true"
+                    [items]="onlandVisualTrashAssessmentAreas$ | async"
+                    [minTermLength]="2"
+                    [formControl]="formGroup.controls.OnlandVisualTrashAssessmentAreaID"
+                    bindLabel="OnlandVisualTrashAssessmentAreaName"
+                    bindValue="OnlandVisualTrashAssessmentAreaID"
+                    (change)="onOVTAAreaDropdownChanged($event)"></ng-select>
+            </div>
         </div>
 
         <div [hidden]="formGroup.controls.AssessingNewArea.value === true">

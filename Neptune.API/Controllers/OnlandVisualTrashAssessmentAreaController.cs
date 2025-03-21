@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
@@ -97,4 +100,17 @@ public class OnlandVisualTrashAssessmentAreaController(
         var featureCollection = OnlandVisualTrashAssessmentAreas.GetTransectLineByIDAsFeatureCollection(DbContext, onlandVisualTrashAssessmentAreaID);
         return Ok(featureCollection);
     }
+
+    [HttpGet("jurisdictions/{jurisdictionID}")]
+    public ActionResult<List<OnlandVisualTrashAssessmentAreaSimpleDto>> ListByJurisdictionID([FromRoute] int jurisdictionID)
+    {
+        var onlandVisualTrashAssessmentAreaSimpleDtos =
+            DbContext.OnlandVisualTrashAssessmentAreas.AsNoTracking().Where(
+                    x => x.StormwaterJurisdictionID == jurisdictionID)
+                .OrderBy(x => x.OnlandVisualTrashAssessmentAreaName)
+                .Select(x => x.AsSimpleDto()).ToList();
+
+        return Ok(onlandVisualTrashAssessmentAreaSimpleDtos);
+    }
+
 }

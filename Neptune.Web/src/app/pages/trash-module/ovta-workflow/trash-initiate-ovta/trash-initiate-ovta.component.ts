@@ -2,9 +2,8 @@ import { Component } from "@angular/core";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FormFieldComponent, FormFieldType, FormInputOption } from "src/app/shared/components/form-field/form-field.component";
-import { SelectDropdownOption } from "src/app/shared/components//form-field/form-field.component";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
-import { Observable, map } from "rxjs";
+import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import * as L from "leaflet";
@@ -18,12 +17,14 @@ import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
+import { OnlandVisualTrashAssessmentAreaSimpleDto, StormwaterJurisdictionDto } from "src/app/shared/generated/model/models";
+import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
+import { NgSelectModule } from "@ng-select/ng-select";
 
 @Component({
     selector: "trash-initiate-ovta",
@@ -40,6 +41,7 @@ import { AlertDisplayComponent } from "../../../../shared/components/alert-displ
         ParcelLayerComponent,
         WorkflowBodyComponent,
         AlertDisplayComponent,
+        NgSelectModule,
     ],
     templateUrl: "./trash-initiate-ovta.component.html",
     styleUrl: "./trash-initiate-ovta.component.scss",
@@ -53,8 +55,6 @@ export class TrashInitiateOvtaComponent {
     public mapIsReady = false;
     public isLoadingSubmit = false;
     public layer: L.featureGroup = new L.featureGroup();
-
-    public stormwaterJurisdictionOptions$: Observable<SelectDropdownOption[]>;
 
     public selectedOVTAArea: FormControl = new FormControl("");
     public selectedOVTAAreaID: number;
@@ -78,6 +78,11 @@ export class TrashInitiateOvtaComponent {
         fillOpacity: 0.1,
     };
 
+    public stormwaterJurisdictions$: Observable<StormwaterJurisdictionDto[]>;
+    private stormwaterJurisdictionSubject = new BehaviorSubject<StormwaterJurisdictionDto | null>(null);
+    public stormwaterJurisdiction$ = this.stormwaterJurisdictionSubject.asObservable();
+    public onlandVisualTrashAssessmentAreas$: Observable<OnlandVisualTrashAssessmentAreaSimpleDto[]>;
+
     public formGroup: FormGroup<OnlandVisualTrashAssessmentSimpleDtoForm> = new FormGroup<any>({
         AssessingNewArea: OnlandVisualTrashAssessmentSimpleDtoFormControls.AssessingNewArea(),
         OnlandVisualTrashAssessmentAreaID: OnlandVisualTrashAssessmentSimpleDtoFormControls.OnlandVisualTrashAssessmentAreaID(),
@@ -86,28 +91,36 @@ export class TrashInitiateOvtaComponent {
 
     constructor(
         private stormwaterJurisdictionService: StormwaterJurisdictionService,
+        private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService,
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
         private alertService: AlertService,
         private ovtaWorkflowProgressService: OvtaWorkflowProgressService,
         private router: Router,
         private route: ActivatedRoute,
-        private wfsService: WfsService,
-        private groupByPipe: GroupByPipe
+        private wfsService: WfsService
     ) {}
 
     ngOnInit() {
         this.formGroup.controls.AssessingNewArea.patchValue(false);
-        this.stormwaterJurisdictionOptions$ = this.stormwaterJurisdictionService.jurisdictionsGet().pipe(
-            map((list) => {
-                const defaultJurisdiction = list[0];
+        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.jurisdictionsUserViewableGet().pipe(
+            tap((x) => {
+                const defaultJurisdiction = x[1];
                 this.formGroup.controls.StormwaterJurisdictionID.patchValue(defaultJurisdiction.StormwaterJurisdictionID);
+                this.stormwaterJurisdictionSubject.next(defaultJurisdiction);
                 this.getStormwaterJurisdictionBounds(defaultJurisdiction.StormwaterJurisdictionID);
-                if (list.length == 1) {
-                    return [{ Value: defaultJurisdiction.StormwaterJurisdictionID, Label: defaultJurisdiction.Organization.OrganizationName, Disabled: false }];
-                }
+            })
+        );
 
-                let options = list.map((x) => ({ Value: x.StormwaterJurisdictionID, Label: x.Organization.OrganizationName } as SelectDropdownOption));
-                return options;
+        this.onlandVisualTrashAssessmentAreas$ = this.stormwaterJurisdiction$.pipe(
+            tap(() => {
+                this.isLoading = true;
+            }),
+            switchMap((x) => {
+                console.log(x);
+                return this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasJurisdictionsJurisdictionIDGet(x.StormwaterJurisdictionID);
+            }),
+            tap(() => {
+                this.isLoading = false;
             })
         );
     }
@@ -151,7 +164,8 @@ export class TrashInitiateOvtaComponent {
                         });
 
                         layer.on("click", (e) => {
-                            this.onOVTAAreaSelected(feature.properties.OnlandVisualTrashAssessmentAreaID, feature.properties.OnlandVisualTrashAssessmentAreaName);
+                            this.formGroup.controls.OnlandVisualTrashAssessmentAreaID.patchValue(feature.properties.OnlandVisualTrashAssessmentAreaID);
+                            this.highlightSelectedOVTAArea();
                         });
                     },
                 });
@@ -167,21 +181,18 @@ export class TrashInitiateOvtaComponent {
             });
     }
 
-    public onJurisdictionSelected(event: any) {
-        this.getStormwaterJurisdictionBounds(event.Value);
+    public onJurisdictionSelected(event: StormwaterJurisdictionDto) {
+        this.stormwaterJurisdictionSubject.next(event);
+        this.getStormwaterJurisdictionBounds(event.StormwaterJurisdictionID);
     }
 
-    private onOVTAAreaSelected(ovtaAreaID: number, ovtaAreaName: string) {
-        this.selectedOVTAAreaID = ovtaAreaID;
-        this.selectedOVTAAreaName = ovtaAreaName;
-        this.selectedOVTAArea.setValue(this.selectedOVTAAreaName);
-        this.formGroup.controls.OnlandVisualTrashAssessmentAreaID.patchValue(ovtaAreaID);
+    public onOVTAAreaDropdownChanged(event: any) {
         this.highlightSelectedOVTAArea();
     }
 
     private highlightSelectedOVTAArea() {
         this.layer.eachLayer((layer) => {
-            if (layer.feature.properties.OVTAAreaID == this.selectedOVTAAreaID) {
+            if (layer.feature.properties.OnlandVisualTrashAssessmentAreaID == this.formGroup.controls.OnlandVisualTrashAssessmentAreaID.value) {
                 layer.setStyle(this.highlightStyle);
                 this.map.fitBounds(layer.getBounds());
             } else {
