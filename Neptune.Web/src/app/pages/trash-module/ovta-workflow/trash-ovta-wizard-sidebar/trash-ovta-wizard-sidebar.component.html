@@ -2,19 +2,20 @@
     <div class="sidebar-header">
         <h5 class="sidebar-title">
             <div>
-                <p>
+                <p class="ovta-label">
                     Onland Visual Trash Assessment
                     <a
                         *ngIf="progressDto?.OnlandVisualTrashAssessmentStatus?.OnlandVisualTrashAssessmentStatusID != OnlandVisualTrashAssessmentStatus.Complete"
                         class="ml-2 delete"
+                        title="Delete OVTA"
                         (click)="deleteOVTA(progressDto.OnlandVisualTrashAssessmentID, progressDto.CreatedDate)">
-                        Delete
+                        <icon icon="Delete"></icon>
                     </a>
                 </p>
                 <div *ngIf="progressDto?.OnlandVisualTrashAssessmentAreaID; then hasName; else noName"></div>
                 <ng-template #hasName>
-                    <p class="mt-2">
-                        <a [routerLink]="['/trash/onland-visual-trash-assessment-areas', progressDto.OnlandVisualTrashAssessmentAreaID]">
+                    <p>
+                        <a class="assessment-link" [routerLink]="['/trash/onland-visual-trash-assessment-areas', progressDto.OnlandVisualTrashAssessmentAreaID]">
                             <strong>{{ progressDto.OnlandVisualTrashAssessmentAreaName }}</strong>
                         </a>
                     </p>

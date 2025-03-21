@@ -13,11 +13,12 @@ import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
+import { IconComponent } from "../../../../shared/components/icon/icon.component";
 
 @Component({
     selector: "trash-ovta-wizard-sidebar",
     standalone: true,
-    imports: [WorkflowNavComponent, WorkflowNavItemComponent, NgIf, AsyncPipe, RouterLink],
+    imports: [WorkflowNavComponent, WorkflowNavItemComponent, NgIf, AsyncPipe, RouterLink, IconComponent],
     templateUrl: "./trash-ovta-wizard-sidebar.component.html",
     styleUrl: "./trash-ovta-wizard-sidebar.component.scss",
 })
