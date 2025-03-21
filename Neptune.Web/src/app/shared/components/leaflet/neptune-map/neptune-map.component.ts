@@ -58,7 +58,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     ngAfterViewInit(): void {
         const mapOptions: MapOptions = {
             minZoom: 6,
-            maxZoom: 22,
+            maxZoom: 20,
             layers: [this.tileLayers[this.selectedTileLayer]],
             fullscreenControl: true,
             fullscreenControlOptions: {

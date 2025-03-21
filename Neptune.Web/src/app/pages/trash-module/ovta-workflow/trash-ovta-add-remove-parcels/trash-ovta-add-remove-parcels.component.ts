@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 import { Router, ActivatedRoute } from "@angular/router";
-import { Observable, switchMap, tap } from "rxjs";
+import { Observable, of, switchMap, tap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
 import { NeptuneMapInitEvent, NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { WfsService } from "src/app/shared/services/wfs.service";
@@ -82,26 +82,11 @@ export class TrashOvtaAddRemoveParcelsComponent {
         );
     }
 
-    public handleMapReady(event: NeptuneMapInitEvent): void {
+    public handleMapReady(event: NeptuneMapInitEvent, onlandVisualTrashAssessment: OnlandVisualTrashAssessmentAddRemoveParcelsDto): void {
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.addSelectedParcelsToMap();
-
-        this.map.on("click", (event: L.LeafletMouseEvent): void => {
-            this.wfsService.getParcelByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((parcelsFeatureCollection: L.FeatureCollection) => {
-                parcelsFeatureCollection.features.forEach((feature: L.Feature) => {
-                    const parcelID = feature.properties.ParcelID;
-                    if (this.selectedParcelIDs.includes(parcelID)) {
-                        this.selectedParcelIDs.splice(this.selectedParcelIDs.indexOf(parcelID), 1);
-                    } else {
-                        this.selectedParcelIDs.push(parcelID);
-                    }
-                });
-
-                this.addSelectedParcelsToMap();
-            });
-        });
-
+        this.enableDisableParcelClickEvent(onlandVisualTrashAssessment);
         this.mapIsReady = true;
     }
 
@@ -113,6 +98,7 @@ export class TrashOvtaAddRemoveParcelsComponent {
             this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:Parcels", `ParcelID in (${this.selectedParcelIDs.join(",")})`, "ParcelID").subscribe((response) => {
                 this.selectedParcelsLayer = L.geoJSON(response, { style: this.highlightStyle });
                 this.selectedParcelsLayer.addTo(this.map);
+                this.map.fitBounds(this.selectedParcelsLayer.getBounds());
             });
         }
     }
@@ -132,6 +118,29 @@ export class TrashOvtaAddRemoveParcelsComponent {
         this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefreshParcelsPost(this.ovtaID).subscribe((ovta) => {
             this.selectedParcelIDs = ovta.SelectedParcelIDs;
             this.addSelectedParcelsToMap();
+            this.enableDisableParcelClickEvent(ovta);
+            this.onlandVisualTrashAssessment$ = of(ovta);
         });
+    }
+
+    private enableDisableParcelClickEvent(ovta: OnlandVisualTrashAssessmentAddRemoveParcelsDto) {
+        if (ovta.IsDraftGeometryManuallyRefined) {
+            this.map.off("click");
+        } else {
+            this.map.on("click", (event: L.LeafletMouseEvent): void => {
+                this.wfsService.getParcelByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((parcelsFeatureCollection: L.FeatureCollection) => {
+                    parcelsFeatureCollection.features.forEach((feature: L.Feature) => {
+                        const parcelID = feature.properties.ParcelID;
+                        if (this.selectedParcelIDs.includes(parcelID)) {
+                            this.selectedParcelIDs.splice(this.selectedParcelIDs.indexOf(parcelID), 1);
+                        } else {
+                            this.selectedParcelIDs.push(parcelID);
+                        }
+                    });
+
+                    this.addSelectedParcelsToMap();
+                });
+            });
+        }
     }
 }
