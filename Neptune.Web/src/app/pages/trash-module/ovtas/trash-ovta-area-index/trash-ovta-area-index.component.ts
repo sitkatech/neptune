@@ -14,18 +14,19 @@ import { HybridMapGridComponent } from "../../../../shared/components/hybrid-map
 import { NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { Map, layerControl } from "leaflet";
 import { SelectedOvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/selected-ovta-area-layer/selected-ovta-area-layer.component";
-import { Router } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 import { OnlandVisualTrashAssessmentSimpleDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-simple-dto";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
+import { AuthenticationService } from "src/app/services/authentication.service";
 
 @Component({
     selector: "trash-ovta-area-index",
     standalone: true,
-    imports: [PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, LoadingDirective, IconComponent, HybridMapGridComponent, SelectedOvtaAreaLayerComponent],
+    imports: [PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, LoadingDirective, IconComponent, HybridMapGridComponent, SelectedOvtaAreaLayerComponent, RouterLink],
     templateUrl: "./trash-ovta-area-index.component.html",
     styleUrl: "./trash-ovta-area-index.component.scss",
 })
@@ -47,7 +48,8 @@ export class TrashOvtaAreaIndexComponent {
         private utilityFunctionsService: UtilityFunctionsService,
         private router: Router,
         private alertService: AlertService,
-        private confirmService: ConfirmService
+        private confirmService: ConfirmService,
+        private authenticationService: AuthenticationService
     ) {}
 
     ngOnInit(): void {
@@ -114,5 +116,13 @@ export class TrashOvtaAreaIndexComponent {
                     });
                 }
             });
+    }
+
+    public currentUserHasJurisdictionManagePermission(): boolean {
+        return this.authenticationService.doesCurrentUserHaveJurisdictionManagePermission();
+    }
+
+    public currentUserHasJurisdictionEditPermission(): boolean {
+        return this.authenticationService.doesCurrentUserHaveJurisdictionEditPermission();
     }
 }

@@ -2,7 +2,7 @@
 
 <ng-template #templateRight>
     <a class="float-right btn btn-primary mr-2" [routerLink]="['new/instructions']">Add New OVTA</a>
-    <a class="float-right btn btn-primary mr-2" [href]="url + '/OnlandVisualTrashAssessment/BulkUploadOTVAs'"> <icon [icon]="'Upload'"></icon> Upload OVTAs </a>
+    <a *ngIf="currentUserHasJurisdictionManagePermission()" class="float-right btn btn-primary mr-2" [href]="url + '/OnlandVisualTrashAssessment/BulkUploadOTVAs'"> <icon [icon]="'Upload'"></icon> Upload OVTAs </a>
 </ng-template>
 
 <app-alert-display></app-alert-display>

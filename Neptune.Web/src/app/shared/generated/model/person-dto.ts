@@ -29,6 +29,7 @@ export class PersonDto {
     ReceiveRSBRevisionRequestEmails?: boolean;
     WebServiceAccessToken?: string;
     IsOCTAGrantReviewer?: boolean;
+    HasAssignedStormwaterJurisdiction?: boolean;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -52,6 +53,7 @@ export interface PersonDtoForm {
     ReceiveRSBRevisionRequestEmails?: FormControl<boolean>;
     WebServiceAccessToken?: FormControl<string>;
     IsOCTAGrantReviewer?: FormControl<boolean>;
+    HasAssignedStormwaterJurisdiction?: FormControl<boolean>;
 }
 
 export class PersonDtoFormControls { 
@@ -216,6 +218,16 @@ export class PersonDtoFormControls {
         }
     );
     public static IsOCTAGrantReviewer = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static HasAssignedStormwaterJurisdiction = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
         value,
         formControlOptions ?? 
         {

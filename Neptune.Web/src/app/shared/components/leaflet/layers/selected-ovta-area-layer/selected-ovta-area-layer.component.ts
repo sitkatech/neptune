@@ -145,7 +145,7 @@ export class SelectedOvtaAreaLayerComponent extends MapLayerBase implements OnCh
             if (layer.options?.icon) return;
 
             const geoJsonLayers = layer.getLayers();
-            if (geoJsonLayers[0].feature.properties.OVTAAreaID == this.selectedOVTAAreaID) {
+            if (geoJsonLayers[0].feature.properties.OnlandVisualTrashAssessmentAreaID == this.selectedOVTAAreaID) {
                 layer.setStyle(this.highlightStyle);
                 this.map.fitBounds(layer.getBounds());
             } else {

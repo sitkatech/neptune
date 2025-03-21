@@ -1,8 +1,8 @@
 <page-header pageTitle="Land Use Blocks" [customRichTextTypeID]="richTextID" [templateRight]="templateRight"></page-header>
 
 <ng-template #templateRight>
-    <a class="float-right btn btn-primary mr-2" [href]="url + '/LandUseBlockGeometry/UpdateLandUseBlockGeometry'"> <icon [icon]="'Upload'"></icon> Upload Land Use Blocks </a>
-    <a class="float-right btn btn-primary" [href]="url + '/LandUseBlockGeometry/DownloadLandUseBlockGeometry'"> <icon [icon]="'Download'"></icon> Download Land Use Blocks </a>
+    <a *ngIf="currentUserHasJurisdictionEditPermission()" class="float-right btn btn-primary mr-2" [href]="url + '/LandUseBlockGeometry/UpdateLandUseBlockGeometry'"> <icon [icon]="'Upload'"></icon> Upload Land Use Blocks </a>
+    <a *ngIf="currentUserHasJurisdictionEditPermission()" class="float-right btn btn-primary" [href]="url + '/LandUseBlockGeometry/DownloadLandUseBlockGeometry'"> <icon [icon]="'Download'"></icon> Download Land Use Blocks </a>
 </ng-template>
 
 <app-alert-display></app-alert-display>
