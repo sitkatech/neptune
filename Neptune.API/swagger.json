@@ -1057,15 +1057,27 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "geometryAsGeoJson",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentRefineAreaDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentRefineAreaDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentRefineAreaDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -5078,6 +5090,20 @@
             "type": "boolean"
           },
           "ExplanationIfTypeIsOther": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OnlandVisualTrashAssessmentRefineAreaDto": {
+        "type": "object",
+        "properties": {
+          "OnlandVisualTrashAssessmentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "GeometryAsGeoJson": {
             "type": "string",
             "nullable": true
           }
