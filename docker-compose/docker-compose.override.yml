@@ -20,6 +20,7 @@ services:
       - QGISAPIBaseUrl=${QGISAPIBaseUrl}
       - OCGISBaseUrl=${OCGISBaseUrl}
       - PlanningModuleBaseUrl=${PlanningModuleBaseUrl}
+      - TrashModuleBaseUrl=${TrashModuleBaseUrl}
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
       - PathToOVTAUploadTemplate=${PathToOVTAUploadTemplate}
       - RecaptchaPublicKey=${RecaptchaPublicKey}
@@ -56,6 +57,7 @@ services:
       - QGISAPIBaseUrl=${QGISAPIBaseUrl}
       - OCGISBaseUrl=${OCGISBaseUrl}
       - PlanningModuleBaseUrl=${PlanningModuleBaseUrl}
+      - TrashModuleBaseUrl=${TrashModuleBaseUrl}
       - AzureBlobStorageConnectionString=${AzureBlobStorageConnectionString}
     ports:
       - "8211:8080"
