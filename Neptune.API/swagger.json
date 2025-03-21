@@ -5110,9 +5110,6 @@
       "OnlandVisualTrashAssessmentReviewAndFinalizeDto": {
         "type": "object",
         "properties": {
-          "Finalize": {
-            "type": "boolean"
-          },
           "OnlandVisualTrashAssessmentID": {
             "type": "integer",
             "format": "int32"

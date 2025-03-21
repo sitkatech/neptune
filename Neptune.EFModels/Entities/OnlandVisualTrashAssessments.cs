@@ -159,10 +159,12 @@ public static class OnlandVisualTrashAssessments
             .Single(x =>
             x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
 
-        if (dto.Finalize)
+        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = dto.OnlandVisualTrashAssessmentScoreID;
+        onlandVisualTrashAssessment.Notes = dto.Notes;
+        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = dto.OnlandVisualTrashAssessmentStatusID;
+
+        if (dto.OnlandVisualTrashAssessmentStatusID == (int)OnlandVisualTrashAssessmentStatusEnum.Complete)
         {
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = dto.OnlandVisualTrashAssessmentScoreID;
-            onlandVisualTrashAssessment.Notes = dto.Notes;
             onlandVisualTrashAssessment.CompletedDate = dto.AssessmentDate;
             onlandVisualTrashAssessment.IsProgressAssessment = dto.IsProgressAssessment ?? false;
 
@@ -188,8 +190,6 @@ public static class OnlandVisualTrashAssessments
                 onlandVisualTrashAssessment.DraftAreaName = null;
             }
 
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = (int) OnlandVisualTrashAssessmentStatusEnum.Complete;
-
             await dbContext.SaveChangesAsync();
 
             onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription = dto.AssessmentAreaDescription;
@@ -201,8 +201,7 @@ public static class OnlandVisualTrashAssessments
 
             if (dto.IsProgressAssessment ?? false)
             {
-                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea
-                        .OnlandVisualTrashAssessmentProgressScoreID =
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID =
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID;
             }
 
@@ -213,8 +212,7 @@ public static class OnlandVisualTrashAssessments
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine4326 = transect.ProjectTo4326();
                 onlandVisualTrashAssessment.IsTransectBackingAssessment = true;
 
-                var transectBackingAssessment =
-                    GetTransectBackingAssessment(dbContext, onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID);
+                var transectBackingAssessment = GetTransectBackingAssessment(dbContext, onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID);
                 if (transectBackingAssessment != null)
                 {
                     transectBackingAssessment.IsTransectBackingAssessment = false;
@@ -223,9 +221,6 @@ public static class OnlandVisualTrashAssessments
         }
         else
         {
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = dto.OnlandVisualTrashAssessmentScoreID;
-            onlandVisualTrashAssessment.Notes = dto.Notes;
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = (int)OnlandVisualTrashAssessmentStatusEnum.InProgress;
             if (onlandVisualTrashAssessment.AssessingNewArea ?? false)
             {
                 onlandVisualTrashAssessment.DraftAreaName = dto.OnlandVisualTrashAssessmentAreaName;

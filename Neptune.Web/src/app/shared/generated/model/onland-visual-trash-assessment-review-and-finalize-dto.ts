@@ -13,7 +13,6 @@ import { OnlandVisualTrashAssessmentPreliminarySourceIdentificationUpsertDto } f
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class OnlandVisualTrashAssessmentReviewAndFinalizeDto { 
-    Finalize?: boolean;
     OnlandVisualTrashAssessmentID?: number;
     OnlandVisualTrashAssessmentAreaID?: number;
     OnlandVisualTrashAssessmentAreaName?: string;
@@ -32,7 +31,6 @@ export class OnlandVisualTrashAssessmentReviewAndFinalizeDto {
 }
 
 export interface OnlandVisualTrashAssessmentReviewAndFinalizeDtoForm { 
-    Finalize?: FormControl<boolean>;
     OnlandVisualTrashAssessmentID?: FormControl<number>;
     OnlandVisualTrashAssessmentAreaID?: FormControl<number>;
     OnlandVisualTrashAssessmentAreaName?: FormControl<string>;
@@ -48,16 +46,6 @@ export interface OnlandVisualTrashAssessmentReviewAndFinalizeDtoForm {
 }
 
 export class OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls { 
-    public static Finalize = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
     public static OnlandVisualTrashAssessmentID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
