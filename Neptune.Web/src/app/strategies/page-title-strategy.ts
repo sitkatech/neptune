@@ -11,7 +11,7 @@ export class PageTitleStrategy extends TitleStrategy {
     override updateTitle(routerState: RouterStateSnapshot) {
         const titles = this.getTitleHierarchyFromActivatedRouteShapshot(routerState);
         if (titles.length > 0) {
-            const fullTitle = titles.join(" - ");
+            const fullTitle = titles.join(" | ");
             this.title.setTitle(`${fullTitle}`);
         } else {
             this.title.setTitle(`Stormwater Tools | Orange County`);
@@ -24,7 +24,8 @@ export class PageTitleStrategy extends TitleStrategy {
         let params = [];
         while (activatedRouteSnapshot.firstChild != null) {
             activatedRouteSnapshot = activatedRouteSnapshot.firstChild;
-            titles = activatedRouteSnapshot.title ? [...titles, activatedRouteSnapshot.title] : [...titles];
+            // only add the title if it doesn't match one already in the array
+            titles = activatedRouteSnapshot.title && !titles.includes(activatedRouteSnapshot.title) ? [...titles, activatedRouteSnapshot.title] : [...titles];
             // lets just take the last params
             params = Object.values(activatedRouteSnapshot.params);
         }
