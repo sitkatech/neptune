@@ -34,6 +34,13 @@ namespace Neptune.API.Controllers
             return Ok(featureCollection);
         }
 
+        [HttpGet("jurisdictions/{jurisdictionID}/verified/feature-collection")]
+        public ActionResult<FeatureCollection> ListInventoryVerifiedTreatmentBMPsByJurisdictionIDAsFeatureCollection([FromRoute] int jurisdictionID)
+        {
+            var featureCollection = TreatmentBMPs.ListInventoryIsVerifiedByPersonAndJurisdictionIDAsFeatureCollection(DbContext, CallingUser, jurisdictionID);
+            return Ok(featureCollection);
+        }
+
         [HttpGet("planned-projects")]
         [JurisdictionEditFeature]
         public ActionResult<List<TreatmentBMPDisplayDto>> ListTreatmentBMPsWithProjectIDAsFeatureCollection()
