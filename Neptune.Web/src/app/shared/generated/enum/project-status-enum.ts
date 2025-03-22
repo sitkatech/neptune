@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[ProjectStatus]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum ProjectStatusEnum {
   Draft = 1
@@ -12,4 +12,4 @@ export enum ProjectStatusEnum {
 export const ProjectStatuses: LookupTableEntry[]  = [
   { Name: "Draft", DisplayName: "Draft", Value: 1 }
 ];
-export const ProjectStatusesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...ProjectStatuses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const ProjectStatusesAsSelectDropdownOptions = ProjectStatuses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

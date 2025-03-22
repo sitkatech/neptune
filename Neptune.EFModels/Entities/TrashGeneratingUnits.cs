@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Neptune.Common;
 using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities;
@@ -16,7 +17,6 @@ public static class TrashGeneratingUnits
                 TrashGeneratingUnitID = x.TrashGeneratingUnitID,
                 TrashCaptureEffectivenessBMP = x.TrashCaptureEffectivenessBMP,
                 TrashCaptureStatusBMP = x.TrashCaptureStatusBMP,
-                TrashGeneratingUnitArea = x.TrashGeneratingUnitArea,
                 StormwaterJurisdictionID = x.StormwaterJurisdictionID,
                 StormwaterJurisdictionName = x.OrganizationName,
                 BaselineLoadingRate = x.BaselineLoadingRate,
@@ -36,7 +36,7 @@ public static class TrashGeneratingUnits
                 PermitClass = x.PermitClass,
                 LandUseForTGR = x.LandUseForTGR,
                 TrashGenerationRate = x.TrashGenerationRate,
-                Area = x.Area,
+                Area = x.Area * Constants.SquareMetersToAcres,
                 LoadingRateDelta = x.LoadingRateDelta,
         }).ToList();
         return trashGeneratingUnitLoadStatistics;

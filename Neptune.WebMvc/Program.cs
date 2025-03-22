@@ -179,10 +179,7 @@ var builder = WebApplication.CreateBuilder(args);
         {
             opt.Cookie.HttpOnly = true;
             opt.Cookie.SameSite = SameSiteMode.Lax;
-            //if (!builder.Environment.IsDevelopment())
-            //{
-            //    opt.Cookie.Domain = ".ocstormwatertools.org";
-            //}
+            opt.SessionStore = new MemoryCacheTicketStore();
         })
         .AddOpenIdConnect("Keystone", options =>
         {

@@ -23,7 +23,6 @@ variables:
   # define these in the pipelines:
   # domainApi: 'api-neptune.esa-$(Environment).sitkatech.com'
   # domainWeb: 'neptune-web.esa-$(Environment).sitkatech.com'
-  # domainPlanning: 'neptune-planning.esa-$(Environment).sitkatech.com'
   # domainGeoserver: 'geoserver-neptune.esa-$(Environment).sitkatech.com'
   # domainWebMvc: 'neptune.esa-$(Environment).sitkatech.com'
 
@@ -661,9 +660,9 @@ stages:
               overrideValues: |
                 global.domains.api="$(domainApi)"
                 global.domains.web="$(domainWeb)"
+                global.domains.planning="$(domainPlanning)"
                 global.domains.geoserver="$(domainGeoserver)"
                 global.domains.webmvc="$(domainWebMvc)"
-                global.domains.planning="$(domainPlanning)"
                 global.env.name="$(Environment)"
                 global.secrets.geoserverSqlServerPassword="$(SQL_GEOSERVER_PASSWORD)"
                 global.secrets.geoserverAdminPassword="$(GEOSERVER_ADMIN_PASSWORD)"

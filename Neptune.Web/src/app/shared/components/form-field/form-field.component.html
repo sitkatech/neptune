@@ -1,5 +1,17 @@
 <div class="field">
-    <ng-container [ngSwitch]="type">
+    <ng-container *ngIf="fieldDefinitionName">
+        <field-definition [fieldDefinitionType]="fieldDefinitionName"></field-definition>
+    </ng-container>
+    <ng-template #readOnlyDisplay>
+        <div class="field-label" [class.required]="formControl | isRequired">
+            {{ fieldLabel }}
+        </div>
+        <div>
+            <span>{{ formControl.getRawValue() }}</span>
+            <span *ngIf="units" class="units">{{ units }}</span>
+        </div>
+    </ng-template>
+    <ng-container *ngIf="!readOnly; else readOnlyDisplay" [ngSwitch]="type">
         <!-- Text -->
         <ng-container *ngSwitchCase="FormFieldType.Text">
             <div class="field-label" [class.required]="formControl | isRequired">
@@ -76,8 +88,16 @@
                 {{ fieldLabel }}
             </label>
 
-            <select-dropdown *ngIf="formInputOptions; else noOptionsProvided" [formInputOptions]="formInputOptions"
-                [formControl]="formControl"></select-dropdown>
+            <ng-select
+                class="custom"
+                *ngIf="formInputOptions; else noOptionsProvided"
+                [items]="formInputOptions"
+                [formControl]="formControl"
+                [multiple]="multiple"
+                bindLabel="Label"
+                bindValue="Value"
+                (change)="onNgSelectChange($event)"></ng-select>
+
             <ng-template #noOptionsProvided>
                 <span class="text-danger"> No "formInputOptions" were provided to this form field component </span>
             </ng-template>
@@ -102,8 +122,14 @@
                 {{ fieldLabel }}
             </div>
             <div class="custom-file-upload">
-                <input type="file" #fileUploadField (change)="onFileChange($event)" [accept]="uploadFileAccepts" [placeholder]="placeholder"
-                    [formControl]="formControl" [name]="name" />
+                <input
+                    type="file"
+                    #fileUploadField
+                    (change)="onFileChange($event)"
+                    [accept]="uploadFileAccepts"
+                    [placeholder]="placeholder"
+                    [formControl]="formControl"
+                    [name]="name" />
                 {{ formControl.value ? formControl.value.name : "No file chosen..." }}
                 <button type="button" class="btn btn-lg btn-primary" (click)="onClickFileUpload($event)">
                     <i class="fas fa-folder-open"></i>
@@ -118,9 +144,5 @@
             </div>
         </ng-container>
     </ng-container>
-    <ng-container *ngIf="fieldDefinitionName">
-        <field-definition [fieldDefinitionType]="fieldDefinitionName"></field-definition>
-    </ng-container>
-
     <input-errors [validateFormControl]="formControl"></input-errors>
 </div>

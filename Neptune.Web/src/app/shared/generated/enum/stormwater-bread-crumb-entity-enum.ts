@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[StormwaterBreadCrumbEntity]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum StormwaterBreadCrumbEntityEnum {
   TreatmentBMP = 1,
@@ -28,4 +28,4 @@ export const StormwaterBreadCrumbEntities: LookupTableEntry[]  = [
   { Name: "Parcel", DisplayName: "Parcel", Value: 9 },
   { Name: "OnlandVisualTrashAssessment", DisplayName: "Onland Visual Trash Assessment", Value: 10 }
 ];
-export const StormwaterBreadCrumbEntitiesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...StormwaterBreadCrumbEntities.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const StormwaterBreadCrumbEntitiesAsSelectDropdownOptions = StormwaterBreadCrumbEntities.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

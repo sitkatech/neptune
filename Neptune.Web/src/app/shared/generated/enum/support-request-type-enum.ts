@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[SupportRequestType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum SupportRequestTypeEnum {
   ReportBug = 1,
@@ -24,4 +24,4 @@ export const SupportRequestTypes: LookupTableEntry[]  = [
   { Name: "Other", DisplayName: "Other", Value: 6 },
   { Name: "RequestToChangeUserAccountPrivileges", DisplayName: "Request to change user account privileges", Value: 7 }
 ];
-export const SupportRequestTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...SupportRequestTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const SupportRequestTypesAsSelectDropdownOptions = SupportRequestTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

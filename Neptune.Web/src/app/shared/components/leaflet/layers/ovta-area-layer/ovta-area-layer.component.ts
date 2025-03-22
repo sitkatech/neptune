@@ -1,35 +1,60 @@
-import { AfterViewInit, Component, Input, OnChanges } from "@angular/core";
-import { environment } from "src/environments/environment";
-import { MapLayerBase } from "../map-layer-base.component";
+import { Component, Input, OnChanges } from "@angular/core";
 import * as L from "leaflet";
+import { MapLayerBase } from "../map-layer-base.component";
+import { Observable, tap } from "rxjs";
+import { IFeature } from "src/app/shared/generated/model/models";
+import { AsyncPipe, NgIf } from "@angular/common";
+import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
+import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 
 @Component({
     selector: "ovta-area-layer",
     standalone: true,
-    imports: [],
+    imports: [NgIf, AsyncPipe],
     templateUrl: "./ovta-area-layer.component.html",
     styleUrl: "./ovta-area-layer.component.scss",
 })
-export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
-    constructor() {
+export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges {
+    constructor(
+        private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
+        private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService
+    ) {
         super();
     }
+
+    @Input() ovtaID: number;
     @Input() ovtaAreaID: number;
-    public wmsOptions: L.WMSOptions;
     public layer;
 
-    ngAfterViewInit(): void {
-        this.wmsOptions = {
-            layers: "OCStormwater:AssessmentAreaExport",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-        };
+    private ovtaAreaStyle = {
+        color: "blue",
+        fillOpacity: 0.2,
+        opacity: 0,
+    };
 
-        if (this.ovtaAreaID) {
-            this.wmsOptions.cql_filter = `OVTAAreaID = ${this.ovtaAreaID}`;
+    public featureCollection$: Observable<IFeature[]>;
+
+    ngAfterViewInit(): void {
+        if (this.ovtaID) {
+            this.featureCollection$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAreaAsFeatureCollectionGet(this.ovtaID).pipe(
+                tap((transectLineFeatureCollection) => {
+                    this.layer = new L.GeoJSON(transectLineFeatureCollection, {
+                        style: this.ovtaAreaStyle,
+                    });
+                    this.initLayer();
+                })
+            );
+        } else if (this.ovtaAreaID) {
+            this.featureCollection$ = this.onlandVisualTrashAssessmentAreaService
+                .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDAreaAsFeatureCollectionGet(this.ovtaAreaID)
+                .pipe(
+                    tap((transectLineFeatureCollection) => {
+                        this.layer = new L.GeoJSON(transectLineFeatureCollection, {
+                            style: this.ovtaAreaStyle,
+                        });
+                        this.initLayer();
+                    })
+                );
         }
-        this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
-        this.initLayer();
     }
 }

@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[TreatmentBMPModelingType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum TreatmentBMPModelingTypeEnum {
   BioinfiltrationBioretentionWithRaisedUnderdrain = 1,
@@ -54,4 +54,4 @@ export const TreatmentBMPModelingTypes: LookupTableEntry[]  = [
   { Name: "VegetatedSwale", DisplayName: "Vegetated Swale", Value: 21 },
   { Name: "WetDetentionBasin", DisplayName: "Wet Detention Basin", Value: 22 }
 ];
-export const TreatmentBMPModelingTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...TreatmentBMPModelingTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const TreatmentBMPModelingTypesAsSelectDropdownOptions = TreatmentBMPModelingTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

@@ -74,19 +74,14 @@ namespace Neptune.API
             var configuration = Configuration.Get<NeptuneConfiguration>();
             services.AddSingleton(Configuration);
 
+
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(o =>
+                {
+                    o.SessionStore = new MemoryCacheTicketStore();
+                })
                 .AddJwtBearer(options =>
                 {
-                    if (_environment.IsDevelopment())
-                    {
-                        // NOTE: CG 3/22 - This allows the self-signed cert on Keystone to work locally.
-                        options.BackchannelHttpHandler = new HttpClientHandler()
-                        {
-                            ServerCertificateCustomValidationCallback = (message, certificate2, arg3, arg4) => true
-                        };
-                        //These allow the use of the container name and the url when developing.
-                        options.TokenValidationParameters.ValidateIssuer = false;
-                    }
                     options.TokenValidationParameters.ValidateAudience = false;
                     options.Authority = configuration.KeystoneOpenIDUrl;
                     options.RequireHttpsMetadata = false;

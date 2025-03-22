@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnChanges } from "@angular/core";
+import { Component, OnChanges } from "@angular/core";
 import { environment } from "src/environments/environment";
 import * as L from "leaflet";
 import "leaflet.markercluster";
@@ -8,6 +8,7 @@ import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { Observable, tap } from "rxjs";
 import { IFeature } from "src/app/shared/generated/model/i-feature";
+
 @Component({
     selector: "inventoried-bmps-layer",
     standalone: true,
@@ -22,7 +23,7 @@ export class InventoriedBMPsLayerComponent extends MapLayerBase implements OnCha
 
             return new L.DivIcon({
                 html: "<div><span>" + childCount + "</span></div>",
-                className: "marker-cluster",
+                className: "treatment-bmp-cluster",
                 iconSize: new L.Point(40, 40),
             });
         },

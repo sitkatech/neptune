@@ -38,8 +38,6 @@ import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wq
 import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 
-declare var $: any;
-
 @Component({
     selector: "planning-map",
     templateUrl: "./planning-map.component.html",
@@ -108,7 +106,7 @@ export class PlanningMapComponent implements OnInit {
         fillOpacity: 0.2,
         opacity: 1,
     };
-    private plannedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px'> Project BMPs";
+    private plannedTreatmentBMPOverlayName = "Project BMPs";
 
     public columnDefs: ColDef[];
     public paginationPageSize: number = 100;
@@ -129,10 +127,10 @@ export class PlanningMapComponent implements OnInit {
 
         this.columnDefs = [
             this.utilityFunctionsService.createLinkColumnDef("Project ID", "ProjectID", "ProjectID", {
-                InRouterLink: "/projects/",
+                InRouterLink: "/planning/projects/",
             }),
             this.utilityFunctionsService.createLinkColumnDef("Project Name", "ProjectName", "ProjectID", {
-                InRouterLink: "/projects/",
+                InRouterLink: "/planning/projects/",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Organization", "Organization.OrganizationName"),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdiction.Organization.OrganizationName"),
@@ -215,6 +213,7 @@ export class PlanningMapComponent implements OnInit {
                 });
             },
         });
+        this.plannedProjectTreatmentBMPsLayer["legendHtml"] = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px'>";
         this.plannedProjectTreatmentBMPsLayer.sortOrder = 100;
         this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
         this.layerControl.addOverlay(this.plannedProjectTreatmentBMPsLayer, this.plannedTreatmentBMPOverlayName);

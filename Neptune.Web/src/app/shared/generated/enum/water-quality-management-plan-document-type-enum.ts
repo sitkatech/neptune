@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[WaterQualityManagementPlanDocumentType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum WaterQualityManagementPlanDocumentTypeEnum {
   FinalWQMP = 1,
@@ -18,4 +18,4 @@ export const WaterQualityManagementPlanDocumentTypes: LookupTableEntry[]  = [
   { Name: "OMPlan", DisplayName: "O&M Plan", Value: 3 },
   { Name: "Other", DisplayName: "Other", Value: 4 }
 ];
-export const WaterQualityManagementPlanDocumentTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...WaterQualityManagementPlanDocumentTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const WaterQualityManagementPlanDocumentTypesAsSelectDropdownOptions = WaterQualityManagementPlanDocumentTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

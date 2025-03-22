@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[SizingBasisType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum SizingBasisTypeEnum {
   FullTrashCapture = 1,
@@ -18,4 +18,4 @@ export const SizingBasisTypes: LookupTableEntry[]  = [
   { Name: "Other", DisplayName: "Other (less than Water Quality)", Value: 3 },
   { Name: "NotProvided", DisplayName: "Not Provided", Value: 4 }
 ];
-export const SizingBasisTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...SizingBasisTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const SizingBasisTypesAsSelectDropdownOptions = SizingBasisTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

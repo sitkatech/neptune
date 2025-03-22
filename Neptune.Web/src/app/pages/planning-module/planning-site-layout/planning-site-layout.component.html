@@ -2,42 +2,81 @@
     <header-nav moduleTitle="Planning Module"></header-nav>
 
     <nav class="site-nav">
-        <div class="collapse navbar-collapse" *ngIf="currentUser$ | async as currentUser">
-            <ul class="site-nav__links site-nav__main">
-                <ng-container *ngIf="isAuthenticated() && isNotUnassigned(currentUser)">
-                    <li class="nav-item" routerLinkActive="active">
-                        <a [href]="siteUrl + '/DataHub/Index'" class="nav-link" role="button"> Data Hub </a>
+        <div *ngIf="currentUser$ | async as currentUser"  style="width: 100%;">
+            <button
+                class="hamburger-btn navbar-toggle collapsed"
+                type="button"
+                [dropdownToggle]="mainMenuToggle"
+                aria-controls="hamburger-btn"
+                aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        fill-rule="evenodd"
+                        d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            <div #mainMenuToggle class="site-nav__wrapper collapse navbar-collapse" >
+                <ul class="site-nav__links site-nav__main">
+                    <ng-container *ngIf="isAuthenticated() && isNotUnassigned(currentUser)">
+                        <li class="nav-item" routerLinkActive="active">
+                            <a [href]="siteUrl + '/DataHub/Index'" class="nav-link" role="button"> Data Hub </a>
+                        </li>
+                        <li class="nav-item" routerLinkActive="active">
+                            <a [routerLink]="['/planning/projects']" class="nav-link" role="button"> Projects </a>
+                        </li>
+                        <li class="nav-item" routerLinkActive="active">
+                            <a [routerLink]="['/planning/planning-map']" class="nav-link" role="button"> Planning Map </a>
+                        </li>
+                    </ng-container>
+    
+                    <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isOCTAGrantReviewer()">
+                        <a
+                            href="javascript:void(0);"
+                            [dropdownToggle]="grantProgramsToggle"
+                            class="nav-link dropdown-toggle"
+                            role="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                            <span class="nav-link__label">
+                                Grant Programs
+                                <icon icon="AngleDown"></icon>
+                            </span>
+                        </a>
+    
+                        <div #grantProgramsToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-divider"></div>
+                            <a [routerLink]="['/planning/grant-programs/octa-m2-tier-2']" class="dropdown-item"> OCTA M2 Tier 2 Grant Program </a>
+                        </div>
                     </li>
-                    <li class="nav-item" routerLinkActive="active">
-                        <a [routerLink]="['/projects']" class="nav-link" role="button"> Projects </a>
+                    <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isAdministrator(currentUser) || isJurisdicionManager(currentUser)">
+                        <a
+                            href="javascript:void(0);"
+                            [dropdownToggle]="manageToggle"
+                            class="nav-link dropdown-toggle"
+                            role="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                            <span class="nav-link__label">
+                                Manage
+                                <icon icon="AngleDown"></icon>
+                            </span>
+                        </a>
+    
+                        <div #manageToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-divider"></div>
+                            <a href="{{ usersListUrl() }}" class="dropdown-item" *ngIf="isAdministrator(currentUser) || isJurisdicionManager(currentUser)"> Users </a>
+                            <a href="{{ organizationsIndexUrl() }}" class="dropdown-item" *ngIf="isAdministrator(currentUser)"> Organizations </a>
+                            <a [routerLink]="['/labels-and-definitions']" class="dropdown-item" *ngIf="isAdministrator(currentUser)"> Labels and Definitions </a>
+                        </div>
                     </li>
-                    <li class="nav-item" routerLinkActive="active">
-                        <a [routerLink]="['/planning-map']" class="nav-link" role="button"> Planning Map </a>
-                    </li>
-                </ng-container>
-
-                <li class="nav-item dropdown" routerLinkActive="active" *ngIf="isOCTAGrantReviewer()">
-                    <a
-                        href="javascript:void(0);"
-                        [dropdownToggle]="grantProgramsToggle"
-                        class="nav-link dropdown-toggle"
-                        role="button"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false">
-                        <span class="nav-link__label">
-                            Grant Programs
-                            <icon icon="AngleDown"></icon>
-                        </span>
-                    </a>
-
-                    <div #grantProgramsToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <div class="dropdown-divider"></div>
-                        <a [routerLink]="['/grant-programs/octa-m2-tier-2']" class="dropdown-item"> OCTA M2 Tier 2 Grant Program </a>
-                    </div>
-                </li>
-            </ul>
+                </ul>
+            </div>
         </div>
+
     </nav>
 </header>
 

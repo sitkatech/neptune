@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[PriorityLandUseType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum PriorityLandUseTypeEnum {
   Commercial = 1,
@@ -24,4 +24,4 @@ export const PriorityLandUseTypes: LookupTableEntry[]  = [
   { Name: "Public Transportation Stations", DisplayName: "Public Transportation Stations", Value: 6 },
   { Name: "ALU", DisplayName: "ALU", Value: 7 }
 ];
-export const PriorityLandUseTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...PriorityLandUseTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const PriorityLandUseTypesAsSelectDropdownOptions = PriorityLandUseTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

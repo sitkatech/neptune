@@ -11,13 +11,13 @@ import { LandUseBlockGridDto } from "../../../shared/generated/model/land-use-bl
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 import { IconComponent } from "../../../shared/components/icon/icon.component";
-import { RouterLink } from "@angular/router";
 import { environment } from "src/environments/environment";
+import { AuthenticationService } from "src/app/services/authentication.service";
 
 @Component({
     selector: "trash-land-use-block-index",
     standalone: true,
-    imports: [PageHeaderComponent, AlertDisplayComponent, NeptuneGridComponent, AsyncPipe, NgIf, LoadingDirective, IconComponent, RouterLink],
+    imports: [PageHeaderComponent, AlertDisplayComponent, NeptuneGridComponent, AsyncPipe, NgIf, LoadingDirective, IconComponent],
     templateUrl: "./trash-land-use-block-index.component.html",
     styleUrl: "./trash-land-use-block-index.component.scss",
 })
@@ -28,17 +28,24 @@ export class TrashLandUseBlockIndexComponent {
     public isLoading: boolean = true;
     public url = environment.ocStormwaterToolsBaseUrl;
 
-    constructor(private landUseBlockService: LandUseBlockService, private utilityFunctionsService: UtilityFunctionsService) {}
+    constructor(private landUseBlockService: LandUseBlockService, private utilityFunctionsService: UtilityFunctionsService, private authenticationService: AuthenticationService) {}
 
     ngOnInit() {
         this.landUseBlockColumnDefs = [
             this.utilityFunctionsService.createBasicColumnDef("Block ID", "LandUseBlockID"),
-            this.utilityFunctionsService.createBasicColumnDef("Land Use Type", "PriorityLandUseTypeName"),
+            this.utilityFunctionsService.createBasicColumnDef("Land Use Type", "PriorityLandUseTypeName", {
+                CustomDropdownFilterField: "PriorityLandUseTypeName",
+            }),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName", {
                 CustomDropdownFilterField: "StormwaterJurisdictionName",
             }),
             this.utilityFunctionsService.createDecimalColumnDef("Block Area", "Area"),
-            this.utilityFunctionsService.createDecimalColumnDef("Trash Generation Rate", "TrashGenerationRate"),
+            this.utilityFunctionsService.createDecimalColumnDef("Trash Generation Rate", "TrashGenerationRate", {
+                CustomDropdownFilterField: "TrashGenerationRate",
+            }),
+            this.utilityFunctionsService.createBasicColumnDef("Land Use Description", "LandUseDescription", {
+                CustomDropdownFilterField: "LandUseDescription",
+            }),
             this.utilityFunctionsService.createDecimalColumnDef("Median Household Income Residential", "MedianHouseholdIncomeResidential"),
             this.utilityFunctionsService.createDecimalColumnDef("Median Household Income Retail", "MedianHouseholdIncomeRetail"),
             this.utilityFunctionsService.createDecimalColumnDef("Trash Results Area", "MedianHouseholdIncomeRetail"),
@@ -46,5 +53,9 @@ export class TrashLandUseBlockIndexComponent {
             this.utilityFunctionsService.createBasicColumnDef("Land Use for TGR", "LandUseForTGR"),
         ];
         this.landUseBlocks$ = this.landUseBlockService.landUseBlocksGet().pipe(tap((x) => (this.isLoading = false)));
+    }
+
+    public currentUserHasJurisdictionEditPermission(): boolean {
+        return this.authenticationService.doesCurrentUserHaveJurisdictionEditPermission();
     }
 }

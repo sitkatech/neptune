@@ -86,8 +86,9 @@
                 <div class="card-header">Trash Module</div>
                 <div class="card-body">
                     <ul>
-                        <li><a href="{{ ocstBaseUrl() }}/Trash/Home/Index">Results</a></li>
-                        <li><a href="{{ ocstBaseUrl() }}/OnlandVisualTrashAssessment/Index">View All OVTAs</a></li>
+                        <li><a [routerLink]="['/trash']">Results</a></li>
+                        <li><a [routerLink]="['/trash/onland-visual-trash-assessments']">View All OVTAs</a></li>
+                        <li><a [routerLink]="['/trash/onland-visual-trash-assessment-areas']">View All OVTA Areas</a></li>
                     </ul>
                 </div>
             </div>
@@ -96,8 +97,8 @@
                 <div class="card-header">Planning Module</div>
                 <div class="card-body">
                     <ul>
-                        <li><a routerLink="/projects">Project List</a></li>
-                        <li><a routerLink="/planning-map">Planning Map</a></li>
+                        <li><a routerLink="/planning/projects">Project List</a></li>
+                        <li><a routerLink="/planning/planning-map">Planning Map</a></li>
                     </ul>
                 </div>
             </div>

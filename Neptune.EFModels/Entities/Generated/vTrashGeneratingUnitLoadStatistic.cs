@@ -10,8 +10,6 @@ namespace Neptune.EFModels.Entities;
 [Keyless]
 public partial class vTrashGeneratingUnitLoadStatistic
 {
-    public int PrimaryKey { get; set; }
-
     public int TrashGeneratingUnitID { get; set; }
 
     public int? TreatmentBMPID { get; set; }
@@ -20,16 +18,16 @@ public partial class vTrashGeneratingUnitLoadStatistic
     [Unicode(false)]
     public string? TreatmentBMPName { get; set; }
 
-    public int? TrashCaptureEffectivenessBMP { get; set; }
+    public int? TreatmentBMPTypeID { get; set; }
 
     [StringLength(100)]
     [Unicode(false)]
-    public string? TrashCaptureStatusBMP { get; set; }
+    public string? TreatmentBMPTypeName { get; set; }
 
     [Column(TypeName = "geometry")]
     public Geometry TrashGeneratingUnitGeometry { get; set; } = null!;
 
-    public double? TrashGeneratingUnitArea { get; set; }
+    public double Area { get; set; }
 
     public int StormwaterJurisdictionID { get; set; }
 
@@ -40,7 +38,7 @@ public partial class vTrashGeneratingUnitLoadStatistic
     public string OrganizationName { get; set; } = null!;
 
     [Column(TypeName = "decimal(4, 1)")]
-    public decimal BaselineLoadingRate { get; set; }
+    public decimal? BaselineLoadingRate { get; set; }
 
     public bool IsFullTrashCapture { get; set; }
 
@@ -66,14 +64,22 @@ public partial class vTrashGeneratingUnitLoadStatistic
 
     public bool DelineationIsVerified { get; set; }
 
-    [Column(TypeName = "datetime")]
-    public DateTime? LastCalculatedDate { get; set; }
-
     [StringLength(100)]
     [Unicode(false)]
     public string? PriorityLandUseTypeDisplayName { get; set; }
 
     public int? OnlandVisualTrashAssessmentAreaID { get; set; }
+
+    public int? WaterQualityManagementPlanID { get; set; }
+
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? WaterQualityManagementPlanName { get; set; }
+
+    public int? LandUseBlockID { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? LastUpdateDate { get; set; }
 
     [StringLength(100)]
     [Unicode(false)]
@@ -82,23 +88,6 @@ public partial class vTrashGeneratingUnitLoadStatistic
     [StringLength(100)]
     [Unicode(false)]
     public string? OnlandVisualTrashAssessmentAreaBaselineScore { get; set; }
-
-    public int? WaterQualityManagementPlanID { get; set; }
-
-    [StringLength(100)]
-    [Unicode(false)]
-    public string? WaterQualityManagementPlanName { get; set; }
-
-    [StringLength(100)]
-    [Unicode(false)]
-    public string? TrashCaptureStatusWQMP { get; set; }
-
-    public int? TrashCaptureEffectivenessWQMP { get; set; }
-
-    public int? LandUseBlockID { get; set; }
-
-    [Column(TypeName = "datetime")]
-    public DateTime? LastUpdateDate { get; set; }
 
     [Column(TypeName = "numeric(18, 0)")]
     public decimal? MedianHouseholdIncomeResidential { get; set; }
@@ -114,10 +103,37 @@ public partial class vTrashGeneratingUnitLoadStatistic
     [Unicode(false)]
     public string? LandUseForTGR { get; set; }
 
+    public int? TrashCaptureEffectivenessBMP { get; set; }
+
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? TrashCaptureStatusBMP { get; set; }
+
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? TrashCaptureStatusWQMP { get; set; }
+
+    public int? TrashCaptureEffectivenessWQMP { get; set; }
+
     [Column(TypeName = "decimal(4, 1)")]
     public decimal? TrashGenerationRate { get; set; }
 
-    public double Area { get; set; }
+    [StringLength(11)]
+    [Unicode(false)]
+    public string TrashCaptureStatus { get; set; } = null!;
+
+    public int TrashCaptureStatusSortOrder { get; set; }
+
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? AssessmentScore { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? MostRecentAssessmentDate { get; set; }
+
+    public int? CompletedAssessmentCount { get; set; }
+
+    public int IsPriorityLandUse { get; set; }
 
     [Column(TypeName = "numeric(24, 7)")]
     public decimal? LoadingRateDelta { get; set; }

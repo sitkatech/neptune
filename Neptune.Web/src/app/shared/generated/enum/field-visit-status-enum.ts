@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[FieldVisitStatus]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum FieldVisitStatusEnum {
   InProgress = 1,
@@ -18,4 +18,4 @@ export const FieldVisitStatuses: LookupTableEntry[]  = [
   { Name: "Unresolved", DisplayName: "Unresolved", Value: 3 },
   { Name: "ReturnedToEdit", DisplayName: "Returned to Edit", Value: 4 }
 ];
-export const FieldVisitStatusesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...FieldVisitStatuses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const FieldVisitStatusesAsSelectDropdownOptions = FieldVisitStatuses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

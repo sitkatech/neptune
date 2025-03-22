@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[WaterQualityManagementPlanLandUse]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum WaterQualityManagementPlanLandUseEnum {
   Residential = 1,
@@ -28,4 +28,4 @@ export const WaterQualityManagementPlanLandUses: LookupTableEntry[]  = [
   { Name: "Park", DisplayName: "Park", Value: 8 },
   { Name: "Mixed", DisplayName: "Mixed", Value: 9 }
 ];
-export const WaterQualityManagementPlanLandUsesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...WaterQualityManagementPlanLandUses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const WaterQualityManagementPlanLandUsesAsSelectDropdownOptions = WaterQualityManagementPlanLandUses.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

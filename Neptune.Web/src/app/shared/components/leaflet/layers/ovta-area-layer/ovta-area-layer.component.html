@@ -1,6 +1,7 @@
+<ng-container *ngIf="featureCollection$ | async"> </ng-container>
 <ng-template #layerName>
-    <span>
-        Assessment Area
-        <p><img src="./assets/main/map-legend-images/ovtaLegend.png" /></p>
-    </span>
+    <span> Assessment Area </span>
+</ng-template>
+<ng-template #legend>
+    <div style="width: 12px; height: 12px; background: blue; fill-opacity: 0.2; opacity: 0.3"></div>
 </ng-template>

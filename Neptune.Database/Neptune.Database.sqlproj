@@ -296,19 +296,15 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Views\dbo.vFieldVisitDetailed.sql" />
-    <Build Include="dbo\Views\dbo.vGeoServerAssessmentAreaExport.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerDelineation.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerJurisdiction.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerLandUseBlock.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerMaskLayer.sql" />
-    <Build Include="dbo\Views\dbo.vGeoServerObservationPointExport.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerOCTAPrioritization.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerOnlandVisualTrashAssessmentArea.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerParcel.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerRegionalSubbasin.sql" />
-    <Build Include="dbo\Views\dbo.vGeoServerTransectLineExport.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerTrashGeneratingUnit.sql" />
-    <Build Include="dbo\Views\dbo.vGeoServerTrashGeneratingUnitLoad.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerWaterQualityManagementPlan.sql" />
     <Build Include="dbo\Views\dbo.vGeoServerWatershed.sql" />
     <Build Include="dbo\Views\dbo.vModelingResultUnitConversion.sql" />
@@ -424,6 +420,7 @@
     <Build Include="dbo\Procs\dbo.pDeleteOldNereidLogs.sql" />
     <None Include="Scripts\ReleaseScripts\008 - Add neptune page for new home page.sql" />
     <None Include="Scripts\ReleaseScripts\009 - add neptune page for wqmp modeling options.sql" />
+    <None Include="Scripts\ReleaseScripts\010 - add field definitions for trash home page.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Neptune.Database.refactorlog" />

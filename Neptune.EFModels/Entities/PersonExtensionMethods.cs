@@ -24,7 +24,8 @@ public static partial class PersonExtensionMethods
             LoginName = person.LoginName,
             ReceiveRSBRevisionRequestEmails = person.ReceiveRSBRevisionRequestEmails,
             WebServiceAccessToken = person.WebServiceAccessToken,
-            IsOCTAGrantReviewer = person.IsOCTAGrantReviewer
+            IsOCTAGrantReviewer = person.IsOCTAGrantReviewer,
+            HasAssignedStormwaterJurisdiction = person.StormwaterJurisdictionPeople.Any()
         };
         return personDto;
     }

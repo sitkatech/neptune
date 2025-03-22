@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[NeptuneArea]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum NeptuneAreaEnum {
   Trash = 1,
@@ -18,4 +18,4 @@ export const NeptuneAreas: LookupTableEntry[]  = [
   { Name: "Modeling", DisplayName: "Modeling Module", Value: 3 },
   { Name: "Planning", DisplayName: "Planning Module", Value: 4 }
 ];
-export const NeptuneAreasAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...NeptuneAreas.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const NeptuneAreasAsSelectDropdownOptions = NeptuneAreas.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

@@ -26,29 +26,47 @@ export class TrashTrashGeneratingUnitIndexComponent {
 
     ngOnInit() {
         this.trashGeneratingUnitsColumnDefs = [
-            this.utilityFunctionsService.createBasicColumnDef("Trash Generating Unit ID", "TrashGeneratingUnitID"),
-            this.utilityFunctionsService.createBasicColumnDef("Land Use Type", "PriorityLandUseTypeDisplayName"),
-            this.utilityFunctionsService.createLinkColumnDef("Governing OVTA Area", "OnlandVisualTrashAssessmentAreaName", "OnlandVisualTrashAssessmentAreaID", {
-                InRouterLink: "../onland-visual-trash-assessment-area/",
+            this.utilityFunctionsService.createBasicColumnDef("Trash Analysis Area ID", "TrashGeneratingUnitID"),
+            this.utilityFunctionsService.createBasicColumnDef("Land Use Type", "PriorityLandUseTypeDisplayName", {
+                CustomDropdownFilterField: "PriorityLandUseTypeDisplayName",
             }),
-            this.utilityFunctionsService.createBasicColumnDef("Governing OVTA Area Baseline Score", "OnlandVisualTrashAssessmentAreaBaselineScore"),
+            this.utilityFunctionsService.createLinkColumnDef("Governing OVTA Area", "OnlandVisualTrashAssessmentAreaName", "OnlandVisualTrashAssessmentAreaID", {
+                InRouterLink: "../onland-visual-trash-assessment-area/"
+            }),
+            this.utilityFunctionsService.createBasicColumnDef("Governing OVTA Area Baseline Score", "OnlandVisualTrashAssessmentAreaBaselineScore", {
+                CustomDropdownFilterField: "OnlandVisualTrashAssessmentAreaBaselineScore",
+            }),
             this.utilityFunctionsService.createBasicColumnDef("Governing Treatment BMP", ""),
             this.utilityFunctionsService.createBasicColumnDef("Governing WQMP", "WaterQualityManagementPlanName"),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName", {
                 CustomDropdownFilterField: "StormwaterJurisdictionName",
             }),
             this.utilityFunctionsService.createDecimalColumnDef("Area", "Area"),
-            this.utilityFunctionsService.createDecimalColumnDef("Baseline Loading Rate", "BaselineLoadingRate"),
-            this.utilityFunctionsService.createDecimalColumnDef("Current Loading Rate", "CurrentLoadingRate"),
+            this.utilityFunctionsService.createDecimalColumnDef("Baseline Loading Rate", "BaselineLoadingRate", {
+                CustomDropdownFilterField: "BaselineLoadingRate",
+            }),
+            this.utilityFunctionsService.createDecimalColumnDef("Current Loading Rate", "CurrentLoadingRate", {
+                CustomDropdownFilterField: "CurrentLoadingRate",
+            }),
             this.utilityFunctionsService.createBasicColumnDef("Trash Capture Status via BMP", "TrashCaptureStatusBMP"),
             this.utilityFunctionsService.createBasicColumnDef("Trash Capture Status via WQMP", "TrashCaptureStatusWQMP"),
-            this.utilityFunctionsService.createBasicColumnDef("Trash Capture Effectiveness via BMP", "TrashCaptureStatusBMP"),
-            this.utilityFunctionsService.createBasicColumnDef("Trash Capture Effectiveness via WQMP", "TrashCaptureStatusWQMP"),
+            this.utilityFunctionsService.createBasicColumnDef("Trash Capture Effectiveness via BMP", "TrashCaptureStatusBMP", {
+                CustomDropdownFilterField: "TrashCaptureStatusBMP",
+            }),
+            this.utilityFunctionsService.createBasicColumnDef("Trash Capture Effectiveness via WQMP", "TrashCaptureStatusWQMP", {
+                CustomDropdownFilterField: "TrashCaptureStatusWQMP",
+            }),
             this.utilityFunctionsService.createDecimalColumnDef("Median Household Income (Residential)", "MedianHouseholdIncomeResidential"),
             this.utilityFunctionsService.createDecimalColumnDef("Median Household Income (Retail)", "MedianHouseholdIncomeRetail"),
-            this.utilityFunctionsService.createBasicColumnDef("Permit Class", "PermitTypeName"),
-            this.utilityFunctionsService.createBasicColumnDef("Land Use for TGR", "LandUseForTGR"),
-            this.utilityFunctionsService.createBasicColumnDef("Land Use Default TGR", "TrashGenerationRate"),
+            this.utilityFunctionsService.createBasicColumnDef("Permit Class", "PermitTypeName", {
+                CustomDropdownFilterField: "PermitTypeName",
+            }),
+            this.utilityFunctionsService.createBasicColumnDef("Land Use for TGR", "LandUseForTGR", {
+                CustomDropdownFilterField: "LandUseForTGR",
+            }),
+            this.utilityFunctionsService.createBasicColumnDef("Land Use Default TGR", "TrashGenerationRate", {
+                CustomDropdownFilterField: "TrashGenerationRate",
+            }),
             this.utilityFunctionsService.createDateColumnDef("Last Updated Date", "LastUpdateDate", "MM/dd/yyyy"),
         ];
         this.trashGeneratingUnits$ = this.trashGeneratingUnitService.trashGeneratingUnitsGet().pipe(tap((x) => (this.isLoading = false)));

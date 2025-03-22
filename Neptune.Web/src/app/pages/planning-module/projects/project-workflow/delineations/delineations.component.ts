@@ -33,8 +33,6 @@ import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/compone
 import { routeParams } from "src/app/app.routes";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 
-declare var $: any;
-
 @Component({
     selector: "delineations",
     templateUrl: "./delineations.component.html",
@@ -196,10 +194,10 @@ export class DelineationsComponent implements OnInit {
             }).subscribe(({ project, treatmentBMPs, delineations }) => {
                 // redirect to review step if project is shared with OCTA grant program
                 if (project.ShareOCTAM2Tier2Scores) {
-                    this.router.navigateByUrl(`/projects/edit/${projectID}/review-and-share`);
+                    this.router.navigateByUrl(`/planning/projects/edit/${projectID}/review-and-share`);
                 }
                 if (treatmentBMPs.length == 0) {
-                    this.router.navigateByUrl(`/projects/edit/${this.projectID}`);
+                    this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}`);
                 }
 
                 this.projectTreatmentBMPs = treatmentBMPs;
@@ -439,9 +437,15 @@ export class DelineationsComponent implements OnInit {
                 return;
             }
             if (this.selectedDelineation?.Geometry != null && this.selectedDelineation?.DelineationTypeID != DelineationTypeEnum.Centralized) {
-                $(".leaflet-draw-edit-edit").get(0).click();
+                const button = document.querySelector(".leaflet-draw-edit-edit") as HTMLButtonElement;
+                if (button) {
+                    button.click();
+                }
             } else {
-                $(".leaflet-draw-draw-polygon").get(0).click();
+                const button = document.querySelector(".leaflet-draw-draw-polygon") as HTMLButtonElement;
+                if (button) {
+                    button.click();
+                }
             }
         }
         this.drawMapClicked = false;
@@ -500,7 +504,7 @@ export class DelineationsComponent implements OnInit {
                     this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
 
                     if (continueToNextStep) {
-                        this.router.navigateByUrl(`/projects/edit/${this.projectID}/stormwater-treatments/modeled-performance-and-metrics`).then((x) => {
+                        this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}/stormwater-treatments/modeled-performance-and-metrics`).then((x) => {
                             this.alertService.pushAlert(new Alert("Your Delineation changes have been saved.", AlertContext.Success, true));
                         });
                         return;
@@ -554,7 +558,7 @@ export class DelineationsComponent implements OnInit {
             this.save();
         }
         this.isEditingLocation = !this.isEditingLocation;
-        $(".leaflet-interactive").css("cursor", "crosshair");
+        document.querySelector(".leaflet-interactive").setAttribute("style", "cursor: crosshair");
         this.updateTreatmentBMPsLayer();
     }
 

@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[PermitType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum PermitTypeEnum {
   PhaseIMS4 = 1,
@@ -22,4 +22,4 @@ export const PermitTypes: LookupTableEntry[]  = [
   { Name: "CalTransMS4", DisplayName: "CalTrans MS4", Value: 5 },
   { Name: "Other", DisplayName: "Other", Value: 6 }
 ];
-export const PermitTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...PermitTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const PermitTypesAsSelectDropdownOptions = PermitTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

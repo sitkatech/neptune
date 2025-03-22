@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[TrashCaptureStatusType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum TrashCaptureStatusTypeEnum {
   Full = 1,
@@ -18,4 +18,4 @@ export const TrashCaptureStatusTypes: LookupTableEntry[]  = [
   { Name: "None", DisplayName: "No Trash Capture", Value: 3 },
   { Name: "NotProvided", DisplayName: "Not Provided", Value: 4 }
 ];
-export const TrashCaptureStatusTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...TrashCaptureStatusTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const TrashCaptureStatusTypesAsSelectDropdownOptions = TrashCaptureStatusTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

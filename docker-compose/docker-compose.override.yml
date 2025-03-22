@@ -20,6 +20,7 @@ services:
       - QGISAPIBaseUrl=${QGISAPIBaseUrl}
       - OCGISBaseUrl=${OCGISBaseUrl}
       - PlanningModuleBaseUrl=${PlanningModuleBaseUrl}
+      - TrashModuleBaseUrl=${TrashModuleBaseUrl}
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
       - PathToOVTAUploadTemplate=${PathToOVTAUploadTemplate}
       - RecaptchaPublicKey=${RecaptchaPublicKey}
@@ -56,6 +57,7 @@ services:
       - QGISAPIBaseUrl=${QGISAPIBaseUrl}
       - OCGISBaseUrl=${OCGISBaseUrl}
       - PlanningModuleBaseUrl=${PlanningModuleBaseUrl}
+      - TrashModuleBaseUrl=${TrashModuleBaseUrl}
       - AzureBlobStorageConnectionString=${AzureBlobStorageConnectionString}
     ports:
       - "8211:8080"
@@ -103,6 +105,8 @@ services:
       - SAMPLE_DATA=false
       - GEOSERVER_ADMIN_USER=admin
       - GEOSERVER_ADMIN_PASSWORD=${GeoserverAdminPassword}
+      - INITIAL_MEMORY=4G
+      - MAXIMUM_MEMORY=8G
     ports:
       - 127.0.0.1:8780:8080
     volumes:

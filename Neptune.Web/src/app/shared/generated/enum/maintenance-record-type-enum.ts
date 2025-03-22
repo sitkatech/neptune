@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[MaintenanceRecordType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum MaintenanceRecordTypeEnum {
   Routine = 1,
@@ -14,4 +14,4 @@ export const MaintenanceRecordTypes: LookupTableEntry[]  = [
   { Name: "Routine", DisplayName: "Routine", Value: 1 },
   { Name: "Corrective", DisplayName: "Corrective", Value: 2 }
 ];
-export const MaintenanceRecordTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...MaintenanceRecordTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const MaintenanceRecordTypesAsSelectDropdownOptions = MaintenanceRecordTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

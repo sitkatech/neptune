@@ -26,4 +26,6 @@ GO
 GO
 :r ".\009 - add neptune page for wqmp modeling options.sql"
 GO
+:r ".\010 - add field definitions for trash home page.sql"
+GO
 

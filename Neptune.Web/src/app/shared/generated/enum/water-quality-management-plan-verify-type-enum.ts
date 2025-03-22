@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[WaterQualityManagementPlanVerifyType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum WaterQualityManagementPlanVerifyTypeEnum {
   JurisdictionPerformed = 1,
@@ -14,4 +14,4 @@ export const WaterQualityManagementPlanVerifyTypes: LookupTableEntry[]  = [
   { Name: "Jurisdiction Performed", DisplayName: "Jurisdiction Performed", Value: 1 },
   { Name: "Self Certification", DisplayName: "Self Certification", Value: 2 }
 ];
-export const WaterQualityManagementPlanVerifyTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...WaterQualityManagementPlanVerifyTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const WaterQualityManagementPlanVerifyTypesAsSelectDropdownOptions = WaterQualityManagementPlanVerifyTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

@@ -139,7 +139,12 @@ USING (VALUES
 (138, 'ReceivingWaterScore', 'Receiving Water Score'),
 (139, 'NumberOfIndividualBMPs', '# of Individual BMPs'),
 (140, 'LandUseType', 'Land Use Type'),
-(141, 'LandUseDescription', 'Land Use Description')
+(141, 'LandUseDescription', 'Land Use Description'),
+(142, 'OVTAScoreEquivalentCalculation', 'OVTA Score Equivalent Calculation'),
+(143, 'BaselineLoadingRate', 'Baseline Loading Rate'),
+(144, 'CurrentLoadingRate', 'Current Loading Rate'),
+(145, 'BMPTrashTreatmentStatus', 'BMP Trash Treatment Status'),
+(146, 'WQMPTrashTreatmentStatus', 'WQMP Trash Treatment Status')
 )
 AS Source (FieldDefinitionTypeID, FieldDefinitionTypeName, FieldDefinitionTypeDisplayName)
 ON Target.FieldDefinitionTypeID = Source.FieldDefinitionTypeID

@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[HRUCharacteristicLandUseCode]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum HRUCharacteristicLandUseCodeEnum {
   COMM = 1,
@@ -48,4 +48,4 @@ export const HRUCharacteristicLandUseCodes: LookupTableEntry[]  = [
   { Name: "OSVAC", DisplayName: "Open Space - Vacant Land", Value: 18 },
   { Name: "WATER", DisplayName: "Water", Value: 19 }
 ];
-export const HRUCharacteristicLandUseCodesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...HRUCharacteristicLandUseCodes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const HRUCharacteristicLandUseCodesAsSelectDropdownOptions = HRUCharacteristicLandUseCodes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

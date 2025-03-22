@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Control, LeafletEvent, Map, MapOptions, DomUtil, ControlPosition } from "leaflet";
 import * as L from "leaflet";
@@ -10,10 +10,11 @@ import { BoundingBoxDto } from "src/app/shared/generated/model/models";
 import { IconComponent } from "../../icon/icon.component";
 import { NominatimService } from "src/app/shared/services/nominatim.service";
 import { Observable, debounce, of, switchMap, tap, timer } from "rxjs";
-import { NgSelectComponent, NgSelectModule } from "@ng-select/ng-select";
+import { NgSelectModule } from "@ng-select/ng-select";
 import { FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from "@angular/forms";
 import { LegendItem } from "src/app/shared/models/legend-item";
 import { Feature, FeatureCollection } from "geojson";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
     selector: "neptune-map",
@@ -30,8 +31,7 @@ import { Feature, FeatureCollection } from "geojson";
     ],
 })
 export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild(NgSelectComponent) ngSelectComponent: NgSelectComponent;
-    public mapID: string = crypto.randomUUID();
+    public mapID: string = "map_" + Date.now().toString(36) + Math.random().toString(36).substring(13);
     public legendID: string = this.mapID + "Legend";
     public map: Map;
     public tileLayers: { [key: string]: any } = LeafletHelperService.GetDefaultTileLayers();
@@ -53,12 +53,12 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     public isSearching: boolean = false;
     private searchCleared: boolean = false;
 
-    constructor(public nominatimService: NominatimService, public leafletHelperService: LeafletHelperService) {}
+    constructor(public nominatimService: NominatimService, public leafletHelperService: LeafletHelperService, private sanitizer: DomSanitizer) {}
 
     ngAfterViewInit(): void {
         const mapOptions: MapOptions = {
             minZoom: 6,
-            maxZoom: 17,
+            maxZoom: 20,
             layers: [this.tileLayers[this.selectedTileLayer]],
             fullscreenControl: true,
             fullscreenControlOptions: {
@@ -76,7 +76,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         this.map.addControl(loadingControl);
 
-        this.layerControl = new L.control.groupedLayers(this.tileLayers, null, { collapsed: false }).addTo(this.map);
+        this.layerControl = new L.control.groupedLayers(this.tileLayers, LeafletHelperService.GetDefaultOverlayTileLayers(), { collapsed: false }).addTo(this.map);
 
         this.map.on("load", (event: LeafletEvent) => {
             this.onMapLoad.emit(new NeptuneMapInitEvent(this.map, this.layerControl));
@@ -117,6 +117,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
             this.legendControl = new legendControl({
                 position: this.legendPosition,
             }).addTo(this.map);
+            this.map["showLegend"] = true;
         }
         this.map.fullscreenControl.getContainer().classList.add("leaflet-custom-controls");
 
@@ -169,10 +170,16 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
             // Check if it's an overlay and added to the map
             if (obj.overlay && this.map.hasLayer(obj.layer)) {
                 const legendItem = new LegendItem();
-                legendItem.Title = obj.group ? obj.group.name : obj.name;
-                legendItem.WmsUrl = obj.layer._url;
-                legendItem.WmsLayerName = obj.layer.options.layers;
-                if (!legendItems.some((item) => item.Title === legendItem.Title)) {
+                legendItem.Title = obj.group && obj.group.name ? obj.group.name : obj.name;
+                if (obj.layer.legendHtml) {
+                    legendItem.LengendHtml = this.sanitizer.bypassSecurityTrustHtml(obj.layer.legendHtml);
+                } else if (obj.layer._url) {
+                    legendItem.WmsUrl = obj.layer._url;
+                    legendItem.WmsLayerName = obj.layer.options.layers;
+                    legendItem.WmsLayerStyle = obj.layer.wmsParams.styles;
+                }
+
+                if (legendItem.Title && (legendItem.LengendHtml || legendItem.WmsUrl) && !legendItems.some((item) => item.Title === legendItem.Title)) {
                     legendItems.push(legendItem);
                 }
             }

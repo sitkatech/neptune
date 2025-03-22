@@ -130,7 +130,7 @@ namespace Neptune.EFModels.Entities
     public partial class TrashCaptureStatusTypeFull : TrashCaptureStatusType
     {
         private TrashCaptureStatusTypeFull(int trashCaptureStatusTypeID, string trashCaptureStatusTypeName, string trashCaptureStatusTypeDisplayName, int trashCaptureStatusTypeSortOrder, int trashCaptureStatusTypePriority, string trashCaptureStatusTypeColorCode) : base(trashCaptureStatusTypeID, trashCaptureStatusTypeName, trashCaptureStatusTypeDisplayName, trashCaptureStatusTypeSortOrder, trashCaptureStatusTypePriority, trashCaptureStatusTypeColorCode) {}
-        public static readonly TrashCaptureStatusTypeFull Instance = new TrashCaptureStatusTypeFull(1, @"Full", @"Full", 10, 1, @"18AF18");
+        public static readonly TrashCaptureStatusTypeFull Instance = new TrashCaptureStatusTypeFull(1, @"Full", @"Full", 10, 1, @"E83521");
     }
 
     public partial class TrashCaptureStatusTypePartial : TrashCaptureStatusType

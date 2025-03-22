@@ -11,12 +11,14 @@ import { LandUseBlockService } from './api/land-use-block.service';
 import { NereidService } from './api/nereid.service';
 import { OnlandVisualTrashAssessmentService } from './api/onland-visual-trash-assessment.service';
 import { OnlandVisualTrashAssessmentAreaService } from './api/onland-visual-trash-assessment-area.service';
+import { OnlandVisualTrashAssessmentObservationService } from './api/onland-visual-trash-assessment-observation.service';
 import { OrganizationService } from './api/organization.service';
 import { ProjectService } from './api/project.service';
 import { ProjectDocumentService } from './api/project-document.service';
 import { StormwaterJurisdictionService } from './api/stormwater-jurisdiction.service';
 import { SystemInfoService } from './api/system-info.service';
 import { TrashGeneratingUnitService } from './api/trash-generating-unit.service';
+import { TrashGeneratingUnitByStormwaterJurisdictionService } from './api/trash-generating-unit-by-stormwater-jurisdiction.service';
 import { TreatmentBMPService } from './api/treatment-bmp.service';
 import { TreatmentBMPTypeService } from './api/treatment-bmp-type.service';
 import { UserService } from './api/user.service';
@@ -35,12 +37,14 @@ import { UserClaimsService } from './api/user-claims.service';
     NereidService,
     OnlandVisualTrashAssessmentService,
     OnlandVisualTrashAssessmentAreaService,
+    OnlandVisualTrashAssessmentObservationService,
     OrganizationService,
     ProjectService,
     ProjectDocumentService,
     StormwaterJurisdictionService,
     SystemInfoService,
     TrashGeneratingUnitService,
+    TrashGeneratingUnitByStormwaterJurisdictionService,
     TreatmentBMPService,
     TreatmentBMPTypeService,
     UserService,

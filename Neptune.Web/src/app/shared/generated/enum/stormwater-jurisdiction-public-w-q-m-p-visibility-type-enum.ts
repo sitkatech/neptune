@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[StormwaterJurisdictionPublicWQMPVisibilityType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum StormwaterJurisdictionPublicWQMPVisibilityTypeEnum {
   ActiveAndInactive = 1,
@@ -16,4 +16,4 @@ export const StormwaterJurisdictionPublicWQMPVisibilityTypes: LookupTableEntry[]
   { Name: "ActiveOnly", DisplayName: "Active Only", Value: 2 },
   { Name: "None", DisplayName: "None", Value: 3 }
 ];
-export const StormwaterJurisdictionPublicWQMPVisibilityTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...StormwaterJurisdictionPublicWQMPVisibilityTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const StormwaterJurisdictionPublicWQMPVisibilityTypesAsSelectDropdownOptions = StormwaterJurisdictionPublicWQMPVisibilityTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

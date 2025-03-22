@@ -33,7 +33,7 @@
           <PolygonSymbolizer>
             <Fill>
               <CssParameter name="fill">#006400</CssParameter>
-              <CssParameter name="fill-opacity">.7</CssParameter>
+              <CssParameter name="fill-opacity">.8</CssParameter>
             </Fill>
           </PolygonSymbolizer>
         </Rule>
@@ -65,7 +65,7 @@
           <PolygonSymbolizer>
             <Fill>
               <CssParameter name="fill">#b3ffbb</CssParameter>
-              <CssParameter name="fill-opacity">.7</CssParameter>
+              <CssParameter name="fill-opacity">.8</CssParameter>
             </Fill>
           </PolygonSymbolizer>
         </Rule>
@@ -160,10 +160,6 @@
                 <ogc:PropertyName>TrashCaptureStatus</ogc:PropertyName>
                 <ogc:Literal>Full</ogc:Literal>
               </ogc:PropertyIsEqualTo> 
-              <ogc:PropertyIsNotEqualTo>
-                <ogc:PropertyName>NoDataProvided</ogc:PropertyName>
-                <ogc:Literal>1</ogc:Literal>
-              </ogc:PropertyIsNotEqualTo>
               <ogc:PropertyIsEqualTo>
                 <ogc:Function name="in2">
                   <ogc:Function name="geometryType">
@@ -196,10 +192,6 @@
                 <ogc:PropertyName>TrashCaptureStatus</ogc:PropertyName>
                 <ogc:Literal>Full</ogc:Literal>
               </ogc:PropertyIsNotEqualTo> 
-              <ogc:PropertyIsNotEqualTo>
-                <ogc:PropertyName>NoDataProvided</ogc:PropertyName>
-                <ogc:Literal>1</ogc:Literal>
-              </ogc:PropertyIsNotEqualTo>                            
               <ogc:PropertyIsEqualTo>
                 <ogc:Function name="in2">
                   <ogc:Function name="geometryType">
@@ -219,6 +211,7 @@
             </Fill>
           </PolygonSymbolizer>
         </Rule>
+        <VendorOption name="sortBy">IsPriorityLandUse, TrashCaptureStatusSortOrder D, AssessmentScore D</VendorOption>
       </FeatureTypeStyle>
       <FeatureTypeStyle>
         <Rule>
@@ -396,10 +389,6 @@
                 <ogc:PropertyName>TrashCaptureStatus</ogc:PropertyName>
                 <ogc:Literal>Full</ogc:Literal>
               </ogc:PropertyIsEqualTo> 
-              <ogc:PropertyIsNotEqualTo>
-                <ogc:PropertyName>NoDataProvided</ogc:PropertyName>
-                <ogc:Literal>1</ogc:Literal>
-              </ogc:PropertyIsNotEqualTo>                            
               <ogc:PropertyIsEqualTo>
                 <ogc:Function name="in3">
                   <ogc:Function name="geometryType">
@@ -437,10 +426,6 @@
                 <ogc:PropertyName>TrashCaptureStatus</ogc:PropertyName>
                 <ogc:Literal>Full</ogc:Literal>
               </ogc:PropertyIsNotEqualTo> 
-              <ogc:PropertyIsNotEqualTo>
-                <ogc:PropertyName>NoDataProvided</ogc:PropertyName>
-                <ogc:Literal>1</ogc:Literal>
-              </ogc:PropertyIsNotEqualTo>
               <ogc:PropertyIsEqualTo>
                 <ogc:Function name="in3">
                   <ogc:Function name="geometryType">
@@ -465,6 +450,7 @@
             </Stroke>
           </LineSymbolizer>
         </Rule>
+        <VendorOption name="sortBy">IsPriorityLandUse, TrashCaptureStatusSortOrder D, AssessmentScore D</VendorOption>
       </FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>

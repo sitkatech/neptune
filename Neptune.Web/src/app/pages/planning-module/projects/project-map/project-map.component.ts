@@ -26,8 +26,6 @@ import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/compone
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
 
-declare var $: any;
-
 //This component could use a fair amount of cleanup. It should likely be sent in the treatment bmps and delineations instead of grabbing them itself
 @Component({
     selector: "project-map",

@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[OVTASection]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum OVTASectionEnum {
   Instructions = 1,
@@ -22,4 +22,4 @@ export const OVTASections: LookupTableEntry[]  = [
   { Name: "RefineAssessmentArea", DisplayName: "Refine Assessment Area", Value: 5 },
   { Name: "FinalizeOVTA", DisplayName: "Review and Finalize OVTA", Value: 6 }
 ];
-export const OVTASectionsAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...OVTASections.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const OVTASectionsAsSelectDropdownOptions = OVTASections.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

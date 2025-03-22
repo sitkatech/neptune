@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[ObservationTypeSpecification]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum ObservationTypeSpecificationEnum {
   PassFail_PassFail_None = 1,
@@ -36,4 +36,4 @@ export const ObservationTypeSpecifications: LookupTableEntry[]  = [
   { Name: "PercentValue_SpecificTargetValue_DiscreteThresholdValue", DisplayName: " PercentValue_SpecificTargetValue_DiscreteThresholdValue", Value: 18 },
   { Name: "PercentValue_SpecificTargetValue_PercentFromBenchmark", DisplayName: " PercentValue_SpecificTargetValue_PercentFromBenchmark", Value: 19 }
 ];
-export const ObservationTypeSpecificationsAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...ObservationTypeSpecifications.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const ObservationTypeSpecificationsAsSelectDropdownOptions = ObservationTypeSpecifications.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

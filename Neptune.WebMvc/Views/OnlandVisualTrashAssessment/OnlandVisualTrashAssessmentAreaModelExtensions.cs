@@ -58,41 +58,6 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
             return null;
         }
 
-        public static Geometry RecomputeTransectLine(List<EFModels.Entities.OnlandVisualTrashAssessment> onlandVisualTrashAssessments,
-            out EFModels.Entities.OnlandVisualTrashAssessment onlandVisualTrashAssessment)
-        {
-            var completedOVTAs = onlandVisualTrashAssessments
-                .Where(x => x.OnlandVisualTrashAssessmentStatusID == (int) OnlandVisualTrashAssessmentStatusEnum.Complete).ToList();
-
-            // new transect should come from the earliest completed assessment
-            if (completedOVTAs.Any())
-            {
-                onlandVisualTrashAssessment = completedOVTAs.MinBy(x => x.CompletedDate);
-                return onlandVisualTrashAssessment.GetTransect();
-            }
-
-            onlandVisualTrashAssessment = null;
-            return null;
-        }
-
-        public static OnlandVisualTrashAssessmentScore CalculateProgressScore(List<EFModels.Entities.OnlandVisualTrashAssessment> onlandVisualTrashAssessments)
-        {
-            var completedAndIsProgressAssessment = onlandVisualTrashAssessments.Where(x =>
-                x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete
-                    .OnlandVisualTrashAssessmentStatusID && x.IsProgressAssessment).ToList();
-
-            if (!completedAndIsProgressAssessment.Any())
-            {
-                return null;
-            }
-
-            var average = completedAndIsProgressAssessment.OrderByDescending(x=>x.CompletedDate).Take(3).Average(x=>x.OnlandVisualTrashAssessmentScore.NumericValue);
-
-            var onlandVisualTrashAssessmentScore = OnlandVisualTrashAssessmentScore.All.Single(x => x.NumericValue == Math.Round(average));
-            
-            return onlandVisualTrashAssessmentScore;
-        }
-
         public static LayerGeoJson GetAssessmentAreaLayerGeoJson(this EFModels.Entities.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
             var geoJsonFeatureCollection = new List<EFModels.Entities.OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessmentArea }
@@ -100,22 +65,6 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
 
             var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels", geoJsonFeatureCollection, "#ffff00", 0.5f, LayerInitialVisibility.Show);
             return assessmentAreaLayerGeoJson;
-        }
-
-        public static OnlandVisualTrashAssessmentScore? CalculateScoreFromBackingData(
-            List<EFModels.Entities.OnlandVisualTrashAssessment> onlandVisualTrashAssessments, bool calculateProgressScore)
-        {
-            var completedAndIsProgressAssessment = onlandVisualTrashAssessments.Where(x => x.OnlandVisualTrashAssessmentStatusID == (int)
-                    OnlandVisualTrashAssessmentStatusEnum.Complete && x.IsProgressAssessment == calculateProgressScore).ToList();
-
-            if (!completedAndIsProgressAssessment.Any())
-            {
-                return null;
-            }
-
-            var average = completedAndIsProgressAssessment.Average(x => x.OnlandVisualTrashAssessmentScore.NumericValue);
-            var round = (int)Math.Round(average);
-            return OnlandVisualTrashAssessmentScore.All.SingleOrDefault(x => x.NumericValue == round);
         }
     }
 }

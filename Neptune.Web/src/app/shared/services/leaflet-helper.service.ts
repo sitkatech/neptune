@@ -138,6 +138,23 @@ export class LeafletHelperService {
                 maxZoom: 22,
                 maxNativeZoom: 18,
             }),
+            Hillshade: L.tileLayer("https://wtb.maptiles.arcgis.com/arcgis/rest/services/World_Topo_Base/MapServer/tile/{z}/{y}/{x}'", {
+                attribution: "Hillshade",
+                maxZoom: 22,
+                maxNativeZoom: 18,
+            }),
+        };
+    }
+
+    public static GetDefaultOverlayTileLayers(): { [key: string]: any } {
+        return {
+            "": {
+                "Street Labels": L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}", {
+                    attribution: "Street Labels",
+                    maxZoom: 22,
+                    maxNativeZoom: 18,
+                }),
+            },
         };
     }
 }

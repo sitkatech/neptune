@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[UnderlyingHydrologicSoilGroup]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum UnderlyingHydrologicSoilGroupEnum {
   A = 1,
@@ -20,4 +20,4 @@ export const UnderlyingHydrologicSoilGroups: LookupTableEntry[]  = [
   { Name: "D", DisplayName: "D", Value: 4 },
   { Name: "Liner", DisplayName: "Liner", Value: 5 }
 ];
-export const UnderlyingHydrologicSoilGroupsAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...UnderlyingHydrologicSoilGroups.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const UnderlyingHydrologicSoilGroupsAsSelectDropdownOptions = UnderlyingHydrologicSoilGroups.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

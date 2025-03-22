@@ -1,5 +1,26 @@
 <ng-container *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
-    <page-header [pageTitle]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName"> </page-header>
+    <page-header [pageTitle]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName" [templateAbove]="templateAbove" [templateRight]="templateRight">
+        <ng-template #templateAbove>
+            <div class="back">
+                <a [routerLink]="['../']" class="back__link">OVTA List</a>
+            </div>
+        </ng-template>
+        <ng-template #templateRight>
+            <div class="flex-between mb-3">
+                <a
+                    class="btn btn-primary"
+                    (click)="
+                        confirmEditOVTA(
+                            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID,
+                            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID,
+                            onlandVisualTrashAssessment.CompletedDate
+                        )
+                    "
+                    >Edit</a
+                >
+            </div>
+        </ng-template>
+    </page-header>
     <app-alert-display></app-alert-display>
 
     <div class="grid-12 mt-2 mb-3">
@@ -9,7 +30,9 @@
                 <dl class="grid-12">
                     <dt class="g-col-4">Assessment Area</dt>
                     <dd class="g-col-8">
-                        {{ onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName }}
+                        <a [routerLink]="['/trash/onland-visual-trash-assessment-areas', onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID]">{{
+                            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName
+                        }}</a>
                     </dd>
                     <dt class="g-col-4">Assessment Date</dt>
                     <dd class="g-col-8">
@@ -18,6 +41,10 @@
                     <dt class="g-col-4">Assessment Type</dt>
                     <dd class="g-col-8">
                         {{ onlandVisualTrashAssessment.IsProgressAssessment }}
+                    </dd>
+                    <dt class="g-col-4">Status</dt>
+                    <dd class="g-col-8">
+                        {{ onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusName }}
                     </dd>
                     <dt class="g-col-4"><field-definition fieldDefinitionType="AssessmentScore"></field-definition></dt>
                     <dd class="g-col-8">
@@ -37,58 +64,36 @@
         <div class="card g-col-6">
             <div class="card-header">Preliminary Source Identification</div>
             <div class="card-body">
-                <dl class="grid-12" *ngFor="let preliminarySourceIdentificationType of onlandVisualTrashAssessment.PreliminarySourceIdentificationTypeDictionary | keyvalue">
-                    <dt class="g-col-4">{{ preliminarySourceIdentificationType.key }}</dt>
-                    <dd class="g-col-8">
-                        {{ preliminarySourceIdentificationType.value }}
-                    </dd>
-                </dl>
-            </div>
-        </div>
-        <div class="card g-col-6">
-            <div class="card-header">Observations</div>
-            <div class="card-body observations">
-                <div class="grid-12" *ngFor="let item of onlandVisualTrashAssessment.Observations">
-                    <div
-                        [id]="item.OnlandVisualTrashAssessmentObservationID"
-                        class="g-col-12 mb-4"
-                        [ngClass]="{
-                            'selected-observation':
-                                selectedOVTAObservation != null && selectedOVTAObservation.OnlandVisualTrashAssessmentObservationID == item.OnlandVisualTrashAssessmentObservationID
-                        }"
-                        (click)="selectOVTAObservationImpl(onlandVisualTrashAssessment.Observations, item.OnlandVisualTrashAssessmentObservationID)">
-                        <img [src]="getUrl(item.FileResourceGUID)" style="width: 400px; height: 500px" />
-                        <div class="mt-2">
-                            {{ item.Note ?? "No note provided" }}
-                        </div>
-                    </div>
+                <div class="mb-2" *ngFor="let preliminarySourceIdentificationCategory of PreliminarySourceIdentificationCategories">
+                    <h4>{{ preliminarySourceIdentificationCategory.DisplayName }}</h4>
+                    <ul
+                        *ngIf="
+                            onlandVisualTrashAssessment.PreliminarySourceIdentificationsByCategory[preliminarySourceIdentificationCategory.Value]?.length > 0;
+                            else noPreliminarySources
+                        ">
+                        <li
+                            *ngFor="
+                                let preliminarySourceIdentification of onlandVisualTrashAssessment.PreliminarySourceIdentificationsByCategory[
+                                    preliminarySourceIdentificationCategory.Value
+                                ]
+                            ">
+                            {{ preliminarySourceIdentification }}
+                        </li>
+                    </ul>
                 </div>
+                <ng-template #noPreliminarySources>
+                    <i>No Preliminary Sources identified.</i>
+                </ng-template>
             </div>
         </div>
-        <div class="card g-col-6">
-            <div class="card-header">Map</div>
+        <div class="card g-col-12">
+            <div class="card-header">Observations</div>
             <div class="card-body">
-                <neptune-map
-                    (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessment.Observations)"
-                    mapHeight="400px"
-                    [showLegend]="false"
-                    [boundingBox]="onlandVisualTrashAssessment.BoundingBox">
-                    <ovta-area-layer
-                        *ngIf="mapIsReady"
-                        [displayOnLoad]="true"
-                        [map]="map"
-                        [layerControl]="layerControl"
-                        [sortOrder]="10"
-                        [ovtaAreaID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID"></ovta-area-layer>
-                    <transect-line-layer
-                        *ngIf="mapIsReady"
-                        [displayOnLoad]="true"
-                        [map]="map"
-                        [layerControl]="layerControl"
-                        [sortOrder]="15"
-                        [ovtaAreaName]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaName"
-                        [jurisdictionID]="onlandVisualTrashAssessment.StormwaterJurisdictionID"></transect-line-layer>
-                </neptune-map>
+                <observations-map
+                    *ngIf="onlandVisualTrashAssessmentObservations$ | async as onlandVisualTrashAssessmentObservations"
+                    [observations]="onlandVisualTrashAssessmentObservations"
+                    [onlandVisualTrashAssessmentID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID">
+                </observations-map>
             </div>
         </div>
     </div>

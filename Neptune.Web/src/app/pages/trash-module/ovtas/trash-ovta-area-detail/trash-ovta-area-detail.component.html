@@ -1,10 +1,31 @@
 <ng-container *ngIf="onlandVisualTrashAssessmentArea$ | async as onlandVisualTrashAssessmentArea">
-    <page-header [pageTitle]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName"> </page-header>
+    <page-header [pageTitle]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName" [templateRight]="templateRight" [templateAbove]="templateAbove">
+        <ng-template #templateAbove>
+            <div class="back">
+                <a [routerLink]="['../']" class="back__link">OVTA Area List</a>
+            </div>
+        </ng-template>
+        <ng-template #templateRight>
+            <div class="flex-between mb-3">
+                <a
+                    class="btn btn-primary"
+                    (click)="
+                        addNewOVTA(
+                            onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID,
+                            onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName,
+                            onlandVisualTrashAssessmentArea.StormwaterJurisdictionID
+                        )
+                    "
+                    >Add New OVTA</a
+                >
+            </div>
+        </ng-template>
+    </page-header>
     <app-alert-display></app-alert-display>
 
-    <div class="grid-12 mt-2 mb-3">
+    <div class="grid-12 mt-2 mb-3" *ngIf="onlandVisualTrashAssessments$ | async as onlandVisualTrashAssessments">
         <div class="card g-col-6">
-            <div class="card-header">Details</div>
+            <div class="card-header flex-between">Details <button class="btn btn-primary" (click)="updateOVTAAreaDetails(onlandVisualTrashAssessmentArea)">Edit</button></div>
             <div class="card-body">
                 <dl class="grid-12">
                     <dt class="g-col-4">Assessment Area</dt>
@@ -17,7 +38,7 @@
                     </dd>
                     <dt class="g-col-4">Last Assessment Date</dt>
                     <dd class="g-col-8">
-                        {{ onlandVisualTrashAssessmentArea.LastAssessmentDate | date : "MM/dd/yyyy" }}
+                        {{ getLastAssessmentDate(onlandVisualTrashAssessments) }}
                     </dd>
                     <dt class="g-col-4"><field-definition fieldDefinitionType="BaselineScore"></field-definition></dt>
                     <dd class="g-col-8">
@@ -27,16 +48,20 @@
                     <dd class="g-col-8">
                         {{ onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreName ?? "No completed assessments" }}
                     </dd>
+                    <dt class="g-col-4">Assessment Area Description</dt>
+                    <dd class="g-col-8">
+                        {{ onlandVisualTrashAssessmentArea.AssessmentAreaDescription }}
+                    </dd>
                 </dl>
             </div>
         </div>
-        <div class="card g-col-6">
-            <div class="card-header">
+        <div class="card g-col-6" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
+            <div class="card-header flex-between">
                 Location
-                <!-- <button class="btn btn-primary" [routerLink]="['edit-location']">Edit</button> -->
+                <a class="btn btn-primary" (click)="editLocation(onlandVisualTrashAssessments.length)">Edit</a>
             </div>
-            <div class="card-body">
-                <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="400px" [showLegend]="false" [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
+            <div class="card-body map">
+                <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="400px" [showLegend]="true" [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
                     <ovta-area-layer
                         *ngIf="mapIsReady"
                         [displayOnLoad]="true"
@@ -50,18 +75,19 @@
                         [map]="map"
                         [layerControl]="layerControl"
                         [sortOrder]="15"
-                        [jurisdictionID]="onlandVisualTrashAssessmentArea.StormwaterJurisdictionID"
-                        [ovtaAreaName]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName"></transect-line-layer>
+                        [ovtaAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"></transect-line-layer>
                 </neptune-map>
             </div>
         </div>
         <h3>Onland Visual Trash Assessments</h3>
-        <neptune-grid
-            height="800px"
-            [rowData]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments"
-            [columnDefs]="ovtaColumnDefs"
-            downloadFileName="onland-visual-trash-assessments"
-            [pagination]="true"
-            [sizeColumnsToFitGrid]="true"></neptune-grid>
+        <div [loadingSpinner]="{ isLoading: isLoadingGrid, loadingHeight: 100 }">
+            <neptune-grid
+                height="800px"
+                [rowData]="onlandVisualTrashAssessments"
+                [columnDefs]="ovtaColumnDefs"
+                downloadFileName="onland-visual-trash-assessments"
+                [pagination]="true"
+                [sizeColumnsToFitGrid]="true"></neptune-grid>
+        </div>
     </div>
 </ng-container>

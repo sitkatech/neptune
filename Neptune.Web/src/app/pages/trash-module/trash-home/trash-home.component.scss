@@ -3,101 +3,6 @@
 .hero {
     display: grid;
 
-    &__photo {
-        z-index: 0;
-        grid-column: 1;
-        grid-row: 1;
-        aspect-ratio: 4 / 3;
-
-        @include tablet {
-            aspect-ratio: 16 / 9;
-        }
-
-        @include desktop-medium {
-            aspect-ratio: unset;
-            max-height: clamp(20rem, 70vh, 48rem);
-        }
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-position: top center;
-            object-fit: cover;
-        }
-    }
-
-    &__info {
-        z-index: 2;
-        grid-column: 1;
-        grid-row: 1;
-        align-self: end;
-        color: white;
-        padding: 2rem;
-    }
-
-    &__name {
-        background: $secondary;
-        display: inline-block;
-        padding: 0.75rem 0.75rem 0.375rem 0.75rem;
-        font-size: $type-size-200;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        font-weight: bold;
-        line-height: 1;
-    }
-
-    &__title {
-        font-size: $type-size-600;
-        font-weight: 900;
-
-        @include desktop-medium {
-            font-size: $type-size-800;
-        }
-
-        .line {
-            background: $primary;
-            display: inline-block;
-            padding: 0.75rem 0.5rem 0.5rem;
-
-            @include tablet {
-                padding: 1.25rem 1rem 1rem;
-            }
-
-            &-2 {
-                padding-top: 0;
-                padding-bottom: 0.375rem;
-
-                @include tablet {
-                    padding-bottom: 0.5rem;
-                }
-            }
-        }
-    }
-
-    &__actions {
-        background: $white;
-        box-shadow: $shadow-200;
-        margin: 0rem 1rem;
-
-        @include desktop-small {
-            z-index: 7;
-            max-width: 24rem;
-            width: 50%;
-            align-self: end;
-            justify-self: center;
-        }
-
-        .card-header {
-            border-top-color: transparent;
-            background-color: transparent;
-        }
-
-        .card-title {
-            font-weight: 500;
-            color: $primary;
-        }
-    }
-
     &__btns {
         display: grid;
         gap: 1rem;
@@ -111,7 +16,307 @@
     }
 }
 
+.page-wrapper {
+    gap: $spacing-800;
+}
+
+.sign-in-card {
+    background: $white;
+    box-shadow: $shadow-200;
+
+    .card-header {
+        background-color: $white;
+        font-weight: 700;
+        font-size: $type-size-400;
+        color: $blue-500;
+
+    }
+
+    .card-body {
+        padding: $spacing-500;
+        display: grid;
+        gap: $spacing-400;
+
+        p {
+            font-size: $type-size-300;
+            line-height: 24px;
+        }
+    }
+
+    .card-footer {
+        margin-top: 0;
+        font-size: $type-size-200;
+        line-height: 24px;
+        padding: $spacing-500;
+    }
+}
+
 .alert-container {
     padding: $spacing-700;
     max-width: 94rem;
+}
+
+
+.content-section {
+    padding: $spacing-050 0 0 0;
+    display: grid;
+
+    &__header {
+        align-items: center;
+        font-size: $type-size-400;
+        padding-bottom: $spacing-400;
+
+        icon {
+            color: $blue-500;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 0 $spacing-200;
+            line-height: 1;
+
+            span {
+                font-size: $type-size-400;
+                color: $blue-500;
+                display: block;
+            }
+        }
+    }
+
+    &__body {
+        display: grid;
+        gap: 3rem;
+    }
+}
+
+.card {
+    &-header {
+        color: $white;
+    }
+
+    &-header-dropdown {
+        border-bottom: 1px solid $gray-200;
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        h3 {
+            display: flex;
+            align-items: center;
+            gap: $spacing-200;
+        }
+
+        ::ng-deep {
+            svg {
+                width: 0.5rem;
+            }
+        }
+
+        icon {
+            transform: rotate(180deg);
+            width: 0.75rem;
+        }
+
+        &.open icon {
+            transform: rotate(0deg);
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    &-body-dropdown {
+        background: $white;
+        padding: $spacing-200;
+        display: none;
+
+        &.open {
+            display: grid;
+            gap: 2rem;
+        }
+    }
+
+    &-footer {
+        padding-top: $spacing-400;
+        border-top: 1px solid $gray-100;
+
+        .btn-primary {
+            background: $green-600;
+            border-color: $green-600;
+            color: $white;
+
+            &-outline {
+                border-color: $green-600;
+                color: $green-600;
+
+                &:hover {
+                    background: $green-600;
+                    color: $white;
+                }
+            }
+        }
+    }
+
+    .content-section {
+        font-size: $type-size-300;
+        font-weight: bold;
+    }
+
+    dl {
+        margin-left: 0.5rem;
+    }
+}
+
+#tcLegend, #ovtaAreaLegend {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+    #tcLegend img {
+        max-height: 50px;
+        margin-right: 5px;
+    }
+
+    #ovtaAreaLegend img {
+        max-height: 25px;
+        margin-right: 5px;
+        border: 1px solid #ddd;
+    }
+
+    #ovtaAreaLegend li {
+        padding-bottom: 10px;
+    }
+
+
+.bootstrap-select {
+    padding-left: 0;
+}
+
+.leaflet-control-layers-list {
+    width: 195px !important;
+    padding: 5px;
+}
+
+@media (min-width: 768px) {
+    .TGUColumn .table-of {
+        padding-top: 10%;
+    }
+}
+
+@media (max-width: 768px) {
+    .TGUColumn .table-of {
+        padding-top: 3%;
+    }
+}
+
+.areaBasedCalculationControlTable {
+    margin-bottom: 0;
+    border: none;
+
+    tr:nth-of-type(even) {
+        background: transparent;
+    }
+
+    tr {
+        & > td:first-of-type {
+            font-weight: normal;
+        }
+
+        
+    }
+}
+
+.font25 {
+    font-size: 25px;
+}
+
+.font15 {
+    font-size: 15px;
+}
+
+.greyLabel {
+    margin-bottom: 0;
+    color: rgb(116, 116, 114);
+}
+
+.TGUColumn {
+    font-weight: bold;
+    border-top: none !important;
+    border-bottom: none !important;
+    text-align: center;
+}
+
+table.areaBasedCalculationControlTable td + td {
+    border-left: 1px solid rgb(204, 204, 204);
+}
+
+.ovtaResults {
+    font-weight: bold;
+    border: none !important;
+    text-align: center;
+}
+
+.inline-display a:hover {
+    display: inline;
+}
+
+.inline-display a {
+    display: inline;
+}
+
+.loadBasedResultsColumn {
+    font-weight: bold;
+    border: none;
+    border-top: none !important;
+    border-bottom: none !important;
+    text-align: center;
+}
+
+loadBasedResultsColumn p {
+    margin-top: 8px;
+}
+
+.loadBasedCalculationControlTable {
+    margin-bottom: 0;
+    border: none;
+}
+
+    .loadBasedCalculationControlTable tfoot tr th {
+        padding-top: 10px;
+    }
+
+.loadBased-lightblue {
+    color: RGB(132, 151, 176);
+}
+
+.loadBased-red {
+    color: RGB(255, 0, 0);
+}
+
+.loadBased-blue {
+    color: RGB(31, 78, 121);
+}
+
+.font20 {
+    font-size: 20px;
+}
+
+.font22 {
+    font-size: 22.5px;
+}
+
+.text-normal label {
+    font-weight: normal;
+}
+
+.gpy {
+    font-size: 9pt;
+    font-style: italic;
+    margin-bottom: 0;
+    text-align: end;
 }

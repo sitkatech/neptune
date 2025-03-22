@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[ObservationTypeCollectionMethod]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum ObservationTypeCollectionMethodEnum {
   DiscreteValue = 1,
@@ -16,4 +16,4 @@ export const ObservationTypeCollectionMethods: LookupTableEntry[]  = [
   { Name: "PassFail", DisplayName: "Pass/Fail Observation", Value: 3 },
   { Name: "Percentage", DisplayName: "Percent-based Observation", Value: 4 }
 ];
-export const ObservationTypeCollectionMethodsAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...ObservationTypeCollectionMethods.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const ObservationTypeCollectionMethodsAsSelectDropdownOptions = ObservationTypeCollectionMethods.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

@@ -101,33 +101,35 @@ export class SelectedOvtaAreaLayerComponent extends MapLayerBase implements OnCh
     private addOVTAAreasToLayer() {
         let cql_filter = ``;
 
-        this.wfsService.getGeoserverWFSLayer("OCStormwater:AssessmentAreaExport", cql_filter, "OVTAAreaID").subscribe((response) => {
-            if (response.length == 0) return;
+        this.wfsService
+            .getGeoserverWFSLayerWithCQLFilter("OCStormwater:OnlandVisualTrashAssessmentAreas", cql_filter, "OnlandVisualTrashAssessmentAreaID")
+            .subscribe((response) => {
+                if (response.length == 0) return;
 
-            const featuresGroupedByOVTAAreaID = this.groupByPipe.transform(response, "properties.OVTAAreaID");
+                const featuresGroupedByOVTAAreaID = this.groupByPipe.transform(response, "properties.OnlandVisualTrashAssessmentAreaID");
 
-            Object.keys(featuresGroupedByOVTAAreaID).forEach((ovtaAreaID) => {
-                const geoJson = L.geoJSON(featuresGroupedByOVTAAreaID[ovtaAreaID], {
-                    style: this.styleDictionary[featuresGroupedByOVTAAreaID[ovtaAreaID][0].properties.Score],
-                });
-                geoJson.on("mouseover", (e) => {
-                    geoJson.setStyle({ fillOpacity: 0.5 });
-                });
-                geoJson.on("mouseout", (e) => {
-                    geoJson.setStyle({ fillOpacity: 0.1 });
+                Object.keys(featuresGroupedByOVTAAreaID).forEach((ovtaAreaID) => {
+                    const geoJson = L.geoJSON(featuresGroupedByOVTAAreaID[ovtaAreaID], {
+                        style: this.styleDictionary[featuresGroupedByOVTAAreaID[ovtaAreaID][0].properties.Score],
+                    });
+                    geoJson.on("mouseover", (e) => {
+                        geoJson.setStyle({ fillOpacity: 0.5 });
+                    });
+                    geoJson.on("mouseout", (e) => {
+                        geoJson.setStyle({ fillOpacity: 0.1 });
+                    });
+
+                    geoJson.on("click", (e) => {
+                        this.onOVTAAreaSelected(Number(ovtaAreaID));
+                    });
+
+                    geoJson.addTo(this.layer);
                 });
 
-                geoJson.on("click", (e) => {
-                    this.onOVTAAreaSelected(Number(ovtaAreaID));
-                });
-
-                geoJson.addTo(this.layer);
+                const bounds = this.layer.getBounds();
+                this.map.fitBounds(bounds);
+                this.layerBoundsCalculated.emit(bounds);
             });
-
-            const bounds = this.layer.getBounds();
-            this.map.fitBounds(bounds);
-            this.layerBoundsCalculated.emit(bounds);
-        });
     }
 
     private onOVTAAreaSelected(ovtaAreaID: number) {
@@ -143,7 +145,7 @@ export class SelectedOvtaAreaLayerComponent extends MapLayerBase implements OnCh
             if (layer.options?.icon) return;
 
             const geoJsonLayers = layer.getLayers();
-            if (geoJsonLayers[0].feature.properties.OVTAAreaID == this.selectedOVTAAreaID) {
+            if (geoJsonLayers[0].feature.properties.OnlandVisualTrashAssessmentAreaID == this.selectedOVTAAreaID) {
                 layer.setStyle(this.highlightStyle);
                 this.map.fitBounds(layer.getBounds());
             } else {

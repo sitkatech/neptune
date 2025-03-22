@@ -184,6 +184,40 @@ export class AuthenticationService {
         return this.currentUser.IsOCTAGrantReviewer;
     }
 
+    public isUserAJurisdictionManager(user: PersonDto): boolean {
+        const role = user ? user.RoleID : null;
+        return role === RoleEnum.JurisdictionManager;
+    }
+
+    public isCurrentUserAJurisdictionManagerWithAssignedJurisdiction(): boolean {
+        return this.isUserAJurisdictionManager(this.currentUser) && this.doesCurrentUserHaveAssignedStormwaterJurisdiction();
+    }
+
+    public isCurrentUserAJurisdictionEditorWithAssignedJurisdiction(): boolean {
+        return this.isUserAJurisdictionEditor(this.currentUser) && this.doesCurrentUserHaveAssignedStormwaterJurisdiction();
+    }
+
+    public isUserAJurisdictionEditor(user: PersonDto): boolean {
+        const role = user ? user.RoleID : null;
+        return role === RoleEnum.JurisdictionEditor;
+    }
+
+    public doesCurrentUserHaveAssignedStormwaterJurisdiction(): boolean {
+        if (!this.currentUser) {
+            return false;
+        }
+        return this.currentUser.HasAssignedStormwaterJurisdiction;
+    }
+
+    public doesCurrentUserHaveJurisdictionManagePermission(): boolean {
+        return this.isCurrentUserAnAdministrator() || this.isCurrentUserAJurisdictionManagerWithAssignedJurisdiction();
+    }
+
+    public doesCurrentUserHaveJurisdictionEditPermission(): boolean {
+        return this.isCurrentUserAnAdministrator() || this.isCurrentUserAJurisdictionManagerWithAssignedJurisdiction() || this.isCurrentUserAJurisdictionEditorWithAssignedJurisdiction();
+    }
+
+
     public isUserUnassigned(user: PersonDto): boolean {
         const role = user ? user.RoleID : null;
         return role === RoleEnum.Unassigned;

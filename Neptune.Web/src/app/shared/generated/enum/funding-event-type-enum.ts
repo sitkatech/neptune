@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[FundingEventType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum FundingEventTypeEnum {
   PlanningAndDesign = 1,
@@ -20,4 +20,4 @@ export const FundingEventTypes: LookupTableEntry[]  = [
   { Name: "RehabilitativeMaintenance", DisplayName: "Rehabilitative Maintenance", Value: 4 },
   { Name: "Retrofit", DisplayName: "Retrofit", Value: 5 }
 ];
-export const FundingEventTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...FundingEventTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const FundingEventTypesAsSelectDropdownOptions = FundingEventTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

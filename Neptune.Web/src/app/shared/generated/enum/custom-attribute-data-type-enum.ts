@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[CustomAttributeDataType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum CustomAttributeDataTypeEnum {
   String = 1,
@@ -22,4 +22,4 @@ export const CustomAttributeDataTypes: LookupTableEntry[]  = [
   { Name: "PickFromList", DisplayName: "Pick One from List", Value: 5 },
   { Name: "MultiSelect", DisplayName: "Select Many from List", Value: 6 }
 ];
-export const CustomAttributeDataTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...CustomAttributeDataTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const CustomAttributeDataTypesAsSelectDropdownOptions = CustomAttributeDataTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

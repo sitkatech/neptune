@@ -111,7 +111,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
 
                 var onlandVisualTrashAssessments = OnlandVisualTrashAssessments.ListByOnlandVisualTrashAssessmentAreaID(dbContext, onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID.Value);
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID =
-                    OnlandVisualTrashAssessmentAreaModelExtensions.CalculateScoreFromBackingData(onlandVisualTrashAssessments, false)?
+                    OnlandVisualTrashAssessmentAreas.CalculateScoreFromBackingData(onlandVisualTrashAssessments, false)?
                         .OnlandVisualTrashAssessmentScoreID;
 
                 if (IsProgressAssessment)
@@ -158,7 +158,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
                         OnlandVisualTrashAssessmentID = OnlandVisualTrashAssessmentID.GetValueOrDefault(),
                         PreliminarySourceIdentificationTypeID =
                             x.PreliminarySourceIdentificationTypeID.GetValueOrDefault(),
-                        ExplanationIfTypeIsOther = x.ExplanationIfTypeIsOther
+                        ExplanationIfTypeIsOther = x. ExplanationIfTypeIsOther
                     }).ToList();
 
             await dbContext.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.AddRangeAsync(onlandVisualTrashAssessmentPreliminarySourceIdentificationTypesToUpdate);

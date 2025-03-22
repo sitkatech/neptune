@@ -9,8 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from '././onland-visual-trash-assessment-observation-with-photo-dto';
-import { BoundingBoxDto } from '././bounding-box-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class OnlandVisualTrashAssessmentDetailDto { 
@@ -22,13 +20,12 @@ export class OnlandVisualTrashAssessmentDetailDto {
     Notes?: string;
     StormwaterJurisdictionID?: number;
     StormwaterJurisdictionName?: string;
+    OnlandVisualTrashAssessmentStatusID?: number;
     OnlandVisualTrashAssessmentStatusName?: string;
     OnlandVisualTrashAssessmentScoreName?: string;
     CompletedDate?: string;
     IsProgressAssessment?: string;
-    PreliminarySourceIdentificationTypeDictionary?: { [key: string]: Array<string>; };
-    Observations?: Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>;
-    BoundingBox?: BoundingBoxDto;
+    PreliminarySourceIdentificationsByCategory?: { [key: string]: Array<string>; };
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -43,13 +40,12 @@ export interface OnlandVisualTrashAssessmentDetailDtoForm {
     Notes?: FormControl<string>;
     StormwaterJurisdictionID?: FormControl<number>;
     StormwaterJurisdictionName?: FormControl<string>;
+    OnlandVisualTrashAssessmentStatusID?: FormControl<number>;
     OnlandVisualTrashAssessmentStatusName?: FormControl<string>;
     OnlandVisualTrashAssessmentScoreName?: FormControl<string>;
     CompletedDate?: FormControl<string>;
     IsProgressAssessment?: FormControl<string>;
-    PreliminarySourceIdentificationTypeDictionary?: FormControl<{ [key: string]: Array<string>; }>;
-    Observations?: FormControl<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>>;
-    BoundingBox?: FormControl<BoundingBoxDto>;
+    PreliminarySourceIdentificationsByCategory?: FormControl<{ [key: string]: Array<string>; }>;
 }
 
 export class OnlandVisualTrashAssessmentDetailDtoFormControls { 
@@ -133,6 +129,16 @@ export class OnlandVisualTrashAssessmentDetailDtoFormControls {
             ],
         }
     );
+    public static OnlandVisualTrashAssessmentStatusID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static OnlandVisualTrashAssessmentStatusName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
@@ -173,27 +179,7 @@ export class OnlandVisualTrashAssessmentDetailDtoFormControls {
             ],
         }
     );
-    public static PreliminarySourceIdentificationTypeDictionary = (value: FormControlState<{ [key: string]: Array<string>; }> | { [key: string]: Array<string>; } = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<{ [key: string]: Array<string>; }>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static Observations = (value: FormControlState<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>> | Array<OnlandVisualTrashAssessmentObservationWithPhotoDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<OnlandVisualTrashAssessmentObservationWithPhotoDto>>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static BoundingBox = (value: FormControlState<BoundingBoxDto> | BoundingBoxDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<BoundingBoxDto>(
+    public static PreliminarySourceIdentificationsByCategory = (value: FormControlState<{ [key: string]: Array<string>; }> | { [key: string]: Array<string>; } = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<{ [key: string]: Array<string>; }>(
         value,
         formControlOptions ?? 
         {

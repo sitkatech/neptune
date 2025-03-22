@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[ProjectNetworkSolveHistoryStatusType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum ProjectNetworkSolveHistoryStatusTypeEnum {
   Queued = 1,
@@ -16,4 +16,4 @@ export const ProjectNetworkSolveHistoryStatusTypes: LookupTableEntry[]  = [
   { Name: "Succeeded", DisplayName: "Succeeded", Value: 2 },
   { Name: "Failed", DisplayName: "Failed", Value: 3 }
 ];
-export const ProjectNetworkSolveHistoryStatusTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...ProjectNetworkSolveHistoryStatusTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const ProjectNetworkSolveHistoryStatusTypesAsSelectDropdownOptions = ProjectNetworkSolveHistoryStatusTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

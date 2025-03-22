@@ -36,4 +36,21 @@ export class TrashSiteLayoutComponent implements OnInit {
         }
         return !this.authenticationService.isUserUnassigned(currentUser);
     }
+
+    public isAdministrator(currentUser: PersonDto): boolean {
+        return this.authenticationService.isUserAnAdministrator(currentUser);
+    }
+
+    public isJurisdicionManager(currentUser: PersonDto): boolean {
+        return this.authenticationService.isUserAJurisdictionManager(currentUser);
+    }
+
+    public usersListUrl(): string {
+        return `${environment.ocStormwaterToolsBaseUrl}/User/Index`;
+    }
+
+    public organizationsIndexUrl(): string {
+        return `${environment.ocStormwaterToolsBaseUrl}/Organization/Index`;
+    }
+
 }

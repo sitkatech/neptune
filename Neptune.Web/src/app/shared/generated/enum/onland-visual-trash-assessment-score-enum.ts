@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[OnlandVisualTrashAssessmentScore]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum OnlandVisualTrashAssessmentScoreEnum {
   A = 1,
@@ -18,4 +18,4 @@ export const OnlandVisualTrashAssessmentScores: LookupTableEntry[]  = [
   { Name: "C", DisplayName: "C", Value: 3 },
   { Name: "D", DisplayName: "D", Value: 4 }
 ];
-export const OnlandVisualTrashAssessmentScoresAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...OnlandVisualTrashAssessmentScores.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const OnlandVisualTrashAssessmentScoresAsSelectDropdownOptions = OnlandVisualTrashAssessmentScores.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

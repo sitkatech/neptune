@@ -36,7 +36,7 @@ namespace Neptune.WebMvc.Views.Shared
         public IEnumerable<NeptuneArea> NeptuneAreas { get; }
         public string CurrentPersonDetailUrl { get; }
         public string PlanningModuleUrl { get; }
-        public string ModelingModuleUrl { get; }
+        public string TrashModuleUrl { get; }
         public readonly string HomeUrl;
 
         public NeptuneArea NeptuneArea { get; }
@@ -45,7 +45,8 @@ namespace Neptune.WebMvc.Views.Shared
 
         public NeptuneNavBarViewData(LinkGenerator linkGenerator, Person currentPerson, string logInUrl,
             string logOutUrl, string requestSupportUrl,
-            NeptuneArea neptuneArea, bool isHomePage, string planningModuleUrl)
+            NeptuneArea neptuneArea, bool isHomePage, string planningModuleUrl,
+            string trashModuleUrl)
         {
             CurrentPerson = currentPerson;
             LinkGenerator = linkGenerator;
@@ -63,6 +64,7 @@ namespace Neptune.WebMvc.Views.Shared
             NeptuneAreas = NeptuneArea.All.Where(x => x.ShowOnPrimaryNavigation).OrderBy(x => x.NeptuneAreaDisplayName);
             NeptuneArea = neptuneArea;
             PlanningModuleUrl = planningModuleUrl;
+            TrashModuleUrl = trashModuleUrl;
             ShowLinkToArea = !isHomePage;
         }
 
@@ -97,7 +99,7 @@ namespace Neptune.WebMvc.Views.Shared
                 case NeptuneAreaEnum.Planning:
                     return PlanningModuleUrl;
                 case NeptuneAreaEnum.Trash:
-                    return SitkaRoute<TrashHomeController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
+                    return TrashModuleUrl;
                 case NeptuneAreaEnum.OCStormwaterTools:
                     return SitkaRoute<HomeController>.BuildUrlFromExpression(LinkGenerator, x => x.Index()) + "#welcome";
                 case NeptuneAreaEnum.Modeling:

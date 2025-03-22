@@ -54,7 +54,7 @@
                     <div class="flex-between">
                         <div class="content-section">Project</div>
                         <div class="flex-end">
-                            <a [routerLink]="['/projects', selectedProject.ProjectID]" class="btn btn-sm btn-primary ml-auto">View Project Details</a>
+                            <a [routerLink]="['/planning/projects', selectedProject.ProjectID]" class="btn btn-sm btn-primary ml-auto">View Project Details</a>
                         </div>
                     </div>
                     <dl class="grid-12 mt-3">
@@ -129,7 +129,7 @@
             </div>
         </div>
         <div class="g-col-9">
-            <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false" *ngIf="boundingBox$ | async as boundingBox" [boundingBox]="boundingBox">
+            <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="true" *ngIf="boundingBox$ | async as boundingBox" [boundingBox]="boundingBox">
                 <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
                 <stormwater-network-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></stormwater-network-layer>
                 <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>

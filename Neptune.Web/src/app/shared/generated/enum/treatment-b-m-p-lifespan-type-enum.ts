@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[TreatmentBMPLifespanType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum TreatmentBMPLifespanTypeEnum {
   Unspecified = 1,
@@ -16,4 +16,4 @@ export const TreatmentBMPLifespanTypes: LookupTableEntry[]  = [
   { Name: "Perpetuity", DisplayName: "Perpetuity/Life of Project", Value: 2 },
   { Name: "FixedEndDate", DisplayName: "Fixed End Date", Value: 3 }
 ];
-export const TreatmentBMPLifespanTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...TreatmentBMPLifespanTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const TreatmentBMPLifespanTypesAsSelectDropdownOptions = TreatmentBMPLifespanTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

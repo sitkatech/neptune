@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[MeasurementUnitType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum MeasurementUnitTypeEnum {
   Acres = 1,
@@ -54,4 +54,4 @@ export const MeasurementUnitTypes: LookupTableEntry[]  = [
   { Name: "Tons", DisplayName: "tons", Value: 21 },
   { Name: "CubicYards", DisplayName: "cubic yards", Value: 22 }
 ];
-export const MeasurementUnitTypesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...MeasurementUnitTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const MeasurementUnitTypesAsSelectDropdownOptions = MeasurementUnitTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

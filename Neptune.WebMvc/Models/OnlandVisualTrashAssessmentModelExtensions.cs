@@ -51,41 +51,6 @@ namespace Neptune.WebMvc.Models
             return null;
         }
 
-        public static IQueryable<ParcelGeometry> GetParcelsViaTransect(this OnlandVisualTrashAssessment ovta,
-            NeptuneDbContext dbContext)
-        {
-            if (!ovta.OnlandVisualTrashAssessmentObservations.Any())
-            {
-                return new List<ParcelGeometry>().AsQueryable();
-            }
-
-            var transect = ovta.OnlandVisualTrashAssessmentObservations.Count == 1
-                ? ovta.OnlandVisualTrashAssessmentObservations.Single().LocationPoint // don't attempt to calculate the transect
-                : ovta.GetTransect();
-
-            return ParcelGeometries.GetIntersected(dbContext, transect);
-        }
-
-        public static List<int> GetParcelIDsForAddOrRemoveParcels(
-            this OnlandVisualTrashAssessment onlandVisualTrashAssessment, NeptuneDbContext dbContext)
-        {
-            if (onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined.GetValueOrDefault())
-            {
-                return new List<int>();
-            }
-
-            // NP 8/22 these are supposed to be in 2771 already, but due to a b*g somewhere, some of them have 4326 as their SRID even though the coords are 2771...
-            var draftGeometry = onlandVisualTrashAssessment.DraftGeometry;//.FixSrid(CoordinateSystemHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
-
-            // ... and the wrong SRID would cause this next lookup to fail bigly 
-            var parcelIDs = draftGeometry == null
-                ? onlandVisualTrashAssessment.GetParcelsViaTransect(dbContext).Select(x => x.ParcelID)
-                : dbContext.ParcelGeometries.AsNoTracking()
-                    .Where(x => draftGeometry.Contains(x.GeometryNative)).Select(x => x.ParcelID);
-
-            return parcelIDs.ToList();
-        }
-
         public static List<PreliminarySourceIdentificationSimple> GetPreliminarySourceIdentificationSimples(
             this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {

@@ -1,7 +1,9 @@
 <ng-container *ngIf="treatmentBMPs$ | async"> </ng-container>
 <ng-template #layerName>
     <span>
-        Inventoried BMP Locations<br />
-        <img src="./assets/main/map-icons/marker-icon-orange.png" style="height: 17px; margin: 3px" /> BMP (Verified)
+        Inventoried BMP Locations
     </span>
+</ng-template>
+<ng-template #legend>
+    <span><img src="./assets/main/map-icons/marker-icon-orange.png" style="height: 17px; margin: 3px" /> BMP (Verified)</span>
 </ng-template>

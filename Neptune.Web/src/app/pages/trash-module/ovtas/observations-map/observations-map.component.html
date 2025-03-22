@@ -1,0 +1,46 @@
+<div class="grid-12" *ngIf="onlandVisualTrashAssessmentObservations?.length > 0; else noOnlandVisualTrashAssessmentObservations">
+    <div class="g-col-4" [style.height]="mapHeight" style="overflow-y: auto" #ovtaObservations>
+        <ul class="list-group">
+            <li
+                [id]="'ovtaObservation' + onlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentObservationID"
+                class="list-group-item font-weight-bold"
+                *ngFor="let onlandVisualTrashAssessmentObservation of onlandVisualTrashAssessmentObservations"
+                [class.selected]="
+                    selectedOnlandVisualTrashAssessmentObservation?.OnlandVisualTrashAssessmentObservationID ==
+                    onlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentObservationID
+                "
+                (click)="selectOnlandVisualTrashAssessmentObservation(onlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentObservationID)">
+                <img
+                    [src]="getFileResourceUrl(onlandVisualTrashAssessmentObservation.FileResourceGUID)"
+                    *ngIf="onlandVisualTrashAssessmentObservation.FileResourceGUID; else noImage"
+                    style="width: 300px" />
+                <ng-template #noImage> <i>No photo provided</i></ng-template>
+                <div class="mt-2">
+                    {{ onlandVisualTrashAssessmentObservation.Note ?? "No note provided" }}
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="g-col-8">
+        <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="true" [boundingBox]="boundingBox">
+            <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
+            <ovta-area-layer
+                *ngIf="mapIsReady"
+                [displayOnLoad]="true"
+                [map]="map"
+                [layerControl]="layerControl"
+                [sortOrder]="20"
+                [ovtaID]="onlandVisualTrashAssessmentID"></ovta-area-layer>
+            <transect-line-layer
+                *ngIf="mapIsReady"
+                [displayOnLoad]="true"
+                [map]="map"
+                [layerControl]="layerControl"
+                [sortOrder]="25"
+                [ovtaID]="onlandVisualTrashAssessmentID"></transect-line-layer>
+        </neptune-map>
+    </div>
+</div>
+<ng-template #noOnlandVisualTrashAssessmentObservations>
+    <p class="text-italic">No observations have been added to this assessment yet</p>
+</ng-template>

@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[PreliminarySourceIdentificationCategory]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum PreliminarySourceIdentificationCategoryEnum {
   Vehicles = 1,
@@ -18,4 +18,4 @@ export const PreliminarySourceIdentificationCategories: LookupTableEntry[]  = [
   { Name: "PedestrianLitter", DisplayName: "Pedestrian Litter", Value: 3 },
   { Name: "IllegalDumping", DisplayName: "Illegal Dumping", Value: 4 }
 ];
-export const PreliminarySourceIdentificationCategoriesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...PreliminarySourceIdentificationCategories.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const PreliminarySourceIdentificationCategoriesAsSelectDropdownOptions = PreliminarySourceIdentificationCategories.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

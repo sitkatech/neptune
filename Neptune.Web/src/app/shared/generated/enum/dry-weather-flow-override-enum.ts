@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[DryWeatherFlowOverride]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum DryWeatherFlowOverrideEnum {
   No = 1,
@@ -14,4 +14,4 @@ export const DryWeatherFlowOverrides: LookupTableEntry[]  = [
   { Name: "No", DisplayName: "No - As Modeled", Value: 1 },
   { Name: "Yes", DisplayName: "Yes - DWF Effectively Eliminated", Value: 2 }
 ];
-export const DryWeatherFlowOverridesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...DryWeatherFlowOverrides.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const DryWeatherFlowOverridesAsSelectDropdownOptions = DryWeatherFlowOverrides.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

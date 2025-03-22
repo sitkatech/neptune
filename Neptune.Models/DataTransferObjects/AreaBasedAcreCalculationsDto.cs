@@ -8,6 +8,5 @@
         public double TotalPLUAcres { get; set; }
 
         public double PercentTreated { get; set; }
-
     }
 }

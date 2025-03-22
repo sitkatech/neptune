@@ -1,37 +1,61 @@
 import { Component, Input, OnChanges } from "@angular/core";
 import * as L from "leaflet";
-import { environment } from "src/environments/environment";
 import { MapLayerBase } from "../map-layer-base.component";
+import { Observable, tap } from "rxjs";
+import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
+import { IFeature } from "src/app/shared/generated/model/i-feature";
+import { AsyncPipe, NgIf } from "@angular/common";
+import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 
 @Component({
     selector: "transect-line-layer",
     standalone: true,
-    imports: [],
+    imports: [NgIf, AsyncPipe],
     templateUrl: "./transect-line-layer.component.html",
     styleUrl: "./transect-line-layer.component.scss",
 })
 export class TransectLineLayerComponent extends MapLayerBase implements OnChanges {
-    constructor() {
+    constructor(
+        private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
+        private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService
+    ) {
         super();
     }
-    @Input() ovtaAreaName: string;
-    @Input() jurisdictionID: number;
-    public wmsOptions: L.WMSOptions;
+
+    @Input() ovtaID: number;
+    @Input() ovtaAreaID: number;
     public layer;
 
+    private transectLineStyle = {
+        color: "#ff42ff",
+        weight: 2,
+    };
+
+    public featureCollection$: Observable<IFeature[]>;
+
     ngAfterViewInit(): void {
-        this.wmsOptions = {
-            layers: "OCStormwater:TransectLineExport",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-        };
-
-        if (this.ovtaAreaName && this.jurisdictionID) {
-            this.wmsOptions.cql_filter = `OVTAAreaName = '${this.ovtaAreaName}' and JurisID = ${this.jurisdictionID}`;
+        if (this.ovtaID) {
+            this.featureCollection$ = this.onlandVisualTrashAssessmentService
+                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDTransectLineAsFeatureCollectionGet(this.ovtaID)
+                .pipe(
+                    tap((transectLineFeatureCollection) => {
+                        this.layer = new L.GeoJSON(transectLineFeatureCollection, {
+                            style: this.transectLineStyle,
+                        });
+                        this.initLayer();
+                    })
+                );
+        } else if (this.ovtaAreaID) {
+            this.featureCollection$ = this.onlandVisualTrashAssessmentAreaService
+                .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDTransectLineAsFeatureCollectionGet(this.ovtaAreaID)
+                .pipe(
+                    tap((transectLineFeatureCollection) => {
+                        this.layer = new L.GeoJSON(transectLineFeatureCollection, {
+                            style: this.transectLineStyle,
+                        });
+                        this.initLayer();
+                    })
+                );
         }
-
-        this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
-        this.initLayer();
     }
 }

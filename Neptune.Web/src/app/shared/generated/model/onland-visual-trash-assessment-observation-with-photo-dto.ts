@@ -16,6 +16,7 @@ export class OnlandVisualTrashAssessmentObservationWithPhotoDto {
     OnlandVisualTrashAssessmentID?: number;
     Note?: string;
     ObservationDatetime?: string;
+    FileResourceID?: number;
     FileResourceGUID?: string;
     Longitude?: number;
     Latitude?: number;
@@ -29,6 +30,7 @@ export interface OnlandVisualTrashAssessmentObservationWithPhotoDtoForm {
     OnlandVisualTrashAssessmentID?: FormControl<number>;
     Note?: FormControl<string>;
     ObservationDatetime?: FormControl<string>;
+    FileResourceID?: FormControl<number>;
     FileResourceGUID?: FormControl<string>;
     Longitude?: FormControl<number>;
     Latitude?: FormControl<number>;
@@ -66,6 +68,16 @@ export class OnlandVisualTrashAssessmentObservationWithPhotoDtoFormControls {
         }
     );
     public static ObservationDatetime = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FileResourceID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

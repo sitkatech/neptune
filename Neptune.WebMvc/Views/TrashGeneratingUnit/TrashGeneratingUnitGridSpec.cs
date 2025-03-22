@@ -19,7 +19,7 @@ namespace Neptune.WebMvc.Views.TrashGeneratingUnit
             var wqmpDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));
 
-            Add("Trash Generating Unit ID", x => x.TrashGeneratingUnitID.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
+            Add("Trash Analysis Area ID", x => x.TrashGeneratingUnitID.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
             Add("Land Use Type", x => x.PriorityLandUseTypeDisplayName ?? "Not Priority Land Use", 140, DhtmlxGridColumnFilterType.Text);
             
             Add("Governing OVTA Area", x => x.OnlandVisualTrashAssessmentAreaID != null ? UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.OnlandVisualTrashAssessmentAreaID.Value), x.OnlandVisualTrashAssessmentAreaName, x.OnlandVisualTrashAssessmentAreaName) : new HtmlString(""), 255, DhtmlxGridColumnFilterType.Html);
@@ -31,7 +31,7 @@ namespace Neptune.WebMvc.Views.TrashGeneratingUnit
             Add("Governing WQMP", x => x.WaterQualityManagementPlanID != null ?
                 UrlTemplate.MakeHrefString(wqmpDetailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID.Value), x.WaterQualityManagementPlanName) : new HtmlString(""), 190, DhtmlxGridColumnFilterType.Html);
             Add("Stormwater Jurisdiction", x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.OrganizationName), 170, DhtmlxGridColumnFilterType.Html);
-            Add("Area", x => ((x.TrashGeneratingUnitArea ?? 0) * Constants.SquareMetersToAcres).ToString("F12", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
+            Add("Area", x => (x.Area * Constants.SquareMetersToAcres).ToString("F12", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
             Add("Baseline Loading Rate", x => x.BaselineLoadingRate, 100, DhtmlxGridColumnFormatType.Decimal);
 
             Add("Current Loading Rate", x => x.CurrentLoadingRate, 100, DhtmlxGridColumnFormatType.Decimal);

@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[SourceControlBMPAttributeCategory]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/inputs/select-dropdown/select-dropdown.component"
+import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
 
 export enum SourceControlBMPAttributeCategoryEnum {
   HydrologicSourceControlandSiteDesignBMPs = 1,
@@ -16,4 +16,4 @@ export const SourceControlBMPAttributeCategories: LookupTableEntry[]  = [
   { Name: "Applicable Routine Non-Structural Source Control BMPs", DisplayName: "Applicable Routine Non-Structural Source Control BMPs", Value: 2 },
   { Name: "Applicable Routine Structural Source Control BMPs", DisplayName: "Applicable Routine Structural Source Control BMPs", Value: 3 }
 ];
-export const SourceControlBMPAttributeCategoriesAsSelectDropdownOptions = [{ Value: null, Label: "- Select -", Disabled: true }, ...SourceControlBMPAttributeCategories.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption))];
+export const SourceControlBMPAttributeCategoriesAsSelectDropdownOptions = SourceControlBMPAttributeCategories.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

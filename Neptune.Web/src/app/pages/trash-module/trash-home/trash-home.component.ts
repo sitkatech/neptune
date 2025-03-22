@@ -7,20 +7,69 @@ import { RoleEnum } from "src/app/shared/generated/enum/role-enum";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
-import { AsyncPipe, NgIf } from "@angular/common";
-import { Observable } from "rxjs";
-import { BtnGroupRadioInputComponent } from "../../../shared/components/inputs/btn-group-radio-input/btn-group-radio-input.component";
+import { AsyncPipe, DatePipe, DecimalPipe, NgIf } from "@angular/common";
+import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import * as L from "leaflet";
 import "leaflet-draw";
 import "leaflet.fullscreen";
+import { DelineationsLayerComponent } from "src/app/shared/components/leaflet/layers/delineations-layer/delineations-layer.component";
+import { JurisdictionsLayerComponent } from "src/app/shared/components/leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
+import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leaflet/layers/regional-subbasins-layer/regional-subbasins-layer.component";
+import { LandUseBlockLayerComponent } from "src/app/shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
+import { TrashGeneratingUnitLayerComponent } from "src/app/shared/components/leaflet/layers/trash-generating-unit-layer/trash-generating-unit-layer.component";
+import { NgSelectModule } from "@ng-select/ng-select";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
+import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
+import { AreaBasedAcreCalculationsDto } from "src/app/shared/generated/model/area-based-acre-calculations-dto";
+import { LoadResultsDto } from "src/app/shared/generated/model/load-results-dto";
+import { OVTAResultsDto } from "src/app/shared/generated/model/ovta-results-dto";
+import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
+import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
+import { StormwaterJurisdictionDto, TrashGeneratingUnitDto } from "src/app/shared/generated/model/models";
+import { InventoriedBMPsTrashCaptureLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-trash-capture-layer/inventoried-bmps-trash-capture-layer.component";
+import { WqmpsTrashCaptureLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-trash-capture-layer/wqmps-trash-capture-layer.component";
+import { OvtaAreasLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-areas-layer/ovta-areas-layer.component";
+import { TrashGeneratingUnitLoadsLayerComponent } from "src/app/shared/components/leaflet/layers/trash-generating-unit-loads-layer/trash-generating-unit-loads-layer.component";
+import { TrashGeneratingUnitByStormwaterJurisdictionService } from "src/app/shared/generated/api/trash-generating-unit-by-stormwater-jurisdiction.service";
+import { LoadingDirective } from "src/app/shared/directives/loading.directive";
+import { WfsService } from "src/app/shared/services/wfs.service";
+import { TrashGeneratingUnitService } from "src/app/shared/generated/api/trash-generating-unit.service";
+import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/services/modal/modal.service";
+import { ScoreDescriptionsComponent } from "../ovtas/score-descriptions/score-descriptions.component";
+import { IconComponent } from "src/app/shared/components/icon/icon.component";
 
 @Component({
     selector: "trash-home",
     templateUrl: "./trash-home.component.html",
     styleUrls: ["./trash-home.component.scss"],
     standalone: true,
-    imports: [NgIf, AlertDisplayComponent, CustomRichTextComponent, AsyncPipe, RouterLink, BtnGroupRadioInputComponent, NeptuneMapComponent],
+    imports: [
+        NgIf,
+        AlertDisplayComponent,
+        CustomRichTextComponent,
+        AsyncPipe,
+        RouterLink,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        DelineationsLayerComponent,
+        JurisdictionsLayerComponent,
+        InventoriedBMPsTrashCaptureLayerComponent,
+        WqmpsTrashCaptureLayerComponent,
+        LandUseBlockLayerComponent,
+        TrashGeneratingUnitLayerComponent,
+        TrashGeneratingUnitLoadsLayerComponent,
+        OvtaAreasLayerComponent,
+        NgSelectModule,
+        FormsModule,
+        ReactiveFormsModule,
+        FieldDefinitionComponent,
+        DecimalPipe,
+        DatePipe,
+        LoadingDirective,
+        IconComponent,
+    ],
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;
@@ -31,14 +80,51 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     public map: L.Map;
     public mapIsReady: boolean = false;
     public layerControl: L.Control.Layers;
-    public activeTab: string = "Area-Based Results";
-    public tabs = [
-        { label: "Area-Based Results", value: "Area-Based Results" },
-        { label: "Load-Based Results", value: "Load-Based Results" },
-        { label: "OVTA-Based Results", value: "OVTA-Based Results" },
-    ];
 
-    constructor(private authenticationService: AuthenticationService, private router: Router, private route: ActivatedRoute) {}
+    public stormwaterJurisdictions$: Observable<Array<StormwaterJurisdictionDto>>;
+    public currentStormwaterJurisdiction: StormwaterJurisdictionDto;
+    private stormwaterJurisdictionSubject = new BehaviorSubject<StormwaterJurisdictionDto | null>(null);
+    public stormwaterJurisdiction$ = this.stormwaterJurisdictionSubject.asObservable();
+
+    public selectedStormwaterJurisdictionLayer: L.GeoJSON<any>;
+    private selectedJurisdictionStyle = {
+        color: "#FF6C2D",
+        weight: 5,
+        fill: false,
+    };
+
+    public currentResultType: string = "Area-Based Results";
+    public resultTypes = ["Area-Based Results", "Load-Based Results (Current)", "Load-Based (Net Change)", "OVTA-Based Results", "No Metric, Map Overlay"];
+
+    public areaBasedAcreCalculationsDto$: Observable<AreaBasedAcreCalculationsDto>;
+    public loadResultsDto$: Observable<LoadResultsDto>;
+    public ovtaResultsDto$: Observable<OVTAResultsDto>;
+    public boundingBox$: Observable<BoundingBoxDto>;
+
+    public isLoading: boolean;
+
+    public tguDto$: Observable<TrashGeneratingUnitDto>;
+    public tguLayer: L.GeoJSON<any>;
+    private highlightStyle = {
+        color: "#fcfc12",
+        weight: 2,
+        opacity: 0.65,
+        fillOpacity: 0.1,
+    };
+
+    public lastUpdateDate$: Observable<string>;
+
+    constructor(
+        private authenticationService: AuthenticationService,
+        private router: Router,
+        private route: ActivatedRoute,
+        private stormwaterJurisdictionService: StormwaterJurisdictionService,
+        private trashResultsByJurisdictionService: TrashGeneratingUnitByStormwaterJurisdictionService,
+        private leafletHelperService: LeafletHelperService,
+        private wfsService: WfsService,
+        private trashGeneratingUnitService: TrashGeneratingUnitService,
+        private modalService: ModalService
+    ) {}
 
     public ngOnInit(): void {
         this.currentUser$ = this.authenticationService.getCurrentUser();
@@ -62,12 +148,152 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 });
             }
         });
+
+        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.jurisdictionsUserViewableGet().pipe(
+            tap((x) => {
+                this.stormwaterJurisdictionSubject.next(x[0]);
+                this.currentStormwaterJurisdiction = x[0];
+            })
+        );
+
+        this.lastUpdateDate$ = this.trashGeneratingUnitService.trashGeneratingUnitsLastUpdateDateGet();
+
+        this.areaBasedAcreCalculationsDto$ = this.stormwaterJurisdiction$.pipe(
+            tap(() => {
+                this.isLoading = true;
+            }),
+            switchMap((x) => {
+                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+            }),
+            tap(() => {
+                this.isLoading = false;
+            })
+        );
+
+        this.loadResultsDto$ = this.stormwaterJurisdiction$.pipe(
+            tap(() => {
+                this.isLoading = true;
+            }),
+            switchMap((x) => {
+                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+            }),
+            tap(() => {
+                this.isLoading = false;
+            })
+        );
+
+        this.ovtaResultsDto$ = this.stormwaterJurisdiction$.pipe(
+            tap(() => {
+                this.isLoading = true;
+            }),
+            switchMap((x) => {
+                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+            }),
+            tap(() => {
+                this.isLoading = false;
+            })
+        );
+
+        this.boundingBox$ = this.stormwaterJurisdiction$.pipe(
+            tap((x) => {
+                this.addSelectedJurisdictionLayer(x.StormwaterJurisdictionID);
+            }),
+            switchMap((x) => {
+                return this.stormwaterJurisdictionService.jurisdictionsJurisdictionIDBoundingBoxGet(x.StormwaterJurisdictionID);
+            }),
+            tap((boundingBox) => {
+                if (this.mapIsReady) {
+                    this.leafletHelperService.fitMapToBoundingBox(this.map, boundingBox);
+                }
+            })
+        );
     }
 
     public handleMapReady(event: NeptuneMapInitEvent): void {
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
+
+        this.registerClickEvents();
+        this.addSelectedJurisdictionLayer(this.currentStormwaterJurisdiction.StormwaterJurisdictionID);
+    }
+
+    public onJurisdictionSelected(selectedJurisdiction: StormwaterJurisdictionDto) {
+        this.stormwaterJurisdictionSubject.next(selectedJurisdiction);
+    }
+
+    public registerClickEvents(): void {
+        const wfsService = this.wfsService;
+        const self = this;
+        this.map.on("click", (event: L.LeafletMouseEvent): void => {
+            wfsService.getTrashGeneratingUnitByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((tguFeatureCollection: L.FeatureCollection) => {
+                if (tguFeatureCollection.features.length == 0) {
+                    this.tguDto$ = null;
+                    if (this.tguLayer) {
+                        this.map.removeLayer(this.tguLayer);
+                    }
+                }
+                var featuresInRenderedOrder = tguFeatureCollection.features
+                    .sort((a, b) => {
+                        if (a.properties.IsPriorityLandUse > b.properties.IsPriorityLandUse) {
+                            return 1;
+                        }
+                        if (b.properties.IsPriorityLandUse > a.properties.IsPriorityLandUse) {
+                            return -1;
+                        }
+                        return 0;
+                    })
+                    .sort((a, b) => {
+                        // sort by AssessmentScore descending
+                        if (a.properties.AssessmentScore < b.properties.AssessmentScore) {
+                            return 1;
+                        }
+                        if (b.properties.AssessmentScore < a.properties.AssessmentScore) {
+                            return -1;
+                        }
+                        return 0;
+                    })
+                    .sort((a, b) => {
+                        // sort by TrashCaptureStatusSortOrder descending
+                        if (a.properties.TrashCaptureStatusSortOrder < b.properties.TrashCaptureStatusSortOrder) {
+                            return 1;
+                        }
+                        if (b.properties.TrashCaptureStatusSortOrder < a.properties.TrashCaptureStatusSortOrder) {
+                            return -1;
+                        }
+                        return 0;
+                    });
+
+                featuresInRenderedOrder.forEach((feature: L.Feature) => {
+                    this.tguDto$ = this.trashGeneratingUnitService.trashGeneratingUnitsTrashGeneratingUnitIDGet(feature.properties.TrashGeneratingUnitID);
+                    const geoJson = L.geoJSON(feature, {
+                        style: this.highlightStyle,
+                    });
+                    if (this.tguLayer) {
+                        this.map.removeLayer(this.tguLayer);
+                    }
+                    this.tguLayer = L.geoJSON(feature, {
+                        style: this.highlightStyle,
+                    });
+                    //this.map.fitBounds(this.tguLayer.getBounds());
+                    this.tguLayer.addTo(this.map);
+                });
+            });
+        });
+    }
+
+    public addSelectedJurisdictionLayer(stormwaterJurisdictionID: number) {
+        this.wfsService
+            .getGeoserverWFSLayerWithCQLFilter("OCStormwater:Jurisdictions", `StormwaterJurisdictionID = ${stormwaterJurisdictionID}`, "StormwaterJurisdictionID")
+            .subscribe((response) => {
+                if (this.mapIsReady) {
+                    if (this.selectedStormwaterJurisdictionLayer) {
+                        this.map.removeLayer(this.selectedStormwaterJurisdictionLayer);
+                    }
+                    this.selectedStormwaterJurisdictionLayer = L.geoJSON(response, { style: this.selectedJurisdictionStyle });
+                    this.selectedStormwaterJurisdictionLayer.addTo(this.map);
+                }
+            });
     }
 
     ngOnDestroy(): void {
@@ -122,11 +348,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         return environment.ocStormwaterToolsBaseUrl;
     }
 
-    public setActiveTab(event) {
-        this.activeTab = event;
-        if (this.activeTab === "Area-Based Results") {
-        } else if (this.activeTab === "Load-Based Results") {
-        } else if (this.activeTab === "OVTA-Based Results") {
-        }
+    showScoreDefinitions() {
+        this.modalService.open(ScoreDescriptionsComponent, null, { CloseOnClickOut: false, TopLayer: false, ModalSize: ModalSizeEnum.Large, ModalTheme: ModalThemeEnum.Light });
     }
 }
