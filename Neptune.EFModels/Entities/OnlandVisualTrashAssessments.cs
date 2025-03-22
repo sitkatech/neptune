@@ -112,12 +112,14 @@ public static class OnlandVisualTrashAssessments
         var onlandVisualTrashAssessment = new OnlandVisualTrashAssessment()
         {
             CreatedByPersonID = currentUser.PersonID,
-            AssessingNewArea = dto.AssessingNewArea,
             CreatedDate = DateTime.UtcNow,
             OnlandVisualTrashAssessmentAreaID = dto.OnlandVisualTrashAssessmentAreaID,
             StormwaterJurisdictionID = dto.StormwaterJurisdictionID,
             OnlandVisualTrashAssessmentStatusID = (int)OnlandVisualTrashAssessmentStatusEnum.InProgress
         };
+
+        var assessingNewArea = (dto.AssessingNewArea ?? false);
+        onlandVisualTrashAssessment.AssessingNewArea = assessingNewArea || !dto.OnlandVisualTrashAssessmentAreaID.HasValue;
 
         if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID.HasValue)
         {

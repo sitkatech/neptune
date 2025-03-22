@@ -112,11 +112,11 @@ export class TrashInitiateOvtaComponent {
         );
 
         this.onlandVisualTrashAssessmentAreas$ = this.stormwaterJurisdiction$.pipe(
-            tap(() => {
+            tap((x) => {
                 this.isLoading = true;
+                this.addOVTAAreasToLayer(x.StormwaterJurisdictionID);
             }),
             switchMap((x) => {
-                console.log(x);
                 return this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasJurisdictionsJurisdictionIDGet(x.StormwaterJurisdictionID);
             }),
             tap(() => {
@@ -130,7 +130,6 @@ export class TrashInitiateOvtaComponent {
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
         this.layer.addTo(this.map);
-        this.addOVTAAreasToLayer();
     }
 
     public save(andContinue: boolean = false) {
@@ -146,8 +145,8 @@ export class TrashInitiateOvtaComponent {
         });
     }
 
-    private addOVTAAreasToLayer() {
-        let cql_filter = ``;
+    private addOVTAAreasToLayer(jurisdictionID: number) {
+        let cql_filter = `StormwaterJurisdictionID = ${jurisdictionID}`;
 
         this.wfsService
             .getGeoserverWFSLayerWithCQLFilter("OCStormwater:OnlandVisualTrashAssessmentAreas", cql_filter, "OnlandVisualTrashAssessmentAreaID")
