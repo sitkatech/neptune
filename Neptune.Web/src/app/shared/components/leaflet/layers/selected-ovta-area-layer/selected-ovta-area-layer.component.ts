@@ -125,10 +125,6 @@ export class SelectedOvtaAreaLayerComponent extends MapLayerBase implements OnCh
 
                     geoJson.addTo(this.layer);
                 });
-
-                const bounds = this.layer.getBounds();
-                this.map.fitBounds(bounds);
-                this.layerBoundsCalculated.emit(bounds);
             });
     }
 
