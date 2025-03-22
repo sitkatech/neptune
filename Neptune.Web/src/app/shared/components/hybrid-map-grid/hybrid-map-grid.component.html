@@ -42,7 +42,7 @@
     </div>
 
     <div class="tab-nav-panel" [class.g-col-6]="selectedPanel === 'Hybrid'" [class.g-col-12]="selectedPanel === 'Map'" [class.hidden]="selectedPanel === 'Grid'">
-        <neptune-map class="location-card" [mapHeight]="mapHeight" (onMapLoad)="handleMapReady($event)">
+        <neptune-map class="location-card" [mapHeight]="mapHeight" (onMapLoad)="handleMapReady($event)" [boundingBox]="boundingBox">
             <ng-container *ngIf="mapIsReady">
                 <ng-content select="[mapLayers]"></ng-content>
             </ng-container>
