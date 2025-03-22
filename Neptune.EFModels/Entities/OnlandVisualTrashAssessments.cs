@@ -159,15 +159,8 @@ public static class OnlandVisualTrashAssessments
             .Single(x =>
             x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
 
-        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = dto.OnlandVisualTrashAssessmentScoreID;
-        onlandVisualTrashAssessment.Notes = dto.Notes;
-        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = dto.OnlandVisualTrashAssessmentStatusID;
-
         if (dto.OnlandVisualTrashAssessmentStatusID == (int)OnlandVisualTrashAssessmentStatusEnum.Complete)
         {
-            onlandVisualTrashAssessment.CompletedDate = dto.AssessmentDate;
-            onlandVisualTrashAssessment.IsProgressAssessment = dto.IsProgressAssessment ?? false;
-
             // create the assessment area
             if (onlandVisualTrashAssessment.AssessingNewArea.GetValueOrDefault())
             {
@@ -188,6 +181,13 @@ public static class OnlandVisualTrashAssessments
                 onlandVisualTrashAssessment.DraftGeometry = null;
                 onlandVisualTrashAssessment.DraftAreaDescription = null;
                 onlandVisualTrashAssessment.DraftAreaName = null;
+                onlandVisualTrashAssessment.CompletedDate = dto.AssessmentDate;
+                onlandVisualTrashAssessment.IsProgressAssessment = dto.IsProgressAssessment ?? false;
+
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = dto.OnlandVisualTrashAssessmentScoreID;
+                onlandVisualTrashAssessment.Notes = dto.Notes;
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = dto.OnlandVisualTrashAssessmentStatusID;
+
             }
 
             await dbContext.SaveChangesAsync();
@@ -221,6 +221,9 @@ public static class OnlandVisualTrashAssessments
         }
         else
         {
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = dto.OnlandVisualTrashAssessmentScoreID;
+            onlandVisualTrashAssessment.Notes = dto.Notes;
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = dto.OnlandVisualTrashAssessmentStatusID;
             if (onlandVisualTrashAssessment.AssessingNewArea ?? false)
             {
                 onlandVisualTrashAssessment.DraftAreaName = dto.OnlandVisualTrashAssessmentAreaName;
