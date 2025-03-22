@@ -20,8 +20,9 @@
             (onMapLoad)="handleMapReady($event)"
             [selectedValue]="ovtaAreaID"
             [selectionFromMap]="selectionFromMap"
-            (selectedValueChange)="onSelectedOVTAAreaChangedFromGrid($event)">
-            <div mapLayers *ngIf="mapIsReady">
+            (selectedValueChange)="onSelectedOVTAAreaChangedFromGrid($event)"
+            *ngIf="boundingBox$ | async as boundingBox" [boundingBox]="boundingBox">
+            <div mapLayers *ngIf="mapIsReady" >
                 <selected-ovta-area-layer
                     *ngIf="mapIsReady"
                     [displayOnLoad]="true"

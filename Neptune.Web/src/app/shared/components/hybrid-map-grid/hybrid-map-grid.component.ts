@@ -8,6 +8,7 @@ import { CommonModule } from "@angular/common";
 import { NeptuneGridHeaderComponent } from "../neptune-grid-header/neptune-grid-header.component";
 import { NeptuneGridComponent } from "../neptune-grid/neptune-grid.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../leaflet/neptune-map/neptune-map.component";
+import { BoundingBoxDto } from "../../generated/model/bounding-box-dto";
 
 @Component({
     selector: "hybrid-map-grid",
@@ -24,6 +25,7 @@ export class HybridMapGridComponent {
     @Input() selectionFromMap: boolean;
     @Input() entityIDField: string = "";
     @Input() mapHeight: string = "720px";
+    @Input() boundingBox: BoundingBoxDto;
 
     @Output() onMapLoad: EventEmitter<NeptuneMapInitEvent> = new EventEmitter();
     @Output() selectedValueChange: EventEmitter<number> = new EventEmitter<number>();

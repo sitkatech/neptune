@@ -22,6 +22,8 @@ import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { AuthenticationService } from "src/app/services/authentication.service";
+import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
+import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 
 @Component({
     selector: "trash-ovta-area-index",
@@ -42,6 +44,7 @@ export class TrashOvtaAreaIndexComponent {
     public layerControl: layerControl;
     public bounds: any;
     public mapIsReady: boolean = false;
+    public boundingBox$: Observable<BoundingBoxDto>;
 
     constructor(
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
@@ -50,7 +53,8 @@ export class TrashOvtaAreaIndexComponent {
         private router: Router,
         private alertService: AlertService,
         private confirmService: ConfirmService,
-        private authenticationService: AuthenticationService
+        private authenticationService: AuthenticationService,
+        private stormwaterJurisdictionService: StormwaterJurisdictionService 
     ) {}
 
     ngOnInit(): void {
@@ -80,6 +84,7 @@ export class TrashOvtaAreaIndexComponent {
             this.utilityFunctionsService.createBasicColumnDef("Description", "AssessmentAreaDescription"),
         ];
         this.onlandVisualTrashAssessmentAreas$ = this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasGet().pipe(tap((x) => (this.isLoading = false)));
+        this.boundingBox$ = this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet();
     }
 
     public handleMapReady(event: NeptuneMapInitEvent) {
