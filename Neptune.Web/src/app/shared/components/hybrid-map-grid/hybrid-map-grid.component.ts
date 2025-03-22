@@ -21,6 +21,7 @@ export class HybridMapGridComponent {
     @Input() columnDefs: ColDef[];
     @Input() downloadFileName: string;
     @Input() selectedValue: number = null;
+    @Input() selectionFromMap: boolean;
     @Input() entityIDField: string = "";
     @Input() mapHeight: string = "720px";
 
@@ -43,7 +44,15 @@ export class HybridMapGridComponent {
         if (changes.selectedValue) {
             if (changes.selectedValue.previousValue == changes.selectedValue.currentValue) return;
             this.selectedValue = changes.selectedValue.currentValue;
-            this.onMapSelectionChanged(this.selectedValue);
+            
+            // only want to call onMapSelectionChanged if the change to selectedValue originated from the Map.
+            // This will find the row in the grid for the selectedValue and scroll it to the top of the grid
+            if (changes.selectionFromMap){
+                this.selectionFromMap = changes.selectionFromMap.currentValue;
+            }
+            if (this.selectionFromMap){
+                this.onMapSelectionChanged(this.selectedValue);
+            }
         }
     }
 
@@ -87,12 +96,7 @@ export class HybridMapGridComponent {
         const selectedNodes = this.gridApi.getSelectedNodes();
 
         this.selectedValue = selectedNodes.length > 0 ? selectedNodes[0].data[this.entityIDField] : null;
-        this.gridApi.forEachNode((node, index) => {
-            if (node.data[this.entityIDField] == this.selectedValue) {
-                node.setSelected(true, true);
-                this.gridApi.ensureIndexVisible(index, "top");
-            }
-        });
+        // do not scroll the row for the selected value to the top. Since the selection origniated from clicking the grid, it is already in view
         this.selectedValueChange.emit(this.selectedValue);
     }
 

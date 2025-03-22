@@ -36,6 +36,7 @@ export class TrashOvtaAreaIndexComponent {
     public isLoading: boolean = true;
     public url = environment.ocStormwaterToolsBaseUrl;
     public ovtaAreaID: number;
+    public selectionFromMap: boolean;
 
     public map: Map;
     public layerControl: layerControl;
@@ -56,7 +57,7 @@ export class TrashOvtaAreaIndexComponent {
         this.ovtaAreaColumnDefs = [
             this.utilityFunctionsService.createActionsColumnDef((params: any) => {
                 return [
-                    { ActionName: "View", ActionHandler: () => this.router.navigate(["trash", "onland-visual-trash-assessments", params.data.OnlandVisualTrashAssessmentID]) },
+                    { ActionName: "View", ActionHandler: () => this.router.navigate(["trash", "onland-visual-trash-assessment-areas", params.data.OnlandVisualTrashAssessmentAreaID]) },
                     {
                         ActionName: "Add New OVTA",
                         ActionHandler: () =>
@@ -87,10 +88,19 @@ export class TrashOvtaAreaIndexComponent {
         this.mapIsReady = true;
     }
 
+    public onSelectedOVTAAreaChangedFromGrid(selectedOVTAAreaID) {
+        if (this.ovtaAreaID == selectedOVTAAreaID) return;
+
+        this.ovtaAreaID = selectedOVTAAreaID;
+        this.selectionFromMap = false;
+        return this.ovtaAreaID; 
+    }
+
     public onSelectedOVTAAreaChanged(selectedOVTAAreaID) {
         if (this.ovtaAreaID == selectedOVTAAreaID) return;
 
         this.ovtaAreaID = selectedOVTAAreaID;
+        this.selectionFromMap = true;
         return this.ovtaAreaID;
     }
 

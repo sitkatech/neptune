@@ -19,7 +19,8 @@
             entityIDField="OnlandVisualTrashAssessmentAreaID"
             (onMapLoad)="handleMapReady($event)"
             [selectedValue]="ovtaAreaID"
-            (selectedValueChange)="onSelectedOVTAAreaChanged($event)">
+            [selectionFromMap]="selectionFromMap"
+            (selectedValueChange)="onSelectedOVTAAreaChangedFromGrid($event)">
             <div mapLayers *ngIf="mapIsReady">
                 <selected-ovta-area-layer
                     *ngIf="mapIsReady"
