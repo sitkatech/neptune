@@ -27,7 +27,7 @@ export class ObservationsMapComponent {
     public boundingBox: BoundingBoxDto;
 
     public mapIsReady: boolean = false;
-    public mapHeight: string = "750px";
+    public mapHeight: string = "600px";
 
     @Output()
     public afterSetControl: EventEmitter<L.Control.Layers> = new EventEmitter();

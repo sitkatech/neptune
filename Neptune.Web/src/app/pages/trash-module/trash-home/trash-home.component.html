@@ -304,12 +304,6 @@
                         [layerControl]="layerControl"
                         [sortOrder]="20"
                         [isAnalyzedInModelingModule]="false"></delineations-layer>
-                    <inventoried-bmps-trash-capture-layer
-                        *ngIf="mapIsReady"
-                        [displayOnLoad]="false"
-                        [map]="map"
-                        [layerControl]="layerControl"
-                        [sortOrder]="30"></inventoried-bmps-trash-capture-layer>
                     <wqmps-trash-capture-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-trash-capture-layer>
                     <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></jurisdictions-layer>
                     <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></regional-subbasins-layer>
@@ -340,6 +334,7 @@
                         [map]="map"
                         [layerControl]="layerControl"
                         [sortOrder]="1"></ovta-areas-layer>
+                    <span *ngIf="treatmentBMPs$ | async"></span>
                 </neptune-map>
             </div>
         </div>

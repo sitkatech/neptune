@@ -27,8 +27,7 @@ import { LoadResultsDto } from "src/app/shared/generated/model/load-results-dto"
 import { OVTAResultsDto } from "src/app/shared/generated/model/ovta-results-dto";
 import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
-import { StormwaterJurisdictionDto, TrashGeneratingUnitDto } from "src/app/shared/generated/model/models";
-import { InventoriedBMPsTrashCaptureLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-trash-capture-layer/inventoried-bmps-trash-capture-layer.component";
+import { IFeature, StormwaterJurisdictionDto, TrashGeneratingUnitDto } from "src/app/shared/generated/model/models";
 import { WqmpsTrashCaptureLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-trash-capture-layer/wqmps-trash-capture-layer.component";
 import { OvtaAreasLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-areas-layer/ovta-areas-layer.component";
 import { TrashGeneratingUnitLoadsLayerComponent } from "src/app/shared/components/leaflet/layers/trash-generating-unit-loads-layer/trash-generating-unit-loads-layer.component";
@@ -38,7 +37,9 @@ import { WfsService } from "src/app/shared/services/wfs.service";
 import { TrashGeneratingUnitService } from "src/app/shared/generated/api/trash-generating-unit.service";
 import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/services/modal/modal.service";
 import { ScoreDescriptionsComponent } from "../ovtas/score-descriptions/score-descriptions.component";
-import { IconComponent } from "src/app/shared/components/icon/icon.component";
+import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
+import { TrashCaptureStatusTypeEnum } from "src/app/shared/generated/enum/trash-capture-status-type-enum";
+import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 
 @Component({
     selector: "trash-home",
@@ -55,7 +56,6 @@ import { IconComponent } from "src/app/shared/components/icon/icon.component";
         RegionalSubbasinsLayerComponent,
         DelineationsLayerComponent,
         JurisdictionsLayerComponent,
-        InventoriedBMPsTrashCaptureLayerComponent,
         WqmpsTrashCaptureLayerComponent,
         LandUseBlockLayerComponent,
         TrashGeneratingUnitLayerComponent,
@@ -68,7 +68,6 @@ import { IconComponent } from "src/app/shared/components/icon/icon.component";
         DecimalPipe,
         DatePipe,
         LoadingDirective,
-        IconComponent,
     ],
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
@@ -114,6 +113,20 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
 
     public lastUpdateDate$: Observable<string>;
 
+    public treatmentBMPClusterLayer: L.markerClusterGroup = L.markerClusterGroup({
+        iconCreateFunction: function (cluster) {
+            var childCount = cluster.getChildCount();
+
+            return new L.DivIcon({
+                html: "<div><span>" + childCount + "</span></div>",
+                className: "treatment-bmp-cluster",
+                iconSize: new L.Point(40, 40),
+            });
+        },
+    });
+
+    public treatmentBMPs$: Observable<IFeature[]>;
+
     constructor(
         private authenticationService: AuthenticationService,
         private router: Router,
@@ -123,6 +136,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         private leafletHelperService: LeafletHelperService,
         private wfsService: WfsService,
         private trashGeneratingUnitService: TrashGeneratingUnitService,
+        private treatmentBMPService: TreatmentBMPService,
         private modalService: ModalService
     ) {}
 
@@ -204,6 +218,58 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
             tap((boundingBox) => {
                 if (this.mapIsReady) {
                     this.leafletHelperService.fitMapToBoundingBox(this.map, boundingBox);
+                }
+            })
+        );
+
+        this.treatmentBMPs$ = this.stormwaterJurisdiction$.pipe(
+            switchMap((x) => {
+                return this.treatmentBMPService.treatmentBmpsJurisdictionsJurisdictionIDVerifiedFeatureCollectionGet(x.StormwaterJurisdictionID);
+            }),
+            tap((treatmentBMPs) => {
+                var isCurrentlyOn = this.map.hasLayer(this.treatmentBMPClusterLayer);
+
+                if (this.treatmentBMPClusterLayer) {
+                    this.treatmentBMPClusterLayer.clearLayers();
+                    this.map.removeLayer(this.treatmentBMPClusterLayer);
+                    this.layerControl.removeLayer(this.treatmentBMPClusterLayer);
+                }
+
+                const inventoriedTreatmentBMPsLayer = new L.GeoJSON(treatmentBMPs, {
+                    pointToLayer: (feature, latlng) => {
+                        var iconSrc = "./assets/main/map-icons/marker-icon-orange.png";
+                        switch (feature.properties["TrashCaptureStatusTypeID"]) {
+                            case TrashCaptureStatusTypeEnum.Full:
+                                iconSrc = "./assets/main/map-icons/marker-icon-red.png";
+                                break;
+                            case TrashCaptureStatusTypeEnum.Partial:
+                                iconSrc = "./assets/main/map-icons/marker-icon-blue.png";
+                                break;
+                            case TrashCaptureStatusTypeEnum.None:
+                                iconSrc = "./assets/main/map-icons/marker-icon-black.png";
+                                break;
+                            case TrashCaptureStatusTypeEnum.NotProvided:
+                                iconSrc = "./assets/main/map-icons/marker-icon-gray.png";
+                                break;
+                            default:
+                                iconSrc = "./assets/main/map-icons/marker-icon-orange.png";
+                                break;
+                        }
+                        return L.marker(latlng, { icon: MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath(iconSrc) });
+                    },
+                    onEachFeature: (feature, layer) => {
+                        layer.bindPopup(
+                            `<b>Name:</b> <a target="_blank" href="${this.ocstBaseUrl()}/TreatmentBMP/Detail/${feature.properties.TreatmentBMPID}">${
+                                feature.properties.TreatmentBMPName
+                            }</a><br>` + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
+                        );
+                    },
+                });
+                this.treatmentBMPClusterLayer.addLayer(inventoriedTreatmentBMPsLayer);
+                this.treatmentBMPClusterLayer["legendHtml"] = "<img src='/assets/main/map-legend-images/bmpTrashCaptureLegend.png' />";
+                this.layerControl.addOverlay(this.treatmentBMPClusterLayer, "BMPs");
+                if (isCurrentlyOn) {
+                    this.map.addLayer(this.treatmentBMPClusterLayer);
                 }
             })
         );
