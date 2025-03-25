@@ -92,7 +92,7 @@ export class FieldDefinitionComponent implements OnInit, AfterViewInit, OnDestro
         this.isLoading = true;
 
         this.fieldDefinition.FieldDefinitionValue = this.editedContent;
-        this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDPut(this.fieldDefinition.FieldDefinitionID, this.fieldDefinition).subscribe(
+        this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDPut(this.fieldDefinition.FieldDefinitionType.FieldDefinitionTypeID, this.fieldDefinition).subscribe(
             (x) => this.loadFieldDefinition(x),
             (error) => {
                 this.isLoading = false;
