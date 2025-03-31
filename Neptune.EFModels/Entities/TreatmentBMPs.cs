@@ -134,11 +134,18 @@ namespace Neptune.EFModels.Entities
                 .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID)).ToList());
         }
 
-        public static FeatureCollection ListInventoryIsVerifiedByPersonAsFeatureCollection(NeptuneDbContext dbContext,
-            PersonDto person)
+        public static FeatureCollection ListInventoryIsVerifiedByPersonAsFeatureCollection(NeptuneDbContext dbContext, PersonDto person)
         {
             var treatmentBmps = ListByPerson(dbContext, person);
             return AsFeatureCollection(treatmentBmps.Where(x => x.ProjectID == null && x.InventoryIsVerified).ToList());
+        }
+
+        public static FeatureCollection ListInventoryIsVerifiedByPersonAndJurisdictionIDAsFeatureCollection(
+            NeptuneDbContext dbContext,
+            PersonDto person, int jurisdictionID)
+        {
+            var treatmentBmps = ListByPerson(dbContext, person);
+            return AsFeatureCollection(treatmentBmps.Where(x => x.ProjectID == null && x.StormwaterJurisdictionID == jurisdictionID && x.InventoryIsVerified).ToList());
         }
 
         public static FeatureCollection ListInventoryIsVerifiedByTrashCaptureStatusIDAsFeatureCollection(NeptuneDbContext dbContext,

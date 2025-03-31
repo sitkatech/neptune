@@ -13,7 +13,7 @@
     <neptune-map
         *ngIf="onlandVisualTrashAssessmentArea$ | async as onlandVisualTrashAssessmentArea"
         (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessmentArea)"
-        mapHeight="750px"
+        mapHeight="600px"
         [showLegend]="true">
         <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
         <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20" styles="parcel_alt"></parcel-layer>

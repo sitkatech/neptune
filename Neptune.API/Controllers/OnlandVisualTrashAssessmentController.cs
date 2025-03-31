@@ -155,9 +155,9 @@ public class OnlandVisualTrashAssessmentController(
     [HttpPost("{onlandVisualTrashAssessmentID}/refine-area")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
-    public async Task<ActionResult> UpdateOnlandVisualTrashAssessmentWithRefinedArea([FromRoute] int onlandVisualTrashAssessmentID, string geometryAsGeoJson)
+    public async Task<ActionResult> UpdateOnlandVisualTrashAssessmentWithRefinedArea([FromRoute] int onlandVisualTrashAssessmentID, OnlandVisualTrashAssessmentRefineAreaDto dto)
     {
-        await OnlandVisualTrashAssessments.UpdateGeometry(dbContext, onlandVisualTrashAssessmentID, geometryAsGeoJson);
+        await OnlandVisualTrashAssessments.UpdateGeometry(dbContext, onlandVisualTrashAssessmentID, dto.GeometryAsGeoJson);
         return Ok();
     }
 

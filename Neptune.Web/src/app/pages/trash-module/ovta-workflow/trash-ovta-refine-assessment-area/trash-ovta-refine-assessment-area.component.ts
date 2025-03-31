@@ -23,7 +23,7 @@ import { WorkflowBodyComponent } from "../../../../shared/components/workflow-bo
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
-import { IFeature, OnlandVisualTrashAssessmentDetailDto } from "src/app/shared/generated/model/models";
+import { IFeature, OnlandVisualTrashAssessmentDetailDto, OnlandVisualTrashAssessmentRefineAreaDto } from "src/app/shared/generated/model/models";
 import { FeatureCollection } from "geojson";
 import { WfsService } from "src/app/shared/services/wfs.service";
 
@@ -129,21 +129,23 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     }
 
     public save(andContinue = false) {
-        this.isLoadingSubmit = true;
-        var geometryAsGeoJson: string;
+        var onlandVisualTrashAssessmentRefineArea = new OnlandVisualTrashAssessmentRefineAreaDto();
+        onlandVisualTrashAssessmentRefineArea.OnlandVisualTrashAssessmentID = this.ovtaID;
         this.layer.eachLayer((layer) => {
-            geometryAsGeoJson = JSON.stringify(layer.toGeoJSON());
+            onlandVisualTrashAssessmentRefineArea.GeometryAsGeoJson = JSON.stringify(layer.toGeoJSON());
         });
 
-        this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(this.ovtaID, geometryAsGeoJson).subscribe(() => {
-            this.isLoadingSubmit = false;
-            this.alertService.clearAlerts();
-            this.alertService.pushAlert(new Alert("Successfully updated Assessment Area.", AlertContext.Success));
-            this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
-            if (andContinue) {
-                this.router.navigate([`../../${this.ovtaID}/review-and-finalize`], { relativeTo: this.route });
-            }
-        });
+        this.onlandVisualTrashAssessmentService
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(this.ovtaID, onlandVisualTrashAssessmentRefineArea)
+            .subscribe(() => {
+                this.isLoadingSubmit = false;
+                this.alertService.clearAlerts();
+                this.alertService.pushAlert(new Alert("Successfully updated Assessment Area.", AlertContext.Success));
+                this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
+                if (andContinue) {
+                    this.router.navigate([`../../${this.ovtaID}/review-and-finalize`], { relativeTo: this.route });
+                }
+            });
     }
 
     public addOrRemoveDrawControl(turnOn: boolean) {

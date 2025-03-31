@@ -1057,15 +1057,27 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "geometryAsGeoJson",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentRefineAreaDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentRefineAreaDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnlandVisualTrashAssessmentRefineAreaDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -3521,6 +3533,55 @@
         }
       }
     },
+    "/treatment-bmps/jurisdictions/{jurisdictionID}/verified/feature-collection": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "jurisdictionID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IFeature"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IFeature"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IFeature"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/treatment-bmps/planned-projects": {
       "get": {
         "tags": [
@@ -5078,6 +5139,20 @@
             "type": "boolean"
           },
           "ExplanationIfTypeIsOther": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OnlandVisualTrashAssessmentRefineAreaDto": {
+        "type": "object",
+        "properties": {
+          "OnlandVisualTrashAssessmentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "GeometryAsGeoJson": {
             "type": "string",
             "nullable": true
           }
