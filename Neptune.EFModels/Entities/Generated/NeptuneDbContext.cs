@@ -303,6 +303,8 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<vTreatmentBMPUpstream> vTreatmentBMPUpstreams { get; set; }
 
+    public virtual DbSet<vWaterQualityManagementPlanAnnualReport> vWaterQualityManagementPlanAnnualReports { get; set; }
+
     public virtual DbSet<vWaterQualityManagementPlanDetailed> vWaterQualityManagementPlanDetaileds { get; set; }
 
     public virtual DbSet<vWaterQualityManagementPlanLGUAudit> vWaterQualityManagementPlanLGUAudits { get; set; }
@@ -1363,6 +1365,11 @@ public partial class NeptuneDbContext : DbContext
         modelBuilder.Entity<vTreatmentBMPUpstream>(entity =>
         {
             entity.ToView("vTreatmentBMPUpstream");
+        });
+
+        modelBuilder.Entity<vWaterQualityManagementPlanAnnualReport>(entity =>
+        {
+            entity.ToView("vWaterQualityManagementPlanAnnualReport");
         });
 
         modelBuilder.Entity<vWaterQualityManagementPlanDetailed>(entity =>

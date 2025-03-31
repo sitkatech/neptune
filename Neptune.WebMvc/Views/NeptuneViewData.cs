@@ -142,6 +142,7 @@ namespace Neptune.WebMvc.Views
             bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldVisitController>(LinkGenerator, x => x.Index()), currentPerson, "View All Field Records", "Group2"));
 
             bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<WaterQualityManagementPlanController>(LinkGenerator, x => x.Index()), currentPerson, FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized(), "Group3"));
+            bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<WaterQualityManagementPlanController>(LinkGenerator, x => x.AnnualReport()), currentPerson, "WQMP Annual Report", "Group3"));
             bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<ParcelController>(LinkGenerator, x => x.Index()), currentPerson, "Parcels", "Group3"));
 
             return bmpMenu;
