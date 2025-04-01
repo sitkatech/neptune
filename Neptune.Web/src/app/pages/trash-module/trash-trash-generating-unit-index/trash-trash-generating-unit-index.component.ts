@@ -58,8 +58,8 @@ export class TrashTrashGeneratingUnitIndexComponent {
             }),
             this.utilityFunctionsService.createDecimalColumnDef("Median Household Income (Residential)", "MedianHouseholdIncomeResidential"),
             this.utilityFunctionsService.createDecimalColumnDef("Median Household Income (Retail)", "MedianHouseholdIncomeRetail"),
-            this.utilityFunctionsService.createBasicColumnDef("Permit Class", "PermitTypeName", {
-                CustomDropdownFilterField: "PermitTypeName",
+            this.utilityFunctionsService.createBasicColumnDef("Permit Class", "PermitClass", {
+                CustomDropdownFilterField: "PermitClass",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Land Use for TGR", "LandUseForTGR", {
                 CustomDropdownFilterField: "LandUseForTGR",
