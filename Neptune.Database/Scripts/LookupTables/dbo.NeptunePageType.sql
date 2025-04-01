@@ -84,7 +84,9 @@ USING (VALUES
 (85, 'ParcelUploadDataHub', 'Parcel Upload Data Hub'),
 (86, 'ExportBMPInventoryToGIS', 'Export BMP Inventory to GIS'),
 (87, 'SPAHomePage', 'SPA Home Page'),
-(88, 'WQMPModelingOptions', 'WQMP Modeling Options')
+(88, 'WQMPModelingOptions', 'WQMP Modeling Options'),
+(89, 'WQMPApprovalSummary', 'WQMP Approval Summary'),
+(90, 'WQMPPostConstructionInspectionAndVerification', 'WQMP Post Construction Inspection and Verification')
 )
 AS Source (NeptunePageTypeID, NeptunePageTypeName, NeptunePageTypeDisplayName)
 ON Target.NeptunePageTypeID = Source.NeptunePageTypeID

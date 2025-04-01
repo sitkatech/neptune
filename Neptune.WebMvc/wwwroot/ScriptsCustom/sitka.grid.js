@@ -503,8 +503,10 @@ Sitka.Grid.Class.Grid.prototype.filterOnOtherColumn = function (originalColumn, 
 Sitka.Grid.Class.Grid.prototype.showHideFilterRow = function (setToState) {
     var xhdrId = '#' + this.gridElement + ' div.xhdr';
     var objboxId = '#' + this.gridElement + ' div.objbox';
+    var hdrId = '#' + this.gridElement + ' .hdr';
     var xhdr = jQuery(xhdrId);
     var objbox = jQuery(objboxId);
+    var hdr = jQuery(hdrId);
     var filterRow = this.grid.hdr.rows[2];
     var currentState = (filterRow.style.display == "none") ? 0 : 1;
     if (setToState == undefined) {
@@ -525,7 +527,8 @@ Sitka.Grid.Class.Grid.prototype.showHideFilterRow = function (setToState) {
             else {
                 filterRow.style.display = "table-row";
             }
-            xhdr.height(xhdr.height() + this.awaitedRowHeight);
+            var height = hdr.height() ?? xhdr.height() + this.awaitedRowHeight;
+            xhdr.height(height);
             objbox.height(objbox.height() - this.awaitedRowHeight);
             Sitka.Methods.createCookie(this.getGridCookieName() + "filterVisible", "1", null);
         }
@@ -722,6 +725,34 @@ Sitka.Grid.Class.Grid.prototype.load = function (dataUrl) {
     });
 
     this.grid.load(dataUrl, "json");
+};
+
+Sitka.Grid.Class.Grid.prototype.reloadDataFromJson = function (jsonData) {
+    window.dhx4.attachEvent("onLoadXMLError", function (request, object) {
+        // status of 0 is a click away from grid (firefox errors on this, but we don't care), 200 is a-okay.
+        if (object.status !== 200 && object.status !== 0) {
+            SitkaAjax.errorHandler(object, object.status);
+        }
+        return false;
+    });
+    if (this.grid.getRowsNum() > 0) {
+        this.grid.clearAll();
+
+    } else {
+        jQuery("#gridEmptyText").remove();
+    }
+
+    this.grid.parse(jsonData, "json");
+
+    if (jsonData.rows.length == 0) {
+        // ensure the height of the hidden filter row is maintained so the grid doesn't jump around
+        var xhdrId = '#' + this.gridElement + ' div.xhdr';
+        var hdrId = '#' + this.gridElement + ' .hdr';
+        var xhdr = jQuery(xhdrId);
+        var hdr = jQuery(hdrId);
+        var height = xhdr.height() == hdr.height() ? xhdr.height() + hdr.height() + 2 : xhdr.height()
+        xhdr.height(height);
+    }
 };
 
 Sitka.Grid.Class.Grid.prototype.setGridInstructions = function (instructionHtml, show) {

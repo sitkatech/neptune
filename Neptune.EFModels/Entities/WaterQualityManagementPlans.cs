@@ -35,7 +35,9 @@ public static class WaterQualityManagementPlans
             .Include(x => x.TreatmentBMPs)
             .ThenInclude(x => x.TreatmentBMPType)
             .Include(x => x.StormwaterJurisdiction)
-            .ThenInclude(x => x.StormwaterJurisdictionGeometry).AsNoTracking()
+            .ThenInclude(x => x.StormwaterJurisdictionGeometry)
+            .Include(x => x.HydrologicSubarea)
+            .AsNoTracking()
             .SingleOrDefault(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID);
         Check.RequireNotNull(waterQualityManagementPlan,
             $"WaterQualityManagementPlan with ID {waterQualityManagementPlanID} not found!");
