@@ -1071,16 +1071,16 @@ The WQMP Boundaries for Stormwater Jurisdiction {stormwaterJurisdiction} were su
 
         [HttpGet]
         [WaterQualityManagementPlanAnnualReportFeature]
-        public GridJsonNetJObjectResult<vWaterQualityManagementPlanDetailed> AnnualReportApprovalSummaryGridData(int fiscalYear, int stormwaterJurisdictionID)
+        public GridJsonNetJObjectResult<vWaterQualityManagementPlanDetailed> AnnualReportApprovalSummaryGridData(int reportingYear, int stormwaterJurisdictionID)
         {
             var gridSpec = new AnnualReportApprovalSummaryGridSpec(_linkGenerator);
 
-            var fiscalYearStart = new DateTime(fiscalYear - 1, 7, 1);
-            var fiscalYearEnd = new DateTime(fiscalYear, 6, DateTime.DaysInMonth(fiscalYear, 6));
+            var reportingPeriodStart = GetWQMPReportingPeriodStart(reportingYear);
+            var reportingPeriodEnd = GetWQMPReportingPeriodEnd(reportingYear);
 
             var waterQualityManagementPlans =
                 vWaterQualityManagementPlanDetaileds.ListViewableByPerson(_dbContext, CurrentPerson)
-                    .Where(x => x.ApprovalDate >= fiscalYearStart && x.ApprovalDate <= fiscalYearEnd && (stormwaterJurisdictionID == -1 || x.StormwaterJurisdictionID == stormwaterJurisdictionID))
+                    .Where(x => x.ApprovalDate >= reportingPeriodStart && x.ApprovalDate <= reportingPeriodEnd && (stormwaterJurisdictionID == -1 || x.StormwaterJurisdictionID == stormwaterJurisdictionID))
                     .OrderBy(x => x.WaterQualityManagementPlanName)
                     .ToList();
             
@@ -1090,50 +1090,74 @@ The WQMP Boundaries for Stormwater Jurisdiction {stormwaterJurisdiction} were su
 
         [HttpGet]
         [WaterQualityManagementPlanAnnualReportFeature]
-        public GridJsonNetJObjectResult<PostConstructionInspectionAndVerificationGridSimple> AnnualReportPostConstructionInspectionAndVerificationGridData(int fiscalYear, int stormwaterJurisdictionID)
+        public GridJsonNetJObjectResult<PostConstructionInspectionAndVerificationGridSimple> AnnualReportPostConstructionInspectionAndVerificationGridData(int reportingYear, int stormwaterJurisdictionID)
         {
             var gridSpec = new AnnualReportPostConstructionInspectionAndVerificationGridSpec(_linkGenerator);
 
-            var fiscalYearStart = new DateTime(fiscalYear - 1, 7, 1);
-            var fiscalYearEnd = new DateTime(fiscalYear, 6, DateTime.DaysInMonth(fiscalYear, 6));
+            var reportingPeriodStart = GetWQMPReportingPeriodStart(reportingYear);
+            var reportingPeriodEnd = GetWQMPReportingPeriodEnd(reportingYear);
 
             var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForWQMPs(_dbContext, CurrentPerson).ToList();
 
             var wqmpInventoryVerificationsAndFieldVisits = vWaterQualityManagementPlanAnnualReports
                 .ListForStormwaterJurisdictionIDs(_dbContext, CurrentPerson, stormwaterJurisdictionIDsPersonCanView).Where(x =>
                     (stormwaterJurisdictionID == -1 || x.StormwaterJurisdictionID == stormwaterJurisdictionID) 
-                    && (!x.WaterQualityManagementPlanVerifyVerificationDate.HasValue || x.WaterQualityManagementPlanVerifyVerificationDate >= fiscalYearStart && x.WaterQualityManagementPlanVerifyVerificationDate <= fiscalYearEnd)
-                    && (!x.FieldVisitDate.HasValue || x.FieldVisitDate >= fiscalYearStart && x.FieldVisitDate <= fiscalYearEnd)
-                    )
+                    && x.WaterQualityManagementPlanVerifyVerificationDate >= reportingPeriodStart && x.WaterQualityManagementPlanVerifyVerificationDate <= reportingPeriodEnd)
                 .GroupBy(x => x.WaterQualityManagementPlanID);
 
-            var postConstructionInspectionAndVerificationGridSimples = wqmpInventoryVerificationsAndFieldVisits.Select(x =>
-            {
-                var wqmp = x.First();
-                var wqmpName = wqmp.WaterQualityManagementPlanName;
-                // count of BMPs is identical in all rows. Just take the first
-                var numberOfBMPs = wqmp.TreatmentBMPCount ?? wqmp.QuickBMPCount;
-                // Verification IDs and Field Visit IDs may be duplicated due to the joins in the view. Count distinct values.
-                var numberOfWQMPVerifications = x.Where(y => y.WaterQualityManagementPlanVerifyID.HasValue).DistinctBy(y => y.WaterQualityManagementPlanVerifyID).Count();
-                var numberOfFieldVisits= x.Where(y => y.FieldVisitID.HasValue).DistinctBy(y => y.FieldVisitID).Count();
-                var treatmentBMPNotes =  string.Join("; ", x.DistinctBy(y => y.WaterQualityManagementPlanVerifyID).Where(y => !string.IsNullOrWhiteSpace(y.WaterQualityManagementPlanVerifyTreatmentBMPNotes)).Select(y => y.WaterQualityManagementPlanVerifyTreatmentBMPNotes));
-                var quickBMPNotes = string.Join("; ", x.DistinctBy(y => y.WaterQualityManagementPlanVerifyID).Where(y => !string.IsNullOrWhiteSpace(y.WaterQualityManagementPlanVerifyQuickBMPNotes)).Select(y => y.WaterQualityManagementPlanVerifyQuickBMPNotes));
-                var comments = $"{treatmentBMPNotes}{(string.IsNullOrWhiteSpace(treatmentBMPNotes) ? string.Empty : "; ")}{quickBMPNotes}";
-                return new PostConstructionInspectionAndVerificationGridSimple
+            var postConstructionInspectionAndVerificationGridSimples = wqmpInventoryVerificationsAndFieldVisits.Select(
+                x =>
                 {
-                    WaterQualityManagementPlanID = x.Key,
-                    WaterQualityManagementPlanName = wqmpName,
-                    NumberOfBMPs = numberOfBMPs,
-                    NumberOfFieldVisits = numberOfFieldVisits,
-                    NumberOfWQMPVerifications = numberOfWQMPVerifications,
-                    WQMPVerificationComments = comments
-                };
-            }).OrderBy(x => x.WaterQualityManagementPlanName).ToList();
+                    var wqmp = x.First();
+                    var wqmpName = wqmp.WaterQualityManagementPlanName;
+                    // count of BMPs is identical in all rows. Just take the first
+                    
+
+                    var mostRecentVerification =
+                        x.OrderByDescending(y => y.WaterQualityManagementPlanVerifyVerificationDate).First();
+                    var useTreatmentBMP = mostRecentVerification.WaterQualityManagementPlanVerifyTreatmentBMPCount.HasValue;// wqmp.TreatmentBMPCount.HasValue;
+                    var numberOfBMPs = mostRecentVerification.WaterQualityManagementPlanVerifyTreatmentBMPCount ?? mostRecentVerification.WaterQualityManagementPlanVerifyQuickBMPCount;
+                    var bmpsAdequate = useTreatmentBMP
+                        ? mostRecentVerification.WaterQualityManagementPlanVerifyTreatmentBMPIsAdequateCount
+                        : mostRecentVerification.WaterQualityManagementPlanVerifyQuickBMPIsAdequateCount;
+                    var bmpsDeficient = useTreatmentBMP
+                        ? mostRecentVerification.WaterQualityManagementPlanVerifyTreatmentBMPIsDeficientCount
+                        : mostRecentVerification.WaterQualityManagementPlanVerifyQuickBMPIsDeficient;
+
+                    var bmpNoteComments =
+                        $"{(useTreatmentBMP ? mostRecentVerification.WaterQualityManagementPlanVerifyTreatmentBMPNotes : mostRecentVerification.WaterQualityManagementPlanVerifyQuickBMPNotes)}";
+                    var comments =
+                        $"{bmpNoteComments}{(string.IsNullOrWhiteSpace(bmpNoteComments) ? string.Empty : "; ")}{mostRecentVerification.EnforcementOrFollowupActions}";
+                    return new PostConstructionInspectionAndVerificationGridSimple
+                    {
+                        WaterQualityManagementPlanID = x.Key,
+                        WaterQualityManagementPlanName = wqmpName,
+                        WaterQualityManagementPlanVerifyStatusName =
+                            mostRecentVerification.WaterQualityManagementPlanVerifyStatusID.HasValue
+                                ? WaterQualityManagementPlanVerifyStatus
+                                    .AllLookupDictionary[
+                                        mostRecentVerification.WaterQualityManagementPlanVerifyStatusID.Value]
+                                    .WaterQualityManagementPlanVerifyStatusDisplayName
+                                : string.Empty,
+                        NumberOfBMPs = numberOfBMPs,
+                        NumberOfBMPsAdequate = bmpsAdequate,
+                        NumberOfBMPsDeficient = bmpsDeficient,
+                        WQMPVerificationComments = comments
+                    };
+                }).OrderBy(x => x.WaterQualityManagementPlanName).ToList();
 
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<PostConstructionInspectionAndVerificationGridSimple>(postConstructionInspectionAndVerificationGridSimples, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
+        private DateTime GetWQMPReportingPeriodStart(int reportingYear)
+        {
+            return new DateTime(reportingYear - 1, 7, 1);
+        }
 
+        private DateTime GetWQMPReportingPeriodEnd(int reportingYear)
+        {
+            return new DateTime(reportingYear, 6, DateTime.DaysInMonth(reportingYear, 6));
+        }
     }
 }

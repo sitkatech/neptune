@@ -22,7 +22,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Land Use", x => x.WaterQualityManagementPlanLandUseDisplayName, 100,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Hydrologic Subarea", x => x.HydrologicSubareaName, 150, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Hydrologic Subarea", x => x.HydrologicSubareaName, 200, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Acres (user-entered)", x => x.RecordedWQMPAreaInAcres, 130, DhtmlxGridColumnFormatType.Decimal);
             Add("Date Approved", x => x.ApprovalDate, 140, DhtmlxGridColumnFormatType.Date);
         }
@@ -39,10 +39,11 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             Add("Water Quality Management Plan",
                 x => new HtmlString(
                     $"<a href='{detailUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID)}'>{x.WaterQualityManagementPlanName}</a>"),
-                450, DhtmlxGridColumnFilterType.Html);
+                340, DhtmlxGridColumnFilterType.Html);
+            Add("WQMP Status at End of Period", x => x.WaterQualityManagementPlanVerifyStatusName, 260, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("# of BMPs", x => x.NumberOfBMPs, 100, DhtmlxGridColumnFormatType.Integer);
-            Add("# of Field Visits", x => x.NumberOfFieldVisits, 100, DhtmlxGridColumnFormatType.Integer);
-            Add("# of WQMP O&M Verifications", x => x.NumberOfWQMPVerifications, 100, DhtmlxGridColumnFormatType.Integer);
+            Add("BMPs Adequate", x => x.NumberOfBMPsAdequate, 100, DhtmlxGridColumnFormatType.Integer);
+            Add("BMPs Deficient", x => x.NumberOfBMPsDeficient, 100, DhtmlxGridColumnFormatType.Integer);
             Add("WQMP O&M Verification Comments", x => x.WQMPVerificationComments, 320, DhtmlxGridColumnFilterType.Text);
 
         }
@@ -51,10 +52,11 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
     public class PostConstructionInspectionAndVerificationGridSimple
     {
         public int WaterQualityManagementPlanID { get; set; }
-        public string? WaterQualityManagementPlanName { get; set; }
+        public string WaterQualityManagementPlanName { get; set; }
+        public string WaterQualityManagementPlanVerifyStatusName { get; set; }
         public int? NumberOfBMPs { get; set; }
-        public int? NumberOfFieldVisits { get; set; }
-        public int? NumberOfWQMPVerifications { get; set; }
-        public string? WQMPVerificationComments { get; set; }
+        public int? NumberOfBMPsAdequate { get; set; }
+        public int? NumberOfBMPsDeficient{ get; set; }
+        public string WQMPVerificationComments { get; set; }
     }
 }
