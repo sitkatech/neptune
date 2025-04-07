@@ -219,6 +219,25 @@ export class UtilityFunctionsService {
         return colDef;
     }
 
+    public createLinkHrefColumnDef(headerName: string, fieldName: string, linkValueField: string, linkColumnDefParams?: LinkColumnDefParams) {
+        const colDef: ColDef = {
+            headerName: headerName,
+            field: fieldName,
+            valueGetter: (params) => {
+                return {
+                    LinkValue: this.defaultValueGetter(params, linkValueField),
+                    LinkDisplay: this.defaultValueGetter(params, linkColumnDefParams?.LinkDisplayField ?? fieldName),
+                    href: `${linkColumnDefParams.HrefTemplate}/${this.defaultValueGetter(params, linkValueField)}`
+                };
+            },
+            filterValueGetter: (params) => this.defaultValueGetter(params, fieldName),
+            comparator: this.linkRendererComparator,
+            cellRenderer: LinkRendererComponent,
+        };
+        this.applyDefaultQanatColumnDefParams(colDef, linkColumnDefParams);
+        return colDef;
+    }
+
     public multiLinkRendererComparator(id1: any, id2: any) {
         if (id1.downloadDisplay == id2.downloadDisplay) {
             return 0;
@@ -373,6 +392,7 @@ export interface LinkColumnDefParams extends QanatColumnDefParams {
     Width?: number;
     InRouterLink?: string;
     LinkDisplayField?: string;
+    HrefTemplate?: string;
 }
 
 export interface MultiLinkColumnDefParams extends QanatColumnDefParams {
