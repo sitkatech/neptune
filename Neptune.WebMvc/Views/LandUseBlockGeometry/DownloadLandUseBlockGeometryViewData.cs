@@ -17,8 +17,8 @@ namespace Neptune.WebMvc.Views.LandUseBlockGeometry
         public DownloadLandUseBlockGeometryViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, WebConfiguration webConfiguration, string newGisUploadUrl, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions, string uploadLandUseBlockUrl) : base(httpContext, linkGenerator, currentPerson, webConfiguration)
         {
             UploadLandUseBlockUrl = uploadLandUseBlockUrl;
-            EntityName = "Land Use Block";
-            EntityUrl = SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            EntityName = "Data Hub";
+            EntityUrl = SitkaRoute<DataHubController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             PageTitle = "Download Land Use Block Geometry";
             StormwaterJurisdictions =
                 stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
