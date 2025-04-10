@@ -19,5 +19,8 @@ namespace Neptune.WebMvc.Views.DelineationGeometry
         [Required]
         [DisplayName("Stormwater Jurisdiction")]
         public int? StormwaterJurisdictionID { get; set; }
+
+        [DisplayName("Delineation Status Field")]
+        public string DelineationStatusField { get; set; }
     }
 }

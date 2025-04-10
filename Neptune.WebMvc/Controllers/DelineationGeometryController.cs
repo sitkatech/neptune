@@ -50,7 +50,7 @@ namespace Neptune.WebMvc.Controllers
         [JurisdictionEditFeature]
         public ViewResult UpdateDelineationGeometry()
         {
-            var viewModel = new UpdateDelineationGeometryViewModel(){ TreatmentBMPNameField = "TreatmentBMPName" };
+            var viewModel = new UpdateDelineationGeometryViewModel(){ TreatmentBMPNameField = "TreatmentBMPName", DelineationStatusField = "DelineationStatus" };
             return ViewUpdateDelineationGeometry(viewModel);
         }
 
@@ -95,10 +95,13 @@ namespace Neptune.WebMvc.Controllers
                 {
                     $"{CurrentPerson.PersonID} as UploadedByPersonID",
                     $"{viewModel.StormwaterJurisdictionID} as StormwaterJurisdictionID",
-                    $"{viewModel.TreatmentBMPNameField} as TreatmentBMPName",
-                    $"DelineationStatus"
+                    $"{viewModel.TreatmentBMPNameField} as TreatmentBMPName"
                 };
-
+                if (!string.IsNullOrWhiteSpace(viewModel.DelineationStatusField))
+                {
+                    columns.Add($"{viewModel.DelineationStatusField} as DelineationStatus");
+                }
+                
                 var apiRequest = new GdbToGeoJsonRequestDto()
                 {
                     BlobContainer = AzureBlobStorageService.BlobContainerName,
@@ -305,31 +308,30 @@ namespace Neptune.WebMvc.Controllers
                 return ViewUpdateDelineationGeometry(new UpdateDelineationGeometryViewModel());
             }
 
-            var delineationStagings = _dbContext.DelineationStagings.Where(x => x.UploadedByPersonID == CurrentPerson.PersonID).ToList();
-
+            var delineationStagings = _dbContext.DelineationStagings.AsNoTracking().Where(x => x.UploadedByPersonID == CurrentPerson.PersonID).ToList();
+            var treatmentBMPNames = delineationStagings.Select(x => x.TreatmentBMPName).ToList();
             // Will break if there are multiple batches of staged uploads, which is precisely what we want to happen. 
             var stormwaterJurisdictionID = delineationStagings.Select(x => x.StormwaterJurisdictionID).Distinct().Single();
-            var stormwaterJurisdiction = _dbContext.StormwaterJurisdictions.Include(x => x.Organization)
-                .Include(x => x.TreatmentBMPs).ThenInclude(x => x.Delineation)
-                .Single(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID);
-            var stormwaterJurisdictionName = stormwaterJurisdiction.GetOrganizationDisplayName();
-                                                        
-            // Starting from the treatment BMP is kind of backwards, conceptually, but it's easier to read and write
-            var treatmentBMPNames = delineationStagings.Select(x => x.TreatmentBMPName).ToList();
-            var treatmentBMPsToUpdate = 
-                stormwaterJurisdiction.TreatmentBMPs.Where(x => treatmentBMPNames.Contains(x.TreatmentBMPName)).ToList();
+            var delineationsToDelete = _dbContext.Delineations.AsNoTracking().Include(x => x.TreatmentBMP)
+                .Where(x => treatmentBMPNames.Contains(x.TreatmentBMP.TreatmentBMPName)).Select(x => x.DelineationID).ToList();
+            foreach (var delineationID in delineationsToDelete)
+            {
+                await Delineation.DeleteFull(_dbContext, delineationID);
+            }
 
+            // Starting from the treatment BMP is kind of backwards, conceptually, but it's easier to read and write
+            var treatmentBMPsToUpdate = _dbContext.TreatmentBMPs.Include(x => x.Delineation).Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID && treatmentBMPNames.Contains(x.TreatmentBMPName)).ToList();
+
+            var newDelineations = new List<Delineation>();
             foreach (var treatmentBMP in treatmentBMPsToUpdate)
             {
                 var delineationStaging = delineationStagings.Single(z => treatmentBMP.TreatmentBMPName == z.TreatmentBMPName);
 
-                treatmentBMP.Delineation?.DeleteFull(_dbContext);
-
-                treatmentBMP.Delineation = new Delineation
+                var delineation = new Delineation
                 {
                     HasDiscrepancies = false,
                     IsVerified = delineationStaging.DelineationStatus?.Trim().ToLower() == "verified",
-                    DelineationTypeID = (int) DelineationTypeEnum.Distributed,
+                    DelineationTypeID = (int)DelineationTypeEnum.Distributed,
                     TreatmentBMPID = treatmentBMP.TreatmentBMPID,
                     DateLastModified = DateTime.UtcNow,
                     VerifiedByPersonID = CurrentPerson.PersonID,
@@ -337,9 +339,15 @@ namespace Neptune.WebMvc.Controllers
                     DelineationGeometry4326 = delineationStaging.Geometry.ProjectTo4326(),
                     DelineationGeometry = delineationStaging.Geometry
                 };
+                newDelineations.Add(delineation);
             }
+            _dbContext.Delineations.AddRange(newDelineations);
 
             var successfulUploadCount = (int?)treatmentBMPsToUpdate.Count;
+
+            var stormwaterJurisdiction = _dbContext.StormwaterJurisdictions.AsNoTracking().Include(x => x.Organization)
+                .Single(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID);
+            var stormwaterJurisdictionName = stormwaterJurisdiction.GetOrganizationDisplayName();
 
             SetMessageForDisplay($"{successfulUploadCount} Delineations were successfully uploaded for Jurisdiction {stormwaterJurisdictionName}");
 
