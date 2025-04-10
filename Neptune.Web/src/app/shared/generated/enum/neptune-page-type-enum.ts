@@ -90,7 +90,9 @@ export enum NeptunePageTypeEnum {
   ParcelUploadDataHub = 85,
   ExportBMPInventoryToGIS = 86,
   SPAHomePage = 87,
-  WQMPModelingOptions = 88
+  WQMPModelingOptions = 88,
+  WQMPApprovalSummary = 89,
+  WQMPPostConstructionInspectionAndVerification = 90
 }
 
 export const NeptunePageTypes: LookupTableEntry[]  = [
@@ -178,6 +180,8 @@ export const NeptunePageTypes: LookupTableEntry[]  = [
   { Name: "ParcelUploadDataHub", DisplayName: "Parcel Upload Data Hub", Value: 85 },
   { Name: "ExportBMPInventoryToGIS", DisplayName: "Export BMP Inventory to GIS", Value: 86 },
   { Name: "SPAHomePage", DisplayName: "SPA Home Page", Value: 87 },
-  { Name: "WQMPModelingOptions", DisplayName: "WQMP Modeling Options", Value: 88 }
+  { Name: "WQMPModelingOptions", DisplayName: "WQMP Modeling Options", Value: 88 },
+  { Name: "WQMPApprovalSummary", DisplayName: "WQMP Approval Summary", Value: 89 },
+  { Name: "WQMPPostConstructionInspectionAndVerification", DisplayName: "WQMP Post Construction Inspection and Verification", Value: 90 }
 ];
 export const NeptunePageTypesAsSelectDropdownOptions = NeptunePageTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

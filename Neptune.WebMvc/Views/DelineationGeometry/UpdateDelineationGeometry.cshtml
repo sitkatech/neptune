@@ -57,6 +57,15 @@
                         </div>
                     </div>
                     <div class="row form-group">
+                        <div class="col-md-6">
+                            @Html.LabelWithSugarFor(x => x.DelineationStatusField)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(x => x.DelineationStatusField, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.DelineationStatusField)
+                        </div>
+                    </div>
+                    <div class="row form-group">
                         <div class="col-md-12">
                             @Html.EditorFor(x => x.FileResourceData)
                             @Html.ValidationMessageFor(x => x.FileResourceData)

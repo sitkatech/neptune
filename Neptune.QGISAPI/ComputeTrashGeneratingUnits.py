@@ -179,7 +179,7 @@ class Flatten:
         res = processing.run("qgis:joinattributesbylocation", {
 	        'INPUT': self.working_layer,
 	        'JOIN': dupe,
-	        'PREDICATE': ['2'], # 5 := Within
+	        'PREDICATE': ['5'], # 5 := Within
 	        'JOIN_FIELDS':'',
 	        'METHOD':'0',
 	        'DISCARD_NONMATCHING':False,

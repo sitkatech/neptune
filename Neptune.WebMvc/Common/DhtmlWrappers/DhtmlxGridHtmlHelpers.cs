@@ -160,7 +160,7 @@ namespace Neptune.WebMvc.Common.DhtmlWrappers
             else
             {{
                 Sitka.{0}.showHideFilterRow(false);
-                Sitka.{0}.setGridInstructions(""<div style=\""padding:10px; font-weight:bold\"">{11}</div>"", true);
+                Sitka.{0}.setGridInstructions(""<div id=\""gridEmptyText\"" style=\""padding:10px; font-weight:bold\"">{11}</div>"", true);
             }}
         }});
         {12}

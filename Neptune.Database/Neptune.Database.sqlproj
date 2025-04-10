@@ -421,6 +421,8 @@
     <None Include="Scripts\ReleaseScripts\008 - Add neptune page for new home page.sql" />
     <None Include="Scripts\ReleaseScripts\009 - add neptune page for wqmp modeling options.sql" />
     <None Include="Scripts\ReleaseScripts\010 - add field definitions for trash home page.sql" />
+    <Build Include="dbo\Views\dbo.vWaterQualityManagementPlanAnnualReport.sql" />
+    <None Include="Scripts\ReleaseScripts\011 - add neptune page for wqmp annual report.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Neptune.Database.refactorlog" />

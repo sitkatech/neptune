@@ -12,7 +12,7 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class WaterQualityManagementPlanVerifyStatus : IHavePrimaryKey
     {
-        public static readonly WaterQualityManagementPlanVerifyStatusVerifyAdequateOAndMofWQMP VerifyAdequateOAndMofWQMP = WaterQualityManagementPlanVerifyStatusVerifyAdequateOAndMofWQMP.Instance;
+        public static readonly WaterQualityManagementPlanVerifyStatusAdequateOAndMofWQMPisVerified AdequateOAndMofWQMPisVerified = WaterQualityManagementPlanVerifyStatusAdequateOAndMofWQMPisVerified.Instance;
         public static readonly WaterQualityManagementPlanVerifyStatusDeficienciesarePresentandFollowupisRequired DeficienciesarePresentandFollowupisRequired = WaterQualityManagementPlanVerifyStatusDeficienciesarePresentandFollowupisRequired.Instance;
 
         public static readonly List<WaterQualityManagementPlanVerifyStatus> All;
@@ -25,8 +25,8 @@ namespace Neptune.EFModels.Entities
         /// </summary>
         static WaterQualityManagementPlanVerifyStatus()
         {
-            All = new List<WaterQualityManagementPlanVerifyStatus> { VerifyAdequateOAndMofWQMP, DeficienciesarePresentandFollowupisRequired };
-            AllAsSimpleDto = new List<WaterQualityManagementPlanVerifyStatusSimpleDto> { VerifyAdequateOAndMofWQMP.AsSimpleDto(), DeficienciesarePresentandFollowupisRequired.AsSimpleDto() };
+            All = new List<WaterQualityManagementPlanVerifyStatus> { AdequateOAndMofWQMPisVerified, DeficienciesarePresentandFollowupisRequired };
+            AllAsSimpleDto = new List<WaterQualityManagementPlanVerifyStatusSimpleDto> { AdequateOAndMofWQMPisVerified.AsSimpleDto(), DeficienciesarePresentandFollowupisRequired.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanVerifyStatus>(All.ToDictionary(x => x.WaterQualityManagementPlanVerifyStatusID));
             AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanVerifyStatusSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.WaterQualityManagementPlanVerifyStatusID));
         }
@@ -97,10 +97,10 @@ namespace Neptune.EFModels.Entities
         {
             switch (enumValue)
             {
+                case WaterQualityManagementPlanVerifyStatusEnum.AdequateOAndMofWQMPisVerified:
+                    return AdequateOAndMofWQMPisVerified;
                 case WaterQualityManagementPlanVerifyStatusEnum.DeficienciesarePresentandFollowupisRequired:
                     return DeficienciesarePresentandFollowupisRequired;
-                case WaterQualityManagementPlanVerifyStatusEnum.VerifyAdequateOAndMofWQMP:
-                    return VerifyAdequateOAndMofWQMP;
                 default:
                     throw new ArgumentException("Unable to map Enum: {enumValue}");
             }
@@ -109,14 +109,14 @@ namespace Neptune.EFModels.Entities
 
     public enum WaterQualityManagementPlanVerifyStatusEnum
     {
-        VerifyAdequateOAndMofWQMP = 1,
+        AdequateOAndMofWQMPisVerified = 1,
         DeficienciesarePresentandFollowupisRequired = 2
     }
 
-    public partial class WaterQualityManagementPlanVerifyStatusVerifyAdequateOAndMofWQMP : WaterQualityManagementPlanVerifyStatus
+    public partial class WaterQualityManagementPlanVerifyStatusAdequateOAndMofWQMPisVerified : WaterQualityManagementPlanVerifyStatus
     {
-        private WaterQualityManagementPlanVerifyStatusVerifyAdequateOAndMofWQMP(int waterQualityManagementPlanVerifyStatusID, string waterQualityManagementPlanVerifyStatusName, string waterQualityManagementPlanVerifyStatusDisplayName) : base(waterQualityManagementPlanVerifyStatusID, waterQualityManagementPlanVerifyStatusName, waterQualityManagementPlanVerifyStatusDisplayName) {}
-        public static readonly WaterQualityManagementPlanVerifyStatusVerifyAdequateOAndMofWQMP Instance = new WaterQualityManagementPlanVerifyStatusVerifyAdequateOAndMofWQMP(1, @"Verify Adequate O&M of WQMP", @"Verify Adequate O&M of WQMP");
+        private WaterQualityManagementPlanVerifyStatusAdequateOAndMofWQMPisVerified(int waterQualityManagementPlanVerifyStatusID, string waterQualityManagementPlanVerifyStatusName, string waterQualityManagementPlanVerifyStatusDisplayName) : base(waterQualityManagementPlanVerifyStatusID, waterQualityManagementPlanVerifyStatusName, waterQualityManagementPlanVerifyStatusDisplayName) {}
+        public static readonly WaterQualityManagementPlanVerifyStatusAdequateOAndMofWQMPisVerified Instance = new WaterQualityManagementPlanVerifyStatusAdequateOAndMofWQMPisVerified(1, @"Adequate O&M of WQMP is Verified", @"Adequate O&M of WQMP is Verified");
     }
 
     public partial class WaterQualityManagementPlanVerifyStatusDeficienciesarePresentandFollowupisRequired : WaterQualityManagementPlanVerifyStatus

@@ -15,8 +15,8 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
 
         public BulkUploadOVTAsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.NeptunePage neptunePage, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
-            EntityName = FieldDefinitionType.OnlandVisualTrashAssessment.GetFieldDefinitionLabel();
-            EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            EntityName = "Data Hub";
+            EntityUrl = SitkaRoute<DataHubController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             PageTitle = "Bulk Upload OTVAs";
             StormwaterJurisdictions =
                 stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
