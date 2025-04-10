@@ -196,7 +196,16 @@ export class UtilityFunctionsService {
         if (id1.LinkDisplay == id2.LinkDisplay) {
             return 0;
         }
-        return id1.LinkDisplay > id2.LinkDisplay ? 1 : -1;
+        if (id1.LinkDisplay == null){
+            // id1.LinkDisplay is null and id2.LinkDisplay is not null. Sort id1.LinkDisplay before
+            return -1;
+        }
+        if(id2.LinkDisplay == null){
+            // id1.LinkDisplay is not null and id2.LinkDisplay is null. Sort id1.LinkDisplay after
+            return 1;
+        }
+        // compare case insensitive
+        return id1.LinkDisplay.localeCompare(id2.LinkDisplay, 'en', {'sensitivity': 'base'});
     }
 
     public createLinkColumnDef(headerName: string, fieldName: string, linkValueField: string, linkColumnDefParams?: LinkColumnDefParams) {
