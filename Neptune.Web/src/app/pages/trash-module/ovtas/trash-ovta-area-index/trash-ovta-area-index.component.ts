@@ -69,7 +69,9 @@ export class TrashOvtaAreaIndexComponent {
                     },
                 ];
             }),
-            this.utilityFunctionsService.createLinkColumnDef("Assessment Area Name", "OnlandVisualTrashAssessmentAreaName", "OnlandVisualTrashAssessmentAreaID"),
+            this.utilityFunctionsService.createLinkColumnDef("Assessment Area Name", "OnlandVisualTrashAssessmentAreaName", "OnlandVisualTrashAssessmentAreaID", {
+                InRouterLink: "../onland-visual-trash-assessment-areas/",
+            }),
             this.utilityFunctionsService.createBasicColumnDef("Baseline Score", "OnlandVisualTrashAssessmentBaselineScoreName", {
                 CustomDropdownFilterField: "OnlandVisualTrashAssessmentBaselineScoreName",
             }),
