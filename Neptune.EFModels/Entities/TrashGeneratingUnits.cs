@@ -17,6 +17,8 @@ public static class TrashGeneratingUnits
                 TrashGeneratingUnitID = x.TrashGeneratingUnitID,
                 TrashCaptureEffectivenessBMP = x.TrashCaptureEffectivenessBMP,
                 TrashCaptureStatusBMP = x.TrashCaptureStatusBMP,
+                TreatmentBMPName = x.TreatmentBMPName,
+                TreatmentBMPID = x.TreatmentBMPID,
                 StormwaterJurisdictionID = x.StormwaterJurisdictionID,
                 StormwaterJurisdictionName = x.OrganizationName,
                 BaselineLoadingRate = x.BaselineLoadingRate,

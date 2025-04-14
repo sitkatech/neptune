@@ -14,6 +14,7 @@ import { FormControl, FormControlOptions, FormControlState, Validators } from "@
 export class TrashGeneratingUnitGridDto { 
     TrashGeneratingUnitID?: number;
     TrashCaptureEffectivenessBMP?: number;
+    TreatmentBMPID?: number;
     TreatmentBMPName?: string;
     TrashCaptureStatusBMP?: string;
     StormwaterJurisdictionID?: number;
@@ -45,6 +46,7 @@ export class TrashGeneratingUnitGridDto {
 export interface TrashGeneratingUnitGridDtoForm { 
     TrashGeneratingUnitID?: FormControl<number>;
     TrashCaptureEffectivenessBMP?: FormControl<number>;
+    TreatmentBMPID?: FormControl<number>;
     TreatmentBMPName?: FormControl<string>;
     TrashCaptureStatusBMP?: FormControl<string>;
     StormwaterJurisdictionID?: FormControl<number>;
@@ -82,6 +84,16 @@ export class TrashGeneratingUnitGridDtoFormControls {
         }
     );
     public static TrashCaptureEffectivenessBMP = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

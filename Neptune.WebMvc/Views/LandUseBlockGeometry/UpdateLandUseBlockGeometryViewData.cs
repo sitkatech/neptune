@@ -18,8 +18,8 @@ namespace Neptune.WebMvc.Views.LandUseBlockGeometry
         {
             NewGisUploadUrl = newGisUploadUrl;
             DownloadLandUseBlockUrl = downloadLandUseBlockUrl;
-            EntityName = "Land Use Block";
-            EntityUrl = SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            EntityName = "Data Hub";
+            EntityUrl = SitkaRoute<DataHubController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
             PageTitle = "Update Land Use Block Geometry";
             StormwaterJurisdictions =
                 stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())

@@ -47,5 +47,28 @@ namespace Neptune.EFModels.Entities
             await dbContext.ProjectNereidResults.Where(x => x.DelineationID == DelineationID).ExecuteDeleteAsync();
             await dbContext.Delineations.Where(x => x.DelineationID == DelineationID).ExecuteDeleteAsync();
         }
+
+        public static async Task DeleteFull(NeptuneDbContext dbContext, int delineationID)
+        {
+            await dbContext.DelineationOverlaps.Where(x => x.DelineationID == delineationID).ExecuteDeleteAsync();
+            await dbContext.DelineationOverlaps.Where(x => x.OverlappingDelineationID == delineationID).ExecuteDeleteAsync();
+            await dbContext.DirtyModelNodes.Where(x => x.DelineationID == delineationID).ExecuteDeleteAsync();
+            await dbContext.HRUCharacteristics.Include(x => x.LoadGeneratingUnit).Where(x => x.LoadGeneratingUnit.DelineationID == delineationID)
+                .ExecuteDeleteAsync();
+            await dbContext.LoadGeneratingUnits.Where(x => x.DelineationID == delineationID)
+                .ExecuteDeleteAsync();
+            await dbContext.LoadGeneratingUnit4326s.Where(x => x.DelineationID == delineationID)
+                .ExecuteDeleteAsync();
+            await dbContext.NereidResults.Where(x => x.DelineationID == delineationID).ExecuteDeleteAsync();
+            await dbContext.ProjectHRUCharacteristics
+                .Include(x => x.ProjectLoadGeneratingUnit)
+                .Where(x => x.ProjectLoadGeneratingUnit.DelineationID == delineationID).ExecuteDeleteAsync();
+            await dbContext.ProjectLoadGeneratingUnits.Where(x => x.DelineationID == delineationID)
+                .ExecuteDeleteAsync();
+            await dbContext.TrashGeneratingUnits.Where(x => x.DelineationID == delineationID)
+                .ExecuteDeleteAsync();
+            await dbContext.ProjectNereidResults.Where(x => x.DelineationID == delineationID).ExecuteDeleteAsync();
+            await dbContext.Delineations.Where(x => x.DelineationID == delineationID).ExecuteDeleteAsync();
+        }
     }
 }

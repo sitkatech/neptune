@@ -31,10 +31,10 @@ namespace Neptune.EFModels.Entities
 {
     public static class TreatmentBMPs
     {
-        private static IQueryable<TreatmentBMP> GetTreatmentBMPsDisplayOnlyImpl(NeptuneDbContext dbContext)
+        private static IQueryable<TreatmentBMP> GetTreatmentBMPsDisplayOnlyImpl(NeptuneDbContext dbContext, bool checkIsAnalyzedInModelingModule = true)
         {
             return dbContext.TreatmentBMPs
-                .Include(x => x.TreatmentBMPType).Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule)
+                .Include(x => x.TreatmentBMPType).Where(x => !checkIsAnalyzedInModelingModule || x.TreatmentBMPType.IsAnalyzedInModelingModule)
                 .Include(x => x.Delineation)
                 .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
                 .Include(x => x.Project)
@@ -144,7 +144,7 @@ namespace Neptune.EFModels.Entities
             NeptuneDbContext dbContext,
             PersonDto person, int jurisdictionID)
         {
-            var treatmentBmps = ListByPerson(dbContext, person);
+            var treatmentBmps = ListByPerson(dbContext, person, false);
             return AsFeatureCollection(treatmentBmps.Where(x => x.ProjectID == null && x.StormwaterJurisdictionID == jurisdictionID && x.InventoryIsVerified).ToList());
         }
 
@@ -169,18 +169,18 @@ namespace Neptune.EFModels.Entities
                 .ToList();
         }
 
-        private static List<TreatmentBMP> ListByPerson(NeptuneDbContext dbContext, PersonDto? person)
+        private static List<TreatmentBMP> ListByPerson(NeptuneDbContext dbContext, PersonDto? person, bool checkIsAnalyzedInModelingModule = true)
         {
             List<TreatmentBMP> treatmentBmps;
             if (person == null || !(person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin))
             {
                 var jurisdictionIDs = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(dbContext, person?.PersonID);
-                treatmentBmps = GetTreatmentBMPsDisplayOnlyImpl(dbContext)
+                treatmentBmps = GetTreatmentBMPsDisplayOnlyImpl(dbContext, checkIsAnalyzedInModelingModule)
                     .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID)).ToList();
             }
             else
             {
-                treatmentBmps = GetTreatmentBMPsDisplayOnlyImpl(dbContext).ToList();
+                treatmentBmps = GetTreatmentBMPsDisplayOnlyImpl(dbContext, checkIsAnalyzedInModelingModule).ToList();
             }
 
             return treatmentBmps;

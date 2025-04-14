@@ -9,6 +9,7 @@ import { PageHeaderComponent } from "../../../shared/components/page-header/page
 import { TrashGeneratingUnitService } from "../../../shared/generated/api/trash-generating-unit.service";
 import { TrashGeneratingUnitGridDto } from "../../../shared/generated/model/trash-generating-unit-grid-dto";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
+import { environment } from "src/environments/environment";
 
 @Component({
     selector: "trash-trash-generating-unit-index",
@@ -31,13 +32,17 @@ export class TrashTrashGeneratingUnitIndexComponent {
                 CustomDropdownFilterField: "PriorityLandUseTypeDisplayName",
             }),
             this.utilityFunctionsService.createLinkColumnDef("Governing OVTA Area", "OnlandVisualTrashAssessmentAreaName", "OnlandVisualTrashAssessmentAreaID", {
-                InRouterLink: "../onland-visual-trash-assessment-area/"
+                InRouterLink: "../onland-visual-trash-assessment-areas/"
             }),
             this.utilityFunctionsService.createBasicColumnDef("Governing OVTA Area Baseline Score", "OnlandVisualTrashAssessmentAreaBaselineScore", {
                 CustomDropdownFilterField: "OnlandVisualTrashAssessmentAreaBaselineScore",
             }),
-            this.utilityFunctionsService.createBasicColumnDef("Governing Treatment BMP", ""),
-            this.utilityFunctionsService.createBasicColumnDef("Governing WQMP", "WaterQualityManagementPlanName"),
+            this.utilityFunctionsService.createLinkHrefColumnDef("Governing Treatment BMP", "TreatmentBMPName", "TreatmentBMPID", {
+                HrefTemplate: `${environment.ocStormwaterToolsBaseUrl}/TreatmentBMP/Detail`
+            }),
+            this.utilityFunctionsService.createLinkHrefColumnDef("Governing WQMP", "WaterQualityManagementPlanName", "WaterQualityManagementPlanID", {
+                HrefTemplate: `${environment.ocStormwaterToolsBaseUrl}/WaterQualityManagementPlan/Detail`
+            }),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName", {
                 CustomDropdownFilterField: "StormwaterJurisdictionName",
             }),

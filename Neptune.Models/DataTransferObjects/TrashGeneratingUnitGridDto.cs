@@ -8,7 +8,8 @@ public class TrashGeneratingUnitGridDto
 {
     public int TrashGeneratingUnitID { get; set; }
     public int? TrashCaptureEffectivenessBMP { get; set; }
-    public string TreatmentBMPName { get; set; }
+    public int? TreatmentBMPID { get; set; }
+    public string? TreatmentBMPName { get; set; }
     public string? TrashCaptureStatusBMP { get; set; }
     public int StormwaterJurisdictionID { get; set; }
     public string StormwaterJurisdictionName { get; set; } = null!;
