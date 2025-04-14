@@ -163,6 +163,13 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
                 validationResults.Add(new ValidationResult($"\"Enforcement or Follow-up Actions\"'s message is too long. It has a maximum of {enforcementOrFollowupActionsMaxLength} characters and is {EnforcementOrFollowupActions.Length - enforcementOrFollowupActionsMaxLength} over the limit."));
             }
 
+            if (HiddenIsFinalizeVerificationInput && WaterQualityManagementPlanVerifyStatusID == WaterQualityManagementPlanVerifyStatus.AdequateOAndMofWQMPisVerified.WaterQualityManagementPlanVerifyStatusID &&
+                ((WaterQualityManagementPlanVerifyQuickBMPs != null && WaterQualityManagementPlanVerifyQuickBMPs.Any(x => x.IsAdequate == false)) ||
+                 WaterQualityManagementPlanVerifyTreatmentBMPSimples != null && WaterQualityManagementPlanVerifyTreatmentBMPSimples.Any(x => x.IsAdequate == false))) 
+            {
+                validationResults.Add(new ValidationResult($"Cannot Finalize Verification because Verification of O&M Status is \"{WaterQualityManagementPlanVerifyStatus.AdequateOAndMofWQMPisVerified.WaterQualityManagementPlanVerifyStatusDisplayName}\" but at least one BMP has \"O&M Adequate\" is set to \"No\"."));
+            }
+
             return validationResults;
         }
     }
