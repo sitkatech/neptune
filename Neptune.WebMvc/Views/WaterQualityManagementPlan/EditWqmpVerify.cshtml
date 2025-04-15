@@ -153,70 +153,78 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @for (var i = 0; i < Model.WaterQualityManagementPlanVerifyQuickBMPs.Count; i++)
-                                        {
-                                            var waterQualityManagementPlanVerifyQuickBMP = Model.WaterQualityManagementPlanVerifyQuickBMPs[i];
-                                            <tr>
-                                                <td class="table-padding"> @waterQualityManagementPlanVerifyQuickBMP.QuickBMPName</td>
-                                                <td class="table-padding"> @waterQualityManagementPlanVerifyQuickBMP.TreatmentBMPType</td>
-                                                <td class="table-padding">
-                                                    <label>@Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyQuickBMPs[i].IsAdequate, true) Yes</label>
-                                                    <label> @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyQuickBMPs[i].IsAdequate, false) No </label>
-                                                </td>
-                                                <td class="table-padding">  @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyQuickBMPs[i].WaterQualityManagementPlanVerifyQuickBMPNote, new { @class = "form-control" })</td>
-                                                <td class="table-padding"> No</td>
-                                            </tr>
-                                            <tr style="display: none;">
-                                                <td>
-                                                    @Html.HiddenFor(m => m.WaterQualityManagementPlanVerifyQuickBMPs[i].QuickBMPName)
-                                                    @Html.HiddenFor(x => x.WaterQualityManagementPlanVerifyQuickBMPs[i].QuickBMPID)
-                                                </td>
-                                            </tr>
-                                        }
-                                        @for (var i = 0; i < Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples.Count; i++)
-                                        {
-                                            var waterQualityManagementPlanVerifyTreatmentBMPSimple = Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i];
+                                            @if (Model.WaterQualityManagementPlanVerifyQuickBMPs != null && Model.WaterQualityManagementPlanVerifyQuickBMPs.Any())
+                                            {
+                                                for (var i = 0; i < Model.WaterQualityManagementPlanVerifyQuickBMPs.Count; i++)
+                                                {
+                                                    var waterQualityManagementPlanVerifyQuickBMP = Model.WaterQualityManagementPlanVerifyQuickBMPs[i];
+                                                    <tr>
+                                                        <td class="table-padding"> @waterQualityManagementPlanVerifyQuickBMP.QuickBMPName</td>
+                                                        <td class="table-padding"> @waterQualityManagementPlanVerifyQuickBMP.TreatmentBMPType</td>
+                                                        <td class="table-padding">
+                                                            <label>@Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyQuickBMPs[i].IsAdequate, true) Yes</label>
+                                                            <label> @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyQuickBMPs[i].IsAdequate, false) No </label>
+                                                        </td>
+                                                        <td class="table-padding"> @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyQuickBMPs[i].WaterQualityManagementPlanVerifyQuickBMPNote, new { @class = "form-control" })</td>
+                                                        <td class="table-padding"> No</td>
+                                                    </tr>
+                                                    <tr style="display: none;">
+                                                        <td>
+                                                            @Html.HiddenFor(m => m.WaterQualityManagementPlanVerifyQuickBMPs[i].QuickBMPName)
+                                                            @Html.HiddenFor(x => x.WaterQualityManagementPlanVerifyQuickBMPs[i].QuickBMPID)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        
+                                            @if (Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples != null && Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples.Any())
+                                            {
+                                                for (var i = 0; i < Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples.Count; i++)
+                                                {
+                                                    var waterQualityManagementPlanVerifyTreatmentBMPSimple = Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i];
 
 
-                                            <tr>
-                                                <td class="table-padding"> @waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPName</td>
-                                                <td class="table-padding">  @waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPType</td>
-                                                <td class="table-padding">
-                                                    <label>
-                                                        @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].IsAdequate, true)
-                                                        Yes
-                                                    </label>
-                                                    <label>
-                                                        @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].IsAdequate, false)
-                                                        No
-                                                    </label>
-                                                </td>
-                                                <td class="table-padding"> @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].WaterQualityManagementPlanVerifyTreatmentBMPNote, new { @class = "form-control" })</td>
+                                                    <tr>
+                                                        <td class="table-padding"> @waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPName</td>
+                                                        <td class="table-padding"> @waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPType</td>
+                                                        <td class="table-padding">
+                                                            <label>
+                                                                @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].IsAdequate, true)
+                                                                Yes
+                                                            </label>
+                                                            <label>
+                                                                @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].IsAdequate, false)
+                                                                No
+                                                            </label>
+                                                        </td>
+                                                        <td class="table-padding"> @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].WaterQualityManagementPlanVerifyTreatmentBMPNote, new { @class = "form-control" })</td>
 
-                                                <td class="table-padding"> Yes </td>
-                                            </tr>
-                                            <tr style="display: none;">
-                                                <td>
-                                                    @Html.HiddenFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].TreatmentBMPName)
-                                                    @Html.HiddenFor(x => x.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].TreatmentBMPID)
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="5" style="border-top: none; padding-bottom: 20px">
+                                                        <td class="table-padding"> Yes </td>
+                                                    </tr>
+                                                    <tr style="display: none;">
+                                                        <td>
+                                                            @Html.HiddenFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].TreatmentBMPName)
+                                                            @Html.HiddenFor(x => x.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].TreatmentBMPID)
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5" style="border-top: none; padding-bottom: 20px">
 
-                                                    @if (waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate != null)
-                                                    {
-                                                        <span>
-                                                            Last assessed on @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate (Score @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisitMostRecentScore). <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPDetailUrl" target="_blank" rel="noopener noreferrer">Conduct a new Assessment <span class="glyphicon glyphicon-new-window"></span></a>
-                                                        </span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="text-danger">This BMP has no finalized assessment. <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPDetailUrl" target="_blank" rel="noopener noreferrer">Conduct a new Assessment <span class="glyphicon glyphicon-new-window"></span></a> </span>
-                                                    }
-                                                </td>
-                                            </tr>
-                                        }
+                                                            @if (waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate != null)
+                                                            {
+                                                                <span>
+                                                                    Last assessed on @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate (Score @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisitMostRecentScore). <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPDetailUrl" target="_blank" rel="noopener noreferrer">Conduct a new Assessment <span class="glyphicon glyphicon-new-window"></span></a>
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="text-danger">This BMP has no finalized assessment. <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPDetailUrl" target="_blank" rel="noopener noreferrer">Conduct a new Assessment <span class="glyphicon glyphicon-new-window"></span></a> </span>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                       
                                         </tbody>
                                     </table>
                                 }
