@@ -116,7 +116,7 @@
                                 <h5>  Structural Treatment and Hydromodification BMPs</h5>
                             </div>
                             <div style="padding: 21px 15px">
-                                @if (Model.WaterQualityManagementPlanVerifyQuickBMPs.Any() || Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples.Any())
+                                @if ((Model.WaterQualityManagementPlanVerifyQuickBMPs != null && Model.WaterQualityManagementPlanVerifyQuickBMPs.Any()) || (Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples != null && Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples.Any()))
                                 {
                                     <table class="table table-condensed table-striped" id="WaterQualityManagementPlanVerifyBmpTable">
                                         <thead>
