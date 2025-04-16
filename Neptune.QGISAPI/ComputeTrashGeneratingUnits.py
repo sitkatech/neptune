@@ -44,7 +44,8 @@ from pyqgis_utils import (
     snapGeometriesWithinLayer,
     union,
     QgisError,
-    writeVectorLayerToDisk
+    writeVectorLayerToDisk,
+    multipartToSinglePart
 )
 
 JOIN_PREFIX = "Joined_"
@@ -390,35 +391,39 @@ if __name__ == '__main__':
     odw_layer_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'odw_layer.geojson'
     odw_layer = unionAndFix(ovta_delineation_layer_path, flatten_wqmps.working_layer, ovta_delineation_layer_unionedandfixed_path, wqmp_flattened_layer_path, odw_layer_path, PROCESSING_CONTEXT)
 
-    finalOutputPath = OUTPUT_FOLDER_AND_FILE_PREFIX + '.geojson'
-    print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + finalOutputPath)
+    semifinalOutputPath = OUTPUT_FOLDER_AND_FILE_PREFIX + 'semifinal.geojson'
+    print("Union Land Use Block layer with Delineation-OVTA Layer. Will write to: " + semifinalOutputPath)
 
     # The union will include false TGUs, where there is no land use block ID. The GDAL query will remove those.
     land_use_block_layer = fetchLayerFromFileSystem(LAND_USE_BLOCK_INPUT_PATH, "LUBLayer")
     land_use_block_layer_unionandfixed_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'land_use_block_layer_unionedandfixed.geojson'
     odw_layer_unionandfixed_path = OUTPUT_FOLDER_AND_FILE_PREFIX + 'odw_layer_unionedandfixed.geojson'
-    unionAndFix(land_use_block_layer, odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, finalOutputPath, PROCESSING_CONTEXT)
+    unionAndFix(land_use_block_layer, odw_layer_path, land_use_block_layer_unionandfixed_path, odw_layer_unionandfixed_path, semifinalOutputPath, PROCESSING_CONTEXT)
 
     # we are getting line strings back from the union. let's try and remove the bad geometries
-    #tgu_layer = fetchLayerFromFileSystem(finalOutputPath, "TGUsNoLines")
-    #print("Starting removing line strings and bad geometries.")
-    #print("Starting with {count} features".format(count = str(tgu_layer.featureCount())))
+    finalOutputPath = OUTPUT_FOLDER_AND_FILE_PREFIX + '.geojson'
+    multipartToSinglePart(semifinalOutputPath, None, finalOutputPath, PROCESSING_CONTEXT )
 
-    #tgu_layer.startEditing()
+    tgu_layer = fetchLayerFromFileSystem(finalOutputPath, "TGUsNoLines")
+    print("Starting removing line strings and bad geometries.")
+    print("Starting with {count} features".format(count = str(tgu_layer.featureCount())))
 
-    #for feat in tgu_layer.getFeatures():
-    #    if feat.geometry().type() == 1: # line strings
-    #        print("Deleting " + str(feat.id()) + " with geometry type " + QgsWkbTypes.geometryDisplayString(feat.geometry().type()))
-    #        tgu_layer.deleteFeature(feat.id())
-    #    elif feat.geometry().area() < 1:
-    #        print("Deleting " + str(feat.id()) + " since it has area < 1")
-    #        tgu_layer.deleteFeature(feat.id())
-    #    elif feat["LUBID"] is None or feat["SJID"] is None:
-    #        print("Deleting " + str(feat.id()) + " since it has no LUBID or SJID")
-    #        tgu_layer.deleteFeature(feat.id())
-    
-    #tgu_layer.commitChanges()
-    #print("Ending with {count} features".format(count = str(tgu_layer.featureCount())))
-    #print("Ending removing line strings and bad geometries.")
+    tgu_layer.startEditing()
+
+    for feat in tgu_layer.getFeatures():
+        if feat.geometry().type() == 1: # line strings
+            print("Deleting " + str(feat.id()) + " with geometry type " + QgsWkbTypes.geometryDisplayString(feat.geometry().type()))
+            tgu_layer.deleteFeature(feat.id())
+        elif feat.geometry().area() < 1:
+            print("Deleting " + str(feat.id()) + " since it has area < 1")
+            tgu_layer.deleteFeature(feat.id())
+        elif feat["LUBID"] is None or feat["SJID"] is None:
+            print("Deleting " + str(feat.id()) + " since it has no LUBID or SJID")
+            tgu_layer.deleteFeature(feat.id())
+
+
+    tgu_layer.commitChanges()
+    print("Ending with {count} features".format(count = str(tgu_layer.featureCount())))
+    print("Ending removing line strings and bad geometries.")
     
     print("Succeeded!")
