@@ -11,10 +11,10 @@ from dbo.OnlandVisualTrashAssessmentArea a
 			ovta.OnlandVisualTrashAssessmentAreaID,
 			ovta.OnlandVisualTrashAssessmentScoreID,
 			ovta.CompletedDate,
-			rownumber = Row_Number() over (partition by ovta.OnlandVisualTrashAssessmentAreaID order by ovta.CompletedDate desc)
+			rownumber = Row_Number() over (partition by ovta.OnlandVisualTrashAssessmentAreaID order by ovta.CompletedDate desc),
+			AssessmentCount = count(*) over (partition by ovta.OnlandVisualTrashAssessmentAreaID)
 		from dbo.OnlandVisualTrashAssessment ovta
 		where CompletedDate is not null
 	) q 
-		on a.OnlandVisualTrashAssessmentAreaID = q.OnlandVisualTrashAssessmentAreaID
-	where rownumber = 1
+		on a.OnlandVisualTrashAssessmentAreaID = q.OnlandVisualTrashAssessmentAreaID and q.AssessmentCount > 1 and q.rownumber = 1
 GO
