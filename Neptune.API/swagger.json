@@ -4791,10 +4791,6 @@
             "type": "string",
             "nullable": true
           },
-          "NumberOfAssessmentsCompleted": {
-            "type": "integer",
-            "format": "int32"
-          },
           "LastAssessmentDate": {
             "type": "string",
             "format": "date-time",
@@ -4866,6 +4862,10 @@
           "OnlandVisualTrashAssessmentProgressScoreName": {
             "type": "string",
             "nullable": true
+          },
+          "NumberOfAssessmentsInProgress": {
+            "type": "integer",
+            "format": "int32"
           },
           "NumberOfAssessmentsCompleted": {
             "type": "integer",

@@ -54,14 +54,17 @@ export class TrashOvtaAreaIndexComponent {
         private alertService: AlertService,
         private confirmService: ConfirmService,
         private authenticationService: AuthenticationService,
-        private stormwaterJurisdictionService: StormwaterJurisdictionService 
+        private stormwaterJurisdictionService: StormwaterJurisdictionService
     ) {}
 
     ngOnInit(): void {
         this.ovtaAreaColumnDefs = [
             this.utilityFunctionsService.createActionsColumnDef((params: any) => {
                 return [
-                    { ActionName: "View", ActionHandler: () => this.router.navigate(["trash", "onland-visual-trash-assessment-areas", params.data.OnlandVisualTrashAssessmentAreaID]) },
+                    {
+                        ActionName: "View",
+                        ActionHandler: () => this.router.navigate(["trash", "onland-visual-trash-assessment-areas", params.data.OnlandVisualTrashAssessmentAreaID]),
+                    },
                     {
                         ActionName: "Add New OVTA",
                         ActionHandler: () =>
@@ -78,7 +81,8 @@ export class TrashOvtaAreaIndexComponent {
             this.utilityFunctionsService.createBasicColumnDef("Progress Score", "OnlandVisualTrashAssessmentProgressScoreName", {
                 CustomDropdownFilterField: "OnlandVisualTrashAssessmentProgressScoreName",
             }),
-            this.utilityFunctionsService.createBasicColumnDef("Number of Assessments Completed", "NumberOfAssessmentsCompleted"),
+            this.utilityFunctionsService.createDecimalColumnDef("# of Assessments in Progress", "NumberOfAssessmentsInProgress", { DecimalPlacesToDisplay: 0 }),
+            this.utilityFunctionsService.createDecimalColumnDef("# of Completed Assessments", "NumberOfAssessmentsCompleted", { DecimalPlacesToDisplay: 0 }),
             this.utilityFunctionsService.createDateColumnDef("Last Assessment Date", "LastAssessmentDate", "short"),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName", {
                 CustomDropdownFilterField: "StormwaterJurisdictionName",
@@ -100,7 +104,7 @@ export class TrashOvtaAreaIndexComponent {
 
         this.ovtaAreaID = selectedOVTAAreaID;
         this.selectionFromMap = false;
-        return this.ovtaAreaID; 
+        return this.ovtaAreaID;
     }
 
     public onSelectedOVTAAreaChanged(selectedOVTAAreaID) {
