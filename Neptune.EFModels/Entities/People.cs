@@ -187,7 +187,8 @@ namespace Neptune.EFModels.Entities
                 IsActive = true,
                 RoleID = personToCreate.RoleID.Value,
                 CreateDate = DateTime.UtcNow,
-                OrganizationID = organizationID
+                OrganizationID = organizationID,
+                WebServiceAccessToken = Guid.NewGuid()
             };
 
             dbContext.People.Add(person);
