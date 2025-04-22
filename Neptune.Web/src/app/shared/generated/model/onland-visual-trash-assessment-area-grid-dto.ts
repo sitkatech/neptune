@@ -19,6 +19,7 @@ export class OnlandVisualTrashAssessmentAreaGridDto {
     OnlandVisualTrashAssessmentBaselineScoreName?: string;
     AssessmentAreaDescription?: string;
     OnlandVisualTrashAssessmentProgressScoreName?: string;
+    NumberOfAssessmentsInProgress?: number;
     NumberOfAssessmentsCompleted?: number;
     LastAssessmentDate?: string;
     constructor(obj?: any) {
@@ -34,6 +35,7 @@ export interface OnlandVisualTrashAssessmentAreaGridDtoForm {
     OnlandVisualTrashAssessmentBaselineScoreName?: FormControl<string>;
     AssessmentAreaDescription?: FormControl<string>;
     OnlandVisualTrashAssessmentProgressScoreName?: FormControl<string>;
+    NumberOfAssessmentsInProgress?: FormControl<number>;
     NumberOfAssessmentsCompleted?: FormControl<number>;
     LastAssessmentDate?: FormControl<string>;
 }
@@ -100,6 +102,16 @@ export class OnlandVisualTrashAssessmentAreaGridDtoFormControls {
         }
     );
     public static OnlandVisualTrashAssessmentProgressScoreName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static NumberOfAssessmentsInProgress = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
