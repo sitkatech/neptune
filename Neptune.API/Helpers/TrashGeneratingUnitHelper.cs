@@ -24,12 +24,11 @@ public static class TrashGeneratingUnitHelper
             : 0;
     }
 
-
-    public static double EquivalentAreaAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
+    public static double EquivalentAreaAcreageFromAssessments(this List<TrashGeneratingUnit> trashGeneratingUnits)
     {
-        return trashGeneratingUnits.Where(x =>
-            x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID ==
-            (int)OnlandVisualTrashAssessmentScoreEnum.A &&
+        return trashGeneratingUnits.Where(x => x.OnlandVisualTrashAssessmentArea != null &&
+            x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessments.Count >= 2 &&
+            x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.OrderByDescending(y => y.CompletedDate).Take(2).All(y => y.OnlandVisualTrashAssessmentScoreID == (int)OnlandVisualTrashAssessmentScoreEnum.A) &&
             !x.IsFullTrashCapture() &&
             x.IsPLU()
         ).GetArea();
