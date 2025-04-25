@@ -183,14 +183,16 @@ public static class OnlandVisualTrashAssessments
                 onlandVisualTrashAssessment.DraftGeometry = null;
                 onlandVisualTrashAssessment.DraftAreaDescription = null;
                 onlandVisualTrashAssessment.DraftAreaName = null;
-                onlandVisualTrashAssessment.CompletedDate = dto.AssessmentDate;
-                onlandVisualTrashAssessment.IsProgressAssessment = dto.IsProgressAssessment ?? false;
 
-                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = dto.OnlandVisualTrashAssessmentScoreID;
-                onlandVisualTrashAssessment.Notes = dto.Notes;
-                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = dto.OnlandVisualTrashAssessmentStatusID;
 
             }
+
+            onlandVisualTrashAssessment.CompletedDate = dto.AssessmentDate;
+            onlandVisualTrashAssessment.IsProgressAssessment = dto.IsProgressAssessment ?? false;
+
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = dto.OnlandVisualTrashAssessmentScoreID;
+            onlandVisualTrashAssessment.Notes = dto.Notes;
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = dto.OnlandVisualTrashAssessmentStatusID;
 
             await dbContext.SaveChangesAsync();
 
