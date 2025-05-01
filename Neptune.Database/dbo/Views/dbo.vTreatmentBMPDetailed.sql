@@ -29,6 +29,7 @@ select	tb.TreatmentBMPID as PrimaryKey,
 		, isnull((select max(RankNumber) from mrs where mrs.TreatmentBMPID = tb.TreatmentBMPID), 0) as NumberOfMaintenanceRecords
 		, mrsLatest.MaintenanceRecordID as LatestMaintenanceRecordID, mrsLatest.VisitDate as LatestMaintenanceDate
 		, possibleBandT.NumberOfBenchmarkAndThresholds, isnull(enteredBandT.NumberOfBenchmarkAndThresholdsEntered, 0) as NumberOfBenchmarkAndThresholdsEntered
+		, tb.TrashCaptureEffectiveness
 from dbo.TreatmentBMP tb
 join dbo.TreatmentBMPType tbt on tb.TreatmentBMPTypeID = tbt.TreatmentBMPTypeID
 join dbo.StormwaterJurisdiction sj on tb.StormwaterJurisdictionID = sj.StormwaterJurisdictionID

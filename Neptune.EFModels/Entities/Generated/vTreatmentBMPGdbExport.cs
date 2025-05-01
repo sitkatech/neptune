@@ -103,4 +103,6 @@ public partial class vTreatmentBMPGdbExport
     [StringLength(100)]
     [Unicode(false)]
     public string? WaterQualityManagementPlanName { get; set; }
+
+    public int? TrashCaptureEffectiveness { get; set; }
 }

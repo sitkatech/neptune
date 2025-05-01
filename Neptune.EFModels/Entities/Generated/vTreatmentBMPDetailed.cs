@@ -91,4 +91,6 @@ public partial class vTreatmentBMPDetailed
     public int? NumberOfBenchmarkAndThresholds { get; set; }
 
     public int NumberOfBenchmarkAndThresholdsEntered { get; set; }
+
+    public int? TrashCaptureEffectiveness { get; set; }
 }
