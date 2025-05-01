@@ -170,7 +170,8 @@ namespace Neptune.WebMvc.Models
                 { "Required_Lifespan_of_Installation", x.TreatmentBMPLifespanTypeDisplayName ?? "Unknown" },
                 { "Lifespan_End_Date", x.TreatmentBMPLifespanEndDate },
                 { "Required_Field_Visits_Per_Year", x.RequiredFieldVisitsPerYear },
-                { "Required_Post_Storm_Visits_Per_Year", x.RequiredPostStormFieldVisitsPerYear }
+                { "Required_Post_Storm_Visits_Per_Year", x.RequiredPostStormFieldVisitsPerYear },
+                { "Trash_Capture_Effectiveness", x.TrashCaptureEffectiveness }
             };
             return attributesTable;
         }
