@@ -162,6 +162,7 @@ namespace Neptune.WebMvc.Models
                 { "Year_Built", x.YearBuilt },
                 { "ID_in_System_of_Record", x.SystemOfRecordID },
                 { "Water_Quality_Management_Plan", x.WaterQualityManagementPlanName },
+                { "Trash_Capture_Effectiveness", x.TrashCaptureEffectiveness },
                 { "Notes", x.Notes },
                 { "Last_Assessment_Date", x.LatestAssessmentDate },
                 { "Last_Assessed_Score", x.LatestAssessmentScore },
@@ -170,8 +171,7 @@ namespace Neptune.WebMvc.Models
                 { "Required_Lifespan_of_Installation", x.TreatmentBMPLifespanTypeDisplayName ?? "Unknown" },
                 { "Lifespan_End_Date", x.TreatmentBMPLifespanEndDate },
                 { "Required_Field_Visits_Per_Year", x.RequiredFieldVisitsPerYear },
-                { "Required_Post_Storm_Visits_Per_Year", x.RequiredPostStormFieldVisitsPerYear },
-                { "Trash_Capture_Effectiveness", x.TrashCaptureEffectiveness }
+                { "Required_Post_Storm_Visits_Per_Year", x.RequiredPostStormFieldVisitsPerYear }
             };
             return attributesTable;
         }
