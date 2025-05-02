@@ -81,6 +81,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             Add(FieldDefinitionType.RequiredPostStormFieldVisitsPerYear.ToGridHeaderString(), x => x.RequiredPostStormFieldVisitsPerYear, 130, DhtmlxGridColumnFormatType.Integer);
             Add(FieldDefinitionType.SizingBasis.ToGridHeaderString(), x => x.SizingBasisTypeDisplayName, 130, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(FieldDefinitionType.TrashCaptureStatus.ToGridHeaderString(), x => x.TrashCaptureStatusTypeDisplayName, 130, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Trash Capture Effectiveness (%)", x => x.TrashCaptureEffectiveness, 130);
             Add(FieldDefinitionType.DelineationType.ToGridHeaderString(), x => string.IsNullOrWhiteSpace(x.DelineationTypeDisplayName) ? new HtmlString("<p class='systemText'>No Delineation Provided</p>") : new HtmlString(x.DelineationTypeDisplayName), 130,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
         }

@@ -124,6 +124,8 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             Add(FieldDefinitionType.TrashCaptureStatus.ToGridHeaderString(),
                 x => x.WaterQualityManagementPlan.TrashCaptureStatusTypeDisplayName, 130,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Trash Capture Effectiveness (%)",
+                x => x.WaterQualityManagementPlan.TrashCaptureEffectiveness, 130);
         }
     }
 }

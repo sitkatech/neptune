@@ -89,7 +89,8 @@ public static class AuthenticationHelper
                 CreateDate = DateTime.UtcNow,
                 IsActive = true,
                 OrganizationID = unknownOrganization.OrganizationID,
-                LoginName = loginName
+                LoginName = loginName,
+                WebServiceAccessToken = Guid.NewGuid()
             };
             await dbContext.People.AddAsync(person);
             sendNewUserNotification = true;

@@ -162,6 +162,7 @@ namespace Neptune.WebMvc.Models
                 { "Year_Built", x.YearBuilt },
                 { "ID_in_System_of_Record", x.SystemOfRecordID },
                 { "Water_Quality_Management_Plan", x.WaterQualityManagementPlanName },
+                { "Trash_Capture_Effectiveness", x.TrashCaptureEffectiveness },
                 { "Notes", x.Notes },
                 { "Last_Assessment_Date", x.LatestAssessmentDate },
                 { "Last_Assessed_Score", x.LatestAssessmentScore },

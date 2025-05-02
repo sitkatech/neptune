@@ -7,23 +7,16 @@ using Neptune.EFModels.Entities;
 
 namespace Neptune.Jobs.Hangfire
 {
-    public class LandUseBlockUploadBackgroundJob
+    public class LandUseBlockUploadBackgroundJob(
+        NeptuneDbContext dbContext,
+        IOptions<NeptuneJobConfiguration> neptuneJobConfiguration,
+        SitkaSmtpClientService sitkaSmtpClientService)
     {
-        private readonly NeptuneDbContext _dbContext;
-        private readonly NeptuneJobConfiguration _neptuneJobConfiguration;
-        private readonly SitkaSmtpClientService _sitkaSmtpClient;
-
-        public LandUseBlockUploadBackgroundJob(NeptuneDbContext dbContext,
-            IOptions<NeptuneJobConfiguration> neptuneJobConfiguration, SitkaSmtpClientService sitkaSmtpClientService)
-        {
-            _dbContext = dbContext;
-            _neptuneJobConfiguration = neptuneJobConfiguration.Value;
-            _sitkaSmtpClient = sitkaSmtpClientService;
-        }
+        private readonly NeptuneJobConfiguration _neptuneJobConfiguration = neptuneJobConfiguration.Value;
 
         public async Task RunJob(int personID)
         {
-            var person = People.GetByID(_dbContext, personID);
+            var person = People.GetByID(dbContext, personID);
 
             if (person == null)
             {
@@ -31,12 +24,7 @@ namespace Neptune.Jobs.Hangfire
             }
             try
             {
-                var landUseBlockStagings = LandUseBlockStagings.ListByPersonID(_dbContext, personID);
-                var stormwaterJurisdictions = _dbContext.StormwaterJurisdictions.Include(x => x.Organization).Include(x => x.StormwaterJurisdictionGeometry).AsNoTracking().ToDictionary(x => x.Organization.OrganizationName);
-                var editableStormwaterJurisdictionIDs = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, person).ToList();
-
-                var stormwaterJurisdictionNames = stormwaterJurisdictions.Select(x => x.Key).ToList();
-                var allowedStormwaterJurisdictionNames = string.Join(", ", stormwaterJurisdictionNames.ToList());
+                var landUseBlockStagings = LandUseBlockStagings.ListByPersonID(dbContext, personID);
                 var allowedPermitTypeNames = string.Join(", ", PermitType.All.Select(x => x.PermitTypeDisplayName).ToList());
                 var allowedPriorityLandUseTypeNames = string.Join(", ", PriorityLandUseType.All.Select(x => x.PriorityLandUseTypeDisplayName).ToList());
 
@@ -49,7 +37,7 @@ namespace Neptune.Jobs.Hangfire
                     var landUseBlock = new LandUseBlock();
                     var landUseBlockPLUType = landUseBlockStaging.PriorityLandUseType;
                     if (!PriorityLandUseType.All.Select(x => x.PriorityLandUseTypeDisplayName)
-                        .Contains(landUseBlockPLUType))
+                        .Contains(landUseBlockPLUType, StringComparer.InvariantCultureIgnoreCase))
                     {
 
                         errorList.Add(
@@ -68,12 +56,13 @@ namespace Neptune.Jobs.Hangfire
                     landUseBlock.LandUseBlockGeometry4326 = landUseBlockStaging.Geometry.ProjectTo4326();
                     landUseBlock.StormwaterJurisdictionID = landUseBlockStaging.StormwaterJurisdictionID;
 
-                    if (landUseBlockStaging.LandUseForTGR == "Residential")
+                    var landUseForTGR = landUseBlockStaging.LandUseForTGR?.ToUpper();
+                    if (landUseForTGR == "RESIDENTIAL")
                     {
                         landUseBlock.MedianHouseholdIncomeResidential = landUseBlockStaging.MedianHouseholdIncomeResidential;
                         landUseBlock.MedianHouseholdIncomeRetail = 0;
                     }
-                    else if (landUseBlockStaging.LandUseForTGR == "Retail")
+                    else if (landUseForTGR == "RETAIL")
                     {
                         landUseBlock.MedianHouseholdIncomeResidential = 0;
                         landUseBlock.MedianHouseholdIncomeRetail = landUseBlockStaging.MedianHouseholdIncomeRetail;
@@ -91,7 +80,7 @@ namespace Neptune.Jobs.Hangfire
                             $"The Permit Type at row {count} is null, empty or whitespace. A value must be provided");
                     }
 
-                    if (!PermitType.All.Select(x => x.PermitTypeDisplayName).Contains(landUseBlockStaging.PermitType))
+                    if (!PermitType.All.Select(x => x.PermitTypeDisplayName).Contains(landUseBlockStaging.PermitType, StringComparer.InvariantCultureIgnoreCase))
                     {
                         errorList.Add(
                             $"The Permit Type '{permitType}' at row {count} was not found. Acceptable values are {allowedPermitTypeNames}");
@@ -110,18 +99,18 @@ namespace Neptune.Jobs.Hangfire
                 {
                     var stormwaterJurisdictionIDsToClear =
                         landUseBlocksToUpload.Select(x => x.StormwaterJurisdictionID).Distinct();
-                    await _dbContext.TrashGeneratingUnits
+                    await dbContext.TrashGeneratingUnits
                         .Where(x => stormwaterJurisdictionIDsToClear.Contains(x.StormwaterJurisdictionID))
                         .ExecuteUpdateAsync(x => x.SetProperty(y => y.LandUseBlockID, (int?)null));
-                    await _dbContext.TrashGeneratingUnit4326s
+                    await dbContext.TrashGeneratingUnit4326s
                         .Where(x => stormwaterJurisdictionIDsToClear.Contains(x.StormwaterJurisdictionID))
                         .ExecuteUpdateAsync(x => x.SetProperty(y => y.LandUseBlockID, (int?)null));
-                    await _dbContext.LandUseBlocks
+                    await dbContext.LandUseBlocks
                         .Where(x => stormwaterJurisdictionIDsToClear.Contains(x.StormwaterJurisdictionID))
                         .ExecuteDeleteAsync();
 
-                    await _dbContext.LandUseBlocks.AddRangeAsync(landUseBlocksToUpload);
-                    await _dbContext.SaveChangesAsync();
+                    await dbContext.LandUseBlocks.AddRangeAsync(landUseBlocksToUpload);
+                    await dbContext.SaveChangesAsync();
 
                     var body = "Your Land Use Block Upload has been processed. The updated Land Use Blocks are now in the Orange County Stormwater Tools system. It may take up to 24 hours for updated Trash Results to appear in the system.";
 
@@ -133,7 +122,7 @@ namespace Neptune.Jobs.Hangfire
                     };
 
                     mailMessage.To.Add(person.Email);
-                    await _sitkaSmtpClient.Send(mailMessage);
+                    await sitkaSmtpClientService.Send(mailMessage);
                 }
                 else
                 {
@@ -149,10 +138,10 @@ namespace Neptune.Jobs.Hangfire
                     };
 
                     mailMessage.To.Add(person.Email);
-                    await _sitkaSmtpClient.Send(mailMessage);
+                    await sitkaSmtpClientService.Send(mailMessage);
                 }
 
-                await _dbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pLandUseBlockStagingDeleteByPersonID @PersonID = {personID}");
+                await dbContext.Database.ExecuteSqlRawAsync($"EXEC dbo.pLandUseBlockStagingDeleteByPersonID @PersonID = {personID}");
             }
             catch (Exception)
             {
@@ -167,7 +156,7 @@ namespace Neptune.Jobs.Hangfire
                 };
 
                 mailMessage.To.Add(person.Email);
-                await _sitkaSmtpClient.Send(mailMessage);
+                await sitkaSmtpClientService.Send(mailMessage);
 
                 throw;
             }

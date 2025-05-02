@@ -31,7 +31,7 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
 
         var fullTrashCapture = trashGeneratingUnits.FullTrashCaptureAcreage();
 
-        var equivalentArea = trashGeneratingUnits.EquivalentAreaAcreage();
+        var equivalentArea = trashGeneratingUnits.EquivalentAreaAcreageFromAssessments();
 
         var totalAcresCaptured = fullTrashCapture + equivalentArea;
 
@@ -56,7 +56,7 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
     {
         var trashGeneratingUnits = DbContext.TrashGeneratingUnits
             .Include(x => x.LandUseBlock)
-            .Include(x => x.OnlandVisualTrashAssessmentArea)
+            .Include(x => x.OnlandVisualTrashAssessmentArea).ThenInclude(x => x.OnlandVisualTrashAssessments)
             .Include(x => x.Delineation)
             .ThenInclude(x => x.TreatmentBMP)
             .Include(x => x.WaterQualityManagementPlan)
