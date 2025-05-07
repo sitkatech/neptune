@@ -80,10 +80,18 @@ namespace Neptune.WebMvc.Models
                             .SingleOrDefault(y =>
                                 y.TreatmentBMPAssessmentObservationTypeID ==
                                 x.TreatmentBMPAssessmentObservationTypeID);
-                        var observationScore = treatmentBMPObservations
+                        var observation = treatmentBMPObservations
                             .SingleOrDefault(y =>
                                 y.TreatmentBMPAssessmentObservationTypeID ==
-                                x.TreatmentBMPAssessmentObservationTypeID).CalculateObservationScore(treatmentBMP);
+                                x.TreatmentBMPAssessmentObservationTypeID);
+
+                        if (observation == null)
+                        {
+                            throw new NullReferenceException(
+                                $"Cannot find Treatment BMP observation type {x.TreatmentBMPAssessmentObservationTypeName}");
+                        }
+
+                        var observationScore = observation.CalculateObservationScore(treatmentBMP);
 
                         var treatmentBMPAssessmentObservationType = treatmentBMPObservations
                             .SingleOrDefault(y =>
