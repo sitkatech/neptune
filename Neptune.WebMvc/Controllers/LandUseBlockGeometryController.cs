@@ -180,7 +180,7 @@ namespace Neptune.WebMvc.Controllers
 
             SetMessageForDisplay("The Land Use Blocks were successfully added to the staging area. The staged Land Use Blocks will be processed and added to the system. You will receive an email notification when this process completes or if errors in the upload are discovered during processing.");
 
-            return Redirect(SitkaRoute<LandUseBlockController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()));
+            return Redirect(_webConfiguration.PlanningModuleBaseUrl + "/trash/land-use-blocks"); 
         }
 
         [HttpPost]
