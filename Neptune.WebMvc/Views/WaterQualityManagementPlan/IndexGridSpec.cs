@@ -102,7 +102,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
                 , 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
             Add("Record Number", x => x.WaterQualityManagementPlan.RecordNumber, 150);
             Add("Recorded Parcel Acreage", x => x.WaterQualityManagementPlan.RecordedWQMPAreaInAcres, 100);
-            Add("Calculated WQMP Acreage", x => Math.Round(x.WaterQualityManagementPlan.CalculatedWQMPAcreage ?? 0, 1), 100);
+            Add("Calculated Acreage of Assigned Boundary", x => Math.Round(x.WaterQualityManagementPlan.CalculatedWQMPAcreage ?? 0, 1), 100);
             Add("Associated APNs", x => x.WaterQualityManagementPlan.AssociatedAPNs, 200);
             Add("Latest O&M Verification",
                 x =>
