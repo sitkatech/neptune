@@ -330,6 +330,12 @@
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
                     Locations
+                    @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                    {
+                        <span class="pull-right">
+                            @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.EditNotesUrl, $"Edit {FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()} Basics", new List<string>(), true)
+                        </span>
+                    }
                 </div>
                 <div class="panel-body">
                     @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
@@ -343,8 +349,12 @@
                 <div class="panel-body">
                     <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
                     <div class="row" style="margin-top: 12px;">
-                        <label class="col-sm-5 control-label">Calculated WQMP Acreage:</label>
+                        <label class="col-sm-5 control-label">Calculated Acreage of Assigned Boundary:</label>
                         <div class="col-sm-7">@ViewDataTyped.CalculatedWQMPAcreage</div>
+                    </div>
+                    <div class="row" style="margin-top: 12px;">
+                        <label class="col-sm-5 control-label">WQMP Boundary Notes:</label>
+                        <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanBoundaryNotes</div>
                     </div>
                 </div>
             </div>
