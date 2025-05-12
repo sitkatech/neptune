@@ -4793,7 +4793,7 @@
           },
           "LastAssessmentDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "BoundingBox": {
@@ -4873,7 +4873,7 @@
           },
           "LastAssessmentDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           }
         },
@@ -4961,7 +4961,7 @@
           },
           "CompletedDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "IsProgressAssessment": {
@@ -5031,7 +5031,7 @@
           },
           "CompletedDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "IsProgressAssessment": {
@@ -5206,7 +5206,7 @@
           },
           "AssessmentDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "PreliminarySourceIdentifications": {
@@ -5266,7 +5266,7 @@
           },
           "CompletedDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "DraftAreaName": {
@@ -6940,7 +6940,7 @@
           },
           "AssessmentDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "CompletedAssessmentCount": {

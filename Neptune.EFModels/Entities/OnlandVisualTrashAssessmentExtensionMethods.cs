@@ -77,7 +77,7 @@ public static partial class OnlandVisualTrashAssessmentExtensionMethods
             AssessmentAreaDescription = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null ? onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription : onlandVisualTrashAssessment.DraftAreaDescription,
             AssessingNewArea = onlandVisualTrashAssessment.AssessingNewArea ?? false,
             IsProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment,
-            AssessmentDate = DateTime.UtcNow,
+            AssessmentDate = DateOnly.FromDateTime(DateTime.UtcNow),
             OnlandVisualTrashAssessmentStatusID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID,
         };
 

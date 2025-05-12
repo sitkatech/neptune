@@ -15,6 +15,5 @@ public partial class vPyQgisOnlandVisualTrashAssessmentAreaDated
     [Column(TypeName = "geometry")]
     public Geometry OnlandVisualTrashAssessmentAreaGeometry { get; set; } = null!;
 
-    [Column(TypeName = "datetime")]
-    public DateTime? AssessDate { get; set; }
+    public DateOnly? AssessDate { get; set; }
 }

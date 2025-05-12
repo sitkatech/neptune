@@ -10,7 +10,7 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessment](
 	[DraftGeometry] [geometry] NULL,
 	[IsDraftGeometryManuallyRefined] [bit] NULL,
 	[OnlandVisualTrashAssessmentScoreID] [int] NULL CONSTRAINT [FK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentScore_OnlandVisualTrashAssessmentScoreID] FOREIGN KEY REFERENCES [dbo].[OnlandVisualTrashAssessmentScore] ([OnlandVisualTrashAssessmentScoreID]),
-	[CompletedDate] [datetime] NULL,
+	[CompletedDate] [date] NULL,
 	[DraftAreaName] [varchar](100) NULL,
 	[DraftAreaDescription] [varchar](500) NULL,
 	[IsTransectBackingAssessment] [bit] NOT NULL,

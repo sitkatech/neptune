@@ -54,7 +54,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
             Add("Number of Assessments Completed", x => ovtaAssessmentsLookup?[x.OnlandVisualTrashAssessmentAreaID].Count(), 170,
                 DhtmlxGridColumnAggregationType.Total);
             Add("Last Assessment Date", x => ovtaAssessmentsLookup?[x.OnlandVisualTrashAssessmentAreaID].Where(y =>
-                y.OnlandVisualTrashAssessmentStatusID == (int)OnlandVisualTrashAssessmentStatusEnum.Complete).Max(y => y.CompletedDate), 120, DhtmlxGridColumnFormatType.Date);
+                y.OnlandVisualTrashAssessmentStatusID == (int)OnlandVisualTrashAssessmentStatusEnum.Complete).Max(y => y.CompletedDate.ToString()), 120);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.StormwaterJurisdiction.GetOrganizationDisplayName()), 170);
             Add("Description", x => x.AssessmentAreaDescription, 170);
         }

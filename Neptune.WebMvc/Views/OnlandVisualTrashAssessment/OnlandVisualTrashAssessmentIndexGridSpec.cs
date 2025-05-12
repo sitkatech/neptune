@@ -102,7 +102,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Assessment Type", x => x.ToBaselineProgress(), 75,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Last Assessment Date", x => x.CompletedDate, 120, DhtmlxGridColumnFormatType.Date);
+            Add("Last Assessment Date", x => x.CompletedDate.ToString(), 120);
             Add("Status", x => x.OnlandVisualTrashAssessmentStatus.OnlandVisualTrashAssessmentStatusDisplayName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString("Jurisdiction"), x =>
                 UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.StormwaterJurisdiction.GetOrganizationDisplayName()), 170);

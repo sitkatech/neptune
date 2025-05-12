@@ -25,7 +25,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
         public string AssessmentAreaDescription { get; set; }
 
         [DisplayName("Assessment Date")]
-        public DateTime AssessmentDate { get; set; }
+        public DateOnly AssessmentDate { get; set; }
 
         [StringLength(EFModels.Entities.OnlandVisualTrashAssessment.FieldLengths.Notes)]
         [FieldDefinitionDisplay(FieldDefinitionTypeEnum.OnlandVisualTrashAssessmentNotes)]
@@ -64,7 +64,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
             AssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID;
             PreliminarySourceIdentifications = ovta.GetPreliminarySourceIdentificationSimples();
             OnlandVisualTrashAssessmentID = ovta.OnlandVisualTrashAssessmentID;
-            AssessmentDate = ovta.CompletedDate ??  DateTime.UtcNow;
+            AssessmentDate = ovta.CompletedDate ?? DateOnly.FromDateTime(DateTime.UtcNow);
             IsProgressAssessment = ovta.IsProgressAssessment;
 
         }
