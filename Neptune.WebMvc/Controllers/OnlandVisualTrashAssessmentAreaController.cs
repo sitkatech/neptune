@@ -421,6 +421,13 @@ namespace Neptune.WebMvc.Controllers
                 var validOVTAAreaStagings = ovtaAreaStagings.Where(x => x.Geometry is { IsValid: true, Area: > 0 }).ToList();
                 if (validOVTAAreaStagings.Any())
                 {
+                    var duplicates = validOVTAAreaStagings.GroupBy(x => x.AreaName)
+                        .Where(g => g.Count() > 1)
+                        .Select(x => x.Key).ToList();
+                    if (duplicates.Count > 0)
+                    {
+                        throw new Exception($"Duplicate OVTA Area Names: {String.Join(", ", duplicates)}");
+                    }
                     await _dbContext.OnlandVisualTrashAssessmentAreaStagings.Where(x => x.UploadedByPersonID == CurrentPerson.PersonID).ExecuteDeleteAsync();
                     _dbContext.OnlandVisualTrashAssessmentAreaStagings.AddRange(validOVTAAreaStagings);
                     await _dbContext.SaveChangesAsync();
@@ -436,8 +443,9 @@ namespace Neptune.WebMvc.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("",
-                        $"There was a problem processing the Feature Class \"{featureClassName}\". The file may be corrupted or invalid.");
+                    ModelState.AddModelError("", e.Message);
+                    //ModelState.AddModelError("",
+                    //    $"There was a problem processing the Feature Class \"{featureClassName}\". The file may be corrupted or invalid.");
                 }
                 return ViewUpdateOVTAAreaGeometryErrors(viewModel);
             }
