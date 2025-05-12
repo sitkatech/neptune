@@ -221,7 +221,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         {
             var parameterizationErrors = new List<HtmlString>();
 
-            if (!waterQualityManagement.TreatmentBMPs.Any() && !waterQualityManagement.QuickBMPs.Any())
+            if (!waterQualityManagement.TreatmentBMPs.Any() && !waterQualityManagement.QuickBMPs.Any() && waterQualityManagement.WaterQualityManagementPlanModelingApproachID != (int)WaterQualityManagementPlanModelingApproachEnum.Simplified)
             {
                 parameterizationErrors.Add(new HtmlString("This WQMP is not associated with any inventoried Treatment BMPs and does not have any other treatment area assigned.No load reduction will be calculated for this WQMP."));
             }
