@@ -83,7 +83,7 @@ export class TrashOvtaAreaIndexComponent {
             }),
             this.utilityFunctionsService.createDecimalColumnDef("# of Assessments in Progress", "NumberOfAssessmentsInProgress", { DecimalPlacesToDisplay: 0 }),
             this.utilityFunctionsService.createDecimalColumnDef("# of Completed Assessments", "NumberOfAssessmentsCompleted", { DecimalPlacesToDisplay: 0 }),
-            this.utilityFunctionsService.createDateColumnDef("Last Assessment Date", "LastAssessmentDate", "short"),
+            this.utilityFunctionsService.createDateColumnDef("Last Assessment Date", "LastAssessmentDate", "shortDate"),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName", {
                 CustomDropdownFilterField: "StormwaterJurisdictionName",
             }),

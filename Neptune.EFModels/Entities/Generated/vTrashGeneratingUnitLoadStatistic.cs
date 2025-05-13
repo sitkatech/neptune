@@ -128,8 +128,7 @@ public partial class vTrashGeneratingUnitLoadStatistic
     [Unicode(false)]
     public string? AssessmentScore { get; set; }
 
-    [Column(TypeName = "datetime")]
-    public DateTime? MostRecentAssessmentDate { get; set; }
+    public DateOnly? MostRecentAssessmentDate { get; set; }
 
     public int? CompletedAssessmentCount { get; set; }
 

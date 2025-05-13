@@ -1044,7 +1044,9 @@ namespace Neptune.WebMvc.Controllers
             }
             catch (Exception e)
             {
-                SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
+                SetErrorForDisplay(e.Message.Contains("column")
+                    ? e.Message
+                    : "Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
                 return ViewBulkUploadTrashScreenVisit(viewModel);
             }
 

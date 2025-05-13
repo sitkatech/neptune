@@ -13,7 +13,7 @@ public class OnlandVisualTrashAssessmentDetailDto
     public int OnlandVisualTrashAssessmentStatusID { get; set; }
     public string OnlandVisualTrashAssessmentStatusName { get; set; }
     public string OnlandVisualTrashAssessmentScoreName { get; set; }
-    public DateTime? CompletedDate { get; set; }
+    public DateOnly? CompletedDate { get; set; }
     public string IsProgressAssessment { get; set; }
     public Dictionary<string, List<string>> PreliminarySourceIdentificationsByCategory { get; set; }
 }
