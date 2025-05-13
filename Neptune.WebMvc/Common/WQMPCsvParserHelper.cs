@@ -33,7 +33,7 @@ namespace Neptune.WebMvc.Common
             var optionalFields = new List<string> { "Maintenance Contact Name", "Maintenance Contact Organization", "Maintenance Contact Phone",
                 "Maintenance Contact Address 1", "Maintenance Contact Address 2", "Maintenance Contact City", "Maintenance Contact State", "Maintenance Contact Zip",
                 "Permit Term", "Hydromodification Controls Apply", "Approval Date", "Date of Construction", "Hydrologic Subarea", "Record Number", "Recorded WQMP Area (Acres)",
-                "Trash Capture Effectiveness", "Modeling Approach"
+                "Trash Capture Effectiveness", "Modeling Approach", "WQMP Boundary Note"
             };
 
             try
@@ -236,19 +236,10 @@ namespace Neptune.WebMvc.Common
                 }
             }
 
-            var constructionDateString = SetStringValue(row, fieldsDict, rowNumber, errorList, "Date of Construction", 100, false);
-            if (!string.IsNullOrWhiteSpace(constructionDateString))
+            var wqmpBoundaryNote = SetStringValue(row, fieldsDict, rowNumber, errorList, "WQMP Boundary Note", 500, false);
+            if (!string.IsNullOrWhiteSpace(wqmpBoundaryNote))
             {
-                if (!DateTime.TryParse(constructionDateString,
-                        out var constructionDateParsed))
-                {
-                    errorList.Add(
-                        $"{constructionDateParsed} can not be converted to Date Time format at row: {rowNumber}");
-                }
-                else
-                {
-                    wqmp.DateOfConstruction = constructionDateParsed.ConvertTimeFromPSTToUTC();
-                }
+                wqmp.WaterQualityManagementPlanBoundaryNotes = wqmpBoundaryNote;
             }
 
             var hydrologicSubareaID = FindLookupValue(row, fieldsDict, "Hydrologic Subarea", rowNumber,
@@ -284,6 +275,21 @@ namespace Neptune.WebMvc.Common
             if (modelingApproachID.HasValue)
             {
                 wqmp.WaterQualityManagementPlanModelingApproachID = modelingApproachID.Value;
+            }
+
+            var constructionDateString = SetStringValue(row, fieldsDict, rowNumber, errorList, "Date of Construction", 100, false);
+            if (!string.IsNullOrWhiteSpace(constructionDateString))
+            {
+                if (!DateTime.TryParse(constructionDateString,
+                        out var constructionDateParsed))
+                {
+                    errorList.Add(
+                        $"{constructionDateParsed} can not be converted to Date Time format at row: {rowNumber}");
+                }
+                else
+                {
+                    wqmp.DateOfConstruction = constructionDateParsed.ConvertTimeFromPSTToUTC();
+                }
             }
 
             //End of Optional Fields
