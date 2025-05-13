@@ -738,7 +738,7 @@ namespace Neptune.WebMvc.Controllers
                             CreatedByPersonID = (int)createdByPersonID,
                             StormwaterJurisdictionID = stormwaterJurisdictionsPersonCanView.Single(x => x.Organization.OrganizationName == row["Jurisdiction Name"].ToString() || x.Organization.OrganizationShortName == row["Jurisdiction Name"].ToString()).StormwaterJurisdictionID,
                             OnlandVisualTrashAssessmentStatusID = row["Status"].ToString().Trim() == "Finalized" ? (int)OnlandVisualTrashAssessmentStatusEnum.Complete : (int)OnlandVisualTrashAssessmentStatusEnum.InProgress,
-                            CreatedDate = DateTime.Parse(row["Created Date"].ToString().Trim()).ConvertTimeFromPSTToUTC(),
+                            CreatedDate = DateTime.UtcNow,
                             CompletedDate = DateOnly.FromDateTime(DateTime.Parse(row["Completed Date"].ToString().Trim())),
                             OnlandVisualTrashAssessmentScoreID = OnlandVisualTrashAssessmentScore.All.Single(x => x.OnlandVisualTrashAssessmentScoreDisplayName == row["Score"].ToString().Trim()).OnlandVisualTrashAssessmentScoreID,
                             IsProgressAssessment = row["Is Progress Assessment"].ToString().Trim() == "Yes",
