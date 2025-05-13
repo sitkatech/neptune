@@ -38,8 +38,7 @@ public partial class OnlandVisualTrashAssessment
 
     public int? OnlandVisualTrashAssessmentScoreID { get; set; }
 
-    [Column(TypeName = "datetime")]
-    public DateTime? CompletedDate { get; set; }
+    public DateOnly? CompletedDate { get; set; }
 
     [StringLength(100)]
     [Unicode(false)]

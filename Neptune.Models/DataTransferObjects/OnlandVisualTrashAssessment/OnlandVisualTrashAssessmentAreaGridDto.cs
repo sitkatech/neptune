@@ -11,5 +11,5 @@ public class OnlandVisualTrashAssessmentAreaGridDto
     public string? OnlandVisualTrashAssessmentProgressScoreName { get; set; }
     public int NumberOfAssessmentsInProgress { get; set; }
     public int NumberOfAssessmentsCompleted { get; set; }
-    public DateTime? LastAssessmentDate { get; set; }
+    public DateOnly? LastAssessmentDate { get; set; }
 }

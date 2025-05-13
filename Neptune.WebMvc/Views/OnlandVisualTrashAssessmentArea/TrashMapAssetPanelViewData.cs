@@ -12,12 +12,12 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea
         public bool UserHasViewDetailsPermission { get; }
         public HtmlString ScoreHtmlString { get; set; }
         public string DetailUrl { get; }
-        public DateTime? MostRecentAssessmentDate { get; }
+        public DateOnly? MostRecentAssessmentDate { get; }
         public string BeginOVTAUrl { get; }
 
         public TrashMapAssetPanelViewData(LinkGenerator linkGenerator, Person currentPerson,
             EFModels.Entities.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea,
-            DateTime? mostRecentAssessmentCompletedDate)
+            DateOnly? mostRecentAssessmentCompletedDate)
         {
             OnlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentArea;
             UserHasViewDetailsPermission = new OnlandVisualTrashAssessmentAreaViewFeature().HasPermission(currentPerson, onlandVisualTrashAssessmentArea).HasPermission;
