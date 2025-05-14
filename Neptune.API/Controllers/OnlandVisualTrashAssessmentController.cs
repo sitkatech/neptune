@@ -66,7 +66,7 @@ public class OnlandVisualTrashAssessmentController(
         if (onlandVisualTrashAssessmentArea != null)
         {
             var onlandVisualTrashAssessments = OnlandVisualTrashAssessments.ListByOnlandVisualTrashAssessmentAreaID(DbContext, onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID);
-            onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID = OnlandVisualTrashAssessmentAreas.CalculateScoreFromBackingData(onlandVisualTrashAssessments, false)?.OnlandVisualTrashAssessmentScoreID;
+            onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID = OnlandVisualTrashAssessmentAreas.CalculateBaselineScoreFromBackingData(onlandVisualTrashAssessments)?.OnlandVisualTrashAssessmentScoreID;
 
             if (isProgressAssessment)
             {
@@ -187,7 +187,7 @@ public class OnlandVisualTrashAssessmentController(
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID.Value);
         var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea;
         onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID =
-            OnlandVisualTrashAssessmentAreas.CalculateScoreFromBackingData(onlandVisualTrashAssessments, false)?
+            OnlandVisualTrashAssessmentAreas.CalculateBaselineScoreFromBackingData(onlandVisualTrashAssessments)?
                 .OnlandVisualTrashAssessmentScoreID;
 
         onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID =

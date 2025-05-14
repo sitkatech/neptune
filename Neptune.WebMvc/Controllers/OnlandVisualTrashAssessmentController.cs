@@ -461,7 +461,7 @@ namespace Neptune.WebMvc.Controllers
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID.Value);
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea;
             onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID =
-                OnlandVisualTrashAssessmentAreas.CalculateScoreFromBackingData(onlandVisualTrashAssessments, false)?
+                OnlandVisualTrashAssessmentAreas.CalculateBaselineScoreFromBackingData(onlandVisualTrashAssessments)?
                     .OnlandVisualTrashAssessmentScoreID;
 
             onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID =
@@ -561,7 +561,7 @@ namespace Neptune.WebMvc.Controllers
             if (onlandVisualTrashAssessmentArea != null)
             {
                 var onlandVisualTrashAssessments = OnlandVisualTrashAssessments.ListByOnlandVisualTrashAssessmentAreaID(_dbContext, onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID);
-                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID = OnlandVisualTrashAssessmentAreas.CalculateScoreFromBackingData(onlandVisualTrashAssessments, false)?.OnlandVisualTrashAssessmentScoreID;
+                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID = OnlandVisualTrashAssessmentAreas.CalculateBaselineScoreFromBackingData(onlandVisualTrashAssessments)?.OnlandVisualTrashAssessmentScoreID;
 
                 if (isProgressAssessment)
                 {
