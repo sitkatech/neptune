@@ -63,6 +63,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         public bool AnySimpleBMPsNotFullyParameterized { get; set; }
 
         public string EditUrl { get; }
+        public string EditNotesUrl { get; }
         public UrlTemplate<int> StormwaterJurisdictionDetailUrlTemplate { get; }
         public UrlTemplate<int> TreatmentBMPDetailUrlTemplate { get; }
         public UrlTemplate<int> VerifyDetailUrlTemplate { get; }
@@ -100,6 +101,9 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             EditUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
                     x.Edit(WaterQualityManagementPlan));
+            EditNotesUrl =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
+                    x.EditNotes(WaterQualityManagementPlan));
             EditInventoriedBMPsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
                     x.EditTreatmentBMPs(WaterQualityManagementPlan));
@@ -217,7 +221,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         {
             var parameterizationErrors = new List<HtmlString>();
 
-            if (!waterQualityManagement.TreatmentBMPs.Any() && !waterQualityManagement.QuickBMPs.Any())
+            if (!waterQualityManagement.TreatmentBMPs.Any() && !waterQualityManagement.QuickBMPs.Any() && waterQualityManagement.WaterQualityManagementPlanModelingApproachID != (int)WaterQualityManagementPlanModelingApproachEnum.Simplified)
             {
                 parameterizationErrors.Add(new HtmlString("This WQMP is not associated with any inventoried Treatment BMPs and does not have any other treatment area assigned.No load reduction will be calculated for this WQMP."));
             }

@@ -20,10 +20,11 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[DateOfConstruction] [datetime] NULL,
 	[HydrologicSubareaID] [int] NULL CONSTRAINT [FK_WaterQualityManagementPlan_HydrologicSubarea_HydrologicSubareaID] FOREIGN KEY REFERENCES [dbo].[HydrologicSubarea] ([HydrologicSubareaID]),
 	[RecordNumber] [varchar](500) NULL,
-	[RecordedWQMPAreaInAcres] [decimal](5, 1) NULL,
+	[RecordedWQMPAreaInAcres] [decimal](6, 2) NULL,
 	[TrashCaptureStatusTypeID] [int] NOT NULL CONSTRAINT [FK_WaterQualityManagementPlan_TrashCaptureStatusType_TrashCaptureStatusTypeID] FOREIGN KEY REFERENCES [dbo].[TrashCaptureStatusType] ([TrashCaptureStatusTypeID]),
 	[TrashCaptureEffectiveness] [int] NULL CONSTRAINT [CK_WaterQualityManagementPlan_TrashCaptureEffectivenessMustBeBetween1And99] CHECK  (([TrashCaptureEffectiveness] IS NULL OR [TrashCaptureEffectiveness]>(0) AND [TrashCaptureEffectiveness]<(100))),
 	[WaterQualityManagementPlanModelingApproachID] [int] NOT NULL CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanModelingApproach_WaterQualityManagementPlanModelingApproachID] FOREIGN KEY REFERENCES [dbo].[WaterQualityManagementPlanModelingApproach] ([WaterQualityManagementPlanModelingApproachID]),
 	[LastNereidLogID] [int] NULL CONSTRAINT [FK_WaterQualityManagementPlan_NereidLog_LastNereidLogID_NereidLogID] FOREIGN KEY REFERENCES [dbo].NereidLog ([NereidLogID]),
+	[WaterQualityManagementPlanBoundaryNotes] varchar(500) NULL,
 	CONSTRAINT [AK_WaterQualityManagementPlan_WaterQualityManagementPlanName_StormwaterJurisdictionID] UNIQUE ([WaterQualityManagementPlanName], [StormwaterJurisdictionID])
 )

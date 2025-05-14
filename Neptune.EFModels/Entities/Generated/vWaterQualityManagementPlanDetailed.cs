@@ -107,7 +107,7 @@ public partial class vWaterQualityManagementPlanDetailed
     [Unicode(false)]
     public string? HydrologicSubareaName { get; set; }
 
-    [Column(TypeName = "decimal(5, 1)")]
+    [Column(TypeName = "decimal(6, 2)")]
     public decimal? RecordedWQMPAreaInAcres { get; set; }
 
     public double? CalculatedWQMPAcreage { get; set; }

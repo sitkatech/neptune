@@ -75,7 +75,7 @@ public partial class WaterQualityManagementPlan
     [Unicode(false)]
     public string? RecordNumber { get; set; }
 
-    [Column(TypeName = "decimal(5, 1)")]
+    [Column(TypeName = "decimal(6, 2)")]
     public decimal? RecordedWQMPAreaInAcres { get; set; }
 
     public int TrashCaptureStatusTypeID { get; set; }
@@ -85,6 +85,10 @@ public partial class WaterQualityManagementPlan
     public int WaterQualityManagementPlanModelingApproachID { get; set; }
 
     public int? LastNereidLogID { get; set; }
+
+    [StringLength(500)]
+    [Unicode(false)]
+    public string? WaterQualityManagementPlanBoundaryNotes { get; set; }
 
     [InverseProperty("WaterQualityManagementPlan")]
     public virtual ICollection<DirtyModelNode> DirtyModelNodes { get; set; } = new List<DirtyModelNode>();

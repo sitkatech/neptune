@@ -306,11 +306,46 @@ namespace Neptune.WebMvc.Controllers
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(waterQualityManagementPlan)));
         }
 
+        private PartialViewResult ViewEditNotes(EditNotesViewModel viewModel)
+        {
+            var viewData = new EditNotesViewData();
+            return RazorPartialView<EditNotes, EditNotesViewData, EditNotesViewModel>(viewData, viewModel);
+        }
+
         private PartialViewResult ViewEdit(EditViewModel viewModel)
         {
             var hydrologicSubareas = _dbContext.HydrologicSubareas.ToList();
             var viewData = new EditViewData(hydrologicSubareas, TrashCaptureStatusType.All);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
+        [WaterQualityManagementPlanManageFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public PartialViewResult EditNotes([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = WaterQualityManagementPlans.GetByID(_dbContext, waterQualityManagementPlanPrimaryKey);
+            var viewModel = new EditNotesViewModel(waterQualityManagementPlan);
+            return ViewEditNotes(viewModel);
+        }
+
+        [HttpPost("{waterQualityManagementPlanPrimaryKey}")]
+        [WaterQualityManagementPlanManageFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public async Task<IActionResult> EditNotes([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditNotesViewModel viewModel)
+        {
+            var waterQualityManagementPlan = WaterQualityManagementPlans.GetByIDWithChangeTracking(_dbContext, waterQualityManagementPlanPrimaryKey);
+            if (!ModelState.IsValid)
+            {
+                return ViewEditNotes(viewModel);
+            }
+
+            viewModel.UpdateModel(waterQualityManagementPlan);
+            SetMessageForDisplay($"Successfully updated \"{waterQualityManagementPlan.WaterQualityManagementPlanName}\".");
+            await _dbContext.SaveChangesAsync();
+
+            return new ModalDialogFormJsonResult(
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(waterQualityManagementPlan)));
         }
 
         [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
