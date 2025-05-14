@@ -99,18 +99,18 @@ public static class OnlandVisualTrashAssessmentAreas
         }
     }
 
-    public static OnlandVisualTrashAssessmentScore? CalculateScoreFromBackingData(
-        List<Entities.OnlandVisualTrashAssessment> onlandVisualTrashAssessments, bool calculateProgressScore)
+    public static OnlandVisualTrashAssessmentScore? CalculateBaselineScoreFromBackingData(
+        List<Entities.OnlandVisualTrashAssessment> onlandVisualTrashAssessments)
     {
-        var completedAndIsProgressAssessment = onlandVisualTrashAssessments.Where(x => x.OnlandVisualTrashAssessmentStatusID == (int)
-            OnlandVisualTrashAssessmentStatusEnum.Complete && x.IsProgressAssessment == calculateProgressScore).ToList();
+        var completedAndIsBaselineAssessment = onlandVisualTrashAssessments.Where(x => x.OnlandVisualTrashAssessmentStatusID == (int)
+            OnlandVisualTrashAssessmentStatusEnum.Complete && !x.IsProgressAssessment).ToList();
 
-        if (!completedAndIsProgressAssessment.Any())
+        if (completedAndIsBaselineAssessment.Count < 2)
         {
             return null;
         }
 
-        var average = completedAndIsProgressAssessment.Average(x => x.OnlandVisualTrashAssessmentScore.NumericValue);
+        var average = completedAndIsBaselineAssessment.Average(x => x.OnlandVisualTrashAssessmentScore.NumericValue);
         var round = (int)Math.Round(average);
         return OnlandVisualTrashAssessmentScore.All.SingleOrDefault(x => x.NumericValue == round);
     }

@@ -75,6 +75,7 @@
     <None Include="Scripts\PreReleaseScripts\README.md" />
     <None Include="Scripts\ReleaseScripts\README.md" />
     <None Include="Scripts\ReleaseScripts\001-rename fields on ModelingAttribute table.sql" />
+    <None Include="Scripts\ReleaseScripts\012 - recalculate OVTA Area Baseline Score.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\LookupTables\Script.PostDeployment.LookupTables.sql" />

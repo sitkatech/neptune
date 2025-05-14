@@ -3,7 +3,7 @@ Create View dbo.vPyQgisOnlandVisualTrashAssessmentAreaDated as
 Select
 	a.OnlandVisualTrashAssessmentAreaID as OVTAID,
 	a.OnlandVisualTrashAssessmentAreaGeometry,
-	q.CompletedDate as AssessDate
+	CAST(q.CompletedDate AS datetime) as AssessDate
 from dbo.OnlandVisualTrashAssessmentArea a
 	inner join (
 		Select

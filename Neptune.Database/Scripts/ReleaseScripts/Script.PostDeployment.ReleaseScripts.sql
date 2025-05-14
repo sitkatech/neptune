@@ -30,4 +30,6 @@ GO
 GO
 :r ".\011 - add neptune page for wqmp annual report.sql"
 GO
+:r ".\012 - recalculate OVTA Area Baseline Score.sql"
+GO
 
