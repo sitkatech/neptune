@@ -851,8 +851,6 @@ namespace Neptune.WebMvc.Controllers
                 {
                     throw new NullReferenceException($"Not a valid Observation Type {treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName} for Treatment BMP Type {treatmentBMPType.TreatmentBMPTypeName}");
                 }
-                //Check.RequireNotNull(treatmentBMPTypeAssessmentObservationType,
-                //    $"Not a valid Observation Type ID {treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID} for Treatment BMP Type ID {treatmentBMPType.TreatmentBMPTypeID}");
                 treatmentBMPObservation = new TreatmentBMPObservation
                 {
                     TreatmentBMPAssessment = treatmentBMPAssessment,
@@ -1195,7 +1193,14 @@ namespace Neptune.WebMvc.Controllers
                                 treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, ACCUMULATION,
                                 false, false, _dbContext, errors);
 
-                            initialAssessment.CalculateAssessmentScore(treatmentBMPType, treatmentBMP);
+                            try
+                            {
+                                initialAssessment.CalculateAssessmentScore(treatmentBMPType, treatmentBMP);
+                            }
+                            catch (Exception ex)
+                            {
+                                errors.Add(ex.Message + $" on row {i+2}");
+                            }
                         }
 
                         if (MaintenanceRecordFieldsPopulated(row))
