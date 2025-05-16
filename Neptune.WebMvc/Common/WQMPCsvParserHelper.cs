@@ -33,7 +33,7 @@ namespace Neptune.WebMvc.Common
             var optionalFields = new List<string> { "Maintenance Contact Name", "Maintenance Contact Organization", "Maintenance Contact Phone",
                 "Maintenance Contact Address 1", "Maintenance Contact Address 2", "Maintenance Contact City", "Maintenance Contact State", "Maintenance Contact Zip",
                 "Permit Term", "Hydromodification Controls Apply", "Approval Date", "Date of Construction", "Hydrologic Subarea", "Record Number", "Recorded WQMP Area (Acres)",
-                "Trash Capture Effectiveness", "Modeling Approach", "WQMP Boundary Note"
+                "Trash Capture Effectiveness", "Modeling Approach"
             };
 
             try
@@ -234,12 +234,6 @@ namespace Neptune.WebMvc.Common
                 {
                     wqmp.ApprovalDate = approvalDateParsed.ConvertTimeFromPSTToUTC();
                 }
-            }
-
-            var wqmpBoundaryNote = SetStringValue(row, fieldsDict, rowNumber, errorList, "WQMP Boundary Note", 500, false);
-            if (!string.IsNullOrWhiteSpace(wqmpBoundaryNote))
-            {
-                wqmp.WaterQualityManagementPlanBoundaryNotes = wqmpBoundaryNote;
             }
 
             var hydrologicSubareaID = FindLookupValue(row, fieldsDict, "Hydrologic Subarea", rowNumber,
