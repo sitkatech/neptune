@@ -969,7 +969,7 @@ namespace Neptune.WebMvc.Controllers
             DataTable dataTableFromExcel;
             try
             {
-                dataTableFromExcel = SimplifiedBMPsExcelParserHelper.GetDataTableFromExcel(uploadXlsxInputStream, "BMP");
+                dataTableFromExcel = ExcelHelper.GetDataTableFromExcel(uploadXlsxInputStream, "BMP");
             }
             catch (Exception)
             {
