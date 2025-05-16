@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Net.Mail;
+using ClosedXML.Excel;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
@@ -30,12 +31,13 @@ namespace Neptune.WebMvc.Controllers
     {
         private readonly FileResourceService _fileResourceService;
         private readonly SitkaSmtpClientService _sitkaSmtpClientService;
+        private readonly AzureBlobStorageService _azureBlobStorageService;
 
-
-        public WaterQualityManagementPlanController(NeptuneDbContext dbContext, ILogger<WaterQualityManagementPlanController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService, SitkaSmtpClientService sitkaSmtpClientService) : base(dbContext, logger, linkGenerator, webConfiguration)
+        public WaterQualityManagementPlanController(NeptuneDbContext dbContext, ILogger<WaterQualityManagementPlanController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService, SitkaSmtpClientService sitkaSmtpClientService, AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
             _fileResourceService = fileResourceService;
             _sitkaSmtpClientService = sitkaSmtpClientService;
+            _azureBlobStorageService = azureBlobStorageService;
         }
 
         [HttpGet]
@@ -948,7 +950,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         public ViewResult UploadSimplifiedBMPs()
         {
             var viewModel = new UploadSimplifiedBMPsViewModel();
@@ -957,14 +959,12 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpPost]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         [RequestSizeLimit(100_000_000_000)]
         [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<IActionResult> UploadSimplifiedBMPs(UploadSimplifiedBMPsViewModel viewModel)
         {
-            var currentPerson = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-            var uploadedCSVFile = viewModel.UploadCSV;
-            var uploadXlsxInputStream = viewModel.UploadCSV.OpenReadStream();
+            var uploadXlsxInputStream = viewModel.UploadXLSX.OpenReadStream();
 
             DataTable dataTableFromExcel;
             try
@@ -1007,6 +1007,21 @@ namespace Neptune.WebMvc.Controllers
             return RazorView<UploadSimplifiedBMPs, UploadSimplifiedBMPsViewData, UploadSimplifiedBMPsViewModel>(viewData,
                 viewModel);
         }
+
+        [HttpGet]
+        [JurisdictionEditFeature]
+        public async Task<FileResult> SimplifiedBMPBulkUploadTemplate()
+        {
+            using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
+            await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToSimplifiedBMPTemplate, disposableTempFile.FileInfo.FullName);
+            using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            return File(stream.ToArray(), @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                $"SimplifiedBMPBulkUploadTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.xlsx");
+        }
+
 
         [HttpGet]
         [NeptuneAdminFeature]

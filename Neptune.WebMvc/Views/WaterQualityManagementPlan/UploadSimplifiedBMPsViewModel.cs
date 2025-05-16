@@ -8,9 +8,9 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
     public class UploadSimplifiedBMPsViewModel : FormViewModel
     {
         [Required]
-        [SitkaFileExtensions("csv")]
-        [DisplayName("CSV File to Import")]
-        public IFormFile UploadCSV { get; set; }
+        [SitkaFileExtensions("xlsx")]
+        [DisplayName("XLSX File to Import")]
+        public IFormFile UploadXLSX { get; set; }
 
         public UploadSimplifiedBMPsViewModel()
         {

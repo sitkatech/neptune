@@ -10,6 +10,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         public string WqmpsUploadUrl { get; }
         public string WqmpIndexUrl { get; }
         public List<string> ErrorList { get; }
+        public string UploadTemplateUrl { get; }
         
         public UploadSimplifiedBMPsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<string> errorList, EFModels.Entities.NeptunePage neptunePage, string wqmpsUploadUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
@@ -19,6 +20,9 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             WqmpsUploadUrl = wqmpsUploadUrl;
             WqmpIndexUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
             ErrorList = errorList;
+            UploadTemplateUrl =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator,
+                    x => x.SimplifiedBMPBulkUploadTemplate());
         }
     }
 }
