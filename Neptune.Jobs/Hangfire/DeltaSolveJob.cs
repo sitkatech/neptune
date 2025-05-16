@@ -1,32 +1,52 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Neptune.Common.GeoSpatial;
 using Neptune.EFModels.Entities;
 using Neptune.Jobs.Services;
+using System.Text.Json.Nodes;
 
 namespace Neptune.Jobs.Hangfire;
 
-public class DeltaSolveJob
+public class DeltaSolveJob(
+    IOptions<NeptuneJobConfiguration> configuration,
+    ILogger<DeltaSolveJob> logger,
+    NeptuneDbContext dbContext,
+    NereidService nereidService)
+    : BlobStorageWritingJob<DeltaSolveJob>(configuration, logger, dbContext)
 {
-    private readonly ILogger<DeltaSolveJob> _logger;
-    private readonly NeptuneDbContext _dbContext;
-    private readonly NereidService _nereidService;
-
-    public DeltaSolveJob(ILogger<DeltaSolveJob> logger, NeptuneDbContext dbContext, NereidService nereidService)
-    {
-        _logger = logger;
-        _dbContext = dbContext;
-        _nereidService = nereidService;
-    }
-
     public async Task RunJob()
     {
-        var dirtyModelNodes = _dbContext.DirtyModelNodes.ToList();
+        var dirtyModelNodes = DbContext.DirtyModelNodes.ToList();
 
-        await _nereidService.DeltaSolve(_dbContext, dirtyModelNodes, true);
-        await _nereidService.DeltaSolve(_dbContext, dirtyModelNodes, false);
+        await nereidService.DeltaSolve(DbContext, dirtyModelNodes, true);
+        await nereidService.DeltaSolve(DbContext, dirtyModelNodes, false);
 
-        _dbContext.DirtyModelNodes.RemoveRange(dirtyModelNodes);
-        _dbContext.Database.SetCommandTimeout(600);
-        await _dbContext.SaveChangesAsync();
+        DbContext.DirtyModelNodes.RemoveRange(dirtyModelNodes);
+        DbContext.Database.SetCommandTimeout(600);
+        await DbContext.SaveChangesAsync();
+
+        var allBaselineNereidResults = DbContext.NereidResults.Where(x => x.IsBaselineCondition);
+        var allNereidResults = DbContext.NereidResults.Where(x => !x.IsBaselineCondition);
+        await CreateNereidResultsAsJsonFileAndPostToBlobStorage(allBaselineNereidResults, TotalNetworkSolveJob.BaselineModelResultsFileName);
+        await CreateNereidResultsAsJsonFileAndPostToBlobStorage(allNereidResults, TotalNetworkSolveJob.ModelResultsFileName);
+
+        var landUseStatistics = DbContext.vPowerBILandUseStatistics.ToList();
+        await SerializeAndUploadToBlobStorage(landUseStatistics, HRURefreshJob.LandUseStatisticsFileName);
+    }
+
+    private async Task CreateNereidResultsAsJsonFileAndPostToBlobStorage(IEnumerable<NereidResult> nereidResults, string blobFilename)
+    {
+        var list = nereidResults.Select(x =>
+        {
+            var jsonObject = GeoJsonSerializer.Deserialize<JsonObject>(x.FullResponse);
+            jsonObject["TreatmentBMPID"] = x.TreatmentBMPID;
+            jsonObject["WaterQualityManagementPlanID"] = x.WaterQualityManagementPlanID;
+            jsonObject["DelineationID"] = x.DelineationID;
+            jsonObject["RegionalSubbasinID"] = x.RegionalSubbasinID;
+            return jsonObject;
+        }).ToList();
+
+        await SerializeAndUploadToBlobStorage(list, blobFilename);
     }
 }
