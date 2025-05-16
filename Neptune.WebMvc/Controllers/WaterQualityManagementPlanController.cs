@@ -1,4 +1,5 @@
-﻿using System.Net.Mail;
+﻿using System.Data;
+using System.Net.Mail;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
@@ -961,8 +962,26 @@ namespace Neptune.WebMvc.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<IActionResult> UploadSimplifiedBMPs(UploadSimplifiedBMPsViewModel viewModel)
         {
+            var currentPerson = UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
             var uploadedCSVFile = viewModel.UploadCSV;
-            var quickBMPs = SimplifiedBMPsCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), out var errorList);
+            var uploadXlsxInputStream = viewModel.UploadCSV.OpenReadStream();
+
+            DataTable dataTableFromExcel;
+            try
+            {
+                dataTableFromExcel = SimplifiedBMPsExcelParserHelper.GetDataTableFromExcel(uploadXlsxInputStream, "BMP");
+            }
+            catch (Exception)
+            {
+                SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
+                return ViewUploadSimplifiedBMPs(viewModel, new List<string>());
+            }
+
+            var stormwaterJurisdictionsPersonCanView = StormwaterJurisdictions
+                .ListViewableByPersonForBMPs(_dbContext, CurrentPerson).Select(x => x.StormwaterJurisdictionID)
+                .ToList();
+            var quickBMPs = SimplifiedBMPsExcelParserHelper.ParseWQMPRowsFromXLSX(_dbContext,
+                stormwaterJurisdictionsPersonCanView, dataTableFromExcel, out var errorList);
 
             if (errorList.Any())
             {
