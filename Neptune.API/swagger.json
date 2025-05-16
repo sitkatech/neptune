@@ -4783,12 +4783,22 @@
             "type": "string",
             "nullable": true
           },
+          "OnlandVisualTrashAssessmentBaselineScoreTrashGenerationRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
           "AssessmentAreaDescription": {
             "type": "string",
             "nullable": true
           },
           "OnlandVisualTrashAssessmentProgressScoreName": {
             "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentProgressScoreTrashGenerationRate": {
+            "type": "number",
+            "format": "double",
             "nullable": true
           },
           "LastAssessmentDate": {

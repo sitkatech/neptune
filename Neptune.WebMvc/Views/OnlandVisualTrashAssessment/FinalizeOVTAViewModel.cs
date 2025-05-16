@@ -111,14 +111,15 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessment
 
                 var onlandVisualTrashAssessments = OnlandVisualTrashAssessments.ListByOnlandVisualTrashAssessmentAreaID(dbContext, onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID.Value);
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID =
-                    OnlandVisualTrashAssessmentAreas.CalculateScoreFromBackingData(onlandVisualTrashAssessments, false)?
+                    OnlandVisualTrashAssessmentAreas.CalculateBaselineScoreFromBackingData(onlandVisualTrashAssessments)?
                         .OnlandVisualTrashAssessmentScoreID;
 
                 if (IsProgressAssessment)
                 {
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea
                             .OnlandVisualTrashAssessmentProgressScoreID =
-                        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID;
+                        OnlandVisualTrashAssessments.CalculateProgressScore(onlandVisualTrashAssessments)
+                            ?.OnlandVisualTrashAssessmentScoreID;
                 }
 
                 if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine == null && onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Count >= 2)

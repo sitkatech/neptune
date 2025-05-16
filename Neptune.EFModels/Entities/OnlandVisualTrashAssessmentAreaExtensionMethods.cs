@@ -32,7 +32,9 @@ public static partial class OnlandVisualTrashAssessmentAreaExtensionMethods
             StormwaterJurisdictionID = onlandVisualTrashAssessmentArea.StormwaterJurisdictionID,
             StormwaterJurisdictionName = onlandVisualTrashAssessmentArea.StormwaterJurisdiction.GetOrganizationDisplayName(),
             OnlandVisualTrashAssessmentBaselineScoreName = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore?.OnlandVisualTrashAssessmentScoreDisplayName,
+            OnlandVisualTrashAssessmentBaselineScoreTrashGenerationRate= onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore?.TrashGenerationRate,
             OnlandVisualTrashAssessmentProgressScoreName = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScore?.OnlandVisualTrashAssessmentScoreDisplayName,
+            OnlandVisualTrashAssessmentProgressScoreTrashGenerationRate= onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScore?.TrashGenerationRate,
             LastAssessmentDate = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Select(x => x.CompletedDate).Max(),
             BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry4326),
             Geometry = onlandVisualTrashAssessmentArea.GetGeometry4326GeoJson()
