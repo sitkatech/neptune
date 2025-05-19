@@ -25,7 +25,7 @@ public static class WQMPAPNsCsvParserHelper
         var wqmpBoundariesToUpload = new List<WaterQualityManagementPlanBoundary>();
         var fieldsDict = new Dictionary<string, int>();
 
-        var requiredFields = new List<string> { "WQMP", "APNs" };
+        var requiredFields = new List<string> { "WQMP", "APNs", "WQMP Boundary Notes" };
 
         try
         {
@@ -114,7 +114,10 @@ public static class WQMPAPNsCsvParserHelper
             errorList.Add($"The WQMP with name '{wqmpName}' in row {rowNumber} was not found.");
             return null;
         }
-        var wqmpBoundary = dbContext.WaterQualityManagementPlanBoundaries.SingleOrDefault(x => x.WaterQualityManagementPlanID == wqmp.WaterQualityManagementPlanID);
+        var wqmpBoundary = dbContext.WaterQualityManagementPlanBoundaries
+            .Include(
+                waterQualityManagementPlanBoundary => waterQualityManagementPlanBoundary.WaterQualityManagementPlan)
+            .SingleOrDefault(x => x.WaterQualityManagementPlanID == wqmp.WaterQualityManagementPlanID);
         if (wqmpBoundary == null)
         {
             wqmpBoundary = new WaterQualityManagementPlanBoundary() { WaterQualityManagementPlanID = wqmp.WaterQualityManagementPlanID };
@@ -156,6 +159,9 @@ public static class WQMPAPNsCsvParserHelper
             dbContext.WaterQualityManagementPlanParcels,
             (x, y) => x.WaterQualityManagementPlanID == y.WaterQualityManagementPlanID && x.ParcelID == y.ParcelID);
 
+        var wqmpBoundaryNotes = SetStringValue(row, fieldsDict, rowNumber, errorList, "WQMP Boundary Notes", 500, false);
+
+        wqmpBoundary.WaterQualityManagementPlan.WaterQualityManagementPlanBoundaryNotes = wqmpBoundaryNotes;
 
         return wqmpBoundary;
     }
