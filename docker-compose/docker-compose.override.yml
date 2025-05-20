@@ -23,6 +23,7 @@ services:
       - TrashModuleBaseUrl=${TrashModuleBaseUrl}
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
       - PathToOVTAUploadTemplate=${PathToOVTAUploadTemplate}
+      - PathToSimplifiedBMPTemplate=${PathToSimplifiedBMPTemplate}
       - RecaptchaPublicKey=${RecaptchaPublicKey}
       - RecaptchaPrivateKey=${RecaptchaPrivateKey}
       - RecaptchaValidatorUrl=${RecaptchaValidatorUrl}

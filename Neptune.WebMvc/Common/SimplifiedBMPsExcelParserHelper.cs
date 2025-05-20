@@ -64,7 +64,7 @@ public static class SimplifiedBMPsExcelParserHelper
             }
             var treatmentBMPTypes = TreatmentBMPTypes.List(dbContext);
             var quickBMPNamesInCsv = new List<string>();
-            quickBMPs.Add(ParseRequiredAndOptionalFieldsAndCreateSimplifiedBMPs(dbContext, row, i, out var errorsList,
+            quickBMPs.Add(ParseRequiredAndOptionalFieldsAndCreateSimplifiedBMPs(dbContext, row, i+2, out var errorsList,
                 treatmentBMPTypes, quickBMPNamesInCsv));
             errors.AddRange(errorsList);
             
@@ -134,11 +134,11 @@ public static class SimplifiedBMPsExcelParserHelper
             errorList.Add($"BMP Type in row {rowNumber} is empty or null");
         }
 
-        //var countOfBMPs = GetIntFieldValue(row, rowNumber, errorList, "Count of BMPs", true);
-        //if (countOfBMPs.HasValue)
-        //{
-        //    quickBMP.NumberOfIndividualBMPs = countOfBMPs.Value;
-        //}
+        var countOfBMPs = ExcelHelper.GetIntFieldValue(row, rowNumber, errorList, "Count of BMPs", true);
+        if (countOfBMPs.HasValue)
+        {
+            quickBMP.NumberOfIndividualBMPs = countOfBMPs.Value;
+        }
 
         var percentageOfSiteTreated = ExcelHelper.GetDecimalFieldValue(row, rowNumber, errorList, "% of Site Treated", false);
         if (percentageOfSiteTreated.HasValue)
