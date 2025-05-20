@@ -907,7 +907,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         public ViewResult UploadWqmps()
         {
             var viewModel = new UploadWqmpsViewModel();
@@ -916,13 +916,28 @@ namespace Neptune.WebMvc.Controllers
         }
         
         [HttpPost]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         [RequestSizeLimit(100_000_000_000)]
         [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<IActionResult> UploadWqmps(UploadWqmpsViewModel viewModel)
         {
-            var uploadedCSVFile = viewModel.UploadCSV;
-            var wqmps = WQMPCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), out var errorList);
+            var uploadXlsxInputStream = viewModel.UploadXLSX.OpenReadStream();
+
+            DataTable dataTableFromExcel;
+            try
+            {
+                dataTableFromExcel = ExcelHelper.GetDataTableFromExcel(uploadXlsxInputStream, "WQMP");
+            }
+            catch (Exception e)
+            {
+                SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
+                return ViewUploadWqmps(viewModel, new List<string>());
+            }
+            var stormwaterJurisdictionsPersonCanView = StormwaterJurisdictions
+                .ListViewableByPersonForBMPs(_dbContext, CurrentPerson).Select(x => x.StormwaterJurisdictionID)
+                .ToList();
+            var wqmps = WQMPXSLXParserHelper.ParseWQMPRowsFromXLSX(_dbContext, stormwaterJurisdictionsPersonCanView,
+                dataTableFromExcel, out var errorList);
 
             if (errorList.Any())
             {

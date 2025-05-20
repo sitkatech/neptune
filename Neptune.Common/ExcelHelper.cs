@@ -71,6 +71,7 @@ public class ExcelHelper
 
         return null;
     }
+
     public static int? GetIntFieldValue(DataRow row, int rowNumber, List<string> errorList, string fieldName, bool requireNotEmpty)
     {
         var fieldValue = row[fieldName].ToString();
@@ -127,4 +128,43 @@ public class ExcelHelper
 
         return null;
     }
+
+    public static decimal? GetOptionalDecimalFieldValue(DataRow row, int rowNumber, List<string> errorList, string fieldName)
+    {
+
+        var fieldValue = row[fieldName].ToString();
+        if (!string.IsNullOrWhiteSpace(fieldValue))
+        {
+            if (!decimal.TryParse(fieldValue, out var fieldValueAsInt))
+            {
+                errorList.Add($"{fieldName} can not be converted to decimal at row: {rowNumber}");
+            }
+            else
+            {
+                return fieldValueAsInt;
+            }
+        }
+    
+
+        return null;
+    }
+
+    public static int? GetOptionalIntFieldValue(DataRow row, int rowNumber, List<string> errorList, string fieldName)
+    {
+        var fieldValue = row[fieldName].ToString();
+        if (!string.IsNullOrWhiteSpace(fieldValue))
+        {
+            if (!int.TryParse(fieldValue, out var fieldValueAsInt))
+            {
+                errorList.Add($"{fieldName} can not be converted to Int at row: {rowNumber}");
+            }
+            else
+            {
+                return fieldValueAsInt;
+            }
+        }
+
+        return null;
+    }
+
 }
