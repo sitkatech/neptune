@@ -1067,7 +1067,9 @@ namespace Neptune.WebMvc.Controllers
         public async Task<IActionResult> UploadWqmpBoundaryFromAPNs(UploadWqmpBoundaryFromAPNsViewModel viewModel)
         {
             var uploadedCSVFile = viewModel.UploadCSV;
-            var wqmpBoundaries = WQMPAPNsCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), out var errorList , out var missingApnList, out var oldBoundaries);
+            var stormwaterJurisdictionID = (int)viewModel.StormwaterJurisdictionID;
+            var wqmpBoundaries = WQMPAPNsCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), stormwaterJurisdictionID,
+                out var errorList, out var missingApnList, out var oldBoundaries);
 
             if (errorList.Any())
             {

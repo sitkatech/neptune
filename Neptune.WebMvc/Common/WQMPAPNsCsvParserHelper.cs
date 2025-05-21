@@ -10,13 +10,16 @@ namespace Neptune.WebMvc.Common;
 public static class WQMPAPNsCsvParserHelper
 {
     public static List<WaterQualityManagementPlanBoundary> CSVUpload(NeptuneDbContext dbContext, Stream fileStream,
+        int stormwaterJurisdictionID,
         out List<string> errorList, out List<string> missingApnList, out List<Geometry> oldBoundaries)
     {
         var streamReader = new StreamReader(fileStream);
         var parser = new TextFieldParser(streamReader);
-        return ParseWqmpRowsFromCsv(dbContext, parser, out errorList, out missingApnList, out oldBoundaries);
+        return ParseWqmpRowsFromCsv(dbContext, parser, stormwaterJurisdictionID, out errorList, out missingApnList, out oldBoundaries);
     }
-    public static List<WaterQualityManagementPlanBoundary> ParseWqmpRowsFromCsv(NeptuneDbContext dbContext, TextFieldParser parser, out List<string> errorList, out List<string> missingApnList, out List<Geometry> oldBoundaries)
+    public static List<WaterQualityManagementPlanBoundary> ParseWqmpRowsFromCsv(NeptuneDbContext dbContext, 
+        TextFieldParser parser, int stormwaterJurisdictionID, out List<string> errorList, out List<string> missingApnList, 
+        out List<Geometry> oldBoundaries)
     {
         parser.SetDelimiters(",");
         errorList = new List<string>();
@@ -47,7 +50,7 @@ public static class WQMPAPNsCsvParserHelper
         {
             var currentRow = parser.ReadFields();
 
-            var currentWQMPBoundary = ParseRequiredFieldsAndCreateWQMPBoundaries(dbContext, currentRow, fieldsDict, rowCount, out var currentErrorList, out var currentMissingApnList, out var oldBoundary);
+            var currentWQMPBoundary = ParseRequiredFieldsAndCreateWQMPBoundaries(dbContext, currentRow, fieldsDict, rowCount, stormwaterJurisdictionID, out var currentErrorList, out var currentMissingApnList, out var oldBoundary);
             if (currentWQMPBoundary != null)
             {
                 wqmpBoundariesToUpload.Add(currentWQMPBoundary);
@@ -92,7 +95,7 @@ public static class WQMPAPNsCsvParserHelper
     }
 
     private static WaterQualityManagementPlanBoundary ParseRequiredFieldsAndCreateWQMPBoundaries(NeptuneDbContext dbContext, string[] row,
-            Dictionary<string, int> fieldsDict, int rowNumber, out List<string> errorList, out List<string> missingApnList, out Geometry? oldBoundary)
+            Dictionary<string, int> fieldsDict, int rowNumber, int stormwaterJurisdictionID, out List<string> errorList, out List<string> missingApnList, out Geometry? oldBoundary)
     {
         errorList = new List<string>();
         missingApnList = new List<string>();
@@ -107,7 +110,7 @@ public static class WQMPAPNsCsvParserHelper
         }
 
         var wqmp = dbContext.WaterQualityManagementPlans.SingleOrDefault(x =>
-            x.WaterQualityManagementPlanName == wqmpName);
+            x.WaterQualityManagementPlanName == wqmpName && x.StormwaterJurisdictionID == stormwaterJurisdictionID);
 
         if (wqmp == null)
         {
@@ -161,7 +164,7 @@ public static class WQMPAPNsCsvParserHelper
 
         var wqmpBoundaryNotes = SetStringValue(row, fieldsDict, rowNumber, errorList, "WQMP Boundary Notes", 500, false);
 
-        wqmpBoundary.WaterQualityManagementPlan.WaterQualityManagementPlanBoundaryNotes = wqmpBoundaryNotes;
+        wqmp.WaterQualityManagementPlanBoundaryNotes = wqmpBoundaryNotes;
 
         return wqmpBoundary;
     }
