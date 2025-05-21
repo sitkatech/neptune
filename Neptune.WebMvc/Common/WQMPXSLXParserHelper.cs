@@ -7,23 +7,17 @@ namespace Neptune.WebMvc.Common
 {
     public static class WQMPXSLXParserHelper
     {
-        public static List<WaterQualityManagementPlan> ParseWQMPRowsFromXLSX(NeptuneDbContext dbContext, List<int> stormwaterJurisdictionsPersonCanView, DataTable dataTableFromExcel,
+        public static List<WaterQualityManagementPlan> ParseWQMPRowsFromXLSX(NeptuneDbContext dbContext,  DataTable dataTableFromExcel, int stormwaterJurisdictionID,
         out List<string> errors)
         {
             errors = [];
-            var requiredFields = new List<string> { "WQMP Name", "Jurisdiction", "Land Use", "Priority", "Status", "Development Type", "Trash Capture Status" };
+            var requiredFields = new List<string> { "WQMP Name", "Land Use", "Priority", "Status", "Development Type", "Trash Capture Status" };
             var optionalFields = new List<string> { "Maintenance Contact Name", "Maintenance Contact Organization", "Maintenance Contact Phone",
                 "Maintenance Contact Address 1", "Maintenance Contact Address 2", "Maintenance Contact City", "Maintenance Contact State", "Maintenance Contact Zip",
                 "Permit Term", "Hydromodification Controls Apply", "Approval Date", "Date of Construction", "Hydrologic Subarea", "Record Number", "Recorded WQMP Area (Acres)",
                 "Trash Capture Effectiveness", "Modeling Approach"
             };
-            foreach (var field in requiredFields)
-            {
-                if (!dataTableFromExcel.Columns.Contains(field))
-                {
-                    errors.Add($"Spreadsheet is missing required column: {field}");
-                }
-            }
+            errors.AddRange(from field in requiredFields where !dataTableFromExcel.Columns.Contains(field) select $"Spreadsheet is missing required column: {field}");
 
             if (errors.Count > 0)
             {
@@ -31,30 +25,12 @@ namespace Neptune.WebMvc.Common
             }
             var numColumns = dataTableFromExcel.Columns.Count;
             var numRows = dataTableFromExcel.Rows.Count;
-            foreach (DataRow row in dataTableFromExcel.Rows)
-            {
-                var wqmpName = row["WQMP Name"].ToString();
-                var wqmp = dbContext.WaterQualityManagementPlans.SingleOrDefault(x =>
-                    x.WaterQualityManagementPlanName == wqmpName);
-
-                if (wqmp != null && !stormwaterJurisdictionsPersonCanView.Contains(wqmp.StormwaterJurisdictionID))
-                {
-                    errors.Add($"WQMP with name {wqmpName} is in a jurisdiction you don't have access to.");
-                }
-
-                var jurisdictionName = row["Jurisdiction"].ToString();
-                var jurisdiction = dbContext.StormwaterJurisdictions.Include(x => x.Organization)
-                    .SingleOrDefault(x => x.Organization.OrganizationName == jurisdictionName);
-
-                if (jurisdiction == null)
-                {
-                    errors.Add($"No Stormwater Jurisdiction named {jurisdictionName} found.");
-                }
-                else if (!stormwaterJurisdictionsPersonCanView.Contains(jurisdiction.StormwaterJurisdictionID))
-                {
-                    errors.Add($"You do not have permission to add WQMPs {jurisdictionName}.");
-                }
-            }
+            //foreach (DataRow row in dataTableFromExcel.Rows)
+            //{
+            //    var wqmpName = row["WQMP Name"].ToString();
+            //    var wqmp = dbContext.WaterQualityManagementPlans.SingleOrDefault(x =>
+            //        x.WaterQualityManagementPlanName == wqmpName && x.StormwaterJurisdictionID == stormwaterJurisdictionID);
+            //}
 
             if (errors.Count > 0)
             {
@@ -62,6 +38,8 @@ namespace Neptune.WebMvc.Common
             }
 
             var wqmps = new List<WaterQualityManagementPlan>();
+            var wqmpNamesInCsv = new List<string>();
+            var hydrologicSubareas = dbContext.HydrologicSubareas.AsNoTracking().ToList();
             for (var i = 0; i < numRows; i++)
             {
                 var row = dataTableFromExcel.Rows[i];
@@ -79,28 +57,24 @@ namespace Neptune.WebMvc.Common
                 {
                     continue;
                 }
-                var stormwaterJurisdictions = StormwaterJurisdictions.List(dbContext).ToList();
-                var wqmpNamesInCsv = new List<string>();
-                var hydrologicSubareas = dbContext.HydrologicSubareas.AsNoTracking().ToList();
-                wqmps.Add(ParseRequiredAndOptionalFieldsAndCreateWQMP(dbContext, row, i, out var errorsList,
-                    stormwaterJurisdictions, wqmpNamesInCsv, hydrologicSubareas));
+                wqmps.Add(ParseRequiredAndOptionalFieldsAndCreateWQMP(dbContext, row, i+2, out var errorsList,
+                    stormwaterJurisdictionID, wqmpNamesInCsv, hydrologicSubareas));
                 errors.AddRange(errorsList);
 
             }
 
-            return errors.Count > 0 ? null : wqmps;
+            return errors.Count > 0 ? [] : wqmps;
         }
 
         private static WaterQualityManagementPlan ParseRequiredAndOptionalFieldsAndCreateWQMP(NeptuneDbContext dbContext, DataRow row,
             int rowNumber, out List<string> errorList,
-            List<StormwaterJurisdiction> stormwaterJurisdictions, List<string> wqmpNamesInCsv, List<HydrologicSubarea> hydrologicSubareas)
+            int stormwaterJurisdictionID, List<string> wqmpNamesInCsv, List<HydrologicSubarea> hydrologicSubareas)
         {
-            errorList = new List<string>();
+            errorList = [];
 
             var wqmpName = ExcelHelper.SetStringValue(row, rowNumber, errorList, "WQMP Name", WaterQualityManagementPlan.FieldLengths.WaterQualityManagementPlanName, true);
-            var jurisdictionName = row["Jurisdiction"].ToString();
 
-            if (string.IsNullOrWhiteSpace(jurisdictionName) || string.IsNullOrWhiteSpace(wqmpName))
+            if (string.IsNullOrWhiteSpace(wqmpName))
             {
                 // no point in going further if we don't have a name and jurisdiction
                 return null;
@@ -114,12 +88,6 @@ namespace Neptune.WebMvc.Common
                         $"The WQMP with Name '{wqmpName}' was already added in this upload, duplicate name is found at row: {rowNumber}");
                 }
                 wqmpNamesInCsv.Add(wqmpName);
-            }
-            var stormwaterJurisdictionID = stormwaterJurisdictions.SingleOrDefault(x => x.Organization.OrganizationName == jurisdictionName).StormwaterJurisdictionID;
-            if (stormwaterJurisdictionID == null)
-            {
-                errorList.Add($"Stormwater Jurisdiction {jurisdictionName} does not exist");
-                return null;
             }
 
             var wqmp = dbContext.WaterQualityManagementPlans.SingleOrDefault(x =>
@@ -138,7 +106,7 @@ namespace Neptune.WebMvc.Common
                     x.WaterQualityManagementPlanLandUseDisplayName == landUseName)?.WaterQualityManagementPlanLandUseID;
                 if (landUseID == null)
                 {
-                    errorList.Add($"Land Use {landUseName} does not exist");
+                    errorList.Add($"Land Use {landUseName} does not exist in row number: {rowNumber}");
                 }
                 else
                 {
@@ -157,7 +125,7 @@ namespace Neptune.WebMvc.Common
                     x.WaterQualityManagementPlanPriorityDisplayName == priority)?.WaterQualityManagementPlanPriorityID;
                 if (priorityID == null)
                 {
-                    errorList.Add($"Priority {priority} does not exist");
+                    errorList.Add($"Priority {priority} does not exist in row number: {rowNumber}");
                 }
                 else
                 {
@@ -176,7 +144,7 @@ namespace Neptune.WebMvc.Common
                     x.WaterQualityManagementPlanStatusDisplayName == status)?.WaterQualityManagementPlanStatusID;
                 if (statusID == null)
                 {
-                    errorList.Add($"Status {status} does not exist");
+                    errorList.Add($"Status {status} does not exist in row number: {rowNumber}");
                 }
                 else
                 {
@@ -195,7 +163,7 @@ namespace Neptune.WebMvc.Common
                     x.WaterQualityManagementPlanDevelopmentTypeDisplayName == developmentType)?.WaterQualityManagementPlanDevelopmentTypeID;
                 if (developmentTypeID == null)
                 {
-                    errorList.Add($"Development Type {developmentType} does not exist");
+                    errorList.Add($"Development Type {developmentType} does not exist in row number: {rowNumber}");
                 }
                 else
                 {
@@ -214,7 +182,7 @@ namespace Neptune.WebMvc.Common
                     x.TrashCaptureStatusTypeDisplayName == trashCaptureStatus)?.TrashCaptureStatusTypeID;
                 if (developmentTypeID == null)
                 {
-                    errorList.Add($"Trash Capture Status Type {trashCaptureStatus} does not exist");
+                    errorList.Add($"Trash Capture Status Type {trashCaptureStatus} does not exist in row number: {rowNumber}");
                 }
                 else
                 {
@@ -292,7 +260,7 @@ namespace Neptune.WebMvc.Common
                     x.WaterQualityManagementPlanPermitTermDisplayName == permitTermName)?.WaterQualityManagementPlanPermitTermID;
                 if (permitID == null)
                 {
-                    errorList.Add($"Permit term {permitTermName} does not exist");
+                    errorList.Add($"Permit term {permitTermName} does not exist in row number: {rowNumber}");
                 }
                 else
                 {
@@ -307,7 +275,7 @@ namespace Neptune.WebMvc.Common
                     x.HydromodificationAppliesTypeDisplayName == hydromodificationAppliesType)?.HydromodificationAppliesTypeID;
                 if (hydromodificationAppliesTypeID == null)
                 {
-                    errorList.Add($"Hydromodification Controls Apply {hydromodificationAppliesType} does not exist");
+                    errorList.Add($"Hydromodification Controls Apply {hydromodificationAppliesType} does not exist in row number: {rowNumber}");
                 }
                 else
                 {
@@ -337,7 +305,7 @@ namespace Neptune.WebMvc.Common
                     x.HydrologicSubareaName == hydrologicSubarea)?.HydrologicSubareaID;
                 if (hydrologicSubareaID == null)
                 {
-                    errorList.Add($"Hydrologic Subarea {hydrologicSubarea} does not exist");
+                    errorList.Add($"Hydrologic Subarea {hydrologicSubarea} does not exist in row number: {rowNumber}");
                 }
                 else
                 {
@@ -371,7 +339,7 @@ namespace Neptune.WebMvc.Common
                     x.WaterQualityManagementPlanModelingApproachDisplayName == modelingApproach)?.WaterQualityManagementPlanModelingApproachID;
                 if (modelingApproachID == null)
                 {
-                    errorList.Add($"Modeling approach {modelingApproach} does not exist");
+                    errorList.Add($"Modeling approach {modelingApproach} does not exist in row number: {rowNumber}");
                 }
                 else
                 {
@@ -398,39 +366,6 @@ namespace Neptune.WebMvc.Common
 
             return wqmp;
         }
-
-        private static Dictionary<string, int> ValidateHeader(string[] row, List<string> requiredFields, List<string> optionalFields, out List<string> errorList)
-        {
-            errorList = new List<string>();
-            var fieldsDict = new Dictionary<string, int>();
-
-            for (var fieldIndex = 0; fieldIndex < row.Length; fieldIndex++)
-            {
-                var temp = row[fieldIndex].Trim();
-                if (!string.IsNullOrWhiteSpace(temp))
-                {
-                    fieldsDict.Add(temp, fieldIndex);
-                }
-            }
-
-            var headers = fieldsDict.Keys.ToList();
-            var requiredFieldDifference = requiredFields.Except(headers).ToList();
-            var optionalFieldDifference = headers.Except(requiredFields).Except(optionalFields).ToList();
-
-            if (requiredFieldDifference.Any())
-            {
-                errorList.Add("One or more required headers have not been provided. Required Fields are: " +
-                              string.Join(", ", requiredFieldDifference));
-            }
-
-            if (optionalFieldDifference.Any())
-            {
-                errorList.Add($"The provided fields '{string.Join(", ", optionalFieldDifference)}' did not match a property of Water Quality Management Plan");
-            }
-
-            return fieldsDict;
-        }
-
     }
 
 }

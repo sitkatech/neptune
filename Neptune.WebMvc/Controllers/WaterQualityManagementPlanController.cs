@@ -931,13 +931,11 @@ namespace Neptune.WebMvc.Controllers
             catch (Exception e)
             {
                 SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
-                return ViewUploadWqmps(viewModel, new List<string>());
+                return ViewUploadWqmps(viewModel, []);
             }
-            var stormwaterJurisdictionsPersonCanView = StormwaterJurisdictions
-                .ListViewableByPersonForBMPs(_dbContext, CurrentPerson).Select(x => x.StormwaterJurisdictionID)
-                .ToList();
-            var wqmps = WQMPXSLXParserHelper.ParseWQMPRowsFromXLSX(_dbContext, stormwaterJurisdictionsPersonCanView,
-                dataTableFromExcel, out var errorList);
+
+            var wqmps = WQMPXSLXParserHelper.ParseWQMPRowsFromXLSX(_dbContext,
+                dataTableFromExcel, viewModel.StormwaterJurisdictionID, out var errorList);
 
             if (errorList.Any())
             {
@@ -959,7 +957,8 @@ namespace Neptune.WebMvc.Controllers
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadWQMPs);
             var viewData = new UploadWqmpsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, errorList, neptunePage,
-                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.UploadWqmps()));
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.UploadWqmps()),
+                StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
             return RazorView<UploadWqmps, UploadWqmpsViewData, UploadWqmpsViewModel>(viewData,
                 viewModel);
         }
