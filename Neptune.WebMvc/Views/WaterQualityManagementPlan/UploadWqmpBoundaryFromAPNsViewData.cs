@@ -19,8 +19,8 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         public UploadWqmpBoundaryFromAPNsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<string> errorList, EFModels.Entities.NeptunePage neptunePage, string wqmpsUploadUrl, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             PageTitle = "WQMP Boundary from APN List";
-            EntityName = $"{FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
-            EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
+            EntityName = $"Data Hub";
+            EntityUrl = SitkaRoute<DataHubController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
             WqmpsUploadUrl = wqmpsUploadUrl;
             WqmpIndexUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
             ErrorList = errorList;

@@ -15,8 +15,8 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         public UploadSimplifiedBMPsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<string> errorList, EFModels.Entities.NeptunePage neptunePage, string wqmpsUploadUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             PageTitle = "Simplified BMPs Bulk Upload";
-            EntityName = $"{FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
-            EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
+            EntityName = $"Data Hub";
+            EntityUrl = SitkaRoute<DataHubController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
             WqmpsUploadUrl = wqmpsUploadUrl;
             WqmpIndexUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
             ErrorList = errorList;

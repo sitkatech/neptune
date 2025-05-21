@@ -18,9 +18,9 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         public UploadWqmpsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<string> errorList, EFModels.Entities.NeptunePage neptunePage, string wqmpsUploadUrl, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             PageTitle = "WQMP Bulk Upload";
-            EntityName = $"{FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"Data Hub";
             WqmpsUploadUrl = wqmpsUploadUrl;
-            WqmpIndexUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
+            WqmpIndexUrl = SitkaRoute<DataHubController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
             ErrorList = errorList;
             StormwaterJurisdictions =
                 stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
