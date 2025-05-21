@@ -14,6 +14,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         public string WqmpIndexUrl { get; }
         public List<string> ErrorList { get; }
         public IEnumerable<SelectListItem> StormwaterJurisdictions { get; }
+        public string DownloadTemplateUrl { get; }
 
         public UploadWqmpBoundaryFromAPNsViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<string> errorList, EFModels.Entities.NeptunePage neptunePage, string wqmpsUploadUrl, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
@@ -26,6 +27,9 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             StormwaterJurisdictions =
                 stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
                     .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
+            DownloadTemplateUrl =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator,
+                    x => x.UploadWQMPBoundaryTemplate());
         }
     }
 }

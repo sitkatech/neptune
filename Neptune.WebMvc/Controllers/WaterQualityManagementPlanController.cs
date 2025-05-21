@@ -1145,6 +1145,18 @@ The WQMP Boundaries for Stormwater Jurisdiction {stormwaterJurisdiction} were su
         }
 
         [HttpGet]
+        [JurisdictionEditFeature]
+        public async Task<FileResult> UploadWQMPBoundaryTemplate()
+        {
+            using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".csv");
+            await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToUploadWQMPBoundaryTemplate, disposableTempFile.FileInfo.FullName);
+            var stream = new FileStream(disposableTempFile.FileInfo.FullName, FileMode.Open);
+
+            return File(stream, @"text/csv",
+                $"UploadWQMPBoundaryTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.csv");
+        }
+
+        [HttpGet]
         public ViewResult WqmpModelingOptions()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WQMPModelingOptions);

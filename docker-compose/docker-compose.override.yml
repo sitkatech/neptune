@@ -25,6 +25,7 @@ services:
       - PathToOVTAUploadTemplate=${PathToOVTAUploadTemplate}
       - PathToSimplifiedBMPTemplate=${PathToSimplifiedBMPTemplate}
       - PathToBulkUploadWQMPTemplate=${PathToBulkUploadWQMPTemplate}
+      - PathToUploadWQMPBoundaryTemplate=${PathToUploadWQMPBoundaryTemplate}
       - RecaptchaPublicKey=${RecaptchaPublicKey}
       - RecaptchaPrivateKey=${RecaptchaPrivateKey}
       - RecaptchaValidatorUrl=${RecaptchaValidatorUrl}
