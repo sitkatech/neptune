@@ -1,8 +1,4 @@
-﻿using NetTopologySuite.Geometries;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace Neptune.Models.DataTransferObjects;
+﻿namespace Neptune.Models.DataTransferObjects;
 
 public class TrashGeneratingUnitDto
 {
@@ -15,18 +11,19 @@ public class TrashGeneratingUnitDto
     public int StormwaterJurisdictionID { get; set; }
     public string StormwaterJurisdictionName { get; set; } = null!;
     public decimal? BaselineLoadingRate { get; set; }
+    public decimal? ProgressLoadingRate { get; set; }
     public string? LandUseType { get; set; }
     public decimal? CurrentLoadingRate { get; set; }
     public int? OnlandVisualTrashAssessmentAreaID { get; set; }
     public string? OnlandVisualTrashAssessmentAreaName { get; set; }
     public string? OnlandVisualTrashAssessmentAreaBaselineScore { get; set; }
+    public string? OnlandVisualTrashAssessmentAreaProgressScore { get; set; }
     public int? WaterQualityManagementPlanID { get; set; }
     public string? WaterQualityManagementPlanName { get; set; }
     public string? TrashCaptureStatusWQMP { get; set; }
     public int? TrashCaptureEffectivenessWQMP { get; set; }
     public DateTime? LastUpdateDate { get; set; }
     public double Area { get; set; }
-    public string? AssessmentScore { get; set; }
     public DateOnly? AssessmentDate { get; set; }
     public int? CompletedAssessmentCount { get; set; }
 }

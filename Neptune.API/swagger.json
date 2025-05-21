@@ -6895,6 +6895,11 @@
             "format": "double",
             "nullable": true
           },
+          "ProgressLoadingRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
           "LandUseType": {
             "type": "string",
             "nullable": true
@@ -6914,6 +6919,10 @@
             "nullable": true
           },
           "OnlandVisualTrashAssessmentAreaBaselineScore": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnlandVisualTrashAssessmentAreaProgressScore": {
             "type": "string",
             "nullable": true
           },
@@ -6943,10 +6952,6 @@
           "Area": {
             "type": "number",
             "format": "double"
-          },
-          "AssessmentScore": {
-            "type": "string",
-            "nullable": true
           },
           "AssessmentDate": {
             "type": "string",
@@ -6995,6 +7000,11 @@
             "nullable": true
           },
           "BaselineLoadingRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "ProgressLoadingRate": {
             "type": "number",
             "format": "double",
             "nullable": true

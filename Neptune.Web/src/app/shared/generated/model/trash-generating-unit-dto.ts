@@ -21,18 +21,19 @@ export class TrashGeneratingUnitDto {
     StormwaterJurisdictionID?: number;
     StormwaterJurisdictionName?: string;
     BaselineLoadingRate?: number;
+    ProgressLoadingRate?: number;
     LandUseType?: string;
     CurrentLoadingRate?: number;
     OnlandVisualTrashAssessmentAreaID?: number;
     OnlandVisualTrashAssessmentAreaName?: string;
     OnlandVisualTrashAssessmentAreaBaselineScore?: string;
+    OnlandVisualTrashAssessmentAreaProgressScore?: string;
     WaterQualityManagementPlanID?: number;
     WaterQualityManagementPlanName?: string;
     TrashCaptureStatusWQMP?: string;
     TrashCaptureEffectivenessWQMP?: number;
     LastUpdateDate?: string;
     Area?: number;
-    AssessmentScore?: string;
     AssessmentDate?: string;
     CompletedAssessmentCount?: number;
     constructor(obj?: any) {
@@ -50,18 +51,19 @@ export interface TrashGeneratingUnitDtoForm {
     StormwaterJurisdictionID?: FormControl<number>;
     StormwaterJurisdictionName?: FormControl<string>;
     BaselineLoadingRate?: FormControl<number>;
+    ProgressLoadingRate?: FormControl<number>;
     LandUseType?: FormControl<string>;
     CurrentLoadingRate?: FormControl<number>;
     OnlandVisualTrashAssessmentAreaID?: FormControl<number>;
     OnlandVisualTrashAssessmentAreaName?: FormControl<string>;
     OnlandVisualTrashAssessmentAreaBaselineScore?: FormControl<string>;
+    OnlandVisualTrashAssessmentAreaProgressScore?: FormControl<string>;
     WaterQualityManagementPlanID?: FormControl<number>;
     WaterQualityManagementPlanName?: FormControl<string>;
     TrashCaptureStatusWQMP?: FormControl<string>;
     TrashCaptureEffectivenessWQMP?: FormControl<number>;
     LastUpdateDate?: FormControl<string>;
     Area?: FormControl<number>;
-    AssessmentScore?: FormControl<string>;
     AssessmentDate?: FormControl<string>;
     CompletedAssessmentCount?: FormControl<number>;
 }
@@ -157,6 +159,16 @@ export class TrashGeneratingUnitDtoFormControls {
             ],
         }
     );
+    public static ProgressLoadingRate = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static LandUseType = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
@@ -198,6 +210,16 @@ export class TrashGeneratingUnitDtoFormControls {
         }
     );
     public static OnlandVisualTrashAssessmentAreaBaselineScore = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static OnlandVisualTrashAssessmentAreaProgressScore = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -258,16 +280,6 @@ export class TrashGeneratingUnitDtoFormControls {
         }
     );
     public static Area = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static AssessmentScore = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
