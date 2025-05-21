@@ -24,6 +24,7 @@ services:
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
       - PathToOVTAUploadTemplate=${PathToOVTAUploadTemplate}
       - PathToSimplifiedBMPTemplate=${PathToSimplifiedBMPTemplate}
+      - PathToBulkUploadWQMPTemplate=${PathToBulkUploadWQMPTemplate}
       - RecaptchaPublicKey=${RecaptchaPublicKey}
       - RecaptchaPrivateKey=${RecaptchaPrivateKey}
       - RecaptchaValidatorUrl=${RecaptchaValidatorUrl}

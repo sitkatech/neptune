@@ -965,6 +965,20 @@ namespace Neptune.WebMvc.Controllers
 
         [HttpGet]
         [JurisdictionEditFeature]
+        public async Task<FileResult> UploadWQMPTemplate()
+        {
+            using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
+            await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToBulkUploadWQMPTemplate, disposableTempFile.FileInfo.FullName);
+            using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            return File(stream.ToArray(), @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                $"UploadWQMPTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.xlsx");
+        }
+
+        [HttpGet]
+        [JurisdictionEditFeature]
         public ViewResult UploadSimplifiedBMPs()
         {
             var viewModel = new UploadSimplifiedBMPsViewModel();

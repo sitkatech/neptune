@@ -20,6 +20,7 @@
     -----------------------------------------------------------------------*@
 
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Neptune.WebMvc.Common.BootstrapWrappers
 @using Neptune.WebMvc.Common.HtmlHelperExtensions
 @using Neptune.WebMvc.Views.Shared
 @inherits Neptune.WebMvc.Views.WaterQualityManagementPlan.UploadWqmps
@@ -53,13 +54,15 @@
             </div>
         </div>
         <div class="row form-group">
-                <div class="col-sm-2 col-xs-12 control-label">
-                    @Html.LabelWithSugarFor(m => m.UploadXLSX)
-                </div>
-                <div class="col-sm-10 col-xs-12">
-                    @Html.EditorFor(m => m.UploadXLSX, new { @class = "form-control" })
-                </div>
+            <div class="col-sm-2 col-xs-12 control-label">
+                @Html.LabelWithSugarFor(m => m.UploadXLSX)
             </div>
+            <div class="col-sm-10 col-xs-12">
+                @Html.EditorFor(m => m.UploadXLSX, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <a href="@ViewDataTyped.UploadTemplateUrl" class="btn btn-neptune" download>@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon glyphicon-download-alt") Download Template</a>
         <div class="pull-right" style="margin-left: 1em;">
             <a class="btn btn-neptune" href="@ViewDataTyped.WqmpIndexUrl">Cancel</a>
         </div>
