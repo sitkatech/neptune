@@ -1052,7 +1052,7 @@ namespace Neptune.WebMvc.Controllers
 
 
         [HttpGet]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         public ViewResult UploadWqmpBoundaryFromAPNs()
         {
             var viewModel = new UploadWqmpBoundaryFromAPNsViewModel();
@@ -1061,7 +1061,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpPost]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         [RequestSizeLimit(100_000_000_000)]
         [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<IActionResult> UploadWqmpBoundaryFromAPNs(UploadWqmpBoundaryFromAPNsViewModel viewModel)
