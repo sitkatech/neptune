@@ -20,6 +20,7 @@ export class TrashGeneratingUnitGridDto {
     StormwaterJurisdictionID?: number;
     StormwaterJurisdictionName?: string;
     BaselineLoadingRate?: number;
+    ProgressLoadingRate?: number;
     LandUseType?: string;
     CurrentLoadingRate?: number;
     PriorityLandUseTypeDisplayName?: string;
@@ -52,6 +53,7 @@ export interface TrashGeneratingUnitGridDtoForm {
     StormwaterJurisdictionID?: FormControl<number>;
     StormwaterJurisdictionName?: FormControl<string>;
     BaselineLoadingRate?: FormControl<number>;
+    ProgressLoadingRate?: FormControl<number>;
     LandUseType?: FormControl<string>;
     CurrentLoadingRate?: FormControl<number>;
     PriorityLandUseTypeDisplayName?: FormControl<string>;
@@ -144,6 +146,16 @@ export class TrashGeneratingUnitGridDtoFormControls {
         }
     );
     public static BaselineLoadingRate = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ProgressLoadingRate = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

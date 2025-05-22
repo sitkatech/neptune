@@ -22,6 +22,7 @@ public static class TrashGeneratingUnits
                 StormwaterJurisdictionID = x.StormwaterJurisdictionID,
                 StormwaterJurisdictionName = x.OrganizationName,
                 BaselineLoadingRate = x.BaselineLoadingRate,
+                ProgressLoadingRate = x.ProgressLoadingRate,
                 LandUseType = x.LandUseType,
                 CurrentLoadingRate = x.CurrentLoadingRate,
                 PriorityLandUseTypeDisplayName = x.PriorityLandUseTypeDisplayName,
