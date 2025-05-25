@@ -67,16 +67,6 @@ public static class OnlandVisualTrashAssessments
 
     }
 
-    public static OnlandVisualTrashAssessment GetByIDForFeatureContextCheck(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID)
-    {
-        var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments
-            .Include(x => x.StormwaterJurisdiction)
-            .ThenInclude(x => x.Organization).AsNoTracking()
-            .SingleOrDefault(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
-        Check.RequireNotNull(onlandVisualTrashAssessment, $"OnlandVisualTrashAssessment with ID {onlandVisualTrashAssessmentID} not found!");
-        return onlandVisualTrashAssessment;
-    }
-
     public static List<OnlandVisualTrashAssessment> ListByOnlandVisualTrashAssessmentAreaID(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentAreaID)
     {
         return GetImpl(dbContext).AsNoTracking().Where(x => x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentAreaID).OrderByDescending(x => x.CompletedDate).ToList();

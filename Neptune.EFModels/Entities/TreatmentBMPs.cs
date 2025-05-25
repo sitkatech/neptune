@@ -25,7 +25,6 @@ using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
-using System;
 
 namespace Neptune.EFModels.Entities
 {
@@ -85,16 +84,6 @@ namespace Neptune.EFModels.Entities
             return treatmentBMPDisplayDtos;
         }
 
-        public static FeatureCollection ListByProjectIDsAsFeatureCollection(NeptuneDbContext dbContext,
-            List<int> projectIDs)
-        {
-            var treatmentBMPs = GetTreatmentBMPsDisplayOnlyImpl(dbContext)
-                .Where(x => x.ProjectID.HasValue && projectIDs.Contains(x.ProjectID.Value))
-                .ToList();
-
-            return AsFeatureCollection(treatmentBMPs);
-        }
-
         private static FeatureCollection AsFeatureCollection(List<TreatmentBMP> treatmentBMPs)
         {
             var featureCollection = new FeatureCollection();
@@ -120,20 +109,6 @@ namespace Neptune.EFModels.Entities
             return featureCollection;
         }
 
-        public static FeatureCollection ListByPersonIDAsFeatureCollection(NeptuneDbContext dbContext, Person person)
-        {
-            var personID = person.PersonID;
-            if (person.Role.RoleID == (int)RoleEnum.Admin || person.Role.RoleID == (int)RoleEnum.SitkaAdmin)
-            {
-                return AsFeatureCollection(GetTreatmentBMPsDisplayOnlyImpl(dbContext).ToList());
-            }
-
-            var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
-
-            return AsFeatureCollection(GetTreatmentBMPsDisplayOnlyImpl(dbContext)
-                .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID)).ToList());
-        }
-
         public static FeatureCollection ListInventoryIsVerifiedByPersonAsFeatureCollection(NeptuneDbContext dbContext, PersonDto person)
         {
             var treatmentBmps = ListByPerson(dbContext, person);
@@ -146,13 +121,6 @@ namespace Neptune.EFModels.Entities
         {
             var treatmentBmps = ListByPerson(dbContext, person, false);
             return AsFeatureCollection(treatmentBmps.Where(x => x.ProjectID == null && x.StormwaterJurisdictionID == jurisdictionID && x.InventoryIsVerified).ToList());
-        }
-
-        public static FeatureCollection ListInventoryIsVerifiedByTrashCaptureStatusIDAsFeatureCollection(NeptuneDbContext dbContext,
-            PersonDto person, int trashCaptureStatusTypeID)
-        {
-            var treatmentBmps = ListByPerson(dbContext, person);
-            return AsFeatureCollection(treatmentBmps.Where(x => x.ProjectID == null && x.InventoryIsVerified && x.TrashCaptureStatusTypeID == trashCaptureStatusTypeID).ToList());
         }
 
         public static List<TreatmentBMPDisplayDto> ListWithProjectByPerson(NeptuneDbContext dbContext, PersonDto person)

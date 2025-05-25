@@ -267,7 +267,7 @@ namespace Neptune.WebMvc.Controllers
             var newGisDownloadUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.DownloadLandUseBlockGeometry());
             var downloadLandUseBlockUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateLandUseBlockGeometry());
 
-            var viewData = new DownloadLandUseBlockGeometryViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, newGisDownloadUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson), downloadLandUseBlockUrl);
+            var viewData = new DownloadLandUseBlockGeometryViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson), downloadLandUseBlockUrl);
             return RazorView<DownloadLandUseBlockGeometry, DownloadLandUseBlockGeometryViewData, DownloadLandUseBlockGeometryViewModel>(viewData, viewModel);
         }
 
