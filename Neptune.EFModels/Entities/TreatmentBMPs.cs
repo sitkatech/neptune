@@ -98,7 +98,7 @@ namespace Neptune.EFModels.Entities
                     //{ "StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdictionID },
                     //{ "Latitude", treatmentBMP.LocationPoint4326?.Coordinate.Y},
                     //{ "Longitude", treatmentBMP.LocationPoint4326?.Coordinate.Z},
-                    { "FeatureColor", treatmentBMP.TrashCaptureStatusType.FeatureColorOnTrashModuleMap() },
+                    { "FeatureColor", $"#{treatmentBMP.TrashCaptureStatusType.TrashCaptureStatusTypeColorCode}" },
                     { "TrashCaptureStatusTypeID", treatmentBMP.TrashCaptureStatusTypeID },
                     { "StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdictionID }
                 };

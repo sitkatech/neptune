@@ -197,7 +197,7 @@ namespace Neptune.WebMvc.Controllers
 
             SetMessageForDisplay("Successfully bulk uploaded OVTAs");
 
-            return RedirectToAction(new SitkaRoute<DataHubController>(_linkGenerator, x => x.Index()));
+            return new RedirectResult($"{_webConfiguration.TrashModuleBaseUrl}/onland-visual-trash-assessments");
         }
 
         private static List<string> CheckDataFromRow(int? areaName, int i, int? createdByPersonID, DataRow row)

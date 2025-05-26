@@ -205,7 +205,7 @@ namespace Neptune.WebMvc.Controllers
 
             await _dbContext.OnlandVisualTrashAssessmentAreaStagings.Where(x => x.UploadedByPersonID == CurrentPerson.PersonID).ExecuteDeleteAsync();
 
-            return RedirectToAction(new SitkaRoute<DataHubController>(_linkGenerator, x => x.Index()));
+            return new RedirectResult($"{_webConfiguration.TrashModuleBaseUrl}/onland-visual-trash-assessment-areas");
         }
 
         private PartialViewResult ViewApproveOVTAAreaGisUpload(ApproveOVTAAreaGisUploadViewModel viewModel)
