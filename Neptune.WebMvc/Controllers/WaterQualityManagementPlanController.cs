@@ -1005,11 +1005,8 @@ namespace Neptune.WebMvc.Controllers
                 return ViewUploadSimplifiedBMPs(viewModel, new List<string>());
             }
 
-            var stormwaterJurisdictionsPersonCanView = StormwaterJurisdictions
-                .ListViewableByPersonForBMPs(_dbContext, CurrentPerson).Select(x => x.StormwaterJurisdictionID)
-                .ToList();
             var quickBMPs = SimplifiedBMPsExcelParserHelper.ParseWQMPRowsFromXLSX(_dbContext,
-                stormwaterJurisdictionsPersonCanView, dataTableFromExcel, out var errorList);
+                viewModel.StormwaterJurisdictionID, dataTableFromExcel, out var errorList);
 
             if (errorList.Any())
             {
@@ -1031,7 +1028,8 @@ namespace Neptune.WebMvc.Controllers
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadSimplifiedBMPs);
             var viewData = new UploadSimplifiedBMPsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, errorList, neptunePage,
-                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.UploadWqmps()));
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.UploadWqmps()),
+                StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
             return RazorView<UploadSimplifiedBMPs, UploadSimplifiedBMPsViewData, UploadSimplifiedBMPsViewModel>(viewData,
                 viewModel);
         }

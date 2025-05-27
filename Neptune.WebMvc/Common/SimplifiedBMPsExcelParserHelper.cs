@@ -7,11 +7,12 @@ namespace Neptune.WebMvc.Common;
 
 public static class SimplifiedBMPsExcelParserHelper
 {
-    public static List<QuickBMP> ParseWQMPRowsFromXLSX(NeptuneDbContext dbContext, List<int> stormwaterJurisdictionsPersonCanView, DataTable dataTableFromExcel,
+    public static List<QuickBMP> ParseWQMPRowsFromXLSX(NeptuneDbContext dbContext, int stormwaterJurisdictionID, 
+        DataTable dataTableFromExcel,
         out List<string> errors)
     {
         errors = [];
-        var requiredFields = new List<string> { "WQMP Name", "BMP Name", "BMP Type" };
+        var requiredFields = new List<string> { "WQMP Name", "BMP Name", "BMP Type", "Count of BMPs" };
         foreach (var field in requiredFields)
         {
             if (!dataTableFromExcel.Columns.Contains(field))
@@ -30,18 +31,11 @@ public static class SimplifiedBMPsExcelParserHelper
         {
             var wqmpName = row["WQMP Name"].ToString();
             var wqmp = dbContext.WaterQualityManagementPlans.SingleOrDefault(x =>
-                x.WaterQualityManagementPlanName == wqmpName);
+                x.WaterQualityManagementPlanName == wqmpName && x.StormwaterJurisdictionID == stormwaterJurisdictionID);
             if (wqmp == null)
             {
-                errors.Add($"WQMP with name {wqmpName} does not exist.");
+                errors.Add($"WQMP with name {wqmpName} does not exist in given jurisdiction.");
             }
-
-            else if (wqmp != null && !stormwaterJurisdictionsPersonCanView.Contains(wqmp.StormwaterJurisdictionID))
-            {
-                errors.Add($"WQMP with name {wqmpName} is in a jurisdition you don't have access to.");
-            }
-
-            
         }
 
         var quickBMPs = new List<QuickBMP>();
@@ -65,7 +59,7 @@ public static class SimplifiedBMPsExcelParserHelper
             var treatmentBMPTypes = TreatmentBMPTypes.List(dbContext);
             var quickBMPNamesInCsv = new List<string>();
             quickBMPs.Add(ParseRequiredAndOptionalFieldsAndCreateSimplifiedBMPs(dbContext, row, i+2, out var errorsList,
-                treatmentBMPTypes, quickBMPNamesInCsv));
+                treatmentBMPTypes, quickBMPNamesInCsv, stormwaterJurisdictionID));
             errors.AddRange(errorsList);
             
         }
@@ -78,7 +72,7 @@ public static class SimplifiedBMPsExcelParserHelper
         return quickBMPs;
     }
 
-    private static QuickBMP ParseRequiredAndOptionalFieldsAndCreateSimplifiedBMPs(NeptuneDbContext dbContext, DataRow row, int rowNumber, out List<string> errorList, List<TreatmentBMPType> treatmentBMPTypes, List<string> quickBMPNamesInCsv)
+    private static QuickBMP ParseRequiredAndOptionalFieldsAndCreateSimplifiedBMPs(NeptuneDbContext dbContext, DataRow row, int rowNumber, out List<string> errorList, List<TreatmentBMPType> treatmentBMPTypes, List<string> quickBMPNamesInCsv, int stormwaterJurisdictionID)
     {
         errorList = new List<string>();
 
@@ -91,7 +85,7 @@ public static class SimplifiedBMPsExcelParserHelper
         }
 
         var wqmp = dbContext.WaterQualityManagementPlans.SingleOrDefault(x =>
-            x.WaterQualityManagementPlanName == wqmpName);
+            x.WaterQualityManagementPlanName == wqmpName && x.StormwaterJurisdictionID == stormwaterJurisdictionID);
 
         if (wqmp == null)
         {
