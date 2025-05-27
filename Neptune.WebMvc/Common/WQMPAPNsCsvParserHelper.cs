@@ -28,6 +28,7 @@ public static class WQMPAPNsCsvParserHelper
         oldBoundaries = new List<Geometry>();
         var wqmpBoundariesToUpload = new List<WaterQualityManagementPlanBoundary>();
         var fieldsDict = new Dictionary<string, int>();
+        var wqmpsInCSV = new List<string>();
 
         var requiredFields = new List<string> { "WQMP", "APNs", "WQMP Boundary Notes" };
 
@@ -51,7 +52,9 @@ public static class WQMPAPNsCsvParserHelper
         {
             var currentRow = parser.ReadFields();
 
-            var currentWQMPBoundary = ParseRequiredFieldsAndCreateWQMPBoundaries(dbContext, currentRow, fieldsDict, rowCount, stormwaterJurisdictionID, out var currentErrorList, out var currentMissingApnList, out var oldBoundary);
+            var currentWQMPBoundary = ParseRequiredFieldsAndCreateWQMPBoundaries(dbContext, currentRow, fieldsDict,
+                rowCount, stormwaterJurisdictionID, out var currentErrorList, out var currentMissingApnList,
+                out var oldBoundary, wqmpsInCSV);
             if (currentWQMPBoundary != null)
             {
                 wqmpBoundariesToUpload.Add(currentWQMPBoundary);
@@ -96,20 +99,26 @@ public static class WQMPAPNsCsvParserHelper
     }
 
     private static WaterQualityManagementPlanBoundary ParseRequiredFieldsAndCreateWQMPBoundaries(NeptuneDbContext dbContext, string[] row,
-            Dictionary<string, int> fieldsDict, int rowNumber, int stormwaterJurisdictionID, out List<string> errorList, out List<string> missingApnList, out Geometry? oldBoundary)
+            Dictionary<string, int> fieldsDict, int rowNumber, int stormwaterJurisdictionID, 
+            out List<string> errorList, out List<string> missingApnList, out Geometry? oldBoundary,
+            List<string> wqmpList)
     {
         errorList = new List<string>();
         missingApnList = new List<string>();
         oldBoundary = null;
 
         var wqmpName = SetStringValue(row, fieldsDict, rowNumber, errorList, "WQMP", WaterQualityManagementPlan.FieldLengths.WaterQualityManagementPlanName, true);
-
         if (string.IsNullOrWhiteSpace(wqmpName))
         {
             // no point in going further if there is no wqmp name
             return null;
         }
-
+        else if (wqmpList.Contains(wqmpName))
+        {
+            errorList.Add($"WQMP with name {wqmpName} is in csv multiple times.");
+            return null;
+        }
+        wqmpList.Add(wqmpName);
         var wqmp = dbContext.WaterQualityManagementPlans.SingleOrDefault(x =>
             x.WaterQualityManagementPlanName == wqmpName && x.StormwaterJurisdictionID == stormwaterJurisdictionID);
 
