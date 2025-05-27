@@ -89,6 +89,10 @@ public partial class vTrashGeneratingUnitLoadStatistic
     [Unicode(false)]
     public string? OnlandVisualTrashAssessmentAreaBaselineScore { get; set; }
 
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? OnlandVisualTrashAssessmentAreaProgressScore { get; set; }
+
     [Column(TypeName = "numeric(18, 0)")]
     public decimal? MedianHouseholdIncomeResidential { get; set; }
 

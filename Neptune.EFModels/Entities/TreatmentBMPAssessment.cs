@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.EntityFrameworkCore;
-using Neptune.Common;
 
 namespace Neptune.EFModels.Entities
 {
@@ -30,11 +29,6 @@ namespace Neptune.EFModels.Entities
         {
             var canManageStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdictionID);
             return canManageStormwaterJurisdiction;
-        }
-
-        public int GetWaterYear()
-        {
-            return GetAssessmentDate().GetFiscalYear();
         }
 
         public string GetAssessmentStatus(TreatmentBMPType treatmentBMPType)
@@ -70,16 +64,6 @@ namespace Neptune.EFModels.Entities
         public DateTime GetAssessmentDate()
         {
             return FieldVisit.VisitDate;
-        }
-
-        public string CalculateObservationValueForObservationType(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
-        {
-            if (treatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.All(x => x.TreatmentBMPTypeID != TreatmentBMPTypeID))
-            {
-                return "n/a";
-            }
-
-            return TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID)?.FormattedObservationValueWithoutUnits(treatmentBMPAssessmentObservationType) ?? "not provided";
         }
 
         public async Task DeleteFull(NeptuneDbContext dbContext)

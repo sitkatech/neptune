@@ -248,6 +248,8 @@
 
                             <dt class="g-col-5"><field-definition fieldDefinitionType="BaselineLoadingRate"></field-definition></dt>
                             <dd class="g-col-7">{{ tguDto.BaselineLoadingRate }}{{ tguDto.BaselineLoadingRate != null ? " gal/yr" : "" }}</dd>
+                            <dt class="g-col-5">Progress Loading Rate</dt>
+                            <dd class="g-col-7">{{ tguDto.BaselineLoadingRate }}{{ tguDto.ProgressLoadingRate != null ? " gal/yr" : "" }}</dd>
 
                             <dt class="g-col-5">Jurisdiction</dt>
                             <dd class="g-col-7">{{ tguDto.StormwaterJurisdictionName }}</dd>
@@ -278,8 +280,10 @@
                                     tguDto.OnlandVisualTrashAssessmentAreaName
                                 }}</a>
                             </dd>
-                            <dt class="g-col-5"><field-definition fieldDefinitionType="OVTAScoreEquivalentCalculation" labelOverride="OVTA Score"></field-definition></dt>
-                            <dd class="g-col-7">{{ tguDto.AssessmentScore }}</dd>
+                            <dt class="g-col-5"><field-definition fieldDefinitionType="BaselineScore" labelOverride="OVTA Baseline Score"></field-definition></dt>
+                            <dd class="g-col-7">{{ tguDto.OnlandVisualTrashAssessmentAreaBaselineScore }}</dd>
+                            <dt class="g-col-5"><field-definition fieldDefinitionType="ProgressScore" labelOverride="OVTA Progress Score"></field-definition></dt>
+                            <dd class="g-col-7">{{ tguDto.OnlandVisualTrashAssessmentAreaProgressScore }}</dd>
                             <dt class="g-col-5"># of Assessments</dt>
                             <dd class="g-col-7">{{ tguDto.CompletedAssessmentCount }}</dd>
                             <dt class="g-col-5">Last Assessed Date</dt>

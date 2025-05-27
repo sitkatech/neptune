@@ -180,7 +180,7 @@ namespace Neptune.WebMvc.Controllers
 
             SetMessageForDisplay("The Land Use Blocks were successfully added to the staging area. The staged Land Use Blocks will be processed and added to the system. You will receive an email notification when this process completes or if errors in the upload are discovered during processing.");
 
-            return Redirect(_webConfiguration.PlanningModuleBaseUrl + "/trash/land-use-blocks"); 
+            return Redirect($"{_webConfiguration.TrashModuleBaseUrl}/land-use-blocks"); 
         }
 
         [HttpPost]
@@ -267,7 +267,7 @@ namespace Neptune.WebMvc.Controllers
             var newGisDownloadUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.DownloadLandUseBlockGeometry());
             var downloadLandUseBlockUrl = SitkaRoute<LandUseBlockGeometryController>.BuildUrlFromExpression(_linkGenerator, x => x.UpdateLandUseBlockGeometry());
 
-            var viewData = new DownloadLandUseBlockGeometryViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, newGisDownloadUrl, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson), downloadLandUseBlockUrl);
+            var viewData = new DownloadLandUseBlockGeometryViewData(HttpContext, _linkGenerator, CurrentPerson, _webConfiguration, StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson), downloadLandUseBlockUrl);
             return RazorView<DownloadLandUseBlockGeometry, DownloadLandUseBlockGeometryViewData, DownloadLandUseBlockGeometryViewModel>(viewData, viewModel);
         }
 

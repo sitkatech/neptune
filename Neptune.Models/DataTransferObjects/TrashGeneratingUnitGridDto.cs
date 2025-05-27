@@ -14,6 +14,7 @@ public class TrashGeneratingUnitGridDto
     public int StormwaterJurisdictionID { get; set; }
     public string StormwaterJurisdictionName { get; set; } = null!;
     public decimal? BaselineLoadingRate { get; set; }
+    public decimal? ProgressLoadingRate { get; set; }
     public string? LandUseType { get; set; }
     public decimal? CurrentLoadingRate { get; set; }
     public string? PriorityLandUseTypeDisplayName { get; set; }

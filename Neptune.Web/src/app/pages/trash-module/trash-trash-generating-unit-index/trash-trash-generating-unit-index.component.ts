@@ -50,6 +50,9 @@ export class TrashTrashGeneratingUnitIndexComponent {
             this.utilityFunctionsService.createDecimalColumnDef("Baseline Loading Rate", "BaselineLoadingRate", {
                 CustomDropdownFilterField: "BaselineLoadingRate",
             }),
+            this.utilityFunctionsService.createDecimalColumnDef("Progress Loading Rate", "ProgressLoadingRate", {
+                CustomDropdownFilterField: "ProgressLoadingRate",
+            }),
             this.utilityFunctionsService.createDecimalColumnDef("Current Loading Rate", "CurrentLoadingRate", {
                 CustomDropdownFilterField: "CurrentLoadingRate",
             }),

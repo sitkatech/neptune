@@ -7,7 +7,7 @@ using Neptune.WebMvc.Controllers;
 
 namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessmentExport
 {
-    public class ExportAssessmentGeospatialDataViewData : TrashModuleViewData
+    public class ExportAssessmentGeospatialDataViewData : NeptuneViewData
     {
         public IEnumerable<SelectListItem> StormwaterJurisdictions { get; }
         public string MapServiceUrl { get; }
@@ -19,7 +19,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessmentExport
             Person currentPerson, WebConfiguration webConfiguration, EFModels.Entities.NeptunePage neptunePage,
             List<StormwaterJurisdiction> stormwaterJurisdictions, string mapServiceUrl,
             ILookup<int, EFModels.Entities.OnlandVisualTrashAssessmentArea> onlandVisualTrashAssessmentAreas,
-            ILookup<int, EFModels.Entities.OnlandVisualTrashAssessment> onlandVisualTrashAssessments, string uploadOVTAAreaUrl) : base(httpContext, linkGenerator, currentPerson, webConfiguration, neptunePage)
+            ILookup<int, EFModels.Entities.OnlandVisualTrashAssessment> onlandVisualTrashAssessments, string uploadOVTAAreaUrl) : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             MapServiceUrl = mapServiceUrl;
             OnlandVisualTrashAssessmentAreas = onlandVisualTrashAssessmentAreas;

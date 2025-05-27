@@ -13,7 +13,7 @@ namespace Neptune.WebMvc.Views.OnlandVisualTrashAssessmentArea
         public ApproveOVTAAreaGisUploadViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, OVTAAreaUploadGisReportJsonResult ovtaAreaUploadGisReportFromStaging) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             OvtaAreaUploadGisReportFromStaging = ovtaAreaUploadGisReportFromStaging;
-            OVTAIndexUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
+            OVTAIndexUrl = SitkaRoute<DataHubController>.BuildUrlFromExpression(linkGenerator, x => x.Index());
         }
     }
 }

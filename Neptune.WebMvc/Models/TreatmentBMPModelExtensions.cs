@@ -54,27 +54,6 @@ namespace Neptune.WebMvc.Models
             return featureCollection;
         }
 
-        public static FeatureCollection ToGeoJsonFeatureCollectionForTrashMap(this IEnumerable<TreatmentBMP> treatmentBMPs, LinkGenerator linkGenerator)
-        {
-            UrlTemplate<int> trashMapAssetUrlTemplate = new(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.TrashMapAssetPanel(UrlTemplate.Parameter1Int)));
-            var featureCollection = new FeatureCollection();
-            foreach (var treatmentBMP in treatmentBMPs)
-            {
-                var attributesTable = new AttributesTable
-                {
-                    { "Name", treatmentBMP.TreatmentBMPName },
-                    { "FeatureColor", treatmentBMP.TrashCaptureStatusType.FeatureColorOnTrashModuleMap() },
-                    { "MapSummaryUrl", trashMapAssetUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID) },
-                    { "TreatmentBMPID", treatmentBMP.TreatmentBMPID },
-                    { "TrashCaptureStatusTypeID", treatmentBMP.TrashCaptureStatusTypeID },
-                    { "StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdictionID }
-                };
-                var feature = new Feature(treatmentBMP.LocationPoint4326, attributesTable);
-                featureCollection.Add(feature);
-            }
-            return featureCollection;
-        }
-
         /// <summary>
         /// Creates a GeoJson FeatureCollection from an enumerable of TreatmentBMPs.
         /// Adds some common properties (Name, Treatment BMP Type, ID, Type ID) to each feature.

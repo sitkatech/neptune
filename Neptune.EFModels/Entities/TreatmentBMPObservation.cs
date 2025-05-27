@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Globalization;
 using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
 
@@ -56,19 +55,6 @@ namespace Neptune.EFModels.Entities
         public double? CalculateObservationValue()
         {
             return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData);
-        }
-
-        public string FormattedObservationValueWithoutUnits(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
-        {
-            var observationTypeCollectionMethod = treatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod;
-            var observationValue = observationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData) ?? 0;
-
-            if (observationTypeCollectionMethod == ObservationTypeCollectionMethod.PassFail)
-            {
-                return Math.Abs(observationValue - 5) < 0.0001 ? "Pass" : "Fail";
-            }
-
-            return $"{observationValue.ToString(CultureInfo.InvariantCulture)}";
         }
 
         public bool OverrideScoreForFailingObservation()
