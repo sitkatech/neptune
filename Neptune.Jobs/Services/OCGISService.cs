@@ -67,7 +67,10 @@ public class OCGISService(
             .ToList();
         dbContext.RegionalSubbasinStagings.AddRange(regionalSubbasinStagings);
         await dbContext.SaveChangesAsync();
+        //We need to delete everything that has a foreign key relationship to RSBs prior to the update for the merge delete to not fail
+        //This is NOT everything, but waiting until we run up against an actual instance of needing to delete the remaining entities before enforcing (ie.ProjectNereidResults)
         await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteLoadGeneratingUnitsPriorToTotalRefresh");
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pDeleteNereidResults");
         await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pUpdateRegionalSubbasinLiveFromStaging");
         
         // reproject to 4326
