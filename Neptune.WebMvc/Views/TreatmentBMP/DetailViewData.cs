@@ -65,6 +65,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public string LocationEditUrl { get; }
         public string DelineationMapUrl { get; }
         public string ManageTreatmentBMPImagesUrl { get; }
+        public string QueueLGURefreshUrl { get; }
         public string DelineationArea { get; }
         public string DelineationStatus { get; }
         public bool DisplayTrashCaptureEffectiveness { get; }
@@ -228,6 +229,8 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             HRUCharacteristicsGridSpec = new HRUCharacteristicGridSpec(LinkGenerator);
             HRUCharacteristicsGridName = "HRUCharacteristics";
             HRUCharacteristicsGridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.HRUCharacteristicGridJsonData(treatmentBMP));
+            QueueLGURefreshUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.QueueLGURefreshForTreatmentBMP(treatmentBMP));
+
 
             MapServiceUrl = mapServiceUrl;
             ModeledPerformanceViewData = modeledPerformanceViewData;

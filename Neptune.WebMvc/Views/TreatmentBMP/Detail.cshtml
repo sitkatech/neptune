@@ -797,6 +797,10 @@
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
                     Drainage Area Land Uses
+                    @if (ViewDataTyped.HRUCharacteristicsViewData.HRUCharacteristicsSummaries.Any() && ViewDataTyped.Delineation?.IsVerified == true)
+                    {
+                        @ModalDialogFormHelper.ModalDialogFormLink("Refresh Land Use", ViewDataTyped.QueueLGURefreshUrl, "Refresh Land Use?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-xs", "btn-neptune", "pull-right" }, null, null)
+                    }
                 </div>
                 <div class="panel-body">
                     @if (ViewDataTyped.HRUCharacteristicsViewData.HRUCharacteristicsSummaries.Any() && ViewDataTyped.Delineation?.IsVerified == true)

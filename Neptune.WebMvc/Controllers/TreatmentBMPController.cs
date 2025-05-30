@@ -697,6 +697,56 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
+        [TreatmentBMPDeleteFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
+        public PartialViewResult QueueLGURefreshForTreatmentBMP([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(treatmentBMP.TreatmentBMPID);
+            return ViewQueueLGURefreshForTreatmentBMP(treatmentBMP, viewModel);
+        }
+
+        [HttpPost("{treatmentBMPPrimaryKey}")]
+        [TreatmentBMPEditFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
+        public async Task<IActionResult> QueueLGURefreshForTreatmentBMP([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ConfirmDialogFormViewModel viewMode)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var delineation = Delineations.GetByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPID);
+
+            if (delineation == null)
+            {
+                SetErrorForDisplay($"Treatment BMPs require a delineation in order to refresh their Load Generating Units.");
+                return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMPPrimaryKey)));
+            }
+
+            var delineationGeometry = delineation?.DelineationGeometry;
+            var isDelineationDistributed = delineation != null && delineation.DelineationType == DelineationType.Distributed;
+
+            if (!isDelineationDistributed)
+            {
+                SetErrorForDisplay($"This delineation cannot be refreshed because it is not distributed.");
+                return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMPPrimaryKey)));
+            }
+
+            //await NereidUtilities.MarkDownstreamNodeDirty(treatmentBMP, _dbContext);
+            await ModelingEngineUtilities.QueueLGURefreshForArea(delineationGeometry, null, _dbContext);
+
+            SetMessageForDisplay($"Successfully queued a Load Generating Unit refresh for the Treatment BMP {treatmentBMP.TreatmentBMPName}. It will run in the background, please check back later to view the results.");
+            return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMPPrimaryKey)));
+        }
+
+        private PartialViewResult ViewQueueLGURefreshForTreatmentBMP(TreatmentBMP treatmentBMP,
+            ConfirmDialogFormViewModel viewModel)
+        {
+            var viewData =
+                new ConfirmDialogFormViewData(
+                    $"Are you sure you want to refresh the Land Use Area for '{treatmentBMP.TreatmentBMPName}' treatment BMP?");
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData,
+                viewModel);
+        }
+
+        [HttpGet("{treatmentBMPPrimaryKey}")]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public PartialViewResult SummaryForMap([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
@@ -827,7 +877,9 @@ namespace Neptune.WebMvc.Controllers
             var precipitationZonesDict = _dbContext.PrecipitationZones.AsNoTracking()
                 .Select(x => new { x.PrecipitationZoneID, x.DesignStormwaterDepthInInches })
                 .ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
-            var gridSpec = new ViewTreatmentBMPModelingAttributesGridSpec(_linkGenerator, delineationsDict, watershedsDict, precipitationZonesDict);
+            var hruCharacteristicsAcreageSumByTreatmentBMPDict =
+                vHRUCharacteristics.ListAcreageSumByTreatmentBMPDictionary(_dbContext);
+            var gridSpec = new ViewTreatmentBMPModelingAttributesGridSpec(_linkGenerator, delineationsDict, watershedsDict, precipitationZonesDict, hruCharacteristicsAcreageSumByTreatmentBMPDict);
             var treatmentBMPs = TreatmentBMPs.ListWithModelingAttributes(_dbContext).Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
