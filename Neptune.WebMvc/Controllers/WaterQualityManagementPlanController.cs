@@ -109,6 +109,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
+        [AnonymousUnclassifiedFeature] // intentionally put here to bypass having to login
         [WaterQualityManagementPlanViewFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
         public ViewResult Detail([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
@@ -208,6 +209,7 @@ namespace Neptune.WebMvc.Controllers
 
 
         [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
+        [AnonymousUnclassifiedFeature] // intentionally put here to bypass having to login
         [WaterQualityManagementPlanViewFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
         public GridJsonNetJObjectResult<Parcel> ParcelsForWaterQualityManagementPlanGridData([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
@@ -218,6 +220,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
+        [AnonymousUnclassifiedFeature] // intentionally put here to bypass having to login
         [WaterQualityManagementPlanViewFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
         public GridJsonNetJObjectResult<QuickBMP> SimplifiedStructuralBMPsForWaterQualityManagementPlanGridData([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
