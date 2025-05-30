@@ -46,16 +46,6 @@ public static class MaintenanceRecordObservations
         return GetByID(dbContext, maintenanceRecordObservationPrimaryKey.PrimaryKeyValue);
     }
 
-    public static List<MaintenanceRecordObservation> ListByMaintenanceRecordID(NeptuneDbContext dbContext, int maintenanceRecordID)
-    {
-        return GetImpl(dbContext).AsNoTracking().Where(x => x.MaintenanceRecordID == maintenanceRecordID).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
-    }
-
-    public static List<MaintenanceRecordObservation> ListByMaintenanceRecordIDWithChangeTracking(NeptuneDbContext dbContext, int maintenanceRecordID)
-    {
-        return GetImpl(dbContext).Where(x => x.MaintenanceRecordID == maintenanceRecordID).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
-    }
-
     public static List<MaintenanceRecordObservation> ListByCustomAttributeTypeID(NeptuneDbContext dbContext, int customAttributeTypeID)
     {
         return GetImpl(dbContext).AsNoTracking().Where(x => x.CustomAttributeTypeID == customAttributeTypeID).OrderBy(x => x.MaintenanceRecordObservationID).ToList();

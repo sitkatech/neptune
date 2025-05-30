@@ -46,9 +46,4 @@ public static class LandUseBlockStagings
         return GetImpl(dbContext).AsNoTracking()
             .Where(x => x.UploadedByPersonID == personID).ToList();
     }
-
-    public static List<LandUseBlockStaging> ListByPersonIDWithChangeTracking(NeptuneDbContext dbContext, int personID)
-    {
-        return GetImpl(dbContext).Where(x => x.UploadedByPersonID == personID).ToList();
-    }
 }

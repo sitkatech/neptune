@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common;
 using Neptune.Common.GeoSpatial;
@@ -29,11 +28,6 @@ namespace Neptune.EFModels.Entities
 {
     public partial class TreatmentBMPAssessmentObservationType
     {
-        //public string BenchmarkAndThresholdUrl(TreatmentBMP treatmentBMP)
-        //{
-        //    return ObservationTypeSpecification.ObservationThresholdType.GetBenchmarkAndThresholdUrl(treatmentBMP, this);
-        //}
-
         public string DisplayNameWithUnits()
         {
             return
@@ -43,12 +37,6 @@ namespace Neptune.EFModels.Entities
         public bool GetHasBenchmarkAndThreshold()
         {
             return ObservationTypeSpecification.ObservationThresholdType != ObservationThresholdType.None;
-        }
-
-        public bool GetThresholdIsRelativePercentOfBenchmark()
-        {
-            return ObservationTypeSpecification.ObservationThresholdType ==
-                   ObservationThresholdType.RelativeToBenchmark;
         }
 
         public bool GetTargetIsSweetSpot()

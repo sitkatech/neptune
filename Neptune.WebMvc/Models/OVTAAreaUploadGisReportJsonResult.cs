@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Neptune.Common.DesignByContract;
+﻿using Neptune.Common.DesignByContract;
 using Neptune.EFModels.Entities;
 
 namespace Neptune.WebMvc.Models;

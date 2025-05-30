@@ -51,22 +51,6 @@ namespace Neptune.EFModels.Entities
             return !observationTypesIDs.Except(benchmarkAndThresholdObservationTypeIDs).Any();
         }
 
-        public string GetMostRecentScoreAsString()
-        {
-            var latestAssessment = GetMostRecentAssessment();
-            if (latestAssessment == null)
-            {
-                return string.Empty;
-            }
-            return latestAssessment.FormattedScore();
-        }
-
-        public TreatmentBMPAssessment GetMostRecentAssessment()
-        {
-            var latestAssessment = TreatmentBMPAssessments.OrderByDescending(x => x.GetAssessmentDate()).FirstOrDefault(x => x.IsAssessmentComplete);
-            return latestAssessment;
-        }
-
         public static string GetCustomAttributeValueWithUnits(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType, ICollection<CustomAttribute> customAttributes)
         {
             if (customAttributes.Any())
@@ -106,16 +90,6 @@ namespace Neptune.EFModels.Entities
             return completedObservationCount == totalObservationCount
                 ? "All Required Data Provided"
                 : $"In Progress ({completedObservationCount} of {totalObservationCount} required attributes entered)";
-        }
-
-        public DateTime? LastMaintainedDateTime()
-        {
-            if (!MaintenanceRecords.Any())
-            {
-                return null;
-            }
-
-            return MaintenanceRecords.Max(x => x.GetMaintenanceRecordDate());
         }
 
         public void MarkAsVerified(Person currentPerson)
