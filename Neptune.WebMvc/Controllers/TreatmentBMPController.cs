@@ -716,7 +716,7 @@ namespace Neptune.WebMvc.Controllers
 
             if (delineation == null)
             {
-                SetErrorForDisplay($"Treatment BMPs require a delineation in order to refresh their Load Generating Units.");
+                SetErrorForDisplay($"Treatment BMPs require a delineation in order to refresh their Land Use.");
                 return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMPPrimaryKey)));
             }
 
@@ -732,7 +732,7 @@ namespace Neptune.WebMvc.Controllers
             //await NereidUtilities.MarkDownstreamNodeDirty(treatmentBMP, _dbContext);
             await ModelingEngineUtilities.QueueLGURefreshForArea(delineationGeometry, null, _dbContext);
 
-            SetMessageForDisplay($"Successfully queued a Load Generating Unit refresh for the Treatment BMP {treatmentBMP.TreatmentBMPName}. It will run in the background, please check back later to view the results.");
+            SetMessageForDisplay($"Successfully queued a Land Use refresh for the Treatment BMP {treatmentBMP.TreatmentBMPName}. It will run in the background, please check back later to view the results.");
             return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMPPrimaryKey)));
         }
 

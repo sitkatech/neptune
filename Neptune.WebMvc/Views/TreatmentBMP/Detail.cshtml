@@ -28,6 +28,7 @@
 @using Neptune.WebMvc.Common.DhtmlWrappers
 @using Neptune.WebMvc.Views.Shared.ModeledPerformance
 @using HRUCharacteristics = Neptune.WebMvc.Views.Shared.HRUCharacteristics.HRUCharacteristics
+@using Microsoft.AspNetCore.Html
 @inherits Neptune.WebMvc.Views.TreatmentBMP.Detail
 
 @section JavascriptAndStylesContent
@@ -797,12 +798,13 @@
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
                     Drainage Area Land Uses
-                    @if (ViewDataTyped.HRUCharacteristicsViewData.HRUCharacteristicsSummaries.Any() && ViewDataTyped.Delineation?.IsVerified == true)
-                    {
-                        @ModalDialogFormHelper.ModalDialogFormLink("Refresh Land Use", ViewDataTyped.QueueLGURefreshUrl, "Refresh Land Use?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-xs", "btn-neptune", "pull-right" }, null, null)
-                    }
                 </div>
                 <div class="panel-body">
+                    @{
+                        var disabledCssClass = ViewDataTyped.Delineation != null || ViewDataTyped.Delineation?.IsVerified == true ? "" : "btn-default disabled";
+
+                        @ModalDialogFormHelper.ModalDialogFormLink(null, new HtmlString("Refresh Land Use"), ViewDataTyped.QueueLGURefreshUrl, "Refresh Land Use?", 400, "refresh-land-use-save-button", "Continue", "Cancel", new List<string> { "btn", "btn-neptune", disabledCssClass }, null, null, null, "Land Use may only be refreshed if the Treatment BMP is delineated and the delineation has been verified.");
+                    }
                     @if (ViewDataTyped.HRUCharacteristicsViewData.HRUCharacteristicsSummaries.Any() && ViewDataTyped.Delineation?.IsVerified == true)
                     {
                         HRUCharacteristics.RenderPartialView(Html, ViewDataTyped.HRUCharacteristicsViewData);
