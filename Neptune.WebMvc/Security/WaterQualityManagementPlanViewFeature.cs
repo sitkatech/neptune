@@ -32,8 +32,8 @@ namespace Neptune.WebMvc.Security
                 return new PermissionCheckResult($"You don't have permission to view this WQMP.");
             }
 
-            var isAssignedToTreatmentBMP = person.IsAssignedToStormwaterJurisdiction(waterQualityManagementPlan.StormwaterJurisdictionID);
-            if (!person.IsAnonymousOrUnassigned() && !isAssignedToTreatmentBMP)
+            var isAssignedToStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(waterQualityManagementPlan.StormwaterJurisdictionID);
+            if (!person.IsAnonymousOrUnassigned() && !isAssignedToStormwaterJurisdiction)
             {
                 return new PermissionCheckResult($"You don't have permission to view WQMPs for Jurisdiction {waterQualityManagementPlan.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }

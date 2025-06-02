@@ -11,7 +11,7 @@ export class MapLayerBase implements IMapLayer, OnDestroy {
     @Input() sortOrder: number;
 
     @ViewChild("layerName") layerTemplate!: TemplateRef<any>;
-    @ViewChild("legend") lengendTemplate!: TemplateRef<any>;
+    @ViewChild("legend") legendTemplate!: TemplateRef<any>;
     layer: any;
 
     constructor() {}
@@ -33,9 +33,9 @@ export class MapLayerBase implements IMapLayer, OnDestroy {
             if (this.sortOrder) {
                 this.layer.sortOrder = this.sortOrder;
             }
-            if(this.lengendTemplate){
-                const legendViewRef = this.lengendTemplate.createEmbeddedView(null);
-                if(legendViewRef){
+            if (this.legendTemplate) {
+                const legendViewRef = this.legendTemplate.createEmbeddedView(null);
+                if (legendViewRef) {
                     legendViewRef.detectChanges();
                     const legendHtml = legendViewRef.rootNodes[0].outerHTML;
                     this.layer["legendHtml"] = legendHtml;

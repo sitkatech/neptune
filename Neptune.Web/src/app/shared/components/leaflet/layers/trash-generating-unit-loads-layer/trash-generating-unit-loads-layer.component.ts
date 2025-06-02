@@ -15,6 +15,7 @@ export class TrashGeneratingUnitLoadsLayerComponent extends MapLayerBase impleme
         super();
     }
     @Input() style: string;
+    @Input() selectedJurisdictionID: number;
     public wmsOptions: L.WMSOptions;
     public layer;
 
@@ -26,8 +27,18 @@ export class TrashGeneratingUnitLoadsLayerComponent extends MapLayerBase impleme
             tiled: true,
             styles: this.style,
         };
+        if (this.selectedJurisdictionID) {
+            this.wmsOptions.cql_filter = `StormwaterJurisdictionID=${this.selectedJurisdictionID}`;
+        }
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
-
         this.initLayer();
+    }
+
+    ngOnChanges(changes: any): void {
+        if (!this.layer) {
+            return;
+        }
+        this.layer.wmsParams.cql_filter = `StormwaterJurisdictionID=${this.selectedJurisdictionID}`;
+        this.layer.redraw();
     }
 }
