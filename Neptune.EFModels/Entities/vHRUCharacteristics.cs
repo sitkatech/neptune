@@ -35,6 +35,12 @@ public static class vHRUCharacteristics
             .Where(x => x.RegionalSubbasinID == regionalSubbasinID).ToList();
     }
 
+    public static List<vHRUCharacteristic> ListByLoadGeneratingUnitID(NeptuneDbContext dbContext,
+        int loadGeneratingUnitID)
+    {
+        return GetImpl(dbContext).Where(x => x.LoadGeneratingUnitID == loadGeneratingUnitID).ToList();
+    }
+
     public static List<vHRUCharacteristic> ListByTreatmentBMP(NeptuneDbContext dbContext, TreatmentBMP treatmentBMP, Delineation? delineation)
     {
         if (delineation == null)
