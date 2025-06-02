@@ -15,6 +15,7 @@ export class OvtaAreasLayerComponent extends MapLayerBase implements OnChanges, 
     constructor() {
         super();
     }
+    @Input() selectedJurisdictionID: number;
     public wmsOptions: L.WMSOptions;
     public layer;
 
@@ -25,8 +26,18 @@ export class OvtaAreasLayerComponent extends MapLayerBase implements OnChanges, 
             format: "image/png",
             tiled: true,
         };
-
+        if (this.selectedJurisdictionID) {
+            this.wmsOptions.cql_filter = `StormwaterJurisdictionID=${this.selectedJurisdictionID}`;
+        }
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
         this.initLayer();
+    }
+
+    ngOnChanges(changes: any): void {
+        if (!this.layer) {
+            return;
+        }
+        this.layer.wmsParams.cql_filter = `StormwaterJurisdictionID=${this.selectedJurisdictionID}`;
+        this.layer.redraw();
     }
 }
