@@ -16,10 +16,10 @@ public static class vWaterQualityManagementPlanDetaileds
             var publicWaterQualityManagementPlans = waterQualityManagementPlans.Where(x =>
                 x.WaterQualityManagementPlanStatusID ==
                 (int)WaterQualityManagementPlanStatusEnum.Active ||
-                x.WaterQualityManagementPlanStatusID ==
+                (x.WaterQualityManagementPlanStatusID ==
                 (int)WaterQualityManagementPlanStatusEnum.Inactive &&
                 x.StormwaterJurisdictionPublicWQMPVisibilityTypeID ==
-                (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.ActiveAndInactive).ToList();
+                (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.ActiveAndInactive)).ToList();
             return publicWaterQualityManagementPlans;
         }
 

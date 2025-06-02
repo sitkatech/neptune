@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { environment } from "src/environments/environment";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
@@ -137,7 +137,8 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         private wfsService: WfsService,
         private trashGeneratingUnitService: TrashGeneratingUnitService,
         private treatmentBMPService: TreatmentBMPService,
-        private modalService: ModalService
+        private modalService: ModalService,
+        private cdr: ChangeDetectorRef
     ) {}
 
     public ngOnInit(): void {
@@ -286,6 +287,8 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
 
     public onJurisdictionSelected(selectedJurisdiction: StormwaterJurisdictionDto) {
         this.stormwaterJurisdictionSubject.next(selectedJurisdiction);
+        this.currentStormwaterJurisdiction = selectedJurisdiction;
+        this.cdr.detectChanges();
     }
 
     public registerClickEvents(): void {
