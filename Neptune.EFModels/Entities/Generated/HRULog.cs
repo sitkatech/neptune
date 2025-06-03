@@ -28,4 +28,7 @@ public partial class HRULog
 
     [InverseProperty("HRULog")]
     public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; } = new List<LoadGeneratingUnit>();
+
+    [InverseProperty("HRULog")]
+    public virtual ICollection<ProjectLoadGeneratingUnit> ProjectLoadGeneratingUnits { get; set; } = new List<ProjectLoadGeneratingUnit>();
 }

@@ -140,7 +140,7 @@ You can view the results or trigger another network solve <a href='{planningURL}
                     await _dbContext.ProjectLoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
                             .Contains(x.ProjectLoadGeneratingUnitID))
                         .ExecuteUpdateAsync(x => x.SetProperty(y => y.DateHRURequested, DateTime.UtcNow));
-                    var hruResponseResult = await HRURefreshJob.ProcessHRUsForLGUs(group, _ocgisService, true);
+                    var hruResponseResult = await HRURefreshJob.ProcessHRUsForLGUs(group, _ocgisService, true, _dbContext);
 
                     var hruResponseFeatures = hruResponseResult.HRUResponseFeatures;
                     if (!hruResponseFeatures.Any())
@@ -153,6 +153,12 @@ You can view the results or trigger another network solve <a href='{planningURL}
                         _logger.LogWarning($"No data for PLGUs with these IDs: {string.Join(", ", lguIDsWithProblems)}");
                     }
 
+                    await _dbContext.ProjectLoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
+                            .Contains(x.ProjectLoadGeneratingUnitID))
+                        .ExecuteUpdateAsync(x => x.SetProperty(y => y.HRULogID, hruResponseResult.HRULogID));
+
+                    //Now that HRULogs are linked with LGUs, delete the old logs
+                    await _dbContext.Database.ExecuteSqlAsync($"EXEC dbo.pDeleteOldHRULogs");
                     var projectHruCharacteristics = hruResponseFeatures.Select(x =>
                     {
                         var projectHRUCharacteristic = new ProjectHRUCharacteristic

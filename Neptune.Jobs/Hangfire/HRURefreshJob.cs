@@ -29,14 +29,14 @@ public class HRURefreshJob(
         var stopwatch = new Stopwatch();
         stopwatch.Start();
 
-        var loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit = DbContext.vLoadGeneratingUnitUpdateCandidates.ToList().GroupBy(x => x.SpatialGridUnitID);
+        var loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit = dbContext.vLoadGeneratingUnitUpdateCandidates.ToList().GroupBy(x => x.SpatialGridUnitID);
 
         foreach (var group in loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit.OrderByDescending(x => x.Count()))
         {
             try
             {
                 var loadGeneratingUnitIDs = group.Select(x => x.PrimaryKey);
-                await DbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
+                await dbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
                         .Contains(x.LoadGeneratingUnitID))
                     .ExecuteUpdateAsync(x => x.SetProperty(y => y.DateHRURequested, DateTime.UtcNow));
                 var hruResponseResult = await ProcessHRUsForLGUs(group, ocgisService, false, dbContext);
@@ -45,7 +45,7 @@ public class HRURefreshJob(
                 if (!hruResponseFeatures.Any())
                 {
                     var lguIDsWithProblems = hruResponseResult.LoadGeneratingUnitIDs;
-                    await DbContext.LoadGeneratingUnits.Where(x =>
+                    await dbContext.LoadGeneratingUnits.Where(x =>
                             lguIDsWithProblems.Contains(x.LoadGeneratingUnitID))
                         .ExecuteUpdateAsync(x => 
                             x.SetProperty(y => y.IsEmptyResponseFromHRUService, true));
@@ -53,7 +53,7 @@ public class HRURefreshJob(
                     Logger.LogWarning($"No data for LGUs with these IDs: {string.Join(", ", lguIDsWithProblems)}");
                 }
 
-                await DbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
+                await dbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
                         .Contains(x.LoadGeneratingUnitID))
                     .ExecuteUpdateAsync(x => x.SetProperty(y => y.HRULogID, hruResponseResult.HRULogID));
 
@@ -68,8 +68,8 @@ public class HRURefreshJob(
                     SetHRUCharacteristicProperties(x, hruCharacteristic);
                     return hruCharacteristic;
                 });
-                DbContext.HRUCharacteristics.AddRange(hruCharacteristics);
-                await DbContext.SaveChangesAsync();
+                dbContext.HRUCharacteristics.AddRange(hruCharacteristics);
+                await dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -91,7 +91,7 @@ public class HRURefreshJob(
         if (!maxTimeAllowed.HasValue)
         {
             // this implies a full hru refresh was run; let's go ahead and cache the hru results
-            var list = DbContext.vPowerBILandUseStatistics.ToList();
+            var list = dbContext.vPowerBILandUseStatistics.ToList();
             await SerializeAndUploadToBlobStorage(list, LandUseStatisticsFileName);
         }
         ExecuteNetworkSolveJobIfNeeded();
@@ -114,11 +114,11 @@ public class HRURefreshJob(
     private void ExecuteNetworkSolveJobIfNeeded()
     {
         var updatedRegionalSubbasins =
-            DbContext.RegionalSubbasins.AsNoTracking().Where(x => x.LastUpdate != null).ToList();
+            dbContext.RegionalSubbasins.AsNoTracking().Where(x => x.LastUpdate != null).ToList();
         var lastRegionalSubbasinUpdateDate = updatedRegionalSubbasins.Any()
             ? updatedRegionalSubbasins.Max(x => x.LastUpdate.Value)
             : DateTime.MinValue;
-        var updatedNereidResults = DbContext.NereidResults.AsNoTracking().Where(x => x.LastUpdate != null).ToList();
+        var updatedNereidResults = dbContext.NereidResults.AsNoTracking().Where(x => x.LastUpdate != null).ToList();
         var lastNereidResultUpdateDate = updatedNereidResults.Any()
             ? updatedNereidResults.Max(x => x.LastUpdate.Value)
             : DateTime.MinValue;
@@ -127,7 +127,7 @@ public class HRURefreshJob(
         {
             BackgroundJob.Enqueue<TotalNetworkSolveScheduledBackgroundJob>(x => x.RunJob(null));
         }
-        else if (DbContext.DirtyModelNodes.AsNoTracking().Any())
+        else if (dbContext.DirtyModelNodes.AsNoTracking().Any())
         {
             BackgroundJob.Enqueue<DeltaSolveJob>(x => x.RunJob());
         }
