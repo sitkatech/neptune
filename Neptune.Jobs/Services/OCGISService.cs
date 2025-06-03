@@ -15,6 +15,7 @@ using Neptune.Common.JsonConverters;
 using Neptune.Common.Services;
 using Neptune.EFModels.Entities;
 using Neptune.Jobs.EsriAsynchronousJob;
+using Neptune.Jobs.Hangfire;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Converters;
@@ -275,27 +276,40 @@ public class OCGISService(
     }
 
 
-    public async Task<List<HRUResponseFeature>> RetrieveHRUResponseFeatures(List<HRURequestFeature> hruRequestFeatures)
+    public async Task<HRUResponseResult> RetrieveHRUResponseFeatures(List<HRURequestFeature> hruRequestFeatures, NeptuneDbContext dbContext)
     {
-        var newHRUCharacteristics = new List<HRUResponseFeature>();
+        var hruResponseResult = new HRUResponseResult();
         var rawResponse = string.Empty;
         try
         {
-            var esriGPRecordSetLayer = (await SubmitHRURequestJobAndRetrieveResults(hruRequestFeatures)).Value;
-            newHRUCharacteristics.AddRange(esriGPRecordSetLayer.Features.Where(x => x.Attributes.ImperviousAcres != null));
+            try
+            {
+                var esriAsyncJobOutputParameter =
+                    await SubmitHRURequestJobAndRetrieveResults(hruRequestFeatures, dbContext);
+                var esriGPRecordSetLayer = esriAsyncJobOutputParameter.Value;
+                hruResponseResult.HRUResponseFeatures.AddRange(
+                    esriGPRecordSetLayer.Features.Where(x => x.Attributes.ImperviousAcres != null));
+                hruResponseResult.HRULogID = esriAsyncJobOutputParameter.HRULogID;
+            }
+            catch (EsriAsynchronousJobException ex)
+            {
+                hruResponseResult.HRULogID = ex.HRULogID;
+                throw new Exception(ex.Message);
+            }
         }
         catch (Exception ex)
         {
             Logger.LogWarning(ex.Message, ex);
-            Logger.LogWarning($"Skipped entities (ProjectLGUs if Project modeling, otherwise LGUs) with these IDs: {string.Join(", ", hruRequestFeatures.Select(x => x.Attributes.QueryFeatureID.ToString()))}");
+            Logger.LogWarning(
+                $"Skipped entities (ProjectLGUs if Project modeling, otherwise LGUs) with these IDs: {string.Join(", ", hruRequestFeatures.Select(x => x.Attributes.QueryFeatureID.ToString()))}");
             Logger.LogWarning(rawResponse);
         }
 
-        return newHRUCharacteristics;
+        return hruResponseResult;
     }
 
     private async Task<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>
-        SubmitHRURequestJobAndRetrieveResults(List<HRURequestFeature> featuresForHRURequest)
+        SubmitHRURequestJobAndRetrieveResults(List<HRURequestFeature> featuresForHRURequest, NeptuneDbContext dbContext)
     {
         var requestObject = GetGPRecordSetLayer(featuresForHRURequest);
         var keyValuePairs = new List<KeyValuePair<string, string>>
@@ -347,20 +361,30 @@ public class OCGISService(
             isExecuting = jobStatusResponse.IsExecuting();
         }
 
+        var hruLog = new HRULog()
+        {
+            RequestDate = DateTime.UtcNow,
+            Success = jobStatusResponse.jobStatus == EsriJobStatus.esriJobSucceeded,
+            HRURequest = GeoJsonSerializer.Serialize(keyValuePairs),
+            HRUResponse = GeoJsonSerializer.Serialize(jobStatusResponse)
+        };
+        await dbContext.AddAsync(hruLog);
+        await dbContext.SaveChangesAsync();
+        var hruLogID = hruLog.HRULogID;
+
         switch (jobStatusResponse.jobStatus)
         {
             case EsriJobStatus.esriJobSucceeded:
                 var resultContent = await HttpClient.GetFromJsonAsync<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>($"{HRUServiceEndPoint}/jobs/{jobID}/results/output_table/?f=json", GeoJsonSerializer.DefaultSerializerOptions);
+                resultContent.HRULogID = hruLogID;
                 return resultContent;
             case EsriJobStatus.esriJobCancelling:
             case EsriJobStatus.esriJobCancelled:
-                throw new EsriAsynchronousJobCancelledException(jobStatusResponse.jobId);
+                throw new EsriAsynchronousJobCancelledException(jobStatusResponse.jobId, hruLogID);
             case EsriJobStatus.esriJobFailed:
-                throw new EsriAsynchronousJobFailedException(jobStatusResponse, requestObject.ToString());
+                throw new EsriAsynchronousJobFailedException(jobStatusResponse, requestObject.ToString(), hruLogID);
             default:
-                // ReSharper disable once NotResolvedInText
-                throw new ArgumentOutOfRangeException("jobStatusResponse.jobStatus",
-                    $"Unexpected job status from HRU job {jobStatusResponse.jobId}. Last message: {jobStatusResponse.messages.Last().description}");
+                throw new EsriAsynchronousJobUnrecognizedStatusException(jobStatusResponse, hruLogID);
         }
     }
 

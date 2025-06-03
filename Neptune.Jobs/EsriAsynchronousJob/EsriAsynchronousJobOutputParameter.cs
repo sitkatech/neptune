@@ -10,4 +10,6 @@ public class EsriAsynchronousJobOutputParameter<T>
     public string DataType { get; set; }
     [JsonPropertyName("value")]
     public T Value { get; set; }
+    //Not from the service itself, but as a means to hold onto the HRULogID for later
+    public int HRULogID { get; set; }
 }

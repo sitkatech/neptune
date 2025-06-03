@@ -39,7 +39,7 @@ public class HRURefreshJob(
                 await DbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
                         .Contains(x.LoadGeneratingUnitID))
                     .ExecuteUpdateAsync(x => x.SetProperty(y => y.DateHRURequested, DateTime.UtcNow));
-                var hruResponseResult = await ProcessHRUsForLGUs(group, ocgisService, false);
+                var hruResponseResult = await ProcessHRUsForLGUs(group, ocgisService, false, dbContext);
 
                 var hruResponseFeatures = hruResponseResult.HRUResponseFeatures;
                 if (!hruResponseFeatures.Any())
@@ -47,11 +47,18 @@ public class HRURefreshJob(
                     var lguIDsWithProblems = hruResponseResult.LoadGeneratingUnitIDs;
                     await DbContext.LoadGeneratingUnits.Where(x =>
                             lguIDsWithProblems.Contains(x.LoadGeneratingUnitID))
-                        .ExecuteUpdateAsync(x => x.SetProperty(y => y.IsEmptyResponseFromHRUService, true));
+                        .ExecuteUpdateAsync(x => 
+                            x.SetProperty(y => y.IsEmptyResponseFromHRUService, true));
 
                     Logger.LogWarning($"No data for LGUs with these IDs: {string.Join(", ", lguIDsWithProblems)}");
                 }
 
+                await DbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
+                        .Contains(x.LoadGeneratingUnitID))
+                    .ExecuteUpdateAsync(x => x.SetProperty(y => y.HRULogID, hruResponseResult.HRULogID));
+
+                //Now that HRULogs are linked with LGUs, delete the old logs
+                await dbContext.Database.ExecuteSqlAsync($"EXEC dbo.pDeleteOldHRULogs");
                 var hruCharacteristics = hruResponseFeatures.Select(x =>
                 {
                     var hruCharacteristic = new HRUCharacteristic
@@ -92,15 +99,16 @@ public class HRURefreshJob(
         stopwatch.Stop();
     }
 
-    public static async Task<HRUResponseResult> ProcessHRUsForLGUs(IEnumerable<ILoadGeneratingUnit> loadGeneratingUnitsGroup, OCGISService ocgisService, bool isProject)
+    public static async Task<HRUResponseResult> ProcessHRUsForLGUs(IEnumerable<ILoadGeneratingUnit> loadGeneratingUnitsGroup, OCGISService ocgisService, bool isProject, NeptuneDbContext dbContext)
     {
         var loadGeneratingUnits = loadGeneratingUnitsGroup.ToList();
         var loadGeneratingUnitIDs = loadGeneratingUnits.Select(y => y.PrimaryKey);
         var hruRequestFeatures = HruRequestFeatureHelpers.GetHRURequestFeatures(
             loadGeneratingUnits.ToDictionary(x => x.PrimaryKey,
                 x => x.Geometry), isProject);
-        var hruResponseFeatures = await ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList());
-        return new HRUResponseResult(hruResponseFeatures, loadGeneratingUnitIDs);
+        var hruResponseResult = await ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList(), dbContext);
+        hruResponseResult.LoadGeneratingUnitIDs = loadGeneratingUnitIDs;
+        return hruResponseResult;
     }
 
     private void ExecuteNetworkSolveJobIfNeeded()
