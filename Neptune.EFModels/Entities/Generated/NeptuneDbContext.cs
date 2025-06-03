@@ -41,6 +41,8 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<HRUCharacteristic> HRUCharacteristics { get; set; }
 
+    public virtual DbSet<HRULog> HRULogs { get; set; }
+
     public virtual DbSet<HydrologicSubarea> HydrologicSubareas { get; set; }
 
     public virtual DbSet<LandUseBlock> LandUseBlocks { get; set; }
@@ -440,6 +442,11 @@ public partial class NeptuneDbContext : DbContext
             entity.HasKey(e => e.HRUCharacteristicID).HasName("PK_HRUCharacteristic_HRUCharacteristicID");
 
             entity.HasOne(d => d.LoadGeneratingUnit).WithMany(p => p.HRUCharacteristics).OnDelete(DeleteBehavior.ClientSetNull);
+        });
+
+        modelBuilder.Entity<HRULog>(entity =>
+        {
+            entity.HasKey(e => e.HRULogID).HasName("PK_HRULog_HRULogID");
         });
 
         modelBuilder.Entity<HydrologicSubarea>(entity =>
