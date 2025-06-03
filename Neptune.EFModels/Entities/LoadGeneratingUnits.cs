@@ -25,6 +25,7 @@ public static class LoadGeneratingUnits
     public static LoadGeneratingUnit GetByID(NeptuneDbContext dbContext, int loadGeneratingUnitID)
     {
         var loadGeneratingUnit = dbContext.LoadGeneratingUnits
+            .Include(x => x.HRULog)
             .Include(x => x.RegionalSubbasin)
             .Include(x => x.WaterQualityManagementPlan)
             .Include(x => x.Delineation)

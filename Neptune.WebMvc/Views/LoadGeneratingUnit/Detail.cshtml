@@ -29,6 +29,7 @@
 @using Neptune.WebMvc.Views.Shared.ModeledPerformance
 @using HRUCharacteristics = Neptune.WebMvc.Views.Shared.HRUCharacteristics.HRUCharacteristics
 @using Microsoft.AspNetCore.Html
+@using DocumentFormat.OpenXml.Wordprocessing
 @inherits Neptune.WebMvc.Views.LoadGeneratingUnit.Detail
 
 @section JavascriptAndStylesContent
@@ -102,6 +103,24 @@
                         }
                     </div>
                 </div>
+                <div style="margin: 10px 0">
+                    @if (ViewDataTyped.HRURequestDate != null)
+                    {
+                        <p class="systemText">Most recent HRU Request made at @ViewDataTyped.HRURequestDate.Value.ToString("MM/dd/yyyy hh:mm tt")</p>
+                        <a href="javascript:void()" onclick="downloadHRURequest()">Latest HRU Request</a>
+                        @if (!string.IsNullOrWhiteSpace(ViewDataTyped.HRUResponse))
+                        {
+                            <span>|</span>
+                            <a href="javascript:void()" onclick="downloadHRUResponse()">Latest HRU Response</a>
+                        }
+                    }
+                    else
+                    {
+                        <p class="systemText">There are no HRU Request logs for this Load Generating Unit</p>
+                    }
+                    
+                    
+                </div>
             </div>
         </div>
     </div>
@@ -164,4 +183,32 @@
         jQuery("#legend").css("display", "");
 
     });
+
+    function downloadHRURequest() {
+            var data = @Html.Raw(ViewDataTyped.HRURequest.ToJsonHtmlString());
+
+            const blob = new Blob([data], { type: "text/plain" });
+            const jsonObjectUrl = URL.createObjectURL(blob);
+
+            const filename = "hruRequest.json";
+            const anchorEl = document.createElement("a");
+            anchorEl.href = jsonObjectUrl;
+            anchorEl.download = filename;
+            anchorEl.click();
+            URL.revokeObjectURL(jsonObjectUrl);
+        }
+
+        function downloadHRUResponse() {
+            var data = @Html.Raw(ViewDataTyped.HRUResponse.ToJsonHtmlString());
+
+            const blob = new Blob([data], { type: "text/plain" });
+            const jsonObjectUrl = URL.createObjectURL(blob);
+
+            const filename = "hruResponse.json";
+            const anchorEl = document.createElement("a");
+            anchorEl.href = jsonObjectUrl;
+            anchorEl.download = filename;
+            anchorEl.click();
+            URL.revokeObjectURL(jsonObjectUrl);
+        }
 </script>

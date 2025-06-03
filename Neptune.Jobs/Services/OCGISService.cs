@@ -287,8 +287,7 @@ public class OCGISService(
                 var esriAsyncJobOutputParameter =
                     await SubmitHRURequestJobAndRetrieveResults(hruRequestFeatures, dbContext);
                 var esriGPRecordSetLayer = esriAsyncJobOutputParameter.Value;
-                hruResponseResult.HRUResponseFeatures.AddRange(
-                    esriGPRecordSetLayer.Features.Where(x => x.Attributes.ImperviousAcres != null));
+                hruResponseResult.HRUResponseFeatures = [.. esriGPRecordSetLayer.Features.Where(x => x.Attributes.ImperviousAcres != null)];
                 hruResponseResult.HRULogID = esriAsyncJobOutputParameter.HRULogID;
             }
             catch (EsriAsynchronousJobException ex)
@@ -361,11 +360,21 @@ public class OCGISService(
             isExecuting = jobStatusResponse.IsExecuting();
         }
 
+        //Maybe this is overkill, but I don't want to double serialize the requestObject, since input_fc has it stored as a serialized object
+        //So make a new list that will allow it to sit as an object, then serialize the whole list
+        var logKeyValuePairs = new List<KeyValuePair<string, object>> { new("input_fc", requestObject) };
+        keyValuePairs.RemoveAt(0);
+        foreach (var keyValuePair in keyValuePairs)
+        {
+            KeyValuePair<string, object> pair = new(keyValuePair.Key, Convert.ChangeType(keyValuePair.Value, typeof(object)));
+            logKeyValuePairs.Add(pair);
+        }
+
         var hruLog = new HRULog()
         {
             RequestDate = DateTime.UtcNow,
             Success = jobStatusResponse.jobStatus == EsriJobStatus.esriJobSucceeded,
-            HRURequest = GeoJsonSerializer.Serialize(keyValuePairs),
+            HRURequest = GeoJsonSerializer.Serialize(logKeyValuePairs),
             HRUResponse = GeoJsonSerializer.Serialize(jobStatusResponse)
         };
         await dbContext.AddAsync(hruLog);

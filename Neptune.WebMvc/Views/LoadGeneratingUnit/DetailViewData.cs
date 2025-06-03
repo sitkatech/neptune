@@ -68,6 +68,7 @@ namespace Neptune.WebMvc.Views.LoadGeneratingUnit
             EFModels.Entities.RegionalSubbasin? regionalSubbasin,
             EFModels.Entities.TreatmentBMP? treatmentBMP,
             EFModels.Entities.WaterQualityManagementPlan? wqmp,
+            EFModels.Entities.HRULog? hruLog,
             MapInitJson mapInitJson,
             HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
@@ -96,7 +97,17 @@ namespace Neptune.WebMvc.Views.LoadGeneratingUnit
             HRUCharacteristicsGridSpec = new HRUCharacteristicGridSpec(LinkGenerator);
             HRUCharacteristicsGridName = "HRUCharacteristics";
             HRUCharacteristicsGridDataUrl = SitkaRoute<LoadGeneratingUnitController>.BuildUrlFromExpression(LinkGenerator, x => x.HRUCharacteristicGridJsonData(loadGeneratingUnit));
+
+            HRURequest = hruLog?.HRURequest;
+            HRUResponse = hruLog?.HRUResponse;
+            HRURequestDate = hruLog?.RequestDate;
         }
+
+        public DateTime? HRURequestDate { get; set; }
+
+        public string? HRUResponse { get; set; }
+
+        public string? HRURequest { get; set; }
 
         public UrlTemplate<int> RegionalSubbasinUrlTemplate { get; set; }
 
