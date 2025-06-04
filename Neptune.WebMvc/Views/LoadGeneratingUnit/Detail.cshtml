@@ -186,11 +186,11 @@
 
     function downloadHRURequest() {
             var data = @Html.Raw(ViewDataTyped.HRURequest.ToJsonHtmlString());
-
+            var lguID = @Html.Raw(ViewDataTyped.LoadGeneratingUnit.LoadGeneratingUnitID);
             const blob = new Blob([data], { type: "text/plain" });
             const jsonObjectUrl = URL.createObjectURL(blob);
 
-            const filename = "hruRequest.json";
+            const filename = `hruRequest-${lguID}.json`;
             const anchorEl = document.createElement("a");
             anchorEl.href = jsonObjectUrl;
             anchorEl.download = filename;
@@ -200,11 +200,12 @@
 
         function downloadHRUResponse() {
             var data = @Html.Raw(ViewDataTyped.HRUResponse.ToJsonHtmlString());
+            var lguID = @Html.Raw(ViewDataTyped.LoadGeneratingUnit.LoadGeneratingUnitID);
 
             const blob = new Blob([data], { type: "text/plain" });
             const jsonObjectUrl = URL.createObjectURL(blob);
 
-            const filename = "hruResponse.json";
+            const filename = `hruResponse-${lguID}.json`;
             const anchorEl = document.createElement("a");
             anchorEl.href = jsonObjectUrl;
             anchorEl.download = filename;
