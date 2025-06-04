@@ -73,6 +73,7 @@ namespace Neptune.WebMvc.Controllers
             var loadGeneratingUnit4326 = LoadGeneratingUnit4326s.GetByID(_dbContext, loadGeneratingUnit.LoadGeneratingUnitID);
             var regionalSubbasin = loadGeneratingUnit.RegionalSubbasin;
             var treatmentBMP = loadGeneratingUnit.Delineation?.TreatmentBMP;
+            var hruLog = loadGeneratingUnit.HRULog;
             var wqmp = loadGeneratingUnit.WaterQualityManagementPlan;
             
             var boundingBoxGeometry = loadGeneratingUnit4326.LoadGeneratingUnit4326Geometry;
@@ -101,7 +102,7 @@ namespace Neptune.WebMvc.Controllers
             var hruCharacteristics = vHRUCharacteristics.ListByLoadGeneratingUnitID(_dbContext, loadGeneratingUnit.LoadGeneratingUnitID);
             var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
             var mapServiceUrl = _webConfiguration.MapServiceUrl;
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, loadGeneratingUnit, regionalSubbasin, treatmentBMP, wqmp, mapInitJson, hruCharacteristicsViewData, mapServiceUrl);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, loadGeneratingUnit, regionalSubbasin, treatmentBMP, wqmp, hruLog, mapInitJson, hruCharacteristicsViewData, mapServiceUrl);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

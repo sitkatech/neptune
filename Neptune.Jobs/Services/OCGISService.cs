@@ -386,6 +386,12 @@ public class OCGISService(
             case EsriJobStatus.esriJobSucceeded:
                 var resultContent = await HttpClient.GetFromJsonAsync<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>($"{HRUServiceEndPoint}/jobs/{jobID}/results/output_table/?f=json", GeoJsonSerializer.DefaultSerializerOptions);
                 resultContent.HRULogID = hruLogID;
+
+                //If we're successful, provide the final response in the log as well.
+                jobStatusResponse.jobResult = resultContent;
+                hruLog.HRUResponse = GeoJsonSerializer.Serialize(jobStatusResponse);
+                await dbContext.SaveChangesAsync();
+                
                 return resultContent;
             case EsriJobStatus.esriJobCancelling:
             case EsriJobStatus.esriJobCancelled:

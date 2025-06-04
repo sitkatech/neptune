@@ -24,7 +24,9 @@ export enum HRUCharacteristicLandUseCodeEnum {
   OSFOR = 16,
   OSWET = 17,
   OSVAC = 18,
-  WATER = 19
+  WATER = 19,
+  EMPTY = 20,
+  UNKNOWN = 21
 }
 
 export const HRUCharacteristicLandUseCodes: LookupTableEntry[]  = [
@@ -46,6 +48,8 @@ export const HRUCharacteristicLandUseCodes: LookupTableEntry[]  = [
   { Name: "OSFOR", DisplayName: "Open Space - Forest", Value: 16 },
   { Name: "OSWET", DisplayName: "Open Space - Wetlands", Value: 17 },
   { Name: "OSVAC", DisplayName: "Open Space - Vacant Land", Value: 18 },
-  { Name: "WATER", DisplayName: "Water", Value: 19 }
+  { Name: "WATER", DisplayName: "Water", Value: 19 },
+  { Name: "EMPTY", DisplayName: "Empty Land Use Code", Value: 20 },
+  { Name: "UNKNOWN", DisplayName: "Unknown Land Use Code", Value: 21 }
 ];
 export const HRUCharacteristicLandUseCodesAsSelectDropdownOptions = HRUCharacteristicLandUseCodes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

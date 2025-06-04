@@ -135,10 +135,21 @@ public class HRURefreshJob(
 
     public static void SetHRUCharacteristicProperties(HRUResponseFeature hruResponseFeature, IHRUCharacteristic hruCharacteristic)
     {
-        var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
-            y.HRUCharacteristicLandUseCodeName == hruResponseFeature.Attributes.ModelBasinLandUseDescription);
-        var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
-            y.HRUCharacteristicLandUseCodeName == hruResponseFeature.Attributes.BaselineLandUseDescription);
+        //Can't generate an enum value with an empty name...so set to 'EMPTY' here if necessary
+        //But we also want to capture simply unrecognized codes (UNKNOWN), so EMPTY can't be the default
+        hruResponseFeature.Attributes.ModelBasinLandUseDescription =
+            String.IsNullOrWhiteSpace(hruResponseFeature.Attributes.ModelBasinLandUseDescription)
+                ? HRUCharacteristicLandUseCode.EMPTY.HRUCharacteristicLandUseCodeName
+                : hruResponseFeature.Attributes.ModelBasinLandUseDescription;
+        hruResponseFeature.Attributes.BaselineLandUseDescription =
+            String.IsNullOrWhiteSpace(hruResponseFeature.Attributes.BaselineLandUseDescription)
+                ? HRUCharacteristicLandUseCode.EMPTY.HRUCharacteristicLandUseCodeName
+                : hruResponseFeature.Attributes.BaselineLandUseDescription;
+       
+        var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.SingleOrDefault(y =>
+            y.HRUCharacteristicLandUseCodeName == hruResponseFeature.Attributes.ModelBasinLandUseDescription) ?? HRUCharacteristicLandUseCode.UNKNOWN;
+        var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.SingleOrDefault(y =>
+            y.HRUCharacteristicLandUseCodeName == hruResponseFeature.Attributes.BaselineLandUseDescription) ?? HRUCharacteristicLandUseCode.UNKNOWN;
 
         hruCharacteristic.HydrologicSoilGroup = hruResponseFeature.Attributes.HydrologicSoilGroup;
         hruCharacteristic.SlopePercentage = hruResponseFeature.Attributes.SlopePercentage.GetValueOrDefault();
