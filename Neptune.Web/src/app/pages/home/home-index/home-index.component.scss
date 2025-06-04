@@ -95,12 +95,18 @@
     a.navbar-brand {
         font-size: $type-size-400;
     }
+
+    .dropdown-item:hover {
+        color: #333;
+        background-color: #eee;
+        text-decoration: none;
+    }
 }
 
 .site-nav {
     background-color: $primary;
     color: $white;
-    height: 2rem;
+    min-height: 50px;
     padding: 1.5rem 2rem;
     display: flex;
     align-items: center;
@@ -370,7 +376,6 @@
             line-height: 24px;
             padding: $spacing-500;
         }
-        
     }
 
     &__btns {
