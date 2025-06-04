@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 
 namespace Neptune.WebMvc.Models
@@ -79,6 +80,15 @@ namespace Neptune.WebMvc.Models
             var treatmentBmps = TreatmentBMPs.GetNonPlanningModuleBMPs(dbContext)
                 .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             return person.IsAnonymousOrUnassigned() ? treatmentBmps.Where(x => x.InventoryIsVerified).ToList() : treatmentBmps;
+        }
+
+        public static List<WaterQualityManagementPlan> GetWQMPPersonCanView(this Person person,
+            NeptuneDbContext dbContext, IEnumerable<int> stormwaterJurisdictionIDsPersonCanView)
+        {
+            var wqmpBoundaries = dbContext.WaterQualityManagementPlans
+                .Include(x => x.WaterQualityManagementPlanBoundary).Where(x =>
+                    stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            return wqmpBoundaries;
         }
 
         public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson, NeptuneDbContext dbContext)
