@@ -273,25 +273,15 @@ public class OCGISService(
     }
 
 
-    public async Task<HRUResponseResult> RetrieveHRUResponseFeatures(List<HRURequestFeature> hruRequestFeatures, NeptuneDbContext dbContext)
+    public async Task<HRUResponseResult> RetrieveHRUResponseFeatures(List<HRURequestFeature> hruRequestFeatures, HRULog hruLog)
     {
         var hruResponseResult = new HRUResponseResult();
         var rawResponse = string.Empty;
         try
         {
-            try
-            {
-                var esriAsyncJobOutputParameter =
-                    await SubmitHRURequestJobAndRetrieveResults(hruRequestFeatures, dbContext);
-                var esriGPRecordSetLayer = esriAsyncJobOutputParameter.Value;
-                hruResponseResult.HRUResponseFeatures = [.. esriGPRecordSetLayer.Features.Where(x => x.Attributes.ImperviousAcres != null)];
-                hruResponseResult.HRULogID = esriAsyncJobOutputParameter.HRULogID;
-            }
-            catch (EsriAsynchronousJobException ex)
-            {
-                hruResponseResult.HRULogID = ex.HRULogID;
-                throw new Exception(ex.Message);
-            }
+            var esriAsyncJobOutputParameter = await SubmitHRURequestJobAndRetrieveResults(hruRequestFeatures, hruLog);
+            var esriGPRecordSetLayer = esriAsyncJobOutputParameter.Value;
+            hruResponseResult.HRUResponseFeatures = [.. esriGPRecordSetLayer.Features.Where(x => x.Attributes.ImperviousAcres != null)];
         }
         catch (Exception ex)
         {
@@ -303,8 +293,7 @@ public class OCGISService(
         return hruResponseResult;
     }
 
-    private async Task<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>
-        SubmitHRURequestJobAndRetrieveResults(List<HRURequestFeature> featuresForHRURequest, NeptuneDbContext dbContext)
+    private async Task<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>> SubmitHRURequestJobAndRetrieveResults(List<HRURequestFeature> featuresForHRURequest, HRULog hruLog)
     {
         var requestObject = GetGPRecordSetLayer(featuresForHRURequest);
         var keyValuePairs = new List<KeyValuePair<string, string>>
@@ -323,7 +312,7 @@ public class OCGISService(
         var retry = true;
         var attempts = 0;
         EsriJobStatusResponse? jobStatusResponse = null;
-        string requestUri = $"{HRUServiceEndPoint}/submitJob";
+        var requestUri = $"{HRUServiceEndPoint}/submitJob";
         while (retry && attempts < MAX_RETRIES)
         {
             var httpResponseMessage = await HttpClient.PostAsync(requestUri, new FormUrlEncodedContent(keyValuePairs));
@@ -367,31 +356,26 @@ public class OCGISService(
             logKeyValuePairs.Add(pair);
         }
 
+        // update the HRU log with the response and request URIs and content
         var responseURI = $"{HttpClient.BaseAddress}{HRUServiceEndPoint}/jobs/{jobID}/?f=json";
-        var hruLog = new HRULog()
+        hruLog.HRUResponse = GeoJsonSerializer.Serialize(new
         {
-            RequestDate = DateTime.UtcNow,
-            Success = jobStatusResponse.jobStatus == EsriJobStatus.esriJobSucceeded,
-            HRURequest = GeoJsonSerializer.Serialize(new {
-                    RequestURI = $"{HttpClient.BaseAddress}{requestUri}",
-                    RequestBody = logKeyValuePairs
-                }),
-            HRUResponse = GeoJsonSerializer.Serialize(new
-            {
-                ResponseURI = responseURI,
-                ResponseContent = jobStatusResponse
-            })
-        };
-        await dbContext.AddAsync(hruLog);
+            ResponseURI = responseURI,
+            ResponseContent = jobStatusResponse
+        });
+        hruLog.HRURequest = GeoJsonSerializer.Serialize(new {
+            RequestURI = $"{HttpClient.BaseAddress}{requestUri}",
+            RequestBody = logKeyValuePairs
+        });
+        hruLog.Success = jobStatusResponse.jobStatus == EsriJobStatus.esriJobSucceeded;
         await dbContext.SaveChangesAsync();
-        var hruLogID = hruLog.HRULogID;
 
         switch (jobStatusResponse.jobStatus)
         {
             case EsriJobStatus.esriJobSucceeded:
+                // If the job succeeded, we can retrieve the results.  Update the HRULog with the more detailed results.
                 var resultURI = $"{HRUServiceEndPoint}/jobs/{jobID}/results/output_table/?f=json";
                 var resultContent = await HttpClient.GetFromJsonAsync<EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>>>(resultURI, GeoJsonSerializer.DefaultSerializerOptions);
-                resultContent.HRULogID = hruLogID;
 
                 //If we're successful, provide the final response in the log as well.
                 jobStatusResponse.jobResult = resultContent;
@@ -406,11 +390,11 @@ public class OCGISService(
                 return resultContent;
             case EsriJobStatus.esriJobCancelling:
             case EsriJobStatus.esriJobCancelled:
-                throw new EsriAsynchronousJobCancelledException(jobStatusResponse.jobId, hruLogID);
+                throw new EsriAsynchronousJobCancelledException(jobStatusResponse.jobId);
             case EsriJobStatus.esriJobFailed:
-                throw new EsriAsynchronousJobFailedException(jobStatusResponse, requestObject.ToString(), hruLogID);
+                throw new EsriAsynchronousJobFailedException(jobStatusResponse, requestObject.ToString());
             default:
-                throw new EsriAsynchronousJobUnrecognizedStatusException(jobStatusResponse, hruLogID);
+                throw new EsriAsynchronousJobUnrecognizedStatusException(jobStatusResponse);
         }
     }
 

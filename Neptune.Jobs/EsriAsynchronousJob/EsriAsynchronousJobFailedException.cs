@@ -2,8 +2,6 @@
 
 public class EsriAsynchronousJobFailedException(
     EsriJobStatusResponse jobStatusResponse,
-    string requestObjectString,
-    int? hruLogID = null)
+    string requestObjectString)
     : EsriAsynchronousJobException(
-        $"{jobStatusResponse.jobId} failed. Last messages: {string.Join(", ", jobStatusResponse.messages.Select(x => x.description))}. Last request Oboject: {requestObjectString}",
-        hruLogID);
+        $"{jobStatusResponse.jobId} failed. Last messages: {string.Join(", ", jobStatusResponse.messages.Select(x => x.description))}. Last request Object: {requestObjectString}");

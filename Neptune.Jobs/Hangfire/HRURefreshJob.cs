@@ -35,30 +35,20 @@ public class HRURefreshJob(
         {
             try
             {
-                var loadGeneratingUnitIDs = group.Select(x => x.PrimaryKey);
-                await dbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
-                        .Contains(x.LoadGeneratingUnitID))
-                    .ExecuteUpdateAsync(x => x.SetProperty(y => y.DateHRURequested, DateTime.UtcNow));
-                var hruResponseResult = await ProcessHRUsForLGUs(group, ocgisService, false, dbContext);
+                var loadGeneratingUnitIDs = group.Select(x => x.PrimaryKey).ToList();
+                var hruResponseResult = await ProcessHRUs(group, ocgisService);
 
                 var hruResponseFeatures = hruResponseResult.HRUResponseFeatures;
                 if (!hruResponseFeatures.Any())
                 {
-                    var lguIDsWithProblems = hruResponseResult.LoadGeneratingUnitIDs;
                     await dbContext.LoadGeneratingUnits.Where(x =>
-                            lguIDsWithProblems.Contains(x.LoadGeneratingUnitID))
+                            loadGeneratingUnitIDs.Contains(x.LoadGeneratingUnitID))
                         .ExecuteUpdateAsync(x => 
                             x.SetProperty(y => y.IsEmptyResponseFromHRUService, true));
 
-                    Logger.LogWarning($"No data for LGUs with these IDs: {string.Join(", ", lguIDsWithProblems)}");
+                    Logger.LogWarning($"No data for LGUs with these IDs: {string.Join(", ", loadGeneratingUnitIDs)}");
                 }
 
-                await dbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
-                        .Contains(x.LoadGeneratingUnitID))
-                    .ExecuteUpdateAsync(x => x.SetProperty(y => y.HRULogID, hruResponseResult.HRULogID));
-
-                //Now that HRULogs are linked with LGUs, delete the old logs
-                await dbContext.Database.ExecuteSqlAsync($"EXEC dbo.pDeleteOldHRULogs");
                 var hruCharacteristics = hruResponseFeatures.Select(x =>
                 {
                     var hruCharacteristic = new HRUCharacteristic
@@ -88,6 +78,9 @@ public class HRURefreshJob(
             }
         }
 
+        // delete the old HRU logs
+        await dbContext.Database.ExecuteSqlAsync($"EXEC dbo.pDeleteOldHRULogs");
+
         if (!maxTimeAllowed.HasValue)
         {
             // this implies a full hru refresh was run; let's go ahead and cache the hru results
@@ -99,15 +92,24 @@ public class HRURefreshJob(
         stopwatch.Stop();
     }
 
-    public static async Task<HRUResponseResult> ProcessHRUsForLGUs(IEnumerable<ILoadGeneratingUnit> loadGeneratingUnitsGroup, OCGISService ocgisService, bool isProject, NeptuneDbContext dbContext)
+    public async Task<HRUResponseResult> ProcessHRUs(IEnumerable<ILoadGeneratingUnit> loadGeneratingUnitsGroup, OCGISService ocgisService)
     {
         var loadGeneratingUnits = loadGeneratingUnitsGroup.ToList();
         var loadGeneratingUnitIDs = loadGeneratingUnits.Select(y => y.PrimaryKey);
         var hruRequestFeatures = HruRequestFeatureHelpers.GetHRURequestFeatures(
             loadGeneratingUnits.ToDictionary(x => x.PrimaryKey,
-                x => x.Geometry), isProject);
-        var hruResponseResult = await ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList(), dbContext);
-        hruResponseResult.LoadGeneratingUnitIDs = loadGeneratingUnitIDs;
+                x => x.Geometry), false);
+        var hruLog = new HRULog()
+        {
+            RequestDate = DateTime.UtcNow
+        };
+        await dbContext.AddAsync(hruLog);
+        await dbContext.SaveChangesAsync();
+        // todo: probably would not need this anymore if we are reading from the HRULog since every request should have a HRULog
+        await dbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs.Contains(x.LoadGeneratingUnitID)).ExecuteUpdateAsync(x => x.SetProperty(y => y.DateHRURequested, DateTime.UtcNow));
+        await dbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs.Contains(x.LoadGeneratingUnitID)).ExecuteUpdateAsync(x => x.SetProperty(y => y.HRULogID, hruLog.HRULogID));
+
+        var hruResponseResult = await ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList(), hruLog);
         return hruResponseResult;
     }
 

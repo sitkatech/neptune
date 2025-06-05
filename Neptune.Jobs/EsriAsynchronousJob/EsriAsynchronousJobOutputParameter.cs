@@ -4,10 +4,6 @@ namespace Neptune.Jobs.EsriAsynchronousJob;
 
 public class EsriAsynchronousJobOutputParameter<T>
 {
-    //Not from the service itself, but as a means to hold onto the HRULogID for later.
-    //Doesn't need to be logged or included in serialization for now
-    [JsonIgnore]
-    public int HRULogID { get; set; }
     public string ResultURI { get; set; }
 
     [JsonPropertyName("paramName")]
