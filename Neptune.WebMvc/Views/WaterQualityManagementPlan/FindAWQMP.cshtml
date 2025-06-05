@@ -145,21 +145,6 @@
         <div class="col-sm-4 col-md-3">
             <a style="width: 100%" class="btn btn-neptune" ng-click="zoomMapToCurrentLocation()"><i class="glyphicon glyphicon-phone" style="margin-right: 4px;"></i>Find nearby BMPs</a>
         </div>
-        <div class="col-sm-8 col-md-6">
-            <div class="aligned-row">
-                <div class="col-xs-4 no-padding-centered-col">
-                    <span style="font-weight: bold">Filter by BMP Type</span>
-                </div>
-                <div class="col-xs-8" style="padding: 0">
-                    <select id="treatmentBMPTypeDropDown" class="selectpicker" data-width="100%" multiple="multiple" ng-change="filterMapByBmpType()" ng-model="selectedTreatmentBMPTypeIDs"
-                            data-selected-text-format="count>1" data-count-selected-text="{0} of {1} selected" data-actions-box="true">
-                        <option ng-repeat="treatmentBMPType in AngularViewData.TreatmentBMPTypes | orderBy:'TreatmentBMPTypeName'" value="{{treatmentBMPType.TreatmentBMPTypeID}}">
-                            {{treatmentBMPType.TreatmentBMPTypeName}}
-                        </option>
-                    </select>
-                </div>
-            </div>
-        </div>
     </div>
     <div class="row" style="margin-top:2px">
         <div class="col-sm-8 col-md-6 col-md-push-6">
