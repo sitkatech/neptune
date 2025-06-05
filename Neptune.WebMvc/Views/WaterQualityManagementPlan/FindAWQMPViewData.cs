@@ -47,7 +47,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             List<StormwaterJurisdictionDisplayDto> jurisdictions, List<EFModels.Entities.WaterQualityManagementPlan> wqmpBoundaries)
             : base(httpContext, linkGenerator, currentPerson, neptunePage, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
-            PageTitle = "Find a WQMP";
+            PageTitle = "WQMP Map";
             EntityName = $"{FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
             MapInitJson = mapInitJson;
