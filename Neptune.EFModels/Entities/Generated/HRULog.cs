@@ -18,7 +18,7 @@ public partial class HRULog
     public bool Success { get; set; }
 
     [Unicode(false)]
-    public string HRURequest { get; set; } = null!;
+    public string? HRURequest { get; set; }
 
     [Unicode(false)]
     public string? HRUResponse { get; set; }
