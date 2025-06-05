@@ -91,6 +91,8 @@ namespace Neptune.WebMvc.Controllers
 
             var errors = new List<string>();
 
+            var ovtaAreaIDsForScoreRecalculation = new List<int?>();
+
             try
             {
                 for (var i = 0; i < numRows; i++)
@@ -123,6 +125,7 @@ namespace Neptune.WebMvc.Controllers
                             errors.AddRange(newErrors);
                             continue;
                         }
+                        ovtaAreaIDsForScoreRecalculation.Add(areaName);
 
                         var categories = PreliminarySourceIdentificationCategory.All.Select(x =>
                             x.PreliminarySourceIdentificationCategoryDisplayName).ToList();
@@ -193,6 +196,20 @@ namespace Neptune.WebMvc.Controllers
                 return ViewBulkUploadOTVAs(viewModel);
             }
 
+            await _dbContext.SaveChangesAsync();
+
+            // Recalculate scores for all OVTAs in the areas that were uploaded
+            foreach (var ovtaAreaID in ovtaAreaIDsForScoreRecalculation)
+            {
+                var ovtaArea = ovtaAreas.SingleOrDefault(x => x.OnlandVisualTrashAssessmentAreaID == ovtaAreaID);
+                if (ovtaArea != null)
+                {
+                    var assessments = _dbContext.OnlandVisualTrashAssessments
+                        .Where(x => x.OnlandVisualTrashAssessmentAreaID == ovtaAreaID).ToList();
+                    ovtaArea.OnlandVisualTrashAssessmentBaselineScoreID = OnlandVisualTrashAssessmentAreas.CalculateBaselineScoreFromBackingData(assessments)?.OnlandVisualTrashAssessmentScoreID;
+                    ovtaArea.OnlandVisualTrashAssessmentProgressScoreID = OnlandVisualTrashAssessments.CalculateProgressScore(assessments)?.OnlandVisualTrashAssessmentScoreID;
+                }
+            }
             await _dbContext.SaveChangesAsync();
 
             SetMessageForDisplay("Successfully bulk uploaded OVTAs");
