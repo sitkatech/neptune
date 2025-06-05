@@ -296,8 +296,7 @@ public class OCGISService(
         catch (Exception ex)
         {
             Logger.LogWarning(ex.Message, ex);
-            Logger.LogWarning(
-                $"Skipped entities (ProjectLGUs if Project modeling, otherwise LGUs) with these IDs: {string.Join(", ", hruRequestFeatures.Select(x => x.Attributes.QueryFeatureID.ToString()))}");
+            Logger.LogWarning($"Skipped entities (ProjectLGUs if Project modeling, otherwise LGUs) with these IDs: {string.Join(", ", hruRequestFeatures.Select(x => x.Attributes.QueryFeatureID.ToString()))}");
             Logger.LogWarning(rawResponse);
         }
 

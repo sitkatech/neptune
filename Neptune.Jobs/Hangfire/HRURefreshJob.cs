@@ -135,7 +135,7 @@ public class HRURefreshJob(
 
     public static void SetHRUCharacteristicProperties(HRUResponseFeature hruResponseFeature, IHRUCharacteristic hruCharacteristic)
     {
-        //Can't generate an enum value with an empty name...so set to 'EMPTY' here if necessary
+        //Can't generate an enum value with an empty name...so set to EMPTY here if necessary
         //But we also want to capture simply unrecognized codes (UNKNOWN), so EMPTY can't be the default
         hruResponseFeature.Attributes.ModelBasinLandUseDescription =
             String.IsNullOrWhiteSpace(hruResponseFeature.Attributes.ModelBasinLandUseDescription)

@@ -96,9 +96,6 @@ namespace Neptune.WebMvc.Controllers
             var mapInitJson = new MapInitJson("loadGeneratingUnitMap", 0, layerGeoJsons,
                 boundingBoxDto);
 
-            //var modelingResultsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.GetModelResults(loadGeneratingUnit));
-            //var treatmentBMPNereidLog = NereidLogs.GetByTreatmentBMPID(_dbContext, loadGeneratingUnit.TreatmentBMPID);
-            //var modeledBMPPerformanceViewData = new ModeledPerformanceViewData(_linkGenerator, modelingResultsUrl, "To BMP", isSitkaAdmin, treatmentBMPNereidLog?.NereidRequest, treatmentBMPNereidLog?.NereidResponse);
             var hruCharacteristics = vHRUCharacteristics.ListByLoadGeneratingUnitID(_dbContext, loadGeneratingUnit.LoadGeneratingUnitID);
             var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
             var mapServiceUrl = _webConfiguration.MapServiceUrl;
