@@ -99,7 +99,6 @@
                         };
                     },
                     onEachFeature: function (feature, layer) {
-                        console.log(layer)
                         layer.on("mouseover",
                             function () {
                                 layer.setStyle({ fillOpacity: .6 }); // this is what looks the best.
@@ -118,6 +117,53 @@
             $scope.neptuneMap.layerControl.addOverlay($scope.selectedJurisdictionsLayerGeoJson, legendSpan);
         };
 
+        $scope.initalizeWQMPLayer = function () {
+            if ($scope.wqmps) {
+                $scope.neptuneMap.layerControl.removeLayer($scope.wqmps);
+                $scope.neptuneMap.map.removeLayer($scope.wqmps);
+            }
+
+            $scope.wqmps = L.geoJson(
+                $scope.AngularViewData.MapInitJson.SearchableLayerGeoJson.GeoJsonFeatureCollection,
+                {
+                    filter: function (feature, layer) {
+                        return _.includes($scope.selectedJurisdictionIDs,
+                            feature.properties.StormwaterJurisdictionID.toString());
+                    },
+                    onEachFeature: function (feature, layer) {
+                        layer.on("mouseover",
+                            function () {
+                                layer.setStyle({ fillOpacity: .6 }); // this is what looks the best.
+                            });
+                        layer.on("mouseout", (e) => {
+                            layer.setStyle({ fillOpacity: 0 });
+                        });
+                        layer.on("click", (e) => {
+                            console.log("Clicked!");
+                        });
+                    },
+                    style: function (feature) {
+                        return {
+                            color: $scope.AngularViewData.MapInitJson.SearchableLayerGeoJson.LayerColor,
+                            weight: 2,
+                            fillOpacity: 0
+                        };
+                    }
+                });
+
+            $scope.wqmps.addTo($scope.neptuneMap.map);
+            $scope.wqmps.on('click',
+                function (e) {
+                    console.log("Clicked!")
+                    $scope.setActiveByID(e.layer.feature.properties.WaterQualityManagementPlanID);
+                    $scope.$apply();
+                });
+            var legendSpan = "<span><img src='/Content/img/legendImages/wqmp.png' height='20px' /> WQMPs</span>";
+            $scope.neptuneMap.layerControl.addOverlay($scope.wqmps, legendSpan);
+        }
+
+        $scope.initalizeWQMPLayer();
+
         //$scope.refreshSelectedJurisdictionsLayer();
 
         //$scope.neptuneMap.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
@@ -129,40 +175,7 @@
         $scope.neptuneMap.map.on('viewreset', function () { $scope.$apply(); });
         $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
 
-        $scope.wqmps = L.geoJson(
-            $scope.AngularViewData.MapInitJson.SearchableLayerGeoJson.GeoJsonFeatureCollection,
-            {
-                onEachFeature: function (feature, layer) {
-                    console.log(layer)
-                    layer.on("mouseover",
-                        function () {
-                            layer.setStyle({ fillOpacity: .6 }); // this is what looks the best.
-                        });
-                    layer.on("mouseout", (e) => {
-                        layer.setStyle({ fillOpacity: 0 });
-                    });
-                    layer.on("click", (e) => {
-                        console.log("Clicked!");
-                    });
-                },
-                style: function (feature) {
-                    return {
-                        color: $scope.AngularViewData.MapInitJson.SearchableLayerGeoJson.LayerColor,
-                        weight: 2,
-                        fillOpacity: 0
-                    };
-                }
-            });
-
-        $scope.wqmps.addTo($scope.neptuneMap.map);
-        $scope.wqmps.on('click',
-            function (e) {
-                console.log("Clicked!")
-                $scope.setActiveByID(e.layer.feature.properties.WaterQualityManagementPlanID);
-                $scope.$apply();
-            });
-        var legendSpan = "<span><img src='/Content/img/legendImages/wqmp.png' height='20px' /> WQMPs</span>";
-        $scope.neptuneMap.layerControl.addOverlay($scope.wqmps, legendSpan);
+        
 
         //$scope.typeaheadSearch(selector, selectorButton, summaryUrl);
 
@@ -182,6 +195,7 @@
 
         $scope.filterMapByJurisdiction = function () {
             //$scope.refreshSelectedJurisdictionsLayer();
+            $scope.initalizeWQMPLayer();
         };
 
         $scope.setSelectedMarker = function(layer) {
