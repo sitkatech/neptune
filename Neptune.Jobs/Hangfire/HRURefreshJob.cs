@@ -106,9 +106,8 @@ public class HRURefreshJob(
         await dbContext.AddAsync(hruLog);
         await dbContext.SaveChangesAsync();
         // todo: probably would not need this anymore if we are reading from the HRULog since every request should have a HRULog
-        await dbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs.Contains(x.LoadGeneratingUnitID)).ExecuteUpdateAsync(x => x.SetProperty(y => y.DateHRURequested, DateTime.UtcNow));
-        await dbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs.Contains(x.LoadGeneratingUnitID)).ExecuteUpdateAsync(x => x.SetProperty(y => y.HRULogID, hruLog.HRULogID));
-
+        await dbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs.Contains(x.LoadGeneratingUnitID)).ExecuteUpdateAsync(x => x.SetProperty(y => y.DateHRURequested, DateTime.UtcNow).SetProperty(y => y.HRULogID, hruLog.HRULogID));
+ 
         var hruResponseResult = await ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList(), hruLog);
         return hruResponseResult;
     }

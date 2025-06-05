@@ -189,8 +189,7 @@ You can view the results or trigger another network solve <a href='{planningURL}
             await dbContext.AddAsync(hruLog);
             await dbContext.SaveChangesAsync();
             // todo: probably would not need this anymore if we are reading from the HRULog since every request should have a HRULog
-            await dbContext.ProjectLoadGeneratingUnits.Where(x => loadGeneratingUnitIDs.Contains(x.ProjectLoadGeneratingUnitID)).ExecuteUpdateAsync(x => x.SetProperty(y => y.DateHRURequested, DateTime.UtcNow));
-            await dbContext.ProjectLoadGeneratingUnits.Where(x => loadGeneratingUnitIDs.Contains(x.ProjectLoadGeneratingUnitID)).ExecuteUpdateAsync(x => x.SetProperty(y => y.HRULogID, hruLog.HRULogID));
+            await dbContext.ProjectLoadGeneratingUnits.Where(x => loadGeneratingUnitIDs.Contains(x.ProjectLoadGeneratingUnitID)).ExecuteUpdateAsync(x => x.SetProperty(y => y.DateHRURequested, DateTime.UtcNow).SetProperty(y => y.HRULogID, hruLog.HRULogID));
             var hruResponseResult = await ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList(), hruLog);
             return hruResponseResult;
         }
