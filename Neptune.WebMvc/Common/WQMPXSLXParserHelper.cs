@@ -25,12 +25,6 @@ namespace Neptune.WebMvc.Common
             }
             var numColumns = dataTableFromExcel.Columns.Count;
             var numRows = dataTableFromExcel.Rows.Count;
-            //foreach (DataRow row in dataTableFromExcel.Rows)
-            //{
-            //    var wqmpName = row["WQMP Name"].ToString();
-            //    var wqmp = dbContext.WaterQualityManagementPlans.SingleOrDefault(x =>
-            //        x.WaterQualityManagementPlanName == wqmpName && x.StormwaterJurisdictionID == stormwaterJurisdictionID);
-            //}
 
             if (errors.Count > 0)
             {
