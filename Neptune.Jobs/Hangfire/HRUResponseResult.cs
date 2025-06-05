@@ -4,12 +4,14 @@ namespace Neptune.Jobs.Hangfire;
 
 public class HRUResponseResult
 {
-    public List<HRUResponseFeature> HRUResponseFeatures { get; }
-    public IEnumerable<int> LoadGeneratingUnitIDs { get; }
+    public List<HRUResponseFeature> HRUResponseFeatures { get; set; }
 
-    public HRUResponseResult(List<HRUResponseFeature> hruResponseFeatures, IEnumerable<int> loadGeneratingUnitIDs)
+    public HRUResponseResult()
+    {
+    }
+
+    public HRUResponseResult(List<HRUResponseFeature> hruResponseFeatures)
     {
         HRUResponseFeatures = hruResponseFeatures;
-        LoadGeneratingUnitIDs = loadGeneratingUnitIDs;
     }
 }

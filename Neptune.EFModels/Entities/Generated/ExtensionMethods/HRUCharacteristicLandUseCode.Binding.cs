@@ -31,6 +31,8 @@ namespace Neptune.EFModels.Entities
         public static readonly HRUCharacteristicLandUseCodeOSWET OSWET = HRUCharacteristicLandUseCodeOSWET.Instance;
         public static readonly HRUCharacteristicLandUseCodeOSVAC OSVAC = HRUCharacteristicLandUseCodeOSVAC.Instance;
         public static readonly HRUCharacteristicLandUseCodeWATER WATER = HRUCharacteristicLandUseCodeWATER.Instance;
+        public static readonly HRUCharacteristicLandUseCodeEMPTY EMPTY = HRUCharacteristicLandUseCodeEMPTY.Instance;
+        public static readonly HRUCharacteristicLandUseCodeUNKNOWN UNKNOWN = HRUCharacteristicLandUseCodeUNKNOWN.Instance;
 
         public static readonly List<HRUCharacteristicLandUseCode> All;
         public static readonly List<HRUCharacteristicLandUseCodeSimpleDto> AllAsSimpleDto;
@@ -42,8 +44,8 @@ namespace Neptune.EFModels.Entities
         /// </summary>
         static HRUCharacteristicLandUseCode()
         {
-            All = new List<HRUCharacteristicLandUseCode> { COMM, EDU, IND, UTIL, RESSFH, RESSFL, RESMF, TRFWY, TRANS, TROTH, OSAGIR, OSAGNI, OSDEV, OSIRR, OSLOW, OSFOR, OSWET, OSVAC, WATER };
-            AllAsSimpleDto = new List<HRUCharacteristicLandUseCodeSimpleDto> { COMM.AsSimpleDto(), EDU.AsSimpleDto(), IND.AsSimpleDto(), UTIL.AsSimpleDto(), RESSFH.AsSimpleDto(), RESSFL.AsSimpleDto(), RESMF.AsSimpleDto(), TRFWY.AsSimpleDto(), TRANS.AsSimpleDto(), TROTH.AsSimpleDto(), OSAGIR.AsSimpleDto(), OSAGNI.AsSimpleDto(), OSDEV.AsSimpleDto(), OSIRR.AsSimpleDto(), OSLOW.AsSimpleDto(), OSFOR.AsSimpleDto(), OSWET.AsSimpleDto(), OSVAC.AsSimpleDto(), WATER.AsSimpleDto() };
+            All = new List<HRUCharacteristicLandUseCode> { COMM, EDU, IND, UTIL, RESSFH, RESSFL, RESMF, TRFWY, TRANS, TROTH, OSAGIR, OSAGNI, OSDEV, OSIRR, OSLOW, OSFOR, OSWET, OSVAC, WATER, EMPTY, UNKNOWN };
+            AllAsSimpleDto = new List<HRUCharacteristicLandUseCodeSimpleDto> { COMM.AsSimpleDto(), EDU.AsSimpleDto(), IND.AsSimpleDto(), UTIL.AsSimpleDto(), RESSFH.AsSimpleDto(), RESSFL.AsSimpleDto(), RESMF.AsSimpleDto(), TRFWY.AsSimpleDto(), TRANS.AsSimpleDto(), TROTH.AsSimpleDto(), OSAGIR.AsSimpleDto(), OSAGNI.AsSimpleDto(), OSDEV.AsSimpleDto(), OSIRR.AsSimpleDto(), OSLOW.AsSimpleDto(), OSFOR.AsSimpleDto(), OSWET.AsSimpleDto(), OSVAC.AsSimpleDto(), WATER.AsSimpleDto(), EMPTY.AsSimpleDto(), UNKNOWN.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, HRUCharacteristicLandUseCode>(All.ToDictionary(x => x.HRUCharacteristicLandUseCodeID));
             AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, HRUCharacteristicLandUseCodeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.HRUCharacteristicLandUseCodeID));
         }
@@ -118,6 +120,8 @@ namespace Neptune.EFModels.Entities
                     return COMM;
                 case HRUCharacteristicLandUseCodeEnum.EDU:
                     return EDU;
+                case HRUCharacteristicLandUseCodeEnum.EMPTY:
+                    return EMPTY;
                 case HRUCharacteristicLandUseCodeEnum.IND:
                     return IND;
                 case HRUCharacteristicLandUseCodeEnum.OSAGIR:
@@ -148,6 +152,8 @@ namespace Neptune.EFModels.Entities
                     return TRFWY;
                 case HRUCharacteristicLandUseCodeEnum.TROTH:
                     return TROTH;
+                case HRUCharacteristicLandUseCodeEnum.UNKNOWN:
+                    return UNKNOWN;
                 case HRUCharacteristicLandUseCodeEnum.UTIL:
                     return UTIL;
                 case HRUCharacteristicLandUseCodeEnum.WATER:
@@ -178,7 +184,9 @@ namespace Neptune.EFModels.Entities
         OSFOR = 16,
         OSWET = 17,
         OSVAC = 18,
-        WATER = 19
+        WATER = 19,
+        EMPTY = 20,
+        UNKNOWN = 21
     }
 
     public partial class HRUCharacteristicLandUseCodeCOMM : HRUCharacteristicLandUseCode
@@ -293,5 +301,17 @@ namespace Neptune.EFModels.Entities
     {
         private HRUCharacteristicLandUseCodeWATER(int hRUCharacteristicLandUseCodeID, string hRUCharacteristicLandUseCodeName, string hRUCharacteristicLandUseCodeDisplayName) : base(hRUCharacteristicLandUseCodeID, hRUCharacteristicLandUseCodeName, hRUCharacteristicLandUseCodeDisplayName) {}
         public static readonly HRUCharacteristicLandUseCodeWATER Instance = new HRUCharacteristicLandUseCodeWATER(19, @"WATER", @"Water");
+    }
+
+    public partial class HRUCharacteristicLandUseCodeEMPTY : HRUCharacteristicLandUseCode
+    {
+        private HRUCharacteristicLandUseCodeEMPTY(int hRUCharacteristicLandUseCodeID, string hRUCharacteristicLandUseCodeName, string hRUCharacteristicLandUseCodeDisplayName) : base(hRUCharacteristicLandUseCodeID, hRUCharacteristicLandUseCodeName, hRUCharacteristicLandUseCodeDisplayName) {}
+        public static readonly HRUCharacteristicLandUseCodeEMPTY Instance = new HRUCharacteristicLandUseCodeEMPTY(20, @"EMPTY", @"Empty Land Use Code");
+    }
+
+    public partial class HRUCharacteristicLandUseCodeUNKNOWN : HRUCharacteristicLandUseCode
+    {
+        private HRUCharacteristicLandUseCodeUNKNOWN(int hRUCharacteristicLandUseCodeID, string hRUCharacteristicLandUseCodeName, string hRUCharacteristicLandUseCodeDisplayName) : base(hRUCharacteristicLandUseCodeID, hRUCharacteristicLandUseCodeName, hRUCharacteristicLandUseCodeDisplayName) {}
+        public static readonly HRUCharacteristicLandUseCodeUNKNOWN Instance = new HRUCharacteristicLandUseCodeUNKNOWN(21, @"UNKNOWN", @"Unknown Land Use Code");
     }
 }

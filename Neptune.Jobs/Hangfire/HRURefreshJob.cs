@@ -29,27 +29,24 @@ public class HRURefreshJob(
         var stopwatch = new Stopwatch();
         stopwatch.Start();
 
-        var loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit = DbContext.vLoadGeneratingUnitUpdateCandidates.ToList().GroupBy(x => x.SpatialGridUnitID);
+        var loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit = dbContext.vLoadGeneratingUnitUpdateCandidates.ToList().GroupBy(x => x.SpatialGridUnitID);
 
         foreach (var group in loadGeneratingUnitsToUpdateGroupedBySpatialGridUnit.OrderByDescending(x => x.Count()))
         {
             try
             {
-                var loadGeneratingUnitIDs = group.Select(x => x.PrimaryKey);
-                await DbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs
-                        .Contains(x.LoadGeneratingUnitID))
-                    .ExecuteUpdateAsync(x => x.SetProperty(y => y.DateHRURequested, DateTime.UtcNow));
-                var hruResponseResult = await ProcessHRUsForLGUs(group, ocgisService, false);
+                var loadGeneratingUnitIDs = group.Select(x => x.PrimaryKey).ToList();
+                var hruResponseResult = await ProcessHRUs(group, ocgisService);
 
                 var hruResponseFeatures = hruResponseResult.HRUResponseFeatures;
                 if (!hruResponseFeatures.Any())
                 {
-                    var lguIDsWithProblems = hruResponseResult.LoadGeneratingUnitIDs;
-                    await DbContext.LoadGeneratingUnits.Where(x =>
-                            lguIDsWithProblems.Contains(x.LoadGeneratingUnitID))
-                        .ExecuteUpdateAsync(x => x.SetProperty(y => y.IsEmptyResponseFromHRUService, true));
+                    await dbContext.LoadGeneratingUnits.Where(x =>
+                            loadGeneratingUnitIDs.Contains(x.LoadGeneratingUnitID))
+                        .ExecuteUpdateAsync(x => 
+                            x.SetProperty(y => y.IsEmptyResponseFromHRUService, true));
 
-                    Logger.LogWarning($"No data for LGUs with these IDs: {string.Join(", ", lguIDsWithProblems)}");
+                    Logger.LogWarning($"No data for LGUs with these IDs: {string.Join(", ", loadGeneratingUnitIDs)}");
                 }
 
                 var hruCharacteristics = hruResponseFeatures.Select(x =>
@@ -61,8 +58,8 @@ public class HRURefreshJob(
                     SetHRUCharacteristicProperties(x, hruCharacteristic);
                     return hruCharacteristic;
                 });
-                DbContext.HRUCharacteristics.AddRange(hruCharacteristics);
-                await DbContext.SaveChangesAsync();
+                dbContext.HRUCharacteristics.AddRange(hruCharacteristics);
+                await dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -81,10 +78,13 @@ public class HRURefreshJob(
             }
         }
 
+        // delete the old HRU logs
+        await dbContext.Database.ExecuteSqlAsync($"EXEC dbo.pDeleteOldHRULogs");
+
         if (!maxTimeAllowed.HasValue)
         {
             // this implies a full hru refresh was run; let's go ahead and cache the hru results
-            var list = DbContext.vPowerBILandUseStatistics.ToList();
+            var list = dbContext.vPowerBILandUseStatistics.ToList();
             await SerializeAndUploadToBlobStorage(list, LandUseStatisticsFileName);
         }
         ExecuteNetworkSolveJobIfNeeded();
@@ -92,25 +92,34 @@ public class HRURefreshJob(
         stopwatch.Stop();
     }
 
-    public static async Task<HRUResponseResult> ProcessHRUsForLGUs(IEnumerable<ILoadGeneratingUnit> loadGeneratingUnitsGroup, OCGISService ocgisService, bool isProject)
+    public async Task<HRUResponseResult> ProcessHRUs(IEnumerable<ILoadGeneratingUnit> loadGeneratingUnitsGroup, OCGISService ocgisService)
     {
         var loadGeneratingUnits = loadGeneratingUnitsGroup.ToList();
         var loadGeneratingUnitIDs = loadGeneratingUnits.Select(y => y.PrimaryKey);
         var hruRequestFeatures = HruRequestFeatureHelpers.GetHRURequestFeatures(
             loadGeneratingUnits.ToDictionary(x => x.PrimaryKey,
-                x => x.Geometry), isProject);
-        var hruResponseFeatures = await ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList());
-        return new HRUResponseResult(hruResponseFeatures, loadGeneratingUnitIDs);
+                x => x.Geometry), false);
+        var hruLog = new HRULog()
+        {
+            RequestDate = DateTime.UtcNow
+        };
+        await dbContext.AddAsync(hruLog);
+        await dbContext.SaveChangesAsync();
+        // todo: probably would not need this anymore if we are reading from the HRULog since every request should have a HRULog
+        await dbContext.LoadGeneratingUnits.Where(x => loadGeneratingUnitIDs.Contains(x.LoadGeneratingUnitID)).ExecuteUpdateAsync(x => x.SetProperty(y => y.DateHRURequested, DateTime.UtcNow).SetProperty(y => y.HRULogID, hruLog.HRULogID));
+ 
+        var hruResponseResult = await ocgisService.RetrieveHRUResponseFeatures(hruRequestFeatures.ToList(), hruLog);
+        return hruResponseResult;
     }
 
     private void ExecuteNetworkSolveJobIfNeeded()
     {
         var updatedRegionalSubbasins =
-            DbContext.RegionalSubbasins.AsNoTracking().Where(x => x.LastUpdate != null).ToList();
+            dbContext.RegionalSubbasins.AsNoTracking().Where(x => x.LastUpdate != null).ToList();
         var lastRegionalSubbasinUpdateDate = updatedRegionalSubbasins.Any()
             ? updatedRegionalSubbasins.Max(x => x.LastUpdate.Value)
             : DateTime.MinValue;
-        var updatedNereidResults = DbContext.NereidResults.AsNoTracking().Where(x => x.LastUpdate != null).ToList();
+        var updatedNereidResults = dbContext.NereidResults.AsNoTracking().Where(x => x.LastUpdate != null).ToList();
         var lastNereidResultUpdateDate = updatedNereidResults.Any()
             ? updatedNereidResults.Max(x => x.LastUpdate.Value)
             : DateTime.MinValue;
@@ -119,7 +128,7 @@ public class HRURefreshJob(
         {
             BackgroundJob.Enqueue<TotalNetworkSolveScheduledBackgroundJob>(x => x.RunJob(null));
         }
-        else if (DbContext.DirtyModelNodes.AsNoTracking().Any())
+        else if (dbContext.DirtyModelNodes.AsNoTracking().Any())
         {
             BackgroundJob.Enqueue<DeltaSolveJob>(x => x.RunJob());
         }
@@ -127,10 +136,21 @@ public class HRURefreshJob(
 
     public static void SetHRUCharacteristicProperties(HRUResponseFeature hruResponseFeature, IHRUCharacteristic hruCharacteristic)
     {
-        var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
-            y.HRUCharacteristicLandUseCodeName == hruResponseFeature.Attributes.ModelBasinLandUseDescription);
-        var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.Single(y =>
-            y.HRUCharacteristicLandUseCodeName == hruResponseFeature.Attributes.BaselineLandUseDescription);
+        //Can't generate an enum value with an empty name...so set to EMPTY here if necessary
+        //But we also want to capture simply unrecognized codes (UNKNOWN), so EMPTY can't be the default
+        hruResponseFeature.Attributes.ModelBasinLandUseDescription =
+            String.IsNullOrWhiteSpace(hruResponseFeature.Attributes.ModelBasinLandUseDescription)
+                ? HRUCharacteristicLandUseCode.EMPTY.HRUCharacteristicLandUseCodeName
+                : hruResponseFeature.Attributes.ModelBasinLandUseDescription;
+        hruResponseFeature.Attributes.BaselineLandUseDescription =
+            String.IsNullOrWhiteSpace(hruResponseFeature.Attributes.BaselineLandUseDescription)
+                ? HRUCharacteristicLandUseCode.EMPTY.HRUCharacteristicLandUseCodeName
+                : hruResponseFeature.Attributes.BaselineLandUseDescription;
+       
+        var hruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.SingleOrDefault(y =>
+            y.HRUCharacteristicLandUseCodeName == hruResponseFeature.Attributes.ModelBasinLandUseDescription) ?? HRUCharacteristicLandUseCode.UNKNOWN;
+        var baselineHruCharacteristicLandUseCode = HRUCharacteristicLandUseCode.All.SingleOrDefault(y =>
+            y.HRUCharacteristicLandUseCodeName == hruResponseFeature.Attributes.BaselineLandUseDescription) ?? HRUCharacteristicLandUseCode.UNKNOWN;
 
         hruCharacteristic.HydrologicSoilGroup = hruResponseFeature.Attributes.HydrologicSoilGroup;
         hruCharacteristic.SlopePercentage = hruResponseFeature.Attributes.SlopePercentage.GetValueOrDefault();

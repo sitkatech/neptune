@@ -30,11 +30,14 @@ namespace Neptune.WebMvc.Views.LoadGeneratingUnit
     {
         public LoadGeneratingUnitGridSpec(LinkGenerator linkGenerator)
         {
+            var loadGeneratingUnitDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<LoadGeneratingUnitController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var treatmentBMPDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var wqmpDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             var regionalSubbasinDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             
-            Add("LGU ID", x => x.LoadGeneratingUnitID, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnFilterType.Numeric);
+            Add("LGU ID", x => UrlTemplate.MakeHrefString(
+                loadGeneratingUnitDetailUrlTemplate.ParameterReplace(x.LoadGeneratingUnitID),
+                x.LoadGeneratingUnitID.ToString()), 100, DhtmlxGridColumnFilterType.Text);
             
             Add("Treatment BMP", x => x.TreatmentBMPID == null
                 ? new HtmlString("N/A")

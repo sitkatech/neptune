@@ -1,8 +1,4 @@
 ﻿namespace Neptune.Jobs.EsriAsynchronousJob;
 
-public class EsriAsynchronousJobCancelledException : Exception
-{
-    public EsriAsynchronousJobCancelledException(string jobId) : base($"{jobId} cancelled unexpectedly")
-    {
-    }
-}
+public class EsriAsynchronousJobCancelledException(string jobId)
+    : EsriAsynchronousJobException($"{jobId} cancelled unexpectedly");

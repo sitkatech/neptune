@@ -48,9 +48,16 @@ $desktop-xx-large-width: 1920px;
     }
 }
 
+$tablet-width-max: 767px;
 $desktop-small-width-max: 991px;
 $desktop-medium-width-max: 1279px;
 $desktop-large-width-max: 1439px;
+
+@mixin tablet-max {
+    @media screen and (max-width: #{$tablet-width-max}) {
+        @content;
+    }
+}
 
 @mixin desktop-small-max {
     @media screen and (max-width: #{$desktop-small-width-max}) {
