@@ -21,7 +21,9 @@
 @using Neptune.WebMvc.Views.Shared
 @using Neptune.WebMvc.Common.BootstrapWrappers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Neptune.EFModels.Entities
 @using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Common.ModalDialog
 @using Neptune.WebMvc.Views.WaterQualityManagementPlan
 @inherits Neptune.WebMvc.Views.WaterQualityManagementPlan.FindAWQMP
 
@@ -122,10 +124,25 @@
 
 @section RightOfPageTitle
 {
-    @if (ViewDataTyped.HasEditPermissions)
+    @if (ViewDataTyped.CurrentPersonCanCreate)
     {
-        <a class="btn btn-neptune headerButtonText treatmentBMPButton" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
-    }}
+        @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")} Add Plan", ViewDataTyped.NewWaterQualityManagementPlanUrl, string.Format("Create New {0}", FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string> {"btn btn-neptune"}, true)
+    }
+    @if (ViewDataTyped.CurrentPerson.IsAdministrator())
+    {
+        <span class="dropdown">
+            <button id="actionsDropdown" class="btn btn-neptune" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="False">
+                More Actions
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" aria-labeledby="actionsDropdown" style="list-style: none; background: #fff;">
+                <li><a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadWQMPUrl"> Bulk Upload WQMPs</a></li>
+                <li><a class="btn btn-neptune" href="@ViewDataTyped.BulkUploadSimplifiedBMPs"> Bulk Upload Simplified BMPs</a></li>
+                <li><a class="btn btn-neptune" href="@ViewDataTyped.BulkWqmpBoundaryFromAPNs"> Bulk Upload WQMP Boundaries From APNs</a></li>
+            </ul>
+        </span>
+    }
+}
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 
@@ -133,7 +150,7 @@
     <div class="row">
         <div class="col-sm-8 col-md-3">
             <div class="input-group">
-                <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Search by BMP name" autocomplete="off" />
+                <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Search by WQMP name" autocomplete="off" />
                 <span class="input-group-btn">
                     <a id="treatmentBMPFinderButton" class="btn btn-default">
                         <i class="glyphicon glyphicon-search"></i>
@@ -141,9 +158,6 @@
                 </span>
             </div>
 
-        </div>
-        <div class="col-sm-4 col-md-3">
-            <a style="width: 100%" class="btn btn-neptune" ng-click="zoomMapToCurrentLocation()"><i class="glyphicon glyphicon-phone" style="margin-right: 4px;"></i>Find nearby BMPs</a>
         </div>
     </div>
     <div class="row" style="margin-top:2px">

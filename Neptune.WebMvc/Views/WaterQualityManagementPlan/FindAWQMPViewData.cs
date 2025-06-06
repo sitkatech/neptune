@@ -40,6 +40,11 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         public ViewDataForAngular ViewDataForAngular { get; set; }
         public string AllBMPsUrl { get; }
         public bool HasEditPermissions { get; set; }
+        public string BulkUploadWQMPUrl { get; }
+        public string BulkUploadSimplifiedBMPs { get; }
+        public string BulkWqmpBoundaryFromAPNs { get; }
+        public string NewWaterQualityManagementPlanUrl { get; }
+        public bool CurrentPersonCanCreate { get; }
 
 
         public FindAWQMPViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
@@ -57,6 +62,17 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             ViewDataForAngular = new ViewDataForAngular(mapInitJson, FindTreatmentBMPByNameUrl, jurisdictions, wqmpBoundaries.Select(x => x.AsGeometryDto()).ToList());
             HasEditPermissions = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
+            BulkUploadWQMPUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x =>
+                x.UploadWqmps());
+            BulkUploadSimplifiedBMPs =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator,
+                    x => x.UploadSimplifiedBMPs());
+            BulkWqmpBoundaryFromAPNs =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator,
+                    x => x.UploadWqmpBoundaryFromAPNs());
+            NewWaterQualityManagementPlanUrl =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.New());
+            CurrentPersonCanCreate = new WaterQualityManagementPlanCreateFeature().HasPermissionByPerson(currentPerson);
         }
     }
 
