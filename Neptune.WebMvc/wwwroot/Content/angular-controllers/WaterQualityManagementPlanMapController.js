@@ -18,7 +18,6 @@
         var summaryUrl = $scope.AngularViewData.FindTreatmentBMPByNameUrl;
 
         $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
-        console.log("Hello")
         
         //$scope.typeaheadSearch = function (typeaheadSelector, typeaheadSelectorButton, summaryUrl) {
         //    $scope.typeaheadSelector = typeaheadSelector;
@@ -139,7 +138,8 @@
                             layer.setStyle({ fillOpacity: 0 });
                         });
                         layer.on("click", (e) => {
-                            console.log("Clicked!");
+                            $scope.setActiveByID(e.layer.feature.properties.WaterQualityManagementPlanID);
+                            $scope.$apply();
                         });
                     },
                     style: function (feature) {
@@ -152,12 +152,6 @@
                 });
 
             $scope.wqmps.addTo($scope.neptuneMap.map);
-            $scope.wqmps.on('click',
-                function (e) {
-                    console.log("Clicked!")
-                    $scope.setActiveByID(e.layer.feature.properties.WaterQualityManagementPlanID);
-                    $scope.$apply();
-                });
             var legendSpan = "<span><img src='/Content/img/legendImages/wqmp.png' height='20px' /> WQMPs</span>";
             $scope.neptuneMap.layerControl.addOverlay($scope.wqmps, legendSpan);
         }
