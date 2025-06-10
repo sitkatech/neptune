@@ -34,6 +34,7 @@ export var IconInterface:
     | "Download"
     | "Drag"
     | "ExternalLink"
+    | "FullScreen"
     | "Geography"
     | "Geography-Alt"
     | "Guide"
