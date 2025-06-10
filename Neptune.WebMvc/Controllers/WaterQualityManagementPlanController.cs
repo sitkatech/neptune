@@ -66,24 +66,24 @@ namespace Neptune.WebMvc.Controllers
         public JsonResult FindByName(FindAWQMPViewModel viewModel)
         {
             var searchString = viewModel.SearchTerm.Trim().ToLower();
-            var viewModelWaterQualityManagementPlanIDs = viewModel.WaterQualityManagementPlanIDs;
+            //var viewModelWaterQualityManagementPlanIDs = viewModel.WaterQualityManagementPlanIDs;
             var stormwaterJurisdictionIDs = viewModel.StormwaterJurisdictionIDs;
             // ReSharper disable once InconsistentNaming
             var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson);
             var allWQMPSearchString = CurrentPerson
                 .GetWQMPPersonCanView(_dbContext, stormwaterJurisdictionIDsPersonCanView)
-                .Where(x => viewModelWaterQualityManagementPlanIDs.Contains(x.WaterQualityManagementPlanID) &&
+                .Where(x => 
                             stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdictionID) &&
                             x.WaterQualityManagementPlanName.ToLower().Contains(searchString)).ToList();
 
             var mapSummaryUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, t => t.SummaryForMap(UrlTemplate.Parameter1Int)));
             var listItems = allWQMPSearchString.OrderBy(x => x.WaterQualityManagementPlanName).Take(20).Select(x =>
             {
-                var locationPoint4326 = x.WaterQualityManagementPlanBoundary.Geometry4326;
+                var locationPoint4326 = x.WaterQualityManagementPlanBoundary?.Geometry4326;
                 var treatmentBMPMapSummaryData = new SearchMapSummaryData(
                     mapSummaryUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID), locationPoint4326,
-                    locationPoint4326.Coordinate.Y,
-                    locationPoint4326.Coordinate.X,
+                    locationPoint4326?.Coordinate.Y,
+                    locationPoint4326?.Coordinate.X,
                     x.WaterQualityManagementPlanID);
                 var listItem = new SelectListItem(x.WaterQualityManagementPlanName, GeoJsonSerializer.Serialize(treatmentBMPMapSummaryData));
                 return listItem;

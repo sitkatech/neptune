@@ -18,7 +18,8 @@
         var summaryUrl = $scope.AngularViewData.FindWQMPByNameUrl;
 
         $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
-        
+
+
         $scope.typeaheadSearch = function (typeaheadSelector, typeaheadSelectorButton, summaryUrl) {
             $scope.typeaheadSelector = typeaheadSelector;
             var finder = jQuery(typeaheadSelector);
@@ -41,7 +42,7 @@
                                     url: url,
                                     data: {
                                         SearchTerm: query,
-                                        WaterQualityManagementPlanIDs: $scope.selectedWaterQualityManagementPlanIDs,
+                                        //WaterQualityManagementPlanIDs: $scope.selectedWaterQualityManagementPlanIDs,
                                         StormwaterJurisdictionIDs: $scope.selectedJurisdictionIDs
                                     },
                                     type: "POST",
