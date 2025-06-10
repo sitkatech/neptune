@@ -32,7 +32,7 @@
     @{
         MapJavascriptIncludes.RenderPartialView(Html);
     }
-     <script type="text/javascript" src="@Url.Content("~/Content/angular-controllers/WaterQualityManagementPlanMapController.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/angular-controllers/WaterQualityManagementPlanMapController.js")"></script>
      <script type="text/javascript">
         // <![CDATA[
         angular.module("NeptuneApp")
@@ -46,8 +46,6 @@
                 });
 
         jQuery(document).ready(function () {
-            jQuery("#treatmentBMPTypeDropDown").selectpicker("selectAll");
-
             jQuery("#jurisdictionDropDown").selectpicker("selectAll");
         });
         // ]]>
@@ -214,18 +212,4 @@
 
         <div class="col-sm-8 col-md-12" id="mapSummaryResults"></div>
     </div>
-    @if (!ViewDataTyped.CurrentPerson.IsAnonymousOrUnassigned())
-    {
-        <hr/>
-        <div class="row">
-            <div class="col-sm-12">
-                <h4 style="margin-top: 0;">Didn't find the BMP you were looking for?</h4>
-                <a href="@ViewDataTyped.AllBMPsUrl" class="btn btn-neptune btn">View list of All BMPs</a>
-                @if (ViewDataTyped.HasManagePermissions)
-                {
-                    <a class="btn btn-neptune headerButtonText treatmentBMPButton" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
-                }
-            </div>
-        </div>
-    }
 </div>
