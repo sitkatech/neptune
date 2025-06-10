@@ -29,7 +29,6 @@
         font-weight: 700;
         font-size: $type-size-400;
         color: $blue-500;
-
     }
 
     .card-body {
@@ -55,7 +54,6 @@
     padding: $spacing-700;
     max-width: 94rem;
 }
-
 
 .content-section {
     padding: $spacing-050 0 0 0;
@@ -172,26 +170,26 @@
     }
 }
 
-#tcLegend, #ovtaAreaLegend {
+#tcLegend,
+#ovtaAreaLegend {
     padding-left: 0;
     list-style-type: none;
 }
 
-    #tcLegend img {
-        max-height: 50px;
-        margin-right: 5px;
-    }
+#tcLegend img {
+    max-height: 50px;
+    margin-right: 5px;
+}
 
-    #ovtaAreaLegend img {
-        max-height: 25px;
-        margin-right: 5px;
-        border: 1px solid #ddd;
-    }
+#ovtaAreaLegend img {
+    max-height: 25px;
+    margin-right: 5px;
+    border: 1px solid #ddd;
+}
 
-    #ovtaAreaLegend li {
-        padding-bottom: 10px;
-    }
-
+#ovtaAreaLegend li {
+    padding-bottom: 10px;
+}
 
 .bootstrap-select {
     padding-left: 0;
@@ -200,12 +198,6 @@
 .leaflet-control-layers-list {
     width: 195px !important;
     padding: 5px;
-}
-
-@media (min-width: 768px) {
-    .TGUColumn .table-of {
-        padding-top: 10%;
-    }
 }
 
 @media (max-width: 768px) {
@@ -226,8 +218,6 @@
         & > td:first-of-type {
             font-weight: normal;
         }
-
-        
     }
 }
 
@@ -286,9 +276,9 @@ loadBasedResultsColumn p {
     border: none;
 }
 
-    .loadBasedCalculationControlTable tfoot tr th {
-        padding-top: 10px;
-    }
+.loadBasedCalculationControlTable tfoot tr th {
+    padding-top: 10px;
+}
 
 .loadBased-lightblue {
     color: RGB(132, 151, 176);
@@ -319,4 +309,54 @@ loadBasedResultsColumn p {
     font-style: italic;
     margin-bottom: 0;
     text-align: end;
+}
+
+.tgu-grid-data-container {
+    dl {
+        display: grid;
+        gap: 1rem;
+        @include tablet-small {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        @include desktop-small {
+            grid-template-columns: unset;
+        }
+    }
+
+    dt,
+    dd {
+        text-align: left;
+    }
+
+    dt {
+        padding-bottom: 0;
+    }
+
+    dd {
+        padding-bottom: 0.75rem;
+    }
+
+    .tgu-grid-data-column:last-of-type {
+        @include desktop-small {
+            border-top: 1px solid $gray-200;
+            padding-top: 1rem;
+        }
+    }
+}
+
+.tgu-feature {
+    display: grid;
+    gap: 1rem;
+
+    @include desktop-small {
+        grid-template-columns: 20rem auto;
+        align-items: stretch;
+    }
+
+    &__info {
+    }
+
+    &__map {
+    }
 }
