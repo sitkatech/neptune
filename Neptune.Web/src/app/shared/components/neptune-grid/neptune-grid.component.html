@@ -10,13 +10,14 @@
     <ng-content select="[customGridActionsRight]" ngProjectAs="[customGridActionsRight]"></ng-content>
 </neptune-grid-header>
 
-<div class="table-responsive">
+<div class="table-responsive" #gridContainer>
     <ag-grid-angular
         [style.height]="height"
         [style.width]="width"
         defaultGridOptions
         #gridref
         class="ag-theme-balham"
+        [class.fullscreen]="isFullscreen"
         [overlayLoadingTemplate]="agGridOverlay"
         [autoSizeStrategy]="autoSizeStrategy"
         [rowData]="rowData"
@@ -42,6 +43,7 @@
         (rowDataUpdated)="onRowDataUpdated($event)"></ag-grid-angular>
 
     <div class="table-footer flex-between">
+        <full-screen-button [elementRef]="gridContainer"></full-screen-button>
         <div *ngIf="!hideDownloadButton" class="download-button">
             <neptune-csv-download-button [grid]="gridref" [fileName]="downloadFileName" [colIDsToExclude]="colIDsToExclude"></neptune-csv-download-button>
         </div>

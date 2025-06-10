@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { AgGridAngular, AgGridModule } from "ag-grid-angular";
 import {
@@ -18,11 +18,12 @@ import { FormsModule } from "@angular/forms";
 import { PaginationControlsComponent } from "src/app/shared/components/ag-grid/pagination-controls/pagination-controls.component";
 import { CsvDownloadButtonComponent } from "../csv-download-button/csv-download-button.component";
 import { NeptuneGridHeaderComponent } from "../neptune-grid-header/neptune-grid-header.component";
+import { FullScreenButtonComponent } from "../full-screen-button/full-screen-button.component";
 
 @Component({
     selector: "neptune-grid",
     standalone: true,
-    imports: [CommonModule, AgGridModule, FormsModule, PaginationControlsComponent, CsvDownloadButtonComponent, NeptuneGridHeaderComponent],
+    imports: [CommonModule, AgGridModule, FormsModule, PaginationControlsComponent, CsvDownloadButtonComponent, NeptuneGridHeaderComponent, FullScreenButtonComponent],
     templateUrl: "./neptune-grid.component.html",
     styleUrls: ["./neptune-grid.component.scss"],
 })
@@ -72,6 +73,7 @@ export class NeptuneGridComponent implements OnInit, OnChanges {
     public multiSelectEnabled: boolean;
     public anyFilterPresent: boolean = false;
     public filteredRowsCount: number;
+    public isFullscreen: boolean = false;
 
     public autoSizeStrategy: { type: "fitCellContents" | "fitGridWidth" };
 
