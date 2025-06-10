@@ -15,67 +15,67 @@
 
         var selector = '#treatmentBMPFinder';
         var selectorButton = '#treatmentBMPFinderButton';
-        var summaryUrl = $scope.AngularViewData.FindTreatmentBMPByNameUrl;
+        var summaryUrl = $scope.AngularViewData.FindWQMPByNameUrl;
 
         $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
         
-        //$scope.typeaheadSearch = function (typeaheadSelector, typeaheadSelectorButton, summaryUrl) {
-        //    $scope.typeaheadSelector = typeaheadSelector;
-        //    var finder = jQuery(typeaheadSelector);
-        //    finder.typeahead({
-        //        highlight: true,
-        //        minLength: 1
-        //    },
-        //        {
-        //            source: new Bloodhound({
-        //                datumTokenizer: Bloodhound.tokenizers.whitespace,
-        //                queryTokenizer: Bloodhound.tokenizers.whitespace,
-        //                remote: {
-        //                    cache: false,
-        //                    url: '/WaterQualityManagementPlan/FindByName#%QUERY',
-        //                    wildcard: '%QUERY',
-        //                    transport: function (opts, onSuccess, onError) {
-        //                        var url = opts.url.split("#")[0];
-        //                        var query = opts.url.split("#")[1];
-        //                        $.ajax({
-        //                            url: url,
-        //                            data: {
-        //                                SearchTerm: query,
-        //                                WaterQualityManagementPlanIDs: $scope.selectedWaterQualityManagementPlanIDs,
-        //                                StormwaterJurisdictionIDs: $scope.selectedJurisdictionIDs
-        //                            },
-        //                            type: "POST",
-        //                            success: onSuccess,
-        //                            error: onError
-        //                        });
-        //                    }
-        //                }
-        //            }),
-        //            display: 'Text',
-        //            limit: Number.MAX_VALUE
-        //        });
+        $scope.typeaheadSearch = function (typeaheadSelector, typeaheadSelectorButton, summaryUrl) {
+            $scope.typeaheadSelector = typeaheadSelector;
+            var finder = jQuery(typeaheadSelector);
+            finder.typeahead({
+                highlight: true,
+                minLength: 1
+            },
+                {
+                    source: new Bloodhound({
+                        datumTokenizer: Bloodhound.tokenizers.whitespace,
+                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                        remote: {
+                            cache: false,
+                            url: '/WaterQualityManagementPlan/FindByName#%QUERY',
+                            wildcard: '%QUERY',
+                            transport: function (opts, onSuccess, onError) {
+                                var url = opts.url.split("#")[0];
+                                var query = opts.url.split("#")[1];
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        SearchTerm: query,
+                                        WaterQualityManagementPlanIDs: $scope.selectedWaterQualityManagementPlanIDs,
+                                        StormwaterJurisdictionIDs: $scope.selectedJurisdictionIDs
+                                    },
+                                    type: "POST",
+                                    success: onSuccess,
+                                    error: onError
+                                });
+                            }
+                        }
+                    }),
+                    display: 'Text',
+                    limit: Number.MAX_VALUE
+                });
 
-        //    finder.bind('typeahead:select',
-        //        function (ev, suggestion) {
-        //            var summaryDataJson = JSON.parse(suggestion.Value);
-        //            $scope.loadSummaryPanel(summaryDataJson.MapSummaryUrl);
-        //            $scope.neptuneMap.map.setView(new L.LatLng(summaryDataJson.Latitude, summaryDataJson.Longitude), 18);
-        //            $scope.neptuneMap.map.invalidateSize();
-        //            setTimeout(function () {
-        //                    $scope.applyMap(L.GeoJSON.geometryToLayer(summaryDataJson.GeometryJson), summaryDataJson.EntityID);
-        //                },
-        //                500);
-        //        });
+            finder.bind('typeahead:select',
+                function (ev, suggestion) {
+                    var summaryDataJson = JSON.parse(suggestion.Value);
+                    $scope.loadSummaryPanel(summaryDataJson.MapSummaryUrl);
+                    $scope.neptuneMap.map.setView(new L.LatLng(summaryDataJson.Latitude, summaryDataJson.Longitude), 18);
+                    $scope.neptuneMap.map.invalidateSize();
+                    setTimeout(function () {
+                            $scope.applyMap(L.GeoJSON.geometryToLayer(summaryDataJson.GeometryJson), summaryDataJson.EntityID);
+                        },
+                        500);
+                });
 
-        //    jQuery(typeaheadSelectorButton).click(function () { selectFirstSuggestionFunction(finder); });
+            jQuery(typeaheadSelectorButton).click(function () { selectFirstSuggestionFunction(finder); });
 
-        //    finder.keypress(function (e) {
-        //        if (e.which == 13) {
-        //            e.preventDefault();
-        //            selectFirstSuggestionFunction(this);
-        //        }
-        //    });
-        //};
+            finder.keypress(function (e) {
+                if (e.which == 13) {
+                    e.preventDefault();
+                    selectFirstSuggestionFunction(this);
+                }
+            });
+        };
 
         $scope.refreshSelectedJurisdictionsLayer = function () {
             if ($scope.selectedJurisdictionsLayerGeoJson) {
@@ -96,18 +96,6 @@
                             weight: 2,
                             fillOpacity: 0 
                         };
-                    },
-                    onEachFeature: function (feature, layer) {
-                        layer.on("mouseover",
-                            function () {
-                                layer.setStyle({ fillOpacity: .6 }); // this is what looks the best.
-                            });
-                        layer.on("mouseout", (e) => {
-                            layer.setStyle({ fillOpacity: 0 });
-                        });
-                        layer.on("click", (e) => {
-                            console.log("Clicked!");
-                        });
                     }
                 });
             
@@ -137,10 +125,6 @@
                         layer.on("mouseout", (e) => {
                             layer.setStyle({ fillOpacity: 0 });
                         });
-                        layer.on("click", (e) => {
-                            $scope.setActiveByID(e.layer.feature.properties.WaterQualityManagementPlanID);
-                            $scope.$apply();
-                        });
                     },
                     style: function (feature) {
                         return {
@@ -152,16 +136,28 @@
                 });
 
             $scope.wqmps.addTo($scope.neptuneMap.map);
+            $scope.wqmps.on("click", function (e) {
+                $scope.setActiveByID(e.layer.feature.properties.WaterQualityManagementPlanID);
+                $scope.$apply();
+            })
             var legendSpan = "<span><img src='/Content/img/legendImages/wqmp.png' height='20px' /> WQMPs</span>";
             $scope.neptuneMap.layerControl.addOverlay($scope.wqmps, legendSpan);
         }
 
         $scope.initalizeWQMPLayer();
 
-        //$scope.refreshSelectedJurisdictionsLayer();
+        $scope.refreshSelectedJurisdictionsLayer();
 
-        //$scope.neptuneMap.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
-            //"<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", true);
+        $scope.neptuneMap.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
+            "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", true);
+
+        //var parcelsLegendUrl = "/Content/img/legendImages/parcel.png";
+        //var parcelsLabel = "<span><img src='" + parcelsLegendUrl + "' height='14px'/> Parcels</span>";
+        //$scope.neptuneMap.addWmsLayer("OCStormwater:Parcels",
+        //    parcelsLabel,
+        //    {
+        //        styles: "parcel"
+        //    }, true);
 
         $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
@@ -171,7 +167,7 @@
 
         
 
-        //$scope.typeaheadSearch(selector, selectorButton, summaryUrl);
+        $scope.typeaheadSearch(selector, selectorButton, summaryUrl);
 
         $scope.applyMap = function (marker, waterQualityManagementPlanID) {
             console.log("apply map")
@@ -188,7 +184,7 @@
         };
 
         $scope.filterMapByJurisdiction = function () {
-            //$scope.refreshSelectedJurisdictionsLayer();
+            $scope.refreshSelectedJurisdictionsLayer();
             $scope.initalizeWQMPLayer();
         };
 
