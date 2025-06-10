@@ -7,5 +7,5 @@ export class LegendItem {
     WmsLayerName: string;
     Color: string;
     WmsLayerStyle: string;
-    LengendHtml: SafeHtml;
+    LegendHtml: SafeHtml;
 }
