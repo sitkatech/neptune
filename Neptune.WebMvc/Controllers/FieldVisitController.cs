@@ -847,8 +847,10 @@ namespace Neptune.WebMvc.Controllers
                         x =>
                             x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType
                                 .TreatmentBMPAssessmentObservationTypeID);
-                Check.RequireNotNull(treatmentBMPTypeAssessmentObservationType,
-                    $"Not a valid Observation Type ID {treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID} for Treatment BMP Type ID {treatmentBMPType.TreatmentBMPTypeID}");
+                if (treatmentBMPTypeAssessmentObservationType == null)
+                {
+                    throw new NullReferenceException($"Not a valid Observation Type {treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName} for Treatment BMP Type {treatmentBMPType.TreatmentBMPTypeName}");
+                }
                 treatmentBMPObservation = new TreatmentBMPObservation
                 {
                     TreatmentBMPAssessment = treatmentBMPAssessment,
@@ -1038,9 +1040,11 @@ namespace Neptune.WebMvc.Controllers
             {
                 dataTableFromExcel = GetDataTableFromExcel(uploadXlsxInputStream, "Field Visits");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
+                SetErrorForDisplay(e.Message.Contains("column")
+                    ? e.Message
+                    : "Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
                 return ViewBulkUploadTrashScreenVisit(viewModel);
             }
 
@@ -1108,8 +1112,8 @@ namespace Neptune.WebMvc.Controllers
                             continue;
                         }
 
-                        var treatmentBMPName = row["BMP Name"].ToString();
-                        var jurisdictionName = row["Jurisdiction"].ToString();
+                        var treatmentBMPName = row["BMP Name"].ToString()?.Trim();
+                        var jurisdictionName = row["Jurisdiction"].ToString()?.Trim();
 
                         var treatmentBMP = _dbContext.TreatmentBMPs
                             .Include(x => x.TreatmentBMPBenchmarkAndThresholds)
@@ -1122,8 +1126,8 @@ namespace Neptune.WebMvc.Controllers
                             throw new InvalidOperationException($"Invalid BMP Name or Jurisdiction at row {i + 2}");
                         }
 
-                        var rawFieldVisitType = row["Field Visit Type"].ToString();
-                        var fieldVisitType = FieldVisitType.All.SingleOrDefault(x => x.FieldVisitTypeDisplayName == rawFieldVisitType);
+                        var rawFieldVisitType = row["Field Visit Type"].ToString()?.ToLower();
+                        var fieldVisitType = FieldVisitType.All.SingleOrDefault(x => x.FieldVisitTypeDisplayName.ToLower() == rawFieldVisitType);
                         if (fieldVisitType == null)
                         {
                             throw new InvalidOperationException($"Invalid Field Visit Type at row {i + 2}");
@@ -1175,21 +1179,28 @@ namespace Neptune.WebMvc.Controllers
                                 await _dbContext.TreatmentBMPAssessments.AddAsync(initialAssessment);
                             }
 
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
                                 treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, INLET, true,
-                                false, _dbContext);
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, OUTLET, true, false, _dbContext);
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                                false, _dbContext, errors);
+                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, OUTLET, true, false, _dbContext, errors);
+                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
                                 treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, OPERABILITY,
-                                true, false, _dbContext);
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, NUISANCE, true, false, _dbContext);
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                                true, false, _dbContext, errors);
+                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, NUISANCE, true, false, _dbContext, errors);
+                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
                                 treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, ACCUMULATION,
-                                false, false, _dbContext);
+                                false, false, _dbContext, errors);
 
-                            initialAssessment.CalculateAssessmentScore(treatmentBMPType, treatmentBMP);
+                            try
+                            {
+                                initialAssessment.CalculateAssessmentScore(treatmentBMPType, treatmentBMP);
+                            }
+                            catch (Exception ex)
+                            {
+                                errors.Add(ex.Message + $" on row {i+2}");
+                            }
                         }
 
                         if (MaintenanceRecordFieldsPopulated(row))
@@ -1206,11 +1217,11 @@ namespace Neptune.WebMvc.Controllers
                                 await _dbContext.MaintenanceRecords.AddAsync(maintenanceRecord);
                             }
 
-                            var rawMaintenanceType = row["Maintenance Type"].ToString();
+                            var rawMaintenanceType = row["Maintenance Type"].ToString()?.ToLower();
                             var rawDescription = row["Description"].ToString();
 
                             var maintenanceRecordType = MaintenanceRecordType.All.SingleOrDefault(x =>
-                                x.MaintenanceRecordTypeDisplayName == rawMaintenanceType);
+                                x.MaintenanceRecordTypeDisplayName.ToLower() == rawMaintenanceType);
 
                             if (maintenanceRecordType == null)
                             {
@@ -1221,20 +1232,20 @@ namespace Neptune.WebMvc.Controllers
                             maintenanceRecord.MaintenanceRecordTypeID = maintenanceRecordType.MaintenanceRecordTypeID;
                             maintenanceRecord.MaintenanceRecordDescription = rawDescription;
 
-                            await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
-                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, STRUCTURAL_REPAIR, i);
-                            await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
-                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, MECHANICAL_REPAIR, i);
-                            await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
-                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, VOLUME_CUFT, i);
-                            await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
-                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, VOLUME_GAL, i);
-                            await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
-                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, TRASH, i);
-                            await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
-                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, GREEN_WASTE, i);
-                            await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
-                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, SEDIMENT, i);
+                            errors = await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
+                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, STRUCTURAL_REPAIR, i, errors);
+                            errors = await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
+                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, MECHANICAL_REPAIR, i, errors);
+                            errors = await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
+                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, VOLUME_CUFT, i, errors);
+                            errors = await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
+                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, VOLUME_GAL, i, errors);
+                            errors = await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
+                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, TRASH, i, errors);
+                            errors = await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
+                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, GREEN_WASTE, i, errors);
+                            errors = await UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(_dbContext, row,
+                                treatmentBMPTypeCustomAttributeTypeDictionary, maintenanceRecord, SEDIMENT, i, errors);
                         }
 
                         if (PostMaintenanceAssessmentFieldsPopulated(row, i))
@@ -1253,14 +1264,25 @@ namespace Neptune.WebMvc.Controllers
                                 await _dbContext.TreatmentBMPAssessments.AddAsync(postMaintenanceAssessment);
                             }
 
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, INLET, true, true, _dbContext);
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, OUTLET, true, true, _dbContext);
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment,
-                                treatmentBMPType, OPERABILITY, true, true, _dbContext);
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, NUISANCE, true, true, _dbContext);
-                            await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, ACCUMULATION, false, true, _dbContext);
+                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, INLET, true, true, _dbContext, errors);
+                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, OUTLET, true, true, _dbContext, errors);
+                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment,
+                                treatmentBMPType, OPERABILITY, true, true, _dbContext, errors);
+                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, NUISANCE, true, true, _dbContext, errors);
+                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, ACCUMULATION, false, true, _dbContext, errors);
 
-                            postMaintenanceAssessment.CalculateAssessmentScore(treatmentBMPType, treatmentBMP);
+                            if (errors.Count == 0)
+                            {
+                                try
+                                {
+                                    postMaintenanceAssessment.CalculateAssessmentScore(treatmentBMPType, treatmentBMP);
+                                }
+                                catch (Exception ex)
+                                {
+                                    SetErrorForDisplay(ex.Message);
+                                    throw ex;
+                                }
+                            }
                         }
                     }
                     catch (InvalidOperationException ioe)
@@ -1269,7 +1291,7 @@ namespace Neptune.WebMvc.Controllers
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
                 return ViewBulkUploadTrashScreenVisit(viewModel);
@@ -1368,17 +1390,17 @@ namespace Neptune.WebMvc.Controllers
             return !allowBlank;
         }
 
-        private static async Task UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(NeptuneDbContext dbContext,
+        private static async Task<List<string>> UpdateOrCreateMaintenanceRecordObservationFromDataTableRow(NeptuneDbContext dbContext,
             DataRow row,
             IReadOnlyDictionary<string, TreatmentBMPTypeCustomAttributeType>
                 treatmentBMPTypeCustomAttributeTypeDictionary,
-            MaintenanceRecord maintenanceRecord, string observationName, int rowNumber)
+            MaintenanceRecord maintenanceRecord, string observationName, int rowNumber, List<string> errors)
         {
             var rawObservation = row[observationName].ToString();
             var treatmentBMPTypeCustomAttributeType = treatmentBMPTypeCustomAttributeTypeDictionary[observationName];
 
             var maintenanceRecordObservation = maintenanceRecord.MaintenanceRecordObservations.SingleOrDefault(x =>
-                x.CustomAttributeType.CustomAttributeTypeName == observationName);
+                x.CustomAttributeType.CustomAttributeTypeName.ToLower() == observationName.ToLower());
             string valueParsedForDataType;
             try
             {
@@ -1387,7 +1409,8 @@ namespace Neptune.WebMvc.Controllers
             }
             catch (Exception)
             {
-                throw new InvalidOperationException($"Invalid {observationName} at row {rowNumber + 2}");
+                errors.Add($"Invalid {observationName} at row {rowNumber + 2}");
+                return errors;
             }
 
             if (maintenanceRecordObservation != null)
@@ -1426,15 +1449,18 @@ namespace Neptune.WebMvc.Controllers
                     };
                 await dbContext.MaintenanceRecordObservationValues.AddAsync(maintenanceRecordObservationValue);
             }
+
+            return errors;
         }
 
-        private static async Task UpdateOrCreateSingleValueObservationFromDataTableRow(DataRow row,
+        private static async Task<List<string>> UpdateOrCreateSingleValueObservationFromDataTableRow(DataRow row,
             Dictionary<string, TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypeDictionary,
             int rowNumber, TreatmentBMPAssessment assessment, TreatmentBMPType treatmentBMPType,
-            string observationTypeName, bool isPassFail, bool isPostMaintenance, NeptuneDbContext dbContext)
+            string observationTypeName, bool isPassFail, bool isPostMaintenance, NeptuneDbContext dbContext,
+            List<string> errors)
         {
             var suffix = isPostMaintenance ? " (Post-Maintenance)" : "";
-            var rawInletCondition = row[$"{observationTypeName}{suffix}"].ToString().ToUpperInvariant();
+            var rawInletCondition = row[$"{observationTypeName}{suffix}"].ToString()?.ToUpperInvariant().Trim();
             var rawInletConditionNotes = row[$"{observationTypeName} Notes{suffix}"].ToString();
             string inletConditionObservationValue;
             if (isPassFail)
@@ -1448,7 +1474,8 @@ namespace Neptune.WebMvc.Controllers
 
             if (inletConditionObservationValue == "invalid")
             {
-                throw new InvalidOperationException($"Invalid {observationTypeName} at row {rowNumber + 2}");
+                errors.Add($"Invalid {observationTypeName} at row {rowNumber + 2}");
+                return errors;
             }
 
             var inletConditionBoxed = new
@@ -1473,12 +1500,23 @@ namespace Neptune.WebMvc.Controllers
 
             if (validateObservationDataJson.Count > 0)
             {
-                throw new InvalidOperationException($"Invalid {observationTypeName} at row {rowNumber + 2}");
+                errors.Add($"Invalid {observationTypeName} at row {rowNumber + 2}");
+                return errors;
             }
 
-            var initialInletConditionObservation = await GetExistingTreatmentBMPObservationOrCreateNew(assessment,
-                treatmentBMPAssessmentObservationTypeDictionary[observationTypeName], treatmentBMPType, dbContext);
-            initialInletConditionObservation.ObservationData = inletConditionJson;
+            try
+            {
+                var initialInletConditionObservation = await GetExistingTreatmentBMPObservationOrCreateNew(assessment,
+                    treatmentBMPAssessmentObservationTypeDictionary[observationTypeName], treatmentBMPType, dbContext);
+                initialInletConditionObservation.ObservationData = inletConditionJson;
+            }
+            catch (Exception e)
+            {
+                errors.Add($"{e.Message} on row {rowNumber + 2}");
+            }
+            
+
+            return errors;
         }
 
         [HttpGet]

@@ -32,7 +32,11 @@ Select
 	Cast(HasProgressScore as bit) as HasProgressScore,
 	Case
 		When IsFullTrashCapture = 1 then 2.5
-		When (DelineationIsVerified = 0 and WaterQualityManagementPlanID is null) then BaselineLoadingRate
+		When OnlandVisualTrashAssessmentAreaProgressScore = 'A' then 2.5
+		When OnlandVisualTrashAssessmentAreaBaselineScore = 'A' then 2.5
+		When PartialTrashCaptureEffectivenessPercentage > 0 and BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0) > 2.5 then BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0)
+		When HasProgressScore = 1 then ProgressLoadingRate
+		When HasBaselineScore = 1 then BaselineLoadingRate
 		When BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0) > 2.5 then BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0)
 		Else 2.5
 	end as CurrentLoadingRate,
@@ -46,6 +50,7 @@ Select
 	LastUpdateDate,
     OnlandVisualTrashAssessmentAreaName,
     OnlandVisualTrashAssessmentAreaBaselineScore,
+	OnlandVisualTrashAssessmentAreaProgressScore,
     MedianHouseholdIncomeResidential,
     MedianHouseholdIncomeRetail,
     PermitClass,
@@ -122,6 +127,7 @@ From (
         tcs.TrashCaptureStatusTypeDisplayName as TrashCaptureStatusBMP,
         area.OnlandVisualTrashAssessmentAreaName,
         scoreBaseline.OnlandVisualTrashAssessmentScoreDisplayName as OnlandVisualTrashAssessmentAreaBaselineScore,
+        scoreProgress.OnlandVisualTrashAssessmentScoreDisplayName as OnlandVisualTrashAssessmentAreaProgressScore,
         wqmptcs.TrashCaptureStatusTypeDisplayName as TrashCaptureStatusWQMP,
         wqmp.TrashCaptureEffectiveness as TrashCaptureEffectivenessWQMP,
         lub.MedianHouseholdIncomeResidential,

@@ -56,8 +56,6 @@ GO
 GO
 :r ".\dbo.OnlandVisualTrashAssessmentStatus.sql"
 GO
-:r ".\dbo.OVTASection.sql"
-GO
 :r ".\dbo.PermitType.sql"
 GO
 :r ".\dbo.PreliminarySourceIdentificationCategory.sql"

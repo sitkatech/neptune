@@ -67,16 +67,6 @@ public static class OnlandVisualTrashAssessments
 
     }
 
-    public static OnlandVisualTrashAssessment GetByIDForFeatureContextCheck(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID)
-    {
-        var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments
-            .Include(x => x.StormwaterJurisdiction)
-            .ThenInclude(x => x.Organization).AsNoTracking()
-            .SingleOrDefault(x => x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
-        Check.RequireNotNull(onlandVisualTrashAssessment, $"OnlandVisualTrashAssessment with ID {onlandVisualTrashAssessmentID} not found!");
-        return onlandVisualTrashAssessment;
-    }
-
     public static List<OnlandVisualTrashAssessment> ListByOnlandVisualTrashAssessmentAreaID(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentAreaID)
     {
         return GetImpl(dbContext).AsNoTracking().Where(x => x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentAreaID).OrderByDescending(x => x.CompletedDate).ToList();
@@ -200,13 +190,13 @@ public static class OnlandVisualTrashAssessments
 
             var onlandVisualTrashAssessments = OnlandVisualTrashAssessments.ListByOnlandVisualTrashAssessmentAreaID(dbContext, onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID.Value);
             onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID =
-                OnlandVisualTrashAssessmentAreas.CalculateScoreFromBackingData(onlandVisualTrashAssessments, false)?
+                OnlandVisualTrashAssessmentAreas.CalculateBaselineScoreFromBackingData(onlandVisualTrashAssessments)?
                     .OnlandVisualTrashAssessmentScoreID;
 
             if (dto.IsProgressAssessment ?? false)
             {
-                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID =
-                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID;
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID = CalculateProgressScore(onlandVisualTrashAssessments)
+                        ?.OnlandVisualTrashAssessmentScoreID;
             }
 
             if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine == null && onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Count >= 2)
@@ -392,13 +382,14 @@ public static class OnlandVisualTrashAssessments
         return parcelIDs.ToList();
     }
 
-    public static OnlandVisualTrashAssessmentScore CalculateProgressScore(List<OnlandVisualTrashAssessment> onlandVisualTrashAssessments)
+    public static OnlandVisualTrashAssessmentScore? CalculateProgressScore(List<OnlandVisualTrashAssessment> onlandVisualTrashAssessments)
     {
+        var fourYearAgo = DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-4));
         var completedAndIsProgressAssessment = onlandVisualTrashAssessments.Where(x =>
             x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete
-                .OnlandVisualTrashAssessmentStatusID && x.IsProgressAssessment).ToList();
+                .OnlandVisualTrashAssessmentStatusID && x.IsProgressAssessment && x.CompletedDate >= fourYearAgo).ToList();
 
-        if (!completedAndIsProgressAssessment.Any())
+        if (completedAndIsProgressAssessment.Count < 2)
         {
             return null;
         }

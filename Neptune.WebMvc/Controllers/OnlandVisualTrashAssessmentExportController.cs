@@ -11,16 +11,15 @@ using NetTopologySuite.Features;
 
 namespace Neptune.WebMvc.Controllers
 {
-    //[Area("Trash")]
-    //[Route("[area]/[controller]/[action]", Name = "[area]_[controller]_[action]")]
-    public class OnlandVisualTrashAssessmentExportController : NeptuneBaseController<OnlandVisualTrashAssessmentExportController>
+    public class OnlandVisualTrashAssessmentExportController(
+        NeptuneDbContext dbContext,
+        ILogger<OnlandVisualTrashAssessmentExportController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        GDALAPIService gdalApiService)
+        : NeptuneBaseController<OnlandVisualTrashAssessmentExportController>(dbContext, logger, linkGenerator,
+            webConfiguration)
     {
-        private readonly GDALAPIService _gdalApiService;
-        public OnlandVisualTrashAssessmentExportController(NeptuneDbContext dbContext, ILogger<OnlandVisualTrashAssessmentExportController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, GDALAPIService gdalApiService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _gdalApiService=gdalApiService;
-        }
-
         [HttpGet]
         [NeptuneViewAndRequiresJurisdictionsFeature]
         public ViewResult ExportAssessmentGeospatialData()
@@ -72,7 +71,7 @@ namespace Neptune.WebMvc.Controllers
             };
 
             var jurisdictionName = stormwaterJurisdictionName.Replace(' ', '-');
-            var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
+            var bytes = await gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
             {
                 GdbInputs = new List<GdbInput> { gdbInput },
                 GdbName = $"ovta-export-{jurisdictionName}"

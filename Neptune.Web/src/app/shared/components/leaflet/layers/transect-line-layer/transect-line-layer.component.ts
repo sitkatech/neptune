@@ -50,6 +50,7 @@ export class TransectLineLayerComponent extends MapLayerBase implements OnChange
                 .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDTransectLineAsFeatureCollectionGet(this.ovtaAreaID)
                 .pipe(
                     tap((transectLineFeatureCollection) => {
+                        console.log(transectLineFeatureCollection);
                         this.layer = new L.GeoJSON(transectLineFeatureCollection, {
                             style: this.transectLineStyle,
                         });

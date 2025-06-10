@@ -7,14 +7,14 @@ using Neptune.WebMvc.Controllers;
 
 namespace Neptune.WebMvc.Views.LandUseBlockGeometry
 {
-    public class UpdateLandUseBlockGeometryViewData : TrashModuleViewData
+    public class UpdateLandUseBlockGeometryViewData : NeptuneViewData
     {
         public string NewGisUploadUrl { get; }
         public string DownloadLandUseBlockUrl { get; }
         public IEnumerable<SelectListItem> StormwaterJurisdictions { get; }
 
 
-        public UpdateLandUseBlockGeometryViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, WebConfiguration webConfiguration, string newGisUploadUrl, string downloadLandUseBlockUrl, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions) : base(httpContext, linkGenerator, currentPerson, webConfiguration)
+        public UpdateLandUseBlockGeometryViewData(HttpContext httpContext, LinkGenerator linkGenerator, Person currentPerson, WebConfiguration webConfiguration, string newGisUploadUrl, string downloadLandUseBlockUrl, IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             NewGisUploadUrl = newGisUploadUrl;
             DownloadLandUseBlockUrl = downloadLandUseBlockUrl;

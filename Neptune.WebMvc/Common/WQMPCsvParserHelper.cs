@@ -236,21 +236,6 @@ namespace Neptune.WebMvc.Common
                 }
             }
 
-            var constructionDateString = SetStringValue(row, fieldsDict, rowNumber, errorList, "Date of Construction", 100, false);
-            if (!string.IsNullOrWhiteSpace(constructionDateString))
-            {
-                if (!DateTime.TryParse(constructionDateString,
-                        out var constructionDateParsed))
-                {
-                    errorList.Add(
-                        $"{constructionDateParsed} can not be converted to Date Time format at row: {rowNumber}");
-                }
-                else
-                {
-                    wqmp.DateOfConstruction = constructionDateParsed.ConvertTimeFromPSTToUTC();
-                }
-            }
-
             var hydrologicSubareaID = FindLookupValue(row, fieldsDict, "Hydrologic Subarea", rowNumber,
                 errorList, hydrologicSubareas, x => x.HydrologicSubareaName,
                 x => x.HydrologicSubareaID, true, false);
@@ -284,6 +269,21 @@ namespace Neptune.WebMvc.Common
             if (modelingApproachID.HasValue)
             {
                 wqmp.WaterQualityManagementPlanModelingApproachID = modelingApproachID.Value;
+            }
+
+            var constructionDateString = SetStringValue(row, fieldsDict, rowNumber, errorList, "Date of Construction", 100, false);
+            if (!string.IsNullOrWhiteSpace(constructionDateString))
+            {
+                if (!DateTime.TryParse(constructionDateString,
+                        out var constructionDateParsed))
+                {
+                    errorList.Add(
+                        $"{constructionDateParsed} can not be converted to Date Time format at row: {rowNumber}");
+                }
+                else
+                {
+                    wqmp.DateOfConstruction = constructionDateParsed.ConvertTimeFromPSTToUTC();
+                }
             }
 
             //End of Optional Fields

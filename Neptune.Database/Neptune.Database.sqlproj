@@ -75,6 +75,7 @@
     <None Include="Scripts\PreReleaseScripts\README.md" />
     <None Include="Scripts\ReleaseScripts\README.md" />
     <None Include="Scripts\ReleaseScripts\001-rename fields on ModelingAttribute table.sql" />
+    <None Include="Scripts\ReleaseScripts\012 - recalculate OVTA Area Baseline Score.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\LookupTables\Script.PostDeployment.LookupTables.sql" />
@@ -149,7 +150,6 @@
     <Build Include="dbo\Tables\dbo.OnlandVisualTrashAssessmentStatus.sql" />
     <Build Include="dbo\Tables\dbo.Organization.sql" />
     <Build Include="dbo\Tables\dbo.OrganizationType.sql" />
-    <Build Include="dbo\Tables\dbo.OVTASection.sql" />
     <Build Include="dbo\Tables\dbo.Parcel.sql" />
     <Build Include="dbo\Tables\dbo.ParcelGeometry.sql" />
     <Build Include="dbo\Tables\dbo.ParcelStaging.sql" />
@@ -265,7 +265,6 @@
     <None Include="Scripts\LookupTables\dbo.ObservationTypeSpecification.sql" />
     <None Include="Scripts\LookupTables\dbo.OnlandVisualTrashAssessmentScore.sql" />
     <None Include="Scripts\LookupTables\dbo.OnlandVisualTrashAssessmentStatus.sql" />
-    <None Include="Scripts\LookupTables\dbo.OVTASection.sql" />
     <None Include="Scripts\LookupTables\dbo.PermitType.sql" />
     <None Include="Scripts\LookupTables\dbo.PreliminarySourceIdentificationCategory.sql" />
     <None Include="Scripts\LookupTables\dbo.PreliminarySourceIdentificationType.sql" />
@@ -423,6 +422,9 @@
     <None Include="Scripts\ReleaseScripts\010 - add field definitions for trash home page.sql" />
     <Build Include="dbo\Views\dbo.vWaterQualityManagementPlanAnnualReport.sql" />
     <None Include="Scripts\ReleaseScripts\011 - add neptune page for wqmp annual report.sql" />
+    <None Include="Scripts\ReleaseScripts\013 - update neptune page content for wqmp apn uploader.sql" />
+    <Build Include="dbo\Tables\dbo.HRULog.sql" />
+    <Build Include="dbo\Procs\dbo.pDeleteOldHRULogs.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Neptune.Database.refactorlog" />

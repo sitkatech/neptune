@@ -1,7 +1,23 @@
-@import url(https://fonts.googleapis.com/css?family=Basic);
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600);
-@import url(https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i,900);
-@import url(https://fonts.googleapis.com/css?family=Montserrat:700);
+﻿@font-face {
+  font-family: 'Basic';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/basic/v17/xfu_0WLxV2_XKTNw6FQ.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: normal;
+  src: url(https://fonts.gstatic.com/s/opensans/v43/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVc.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: normal;
+  src: url(https://fonts.gstatic.com/s/opensans/v43/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsgH1x4gaVc.ttf) format('truetype');
+}
 html,
 body {
   height: 100%;
@@ -73,6 +89,9 @@ h6 {
 }
 .neptunePageContent {
   background-color: inherit;
+  -ms-transition: all 100ms ease-out;
+  -o-transition: all 100ms ease-out;
+  -webkit-transition: all 100ms ease-out;
   transition: all 100ms ease-out;
 }
 .neptunePageContent:hover {
@@ -83,6 +102,9 @@ h6 {
   visibility: hidden;
   -ms-opacity: 0;
   opacity: 0;
+  -ms-transition: all 100ms ease-out;
+  -o-transition: all 100ms ease-out;
+  -webkit-transition: all 100ms ease-out;
   transition: all 100ms ease-out;
 }
 .neptunePageContent:hover .hoverEditButton {
@@ -273,11 +295,11 @@ footer p {
 }
 .neptune-modal-dialog .modal-header {
   background-color: #e7e7e7;
-  padding: .5em;
+  padding: 0.5em;
   cursor: move;
 }
 .neptune-modal-dialog .modal-footer {
-  padding: .5em;
+  padding: 0.5em;
   float: none;
   text-align: left;
 }
@@ -336,6 +358,14 @@ a.btn-neptune {
   color: #fff;
   background-color: #0099ab;
 }
+a.btn-neptune.btn-default.disabled {
+  pointer-events: all;
+}
+a.btn-neptune.btn-default.disabled:hover {
+  background-color: transparent;
+  cursor: default;
+  color: #999;
+}
 .mainPageHeader {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -368,8 +398,8 @@ a.btn-neptune {
 }
 /* First arrow */
 .firstArrow {
-  border-top-left-radius: .25rem;
-  border-bottom-left-radius: .25rem;
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
 }
 .firstArrow.current {
   background-color: #E49937;
@@ -442,8 +472,8 @@ a.btn-neptune {
 }
 /* Last arrow */
 .lastArrow {
-  border-top-right-radius: .25rem;
-  border-bottom-right-radius: .25rem;
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
 }
 .lastArrow.current {
   background-color: #E49937;
@@ -569,6 +599,9 @@ nav#tableOfContents ul.nav ul.nav li a {
 nav#tableOfContents ul.nav li ul.nav {
   max-height: 0;
   padding: 0;
+  -moz-transition: max-height 0.5s;
+  -o-transition: max-height 0.5s;
+  -webkit-transition: max-height 0.5s;
   transition: max-height 0.5s;
   overflow: hidden;
 }
@@ -637,6 +670,8 @@ ul.filmStrip li {
   border: 1px solid #000;
   vertical-align: top;
   position: relative;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
   border-radius: 10px;
 }
 ul.filmStrip li div.icons {
@@ -1001,6 +1036,42 @@ nav#wizardNav ul li a.disabled {
 .treatmentBMPCluster span {
   line-height: 30px;
 }
+@font-face {
+  font-family: 'Lato';
+  font-style: italic;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/lato/v24/S6u8w4BMUTPHjxsAXC-v.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: italic;
+  font-weight: 700;
+  src: url(https://fonts.gstatic.com/s/lato/v24/S6u_w4BMUTPHjxsI5wq_Gwfo.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/lato/v24/S6uyw4BMUTPHjx4wWw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  src: url(https://fonts.gstatic.com/s/lato/v24/S6u9w4BMUTPHh6UVSwiPHA.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 900;
+  src: url(https://fonts.gstatic.com/s/lato/v24/S6u9w4BMUTPHh50XSwiPHA.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  src: url(https://fonts.gstatic.com/s/montserrat/v30/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCuM73w5aX8.ttf) format('truetype');
+}
 .header {
   padding: 0;
 }
@@ -1143,6 +1214,14 @@ nav.navbar-fixed-top {
 .btn-neptune,
 .neptune-modal-dialog .btn-neptune {
   font-size: 15px;
+}
+a.btn-neptune.btn-default.disabled {
+  pointer-events: all;
+}
+a.btn-neptune.btn-default.disabled:hover {
+  background-color: transparent;
+  cursor: default;
+  color: #999;
 }
 hr {
   border-top-color: #ccc;

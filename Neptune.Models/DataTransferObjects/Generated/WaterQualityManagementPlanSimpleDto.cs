@@ -33,5 +33,6 @@ namespace Neptune.Models.DataTransferObjects
         public int? TrashCaptureEffectiveness { get; set; }
         public int WaterQualityManagementPlanModelingApproachID { get; set; }
         public int? LastNereidLogID { get; set; }
+        public string WaterQualityManagementPlanBoundaryNotes { get; set; }
     }
 }

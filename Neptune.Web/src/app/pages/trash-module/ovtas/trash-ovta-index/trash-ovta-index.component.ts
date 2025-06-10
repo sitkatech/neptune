@@ -70,7 +70,7 @@ export class TrashOvtaIndexComponent {
                 CustomDropdownFilterField: "OnlandVisualTrashAssessmentScoreName",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Assessment Type", "IsProgressAssessment", { CustomDropdownFilterField: "IsProgressAssessment" }),
-            this.utilityFunctionsService.createDateColumnDef("Last Assessment Date", "CompletedDate", "short"),
+            this.utilityFunctionsService.createDateColumnDef("Last Assessment Date", "CompletedDate", "shortDate"),
             this.utilityFunctionsService.createBasicColumnDef("Status", "OnlandVisualTrashAssessmentStatusName", {
                 CustomDropdownFilterField: "OnlandVisualTrashAssessmentStatusName",
             }),

@@ -30,9 +30,15 @@ public partial class LoadGeneratingUnit4326
     [Column(TypeName = "datetime")]
     public DateTime? DateHRURequested { get; set; }
 
+    public int? HRULogID { get; set; }
+
     [ForeignKey("DelineationID")]
     [InverseProperty("LoadGeneratingUnit4326s")]
     public virtual Delineation? Delineation { get; set; }
+
+    [ForeignKey("HRULogID")]
+    [InverseProperty("LoadGeneratingUnit4326s")]
+    public virtual HRULog? HRULog { get; set; }
 
     [ForeignKey("ModelBasinID")]
     [InverseProperty("LoadGeneratingUnit4326s")]

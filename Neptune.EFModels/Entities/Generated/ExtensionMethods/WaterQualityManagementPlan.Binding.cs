@@ -28,6 +28,7 @@ namespace Neptune.EFModels.Entities
             public const int MaintenanceContactState = 100;
             public const int MaintenanceContactZip = 100;
             public const int RecordNumber = 500;
+            public const int WaterQualityManagementPlanBoundaryNotes = 500;
         }
     }
 }

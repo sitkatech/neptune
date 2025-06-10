@@ -17,7 +17,7 @@ namespace Neptune.Models.DataTransferObjects
         public int OnlandVisualTrashAssessmentStatusID { get; set; }
         public bool? IsDraftGeometryManuallyRefined { get; set; }
         public int? OnlandVisualTrashAssessmentScoreID { get; set; }
-        public DateTime? CompletedDate { get; set; }
+        public DateOnly? CompletedDate { get; set; }
         public string DraftAreaName { get; set; }
         public string DraftAreaDescription { get; set; }
         public bool IsTransectBackingAssessment { get; set; }

@@ -18,8 +18,10 @@ export class OnlandVisualTrashAssessmentAreaDetailDto {
     StormwaterJurisdictionID?: number;
     StormwaterJurisdictionName?: string;
     OnlandVisualTrashAssessmentBaselineScoreName?: string;
+    OnlandVisualTrashAssessmentBaselineScoreTrashGenerationRate?: number;
     AssessmentAreaDescription?: string;
     OnlandVisualTrashAssessmentProgressScoreName?: string;
+    OnlandVisualTrashAssessmentProgressScoreTrashGenerationRate?: number;
     LastAssessmentDate?: string;
     BoundingBox?: BoundingBoxDto;
     Geometry?: string;
@@ -34,8 +36,10 @@ export interface OnlandVisualTrashAssessmentAreaDetailDtoForm {
     StormwaterJurisdictionID?: FormControl<number>;
     StormwaterJurisdictionName?: FormControl<string>;
     OnlandVisualTrashAssessmentBaselineScoreName?: FormControl<string>;
+    OnlandVisualTrashAssessmentBaselineScoreTrashGenerationRate?: FormControl<number>;
     AssessmentAreaDescription?: FormControl<string>;
     OnlandVisualTrashAssessmentProgressScoreName?: FormControl<string>;
+    OnlandVisualTrashAssessmentProgressScoreTrashGenerationRate?: FormControl<number>;
     LastAssessmentDate?: FormControl<string>;
     BoundingBox?: FormControl<BoundingBoxDto>;
     Geometry?: FormControl<string>;
@@ -92,6 +96,16 @@ export class OnlandVisualTrashAssessmentAreaDetailDtoFormControls {
             ],
         }
     );
+    public static OnlandVisualTrashAssessmentBaselineScoreTrashGenerationRate = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static AssessmentAreaDescription = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
@@ -103,6 +117,16 @@ export class OnlandVisualTrashAssessmentAreaDetailDtoFormControls {
         }
     );
     public static OnlandVisualTrashAssessmentProgressScoreName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static OnlandVisualTrashAssessmentProgressScoreTrashGenerationRate = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
