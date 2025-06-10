@@ -230,7 +230,7 @@
             </div>
         </div>
         <div class="tgu-feature mt-4">
-            <div class="card tgu-feature__info">
+            <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Selected Feature</h3>
                 </div>
@@ -297,7 +297,7 @@
                     </span>
                 </div>
             </div>
-            <div class="tgu-feature__map">
+            <div>
                 <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="1000px" [showLegend]="true" *ngIf="boundingBox$ | async as boundingBox" [boundingBox]="boundingBox">
                     <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
                     <delineations-layer
