@@ -7,8 +7,7 @@
             return m.StormwaterJurisdictionID;
         });
 
-        $scope.visibleBMPIDs = [];
-        $scope.activeTreatmentBMP = {};
+        $scope.activeWQMP = {};
 
         var selector = '#treatmentBMPFinder';
         var selectorButton = '#treatmentBMPFinderButton';
@@ -267,7 +266,7 @@
         };
 
         $scope.isActive = function (waterQualityManagementPlan) {
-            return $scope.activeTreatmentBMP &&
+            return $scope.activeWQMP &&
                 $scope.activeWaterQualityManagementPlan.WaterQualityManagementPlanID === waterQualityManagementPlan.WaterQualityManagementPlanID;
         };
     });

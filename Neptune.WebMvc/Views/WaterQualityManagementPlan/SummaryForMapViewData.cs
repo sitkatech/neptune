@@ -32,6 +32,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         public EFModels.Entities.WaterQualityManagementPlan WaterQualityManagementPlan{ get; }
         public string StormwaterJurisdictionDetailUrl { get; }
         public string WaterQualityManagementPlanDetailUrl { get; }
+        public string WaterQualityManagementPlanOAndMVerificationlUrl { get; }
 
         public SummaryForMapViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
             EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
@@ -41,6 +42,9 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             WaterQualityManagementPlanDetailUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator,
                     x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanID));
+            WaterQualityManagementPlanOAndMVerificationlUrl =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(linkGenerator,
+                    x => x.NewWqmpVerify(waterQualityManagementPlan.WaterQualityManagementPlanID));
         }
     }
 }

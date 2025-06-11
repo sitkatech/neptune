@@ -183,27 +183,6 @@
                 </div>
             </div>
         </div>
-        @* <div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9">
-            <div class="panel panelNeptune">
-                <div class="panel-heading panelTitle">
-                    <h3>
-                        WQMPs in Map View
-                    </h3>
-                </div>
-                <ul class="list-group" ng-if="visibleBMPCount() <= @FindAWQMPViewData.MaxNumberOfBmpsInList">
-                    <li class="list-group-item" ng-repeat="treatmentBMP in visibleBMPs()" ng-click="setActive(treatmentBMP)" ng-class="{'selected-bmp' : isActive(treatmentBMP)}">
-                        <strong>{{treatmentBMP.DisplayName}}</strong>
-                        <div class="help-block">
-                            {{treatmentBMP.TreatmentBMPTypeName}}
-                        </div>
-                    </li>
-                </ul>
-                <div class="panel-body" ng-if="visibleBMPCount() >  @FindAWQMPViewData.MaxNumberOfBmpsInList">
-                    <p class="systemText">{{visibleBMPCount()}} BMPs shown on map - Zoom closer see a list</p>
-                </div>
-
-            </div>
-        </div> *@
 
     </div>
     <div class="row" style="margin-top: 10px;">
@@ -212,4 +191,5 @@
 
         <div class="col-sm-8 col-md-12" id="mapSummaryResults"></div>
     </div>
+    <hr />
 </div>
