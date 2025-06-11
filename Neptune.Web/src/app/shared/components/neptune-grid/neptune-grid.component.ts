@@ -153,4 +153,10 @@ export class NeptuneGridComponent implements OnInit, OnChanges {
         if (this.hideGlobalFilter) return;
         this.quickFilterText = "";
     }
+
+    public handleScreenSizeChangedEvent() {
+        if (this.gridApi) {
+            this.gridApi.sizeColumnsToFit();
+        }
+    }
 }

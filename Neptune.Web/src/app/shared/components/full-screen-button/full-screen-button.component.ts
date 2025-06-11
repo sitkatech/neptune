@@ -1,4 +1,4 @@
-import { Component, HostListener, Input } from "@angular/core";
+import { Component, EventEmitter, HostListener, Input, Output } from "@angular/core";
 import { IconComponent } from "../icon/icon.component";
 
 @Component({
@@ -11,11 +11,13 @@ import { IconComponent } from "../icon/icon.component";
 export class FullScreenButtonComponent {
     @Input() elementRef: HTMLElement;
     @Input() titleText: string = "Make element full screen";
+    @Output() screenSizeChangedEvent = new EventEmitter();
 
     public triggerFullscreen() {
         if (this.elementRef.requestFullscreen) {
             this.elementRef.requestFullscreen();
             this.elementRef.classList.add("fullscreen");
+            this.screenSizeChangedEvent.emit();
         }
     }
 
@@ -25,5 +27,6 @@ export class FullScreenButtonComponent {
         if (!document.fullscreenElement) {
             this.elementRef.classList.remove("fullscreen");
         }
+        this.screenSizeChangedEvent.emit();
     }
 }
