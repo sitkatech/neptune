@@ -85,14 +85,6 @@ namespace Neptune.WebMvc.Models
         public static List<WaterQualityManagementPlan> GetWQMPPersonCanView(this Person person,
             NeptuneDbContext dbContext, IEnumerable<int> stormwaterJurisdictionIDsPersonCanView)
         {
-            if (person.IsAnonymousOrUnassigned())
-            {
-                return dbContext.WaterQualityManagementPlans.Include(x => x.StormwaterJurisdiction)
-                    .Include(x => x.WaterQualityManagementPlanBoundary)
-                    .Where(x =>
-                    x.StormwaterJurisdiction.StormwaterJurisdictionPublicWQMPVisibilityTypeID !=
-                    (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.None).ToList();
-            }
             var wqmpBoundaries = dbContext.WaterQualityManagementPlans
                 .Include(x => x.WaterQualityManagementPlanBoundary).Where(x =>
                     stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();

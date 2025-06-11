@@ -52,7 +52,7 @@ namespace Neptune.WebMvc.Controllers
                 JurisdictionLayerGeoJson = jurisdictionMapLayers.Single(x => x.LayerName == MapInitJsonHelpers.CountyCityLayerName)
             };
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WQMPMap);
-            var viewData = new FindAWQMPViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, mapInitJson, neptunePage, jurisdictions, wqmps);
+            var viewData = new FindAWQMPViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, mapInitJson, neptunePage, jurisdictions, wqmps, _webConfiguration.MapServiceUrl);
             return RazorView<FindAWQMP, FindAWQMPViewData>(viewData);
         }
 

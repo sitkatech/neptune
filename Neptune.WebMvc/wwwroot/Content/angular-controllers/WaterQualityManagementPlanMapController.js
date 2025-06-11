@@ -2,9 +2,6 @@
     .controller("WaterQualityManagementPlanMapController", function($scope, angularModelAndViewData) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
-        $scope.selectedWaterQualityManagementPlanIDs = _.map($scope.AngularViewData.WaterQualityManagementPlans, function (m) {
-            return m.WaterQualityManagementPlanID;
-        });
 
         $scope.selectedJurisdictionIDs = _.map($scope.AngularViewData.Jurisdictions, function (m) {
             return m.StormwaterJurisdictionID;
@@ -42,7 +39,6 @@
                                     url: url,
                                     data: {
                                         SearchTerm: query,
-                                        //WaterQualityManagementPlanIDs: $scope.selectedWaterQualityManagementPlanIDs,
                                         StormwaterJurisdictionIDs: $scope.selectedJurisdictionIDs
                                     },
                                     type: "POST",
@@ -121,7 +117,7 @@
                     onEachFeature: function (feature, layer) {
                         layer.on("mouseover",
                             function () {
-                                layer.setStyle({ fillOpacity: .6 }); // this is what looks the best.
+                                layer.setStyle({ fillOpacity: .6 });
                             });
                         layer.on("mouseout", (e) => {
                             layer.setStyle({ fillOpacity: 0 });
@@ -149,16 +145,19 @@
 
         $scope.refreshSelectedJurisdictionsLayer();
 
-        $scope.neptuneMap.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
-            "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", true);
+        var parcelsLegendUrl = "/Content/img/legendImages/parcel.png";
+        var parcelsLabel = "<span><img src='" + parcelsLegendUrl + "' height='14px'/> Parcels</span>";
+        $scope.wmsOptions = {
+            layers: "OCStormwater:Parcels",
+            transparent: true,
+            format: "image/png",
+            tiled: true,
+            styles: "parcel",
+        };
 
-        //var parcelsLegendUrl = "/Content/img/legendImages/parcel.png";
-        //var parcelsLabel = "<span><img src='" + parcelsLegendUrl + "' height='14px'/> Parcels</span>";
-        //$scope.neptuneMap.addWmsLayer("OCStormwater:Parcels",
-        //    parcelsLabel,
-        //    {
-        //        styles: "parcel"
-        //    }, true);
+        $scope.parcels = L.tileLayer.wms($scope.AngularViewData.GeoServerUrl + "/wms?", $scope.wmsOptions);
+        $scope.parcels.addTo($scope.neptuneMap.map);
+        $scope.neptuneMap.layerControl.addOverlay($scope.parcels, parcelsLabel);
 
         $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
@@ -171,7 +170,6 @@
         $scope.typeaheadSearch(selector, selectorButton, summaryUrl);
 
         $scope.applyMap = function (marker, waterQualityManagementPlanID) {
-            console.log("apply map")
             $scope.setSelectedMarker(marker);
             var waterQualityManagementPlan = _.find($scope.AngularViewData.WaterQualityManagementPlan,
                 function(t) {
@@ -179,9 +177,6 @@
                 });
             $scope.activeWaterQualityManagementPlan = waterQualityManagementPlan;
             $scope.$apply();
-        };
-        $scope.filterMapByBmpType = function () {
-            console.log("Filter map by bmp type");
         };
 
         $scope.filterMapByJurisdiction = function () {
@@ -212,7 +207,6 @@
         };
 
         $scope.loadSummaryPanel = function (mapSummaryUrl) {
-            console.log(mapSummaryUrl)
             if (!Sitka.Methods.isUndefinedNullOrEmpty(mapSummaryUrl)) {
                 jQuery.get(mapSummaryUrl)
                     .done(function(data) {
@@ -220,12 +214,6 @@
                         jQuery('#mapSummaryResults').append(data);
                     });
             }
-        };
-
-        $scope.markerClicked = function (self, e) {
-            console.log("marker clickeed")
-            $scope.setSelectedMarker(e.layer);
-            //$scope.loadSummaryPanel(e.layer.feature.properties.MapSummaryUrl);
         };
 
         // only used when selecting from the list 
@@ -261,13 +249,5 @@
         $scope.isActive = function (waterQualityManagementPlan) {
             return $scope.activeTreatmentBMP &&
                 $scope.activeWaterQualityManagementPlan.WaterQualityManagementPlanID === waterQualityManagementPlan.WaterQualityManagementPlanID;
-        };
-
-        $scope.visibleBMPCount = function() {
-            return $scope.visibleBMPIDs.length;
-        };
-        
-        $scope.zoomMapToCurrentLocation = function() {
-            $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
         };
     });

@@ -126,7 +126,7 @@
     {
         @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")} Add Plan", ViewDataTyped.NewWaterQualityManagementPlanUrl, string.Format("Create New {0}", FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string> {"btn btn-neptune"}, true)
     }
-    @if (ViewDataTyped.CurrentPerson.IsAdministrator())
+    @if (ViewDataTyped.CurrentPerson.IsJurisdictionEditorOrManagerOrAdmin())
     {
         <span class="dropdown">
             <button id="actionsDropdown" class="btn btn-neptune" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="False">
@@ -146,6 +146,9 @@
 
 <div ng-app="NeptuneApp" ng-controller="WaterQualityManagementPlanMapController">
     <div class="row">
+        
+    </div>
+    <div class="row" style="margin-top:2px">
         <div class="col-sm-8 col-md-3">
             <div class="input-group">
                 <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Search by WQMP name" autocomplete="off" />
@@ -155,11 +158,8 @@
                     </a>
                 </span>
             </div>
-
         </div>
-    </div>
-    <div class="row" style="margin-top:2px">
-        <div class="col-sm-8 col-md-6 col-md-push-6">
+        <div class="col-sm-8 col-md-6 col-md-push-3">
             <div class="aligned-row">
                 <div class="col-xs-4 no-padding-centered-col">
                     <span style="display: inline-block; width: 138px; font-weight: bold">Filter by Jurisdiction</span>
@@ -177,13 +177,13 @@
     </div>
 
     <div class="row" style="margin-top: 10px;">
-        <div class="col-sm-8 col-md-9 col-sm-push-4 col-md-push-3">
+        <div class="col-sm-12 col-md-12">
             <div id="mapContainer">
                 <div id="@ViewDataTyped.MapInitJson.MapDivID" class="mapDiv" style="margin: 0">
                 </div>
             </div>
         </div>
-        <div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9">
+        @* <div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9">
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
                     <h3>
@@ -203,7 +203,7 @@
                 </div>
 
             </div>
-        </div>
+        </div> *@
 
     </div>
     <div class="row" style="margin-top: 10px;">
