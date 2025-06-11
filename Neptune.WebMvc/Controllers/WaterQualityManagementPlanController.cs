@@ -69,9 +69,7 @@ namespace Neptune.WebMvc.Controllers
         public JsonResult FindByName(FindAWQMPViewModel viewModel)
         {
             var searchString = viewModel.SearchTerm.Trim().ToLower();
-            //var viewModelWaterQualityManagementPlanIDs = viewModel.WaterQualityManagementPlanIDs;
             var stormwaterJurisdictionIDs = viewModel.StormwaterJurisdictionIDs;
-            // ReSharper disable once InconsistentNaming
             var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson);
             var allWQMPSearchString = CurrentPerson
                 .GetWQMPPersonCanView(_dbContext, stormwaterJurisdictionIDsPersonCanView)
