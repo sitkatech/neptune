@@ -1,19 +1,41 @@
 <page-header pageTitle="Land Use Blocks" [customRichTextTypeID]="richTextID" [templateRight]="templateRight"></page-header>
 
 <ng-template #templateRight>
-    <a *ngIf="currentUserHasJurisdictionEditPermission()" class="float-right btn btn-primary mr-2" [href]="url + '/LandUseBlockGeometry/UpdateLandUseBlockGeometry'"> <icon [icon]="'Upload'"></icon> Upload Land Use Blocks </a>
-    <a *ngIf="currentUserHasJurisdictionEditPermission()" class="float-right btn btn-primary" [href]="url + '/LandUseBlockGeometry/DownloadLandUseBlockGeometry'"> <icon [icon]="'Download'"></icon> Download Land Use Blocks </a>
+    <a *ngIf="currentUserHasJurisdictionEditPermission()" class="float-right btn btn-primary mr-2" [href]="url + '/LandUseBlockGeometry/UpdateLandUseBlockGeometry'">
+        <icon [icon]="'Upload'"></icon> Upload Land Use Blocks
+    </a>
+    <a *ngIf="currentUserHasJurisdictionEditPermission()" class="float-right btn btn-primary" [href]="url + '/LandUseBlockGeometry/DownloadLandUseBlockGeometry'">
+        <icon [icon]="'Download'"></icon> Download Land Use Blocks
+    </a>
 </ng-template>
 
 <app-alert-display></app-alert-display>
 
 <div class="page-body" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
-    <neptune-grid
-        *ngIf="landUseBlocks$ | async as landUseBlocks"
-        height="800px"
-        [rowData]="landUseBlocks"
-        [columnDefs]="landUseBlockColumnDefs"
-        downloadFileName="land-use-blocks"
-        [pagination]="true"
-        [sizeColumnsToFitGrid]="true"></neptune-grid>
+    <ng-container *ngIf="landUseBlocks$ | async as landUseBlocks">
+        <hybrid-map-grid
+            [rowData]="landUseBlocks"
+            [columnDefs]="landUseBlockColumnDefs"
+            downloadFileName="land-use-blocks"
+            entityIDField="LandUseBlockID"
+            (onMapLoad)="handleMapReady($event)"
+            [selectedValue]="landUseBlockID"
+            [selectionFromMap]="selectionFromMap"
+            (selectedValueChange)="onSelectedLandUseBlockChangedFromGrid($event)"
+            *ngIf="boundingBox$ | async as boundingBox"
+            [boundingBox]="boundingBox">
+            <div mapLayers *ngIf="mapIsReady">
+                <selected-land-use-block-layer
+                    *ngIf="mapIsReady"
+                    [displayOnLoad]="true"
+                    [map]="map"
+                    [layerControl]="layerControl"
+                    [sortOrder]="10"
+                    [selectedLandUseBlockID]="landUseBlockID"
+                    (layerBoundsCalculated)="handleLayerBoundsCalculated($event)"
+                    (landUseBlockSelected)="onSelectedLandUseBlockChanged($event)"></selected-land-use-block-layer>
+            </div>
+            <div headerActions></div>
+        </hybrid-map-grid>
+    </ng-container>
 </div>
