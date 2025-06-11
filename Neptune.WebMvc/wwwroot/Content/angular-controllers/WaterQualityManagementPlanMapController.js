@@ -141,23 +141,43 @@
             $scope.neptuneMap.layerControl.addOverlay($scope.wqmps, legendSpan);
         }
 
+        $scope.initalizeParcelLayer = function () {
+            var parcelsLegendUrl = "/Content/img/legendImages/parcel.png";
+            var parcelsLabel = "<span><img src='" + parcelsLegendUrl + "' height='14px'/> Parcels</span>";
+            $scope.wmsOptions = {
+                layers: "OCStormwater:Parcels",
+                transparent: true,
+                format: "image/png",
+                tiled: true,
+                styles: "parcel",
+            };
+
+            $scope.parcels = L.tileLayer.wms($scope.AngularViewData.GeoServerUrl + "/wms?", $scope.wmsOptions);
+            $scope.neptuneMap.layerControl.addOverlay($scope.parcels, parcelsLabel);
+        }
+
+        $scope.initalizeDelineationlLayer = function () {
+            var parcelsLegendUrl = "/Content/img/legendImages/delineationDistributed.png";
+            var parcelsLabel = "<span><img src='" + parcelsLegendUrl + "' height='14px'/> Delineation</span>";
+            $scope.wmsOptions = {
+                layers: "OCStormwater:Delineations",
+                transparent: true,
+                format: "image/png",
+                tiled: true,
+                styles: "delineation",
+            };
+
+            $scope.parcels = L.tileLayer.wms($scope.AngularViewData.GeoServerUrl + "/wms?", $scope.wmsOptions);
+            $scope.neptuneMap.layerControl.addOverlay($scope.parcels, parcelsLabel);
+        }
+
         $scope.initalizeWQMPLayer();
 
         $scope.refreshSelectedJurisdictionsLayer();
 
-        var parcelsLegendUrl = "/Content/img/legendImages/parcel.png";
-        var parcelsLabel = "<span><img src='" + parcelsLegendUrl + "' height='14px'/> Parcels</span>";
-        $scope.wmsOptions = {
-            layers: "OCStormwater:Parcels",
-            transparent: true,
-            format: "image/png",
-            tiled: true,
-            styles: "parcel",
-        };
+        $scope.initalizeParcelLayer();
 
-        $scope.parcels = L.tileLayer.wms($scope.AngularViewData.GeoServerUrl + "/wms?", $scope.wmsOptions);
-        $scope.parcels.addTo($scope.neptuneMap.map);
-        $scope.neptuneMap.layerControl.addOverlay($scope.parcels, parcelsLabel);
+        $scope.initalizeDelineationlLayer();
 
         $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
