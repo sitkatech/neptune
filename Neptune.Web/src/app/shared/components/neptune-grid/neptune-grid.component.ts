@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { AgGridAngular, AgGridModule } from "ag-grid-angular";
 import {
@@ -58,6 +58,7 @@ export class NeptuneGridComponent implements OnInit, OnChanges {
     @Input() downloadFileName: string = "grid-data";
     @Input() colIDsToExclude: string[] = [];
     @Input() hideDownloadButton: boolean = false;
+    @Input() hideFullscreenButton: boolean = false;
     @Input() hideTooltips: boolean = false;
     @Input() hideGlobalFilter: boolean = false;
     @Input() disableGlobalFilter: boolean = false;
@@ -73,9 +74,10 @@ export class NeptuneGridComponent implements OnInit, OnChanges {
     public multiSelectEnabled: boolean;
     public anyFilterPresent: boolean = false;
     public filteredRowsCount: number;
-    public isFullscreen: boolean = false;
 
     public autoSizeStrategy: { type: "fitCellContents" | "fitGridWidth" };
+
+    public fullscreenTitleText = "Make grid full screen";
 
     ngOnInit(): void {
         this.autoSizeStrategy = { type: this.sizeColumnsToFitGrid ? "fitGridWidth" : "fitCellContents" };
