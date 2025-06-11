@@ -18,11 +18,12 @@ import { FormsModule } from "@angular/forms";
 import { PaginationControlsComponent } from "src/app/shared/components/ag-grid/pagination-controls/pagination-controls.component";
 import { CsvDownloadButtonComponent } from "../csv-download-button/csv-download-button.component";
 import { NeptuneGridHeaderComponent } from "../neptune-grid-header/neptune-grid-header.component";
+import { FullScreenButtonComponent } from "../full-screen-button/full-screen-button.component";
 
 @Component({
     selector: "neptune-grid",
     standalone: true,
-    imports: [CommonModule, AgGridModule, FormsModule, PaginationControlsComponent, CsvDownloadButtonComponent, NeptuneGridHeaderComponent],
+    imports: [CommonModule, AgGridModule, FormsModule, PaginationControlsComponent, CsvDownloadButtonComponent, NeptuneGridHeaderComponent, FullScreenButtonComponent],
     templateUrl: "./neptune-grid.component.html",
     styleUrls: ["./neptune-grid.component.scss"],
 })
@@ -57,6 +58,7 @@ export class NeptuneGridComponent implements OnInit, OnChanges {
     @Input() downloadFileName: string = "grid-data";
     @Input() colIDsToExclude: string[] = [];
     @Input() hideDownloadButton: boolean = false;
+    @Input() hideFullscreenButton: boolean = false;
     @Input() hideTooltips: boolean = false;
     @Input() hideGlobalFilter: boolean = false;
     @Input() disableGlobalFilter: boolean = false;
@@ -74,6 +76,8 @@ export class NeptuneGridComponent implements OnInit, OnChanges {
     public filteredRowsCount: number;
 
     public autoSizeStrategy: { type: "fitCellContents" | "fitGridWidth" };
+
+    public fullscreenTitleText = "Make grid full screen";
 
     ngOnInit(): void {
         this.autoSizeStrategy = { type: this.sizeColumnsToFitGrid ? "fitGridWidth" : "fitCellContents" };
@@ -148,5 +152,11 @@ export class NeptuneGridComponent implements OnInit, OnChanges {
     public onFiltersCleared() {
         if (this.hideGlobalFilter) return;
         this.quickFilterText = "";
+    }
+
+    public handleScreenSizeChangedEvent() {
+        if (this.gridApi) {
+            this.gridApi.sizeColumnsToFit();
+        }
     }
 }
