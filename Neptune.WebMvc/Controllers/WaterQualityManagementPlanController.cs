@@ -1,4 +1,6 @@
-﻿using System.Net.Mail;
+﻿using System.Data;
+using System.Net.Mail;
+using ClosedXML.Excel;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
@@ -29,12 +31,13 @@ namespace Neptune.WebMvc.Controllers
     {
         private readonly FileResourceService _fileResourceService;
         private readonly SitkaSmtpClientService _sitkaSmtpClientService;
+        private readonly AzureBlobStorageService _azureBlobStorageService;
 
-
-        public WaterQualityManagementPlanController(NeptuneDbContext dbContext, ILogger<WaterQualityManagementPlanController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService, SitkaSmtpClientService sitkaSmtpClientService) : base(dbContext, logger, linkGenerator, webConfiguration)
+        public WaterQualityManagementPlanController(NeptuneDbContext dbContext, ILogger<WaterQualityManagementPlanController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService, SitkaSmtpClientService sitkaSmtpClientService, AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
         {
             _fileResourceService = fileResourceService;
             _sitkaSmtpClientService = sitkaSmtpClientService;
+            _azureBlobStorageService = azureBlobStorageService;
         }
 
         [HttpGet]
@@ -907,7 +910,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         public ViewResult UploadWqmps()
         {
             var viewModel = new UploadWqmpsViewModel();
@@ -916,13 +919,26 @@ namespace Neptune.WebMvc.Controllers
         }
         
         [HttpPost]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         [RequestSizeLimit(100_000_000_000)]
         [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<IActionResult> UploadWqmps(UploadWqmpsViewModel viewModel)
         {
-            var uploadedCSVFile = viewModel.UploadCSV;
-            var wqmps = WQMPCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), out var errorList);
+            var uploadXlsxInputStream = viewModel.UploadXLSX.OpenReadStream();
+
+            DataTable dataTableFromExcel;
+            try
+            {
+                dataTableFromExcel = ExcelHelper.GetDataTableFromExcel(uploadXlsxInputStream, "WQMP");
+            }
+            catch (Exception e)
+            {
+                SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
+                return ViewUploadWqmps(viewModel, []);
+            }
+
+            var wqmps = WQMPXSLXParserHelper.ParseWQMPRowsFromXLSX(_dbContext,
+                dataTableFromExcel, viewModel.StormwaterJurisdictionID, out var errorList);
 
             if (errorList.Any())
             {
@@ -944,13 +960,28 @@ namespace Neptune.WebMvc.Controllers
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadWQMPs);
             var viewData = new UploadWqmpsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, errorList, neptunePage,
-                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.UploadWqmps()));
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.UploadWqmps()),
+                StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
             return RazorView<UploadWqmps, UploadWqmpsViewData, UploadWqmpsViewModel>(viewData,
                 viewModel);
         }
 
         [HttpGet]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
+        public async Task<FileResult> UploadWQMPTemplate()
+        {
+            using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
+            await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToBulkUploadWQMPTemplate, disposableTempFile.FileInfo.FullName);
+            using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            return File(stream.ToArray(), @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                $"UploadWQMPTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.xlsx");
+        }
+
+        [HttpGet]
+        [JurisdictionEditFeature]
         public ViewResult UploadSimplifiedBMPs()
         {
             var viewModel = new UploadSimplifiedBMPsViewModel();
@@ -959,13 +990,26 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpPost]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         [RequestSizeLimit(100_000_000_000)]
         [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<IActionResult> UploadSimplifiedBMPs(UploadSimplifiedBMPsViewModel viewModel)
         {
-            var uploadedCSVFile = viewModel.UploadCSV;
-            var quickBMPs = SimplifiedBMPsCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), out var errorList);
+            var uploadXlsxInputStream = viewModel.UploadXLSX.OpenReadStream();
+
+            DataTable dataTableFromExcel;
+            try
+            {
+                dataTableFromExcel = ExcelHelper.GetDataTableFromExcel(uploadXlsxInputStream, "BMP");
+            }
+            catch (Exception)
+            {
+                SetErrorForDisplay("Unexpected error parsing Excel Spreadsheet upload. Make sure the file matches the provided template and try again.");
+                return ViewUploadSimplifiedBMPs(viewModel, new List<string>());
+            }
+
+            var quickBMPs = SimplifiedBMPsExcelParserHelper.ParseWQMPRowsFromXLSX(_dbContext,
+                viewModel.StormwaterJurisdictionID, dataTableFromExcel, out var errorList);
 
             if (errorList.Any())
             {
@@ -987,13 +1031,29 @@ namespace Neptune.WebMvc.Controllers
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.UploadSimplifiedBMPs);
             var viewData = new UploadSimplifiedBMPsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, errorList, neptunePage,
-                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.UploadWqmps()));
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, x => x.UploadWqmps()),
+                StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
             return RazorView<UploadSimplifiedBMPs, UploadSimplifiedBMPsViewData, UploadSimplifiedBMPsViewModel>(viewData,
                 viewModel);
         }
 
         [HttpGet]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
+        public async Task<FileResult> SimplifiedBMPBulkUploadTemplate()
+        {
+            using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
+            await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToSimplifiedBMPTemplate, disposableTempFile.FileInfo.FullName);
+            using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            return File(stream.ToArray(), @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                $"SimplifiedBMPBulkUploadTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.xlsx");
+        }
+
+
+        [HttpGet]
+        [JurisdictionEditFeature]
         public ViewResult UploadWqmpBoundaryFromAPNs()
         {
             var viewModel = new UploadWqmpBoundaryFromAPNsViewModel();
@@ -1002,13 +1062,15 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpPost]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         [RequestSizeLimit(100_000_000_000)]
         [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<IActionResult> UploadWqmpBoundaryFromAPNs(UploadWqmpBoundaryFromAPNsViewModel viewModel)
         {
             var uploadedCSVFile = viewModel.UploadCSV;
-            var wqmpBoundaries = WQMPAPNsCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), out var errorList , out var missingApnList, out var oldBoundaries);
+            var stormwaterJurisdictionID = (int)viewModel.StormwaterJurisdictionID;
+            var wqmpBoundaries = WQMPAPNsCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), stormwaterJurisdictionID,
+                out var errorList, out var missingApnList, out var oldBoundaries);
 
             if (errorList.Any())
             {
@@ -1081,6 +1143,18 @@ The WQMP Boundaries for Stormwater Jurisdiction {stormwaterJurisdiction} were su
                 StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson));
             return RazorView<UploadWqmpBoundaryFromAPNs, UploadWqmpBoundaryFromAPNsViewData, UploadWqmpBoundaryFromAPNsViewModel>(viewData,
                 viewModel);
+        }
+
+        [HttpGet]
+        [JurisdictionEditFeature]
+        public async Task<FileResult> UploadWQMPBoundaryTemplate()
+        {
+            using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".csv");
+            await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToUploadWQMPBoundaryTemplate, disposableTempFile.FileInfo.FullName);
+            var stream = new FileStream(disposableTempFile.FileInfo.FullName, FileMode.Open);
+
+            return File(stream, @"text/csv",
+                $"UploadWQMPBoundaryTemplate_{CurrentPerson.LastName}{CurrentPerson.FirstName}.csv");
         }
 
         [HttpGet]
