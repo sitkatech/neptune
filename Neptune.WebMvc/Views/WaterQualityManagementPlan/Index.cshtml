@@ -17,7 +17,7 @@
     {
             @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")} Add Plan", ViewDataTyped.NewWaterQualityManagementPlanUrl, string.Format("Create New {0}", FieldDefinitionType.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string> {"btn btn-neptune"}, true)
     }
-    @if (ViewDataTyped.CurrentPerson.IsAdministrator())
+    @if (ViewDataTyped.CurrentPerson.IsJurisdictionEditorOrManagerOrAdmin())
     {
         <span class="dropdown">
             <button id="actionsDropdown" class="btn btn-neptune" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="False">

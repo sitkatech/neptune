@@ -45,12 +45,22 @@
 
 <form method="post" enctype="multipart/form-data">
     <div class="form-horizontal">
-        <div class="form-group ">
-            <div class="col-sm-2 col-xs-12 control-label">
-                @Html.LabelWithSugarFor(m => m.UploadCSV)
+        <div class="form-group">
+            <div class="row form-group" style="margin-top: 0px;">
+                <div class="col-md-6">
+                    @Html.LabelWithSugarFor(x => x.StormwaterJurisdictionID)
+                </div>
+                <div class="col-md-6">
+                    @Html.DropDownListFor(x => x.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictions, new Dictionary<string, object> { { "class", "form-control" } })
+                </div>
             </div>
-            <div class="col-sm-10 col-xs-12">
-                @Html.EditorFor(m => m.UploadCSV, new { @class = "form-control" })
+            <div class="row form-group">
+                <div class="col-sm-2 col-xs-12 control-label">
+                    @Html.LabelWithSugarFor(m => m.UploadXLSX)
+                </div>
+                <div class="col-sm-10 col-xs-12">
+                    @Html.EditorFor(m => m.UploadXLSX, new { @class = "form-control" })
+                </div>
             </div>
         </div>
         <div class="pull-right" style="margin-left: 1em;">
@@ -62,6 +72,8 @@
         <div class="clearfix"></div>
     </div>
 </form>
+
+<a href="@ViewDataTyped.UploadTemplateUrl" class="btn btn-neptune" download>@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon glyphicon-download-alt") Download Template</a>
 
 @if (ViewDataTyped.ErrorList.Any())
 {

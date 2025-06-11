@@ -40,6 +40,7 @@ import { ScoreDescriptionsComponent } from "../ovtas/score-descriptions/score-de
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { TrashCaptureStatusTypeEnum } from "src/app/shared/generated/enum/trash-capture-status-type-enum";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
+import { PermitTypeLayerComponent } from "src/app/shared/components/leaflet/layers/permit-type-layer/permit-type-layer.component";
 
 @Component({
     selector: "trash-home",
@@ -58,6 +59,7 @@ import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
         JurisdictionsLayerComponent,
         WqmpsTrashCaptureLayerComponent,
         LandUseBlockLayerComponent,
+        PermitTypeLayerComponent,
         TrashGeneratingUnitLayerComponent,
         TrashGeneratingUnitLoadsLayerComponent,
         OvtaAreasLayerComponent,
