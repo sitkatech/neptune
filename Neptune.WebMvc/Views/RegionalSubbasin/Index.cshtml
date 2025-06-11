@@ -16,7 +16,7 @@
             var regionalSubbasinLayerName = @Html.Raw(ViewDataTyped.RegionalSubbasinLayerName.ToJS());
 
             regionalSubbasinMap = new NeptuneMaps.Map(mapInitJson, "Terrain", geoserverUrl);
-
+            regionalSubbasinMap.map.setZoom(mapInitJson.ZoomLevel);
             regionalSubbasinMap.wmsParams = regionalSubbasinMap.createWmsParamsWithLayerName(regionalSubbasinLayerName);
             regionalSubbasinMap.wfsParams = regionalSubbasinMap.createWfsParamsWithLayerName(regionalSubbasinLayerName);
 

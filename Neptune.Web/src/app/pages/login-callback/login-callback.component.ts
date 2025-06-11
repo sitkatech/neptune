@@ -13,7 +13,7 @@ export class LoginCallbackComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.authenticationService.getCurrentUser().subscribe((currentUser) => {
-            this.router.navigate(["./"]);
+            this.router.navigate(["./trash"]);
         });
     }
 

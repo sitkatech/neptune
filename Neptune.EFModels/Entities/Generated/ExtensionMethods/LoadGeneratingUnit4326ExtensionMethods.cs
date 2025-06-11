@@ -19,7 +19,8 @@ namespace Neptune.EFModels.Entities
                 DelineationID = loadGeneratingUnit4326.DelineationID,
                 WaterQualityManagementPlanID = loadGeneratingUnit4326.WaterQualityManagementPlanID,
                 IsEmptyResponseFromHRUService = loadGeneratingUnit4326.IsEmptyResponseFromHRUService,
-                DateHRURequested = loadGeneratingUnit4326.DateHRURequested
+                DateHRURequested = loadGeneratingUnit4326.DateHRURequested,
+                HRULogID = loadGeneratingUnit4326.HRULogID
             };
             return dto;
         }

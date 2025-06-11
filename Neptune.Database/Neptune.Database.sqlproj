@@ -423,6 +423,8 @@
     <Build Include="dbo\Views\dbo.vWaterQualityManagementPlanAnnualReport.sql" />
     <None Include="Scripts\ReleaseScripts\011 - add neptune page for wqmp annual report.sql" />
     <None Include="Scripts\ReleaseScripts\013 - update neptune page content for wqmp apn uploader.sql" />
+    <Build Include="dbo\Tables\dbo.HRULog.sql" />
+    <Build Include="dbo\Procs\dbo.pDeleteOldHRULogs.sql" />
     <None Include="Scripts\ReleaseScripts\014 - add rte for wqmp map.sql" />
   </ItemGroup>
   <ItemGroup>

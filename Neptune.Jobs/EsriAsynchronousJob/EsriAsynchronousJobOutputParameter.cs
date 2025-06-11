@@ -4,6 +4,8 @@ namespace Neptune.Jobs.EsriAsynchronousJob;
 
 public class EsriAsynchronousJobOutputParameter<T>
 {
+    public string ResultURI { get; set; }
+
     [JsonPropertyName("paramName")]
     public string ParameterName { get; set; }
     [JsonPropertyName("dataType")]

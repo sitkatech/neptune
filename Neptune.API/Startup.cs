@@ -35,12 +35,9 @@ namespace Neptune.API
 {
     public class Startup
     {
-        private readonly IWebHostEnvironment _environment;
-        private readonly string _instrumentationKey;
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
             Configuration = configuration;
-            _environment = environment;
         }
 
         public IConfiguration Configuration { get; }

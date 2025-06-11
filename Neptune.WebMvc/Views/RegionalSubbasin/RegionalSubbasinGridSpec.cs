@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.DhtmlWrappers;
 using Neptune.WebMvc.Controllers;
@@ -36,6 +37,7 @@ namespace Neptune.WebMvc.Views.RegionalSubbasin
             Add("RSB ID", x => x.RegionalSubbasinID, 100);
             Add("Drain ID", x => x.DrainID, 150);
             Add("Watershed", x => x.Watershed, 150);
+            Add("Catchment Area (ac)", x => x.GetRegionalSubbasinArea(), 100, DhtmlxGridColumnFormatType.Decimal);
             Add("Catchment ID in OC Survey", x => x.OCSurveyCatchmentID, 150);
             Add("Downstream Catchment ID in OC Survey", x => x.OCSurveyDownstreamCatchmentID.HasValue ? x.OCSurveyDownstreamCatchmentID.Value.ToString() : "Terminus", 250, DhtmlxGridColumnFilterType.Numeric);
 

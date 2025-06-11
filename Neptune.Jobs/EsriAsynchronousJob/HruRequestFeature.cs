@@ -14,7 +14,7 @@ namespace Neptune.Jobs.EsriAsynchronousJob
         [JsonPropertyName("geometry")]
         public EsriPolygonGeometry Geometry { get; set; }
 
-        public HRURequestFeature(Polygon catchmentGeometry, HRURequestFeatureAttributes baseAttributes, int i)
+        public HRURequestFeature(Polygon catchmentGeometry, HRURequestFeatureAttributes baseAttributes, int loadGeneratingUnitID)
         {
             var rings = new List<List<double[]>>();
             var catchmentGeometryExteriorRing = catchmentGeometry.ExteriorRing;
@@ -41,7 +41,7 @@ namespace Neptune.Jobs.EsriAsynchronousJob
             Attributes = new HRURequestFeatureAttributes
             {
                 ObjectID = baseAttributes.ObjectID,
-                QueryFeatureID = i,
+                QueryFeatureID = loadGeneratingUnitID,
                 Area = baseAttributes.Area,
                 Length = baseAttributes.Length
             };

@@ -6,7 +6,8 @@ CREATE TABLE [dbo].[LoadGeneratingUnit](
 	[DelineationID] [int] NULL CONSTRAINT [FK_LoadGeneratingUnit_Delineation_DelineationID] FOREIGN KEY REFERENCES [dbo].[Delineation] ([DelineationID]),
 	[WaterQualityManagementPlanID] [int] NULL CONSTRAINT [FK_LoadGeneratingUnit_WaterQualityManagementPlan_WaterQualityManagementPlanID] FOREIGN KEY REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID]),
 	[IsEmptyResponseFromHRUService] [bit] NULL,
-	[DateHRURequested] datetime null
+	[DateHRURequested] datetime null,
+	[HRULogID] int null CONSTRAINT [FK_LoadGeneratingUnit_HRULog_HRULogID] FOREIGN KEY REFERENCES [dbo].[HRULog] ([HRULogID])
 )
 GO
 

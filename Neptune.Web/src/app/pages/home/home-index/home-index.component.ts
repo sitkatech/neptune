@@ -46,6 +46,8 @@ export class HomeIndexComponent implements OnInit {
                     sessionStorage.removeItem("authRedirectUrl");
                 });
             }
+
+            this.router.navigate(["./trash"]);
         });
     }
 

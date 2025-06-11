@@ -10,6 +10,7 @@ namespace Neptune.Jobs.EsriAsynchronousJob
         public EsriJobStatus jobStatus { get; set; }
 
         public List<EsriJobMessage> messages { get; set; }
+        public EsriAsynchronousJobOutputParameter<EsriGPRecordSetLayer<HRUResponseFeature>> jobResult { get; set; }
 
         public bool IsExecuting()
         {

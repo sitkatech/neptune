@@ -7,8 +7,16 @@ using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.MvcResults;
 using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Security;
+using Neptune.WebMvc.Services.Filters;
 using Neptune.WebMvc.Views.Delineation;
+using Neptune.WebMvc.Views.HRUCharacteristic;
 using Neptune.WebMvc.Views.LoadGeneratingUnit;
+using Neptune.WebMvc.Views.Shared;
+using Neptune.WebMvc.Views.Shared.HRUCharacteristics;
+using Neptune.WebMvc.Views.Shared.ModeledPerformance;
+using NetTopologySuite.Features;
+using DetailViewData = Neptune.WebMvc.Views.LoadGeneratingUnit.DetailViewData;
+using IndexViewData = Neptune.WebMvc.Views.LoadGeneratingUnit.IndexViewData;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -51,8 +59,59 @@ namespace Neptune.WebMvc.Controllers
         public GridJsonNetJObjectResult<vLoadGeneratingUnit> LoadGeneratingUnitGridJsonData()
         {
             var gridSpec = new LoadGeneratingUnitGridSpec(_linkGenerator);
-            var hruCharacteristics = vLoadGeneratingUnits.List(_dbContext);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vLoadGeneratingUnit>(hruCharacteristics, gridSpec);
+            var loadGeneratingUnits = vLoadGeneratingUnits.List(_dbContext);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vLoadGeneratingUnit>(loadGeneratingUnits, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        [HttpGet("{loadGeneratingUnitPrimaryKey}")]
+        [NeptuneAdminFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("loadGeneratingUnitPrimaryKey")]
+        public ViewResult Detail([FromRoute] LoadGeneratingUnitPrimaryKey loadGeneratingUnitPrimaryKey)
+        {
+            var loadGeneratingUnit = LoadGeneratingUnits.GetByID(_dbContext, loadGeneratingUnitPrimaryKey);
+            var loadGeneratingUnit4326 = LoadGeneratingUnit4326s.GetByID(_dbContext, loadGeneratingUnit.LoadGeneratingUnitID);
+            var regionalSubbasin = loadGeneratingUnit.RegionalSubbasin;
+            var treatmentBMP = loadGeneratingUnit.Delineation?.TreatmentBMP;
+            var hruLog = loadGeneratingUnit.HRULog;
+            var wqmp = loadGeneratingUnit.WaterQualityManagementPlan;
+            
+            var boundingBoxGeometry = loadGeneratingUnit4326.LoadGeneratingUnit4326Geometry;
+            var feature =
+                new Feature(loadGeneratingUnit4326.LoadGeneratingUnit4326Geometry, new AttributesTable());
+            var loadGeneratingUnitFeatureCollection = new FeatureCollection
+            {
+                feature
+            };
+
+
+            var layerGeoJsons = new List<LayerGeoJson>
+            {
+                new("loadGeneratingUnits", loadGeneratingUnitFeatureCollection, "#fb00be",
+                    1,
+                    LayerInitialVisibility.Show),
+            };
+
+            var boundingBoxDto = new BoundingBoxDto(boundingBoxGeometry);
+            var mapInitJson = new MapInitJson("loadGeneratingUnitMap", 0, layerGeoJsons,
+                boundingBoxDto);
+
+            var hruCharacteristics = vHRUCharacteristics.ListByLoadGeneratingUnitID(_dbContext, loadGeneratingUnit.LoadGeneratingUnitID);
+            var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
+            var mapServiceUrl = _webConfiguration.MapServiceUrl;
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, loadGeneratingUnit, regionalSubbasin, treatmentBMP, wqmp, hruLog, mapInitJson, hruCharacteristicsViewData, mapServiceUrl);
+            return RazorView<Detail, DetailViewData>(viewData);
+        }
+
+        [HttpGet("{loadGeneratingUnitPrimaryKey}")]
+        [NeptuneAdminFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("loadGeneratingUnitPrimaryKey")]
+        public GridJsonNetJObjectResult<vHRUCharacteristic> HRUCharacteristicGridJsonData([FromRoute] LoadGeneratingUnitPrimaryKey loadGeneratingUnitPrimaryKey)
+        {
+            var loadGeneratingUnit = LoadGeneratingUnits.GetByID(_dbContext, loadGeneratingUnitPrimaryKey);
+            var gridSpec = new HRUCharacteristicGridSpec(_linkGenerator);
+            var hruCharacteristics = vHRUCharacteristics.ListByLoadGeneratingUnitID(_dbContext, loadGeneratingUnit.LoadGeneratingUnitID);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vHRUCharacteristic>(hruCharacteristics, gridSpec);
             return gridJsonNetJObjectResult;
         }
     }

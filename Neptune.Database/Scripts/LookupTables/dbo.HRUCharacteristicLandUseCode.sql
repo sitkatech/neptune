@@ -18,7 +18,9 @@ USING (VALUES
 (16, 'OSFOR', 'Open Space - Forest'),
 (17, 'OSWET', 'Open Space - Wetlands'),
 (18, 'OSVAC', 'Open Space - Vacant Land'),
-(19, 'WATER', 'Water')
+(19, 'WATER', 'Water'),
+(20, 'EMPTY', 'Empty Land Use Code'),
+(21, 'UNKNOWN', 'Unknown Land Use Code')
 )
 AS Source (HRUCharacteristicLandUseCodeID, HRUCharacteristicLandUseCodeName, HRUCharacteristicLandUseCodeDisplayName)
 ON Target.HRUCharacteristicLandUseCodeID = Source.HRUCharacteristicLandUseCodeID
