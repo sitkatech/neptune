@@ -172,14 +172,14 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
                 const legendItem = new LegendItem();
                 legendItem.Title = obj.group && obj.group.name ? obj.group.name : obj.name;
                 if (obj.layer.legendHtml) {
-                    legendItem.LengendHtml = this.sanitizer.bypassSecurityTrustHtml(obj.layer.legendHtml);
+                    legendItem.LegendHtml = this.sanitizer.bypassSecurityTrustHtml(obj.layer.legendHtml);
                 } else if (obj.layer._url) {
                     legendItem.WmsUrl = obj.layer._url;
                     legendItem.WmsLayerName = obj.layer.options.layers;
                     legendItem.WmsLayerStyle = obj.layer.wmsParams.styles;
                 }
 
-                if (legendItem.Title && (legendItem.LengendHtml || legendItem.WmsUrl) && !legendItems.some((item) => item.Title === legendItem.Title)) {
+                if (legendItem.Title && (legendItem.LegendHtml || legendItem.WmsUrl) && !legendItems.some((item) => item.Title === legendItem.Title)) {
                     legendItems.push(legendItem);
                 }
             }
