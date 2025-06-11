@@ -24,4 +24,7 @@ data:
   TrashModuleBaseUrl: "https://{{ .Values.global.domains.web }}/trash"
   PathToFieldVisitUploadTemplate: "Bulk_Upload_FieldVisists_for_Trash_Screens_Template.xlsx"
   PathToOVTAUploadTemplate: "OVTAAssessment_BulkUpload_Template.xlsx"
+  PathToSimplifiedBMPTemplate: "Simplified_BMPs_Bulk_Upload_Template.xlsx"
+  PathToBulkUploadWQMPTemplate: "WQMP_Bulk_Upload_Template.xlsx"
+  PathToUploadWQMPBoundaryTemplate: "WQMP_Boundary_Bulk_Upload_Template.csv"
 {{ end }}

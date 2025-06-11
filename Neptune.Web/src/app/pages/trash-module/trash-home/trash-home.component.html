@@ -229,76 +229,75 @@
                 </div>
             </div>
         </div>
-        <div class="grid-12 mt-4">
-            <div class="g-col-3">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Selected Feature</h3>
-                    </div>
-                    <div class="card-body" *ngIf="tguDto$ | async as tguDto">
-                        <dl class="grid-12 mt-3" style="row-gap: normal">
-                            <dt class="g-col-5">Analysis Area ID</dt>
-                            <dd class="g-col-7">{{ tguDto.TrashGeneratingUnitID }}</dd>
+        <div class="tgu-feature mt-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Selected Feature</h3>
+                </div>
+                <div class="card-body tgu-grid-data-container" *ngIf="tguDto$ | async as tguDto">
+                    <dl>
+                        <div class="tgu-grid-data-column">
+                            <dt>Analysis Area ID</dt>
+                            <dd>{{ tguDto.TrashGeneratingUnitID }}</dd>
 
-                            <dt class="g-col-5"><field-definition fieldDefinitionType="LandUseType"></field-definition></dt>
-                            <dd class="g-col-7">{{ tguDto.LandUseType }}</dd>
+                            <dt><field-definition fieldDefinitionType="LandUseType"></field-definition></dt>
+                            <dd>{{ tguDto.LandUseType }}</dd>
 
-                            <dt class="g-col-5"><field-definition fieldDefinitionType="CurrentLoadingRate"></field-definition></dt>
-                            <dd class="g-col-7">{{ tguDto.CurrentLoadingRate }} gal/ac/yr</dd>
+                            <dt><field-definition fieldDefinitionType="CurrentLoadingRate"></field-definition></dt>
+                            <dd>{{ tguDto.CurrentLoadingRate }} gal/ac/yr</dd>
 
-                            <dt class="g-col-5"><field-definition fieldDefinitionType="BaselineLoadingRate"></field-definition></dt>
-                            <dd class="g-col-7">{{ tguDto.BaselineLoadingRate }}{{ tguDto.BaselineLoadingRate != null ? " gal/ac/yr" : "" }}</dd>
-                            <dt class="g-col-5">Progress Loading Rate</dt>
-                            <dd class="g-col-7">{{ tguDto.ProgressLoadingRate }}{{ tguDto.ProgressLoadingRate != null ? " gal/ac/yr" : "" }}</dd>
+                            <dt><field-definition fieldDefinitionType="BaselineLoadingRate"></field-definition></dt>
+                            <dd>{{ tguDto.BaselineLoadingRate }}{{ tguDto.BaselineLoadingRate != null ? " gal/ac/yr" : "" }}</dd>
+                            <dt>Progress Loading Rate</dt>
+                            <dd>{{ tguDto.ProgressLoadingRate }}{{ tguDto.ProgressLoadingRate != null ? " gal/ac/yr" : "" }}</dd>
 
-                            <dt class="g-col-5">Jurisdiction</dt>
-                            <dd class="g-col-7">{{ tguDto.StormwaterJurisdictionName }}</dd>
-
-                            <hr />
-
-                            <dt class="g-col-5">BMP</dt>
-                            <dd class="g-col-7">
+                            <dt>Jurisdiction</dt>
+                            <dd>{{ tguDto.StormwaterJurisdictionName }}</dd>
+                        </div>
+                        <div class="tgu-grid-data-column">
+                            <dt>BMP</dt>
+                            <dd>
                                 <a href="{{ ocstBaseUrl() }}/TreatmentBMP/Detail/{{ tguDto.TreatmentBMPID }}">{{ tguDto.TreatmentBMPName }}</a>
                             </dd>
-                            <dt class="g-col-5">BMP Type</dt>
-                            <dd class="g-col-7">{{ tguDto.TreatmentBMPTypeName }}</dd>
-                            <dt class="g-col-5"><field-definition fieldDefinitionType="BMPTrashTreatmentStatus" labelOverride="BMP Status"></field-definition></dt>
-                            <dd class="g-col-7">{{ tguDto.TrashCaptureStatusBMP }}</dd>
+                            <dt>BMP Type</dt>
+                            <dd>{{ tguDto.TreatmentBMPTypeName }}</dd>
+                            <dt><field-definition fieldDefinitionType="BMPTrashTreatmentStatus" labelOverride="BMP Status"></field-definition></dt>
+                            <dd>{{ tguDto.TrashCaptureStatusBMP }}</dd>
 
-                            <dt class="g-col-5">WQMP</dt>
-                            <dd class="g-col-7">
+                            <dt>WQMP</dt>
+                            <dd>
                                 <a href="{{ ocstBaseUrl() }}/WaterQualityManagementPlan/Detail/{{ tguDto.WaterQualityManagementPlanID }}">{{
                                     tguDto.WaterQualityManagementPlanName
                                 }}</a>
                             </dd>
-                            <dt class="g-col-5"><field-definition fieldDefinitionType="WQMPTrashTreatmentStatus" labelOverride="WQMP Status"></field-definition></dt>
-                            <dd class="g-col-7">{{ tguDto.TrashCaptureStatusWQMP }}</dd>
+                            <dt><field-definition fieldDefinitionType="WQMPTrashTreatmentStatus" labelOverride="WQMP Status"></field-definition></dt>
+                            <dd>{{ tguDto.TrashCaptureStatusWQMP }}</dd>
 
-                            <dt class="g-col-5">OVTA Area</dt>
-                            <dd class="g-col-7">
+                            <dt>OVTA Area</dt>
+                            <dd>
                                 <a [routerLink]="['/trash/onland-visual-trash-assessment-areas', tguDto.OnlandVisualTrashAssessmentAreaID]">{{
                                     tguDto.OnlandVisualTrashAssessmentAreaName
                                 }}</a>
                             </dd>
-                            <dt class="g-col-5"><field-definition fieldDefinitionType="BaselineScore" labelOverride="OVTA Baseline Score"></field-definition></dt>
-                            <dd class="g-col-7">{{ tguDto.OnlandVisualTrashAssessmentAreaBaselineScore }}</dd>
-                            <dt class="g-col-5"><field-definition fieldDefinitionType="ProgressScore" labelOverride="OVTA Progress Score"></field-definition></dt>
-                            <dd class="g-col-7">{{ tguDto.OnlandVisualTrashAssessmentAreaProgressScore }}</dd>
-                            <dt class="g-col-5"># of Assessments</dt>
-                            <dd class="g-col-7">{{ tguDto.CompletedAssessmentCount }}</dd>
-                            <dt class="g-col-5">Last Assessed Date</dt>
-                            <dd class="g-col-7">{{ tguDto.AssessmentDate | date : "shortDate" }}</dd>
-                        </dl>
-                    </div>
-                    <div class="card-body" *ngIf="!tguDto$">
-                        <span>
-                            Select a Trash Analysis Area on the map to see land use block details, loading rates, and links to assets in the Inventory that are providing treatment
-                            (WQMP, BMP, or OVTA equivalency)
-                        </span>
-                    </div>
+                            <dt><field-definition fieldDefinitionType="BaselineScore" labelOverride="OVTA Baseline Score"></field-definition></dt>
+                            <dd>{{ tguDto.OnlandVisualTrashAssessmentAreaBaselineScore }}</dd>
+                            <dt><field-definition fieldDefinitionType="ProgressScore" labelOverride="OVTA Progress Score"></field-definition></dt>
+                            <dd>{{ tguDto.OnlandVisualTrashAssessmentAreaProgressScore }}</dd>
+                            <dt># of Assessments</dt>
+                            <dd>{{ tguDto.CompletedAssessmentCount }}</dd>
+                            <dt>Last Assessed Date</dt>
+                            <dd>{{ tguDto.AssessmentDate | date : "shortDate" }}</dd>
+                        </div>
+                    </dl>
+                </div>
+                <div class="card-body" *ngIf="!tguDto$">
+                    <span>
+                        Select a Trash Analysis Area on the map to see land use block details, loading rates, and links to assets in the Inventory that are providing treatment
+                        (WQMP, BMP, or OVTA equivalency)
+                    </span>
                 </div>
             </div>
-            <div class="g-col-9">
+            <div>
                 <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="1000px" [showLegend]="true" *ngIf="boundingBox$ | async as boundingBox" [boundingBox]="boundingBox">
                     <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
                     <delineations-layer
@@ -311,7 +310,7 @@
                     <wqmps-trash-capture-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-trash-capture-layer>
                     <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></jurisdictions-layer>
                     <regional-subbasins-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></regional-subbasins-layer>
-
+                    <permit-type-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="70"></permit-type-layer>
                     <trash-generating-unit-layer
                         *ngIf="mapIsReady && currentResultType == 'Area-Based Results'"
                         [displayOnLoad]="true"
