@@ -20,6 +20,9 @@ public class WebConfiguration : NeptuneJobConfiguration
 
     public string PathToFieldVisitUploadTemplate { get; set; }
     public string PathToOVTAUploadTemplate { get; set; }
+    public string PathToSimplifiedBMPTemplate { get; set; }
+    public string PathToBulkUploadWQMPTemplate { get; set; }
+    public string PathToUploadWQMPBoundaryTemplate { get; set; }
     public string AzureBlobStorageConnectionString { get; set; }
 
     public GoogleRecaptchaV3Config GoogleRecaptchaV3Config { get; set; }

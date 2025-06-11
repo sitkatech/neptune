@@ -23,6 +23,9 @@ services:
       - TrashModuleBaseUrl=${TrashModuleBaseUrl}
       - PathToFieldVisitUploadTemplate=${PathToFieldVisitUploadTemplate}
       - PathToOVTAUploadTemplate=${PathToOVTAUploadTemplate}
+      - PathToSimplifiedBMPTemplate=${PathToSimplifiedBMPTemplate}
+      - PathToBulkUploadWQMPTemplate=${PathToBulkUploadWQMPTemplate}
+      - PathToUploadWQMPBoundaryTemplate=${PathToUploadWQMPBoundaryTemplate}
       - RecaptchaPublicKey=${RecaptchaPublicKey}
       - RecaptchaPrivateKey=${RecaptchaPrivateKey}
       - RecaptchaValidatorUrl=${RecaptchaValidatorUrl}
