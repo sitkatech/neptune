@@ -4,6 +4,7 @@ import { MapLayerBase } from "../map-layer-base.component";
 import { CommonModule } from "@angular/common";
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
+import { PriorityLandUseTypeEnum, PriorityLandUseTypes } from "src/app/shared/generated/enum/priority-land-use-type-enum";
 
 @Component({
     selector: "selected-land-use-block-layer",
@@ -19,14 +20,59 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
     @Output() landUseBlockSelected = new EventEmitter<number>();
 
     public isLoading: boolean = false;
-
+    public blah = PriorityLandUseTypes;
     public layer: L.featureGroup;
+
+    private styleDictionary = {
+        [PriorityLandUseTypeEnum.Commercial]: {
+            color: "#c2fbfc",
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.5,
+        },
+        [PriorityLandUseTypeEnum.HighDensityResidential]: {
+            color: "#c0d6fc",
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.5,
+        },
+        [PriorityLandUseTypeEnum.Industrial]: {
+            color: "#b4fcb3",
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.5,
+        },
+        [PriorityLandUseTypeEnum.MixedUrban]: {
+            color: "#fcb6b9",
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.5,
+        },
+        [PriorityLandUseTypeEnum.CommercialRetail]: {
+            color: "#f2cafc",
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.5,
+        },
+        [PriorityLandUseTypeEnum.PublicTransportationStations]: {
+            color: "#fcd6b6",
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.5,
+        },
+        [PriorityLandUseTypeEnum.ALU]: {
+            color: "#ffffed",
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.5,
+        },
+    };
 
     private highlightStyle = {
         color: "#fcfc12",
         weight: 2,
-        opacity: 0.65,
-        fillOpacity: 0.1,
+        opacity: 1,
+        fillOpacity: 0.5,
     };
 
     constructor(private wfsService: WfsService, private groupByPipe: GroupByPipe) {
@@ -67,12 +113,14 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
             const featuresGroupedByLandUseBlockID = this.groupByPipe.transform(response, "properties.LandUseBlockID");
 
             Object.keys(featuresGroupedByLandUseBlockID).forEach((landUseBlockID) => {
-                const geoJson = L.geoJSON(featuresGroupedByLandUseBlockID[landUseBlockID]);
+                const geoJson = L.geoJSON(featuresGroupedByLandUseBlockID[landUseBlockID], {
+                    style: this.styleDictionary[featuresGroupedByLandUseBlockID[landUseBlockID][0].properties.PriorityLandUseTypeID],
+                });
                 geoJson.on("mouseover", (e) => {
-                    geoJson.setStyle({ fillOpacity: 0.5 });
+                    geoJson.setStyle({ fillOpacity: 0.75 });
                 });
                 geoJson.on("mouseout", (e) => {
-                    geoJson.setStyle({ fillOpacity: 0.1 });
+                    geoJson.setStyle({ fillOpacity: 0.5 });
                 });
 
                 geoJson.on("click", (e) => {
@@ -101,7 +149,7 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
                 layer.setStyle(this.highlightStyle);
                 this.map.fitBounds(layer.getBounds());
             } else {
-                layer.setStyle(null);
+                layer.setStyle(this.styleDictionary[geoJsonLayers[0].feature.properties.PriorityLandUseTypeID]);
             }
         });
     }
