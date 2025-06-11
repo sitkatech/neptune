@@ -19,6 +19,9 @@ import { Map, layerControl } from "leaflet";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { SelectedLandUseBlockLayerComponent } from "src/app/shared/components/leaflet/layers/selected-land-use-block-layer/selected-land-use-block-layer.component";
+import { DelineationsLayerComponent } from "src/app/shared/components/leaflet/layers/delineations-layer/delineations-layer.component";
+import { JurisdictionsLayerComponent } from "src/app/shared/components/leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
+import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 
 @Component({
     selector: "trash-land-use-block-index",
@@ -33,6 +36,9 @@ import { SelectedLandUseBlockLayerComponent } from "src/app/shared/components/le
         IconComponent,
         HybridMapGridComponent,
         SelectedLandUseBlockLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        DelineationsLayerComponent,
     ],
     templateUrl: "./trash-land-use-block-index.component.html",
     styleUrl: "./trash-land-use-block-index.component.scss",

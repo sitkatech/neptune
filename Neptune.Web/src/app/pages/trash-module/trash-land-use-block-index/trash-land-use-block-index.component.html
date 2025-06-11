@@ -34,6 +34,15 @@
                     [selectedLandUseBlockID]="landUseBlockID"
                     (layerBoundsCalculated)="handleLayerBoundsCalculated($event)"
                     (landUseBlockSelected)="onSelectedLandUseBlockChanged($event)"></selected-land-use-block-layer>
+                <jurisdictions-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></jurisdictions-layer>
+                <wqmps-layer *ngIf="mapIsReady" [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></wqmps-layer>
+                <delineations-layer
+                    *ngIf="mapIsReady"
+                    [displayOnLoad]="false"
+                    [map]="map"
+                    [layerControl]="layerControl"
+                    [sortOrder]="30"
+                    [isAnalyzedInModelingModule]="false"></delineations-layer>
             </div>
             <div headerActions></div>
         </hybrid-map-grid>
