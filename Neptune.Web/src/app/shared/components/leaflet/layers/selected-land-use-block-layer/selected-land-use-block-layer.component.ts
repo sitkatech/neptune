@@ -20,7 +20,6 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
     @Output() landUseBlockSelected = new EventEmitter<number>();
 
     public isLoading: boolean = false;
-    public blah = PriorityLandUseTypes;
     public layer: L.featureGroup;
 
     private styleDictionary = {
