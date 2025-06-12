@@ -23,6 +23,7 @@ using Neptune.WebMvc.Services.Filters;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using Neptune.Common.Email;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 
 namespace Neptune.WebMvc.Controllers
@@ -38,6 +39,67 @@ namespace Neptune.WebMvc.Controllers
             _fileResourceService = fileResourceService;
             _sitkaSmtpClientService = sitkaSmtpClientService;
             _azureBlobStorageService = azureBlobStorageService;
+        }
+
+        [HttpGet]
+        public ViewResult FindAWQMP()
+        {
+            var stormwaterJurisdictions = StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson);
+            var stormwaterJurisdictionIDsPersonCanView = stormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID);
+            var wqmps = CurrentPerson.GetWQMPPersonCanView(_dbContext, stormwaterJurisdictionIDsPersonCanView).ToList();
+            var jurisdictions = stormwaterJurisdictions.Select(x => x.AsDisplayDto()).ToList();
+            var jurisdictionMapLayers = MapInitJsonHelpers.GetJurisdictionMapLayers(_dbContext);
+            var mapInitJson = new SearchMapInitJson("StormwaterIndexMap", jurisdictionMapLayers,
+                StormwaterMapInitJson.MakeWQMPLayerGeoJson(wqmps, false, false, _linkGenerator))
+            {
+                JurisdictionLayerGeoJson = jurisdictionMapLayers.Single(x => x.LayerName == MapInitJsonHelpers.CountyCityLayerName)
+            };
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.WQMPMap);
+            var viewData = new FindAWQMPViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, mapInitJson, neptunePage, jurisdictions, wqmps, _webConfiguration.MapServiceUrl);
+            return RazorView<FindAWQMP, FindAWQMPViewData>(viewData);
+        }
+
+        [HttpGet]
+        public ContentResult FindByName()
+        {
+            return new ContentResult();
+        }
+
+        [HttpPost]
+        public JsonResult FindByName(FindAWQMPViewModel viewModel)
+        {
+            var searchString = viewModel.SearchTerm.Trim().ToLower();
+            var stormwaterJurisdictionIDs = viewModel.StormwaterJurisdictionIDs;
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson);
+            var allWQMPSearchString = CurrentPerson
+                .GetWQMPPersonCanView(_dbContext, stormwaterJurisdictionIDsPersonCanView)
+                .Where(x => 
+                            stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdictionID) &&
+                            x.WaterQualityManagementPlanName.ToLower().Contains(searchString)).ToList();
+
+            var mapSummaryUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(_linkGenerator, t => t.SummaryForMap(UrlTemplate.Parameter1Int)));
+            var listItems = allWQMPSearchString.OrderBy(x => x.WaterQualityManagementPlanName).Take(20).Select(x =>
+            {
+                var locationPoint4326 = x.WaterQualityManagementPlanBoundary?.Geometry4326;
+                var treatmentBMPMapSummaryData = new SearchMapSummaryData(
+                    mapSummaryUrlTemplate.ParameterReplace(x.WaterQualityManagementPlanID), locationPoint4326,
+                    locationPoint4326?.Coordinate.Y,
+                    locationPoint4326?.Coordinate.X,
+                    x.WaterQualityManagementPlanID);
+                var listItem = new SelectListItem(x.WaterQualityManagementPlanName, GeoJsonSerializer.Serialize(treatmentBMPMapSummaryData));
+                return listItem;
+            }).ToList();
+
+            return Json(listItems);
+        }
+
+        [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
+        [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
+        public PartialViewResult SummaryForMap([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = WaterQualityManagementPlans.GetByID(_dbContext, waterQualityManagementPlanPrimaryKey);
+            var viewData = new SummaryForMapViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, waterQualityManagementPlan);
+            return RazorPartialView<SummaryForMap, SummaryForMapViewData>(viewData);
         }
 
         [HttpGet]

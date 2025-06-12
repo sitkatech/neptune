@@ -425,6 +425,7 @@
     <None Include="Scripts\ReleaseScripts\013 - update neptune page content for wqmp apn uploader.sql" />
     <Build Include="dbo\Tables\dbo.HRULog.sql" />
     <Build Include="dbo\Procs\dbo.pDeleteOldHRULogs.sql" />
+    <None Include="Scripts\ReleaseScripts\014 - add rte for wqmp map.sql" />
     <Build Include="dbo\Procs\dbo.pRegionalSubbasinGenerateNetwork.sql" />
   </ItemGroup>
   <ItemGroup>

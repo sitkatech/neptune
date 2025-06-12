@@ -66,6 +66,13 @@ namespace Neptune.WebMvc.Common
             return treatmentBMPLayerGeoJson;
         }
 
+        public static LayerGeoJson MakeWQMPLayerGeoJson(IEnumerable<WaterQualityManagementPlan> waterQualityManagementPlanBoundaries, bool isGeneric, bool enablePopups, LinkGenerator linkGenerator)
+        {
+            var featureCollection = isGeneric ? waterQualityManagementPlanBoundaries.ToGeoJsonFeatureCollectionGeneric(null) : waterQualityManagementPlanBoundaries.ToGeoJsonFeatureCollection(linkGenerator);
+            var wqmpLayerGeoJson = new LayerGeoJson("WQMPs", featureCollection, "#de54b2", 1, LayerInitialVisibility.Show) { EnablePopups = enablePopups };
+            return wqmpLayerGeoJson;
+        }
+
         /// <summary>
         /// Creates a LayerGeoJson with features for each TreatmentBMP in treatmentBMPs.
         /// The FeatureCollection of the resultant LayerGeoJson will have some common properties,

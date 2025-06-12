@@ -42,6 +42,12 @@
     <ProjectReference Include="..\Neptune.Jobs\Neptune.Jobs.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Content Update="Views\WaterQualityManagementPlan\SummaryForMap.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <None Update="Common\TinyMCEExtensionTest.GenerateJavascriptWithNoToolbarTest.approved.txt">
       <DependentUpon>TinyMCEExtensionTest.cs</DependentUpon>
     </None>
