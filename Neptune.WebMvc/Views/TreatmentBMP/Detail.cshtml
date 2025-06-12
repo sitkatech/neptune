@@ -676,6 +676,11 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 500px;">
+                            <div class="leaflet-bottom leaflet-right text-right">
+                                <button class="btn btn-xs btn-neptune" style="pointer-events:auto" onclick="toggleUpstreamRSBTrace()">View Upstream Trace</button>
+                                <br/>
+                                <button class="btn btn-xs btn-neptune" style="pointer-events:auto" onclick="toggleDownstreamRSBTrace()">View Downstream Trace</button>
+                            </div>
                         </div>
                     </div>
 
@@ -689,6 +694,7 @@
                             </div>
                         </div>
                     </div>
+                    
                 </div>
                 @{
                     if (ViewDataTyped.UpstreamestBMP != null)
@@ -1048,6 +1054,8 @@
 
 <script type="text/javascript">
     var map;
+    var upstreamRSBTraceLayer;
+    var downstreamRSBTraceLayer;
     jQuery(document).ready(function() {
         var mapInitJson = @Html.Raw(ViewDataTyped.MapInitJson.ToJsonHtmlString());
         map = new NeptuneMaps.Map(mapInitJson, null, @Html.Raw(ViewDataTyped.MapServiceUrl.ToJS()));
@@ -1101,6 +1109,61 @@
                 @:});
             }
         }
-
     });
+
+    function toggleUpstreamRSBTrace() {
+        if (upstreamRSBTraceLayer) {
+            map.map.removeLayer(upstreamRSBTraceLayer);
+            upstreamRSBTraceLayer = null;
+            return;
+        }
+
+        jQuery.ajax({
+        url: "@ViewDataTyped.UpstreamRSBTraceUrl",
+        dataType: "json",
+        jsonpCallback: "getJson",}).then(function (response) {
+            upstreamRSBTraceLayer = L.geoJson(response,
+            {
+                style: function (feature) {
+                    return {
+                        fillColor: "#FFFF00",
+                        fill: true,
+                        fillOpacity: 0.4,
+                        color: "#FFFF00",
+                        weight: 5,
+                        stroke: true
+                    };
+                }
+            });
+            upstreamRSBTraceLayer.addTo(map.map);
+        });
+    }
+
+    function toggleDownstreamRSBTrace() {
+        if (downstreamRSBTraceLayer) {
+            map.map.removeLayer(downstreamRSBTraceLayer);
+            downstreamRSBTraceLayer = null;
+            return;
+        }
+
+        jQuery.ajax({
+        url: "@ViewDataTyped.DownstreamRSBTraceUrl",
+        dataType: "json",
+        jsonpCallback: "getJson",}).then(function (response) {
+            downstreamRSBTraceLayer = L.geoJson(response,
+            {
+                style: function (feature) {
+                    return {
+                        fillColor: "#FFFF00",
+                        fill: true,
+                        fillOpacity: 0.4,
+                        color: "#FFFF00",
+                        weight: 5,
+                        stroke: true
+                    };
+                }
+            });
+            downstreamRSBTraceLayer.addTo(map.map);
+        });
+    }
 </script>

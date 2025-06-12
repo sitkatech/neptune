@@ -62,7 +62,7 @@ As
             end
         end
         
-        select @regionalSubbasinID as BaseRegionalSubbasinID, rsb.RegionalSubbasinID as CurrentNodeRegionalSubbasinID, #rsbIDs.OCSurveyCatchmentID, #rsbIDs.OCSurveyDownstreamCatchmentID, Depth, rsb.CatchmentGeometry4326, geometry::STGeomFromText('LINESTRING(' + CAST(rsb.CatchmentGeometry4326.STCentroid().STX AS VARCHAR(20)) + ' ' + CAST(rsb.CatchmentGeometry4326.STCentroid().STY AS VARCHAR(20)) + ', ' + CAST(rsbu.CatchmentGeometry4326.STCentroid().STX AS VARCHAR(20)) + ' ' + CAST(rsbu.CatchmentGeometry4326.STCentroid().STY AS VARCHAR(20)) + ')', 4326) as DownstreamLineGeometry
+        select cast(Row_number() over (order by Depth, #rsbIDs.RegionalSubbasinID) as int) as [ResultKey], @regionalSubbasinID as BaseRegionalSubbasinID, rsb.RegionalSubbasinID as CurrentNodeRegionalSubbasinID, #rsbIDs.OCSurveyCatchmentID, #rsbIDs.OCSurveyDownstreamCatchmentID, Depth, rsb.CatchmentGeometry4326, geometry::STGeomFromText('LINESTRING(' + CAST(rsb.CatchmentGeometry4326.STCentroid().STX AS VARCHAR(20)) + ' ' + CAST(rsb.CatchmentGeometry4326.STCentroid().STY AS VARCHAR(20)) + ', ' + CAST(rsbu.CatchmentGeometry4326.STCentroid().STX AS VARCHAR(20)) + ' ' + CAST(rsbu.CatchmentGeometry4326.STCentroid().STY AS VARCHAR(20)) + ')', 4326) as DownstreamLineGeometry
         from #rsbIDs
         join dbo.RegionalSubbasin rsb on #rsbIDs.OCSurveyCatchmentID = rsb.OCSurveyCatchmentID
         left join dbo.RegionalSubbasin rsbu on #rsbIDs.OCSurveyDownstreamCatchmentID = rsbu.OCSurveyCatchmentID
