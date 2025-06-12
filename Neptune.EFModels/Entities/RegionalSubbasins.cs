@@ -104,7 +104,8 @@ public static class RegionalSubbasins
                 {
                     { "RegionalSubbasinID", x.CurrentNodeRegionalSubbasinID},
                     { "OCSurveyCatchmentID" , x.OCSurveyCatchmentID},
-                    { "OCSurveyDownstreamCatchmentID", x.OCSurveyDownstreamCatchmentID}
+                    { "OCSurveyDownstreamCatchmentID", x.OCSurveyDownstreamCatchmentID},
+                    { "Depth", x.Depth}
                 };
                 featureCollection.Add(new Feature(x.DownstreamLineGeometry, attributesTable));
             }
