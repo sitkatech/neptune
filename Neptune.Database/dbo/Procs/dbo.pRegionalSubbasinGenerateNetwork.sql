@@ -1,7 +1,9 @@
 Create Procedure dbo.pRegionalSubbasinGenerateNetwork
 
 (
-    @regionalSubbasinID int
+    @regionalSubbasinID int,
+    @upstreamOnly bit = 0,
+    @downstreamOnly bit = 0
 )
 
 As
@@ -20,41 +22,47 @@ As
         from dbo.RegionalSubbasin n
         where n.RegionalSubbasinID = @regionalSubbasinID
 
-        -- Find all downstream Regional Subbasins
-        declare @depth int = 0
-        while(exists(select 1 from dbo.RegionalSubbasin n join #rsbIDs s on n.OCSurveyDownstreamCatchmentID = s.OCSurveyCatchmentID and s.Depth = @depth left join #rsbIDs s2 on n.RegionalSubbasinID = s2.RegionalSubbasinID and s2.RegionalSubbasinID is null))
+        if @downstreamOnly <> 1
         begin
-                insert into #rsbIDs(RegionalSubbasinID, OCSurveyCatchmentID, OCSurveyDownstreamCatchmentID, Depth)
-                select a.RegionalSubbasinID, a.OCSurveyCatchmentID, a.OCSurveyDownstreamCatchmentID, a.Depth
-                from
-                (
-                    select distinct n.RegionalSubbasinID, n.OCSurveyCatchmentID, n.OCSurveyDownstreamCatchmentID, s.Depth - 1 as Depth
-                    from dbo.RegionalSubbasin n
-                    join #rsbIDs s on n.OCSurveyDownstreamCatchmentID = s.OCSurveyCatchmentID and s.Depth = @depth
-                ) a
-                left join #rsbIDs p on a.RegionalSubbasinID = p.RegionalSubbasinID
-                where p.RegionalSubbasinID is null
-            set @depth = @depth - 1
+        -- Find all upstream Regional Subbasins
+            declare @depth int = 0
+            while(exists(select 1 from dbo.RegionalSubbasin n join #rsbIDs s on n.OCSurveyDownstreamCatchmentID = s.OCSurveyCatchmentID and s.Depth = @depth left join #rsbIDs s2 on n.RegionalSubbasinID = s2.RegionalSubbasinID and s2.RegionalSubbasinID is null))
+            begin
+                    insert into #rsbIDs(RegionalSubbasinID, OCSurveyCatchmentID, OCSurveyDownstreamCatchmentID, Depth)
+                    select a.RegionalSubbasinID, a.OCSurveyCatchmentID, a.OCSurveyDownstreamCatchmentID, a.Depth
+                    from
+                    (
+                        select distinct n.RegionalSubbasinID, n.OCSurveyCatchmentID, n.OCSurveyDownstreamCatchmentID, s.Depth + 1 as Depth
+                        from dbo.RegionalSubbasin n
+                        join #rsbIDs s on n.OCSurveyDownstreamCatchmentID = s.OCSurveyCatchmentID and s.Depth = @depth
+                    ) a
+                    left join #rsbIDs p on a.RegionalSubbasinID = p.RegionalSubbasinID
+                    where p.RegionalSubbasinID is null
+                set @depth = @depth + 1
+            end
         end
 
-        -- Find all upstream Regional Subbasins
-        set @depth = 0
-        while(exists(select 1 from dbo.RegionalSubbasin n join #rsbIDs s on n.OCSurveyCatchmentID = s.OCSurveyDownstreamCatchmentID and s.Depth = @depth left join #rsbIDs s2 on n.RegionalSubbasinID = s2.RegionalSubbasinID and s2.RegionalSubbasinID is null))
+        if @upstreamOnly <> 1
         begin
-                insert into #rsbIDs(RegionalSubbasinID, OCSurveyCatchmentID, OCSurveyDownstreamCatchmentID, Depth)
-                select a.RegionalSubbasinID, a.OCSurveyCatchmentID, a.OCSurveyDownstreamCatchmentID, a.Depth
-                from
-                (
-                    select distinct n.RegionalSubbasinID, n.OCSurveyCatchmentID, n.OCSurveyDownstreamCatchmentID, s.Depth + 1 as Depth
-                    from dbo.RegionalSubbasin n
-                    join #rsbIDs s on n.OCSurveyCatchmentID = s.OCSurveyDownstreamCatchmentID and s.Depth = @depth
-                ) a
-                left join #rsbIDs p on a.RegionalSubbasinID = p.RegionalSubbasinID
-                where p.RegionalSubbasinID is null
-            set @depth = @depth + 1
+            -- Find all downstream Regional Subbasins
+            set @depth = 0
+            while(exists(select 1 from dbo.RegionalSubbasin n join #rsbIDs s on n.OCSurveyCatchmentID = s.OCSurveyDownstreamCatchmentID and s.Depth = @depth left join #rsbIDs s2 on n.RegionalSubbasinID = s2.RegionalSubbasinID and s2.RegionalSubbasinID is null))
+            begin
+                    insert into #rsbIDs(RegionalSubbasinID, OCSurveyCatchmentID, OCSurveyDownstreamCatchmentID, Depth)
+                    select a.RegionalSubbasinID, a.OCSurveyCatchmentID, a.OCSurveyDownstreamCatchmentID, a.Depth
+                    from
+                    (
+                        select distinct n.RegionalSubbasinID, n.OCSurveyCatchmentID, n.OCSurveyDownstreamCatchmentID, s.Depth - 1 as Depth
+                        from dbo.RegionalSubbasin n
+                        join #rsbIDs s on n.OCSurveyCatchmentID = s.OCSurveyDownstreamCatchmentID and s.Depth = @depth
+                    ) a
+                    left join #rsbIDs p on a.RegionalSubbasinID = p.RegionalSubbasinID
+                    where p.RegionalSubbasinID is null
+                set @depth = @depth - 1
+            end
         end
         
-        select @regionalSubbasinID, #rsbIDs.OCSurveyCatchmentID, #rsbIDs.OCSurveyDownstreamCatchmentID, Depth, geometry::STGeomFromText('LINESTRING(' + CAST(rsb.CatchmentGeometry4326.STCentroid().STX AS VARCHAR(20)) + ' ' + CAST(rsb.CatchmentGeometry4326.STCentroid().STY AS VARCHAR(20)) + ', ' + CAST(rsbu.CatchmentGeometry4326.STCentroid().STX AS VARCHAR(20)) + ' ' + CAST(rsbu.CatchmentGeometry4326.STCentroid().STY AS VARCHAR(20)) + ')', 4326)
+        select @regionalSubbasinID as BaseRegionalSubbasinID, rsb.RegionalSubbasinID as CurrentNodeRegionalSubbasinID, #rsbIDs.OCSurveyCatchmentID, #rsbIDs.OCSurveyDownstreamCatchmentID, Depth, rsb.CatchmentGeometry4326, geometry::STGeomFromText('LINESTRING(' + CAST(rsb.CatchmentGeometry4326.STCentroid().STX AS VARCHAR(20)) + ' ' + CAST(rsb.CatchmentGeometry4326.STCentroid().STY AS VARCHAR(20)) + ', ' + CAST(rsbu.CatchmentGeometry4326.STCentroid().STX AS VARCHAR(20)) + ' ' + CAST(rsbu.CatchmentGeometry4326.STCentroid().STY AS VARCHAR(20)) + ')', 4326) as DownstreamLineGeometry
         from #rsbIDs
         join dbo.RegionalSubbasin rsb on #rsbIDs.OCSurveyCatchmentID = rsb.OCSurveyCatchmentID
         left join dbo.RegionalSubbasin rsbu on #rsbIDs.OCSurveyDownstreamCatchmentID = rsbu.OCSurveyCatchmentID

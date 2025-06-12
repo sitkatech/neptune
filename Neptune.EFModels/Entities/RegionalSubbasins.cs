@@ -2,6 +2,7 @@
 using Neptune.Common.DesignByContract;
 using Neptune.Models.DataTransferObjects;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.Features;
 
 namespace Neptune.EFModels.Entities;
 
@@ -66,5 +67,49 @@ public static class RegionalSubbasins
         NeptuneDbContext dbContext, int regionalSubbasinID, int treatmentBMPID, int? delineationID)
     {
         return dbContext.vRegionalSubbasinUpstreamCatchmentGeometry4326s.SingleOrDefault(x => x.PrimaryKey == regionalSubbasinID)?.AsGeometryGeoJSONAndAreaDto(treatmentBMPID, delineationID);
+    }
+
+    public static FeatureCollection GetRegionalSubbasinGraphUpstreamTraceAsFeatureCollection(NeptuneDbContext dbContext,
+        int regionalSubbasinBaseID)
+    {
+        return GetRegionalSubbasinGraphTraceAsFeatureCollection(dbContext, regionalSubbasinBaseID, upstreamOnly: true);
+    }
+
+    public static FeatureCollection GetRegionalSubbasinGraphDownstreamTraceAsFeatureCollection(NeptuneDbContext dbContext,
+        int regionalSubbasinBaseID)
+    {
+        return GetRegionalSubbasinGraphTraceAsFeatureCollection(dbContext, regionalSubbasinBaseID, downstreamOnly: true);
+    }
+
+    public static FeatureCollection GetRegionalSubbasinGraphTraceAsFeatureCollection(NeptuneDbContext dbContext, int regionalSubbasinBaseID, bool upstreamOnly = false, bool downstreamOnly = false)
+    {
+        var featureCollection = new FeatureCollection();
+        var regionalSubbasinGraphTrace = dbContext.RegionalSubbasinNetworkResults.FromSql($"EXECUTE dbo.pRegionalSubbasinGenerateNetwork {regionalSubbasinBaseID}, {upstreamOnly}, {downstreamOnly}").ToList();
+        
+        regionalSubbasinGraphTrace.ForEach(x =>
+        {
+
+            //First the RSB itself
+            var attributesTable = new AttributesTable
+            {
+                {
+                    "RegionalSubbasinID", x.CurrentNodeRegionalSubbasinID
+                }
+            };
+            featureCollection.Add(new Feature(x.CatchmentGeometry4326, attributesTable));
+            if (x.DownstreamLineGeometry != null)
+            {
+                //Then the downstream line
+                attributesTable = new AttributesTable
+                {
+                    { "RegionalSubbasinID", x.CurrentNodeRegionalSubbasinID},
+                    { "OCSurveyCatchmentID" , x.OCSurveyCatchmentID},
+                    { "OCSurveyDownstreamCatchmentID", x.OCSurveyDownstreamCatchmentID}
+                };
+                featureCollection.Add(new Feature(x.DownstreamLineGeometry, attributesTable));
+            }
+        });
+
+        return featureCollection;
     }
 }
