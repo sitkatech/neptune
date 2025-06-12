@@ -148,6 +148,9 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public GridSpec<vHRUCharacteristic> HRUCharacteristicsGridSpec { get; }
         public string HRUCharacteristicsGridName { get; }
         public string HRUCharacteristicsGridDataUrl { get; }
+        public string DownstreamRSBTraceUrl { get; set; }
+
+        public string UpstreamRSBTraceUrl { get; set; }
 
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
@@ -297,10 +300,6 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             IsFullyParameterized = treatmentBMP.IsFullyParameterized(delineation);
 
         }
-
-        public string DownstreamRSBTraceUrl { get; set; }
-
-        public string UpstreamRSBTraceUrl { get; set; }
 
         private List<HtmlString> CheckForDelineationErrors(EFModels.Entities.Delineation? delineation, ICollection<DelineationOverlap>? delineationOverlapDelineations)
         {
