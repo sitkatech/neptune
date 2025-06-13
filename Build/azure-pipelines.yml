@@ -26,7 +26,7 @@ variables:
   # domainGeoserver: 'geoserver-neptune.esa-$(Environment).sitkatech.com'
   # domainWebMvc: 'neptune.esa-$(Environment).sitkatech.com'
 
-  nereidTag: 'v0.11.0'
+  nereidTag: 'v0.10.1'
   nereidDataTag: '2023.11.08'
 
 resources:
@@ -204,6 +204,7 @@ stages:
         azureSubscriptionEndpoint: '$(azureSubscription)'
         azureContainerRegistry: '$(kv-containerRegistry)'
         dockerComposeFile: docker-compose.build.yml
+        projectName:
         additionalDockerComposeFiles: |
           docker-compose.image.yml
         dockerComposeFileArgs: |
