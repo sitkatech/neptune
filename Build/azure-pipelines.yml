@@ -198,7 +198,7 @@ stages:
         SecretsFilter: '*'
         RunAsPreJob: true
 
-    - task: DockerCompose@0
+    - task: DockerCompose@1
       displayName: Build Nereid services
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
@@ -216,7 +216,7 @@ stages:
           $(nereidTag)
         includeLatestTag: true
 
-    - task: DockerCompose@0
+    - task: DockerCompose@1
       displayName: Push Nereid to Registry  
       condition: eq(variables['buildNereid'], 'true')
       inputs:
