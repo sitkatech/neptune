@@ -148,6 +148,9 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public GridSpec<vHRUCharacteristic> HRUCharacteristicsGridSpec { get; }
         public string HRUCharacteristicsGridName { get; }
         public string HRUCharacteristicsGridDataUrl { get; }
+        public string DownstreamRSBTraceUrl { get; set; }
+
+        public string UpstreamRSBTraceUrl { get; set; }
 
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
@@ -178,6 +181,9 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             WaterQualityManagementPlanDetailUrl = treatmentBMP.WaterQualityManagementPlanID == null ? string.Empty : WaterQualityManagementPlanDetailUrlTemplate.ParameterReplace(treatmentBMP.WaterQualityManagementPlanID.Value);
             TreatmentBMPTypeDetailUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(treatmentBMP.TreatmentBMPTypeID));
             UpstreamBMPDetailUrl = upstreamestBMP == null ? string.Empty : DetailUrlTemplate.ParameterReplace(upstreamestBMP.TreatmentBMPID);
+
+            UpstreamRSBTraceUrl = SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(LinkGenerator, x => x.GetRegionalSubbasinGraphUpstreamTraceAsFeatureCollection(treatmentBMP.RegionalSubbasinID));
+            DownstreamRSBTraceUrl = SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(LinkGenerator, x => x.GetRegionalSubbasinGraphDownstreamTraceAsFeatureCollection(treatmentBMP.RegionalSubbasinID));
 
             DelineationErrors = CheckForDelineationErrors(delineation, delineationOverlapDelineations);
             ParameterizationErrors = CheckForParameterizationErrors(treatmentBMP, hasMissingModelingAttributes, delineation);
