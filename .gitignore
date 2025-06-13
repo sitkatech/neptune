@@ -104,3 +104,5 @@ Source/Neptune.GeoServer/data_dir/logs/
 /Neptune.Web/obj
 /Neptune.GeoServer/data_dir/gwc/diskquota_page_store_hsql
 /Neptune.Web/wwwroot
+
+.vs/neptune/CopilotIndices
