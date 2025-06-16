@@ -29,6 +29,7 @@
 @using Neptune.WebMvc.Views.Shared.ModeledPerformance
 @using HRUCharacteristics = Neptune.WebMvc.Views.Shared.HRUCharacteristics.HRUCharacteristics
 @using Microsoft.AspNetCore.Html
+@using Neptune.WebMvc.Views.Shared.RegionalSubbasin
 @inherits Neptune.WebMvc.Views.TreatmentBMP.Detail
 
 @section JavascriptAndStylesContent
@@ -678,11 +679,10 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 500px;">
-                            <div class="leaflet-bottom leaflet-right text-right">
-                                <button class="btn btn-xs btn-neptune" style="pointer-events:auto" onclick="toggleUpstreamRSBTrace()"><span id="toggleUpstreamRSBTraceDisplay">View</span> Upstream Area</button>
-                                <br/>
-                                <button class="btn btn-xs btn-neptune" style="pointer-events:auto" onclick="toggleDownstreamRSBTrace()"><span id="toggleDownstreamRSBTraceDisplay">View</span> Downstream Area</button>
-                            </div>
+                            @{
+                                TraceFromPoint.RenderPartialView(Html, new TraceFromPointViewData(ViewDataTyped.MapInitJson.MapDivID));
+                            }
+                            ;
                         </div>
                     </div>
 
