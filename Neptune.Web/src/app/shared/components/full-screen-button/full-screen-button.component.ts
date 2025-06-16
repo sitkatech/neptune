@@ -15,6 +15,17 @@ export class FullScreenButtonComponent {
     exitFullScreenTitleText: string = "Exit full screen";
     isFullScreen: boolean = false;
 
+    //Detect fullscreen mode changes
+    //Because we can exit via button click or 'esc' press, listen to the event to handle exiting
+    @HostListener("document:fullscreenchange")
+    handleFullscreenChange() {
+        if (!document.fullscreenElement) {
+            this.elementRef.classList.remove("full-screen");
+            this.isFullScreen = false;
+            this.screenSizeChangedEvent.emit();
+        }
+    }
+
     public enterFullScreen() {
         if (this.elementRef.requestFullscreen) {
             this.elementRef.requestFullscreen().then(() => {
@@ -26,10 +37,6 @@ export class FullScreenButtonComponent {
     }
 
     public exitFullScreen() {
-        document.exitFullscreen().then(() => {
-            this.elementRef.classList.remove("full-screen");
-            this.isFullScreen = false;
-            this.screenSizeChangedEvent.emit();
-        });
+        document.exitFullscreen();
     }
 }

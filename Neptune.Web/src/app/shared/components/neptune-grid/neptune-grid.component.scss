@@ -26,10 +26,12 @@
 
 .full-screen {
     ag-grid-angular {
-        height: 90% !important;
+        height: 92% !important;
     }
 
     .table-footer {
-        height: 10% !important;
+        height: 8% !important;
+        background-color: white;
+        padding: 0.5rem 1rem;
     }
 }
