@@ -156,7 +156,7 @@ export class NeptuneGridComponent implements OnInit, OnChanges {
 
     public handleScreenSizeChangedEvent() {
         if (this.gridApi) {
-            this.gridApi.sizeColumnsToFit();
+            this.gridApi.autoSizeAllColumns();
         }
     }
 }

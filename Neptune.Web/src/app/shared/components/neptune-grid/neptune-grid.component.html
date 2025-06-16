@@ -44,7 +44,10 @@
     <div class="table-footer flex-between">
         <div style="display: flex">
             <div *ngIf="!hideFullscreenButton" class="full-screen-button">
-                <full-screen-button [elementRef]="gridContainer" [titleText]="fullscreenTitleText" (screenSizeChangedEvent)="handleScreenSizeChangedEvent()"></full-screen-button>
+                <full-screen-button
+                    [elementRef]="gridContainer"
+                    [enterFullScreenText]="fullscreenTitleText"
+                    (screenSizeChangedEvent)="handleScreenSizeChangedEvent()"></full-screen-button>
             </div>
             <div *ngIf="!hideDownloadButton" class="download-button">
                 <neptune-csv-download-button [grid]="gridref" [fileName]="downloadFileName" [colIDsToExclude]="colIDsToExclude"></neptune-csv-download-button>
