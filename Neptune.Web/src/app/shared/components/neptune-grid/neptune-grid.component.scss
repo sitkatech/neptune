@@ -1,7 +1,7 @@
 @use "/src/scss/abstracts" as *;
 
 .table-footer {
-    padding: $spacing-400;
+    padding: $spacing-200 $spacing-400;
     border: 1px solid rgba($black, 0.1);
     border-top: none;
     border-radius: 0 0 $spacing-200 $spacing-200;
@@ -22,4 +22,15 @@
 
 .full-screen-button {
     padding-right: 0.5rem;
+}
+
+.full-screen {
+    ag-grid-angular {
+        height: 92% !important;
+    }
+
+    .table-footer {
+        height: 8% !important;
+        background-color: white;
+    }
 }

@@ -10,23 +10,33 @@ import { IconComponent } from "../icon/icon.component";
 })
 export class FullScreenButtonComponent {
     @Input() elementRef: HTMLElement;
-    @Input() titleText: string = "Make element full screen";
+    @Input() enterFullScreenTitleText: string = "Make element full screen";
     @Output() screenSizeChangedEvent = new EventEmitter();
+    exitFullScreenTitleText: string = "Exit full screen";
+    isFullScreen: boolean = false;
 
-    public triggerFullscreen() {
-        if (this.elementRef.requestFullscreen) {
-            this.elementRef.requestFullscreen();
-            this.elementRef.classList.add("fullscreen");
+    //Detect fullscreen mode changes
+    //Because we can exit via button click or 'esc' press, listen to the event to handle exiting
+    @HostListener("document:fullscreenchange")
+    handleFullscreenChange() {
+        if (!document.fullscreenElement) {
+            this.elementRef.classList.remove("full-screen");
+            this.isFullScreen = false;
             this.screenSizeChangedEvent.emit();
         }
     }
 
-    //Detect fullscreen mode changes
-    @HostListener("document:fullscreenchange")
-    handleFullscreen() {
-        if (!document.fullscreenElement) {
-            this.elementRef.classList.remove("fullscreen");
+    public enterFullScreen() {
+        if (this.elementRef.requestFullscreen) {
+            this.elementRef.requestFullscreen().then(() => {
+                this.elementRef.classList.add("full-screen");
+                this.isFullScreen = true;
+                this.screenSizeChangedEvent.emit();
+            });
         }
-        this.screenSizeChangedEvent.emit();
+    }
+
+    public exitFullScreen() {
+        document.exitFullscreen();
     }
 }
