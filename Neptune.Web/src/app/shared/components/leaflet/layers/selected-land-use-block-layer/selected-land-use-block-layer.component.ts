@@ -146,7 +146,6 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
             const geoJsonLayers = layer.getLayers();
             if (geoJsonLayers[0].feature.properties.LandUseBlockID == this.selectedLandUseBlockID) {
                 layer.setStyle(this.highlightStyle);
-                this.map.fitBounds(layer.getBounds());
             } else {
                 layer.setStyle(this.styleDictionary[geoJsonLayers[0].feature.properties.PriorityLandUseTypeID]);
             }
