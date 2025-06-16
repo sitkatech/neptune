@@ -24,7 +24,7 @@
               <CssParameter name="fill">
                 <ogc:Function name="env">
                   <ogc:Literal>color1</ogc:Literal>
-                  <ogc:Literal>#0075A4</ogc:Literal>
+                  <ogc:Literal>#E69F00</ogc:Literal>
                 </ogc:Function>
               </CssParameter><CssParameter name="fill-opacity">.7</CssParameter>
             </Fill>
@@ -45,7 +45,7 @@
               <CssParameter name="fill">
                 <ogc:Function name="env">
                   <ogc:Literal>color2</ogc:Literal>
-                  <ogc:Literal>#008fad</ogc:Literal>
+                  <ogc:Literal>#56B4E9</ogc:Literal>
                 </ogc:Function>
               </CssParameter><CssParameter name="fill-opacity">.7</CssParameter>
             </Fill>
@@ -66,7 +66,7 @@
               <CssParameter name="fill">
                 <ogc:Function name="env">
                   <ogc:Literal>color3</ogc:Literal>
-                  <ogc:Literal>#00a697</ogc:Literal>
+                  <ogc:Literal>#009E73</ogc:Literal>
                 </ogc:Function>
               </CssParameter><CssParameter name="fill-opacity">.7</CssParameter>
             </Fill>
@@ -87,7 +87,7 @@
               <CssParameter name="fill">
                 <ogc:Function name="env">
                   <ogc:Literal>color4</ogc:Literal>
-                  <ogc:Literal>#1eb769</ogc:Literal>
+                  <ogc:Literal>#F0E442</ogc:Literal>
                 </ogc:Function>
               </CssParameter><CssParameter name="fill-opacity">.7</CssParameter>
             </Fill>
@@ -108,7 +108,7 @@
               <CssParameter name="fill">
                 <ogc:Function name="env">
                   <ogc:Literal>color5</ogc:Literal>
-                  <ogc:Literal>#94c031</ogc:Literal>
+                  <ogc:Literal>#0072B2</ogc:Literal>
                 </ogc:Function>
               </CssParameter><CssParameter name="fill-opacity">.7</CssParameter>
             </Fill>
@@ -129,7 +129,7 @@
               <CssParameter name="fill">
                 <ogc:Function name="env">
                   <ogc:Literal>color6</ogc:Literal>
-                  <ogc:Literal>#F3BC00</ogc:Literal>
+                  <ogc:Literal>#CC79A7</ogc:Literal>
                 </ogc:Function>
               </CssParameter><CssParameter name="fill-opacity">.7</CssParameter>
             </Fill>
