@@ -10,9 +10,9 @@ import { IconComponent } from "../icon/icon.component";
 })
 export class FullScreenButtonComponent {
     @Input() elementRef: HTMLElement;
-    @Input() enterFullScreenText: string = "Make element full screen";
+    @Input() enterFullScreenTitleText: string = "Make element full screen";
     @Output() screenSizeChangedEvent = new EventEmitter();
-    exitFullScreenText: string = "Exit full screen";
+    exitFullScreenTitleText: string = "Exit full screen";
     isFullScreen: boolean = false;
 
     public enterFullScreen() {
