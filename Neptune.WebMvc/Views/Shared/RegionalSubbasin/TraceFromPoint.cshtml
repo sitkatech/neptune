@@ -1,3 +1,79 @@
-﻿<div class="leaflet-bottom leaflet-right text-right">
-    <button class="btn btn-xs btn-neptune" style="pointer-events:auto" onclick="toggleUpstreamRSBTrace()"><span id="toggleUpstreamRSBTraceDisplay">View</span> Upstream Area</button>
+﻿@inherits Neptune.WebMvc.Views.Shared.RegionalSubbasin.TraceFromPoint
+
+<div class="leaflet-bottom leaflet-right text-right">
+    <button class="btn btn-xs btn-neptune" style="pointer-events:auto" onclick="enterOrExitTraceMode()">View Upstream Area</button>
 </div>
+
+<script>
+    var mapRef;
+    var mapDivID = "@ViewDataTyped.MapDivID"
+    var arrowHeadsStyle =  {
+        frequency: '100px',
+        size: '10px',
+        fill: true,
+        color: '#0099ab',
+        fillColor: "#FFFFFF"
+    }
+
+     NeptuneMaps.Map.prototype.rsbTraceFromPoint = function(self, e) {
+         self.removeLayerFromMap(self.currentMarker);
+         if (self.traceFromPointMode) {
+             self.currentMarker = L.marker(e.latlng, { icon: self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-935F59.png') });
+             self.currentMarker.addTo(self.map);
+         }
+        // self.treatmentBMPPointYField.val(e.latlng.lat.toFixed(4));
+        // self.treatmentBMPPointXField.val(e.latlng.lng.toFixed(4));
+    };
+
+    NeptuneMaps.Map.prototype.setupTraceFromPoint = function() {
+        mapRef = this;
+        this.rsbTraceLayer = null;
+        this.traceFromPointMode = false;
+    }
+
+    function enterOrExitTraceMode() {
+        if (mapRef.traceFromPointMode) {
+            exitTraceFromPointMode();
+            return;
+        }
+
+        enterTraceFromPointMode();
+    }
+
+    function enterTraceFromPointMode() {
+       mapRef.traceFromPointMode = true;
+       document.getElementById(mapDivID).style.cursor = 'crosshair';
+       mapRef.assignClickEventHandler(mapRef.rsbTraceFromPoint);
+       event.stopPropagation();
+    }
+
+    function exitTraceFromPointMode() {
+        mapRef.traceFromPointMode = false;
+        mapRef.removeLayerFromMap(mapRef.currentMarker);
+        mapRef.removeLayerFromMap(mapRef.rsbTraceLayer);
+        mapRef.rsbTraceLayer = null;
+        document.getElementById(mapDivID).style.cursor = 'default';
+        mapRef.removeClickEventHandler(mapRef.rsbTraceFromPoint);
+    }
+
+    // function toggleUpstreamRSBTrace() {
+    //     if (upstreamRSBTraceLayer) {
+    //         map.map.removeLayer(upstreamRSBTraceLayer);
+    //         upstreamRSBTraceLayer = null;
+    //         jQuery("#toggleUpstreamRSBTraceDisplay").text("View");
+    //         jQuery("#rsbTraceUpstreamLegendItem").hide();
+    //         if (!downstreamRSBTraceLayer) {
+    //             jQuery("#rsbTraceDirectionOfFlowLegendItem").hide();
+    //         }
+    //         return;
+    //     }
+
+    //         jQuery("#toggleUpstreamRSBTraceDisplay").text("Hide");
+    //         showRSBLegendItemAndFitBounds();
+    // }
+
+    // function showRSBLegendItemAndFitBounds() {
+    //     jQuery("#rsbTraceDownstreamLegendItem").show();
+    //     jQuery("#rsbTraceDirectionOfFlowLegendItem").show();
+    // }
+</script>

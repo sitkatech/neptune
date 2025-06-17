@@ -416,7 +416,15 @@ NeptuneMaps.Map.prototype.assignClickEventHandler = function(clickEventFunction)
     this.map.on("click", function(e) { clickEventFunction(self, e); });
 };
 
-NeptuneMaps.Map.prototype.removeClickEventHandler = function() {
+NeptuneMaps.Map.prototype.removeClickEventHandler = function (clickEventFunction) {
+    for (var i = 0; i < this.vectorLayers.length; ++i) {
+        var currentLayer = this.vectorLayers[i];
+        currentLayer.off("click", clickEventFunction);
+    }
+    this.map.off("click", clickEventFunction);
+};
+
+NeptuneMaps.Map.prototype.removeAllClickEvents = function() {
     for (var i = 0; i < this.vectorLayers.length; ++i) {
         var currentLayer = this.vectorLayers[i];
         currentLayer.off("click");

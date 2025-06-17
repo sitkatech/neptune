@@ -1065,15 +1065,6 @@
 
 <script type="text/javascript">
     var map;
-    var upstreamRSBTraceLayer;
-    var downstreamRSBTraceLayer;
-    var arrowHeadsStyle =  {
-        frequency: '100px',
-        size: '10px',
-        fill: true,
-        color: '#0099ab',
-        fillColor: "#FFFFFF"
-    }
     jQuery(document).ready(function() {
         var mapInitJson = @Html.Raw(ViewDataTyped.MapInitJson.ToJsonHtmlString());
         map = new NeptuneMaps.Map(mapInitJson, null, @Html.Raw(ViewDataTyped.MapServiceUrl.ToJS()));
@@ -1127,106 +1118,6 @@
                 @:});
             }
         }
+        map.setupTraceFromPoint();
     });
-
-    function toggleUpstreamRSBTrace() {
-        if (upstreamRSBTraceLayer) {
-            map.map.removeLayer(upstreamRSBTraceLayer);
-            upstreamRSBTraceLayer = null;
-            jQuery("#toggleUpstreamRSBTraceDisplay").text("View");
-            jQuery("#rsbTraceUpstreamLegendItem").hide();
-            if (!downstreamRSBTraceLayer) {
-                jQuery("#rsbTraceDirectionOfFlowLegendItem").hide();
-            }
-            return;
-        }
-
-        jQuery.ajax({
-        url: "@ViewDataTyped.UpstreamRSBTraceUrl",
-        dataType: "json",
-        jsonpCallback: "getJson",}).then(function (response) {
-            upstreamRSBTraceLayer = L.geoJson(response.features.sort((a, b) => b.geometry.type.localeCompare(a.geometry.type)),
-            {
-                style: function (feature) {
-                    if (feature.geometry.type == "LineString") {
-                        var depthForWeight = feature.properties.Depth * 0.1;
-                        return {
-                            color: "#0099ab",
-                            weight: depthForWeight > 2.5 ? 0.5 : 3 - depthForWeight
-                        }
-                    }
-
-                    return {
-                        fillColor: "#5600FF",
-                        fill: true,
-                        fillOpacity: 0.4,
-                        color: "#5600FF",
-                        weight: 1,
-                        stroke: true
-                    };
-                },
-                arrowheads: arrowHeadsStyle
-            });
-            upstreamRSBTraceLayer.addTo(map.map);
-            jQuery("#toggleUpstreamRSBTraceDisplay").text("Hide");
-            showRSBLegendItemAndFitBounds();
-        });
-    }
-
-    function toggleDownstreamRSBTrace() {
-        if (downstreamRSBTraceLayer) {
-            map.map.removeLayer(downstreamRSBTraceLayer);
-            downstreamRSBTraceLayer = null;
-            jQuery("#toggleDownstreamRSBTraceDisplay").text("View");
-            jQuery("#rsbTraceDownstreamLegendItem").hide();
-            if (!upstreamRSBTraceLayer) {
-                jQuery("#rsbTraceDirectionOfFlowLegendItem").hide();
-            }
-            return;
-        }
-
-        jQuery.ajax({
-        url: "@ViewDataTyped.DownstreamRSBTraceUrl",
-        dataType: "json",
-        jsonpCallback: "getJson",}).then(function (response) {
-            downstreamRSBTraceLayer = L.geoJson(response.features.sort((a, b) => b.geometry.type.localeCompare(a.geometry.type)),
-            {
-                style: function (feature) {
-                    if (feature.geometry.type == "LineString") {
-                        var depthForWeight = Math.abs(feature.properties.Depth) * 0.1;
-                        return {
-                            color: "#0099ab",
-                            weight: depthForWeight > 2.5 ? 0.5 : 3 - depthForWeight
-                        }
-                    }
-
-                    return {
-                        fillColor: "#FF4345",
-                        fill: true,
-                        fillOpacity: 0.4,
-                        color: "#FF4345",
-                        weight: 1,
-                        stroke: true
-                    };
-                },
-                arrowheads: arrowHeadsStyle
-            });
-            downstreamRSBTraceLayer.addTo(map.map);
-            jQuery("#toggleDownstreamRSBTraceDisplay").text("Hide");
-            showRSBLegendItemAndFitBounds();
-        });
-    }
-
-    function showRSBLegendItemAndFitBounds() {
-        jQuery("#rsbTraceDownstreamLegendItem").show();
-        jQuery("#rsbTraceDirectionOfFlowLegendItem").show();
-        var boundsLayerGroup = new L.featureGroup();
-        if (upstreamRSBTraceLayer) {
-            boundsLayerGroup.addLayer(upstreamRSBTraceLayer);
-        }
-        if (downstreamRSBTraceLayer) {
-            boundsLayerGroup.addLayer(downstreamRSBTraceLayer);
-        }
-        map.map.fitBounds(boundsLayerGroup.getBounds());
-    }
 </script>
