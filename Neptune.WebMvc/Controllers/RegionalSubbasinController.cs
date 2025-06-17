@@ -127,19 +127,10 @@ namespace Neptune.WebMvc.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        [HttpGet("{regionalSubbasinPrimaryKey}")]
-        [ValidateEntityExistsAndPopulateParameterFilter("regionalSubbasinPrimaryKey")]
-        public JsonResult GetRegionalSubbasinGraphUpstreamTraceAsFeatureCollection([FromRoute] RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
+        [HttpPost]
+        public JsonResult GetRegionalSubbasinGraphTraceAsFeatureCollectionFromPoint([FromBody] CoordinateDto coordinateDto)
         {
-            var featureCollection = RegionalSubbasins.GetRegionalSubbasinGraphUpstreamTraceAsFeatureCollection(_dbContext, regionalSubbasinPrimaryKey.PrimaryKeyValue);
-            return Json(featureCollection);
-        }
-
-        [HttpGet("{regionalSubbasinPrimaryKey}")]
-        [ValidateEntityExistsAndPopulateParameterFilter("regionalSubbasinPrimaryKey")]
-        public JsonResult GetRegionalSubbasinGraphDownstreamTraceAsFeatureCollection([FromRoute] RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
-        {
-            var featureCollection = RegionalSubbasins.GetRegionalSubbasinGraphDownstreamTraceAsFeatureCollection(_dbContext, regionalSubbasinPrimaryKey.PrimaryKeyValue);
+            var featureCollection = RegionalSubbasins.GetRegionalSubbasinGraphTraceAsFeatureCollection(_dbContext, coordinateDto);
             return Json(featureCollection);
         }
     }

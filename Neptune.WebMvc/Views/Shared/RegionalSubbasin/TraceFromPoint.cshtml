@@ -18,8 +18,42 @@
      NeptuneMaps.Map.prototype.rsbTraceFromPoint = function(self, e) {
          self.removeLayerFromMap(self.currentMarker);
          if (self.traceFromPointMode) {
-             self.currentMarker = L.marker(e.latlng, { icon: self.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-935F59.png') });
-             self.currentMarker.addTo(self.map);
+             debugger;
+             jQuery.ajax({
+                url: "/RegionalSubbasin/GetRegionalSubbasinGraphTraceAsFeatureCollectionFromPoint",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({"Longitude" : e.latlng.lng, "Latitude" : e.latlng.lat}),
+                type: 'POST',
+                dataType: 'json',
+                jsonpCallback: 'getJson'
+             }).then(function(response) {
+                 self.rsbTraceLayer = L.geoJson(response.features.sort((a, b) => b.geometry.type.localeCompare(a.geometry.type)),
+                                        {
+                                            style: function (feature) {
+                                                if (feature.geometry.type == "LineString") {
+                                                    var depthForWeight = Math.abs(feature.properties.Depth) * 0.1;
+                                                    return {
+                                                        color: "#0099ab",
+                                                        weight: depthForWeight > 2.5 ? 0.5 : 3 - depthForWeight
+                                                    }
+                                                }
+
+                                                return {
+                                                    fillColor: "#FF4345",
+                                                    fill: true,
+                                                    fillOpacity: 0.4,
+                                                    color: "#FF4345",
+                                                    weight: 1,
+                                                    stroke: true
+                                                };
+                                            },
+                                            arrowheads: arrowHeadsStyle
+                                        });
+                 self.rsbTraceLayer.addTo(self.map);
+             });
          }
         // self.treatmentBMPPointYField.val(e.latlng.lat.toFixed(4));
         // self.treatmentBMPPointXField.val(e.latlng.lng.toFixed(4));
