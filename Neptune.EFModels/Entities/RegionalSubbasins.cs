@@ -85,17 +85,17 @@ public static class RegionalSubbasins
     {
         var featureCollection = new FeatureCollection();
         var regionalSubbasinGraphTrace = dbContext.RegionalSubbasinNetworkResults.FromSql($"EXECUTE dbo.pRegionalSubbasinGenerateNetwork {coordinate.Latitude}, {coordinate.Longitude}, {upstreamOnly}, {downstreamOnly}").ToList();
-        
+
         regionalSubbasinGraphTrace.ForEach(x =>
         {
 
             //First the RSB itself
             var attributesTable = new AttributesTable
             {
-                {
-                    "RegionalSubbasinID", x.CurrentNodeRegionalSubbasinID
-                }
+                { "RegionalSubbasinID", x.CurrentNodeRegionalSubbasinID},
+                { "Depth", x.Depth}
             };
+
             featureCollection.Add(new Feature(x.CatchmentGeometry4326, attributesTable));
             if (x.DownstreamLineGeometry != null)
             {

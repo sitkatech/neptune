@@ -7,6 +7,7 @@
 <script>
     var mapRef;
     var mapDivID = "@ViewDataTyped.MapDivID"
+    var toolTip;
     var arrowHeadsStyle =  {
         frequency: '100px',
         size: '10px',
@@ -14,11 +15,28 @@
         color: '#0099ab',
         fillColor: "#FFFFFF"
     }
+    
+    var upstreamStyle = {
+        fillColor: "#5600FF",
+        fill: true,
+        fillOpacity: 0.4,
+        color: "#5600FF",
+        weight: 1,
+        stroke: true
+    };
+
+    var downstreamStyle = {
+        fillColor: "#FF4345",
+        fill: true,
+        fillOpacity: 0.4,
+        color: "#FF4345",
+        weight: 1,
+        stroke: true
+    };
 
      NeptuneMaps.Map.prototype.rsbTraceFromPoint = function(self, e) {
-         self.removeLayerFromMap(self.currentMarker);
+         self.removeLayerFromMap(self.rsbTraceLayer);
          if (self.traceFromPointMode) {
-             debugger;
              jQuery.ajax({
                 url: "/RegionalSubbasin/GetRegionalSubbasinGraphTraceAsFeatureCollectionFromPoint",
                 headers: {
@@ -33,36 +51,28 @@
                  self.rsbTraceLayer = L.geoJson(response.features.sort((a, b) => b.geometry.type.localeCompare(a.geometry.type)),
                                         {
                                             style: function (feature) {
+                                                var depth = feature.properties.Depth;
                                                 if (feature.geometry.type == "LineString") {
-                                                    var depthForWeight = Math.abs(feature.properties.Depth) * 0.1;
+                                                    var depthForWeight = Math.abs(depth) * 0.1;
                                                     return {
-                                                        color: "#0099ab",
                                                         weight: depthForWeight > 2.5 ? 0.5 : 3 - depthForWeight
                                                     }
                                                 }
 
-                                                return {
-                                                    fillColor: "#FF4345",
-                                                    fill: true,
-                                                    fillOpacity: 0.4,
-                                                    color: "#FF4345",
-                                                    weight: 1,
-                                                    stroke: true
-                                                };
+                                                return depth >= 0 ? upstreamStyle : downstreamStyle
                                             },
                                             arrowheads: arrowHeadsStyle
                                         });
                  self.rsbTraceLayer.addTo(self.map);
              });
          }
-        // self.treatmentBMPPointYField.val(e.latlng.lat.toFixed(4));
-        // self.treatmentBMPPointXField.val(e.latlng.lng.toFixed(4));
     };
 
     NeptuneMaps.Map.prototype.setupTraceFromPoint = function() {
         mapRef = this;
         this.rsbTraceLayer = null;
         this.traceFromPointMode = false;
+        debugger;
     }
 
     function enterOrExitTraceMode() {
@@ -78,7 +88,11 @@
        mapRef.traceFromPointMode = true;
        document.getElementById(mapDivID).style.cursor = 'crosshair';
        mapRef.assignClickEventHandler(mapRef.rsbTraceFromPoint);
-       event.stopPropagation();
+
+       toolTip = L.tooltip({sticky: true, permanent: true}).setLatLng([0,0]).setContent("WHY").addTo(mapRef.map);
+       mapRef.map.on('mousemove', (e)=>{
+        toolTip.setLatLng(mapRef.map.layerPointToLatLng(e.layerPoint));
+       });
     }
 
     function exitTraceFromPointMode() {
