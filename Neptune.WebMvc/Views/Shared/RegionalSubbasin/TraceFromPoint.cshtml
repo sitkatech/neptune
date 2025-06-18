@@ -1,7 +1,41 @@
 ﻿@inherits Neptune.WebMvc.Views.Shared.RegionalSubbasin.TraceFromPoint
 
+@section JavascriptAndStylesContent
+{
+    <script src="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.js")" type="text/javascript"></script>
+    <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css" />
+    <style>
+        #legend {
+            padding: 10px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+        }
+
+        .legend-container .glyphicon {
+            margin-right: 5px;
+        }
+    </style>
+}
+
+<div id="legendContainer" style="display:none">
+    <div id="legend" class="rsb-trace-legend">
+        <div>
+            <span class="glyphicon glyphicon-stop" style="color: #FFFF00"></span>Drainage Area Point of Interest
+        </div>
+        <div>
+            <img src='/Content/img/legendImages/regionalSubbasinTraceDirectionOfFlow.png' height='12px' style='margin-bottom:3px; margin-right:5px'/>Direction of Flow
+        </div>
+        <div>
+            <span class="glyphicon glyphicon-stop" style="color: #5600FF"></span>Upstream Regional Subbasin
+        </div>
+        <div>
+            <span class="glyphicon glyphicon-stop" style="color: #FF4345"></span>Downstream Regional Subbasin
+        </div>
+    </div>
+</div>
+
+
 <div class="leaflet-bottom leaflet-right text-right">
-    <button class="btn btn-xs btn-neptune" style="pointer-events:auto" onclick="enterOrExitTraceMode()">View Upstream Area</button>
+    <button class="btn btn-xs btn-neptune" style="pointer-events:auto" onclick="enterOrExitTraceMode()"><span id="traceButtonDisplayAction">View</span> Drainage Areas</button>
 </div>
 
 <script>
@@ -9,6 +43,7 @@
     var mapDivID = "@ViewDataTyped.MapDivID"
     var toolTip;
     var defaultCursorStyle;
+    var rsbTraceLegend;
     var arrowHeadsStyle =  {
         frequency: '100px',
         size: '10px',
@@ -35,15 +70,24 @@
         stroke: true
     };
 
+    //To gain our map context and add a few variables, we'll extend Neptune Maps
     NeptuneMaps.Map.prototype.setupTraceFromPoint = function() {
-        mapRef = this;
         this.rsbTraceLayer = null;
+        this.rsbTraceStartMarker = null;
         this.traceFromPointMode = false;
+        mapRef = this;
+        defaultCursorStyle = document.getElementById(mapDivID).style.cursor;
     }
 
     function getRSBTraceFromPoint(e) {
          mapRef.removeLayerFromMap(mapRef.rsbTraceLayer);
+         mapRef.removeLayerFromMap(mapRef.rsbTraceStartMarker);
          if (mapRef.traceFromPointMode) {
+             var latLng = new L.LatLng(e.latlng.lat,
+                e.latlng.lng);
+             mapRef.rsbTraceStartMarker = L.marker(latLng,
+                { icon: mapRef.buildDefaultLeafletMarkerFromMarkerPath('/Content/leaflet/images/marker-icon-FFFF00.png') });
+             mapRef.rsbTraceStartMarker.addTo(mapRef.map);
              jQuery.ajax({
                 url: "/RegionalSubbasin/GetRegionalSubbasinGraphTraceAsFeatureCollectionFromPoint",
                 headers: {
@@ -100,7 +144,8 @@
         toolTip = L.tooltip({sticky: true, permanent: true})
                     //requires a default starting position, otherwise it will throw an error
                    .setLatLng([0,0])
-                   .setContent("Click on the map to see<br/>the Regional Subbasins<br/>upstream and downstream<br/>of the selected point").addTo(mapRef.map);
+                   .setContent("Click on the map to see<br/>the Regional Subbasins<br/>upstream and downstream<br/>of the selected point")
+                   .addTo(mapRef.map);
         mapRef.map.on('mousemove', updateTooltipPosition);
         jQuery("#" + mapDivID).on('mouseleave', closeRSBTraceTooltip);
         jQuery("#" + mapDivID).on('mouseenter', openRSBTraceTooltip);
@@ -114,12 +159,29 @@
         toolTip = null;
     }
 
+    function setupLegend() {
+        rsbTraceLegend = new L.Control.Legend({
+            position: 'topleft',
+            collapsed: false
+        });
+        mapRef.map.addControl(rsbTraceLegend);
+        jQuery(rsbTraceLegend.getContainer()).addClass("rsb-trace-legend-container")
+        jQuery(".rsb-trace-legend-container").append( jQuery(".rsb-trace-legend") );
+        jQuery(".rsb-trace-legend").css("display", "");
+    }
+
+    function tearDownLegend() {
+        jQuery("#legendContainer").append( jQuery(".rsb-trace-legend") );
+        mapRef.map.removeControl(rsbTraceLegend);
+    }
+
     function enterTraceFromPointMode() {
        mapRef.traceFromPointMode = true;
        mapRef.map.on("click", getRSBTraceFromPoint);
        setupRSBTraceTooltip();  
-       defaultCursorStyle = document.getElementById(mapDivID).style.cursor;
-       document.getElementById(mapDivID).style.cursor = 'crosshair';
+       setupLegend();
+       jQuery("#" + mapDivID).css('cursor', 'crosshair');
+       jQuery("#traceButtonDisplayAction").text("Clear");
        event.stopPropagation();
     }
 
@@ -127,29 +189,12 @@
         mapRef.traceFromPointMode = false;
         mapRef.map.off("click", getRSBTraceFromPoint);
         tearDownRSBTraceTooltip();
-        document.getElementById(mapDivID).style.cursor = defaultCursorStyle;
+        tearDownLegend();
+        jQuery("#" + mapDivID).css('cursor', defaultCursorStyle);
+        jQuery("#traceButtonDisplayAction").text("View");
         mapRef.removeLayerFromMap(mapRef.rsbTraceLayer);
+        mapRef.removeLayerFromMap(mapRef.rsbTraceStartMarker);
         mapRef.rsbTraceLayer = null;
+        mapRef.rsbTraceStartMarker = null;
     }
-
-    // function toggleUpstreamRSBTrace() {
-    //     if (upstreamRSBTraceLayer) {
-    //         map.map.removeLayer(upstreamRSBTraceLayer);
-    //         upstreamRSBTraceLayer = null;
-    //         jQuery("#toggleUpstreamRSBTraceDisplay").text("View");
-    //         jQuery("#rsbTraceUpstreamLegendItem").hide();
-    //         if (!downstreamRSBTraceLayer) {
-    //             jQuery("#rsbTraceDirectionOfFlowLegendItem").hide();
-    //         }
-    //         return;
-    //     }
-
-    //         jQuery("#toggleUpstreamRSBTraceDisplay").text("Hide");
-    //         showRSBLegendItemAndFitBounds();
-    // }
-
-    // function showRSBLegendItemAndFitBounds() {
-    //     jQuery("#rsbTraceDownstreamLegendItem").show();
-    //     jQuery("#rsbTraceDirectionOfFlowLegendItem").show();
-    // }
 </script>

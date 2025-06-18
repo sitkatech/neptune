@@ -54,13 +54,13 @@
             text-align: right;
         }
 
-        .treatmentBMPLocationLegend .glyphicon {
-            margin-right: 5px;
-        }
-
         #legend {
             padding: 10px;
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+        }
+
+        .legend-container .glyphicon {
+            margin-right: 5px;
         }
     </style>
 }
@@ -686,23 +686,12 @@
                         </div>
                     </div>
 
-                    <div id="legend" style="display: none;">
-                        <div class="treatmentBMPLocationLegend" style="margin-left: 10px">
-                            <div>
-                                <span class="glyphicon glyphicon-stop" style="color: #935F59"></span>Treatment BMP Location
-                            </div>
-                            <div>
-                                <span class="glyphicon glyphicon-stop" style="color: blue"></span>Delineation Area
-                            </div>
-                            <div id="rsbTraceDirectionOfFlowLegendItem" style="display: none;">
-                                <img src='/Content/img/legendImages/regionalSubbasinTraceDirectionOfFlow.png' height='12px' style='margin-bottom:3px; margin-right:5px' />Direction of Flow
-                            </div>
-                            <div id="rsbTraceUpstreamLegendItem" style="display: none;">
-                                <span class="glyphicon glyphicon-stop" style="color: #5600FF"></span>Upstream Regional Subbasin
-                            </div>
-                            <div id="rsbTraceDownstreamLegendItem" style="display: none;">
-                                <span class="glyphicon glyphicon-stop" style="color: #FF4345"></span>Downstream Regional Subbasin
-                            </div>
+                    <div id="legend" class="treatment-bmp-legend" style="display: none;">
+                        <div>
+                            <span class="glyphicon glyphicon-stop" style="color: #935F59"></span>Treatment BMP Location
+                        </div>
+                        <div>
+                            <span class="glyphicon glyphicon-stop" style="color: blue"></span>Delineation Area
                         </div>
                     </div>
                     
@@ -1084,18 +1073,14 @@
             map.map.setZoom(18);
         }
 
-        var legend = new L.Control.Legend({
+        var treatmentBMPLegend = new L.Control.Legend({
             position: 'topleft',
-            collapsed: false,
-            controlButton: {
-                title: "Legend"
-            }
+            collapsed: false
         });
-        map.map.addControl(legend);
-
-        jQuery(".legend-container").append( jQuery("#legend") );
-        jQuery(".legend-container").append( jQuery("#legend") );
-        jQuery("#legend").css("display", "");
+        map.map.addControl(treatmentBMPLegend);
+        jQuery(treatmentBMPLegend.getContainer()).addClass("treatment-bmp-legend-container");
+        jQuery(".treatment-bmp-legend-container").append( jQuery(".treatment-bmp-legend") );
+        jQuery(".treatment-bmp-legend").css("display", "");
 
         @{
             if (ViewDataTyped.UpstreamestBMP == null)
