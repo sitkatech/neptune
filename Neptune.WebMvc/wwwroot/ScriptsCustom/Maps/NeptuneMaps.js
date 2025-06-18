@@ -407,31 +407,22 @@ NeptuneMaps.Map.prototype.bindPopupToFeature = function(layer, feature) {
     }
 };
 
-NeptuneMaps.Map.prototype.assignClickEventHandler = function(clickEventFunction) {
+NeptuneMaps.Map.prototype.assignClickEventHandler = function (clickEventFunction) {
     var self = this;
     for (var i = 0; i < this.vectorLayers.length; ++i) {
         var currentLayer = this.vectorLayers[i];
-        currentLayer.on("click", function(e) { clickEventFunction(self, e); });
+        currentLayer.on("click", function (e) { clickEventFunction(self, e); });
     }
-    this.map.on("click", function(e) { clickEventFunction(self, e); });
+    this.map.on("click", function (e) { clickEventFunction(self, e); });
 };
 
-NeptuneMaps.Map.prototype.removeClickEventHandler = function (clickEventFunction) {
-    for (var i = 0; i < this.vectorLayers.length; ++i) {
-        var currentLayer = this.vectorLayers[i];
-        currentLayer.off("click", clickEventFunction);
-    }
-    this.map.off("click", clickEventFunction);
-};
-
-NeptuneMaps.Map.prototype.removeAllClickEvents = function() {
+NeptuneMaps.Map.prototype.removeClickEventHandler = function () {
     for (var i = 0; i < this.vectorLayers.length; ++i) {
         var currentLayer = this.vectorLayers[i];
         currentLayer.off("click");
     }
     this.map.off("click");
 };
-
 
 NeptuneMaps.Map.prototype.clickThroughFeature = function(e) {
     var self = this,

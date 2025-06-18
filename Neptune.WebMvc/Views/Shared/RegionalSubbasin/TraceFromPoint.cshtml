@@ -8,6 +8,7 @@
     var mapRef;
     var mapDivID = "@ViewDataTyped.MapDivID"
     var toolTip;
+    var defaultCursorStyle;
     var arrowHeadsStyle =  {
         frequency: '100px',
         size: '10px',
@@ -34,9 +35,15 @@
         stroke: true
     };
 
-     NeptuneMaps.Map.prototype.rsbTraceFromPoint = function(self, e) {
-         self.removeLayerFromMap(self.rsbTraceLayer);
-         if (self.traceFromPointMode) {
+    NeptuneMaps.Map.prototype.setupTraceFromPoint = function() {
+        mapRef = this;
+        this.rsbTraceLayer = null;
+        this.traceFromPointMode = false;
+    }
+
+    function getRSBTraceFromPoint(e) {
+         mapRef.removeLayerFromMap(mapRef.rsbTraceLayer);
+         if (mapRef.traceFromPointMode) {
              jQuery.ajax({
                 url: "/RegionalSubbasin/GetRegionalSubbasinGraphTraceAsFeatureCollectionFromPoint",
                 headers: {
@@ -48,7 +55,7 @@
                 dataType: 'json',
                 jsonpCallback: 'getJson'
              }).then(function(response) {
-                 self.rsbTraceLayer = L.geoJson(response.features.sort((a, b) => b.geometry.type.localeCompare(a.geometry.type)),
+                 mapRef.rsbTraceLayer = L.geoJson(response.features.sort((a, b) => b.geometry.type.localeCompare(a.geometry.type)),
                                         {
                                             style: function (feature) {
                                                 var depth = feature.properties.Depth;
@@ -63,17 +70,10 @@
                                             },
                                             arrowheads: arrowHeadsStyle
                                         });
-                 self.rsbTraceLayer.addTo(self.map);
+                 mapRef.rsbTraceLayer.addTo(mapRef.map);
              });
          }
     };
-
-    NeptuneMaps.Map.prototype.setupTraceFromPoint = function() {
-        mapRef = this;
-        this.rsbTraceLayer = null;
-        this.traceFromPointMode = false;
-        debugger;
-    }
 
     function enterOrExitTraceMode() {
         if (mapRef.traceFromPointMode) {
@@ -84,24 +84,52 @@
         enterTraceFromPointMode();
     }
 
+    function updateTooltipPosition(e) {
+        toolTip.setLatLng(mapRef.map.layerPointToLatLng(e.layerPoint));
+    }
+
+    function openRSBTraceTooltip(e) {
+        mapRef.map.openTooltip(toolTip);
+    }
+
+    function closeRSBTraceTooltip(e) {
+        mapRef.map.closeTooltip(toolTip);
+    }
+
+    function setupRSBTraceTooltip() {
+        toolTip = L.tooltip({sticky: true, permanent: true})
+                    //requires a default starting position, otherwise it will throw an error
+                   .setLatLng([0,0])
+                   .setContent("Click on the map to see<br/>the Regional Subbasins<br/>upstream and downstream<br/>of the selected point").addTo(mapRef.map);
+        mapRef.map.on('mousemove', updateTooltipPosition);
+        jQuery("#" + mapDivID).on('mouseleave', closeRSBTraceTooltip);
+        jQuery("#" + mapDivID).on('mouseenter', openRSBTraceTooltip);
+    }
+
+    function tearDownRSBTraceTooltip() {
+        mapRef.map.off('mousemove', updateTooltipPosition);
+        jQuery("#" + mapDivID).off('mouseleave', closeRSBTraceTooltip);
+        jQuery("#" + mapDivID).off('mouseenter', openRSBTraceTooltip);
+        mapRef.removeLayerFromMap(toolTip);
+        toolTip = null;
+    }
+
     function enterTraceFromPointMode() {
        mapRef.traceFromPointMode = true;
+       mapRef.map.on("click", getRSBTraceFromPoint);
+       setupRSBTraceTooltip();  
+       defaultCursorStyle = document.getElementById(mapDivID).style.cursor;
        document.getElementById(mapDivID).style.cursor = 'crosshair';
-       mapRef.assignClickEventHandler(mapRef.rsbTraceFromPoint);
-
-       toolTip = L.tooltip({sticky: true, permanent: true}).setLatLng([0,0]).setContent("WHY").addTo(mapRef.map);
-       mapRef.map.on('mousemove', (e)=>{
-        toolTip.setLatLng(mapRef.map.layerPointToLatLng(e.layerPoint));
-       });
+       event.stopPropagation();
     }
 
     function exitTraceFromPointMode() {
         mapRef.traceFromPointMode = false;
-        mapRef.removeLayerFromMap(mapRef.currentMarker);
+        mapRef.map.off("click", getRSBTraceFromPoint);
+        tearDownRSBTraceTooltip();
+        document.getElementById(mapDivID).style.cursor = defaultCursorStyle;
         mapRef.removeLayerFromMap(mapRef.rsbTraceLayer);
         mapRef.rsbTraceLayer = null;
-        document.getElementById(mapDivID).style.cursor = 'default';
-        mapRef.removeClickEventHandler(mapRef.rsbTraceFromPoint);
     }
 
     // function toggleUpstreamRSBTrace() {
