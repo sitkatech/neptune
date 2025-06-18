@@ -1,4 +1,5 @@
 .gitignore
+api.base.service.ts
 api.module.ts
 api/custom-rich-text.service.ts
 api/delineation.service.ts
@@ -12,6 +13,7 @@ api/onland-visual-trash-assessment.service.ts
 api/organization.service.ts
 api/project-document.service.ts
 api/project.service.ts
+api/regional-subbasin.service.ts
 api/stormwater-jurisdiction.service.ts
 api/system-info.service.ts
 api/trash-generating-unit-by-stormwater-jurisdiction.service.ts
@@ -24,6 +26,7 @@ configuration.ts
 encoder.ts
 model/area-based-acre-calculations-dto.ts
 model/bounding-box-dto.ts
+model/coordinate-dto.ts
 model/coordinate-sequence-factory.ts
 model/coordinate-sequence.ts
 model/coordinate.ts
@@ -97,4 +100,5 @@ model/treatment-bmp-type-with-modeling-attributes-dto.ts
 model/treatment-bmp-upsert-dto.ts
 model/treatment-bmphru-characteristics-summary-simple-dto.ts
 model/workflow-step-status.ts
+param.ts
 variables.ts
