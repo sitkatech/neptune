@@ -21,6 +21,7 @@
 @using Neptune.WebMvc.Views.Shared
 @using Neptune.EFModels.Entities
 @using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Views.Shared.RegionalSubbasin
 @inherits Neptune.WebMvc.Views.Parcel.Index
 
 @section JavascriptAndStylesContent
@@ -68,6 +69,9 @@
     </div>
     <div class="col-md-7" style="padding-right: 10px;">
         <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 600px; margin: 0">
+            @{
+                TraceFromPoint.RenderPartialView(Html, new TraceFromPointViewData(ViewDataTyped.MapInitJson.MapDivID));
+            }
         </div>
 
         <script type="text/javascript">
@@ -77,6 +81,7 @@
                 var geoserverUrl = @Html.Raw(ViewDataTyped.GeoserverUrl.ToJS());
                 var parcelSummaryForMapUrl = @Html.Raw(ViewDataTyped.ParcelSummaryForMapUrl.ToJS());
                 var map = new NeptuneMaps.ParcelSearch(mapInitJson, "Hybrid", geoserverUrl, parcelSummaryForMapUrl);
+                map.setupTraceFromPoint();
 
                 var parcelAddressFinder = jQuery('#parcelAddressFinder');
                 parcelAddressFinder.typeahead({
@@ -127,6 +132,6 @@
                 }
             }
         </script>
-        <span class="systemText" style="font-size: 12px">To zoom , hold Shift and drag a rectangle.</span>
+        <span class="systemText" style="font-size: 12px">To zoom, hold Shift and drag a rectangle.</span>
     </div>
 </div>
