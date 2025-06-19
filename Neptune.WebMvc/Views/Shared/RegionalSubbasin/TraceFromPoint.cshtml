@@ -15,6 +15,9 @@
 <div id="legendContainer" style="display:none">
     <div id="legend" class="rsb-trace-legend">
         <div>
+            <strong>Drainage Areas</strong>
+        </div>
+        <div>
             <span class="glyphicon glyphicon-stop" style="color: #F2BBE0"></span>Drainage Area Point of Interest
         </div>
         <div>
@@ -102,13 +105,15 @@
                                                 if (feature.geometry.type == "LineString") {
                                                     var depthForWeight = Math.abs(depth) * 0.1;
                                                     return {
-                                                        weight: depthForWeight > 2.5 ? 0.5 : 3 - depthForWeight
+                                                        weight: depthForWeight > 2.5 ? 0.5 : 3 - depthForWeight,
+                                                        color: '#0099ab'
                                                     }
                                                 }
 
                                                 return depth >= 0 ? upstreamStyle : downstreamStyle
                                             },
-                                            arrowheads: arrowHeadsStyle
+                                            arrowheads: arrowHeadsStyle,
+                                            interactive: false
                                         });
                  mapRef.rsbTraceLayer.addTo(mapRef.map);
              });
