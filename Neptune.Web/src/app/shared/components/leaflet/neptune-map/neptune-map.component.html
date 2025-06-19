@@ -37,7 +37,7 @@
             </div>
         </div>
     </div>
-    <div [id]="mapID" [style.height]="mapHeight">
+    <div [id]="mapID" [style.height]="mapHeight" [style.cursor]="cursorStyle">
         <div class="legend leaflet-control-layers leaflet-control-layers-expanded" [id]="legendID" *ngIf="showLegend">
             <a class="leaflet-control-layers-toggle">
                 <icon icon="MapLegend" (click)="legendToggle()"></icon>
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </div>
-        <regional-subbasin-trace-from-point *ngIf="map" [map]="map"></regional-subbasin-trace-from-point>
+        <regional-subbasin-trace-from-point *ngIf="map" [map]="map" [(cursorStyle)]="cursorStyle"></regional-subbasin-trace-from-point>
         <ng-content></ng-content>
     </div>
     <div class="map-footer">

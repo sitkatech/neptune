@@ -54,6 +54,8 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     public isSearching: boolean = false;
     private searchCleared: boolean = false;
 
+    public cursorStyle: string = "grab";
+
     constructor(public nominatimService: NominatimService, public leafletHelperService: LeafletHelperService, private sanitizer: DomSanitizer) {}
 
     ngAfterViewInit(): void {
