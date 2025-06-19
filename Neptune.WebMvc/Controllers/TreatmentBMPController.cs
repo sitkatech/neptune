@@ -697,7 +697,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
-        [TreatmentBMPDeleteFeature]
+        [TreatmentBMPManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public PartialViewResult QueueLGURefreshForTreatmentBMP([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
