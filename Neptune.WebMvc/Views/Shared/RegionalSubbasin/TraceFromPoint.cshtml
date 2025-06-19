@@ -1,6 +1,11 @@
 ﻿@inherits Neptune.WebMvc.Views.Shared.RegionalSubbasin.TraceFromPoint
 
 
+    <script src="@Url.Content("~/Content/leaflet/leaflet.geometryutil/leaflet.geometryutil.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/leaflet/leaflet.arrowheads/leaflet-arrowheads.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.js")" type="text/javascript"></script>
+    <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css" />
+
     <style>
         #legend {
             padding: 10px;
