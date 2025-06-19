@@ -11,7 +11,7 @@ import { CommonModule } from "@angular/common";
 export class IconComponent {
     @Input() icon: typeof IconInterface;
     @Input() enableFontSize: boolean = false;
-    @Input() color: string = "black";
+    @Input() color: string = "inherit";
     @Input() fillOpacity: number;
 }
 
