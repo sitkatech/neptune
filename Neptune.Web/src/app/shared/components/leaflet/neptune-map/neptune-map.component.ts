@@ -15,11 +15,12 @@ import { FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from
 import { LegendItem } from "src/app/shared/models/legend-item";
 import { Feature, FeatureCollection } from "geojson";
 import { DomSanitizer } from "@angular/platform-browser";
+import { RegionalSubbasinTraceFromPointComponent } from "../features/regional-subbasin-trace-from-point/regional-subbasin-trace-from-point.component";
 
 @Component({
     selector: "neptune-map",
     standalone: true,
-    imports: [CommonModule, IconComponent, NgSelectModule, FormsModule, ReactiveFormsModule],
+    imports: [CommonModule, IconComponent, NgSelectModule, FormsModule, ReactiveFormsModule, RegionalSubbasinTraceFromPointComponent],
     templateUrl: "./neptune-map.component.html",
     styleUrls: ["./neptune-map.component.scss"],
     providers: [
