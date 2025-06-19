@@ -29,6 +29,7 @@
 @using Neptune.WebMvc.Views.Shared.ModeledPerformance
 @using HRUCharacteristics = Neptune.WebMvc.Views.Shared.HRUCharacteristics.HRUCharacteristics
 @using Microsoft.AspNetCore.Html
+@using Neptune.WebMvc.Views.Shared.RegionalSubbasin
 @inherits Neptune.WebMvc.Views.TreatmentBMP.Detail
 
 @section JavascriptAndStylesContent
@@ -36,10 +37,6 @@
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
     <script src="@Url.Content("~/Content/angular-controllers/EditFundingEventFundingSourceController.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Content/leaflet/leaflet.geometryutil/leaflet.geometryutil.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Content/leaflet/leaflet.arrowheads/leaflet-arrowheads.min.js")" type="text/javascript"></script>
-    <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css" />
     <style>
 
         .extra-small {
@@ -53,13 +50,13 @@
             text-align: right;
         }
 
-        .treatmentBMPLocationLegend .glyphicon {
-            margin-right: 5px;
-        }
-
         #legend {
             padding: 10px;
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+        }
+
+        .legend-container .glyphicon {
+            margin-right: 5px;
         }
     </style>
 }
@@ -678,31 +675,18 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 500px;">
-                            <div class="leaflet-bottom leaflet-right text-right">
-                                <button class="btn btn-xs btn-neptune" style="pointer-events:auto" onclick="toggleUpstreamRSBTrace()"><span id="toggleUpstreamRSBTraceDisplay">View</span> Upstream Area</button>
-                                <br/>
-                                <button class="btn btn-xs btn-neptune" style="pointer-events:auto" onclick="toggleDownstreamRSBTrace()"><span id="toggleDownstreamRSBTraceDisplay">View</span> Downstream Area</button>
-                            </div>
+                            @{
+                                TraceFromPoint.RenderPartialView(Html, new TraceFromPointViewData(ViewDataTyped.MapInitJson.MapDivID));
+                            }
                         </div>
                     </div>
 
-                    <div id="legend" style="display: none;">
-                        <div class="treatmentBMPLocationLegend" style="margin-left: 10px">
-                            <div>
-                                <span class="glyphicon glyphicon-stop" style="color: #935F59"></span>Treatment BMP Location
-                            </div>
-                            <div>
-                                <span class="glyphicon glyphicon-stop" style="color: blue"></span>Delineation Area
-                            </div>
-                            <div id="rsbTraceDirectionOfFlowLegendItem" style="display: none;">
-                                <img src='/Content/img/legendImages/regionalSubbasinTraceDirectionOfFlow.png' height='12px' style='margin-bottom:3px; margin-right:5px' />Direction of Flow
-                            </div>
-                            <div id="rsbTraceUpstreamLegendItem" style="display: none;">
-                                <span class="glyphicon glyphicon-stop" style="color: #5600FF"></span>Upstream Regional Subbasin
-                            </div>
-                            <div id="rsbTraceDownstreamLegendItem" style="display: none;">
-                                <span class="glyphicon glyphicon-stop" style="color: #FF4345"></span>Downstream Regional Subbasin
-                            </div>
+                    <div id="legend" class="treatment-bmp-legend" style="display: none;">
+                        <div>
+                            <span class="glyphicon glyphicon-stop" style="color: #935F59"></span>Treatment BMP Location
+                        </div>
+                        <div>
+                            <span class="glyphicon glyphicon-stop" style="color: blue"></span>Delineation Area
                         </div>
                     </div>
                     
@@ -1065,15 +1049,6 @@
 
 <script type="text/javascript">
     var map;
-    var upstreamRSBTraceLayer;
-    var downstreamRSBTraceLayer;
-    var arrowHeadsStyle =  {
-        frequency: '100px',
-        size: '10px',
-        fill: true,
-        color: '#0099ab',
-        fillColor: "#FFFFFF"
-    }
     jQuery(document).ready(function() {
         var mapInitJson = @Html.Raw(ViewDataTyped.MapInitJson.ToJsonHtmlString());
         map = new NeptuneMaps.Map(mapInitJson, null, @Html.Raw(ViewDataTyped.MapServiceUrl.ToJS()));
@@ -1093,18 +1068,14 @@
             map.map.setZoom(18);
         }
 
-        var legend = new L.Control.Legend({
+        var treatmentBMPLegend = new L.Control.Legend({
             position: 'topleft',
-            collapsed: false,
-            controlButton: {
-                title: "Legend"
-            }
+            collapsed: false
         });
-        map.map.addControl(legend);
-
-        jQuery(".legend-container").append( jQuery("#legend") );
-        jQuery(".legend-container").append( jQuery("#legend") );
-        jQuery("#legend").css("display", "");
+        map.map.addControl(treatmentBMPLegend);
+        jQuery(treatmentBMPLegend.getContainer()).addClass("treatment-bmp-legend-container");
+        jQuery(".treatment-bmp-legend-container").append( jQuery(".treatment-bmp-legend") );
+        jQuery(".treatment-bmp-legend").css("display", "");
 
         @{
             if (ViewDataTyped.UpstreamestBMP == null)
@@ -1127,106 +1098,6 @@
                 @:});
             }
         }
+        map.setupTraceFromPoint();
     });
-
-    function toggleUpstreamRSBTrace() {
-        if (upstreamRSBTraceLayer) {
-            map.map.removeLayer(upstreamRSBTraceLayer);
-            upstreamRSBTraceLayer = null;
-            jQuery("#toggleUpstreamRSBTraceDisplay").text("View");
-            jQuery("#rsbTraceUpstreamLegendItem").hide();
-            if (!downstreamRSBTraceLayer) {
-                jQuery("#rsbTraceDirectionOfFlowLegendItem").hide();
-            }
-            return;
-        }
-
-        jQuery.ajax({
-        url: "@ViewDataTyped.UpstreamRSBTraceUrl",
-        dataType: "json",
-        jsonpCallback: "getJson",}).then(function (response) {
-            upstreamRSBTraceLayer = L.geoJson(response.features.sort((a, b) => b.geometry.type.localeCompare(a.geometry.type)),
-            {
-                style: function (feature) {
-                    if (feature.geometry.type == "LineString") {
-                        var depthForWeight = feature.properties.Depth * 0.1;
-                        return {
-                            color: "#0099ab",
-                            weight: depthForWeight > 2.5 ? 0.5 : 3 - depthForWeight
-                        }
-                    }
-
-                    return {
-                        fillColor: "#5600FF",
-                        fill: true,
-                        fillOpacity: 0.4,
-                        color: "#5600FF",
-                        weight: 1,
-                        stroke: true
-                    };
-                },
-                arrowheads: arrowHeadsStyle
-            });
-            upstreamRSBTraceLayer.addTo(map.map);
-            jQuery("#toggleUpstreamRSBTraceDisplay").text("Hide");
-            showRSBLegendItemAndFitBounds();
-        });
-    }
-
-    function toggleDownstreamRSBTrace() {
-        if (downstreamRSBTraceLayer) {
-            map.map.removeLayer(downstreamRSBTraceLayer);
-            downstreamRSBTraceLayer = null;
-            jQuery("#toggleDownstreamRSBTraceDisplay").text("View");
-            jQuery("#rsbTraceDownstreamLegendItem").hide();
-            if (!upstreamRSBTraceLayer) {
-                jQuery("#rsbTraceDirectionOfFlowLegendItem").hide();
-            }
-            return;
-        }
-
-        jQuery.ajax({
-        url: "@ViewDataTyped.DownstreamRSBTraceUrl",
-        dataType: "json",
-        jsonpCallback: "getJson",}).then(function (response) {
-            downstreamRSBTraceLayer = L.geoJson(response.features.sort((a, b) => b.geometry.type.localeCompare(a.geometry.type)),
-            {
-                style: function (feature) {
-                    if (feature.geometry.type == "LineString") {
-                        var depthForWeight = Math.abs(feature.properties.Depth) * 0.1;
-                        return {
-                            color: "#0099ab",
-                            weight: depthForWeight > 2.5 ? 0.5 : 3 - depthForWeight
-                        }
-                    }
-
-                    return {
-                        fillColor: "#FF4345",
-                        fill: true,
-                        fillOpacity: 0.4,
-                        color: "#FF4345",
-                        weight: 1,
-                        stroke: true
-                    };
-                },
-                arrowheads: arrowHeadsStyle
-            });
-            downstreamRSBTraceLayer.addTo(map.map);
-            jQuery("#toggleDownstreamRSBTraceDisplay").text("Hide");
-            showRSBLegendItemAndFitBounds();
-        });
-    }
-
-    function showRSBLegendItemAndFitBounds() {
-        jQuery("#rsbTraceDownstreamLegendItem").show();
-        jQuery("#rsbTraceDirectionOfFlowLegendItem").show();
-        var boundsLayerGroup = new L.featureGroup();
-        if (upstreamRSBTraceLayer) {
-            boundsLayerGroup.addLayer(upstreamRSBTraceLayer);
-        }
-        if (downstreamRSBTraceLayer) {
-            boundsLayerGroup.addLayer(downstreamRSBTraceLayer);
-        }
-        map.map.fitBounds(boundsLayerGroup.getBounds());
-    }
 </script>

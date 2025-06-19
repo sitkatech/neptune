@@ -23,6 +23,7 @@
 @using Neptune.WebMvc.Common.BootstrapWrappers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Views.Shared.RegionalSubbasin
 @inherits FindABMP
 
 @section JavascriptAndStylesContent
@@ -181,6 +182,9 @@
         <div class="col-sm-8 col-md-9 col-sm-push-4 col-md-push-3">
             <div id="mapContainer">
                 <div id="@ViewDataTyped.MapInitJson.MapDivID" class="mapDiv" style="margin: 0">
+                    @{
+                        TraceFromPoint.RenderPartialView(Html, new TraceFromPointViewData(ViewDataTyped.MapInitJson.MapDivID));
+                    }
                 </div>
             </div>
         </div>

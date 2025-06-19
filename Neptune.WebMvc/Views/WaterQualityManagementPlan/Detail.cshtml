@@ -7,6 +7,7 @@
 @using Neptune.WebMvc.Common.HtmlHelperExtensions
 @using Neptune.EFModels.Entities
 @using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Views.Shared.RegionalSubbasin
 @using HRUCharacteristics = Neptune.WebMvc.Views.Shared.HRUCharacteristics.HRUCharacteristics
 
 @inherits Detail
@@ -20,6 +21,7 @@
         jQuery(function() {
             var mapInitJson = @Html.Raw(ViewDataTyped.MapInitJson.ToJsonHtmlString());
             map = new NeptuneMaps.Map(mapInitJson);
+            map.setupTraceFromPoint();
 
             map.addLayerToLayerControl(map.vectorLayers[0], "<img src='/Content/img/legendImages/parcel-wqmp.png' style='margin-bottom:2px' height='15px'> WQMPs", false);
             map.addLayerToLayerControl(map.vectorLayers[1], "<img src='/Content/leaflet/images/marker-icon-2x-935F59.png' height='30px' style='margin-bottom:-7px'>Treatment BMPs", false);
@@ -347,7 +349,11 @@
                     }
                 </div>
                 <div class="panel-body">
-                    <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
+                    <div id="@ViewDataTyped.MapInitJson.MapDivID">
+                        @{
+                            TraceFromPoint.RenderPartialView(Html, new TraceFromPointViewData(ViewDataTyped.MapInitJson.MapDivID));
+                        }
+                    </div>
                     <div class="row" style="margin-top: 12px;">
                         <label class="col-sm-5 control-label">Calculated Acreage of Assigned Boundary:</label>
                         <div class="col-sm-7">@ViewDataTyped.CalculatedWQMPAcreage</div>

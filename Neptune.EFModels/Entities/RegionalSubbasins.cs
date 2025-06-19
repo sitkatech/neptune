@@ -70,32 +70,32 @@ public static class RegionalSubbasins
     }
 
     public static FeatureCollection GetRegionalSubbasinGraphUpstreamTraceAsFeatureCollection(NeptuneDbContext dbContext,
-        int regionalSubbasinBaseID)
+        CoordinateDto coordinate)
     {
-        return GetRegionalSubbasinGraphTraceAsFeatureCollection(dbContext, regionalSubbasinBaseID, upstreamOnly: true);
+        return GetRegionalSubbasinGraphTraceAsFeatureCollection(dbContext, coordinate, upstreamOnly: true);
     }
 
     public static FeatureCollection GetRegionalSubbasinGraphDownstreamTraceAsFeatureCollection(NeptuneDbContext dbContext,
-        int regionalSubbasinBaseID)
+        CoordinateDto coordinate)
     {
-        return GetRegionalSubbasinGraphTraceAsFeatureCollection(dbContext, regionalSubbasinBaseID, downstreamOnly: true);
+        return GetRegionalSubbasinGraphTraceAsFeatureCollection(dbContext, coordinate, downstreamOnly: true);
     }
 
-    public static FeatureCollection GetRegionalSubbasinGraphTraceAsFeatureCollection(NeptuneDbContext dbContext, int regionalSubbasinBaseID, bool upstreamOnly = false, bool downstreamOnly = false)
+    public static FeatureCollection GetRegionalSubbasinGraphTraceAsFeatureCollection(NeptuneDbContext dbContext, CoordinateDto coordinate, bool upstreamOnly = false, bool downstreamOnly = false)
     {
         var featureCollection = new FeatureCollection();
-        var regionalSubbasinGraphTrace = dbContext.RegionalSubbasinNetworkResults.FromSql($"EXECUTE dbo.pRegionalSubbasinGenerateNetwork {regionalSubbasinBaseID}, {upstreamOnly}, {downstreamOnly}").ToList();
-        
+        var regionalSubbasinGraphTrace = dbContext.RegionalSubbasinNetworkResults.FromSql($"EXECUTE dbo.pRegionalSubbasinGenerateNetwork {coordinate.Latitude}, {coordinate.Longitude}, {upstreamOnly}, {downstreamOnly}").ToList();
+
         regionalSubbasinGraphTrace.ForEach(x =>
         {
 
             //First the RSB itself
             var attributesTable = new AttributesTable
             {
-                {
-                    "RegionalSubbasinID", x.CurrentNodeRegionalSubbasinID
-                }
+                { "RegionalSubbasinID", x.CurrentNodeRegionalSubbasinID},
+                { "Depth", x.Depth}
             };
+
             featureCollection.Add(new Feature(x.CatchmentGeometry4326, attributesTable));
             if (x.DownstreamLineGeometry != null)
             {

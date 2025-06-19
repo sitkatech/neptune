@@ -182,9 +182,6 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             TreatmentBMPTypeDetailUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(treatmentBMP.TreatmentBMPTypeID));
             UpstreamBMPDetailUrl = upstreamestBMP == null ? string.Empty : DetailUrlTemplate.ParameterReplace(upstreamestBMP.TreatmentBMPID);
 
-            UpstreamRSBTraceUrl = SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(LinkGenerator, x => x.GetRegionalSubbasinGraphUpstreamTraceAsFeatureCollection(treatmentBMP.RegionalSubbasinID));
-            DownstreamRSBTraceUrl = SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(LinkGenerator, x => x.GetRegionalSubbasinGraphDownstreamTraceAsFeatureCollection(treatmentBMP.RegionalSubbasinID));
-
             DelineationErrors = CheckForDelineationErrors(delineation, delineationOverlapDelineations);
             ParameterizationErrors = CheckForParameterizationErrors(treatmentBMP, hasMissingModelingAttributes, delineation);
 

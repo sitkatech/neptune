@@ -15,6 +15,7 @@ import { OnlandVisualTrashAssessmentObservationService } from './api/onland-visu
 import { OrganizationService } from './api/organization.service';
 import { ProjectService } from './api/project.service';
 import { ProjectDocumentService } from './api/project-document.service';
+import { RegionalSubbasinService } from './api/regional-subbasin.service';
 import { StormwaterJurisdictionService } from './api/stormwater-jurisdiction.service';
 import { SystemInfoService } from './api/system-info.service';
 import { TrashGeneratingUnitService } from './api/trash-generating-unit.service';
@@ -41,6 +42,7 @@ import { UserClaimsService } from './api/user-claims.service';
     OrganizationService,
     ProjectService,
     ProjectDocumentService,
+    RegionalSubbasinService,
     StormwaterJurisdictionService,
     SystemInfoService,
     TrashGeneratingUnitService,
