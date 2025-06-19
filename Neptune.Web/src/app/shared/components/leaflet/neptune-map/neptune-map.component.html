@@ -45,6 +45,8 @@
             <div class="leaflet-control-layers-list">
                 <div *ngFor="let legendItem of legendItems" class="legend-item">
                     <h4>{{ legendItem.Title }}</h4>
+                    <icon *ngIf="legendItem.Icon" [icon]="legendItem.Icon" [color]="legendItem.IconColor" [fillOpacity]="legendItem.IconFillOpacity"></icon>
+                    <span *ngIf="legendItem.Text">{{ legendItem.Text }}</span>
                     <div *ngIf="legendItem.LegendHtml" [innerHTML]="legendItem.LegendHtml"></div>
                     <img
                         *ngIf="legendItem.WmsUrl"
@@ -58,7 +60,13 @@
                 </div>
             </div>
         </div>
-        <regional-subbasin-trace-from-point *ngIf="map" [map]="map" [(cursorStyle)]="cursorStyle"></regional-subbasin-trace-from-point>
+        <regional-subbasin-trace-from-point
+            *ngIf="map"
+            [map]="map"
+            [cursorStyle]="cursorStyle"
+            (cursorStyleChange)="onCursorStyleChange($event)"
+            [legendItems]="legendItems"
+            (legendItemsChange)="onLegendItemsChange($event)"></regional-subbasin-trace-from-point>
         <ng-content></ng-content>
     </div>
     <div class="map-footer">

@@ -198,6 +198,14 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+    onCursorStyleChange(updatedCursorStyle: string) {
+        this.cursorStyle = updatedCursorStyle;
+    }
+
+    onLegendItemsChange(updatedLegendItems: LegendItem[]) {
+        this.legendItems = updatedLegendItems;
+    }
+
     ngOnDestroy(): void {
         console.warn("destroying map");
         if (this.map) {

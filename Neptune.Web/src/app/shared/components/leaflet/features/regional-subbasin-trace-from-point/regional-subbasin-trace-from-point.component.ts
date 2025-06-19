@@ -1,11 +1,11 @@
-import { Component, Input, Output, EventEmitter, HostListener, ChangeDetectorRef } from "@angular/core";
+import { Component, Input, Output, EventEmitter, HostListener, ChangeDetectorRef, ViewChild, ElementRef, Renderer2 } from "@angular/core";
 import * as L from "leaflet";
-import * as LGU from "leaflet-geometryutil";
+import "leaflet-geometryutil";
 import "leaflet-arrowheads";
-import "leaflet-legend";
 import { RegionalSubbasinService } from "src/app/shared/generated/api/regional-subbasin.service";
 import { CoordinateDto } from "src/app/shared/generated/model/coordinate-dto";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
+import { LegendItem } from "src/app/shared/models/legend-item";
 
 @Component({
     selector: "regional-subbasin-trace-from-point",
@@ -18,9 +18,46 @@ export class RegionalSubbasinTraceFromPointComponent {
     @Input() map: any;
     @Input() layerControl: any;
     @Input() cursorStyle: string;
-    defaultCursorStyle: string;
     @Output() cursorStyleChange = new EventEmitter();
+    @Input() legendItems: LegendItem[];
+    @Output() legendItemsChange = new EventEmitter<LegendItem[]>();
+
+    defaultCursorStyle: string;
     traceFromPointMode: boolean = false;
+
+    rsbTraceLegendItemGroupText: string = "RSBTraceLegendItem";
+    rsbTraceLegendItems: LegendItem[] = [
+        new LegendItem({
+            Group: this.rsbTraceLegendItemGroupText,
+            Title: "Drainage Areas",
+        }),
+        new LegendItem({
+            Group: this.rsbTraceLegendItemGroupText,
+            Text: "Drainage Area Point of Interest",
+            Icon: "MapMarker",
+            IconColor: "#f2bbe0",
+        }),
+        new LegendItem({
+            Group: this.rsbTraceLegendItemGroupText,
+            Text: "Direction of Flow",
+            Icon: "FlowArrow",
+            IconColor: "#0099ab",
+        }),
+        new LegendItem({
+            Group: this.rsbTraceLegendItemGroupText,
+            Text: "Upstream Regional Subbasin",
+            Icon: "Square",
+            IconColor: "#5600ff",
+            IconFillOpacity: 0.5,
+        }),
+        new LegendItem({
+            Group: this.rsbTraceLegendItemGroupText,
+            Text: "Downstream Regional Subbasin",
+            Icon: "Square",
+            IconColor: "#ff4345",
+            IconFillOpacity: 0.5,
+        }),
+    ];
 
     rsbTraceLayer: L.Layers = null;
     rsbTraceStartMarker: L.Layer = null;
@@ -52,7 +89,7 @@ export class RegionalSubbasinTraceFromPointComponent {
         stroke: true,
     };
 
-    constructor(private regionalSubbasinService: RegionalSubbasinService, private cdr: ChangeDetectorRef) {}
+    constructor(private regionalSubbasinService: RegionalSubbasinService, private cdr: ChangeDetectorRef, private renderer: Renderer2) {}
 
     clearAddedTraceLayers() {
         if (this.rsbTraceLayer) {
@@ -67,7 +104,7 @@ export class RegionalSubbasinTraceFromPointComponent {
         this.clearAddedTraceLayers();
         if (this.traceFromPointMode) {
             var latLng = new L.LatLng(e.latlng.lat, e.latlng.lng);
-            this.rsbTraceStartMarker = L.marker(latLng, { icon: MarkerHelper.treatmentBMPMarker });
+            this.rsbTraceStartMarker = L.marker(latLng, { icon: MarkerHelper.pinkMarker });
             this.rsbTraceStartMarker.addTo(this.map);
             let coordDto = new CoordinateDto({
                 Latitude: e.latlng.lat,
@@ -83,28 +120,19 @@ export class RegionalSubbasinTraceFromPointComponent {
                                 var depthForWeight = Math.abs(depth) * 0.1;
                                 return {
                                     weight: depthForWeight > 2.5 ? 0.5 : 3 - depthForWeight,
+                                    color: "#0099ab",
                                 };
                             }
 
                             return depth >= 0 ? this.upstreamStyle : this.downstreamStyle;
                         },
                         arrowheads: this.arrowHeadsStyle,
+                        interactive: false,
                     }
                 );
                 this.rsbTraceLayer.addTo(this.map);
             });
         }
-    }
-
-    toggleTraceFromPointMode(event: any) {
-        this.traceFromPointMode = !this.traceFromPointMode;
-        if (this.traceFromPointMode) {
-            this.enterTraceFromPointMode();
-            event.stopPropagation();
-            return;
-        }
-
-        this.exitTraceFromPointMode();
     }
 
     updateTooltipPosition(e) {
@@ -136,16 +164,26 @@ export class RegionalSubbasinTraceFromPointComponent {
 
     tearDownRSBTraceTooltip() {
         this.map.off("mousemove", this.updateTooltipPosition);
-        L.DomEvent.on(this.map.getContainer(), "mouseleave", this.closeRSBTraceTooltip, this);
-        L.DomEvent.on(this.map.getContainer(), "mouseenter", this.openRSBTraceTooltip, this);
+        L.DomEvent.off(this.map.getContainer(), "mouseleave", this.closeRSBTraceTooltip, this);
+        L.DomEvent.off(this.map.getContainer(), "mouseenter", this.openRSBTraceTooltip, this);
         this.map.removeLayer(this.tooltip);
         this.tooltip = null;
+    }
+
+    setupLegend() {
+        this.legendItems = this.legendItems.concat(this.rsbTraceLegendItems);
+        this.legendItemsChange.emit(this.legendItems);
+    }
+
+    tearDownLegend() {
+        this.legendItems = this.legendItems.filter((x) => x.Group !== this.rsbTraceLegendItemGroupText);
+        this.legendItemsChange.emit(this.legendItems);
     }
 
     enterTraceFromPointMode() {
         this.map.on("click", this.getRSBTraceFromPoint, this);
         this.setupRSBTraceTooltip();
-        //setupLegend();
+        this.setupLegend();
         this.defaultCursorStyle = this.cursorStyle;
         this.cursorStyle = "crosshair";
         this.cursorStyleChange.emit(this.cursorStyle);
@@ -155,26 +193,21 @@ export class RegionalSubbasinTraceFromPointComponent {
     exitTraceFromPointMode() {
         this.map.off("click", this.getRSBTraceFromPoint, this);
         this.tearDownRSBTraceTooltip();
+        this.tearDownLegend();
         this.clearAddedTraceLayers();
         this.cursorStyle = this.defaultCursorStyle;
         this.cursorStyleChange.emit(this.cursorStyle);
         this.cdr.detectChanges();
     }
-    // var rsbTraceLegend;
 
-    // function setupLegend() {
-    //     rsbTraceLegend = new L.Control.Legend({
-    //         position: 'topleft',
-    //         collapsed: false
-    //     });
-    //     this.map.addControl(rsbTraceLegend);
-    //     jQuery(rsbTraceLegend.getContainer()).addClass("rsb-trace-legend-container")
-    //     jQuery(".rsb-trace-legend-container").append( jQuery(".rsb-trace-legend") );
-    //     jQuery(".rsb-trace-legend").css("display", "");
-    // }
+    toggleTraceFromPointMode(event: any) {
+        this.traceFromPointMode = !this.traceFromPointMode;
+        if (this.traceFromPointMode) {
+            this.enterTraceFromPointMode();
+            event.stopPropagation();
+            return;
+        }
 
-    // function tearDownLegend() {
-    //     jQuery("#legendContainer").append( jQuery(".rsb-trace-legend") );
-    //     this.map.removeControl(rsbTraceLegend);
-    // }
+        this.exitTraceFromPointMode();
+    }
 }
