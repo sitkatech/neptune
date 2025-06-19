@@ -39,7 +39,7 @@
 
 
 <div class="leaflet-bottom leaflet-right text-right">
-    <button class="btn btn-xs btn-neptune" style="pointer-events:auto" onclick="enterOrExitTraceMode()"><span id="traceButtonDisplayAction">View</span> Drainage Areas</button>
+    <button class="btn btn-xs btn-neptune" style="pointer-events:auto" onclick="toggleTraceFromPointMode()"><span id="traceButtonDisplayAction">View</span> Drainage Areas</button>
 </div>
 
 <script>
@@ -83,9 +83,20 @@
         defaultCursorStyle = document.getElementById(mapDivID).style.cursor;
     }
 
+    function clearAddedTraceLayers() {
+        if (mapRef.rsbTraceLayer) {
+             mapRef.removeLayerFromMap(mapRef.rsbTraceLayer);
+             mapRef.rsbTraceLayer = null;
+        }
+
+        if (mapRef.rsbTraceStartMarker) {
+            mapRef.removeLayerFromMap(mapRef.rsbTraceStartMarker);
+            mapRef.rsbTraceStartMarker = null;
+        }
+    }
+
     function getRSBTraceFromPoint(e) {
-         mapRef.removeLayerFromMap(mapRef.rsbTraceLayer);
-         mapRef.removeLayerFromMap(mapRef.rsbTraceStartMarker);
+         clearAddedTraceLayers();
          if (mapRef.traceFromPointMode) {
              var latLng = new L.LatLng(e.latlng.lat,
                 e.latlng.lng);
@@ -125,15 +136,6 @@
          }
     };
 
-    function enterOrExitTraceMode() {
-        if (mapRef.traceFromPointMode) {
-            exitTraceFromPointMode();
-            return;
-        }
-
-        enterTraceFromPointMode();
-    }
-
     function updateTooltipPosition(e) {
         toolTip.setLatLng(mapRef.map.layerPointToLatLng(e.layerPoint));
     }
@@ -153,14 +155,14 @@
                    .setContent("Click on the map to see<br/>the Regional Subbasins<br/>upstream and downstream<br/>of the selected point")
                    .addTo(mapRef.map);
         mapRef.map.on('mousemove', updateTooltipPosition);
-        jQuery("#" + mapDivID).on('mouseleave', closeRSBTraceTooltip);
-        jQuery("#" + mapDivID).on('mouseenter', openRSBTraceTooltip);
+        L.DomEvent.on(mapRef.map.getContainer(), "mouseleave", closeRSBTraceTooltip, this);
+        L.DomEvent.on(mapRef.map.getContainer(), "mouseenter", openRSBTraceTooltip, this);
     }
 
     function tearDownRSBTraceTooltip() {
         mapRef.map.off('mousemove', updateTooltipPosition);
-        jQuery("#" + mapDivID).off('mouseleave', closeRSBTraceTooltip);
-        jQuery("#" + mapDivID).off('mouseenter', openRSBTraceTooltip);
+        L.DomEvent.off(mapRef.map.getContainer(), "mouseleave", closeRSBTraceTooltip, this);
+        L.DomEvent.off(mapRef.map.getContainer(), "mouseenter", openRSBTraceTooltip, this);
         mapRef.removeLayerFromMap(toolTip);
         toolTip = null;
     }
@@ -182,7 +184,6 @@
     }
 
     function enterTraceFromPointMode() {
-       mapRef.traceFromPointMode = true;
        mapRef.map.on("click", getRSBTraceFromPoint);
        setupRSBTraceTooltip();  
        setupLegend();
@@ -192,15 +193,21 @@
     }
 
     function exitTraceFromPointMode() {
-        mapRef.traceFromPointMode = false;
         mapRef.map.off("click", getRSBTraceFromPoint);
         tearDownRSBTraceTooltip();
         tearDownLegend();
         jQuery("#" + mapDivID).css('cursor', defaultCursorStyle);
         jQuery("#traceButtonDisplayAction").text("View");
-        mapRef.removeLayerFromMap(mapRef.rsbTraceLayer);
-        mapRef.removeLayerFromMap(mapRef.rsbTraceStartMarker);
-        mapRef.rsbTraceLayer = null;
-        mapRef.rsbTraceStartMarker = null;
+        clearAddedTraceLayers();
+    }
+
+    function toggleTraceFromPointMode() {
+        mapRef.traceFromPointMode = !mapRef.traceFromPointMode;
+        if (mapRef.traceFromPointMode) {
+            enterTraceFromPointMode();
+            return;
+        }
+
+        exitTraceFromPointMode();
     }
 </script>
