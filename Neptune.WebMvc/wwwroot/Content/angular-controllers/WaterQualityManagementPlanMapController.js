@@ -172,7 +172,7 @@
                 tiled: true,
                 styles: "delineation",
                 maxZoom: 22,
-                cql_filter: "DelineationStatus = 'Verified'"// + jurisdictionCQLFilter,
+                cql_filter: "DelineationStatus = 'Verified'"
             };
 
             $scope.verifiedDelineations = L.tileLayer.wms($scope.AngularViewData.GeoServerUrl + "/wms?", $scope.wmsOptions);
@@ -190,7 +190,7 @@
                 tiled: true,
                 styles: "delineation",
                 maxZoom: 22,
-                cql_filter: "DelineationStatus = 'Provisional'"// + jurisdictionCQLFilter,
+                cql_filter: "DelineationStatus = 'Provisional'"
             };
 
             $scope.provisionalDelineations = L.tileLayer.wms($scope.AngularViewData.GeoServerUrl + "/wms?", $scope.wmsOptions);
