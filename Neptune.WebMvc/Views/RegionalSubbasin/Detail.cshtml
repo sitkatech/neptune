@@ -21,6 +21,7 @@
 @using Neptune.WebMvc.Views.Shared
 @using Neptune.EFModels.Entities
 @using Neptune.WebMvc.Common
+@using Neptune.WebMvc.Views.Shared.RegionalSubbasin
 @using HRUCharacteristics = Neptune.WebMvc.Views.Shared.HRUCharacteristics.HRUCharacteristics
 @inherits Neptune.WebMvc.Views.RegionalSubbasin.Detail
 
@@ -97,6 +98,9 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 500px;">
+                            @{
+                                TraceFromPoint.RenderPartialView(Html, new TraceFromPointViewData(ViewDataTyped.MapInitJson.MapDivID));
+                            }
                         </div>
                     </div>
                 </div>
@@ -110,5 +114,6 @@
     jQuery(document).ready(function() {
         var mapInitJson = @Html.Raw(ViewDataTyped.MapInitJson.ToJsonHtmlString());
         map = new NeptuneMaps.Map(mapInitJson);
+        map.setupTraceFromPoint();
     });
 </script>
