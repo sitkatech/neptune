@@ -64,9 +64,4 @@ public static class vHRUCharacteristics
         return GetImpl(dbContext)
             .Where(x => x.TreatmentBMPID != null && x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToList();
     }
-
-    public static Dictionary<int, double> ListAcreageSumByTreatmentBMPDictionary(NeptuneDbContext dbContext)
-    {
-        return GetImpl(dbContext).Where(x => x.TreatmentBMPID != null).ToList().GroupBy(x => (int)x.TreatmentBMPID).ToDictionary(x => x.Key, x => x.Sum(y => y.Area));
-    }
 }

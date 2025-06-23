@@ -486,5 +486,16 @@ namespace Neptune.EFModels.Entities
 
             return toReturn;
         }
+
+        public static List<TreatmentBMP> ListModelingTreatmentBMPsWithCentralizedDelineations(NeptuneDbContext dbContext)
+        {
+            return dbContext.TreatmentBMPs
+                .Include(x => x.TreatmentBMPType)
+                .Include(x => x.Delineation)
+                .Where(x => x.RegionalSubbasinID != null && x.TreatmentBMPType.IsAnalyzedInModelingModule &&
+                            x.ModelBasinID != null && x.Delineation != null &&
+                            x.Delineation.DelineationTypeID == DelineationType.Centralized.DelineationTypeID &&
+                            x.Delineation.IsVerified).ToList();
+        }
     }
 }

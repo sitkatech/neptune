@@ -20,6 +20,7 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
     @Output() landUseBlockSelected = new EventEmitter<number>();
 
     public isLoading: boolean = false;
+    public landUseBlockSelectedWithinLayer: boolean = false;
     public layer: L.featureGroup;
 
     private styleDictionary = {
@@ -80,9 +81,13 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
 
     ngOnChanges(changes: any): void {
         if (changes.selectedLandUseBlockID) {
+            if (this.landUseBlockSelectedWithinLayer) {
+                this.landUseBlockSelectedWithinLayer = false;
+                return;
+            }
             if (changes.selectedLandUseBlockID.previousValue == changes.selectedLandUseBlockID.currentValue) return;
             this.selectedLandUseBlockID = changes.selectedLandUseBlockID.currentValue;
-            this.highlightSelectedLandUseBlock();
+            this.highlightSelectedLandUseBlock(true);
         } else if (Object.values(changes).some((x: SimpleChange) => x.firstChange === false)) {
             this.updateLayer();
         }
@@ -133,12 +138,13 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
 
     private onLandUseBlockSelected(landUseBlockID: number) {
         this.selectedLandUseBlockID = landUseBlockID;
+        this.landUseBlockSelectedWithinLayer = true;
         this.highlightSelectedLandUseBlock();
 
         this.landUseBlockSelected.emit(landUseBlockID);
     }
 
-    private highlightSelectedLandUseBlock() {
+    private highlightSelectedLandUseBlock(zoomToFeature: boolean = false) {
         this.layer.eachLayer((layer) => {
             // skip if well layer
             if (layer.options?.icon) return;
@@ -146,6 +152,9 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
             const geoJsonLayers = layer.getLayers();
             if (geoJsonLayers[0].feature.properties.LandUseBlockID == this.selectedLandUseBlockID) {
                 layer.setStyle(this.highlightStyle);
+                if (zoomToFeature) {
+                    this.map.fitBounds(layer.getBounds());
+                }
             } else {
                 layer.setStyle(this.styleDictionary[geoJsonLayers[0].feature.properties.PriorityLandUseTypeID]);
             }

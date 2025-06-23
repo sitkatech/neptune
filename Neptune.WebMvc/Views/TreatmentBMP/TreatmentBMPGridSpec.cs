@@ -110,7 +110,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public ViewTreatmentBMPModelingAttributesGridSpec(LinkGenerator linkGenerator,
             Dictionary<int, EFModels.Entities.Delineation?> delineationsDict, Dictionary<int, string?> watershedsDict,
             Dictionary<int, double> precipitationZonesDict,
-            Dictionary<int, double> hruCharacteristicsAcreageSumByTreatmentBMPDict)
+            Dictionary<int, double?> treatmentBMPModeledLandUseAreas)
         {
             var treatmentBMPTypeDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));
             var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));
@@ -121,7 +121,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             Add("Delineation Status", x=> delineationsDict[x.TreatmentBMPID]?.GetDelineationStatus(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(FieldDefinitionType.TreatmentBMPType.ToGridHeaderString("Type"), x => UrlTemplate.MakeHrefString(treatmentBMPTypeDetailUrlTemplate.ParameterReplace(x.TreatmentBMPTypeID), x.TreatmentBMPType.TreatmentBMPTypeName), 100, DhtmlxGridColumnFilterType.Text);
             Add("Delineation Area (ac)", x => delineationsDict[x.TreatmentBMPID]?.GetDelineationArea(), 100, DhtmlxGridColumnFormatType.Decimal);
-            Add(FieldDefinitionType.Area.ToGridHeaderString("Land Use Area (ac)"), x => hruCharacteristicsAcreageSumByTreatmentBMPDict.TryGetValue(x.TreatmentBMPID, out double value) ? value : null, 100, DhtmlxGridColumnFormatType.Decimal);
+            Add(FieldDefinitionType.Area.ToGridHeaderString("Land Use Area (ac)"), x => treatmentBMPModeledLandUseAreas.TryGetValue(x.TreatmentBMPID, out double? value) ? value : null, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.StormwaterJurisdiction.Organization.OrganizationName), 170);
             Add(FieldDefinitionType.Watershed.ToGridHeaderString("Watershed"), x => x.WatershedID.HasValue ? watershedsDict[x.WatershedID.Value] : null, 170);
             Add(FieldDefinitionType.DesignStormwaterDepth.ToGridHeaderString("Design Stormwater Depth (in)"), x => x.PrecipitationZoneID.HasValue ? precipitationZonesDict[x.PrecipitationZoneID.Value] : null, 100, DhtmlxGridColumnFormatType.Decimal);

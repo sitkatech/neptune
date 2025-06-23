@@ -427,6 +427,7 @@
     <Build Include="dbo\Procs\dbo.pDeleteOldHRULogs.sql" />
     <None Include="Scripts\ReleaseScripts\014 - add rte for wqmp map.sql" />
     <Build Include="dbo\Procs\dbo.pRegionalSubbasinGenerateNetwork.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPModeledLandUseArea.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Neptune.Database.refactorlog" />

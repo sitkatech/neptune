@@ -132,6 +132,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public UrlTemplate<int> OrganizationDetailUrlTemplate { get; }
         public string TreatmentBMPTypeDetailUrl { get; }
         public string UpstreamBMPDetailUrl { get; }
+        public string UpstreamestBMPDetailUrl { get; }
         public string WaterQualityManagementPlanDetailUrl { get; }
         public UrlTemplate<int> WaterQualityManagementPlanDetailUrlTemplate { get; }
         public UrlTemplate<int> CustomAttributeTypeDetailUrlTemplate { get; }
@@ -180,7 +181,9 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             TreatmentBMPDocumentDeleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(LinkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
             WaterQualityManagementPlanDetailUrl = treatmentBMP.WaterQualityManagementPlanID == null ? string.Empty : WaterQualityManagementPlanDetailUrlTemplate.ParameterReplace(treatmentBMP.WaterQualityManagementPlanID.Value);
             TreatmentBMPTypeDetailUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(treatmentBMP.TreatmentBMPTypeID));
-            UpstreamBMPDetailUrl = upstreamestBMP == null ? string.Empty : DetailUrlTemplate.ParameterReplace(upstreamestBMP.TreatmentBMPID);
+            UpstreamestBMPDetailUrl = upstreamestBMP == null ? string.Empty : DetailUrlTemplate.ParameterReplace(upstreamestBMP.TreatmentBMPID);
+            UpstreamBMPDetailUrl = treatmentBMP.UpstreamBMP == null ? string.Empty : DetailUrlTemplate.ParameterReplace(upstreamestBMP.TreatmentBMPID);
+
 
             DelineationErrors = CheckForDelineationErrors(delineation, delineationOverlapDelineations);
             ParameterizationErrors = CheckForParameterizationErrors(treatmentBMP, hasMissingModelingAttributes, delineation);
