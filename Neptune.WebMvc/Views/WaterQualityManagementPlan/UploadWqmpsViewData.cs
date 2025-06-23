@@ -19,6 +19,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         {
             PageTitle = "WQMP Bulk Upload";
             EntityName = $"Data Hub";
+            EntityUrl = SitkaRoute<DataHubController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
             WqmpsUploadUrl = wqmpsUploadUrl;
             WqmpIndexUrl = SitkaRoute<DataHubController>.BuildUrlFromExpression(LinkGenerator, x => x.Index());
             ErrorList = errorList;
