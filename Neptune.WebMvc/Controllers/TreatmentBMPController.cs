@@ -877,9 +877,8 @@ namespace Neptune.WebMvc.Controllers
             var precipitationZonesDict = _dbContext.PrecipitationZones.AsNoTracking()
                 .Select(x => new { x.PrecipitationZoneID, x.DesignStormwaterDepthInInches })
                 .ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
-            var hruCharacteristicsAcreageSumByTreatmentBMPDict =
-                vHRUCharacteristics.ListAcreageSumByTreatmentBMPDictionary(_dbContext);
-            var gridSpec = new ViewTreatmentBMPModelingAttributesGridSpec(_linkGenerator, delineationsDict, watershedsDict, precipitationZonesDict, hruCharacteristicsAcreageSumByTreatmentBMPDict);
+            var treatmentBMPModeledLandUseAreas = vTreatmentBMPModeledLandUseAreas.List(_dbContext).ToDictionary(x => x.TreatmentBMPID.Value, y => y.Area);
+            var gridSpec = new ViewTreatmentBMPModelingAttributesGridSpec(_linkGenerator, delineationsDict, watershedsDict, precipitationZonesDict, treatmentBMPModeledLandUseAreas);
             var treatmentBMPs = TreatmentBMPs.ListWithModelingAttributes(_dbContext).Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
