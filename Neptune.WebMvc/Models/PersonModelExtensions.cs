@@ -86,8 +86,20 @@ namespace Neptune.WebMvc.Models
             NeptuneDbContext dbContext, IEnumerable<int> stormwaterJurisdictionIDsPersonCanView)
         {
             var wqmpBoundaries = dbContext.WaterQualityManagementPlans
-                .Include(x => x.WaterQualityManagementPlanBoundary).Where(x =>
+                .Include(x => x.WaterQualityManagementPlanBoundary)
+                .Include(x => x.StormwaterJurisdiction).Where(x =>
                     stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
+            if (person.IsAnonymousOrUnassigned())
+            {
+                var publicWQMPBoundaries = wqmpBoundaries.Where(x =>
+                    x.WaterQualityManagementPlanStatusID ==
+                    (int)WaterQualityManagementPlanStatusEnum.Active ||
+                    (x.WaterQualityManagementPlanStatusID ==
+                     (int)WaterQualityManagementPlanStatusEnum.Inactive &&
+                     x.StormwaterJurisdiction.StormwaterJurisdictionPublicWQMPVisibilityTypeID ==
+                     (int)StormwaterJurisdictionPublicWQMPVisibilityTypeEnum.ActiveAndInactive)).ToList();
+                return publicWQMPBoundaries;
+            }
             return wqmpBoundaries;
         }
 

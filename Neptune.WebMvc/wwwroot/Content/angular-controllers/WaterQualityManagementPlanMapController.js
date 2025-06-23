@@ -144,30 +144,57 @@
             var parcelsLegendUrl = "/Content/img/legendImages/parcel.png";
             var parcelsLabel = "<span><img src='" + parcelsLegendUrl + "' height='14px'/> Parcels</span>";
             $scope.wmsOptions = {
+                service: "WMS",
+                version: "1.1.1",
+                info_format: "application/json",
                 layers: "OCStormwater:Parcels",
                 transparent: true,
                 format: "image/png",
                 tiled: true,
-                styles: "parcel",
+                styles: "parcel"
             };
 
             $scope.parcels = L.tileLayer.wms($scope.AngularViewData.GeoServerUrl + "/wms?", $scope.wmsOptions);
             $scope.neptuneMap.layerControl.addOverlay($scope.parcels, parcelsLabel);
         }
 
-        $scope.initalizeDelineationlLayer = function () {
-            var parcelsLegendUrl = "/Content/img/legendImages/delineationDistributed.png";
-            var parcelsLabel = "<span><img src='" + parcelsLegendUrl + "' height='14px'/> Delineation</span>";
+        $scope.initalizeDelineationlLayers = function () {
+
+            var verifiedLegendUrl = '/Content/img/legendImages/delineationVerified.png';
+            var verifiedLabel = "<span>Delineations (Verified) </br><img src='" + verifiedLegendUrl + "'/></span>";
             $scope.wmsOptions = {
+                service: "WMS",
+                version: "1.1.1",
+                info_format: "application/json",
                 layers: "OCStormwater:Delineations",
                 transparent: true,
                 format: "image/png",
                 tiled: true,
                 styles: "delineation",
+                maxZoom: 22,
+                cql_filter: "DelineationStatus = 'Verified'"// + jurisdictionCQLFilter,
             };
 
-            $scope.parcels = L.tileLayer.wms($scope.AngularViewData.GeoServerUrl + "/wms?", $scope.wmsOptions);
-            $scope.neptuneMap.layerControl.addOverlay($scope.parcels, parcelsLabel);
+            $scope.verifiedDelineations = L.tileLayer.wms($scope.AngularViewData.GeoServerUrl + "/wms?", $scope.wmsOptions);
+            $scope.neptuneMap.layerControl.addOverlay($scope.verifiedDelineations, verifiedLabel);
+
+            var provisionalLegendUrl = '/Content/img/legendImages/delineationProvisional.png';
+            var provisionalLabel = "<span>Delineations (Provisional) </br><img src='" + provisionalLegendUrl + "'/></span>";
+            $scope.wmsOptions = {
+                service: "WMS",
+                version: "1.1.1",
+                info_format: "application/json",
+                layers: "OCStormwater:Delineations",
+                transparent: true,
+                format: "image/png",
+                tiled: true,
+                styles: "delineation",
+                maxZoom: 22,
+                cql_filter: "DelineationStatus = 'Provisional'"// + jurisdictionCQLFilter,
+            };
+
+            $scope.provisionalDelineations = L.tileLayer.wms($scope.AngularViewData.GeoServerUrl + "/wms?", $scope.wmsOptions);
+            $scope.neptuneMap.layerControl.addOverlay($scope.provisionalDelineations, provisionalLabel);
         }
 
         $scope.initalizeWQMPLayer();
@@ -176,7 +203,7 @@
 
         $scope.initalizeParcelLayer();
 
-        $scope.initalizeDelineationlLayer();
+        $scope.initalizeDelineationlLayers();
 
         $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
