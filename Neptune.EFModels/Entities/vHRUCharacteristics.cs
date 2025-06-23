@@ -64,27 +64,4 @@ public static class vHRUCharacteristics
         return GetImpl(dbContext)
             .Where(x => x.TreatmentBMPID != null && x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToList();
     }
-
-    //This should be done in the database
-    //Waiting for a PR that has building Upstream RSBs as a sproc, and once that gets in we should use that, but I don't want to duplicate work
-    public static Dictionary<int, double> ListAcreageSumByTreatmentBMPDictionary(NeptuneDbContext dbContext)
-    {
-        //Get all the HRU Characteristics the exist for individual BMPs (ie. non-centralized delineations)
-        var acreageSumByTreatmentBMPDictionary = GetImpl(dbContext).Where(x => x.TreatmentBMPID != null).ToList().GroupBy(x => (int)x.TreatmentBMPID).ToDictionary(x => x.Key, x => x.Sum(y => y.Area));
-        
-        //For our modeled treatment BMPs that have centralized delineations
-        var acreageSumByIndividualRegionalSubbasinDictionary = GetImpl(dbContext).Where(x => x.RegionalSubbasinID != null).ToList().GroupBy(x => (int)x.RegionalSubbasinID).ToDictionary(x => x.Key, x => x.Sum(y => y.Area));
-        var acreageSumByRSBUpstreamDictionary = vRegionalSubbasinUpstreams.List(dbContext).GroupBy(x => (int)x.PrimaryKey).ToDictionary(x => x.Key, y => y.Sum(z => acreageSumByIndividualRegionalSubbasinDictionary.TryGetValue(z.RegionalSubbasinID.Value, out var value) ? value : 0));
-
-        var remainingModeledTreatmentBMPs = TreatmentBMPs.ListModelingTreatmentBMPsWithCentralizedDelineations(dbContext)
-            .Where(x => !acreageSumByTreatmentBMPDictionary.ContainsKey(x.TreatmentBMPID)).ToList();
-
-        foreach (var remainingModeledTreatmentBMP in remainingModeledTreatmentBMPs)
-        {
-            
-            acreageSumByTreatmentBMPDictionary.Add(remainingModeledTreatmentBMP.TreatmentBMPID, acreageSumByRSBUpstreamDictionary[remainingModeledTreatmentBMP.RegionalSubbasinID.Value]);
-        }
-
-        return acreageSumByTreatmentBMPDictionary;
-    }
 }
