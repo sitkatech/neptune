@@ -192,7 +192,7 @@ namespace Neptune.WebMvc.Controllers
                 .Single(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID);
 
             var upstreamestBMP = treatmentBMPTree.UpstreamBMPID.HasValue ? TreatmentBMPs.GetByID(_dbContext, treatmentBMPTree.UpstreamBMPID) : null;
-            var isUpstreamestBMPAnalyzedInModelingModule = upstreamestBMP != null && TreatmentBMPTypes.GetByID(_dbContext, upstreamestBMP.TreatmentBMPTypeID).IsAnalyzedInModelingModule;
+            var isUpstreamestBMPAnalyzedInModelingModule = upstreamestBMP != null && upstreamestBMP.TreatmentBMPType.IsAnalyzedInModelingModule;
             var delineation = Delineations.GetByTreatmentBMPID(_dbContext, upstreamestBMP?.TreatmentBMPID ?? treatmentBMP.TreatmentBMPID);
             if (delineation?.DelineationGeometry != null)
             {
@@ -873,7 +873,7 @@ namespace Neptune.WebMvc.Controllers
         public GridJsonNetJObjectResult<TreatmentBMP> ViewTreatmentBMPModelingAttributesGridJsonData()
         {
             var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson);
-            var delineationsDict = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext);
+            var delineationsDict = vTreatmentBMPUpstreams.ListWithDelineationAsDictionaryIncludeTreatmentBMPType(_dbContext);
             var watershedsDict = _dbContext.Watersheds.AsNoTracking().Select(x => new {x.WatershedID, x.WatershedName}).ToDictionary(x => x.WatershedID, x => x.WatershedName);
             var precipitationZonesDict = _dbContext.PrecipitationZones.AsNoTracking()
                 .Select(x => new { x.PrecipitationZoneID, x.DesignStormwaterDepthInInches })

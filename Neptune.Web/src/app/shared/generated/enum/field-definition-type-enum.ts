@@ -150,7 +150,8 @@ export enum FieldDefinitionTypeEnum {
   BaselineLoadingRate = 143,
   CurrentLoadingRate = 144,
   BMPTrashTreatmentStatus = 145,
-  WQMPTrashTreatmentStatus = 146
+  WQMPTrashTreatmentStatus = 146,
+  DownstreamOfNonModeledBMP = 147
 }
 
 export const FieldDefinitionTypes: LookupTableEntry[]  = [
@@ -298,6 +299,7 @@ export const FieldDefinitionTypes: LookupTableEntry[]  = [
   { Name: "BaselineLoadingRate", DisplayName: "Baseline Loading Rate", Value: 143 },
   { Name: "CurrentLoadingRate", DisplayName: "Current Loading Rate", Value: 144 },
   { Name: "BMPTrashTreatmentStatus", DisplayName: "BMP Trash Treatment Status", Value: 145 },
-  { Name: "WQMPTrashTreatmentStatus", DisplayName: "WQMP Trash Treatment Status", Value: 146 }
+  { Name: "WQMPTrashTreatmentStatus", DisplayName: "WQMP Trash Treatment Status", Value: 146 },
+  { Name: "DownstreamOfNonModeledBMP", DisplayName: "Downstream of Non-Modeled BMP?", Value: 147 }
 ];
 export const FieldDefinitionTypesAsSelectDropdownOptions = FieldDefinitionTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));
