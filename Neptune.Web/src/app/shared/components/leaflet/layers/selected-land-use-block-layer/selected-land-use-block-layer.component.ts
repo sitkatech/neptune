@@ -137,6 +137,9 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
     }
 
     private onLandUseBlockSelected(landUseBlockID: number) {
+        if (landUseBlockID == this.selectedLandUseBlockID) {
+            return;
+        }
         this.selectedLandUseBlockID = landUseBlockID;
         this.landUseBlockSelectedWithinLayer = true;
         this.highlightSelectedLandUseBlock();
