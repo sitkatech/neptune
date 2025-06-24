@@ -397,7 +397,6 @@ stages:
   - deployment: Database
     pool:
       vmImage: 'windows-latest'
-      demands: msbuild
     variables: 
       SQL_API_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.SQL_API_PASSWORD'] ]
       SQL_GEOSERVER_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.SQL_GEOSERVER_PASSWORD'] ]
