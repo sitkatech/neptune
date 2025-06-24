@@ -192,6 +192,7 @@ namespace Neptune.WebMvc.Controllers
                 .Single(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID);
 
             var upstreamestBMP = treatmentBMPTree.UpstreamBMPID.HasValue ? TreatmentBMPs.GetByID(_dbContext, treatmentBMPTree.UpstreamBMPID) : null;
+            var isUpstreamestBMPAnalyzedInModelingModule = upstreamestBMP != null && TreatmentBMPTypes.GetByID(_dbContext, upstreamestBMP.TreatmentBMPTypeID).IsAnalyzedInModelingModule;
             var delineation = Delineations.GetByTreatmentBMPID(_dbContext, upstreamestBMP?.TreatmentBMPID ?? treatmentBMP.TreatmentBMPID);
             if (delineation?.DelineationGeometry != null)
             {
@@ -219,7 +220,7 @@ namespace Neptune.WebMvc.Controllers
             var regionalSubbasinRevisionRequest = RegionalSubbasinRevisionRequests.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID).SingleOrDefault(x =>
                 x.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Open);
             var watershed = treatmentBMP.WatershedID.HasValue ? _dbContext.Watersheds.AsNoTracking().Single(x => x.WatershedID == treatmentBMP.WatershedID.Value) : null;
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, treatmentBMPType, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl, hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, otherTreatmentBmpsExistInSubbasin, hasMissingModelingAttributes, customAttributes, fundingEvents, treatmentBMPBenchmarkAndThresholds, treatmentBMPDocuments, delineation, delineationOverlapDelineations, upstreamestBMP, regionalSubbasinRevisionRequest, watershed);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, treatmentBMPType, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl, hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, otherTreatmentBmpsExistInSubbasin, hasMissingModelingAttributes, customAttributes, fundingEvents, treatmentBMPBenchmarkAndThresholds, treatmentBMPDocuments, delineation, delineationOverlapDelineations, upstreamestBMP, isUpstreamestBMPAnalyzedInModelingModule, regionalSubbasinRevisionRequest, watershed);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

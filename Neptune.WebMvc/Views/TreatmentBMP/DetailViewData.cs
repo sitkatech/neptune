@@ -145,6 +145,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public List<EFModels.Entities.TreatmentBMPDocument> TreatmentBMPDocuments { get; }
         public EFModels.Entities.Delineation? Delineation { get; }
         public EFModels.Entities.TreatmentBMP? UpstreamestBMP { get; }
+        public bool IsUpstreamestBMPAnalyzedInModelingModule { get; set; }
         public Watershed? Watershed { get; }
         public GridSpec<vHRUCharacteristic> HRUCharacteristicsGridSpec { get; }
         public string HRUCharacteristicsGridName { get; }
@@ -154,19 +155,27 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public string UpstreamRSBTraceUrl { get; set; }
 
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration,
+            Person currentPerson,
             EFModels.Entities.TreatmentBMP treatmentBMP,
             EFModels.Entities.TreatmentBMPType treatmentBMPType,
             TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData,
             string verifiedUnverifiedUrl, HRUCharacteristicsViewData hruCharacteristicsViewData, string mapServiceUrl,
             ModeledPerformanceViewData modeledPerformanceViewData, bool otherTreatmentBmpsExistInSubbasin,
-            bool hasMissingModelingAttributes, List<CustomAttribute> customAttributes, List<EFModels.Entities.FundingEvent> fundingEvents, List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, List<EFModels.Entities.TreatmentBMPDocument> treatmentBMPDocuments, EFModels.Entities.Delineation? delineation, ICollection<DelineationOverlap>? delineationOverlapDelineations, EFModels.Entities.TreatmentBMP? upstreamestBMP, EFModels.Entities.RegionalSubbasinRevisionRequest? regionalSubbasinRevisionRequest, Watershed? watershed)
+            bool hasMissingModelingAttributes, List<CustomAttribute> customAttributes,
+            List<EFModels.Entities.FundingEvent> fundingEvents,
+            List<EFModels.Entities.TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds,
+            List<EFModels.Entities.TreatmentBMPDocument> treatmentBMPDocuments,
+            EFModels.Entities.Delineation? delineation, ICollection<DelineationOverlap>? delineationOverlapDelineations,
+            EFModels.Entities.TreatmentBMP? upstreamestBMP, bool isUpstreamestBMPAnalyzedInModelingModule,
+            EFModels.Entities.RegionalSubbasinRevisionRequest? regionalSubbasinRevisionRequest, Watershed? watershed)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             TreatmentBMP = treatmentBMP;
             TreatmentBMPType = treatmentBMPType;
             Delineation = delineation;
             UpstreamestBMP = upstreamestBMP;
+            IsUpstreamestBMPAnalyzedInModelingModule = isUpstreamestBMPAnalyzedInModelingModule;
             DelineationArea = delineation?.GetDelineationAreaString();;
             DelineationStatus = delineation.GetDelineationStatus();
 
@@ -182,7 +191,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             WaterQualityManagementPlanDetailUrl = treatmentBMP.WaterQualityManagementPlanID == null ? string.Empty : WaterQualityManagementPlanDetailUrlTemplate.ParameterReplace(treatmentBMP.WaterQualityManagementPlanID.Value);
             TreatmentBMPTypeDetailUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(treatmentBMP.TreatmentBMPTypeID));
             UpstreamestBMPDetailUrl = upstreamestBMP == null ? string.Empty : DetailUrlTemplate.ParameterReplace(upstreamestBMP.TreatmentBMPID);
-            UpstreamBMPDetailUrl = treatmentBMP.UpstreamBMP == null ? string.Empty : DetailUrlTemplate.ParameterReplace(upstreamestBMP.TreatmentBMPID);
+            UpstreamBMPDetailUrl = treatmentBMP.UpstreamBMP == null ? string.Empty : DetailUrlTemplate.ParameterReplace(treatmentBMP.UpstreamBMPID.Value);
 
 
             DelineationErrors = CheckForDelineationErrors(delineation, delineationOverlapDelineations);

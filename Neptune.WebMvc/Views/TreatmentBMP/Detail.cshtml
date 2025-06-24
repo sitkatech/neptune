@@ -135,6 +135,13 @@
             There is an open <a href="@ViewDataTyped.OpenRevisionRequestDetailUrl">Regional Subbasin Revision Request</a> relating to this BMP.
         </div>
     }
+
+    if (ViewDataTyped.UpstreamestBMP != null && !ViewDataTyped.IsUpstreamestBMPAnalyzedInModelingModule)
+    {
+        <div class="alert alert-info">
+            This BMP is downstream of a non-modeled BMP, and therefore will not have model results or land use statistics.
+        </div>
+    }
 }
 
 <div class="row">
@@ -794,7 +801,7 @@
             </div>
 
         </div>
-        @if (ViewDataTyped.TreatmentBMPType.IsAnalyzedInModelingModule)
+        @if (ViewDataTyped.TreatmentBMPType.IsAnalyzedInModelingModule && (ViewDataTyped.UpstreamestBMP == null || ViewDataTyped.IsUpstreamestBMPAnalyzedInModelingModule))
         {
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
