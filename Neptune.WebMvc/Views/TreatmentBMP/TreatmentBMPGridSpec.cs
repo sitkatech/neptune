@@ -149,7 +149,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             Add(FieldDefinitionType.WaterQualityDetentionVolume.ToGridHeaderString("Extended Detention Surcharge Volume (cu ft)"), x => x.TreatmentBMPModelingAttributeTreatmentBMP?.WaterQualityDetentionVolume, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.WettedFootprint.ToGridHeaderString("Wetted Footprint (sq ft)"), x => x.TreatmentBMPModelingAttributeTreatmentBMP?.WettedFootprint, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.WinterHarvestedWaterDemand.ToGridHeaderString("Winter Harvested Water Demand (gpd)"), x => x.TreatmentBMPModelingAttributeTreatmentBMP?.WinterHarvestedWaterDemand, 100, DhtmlxGridColumnFormatType.Decimal);
-            Add(FieldDefinitionType.UpstreamBMP.ToGridHeaderString("Upstream BMP"), x => delineationsDict[x.TreatmentBMPID] != null ? UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(delineationsDict[x.TreatmentBMPID].TreatmentBMPID), delineationsDict[x.TreatmentBMPID].TreatmentBMP.TreatmentBMPName) : new HtmlString(""), 170, DhtmlxGridColumnFilterType.Html);
+            Add(FieldDefinitionType.UpstreamBMP.ToGridHeaderString("Upstream BMP"), x => x.UpstreamBMPID != null ? UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.UpstreamBMPID.Value), x.UpstreamBMP.TreatmentBMPName) : new HtmlString(""), 170, DhtmlxGridColumnFilterType.Html);
             Add(FieldDefinitionType.DryWeatherFlowOverrideID.ToGridHeaderString("Dry Weather Flow Override"),
                 x => x.TreatmentBMPModelingAttributeTreatmentBMP?.DryWeatherFlowOverride != null
                     ? x.TreatmentBMPModelingAttributeTreatmentBMP.DryWeatherFlowOverride.DryWeatherFlowOverrideDisplayName

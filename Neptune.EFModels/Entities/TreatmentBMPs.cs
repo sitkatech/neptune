@@ -259,6 +259,7 @@ namespace Neptune.EFModels.Entities
                 .ThenInclude(x => x.Organization)
                 .Include(x => x.OwnerOrganization)
                 .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
+                .Include(x => x.UpstreamBMP)
                 .AsNoTracking().Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule)
                 .OrderBy(x => x.TreatmentBMPName).ToList();
         }
