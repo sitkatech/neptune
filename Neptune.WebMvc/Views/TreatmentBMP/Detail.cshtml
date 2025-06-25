@@ -135,6 +135,13 @@
             There is an open <a href="@ViewDataTyped.OpenRevisionRequestDetailUrl">Regional Subbasin Revision Request</a> relating to this BMP.
         </div>
     }
+
+    if (ViewDataTyped.UpstreamestBMP != null && !ViewDataTyped.IsUpstreamestBMPAnalyzedInModelingModule)
+    {
+        <div class="alert alert-info">
+            This BMP is downstream of a non-modeled BMP, and therefore will not have model results or land use statistics.
+        </div>
+    }
 }
 
 <div class="row">
@@ -699,7 +706,7 @@
                                 <p>No delineation may be added or edited because this BMP is associated with an Upstream BMP in the network. If you would like to add a delineation, please remove the connection to the Upstream BMP.</p>
                                 <p>
                                     The Delineation displayed above is associated with Upstream BMP:<br/>
-                                    <a href="@ViewDataTyped.UpstreamBMPDetailUrl">@ViewDataTyped.UpstreamestBMP.TreatmentBMPName</a>
+                                    <a href="@ViewDataTyped.UpstreamestBMPDetailUrl">@ViewDataTyped.UpstreamestBMP.TreatmentBMPName</a>
                                 </p>
                             </div>
                         </div>
@@ -794,7 +801,7 @@
             </div>
 
         </div>
-        @if (ViewDataTyped.TreatmentBMPType.IsAnalyzedInModelingModule)
+        @if (ViewDataTyped.TreatmentBMPType.IsAnalyzedInModelingModule && (ViewDataTyped.UpstreamestBMP == null || ViewDataTyped.IsUpstreamestBMPAnalyzedInModelingModule))
         {
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
