@@ -15,14 +15,14 @@ select vrsu.PrimaryKey as RegionalSubbasinID, Sum(Area) Area
 from  dbo.vRegionalSubbasinUpstream vrsu
 left join (select RegionalSubbasinID, sum(Area) Area
 	  from dbo.vHRUCharacteristic 
-	  group by RegionalSubbasinID) RSBArea on vrsu.PrimaryKey = RSBArea.RegionalSubbasinID
+	  group by RegionalSubbasinID) RSBArea on vrsu.RegionalSubbasinID = RSBArea.RegionalSubbasinID
 group by PrimaryKey),
 
 cteStandAloneTreatmentBMPsWithHRUCharacteristics as
 (
 	select TreatmentBMPID, Area
 	from cteTreatmentBMPsWithHRUCharacteristics
-	union
+	union all
 	select tbmp.TreatmentBMPID, Area
 	from dbo.TreatmentBMP tbmp
 	left join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
@@ -37,7 +37,7 @@ cteStandAloneTreatmentBMPsWithHRUCharacteristics as
 
 select TreatmentBMPID, Area
 from cteStandAloneTreatmentBMPsWithHRUCharacteristics
-union 
+union all
 select tbmp.TreatmentBMPID, Area
 from dbo.TreatmentBMP tbmp
 join dbo.vTreatmentBMPUpstream vtbmpu on tbmp.TreatmentBMPID = vtbmpu.TreatmentBMPID
