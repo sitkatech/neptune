@@ -9,27 +9,29 @@
   <connectionParameters>
     <entry key="schema">dbo</entry>
     <entry key="Evictor run periodicity">300</entry>
-    <entry key="Use native geometry serialization">false</entry>
-    <entry key="Batch insert size">1</entry>
-    <entry key="database">${datastore-database}</entry>
-    <entry key="host">${datastore-host}</entry>
-    <entry key="Use Native Paging">false</entry>
     <entry key="Force spatial index usage via hints">false</entry>
     <entry key="fetch size">1000</entry>
     <entry key="Expose primary keys">true</entry>
     <entry key="validate connections">false</entry>
     <entry key="Connection timeout">20</entry>
+    <entry key="Use native geometry serialization">false</entry>
+    <entry key="Batch insert size">1</entry>
+    <entry key="database">${datastore-database}</entry>
     <entry key="Integrated Security">false</entry>
     <entry key="port">1433</entry>
     <entry key="passwd">${datastore-password}</entry>
     <entry key="min connections">1</entry>
+    <entry key="host">${datastore-host}</entry>
     <entry key="dbtype">sqlserver</entry>
     <entry key="namespace">www.ocstormwatertools.org</entry>
     <entry key="max connections">10</entry>
     <entry key="Evictor tests per run">3</entry>
     <entry key="Test while idle">true</entry>
+    <entry key="Use Native Paging">false</entry>
     <entry key="user">${datastore-user}</entry>
     <entry key="Max connection idle time">300</entry>
   </connectionParameters>
   <__default>false</__default>
+  <dateModified>2025-06-25 21:17:12.449 UTC</dateModified>
+  <disableOnConnFailure>false</disableOnConnFailure>
 </dataStore>
