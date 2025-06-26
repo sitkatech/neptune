@@ -1,18 +1,15 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine3.22-amd64 AS base
+#https://github.com/dotnet/dotnet-docker/blob/main/samples/enable-globalization.md#alpine-images
+#Some Alpine Images are by design released without globalization. In order for our application to run, we need to add it manually. 
+#Done to reduce vulnerabilities
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+RUN apk add --no-cache icu-data-full icu-libs
 USER app
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
-#https://github.com/dotnet/dotnet-docker/blob/main/samples/enable-globalization.md#alpine-images
-#Alpine Images are by design released without globalization. In order for our application to run, we need to add it manually. 
-#Use of the 'root' user may be questionable, but the install fails currently without being root user. Turn back to app once finished
-#Done to reduce vulnerabilities
-USER root
-ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
-RUN apk add --no-cache icu-data-full icu-libs
-USER app
 
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine3.22-amd64 AS build
