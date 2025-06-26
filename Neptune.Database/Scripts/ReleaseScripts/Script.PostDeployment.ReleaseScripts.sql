@@ -38,4 +38,6 @@ GO
 GO
 :r ".\015 - Add Field Definition for DownstreamOfNonModeledBMP.sql"
 GO
+:r ".\016 - Add CustomAttributeTypes for modeling attributes.sql"
+GO
 

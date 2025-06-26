@@ -4,7 +4,7 @@ CREATE TABLE [dbo].[CustomAttributeType](
 	[CustomAttributeDataTypeID] [int] NOT NULL CONSTRAINT [FK_CustomAttributeType_CustomAttributeDataType_CustomAttributeDataTypeID] FOREIGN KEY REFERENCES [dbo].[CustomAttributeDataType] ([CustomAttributeDataTypeID]),
 	[MeasurementUnitTypeID] [int] NULL CONSTRAINT [FK_CustomAttributeType_MeasurementUnitType_MeasurementUnitTypeID] FOREIGN KEY REFERENCES [dbo].[MeasurementUnitType] ([MeasurementUnitTypeID]),
 	[IsRequired] [bit] NOT NULL,
-	[CustomAttributeTypeDescription] [varchar](200) NULL,
+	[CustomAttributeTypeDescription] [varchar](500) NULL,
 	[CustomAttributeTypePurposeID] [int] NOT NULL CONSTRAINT [FK_CustomAttributeType_CustomAttributeTypePurpose_CustomAttributeTypePurposeID] FOREIGN KEY REFERENCES [dbo].[CustomAttributeTypePurpose] ([CustomAttributeTypePurposeID]),
 	[CustomAttributeTypeOptionsSchema] [varchar](max) NULL,
 	CONSTRAINT [CK_CustomAttributeType_PickListTypeOptionSchemaNotNull] CHECK  ((NOT ([CustomAttributeDataTypeID]=(6) OR [CustomAttributeDataTypeID]=(5)) AND [CustomAttributeTypeOptionsSchema] IS NULL OR ([CustomAttributeDataTypeID]=(6) OR [CustomAttributeDataTypeID]=(5)) AND [CustomAttributeTypeOptionsSchema] IS NOT NULL))

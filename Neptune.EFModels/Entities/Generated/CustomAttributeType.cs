@@ -23,7 +23,7 @@ public partial class CustomAttributeType
 
     public bool IsRequired { get; set; }
 
-    [StringLength(200)]
+    [StringLength(500)]
     [Unicode(false)]
     public string? CustomAttributeTypeDescription { get; set; }
 

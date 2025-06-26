@@ -12,6 +12,7 @@ namespace Neptune.EFModels.Entities
 {
     public abstract partial class CustomAttributeTypePurpose : IHavePrimaryKey
     {
+        public static readonly CustomAttributeTypePurposeModeling Modeling = CustomAttributeTypePurposeModeling.Instance;
         public static readonly CustomAttributeTypePurposeOtherDesignAttributes OtherDesignAttributes = CustomAttributeTypePurposeOtherDesignAttributes.Instance;
         public static readonly CustomAttributeTypePurposeMaintenance Maintenance = CustomAttributeTypePurposeMaintenance.Instance;
 
@@ -25,8 +26,8 @@ namespace Neptune.EFModels.Entities
         /// </summary>
         static CustomAttributeTypePurpose()
         {
-            All = new List<CustomAttributeTypePurpose> { OtherDesignAttributes, Maintenance };
-            AllAsSimpleDto = new List<CustomAttributeTypePurposeSimpleDto> { OtherDesignAttributes.AsSimpleDto(), Maintenance.AsSimpleDto() };
+            All = new List<CustomAttributeTypePurpose> { Modeling, OtherDesignAttributes, Maintenance };
+            AllAsSimpleDto = new List<CustomAttributeTypePurposeSimpleDto> { Modeling.AsSimpleDto(), OtherDesignAttributes.AsSimpleDto(), Maintenance.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, CustomAttributeTypePurpose>(All.ToDictionary(x => x.CustomAttributeTypePurposeID));
             AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, CustomAttributeTypePurposeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.CustomAttributeTypePurposeID));
         }
@@ -99,6 +100,8 @@ namespace Neptune.EFModels.Entities
             {
                 case CustomAttributeTypePurposeEnum.Maintenance:
                     return Maintenance;
+                case CustomAttributeTypePurposeEnum.Modeling:
+                    return Modeling;
                 case CustomAttributeTypePurposeEnum.OtherDesignAttributes:
                     return OtherDesignAttributes;
                 default:
@@ -109,8 +112,15 @@ namespace Neptune.EFModels.Entities
 
     public enum CustomAttributeTypePurposeEnum
     {
+        Modeling = 1,
         OtherDesignAttributes = 2,
         Maintenance = 3
+    }
+
+    public partial class CustomAttributeTypePurposeModeling : CustomAttributeTypePurpose
+    {
+        private CustomAttributeTypePurposeModeling(int customAttributeTypePurposeID, string customAttributeTypePurposeName, string customAttributeTypePurposeDisplayName) : base(customAttributeTypePurposeID, customAttributeTypePurposeName, customAttributeTypePurposeDisplayName) {}
+        public static readonly CustomAttributeTypePurposeModeling Instance = new CustomAttributeTypePurposeModeling(1, @"Modeling", @"Modeling Attributes");
     }
 
     public partial class CustomAttributeTypePurposeOtherDesignAttributes : CustomAttributeTypePurpose
