@@ -153,6 +153,8 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public string DownstreamRSBTraceUrl { get; set; }
 
         public string UpstreamRSBTraceUrl { get; set; }
+        public string? FieldDefinitionTextForWatershed { get; set; }
+
 
 
         public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration,
@@ -168,7 +170,8 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             List<EFModels.Entities.TreatmentBMPDocument> treatmentBMPDocuments,
             EFModels.Entities.Delineation? delineation, ICollection<DelineationOverlap>? delineationOverlapDelineations,
             EFModels.Entities.TreatmentBMP? upstreamestBMP, bool isUpstreamestBMPAnalyzedInModelingModule,
-            EFModels.Entities.RegionalSubbasinRevisionRequest? regionalSubbasinRevisionRequest, Watershed? watershed)
+            EFModels.Entities.RegionalSubbasinRevisionRequest? regionalSubbasinRevisionRequest, Watershed? watershed,
+            string? watershedFieldDefinitionText)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             TreatmentBMP = treatmentBMP;
@@ -289,9 +292,10 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             FieldDefinitionForWaterQualityDetentionVolume = FieldDefinitionType.WaterQualityDetentionVolume;
             FieldDefinitionForWettedFootprint = FieldDefinitionType.WettedFootprint;
             FieldDefinitionForWinterHarvestedWaterDemand = FieldDefinitionType.WinterHarvestedWaterDemand;
-            FieldDefinitionForWatershed = FieldDefinitionType.Watershed;
             FieldDefinitionForDesignStormwaterDepth = FieldDefinitionType.DesignStormwaterDepth;
             FieldDefinitionForDryWeatherFlowOverride = FieldDefinitionType.DryWeatherFlowOverrideID;
+
+            FieldDefinitionTextForWatershed = watershedFieldDefinitionText;
 
             OpenRevisionRequest = regionalSubbasinRevisionRequest;
             Watershed = watershed;
