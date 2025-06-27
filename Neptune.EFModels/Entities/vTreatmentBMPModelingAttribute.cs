@@ -1,3 +1,6 @@
 ﻿namespace Neptune.EFModels.Entities;
 
-public partial class vTreatmentBMPModelingAttribute : IvTreatmentBMPModelingAttribute
+//public partial class vTreatmentBMPModelingAttribute : IvTreatmentBMPModelingAttribute
+//{
+
+//}
