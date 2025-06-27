@@ -365,18 +365,6 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             return parameterizationErrors;
         }
 
-
-        public string DisplayModelingAttributeValue(Func<TreatmentBMPModelingAttribute, double?> modelAttributeValueFunc, string units)
-        {
-            if (TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP == null)
-            {
-                return null;
-            }
-
-            var modelAttributeValue = modelAttributeValueFunc.Invoke(TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP);
-            return modelAttributeValue == null ? string.Empty : $"{modelAttributeValue.ToGroupedNumeric()} {units}";
-        }
-
         public string DisplayUnderlyingHydrologicSoilGroup()
         {
             return TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP != null && TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP.UnderlyingHydrologicSoilGroup != null
