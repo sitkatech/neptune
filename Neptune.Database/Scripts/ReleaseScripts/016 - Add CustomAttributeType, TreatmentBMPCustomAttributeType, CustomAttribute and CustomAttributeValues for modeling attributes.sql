@@ -90,6 +90,9 @@ values
 (27, @currentCustomAttributeTypeIDMax+16, 0),
 (27, @currentCustomAttributeTypeIDMax+26, 10),
 (27, @currentCustomAttributeTypeIDMax+9, 20),
+(43, @currentCustomAttributeTypeIDMax+16, 0),
+(43, @currentCustomAttributeTypeIDMax+26, 10),
+(43, @currentCustomAttributeTypeIDMax+9, 20),
 --
 (24, @currentCustomAttributeTypeIDMax+21, 0),
 (24, @currentCustomAttributeTypeIDMax+18, 10),
@@ -162,25 +165,25 @@ where cat.CustomAttributeTypeID > @currentCustomAttributeTypeIDMax
 insert into dbo.CustomAttributeValue
 select CustomAttributeID,
 	case
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +1 then cast(AverageDivertedFlowrate as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +2 then cast(AverageTreatmentFlowrate as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +3 then cast(DesignDryWeatherTreatmentCapacity as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +4 then cast(DesignLowFlowDiversionCapacity as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +5 then cast(DesignMediaFiltrationRate as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +6 then cast(DiversionRate as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +7 then cast(DrawdownTimeForDetentionVolume as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +8 then cast(DrawdownTimeForWQDetentionVolume as varchar(20))
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +1 then format(AverageDivertedFlowrate, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +2 then format(AverageTreatmentFlowrate, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +3 then format(DesignDryWeatherTreatmentCapacity, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +4 then format(DesignLowFlowDiversionCapacity, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +5 then format(DesignMediaFiltrationRate, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +6 then format(DiversionRate, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +7 then format(DrawdownTimeForDetentionVolume, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +8 then format(DrawdownTimeForWQDetentionVolume, '0.#####')
 		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +9 then 
 			case 
 				when DryWeatherFlowOverrideID = 1 then 'No - As Modeled'
 				when DryWeatherFlowOverrideID = 2 then 'Yes - DWF Effectively Eliminated'
 				else null
 			end
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +10 then cast(EffectiveFootprint as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +11 then cast(EffectiveRetentionDepth as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +12 then cast(InfiltrationDischargeRate as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +13 then cast(InfiltrationSurfaceArea as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +14 then cast(MediaBedFootprint as varchar(20))
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +10 then format(EffectiveFootprint, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +11 then format(EffectiveRetentionDepth, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +12 then format(InfiltrationDischargeRate, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +13 then format(InfiltrationSurfaceArea, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +14 then format(MediaBedFootprint, '0.#####')
 		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +15 then 
 			case 
 				when MonthsOfOperationID = 1 then 'Summer'
@@ -188,15 +191,15 @@ select CustomAttributeID,
 				when MonthsOfOperationID = 3 then 'Both'
 				else null
 			end
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +16 then cast(PermanentPoolOrWetlandVolume as varchar(20))
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +16 then format(PermanentPoolOrWetlandVolume, '0.#####')
 		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +17 then
 			case 
 				when RoutingConfigurationID = 1 then 'Online'
 				when RoutingConfigurationID = 2 then 'Offline'
 				else null
 			end
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +18 then cast(StorageVolumeBelowLowestOutletElevation as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +19 then cast(SummerHarvestedWaterDemand as varchar(20))
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +18 then format(StorageVolumeBelowLowestOutletElevation, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +19 then format(SummerHarvestedWaterDemand, '0.#####')
 		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +20 then 
 			case
 				when TimeOfConcentrationID = 1 then '5'
@@ -208,9 +211,9 @@ select CustomAttributeID,
 				when TimeOfConcentrationID = 7 then '60'
 				else null
 			end
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +21 then cast(TotalEffectiveBMPVolume as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +22 then cast(TotalEffectiveDrywellBMPVolume as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +23 then cast(TreatmentRate as varchar(20))
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +21 then format(TotalEffectiveBMPVolume, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +22 then format(TotalEffectiveDrywellBMPVolume, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +23 then format(TreatmentRate, '0.#####')
 		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +24 then 
 			case
 				when UnderlyingHydrologicSoilGroupID = 1 then 'A'
@@ -220,10 +223,10 @@ select CustomAttributeID,
 				when UnderlyingHydrologicSoilGroupID = 5 then 'Liner'
 				else null
 			end
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +25 then cast(UnderlyingInfiltrationRate as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +26 then cast(WaterQualityDetentionVolume as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +27 then cast(WettedFootprint as varchar(20))
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +28 then cast(WinterHarvestedWaterDemand as varchar(20))
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +25 then format(UnderlyingInfiltrationRate, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +26 then format(WaterQualityDetentionVolume, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +27 then format(WettedFootprint, '0.#####')
+		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +28 then format(WinterHarvestedWaterDemand, '0.#####')
 		else null
 	end as AttributeValue
 from dbo.CustomAttribute ca
