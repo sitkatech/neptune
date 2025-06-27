@@ -14,46 +14,42 @@ namespace Neptune.WebMvc.Common
     {
         public static List<TreatmentBMP> CSVUpload(NeptuneDbContext dbContext, Stream fileStream, TreatmentBMPType treatmentBMPType,
             out List<string> errorList, out List<CustomAttribute> customAttributes,
-            out List<CustomAttributeValue> customAttributeValues,
-            out List<TreatmentBMPModelingAttribute> modelingAttributes)
+            out List<CustomAttributeValue> customAttributeValues)
         {
             var streamReader = new StreamReader(fileStream);
             var parser = new TextFieldParser(streamReader);
-            return ParseBmpRowsFromCsv(dbContext, parser, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, treatmentBMPType);
+            return ParseBmpRowsFromCsv(dbContext, parser, out errorList, out customAttributes, out customAttributeValues, treatmentBMPType);
         }
 
-        public static List<TreatmentBMP> CSVUpload(NeptuneDbContext dbContext, string fileStream, int treatmentBMPTypeID, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues, out List<TreatmentBMPModelingAttribute> modelingAttributes)
+        public static List<TreatmentBMP> CSVUpload(NeptuneDbContext dbContext, string fileStream, int treatmentBMPTypeID, out List<string> errorList, out List<CustomAttribute> customAttributes, out List<CustomAttributeValue> customAttributeValues)
         {
             var stringReader = new StringReader(fileStream);
             var parser = new TextFieldParser(stringReader);
             var treatmentBMPType = TreatmentBMPTypes.GetByID(dbContext, treatmentBMPTypeID);
-            return ParseBmpRowsFromCsv(dbContext, parser, out errorList, out customAttributes, out customAttributeValues, out modelingAttributes, treatmentBMPType);
+            return ParseBmpRowsFromCsv(dbContext, parser, out errorList, out customAttributes, out customAttributeValues, treatmentBMPType);
         }
 
         public static List<TreatmentBMP> ParseBmpRowsFromCsv(NeptuneDbContext dbContext, TextFieldParser parser,
             out List<string> errorList, out List<CustomAttribute> customAttributes,
-            out List<CustomAttributeValue> customAttributeValues,
-            out List<TreatmentBMPModelingAttribute> modelingAttributes, TreatmentBMPType treatmentBMPType)
+            out List<CustomAttributeValue> customAttributeValues, TreatmentBMPType treatmentBMPType)
         {
             parser.SetDelimiters(",");
             errorList = new List<string>();
             customAttributes = new List<CustomAttribute>();
             customAttributeValues = new List<CustomAttributeValue>();
-            modelingAttributes = new List<TreatmentBMPModelingAttribute>();
             var treatmentBMPsToUpload = new List<TreatmentBMP>();
             var fieldsDict = new Dictionary<string, int>();
 
             var requiredFields = new List<string> { "Jurisdiction", "BMP Name", "Latitude", "Longitude", "Sizing Basis", "Trash Capture Status", "Owner" };
             var optionalFields = new List<string> {"Year Built or Installed","Asset ID in System of Record", "Required Lifespan of Installation",
                 "Allowable End Date of Installation (if applicable)", "Required Field Visits Per Year", "Required Post-Storm Field Visits Per Year","Notes"};
-            var availableModelingAttributes = GetAvailableModelingAttributes(treatmentBMPType);
             var customAttributeTypes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Select(x => x.CustomAttributeType).ToList();
 
             try
             {
                 var header = parser.ReadFields();
                 var customAttributeNames = customAttributeTypes.Select(x => x.CustomAttributeTypeName).ToList();
-                fieldsDict = ValidateHeader(header, requiredFields, optionalFields, availableModelingAttributes, customAttributeNames, out errorList, treatmentBMPType);
+                fieldsDict = ValidateHeader(header, requiredFields, optionalFields, customAttributeNames, out errorList, treatmentBMPType);
                 if (errorList.Any())
                 {
                     return null;
@@ -78,13 +74,6 @@ namespace Neptune.WebMvc.Common
                 {
                     treatmentBMPsToUpload.Add(currentTreatmentBMP);
                     errorList.AddRange(currentErrorList);
-
-                    if (availableModelingAttributes.Count > 0)
-                    {
-                        modelingAttributes.Add(ParseModelingAttributes(currentTreatmentBMP, treatmentBMPType, currentRow, fieldsDict,
-                            availableModelingAttributes, rowCount, out currentErrorList));
-                        errorList.AddRange(currentErrorList);
-                    }
 
                     customAttributes.AddRange(ParseCustomAttributes(dbContext, currentTreatmentBMP, treatmentBMPType, currentRow, fieldsDict,
                         customAttributeTypes, rowCount, out currentErrorList,
@@ -666,7 +655,7 @@ namespace Neptune.WebMvc.Common
         }
 
 
-        private static Dictionary<string, int> ValidateHeader(string[] row, List<string> requiredFields, List<string> optionalFields, List<string> availableModelingAttributes, List<string> customAttributes, out List<string> errorList, TreatmentBMPType treatmentBMPType)
+        private static Dictionary<string, int> ValidateHeader(string[] row, List<string> requiredFields, List<string> optionalFields, List<string> customAttributes, out List<string> errorList, TreatmentBMPType treatmentBMPType)
         {
             errorList = new List<string>();
             var fieldsDict = new Dictionary<string, int>();
@@ -683,8 +672,7 @@ namespace Neptune.WebMvc.Common
             var headers = fieldsDict.Keys.ToList();
             var requiredFieldDifference = requiredFields.Except(headers).ToList();
             var optionalFieldDifference = headers.Except(requiredFields).Except(optionalFields);
-            var modelingAttributesDifference = optionalFieldDifference.Except(availableModelingAttributes).ToList();
-            var customAttributesDifference = modelingAttributesDifference.Except(customAttributes).ToList();
+            var customAttributesDifference = optionalFieldDifference.Except(customAttributes).ToList();
 
             if (requiredFieldDifference.Any())
             {
@@ -694,7 +682,7 @@ namespace Neptune.WebMvc.Common
 
             if (customAttributesDifference.Any())
             {
-                errorList.Add($"The provided fields '{string.Join(", ", customAttributesDifference)}' did not match a property, modeling attribute, or custom attribute of the BMP type '{treatmentBMPType.TreatmentBMPModelingType.TreatmentBMPModelingTypeDisplayName}'");
+                errorList.Add($"The provided fields '{string.Join(", ", customAttributesDifference)}' did not match a property or custom attribute of the BMP type '{treatmentBMPType.TreatmentBMPTypeName}'");
             }
 
             return fieldsDict;

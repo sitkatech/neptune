@@ -1233,7 +1233,7 @@ namespace Neptune.WebMvc.Controllers
             var uploadedCSVFile = viewModel.UploadCSV;
             // ReSharper disable once PossibleInvalidOperationException
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, viewModel.TreatmentBMPTypeID.Value);
-            var treatmentBMPs = TreatmentBMPCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), treatmentBMPType, out var errorList, out var customAttributes, out var customAttributeValues, out var modelingAttributes);
+            var treatmentBMPs = TreatmentBMPCsvParserHelper.CSVUpload(_dbContext, uploadedCSVFile.OpenReadStream(), treatmentBMPType, out var errorList, out var customAttributes, out var customAttributeValues);
 
             if (errorList.Any())
             {
@@ -1246,7 +1246,6 @@ namespace Neptune.WebMvc.Controllers
             await _dbContext.TreatmentBMPs.AddRangeAsync(treatmentBmpsAdded);
             await _dbContext.CustomAttributes.AddRangeAsync(customAttributes.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
             await _dbContext.CustomAttributeValues.AddRangeAsync(customAttributeValues.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
-            await _dbContext.TreatmentBMPModelingAttributes.AddRangeAsync(modelingAttributes.Where(x => !ModelObjectHelpers.IsRealPrimaryKeyValue(x.PrimaryKey)));
             await _dbContext.SaveChangesAsync();
 
             // Need to re-executed model for updated BMPs since they may have been re-parameterized
