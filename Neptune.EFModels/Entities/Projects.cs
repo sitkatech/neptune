@@ -237,43 +237,38 @@ namespace Neptune.EFModels.Entities
 
             var treatmentBMPIDsToCopy = treatmentBMPsToCopy.Select(x => x.TreatmentBMPID).ToList();
 
-            var newModelingAttributes = dbContext.TreatmentBMPModelingAttributes
-                .Where(x => treatmentBMPIDsToCopy.Contains(x.TreatmentBMPID)).AsEnumerable()
-                .Select(x => new TreatmentBMPModelingAttribute()
+            var customAttributesToCopy = dbContext.CustomAttributes
+                .Where(x => treatmentBMPIDsToCopy.Contains(x.TreatmentBMPID)).ToList();
+            var newCustomAttributes = customAttributesToCopy.Select(x => new CustomAttribute()
                 {
                     TreatmentBMPID = newTreatmentBMPIDsByCopiedTreatmentBMPIDs[x.TreatmentBMPID],
-                    UpstreamTreatmentBMPID = x.UpstreamTreatmentBMPID,
-                    AverageDivertedFlowrate = x.AverageDivertedFlowrate,
-                    AverageTreatmentFlowrate = x.AverageTreatmentFlowrate,
-                    DesignDryWeatherTreatmentCapacity = x.DesignDryWeatherTreatmentCapacity,
-                    DesignLowFlowDiversionCapacity = x.DesignLowFlowDiversionCapacity,
-                    DesignMediaFiltrationRate = x.DesignMediaFiltrationRate,
-                    DiversionRate = x.DiversionRate,
-                    DrawdownTimeForWQDetentionVolume = x.DrawdownTimeForWQDetentionVolume,
-                    EffectiveFootprint = x.EffectiveFootprint,
-                    EffectiveRetentionDepth = x.EffectiveRetentionDepth,
-                    InfiltrationDischargeRate = x.InfiltrationDischargeRate,
-                    InfiltrationSurfaceArea = x.InfiltrationSurfaceArea,
-                    MediaBedFootprint = x.MediaBedFootprint,
-                    PermanentPoolOrWetlandVolume = x.PermanentPoolOrWetlandVolume,
-                    RoutingConfigurationID = x.RoutingConfigurationID,
-                    StorageVolumeBelowLowestOutletElevation = x.StorageVolumeBelowLowestOutletElevation,
-                    SummerHarvestedWaterDemand = x.SummerHarvestedWaterDemand,
-                    TimeOfConcentrationID = x.TimeOfConcentrationID,
-                    DrawdownTimeForDetentionVolume = x.DrawdownTimeForDetentionVolume,
-                    TotalEffectiveBMPVolume = x.TotalEffectiveBMPVolume,
-                    TotalEffectiveDrywellBMPVolume = x.TotalEffectiveDrywellBMPVolume,
-                    TreatmentRate = x.TreatmentRate,
-                    UnderlyingHydrologicSoilGroupID = x.UnderlyingHydrologicSoilGroupID,
-                    UnderlyingInfiltrationRate = x.UnderlyingInfiltrationRate,
-                    WaterQualityDetentionVolume = x.WaterQualityDetentionVolume,
-                    WettedFootprint = x.WettedFootprint,
-                    WinterHarvestedWaterDemand = x.WinterHarvestedWaterDemand,
-                    MonthsOfOperationID = x.MonthsOfOperationID,
-                    DryWeatherFlowOverrideID = x.DryWeatherFlowOverrideID
+                    CustomAttributeTypeID = x.CustomAttributeTypeID,
+                    TreatmentBMPTypeID = x.TreatmentBMPTypeID,
+                    TreatmentBMPTypeCustomAttributeTypeID = x.TreatmentBMPTypeCustomAttributeTypeID
+                }).ToList();
+
+            await dbContext.CustomAttributes.AddRangeAsync(newCustomAttributes);
+            await dbContext.SaveChangesAsync();
+
+            var newCustomAttributeIDsByCopiedCustomAttributeIDs = customAttributesToCopy
+                .Select(x => new
+                {
+                    copiedCustomAttributeID = x.CustomAttributeID,
+                    newCustomAttributeID = newCustomAttributes.Single(y => newTreatmentBMPIDsByCopiedTreatmentBMPIDs[x.TreatmentBMPID] == y.TreatmentBMPID && x.CustomAttributeTypeID == y.CustomAttributeTypeID && x.TreatmentBMPTypeID == y.TreatmentBMPTypeID && x.TreatmentBMPTypeCustomAttributeTypeID == y.TreatmentBMPTypeCustomAttributeTypeID).CustomAttributeID
+                }).ToDictionary(x => x.copiedCustomAttributeID, x => x.newCustomAttributeID);
+
+            var customAttributeIDsToCopy = customAttributesToCopy.Select(x => x.CustomAttributeID).ToList();
+
+            var newCustomAttributeValues = dbContext.CustomAttributeValues
+                .Where(x => customAttributeIDsToCopy.Contains(x.CustomAttributeID))
+                .Select(x => new CustomAttributeValue()
+                {
+                    CustomAttributeID = newCustomAttributeIDsByCopiedCustomAttributeIDs[x.CustomAttributeID],
+                    AttributeValue = x.AttributeValue
                 });
-            
-            await dbContext.TreatmentBMPModelingAttributes.AddRangeAsync(newModelingAttributes);
+
+            await dbContext.CustomAttributeValues.AddRangeAsync(newCustomAttributeValues);
+            await dbContext.SaveChangesAsync();
 
             var newDelineations = dbContext.Delineations
                 .Where(x => treatmentBMPIDsToCopy.Contains(x.TreatmentBMPID)).AsEnumerable()
