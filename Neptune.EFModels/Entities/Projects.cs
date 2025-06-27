@@ -238,7 +238,8 @@ namespace Neptune.EFModels.Entities
             var treatmentBMPIDsToCopy = treatmentBMPsToCopy.Select(x => x.TreatmentBMPID).ToList();
 
             var customAttributesToCopy = dbContext.CustomAttributes
-                .Where(x => treatmentBMPIDsToCopy.Contains(x.TreatmentBMPID)).ToList();
+                .Include(x => x.CustomAttributeType)
+                .Where(x => treatmentBMPIDsToCopy.Contains(x.TreatmentBMPID) && x.CustomAttributeType.CustomAttributeTypePurposeID == (int)CustomAttributeTypePurposeEnum.Modeling).ToList();
             var newCustomAttributes = customAttributesToCopy.Select(x => new CustomAttribute()
                 {
                     TreatmentBMPID = newTreatmentBMPIDsByCopiedTreatmentBMPIDs[x.TreatmentBMPID],
