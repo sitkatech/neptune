@@ -217,8 +217,7 @@ select CustomAttributeID,
 				when UnderlyingHydrologicSoilGroupID = 2 then 'B'
 				when UnderlyingHydrologicSoilGroupID = 3 then 'C'
 				when UnderlyingHydrologicSoilGroupID = 4 then 'D'
-				when UnderlyingHydrologicSoilGroupID = 5 then 'E'
-				when UnderlyingHydrologicSoilGroupID = 6 then 'Liner'
+				when UnderlyingHydrologicSoilGroupID = 5 then 'Liner'
 				else null
 			end
 		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +25 then cast(UnderlyingInfiltrationRate as varchar(20))
