@@ -430,6 +430,7 @@
     <Build Include="dbo\Views\dbo.vTreatmentBMPModeledLandUseArea.sql" />
     <None Include="Scripts\ReleaseScripts\015 - Add Field Definition for DownstreamOfNonModeledBMP.sql" />
     <None Include="Scripts\ReleaseScripts\016 - Add CustomAttributeType, TreatmentBMPCustomAttributeType, CustomAttribute and CustomAttributeValues for modeling attributes.sql" />
+    <Build Include="dbo\Views\dbo.vTreatmentBMPModelingAttribute.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Neptune.Database.refactorlog" />
