@@ -15,7 +15,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         {
             PageTitle = "Modeling Attributes";
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            GridSpec = new ViewTreatmentBMPModelingAttributesGridSpec(linkGenerator, new Dictionary<int, EFModels.Entities.Delineation?>(), new Dictionary<int, string?>(), new Dictionary<int, double>(), new Dictionary<int, double?>());
+            GridSpec = new ViewTreatmentBMPModelingAttributesGridSpec(linkGenerator, new Dictionary<int, EFModels.Entities.Delineation?>(), new Dictionary<int, string?>(), new Dictionary<int, double>(), new Dictionary<int, double?>(), new Dictionary<int, vTreatmentBMPModelingAttribute>());
             GridName = "treatmentBMPModelingAttributeGrid";
             GridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.ViewTreatmentBMPModelingAttributesGridJsonData());
         }

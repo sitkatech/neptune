@@ -251,7 +251,7 @@ namespace Neptune.EFModels.Entities
             return GetImpl(dbContext).AsNoTracking().OrderBy(x => x.TreatmentBMPName).ToList();
         }
 
-        public static List<TreatmentBMP> ListWithModelingAttributes(NeptuneDbContext dbContext)
+        public static List<TreatmentBMP> ListModeledOnly(NeptuneDbContext dbContext)
         {
             return dbContext.TreatmentBMPs
                 .Include(x => x.TreatmentBMPType)
