@@ -153,83 +153,428 @@ declare @currentCustomAttributeIDMax int = (select max(CustomAttributeID) from d
 
 insert into dbo.CustomAttribute
 select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
-from dbo.TreatmentBMPModelingAttribute tbma
-left join dbo.TreatmentBMP tbmp on tbma.TreatmentBMPID = tbmp.TreatmentBMPID
-left join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
-left join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
-left join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
-where cat.CustomAttributeTypeID > @currentCustomAttributeTypeIDMax
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +1 and tbmpma.AverageDivertedFlowrate is not null
 
 insert into dbo.CustomAttributeValue
-select CustomAttributeID,
-	case
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +1 then format(AverageDivertedFlowrate, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +2 then format(AverageTreatmentFlowrate, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +3 then format(DesignDryWeatherTreatmentCapacity, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +4 then format(DesignLowFlowDiversionCapacity, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +5 then format(DesignMediaFiltrationRate, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +6 then format(DiversionRate, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +7 then format(DrawdownTimeForDetentionVolume, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +8 then format(DrawdownTimeForWQDetentionVolume, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +9 then 
-			case 
-				when DryWeatherFlowOverrideID = 1 then 'No - As Modeled'
-				when DryWeatherFlowOverrideID = 2 then 'Yes - DWF Effectively Eliminated'
-				else null
-			end
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +10 then format(EffectiveFootprint, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +11 then format(EffectiveRetentionDepth, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +12 then format(InfiltrationDischargeRate, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +13 then format(InfiltrationSurfaceArea, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +14 then format(MediaBedFootprint, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +15 then 
-			case 
-				when MonthsOfOperationID = 1 then 'Summer'
-				when MonthsOfOperationID = 2 then 'Winter'
-				when MonthsOfOperationID = 3 then 'Both'
-				else null
-			end
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +16 then format(PermanentPoolOrWetlandVolume, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +17 then
-			case 
-				when RoutingConfigurationID = 1 then 'Online'
-				when RoutingConfigurationID = 2 then 'Offline'
-				else null
-			end
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +18 then format(StorageVolumeBelowLowestOutletElevation, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +19 then format(SummerHarvestedWaterDemand, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +20 then 
-			case
-				when TimeOfConcentrationID = 1 then '5'
-				when TimeOfConcentrationID = 2 then '10'
-				when TimeOfConcentrationID = 3 then '15'
-				when TimeOfConcentrationID = 4 then '20'
-				when TimeOfConcentrationID = 5 then '30'
-				when TimeOfConcentrationID = 6 then '45'
-				when TimeOfConcentrationID = 7 then '60'
-				else null
-			end
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +21 then format(TotalEffectiveBMPVolume, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +22 then format(TotalEffectiveDrywellBMPVolume, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +23 then format(TreatmentRate, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +24 then 
-			case
-				when UnderlyingHydrologicSoilGroupID = 1 then 'A'
-				when UnderlyingHydrologicSoilGroupID = 2 then 'B'
-				when UnderlyingHydrologicSoilGroupID = 3 then 'C'
-				when UnderlyingHydrologicSoilGroupID = 4 then 'D'
-				when UnderlyingHydrologicSoilGroupID = 5 then 'Liner'
-				else null
-			end
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +25 then format(UnderlyingInfiltrationRate, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +26 then format(WaterQualityDetentionVolume, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +27 then format(WettedFootprint, '0.#####')
-		when CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +28 then format(WinterHarvestedWaterDemand, '0.#####')
-		else null
-	end as AttributeValue
+select CustomAttributeID, format(AverageDivertedFlowrate, '0.#####')
 from dbo.CustomAttribute ca
-left join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
-where CustomAttributeID > @currentCustomAttributeTypeIDMax
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +1 and tbmpma.AverageDivertedFlowrate is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +2 and tbmpma.AverageTreatmentFlowrate is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(AverageTreatmentFlowrate, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +2 and tbmpma.AverageTreatmentFlowrate is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +3 and tbmpma.DesignDryWeatherTreatmentCapacity is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(DesignDryWeatherTreatmentCapacity, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +3 and tbmpma.DesignDryWeatherTreatmentCapacity is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +4 and tbmpma.DesignLowFlowDiversionCapacity is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(DesignLowFlowDiversionCapacity, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +4 and tbmpma.DesignLowFlowDiversionCapacity is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +5 and tbmpma.DesignMediaFiltrationRate is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(DesignMediaFiltrationRate, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +5 and tbmpma.DesignMediaFiltrationRate is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +6 and tbmpma.DiversionRate is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(DiversionRate, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +6 and tbmpma.DiversionRate is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +7 and tbmpma.DrawdownTimeForDetentionVolume is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(DrawdownTimeForDetentionVolume, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +7 and tbmpma.DrawdownTimeForDetentionVolume is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +8 and tbmpma.DrawdownTimeForWQDetentionVolume is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(DrawdownTimeForWQDetentionVolume, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +8 and tbmpma.DrawdownTimeForWQDetentionVolume is not null		
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +9 and tbmpma.DryWeatherFlowOverrideID is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, DryWeatherFlowOverrideDisplayName
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+join dbo.DryWeatherFlowOverride dwfo on tbmpma.DryWeatherFlowOverrideID = dwfo.DryWeatherFlowOverrideID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +9 and tbmpma.DryWeatherFlowOverrideID is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +10 and tbmpma.EffectiveFootprint is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(EffectiveFootprint, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +10 and tbmpma.EffectiveFootprint is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +11 and tbmpma.EffectiveRetentionDepth is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(EffectiveRetentionDepth, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +11 and tbmpma.EffectiveRetentionDepth is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +12 and tbmpma.InfiltrationDischargeRate is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(InfiltrationDischargeRate, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +12 and tbmpma.InfiltrationDischargeRate is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +13 and tbmpma.InfiltrationSurfaceArea is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(InfiltrationSurfaceArea, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +13 and tbmpma.InfiltrationSurfaceArea is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +14 and tbmpma.MediaBedFootprint is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(MediaBedFootprint, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +14 and tbmpma.MediaBedFootprint is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +15 and tbmpma.MonthsOfOperationID is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, MonthsOfOperationDisplayName
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+join dbo.MonthsOfOperation mo on tbmpma.MonthsOfOperationID = mo.MonthsOfOperationID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +15 and tbmpma.MonthsOfOperationID is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +16 and tbmpma.PermanentPoolOrWetlandVolume is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(PermanentPoolOrWetlandVolume, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +16 and tbmpma.PermanentPoolOrWetlandVolume is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +17 and tbmpma.RoutingConfigurationID is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, RoutingConfigurationDisplayName
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+join dbo.RoutingConfiguration rc on tbmpma.RoutingConfigurationID = rc.RoutingConfigurationID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +17 and tbmpma.RoutingConfigurationID is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +18 and tbmpma.StorageVolumeBelowLowestOutletElevation is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(StorageVolumeBelowLowestOutletElevation, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +18 and tbmpma.StorageVolumeBelowLowestOutletElevation is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +19 and tbmpma.SummerHarvestedWaterDemand is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(SummerHarvestedWaterDemand, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +19 and tbmpma.SummerHarvestedWaterDemand is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +20 and tbmpma.TimeOfConcentrationID is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, TimeOfConcentrationDisplayName
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+join dbo.TimeOfConcentration toc on tbmpma.TimeOfConcentrationID = toc.TimeOfConcentrationID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +20 and tbmpma.TimeOfConcentrationID is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +21 and tbmpma.TotalEffectiveBMPVolume is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(TotalEffectiveBMPVolume, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +21 and tbmpma.TotalEffectiveBMPVolume is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +22 and tbmpma.TotalEffectiveDrywellBMPVolume is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(TotalEffectiveDrywellBMPVolume, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +22 and tbmpma.TotalEffectiveDrywellBMPVolume is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +23 and tbmpma.TreatmentRate is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(TreatmentRate, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +23 and tbmpma.TreatmentRate is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +24 and tbmpma.UnderlyingHydrologicSoilGroupID is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, UnderlyingHydrologicSoilGroupDisplayName
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+join dbo.UnderlyingHydrologicSoilGroup uhs on tbmpma.UnderlyingHydrologicSoilGroupID = uhs.UnderlyingHydrologicSoilGroupID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +24 and tbmpma.UnderlyingHydrologicSoilGroupID is not null
+		
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +25 and tbmpma.UnderlyingInfiltrationRate is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(UnderlyingInfiltrationRate, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +25 and tbmpma.UnderlyingInfiltrationRate is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +26 and tbmpma.WaterQualityDetentionVolume is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(WaterQualityDetentionVolume, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +26 and tbmpma.WaterQualityDetentionVolume is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +27 and tbmpma.WettedFootprint is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(WettedFootprint, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +27 and tbmpma.WettedFootprint is not null
+
+insert into dbo.CustomAttribute
+select tbmp.TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, tbmpt.TreatmentBMPTypeID, cat.CustomAttributeTypeID
+from dbo.TreatmentBMPModelingAttribute tbmpma
+join dbo.TreatmentBMP tbmp on tbmpma.TreatmentBMPID = tbmp.TreatmentBMPID
+join dbo.TreatmentBMPType tbmpt on tbmp.TreatmentBMPTypeID = tbmpt.TreatmentBMPTypeID
+join dbo.TreatmentBMPTypeCustomAttributeType tbtcat on tbmpt.TreatmentBMPTypeID = tbtcat.TreatmentBMPTypeID
+join dbo.CustomAttributeType cat on tbtcat.CustomAttributeTypeID = cat.CustomAttributeTypeID
+where cat.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +28 and tbmpma.WinterHarvestedWaterDemand is not null
+
+insert into dbo.CustomAttributeValue
+select CustomAttributeID, format(WinterHarvestedWaterDemand, '0.#####')
+from dbo.CustomAttribute ca
+join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.TreatmentBMPID
+where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +28 and tbmpma.WinterHarvestedWaterDemand is not null
 
     INSERT INTO dbo.DatabaseMigration(MigrationAuthorName, ReleaseScriptFileName, MigrationReason)
     SELECT 'Mack Peters', @MigrationName, '016 - Add CustomAttributeType, TreatmentBMPCustomAttributeType, CustomAttribute and CustomAttributeValues for modeling attributes'
