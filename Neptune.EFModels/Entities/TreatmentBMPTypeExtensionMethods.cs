@@ -194,4 +194,85 @@ public static partial class TreatmentBMPTypeExtensionMethods
 
         return modelingAttributes;
     }
+
+    public static bool HasMissingRequiredCustomAttributes(this TreatmentBMPType treatmentBMPType, CustomAttributeTypePurposeEnum customAttributeTypePurposeEnum, ICollection<CustomAttribute> customAttributes)
+    {
+        return treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes
+                .Any(x =>
+                    x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                    (int)customAttributeTypePurposeEnum &&
+                    x.CustomAttributeType.IsRequired &&
+                    !customAttributes
+                        .Select(y => y.CustomAttributeTypeID)
+                        .Contains(x.CustomAttributeTypeID)) ||
+            customAttributes.Any(x =>
+                x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                (int)customAttributeTypePurposeEnum &&
+                x.CustomAttributeType.IsRequired &&
+                (x.CustomAttributeValues == null ||
+                 x.CustomAttributeValues.All(y => string.IsNullOrEmpty(y.AttributeValue)))
+            );
+    }
+
+    public static List<string> MissingRequiredModelingAttributes(this TreatmentBMPType treatmentBMPType, ICollection<CustomAttribute> customAttributes)
+    {
+        var missingAttributes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes
+            .Where(x =>
+                x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                (int)CustomAttributeTypePurposeEnum.Modeling &&
+                x.CustomAttributeType.IsRequired &&
+                !customAttributes
+                    .Select(y => y.CustomAttributeTypeID)
+                    .Contains(x.CustomAttributeTypeID)).Select(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
+        
+        missingAttributes.Concat(customAttributes.Where(x =>
+                   x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                   (int)CustomAttributeTypePurposeEnum.Modeling &&
+                   x.CustomAttributeType.IsRequired &&
+                   (x.CustomAttributeValues == null ||
+                    x.CustomAttributeValues.All(y => string.IsNullOrEmpty(y.AttributeValue)))
+               ).Select(x => x.CustomAttributeType.CustomAttributeTypeName).ToList());
+
+        if (missingAttributes.Contains("Design Dry Weather Treatment Capacity") &&
+            missingAttributes.Contains("Average Treatment Flowrate"))
+        {
+            missingAttributes.Remove("Design Dry Weather Treatment Capacity");
+            missingAttributes.Remove("Average Treatment Flowrate");
+            missingAttributes.Add("At least one of either Design Dry Weather Treatment Capacity or Average Treatment Flowrate is required");
+        }
+
+        if (missingAttributes.Contains("Design Dry Weather Treatment Capacity") &&
+            !missingAttributes.Contains("Average Treatment Flowrate"))
+        {
+            missingAttributes.Remove("Design Dry Weather Treatment Capacity");
+        }
+
+        if (!missingAttributes.Contains("Design Dry Weather Treatment Capacity") &&
+            missingAttributes.Contains("Average Treatment Flowrate"))
+        {
+            missingAttributes.Remove("Average Treatment Flowrate");
+        }
+
+        if (missingAttributes.Contains("Design Low Flow Diversion Capacity") &&
+            missingAttributes.Contains("Average Diverted Flowrate"))
+        {
+            missingAttributes.Remove("Design Low Flow Diversion Capacity");
+            missingAttributes.Remove("Average Diverted Flowrate");
+            missingAttributes.Add("At least one of either Design Low Flow Diversion Capacity or Average Diverted Flowrate is required");
+        }
+
+        if (missingAttributes.Contains("Design Low Flow Diversion Capacity") &&
+            !missingAttributes.Contains("Average Diverted Flowrate"))
+        {
+            missingAttributes.Remove("Design Low Flow Diversion Capacity");
+        }
+
+        if (!missingAttributes.Contains("Design Low Flow Diversion Capacity") &&
+            missingAttributes.Contains("Average Diverted Flowrate"))
+        {
+            missingAttributes.Remove("Average Diverted Flowrate");
+        }
+
+        return missingAttributes;
+    }
 }

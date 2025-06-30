@@ -19,12 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.WebMvc.Common;
-using Neptune.WebMvc.Models;
-using Neptune.WebMvc.Security;
-using Neptune.WebMvc.Views.Shared;
-using Neptune.WebMvc.Views.TreatmentBMP;
-using System.Globalization;
 using Hangfire;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
@@ -36,26 +30,32 @@ using Neptune.Common.GeoSpatial;
 using Neptune.Common.Services.GDAL;
 using Neptune.EFModels;
 using Neptune.EFModels.Entities;
+using Neptune.EFModels.Nereid;
+using Neptune.Jobs.Services;
 using Neptune.Models.DataTransferObjects;
+using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.Models;
+using Neptune.WebMvc.Common.Mvc;
 using Neptune.WebMvc.Common.MvcResults;
+using Neptune.WebMvc.Models;
+using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Services.Filters;
+using Neptune.WebMvc.Views.HRUCharacteristic;
+using Neptune.WebMvc.Views.Shared;
 using Neptune.WebMvc.Views.Shared.EditAttributes;
 using Neptune.WebMvc.Views.Shared.HRUCharacteristics;
 using Neptune.WebMvc.Views.Shared.Location;
 using Neptune.WebMvc.Views.Shared.ModeledPerformance;
+using Neptune.WebMvc.Views.TreatmentBMP;
+using System.Globalization;
 using Detail = Neptune.WebMvc.Views.TreatmentBMP.Detail;
 using DetailViewData = Neptune.WebMvc.Views.TreatmentBMP.DetailViewData;
 using Edit = Neptune.WebMvc.Views.TreatmentBMP.Edit;
 using EditOtherDesignAttributes = Neptune.WebMvc.Views.TreatmentBMP.EditOtherDesignAttributes;
 using EditViewData = Neptune.WebMvc.Views.TreatmentBMP.EditViewData;
 using EditViewModel = Neptune.WebMvc.Views.TreatmentBMP.EditViewModel;
-using TreatmentBMPAssessmentSummary = Neptune.EFModels.Entities.TreatmentBMPAssessmentSummary;
-using Neptune.EFModels.Nereid;
-using Neptune.Jobs.Services;
-using Neptune.WebMvc.Common.Mvc;
-using Neptune.WebMvc.Views.HRUCharacteristic;
 using IndexViewData = Neptune.WebMvc.Views.TreatmentBMP.IndexViewData;
+using TreatmentBMPAssessmentSummary = Neptune.EFModels.Entities.TreatmentBMPAssessmentSummary;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -840,21 +840,8 @@ namespace Neptune.WebMvc.Controllers
 
         private ViewResult ViewEditOtherDesignAttributes(EditAttributesViewModel viewModel, TreatmentBMP treatmentBMP, CustomAttributeTypePurposeEnum customAttributeTypePurposeEnum, TreatmentBMPType treatmentBMPType, ICollection<CustomAttribute> customAttributes)
         {
-            var missingRequiredAttributes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes
-                                                .Any(x =>
-                                                    x.CustomAttributeType.CustomAttributeTypePurposeID ==
-                                                    (int) customAttributeTypePurposeEnum &&
-                                                    x.CustomAttributeType.IsRequired &&
-                                                    !customAttributes
-                                                        .Select(y => y.CustomAttributeTypeID)
-                                                        .Contains(x.CustomAttributeTypeID)) ||
-                                            customAttributes.Any(x =>
-                                                x.CustomAttributeType.CustomAttributeTypePurposeID ==
-                                                (int) customAttributeTypePurposeEnum &&
-                                                x.CustomAttributeType.IsRequired &&
-                                                (x.CustomAttributeValues == null ||
-                                                 x.CustomAttributeValues.All(y => string.IsNullOrEmpty(y.AttributeValue)))
-                                            );
+            var missingRequiredAttributes =
+                treatmentBMPType.HasMissingRequiredCustomAttributes(customAttributeTypePurposeEnum, customAttributes);
             var editAttributesViewData = new EditAttributesViewData(treatmentBMPType, customAttributeTypePurposeEnum, missingRequiredAttributes);
             var parentDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMP));
             var viewData = new EditOtherDesignAttributesViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, parentDetailUrl, editAttributesViewData);
@@ -894,50 +881,40 @@ namespace Neptune.WebMvc.Controllers
         public ViewResult EditModelingAttributes([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = TreatmentBMPs.GetByID(_dbContext, treatmentBMPPrimaryKey);
-            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP ?? new TreatmentBMPModelingAttribute()
-            {
-                TreatmentBMP = treatmentBMP,
-                /* defaults for a brand new record; note, we probably should only set these for the given type,
-                 * but it doesn't really matter too much since we are using it to prepopulate, and if a certain
-                 * type does not have a property it won't show on the editor and therefore be considered null when saving
-                 */
-                UnderlyingHydrologicSoilGroupID = UnderlyingHydrologicSoilGroup.D.UnderlyingHydrologicSoilGroupID,
-                RoutingConfigurationID = RoutingConfiguration.Online.RoutingConfigurationID,
-                TimeOfConcentrationID = TimeOfConcentration.FiveMinutes.TimeOfConcentrationID,
-                DryWeatherFlowOverrideID = DryWeatherFlowOverride.No.DryWeatherFlowOverrideID
-            };
-
-            var viewModel = new EditModelingAttributesViewModel(treatmentBMPModelingAttribute, treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID);
-            return ViewEditModelingAttributes(viewModel, treatmentBMP);
+            var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMP.TreatmentBMPTypeID);
+            var customAttributes = CustomAttributes.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
+            var customAttributeTypePurposeEnum = CustomAttributeTypePurposeEnum.Modeling;
+            var customAttributeUpsertDtos = CustomAttributes
+                .ListByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMPPrimaryKey.PrimaryKeyValue).Where(x =>
+                    x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                    (int)customAttributeTypePurposeEnum).Select(x => x.AsUpsertDto()).ToList();
+            var viewModel = new EditAttributesViewModel(customAttributeUpsertDtos);
+            return ViewEditModelingAttributes(viewModel, treatmentBMP, customAttributeTypePurposeEnum, treatmentBMPType, customAttributes);
         }
 
         [HttpPost("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPEditFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public async Task<IActionResult> EditModelingAttributes([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
-            EditModelingAttributesViewModel viewModel)
+            EditAttributesViewModel viewModel)
         {
             var treatmentBMP = TreatmentBMPs.GetByIDWithChangeTracking(_dbContext, treatmentBMPPrimaryKey);
+            var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMP.TreatmentBMPTypeID);
+            var customAttributes = CustomAttributes.ListByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMP.TreatmentBMPID);
+            var customAttributeTypePurposeEnum = CustomAttributeTypePurposeEnum.Modeling;
             if (!ModelState.IsValid)
             {
-                return ViewEditModelingAttributes(viewModel, treatmentBMP);
+                return ViewEditModelingAttributes(viewModel, treatmentBMP, customAttributeTypePurposeEnum, treatmentBMPType, customAttributes);
             }
 
-            var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
-            if (treatmentBMPModelingAttribute == null)
-            {
-                treatmentBMPModelingAttribute = new TreatmentBMPModelingAttribute()
-                {
-                    TreatmentBMP = treatmentBMP
-                };
-                await _dbContext.TreatmentBMPModelingAttributes.AddAsync(treatmentBMPModelingAttribute);
-            }
-
-            viewModel.UpdateModel(treatmentBMPModelingAttribute, CurrentPerson);
+            var allCustomAttributeTypes = CustomAttributeTypes.List(_dbContext);
+            var existingCustomAttributes = CustomAttributes.ListByTreatmentBMPIDWithChangeTracking(_dbContext, treatmentBMPPrimaryKey.PrimaryKeyValue).Where(x =>
+                x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                (int)customAttributeTypePurposeEnum).ToList();
+            await viewModel.UpdateModel(_dbContext, treatmentBMP, existingCustomAttributes, allCustomAttributeTypes);
             await _dbContext.SaveChangesAsync();
-
-            var missingAttributes = viewModel.CheckForRequiredFields();
-            SetMessageForDisplay(missingAttributes.Count > 0
+            var missingAttributes = treatmentBMPType.MissingRequiredModelingAttributes(customAttributes);
+            SetMessageForDisplay(missingAttributes.Any()
                 ? "This Treatment BMP is missing required modeling attributes. Modeling Attributes successfully saved."
                 : "Modeling Attributes successfully saved.");
             // need to re-execute the model at this node since it was re-parameterized
@@ -946,15 +923,27 @@ namespace Neptune.WebMvc.Controllers
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(_linkGenerator, x => x.Detail(treatmentBMP.PrimaryKey)));
         }
 
-        private ViewResult ViewEditModelingAttributes(EditModelingAttributesViewModel viewModel, TreatmentBMP treatmentBMP)
+        private ViewResult ViewEditModelingAttributes(EditAttributesViewModel viewModel, TreatmentBMP treatmentBMP, CustomAttributeTypePurposeEnum customAttributeTypePurposeEnum, TreatmentBMPType treatmentBMPType, ICollection<CustomAttribute> customAttributes)
         {
-            var routingConfigurations = RoutingConfiguration.All.OrderBy(x => x.RoutingConfigurationDisplayName);
-            var timeOfConcentrations = TimeOfConcentration.All.OrderBy(x => x.TimeOfConcentrationID);
-            var underlyingHydrologicSoilGroups = UnderlyingHydrologicSoilGroup.All.OrderBy(x => x.UnderlyingHydrologicSoilGroupID);
-            var monthsOfOperation = MonthsOfOperation.All;
-            var dryWeatherFlowOverride = DryWeatherFlowOverride.All;
-            var viewData = new EditModelingAttributesViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, routingConfigurations, timeOfConcentrations, underlyingHydrologicSoilGroups, monthsOfOperation, dryWeatherFlowOverride);
-            return RazorView<EditModelingAttributes, EditModelingAttributesViewData, EditModelingAttributesViewModel>(viewData, viewModel);
+            var missingRequiredAttributes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes
+                                                .Any(x =>
+                                                    x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                                                    (int)customAttributeTypePurposeEnum &&
+                                                    x.CustomAttributeType.IsRequired &&
+                                                    !customAttributes
+                                                        .Select(y => y.CustomAttributeTypeID)
+                                                        .Contains(x.CustomAttributeTypeID)) ||
+                                            customAttributes.Any(x =>
+                                                x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                                                (int)customAttributeTypePurposeEnum &&
+                                                x.CustomAttributeType.IsRequired &&
+                                                (x.CustomAttributeValues == null ||
+                                                 x.CustomAttributeValues.All(y => string.IsNullOrEmpty(y.AttributeValue)))
+                                            );
+            var editAttributesViewData = new EditAttributesViewData(treatmentBMPType, customAttributeTypePurposeEnum, missingRequiredAttributes);
+            var parentDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(treatmentBMP));
+            var viewData = new EditModelingAttributesViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, parentDetailUrl, editAttributesViewData);
+            return RazorView<EditModelingAttributes, EditModelingAttributesViewData, EditAttributesViewModel>(viewData, viewModel);
         }
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
