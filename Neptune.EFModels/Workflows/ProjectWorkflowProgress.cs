@@ -70,7 +70,7 @@ public class ProjectWorkflowProgress
                 {
                     return true;
                 }
-                return project.TreatmentBMPs.Any() && project.TreatmentBMPs.All(x => !x.TreatmentBMPType.HasMissingModelingAttributes(x.TreatmentBMPModelingAttributeTreatmentBMP));
+                return project.TreatmentBMPs.Any() && project.TreatmentBMPs.All(x => !x.TreatmentBMPType.MissingModelingAttributes(x.TreatmentBMPModelingAttributeTreatmentBMP));
             case ProjectWorkflowStep.Delineations:
                 if (project.DoesNotIncludeTreatmentBMPs)
                 {

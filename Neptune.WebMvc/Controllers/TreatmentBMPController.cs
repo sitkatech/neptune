@@ -216,7 +216,7 @@ namespace Neptune.WebMvc.Controllers
             var fundingEvents = FundingEvents.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var treatmentBMPBenchmarkAndThresholds = TreatmentBMPBenchmarkAndThresholds.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var treatmentBMPDocuments = TreatmentBMPDocuments.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
-            var hasMissingModelingAttributes = treatmentBMPType.HasMissingModelingAttributes(treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP);
+            var hasMissingModelingAttributes = treatmentBMPType.MissingModelingAttributes(treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP);
             var regionalSubbasinRevisionRequest = RegionalSubbasinRevisionRequests.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID).SingleOrDefault(x =>
                 x.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Open);
             var watershed = treatmentBMP.WatershedID.HasValue ? _dbContext.Watersheds.AsNoTracking().Single(x => x.WatershedID == treatmentBMP.WatershedID.Value) : null;

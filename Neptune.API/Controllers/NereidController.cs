@@ -278,8 +278,10 @@ namespace Neptune.API.Controllers
             var modelBasins = DbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
             var precipitationZones = DbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
             var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(DbContext);
+            var vTreatmentBMPModelingAttributes = DbContext.vTreatmentBMPModelingAttributes.AsNoTracking()
+                .ToDictionary(x => x.TreatmentBMPID, x => x);
 
-            var treatmentFacility = TreatmentBMPs.GetByID(DbContext, treatmentBMPID).ToTreatmentFacility(delineations, true, modelBasins, precipitationZones);
+            var treatmentFacility = TreatmentBMPs.GetByID(DbContext, treatmentBMPID).ToTreatmentFacility(delineations, true, modelBasins, precipitationZones, vTreatmentBMPModelingAttributes.ContainsKey(treatmentBMPID) ? vTreatmentBMPModelingAttributes[treatmentBMPID] : null);
 
             var treatmentFacilityTable = new TreatmentFacilityTable() { TreatmentFacilities = new List<TreatmentFacility> {treatmentFacility} };
 

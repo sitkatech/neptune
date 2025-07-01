@@ -6,7 +6,7 @@ namespace Neptune.EFModels.Entities;
 
 public static partial class TreatmentBMPExtensionMethods
 {
-    public static TreatmentBMPDisplayDto AsDisplayDto(this TreatmentBMP treatmentBMP)
+    public static TreatmentBMPDisplayDto AsDisplayDto(this TreatmentBMP treatmentBMP, vTreatmentBMPModelingAttribute treatmentBMPModelingAttribute)
     {
         var treatmentBMPSimpleDto = new TreatmentBMPDisplayDto()
         {
@@ -19,14 +19,14 @@ public static partial class TreatmentBMPExtensionMethods
             Latitude = treatmentBMP.LocationPoint4326.Coordinate.Y,
             TreatmentBMPName = treatmentBMP.TreatmentBMPName,
             TreatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.AsSimpleDto(),
-            IsFullyParameterized = treatmentBMP.IsFullyParameterized(treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP),
+            IsFullyParameterized = treatmentBMP.IsFullyParameterized(treatmentBMPModelingAttribute),
             WatershedName = treatmentBMP.Watershed?.WatershedName,
             Notes = treatmentBMP.Notes
         };
         return treatmentBMPSimpleDto;
     }
 
-    public static TreatmentBMPUpsertDto AsUpsertDtoWithModelingAttributes(this TreatmentBMP treatmentBMP, TreatmentBMPModelingAttribute treatmentBMPModelingAttribute)
+    public static TreatmentBMPUpsertDto AsUpsertDtoWithModelingAttributes(this TreatmentBMP treatmentBMP, vTreatmentBMPModelingAttribute treatmentBMPModelingAttribute)
     {
         var treatmentBMPUpsertDto = new TreatmentBMPUpsertDto()
         {
@@ -40,35 +40,8 @@ public static partial class TreatmentBMPExtensionMethods
             Longitude = treatmentBMP.LocationPoint4326?.Coordinate.X,
             Latitude = treatmentBMP.LocationPoint4326?.Coordinate.Y,
             Notes = treatmentBMP.Notes,
-            AverageDivertedFlowrate = treatmentBMPModelingAttribute?.AverageDivertedFlowrate,
-            AverageTreatmentFlowrate = treatmentBMPModelingAttribute?.AverageTreatmentFlowrate,
-            DesignDryWeatherTreatmentCapacity = treatmentBMPModelingAttribute?.DesignDryWeatherTreatmentCapacity,
-            DesignLowFlowDiversionCapacity = treatmentBMPModelingAttribute?.DesignLowFlowDiversionCapacity,
-            DesignMediaFiltrationRate = treatmentBMPModelingAttribute?.DesignMediaFiltrationRate,
-            DiversionRate = treatmentBMPModelingAttribute?.DiversionRate,
-            DrawdownTimeForWQDetentionVolume = treatmentBMPModelingAttribute?.DrawdownTimeForWQDetentionVolume,
-            EffectiveFootprint = treatmentBMPModelingAttribute?.EffectiveFootprint,
-            EffectiveRetentionDepth = treatmentBMPModelingAttribute?.EffectiveRetentionDepth,
-            InfiltrationDischargeRate = treatmentBMPModelingAttribute?.InfiltrationDischargeRate,
-            InfiltrationSurfaceArea = treatmentBMPModelingAttribute?.InfiltrationSurfaceArea,
-            MediaBedFootprint = treatmentBMPModelingAttribute?.MediaBedFootprint,
-            PermanentPoolOrWetlandVolume = treatmentBMPModelingAttribute?.PermanentPoolOrWetlandVolume,
-            RoutingConfigurationID = treatmentBMPModelingAttribute?.RoutingConfigurationID,
-            StorageVolumeBelowLowestOutletElevation = treatmentBMPModelingAttribute?.StorageVolumeBelowLowestOutletElevation,
-            SummerHarvestedWaterDemand = treatmentBMPModelingAttribute?.SummerHarvestedWaterDemand,
-            TimeOfConcentrationID = treatmentBMPModelingAttribute?.TimeOfConcentrationID,
-            DrawdownTimeForDetentionVolume = treatmentBMPModelingAttribute?.DrawdownTimeForDetentionVolume,
-            TotalEffectiveBMPVolume = treatmentBMPModelingAttribute?.TotalEffectiveBMPVolume,
-            TotalEffectiveDrywellBMPVolume = treatmentBMPModelingAttribute?.TotalEffectiveDrywellBMPVolume,
-            TreatmentRate = treatmentBMPModelingAttribute?.TreatmentRate,
-            UnderlyingHydrologicSoilGroupID = treatmentBMPModelingAttribute?.UnderlyingHydrologicSoilGroupID,
-            UnderlyingInfiltrationRate = treatmentBMPModelingAttribute?.UnderlyingInfiltrationRate,
-            WaterQualityDetentionVolume = treatmentBMPModelingAttribute?.WaterQualityDetentionVolume,
-            WettedFootprint = treatmentBMPModelingAttribute?.WettedFootprint,
-            WinterHarvestedWaterDemand = treatmentBMPModelingAttribute?.WinterHarvestedWaterDemand,
-            MonthsOfOperationID = treatmentBMPModelingAttribute?.MonthsOfOperationID,
-            DryWeatherFlowOverrideID = treatmentBMPModelingAttribute?.DryWeatherFlowOverrideID,
-            AreAllModelingAttributesComplete = !treatmentBMP.TreatmentBMPType.HasMissingModelingAttributes(treatmentBMPModelingAttribute),
+            ModelingAttributes = treatmentBMP.CustomAttributes.Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID == (int)CustomAttributeTypePurposeEnum.Modeling).Select(x => x.AsUpsertDto()).ToList(),
+            AreAllModelingAttributesComplete = !treatmentBMP.TreatmentBMPType.MissingModelingAttributes(treatmentBMPModelingAttribute).Any(),
             IsFullyParameterized = treatmentBMP.IsFullyParameterized(treatmentBMPModelingAttribute)
         };
 
@@ -91,7 +64,7 @@ public static partial class TreatmentBMPExtensionMethods
         return waterQualityManagementPlanVerifyTreatmentBMPSimpleDto;
     }
 
-    public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP, Delineation? delineation)
+    public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP, Delineation? delineation, vTreatmentBMPModelingAttribute treatmentBMPModelingAttribute)
     {
         // Planning BMPs don't need verified delineations
         // assumes the delineation passed in is the from the "upstreamest" BMP
@@ -101,11 +74,10 @@ public static partial class TreatmentBMPExtensionMethods
         }
 
         var treatmentBMPType = treatmentBMP.TreatmentBMPType;
-        var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
-        return !treatmentBMPType.HasMissingModelingAttributes(treatmentBMPModelingAttribute);
+        return !treatmentBMPType.MissingModelingAttributes(treatmentBMPModelingAttribute).Any();
     }
 
-    public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP, TreatmentBMPModelingAttribute bmpModelingAttributes)
+    public static bool IsFullyParameterized(this TreatmentBMP treatmentBMP, vTreatmentBMPModelingAttribute bmpModelingAttributes)
     {
         if (treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID == null)
         {
@@ -117,7 +89,7 @@ public static partial class TreatmentBMPExtensionMethods
             return false;
         }
 
-        return !treatmentBMP.TreatmentBMPType.HasMissingModelingAttributes(bmpModelingAttributes);
+        return !treatmentBMP.TreatmentBMPType.MissingModelingAttributes(bmpModelingAttributes).Any();
     }
 
     public static void SetTreatmentBMPPointInPolygonDataByLocationPoint(this TreatmentBMP treatmentBMP,
