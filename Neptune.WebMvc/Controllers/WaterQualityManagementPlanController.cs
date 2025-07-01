@@ -120,11 +120,12 @@ namespace Neptune.WebMvc.Controllers
             var treatmentBmps = _dbContext.TreatmentBMPs.Include(x => x.TreatmentBMPType)
                 .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP).AsNoTracking()
                 .Where(x => x.WaterQualityManagementPlanID != null).ToList();
+            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(_dbContext);
             var treatmentBMPDetaileds = treatmentBmps.Join(
                     vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext),
                     x => x.TreatmentBMPID,
                     y => y.Key,
-                    (x, y) => new TreatmentBMPWithModelingAttributesAndDelineation(x, y.Value)).ToList();
+                    (x, y) => new TreatmentBMPWithModelingAttributesAndDelineation(x, y.Value, treatmentBMPModelingAttributes.TryGetValue(x.TreatmentBMPID, out var attribute) ? attribute : null)).ToList();
             var quickBMPs = QuickBMPs.List(_dbContext);
             var waterQualityManagementPlans =
                 vWaterQualityManagementPlanDetaileds.ListViewableByPerson(_dbContext, CurrentPerson).OrderBy(x => x.WaterQualityManagementPlanName)
@@ -183,6 +184,8 @@ namespace Neptune.WebMvc.Controllers
 
             var wqmpBMPs = TreatmentBMPs.ListByWaterQualityManagementPlanID(_dbContext, waterQualityManagementPlan.WaterQualityManagementPlanID);
             var treatmentBMPs = CurrentPerson.GetInventoriedBMPsForWQMP(waterQualityManagementPlan, wqmpBMPs);
+            var treatmentBMPModelingAttributes =
+                vTreatmentBMPModelingAttributes.ListAsDictionary(_dbContext);
             var treatmentBmpGeoJsonFeatureCollection = treatmentBMPs.ToGeoJsonFeatureCollection(_linkGenerator);
             var boundingBoxGeometries = new List<Geometry>();
 
@@ -267,7 +270,7 @@ namespace Neptune.WebMvc.Controllers
                 waterQualityManagementPlanVerifyDraft, mapInitJson, treatmentBMPs, parcelGridSpec,
                 waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP,
                 waterQualityManagementPlanVerifyTreatmentBMP,
-                hruCharacteristicsViewData, waterQualityManagementPlanModelingApproaches, modeledPerformanceViewData, sourceControlBMPs, quickBmps, quickBMPGridSpec, hasWaterQualityManagementPlanBoundary, delineationsDict, waterQualityManagementPlanDocuments, calculateTotalAcreage);
+                hruCharacteristicsViewData, waterQualityManagementPlanModelingApproaches, modeledPerformanceViewData, sourceControlBMPs, quickBmps, quickBMPGridSpec, hasWaterQualityManagementPlanBoundary, delineationsDict, waterQualityManagementPlanDocuments, calculateTotalAcreage, treatmentBMPModelingAttributes);
 
             return RazorView<Detail, DetailViewData>(viewData);
         }
@@ -495,8 +498,9 @@ namespace Neptune.WebMvc.Controllers
             var treatmentBmps = TreatmentBMPs.ListByStormwaterJurisdictionID(_dbContext, waterQualityManagementPlan.StormwaterJurisdictionID)
                 .Where(x => x.WaterQualityManagementPlanID == null ||
                             x.WaterQualityManagementPlanID == waterQualityManagementPlan.WaterQualityManagementPlanID);
+            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(_dbContext);
             var viewData = new EditTreatmentBMPsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, waterQualityManagementPlan, treatmentBmps
-                .Select(x => x.AsDisplayDto())
+                .Select(x => x.AsDisplayDto(treatmentBMPModelingAttributes.TryGetValue(x.TreatmentBMPID, out var attribute) ? attribute : null))
                 .OrderBy(x => x.DisplayName)
                 .ToList());
             return RazorView<EditTreatmentBMPs, EditTreatmentBMPsViewData, EditTreatmentBMPsViewModel>(viewData, viewModel);

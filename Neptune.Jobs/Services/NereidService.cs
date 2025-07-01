@@ -211,6 +211,7 @@ public class NereidService : BaseAPIService<NereidService>
 
         var modelBasins = dbContext.ModelBasins.ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
         var precipitationZones = dbContext.PrecipitationZones.ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
+        var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(dbContext);
         var missingNodeIDs = new List<string>();
         foreach (var parallel in solutionSequenceResult.Data.SolutionSequence.Parallel)
         {
@@ -220,7 +221,7 @@ public class NereidService : BaseAPIService<NereidService>
                 var subgraph = MakeSubgraphFromParentGraphAndNodes(graph, seriesNodes);
 
                 var notFoundNodes = await SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWQMPNodes,
-                    allModelingQuickBMPs, isBaselineCondition, modelBasins, precipitationZones, delineations, projectDistributedDelineationIDs, dbContext);
+                    allModelingQuickBMPs, isBaselineCondition, modelBasins, precipitationZones, delineations, treatmentBMPModelingAttributes, projectDistributedDelineationIDs, dbContext);
                 missingNodeIDs.AddRange(notFoundNodes);
             }
         }
@@ -289,6 +290,7 @@ public class NereidService : BaseAPIService<NereidService>
         List<WaterQualityManagementPlanNode> allWaterqualityManagementPlanNodes,
         List<QuickBMP> allModelingQuickBMPs, bool isBaselineCondition, Dictionary<int, int> modelBasins,
         Dictionary<int, double> precipitationZones, Dictionary<int, Delineation?> delineations,
+        Dictionary<int, vTreatmentBMPModelingAttribute> treatmentBMPModelingAttributes,
         List<int>? projectDelineationIDs, NeptuneDbContext? dbContext)
     {
         var notFoundNodes = new List<string>();
@@ -316,7 +318,7 @@ public class NereidService : BaseAPIService<NereidService>
             .Where(x => treatmentBMPToIncludeIDs.Contains(x.TreatmentBMPID) &&
                         // Don't create TreatmentFacilities for BMPs belonging to a Simple WQMP
                         x.WaterQualityManagementPlan?.WaterQualityManagementPlanModelingApproachID !=  (int) WaterQualityManagementPlanModelingApproachEnum.Simplified)
-            .Select(x => x.ToTreatmentFacility(delineations, isBaselineCondition, modelBasins, precipitationZones)).ToList();
+            .Select(x => x.ToTreatmentFacility(delineations, isBaselineCondition, modelBasins, precipitationZones, treatmentBMPModelingAttributes.TryGetValue(x.TreatmentBMPID, out var attribute) ? attribute : null)).ToList();
 
         var filteredQuickBMPs = allModelingQuickBMPs
             .Where(x => waterQualityManagementPlanToIncludeIDs.Contains(x.WaterQualityManagementPlanID) &&

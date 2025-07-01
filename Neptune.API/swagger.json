@@ -4206,6 +4206,82 @@
         },
         "additionalProperties": false
       },
+      "CustomAttributeTypeDto": {
+        "type": "object",
+        "properties": {
+          "CustomAttributeTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CustomAttributeTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "CustomAttributeDataTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "MeasurementUnitTypeID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsRequired": {
+            "type": "boolean"
+          },
+          "CustomAttributeTypeDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "CustomAttributeTypePurposeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CustomAttributeTypeOptionsSchema": {
+            "type": "string",
+            "nullable": true
+          },
+          "DataTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "MeasurementUnitDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Purpose": {
+            "type": "string",
+            "nullable": true
+          },
+          "CustomAttributeTypeSortOrder": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomAttributeUpsertDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPTypeCustomAttributeTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CustomAttributeTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CustomAttributeValues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "DelineationDto": {
         "type": "object",
         "properties": {
@@ -7242,20 +7318,6 @@
         },
         "additionalProperties": false
       },
-      "TreatmentBMPModelingAttributeDefinitionDto": {
-        "type": "object",
-        "properties": {
-          "ModelingAttributeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "Units": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "TreatmentBMPModelingAttributeDropdownItemDto": {
         "type": "object",
         "properties": {
@@ -7452,7 +7514,7 @@
           "TreatmentBMPModelingAttributes": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDefinitionDto"
+              "$ref": "#/components/schemas/CustomAttributeTypeDto"
             },
             "nullable": true
           }
@@ -7509,149 +7571,11 @@
             "type": "string",
             "nullable": true
           },
-          "AverageDivertedFlowrate": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "AverageTreatmentFlowrate": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "DesignDryWeatherTreatmentCapacity": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "DesignLowFlowDiversionCapacity": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "DesignMediaFiltrationRate": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "DesignResidenceTimeforPermanentPool": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "DiversionRate": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "DrawdownTimeForWQDetentionVolume": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "EffectiveFootprint": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "EffectiveRetentionDepth": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "InfiltrationDischargeRate": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "InfiltrationSurfaceArea": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "MediaBedFootprint": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "PermanentPoolOrWetlandVolume": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "StorageVolumeBelowLowestOutletElevation": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "SummerHarvestedWaterDemand": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "DrawdownTimeForDetentionVolume": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "TotalEffectiveBMPVolume": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "TotalEffectiveDrywellBMPVolume": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "TreatmentRate": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "UnderlyingInfiltrationRate": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "WaterQualityDetentionVolume": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "WettedFootprint": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "WinterHarvestedWaterDemand": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "RoutingConfigurationID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "TimeOfConcentrationID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "UnderlyingHydrologicSoilGroupID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "MonthsOfOperationID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "DryWeatherFlowOverrideID": {
-            "type": "integer",
-            "format": "int32",
+          "ModelingAttributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomAttributeUpsertDto"
+            },
             "nullable": true
           },
           "AreAllModelingAttributesComplete": {

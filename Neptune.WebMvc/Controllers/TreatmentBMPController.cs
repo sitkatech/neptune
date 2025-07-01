@@ -81,7 +81,9 @@ namespace Neptune.WebMvc.Controllers
             {
                 JurisdictionLayerGeoJson = jurisdictionMapLayers.Single(x => x.LayerName == MapInitJsonHelpers.CountyCityLayerName)
             };
-            var treatmentBMPDisplayDtos = treatmentBMPs.Select(x => x.AsDisplayDto()).ToList();
+            var treatmentBMPModelingAttributes =
+                vTreatmentBMPModelingAttributes.ListAsDictionary(_dbContext);
+            var treatmentBMPDisplayDtos = treatmentBMPs.Select(x => x.AsDisplayDto(treatmentBMPModelingAttributes.TryGetValue(x.TreatmentBMPID, out var attribute) ? attribute : null)).ToList();
             var treatmentBMPTypeDisplayDtos = treatmentBMPs.Select(x => x.TreatmentBMPType).Distinct(new HavePrimaryKeyComparer<TreatmentBMPType>()).Select(x => x.AsDisplayDto()).ToList();
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.FindABMP);
             var viewData = new FindABMPViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, mapInitJson, neptunePage, treatmentBMPDisplayDtos, treatmentBMPTypeDisplayDtos, jurisdictions);
@@ -216,13 +218,15 @@ namespace Neptune.WebMvc.Controllers
             var fundingEvents = FundingEvents.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var treatmentBMPBenchmarkAndThresholds = TreatmentBMPBenchmarkAndThresholds.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var treatmentBMPDocuments = TreatmentBMPDocuments.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
-            var hasMissingModelingAttributes = treatmentBMPType.MissingModelingAttributes(treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP);
+            var treatmentBMPModelingAttribute =
+                vTreatmentBMPModelingAttributes.GetByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
+            var hasMissingModelingAttributes = treatmentBMPType.MissingModelingAttributes(treatmentBMPModelingAttribute).Any();
             var regionalSubbasinRevisionRequest = RegionalSubbasinRevisionRequests.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID).SingleOrDefault(x =>
                 x.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Open);
             var watershed = treatmentBMP.WatershedID.HasValue ? _dbContext.Watersheds.AsNoTracking().Single(x => x.WatershedID == treatmentBMP.WatershedID.Value) : null;
             var watershedFieldDefinitionText =
                 FieldDefinitionType.Watershed.GetFieldDefinitionData(_dbContext).FieldDefinitionValue;
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, treatmentBMPType, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl, hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, otherTreatmentBmpsExistInSubbasin, hasMissingModelingAttributes, customAttributes, fundingEvents, treatmentBMPBenchmarkAndThresholds, treatmentBMPDocuments, delineation, delineationOverlapDelineations, upstreamestBMP, isUpstreamestBMPAnalyzedInModelingModule, regionalSubbasinRevisionRequest, watershed, watershedFieldDefinitionText);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, treatmentBMPType, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl, hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, otherTreatmentBmpsExistInSubbasin, hasMissingModelingAttributes, customAttributes, fundingEvents, treatmentBMPBenchmarkAndThresholds, treatmentBMPDocuments, delineation, delineationOverlapDelineations, upstreamestBMP, isUpstreamestBMPAnalyzedInModelingModule, regionalSubbasinRevisionRequest, watershed, watershedFieldDefinitionText, treatmentBMPModelingAttribute);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -913,7 +917,8 @@ namespace Neptune.WebMvc.Controllers
                 (int)customAttributeTypePurposeEnum).ToList();
             await viewModel.UpdateModel(_dbContext, treatmentBMP, existingCustomAttributes, allCustomAttributeTypes);
             await _dbContext.SaveChangesAsync();
-            var missingAttributes = treatmentBMPType.MissingRequiredModelingAttributes(customAttributes);
+            var newVTreatmentBMPModelingAttribute = vTreatmentBMPModelingAttributes.GetByTreatmentBMPID(_dbContext, treatmentBMPPrimaryKey.PrimaryKeyValue);
+            var missingAttributes = treatmentBMPType.MissingModelingAttributes(newVTreatmentBMPModelingAttribute);
             SetMessageForDisplay(missingAttributes.Any()
                 ? "This Treatment BMP is missing required modeling attributes. Modeling Attributes successfully saved."
                 : "Modeling Attributes successfully saved.");

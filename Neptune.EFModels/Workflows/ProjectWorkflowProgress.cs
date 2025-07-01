@@ -17,7 +17,8 @@ public class ProjectWorkflowProgress
         ReviewAndShare,
     }
 
-    public static ProjectWorkflowProgressDto GetProgress(Project project)
+    public static ProjectWorkflowProgressDto GetProgress(Project project,
+        Dictionary<int, vTreatmentBMPModelingAttribute> vTreatmentBmpModelingAttributes)
     {
         return new ProjectWorkflowProgressDto
         {
@@ -27,7 +28,7 @@ public class ProjectWorkflowProgress
             Steps = Enum.GetValuesAsUnderlyingType<ProjectWorkflowStep>().Cast<ProjectWorkflowStep>()
                 .ToDictionary(x => x, y => new WorkflowStepStatus()
                 {
-                    Completed = WorkflowStepComplete(project, y),
+                    Completed = WorkflowStepComplete(project, y, vTreatmentBmpModelingAttributes),
                     Disabled = !WorkflowStepActive(project, y),
                 })
         };
@@ -36,9 +37,12 @@ public class ProjectWorkflowProgress
     public static bool CanSubmit(NeptuneDbContext dbContext, Project project)
     {
         var steps = Enum.GetValuesAsUnderlyingType<ProjectWorkflowStep>().Cast<ProjectWorkflowStep>();
+        var vTreatmentBMPModelingAttributes = dbContext.vTreatmentBMPModelingAttributes
+            .Where(x => project.TreatmentBMPs.Any(y => y.TreatmentBMPID == x.TreatmentBMPID))
+            .ToDictionary(x => x.TreatmentBMPID, x => x);
         foreach (var step in steps)
         {
-            var stepComplete = WorkflowStepComplete(project, step);
+            var stepComplete = WorkflowStepComplete(project, step, vTreatmentBMPModelingAttributes);
             if (!stepComplete) return false;
         }
 
@@ -50,7 +54,7 @@ public class ProjectWorkflowProgress
         return currentUser.CanEditJurisdiction(project.StormwaterJurisdictionID, dbContext);
     }
 
-    public static bool WorkflowStepComplete(Project project, ProjectWorkflowStep wellRegistryWorkflowStep)
+    public static bool WorkflowStepComplete(Project project, ProjectWorkflowStep wellRegistryWorkflowStep, Dictionary<int, vTreatmentBMPModelingAttribute> vTreatmentBMPModelingAttributes)
     {
         switch (wellRegistryWorkflowStep)
         {
@@ -70,7 +74,7 @@ public class ProjectWorkflowProgress
                 {
                     return true;
                 }
-                return project.TreatmentBMPs.Any() && project.TreatmentBMPs.All(x => !x.TreatmentBMPType.MissingModelingAttributes(x.TreatmentBMPModelingAttributeTreatmentBMP));
+                return project.TreatmentBMPs.Any() && project.TreatmentBMPs.All(x => !x.TreatmentBMPType.MissingModelingAttributes(vTreatmentBMPModelingAttributes.ContainsKey(x.TreatmentBMPID) ? vTreatmentBMPModelingAttributes[x.TreatmentBMPID] : null).Any());
             case ProjectWorkflowStep.Delineations:
                 if (project.DoesNotIncludeTreatmentBMPs)
                 {

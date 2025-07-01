@@ -93,7 +93,8 @@ namespace Neptune.API.Controllers
         public ActionResult<ProjectWorkflowProgress.ProjectWorkflowProgressDto> GetProjectProgress([FromRoute] int projectID)
         {
             var project = Projects.GetByIDWithTrackingForWorkflow(DbContext, projectID);
-            var projectWorkflowProgressDto = ProjectWorkflowProgress.GetProgress(project);
+            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(dbContext);
+            var projectWorkflowProgressDto = ProjectWorkflowProgress.GetProgress(project, treatmentBMPModelingAttributes);
             return projectWorkflowProgressDto;
         }
 

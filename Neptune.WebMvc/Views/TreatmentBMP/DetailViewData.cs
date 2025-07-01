@@ -154,6 +154,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
 
         public string UpstreamRSBTraceUrl { get; set; }
         public string? FieldDefinitionTextForWatershed { get; set; }
+        public vTreatmentBMPModelingAttribute? TreatmentBMPMOdelingAttribute { get; set; }
 
 
 
@@ -171,7 +172,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             EFModels.Entities.Delineation? delineation, ICollection<DelineationOverlap>? delineationOverlapDelineations,
             EFModels.Entities.TreatmentBMP? upstreamestBMP, bool isUpstreamestBMPAnalyzedInModelingModule,
             EFModels.Entities.RegionalSubbasinRevisionRequest? regionalSubbasinRevisionRequest, Watershed? watershed,
-            string? watershedFieldDefinitionText)
+            string? watershedFieldDefinitionText, vTreatmentBMPModelingAttribute treatmentBmpModelingAttribute)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             TreatmentBMP = treatmentBMP;
@@ -310,8 +311,8 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.RemoveUpstreamBMP(treatmentBMP));
 
             IsAnalyzedInModelingModule = treatmentBMPType.IsAnalyzedInModelingModule;
-            IsFullyParameterized = treatmentBMP.IsFullyParameterized(delineation);
-
+            IsFullyParameterized = treatmentBMP.IsFullyParameterized(delineation, treatmentBmpModelingAttribute);
+            TreatmentBMPMOdelingAttribute = treatmentBmpModelingAttribute;
         }
 
         private List<HtmlString> CheckForDelineationErrors(EFModels.Entities.Delineation? delineation, ICollection<DelineationOverlap>? delineationOverlapDelineations)

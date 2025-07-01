@@ -1,11 +1,13 @@
-﻿using System.Globalization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Jobs.Hangfire;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Services;
+using System.Collections.Specialized;
+using System.Globalization;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -26,10 +28,11 @@ namespace Neptune.WebMvc.Controllers
         public JsonResult TreatmentBMPParameterizationSummary([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext);
+            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(_dbContext);
             var data = TreatmentBMPs.GetNonPlanningModuleBMPs(_dbContext)
                 .Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList().Select(x =>
                 {
-                    var isFullyParameterized = x.IsFullyParameterized(delineations[x.TreatmentBMPID]) ? "Yes" : "No";
+                    var isFullyParameterized = x.IsFullyParameterized(delineations[x.TreatmentBMPID], treatmentBMPModelingAttributes.TryGetValue(x.TreatmentBMPID, out var attribute) ? attribute : null) ? "Yes" : "No";
                     return new
                     {
                         x.TreatmentBMPID,
