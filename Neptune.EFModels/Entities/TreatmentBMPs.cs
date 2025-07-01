@@ -35,7 +35,6 @@ namespace Neptune.EFModels.Entities
             return dbContext.TreatmentBMPs
                 .Include(x => x.TreatmentBMPType).Where(x => !checkIsAnalyzedInModelingModule || x.TreatmentBMPType.IsAnalyzedInModelingModule)
                 .Include(x => x.Delineation)
-                .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
                 .Include(x => x.Project)
                 .AsNoTracking();
         }
@@ -58,7 +57,6 @@ namespace Neptune.EFModels.Entities
                     .Include(x => x.StormwaterJurisdiction)
                     .ThenInclude(x => x.Organization)
                     .Include(x => x.OwnerOrganization)
-                    .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
                     .Include(x => x.UpstreamBMP)
                     .Include(x => x.InventoryVerifiedByPerson)
                     .Include(x => x.WaterQualityManagementPlan)
@@ -279,7 +277,6 @@ namespace Neptune.EFModels.Entities
                 .Include(x => x.StormwaterJurisdiction)
                 .ThenInclude(x => x.Organization)
                 .Include(x => x.OwnerOrganization)
-                .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
                 .Include(x => x.UpstreamBMP)
                 .AsNoTracking().Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule)
                 .OrderBy(x => x.TreatmentBMPName).ToList();
@@ -439,7 +436,6 @@ namespace Neptune.EFModels.Entities
                 .Include(x => x.StormwaterJurisdiction)
                 .ThenInclude(x => x.Organization)
                 .Include(x => x.OwnerOrganization)
-                .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
                 .Include(x => x.WaterQualityManagementPlan).AsNoTracking()
                 .Where(x => x.RegionalSubbasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null &&
                             x.ModelBasinID != null).ToList();

@@ -242,8 +242,15 @@ namespace Neptune.API.Controllers
             }
 
             await Projects.DeleteProjectNereidResultsAndGrantScores(DbContext, projectID);
-            var existingProjectTreatmentBMPs = DbContext.TreatmentBMPs.Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP).Where(x => x.ProjectID == project.ProjectID).ToList();
-            var existingProjectTreatmentBMPModelingAttributes = existingProjectTreatmentBMPs.Where(x => x.TreatmentBMPModelingAttributeTreatmentBMP != null).Select(x => x.TreatmentBMPModelingAttributeTreatmentBMP).ToList();
+            var existingProjectTreatmentBMPs = DbContext.TreatmentBMPs
+                .Include(x => x.CustomAttributes)
+                .ThenInclude(x => x.CustomAttributeValues)
+                .Include(x => x.CustomAttributes)
+                .ThenInclude(x => x.CustomAttributeType).Where(x => x.ProjectID == project.ProjectID).ToList();
+            
+            var existingProjectTreatmentBMPModelingAttributes = existingProjectTreatmentBMPs
+                .Where(x => x.CustomAttributes.Any() && x.CustomAttributes.Any(y => y.CustomAttributeType.CustomAttributeTypePurposeID == (int)CustomAttributeTypePurposeEnum.Modeling))
+                .SelectMany(x => x.CustomAttributes.Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID == (int)CustomAttributeTypePurposeEnum.Modeling).ToList()).ToList();
 
             var updatedTreatmentBMPs = treatmentBMPUpsertDtos.Select(x => TreatmentBMPs.TreatmentBMPFromUpsertDtoAndProject(DbContext, x, project)).ToList();
 
@@ -274,41 +281,51 @@ namespace Neptune.API.Controllers
 
             await DbContext.SaveChangesAsync();
 
-            // merge TreatmentBMPModelingAttributeIDs
-            var updatedTreatmentBMPModelingAttributes = updatedTreatmentBMPs.Select(x => x.TreatmentBMPModelingAttributeTreatmentBMP).ToList();
-            existingProjectTreatmentBMPModelingAttributes.MergeUpdate(updatedTreatmentBMPModelingAttributes,
-                (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
-                (x, y) =>
+            //Update Modeling Attributes
+            dbContext.RemoveRange(existingProjectTreatmentBMPModelingAttributes.SelectMany(x => x.CustomAttributeValues));
+            await dbContext.SaveChangesAsync();
+
+            var allCustomAttributeTypes = CustomAttributeTypes.List(dbContext);
+            var customAttributeUpsertDtos = treatmentBMPUpsertDtos.SelectMany(x => x.ModelingAttributes).Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0).ToList();
+            var customAttributeValuesToUpdate = new List<CustomAttributeValue>();
+            foreach (var customAttributeUpsertDto in customAttributeUpsertDtos)
+            {
+                var customAttribute = existingProjectTreatmentBMPModelingAttributes.SingleOrDefault(x =>
+                    x.CustomAttributeID == customAttributeUpsertDto.CustomAttributeID);
+                if (customAttribute == null)
                 {
-                    x.AverageDivertedFlowrate = y.AverageDivertedFlowrate;
-                    x.AverageTreatmentFlowrate = y.AverageTreatmentFlowrate;
-                    x.DesignDryWeatherTreatmentCapacity = y.DesignDryWeatherTreatmentCapacity;
-                    x.DesignLowFlowDiversionCapacity = y.DesignLowFlowDiversionCapacity;
-                    x.DesignMediaFiltrationRate = y.DesignMediaFiltrationRate;
-                    x.DiversionRate = y.DiversionRate;
-                    x.DrawdownTimeForWQDetentionVolume = y.DrawdownTimeForWQDetentionVolume;
-                    x.EffectiveFootprint = y.EffectiveFootprint;
-                    x.EffectiveRetentionDepth = y.EffectiveRetentionDepth;
-                    x.InfiltrationDischargeRate = y.InfiltrationDischargeRate;
-                    x.InfiltrationSurfaceArea = y.InfiltrationSurfaceArea;
-                    x.MediaBedFootprint = y.MediaBedFootprint;
-                    x.PermanentPoolOrWetlandVolume = y.PermanentPoolOrWetlandVolume;
-                    x.RoutingConfigurationID = y.RoutingConfigurationID;
-                    x.StorageVolumeBelowLowestOutletElevation = y.StorageVolumeBelowLowestOutletElevation;
-                    x.SummerHarvestedWaterDemand = y.SummerHarvestedWaterDemand;
-                    x.TimeOfConcentrationID = y.TimeOfConcentrationID;
-                    x.DrawdownTimeForDetentionVolume = y.DrawdownTimeForDetentionVolume;
-                    x.TotalEffectiveBMPVolume = y.TotalEffectiveBMPVolume;
-                    x.TotalEffectiveDrywellBMPVolume = y.TotalEffectiveDrywellBMPVolume;
-                    x.TreatmentRate = y.TreatmentRate;
-                    x.UnderlyingHydrologicSoilGroupID = y.UnderlyingHydrologicSoilGroupID;
-                    x.UnderlyingInfiltrationRate = y.UnderlyingInfiltrationRate;
-                    x.WaterQualityDetentionVolume = y.WaterQualityDetentionVolume;
-                    x.WettedFootprint = y.WettedFootprint;
-                    x.WinterHarvestedWaterDemand = y.WinterHarvestedWaterDemand;
-                    x.MonthsOfOperationID = y.MonthsOfOperationID;
-                    x.DryWeatherFlowOverrideID = y.DryWeatherFlowOverrideID;
-                });
+                    customAttribute = new CustomAttribute()
+                    {
+                        TreatmentBMPID = customAttributeUpsertDto.TreatmentBMPID.Value,
+                        TreatmentBMPTypeCustomAttributeTypeID = customAttributeUpsertDto.TreatmentBMPTypeCustomAttributeTypeID,
+                        TreatmentBMPTypeID = customAttributeUpsertDto.TreatmentBMPTypeID.Value,
+                        CustomAttributeTypeID = customAttributeUpsertDto.CustomAttributeTypeID
+                    };
+                    dbContext.CustomAttributes.Add(customAttribute);
+                }
+
+                foreach (var value in customAttributeUpsertDto.CustomAttributeValues)
+                {
+                    var valueParsedForDataType = allCustomAttributeTypes.Single(y => y.CustomAttributeTypeID == customAttributeUpsertDto.CustomAttributeTypeID).CustomAttributeDataType.ValueParsedForDataType(value);
+                    var customAttributeValue = new CustomAttributeValue
+                    {
+                        CustomAttribute = customAttribute,
+                        AttributeValue = valueParsedForDataType
+                    };
+                    customAttributeValuesToUpdate.Add(customAttributeValue);
+                }
+            }
+
+            foreach (var customAttribute in existingProjectTreatmentBMPModelingAttributes)
+            {
+                var customAttributeUpsertDto = customAttributeUpsertDtos.SingleOrDefault(y =>
+                    customAttribute.TreatmentBMPTypeCustomAttributeTypeID == y.TreatmentBMPTypeCustomAttributeTypeID);
+                if (customAttributeUpsertDto == null)
+                {
+                    dbContext.Remove(customAttribute);
+                }
+            }
+            dbContext.AddRange(customAttributeValuesToUpdate);
             await DbContext.SaveChangesAsync();
 
             await MergeDeleteTreatmentBMPs(existingProjectTreatmentBMPs, updatedTreatmentBMPs);

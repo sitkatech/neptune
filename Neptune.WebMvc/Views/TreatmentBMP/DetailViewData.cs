@@ -154,7 +154,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
 
         public string UpstreamRSBTraceUrl { get; set; }
         public string? FieldDefinitionTextForWatershed { get; set; }
-        public vTreatmentBMPModelingAttribute? TreatmentBMPMOdelingAttribute { get; set; }
+        public vTreatmentBMPModelingAttribute? TreatmentBMPModelingAttribute { get; set; }
 
 
 
@@ -312,7 +312,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
 
             IsAnalyzedInModelingModule = treatmentBMPType.IsAnalyzedInModelingModule;
             IsFullyParameterized = treatmentBMP.IsFullyParameterized(delineation, treatmentBmpModelingAttribute);
-            TreatmentBMPMOdelingAttribute = treatmentBmpModelingAttribute;
+            TreatmentBMPModelingAttribute = treatmentBmpModelingAttribute;
         }
 
         private List<HtmlString> CheckForDelineationErrors(EFModels.Entities.Delineation? delineation, ICollection<DelineationOverlap>? delineationOverlapDelineations)
@@ -364,34 +364,6 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             }
 
             return parameterizationErrors;
-        }
-
-        public string DisplayUnderlyingHydrologicSoilGroup()
-        {
-            return TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP != null && TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP.UnderlyingHydrologicSoilGroup != null
-                ? TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP.UnderlyingHydrologicSoilGroup.UnderlyingHydrologicSoilGroupDisplayName : null;
-        }
-
-        public string DisplayRoutingConfiguration()
-        {
-            return TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP != null && TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP.RoutingConfiguration != null
-                ? TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP.RoutingConfiguration.RoutingConfigurationDisplayName : null;
-        }
-
-        public string DisplayTimeOfConcentration()
-        {
-            return TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP != null && TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP.TimeOfConcentration != null
-                    ? $"{TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP.TimeOfConcentration.TimeOfConcentrationDisplayName} mins" : null;
-        }
-
-        public string DisplayMonthsOfOperation()
-        {
-            return TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.MonthsOfOperation?.MonthsOfOperationDisplayName;
-        }
-
-        public string DisplayDryWeatherFlowOverride()
-        {
-            return TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP != null ? TreatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName : DryWeatherFlowOverride.No.DryWeatherFlowOverrideDisplayName;
         }
     }
 }

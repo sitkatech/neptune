@@ -12,7 +12,6 @@ import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
 import { TreatmentBMPModelingTypeEnum } from "src/app/shared/generated/enum/treatment-b-m-p-modeling-type-enum";
 import { TreatmentBMPTypeWithModelingAttributesDto } from "src/app/shared/generated/model/treatment-bmp-type-with-modeling-attributes-dto";
-import { TreatmentBMPModelingAttributeDefinitionDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-definition-dto";
 import { TreatmentBmpsComponent } from "src/app/pages/planning-module/projects/project-workflow/treatment-bmps/treatment-bmps.component";
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
@@ -252,10 +251,6 @@ export class ProjectMapComponent implements OnInit {
 
     public isFieldWithDropdown(fieldName: string): boolean {
         return TreatmentBmpsComponent.modelingAttributeFieldsWithDropdown.indexOf(fieldName) > -1;
-    }
-
-    public getModelingAttributeFieldsToDisplay(treatmentBMPTypeName: string): Array<TreatmentBMPModelingAttributeDefinitionDto> {
-        return this.treatmentBMPTypes.find((x) => x.TreatmentBMPTypeName == treatmentBMPTypeName).TreatmentBMPModelingAttributes ?? [];
     }
 
     public getDropdownItemNameByFieldNameAndItemID(fieldName: string, itemID: number): string {

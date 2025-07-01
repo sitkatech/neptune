@@ -9,7 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { TreatmentBMPModelingAttributeSimpleDto } from '././treatment-bmp-modeling-attribute-simple-dto';
+import { VTreatmentBMPModelingAttributeDto } from '././v-treatment-bmp-modeling-attribute-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class TreatmentBMPDisplayDto { 
@@ -22,7 +22,7 @@ export class TreatmentBMPDisplayDto {
     ProjectID?: number;
     InventoryIsVerified?: boolean;
     IsFullyParameterized?: boolean;
-    TreatmentBMPModelingAttribute?: TreatmentBMPModelingAttributeSimpleDto;
+    TreatmentBMPModelingAttribute?: VTreatmentBMPModelingAttributeDto;
     WatershedName?: string;
     Notes?: string;
     constructor(obj?: any) {
@@ -40,7 +40,7 @@ export interface TreatmentBMPDisplayDtoForm {
     ProjectID?: FormControl<number>;
     InventoryIsVerified?: FormControl<boolean>;
     IsFullyParameterized?: FormControl<boolean>;
-    TreatmentBMPModelingAttribute?: FormControl<TreatmentBMPModelingAttributeSimpleDto>;
+    TreatmentBMPModelingAttribute?: FormControl<VTreatmentBMPModelingAttributeDto>;
     WatershedName?: FormControl<string>;
     Notes?: FormControl<string>;
 }
@@ -136,7 +136,7 @@ export class TreatmentBMPDisplayDtoFormControls {
             ],
         }
     );
-    public static TreatmentBMPModelingAttribute = (value: FormControlState<TreatmentBMPModelingAttributeSimpleDto> | TreatmentBMPModelingAttributeSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<TreatmentBMPModelingAttributeSimpleDto>(
+    public static TreatmentBMPModelingAttribute = (value: FormControlState<VTreatmentBMPModelingAttributeDto> | VTreatmentBMPModelingAttributeDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<VTreatmentBMPModelingAttributeDto>(
         value,
         formControlOptions ?? 
         {

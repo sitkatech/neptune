@@ -11,10 +11,9 @@
  */
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class TreatmentBMPModelingAttributeSimpleDto { 
-    TreatmentBMPModelingAttributeID?: number;
+export class VTreatmentBMPModelingAttributeDto { 
     TreatmentBMPID?: number;
-    UpstreamTreatmentBMPID?: number;
+    UpstreamBMPID?: number;
     AverageDivertedFlowrate?: number;
     AverageTreatmentFlowrate?: number;
     DesignDryWeatherTreatmentCapacity?: number;
@@ -28,30 +27,29 @@ export class TreatmentBMPModelingAttributeSimpleDto {
     InfiltrationSurfaceArea?: number;
     MediaBedFootprint?: number;
     PermanentPoolOrWetlandVolume?: number;
-    RoutingConfigurationID?: number;
+    RoutingConfiguration?: string;
     StorageVolumeBelowLowestOutletElevation?: number;
     SummerHarvestedWaterDemand?: number;
-    TimeOfConcentrationID?: number;
+    TimeOfConcentration?: string;
     DrawdownTimeForDetentionVolume?: number;
     TotalEffectiveBMPVolume?: number;
     TotalEffectiveDrywellBMPVolume?: number;
     TreatmentRate?: number;
-    UnderlyingHydrologicSoilGroupID?: number;
+    UnderlyingHydrologicSoilGroup?: string;
     UnderlyingInfiltrationRate?: number;
     WaterQualityDetentionVolume?: number;
     WettedFootprint?: number;
     WinterHarvestedWaterDemand?: number;
-    MonthsOfOperationID?: number;
-    DryWeatherFlowOverrideID?: number;
+    MonthsOfOperation?: string;
+    DryWeatherFlowOverride?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
 }
 
-export interface TreatmentBMPModelingAttributeSimpleDtoForm { 
-    TreatmentBMPModelingAttributeID?: FormControl<number>;
+export interface VTreatmentBMPModelingAttributeDtoForm { 
     TreatmentBMPID?: FormControl<number>;
-    UpstreamTreatmentBMPID?: FormControl<number>;
+    UpstreamBMPID?: FormControl<number>;
     AverageDivertedFlowrate?: FormControl<number>;
     AverageTreatmentFlowrate?: FormControl<number>;
     DesignDryWeatherTreatmentCapacity?: FormControl<number>;
@@ -65,34 +63,24 @@ export interface TreatmentBMPModelingAttributeSimpleDtoForm {
     InfiltrationSurfaceArea?: FormControl<number>;
     MediaBedFootprint?: FormControl<number>;
     PermanentPoolOrWetlandVolume?: FormControl<number>;
-    RoutingConfigurationID?: FormControl<number>;
+    RoutingConfiguration?: FormControl<string>;
     StorageVolumeBelowLowestOutletElevation?: FormControl<number>;
     SummerHarvestedWaterDemand?: FormControl<number>;
-    TimeOfConcentrationID?: FormControl<number>;
+    TimeOfConcentration?: FormControl<string>;
     DrawdownTimeForDetentionVolume?: FormControl<number>;
     TotalEffectiveBMPVolume?: FormControl<number>;
     TotalEffectiveDrywellBMPVolume?: FormControl<number>;
     TreatmentRate?: FormControl<number>;
-    UnderlyingHydrologicSoilGroupID?: FormControl<number>;
+    UnderlyingHydrologicSoilGroup?: FormControl<string>;
     UnderlyingInfiltrationRate?: FormControl<number>;
     WaterQualityDetentionVolume?: FormControl<number>;
     WettedFootprint?: FormControl<number>;
     WinterHarvestedWaterDemand?: FormControl<number>;
-    MonthsOfOperationID?: FormControl<number>;
-    DryWeatherFlowOverrideID?: FormControl<number>;
+    MonthsOfOperation?: FormControl<string>;
+    DryWeatherFlowOverride?: FormControl<string>;
 }
 
-export class TreatmentBMPModelingAttributeSimpleDtoFormControls { 
-    public static TreatmentBMPModelingAttributeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
+export class VTreatmentBMPModelingAttributeDtoFormControls { 
     public static TreatmentBMPID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
@@ -103,7 +91,7 @@ export class TreatmentBMPModelingAttributeSimpleDtoFormControls {
             ],
         }
     );
-    public static UpstreamTreatmentBMPID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static UpstreamBMPID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
@@ -243,7 +231,7 @@ export class TreatmentBMPModelingAttributeSimpleDtoFormControls {
             ],
         }
     );
-    public static RoutingConfigurationID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static RoutingConfiguration = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -273,7 +261,7 @@ export class TreatmentBMPModelingAttributeSimpleDtoFormControls {
             ],
         }
     );
-    public static TimeOfConcentrationID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static TimeOfConcentration = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -323,7 +311,7 @@ export class TreatmentBMPModelingAttributeSimpleDtoFormControls {
             ],
         }
     );
-    public static UnderlyingHydrologicSoilGroupID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static UnderlyingHydrologicSoilGroup = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -373,7 +361,7 @@ export class TreatmentBMPModelingAttributeSimpleDtoFormControls {
             ],
         }
     );
-    public static MonthsOfOperationID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static MonthsOfOperation = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -383,7 +371,7 @@ export class TreatmentBMPModelingAttributeSimpleDtoFormControls {
             ],
         }
     );
-    public static DryWeatherFlowOverrideID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static DryWeatherFlowOverride = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

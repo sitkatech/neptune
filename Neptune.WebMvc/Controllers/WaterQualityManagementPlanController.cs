@@ -117,8 +117,7 @@ namespace Neptune.WebMvc.Controllers
         public GridJsonNetJObjectResult<WaterQualityManagementPlanDetailedWithTreatmentBMPsAndQuickBMPs> WaterQualityManagementPlanIndexGridData()
         {
             var gridSpec = new IndexGridSpec(_linkGenerator, CurrentPerson);
-            var treatmentBmps = _dbContext.TreatmentBMPs.Include(x => x.TreatmentBMPType)
-                .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP).AsNoTracking()
+            var treatmentBmps = _dbContext.TreatmentBMPs.Include(x => x.TreatmentBMPType).AsNoTracking()
                 .Where(x => x.WaterQualityManagementPlanID != null).ToList();
             var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(_dbContext);
             var treatmentBMPDetaileds = treatmentBmps.Join(

@@ -42,7 +42,6 @@ namespace Neptune.EFModels.Entities
                 .Include(x => x.TreatmentBMPs)
                 .ThenInclude(x => x.Delineation)
                 .Include(x => x.TreatmentBMPs)
-                .ThenInclude(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
                 .Include(x => x.TreatmentBMPs)
                 .ThenInclude(x => x.TreatmentBMPType)
                 .Include(x => x.ProjectNereidResults)
