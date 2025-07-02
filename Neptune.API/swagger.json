@@ -4010,6 +4010,133 @@
         }
       }
     },
+    "/treatment-bmp-type-custom-attribute-types": {
+      "get": {
+        "tags": [
+          "TreatmentBMPTypeCustomAttributeType"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeCustomAttributeTypeDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeCustomAttributeTypeDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeCustomAttributeTypeDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmp-type-custom-attribute-types/{TreatmentBMPTypeCustomAttributeTypeID}": {
+      "get": {
+        "tags": [
+          "TreatmentBMPTypeCustomAttributeType"
+        ],
+        "parameters": [
+          {
+            "name": "TreatmentBMPTypeCustomAttributeTypeID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPTypeCustomAttributeTypeDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPTypeCustomAttributeTypeDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPTypeCustomAttributeTypeDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmp-type-custom-attribute-types/purpose/{TreatmentBMPTypeCustomAttributeTypePurposeID}": {
+      "get": {
+        "tags": [
+          "TreatmentBMPTypeCustomAttributeType"
+        ],
+        "parameters": [
+          {
+            "name": "TreatmentBMPTypeCustomAttributeTypePurposeID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeCustomAttributeTypeDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeCustomAttributeTypeDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeCustomAttributeTypeDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "tags": [
@@ -7536,6 +7663,32 @@
           },
           "FieldName": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPTypeCustomAttributeTypeDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPTypeCustomAttributeTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CustomAttributeTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CustomAttributeType": {
+            "$ref": "#/components/schemas/CustomAttributeTypeDto"
+          },
+          "SortOrder": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },

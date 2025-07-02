@@ -319,6 +319,7 @@ namespace Neptune.API.Controllers
             foreach (var customAttribute in existingProjectTreatmentBMPModelingAttributes)
             {
                 var customAttributeUpsertDto = customAttributeUpsertDtos.SingleOrDefault(y =>
+                    customAttribute.TreatmentBMPID == y.TreatmentBMPID &&
                     customAttribute.TreatmentBMPTypeCustomAttributeTypeID == y.TreatmentBMPTypeCustomAttributeTypeID);
                 if (customAttributeUpsertDto == null)
                 {

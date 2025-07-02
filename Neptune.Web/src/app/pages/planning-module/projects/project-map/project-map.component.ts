@@ -249,10 +249,6 @@ export class ProjectMapComponent implements OnInit {
         }
     }
 
-    public isFieldWithDropdown(fieldName: string): boolean {
-        return TreatmentBmpsComponent.modelingAttributeFieldsWithDropdown.indexOf(fieldName) > -1;
-    }
-
     public getDropdownItemNameByFieldNameAndItemID(fieldName: string, itemID: number): string {
         const dropdownItem = this.modelingAttributeDropdownItems.find((x) => x.FieldName == fieldName && x.ItemID == itemID);
         return dropdownItem ? dropdownItem.ItemName : "";

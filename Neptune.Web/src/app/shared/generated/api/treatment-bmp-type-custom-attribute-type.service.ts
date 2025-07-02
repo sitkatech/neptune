@@ -18,8 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { CustomAttributeTypeDto } from '../model/custom-attribute-type-dto';
-import { CustomAttributeTypeWithTreatmentBMPTypeIDsDto } from '../model/custom-attribute-type-with-treatment-bmp-type-ids-dto';
+import { TreatmentBMPTypeCustomAttributeTypeDto } from '../model/treatment-bmp-type-custom-attribute-type-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -30,7 +29,7 @@ import { ApiService } from '../../services';
 @Injectable({
   providedIn: 'root'
 })
-export class CustomAttributeTypeService {
+export class TreatmentBMPTypeCustomAttributeTypeService {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();
@@ -65,17 +64,17 @@ export class CustomAttributeTypeService {
     /**
      * 
      * 
-     * @param customAttributeTypeID 
+     * @param treatmentBMPTypeCustomAttributeTypePurposeID 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public customAttributeTypesCustomAttributeTypeIDGet(customAttributeTypeID: number, observe?: 'body', reportProgress?: boolean): Observable<CustomAttributeTypeDto>;
-    public customAttributeTypesCustomAttributeTypeIDGet(customAttributeTypeID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CustomAttributeTypeDto>>;
-    public customAttributeTypesCustomAttributeTypeIDGet(customAttributeTypeID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CustomAttributeTypeDto>>;
-    public customAttributeTypesCustomAttributeTypeIDGet(customAttributeTypeID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public purposeTreatmentBMPTypeCustomAttributeTypePurposeIDGet(treatmentBMPTypeCustomAttributeTypePurposeID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPTypeCustomAttributeTypeDto>>;
+    public purposeTreatmentBMPTypeCustomAttributeTypePurposeIDGet(treatmentBMPTypeCustomAttributeTypePurposeID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPTypeCustomAttributeTypeDto>>>;
+    public purposeTreatmentBMPTypeCustomAttributeTypePurposeIDGet(treatmentBMPTypeCustomAttributeTypePurposeID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPTypeCustomAttributeTypeDto>>>;
+    public purposeTreatmentBMPTypeCustomAttributeTypePurposeIDGet(treatmentBMPTypeCustomAttributeTypePurposeID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (customAttributeTypeID === null || customAttributeTypeID === undefined) {
-            throw new Error('Required parameter customAttributeTypeID was null or undefined when calling customAttributeTypesCustomAttributeTypeIDGet.');
+        if (treatmentBMPTypeCustomAttributeTypePurposeID === null || treatmentBMPTypeCustomAttributeTypePurposeID === undefined) {
+            throw new Error('Required parameter treatmentBMPTypeCustomAttributeTypePurposeID was null or undefined when calling purposeTreatmentBMPTypeCustomAttributeTypePurposeIDGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -95,7 +94,7 @@ export class CustomAttributeTypeService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<CustomAttributeTypeDto>(`${this.basePath}/custom-attribute-types/${encodeURIComponent(String(customAttributeTypeID))}`,
+        return this.httpClient.get<Array<TreatmentBMPTypeCustomAttributeTypeDto>>(`${this.basePath}/treatment-bmp-type-custom-attribute-types/purpose/${encodeURIComponent(String(treatmentBMPTypeCustomAttributeTypePurposeID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -111,10 +110,10 @@ export class CustomAttributeTypeService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public customAttributeTypesGet(observe?: 'body', reportProgress?: boolean): Observable<Array<CustomAttributeTypeDto>>;
-    public customAttributeTypesGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CustomAttributeTypeDto>>>;
-    public customAttributeTypesGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CustomAttributeTypeDto>>>;
-    public customAttributeTypesGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public treatmentBmpTypeCustomAttributeTypesGet(observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPTypeCustomAttributeTypeDto>>;
+    public treatmentBmpTypeCustomAttributeTypesGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPTypeCustomAttributeTypeDto>>>;
+    public treatmentBmpTypeCustomAttributeTypesGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPTypeCustomAttributeTypeDto>>>;
+    public treatmentBmpTypeCustomAttributeTypesGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -133,7 +132,7 @@ export class CustomAttributeTypeService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<CustomAttributeTypeDto>>(`${this.basePath}/custom-attribute-types`,
+        return this.httpClient.get<Array<TreatmentBMPTypeCustomAttributeTypeDto>>(`${this.basePath}/treatment-bmp-type-custom-attribute-types`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -146,17 +145,17 @@ export class CustomAttributeTypeService {
     /**
      * 
      * 
-     * @param customAttributeTypePurposeID 
+     * @param treatmentBMPTypeCustomAttributeTypeID 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public purposeCustomAttributeTypePurposeIDGet(customAttributeTypePurposeID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<CustomAttributeTypeWithTreatmentBMPTypeIDsDto>>;
-    public purposeCustomAttributeTypePurposeIDGet(customAttributeTypePurposeID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CustomAttributeTypeWithTreatmentBMPTypeIDsDto>>>;
-    public purposeCustomAttributeTypePurposeIDGet(customAttributeTypePurposeID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CustomAttributeTypeWithTreatmentBMPTypeIDsDto>>>;
-    public purposeCustomAttributeTypePurposeIDGet(customAttributeTypePurposeID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public treatmentBmpTypeCustomAttributeTypesTreatmentBMPTypeCustomAttributeTypeIDGet(treatmentBMPTypeCustomAttributeTypeID: number, observe?: 'body', reportProgress?: boolean): Observable<TreatmentBMPTypeCustomAttributeTypeDto>;
+    public treatmentBmpTypeCustomAttributeTypesTreatmentBMPTypeCustomAttributeTypeIDGet(treatmentBMPTypeCustomAttributeTypeID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<TreatmentBMPTypeCustomAttributeTypeDto>>;
+    public treatmentBmpTypeCustomAttributeTypesTreatmentBMPTypeCustomAttributeTypeIDGet(treatmentBMPTypeCustomAttributeTypeID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<TreatmentBMPTypeCustomAttributeTypeDto>>;
+    public treatmentBmpTypeCustomAttributeTypesTreatmentBMPTypeCustomAttributeTypeIDGet(treatmentBMPTypeCustomAttributeTypeID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (customAttributeTypePurposeID === null || customAttributeTypePurposeID === undefined) {
-            throw new Error('Required parameter customAttributeTypePurposeID was null or undefined when calling purposeCustomAttributeTypePurposeIDGet.');
+        if (treatmentBMPTypeCustomAttributeTypeID === null || treatmentBMPTypeCustomAttributeTypeID === undefined) {
+            throw new Error('Required parameter treatmentBMPTypeCustomAttributeTypeID was null or undefined when calling treatmentBmpTypeCustomAttributeTypesTreatmentBMPTypeCustomAttributeTypeIDGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -176,7 +175,7 @@ export class CustomAttributeTypeService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<CustomAttributeTypeWithTreatmentBMPTypeIDsDto>>(`${this.basePath}/purpose/${encodeURIComponent(String(customAttributeTypePurposeID))}`,
+        return this.httpClient.get<TreatmentBMPTypeCustomAttributeTypeDto>(`${this.basePath}/treatment-bmp-type-custom-attribute-types/${encodeURIComponent(String(treatmentBMPTypeCustomAttributeTypeID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

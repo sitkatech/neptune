@@ -50,6 +50,9 @@ import { CustomAttributeTypeDto } from "src/app/shared/generated/model/custom-at
 import { CustomAttributeTypeWithTreatmentBMPTypeIDsDto } from "src/app/shared/generated/model/custom-attribute-type-with-treatment-bmp-type-ids-dto";
 import { CustomAttributeDataTypeEnum } from "src/app/shared/generated/enum/custom-attribute-data-type-enum";
 import { PopperDirective } from "src/app/shared/directives/popper.directive";
+import { CustomAttributeUpsertDto } from "src/app/shared/generated/model/custom-attribute-upsert-dto";
+import { TreatmentBMPTypeCustomAttributeTypeDto, TreatmentBMPTypeCustomAttributeTypeDtoForm } from "src/app/shared/generated/model/treatment-bmp-type-custom-attribute-type-dto";
+import { TreatmentBMPTypeCustomAttributeTypeService } from "src/app/shared/generated/api/treatment-bmp-type-custom-attribute-type.service";
 
 @Component({
     selector: "treatment-bmps",
@@ -120,9 +123,8 @@ export class TreatmentBmpsComponent implements OnInit {
     public isLoadingSubmit = false;
     public isEditingLocation = false;
 
-    public static modelingAttributeFieldsWithDropdown = ["TimeOfConcentrationID", "MonthsOfOperationID", "UnderlyingHydrologicSoilGroupID", "DryWeatherFlowOverrideID"];
     public delineations: DelineationUpsertDto[];
-    public customAttributeTypes: CustomAttributeTypeWithTreatmentBMPTypeIDsDto[];
+    public treatmentBMPTypeCustomAttributeTypes: TreatmentBMPTypeCustomAttributeTypeDto[];
 
     constructor(
         private route: ActivatedRoute,
@@ -138,7 +140,7 @@ export class TreatmentBmpsComponent implements OnInit {
         private router: Router,
         private confirmService: ConfirmService,
         private groupByPipe: GroupByPipe,
-        private customAttributeTypeService: CustomAttributeTypeService
+        private treatmentBMPTypeCustomAttributeTypeService: TreatmentBMPTypeCustomAttributeTypeService
     ) {}
 
     canExit() {
@@ -180,16 +182,16 @@ export class TreatmentBmpsComponent implements OnInit {
                         projectTreatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsAsUpsertDtosGet(this.projectID),
                         delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                         treatmentBMPTypes: this.treatmentBMPTypeService.treatmentBmpTypesGet(),
-                        customAttributeTypes: this.customAttributeTypeService.purposeCustomAttributeTypePurposeIDGet(CustomAttributeTypePurposeEnum.Modeling),
-                        //modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBmpsModelingAttributeDropdownItemsGet(),
-                    }).subscribe(({ projectTreatmentBMPs, delineations, treatmentBMPTypes, customAttributeTypes }) => {
+                        treatmentBMPTypeCustomAttributeTypes: this.treatmentBMPTypeCustomAttributeTypeService.purposeTreatmentBMPTypeCustomAttributeTypePurposeIDGet(
+                            CustomAttributeTypePurposeEnum.Modeling
+                        ),
+                    }).subscribe(({ projectTreatmentBMPs, delineations, treatmentBMPTypes, treatmentBMPTypeCustomAttributeTypes: treatmentBMPTypeCustomAttributeTypes }) => {
                         this.originalDoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
                         this.projectTreatmentBMPs = projectTreatmentBMPs;
                         this.originalTreatmentBMPs = JSON.stringify(projectTreatmentBMPs);
                         this.delineations = delineations;
                         this.treatmentBMPTypes = treatmentBMPTypes;
-                        this.customAttributeTypes = customAttributeTypes;
-                        //this.modelingAttributeDropdownItems = this.groupByPipe.transform(modelingAttributeDropdownItems, "FieldName");
+                        this.treatmentBMPTypeCustomAttributeTypes = treatmentBMPTypeCustomAttributeTypes;
                         this.updateMapLayers();
                     });
                 }
@@ -308,7 +310,6 @@ export class TreatmentBmpsComponent implements OnInit {
         let selectedNumber = null;
         let selectedAttributes = null;
         this.selectedTreatmentBMP = this.projectTreatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
-        this.selectedTreatmentBMPType = this.selectedTreatmentBMP.TreatmentBMPTypeID;
         selectedAttributes = [
             `<strong>Type:</strong> ${this.selectedTreatmentBMP.TreatmentBMPTypeName}`,
             `<strong>Latitude:</strong> ${this.selectedTreatmentBMP.Latitude}`,
@@ -325,10 +326,42 @@ export class TreatmentBmpsComponent implements OnInit {
             this.selectedListItemDetails.title = `${selectedNumber}`;
             this.selectedListItemDetails.attributes = selectedAttributes;
         }
+
+        if (this.selectedTreatmentBMP.TreatmentBMPTypeID != null) {
+            this.updateModelingAttributesForSelectedTreatmentBMP();
+        }
+    }
+
+    public updateModelingAttributesForSelectedTreatmentBMP(): void {
+        debugger;
+        if (!this.selectedTreatmentBMP || this.selectedTreatmentBMP.TreatmentBMPTypeID == null) return;
+        if (this.selectedTreatmentBMP.ModelingAttributes == null) {
+            this.selectedTreatmentBMP.ModelingAttributes = new Array<CustomAttributeUpsertDto>();
+        }
+        let treatmentBMPTypeCustomAttributeTypes = this.getTreatmentBMPTypeCustomAttributeTypesForTreatmentBMPType(this.selectedTreatmentBMP.TreatmentBMPTypeID);
+        for (let treatmentBMPTypeCustomAttributeType of treatmentBMPTypeCustomAttributeTypes) {
+            if (this.selectedTreatmentBMP.ModelingAttributes.findIndex((x) => x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID) == -1) {
+                this.selectedTreatmentBMP.ModelingAttributes.push(
+                    new CustomAttributeUpsertDto({
+                        TreatmentBMPID: this.selectedTreatmentBMP.TreatmentBMPID,
+                        TreatmentBMPTypeID: this.selectedTreatmentBMP.TreatmentBMPTypeID,
+                        TreatmentBMPTypeCustomAttributeTypeID: treatmentBMPTypeCustomAttributeType.TreatmentBMPTypeCustomAttributeTypeID,
+                        CustomAttributeTypeID: treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID,
+                        CustomAttributeValues: new Array(),
+                    })
+                );
+            }
+        }
+    }
+
+    public getTreatmentBMPTypeCustomAttributeTypesForTreatmentBMPType(treatmentBMPTypeID: number) {
+        return this.treatmentBMPTypeCustomAttributeTypes.filter((x) => x.TreatmentBMPTypeID == treatmentBMPTypeID);
     }
 
     public getCustomAttributeFieldsToDisplay(treatmentBMPTypeID: number): Array<CustomAttributeTypeDto> {
-        return this.customAttributeTypes.filter((x) => x.TreatmentBMPTypeIDs.includes(treatmentBMPTypeID));
+        return this.getTreatmentBMPTypeCustomAttributeTypesForTreatmentBMPType(treatmentBMPTypeID)
+            .sort((a, b) => a.SortOrder - b.SortOrder)
+            .map((x) => x.CustomAttributeType);
     }
 
     public getTypeNameByTypeID(typeID: number) {
@@ -348,13 +381,13 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     public getIndexOfCustomAttribute(customAttributeTypeID: number): number {
-        return this.selectedTreatmentBMP.ModelingAttributes.findIndex((x) => (x.CustomAttributeTypeID = customAttributeTypeID));
+        let value = this.selectedTreatmentBMP.ModelingAttributes.findIndex((x) => x.CustomAttributeTypeID == customAttributeTypeID);
+        return value;
     }
 
-    public updateModelingTypeOnTypeChange(selectedType: any) {
-        if (selectedType) {
-            this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = selectedType.TreatmentBMPModelingTypeID;
-        }
+    public convertSelectedBMPNumericFieldToString(enteredVal: number, customAttributeTypeID: number) {
+        let index = this.getIndexOfCustomAttribute(customAttributeTypeID);
+        this.selectedTreatmentBMP.ModelingAttributes[index].CustomAttributeValues[0] = enteredVal.toString();
     }
 
     public toggleIsEditingLocation() {
@@ -363,6 +396,7 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     openEditTreatmentBMPTypeModal(): void {
+        this.selectedTreatmentBMPType = this.selectedTreatmentBMP.TreatmentBMPTypeID;
         this.editTreatmentBMPTypeModalComponent = this.modalService.open(this.editTreatmentBMPTypeModal, null, {
             ModalTheme: ModalThemeEnum.Light,
             ModalSize: ModalSizeEnum.Medium,
@@ -400,6 +434,7 @@ export class TreatmentBmpsComponent implements OnInit {
             this.closeEditTreatmentBMPTypeModal();
             this.selectedTreatmentBMP.TreatmentBMPTypeID = treatmentBMPType;
             this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = temp;
+            this.updateModelingAttributesForSelectedTreatmentBMP();
             this.originalTreatmentBMPs = JSON.stringify(this.projectTreatmentBMPs);
         });
     }
@@ -440,11 +475,22 @@ export class TreatmentBmpsComponent implements OnInit {
         return `${delineation.DelineationArea} ac`;
     }
 
+    public clearNonApplicableModelingAttributesForTreatmentBMPs() {
+        this.projectTreatmentBMPs.forEach((treatmentBMP) => {
+            let applicableCustomAttributeTypes = this.treatmentBMPTypeCustomAttributeTypes
+                .filter((x) => x.TreatmentBMPTypeID == treatmentBMP.TreatmentBMPTypeID)
+                .map((x) => x.CustomAttributeTypeID);
+            treatmentBMP.ModelingAttributes = treatmentBMP.ModelingAttributes.filter((attribute) => applicableCustomAttributeTypes.includes(attribute.CustomAttributeTypeID));
+        });
+    }
+
     public save(continueToNextStep?: boolean) {
+        debugger;
         this.isLoadingSubmit = true;
         this.alertService.clearAlerts();
-        this.project.DoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs && (this.projectTreatmentBMPs == null || this.projectTreatmentBMPs.length == 0);
 
+        this.project.DoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs && (this.projectTreatmentBMPs == null || this.projectTreatmentBMPs.length == 0);
+        this.clearNonApplicableModelingAttributesForTreatmentBMPs();
         this.projectService.projectsProjectIDUpdatePost(this.projectID, this.project).subscribe(
             () => {
                 this.projectService.projectsProjectIDTreatmentBmpsPut(this.projectID, this.projectTreatmentBMPs).subscribe(

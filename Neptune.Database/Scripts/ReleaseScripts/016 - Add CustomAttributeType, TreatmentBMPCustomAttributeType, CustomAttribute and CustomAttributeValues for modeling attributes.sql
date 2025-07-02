@@ -75,7 +75,7 @@ values
 (34, @currentCustomAttributeTypeIDMax+21, 0),
 (34, @currentCustomAttributeTypeIDMax+14, 10),
 (34, @currentCustomAttributeTypeIDMax+5, 20),
-(35, @currentCustomAttributeTypeIDMax+9, 30),
+(34, @currentCustomAttributeTypeIDMax+9, 30),
 --
 (20, @currentCustomAttributeTypeIDMax+21, 0),
 (20, @currentCustomAttributeTypeIDMax+28, 10),
