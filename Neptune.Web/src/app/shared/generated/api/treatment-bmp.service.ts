@@ -21,7 +21,6 @@ import { Observable }                                        from 'rxjs';
 import { GeometryGeoJSONAndAreaDto } from '../model/geometry-geo-json-and-area-dto';
 import { IFeature } from '../model/i-feature';
 import { TreatmentBMPDisplayDto } from '../model/treatment-bmp-display-dto';
-import { TreatmentBMPModelingAttributeDropdownItemDto } from '../model/treatment-bmp-modeling-attribute-dropdown-item-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -135,46 +134,7 @@ export class TreatmentBMPService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<IFeature>>(`${this.basePath}/treatment-bmps/jurisdictions/${encodeURIComponent(String(jurisdictionID))}/verified/feature-collection`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public treatmentBmpsModelingAttributeDropdownItemsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<TreatmentBMPModelingAttributeDropdownItemDto>>;
-    public treatmentBmpsModelingAttributeDropdownItemsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<TreatmentBMPModelingAttributeDropdownItemDto>>>;
-    public treatmentBmpsModelingAttributeDropdownItemsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<TreatmentBMPModelingAttributeDropdownItemDto>>>;
-    public treatmentBmpsModelingAttributeDropdownItemsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'text/plain',
-            'application/json',
-            'text/json',
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<Array<TreatmentBMPModelingAttributeDropdownItemDto>>(`${this.basePath}/treatment-bmps/modeling-attribute-dropdown-items`,
-            {
+                return this.httpClient.get<Array<IFeature>>(`${this.basePath}/treatment-bmps/jurisdictions/${encodeURIComponent(String(jurisdictionID))}/verified/feature-collection`,    {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

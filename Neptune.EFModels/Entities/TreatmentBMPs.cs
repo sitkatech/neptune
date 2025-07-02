@@ -361,35 +361,6 @@ namespace Neptune.EFModels.Entities
             return dbContext.TreatmentBMPs.SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
         }
 
-        public static List<TreatmentBMPModelingAttributeDropdownItemDto> GetModelingAttributeDropdownItemsAsDto(
-            NeptuneDbContext dbContext)
-        {
-            var treatmentBMPModelingAttributeDropdownItemDtos =
-                new List<TreatmentBMPModelingAttributeDropdownItemDto>();
-
-            var timeOfConcentrationDropdownItemDtos = TimeOfConcentration.All.Select(x =>
-                new TreatmentBMPModelingAttributeDropdownItemDto(x.TimeOfConcentrationID,
-                    x.TimeOfConcentrationDisplayName, "TimeOfConcentrationID"));
-            treatmentBMPModelingAttributeDropdownItemDtos.AddRange(timeOfConcentrationDropdownItemDtos);
-
-            var monthsOfOperationDropdownItemDtos = MonthsOfOperation.All.Select(x =>
-                new TreatmentBMPModelingAttributeDropdownItemDto(x.MonthsOfOperationID, x.MonthsOfOperationDisplayName,
-                    "MonthsOfOperationID"));
-            treatmentBMPModelingAttributeDropdownItemDtos.AddRange(monthsOfOperationDropdownItemDtos);
-
-            var underlyingHydrologicSoilGroupsDropdownItemDtos = UnderlyingHydrologicSoilGroup.All.Select(x =>
-                new TreatmentBMPModelingAttributeDropdownItemDto(x.UnderlyingHydrologicSoilGroupID,
-                    x.UnderlyingHydrologicSoilGroupDisplayName, "UnderlyingHydrologicSoilGroupID"));
-            treatmentBMPModelingAttributeDropdownItemDtos.AddRange(underlyingHydrologicSoilGroupsDropdownItemDtos);
-
-            var dryWeatherFlowOverrideDropdownItemDtos = DryWeatherFlowOverride.All.Select(x =>
-                new TreatmentBMPModelingAttributeDropdownItemDto(x.DryWeatherFlowOverrideID,
-                    x.DryWeatherFlowOverrideDisplayName, "DryWeatherFlowOverrideID"));
-            treatmentBMPModelingAttributeDropdownItemDtos.AddRange(dryWeatherFlowOverrideDropdownItemDtos);
-
-            return treatmentBMPModelingAttributeDropdownItemDtos;
-        }
-
         public static Geometry CreateLocationPoint4326FromLatLong(double latitude, double longitude)
         {
             return new Point(longitude, latitude) { SRID = 4326 };

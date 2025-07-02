@@ -98,7 +98,6 @@ model/system-info-dto.ts
 model/trash-generating-unit-dto.ts
 model/trash-generating-unit-grid-dto.ts
 model/treatment-bmp-display-dto.ts
-model/treatment-bmp-modeling-attribute-dropdown-item-dto.ts
 model/treatment-bmp-type-custom-attribute-type-dto.ts
 model/treatment-bmp-type-with-modeling-attributes-dto.ts
 model/treatment-bmp-upsert-dto.ts

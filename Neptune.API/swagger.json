@@ -3894,44 +3894,6 @@
         }
       }
     },
-    "/treatment-bmps/modeling-attribute-dropdown-items": {
-      "get": {
-        "tags": [
-          "TreatmentBMP"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPModelingAttributeDropdownItemDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/treatment-bmps/{treatmentBMPID}/upstreamRSBCatchmentGeoJSON": {
       "get": {
         "tags": [
@@ -7657,24 +7619,6 @@
           "ImperviousCover": {
             "type": "number",
             "format": "double"
-          }
-        },
-        "additionalProperties": false
-      },
-      "TreatmentBMPModelingAttributeDropdownItemDto": {
-        "type": "object",
-        "properties": {
-          "ItemID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ItemName": {
-            "type": "string",
-            "nullable": true
-          },
-          "FieldName": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
