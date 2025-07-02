@@ -23,6 +23,7 @@ import { TrashGeneratingUnitService } from './api/trash-generating-unit.service'
 import { TrashGeneratingUnitByStormwaterJurisdictionService } from './api/trash-generating-unit-by-stormwater-jurisdiction.service';
 import { TreatmentBMPService } from './api/treatment-bmp.service';
 import { TreatmentBMPTypeService } from './api/treatment-bmp-type.service';
+import { TreatmentBMPTypeCustomAttributeTypeService } from './api/treatment-bmp-type-custom-attribute-type.service';
 import { UserService } from './api/user.service';
 import { UserClaimsService } from './api/user-claims.service';
 
@@ -51,6 +52,7 @@ import { UserClaimsService } from './api/user-claims.service';
     TrashGeneratingUnitByStormwaterJurisdictionService,
     TreatmentBMPService,
     TreatmentBMPTypeService,
+    TreatmentBMPTypeCustomAttributeTypeService,
     UserService,
     UserClaimsService,
      ]

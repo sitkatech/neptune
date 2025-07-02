@@ -34,6 +34,8 @@ namespace Neptune.EFModels.Entities
         {
             return dbContext.TreatmentBMPs
                 .Include(x => x.TreatmentBMPType).Where(x => !checkIsAnalyzedInModelingModule || x.TreatmentBMPType.IsAnalyzedInModelingModule)
+                .Include(x => x.CustomAttributes)
+                .ThenInclude(x => x.CustomAttributeValues)
                 .Include(x => x.Delineation)
                 .Include(x => x.Project)
                 .AsNoTracking();
@@ -60,6 +62,8 @@ namespace Neptune.EFModels.Entities
                     .Include(x => x.UpstreamBMP)
                     .Include(x => x.InventoryVerifiedByPerson)
                     .Include(x => x.WaterQualityManagementPlan)
+                    .Include(x => x.CustomAttributes)
+                    .ThenInclude(x => x.CustomAttributeValues)
                 ;
         }
 

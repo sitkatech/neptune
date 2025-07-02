@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { VTreatmentBMPModelingAttributeDto } from '././v-treatment-bmp-modeling-attribute-dto';
+import { CustomAttributeUpsertDto } from '././custom-attribute-upsert-dto';
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class TreatmentBMPDisplayDto { 
@@ -23,8 +24,10 @@ export class TreatmentBMPDisplayDto {
     InventoryIsVerified?: boolean;
     IsFullyParameterized?: boolean;
     TreatmentBMPModelingAttribute?: VTreatmentBMPModelingAttributeDto;
+    CustomAttributes?: Array<CustomAttributeUpsertDto>;
     WatershedName?: string;
     Notes?: string;
+    TreatmentBMPTypeID?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -41,8 +44,10 @@ export interface TreatmentBMPDisplayDtoForm {
     InventoryIsVerified?: FormControl<boolean>;
     IsFullyParameterized?: FormControl<boolean>;
     TreatmentBMPModelingAttribute?: FormControl<VTreatmentBMPModelingAttributeDto>;
+    CustomAttributes?: FormControl<Array<CustomAttributeUpsertDto>>;
     WatershedName?: FormControl<string>;
     Notes?: FormControl<string>;
+    TreatmentBMPTypeID?: FormControl<number>;
 }
 
 export class TreatmentBMPDisplayDtoFormControls { 
@@ -146,6 +151,16 @@ export class TreatmentBMPDisplayDtoFormControls {
             ],
         }
     );
+    public static CustomAttributes = (value: FormControlState<Array<CustomAttributeUpsertDto>> | Array<CustomAttributeUpsertDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<CustomAttributeUpsertDto>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static WatershedName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
@@ -157,6 +172,16 @@ export class TreatmentBMPDisplayDtoFormControls {
         }
     );
     public static Notes = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

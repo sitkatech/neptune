@@ -8,10 +8,11 @@ public static partial class TreatmentBMPExtensionMethods
 {
     public static TreatmentBMPDisplayDto AsDisplayDto(this TreatmentBMP treatmentBMP, vTreatmentBMPModelingAttribute? treatmentBMPModelingAttribute)
     {
-        var treatmentBMPSimpleDto = new TreatmentBMPDisplayDto()
+        var treatmentBmpDisplayDto = new TreatmentBMPDisplayDto()
         {
             TreatmentBMPID = treatmentBMP.TreatmentBMPID,
             DisplayName = treatmentBMP.TreatmentBMPName,
+            TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
             TreatmentBMPTypeName = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName,
             ProjectID = treatmentBMP.ProjectID,
             InventoryIsVerified = treatmentBMP.InventoryIsVerified,
@@ -19,11 +20,12 @@ public static partial class TreatmentBMPExtensionMethods
             Latitude = treatmentBMP.LocationPoint4326.Coordinate.Y,
             TreatmentBMPName = treatmentBMP.TreatmentBMPName,
             TreatmentBMPModelingAttribute = treatmentBMPModelingAttribute.AsDto(),
+            CustomAttributes = treatmentBMP.CustomAttributes?.Select(x => x.AsUpsertDto()).ToList(),
             IsFullyParameterized = treatmentBMP.IsFullyParameterized(treatmentBMPModelingAttribute),
             WatershedName = treatmentBMP.Watershed?.WatershedName,
             Notes = treatmentBMP.Notes
         };
-        return treatmentBMPSimpleDto;
+        return treatmentBmpDisplayDto;
     }
 
     public static TreatmentBMPUpsertDto AsUpsertDtoWithModelingAttributes(this TreatmentBMP treatmentBMP, vTreatmentBMPModelingAttribute treatmentBMPModelingAttribute)

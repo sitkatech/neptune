@@ -12,6 +12,8 @@ public class TreatmentBMPDisplayDto
     public bool InventoryIsVerified { get; set; }
     public bool IsFullyParameterized { get; set; }
     public vTreatmentBMPModelingAttributeDto TreatmentBMPModelingAttribute { get; set; }
+    public List<CustomAttributeUpsertDto> CustomAttributes { get; set; }
     public string WatershedName { get; set; }
     public string Notes { get; set; }
+    public int TreatmentBMPTypeID { get; set; }
 }

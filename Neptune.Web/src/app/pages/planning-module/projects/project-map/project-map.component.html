@@ -77,33 +77,46 @@
             </div>
             <div class="g-col-7">
                 <h3>Modeling Attributes</h3>
-                <!-- <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeName; else noTypeSelected">
-                    <ng-container *ngIf="getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeName).length > 0; else modelingTypesNotApplicable">
-                        <dl
-                            class="grid-12"
-                            *ngFor="let treatmentBMPModelingAttributeDefinitionDto of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeName)">
+                <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeName; else noTypeSelected">
+                    <ng-container *ngIf="getCustomAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID).length > 0; else modelingTypesNotApplicable">
+                        <dl class="grid-12" *ngFor="let customAttributeType of getCustomAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID)">
                             <dt class="g-col-7">
-                                <field-definition [fieldDefinitionType]="treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName"></field-definition>
+                                <ng-container>
+                                    <span>
+                                        {{ customAttributeType.CustomAttributeTypeName }}
+                                        <i
+                                            class="fas fa-question-circle small"
+                                            style="cursor: help"
+                                            [popper]="popContent"
+                                            [popperTitle]="customAttributeType.CustomAttributeTypeName"></i>
+                                    </span>
+                                </ng-container>
+                                <ng-template #popContent>
+                                    <ng-container>
+                                        <div [innerHtml]="customAttributeType.CustomAttributeTypeDescription"></div>
+                                    </ng-container>
+                                </ng-template>
                             </dt>
-                            <dd class="g-col-5" *ngIf="isFieldWithDropdown(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName); else numericModelingAttributeField">
+                            <dd class="g-col-5">
+                                <ng-container *ngIf="isFieldWithDropdown(customAttributeType.CustomAttributeDataTypeID); else numericModelingAttributeField">
+                                    {{ selectedTreatmentBMP.CustomAttributes[getIndexOfCustomAttribute(customAttributeType.CustomAttributeTypeID)]?.CustomAttributeValues[0] }}
+                                </ng-container>
+                                <ng-template #numericModelingAttributeField>
+                                    {{
+                                        selectedTreatmentBMP.CustomAttributes[getIndexOfCustomAttribute(customAttributeType.CustomAttributeTypeID)]?.CustomAttributeValues[0]
+                                            | number
+                                    }}
+                                </ng-template>
                                 {{
-                                    getDropdownItemNameByFieldNameAndItemID(
-                                        treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName,
-                                        selectedTreatmentBMP.TreatmentBMPModelingAttribute[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]
-                                    )
+                                    selectedTreatmentBMP.CustomAttributes[getIndexOfCustomAttribute(customAttributeType.CustomAttributeTypeID)]?.CustomAttributeValues[0] != null &&
+                                    customAttributeType.MeasurementUnitDisplayName != "None"
+                                        ? customAttributeType.MeasurementUnitDisplayName
+                                        : ""
                                 }}
                             </dd>
-                            <ng-template #numericModelingAttributeField>
-                                <dd class="g-col-5">
-                                    {{ selectedTreatmentBMP.TreatmentBMPModelingAttribute[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName] | number }}
-                                    <span *ngIf="selectedTreatmentBMP.TreatmentBMPModelingAttribute[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]">{{
-                                        treatmentBMPModelingAttributeDefinitionDto.Units
-                                    }}</span>
-                                </dd>
-                            </ng-template>
                         </dl>
                     </ng-container>
-                </ng-container> -->
+                </ng-container>
                 <ng-template #noTypeSelected>
                     <div class="font-italic">Modeling Attributes will display once a Treatment BMP Type is selected.</div>
                 </ng-template>

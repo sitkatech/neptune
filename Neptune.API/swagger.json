@@ -7613,6 +7613,13 @@
           "TreatmentBMPModelingAttribute": {
             "$ref": "#/components/schemas/vTreatmentBMPModelingAttributeDto"
           },
+          "CustomAttributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomAttributeUpsertDto"
+            },
+            "nullable": true
+          },
           "WatershedName": {
             "type": "string",
             "nullable": true
@@ -7620,6 +7627,10 @@
           "Notes": {
             "type": "string",
             "nullable": true
+          },
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
