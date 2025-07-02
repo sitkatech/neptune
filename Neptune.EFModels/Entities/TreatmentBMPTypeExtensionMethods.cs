@@ -147,7 +147,7 @@ public static partial class TreatmentBMPTypeExtensionMethods
                 CustomAttributeTypePurposeID = x.CustomAttributeType.CustomAttributeTypePurposeID,
                 CustomAttributeTypeOptionsSchema = x.CustomAttributeType.CustomAttributeTypeOptionsSchema,
                 DataTypeDisplayName = x.CustomAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName,
-                MeasurementUnitDisplayName = x.CustomAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName,
+                MeasurementUnitDisplayName = x.CustomAttributeType.MeasurementUnitType?.MeasurementUnitTypeDisplayName,
                 Purpose = x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeDisplayName,
                 CustomAttributeTypeSortOrder = x.SortOrder
             }).ToList();

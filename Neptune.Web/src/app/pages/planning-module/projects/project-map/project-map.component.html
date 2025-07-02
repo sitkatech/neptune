@@ -77,7 +77,7 @@
             </div>
             <div class="g-col-7">
                 <h3>Modeling Attributes</h3>
-                <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeName; else noTypeSelected">
+                <!-- <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeName; else noTypeSelected">
                     <ng-container *ngIf="getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeName).length > 0; else modelingTypesNotApplicable">
                         <dl
                             class="grid-12"
@@ -103,7 +103,7 @@
                             </ng-template>
                         </dl>
                     </ng-container>
-                </ng-container>
+                </ng-container> -->
                 <ng-template #noTypeSelected>
                     <div class="font-italic">Modeling Attributes will display once a Treatment BMP Type is selected.</div>
                 </ng-template>

@@ -13,7 +13,6 @@ import { UnderlyingHydrologicSoilGroupEnum } from "src/app/shared/generated/enum
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
 import { ProjectUpsertDto } from "src/app/shared/generated/model/project-upsert-dto";
-import { TreatmentBMPModelingAttributeDefinitionDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-definition-dto";
 import { TreatmentBMPModelingAttributeDropdownItemDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto";
 import { TreatmentBMPTypeWithModelingAttributesDto } from "src/app/shared/generated/model/treatment-bmp-type-with-modeling-attributes-dto";
 import { TreatmentBMPUpsertDto } from "src/app/shared/generated/model/treatment-bmp-upsert-dto";
@@ -45,6 +44,12 @@ import { routeParams } from "src/app/app.routes";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
+import { CustomAttributeTypeService } from "src/app/shared/generated/api/custom-attribute-type.service";
+import { CustomAttributeTypePurposeEnum, CustomAttributeTypePurposes } from "src/app/shared/generated/enum/custom-attribute-type-purpose-enum";
+import { CustomAttributeTypeDto } from "src/app/shared/generated/model/custom-attribute-type-dto";
+import { CustomAttributeTypeWithTreatmentBMPTypeIDsDto } from "src/app/shared/generated/model/custom-attribute-type-with-treatment-bmp-type-ids-dto";
+import { CustomAttributeDataTypeEnum } from "src/app/shared/generated/enum/custom-attribute-data-type-enum";
+import { PopperDirective } from "src/app/shared/directives/popper.directive";
 
 @Component({
     selector: "treatment-bmps",
@@ -68,6 +73,7 @@ import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
         InventoriedBMPsLayerComponent,
+        PopperDirective,
     ],
 })
 export class TreatmentBmpsComponent implements OnInit {
@@ -116,6 +122,7 @@ export class TreatmentBmpsComponent implements OnInit {
 
     public static modelingAttributeFieldsWithDropdown = ["TimeOfConcentrationID", "MonthsOfOperationID", "UnderlyingHydrologicSoilGroupID", "DryWeatherFlowOverrideID"];
     public delineations: DelineationUpsertDto[];
+    public customAttributeTypes: CustomAttributeTypeWithTreatmentBMPTypeIDsDto[];
 
     constructor(
         private route: ActivatedRoute,
@@ -130,7 +137,8 @@ export class TreatmentBmpsComponent implements OnInit {
         private projectWorkflowProgressService: ProjectWorkflowProgressService,
         private router: Router,
         private confirmService: ConfirmService,
-        private groupByPipe: GroupByPipe
+        private groupByPipe: GroupByPipe,
+        private customAttributeTypeService: CustomAttributeTypeService
     ) {}
 
     canExit() {
@@ -172,14 +180,16 @@ export class TreatmentBmpsComponent implements OnInit {
                         projectTreatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsAsUpsertDtosGet(this.projectID),
                         delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                         treatmentBMPTypes: this.treatmentBMPTypeService.treatmentBmpTypesGet(),
-                        modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBmpsModelingAttributeDropdownItemsGet(),
-                    }).subscribe(({ projectTreatmentBMPs, delineations, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
+                        customAttributeTypes: this.customAttributeTypeService.purposeCustomAttributeTypePurposeIDGet(CustomAttributeTypePurposeEnum.Modeling),
+                        //modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBmpsModelingAttributeDropdownItemsGet(),
+                    }).subscribe(({ projectTreatmentBMPs, delineations, treatmentBMPTypes, customAttributeTypes }) => {
                         this.originalDoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
                         this.projectTreatmentBMPs = projectTreatmentBMPs;
                         this.originalTreatmentBMPs = JSON.stringify(projectTreatmentBMPs);
                         this.delineations = delineations;
                         this.treatmentBMPTypes = treatmentBMPTypes;
-                        this.modelingAttributeDropdownItems = this.groupByPipe.transform(modelingAttributeDropdownItems, "FieldName");
+                        this.customAttributeTypes = customAttributeTypes;
+                        //this.modelingAttributeDropdownItems = this.groupByPipe.transform(modelingAttributeDropdownItems, "FieldName");
                         this.updateMapLayers();
                     });
                 }
@@ -317,16 +327,28 @@ export class TreatmentBmpsComponent implements OnInit {
         }
     }
 
-    public getModelingAttributeFieldsToDisplay(treatmentBMPTypeID: number): Array<TreatmentBMPModelingAttributeDefinitionDto> {
-        return this.treatmentBMPTypes.find((x) => x.TreatmentBMPTypeID == treatmentBMPTypeID).TreatmentBMPModelingAttributes ?? [];
+    public getCustomAttributeFieldsToDisplay(treatmentBMPTypeID: number): Array<CustomAttributeTypeDto> {
+        return this.customAttributeTypes.filter((x) => x.TreatmentBMPTypeIDs.includes(treatmentBMPTypeID));
     }
 
     public getTypeNameByTypeID(typeID: number) {
         return this.treatmentBMPTypes.find((x) => x.TreatmentBMPTypeID == typeID).TreatmentBMPTypeName ?? -1;
     }
 
-    public isFieldWithDropdown(fieldName: string): boolean {
-        return TreatmentBmpsComponent.modelingAttributeFieldsWithDropdown.indexOf(fieldName) > -1;
+    public isFieldWithDropdown(customAttributeDataTypeID: number): boolean {
+        return customAttributeDataTypeID == CustomAttributeDataTypeEnum.PickFromList;
+    }
+
+    public getFieldName(customAttributeDataTypeID: number): string {
+        return `selectedTreatmentBMP.ModelingAttributes[${this.getIndexOfCustomAttribute(customAttributeDataTypeID)}].CustomAttributeValues[0]`;
+    }
+
+    public getDropdownItemsForCustomAttributeType(optionsSchema: string): string[] {
+        return optionsSchema.replaceAll("[", "").replaceAll("]", "").replaceAll('"', "").split(",");
+    }
+
+    public getIndexOfCustomAttribute(customAttributeTypeID: number): number {
+        return this.selectedTreatmentBMP.ModelingAttributes.findIndex((x) => (x.CustomAttributeTypeID = customAttributeTypeID));
     }
 
     public updateModelingTypeOnTypeChange(selectedType: any) {
@@ -397,9 +419,6 @@ export class TreatmentBmpsComponent implements OnInit {
         var newTreatmentBMP = new TreatmentBMPUpsertDto();
         newTreatmentBMP.TreatmentBMPID = this.newTreatmentBMPIndex;
         this.newTreatmentBMPIndex--;
-
-        newTreatmentBMP.TimeOfConcentrationID = TimeOfConcentrationEnum.FiveMinutes;
-        newTreatmentBMP.UnderlyingHydrologicSoilGroupID = UnderlyingHydrologicSoilGroupEnum.D;
 
         this.projectTreatmentBMPs.push(newTreatmentBMP);
         this.selectTreatmentBMP(newTreatmentBMP.TreatmentBMPID);

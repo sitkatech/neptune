@@ -19,6 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { CustomAttributeTypeDto } from '../model/custom-attribute-type-dto';
+import { CustomAttributeTypeWithTreatmentBMPTypeIDsDto } from '../model/custom-attribute-type-with-treatment-bmp-type-ids-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -146,21 +147,16 @@ export class CustomAttributeTypeService {
      * 
      * 
      * @param customAttributeTypePurposeID 
-     * @param treatmentBMPTypeID 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public purposeCustomAttributeTypePurposeIDTreatmentBMPTypeTreatmentBMPTypeIDGet(customAttributeTypePurposeID: number, treatmentBMPTypeID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<CustomAttributeTypeDto>>;
-    public purposeCustomAttributeTypePurposeIDTreatmentBMPTypeTreatmentBMPTypeIDGet(customAttributeTypePurposeID: number, treatmentBMPTypeID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CustomAttributeTypeDto>>>;
-    public purposeCustomAttributeTypePurposeIDTreatmentBMPTypeTreatmentBMPTypeIDGet(customAttributeTypePurposeID: number, treatmentBMPTypeID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CustomAttributeTypeDto>>>;
-    public purposeCustomAttributeTypePurposeIDTreatmentBMPTypeTreatmentBMPTypeIDGet(customAttributeTypePurposeID: number, treatmentBMPTypeID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public purposeCustomAttributeTypePurposeIDGet(customAttributeTypePurposeID: number, observe?: 'body', reportProgress?: boolean): Observable<Array<CustomAttributeTypeWithTreatmentBMPTypeIDsDto>>;
+    public purposeCustomAttributeTypePurposeIDGet(customAttributeTypePurposeID: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CustomAttributeTypeWithTreatmentBMPTypeIDsDto>>>;
+    public purposeCustomAttributeTypePurposeIDGet(customAttributeTypePurposeID: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CustomAttributeTypeWithTreatmentBMPTypeIDsDto>>>;
+    public purposeCustomAttributeTypePurposeIDGet(customAttributeTypePurposeID: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (customAttributeTypePurposeID === null || customAttributeTypePurposeID === undefined) {
-            throw new Error('Required parameter customAttributeTypePurposeID was null or undefined when calling purposeCustomAttributeTypePurposeIDTreatmentBMPTypeTreatmentBMPTypeIDGet.');
-        }
-
-        if (treatmentBMPTypeID === null || treatmentBMPTypeID === undefined) {
-            throw new Error('Required parameter treatmentBMPTypeID was null or undefined when calling purposeCustomAttributeTypePurposeIDTreatmentBMPTypeTreatmentBMPTypeIDGet.');
+            throw new Error('Required parameter customAttributeTypePurposeID was null or undefined when calling purposeCustomAttributeTypePurposeIDGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -180,7 +176,7 @@ export class CustomAttributeTypeService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<CustomAttributeTypeDto>>(`${this.basePath}/purpose/${encodeURIComponent(String(customAttributeTypePurposeID))}/treatmentBMPType/${encodeURIComponent(String(treatmentBMPTypeID))}`,
+        return this.httpClient.get<Array<CustomAttributeTypeDto>>(`${this.basePath}/purpose/${encodeURIComponent(String(customAttributeTypePurposeID))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

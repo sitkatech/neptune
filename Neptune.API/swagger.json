@@ -83,7 +83,7 @@
         }
       }
     },
-    "/purpose/{customAttributeTypePurposeID}/treatmentBMPType/{treatmentBMPTypeID}": {
+    "/purpose/{customAttributeTypePurposeID}": {
       "get": {
         "tags": [
           "CustomAttributeType"
@@ -91,15 +91,6 @@
         "parameters": [
           {
             "name": "customAttributeTypePurposeID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "treatmentBMPTypeID",
             "in": "path",
             "required": true,
             "schema": {
@@ -116,7 +107,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CustomAttributeTypeDto"
+                    "$ref": "#/components/schemas/CustomAttributeTypeWithTreatmentBMPTypeIDsDto"
                   }
                 }
               },
@@ -124,7 +115,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CustomAttributeTypeDto"
+                    "$ref": "#/components/schemas/CustomAttributeTypeWithTreatmentBMPTypeIDsDto"
                   }
                 }
               },
@@ -132,7 +123,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CustomAttributeTypeDto"
+                    "$ref": "#/components/schemas/CustomAttributeTypeWithTreatmentBMPTypeIDsDto"
                   }
                 }
               }
@@ -4392,6 +4383,69 @@
           "CustomAttributeTypeSortOrder": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomAttributeTypeWithTreatmentBMPTypeIDsDto": {
+        "type": "object",
+        "properties": {
+          "CustomAttributeTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CustomAttributeTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "CustomAttributeDataTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "MeasurementUnitTypeID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsRequired": {
+            "type": "boolean"
+          },
+          "CustomAttributeTypeDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "CustomAttributeTypePurposeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CustomAttributeTypeOptionsSchema": {
+            "type": "string",
+            "nullable": true
+          },
+          "DataTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "MeasurementUnitDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Purpose": {
+            "type": "string",
+            "nullable": true
+          },
+          "CustomAttributeTypeSortOrder": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "TreatmentBMPTypeIDs": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
             "nullable": true
           }
         },

@@ -99,5 +99,21 @@ namespace Neptune.EFModels.Entities
                 .Select(x => x.AsDto())
                 .ToList();
         }
+
+        public static List<CustomAttributeTypeDto> GetByCustomAttributeTypePurposeAsDto(NeptuneDbContext dbContext, int customAttributeTypePurposeID)
+        {
+            return GetImpl(dbContext).AsNoTracking().Where(x =>
+                    x.CustomAttributeTypePurposeID == customAttributeTypePurposeID)
+                .Select(x => x.AsDto())
+                .ToList();
+        }
+
+        public static List<CustomAttributeTypeWithTreatmentBMPTypeIDsDto> GetByCustomAttributeTypePurposeAsWithTreatmentBMPTypeIDsDto(NeptuneDbContext dbContext, int customAttributeTypePurposeID)
+        {
+            return GetImpl(dbContext).AsNoTracking().Where(x =>
+                    x.CustomAttributeTypePurposeID == customAttributeTypePurposeID)
+                .Select(x => x.AsDtoWithTreatmentBmpTypeIDs())
+                .ToList();
+        }
     }
 }

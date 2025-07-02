@@ -227,10 +227,6 @@ namespace Neptune.EFModels.Entities
             var treatmentBMPTypeWithModelingAttributesDtos = dbContext.TreatmentBMPTypes
                 .Include(x => x.TreatmentBMPTypeCustomAttributeTypes)
                 .ThenInclude(x => x.CustomAttributeType)
-                .ThenInclude(x => x.CustomAttributeDataType)
-                .Include(x => x.TreatmentBMPTypeCustomAttributeTypes)
-                .ThenInclude(x => x.CustomAttributeType)
-                .ThenInclude(x => x.MeasurementUnitType)
                 .AsNoTracking()
                 .OrderBy(x => x.TreatmentBMPTypeName)
                 .Select(x =>

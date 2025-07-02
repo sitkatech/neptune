@@ -32,13 +32,12 @@ public class CustomAttributeTypeController(
         return RequireNotNullThrowNotFound(customAttributeTypeDto, "CustomAttributeType", customAttributeTypeID);
     }
 
-    [HttpGet("/purpose/{customAttributeTypePurposeID}/treatmentBMPType/{treatmentBMPTypeID}")]
-    public ActionResult<List<CustomAttributeTypeDto>> GetByCustomAttributeTypePurposeIDAndTreatmentBMPTypeID(
-        [FromRoute] int customAttributeTypePurposeID, [FromRoute] int treatmentBMPTypeID)
+    [HttpGet("/purpose/{customAttributeTypePurposeID}")]
+    public ActionResult<List<CustomAttributeTypeWithTreatmentBMPTypeIDsDto>> GetByCustomAttributeTypePurposeID(
+        [FromRoute] int customAttributeTypePurposeID)
     {
         var customAttributeTypeDtos =
-            CustomAttributeTypes.GetByCustomAttributeTypePurposeAndTreatmentBMPTypeAsDto(DbContext, customAttributeTypePurposeID,
-                treatmentBMPTypeID);
+            CustomAttributeTypes.GetByCustomAttributeTypePurposeAsWithTreatmentBMPTypeIDsDto(DbContext, customAttributeTypePurposeID);
 
         return customAttributeTypeDtos;
     }

@@ -3,6 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { CustomAttributeTypeService } from './api/custom-attribute-type.service';
 import { CustomRichTextService } from './api/custom-rich-text.service';
 import { DelineationService } from './api/delineation.service';
 import { FieldDefinitionService } from './api/field-definition.service';
@@ -30,6 +31,7 @@ import { UserClaimsService } from './api/user-claims.service';
   declarations: [],
   exports:      [],
   providers: [
+    CustomAttributeTypeService,
     CustomRichTextService,
     DelineationService,
     FieldDefinitionService,

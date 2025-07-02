@@ -110,36 +110,56 @@
                 <div class="g-col-7">
                     <h3 class="mt-3">Modeling Attributes</h3>
                     <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeID; else noTypeSelected">
-                        <ng-container *ngIf="getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID).length > 0; else modelingTypesNotApplicable">
+                        <ng-container *ngIf="getCustomAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID).length > 0; else modelingTypesNotApplicable">
                             <div class="mt-3">
-                                <div
-                                    class="field mb-2"
-                                    *ngFor="let treatmentBMPModelingAttributeDefinitionDto of getModelingAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID)">
-                                    <ng-container *ngIf="isFieldWithDropdown(treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName); else numericModelingAttributeField">
-                                        <label class="field-label">
+                                <div class="field mb-2" *ngFor="let customAttributeType of getCustomAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID)">
+                                    <ng-container>
+                                        <span class="modeling-attribute">
+                                            {{ customAttributeType.CustomAttributeTypeName }}
+                                            <i
+                                                class="fas fa-question-circle small"
+                                                style="cursor: help"
+                                                [popper]="popContent"
+                                                [popperTitle]="customAttributeType.CustomAttributeTypeName"></i>
+                                        </span>
+                                    </ng-container>
+                                    <ng-template #popContent>
+                                        <ng-container>
+                                            <div [innerHtml]="customAttributeType.CustomAttributeTypeDescription"></div>
+                                        </ng-container>
+                                    </ng-template>
+                                    <ng-container *ngIf="isFieldWithDropdown(customAttributeType.CustomAttributeDataTypeID); else numericModelingAttributeField">
+                                        <!-- <label class="field-label">
                                             <field-definition [fieldDefinitionType]="treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName"></field-definition>
-                                        </label>
+                                        </label> -->
                                         <select
-                                            [(ngModel)]="selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]"
-                                            [name]="treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName">
+                                            [(ngModel)]="
+                                                selectedTreatmentBMP.ModelingAttributes[getIndexOfCustomAttribute(customAttributeType.CustomAttributeTypeID)]
+                                                    .CustomAttributeValues[0]
+                                            "
+                                            name="{{ getFieldName(customAttributeType.CustomAttributeTypeID) }}">
                                             <option
-                                                *ngFor="let dropdownItem of modelingAttributeDropdownItems[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]"
-                                                [value]="dropdownItem.ItemID">
-                                                {{ dropdownItem.ItemName }}
+                                                *ngFor="let dropdownItem of getDropdownItemsForCustomAttributeType(customAttributeType.CustomAttributeTypeOptionsSchema)"
+                                                [value]="dropdownItem">
+                                                {{ dropdownItem }}
                                             </option>
                                         </select>
                                     </ng-container>
                                     <ng-template #numericModelingAttributeField>
-                                        <div class="field-label">
+                                        <!-- <div class="field-label">
                                             <field-definition [fieldDefinitionType]="treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName"></field-definition>
-                                        </div>
+                                        </div> -->
                                         <div class="units-wrapper">
                                             <input
                                                 type="number"
                                                 class="form-control"
-                                                [(ngModel)]="selectedTreatmentBMP[treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName]"
-                                                [name]="treatmentBMPModelingAttributeDefinitionDto.ModelingAttributeName" />
-                                            <span class="units">{{ treatmentBMPModelingAttributeDefinitionDto.Units }}</span>
+                                                [(ngModel)]="
+                                                    selectedTreatmentBMP.ModelingAttributes[getIndexOfCustomAttribute(customAttributeType.CustomAttributeTypeID)]
+                                                        .CustomAttributeValues[0]
+                                                "
+                                                name="selectedTreatmentBMP.ModelingAttributes[customAttributeType.CustomAttributeTypeID]
+                                                        .CustomAttributeValues[0]" />
+                                            <span class="units">{{ customAttributeType.MeasurementUnitDisplayName }}</span>
                                         </div>
                                     </ng-template>
                                 </div>
