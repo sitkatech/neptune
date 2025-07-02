@@ -37,7 +37,7 @@
             </div>
         </div>
     </div>
-    <div [id]="mapID" [style.height]="mapHeight">
+    <div [id]="mapID" [style.height]="mapHeight" [style.cursor]="cursorStyle">
         <div class="legend leaflet-control-layers leaflet-control-layers-expanded" [id]="legendID" *ngIf="showLegend">
             <a class="leaflet-control-layers-toggle">
                 <icon icon="MapLegend" (click)="legendToggle()"></icon>
@@ -45,11 +45,14 @@
             <div class="leaflet-control-layers-list">
                 <div *ngFor="let legendItem of legendItems" class="legend-item">
                     <h4>{{ legendItem.Title }}</h4>
-                    <div *ngIf="legendItem.LengendHtml" [innerHTML]="legendItem.LengendHtml" ></div>
-                    <img *ngIf="legendItem.WmsUrl"
+                    <icon *ngIf="legendItem.Icon" [icon]="legendItem.Icon" [color]="legendItem.IconColor" [fillOpacity]="legendItem.IconFillOpacity"></icon>
+                    <span *ngIf="legendItem.Text">{{ legendItem.Text }}</span>
+                    <div *ngIf="legendItem.LegendHtml" [innerHTML]="legendItem.LegendHtml"></div>
+                    <img
+                        *ngIf="legendItem.WmsUrl"
                         src="{{ legendItem.WmsUrl }}REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=25&HEIGHT=25&LAYER={{
                             legendItem.WmsLayerName
-                        }}&legend_options=fontSize:12&style={{legendItem.WmsLayerStyle}}"
+                        }}&legend_options=fontSize:12&style={{ legendItem.WmsLayerStyle }}"
                         alt="{{ legendItem.Title }} Legend" />
                 </div>
                 <div class="leaflet-control-layers-close-button-wrapper">
@@ -57,6 +60,13 @@
                 </div>
             </div>
         </div>
+        <regional-subbasin-trace-from-point
+            *ngIf="map"
+            [map]="map"
+            [cursorStyle]="cursorStyle"
+            (cursorStyleChange)="onCursorStyleChange($event)"
+            [legendItems]="legendItems"
+            (legendItemsChange)="onLegendItemsChange($event)"></regional-subbasin-trace-from-point>
         <ng-content></ng-content>
     </div>
     <div class="map-footer">

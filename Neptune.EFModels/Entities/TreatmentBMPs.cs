@@ -259,6 +259,7 @@ namespace Neptune.EFModels.Entities
                 .ThenInclude(x => x.Organization)
                 .Include(x => x.OwnerOrganization)
                 .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
+                .Include(x => x.UpstreamBMP)
                 .AsNoTracking().Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule)
                 .OrderBy(x => x.TreatmentBMPName).ToList();
         }
@@ -468,7 +469,6 @@ namespace Neptune.EFModels.Entities
                 .ThenInclude(x => x.Organization)
                 .Include(x => x.OwnerOrganization)
                 .Include(x => x.TreatmentBMPModelingAttributeTreatmentBMP)
-                .Include(x => x.UpstreamBMP)
                 .Include(x => x.WaterQualityManagementPlan).AsNoTracking()
                 .Where(x => x.RegionalSubbasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null &&
                             x.ModelBasinID != null).ToList();
@@ -485,6 +485,17 @@ namespace Neptune.EFModels.Entities
             }
 
             return toReturn;
+        }
+
+        public static List<TreatmentBMP> ListModelingTreatmentBMPsWithCentralizedDelineations(NeptuneDbContext dbContext)
+        {
+            return dbContext.TreatmentBMPs
+                .Include(x => x.TreatmentBMPType)
+                .Include(x => x.Delineation)
+                .Where(x => x.RegionalSubbasinID != null && x.TreatmentBMPType.IsAnalyzedInModelingModule &&
+                            x.ModelBasinID != null && x.Delineation != null &&
+                            x.Delineation.DelineationTypeID == DelineationType.Centralized.DelineationTypeID &&
+                            x.Delineation.IsVerified).ToList();
         }
     }
 }

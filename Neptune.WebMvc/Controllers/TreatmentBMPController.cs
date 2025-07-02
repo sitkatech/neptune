@@ -192,6 +192,7 @@ namespace Neptune.WebMvc.Controllers
                 .Single(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID);
 
             var upstreamestBMP = treatmentBMPTree.UpstreamBMPID.HasValue ? TreatmentBMPs.GetByID(_dbContext, treatmentBMPTree.UpstreamBMPID) : null;
+            var isUpstreamestBMPAnalyzedInModelingModule = upstreamestBMP != null && upstreamestBMP.TreatmentBMPType.IsAnalyzedInModelingModule;
             var delineation = Delineations.GetByTreatmentBMPID(_dbContext, upstreamestBMP?.TreatmentBMPID ?? treatmentBMP.TreatmentBMPID);
             if (delineation?.DelineationGeometry != null)
             {
@@ -219,7 +220,7 @@ namespace Neptune.WebMvc.Controllers
             var regionalSubbasinRevisionRequest = RegionalSubbasinRevisionRequests.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID).SingleOrDefault(x =>
                 x.RegionalSubbasinRevisionRequestStatus == RegionalSubbasinRevisionRequestStatus.Open);
             var watershed = treatmentBMP.WatershedID.HasValue ? _dbContext.Watersheds.AsNoTracking().Single(x => x.WatershedID == treatmentBMP.WatershedID.Value) : null;
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, treatmentBMPType, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl, hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, otherTreatmentBmpsExistInSubbasin, hasMissingModelingAttributes, customAttributes, fundingEvents, treatmentBMPBenchmarkAndThresholds, treatmentBMPDocuments, delineation, delineationOverlapDelineations, upstreamestBMP, regionalSubbasinRevisionRequest, watershed);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, treatmentBMPType, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl, hruCharacteristicsViewData, mapServiceUrl, modeledBMPPerformanceViewData, otherTreatmentBmpsExistInSubbasin, hasMissingModelingAttributes, customAttributes, fundingEvents, treatmentBMPBenchmarkAndThresholds, treatmentBMPDocuments, delineation, delineationOverlapDelineations, upstreamestBMP, isUpstreamestBMPAnalyzedInModelingModule, regionalSubbasinRevisionRequest, watershed);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -697,7 +698,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
-        [TreatmentBMPDeleteFeature]
+        [TreatmentBMPManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
         public PartialViewResult QueueLGURefreshForTreatmentBMP([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
@@ -872,14 +873,13 @@ namespace Neptune.WebMvc.Controllers
         public GridJsonNetJObjectResult<TreatmentBMP> ViewTreatmentBMPModelingAttributesGridJsonData()
         {
             var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForBMPs(_dbContext, CurrentPerson);
-            var delineationsDict = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext);
+            var delineationsDict = vTreatmentBMPUpstreams.ListWithDelineationAsDictionaryIncludeTreatmentBMPType(_dbContext);
             var watershedsDict = _dbContext.Watersheds.AsNoTracking().Select(x => new {x.WatershedID, x.WatershedName}).ToDictionary(x => x.WatershedID, x => x.WatershedName);
             var precipitationZonesDict = _dbContext.PrecipitationZones.AsNoTracking()
                 .Select(x => new { x.PrecipitationZoneID, x.DesignStormwaterDepthInInches })
                 .ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
-            var hruCharacteristicsAcreageSumByTreatmentBMPDict =
-                vHRUCharacteristics.ListAcreageSumByTreatmentBMPDictionary(_dbContext);
-            var gridSpec = new ViewTreatmentBMPModelingAttributesGridSpec(_linkGenerator, delineationsDict, watershedsDict, precipitationZonesDict, hruCharacteristicsAcreageSumByTreatmentBMPDict);
+            var treatmentBMPModeledLandUseAreas = vTreatmentBMPModeledLandUseAreas.List(_dbContext).ToDictionary(x => x.TreatmentBMPID.Value, y => y.Area);
+            var gridSpec = new ViewTreatmentBMPModelingAttributesGridSpec(_linkGenerator, delineationsDict, watershedsDict, precipitationZonesDict, treatmentBMPModeledLandUseAreas);
             var treatmentBMPs = TreatmentBMPs.ListWithModelingAttributes(_dbContext).Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;

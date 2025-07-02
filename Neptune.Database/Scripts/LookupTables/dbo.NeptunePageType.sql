@@ -86,7 +86,8 @@ USING (VALUES
 (87, 'SPAHomePage', 'SPA Home Page'),
 (88, 'WQMPModelingOptions', 'WQMP Modeling Options'),
 (89, 'WQMPApprovalSummary', 'WQMP Approval Summary'),
-(90, 'WQMPPostConstructionInspectionAndVerification', 'WQMP Post Construction Inspection and Verification')
+(90, 'WQMPPostConstructionInspectionAndVerification', 'WQMP Post Construction Inspection and Verification'),
+(91, 'WQMPMap', 'WQMP Map')
 )
 AS Source (NeptunePageTypeID, NeptunePageTypeName, NeptunePageTypeDisplayName)
 ON Target.NeptunePageTypeID = Source.NeptunePageTypeID

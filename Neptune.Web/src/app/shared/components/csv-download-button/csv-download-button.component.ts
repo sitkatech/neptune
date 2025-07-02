@@ -1,12 +1,14 @@
 import { Component, Input } from "@angular/core";
 import { AgGridAngular } from "ag-grid-angular";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
+import { IconComponent } from "../icon/icon.component";
 
 @Component({
     selector: "neptune-csv-download-button",
     templateUrl: "./csv-download-button.component.html",
     styleUrls: ["./csv-download-button.component.scss"],
     standalone: true,
+    imports: [IconComponent],
 })
 export class CsvDownloadButtonComponent {
     @Input() grid: AgGridAngular;

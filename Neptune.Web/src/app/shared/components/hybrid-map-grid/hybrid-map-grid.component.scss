@@ -10,7 +10,7 @@
     }
 }
 
-.tab-nav-panel.hidden {
+.tab-nav-container__panel.hidden {
     display: none;
 }
 
@@ -35,4 +35,18 @@
 }
 .hidden {
     display: none;
+}
+
+.tab-nav-container {
+    display: grid;
+    gap: 1rem;
+    @include desktop-small {
+        &:not(:has(div.hidden)) {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @include tablet-max {
+        grid-template-columns: unset;
+    }
 }

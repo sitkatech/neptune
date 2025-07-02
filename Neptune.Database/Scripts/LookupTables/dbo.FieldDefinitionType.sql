@@ -144,7 +144,8 @@ USING (VALUES
 (143, 'BaselineLoadingRate', 'Baseline Loading Rate'),
 (144, 'CurrentLoadingRate', 'Current Loading Rate'),
 (145, 'BMPTrashTreatmentStatus', 'BMP Trash Treatment Status'),
-(146, 'WQMPTrashTreatmentStatus', 'WQMP Trash Treatment Status')
+(146, 'WQMPTrashTreatmentStatus', 'WQMP Trash Treatment Status'),
+(147, 'DownstreamOfNonModeledBMP', 'Downstream of Non-Modeled BMP?')
 )
 AS Source (FieldDefinitionTypeID, FieldDefinitionTypeName, FieldDefinitionTypeDisplayName)
 ON Target.FieldDefinitionTypeID = Source.FieldDefinitionTypeID

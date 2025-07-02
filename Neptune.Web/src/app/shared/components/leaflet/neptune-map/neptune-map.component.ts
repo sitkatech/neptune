@@ -15,11 +15,12 @@ import { FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from
 import { LegendItem } from "src/app/shared/models/legend-item";
 import { Feature, FeatureCollection } from "geojson";
 import { DomSanitizer } from "@angular/platform-browser";
+import { RegionalSubbasinTraceFromPointComponent } from "../features/regional-subbasin-trace-from-point/regional-subbasin-trace-from-point.component";
 
 @Component({
     selector: "neptune-map",
     standalone: true,
-    imports: [CommonModule, IconComponent, NgSelectModule, FormsModule, ReactiveFormsModule],
+    imports: [CommonModule, IconComponent, NgSelectModule, FormsModule, ReactiveFormsModule, RegionalSubbasinTraceFromPointComponent],
     templateUrl: "./neptune-map.component.html",
     styleUrls: ["./neptune-map.component.scss"],
     providers: [
@@ -52,6 +53,8 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     public searchResults$: Observable<FeatureCollection>;
     public isSearching: boolean = false;
     private searchCleared: boolean = false;
+
+    public cursorStyle: string = "grab";
 
     constructor(public nominatimService: NominatimService, public leafletHelperService: LeafletHelperService, private sanitizer: DomSanitizer) {}
 
@@ -172,14 +175,14 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
                 const legendItem = new LegendItem();
                 legendItem.Title = obj.group && obj.group.name ? obj.group.name : obj.name;
                 if (obj.layer.legendHtml) {
-                    legendItem.LengendHtml = this.sanitizer.bypassSecurityTrustHtml(obj.layer.legendHtml);
+                    legendItem.LegendHtml = this.sanitizer.bypassSecurityTrustHtml(obj.layer.legendHtml);
                 } else if (obj.layer._url) {
                     legendItem.WmsUrl = obj.layer._url;
                     legendItem.WmsLayerName = obj.layer.options.layers;
                     legendItem.WmsLayerStyle = obj.layer.wmsParams.styles;
                 }
 
-                if (legendItem.Title && (legendItem.LengendHtml || legendItem.WmsUrl) && !legendItems.some((item) => item.Title === legendItem.Title)) {
+                if (legendItem.Title && (legendItem.LegendHtml || legendItem.WmsUrl) && !legendItems.some((item) => item.Title === legendItem.Title)) {
                     legendItems.push(legendItem);
                 }
             }
@@ -193,6 +196,14 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
             this.legendControl._container.classList.add("leaflet-control-layers-expanded");
         }
+    }
+
+    onCursorStyleChange(updatedCursorStyle: string) {
+        this.cursorStyle = updatedCursorStyle;
+    }
+
+    onLegendItemsChange(updatedLegendItems: LegendItem[]) {
+        this.legendItems = updatedLegendItems;
     }
 
     ngOnDestroy(): void {

@@ -1,21 +1,22 @@
 ﻿using Hangfire;
-using Neptune.WebMvc.Common;
-using Neptune.WebMvc.Security;
-using Neptune.WebMvc.Views.RegionalSubbasin;
-using Neptune.WebMvc.Views.Shared;
-using Neptune.WebMvc.Views.Shared.HRUCharacteristics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.Common;
 using Neptune.EFModels.Entities;
+using Neptune.Jobs.Hangfire;
 using Neptune.Jobs.Services;
 using Neptune.Models.DataTransferObjects;
+using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.MvcResults;
+using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Services.Filters;
+using Neptune.WebMvc.Views.RegionalSubbasin;
+using Neptune.WebMvc.Views.Shared;
+using Neptune.WebMvc.Views.Shared.HRUCharacteristics;
 using NetTopologySuite.Features;
 using Index = Neptune.WebMvc.Views.RegionalSubbasin.Index;
 using IndexViewData = Neptune.WebMvc.Views.RegionalSubbasin.IndexViewData;
-using Neptune.Jobs.Hangfire;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -45,7 +46,7 @@ namespace Neptune.WebMvc.Controllers
         public JsonResult UpstreamCatchments([FromRoute] RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
         {
             var regionalSubbasin = regionalSubbasinPrimaryKey.EntityObject;
-            return Json(new {regionalSubbasinIDs = vRegionalSubbasinUpstreams.ListUpstreamRegionalBasinIDs(_dbContext, regionalSubbasin) });
+            return Json(new { regionalSubbasinIDs = vRegionalSubbasinUpstreams.ListUpstreamRegionalBasinIDs(_dbContext, regionalSubbasin) });
         }
 
         [HttpGet("{treatmentBMPPrimaryKey}")]
@@ -58,7 +59,7 @@ namespace Neptune.WebMvc.Controllers
             return Json(feature);
         }
 
-        
+
         [HttpGet("{regionalSubbasinPrimaryKey}")]
         [NeptuneAdminFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("regionalSubbasinPrimaryKey")]
@@ -69,8 +70,8 @@ namespace Neptune.WebMvc.Controllers
 
             var feature = new Feature(regionalSubbasinCatchmentGeometry4326, new AttributesTable());
             var featureCollection = new FeatureCollection { feature };
-            var layerGeoJson = new LayerGeoJson("Catchment Boundary", featureCollection,"#000000", 1, LayerInitialVisibility.Show, false );
-            var stormwaterMapInitJson = new StormwaterMapInitJson("map", MapInitJson.DefaultZoomLevel, new List<LayerGeoJson>{layerGeoJson}, new BoundingBoxDto(regionalSubbasinCatchmentGeometry4326));
+            var layerGeoJson = new LayerGeoJson("Catchment Boundary", featureCollection, "#000000", 1, LayerInitialVisibility.Show, false);
+            var stormwaterMapInitJson = new StormwaterMapInitJson("map", MapInitJson.DefaultZoomLevel, new List<LayerGeoJson> { layerGeoJson }, new BoundingBoxDto(regionalSubbasinCatchmentGeometry4326));
 
             var hruCharacteristics = vHRUCharacteristics.ListByRegionalSubbasinID(_dbContext, regionalSubbasin.RegionalSubbasinID).ToList();
             var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
@@ -111,7 +112,7 @@ namespace Neptune.WebMvc.Controllers
         [NeptuneAdminFeature]
         public ViewResult Grid()
         {
-            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext,NeptunePageType.RegionalSubbasins);
+            var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.RegionalSubbasins);
             var viewData = new GridViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, neptunePage);
             return RazorView<Grid, GridViewData>(viewData);
         }
@@ -124,6 +125,13 @@ namespace Neptune.WebMvc.Controllers
             var regionalSubbasins = _dbContext.RegionalSubbasins.ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<RegionalSubbasin>(regionalSubbasins, gridSpec);
             return gridJsonNetJObjectResult;
+        }
+
+        [HttpPost]
+        public JsonResult GetRegionalSubbasinGraphTraceAsFeatureCollectionFromPoint([FromBody] CoordinateDto coordinateDto)
+        {
+            var featureCollection = RegionalSubbasins.GetRegionalSubbasinGraphTraceAsFeatureCollection(_dbContext, coordinateDto);
+            return Json(featureCollection);
         }
     }
 }

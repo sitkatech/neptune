@@ -64,5 +64,17 @@
     "inputFiles": [
       "wwwroot/ScriptsCustom/Maps/NeptuneMaps.ParcelSearch.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/Content/leaflet/leaflet.geometryutil/leaflet.geometryutil.min.js",
+    "inputFiles": [
+      "wwwroot/Content/leaflet/leaflet.geometryutil/leaflet.geometryutil.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/Content/leaflet/leaflet.arrowheads/leaflet-arrowheads.min.js",
+    "inputFiles": [
+      "wwwroot/Content/leaflet/leaflet.arrowheads/leaflet-arrowheads.js"
+    ]
   }
 ]

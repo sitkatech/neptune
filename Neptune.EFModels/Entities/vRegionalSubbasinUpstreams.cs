@@ -13,4 +13,9 @@ public static class vRegionalSubbasinUpstreams
     {
         return dbContext.vRegionalSubbasinUpstreams.AsNoTracking().Where(x => x.PrimaryKey == regionalSubbasinID).Select(x => x.RegionalSubbasinID).ToList();
     }
+
+    public static List<vRegionalSubbasinUpstream> List(NeptuneDbContext dbContext)
+    {
+        return dbContext.vRegionalSubbasinUpstreams.AsNoTracking().ToList();
+    }
 }

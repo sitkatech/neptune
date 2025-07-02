@@ -15,13 +15,6 @@ namespace Neptune.WebMvc.Common
             return ParseWqmpRowsFromCsv(dbContext, parser, out errorList);
         }
 
-        public static List<WaterQualityManagementPlan> CSVUpload(NeptuneDbContext dbContext, string fileStream, out List<string> errorList)
-        {
-            var stringReader = new StringReader(fileStream);
-            var parser = new TextFieldParser(stringReader);
-            return ParseWqmpRowsFromCsv(dbContext, parser, out errorList);
-        }
-
         public static List<WaterQualityManagementPlan> ParseWqmpRowsFromCsv(NeptuneDbContext dbContext, TextFieldParser parser, out List<string> errorList)
         {
             parser.SetDelimiters(",");

@@ -26,7 +26,7 @@ variables:
   # domainGeoserver: 'geoserver-neptune.esa-$(Environment).sitkatech.com'
   # domainWebMvc: 'neptune.esa-$(Environment).sitkatech.com'
 
-  nereidTag: 'v0.10.1'
+  nereidTag: 'v0.11.0'
   nereidDataTag: '2023.11.08'
 
 resources:
@@ -198,12 +198,13 @@ stages:
         SecretsFilter: '*'
         RunAsPreJob: true
 
-    - task: DockerCompose@0
+    - task: DockerCompose@1
       displayName: Build Nereid services
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
         azureContainerRegistry: '$(kv-containerRegistry)'
         dockerComposeFile: docker-compose.build.yml
+        projectName: 'neptune'
         additionalDockerComposeFiles: |
           docker-compose.image.yml
         dockerComposeFileArgs: |
@@ -215,13 +216,14 @@ stages:
           $(nereidTag)
         includeLatestTag: true
 
-    - task: DockerCompose@0
+    - task: DockerCompose@1
       displayName: Push Nereid to Registry  
       condition: eq(variables['buildNereid'], 'true')
       inputs:
         azureSubscriptionEndpoint: '$(azureSubscription)'
         azureContainerRegistry: '$(kv-containerRegistry)'
         dockerComposeFile: docker-compose.build.yml
+        projectName: 'neptune'
         additionalDockerComposeFiles: |
           docker-compose.image.yml
         dockerComposeFileArgs: |
@@ -395,7 +397,6 @@ stages:
   - deployment: Database
     pool:
       vmImage: 'windows-latest'
-      demands: msbuild
     variables: 
       SQL_API_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.SQL_API_PASSWORD'] ]
       SQL_GEOSERVER_PASSWORD: $[ stageDependencies.DeployTerraform.Terraform.outputs['Terraform.Bash.SQL_GEOSERVER_PASSWORD'] ]

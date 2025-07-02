@@ -13,11 +13,33 @@ import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 import { IconComponent } from "../../../shared/components/icon/icon.component";
 import { environment } from "src/environments/environment";
 import { AuthenticationService } from "src/app/services/authentication.service";
+import { NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
+import { HybridMapGridComponent } from "src/app/shared/components/hybrid-map-grid/hybrid-map-grid.component";
+import { Map, layerControl } from "leaflet";
+import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
+import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
+import { SelectedLandUseBlockLayerComponent } from "src/app/shared/components/leaflet/layers/selected-land-use-block-layer/selected-land-use-block-layer.component";
+import { DelineationsLayerComponent } from "src/app/shared/components/leaflet/layers/delineations-layer/delineations-layer.component";
+import { JurisdictionsLayerComponent } from "src/app/shared/components/leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
+import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 
 @Component({
     selector: "trash-land-use-block-index",
     standalone: true,
-    imports: [PageHeaderComponent, AlertDisplayComponent, NeptuneGridComponent, AsyncPipe, NgIf, LoadingDirective, IconComponent],
+    imports: [
+        PageHeaderComponent,
+        AlertDisplayComponent,
+        NeptuneGridComponent,
+        AsyncPipe,
+        NgIf,
+        LoadingDirective,
+        IconComponent,
+        HybridMapGridComponent,
+        SelectedLandUseBlockLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        DelineationsLayerComponent,
+    ],
     templateUrl: "./trash-land-use-block-index.component.html",
     styleUrl: "./trash-land-use-block-index.component.scss",
 })
@@ -27,8 +49,21 @@ export class TrashLandUseBlockIndexComponent {
     public richTextID = NeptunePageTypeEnum.LandUseBlock;
     public isLoading: boolean = true;
     public url = environment.ocStormwaterToolsBaseUrl;
+    public landUseBlockID: number;
+    public selectionFromMap: boolean;
 
-    constructor(private landUseBlockService: LandUseBlockService, private utilityFunctionsService: UtilityFunctionsService, private authenticationService: AuthenticationService) {}
+    public map: Map;
+    public layerControl: layerControl;
+    public bounds: any;
+    public mapIsReady: boolean = false;
+    public boundingBox$: Observable<BoundingBoxDto>;
+
+    constructor(
+        private landUseBlockService: LandUseBlockService,
+        private utilityFunctionsService: UtilityFunctionsService,
+        private authenticationService: AuthenticationService,
+        private stormwaterJurisdictionService: StormwaterJurisdictionService
+    ) {}
 
     ngOnInit() {
         this.landUseBlockColumnDefs = [
@@ -53,9 +88,36 @@ export class TrashLandUseBlockIndexComponent {
             this.utilityFunctionsService.createBasicColumnDef("Land Use for TGR", "LandUseForTGR"),
         ];
         this.landUseBlocks$ = this.landUseBlockService.landUseBlocksGet().pipe(tap((x) => (this.isLoading = false)));
+        this.boundingBox$ = this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet();
     }
 
     public currentUserHasJurisdictionEditPermission(): boolean {
         return this.authenticationService.doesCurrentUserHaveJurisdictionEditPermission();
+    }
+
+    public handleMapReady(event: NeptuneMapInitEvent) {
+        this.map = event.map;
+        this.layerControl = event.layerControl;
+        this.mapIsReady = true;
+    }
+
+    public onSelectedLandUseBlockChangedFromGrid(selectedLandUseBlockID) {
+        if (this.landUseBlockID == selectedLandUseBlockID) return;
+
+        this.landUseBlockID = selectedLandUseBlockID;
+        this.selectionFromMap = false;
+        return this.landUseBlockID;
+    }
+
+    public onSelectedLandUseBlockChanged(selectedLandUseBlockID) {
+        if (this.landUseBlockID == selectedLandUseBlockID) return;
+
+        this.landUseBlockID = selectedLandUseBlockID;
+        this.selectionFromMap = true;
+        return this.landUseBlockID;
+    }
+
+    public handleLayerBoundsCalculated(bounds: any) {
+        this.bounds = bounds;
     }
 }

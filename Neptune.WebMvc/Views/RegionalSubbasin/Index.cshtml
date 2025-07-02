@@ -2,6 +2,7 @@
 @using Neptune.WebMvc.Common.BootstrapWrappers
 @using Neptune.WebMvc.Common.ModalDialog
 @using Neptune.WebMvc.Views.Shared
+@using Neptune.WebMvc.Views.Shared.RegionalSubbasin
 @inherits Neptune.WebMvc.Views.RegionalSubbasin.Index
 
 @section JavascriptAndStylesContent
@@ -16,6 +17,7 @@
             var regionalSubbasinLayerName = @Html.Raw(ViewDataTyped.RegionalSubbasinLayerName.ToJS());
 
             regionalSubbasinMap = new NeptuneMaps.Map(mapInitJson, "Terrain", geoserverUrl);
+            regionalSubbasinMap.setupTraceFromPoint();
             regionalSubbasinMap.map.setZoom(mapInitJson.ZoomLevel);
             regionalSubbasinMap.wmsParams = regionalSubbasinMap.createWmsParamsWithLayerName(regionalSubbasinLayerName);
             regionalSubbasinMap.wfsParams = regionalSubbasinMap.createWfsParamsWithLayerName(regionalSubbasinLayerName);
@@ -100,6 +102,10 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <div class="neptuneMap" id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 925px;"></div>
+        <div class="neptuneMap" id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 925px;">
+            @{
+                TraceFromPoint.RenderPartialView(Html, new TraceFromPointViewData(ViewDataTyped.MapInitJson.MapDivID));
+            }
+        </div>
     </div>
 </div>

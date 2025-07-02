@@ -22,12 +22,12 @@
 </neptune-grid-header>
 
 <div
-    class="grid-12 mt-3"
+    class="tab-nav-container"
     [loadingSpinner]="{
         isLoading: isLoading && !firstLoad,
         loadingHeight: 500,
     }">
-    <div class="tab-nav-panel" [class.g-col-6]="selectedPanel === 'Hybrid'" [class.g-col-12]="selectedPanel === 'Grid'" [class.hidden]="selectedPanel === 'Map'">
+    <div class="tab-nav-container__panel" [class.hidden]="selectedPanel === 'Map'">
         <neptune-grid
             height="675px"
             [rowData]="rowData"
@@ -41,7 +41,7 @@
             [colIDsToExclude]=""></neptune-grid>
     </div>
 
-    <div class="tab-nav-panel" [class.g-col-6]="selectedPanel === 'Hybrid'" [class.g-col-12]="selectedPanel === 'Map'" [class.hidden]="selectedPanel === 'Grid'">
+    <div class="tab-nav-container__panel" [class.hidden]="selectedPanel === 'Grid'">
         <neptune-map class="location-card" [mapHeight]="mapHeight" (onMapLoad)="handleMapReady($event)" [boundingBox]="boundingBox">
             <ng-container *ngIf="mapIsReady">
                 <ng-content select="[mapLayers]"></ng-content>

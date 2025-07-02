@@ -1,0 +1,3 @@
+<a class="btn btn-primary btn-icon" (click)="isFullScreen ? exitFullScreen() : enterFullScreen()" title="{{ !isFullScreen ? enterFullScreenTitleText : exitFullScreenTitleText }}">
+    <icon [icon]="!isFullScreen ? 'EnterFullScreen' : 'ExitFullScreen'"></icon>
+</a>

@@ -145,38 +145,26 @@
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.WQMPPage);
                     }
-                    @if (ViewDataTyped.IsAdmin)
+                    @if (ViewDataTyped.IsAdmin || ViewDataTyped.IsManagerOrEditor)
                     {
                         <a href="@ViewDataTyped.UploadWQMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                    }
-                    @if (ViewDataTyped.IsManagerOrEditor)
-                    {
-                        <a href="@ViewDataTyped.UploadWQMPUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                     }
 
                     <h3>Simplified BMPs</h3>
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.SimplifiedBMPPage);
                     }
-                    @if (ViewDataTyped.IsAdmin)
+                    @if (ViewDataTyped.IsAdmin || ViewDataTyped.IsManagerOrEditor)
                     {
                         <a href="@ViewDataTyped.UploadSimplifiedBMPUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                    }
-                    @if (ViewDataTyped.IsManagerOrEditor)
-                    {
-                        <a href="@ViewDataTyped.UploadSimplifiedBMPUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                     }
                     <h3>Water Quality Management Plan Locations</h3>
                     @{
                         ViewPageContent.RenderPartialView(Html, ViewDataTyped.WQMPLocationPage);
                     }
-                    @if (ViewDataTyped.IsAdmin)
+                    @if (ViewDataTyped.IsAdmin || ViewDataTyped.IsManagerOrEditor)
                     {
                         <a href="@ViewDataTyped.UploadWQMPLocationsUrl" class="btn btn-neptune">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
-                    }
-                    @if (ViewDataTyped.IsManagerOrEditor)
-                    {
-                        <a href="@ViewDataTyped.UploadWQMPLocationsUrl" class="btn btn-neptune disabled">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-upload") Upload</a>
                     }
                 </div>
                 <div class="col-md-3 sidebar">

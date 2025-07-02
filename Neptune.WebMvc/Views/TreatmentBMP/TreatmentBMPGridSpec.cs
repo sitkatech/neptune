@@ -110,7 +110,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public ViewTreatmentBMPModelingAttributesGridSpec(LinkGenerator linkGenerator,
             Dictionary<int, EFModels.Entities.Delineation?> delineationsDict, Dictionary<int, string?> watershedsDict,
             Dictionary<int, double> precipitationZonesDict,
-            Dictionary<int, double> hruCharacteristicsAcreageSumByTreatmentBMPDict)
+            Dictionary<int, double?> treatmentBMPModeledLandUseAreas)
         {
             var treatmentBMPTypeDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));
             var stormwaterJurisdictionDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(linkGenerator, t => t.Detail(UrlTemplate.Parameter1Int)));
@@ -121,7 +121,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             Add("Delineation Status", x=> delineationsDict[x.TreatmentBMPID]?.GetDelineationStatus(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(FieldDefinitionType.TreatmentBMPType.ToGridHeaderString("Type"), x => UrlTemplate.MakeHrefString(treatmentBMPTypeDetailUrlTemplate.ParameterReplace(x.TreatmentBMPTypeID), x.TreatmentBMPType.TreatmentBMPTypeName), 100, DhtmlxGridColumnFilterType.Text);
             Add("Delineation Area (ac)", x => delineationsDict[x.TreatmentBMPID]?.GetDelineationArea(), 100, DhtmlxGridColumnFormatType.Decimal);
-            Add(FieldDefinitionType.Area.ToGridHeaderString("Land Use Area (ac)"), x => hruCharacteristicsAcreageSumByTreatmentBMPDict.TryGetValue(x.TreatmentBMPID, out double value) ? value : null, 100, DhtmlxGridColumnFormatType.Decimal);
+            Add(FieldDefinitionType.Area.ToGridHeaderString("Land Use Area (ac)"), x => treatmentBMPModeledLandUseAreas.TryGetValue(x.TreatmentBMPID, out double? value) ? value : null, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(stormwaterJurisdictionDetailUrlTemplate.ParameterReplace(x.StormwaterJurisdictionID), x.StormwaterJurisdiction.Organization.OrganizationName), 170);
             Add(FieldDefinitionType.Watershed.ToGridHeaderString("Watershed"), x => x.WatershedID.HasValue ? watershedsDict[x.WatershedID.Value] : null, 170);
             Add(FieldDefinitionType.DesignStormwaterDepth.ToGridHeaderString("Design Stormwater Depth (in)"), x => x.PrecipitationZoneID.HasValue ? precipitationZonesDict[x.PrecipitationZoneID.Value] : null, 100, DhtmlxGridColumnFormatType.Decimal);
@@ -149,7 +149,8 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             Add(FieldDefinitionType.WaterQualityDetentionVolume.ToGridHeaderString("Extended Detention Surcharge Volume (cu ft)"), x => x.TreatmentBMPModelingAttributeTreatmentBMP?.WaterQualityDetentionVolume, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.WettedFootprint.ToGridHeaderString("Wetted Footprint (sq ft)"), x => x.TreatmentBMPModelingAttributeTreatmentBMP?.WettedFootprint, 100, DhtmlxGridColumnFormatType.Decimal);
             Add(FieldDefinitionType.WinterHarvestedWaterDemand.ToGridHeaderString("Winter Harvested Water Demand (gpd)"), x => x.TreatmentBMPModelingAttributeTreatmentBMP?.WinterHarvestedWaterDemand, 100, DhtmlxGridColumnFormatType.Decimal);
-            Add(FieldDefinitionType.UpstreamBMP.ToGridHeaderString("Upstream BMP"), x => delineationsDict[x.TreatmentBMPID] != null ? UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(delineationsDict[x.TreatmentBMPID].TreatmentBMPID), delineationsDict[x.TreatmentBMPID].TreatmentBMP.TreatmentBMPName) : new HtmlString(""), 170, DhtmlxGridColumnFilterType.Html);
+            Add(FieldDefinitionType.UpstreamBMP.ToGridHeaderString("Upstream BMP"), x => x.UpstreamBMPID != null && delineationsDict[x.UpstreamBMPID.Value] != null ? UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(delineationsDict[x.UpstreamBMPID.Value].TreatmentBMPID), delineationsDict[x.UpstreamBMPID.Value].TreatmentBMP.TreatmentBMPName) : new HtmlString(""), 170, DhtmlxGridColumnFilterType.Html);
+            Add(FieldDefinitionType.DownstreamOfNonModeledBMP.ToGridHeaderString("Downstream of Non-Modeled BMP?"), x => x.UpstreamBMPID != null && delineationsDict[x.UpstreamBMPID.Value] != null && !delineationsDict[x.UpstreamBMPID.Value].TreatmentBMP.TreatmentBMPType.IsAnalyzedInModelingModule ? new HtmlString("Yes") : new HtmlString("No"), 120);
             Add(FieldDefinitionType.DryWeatherFlowOverrideID.ToGridHeaderString("Dry Weather Flow Override"),
                 x => x.TreatmentBMPModelingAttributeTreatmentBMP?.DryWeatherFlowOverride != null
                     ? x.TreatmentBMPModelingAttributeTreatmentBMP.DryWeatherFlowOverride.DryWeatherFlowOverrideDisplayName
