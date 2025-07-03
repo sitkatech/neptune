@@ -235,7 +235,7 @@ namespace Neptune.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("treatment-facility-validate")]
-        //[SitkaAdminFeature]
+        [SitkaAdminFeature]
         public async Task<IActionResult> TreatmentFacility()
         {
             var modelingTreatmentBMPs = TreatmentBMPs.ListModelingTreatmentBMPs(DbContext);

@@ -394,8 +394,6 @@ namespace Neptune.EFModels.Entities
                 treatmentBMP.TreatmentBMPID = treatmentBMPUpsertDto.TreatmentBMPID;
             }
 
-            //TODO custom attributes here (specifically modeling attributes)
-
             return treatmentBMP;
         }
 

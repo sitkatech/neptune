@@ -4010,14 +4010,14 @@
         }
       }
     },
-    "/treatment-bmp-type-custom-attribute-types/{TreatmentBMPTypeCustomAttributeTypeID}": {
+    "/treatment-bmp-type-custom-attribute-types/{treatmentBMPTypeCustomAttributeTypeID}": {
       "get": {
         "tags": [
           "TreatmentBMPTypeCustomAttributeType"
         ],
         "parameters": [
           {
-            "name": "TreatmentBMPTypeCustomAttributeTypeID",
+            "name": "treatmentBMPTypeCustomAttributeTypeID",
             "in": "path",
             "required": true,
             "schema": {
@@ -4050,14 +4050,14 @@
         }
       }
     },
-    "/treatment-bmp-type-custom-attribute-types/purpose/{TreatmentBMPTypeCustomAttributeTypePurposeID}": {
+    "/treatment-bmp-type-custom-attribute-types/purpose/{customAttributeTypePurposeID}": {
       "get": {
         "tags": [
           "TreatmentBMPTypeCustomAttributeType"
         ],
         "parameters": [
           {
-            "name": "TreatmentBMPTypeCustomAttributeTypePurposeID",
+            "name": "customAttributeTypePurposeID",
             "in": "path",
             "required": true,
             "schema": {

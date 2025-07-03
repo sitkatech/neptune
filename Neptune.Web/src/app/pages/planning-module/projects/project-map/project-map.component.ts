@@ -4,7 +4,6 @@ import "leaflet.fullscreen";
 import { forkJoin } from "rxjs";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
-import { TreatmentBMPModelingAttributeDropdownItemDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
@@ -114,7 +113,7 @@ export class ProjectMapComponent implements OnInit {
                 delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                 boundingBox: this.projectService.projectsProjectIDBoundingBoxGet(this.projectID),
                 treatmentBMPTypes: this.treatmentBMPTypeService.treatmentBmpTypesGet(),
-                treatmentBMPTypeCustomAttributeTypes: this.treatmentBMPTypeCustomAttributeTypeService.purposeTreatmentBMPTypeCustomAttributeTypePurposeIDGet(
+                treatmentBMPTypeCustomAttributeTypes: this.treatmentBMPTypeCustomAttributeTypeService.treatmentBmpTypeCustomAttributeTypesPurposeCustomAttributeTypePurposeIDGet(
                     CustomAttributeTypePurposeEnum.Modeling
                 ),
             }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, treatmentBMPTypeCustomAttributeTypes }) => {

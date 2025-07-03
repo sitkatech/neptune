@@ -13,7 +13,6 @@ import { UnderlyingHydrologicSoilGroupEnum } from "src/app/shared/generated/enum
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
 import { ProjectUpsertDto } from "src/app/shared/generated/model/project-upsert-dto";
-import { TreatmentBMPModelingAttributeDropdownItemDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto";
 import { TreatmentBMPTypeWithModelingAttributesDto } from "src/app/shared/generated/model/treatment-bmp-type-with-modeling-attributes-dto";
 import { TreatmentBMPUpsertDto } from "src/app/shared/generated/model/treatment-bmp-upsert-dto";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
@@ -117,7 +116,6 @@ export class TreatmentBmpsComponent implements OnInit {
 
     public treatmentBMPModelingTypeEnum = TreatmentBMPModelingTypeEnum;
     public fieldDefinitionTypeEnum = FieldDefinitionTypeEnum;
-    public modelingAttributeDropdownItems: ReadonlyMap<string, TreatmentBMPModelingAttributeDropdownItemDto[]>;
     public treatmentBMPTypes: Array<TreatmentBMPTypeWithModelingAttributesDto>;
     public newTreatmentBMPIndex = -1;
     public isLoadingSubmit = false;
@@ -182,9 +180,10 @@ export class TreatmentBmpsComponent implements OnInit {
                         projectTreatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsAsUpsertDtosGet(this.projectID),
                         delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                         treatmentBMPTypes: this.treatmentBMPTypeService.treatmentBmpTypesGet(),
-                        treatmentBMPTypeCustomAttributeTypes: this.treatmentBMPTypeCustomAttributeTypeService.purposeTreatmentBMPTypeCustomAttributeTypePurposeIDGet(
-                            CustomAttributeTypePurposeEnum.Modeling
-                        ),
+                        treatmentBMPTypeCustomAttributeTypes:
+                            this.treatmentBMPTypeCustomAttributeTypeService.treatmentBmpTypeCustomAttributeTypesPurposeCustomAttributeTypePurposeIDGet(
+                                CustomAttributeTypePurposeEnum.Modeling
+                            ),
                     }).subscribe(({ projectTreatmentBMPs, delineations, treatmentBMPTypes, treatmentBMPTypeCustomAttributeTypes: treatmentBMPTypeCustomAttributeTypes }) => {
                         this.originalDoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
                         this.projectTreatmentBMPs = projectTreatmentBMPs;
