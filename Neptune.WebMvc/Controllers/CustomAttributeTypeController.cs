@@ -75,6 +75,12 @@ namespace Neptune.WebMvc.Controllers
                 return ViewEdit(viewModel, null);
             }
 
+            if (viewModel.CustomAttributeTypePurposeID is (int)CustomAttributeTypePurposeEnum.Modeling)
+            {
+                SetErrorForDisplay("Because of their sensitive nature and ability to impact large-scale calculations, Modeling attributes may not be added through this editor. Please contact a system administrator if you need to add Modeling attributes.");
+                return ViewEdit(viewModel, null);
+            }
+
             var customAttributeType = new CustomAttributeType();
             viewModel.UpdateModel(customAttributeType, CurrentPerson);
             await _dbContext.CustomAttributeTypes.AddAsync(customAttributeType);
@@ -176,6 +182,12 @@ namespace Neptune.WebMvc.Controllers
             if (!ModelState.IsValid)
             {
                 return ViewDeleteCustomAttributeType(customAttributeType, viewModel);
+            }
+
+            if (customAttributeType.CustomAttributeTypePurposeID == (int)CustomAttributeTypePurposeEnum.Modeling)
+            {
+                SetErrorForDisplay("Because of their necessity in internal system calculations, modeling attributes may not be removed from the system. Please contact an admin to make changes to attributes of this type.");
+                return new ModalDialogFormJsonResult();
             }
 
             var message = $"{FieldDefinitionType.CustomAttributeType.GetFieldDefinitionLabel()} '{customAttributeType.CustomAttributeTypeName}' successfully deleted!";
