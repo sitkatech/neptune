@@ -28,11 +28,6 @@
                             "src/assets",
                             {
                                 "glob": "**/*",
-                                "input": "./node_modules/leaflet/dist/images",
-                                "output": "./"
-                            },
-                            {
-                                "glob": "**/*",
                                 "input": "node_modules/tinymce",
                                 "output": "/tinymce/"
                             }
@@ -44,7 +39,7 @@
                             "node_modules/leaflet-draw/dist/leaflet.draw.css",
                             "node_modules/leaflet-loading/src/Control.Loading.css"
                         ],
-                        "scripts": ["node_modules/iso8601-js-period/iso8601.js", "src/scripts/leaflet.groupedlayercontrol.js"],
+                        "scripts": ["src/scripts/leaflet.groupedlayercontrol.js"],
                         "extractLicenses": false,
                         "sourceMap": true,
                         "optimization": false,

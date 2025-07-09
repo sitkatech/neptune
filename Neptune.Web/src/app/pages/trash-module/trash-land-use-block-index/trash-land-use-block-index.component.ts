@@ -26,20 +26,19 @@ import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wq
 @Component({
     selector: "trash-land-use-block-index",
     imports: [
-    PageHeaderComponent,
-    AlertDisplayComponent,
-    NeptuneGridComponent,
-    AsyncPipe,
-    LoadingDirective,
-    IconComponent,
-    HybridMapGridComponent,
-    SelectedLandUseBlockLayerComponent,
-    JurisdictionsLayerComponent,
-    WqmpsLayerComponent,
-    DelineationsLayerComponent
-],
+        PageHeaderComponent,
+        AlertDisplayComponent,
+        AsyncPipe,
+        LoadingDirective,
+        IconComponent,
+        HybridMapGridComponent,
+        SelectedLandUseBlockLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        DelineationsLayerComponent,
+    ],
     templateUrl: "./trash-land-use-block-index.component.html",
-    styleUrl: "./trash-land-use-block-index.component.scss"
+    styleUrl: "./trash-land-use-block-index.component.scss",
 })
 export class TrashLandUseBlockIndexComponent {
     public landUseBlocks$: Observable<LandUseBlockGridDto[]>;

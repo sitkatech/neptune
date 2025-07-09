@@ -1,4 +1,5 @@
 .gitignore
+api.base.service.ts
 api.module.ts
 api/custom-rich-text.service.ts
 api/delineation.service.ts
@@ -98,4 +99,5 @@ model/treatment-bmp-type-with-modeling-attributes-dto.ts
 model/treatment-bmp-upsert-dto.ts
 model/treatment-bmphru-characteristics-summary-simple-dto.ts
 model/workflow-step-status.ts
+param.ts
 variables.ts

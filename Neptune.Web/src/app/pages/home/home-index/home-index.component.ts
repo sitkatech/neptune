@@ -8,14 +8,13 @@ import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-t
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { AsyncPipe } from "@angular/common";
 import { Observable } from "rxjs";
-import { HeaderNavComponent } from "../../../shared/components/header-nav/header-nav.component";
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
 
 @Component({
     selector: "app-home-index",
     templateUrl: "./home-index.component.html",
     styleUrls: ["./home-index.component.scss"],
-    imports: [AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe, HeaderNavComponent, IconComponent]
+    imports: [AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe, IconComponent],
 })
 export class HomeIndexComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;

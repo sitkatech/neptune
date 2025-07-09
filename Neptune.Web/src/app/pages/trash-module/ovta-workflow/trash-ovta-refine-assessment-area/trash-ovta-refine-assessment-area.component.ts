@@ -30,19 +30,18 @@ import { WfsService } from "src/app/shared/services/wfs.service";
 @Component({
     selector: "trash-ovta-refine-assessment-area",
     imports: [
-    PageHeaderComponent,
-    NeptuneMapComponent,
-    AlertDisplayComponent,
-    OvtaObservationLayerComponent,
-    AsyncPipe,
-    LoadingDirective,
-    WorkflowBodyComponent,
-    LandUseBlockLayerComponent,
-    ParcelLayerComponent,
-    TransectLineLayerComponent
-],
+        PageHeaderComponent,
+        NeptuneMapComponent,
+        AlertDisplayComponent,
+        OvtaObservationLayerComponent,
+        AsyncPipe,
+        WorkflowBodyComponent,
+        LandUseBlockLayerComponent,
+        ParcelLayerComponent,
+        TransectLineLayerComponent,
+    ],
     templateUrl: "./trash-ovta-refine-assessment-area.component.html",
-    styleUrl: "./trash-ovta-refine-assessment-area.component.scss"
+    styleUrl: "./trash-ovta-refine-assessment-area.component.scss",
 })
 export class TrashOvtaRefineAssessmentAreaComponent {
     public customRichTextTypeID = NeptunePageTypeEnum.EditOVTAArea;
