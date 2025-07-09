@@ -19,9 +19,7 @@ namespace Neptune.EFModels.Entities
         public static readonly UnderlyingHydrologicSoilGroupLiner Liner = UnderlyingHydrologicSoilGroupLiner.Instance;
 
         public static readonly List<UnderlyingHydrologicSoilGroup> All;
-        public static readonly List<UnderlyingHydrologicSoilGroupSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, UnderlyingHydrologicSoilGroup> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, UnderlyingHydrologicSoilGroupSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +27,7 @@ namespace Neptune.EFModels.Entities
         static UnderlyingHydrologicSoilGroup()
         {
             All = new List<UnderlyingHydrologicSoilGroup> { A, B, C, D, Liner };
-            AllAsSimpleDto = new List<UnderlyingHydrologicSoilGroupSimpleDto> { A.AsSimpleDto(), B.AsSimpleDto(), C.AsSimpleDto(), D.AsSimpleDto(), Liner.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, UnderlyingHydrologicSoilGroup>(All.ToDictionary(x => x.UnderlyingHydrologicSoilGroupID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, UnderlyingHydrologicSoilGroupSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.UnderlyingHydrologicSoilGroupID));
         }
 
         /// <summary>

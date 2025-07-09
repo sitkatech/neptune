@@ -26,7 +26,6 @@ import { OnlandVisualTrashAssessmentRefineAreaDto } from '../model/onland-visual
 import { OnlandVisualTrashAssessmentReviewAndFinalizeDto } from '../model/onland-visual-trash-assessment-review-and-finalize-dto';
 import { OnlandVisualTrashAssessmentSimpleDto } from '../model/onland-visual-trash-assessment-simple-dto';
 import { OnlandVisualTrashAssessmentWorkflowProgressDto } from '../model/onland-visual-trash-assessment-workflow-progress-dto';
-import { PreliminarySourceIdentificationTypeSimpleDto } from '../model/preliminary-source-identification-type-simple-dto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -679,44 +678,6 @@ export class OnlandVisualTrashAssessmentService {
 
         return this.httpClient.post<OnlandVisualTrashAssessmentSimpleDto>(`${this.basePath}/onland-visual-trash-assessments`,
             onlandVisualTrashAssessmentSimpleDto,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        ).pipe(catchError((error: any) => { return this.apiService.handleError(error)}));
-    }
-
-    /**
-     * 
-     * 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public onlandVisualTrashAssessmentsPreliminarySourceIdentificationTypesGet(observe?: 'body', reportProgress?: boolean): Observable<Array<PreliminarySourceIdentificationTypeSimpleDto>>;
-    public onlandVisualTrashAssessmentsPreliminarySourceIdentificationTypesGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PreliminarySourceIdentificationTypeSimpleDto>>>;
-    public onlandVisualTrashAssessmentsPreliminarySourceIdentificationTypesGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PreliminarySourceIdentificationTypeSimpleDto>>>;
-    public onlandVisualTrashAssessmentsPreliminarySourceIdentificationTypesGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'text/plain',
-            'application/json',
-            'text/json',
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<Array<PreliminarySourceIdentificationTypeSimpleDto>>(`${this.basePath}/onland-visual-trash-assessments/preliminary-source-identification-types`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

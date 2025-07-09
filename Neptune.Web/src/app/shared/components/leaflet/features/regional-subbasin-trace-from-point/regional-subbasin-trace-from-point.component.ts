@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, HostListener, ChangeDetectorRef, ViewChild, ElementRef, Renderer2 } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ChangeDetectorRef, Renderer2 } from "@angular/core";
 import * as L from "leaflet";
 import "leaflet-geometryutil";
 import "leaflet-arrowheads";

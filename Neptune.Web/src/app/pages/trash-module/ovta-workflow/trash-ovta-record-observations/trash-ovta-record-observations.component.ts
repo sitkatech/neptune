@@ -11,7 +11,7 @@ import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { FormFieldComponent, FormFieldType } from "../../../../shared/components/form-field/form-field.component";
+import { FormFieldComponent, FormFieldType } from "src/app/shared/components/forms/form-field/form-field.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { Alert } from "src/app/shared/models/alert";

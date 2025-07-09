@@ -21,9 +21,7 @@ namespace Neptune.EFModels.Entities
         public static readonly SupportRequestTypeRequestToChangeUserAccountPrivileges RequestToChangeUserAccountPrivileges = SupportRequestTypeRequestToChangeUserAccountPrivileges.Instance;
 
         public static readonly List<SupportRequestType> All;
-        public static readonly List<SupportRequestTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, SupportRequestType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, SupportRequestTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -31,9 +29,7 @@ namespace Neptune.EFModels.Entities
         static SupportRequestType()
         {
             All = new List<SupportRequestType> { ReportBug, ForgotLoginInfo, NewOrganization, ProvideFeedback, RequestOrganizationNameChange, Other, RequestToChangeUserAccountPrivileges };
-            AllAsSimpleDto = new List<SupportRequestTypeSimpleDto> { ReportBug.AsSimpleDto(), ForgotLoginInfo.AsSimpleDto(), NewOrganization.AsSimpleDto(), ProvideFeedback.AsSimpleDto(), RequestOrganizationNameChange.AsSimpleDto(), Other.AsSimpleDto(), RequestToChangeUserAccountPrivileges.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, SupportRequestType>(All.ToDictionary(x => x.SupportRequestTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, SupportRequestTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.SupportRequestTypeID));
         }
 
         /// <summary>

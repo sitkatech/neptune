@@ -16,9 +16,7 @@ namespace Neptune.EFModels.Entities
         public static readonly WaterQualityManagementPlanStatusInactive Inactive = WaterQualityManagementPlanStatusInactive.Instance;
 
         public static readonly List<WaterQualityManagementPlanStatus> All;
-        public static readonly List<WaterQualityManagementPlanStatusSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanStatus> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanStatusSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -26,9 +24,7 @@ namespace Neptune.EFModels.Entities
         static WaterQualityManagementPlanStatus()
         {
             All = new List<WaterQualityManagementPlanStatus> { Active, Inactive };
-            AllAsSimpleDto = new List<WaterQualityManagementPlanStatusSimpleDto> { Active.AsSimpleDto(), Inactive.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanStatus>(All.ToDictionary(x => x.WaterQualityManagementPlanStatusID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanStatusSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.WaterQualityManagementPlanStatusID));
         }
 
         /// <summary>

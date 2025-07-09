@@ -16,9 +16,7 @@ namespace Neptune.EFModels.Entities
         public static readonly HydromodificationAppliesTypeExempt Exempt = HydromodificationAppliesTypeExempt.Instance;
 
         public static readonly List<HydromodificationAppliesType> All;
-        public static readonly List<HydromodificationAppliesTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, HydromodificationAppliesType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, HydromodificationAppliesTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -26,9 +24,7 @@ namespace Neptune.EFModels.Entities
         static HydromodificationAppliesType()
         {
             All = new List<HydromodificationAppliesType> { Applicable, Exempt };
-            AllAsSimpleDto = new List<HydromodificationAppliesTypeSimpleDto> { Applicable.AsSimpleDto(), Exempt.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, HydromodificationAppliesType>(All.ToDictionary(x => x.HydromodificationAppliesTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, HydromodificationAppliesTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.HydromodificationAppliesTypeID));
         }
 
         /// <summary>

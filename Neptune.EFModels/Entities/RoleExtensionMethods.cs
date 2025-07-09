@@ -7,7 +7,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public static partial class RoleExtensionMethods
+    public static class RoleExtensionMethods
     {
         public static RoleSimpleDto AsSimpleDto(this Role role)
         {
@@ -16,7 +16,6 @@ namespace Neptune.EFModels.Entities
                 RoleID = role.RoleID,
                 RoleName = role.RoleName,
                 RoleDisplayName = role.RoleDisplayName,
-                RoleDescription = role.RoleDescription
             };
             return dto;
         }

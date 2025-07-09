@@ -2,7 +2,7 @@
 
 namespace Neptune.EFModels.Entities
 {
-    public static partial class ProjectDocumentExtensionMethods
+    public static class ProjectDocumentExtensionMethods
     {
         public static ProjectDocumentDto AsDto(this ProjectDocument projectDocument)
         {

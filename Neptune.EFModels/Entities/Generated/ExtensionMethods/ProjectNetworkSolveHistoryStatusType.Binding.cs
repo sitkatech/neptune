@@ -17,9 +17,7 @@ namespace Neptune.EFModels.Entities
         public static readonly ProjectNetworkSolveHistoryStatusTypeFailed Failed = ProjectNetworkSolveHistoryStatusTypeFailed.Instance;
 
         public static readonly List<ProjectNetworkSolveHistoryStatusType> All;
-        public static readonly List<ProjectNetworkSolveHistoryStatusTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, ProjectNetworkSolveHistoryStatusType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, ProjectNetworkSolveHistoryStatusTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -27,9 +25,7 @@ namespace Neptune.EFModels.Entities
         static ProjectNetworkSolveHistoryStatusType()
         {
             All = new List<ProjectNetworkSolveHistoryStatusType> { Queued, Succeeded, Failed };
-            AllAsSimpleDto = new List<ProjectNetworkSolveHistoryStatusTypeSimpleDto> { Queued.AsSimpleDto(), Succeeded.AsSimpleDto(), Failed.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, ProjectNetworkSolveHistoryStatusType>(All.ToDictionary(x => x.ProjectNetworkSolveHistoryStatusTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, ProjectNetworkSolveHistoryStatusTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.ProjectNetworkSolveHistoryStatusTypeID));
         }
 
         /// <summary>

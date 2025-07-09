@@ -16,9 +16,7 @@ namespace Neptune.EFModels.Entities
         public static readonly StormwaterJurisdictionPublicBMPVisibilityTypeNone None = StormwaterJurisdictionPublicBMPVisibilityTypeNone.Instance;
 
         public static readonly List<StormwaterJurisdictionPublicBMPVisibilityType> All;
-        public static readonly List<StormwaterJurisdictionPublicBMPVisibilityTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, StormwaterJurisdictionPublicBMPVisibilityType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, StormwaterJurisdictionPublicBMPVisibilityTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -26,9 +24,7 @@ namespace Neptune.EFModels.Entities
         static StormwaterJurisdictionPublicBMPVisibilityType()
         {
             All = new List<StormwaterJurisdictionPublicBMPVisibilityType> { VerifiedOnly, None };
-            AllAsSimpleDto = new List<StormwaterJurisdictionPublicBMPVisibilityTypeSimpleDto> { VerifiedOnly.AsSimpleDto(), None.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, StormwaterJurisdictionPublicBMPVisibilityType>(All.ToDictionary(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, StormwaterJurisdictionPublicBMPVisibilityTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeID));
         }
 
         /// <summary>

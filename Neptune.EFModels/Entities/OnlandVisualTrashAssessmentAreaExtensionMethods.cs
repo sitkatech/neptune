@@ -2,8 +2,22 @@
 
 namespace Neptune.EFModels.Entities;
 
-public static partial class OnlandVisualTrashAssessmentAreaExtensionMethods
+public static class OnlandVisualTrashAssessmentAreaExtensionMethods
 {
+    public static OnlandVisualTrashAssessmentAreaSimpleDto AsSimpleDto(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+    {
+        var dto = new OnlandVisualTrashAssessmentAreaSimpleDto()
+        {
+            OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID,
+            OnlandVisualTrashAssessmentAreaName = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName,
+            StormwaterJurisdictionID = onlandVisualTrashAssessmentArea.StormwaterJurisdictionID,
+            OnlandVisualTrashAssessmentBaselineScoreID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID,
+            AssessmentAreaDescription = onlandVisualTrashAssessmentArea.AssessmentAreaDescription,
+            OnlandVisualTrashAssessmentProgressScoreID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID
+        };
+        return dto;
+    }
+
     public static OnlandVisualTrashAssessmentAreaGridDto AsGridDto(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
     {
         var dto = new OnlandVisualTrashAssessmentAreaGridDto()

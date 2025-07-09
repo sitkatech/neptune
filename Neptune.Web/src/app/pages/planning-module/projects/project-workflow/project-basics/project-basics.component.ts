@@ -18,8 +18,8 @@ import { PageHeaderComponent } from "src/app/shared/components/page-header/page-
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { routeParams } from "src/app/app.routes";
-import { FormFieldComponent, FormFieldType } from "src/app/shared/components/form-field/form-field.component";
-import { SelectDropdownOption } from "src/app/shared/components//form-field/form-field.component";
+import { FormFieldComponent, FormFieldType } from "src/app/shared/components/forms/form-field/form-field.component";
+import { SelectDropdownOption } from "src/app/shared/components/forms/form-field/form-field.component";
 import { ProjectWorkflowProgressService } from "src/app/shared/services/project-workflow-progress.service";
 import { AuthenticationService } from "src/app/services/authentication.service";
 

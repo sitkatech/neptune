@@ -1,6 +1,7 @@
 export * from '././area-based-acre-calculations-dto';
 export * from '././bounding-box-dto';
 export * from '././coordinate';
+export * from '././coordinate-dto';
 export * from '././coordinate-sequence';
 export * from '././coordinate-sequence-factory';
 export * from '././delineation-dto';
@@ -48,7 +49,6 @@ export * from '././person-simple-dto';
 export * from '././point';
 export * from '././precision-model';
 export * from '././precision-models';
-export * from '././preliminary-source-identification-type-simple-dto';
 export * from '././problem-details';
 export * from '././project-document-dto';
 export * from '././project-document-update-dto';

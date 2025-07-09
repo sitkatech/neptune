@@ -1,6 +1,6 @@
 import { Component, ComponentRef, OnInit } from "@angular/core";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { FormFieldComponent, FormFieldType } from "src/app/shared/components/form-field/form-field.component";
+import { FormFieldComponent, FormFieldType } from "src/app/shared/components/forms/form-field/form-field.component";
 import { ModalComponent } from "src/app/shared/components/modal/modal.component";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { ModalService } from "src/app/shared/services/modal/modal.service";

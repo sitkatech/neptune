@@ -27,7 +27,9 @@ import { catchError } from 'rxjs/operators';
 import { ApiService } from '../../services';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class RegionalSubbasinService {
 
     protected basePath = 'http://localhost';
@@ -90,7 +92,7 @@ export class RegionalSubbasinService {
         const consumes: string[] = [
             'application/json',
             'text/json',
-            'application/*+json',
+            'application/_*+json',
         ];
         const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
         if (httpContentTypeSelected != undefined) {

@@ -36,9 +36,7 @@ namespace Neptune.EFModels.Entities
         public static readonly TreatmentBMPModelingTypeWetDetentionBasin WetDetentionBasin = TreatmentBMPModelingTypeWetDetentionBasin.Instance;
 
         public static readonly List<TreatmentBMPModelingType> All;
-        public static readonly List<TreatmentBMPModelingTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, TreatmentBMPModelingType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, TreatmentBMPModelingTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -46,9 +44,7 @@ namespace Neptune.EFModels.Entities
         static TreatmentBMPModelingType()
         {
             All = new List<TreatmentBMPModelingType> { BioinfiltrationBioretentionWithRaisedUnderdrain, BioretentionWithNoUnderdrain, BioretentionWithUnderdrainAndImperviousLiner, CisternsForHarvestAndUse, ConstructedWetland, DryExtendedDetentionBasin, DryWeatherTreatmentSystems, Drywell, FlowDurationControlBasin, FlowDurationControlTank, HydrodynamicSeparator, InfiltrationBasin, InfiltrationTrench, LowFlowDiversions, PermeablePavement, ProprietaryBiotreatment, ProprietaryTreatmentControl, SandFilters, UndergroundInfiltration, VegetatedFilterStrip, VegetatedSwale, WetDetentionBasin };
-            AllAsSimpleDto = new List<TreatmentBMPModelingTypeSimpleDto> { BioinfiltrationBioretentionWithRaisedUnderdrain.AsSimpleDto(), BioretentionWithNoUnderdrain.AsSimpleDto(), BioretentionWithUnderdrainAndImperviousLiner.AsSimpleDto(), CisternsForHarvestAndUse.AsSimpleDto(), ConstructedWetland.AsSimpleDto(), DryExtendedDetentionBasin.AsSimpleDto(), DryWeatherTreatmentSystems.AsSimpleDto(), Drywell.AsSimpleDto(), FlowDurationControlBasin.AsSimpleDto(), FlowDurationControlTank.AsSimpleDto(), HydrodynamicSeparator.AsSimpleDto(), InfiltrationBasin.AsSimpleDto(), InfiltrationTrench.AsSimpleDto(), LowFlowDiversions.AsSimpleDto(), PermeablePavement.AsSimpleDto(), ProprietaryBiotreatment.AsSimpleDto(), ProprietaryTreatmentControl.AsSimpleDto(), SandFilters.AsSimpleDto(), UndergroundInfiltration.AsSimpleDto(), VegetatedFilterStrip.AsSimpleDto(), VegetatedSwale.AsSimpleDto(), WetDetentionBasin.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPModelingType>(All.ToDictionary(x => x.TreatmentBMPModelingTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPModelingTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.TreatmentBMPModelingTypeID));
         }
 
         /// <summary>

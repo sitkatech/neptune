@@ -36,9 +36,7 @@ namespace Neptune.EFModels.Entities
         public static readonly MeasurementUnitTypeCubicYards CubicYards = MeasurementUnitTypeCubicYards.Instance;
 
         public static readonly List<MeasurementUnitType> All;
-        public static readonly List<MeasurementUnitTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, MeasurementUnitType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, MeasurementUnitTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -46,9 +44,7 @@ namespace Neptune.EFModels.Entities
         static MeasurementUnitType()
         {
             All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Count, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds, PercentDecline, PercentIncrease, PercentDeviation, CubicFeet, Gallons, Minutes, CubicFeetPerSecond, GallonsPerDay, Pounds, Tons, CubicYards };
-            AllAsSimpleDto = new List<MeasurementUnitTypeSimpleDto> { Acres.AsSimpleDto(), SquareFeet.AsSimpleDto(), Kilogram.AsSimpleDto(), Count.AsSimpleDto(), Percent.AsSimpleDto(), MilligamsPerLiter.AsSimpleDto(), Meters.AsSimpleDto(), Feet.AsSimpleDto(), Inches.AsSimpleDto(), InchesPerHour.AsSimpleDto(), Seconds.AsSimpleDto(), PercentDecline.AsSimpleDto(), PercentIncrease.AsSimpleDto(), PercentDeviation.AsSimpleDto(), CubicFeet.AsSimpleDto(), Gallons.AsSimpleDto(), Minutes.AsSimpleDto(), CubicFeetPerSecond.AsSimpleDto(), GallonsPerDay.AsSimpleDto(), Pounds.AsSimpleDto(), Tons.AsSimpleDto(), CubicYards.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, MeasurementUnitType>(All.ToDictionary(x => x.MeasurementUnitTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, MeasurementUnitTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.MeasurementUnitTypeID));
         }
 
         /// <summary>

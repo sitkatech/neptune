@@ -965,44 +965,6 @@
         }
       }
     },
-    "/onland-visual-trash-assessments/preliminary-source-identification-types": {
-      "get": {
-        "tags": [
-          "OnlandVisualTrashAssessment"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PreliminarySourceIdentificationTypeSimpleDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PreliminarySourceIdentificationTypeSimpleDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PreliminarySourceIdentificationTypeSimpleDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/progress": {
       "get": {
         "tags": [
@@ -5879,28 +5841,6 @@
           "Fixed"
         ],
         "type": "string"
-      },
-      "PreliminarySourceIdentificationTypeSimpleDto": {
-        "type": "object",
-        "properties": {
-          "PreliminarySourceIdentificationTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "PreliminarySourceIdentificationTypeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "PreliminarySourceIdentificationTypeDisplayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "PreliminarySourceIdentificationCategoryID": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
       },
       "ProblemDetails": {
         "type": "object",

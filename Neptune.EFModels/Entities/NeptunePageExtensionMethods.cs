@@ -2,7 +2,7 @@
 
 namespace Neptune.EFModels.Entities
 {
-    public static partial class NeptunePageExtensionMethods
+    public static class NeptunePageExtensionMethods
     {
         public static NeptunePageDto AsDto(this NeptunePage neptunePage)
         {
