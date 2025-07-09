@@ -1,11 +1,11 @@
-import { CommonModule } from "@angular/common";
+
 import { Component, OnChanges } from "@angular/core";
 import { environment } from "src/environments/environment";
 import * as L from "leaflet";
 import { MapLayerBase } from "../map-layer-base.component";
 @Component({
     selector: "regional-subbasins-layer",
-    imports: [CommonModule],
+    imports: [],
     templateUrl: "./regional-subbasins-layer.component.html",
     styleUrls: ["./regional-subbasins-layer.component.scss"]
 })

@@ -1,4 +1,4 @@
-import { Component, Inject, Renderer2, ViewContainerRef } from "@angular/core";
+import { Component, Inject, Renderer2, ViewContainerRef, DOCUMENT } from "@angular/core";
 import { OAuthService } from "angular-oauth2-oidc";
 import { JwksValidationHandler } from "angular-oauth2-oidc-jwks";
 import { environment } from "../environments/environment";
@@ -6,13 +6,13 @@ import { Router, RouteConfigLoadStart, RouteConfigLoadEnd, NavigationEnd, Router
 import { BusyService } from "./shared/services";
 import { AuthenticationService } from "./services/authentication.service";
 import { Title } from "@angular/platform-browser";
-import { DOCUMENT, NgIf } from "@angular/common";
+
 
 @Component({
     selector: "app-root",
     templateUrl: "./app.component.html",
     styleUrls: ["./app.component.scss"],
-    imports: [RouterOutlet, NgIf]
+    imports: [RouterOutlet]
 })
 export class AppComponent {
     public isIframe = false;

@@ -5,7 +5,7 @@ import { routeParams } from "src/app/app.routes";
 import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
 import { WorkflowNavComponent } from "../../../../shared/components/workflow-nav/workflow-nav.component";
 import { WorkflowNavItemComponent } from "../../../../shared/components/workflow-nav/workflow-nav-item/workflow-nav-item.component";
-import { AsyncPipe, DatePipe, NgIf } from "@angular/common";
+import { AsyncPipe, DatePipe } from "@angular/common";
 import { OnlandVisualTrashAssessmentWorkflowProgressDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-workflow-progress-dto";
 import { OnlandVisualTrashAssessmentStatusEnum } from "src/app/shared/generated/enum/onland-visual-trash-assessment-status-enum";
 import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
@@ -17,7 +17,7 @@ import { IconComponent } from "../../../../shared/components/icon/icon.component
 
 @Component({
     selector: "trash-ovta-wizard-sidebar",
-    imports: [WorkflowNavComponent, WorkflowNavItemComponent, NgIf, AsyncPipe, RouterLink, IconComponent],
+    imports: [WorkflowNavComponent, WorkflowNavItemComponent, AsyncPipe, RouterLink, IconComponent],
     templateUrl: "./trash-ovta-wizard-sidebar.component.html",
     styleUrl: "./trash-ovta-wizard-sidebar.component.scss"
 })

@@ -7,14 +7,14 @@ import { RoleEnum } from "src/app/shared/generated/enum/role-enum";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { Observable, tap } from "rxjs";
 
 @Component({
     selector: "planning-home",
     templateUrl: "./planning-home.component.html",
     styleUrls: ["./planning-home.component.scss"],
-    imports: [NgIf, AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe]
+    imports: [AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe]
 })
 export class PLanningHomeComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;

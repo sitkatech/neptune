@@ -16,7 +16,7 @@ import { AttachmentsDisplayComponent } from "src/app/pages/planning-module/proje
 import { ModelResultsComponent } from "src/app/pages/planning-module/projects/model-results/model-results.component";
 import { ProjectMapComponent } from "src/app/pages/planning-module/projects/project-map/project-map.component";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
-import { NgIf, DatePipe, AsyncPipe } from "@angular/common";
+import { DatePipe, AsyncPipe } from "@angular/common";
 import { routeParams } from "src/app/app.routes";
 import { Observable, combineLatest, map, switchMap } from "rxjs";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
@@ -27,18 +27,17 @@ import { AlertDisplayComponent } from "src/app/shared/components/alert-display/a
     templateUrl: "./project-detail.component.html",
     styleUrls: ["./project-detail.component.scss"],
     imports: [
-        NgIf,
-        RouterLink,
-        FieldDefinitionComponent,
-        ProjectMapComponent,
-        ModelResultsComponent,
-        AttachmentsDisplayComponent,
-        GrantScoresComponent,
-        DatePipe,
-        AsyncPipe,
-        PageHeaderComponent,
-        AlertDisplayComponent,
-    ]
+    RouterLink,
+    FieldDefinitionComponent,
+    ProjectMapComponent,
+    ModelResultsComponent,
+    AttachmentsDisplayComponent,
+    GrantScoresComponent,
+    DatePipe,
+    AsyncPipe,
+    PageHeaderComponent,
+    AlertDisplayComponent
+]
 })
 export class ProjectDetailComponent implements OnInit {
     public currentProject$: Observable<ProjectDto>;

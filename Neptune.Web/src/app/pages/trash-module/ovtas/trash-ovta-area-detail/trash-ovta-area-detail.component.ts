@@ -6,7 +6,7 @@ import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated
 import { OnlandVisualTrashAssessmentAreaDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-detail-dto";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
-import { AsyncPipe, DatePipe, NgIf } from "@angular/common";
+import { AsyncPipe, DatePipe } from "@angular/common";
 import { FieldDefinitionComponent } from "../../../../shared/components/field-definition/field-definition.component";
 import { NeptuneGridComponent } from "../../../../shared/components/neptune-grid/neptune-grid.component";
 import { ColDef } from "ag-grid-community";
@@ -32,18 +32,17 @@ import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/la
 @Component({
     selector: "trash-ovta-area-detail",
     imports: [
-        PageHeaderComponent,
-        AlertDisplayComponent,
-        NgIf,
-        AsyncPipe,
-        FieldDefinitionComponent,
-        NeptuneGridComponent,
-        NeptuneMapComponent,
-        TransectLineLayerComponent,
-        RouterLink,
-        LoadingDirective,
-        OvtaAreaLayerComponent,
-    ],
+    PageHeaderComponent,
+    AlertDisplayComponent,
+    AsyncPipe,
+    FieldDefinitionComponent,
+    NeptuneGridComponent,
+    NeptuneMapComponent,
+    TransectLineLayerComponent,
+    RouterLink,
+    LoadingDirective,
+    OvtaAreaLayerComponent
+],
     templateUrl: "./trash-ovta-area-detail.component.html",
     styleUrl: "./trash-ovta-area-detail.component.scss"
 })

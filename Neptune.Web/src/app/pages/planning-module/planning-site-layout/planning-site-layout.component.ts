@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { PersonDto } from "src/app/shared/generated/model/person-dto";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
@@ -13,7 +13,7 @@ import { environment } from "src/environments/environment";
     selector: "planning-site-layout",
     templateUrl: "./planning-site-layout.component.html",
     styleUrls: ["./planning-site-layout.component.scss"],
-    imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, AsyncPipe, DropdownToggleDirective, IconComponent, HeaderNavComponent]
+    imports: [RouterLink, RouterLinkActive, RouterOutlet, AsyncPipe, DropdownToggleDirective, IconComponent, HeaderNavComponent]
 })
 export class PlanningSiteLayoutComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;

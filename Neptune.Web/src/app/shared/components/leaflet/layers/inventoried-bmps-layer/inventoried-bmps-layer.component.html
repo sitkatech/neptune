@@ -1,9 +1,10 @@
-<ng-container *ngIf="treatmentBMPs$ | async"> </ng-container>
+@if (treatmentBMPs$ | async) {
+}
 <ng-template #layerName>
-    <span>
-        Inventoried BMP Locations
-    </span>
+  <span>
+    Inventoried BMP Locations
+  </span>
 </ng-template>
 <ng-template #legend>
-    <span><img src="./assets/main/map-icons/marker-icon-orange.png" style="height: 17px; margin: 3px" /> BMP (Verified)</span>
+  <span><img src="./assets/main/map-icons/marker-icon-orange.png" style="height: 17px; margin: 3px" /> BMP (Verified)</span>
 </ng-template>

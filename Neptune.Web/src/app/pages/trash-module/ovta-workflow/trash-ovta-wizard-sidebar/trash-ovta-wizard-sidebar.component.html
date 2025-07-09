@@ -1,66 +1,64 @@
-<ng-container *ngIf="progress$ | async as progressDto">
-    <div class="sidebar-header">
-        <h5 class="sidebar-title">
-            <div>
-                <p class="ovta-label">
-                    Onland Visual Trash Assessment
-                    <a
-                        *ngIf="progressDto?.OnlandVisualTrashAssessmentStatus?.OnlandVisualTrashAssessmentStatusID != OnlandVisualTrashAssessmentStatus.Complete"
-                        class="ml-2 delete"
-                        title="Delete OVTA"
-                        (click)="deleteOVTA(progressDto.OnlandVisualTrashAssessmentID, progressDto.CreatedDate)">
-                        <icon icon="Delete"></icon>
-                    </a>
-                </p>
-                <div *ngIf="progressDto?.OnlandVisualTrashAssessmentAreaID; then hasName; else noName"></div>
-                <ng-template #hasName>
-                    <p>
-                        <a class="assessment-link" [routerLink]="['/trash/onland-visual-trash-assessment-areas', progressDto.OnlandVisualTrashAssessmentAreaID]">
-                            <strong>{{ progressDto.OnlandVisualTrashAssessmentAreaName }}</strong>
-                        </a>
-                    </p>
-                </ng-template>
-                <ng-template #noName>
-                    <p><strong>New Assessment Area</strong></p>
-                </ng-template>
-            </div>
-        </h5>
-    </div>
-
-    <workflow-nav>
-        <workflow-nav-item
-            [navRouterLink]="['instructions']"
-            [complete]="progressDto.Steps.Instructions.Completed"
-            [disabled]="progressDto.Steps.Instructions.Disabled"
-            [required]="false">
-            Instructions
-        </workflow-nav-item>
-        <workflow-nav-item [navRouterLink]="['initiate-ovta']" [complete]="progressDto.Steps.InitiateOvta.Completed" [disabled]="progressDto.Steps.InitiateOvta.Disabled">
-            Initiate OVTA
-        </workflow-nav-item>
-        <workflow-nav-item
-            [navRouterLink]="['record-observations']"
-            [complete]="progressDto.Steps.RecordObservations.Completed"
-            [disabled]="progressDto.Steps.RecordObservations.Disabled">
-            Record Observations
-        </workflow-nav-item>
-        <workflow-nav-item
-            [navRouterLink]="['add-or-remove-parcels']"
-            [complete]="progressDto.Steps.AddOrRemoveParcels.Completed"
-            [disabled]="progressDto.Steps.AddOrRemoveParcels.Disabled">
-            Add or Remove Parcels
-        </workflow-nav-item>
-        <workflow-nav-item
-            [navRouterLink]="['refine-assessment-area']"
-            [complete]="progressDto.Steps.RefineAssessmentArea.Completed"
-            [disabled]="progressDto.Steps.RefineAssessmentArea.Disabled">
-            Refine Assessment Area
-        </workflow-nav-item>
-        <workflow-nav-item
-            [navRouterLink]="['review-and-finalize']"
-            [complete]="progressDto.Steps.ReviewAndFinalize.Completed"
-            [disabled]="progressDto.Steps.ReviewAndFinalize.Disabled">
-            Review and Finalize
-        </workflow-nav-item>
-    </workflow-nav>
-</ng-container>
+@if (progress$ | async; as progressDto) {
+  <div class="sidebar-header">
+    <h5 class="sidebar-title">
+      <div>
+        <p class="ovta-label">
+          Onland Visual Trash Assessment
+          @if (progressDto?.OnlandVisualTrashAssessmentStatus?.OnlandVisualTrashAssessmentStatusID != OnlandVisualTrashAssessmentStatus.Complete) {
+            <a
+              class="ml-2 delete"
+              title="Delete OVTA"
+              (click)="deleteOVTA(progressDto.OnlandVisualTrashAssessmentID, progressDto.CreatedDate)">
+              <icon icon="Delete"></icon>
+            </a>
+          }
+        </p>
+        @if (progressDto?.OnlandVisualTrashAssessmentAreaID) {
+          <p>
+            <a class="assessment-link" [routerLink]="['/trash/onland-visual-trash-assessment-areas', progressDto.OnlandVisualTrashAssessmentAreaID]">
+              <strong>{{ progressDto.OnlandVisualTrashAssessmentAreaName }}</strong>
+            </a>
+          </p>
+        } @else {
+          <p><strong>New Assessment Area</strong></p>
+        }
+      </div>
+    </h5>
+  </div>
+  <workflow-nav>
+    <workflow-nav-item
+      [navRouterLink]="['instructions']"
+      [complete]="progressDto.Steps.Instructions.Completed"
+      [disabled]="progressDto.Steps.Instructions.Disabled"
+      [required]="false">
+      Instructions
+    </workflow-nav-item>
+    <workflow-nav-item [navRouterLink]="['initiate-ovta']" [complete]="progressDto.Steps.InitiateOvta.Completed" [disabled]="progressDto.Steps.InitiateOvta.Disabled">
+      Initiate OVTA
+    </workflow-nav-item>
+    <workflow-nav-item
+      [navRouterLink]="['record-observations']"
+      [complete]="progressDto.Steps.RecordObservations.Completed"
+      [disabled]="progressDto.Steps.RecordObservations.Disabled">
+      Record Observations
+    </workflow-nav-item>
+    <workflow-nav-item
+      [navRouterLink]="['add-or-remove-parcels']"
+      [complete]="progressDto.Steps.AddOrRemoveParcels.Completed"
+      [disabled]="progressDto.Steps.AddOrRemoveParcels.Disabled">
+      Add or Remove Parcels
+    </workflow-nav-item>
+    <workflow-nav-item
+      [navRouterLink]="['refine-assessment-area']"
+      [complete]="progressDto.Steps.RefineAssessmentArea.Completed"
+      [disabled]="progressDto.Steps.RefineAssessmentArea.Disabled">
+      Refine Assessment Area
+    </workflow-nav-item>
+    <workflow-nav-item
+      [navRouterLink]="['review-and-finalize']"
+      [complete]="progressDto.Steps.ReviewAndFinalize.Completed"
+      [disabled]="progressDto.Steps.ReviewAndFinalize.Disabled">
+      Review and Finalize
+    </workflow-nav-item>
+  </workflow-nav>
+}

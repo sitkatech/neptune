@@ -4,7 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angul
 import { FormFieldComponent, FormFieldType, FormInputOption } from "src/app/shared/components/forms/form-field/form-field.component";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import * as L from "leaflet";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
@@ -29,19 +29,18 @@ import { NgSelectModule } from "@ng-select/ng-select";
 @Component({
     selector: "trash-initiate-ovta",
     imports: [
-        PageHeaderComponent,
-        ReactiveFormsModule,
-        FormsModule,
-        FormFieldComponent,
-        AsyncPipe,
-        NeptuneMapComponent,
-        LandUseBlockLayerComponent,
-        NgIf,
-        ParcelLayerComponent,
-        WorkflowBodyComponent,
-        AlertDisplayComponent,
-        NgSelectModule,
-    ],
+    PageHeaderComponent,
+    ReactiveFormsModule,
+    FormsModule,
+    FormFieldComponent,
+    AsyncPipe,
+    NeptuneMapComponent,
+    LandUseBlockLayerComponent,
+    ParcelLayerComponent,
+    WorkflowBodyComponent,
+    AlertDisplayComponent,
+    NgSelectModule
+],
     templateUrl: "./trash-initiate-ovta.component.html",
     styleUrl: "./trash-initiate-ovta.component.scss"
 })

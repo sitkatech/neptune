@@ -4,12 +4,12 @@ import * as L from "leaflet";
 import { Observable, tap } from "rxjs";
 import { OnlandVisualTrashAssessmentObservationLocationDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-location-dto";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/generated/api/onland-visual-trash-assessment-observation.service";
 
 @Component({
     selector: "ovta-observation-layer",
-    imports: [AsyncPipe, NgIf],
+    imports: [AsyncPipe],
     templateUrl: "./ovta-observation-layer.component.html",
     styleUrl: "./ovta-observation-layer.component.scss"
 })

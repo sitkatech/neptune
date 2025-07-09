@@ -1,13 +1,13 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChange } from "@angular/core";
 import * as L from "leaflet";
 import { MapLayerBase } from "../map-layer-base.component";
-import { CommonModule } from "@angular/common";
+
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 
 @Component({
     selector: "selected-ovta-area-layer",
-    imports: [CommonModule],
+    imports: [],
     templateUrl: "./selected-ovta-area-layer.component.html",
     styleUrl: "./selected-ovta-area-layer.component.scss"
 })

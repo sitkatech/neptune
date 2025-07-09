@@ -10,13 +10,13 @@ import { FieldDefinitionService } from "src/app/shared/generated/api/field-defin
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
 import { PopperDirective } from "src/app/shared/directives/popper.directive";
 import { FormsModule } from "@angular/forms";
-import { NgIf } from "@angular/common";
+
 
 @Component({
     selector: "field-definition",
     templateUrl: "./field-definition.component.html",
     styleUrls: ["./field-definition.component.scss"],
-    imports: [NgIf, EditorComponent, FormsModule, PopperDirective],
+    imports: [EditorComponent, FormsModule, PopperDirective],
     providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }]
 })
 export class FieldDefinitionComponent implements OnInit, AfterViewInit, OnDestroy {

@@ -3,13 +3,13 @@ import * as L from "leaflet";
 import { MapLayerBase } from "../map-layer-base.component";
 import { Observable, tap } from "rxjs";
 import { IFeature } from "src/app/shared/generated/model/models";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 
 @Component({
     selector: "ovta-area-layer",
-    imports: [NgIf, AsyncPipe],
+    imports: [AsyncPipe],
     templateUrl: "./ovta-area-layer.component.html",
     styleUrl: "./ovta-area-layer.component.scss"
 })

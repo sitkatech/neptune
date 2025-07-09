@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import * as L from "leaflet";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
-import { AsyncPipe, NgFor, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { Observable, switchMap, tap } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { routeParams } from "src/app/app.routes";
@@ -33,22 +33,20 @@ import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/la
 @Component({
     selector: "trash-ovta-record-observations",
     imports: [
-        PageHeaderComponent,
-        NeptuneMapComponent,
-        DropdownToggleDirective,
-        NgIf,
-        NgFor,
-        AsyncPipe,
-        FormFieldComponent,
-        ReactiveFormsModule,
-        FormsModule,
-        AlertDisplayComponent,
-        WorkflowBodyComponent,
-        LandUseBlockLayerComponent,
-        ParcelLayerComponent,
-        TransectLineLayerComponent,
-        OvtaAreaLayerComponent,
-    ],
+    PageHeaderComponent,
+    NeptuneMapComponent,
+    DropdownToggleDirective,
+    AsyncPipe,
+    FormFieldComponent,
+    ReactiveFormsModule,
+    FormsModule,
+    AlertDisplayComponent,
+    WorkflowBodyComponent,
+    LandUseBlockLayerComponent,
+    ParcelLayerComponent,
+    TransectLineLayerComponent,
+    OvtaAreaLayerComponent
+],
     templateUrl: "./trash-ovta-record-observations.component.html",
     styleUrl: "./trash-ovta-record-observations.component.scss"
 })

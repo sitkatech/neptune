@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { IAfterGuiAttachedParams, IHeaderParams, SortDirection } from "ag-grid-community";
 import { IHeaderAngularComp } from "ag-grid-angular";
-import { NgIf } from "@angular/common";
+
 import { FieldDefinitionComponent } from "../field-definition/field-definition.component";
 
 interface MyParams extends IHeaderParams {
@@ -12,7 +12,7 @@ interface MyParams extends IHeaderParams {
     selector: "field-definition-grid-header",
     templateUrl: "./field-definition-grid-header.component.html",
     styleUrls: ["./field-definition-grid-header.component.scss"],
-    imports: [FieldDefinitionComponent, NgIf]
+    imports: [FieldDefinitionComponent]
 })
 export class FieldDefinitionGridHeaderComponent implements IHeaderAngularComp {
     @ViewChild("header") header: ElementRef;

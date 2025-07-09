@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { CommonModule, NgFor } from "@angular/common";
+
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
 @Component({
     selector: "btn-group-radio-input",
@@ -13,7 +13,7 @@ import { IconComponent } from "src/app/shared/components/icon/icon.component";
             multi: true,
         },
     ],
-    imports: [NgFor, IconComponent, CommonModule]
+    imports: [IconComponent]
 })
 export class BtnGroupRadioInputComponent implements OnInit {
     public uniqueName: string = crypto.randomUUID();

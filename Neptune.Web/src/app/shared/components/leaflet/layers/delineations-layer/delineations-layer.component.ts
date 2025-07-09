@@ -1,11 +1,11 @@
-import { CommonModule } from "@angular/common";
+
 import { Component, Input, OnChanges } from "@angular/core";
 import { environment } from "src/environments/environment";
 import * as L from "leaflet";
 import { MapLayerBase } from "../map-layer-base.component";
 @Component({
     selector: "delineations-layer",
-    imports: [CommonModule],
+    imports: [],
     templateUrl: "./delineations-layer.component.html",
     styleUrls: ["./delineations-layer.component.scss"]
 })

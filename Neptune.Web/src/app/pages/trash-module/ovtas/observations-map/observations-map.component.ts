@@ -3,7 +3,7 @@ import * as L from "leaflet";
 import "leaflet.fullscreen";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
-import { NgIf, NgFor } from "@angular/common";
+
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
 import { environment } from "src/environments/environment";
@@ -17,7 +17,7 @@ import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/la
     selector: "observations-map",
     templateUrl: "./observations-map.component.html",
     styleUrls: ["./observations-map.component.scss"],
-    imports: [NgIf, NgFor, NeptuneMapComponent, LandUseBlockLayerComponent, TransectLineLayerComponent, OvtaAreaLayerComponent]
+    imports: [NeptuneMapComponent, LandUseBlockLayerComponent, TransectLineLayerComponent, OvtaAreaLayerComponent]
 })
 export class ObservationsMapComponent {
     @ViewChild("ovtaObservations") ovtaObservations: ElementRef;

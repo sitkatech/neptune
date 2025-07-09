@@ -6,7 +6,7 @@ import { PersonDto } from "src/app/shared/generated/model/person-dto";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { Observable } from "rxjs";
 import { HeaderNavComponent } from "../../../shared/components/header-nav/header-nav.component";
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
@@ -15,7 +15,7 @@ import { IconComponent } from "src/app/shared/components/icon/icon.component";
     selector: "app-home-index",
     templateUrl: "./home-index.component.html",
     styleUrls: ["./home-index.component.scss"],
-    imports: [NgIf, AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe, HeaderNavComponent, IconComponent]
+    imports: [AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe, HeaderNavComponent, IconComponent]
 })
 export class HomeIndexComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;

@@ -1,11 +1,11 @@
 import { Component, Input } from "@angular/core";
-import { CommonModule } from "@angular/common";
+
 import { IconComponent } from "../../icon/icon.component";
 import { RouterLink } from "@angular/router";
 
 @Component({
     selector: "workflow-nav-item",
-    imports: [CommonModule, IconComponent, RouterLink],
+    imports: [IconComponent, RouterLink],
     templateUrl: "./workflow-nav-item.component.html",
     styleUrls: ["./workflow-nav-item.component.scss"]
 })

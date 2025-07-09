@@ -1,11 +1,11 @@
-import { CommonModule } from "@angular/common";
+
 import { Component, OnChanges } from "@angular/core";
 import * as L from "leaflet";
 import * as esri from "esri-leaflet";
 import { MapLayerBase } from "../map-layer-base.component";
 @Component({
     selector: "stormwater-network-layer",
-    imports: [CommonModule],
+    imports: [],
     templateUrl: "./stormwater-network-layer.component.html",
     styleUrls: ["./stormwater-network-layer.component.scss"]
 })

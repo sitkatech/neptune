@@ -7,7 +7,7 @@ import { RoleEnum } from "src/app/shared/generated/enum/role-enum";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
-import { AsyncPipe, DatePipe, DecimalPipe, NgIf } from "@angular/common";
+import { AsyncPipe, DatePipe, DecimalPipe } from "@angular/common";
 import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import * as L from "leaflet";
@@ -47,29 +47,28 @@ import { PermitTypeLayerComponent } from "src/app/shared/components/leaflet/laye
     templateUrl: "./trash-home.component.html",
     styleUrls: ["./trash-home.component.scss"],
     imports: [
-        NgIf,
-        AlertDisplayComponent,
-        CustomRichTextComponent,
-        AsyncPipe,
-        RouterLink,
-        NeptuneMapComponent,
-        RegionalSubbasinsLayerComponent,
-        DelineationsLayerComponent,
-        JurisdictionsLayerComponent,
-        WqmpsTrashCaptureLayerComponent,
-        LandUseBlockLayerComponent,
-        PermitTypeLayerComponent,
-        TrashGeneratingUnitLayerComponent,
-        TrashGeneratingUnitLoadsLayerComponent,
-        OvtaAreasLayerComponent,
-        NgSelectModule,
-        FormsModule,
-        ReactiveFormsModule,
-        FieldDefinitionComponent,
-        DecimalPipe,
-        DatePipe,
-        LoadingDirective,
-    ]
+    AlertDisplayComponent,
+    CustomRichTextComponent,
+    AsyncPipe,
+    RouterLink,
+    NeptuneMapComponent,
+    RegionalSubbasinsLayerComponent,
+    DelineationsLayerComponent,
+    JurisdictionsLayerComponent,
+    WqmpsTrashCaptureLayerComponent,
+    LandUseBlockLayerComponent,
+    PermitTypeLayerComponent,
+    TrashGeneratingUnitLayerComponent,
+    TrashGeneratingUnitLoadsLayerComponent,
+    OvtaAreasLayerComponent,
+    NgSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FieldDefinitionComponent,
+    DecimalPipe,
+    DatePipe,
+    LoadingDirective
+]
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;

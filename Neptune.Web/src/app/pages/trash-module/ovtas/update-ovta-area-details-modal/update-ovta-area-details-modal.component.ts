@@ -4,7 +4,7 @@ import { FormFieldComponent, FormFieldType } from "src/app/shared/components/for
 import { ModalComponent } from "src/app/shared/components/modal/modal.component";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { ModalService } from "src/app/shared/services/modal/modal.service";
-import { NgIf } from "@angular/common";
+
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { Alert } from "src/app/shared/models/alert";
@@ -13,7 +13,7 @@ import { OnlandVisualTrashAssessmentAreaSimpleDtoForm, OnlandVisualTrashAssessme
 
 @Component({
     selector: "update-ovta-area-details-modal",
-    imports: [ReactiveFormsModule, FormFieldComponent, NgIf, AlertDisplayComponent],
+    imports: [ReactiveFormsModule, FormFieldComponent, AlertDisplayComponent],
     templateUrl: "./update-ovta-area-details-modal.component.html",
     styleUrl: "./update-ovta-area-details-modal.component.scss"
 })

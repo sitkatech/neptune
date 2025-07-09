@@ -5,7 +5,7 @@ import { RequiredPipe } from "src/app/shared/pipes/required.pipe";
 import { InputErrorsComponent } from "src/app/shared/components/inputs/input-errors/input-errors.component";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { EditorComponent, TINYMCE_SCRIPT_SRC } from "@tinymce/tinymce-angular";
-import { NgSwitch, NgSwitchCase, NgIf, NgFor } from "@angular/common";
+
 import { NgxMaskDirective, provideNgxMask } from "ngx-mask";
 import { NgSelectModule } from "@ng-select/ng-select";
 
@@ -26,20 +26,16 @@ import { NgSelectModule } from "@ng-select/ng-select";
         provideNgxMask(),
     ],
     imports: [
-        NgSwitch,
-        NgSwitchCase,
-        NgxMaskDirective,
-        FormsModule,
-        ReactiveFormsModule,
-        NgIf,
-        EditorComponent,
-        NgFor,
-        FieldDefinitionComponent,
-        InputErrorsComponent,
-        RequiredPipe,
-        TinyMceConfigPipe,
-        NgSelectModule,
-    ]
+    NgxMaskDirective,
+    FormsModule,
+    ReactiveFormsModule,
+    EditorComponent,
+    FieldDefinitionComponent,
+    InputErrorsComponent,
+    RequiredPipe,
+    TinyMceConfigPipe,
+    NgSelectModule
+]
 })
 export class FormFieldComponent {
     public FormFieldType = FormFieldType;

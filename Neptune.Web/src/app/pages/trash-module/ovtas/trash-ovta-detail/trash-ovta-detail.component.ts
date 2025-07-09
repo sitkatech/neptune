@@ -1,4 +1,4 @@
-import { AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgFor, NgIf } from "@angular/common";
+import { AsyncPipe, DatePipe, KeyValuePipe, NgClass } from "@angular/common";
 import { Component } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { Observable, switchMap } from "rxjs";
@@ -20,7 +20,7 @@ import { ConfirmService } from "src/app/shared/services/confirm/confirm.service"
 
 @Component({
     selector: "trash-ovta-detail",
-    imports: [NgIf, AsyncPipe, AlertDisplayComponent, PageHeaderComponent, FieldDefinitionComponent, DatePipe, NgFor, ObservationsMapComponent, RouterLink],
+    imports: [AsyncPipe, AlertDisplayComponent, PageHeaderComponent, FieldDefinitionComponent, DatePipe, ObservationsMapComponent, RouterLink],
     templateUrl: "./trash-ovta-detail.component.html",
     styleUrl: "./trash-ovta-detail.component.scss"
 })

@@ -13,7 +13,7 @@ import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-
 import { ProjectDto } from "src/app/shared/generated/model/models";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { NgIf, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
@@ -27,7 +27,7 @@ import { AuthenticationService } from "src/app/services/authentication.service";
     selector: "project-basics",
     templateUrl: "./project-basics.component.html",
     styleUrls: ["./project-basics.component.scss"],
-    imports: [NgIf, AsyncPipe, ReactiveFormsModule, FormsModule, FormFieldComponent, NgSelectModule, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent]
+    imports: [AsyncPipe, ReactiveFormsModule, FormsModule, FormFieldComponent, NgSelectModule, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent]
 })
 export class ProjectBasicsComponent implements OnInit {
     public FormFieldType = FormFieldType;

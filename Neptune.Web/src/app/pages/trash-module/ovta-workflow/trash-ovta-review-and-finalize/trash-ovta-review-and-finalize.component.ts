@@ -7,7 +7,7 @@ import { OnlandVisualTrashAssessmentScoresAsSelectDropdownOptions } from "src/ap
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, switchMap, tap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
-import { AsyncPipe, NgFor, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
 import { PreliminarySourceIdentificationCategories } from "src/app/shared/generated/enum/preliminary-source-identification-category-enum";
 import { AlertService } from "src/app/shared/services/alert.service";
@@ -30,18 +30,15 @@ import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/serv
 @Component({
     selector: "trash-ovta-review-and-finalize",
     imports: [
-        PageHeaderComponent,
-        FormFieldComponent,
-        ReactiveFormsModule,
-        NgIf,
-        AsyncPipe,
-        FormsModule,
-        NgFor,
-        ObservationsMapComponent,
-        NgFor,
-        WorkflowBodyComponent,
-        AlertDisplayComponent,
-    ],
+    PageHeaderComponent,
+    FormFieldComponent,
+    ReactiveFormsModule,
+    AsyncPipe,
+    FormsModule,
+    ObservationsMapComponent,
+    WorkflowBodyComponent,
+    AlertDisplayComponent
+],
     templateUrl: "./trash-ovta-review-and-finalize.component.html",
     styleUrl: "./trash-ovta-review-and-finalize.component.scss"
 })

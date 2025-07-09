@@ -3,7 +3,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { ConfirmOptions } from "src/app/shared/services/confirm/confirm-options";
 import { IModal, ModalService } from "../../services/modal/modal.service";
 import { ModalComponent } from "../modal/modal.component";
-import { NgIf } from "@angular/common";
+
 import { ConfirmState } from "../../services/confirm/confirm-state";
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
 
@@ -11,7 +11,7 @@ import { IconComponent } from "src/app/shared/components/icon/icon.component";
     selector: "confirm-modal",
     templateUrl: "./confirm-modal.component.html",
     styleUrls: ["./confirm-modal.component.scss"],
-    imports: [NgIf, IconComponent]
+    imports: [IconComponent]
 })
 export class ConfirmModalComponent implements IModal {
     modalComponentRef: ComponentRef<ModalComponent>;

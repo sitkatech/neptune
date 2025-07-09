@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, OnChanges } from "@angular/core";
-import { CommonModule } from "@angular/common";
+
 import * as L from "leaflet";
 import { environment } from "src/environments/environment";
 import { MapLayerBase } from "../map-layer-base.component";
 
 @Component({
     selector: "permit-type-layer",
-    imports: [CommonModule],
+    imports: [],
     templateUrl: "./permit-type-layer.component.html",
     styleUrl: "./permit-type-layer.component.scss"
 })

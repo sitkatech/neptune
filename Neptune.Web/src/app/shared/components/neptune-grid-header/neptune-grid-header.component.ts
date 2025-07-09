@@ -1,13 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { ClearGridFiltersButtonComponent } from "../clear-grid-filters-button/clear-grid-filters-button.component";
 import { FormsModule } from "@angular/forms";
-import { NgIf } from "@angular/common";
+
 import { AgGridAngular } from "ag-grid-angular";
 import { Subscription } from "rxjs";
 
 @Component({
     selector: "neptune-grid-header",
-    imports: [ClearGridFiltersButtonComponent, FormsModule, NgIf],
+    imports: [ClearGridFiltersButtonComponent, FormsModule],
     templateUrl: "./neptune-grid-header.component.html",
     styleUrl: "./neptune-grid-header.component.scss"
 })

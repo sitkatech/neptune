@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
-import { NgIf, DecimalPipe, PercentPipe } from "@angular/common";
+import { DecimalPipe, PercentPipe } from "@angular/common";
 import { ProjectDto } from "src/app/shared/generated/model/project-dto";
 import { BtnGroupRadioInputComponent } from "src/app/shared/components/inputs/btn-group-radio-input/btn-group-radio-input.component";
 
@@ -10,7 +10,7 @@ import { BtnGroupRadioInputComponent } from "src/app/shared/components/inputs/bt
     selector: "grant-scores",
     templateUrl: "./grant-scores.component.html",
     styleUrls: ["./grant-scores.component.scss"],
-    imports: [NgIf, FieldDefinitionComponent, CustomRichTextComponent, DecimalPipe, PercentPipe, BtnGroupRadioInputComponent]
+    imports: [FieldDefinitionComponent, CustomRichTextComponent, DecimalPipe, PercentPipe, BtnGroupRadioInputComponent]
 })
 export class GrantScoresComponent implements OnInit {
     @Input("project") project: ProjectDto;

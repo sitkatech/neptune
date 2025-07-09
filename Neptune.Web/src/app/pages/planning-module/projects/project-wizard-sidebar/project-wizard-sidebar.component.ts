@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 import { ProjectWorkflowProgressDto } from "src/app/shared/generated/model/models";
-import { NgIf, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { WorkflowNavComponent } from "src/app/shared/components/workflow-nav/workflow-nav.component";
 import { WorkflowNavItemComponent } from "src/app/shared/components/workflow-nav/workflow-nav-item/workflow-nav-item.component";
 import { ProjectWorkflowProgressService } from "src/app/shared/services/project-workflow-progress.service";
@@ -13,7 +13,7 @@ import { routeParams } from "src/app/app.routes";
     selector: "project-wizard-sidebar",
     templateUrl: "./project-wizard-sidebar.component.html",
     styleUrls: ["./project-wizard-sidebar.component.scss"],
-    imports: [NgIf, WorkflowNavComponent, WorkflowNavItemComponent, AsyncPipe]
+    imports: [WorkflowNavComponent, WorkflowNavItemComponent, AsyncPipe]
 })
 export class ProjectWizardSidebarComponent implements OnInit {
     public submitted: boolean = false;

@@ -16,7 +16,7 @@ import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-
 import { GrantScoresComponent } from "src/app/pages/planning-module/projects/grant-scores/grant-scores.component";
 import { ModelResultsComponent } from "src/app/pages/planning-module/projects/model-results/model-results.component";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
@@ -35,24 +35,22 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
     templateUrl: "./modeled-performance.component.html",
     styleUrls: ["./modeled-performance.component.scss"],
     imports: [
-        CustomRichTextComponent,
-        NgIf,
-        AsyncPipe,
-        FieldDefinitionComponent,
-        NgFor,
-        ModelResultsComponent,
-        GrantScoresComponent,
-        PageHeaderComponent,
-        WorkflowBodyComponent,
-        AlertDisplayComponent,
-        NeptuneMapComponent,
-        RegionalSubbasinsLayerComponent,
-        DelineationsLayerComponent,
-        JurisdictionsLayerComponent,
-        WqmpsLayerComponent,
-        StormwaterNetworkLayerComponent,
-        InventoriedBMPsLayerComponent,
-    ]
+    CustomRichTextComponent,
+    AsyncPipe,
+    FieldDefinitionComponent,
+    ModelResultsComponent,
+    GrantScoresComponent,
+    PageHeaderComponent,
+    WorkflowBodyComponent,
+    AlertDisplayComponent,
+    NeptuneMapComponent,
+    RegionalSubbasinsLayerComponent,
+    DelineationsLayerComponent,
+    JurisdictionsLayerComponent,
+    WqmpsLayerComponent,
+    StormwaterNetworkLayerComponent,
+    InventoriedBMPsLayerComponent
+]
 })
 export class ModeledPerformanceComponent implements OnInit {
     public ProjectNetworkHistoryStatusTypeEnum = ProjectNetworkSolveHistoryStatusTypeEnum;

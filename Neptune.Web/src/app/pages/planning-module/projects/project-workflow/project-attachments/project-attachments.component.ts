@@ -11,7 +11,7 @@ import { PersonDto, ProjectDocumentDto, ProjectDocumentUpdateDto } from "src/app
 import { AttachmentsDisplayComponent } from "src/app/pages/planning-module/projects/attachments-display/attachments-display.component";
 import { FormsModule, NgForm } from "@angular/forms";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
-import { NgIf, NgClass } from "@angular/common";
+import { NgClass } from "@angular/common";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
@@ -25,7 +25,7 @@ import { ProjectDocumentService } from "src/app/shared/generated/api/project-doc
     selector: "project-attachments",
     templateUrl: "./project-attachments.component.html",
     styleUrls: ["./project-attachments.component.scss"],
-    imports: [NgIf, CustomRichTextComponent, FormsModule, NgClass, AttachmentsDisplayComponent, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent]
+    imports: [CustomRichTextComponent, FormsModule, NgClass, AttachmentsDisplayComponent, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent]
 })
 export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     @ViewChild("fileUpload") fileUpload: any;

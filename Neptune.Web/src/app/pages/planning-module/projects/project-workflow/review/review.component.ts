@@ -16,7 +16,7 @@ import { GrantScoresComponent } from "src/app/pages/planning-module/projects/gra
 import { AttachmentsDisplayComponent } from "src/app/pages/planning-module/projects/attachments-display/attachments-display.component";
 import { ModelResultsComponent } from "src/app/pages/planning-module/projects/model-results/model-results.component";
 import { ProjectMapComponent } from "src/app/pages/planning-module/projects/project-map/project-map.component";
-import { NgIf, NgClass, DatePipe } from "@angular/common";
+import { NgClass, DatePipe } from "@angular/common";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
@@ -28,18 +28,17 @@ import { ProjectWorkflowProgressService } from "src/app/shared/services/project-
     templateUrl: "./review.component.html",
     styleUrls: ["./review.component.scss"],
     imports: [
-        CustomRichTextComponent,
-        NgIf,
-        NgClass,
-        ProjectMapComponent,
-        ModelResultsComponent,
-        AttachmentsDisplayComponent,
-        GrantScoresComponent,
-        DatePipe,
-        PageHeaderComponent,
-        WorkflowBodyComponent,
-        AlertDisplayComponent,
-    ]
+    CustomRichTextComponent,
+    NgClass,
+    ProjectMapComponent,
+    ModelResultsComponent,
+    AttachmentsDisplayComponent,
+    GrantScoresComponent,
+    DatePipe,
+    PageHeaderComponent,
+    WorkflowBodyComponent,
+    AlertDisplayComponent
+]
 })
 export class ReviewComponent implements OnInit {
     public projectID: number;

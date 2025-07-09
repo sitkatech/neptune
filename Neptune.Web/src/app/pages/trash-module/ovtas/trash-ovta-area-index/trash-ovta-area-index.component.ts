@@ -6,7 +6,7 @@ import { Observable, tap } from "rxjs";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { OnlandVisualTrashAssessmentAreaGridDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-grid-dto";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 import { environment } from "src/environments/environment";
 import { IconComponent } from "../../../../shared/components/icon/icon.component";
@@ -27,7 +27,7 @@ import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto"
 
 @Component({
     selector: "trash-ovta-area-index",
-    imports: [PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, LoadingDirective, IconComponent, HybridMapGridComponent, SelectedOvtaAreaLayerComponent, RouterLink],
+    imports: [PageHeaderComponent, AlertDisplayComponent, AsyncPipe, LoadingDirective, IconComponent, HybridMapGridComponent, SelectedOvtaAreaLayerComponent, RouterLink],
     templateUrl: "./trash-ovta-area-index.component.html",
     styleUrl: "./trash-ovta-area-index.component.scss"
 })
