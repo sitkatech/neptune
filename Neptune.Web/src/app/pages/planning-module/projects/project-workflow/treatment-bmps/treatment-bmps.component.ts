@@ -50,7 +50,6 @@ import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-
     selector: "treatment-bmps",
     templateUrl: "./treatment-bmps.component.html",
     styleUrls: ["./treatment-bmps.component.scss"],
-    standalone: true,
     imports: [
         NgIf,
         AsyncPipe,
@@ -68,7 +67,7 @@ import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
         InventoriedBMPsLayerComponent,
-    ],
+    ]
 })
 export class TreatmentBmpsComponent implements OnInit {
     public projectID: number;

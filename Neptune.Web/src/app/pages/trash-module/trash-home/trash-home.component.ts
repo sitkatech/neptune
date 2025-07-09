@@ -46,7 +46,6 @@ import { PermitTypeLayerComponent } from "src/app/shared/components/leaflet/laye
     selector: "trash-home",
     templateUrl: "./trash-home.component.html",
     styleUrls: ["./trash-home.component.scss"],
-    standalone: true,
     imports: [
         NgIf,
         AlertDisplayComponent,
@@ -70,7 +69,7 @@ import { PermitTypeLayerComponent } from "src/app/shared/components/leaflet/laye
         DecimalPipe,
         DatePipe,
         LoadingDirective,
-    ],
+    ]
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;

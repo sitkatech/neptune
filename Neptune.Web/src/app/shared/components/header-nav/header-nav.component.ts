@@ -12,8 +12,7 @@ import { Observable } from "rxjs";
     selector: "header-nav",
     templateUrl: "./header-nav.component.html",
     styleUrls: ["./header-nav.component.scss"],
-    standalone: true,
-    imports: [RouterLink, RouterLinkActive, NgIf, AsyncPipe, DropdownToggleDirective, IconComponent],
+    imports: [RouterLink, RouterLinkActive, NgIf, AsyncPipe, DropdownToggleDirective, IconComponent]
 })
 export class HeaderNavComponent implements OnInit {
     @Input() moduleTitle: string;

@@ -31,7 +31,6 @@ import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-
     selector: "project-map",
     templateUrl: "./project-map.component.html",
     styleUrls: ["./project-map.component.scss"],
-    standalone: true,
     imports: [
         NgIf,
         NgFor,
@@ -44,7 +43,7 @@ import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
         InventoriedBMPsLayerComponent,
-    ],
+    ]
 })
 export class ProjectMapComponent implements OnInit {
     @Input("projectID") projectID: number;

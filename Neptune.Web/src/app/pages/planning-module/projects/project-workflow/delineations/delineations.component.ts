@@ -37,7 +37,6 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
     selector: "delineations",
     templateUrl: "./delineations.component.html",
     styleUrls: ["./delineations.component.scss"],
-    standalone: true,
     imports: [
         CustomRichTextComponent,
         NgFor,
@@ -54,7 +53,7 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
         InventoriedBMPsLayerComponent,
-    ],
+    ]
 })
 export class DelineationsComponent implements OnInit {
     public mapIsReady: boolean = false;

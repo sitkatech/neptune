@@ -17,8 +17,7 @@ import { BtnGroupRadioInputComponent } from "src/app/shared/components/inputs/bt
     selector: "model-results",
     templateUrl: "./model-results.component.html",
     styleUrls: ["./model-results.component.scss"],
-    standalone: true,
-    imports: [NgIf, NgFor, FormsModule, FieldDefinitionComponent, DecimalPipe, NeptuneModelingResultSigFigPipe, BtnGroupRadioInputComponent],
+    imports: [NgIf, NgFor, FormsModule, FieldDefinitionComponent, DecimalPipe, NeptuneModelingResultSigFigPipe, BtnGroupRadioInputComponent]
 })
 export class ModelResultsComponent implements OnInit {
     public ModeledPerformanceDisplayTypeEnum = ModeledPerformanceDisplayTypeEnum;

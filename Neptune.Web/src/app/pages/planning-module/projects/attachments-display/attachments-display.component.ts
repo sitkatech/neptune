@@ -7,8 +7,7 @@ import { NgIf, NgFor, DatePipe } from "@angular/common";
     selector: "attachments-display",
     templateUrl: "./attachments-display.component.html",
     styleUrls: ["./attachments-display.component.scss"],
-    standalone: true,
-    imports: [NgIf, NgFor, DatePipe],
+    imports: [NgIf, NgFor, DatePipe]
 })
 export class AttachmentsDisplayComponent implements OnInit {
     @Input("attachments") attachments: Array<ProjectDocumentDto>;

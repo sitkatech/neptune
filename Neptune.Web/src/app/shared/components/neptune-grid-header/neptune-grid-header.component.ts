@@ -7,10 +7,9 @@ import { Subscription } from "rxjs";
 
 @Component({
     selector: "neptune-grid-header",
-    standalone: true,
     imports: [ClearGridFiltersButtonComponent, FormsModule, NgIf],
     templateUrl: "./neptune-grid-header.component.html",
-    styleUrl: "./neptune-grid-header.component.scss",
+    styleUrl: "./neptune-grid-header.component.scss"
 })
 export class NeptuneGridHeaderComponent implements OnInit, OnDestroy {
     @Input() grid: AgGridAngular;

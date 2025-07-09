@@ -31,7 +31,6 @@ import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/la
 
 @Component({
     selector: "trash-ovta-area-detail",
-    standalone: true,
     imports: [
         PageHeaderComponent,
         AlertDisplayComponent,
@@ -46,7 +45,7 @@ import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/la
         OvtaAreaLayerComponent,
     ],
     templateUrl: "./trash-ovta-area-detail.component.html",
-    styleUrl: "./trash-ovta-area-detail.component.scss",
+    styleUrl: "./trash-ovta-area-detail.component.scss"
 })
 export class TrashOvtaAreaDetailComponent {
     public onlandVisualTrashAssessmentArea$: Observable<OnlandVisualTrashAssessmentAreaDetailDto>;

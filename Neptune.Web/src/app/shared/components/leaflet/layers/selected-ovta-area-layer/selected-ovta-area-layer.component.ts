@@ -7,10 +7,9 @@ import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 
 @Component({
     selector: "selected-ovta-area-layer",
-    standalone: true,
     imports: [CommonModule],
     templateUrl: "./selected-ovta-area-layer.component.html",
-    styleUrl: "./selected-ovta-area-layer.component.scss",
+    styleUrl: "./selected-ovta-area-layer.component.scss"
 })
 export class SelectedOvtaAreaLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     @Input() selectedOVTAAreaID: number;

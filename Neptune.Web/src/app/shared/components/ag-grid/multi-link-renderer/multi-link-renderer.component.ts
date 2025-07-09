@@ -7,8 +7,7 @@ import { NgFor, NgIf } from "@angular/common";
     selector: "qanat-multi-link-renderer",
     templateUrl: "./multi-link-renderer.component.html",
     styleUrls: ["./multi-link-renderer.component.scss"],
-    standalone: true,
-    imports: [NgFor, NgIf, RouterLink],
+    imports: [NgFor, NgIf, RouterLink]
 })
 export class MultiLinkRendererComponent implements AgRendererComponent {
     params: {

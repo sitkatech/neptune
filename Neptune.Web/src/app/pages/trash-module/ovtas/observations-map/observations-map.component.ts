@@ -17,8 +17,7 @@ import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/la
     selector: "observations-map",
     templateUrl: "./observations-map.component.html",
     styleUrls: ["./observations-map.component.scss"],
-    standalone: true,
-    imports: [NgIf, NgFor, NeptuneMapComponent, LandUseBlockLayerComponent, TransectLineLayerComponent, OvtaAreaLayerComponent],
+    imports: [NgIf, NgFor, NeptuneMapComponent, LandUseBlockLayerComponent, TransectLineLayerComponent, OvtaAreaLayerComponent]
 })
 export class ObservationsMapComponent {
     @ViewChild("ovtaObservations") ovtaObservations: ElementRef;

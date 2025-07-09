@@ -5,10 +5,9 @@ import * as L from "leaflet";
 import { MapLayerBase } from "../map-layer-base.component";
 @Component({
     selector: "jurisdictions-layer",
-    standalone: true,
     imports: [CommonModule],
     templateUrl: "./jurisdictions-layer.component.html",
-    styleUrls: ["./jurisdictions-layer.component.scss"],
+    styleUrls: ["./jurisdictions-layer.component.scss"]
 })
 export class JurisdictionsLayerComponent extends MapLayerBase implements OnChanges {
     constructor() {

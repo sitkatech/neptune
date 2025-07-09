@@ -32,7 +32,6 @@ import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/la
 
 @Component({
     selector: "trash-ovta-record-observations",
-    standalone: true,
     imports: [
         PageHeaderComponent,
         NeptuneMapComponent,
@@ -51,7 +50,7 @@ import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/la
         OvtaAreaLayerComponent,
     ],
     templateUrl: "./trash-ovta-record-observations.component.html",
-    styleUrl: "./trash-ovta-record-observations.component.scss",
+    styleUrl: "./trash-ovta-record-observations.component.scss"
 })
 export class TrashOvtaRecordObservationsComponent {
     public FormFieldType = FormFieldType;

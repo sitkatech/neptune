@@ -21,10 +21,9 @@ import { WfsService } from "src/app/shared/services/wfs.service";
 
 @Component({
     selector: "trash-ovta-area-edit-location",
-    standalone: true,
     imports: [PageHeaderComponent, NeptuneMapComponent, LandUseBlockLayerComponent, NgIf, AsyncPipe, TransectLineLayerComponent, RouterLink],
     templateUrl: "./trash-ovta-area-edit-location.component.html",
-    styleUrl: "./trash-ovta-area-edit-location.component.scss",
+    styleUrl: "./trash-ovta-area-edit-location.component.scss"
 })
 export class TrashOvtaAreaEditLocationComponent {
     public customRichTextTypeID = NeptunePageTypeEnum.EditOVTAArea;

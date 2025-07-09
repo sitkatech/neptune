@@ -11,8 +11,7 @@ import { IconComponent } from "src/app/shared/components/icon/icon.component";
     selector: "confirm-modal",
     templateUrl: "./confirm-modal.component.html",
     styleUrls: ["./confirm-modal.component.scss"],
-    standalone: true,
-    imports: [NgIf, IconComponent],
+    imports: [NgIf, IconComponent]
 })
 export class ConfirmModalComponent implements IModal {
     modalComponentRef: ComponentRef<ModalComponent>;

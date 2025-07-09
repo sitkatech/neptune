@@ -5,10 +5,9 @@ import { RouterLink } from "@angular/router";
 
 @Component({
     selector: "workflow-nav-item",
-    standalone: true,
     imports: [CommonModule, IconComponent, RouterLink],
     templateUrl: "./workflow-nav-item.component.html",
-    styleUrls: ["./workflow-nav-item.component.scss"],
+    styleUrls: ["./workflow-nav-item.component.scss"]
 })
 export class WorkflowNavItemComponent {
     @Input() navRouterLink: string | string[];

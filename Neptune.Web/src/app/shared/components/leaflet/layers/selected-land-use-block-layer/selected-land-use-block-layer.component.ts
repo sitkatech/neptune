@@ -8,10 +8,9 @@ import { PriorityLandUseTypeEnum, PriorityLandUseTypes } from "src/app/shared/ge
 
 @Component({
     selector: "selected-land-use-block-layer",
-    standalone: true,
     imports: [CommonModule],
     templateUrl: "./selected-land-use-block-layer.component.html",
-    styleUrl: "./selected-land-use-block-layer.component.scss",
+    styleUrl: "./selected-land-use-block-layer.component.scss"
 })
 export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     @Input() selectedLandUseBlockID: number;

@@ -5,10 +5,9 @@ import * as L from "leaflet";
 import { MapLayerBase } from "../map-layer-base.component";
 @Component({
     selector: "wqmps-layer",
-    standalone: true,
     imports: [CommonModule],
     templateUrl: "./wqmps-layer.component.html",
-    styleUrls: ["./wqmps-layer.component.scss"],
+    styleUrls: ["./wqmps-layer.component.scss"]
 })
 export class WqmpsLayerComponent extends MapLayerBase implements OnChanges {
     constructor() {

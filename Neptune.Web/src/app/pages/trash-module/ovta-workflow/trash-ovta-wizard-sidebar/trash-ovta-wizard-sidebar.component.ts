@@ -17,10 +17,9 @@ import { IconComponent } from "../../../../shared/components/icon/icon.component
 
 @Component({
     selector: "trash-ovta-wizard-sidebar",
-    standalone: true,
     imports: [WorkflowNavComponent, WorkflowNavItemComponent, NgIf, AsyncPipe, RouterLink, IconComponent],
     templateUrl: "./trash-ovta-wizard-sidebar.component.html",
-    styleUrl: "./trash-ovta-wizard-sidebar.component.scss",
+    styleUrl: "./trash-ovta-wizard-sidebar.component.scss"
 })
 export class TrashOvtaWizardSidebarComponent {
     public submitted: boolean = false;

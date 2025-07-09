@@ -26,7 +26,6 @@ import { AlertDisplayComponent } from "src/app/shared/components/alert-display/a
     selector: "project-detail",
     templateUrl: "./project-detail.component.html",
     styleUrls: ["./project-detail.component.scss"],
-    standalone: true,
     imports: [
         NgIf,
         RouterLink,
@@ -39,7 +38,7 @@ import { AlertDisplayComponent } from "src/app/shared/components/alert-display/a
         AsyncPipe,
         PageHeaderComponent,
         AlertDisplayComponent,
-    ],
+    ]
 })
 export class ProjectDetailComponent implements OnInit {
     public currentProject$: Observable<ProjectDto>;

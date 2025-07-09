@@ -22,10 +22,9 @@ import { AuthenticationService } from "src/app/services/authentication.service";
 
 @Component({
     selector: "trash-ovta-index",
-    standalone: true,
     imports: [NeptuneGridComponent, PageHeaderComponent, AlertDisplayComponent, AsyncPipe, NgIf, LoadingDirective, IconComponent, RouterLink],
     templateUrl: "./trash-ovta-index.component.html",
-    styleUrl: "./trash-ovta-index.component.scss",
+    styleUrl: "./trash-ovta-index.component.scss"
 })
 export class TrashOvtaIndexComponent {
     public onlandVisualTrashAssessments$: Observable<OnlandVisualTrashAssessmentGridDto[]>;

@@ -9,10 +9,9 @@ import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/ge
 
 @Component({
     selector: "ovta-observation-layer",
-    standalone: true,
     imports: [AsyncPipe, NgIf],
     templateUrl: "./ovta-observation-layer.component.html",
-    styleUrl: "./ovta-observation-layer.component.scss",
+    styleUrl: "./ovta-observation-layer.component.scss"
 })
 export class OvtaObservationLayerComponent extends MapLayerBase implements OnChanges {
     @Input() ovtaID: number;

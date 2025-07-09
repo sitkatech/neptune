@@ -5,8 +5,7 @@ import { ModalService } from "src/app/shared/services/modal/modal.service";
     selector: "score-descriptions",
     templateUrl: "./score-descriptions.component.html",
     styleUrls: ["./score-descriptions.component.scss"],
-    standalone: true,
-    imports: [],
+    imports: []
 })
 export class ScoreDescriptionsComponent {
     modalComponentRef: ComponentRef<ModalComponent>;

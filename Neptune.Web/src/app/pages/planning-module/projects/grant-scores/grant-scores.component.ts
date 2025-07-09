@@ -10,8 +10,7 @@ import { BtnGroupRadioInputComponent } from "src/app/shared/components/inputs/bt
     selector: "grant-scores",
     templateUrl: "./grant-scores.component.html",
     styleUrls: ["./grant-scores.component.scss"],
-    standalone: true,
-    imports: [NgIf, FieldDefinitionComponent, CustomRichTextComponent, DecimalPipe, PercentPipe, BtnGroupRadioInputComponent],
+    imports: [NgIf, FieldDefinitionComponent, CustomRichTextComponent, DecimalPipe, PercentPipe, BtnGroupRadioInputComponent]
 })
 export class GrantScoresComponent implements OnInit {
     @Input("project") project: ProjectDto;

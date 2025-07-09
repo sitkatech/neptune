@@ -29,7 +29,6 @@ import { WfsService } from "src/app/shared/services/wfs.service";
 
 @Component({
     selector: "trash-ovta-refine-assessment-area",
-    standalone: true,
     imports: [
         PageHeaderComponent,
         NeptuneMapComponent,
@@ -44,7 +43,7 @@ import { WfsService } from "src/app/shared/services/wfs.service";
         TransectLineLayerComponent,
     ],
     templateUrl: "./trash-ovta-refine-assessment-area.component.html",
-    styleUrl: "./trash-ovta-refine-assessment-area.component.scss",
+    styleUrl: "./trash-ovta-refine-assessment-area.component.scss"
 })
 export class TrashOvtaRefineAssessmentAreaComponent {
     public customRichTextTypeID = NeptunePageTypeEnum.EditOVTAArea;

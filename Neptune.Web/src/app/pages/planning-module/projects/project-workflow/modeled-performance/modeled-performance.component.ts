@@ -34,7 +34,6 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
     selector: "modeled-performance",
     templateUrl: "./modeled-performance.component.html",
     styleUrls: ["./modeled-performance.component.scss"],
-    standalone: true,
     imports: [
         CustomRichTextComponent,
         NgIf,
@@ -53,7 +52,7 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
         InventoriedBMPsLayerComponent,
-    ],
+    ]
 })
 export class ModeledPerformanceComponent implements OnInit {
     public ProjectNetworkHistoryStatusTypeEnum = ProjectNetworkSolveHistoryStatusTypeEnum;

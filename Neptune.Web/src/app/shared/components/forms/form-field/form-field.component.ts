@@ -25,7 +25,6 @@ import { NgSelectModule } from "@ng-select/ng-select";
         },
         provideNgxMask(),
     ],
-    standalone: true,
     imports: [
         NgSwitch,
         NgSwitchCase,
@@ -40,7 +39,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
         RequiredPipe,
         TinyMceConfigPipe,
         NgSelectModule,
-    ],
+    ]
 })
 export class FormFieldComponent {
     public FormFieldType = FormFieldType;

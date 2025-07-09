@@ -28,7 +28,6 @@ import { NgSelectModule } from "@ng-select/ng-select";
 
 @Component({
     selector: "trash-initiate-ovta",
-    standalone: true,
     imports: [
         PageHeaderComponent,
         ReactiveFormsModule,
@@ -44,7 +43,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
         NgSelectModule,
     ],
     templateUrl: "./trash-initiate-ovta.component.html",
-    styleUrl: "./trash-initiate-ovta.component.scss",
+    styleUrl: "./trash-initiate-ovta.component.scss"
 })
 export class TrashInitiateOvtaComponent {
     public FormFieldType = FormFieldType;

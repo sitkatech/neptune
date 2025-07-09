@@ -6,10 +6,9 @@ import { CopyToClipboardDirective } from "src/app/shared/directives/copy-to-clip
 
 @Component({
     selector: "tooltip",
-    standalone: true,
     imports: [CommonModule, CopyToClipboardDirective],
     templateUrl: "./tooltip.component.html",
-    styleUrl: "./tooltip.component.scss",
+    styleUrl: "./tooltip.component.scss"
 })
 export class TooltipComponent implements ITooltipAngularComp {
     public displayValue: string;

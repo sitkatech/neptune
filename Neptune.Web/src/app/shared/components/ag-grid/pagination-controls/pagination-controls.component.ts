@@ -7,8 +7,7 @@ import { NgIf, AsyncPipe } from "@angular/common";
     selector: "pagination-controls",
     templateUrl: "./pagination-controls.component.html",
     styleUrl: "./pagination-controls.component.scss",
-    standalone: true,
-    imports: [NgIf, AsyncPipe],
+    imports: [NgIf, AsyncPipe]
 })
 export class PaginationControlsComponent implements OnInit {
     @Input() grid: AgGridAngular;

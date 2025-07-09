@@ -13,8 +13,7 @@ import { Observable } from "rxjs";
     selector: "site-layout",
     templateUrl: "./site-layout.component.html",
     styleUrls: ["./site-layout.component.scss"],
-    standalone: true,
-    imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, AsyncPipe, DropdownToggleDirective, IconComponent, HeaderNavComponent],
+    imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, AsyncPipe, DropdownToggleDirective, IconComponent, HeaderNavComponent]
 })
 export class SiteLayoutComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;

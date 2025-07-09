@@ -9,8 +9,7 @@ import { NgFor, NgIf, AsyncPipe } from "@angular/common";
     selector: "input-errors",
     templateUrl: "./input-errors.component.html",
     styleUrls: ["./input-errors.component.scss"],
-    standalone: true,
-    imports: [NgFor, NgIf, NoteComponent, AsyncPipe],
+    imports: [NgFor, NgIf, NoteComponent, AsyncPipe]
 })
 export class InputErrorsComponent implements OnInit {
     @Input() validateFormControl: FormControl<any>;

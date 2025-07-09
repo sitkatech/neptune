@@ -13,10 +13,9 @@ import { environment } from "src/environments/environment";
 
 @Component({
     selector: "trash-trash-generating-unit-index",
-    standalone: true,
     imports: [PageHeaderComponent, AlertDisplayComponent, NeptuneGridComponent, AsyncPipe, NgIf, LoadingDirective],
     templateUrl: "./trash-trash-generating-unit-index.component.html",
-    styleUrl: "./trash-trash-generating-unit-index.component.scss",
+    styleUrl: "./trash-trash-generating-unit-index.component.scss"
 })
 export class TrashTrashGeneratingUnitIndexComponent {
     public trashGeneratingUnits$: Observable<TrashGeneratingUnitGridDto[]>;

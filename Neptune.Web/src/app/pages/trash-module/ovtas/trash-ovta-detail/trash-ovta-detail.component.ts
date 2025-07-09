@@ -20,10 +20,9 @@ import { ConfirmService } from "src/app/shared/services/confirm/confirm.service"
 
 @Component({
     selector: "trash-ovta-detail",
-    standalone: true,
     imports: [NgIf, AsyncPipe, AlertDisplayComponent, PageHeaderComponent, FieldDefinitionComponent, DatePipe, NgFor, ObservationsMapComponent, RouterLink],
     templateUrl: "./trash-ovta-detail.component.html",
-    styleUrl: "./trash-ovta-detail.component.scss",
+    styleUrl: "./trash-ovta-detail.component.scss"
 })
 export class TrashOvtaDetailComponent {
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentDetailDto>;

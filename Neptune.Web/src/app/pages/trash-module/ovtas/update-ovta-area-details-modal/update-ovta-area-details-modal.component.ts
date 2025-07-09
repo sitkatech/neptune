@@ -13,10 +13,9 @@ import { OnlandVisualTrashAssessmentAreaSimpleDtoForm, OnlandVisualTrashAssessme
 
 @Component({
     selector: "update-ovta-area-details-modal",
-    standalone: true,
     imports: [ReactiveFormsModule, FormFieldComponent, NgIf, AlertDisplayComponent],
     templateUrl: "./update-ovta-area-details-modal.component.html",
-    styleUrl: "./update-ovta-area-details-modal.component.scss",
+    styleUrl: "./update-ovta-area-details-modal.component.scss"
 })
 export class UpdateOvtaAreaDetailsModalComponent implements OnInit {
     public FormFieldType = FormFieldType;

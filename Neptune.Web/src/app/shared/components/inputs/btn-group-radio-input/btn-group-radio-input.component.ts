@@ -13,8 +13,7 @@ import { IconComponent } from "src/app/shared/components/icon/icon.component";
             multi: true,
         },
     ],
-    standalone: true,
-    imports: [NgFor, IconComponent, CommonModule],
+    imports: [NgFor, IconComponent, CommonModule]
 })
 export class BtnGroupRadioInputComponent implements OnInit {
     public uniqueName: string = crypto.randomUUID();

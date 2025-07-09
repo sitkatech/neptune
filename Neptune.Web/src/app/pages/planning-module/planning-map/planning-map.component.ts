@@ -42,7 +42,6 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
     selector: "planning-map",
     templateUrl: "./planning-map.component.html",
     styleUrls: ["./planning-map.component.scss"],
-    standalone: true,
     imports: [
         AlertDisplayComponent,
         ExpandCollapseDirective,
@@ -67,7 +66,7 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
         StormwaterNetworkLayerComponent,
         InventoriedBMPsLayerComponent,
         AsyncPipe,
-    ],
+    ]
 })
 export class PlanningMapComponent implements OnInit {
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampPlanningMap;

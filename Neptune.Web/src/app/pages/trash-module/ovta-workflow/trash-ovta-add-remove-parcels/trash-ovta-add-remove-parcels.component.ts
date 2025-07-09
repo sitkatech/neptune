@@ -22,7 +22,6 @@ import { ParcelLayerComponent } from "../../../../shared/components/leaflet/laye
 
 @Component({
     selector: "trash-ovta-add-remove-parcels",
-    standalone: true,
     imports: [
         PageHeaderComponent,
         AlertDisplayComponent,
@@ -36,7 +35,7 @@ import { ParcelLayerComponent } from "../../../../shared/components/leaflet/laye
         ParcelLayerComponent,
     ],
     templateUrl: "./trash-ovta-add-remove-parcels.component.html",
-    styleUrl: "./trash-ovta-add-remove-parcels.component.scss",
+    styleUrl: "./trash-ovta-add-remove-parcels.component.scss"
 })
 export class TrashOvtaAddRemoveParcelsComponent {
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentAddRemoveParcelsDto>;

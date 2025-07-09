@@ -27,8 +27,7 @@ import { AuthenticationService } from "src/app/services/authentication.service";
     selector: "project-basics",
     templateUrl: "./project-basics.component.html",
     styleUrls: ["./project-basics.component.scss"],
-    standalone: true,
-    imports: [NgIf, AsyncPipe, ReactiveFormsModule, FormsModule, FormFieldComponent, NgSelectModule, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent],
+    imports: [NgIf, AsyncPipe, ReactiveFormsModule, FormsModule, FormFieldComponent, NgSelectModule, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent]
 })
 export class ProjectBasicsComponent implements OnInit {
     public FormFieldType = FormFieldType;

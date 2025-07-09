@@ -9,8 +9,7 @@ import { NgIf, NgFor } from "@angular/common";
     selector: "grid-context-menu-renderer",
     templateUrl: "./context-menu-renderer.component.html",
     styleUrls: ["./context-menu-renderer.component.scss"],
-    standalone: true,
-    imports: [NgIf, DropdownToggleDirective, NgFor, RouterLink, IconComponent],
+    imports: [NgIf, DropdownToggleDirective, NgFor, RouterLink, IconComponent]
 })
 export class ContextMenuRendererComponent implements AgRendererComponent {
     params: any;

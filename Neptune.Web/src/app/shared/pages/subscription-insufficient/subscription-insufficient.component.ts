@@ -6,8 +6,7 @@ import { SiteLayoutComponent } from "../../../pages/site-layout/site-layout.comp
     selector: "subscription-insufficient",
     templateUrl: "./subscription-insufficient.component.html",
     styleUrls: ["./subscription-insufficient.component.scss"],
-    standalone: true,
-    imports: [PageHeaderComponent, SiteLayoutComponent],
+    imports: [PageHeaderComponent, SiteLayoutComponent]
 })
 export class SubscriptionInsufficientComponent implements OnInit {
     constructor() {}

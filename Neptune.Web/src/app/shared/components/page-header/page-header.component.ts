@@ -6,10 +6,9 @@ import { IconComponent, IconInterface } from "src/app/shared/components/icon/ico
 
 @Component({
     selector: "page-header",
-    standalone: true,
     imports: [CommonModule, CustomRichTextComponent, IconComponent],
     templateUrl: "./page-header.component.html",
-    styleUrls: ["./page-header.component.scss"],
+    styleUrls: ["./page-header.component.scss"]
 })
 export class PageHeaderComponent implements AfterContentInit, OnChanges {
     @Input() pageTitle: string = "";

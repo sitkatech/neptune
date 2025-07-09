@@ -18,9 +18,8 @@ import { PersonDto } from "src/app/shared/generated/model/person-dto";
     selector: "custom-rich-text",
     templateUrl: "./custom-rich-text.component.html",
     styleUrls: ["./custom-rich-text.component.scss"],
-    standalone: true,
     imports: [LoadingDirective, NgIf, IconComponent, FormsModule, EditorComponent],
-    providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }],
+    providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }]
 })
 export class CustomRichTextComponent implements OnInit, AfterViewChecked, OnDestroy {
     @Input() customRichTextTypeID: number;

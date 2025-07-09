@@ -9,10 +9,9 @@ import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api
 
 @Component({
     selector: "ovta-area-layer",
-    standalone: true,
     imports: [NgIf, AsyncPipe],
     templateUrl: "./ovta-area-layer.component.html",
-    styleUrl: "./ovta-area-layer.component.scss",
+    styleUrl: "./ovta-area-layer.component.scss"
 })
 export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges {
     constructor(

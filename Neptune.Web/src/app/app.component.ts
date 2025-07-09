@@ -12,8 +12,7 @@ import { DOCUMENT, NgIf } from "@angular/common";
     selector: "app-root",
     templateUrl: "./app.component.html",
     styleUrls: ["./app.component.scss"],
-    standalone: true,
-    imports: [RouterOutlet, NgIf],
+    imports: [RouterOutlet, NgIf]
 })
 export class AppComponent {
     public isIframe = false;

@@ -27,10 +27,9 @@ import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto"
 
 @Component({
     selector: "trash-ovta-area-index",
-    standalone: true,
     imports: [PageHeaderComponent, AlertDisplayComponent, NgIf, AsyncPipe, LoadingDirective, IconComponent, HybridMapGridComponent, SelectedOvtaAreaLayerComponent, RouterLink],
     templateUrl: "./trash-ovta-area-index.component.html",
-    styleUrl: "./trash-ovta-area-index.component.scss",
+    styleUrl: "./trash-ovta-area-index.component.scss"
 })
 export class TrashOvtaAreaIndexComponent {
     public onlandVisualTrashAssessmentAreas$: Observable<OnlandVisualTrashAssessmentAreaGridDto[]>;

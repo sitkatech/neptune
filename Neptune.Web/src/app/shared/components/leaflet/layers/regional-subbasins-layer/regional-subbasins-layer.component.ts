@@ -5,10 +5,9 @@ import * as L from "leaflet";
 import { MapLayerBase } from "../map-layer-base.component";
 @Component({
     selector: "regional-subbasins-layer",
-    standalone: true,
     imports: [CommonModule],
     templateUrl: "./regional-subbasins-layer.component.html",
-    styleUrls: ["./regional-subbasins-layer.component.scss"],
+    styleUrls: ["./regional-subbasins-layer.component.scss"]
 })
 export class RegionalSubbasinsLayerComponent extends MapLayerBase implements OnChanges {
     constructor() {

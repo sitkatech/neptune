@@ -13,8 +13,7 @@ import { environment } from "src/environments/environment";
     selector: "trash-site-layout",
     templateUrl: "./trash-site-layout.component.html",
     styleUrls: ["./trash-site-layout.component.scss"],
-    standalone: true,
-    imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, AsyncPipe, HeaderNavComponent, IconComponent, DropdownToggleDirective],
+    imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, AsyncPipe, HeaderNavComponent, IconComponent, DropdownToggleDirective]
 })
 export class TrashSiteLayoutComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;

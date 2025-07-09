@@ -6,10 +6,9 @@ import { MapLayerBase } from "../map-layer-base.component";
 
 @Component({
     selector: "land-use-block-layer",
-    standalone: true,
     imports: [CommonModule],
     templateUrl: "./land-use-block-layer.component.html",
-    styleUrl: "./land-use-block-layer.component.scss",
+    styleUrl: "./land-use-block-layer.component.scss"
 })
 export class LandUseBlockLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     constructor() {

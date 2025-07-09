@@ -25,8 +25,7 @@ import { ProjectDocumentService } from "src/app/shared/generated/api/project-doc
     selector: "project-attachments",
     templateUrl: "./project-attachments.component.html",
     styleUrls: ["./project-attachments.component.scss"],
-    standalone: true,
-    imports: [NgIf, CustomRichTextComponent, FormsModule, NgClass, AttachmentsDisplayComponent, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent],
+    imports: [NgIf, CustomRichTextComponent, FormsModule, NgClass, AttachmentsDisplayComponent, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent]
 })
 export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     @ViewChild("fileUpload") fileUpload: any;

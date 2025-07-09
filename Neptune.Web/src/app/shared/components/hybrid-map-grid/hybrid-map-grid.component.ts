@@ -12,10 +12,9 @@ import { BoundingBoxDto } from "../../generated/model/bounding-box-dto";
 
 @Component({
     selector: "hybrid-map-grid",
-    standalone: true,
     imports: [LoadingDirective, IconComponent, CommonModule, NeptuneGridHeaderComponent, NeptuneGridComponent, NeptuneMapComponent],
     templateUrl: "./hybrid-map-grid.component.html",
-    styleUrl: "./hybrid-map-grid.component.scss",
+    styleUrl: "./hybrid-map-grid.component.scss"
 })
 export class HybridMapGridComponent {
     @Input() rowData: any[];

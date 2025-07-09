@@ -3,10 +3,9 @@ import { CommonModule } from "@angular/common";
 
 @Component({
     selector: "icon",
-    standalone: true,
     imports: [CommonModule],
     templateUrl: "./icon.component.html",
-    styleUrls: ["./icon.component.scss"],
+    styleUrls: ["./icon.component.scss"]
 })
 export class IconComponent {
     @Input() icon: typeof IconInterface;

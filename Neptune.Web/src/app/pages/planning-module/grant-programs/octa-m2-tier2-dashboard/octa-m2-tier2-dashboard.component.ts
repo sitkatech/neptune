@@ -44,7 +44,6 @@ import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-togg
     selector: "octa-m2-tier2-dashboard",
     templateUrl: "./octa-m2-tier2-dashboard.component.html",
     styleUrls: ["./octa-m2-tier2-dashboard.component.scss"],
-    standalone: true,
     imports: [
         AlertDisplayComponent,
         NgSelectModule,
@@ -70,7 +69,7 @@ import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-togg
         AsyncPipe,
         InventoriedBMPsLayerComponent,
         DropdownToggleDirective,
-    ],
+    ]
 })
 export class OCTAM2Tier2DashboardComponent implements OnInit {
     public mapIsReady: boolean = false;

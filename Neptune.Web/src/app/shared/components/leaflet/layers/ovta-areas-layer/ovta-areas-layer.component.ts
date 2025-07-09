@@ -6,10 +6,9 @@ import { CommonModule } from "@angular/common";
 
 @Component({
     selector: "ovta-areas-layer",
-    standalone: true,
     imports: [CommonModule],
     templateUrl: "./ovta-areas-layer.component.html",
-    styleUrl: "./ovta-areas-layer.component.scss",
+    styleUrl: "./ovta-areas-layer.component.scss"
 })
 export class OvtaAreasLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     constructor() {

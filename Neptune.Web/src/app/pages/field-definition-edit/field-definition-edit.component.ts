@@ -17,9 +17,8 @@ import { PageHeaderComponent } from "../../shared/components/page-header/page-he
     selector: "field-definition-edit",
     templateUrl: "./field-definition-edit.component.html",
     styleUrls: ["./field-definition-edit.component.scss"],
-    standalone: true,
     imports: [NgIf, RouterLink, AlertDisplayComponent, EditorModule, FormsModule, PageHeaderComponent],
-    providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }],
+    providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }]
 })
 export class FieldDefinitionEditComponent implements OnInit {
     private currentUser: PersonDto;

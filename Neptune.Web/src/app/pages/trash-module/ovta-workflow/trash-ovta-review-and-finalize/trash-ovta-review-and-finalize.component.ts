@@ -29,7 +29,6 @@ import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/serv
 
 @Component({
     selector: "trash-ovta-review-and-finalize",
-    standalone: true,
     imports: [
         PageHeaderComponent,
         FormFieldComponent,
@@ -44,7 +43,7 @@ import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/serv
         AlertDisplayComponent,
     ],
     templateUrl: "./trash-ovta-review-and-finalize.component.html",
-    styleUrl: "./trash-ovta-review-and-finalize.component.scss",
+    styleUrl: "./trash-ovta-review-and-finalize.component.scss"
 })
 export class TrashOvtaReviewAndFinalizeComponent {
     public isLoadingSubmit = false;

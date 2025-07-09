@@ -15,8 +15,7 @@ import { IconComponent } from "src/app/shared/components/icon/icon.component";
     selector: "app-home-index",
     templateUrl: "./home-index.component.html",
     styleUrls: ["./home-index.component.scss"],
-    standalone: true,
-    imports: [NgIf, AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe, HeaderNavComponent, IconComponent],
+    imports: [NgIf, AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe, HeaderNavComponent, IconComponent]
 })
 export class HomeIndexComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;

@@ -27,7 +27,6 @@ import { ProjectWorkflowProgressService } from "src/app/shared/services/project-
     selector: "review",
     templateUrl: "./review.component.html",
     styleUrls: ["./review.component.scss"],
-    standalone: true,
     imports: [
         CustomRichTextComponent,
         NgIf,
@@ -40,7 +39,7 @@ import { ProjectWorkflowProgressService } from "src/app/shared/services/project-
         PageHeaderComponent,
         WorkflowBodyComponent,
         AlertDisplayComponent,
-    ],
+    ]
 })
 export class ReviewComponent implements OnInit {
     public projectID: number;

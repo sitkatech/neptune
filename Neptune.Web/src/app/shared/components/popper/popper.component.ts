@@ -5,8 +5,7 @@ import { NgIf, NgTemplateOutlet } from "@angular/common";
     selector: "popper",
     templateUrl: "./popper.component.html",
     styleUrls: ["./popper.component.scss"],
-    standalone: true,
-    imports: [NgIf, NgTemplateOutlet],
+    imports: [NgIf, NgTemplateOutlet]
 })
 export class PopperComponent implements OnInit {
     @Input() context: TemplateRef<any>;

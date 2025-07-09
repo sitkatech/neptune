@@ -6,10 +6,9 @@ import { MapLayerBase } from "../map-layer-base.component";
 
 @Component({
     selector: "permit-type-layer",
-    standalone: true,
     imports: [CommonModule],
     templateUrl: "./permit-type-layer.component.html",
-    styleUrl: "./permit-type-layer.component.scss",
+    styleUrl: "./permit-type-layer.component.scss"
 })
 export class PermitTypeLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     constructor() {

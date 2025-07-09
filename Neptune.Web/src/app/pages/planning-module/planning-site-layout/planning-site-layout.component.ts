@@ -13,8 +13,7 @@ import { environment } from "src/environments/environment";
     selector: "planning-site-layout",
     templateUrl: "./planning-site-layout.component.html",
     styleUrls: ["./planning-site-layout.component.scss"],
-    standalone: true,
-    imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, AsyncPipe, DropdownToggleDirective, IconComponent, HeaderNavComponent],
+    imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, AsyncPipe, DropdownToggleDirective, IconComponent, HeaderNavComponent]
 })
 export class PlanningSiteLayoutComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;

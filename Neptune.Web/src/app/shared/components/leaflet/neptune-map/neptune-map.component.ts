@@ -19,7 +19,6 @@ import { RegionalSubbasinTraceFromPointComponent } from "../features/regional-su
 
 @Component({
     selector: "neptune-map",
-    standalone: true,
     imports: [CommonModule, IconComponent, NgSelectModule, FormsModule, ReactiveFormsModule, RegionalSubbasinTraceFromPointComponent],
     templateUrl: "./neptune-map.component.html",
     styleUrls: ["./neptune-map.component.scss"],
@@ -29,7 +28,7 @@ import { RegionalSubbasinTraceFromPointComponent } from "../features/regional-su
             multi: true,
             useExisting: NeptuneMapComponent,
         },
-    ],
+    ]
 })
 export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     public mapID: string = "map_" + Date.now().toString(36) + Math.random().toString(36).substring(13);

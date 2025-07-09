@@ -5,10 +5,9 @@ import * as L from "leaflet";
 import { MapLayerBase } from "../map-layer-base.component";
 @Component({
     selector: "trash-generating-unit-layer",
-    standalone: true,
     imports: [CommonModule],
     templateUrl: "./trash-generating-unit-layer.component.html",
-    styleUrls: ["./trash-generating-unit-layer.component.scss"],
+    styleUrls: ["./trash-generating-unit-layer.component.scss"]
 })
 export class TrashGeneratingUnitLayerComponent extends MapLayerBase implements OnChanges {
     constructor() {

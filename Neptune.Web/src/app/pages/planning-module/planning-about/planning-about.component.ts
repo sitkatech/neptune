@@ -6,8 +6,7 @@ import { PageHeaderComponent } from "src/app/shared/components/page-header/page-
     selector: "planning-about",
     templateUrl: "./planning-about.component.html",
     styleUrls: ["./planning-about.component.scss"],
-    standalone: true,
-    imports: [PageHeaderComponent],
+    imports: [PageHeaderComponent]
 })
 export class PlanningAboutComponent implements OnInit {
     constructor() {}

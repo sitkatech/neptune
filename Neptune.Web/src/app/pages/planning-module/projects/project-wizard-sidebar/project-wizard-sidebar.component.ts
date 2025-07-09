@@ -13,8 +13,7 @@ import { routeParams } from "src/app/app.routes";
     selector: "project-wizard-sidebar",
     templateUrl: "./project-wizard-sidebar.component.html",
     styleUrls: ["./project-wizard-sidebar.component.scss"],
-    standalone: true,
-    imports: [NgIf, WorkflowNavComponent, WorkflowNavItemComponent, AsyncPipe],
+    imports: [NgIf, WorkflowNavComponent, WorkflowNavItemComponent, AsyncPipe]
 })
 export class ProjectWizardSidebarComponent implements OnInit {
     public submitted: boolean = false;

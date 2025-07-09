@@ -9,10 +9,9 @@ import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api
 
 @Component({
     selector: "transect-line-layer",
-    standalone: true,
     imports: [NgIf, AsyncPipe],
     templateUrl: "./transect-line-layer.component.html",
-    styleUrl: "./transect-line-layer.component.scss",
+    styleUrl: "./transect-line-layer.component.scss"
 })
 export class TransectLineLayerComponent extends MapLayerBase implements OnChanges {
     constructor(

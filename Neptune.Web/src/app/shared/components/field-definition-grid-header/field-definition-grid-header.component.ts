@@ -12,8 +12,7 @@ interface MyParams extends IHeaderParams {
     selector: "field-definition-grid-header",
     templateUrl: "./field-definition-grid-header.component.html",
     styleUrls: ["./field-definition-grid-header.component.scss"],
-    standalone: true,
-    imports: [FieldDefinitionComponent, NgIf],
+    imports: [FieldDefinitionComponent, NgIf]
 })
 export class FieldDefinitionGridHeaderComponent implements IHeaderAngularComp {
     @ViewChild("header") header: ElementRef;

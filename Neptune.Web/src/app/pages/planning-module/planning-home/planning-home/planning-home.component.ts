@@ -14,8 +14,7 @@ import { Observable, tap } from "rxjs";
     selector: "planning-home",
     templateUrl: "./planning-home.component.html",
     styleUrls: ["./planning-home.component.scss"],
-    standalone: true,
-    imports: [NgIf, AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe],
+    imports: [NgIf, AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe]
 })
 export class PLanningHomeComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;

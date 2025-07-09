@@ -8,8 +8,7 @@ import { NgFor } from "@angular/common";
     selector: "qanat-custom-dropdown-filter",
     templateUrl: "./custom-dropdown-filter.component.html",
     styleUrls: ["./custom-dropdown-filter.component.scss"],
-    standalone: true,
-    imports: [NgFor, FormsModule],
+    imports: [NgFor, FormsModule]
 })
 export class CustomDropdownFilterComponent implements AgFilterComponent {
     params;

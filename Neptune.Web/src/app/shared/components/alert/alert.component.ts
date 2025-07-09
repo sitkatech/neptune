@@ -8,7 +8,6 @@ import { NgIf } from '@angular/common';
     selector: 'alert',
     templateUrl: './alert.component.html',
     styleUrls: ['./alert.component.scss'],
-    standalone: true,
     imports: [NgIf]
 })
 export class AlertComponent implements OnInit {

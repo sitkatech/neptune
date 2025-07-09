@@ -16,9 +16,8 @@ import { NgIf } from "@angular/common";
     selector: "field-definition",
     templateUrl: "./field-definition.component.html",
     styleUrls: ["./field-definition.component.scss"],
-    standalone: true,
     imports: [NgIf, EditorComponent, FormsModule, PopperDirective],
-    providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }],
+    providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }]
 })
 export class FieldDefinitionComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() fieldDefinitionType: string;

@@ -9,10 +9,9 @@ import { LegendItem } from "src/app/shared/models/legend-item";
 
 @Component({
     selector: "regional-subbasin-trace-from-point",
-    standalone: true,
     imports: [],
     templateUrl: "./regional-subbasin-trace-from-point.component.html",
-    styleUrl: "./regional-subbasin-trace-from-point.component.scss",
+    styleUrl: "./regional-subbasin-trace-from-point.component.scss"
 })
 export class RegionalSubbasinTraceFromPointComponent {
     @Input() map: any;

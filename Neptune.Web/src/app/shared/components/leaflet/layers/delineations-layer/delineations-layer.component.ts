@@ -5,10 +5,9 @@ import * as L from "leaflet";
 import { MapLayerBase } from "../map-layer-base.component";
 @Component({
     selector: "delineations-layer",
-    standalone: true,
     imports: [CommonModule],
     templateUrl: "./delineations-layer.component.html",
-    styleUrls: ["./delineations-layer.component.scss"],
+    styleUrls: ["./delineations-layer.component.scss"]
 })
 export class DelineationsLayerComponent extends MapLayerBase implements OnChanges {
     constructor() {
