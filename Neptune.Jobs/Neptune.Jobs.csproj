@@ -5,8 +5,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.23.0" />
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.14" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.24.1" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.20" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Neptune.Common\Neptune.Common.csproj" />

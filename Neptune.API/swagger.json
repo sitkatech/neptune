@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.4",
   "info": {
     "title": "Neptune.API",
     "version": "1.0"
@@ -4261,6 +4261,15 @@
         ],
         "type": "string"
       },
+      "ElevationModel": {
+        "type": "object",
+        "properties": {
+          "Extent": {
+            "$ref": "#/components/schemas/Envelope"
+          }
+        },
+        "additionalProperties": false
+      },
       "Envelope": {
         "type": "object",
         "properties": {
@@ -4509,6 +4518,9 @@
             "format": "int32",
             "readOnly": true
           },
+          "ElevationModel": {
+            "$ref": "#/components/schemas/ElevationModel"
+          },
           "GeometryServices": {
             "$ref": "#/components/schemas/NtsGeometryServices"
           }
@@ -4530,6 +4542,10 @@
         "additionalProperties": false
       },
       "GeometryOverlay": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "GeometryRelate": {
         "type": "object",
         "additionalProperties": false
       },
@@ -4686,6 +4702,9 @@
           "GeometryOverlay": {
             "$ref": "#/components/schemas/GeometryOverlay"
           },
+          "GeometryRelate": {
+            "$ref": "#/components/schemas/GeometryRelate"
+          },
           "CoordinateEqualityComparer": {
             "$ref": "#/components/schemas/CoordinateEqualityComparer"
           },
@@ -4699,6 +4718,9 @@
           },
           "DefaultPrecisionModel": {
             "$ref": "#/components/schemas/PrecisionModel"
+          },
+          "DefaultElevationModel": {
+            "$ref": "#/components/schemas/ElevationModel"
           }
         },
         "additionalProperties": false

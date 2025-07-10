@@ -25,7 +25,7 @@ namespace Neptune.Common
 {
     public class ImageHelper
     {
-        public static async Task<byte[]> ScaleImage(byte[] imageData, int maxWidth, int maxHeight)
+        public static async Task<byte[]> ScaleImage(byte[] imageData, uint maxWidth, uint maxHeight)
         {
             using var image = new MagickImage(imageData);
             image.Format = MagickFormat.Png;

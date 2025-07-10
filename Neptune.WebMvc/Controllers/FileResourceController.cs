@@ -123,8 +123,8 @@ namespace Neptune.WebMvc.Controllers
 
                             var fileResourceBlobDownloadResult = await _azureBlobStorageService.DownloadFileResourceFromBlobStorage(fileResource);
                             var scaledImage =
-                                await ImageHelper.ScaleImage(fileResourceBlobDownloadResult.Content.ToArray(), maxWidth,
-                                    maxHeight);
+                                await ImageHelper.ScaleImage(fileResourceBlobDownloadResult.Content.ToArray(), (uint)maxWidth,
+                                    (uint)maxHeight);
                             return File(scaledImage.ToArray(), "image/png");
                         default:
                             throw new ArgumentOutOfRangeException();
