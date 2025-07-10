@@ -3,7 +3,7 @@
 //  Source Table: [dbo].[HydromodificationAppliesType]
 
 import { LookupTableEntry } from "src/app/shared/models/lookup-table-entry";
-import { SelectDropdownOption } from "src/app/shared/components/form-field/form-field.component"
+import { SelectDropdownOption } from "src/app/shared/components/forms/form-field/form-field.component"
 
 export enum HydromodificationAppliesTypeEnum {
   Applicable = 1,

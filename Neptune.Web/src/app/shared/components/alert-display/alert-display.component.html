@@ -1,5 +1,9 @@
-<div class="mt-2" *ngIf="alerts.length > 0">
-    <alert *ngFor="let alert of alerts" [alert]="alert">
+@if (alerts.length > 0) {
+  <div class="mt-2">
+    @for (alert of alerts; track alert) {
+      <alert [alert]="alert">
         <span [innerHTML]="alert.message"></span>
-    </alert>
-</div>
+      </alert>
+    }
+  </div>
+}

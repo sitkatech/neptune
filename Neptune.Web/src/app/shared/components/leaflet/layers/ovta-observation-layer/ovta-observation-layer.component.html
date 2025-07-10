@@ -1,7 +1,9 @@
-<div *ngIf="onlandVisualTrashAssessmentObservations$ | async"></div>
+@if (onlandVisualTrashAssessmentObservations$ | async) {
+  <div></div>
+}
 <ng-template #layerName>
-    <span>Observations</span>
+  <span>Observations</span>
 </ng-template>
 <ng-template #legend>
-    <img src="./assets/main/map-legend-images/marker.png" style="height: 12px; margin-bottom: 3px" />
+  <img src="./assets/main/map-legend-images/marker.png" style="height: 12px; margin-bottom: 3px" />
 </ng-template>

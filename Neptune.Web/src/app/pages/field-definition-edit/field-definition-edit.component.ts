@@ -10,16 +10,15 @@ import { EditorComponent, EditorModule, TINYMCE_SCRIPT_SRC } from "@tinymce/tiny
 import TinyMCEHelpers from "src/app/shared/helpers/tiny-mce-helpers";
 import { FormsModule } from "@angular/forms";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
-import { NgIf } from "@angular/common";
+
 import { PageHeaderComponent } from "../../shared/components/page-header/page-header.component";
 
 @Component({
     selector: "field-definition-edit",
     templateUrl: "./field-definition-edit.component.html",
     styleUrls: ["./field-definition-edit.component.scss"],
-    standalone: true,
-    imports: [NgIf, RouterLink, AlertDisplayComponent, EditorModule, FormsModule, PageHeaderComponent],
-    providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }],
+    imports: [RouterLink, AlertDisplayComponent, EditorModule, FormsModule, PageHeaderComponent],
+    providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }]
 })
 export class FieldDefinitionEditComponent implements OnInit {
     private currentUser: PersonDto;

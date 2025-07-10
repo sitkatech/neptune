@@ -7,7 +7,7 @@ import { routeParams } from "src/app/app.routes";
 import { NeptuneMapInitEvent, NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { WfsService } from "src/app/shared/services/wfs.service";
 import * as L from "leaflet";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 import { OvtaObservationLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-observation-layer/ovta-observation-layer.component";
 import { OnlandVisualTrashAssessmentAddRemoveParcelsDto } from "src/app/shared/generated/model/models";
@@ -22,21 +22,19 @@ import { ParcelLayerComponent } from "../../../../shared/components/leaflet/laye
 
 @Component({
     selector: "trash-ovta-add-remove-parcels",
-    standalone: true,
     imports: [
-        PageHeaderComponent,
-        AlertDisplayComponent,
-        NeptuneMapComponent,
-        AsyncPipe,
-        NgIf,
-        OvtaObservationLayerComponent,
-        LandUseBlockLayerComponent,
-        WorkflowBodyComponent,
-        TransectLineLayerComponent,
-        ParcelLayerComponent,
-    ],
+    PageHeaderComponent,
+    AlertDisplayComponent,
+    NeptuneMapComponent,
+    AsyncPipe,
+    OvtaObservationLayerComponent,
+    LandUseBlockLayerComponent,
+    WorkflowBodyComponent,
+    TransectLineLayerComponent,
+    ParcelLayerComponent
+],
     templateUrl: "./trash-ovta-add-remove-parcels.component.html",
-    styleUrl: "./trash-ovta-add-remove-parcels.component.scss",
+    styleUrl: "./trash-ovta-add-remove-parcels.component.scss"
 })
 export class TrashOvtaAddRemoveParcelsComponent {
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentAddRemoveParcelsDto>;

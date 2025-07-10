@@ -7,8 +7,7 @@ import { ProjectWizardSidebarComponent } from "src/app/pages/planning-module/pro
     selector: "project-workflow-outlet",
     templateUrl: "./project-workflow-outlet.component.html",
     styleUrls: ["./project-workflow-outlet.component.scss"],
-    standalone: true,
-    imports: [ProjectWizardSidebarComponent, RouterOutlet],
+    imports: [ProjectWizardSidebarComponent, RouterOutlet]
 })
 export class ProjectWorkflowOutletComponent implements OnInit {
     public projectModel: ProjectUpsertDto;

@@ -16,9 +16,7 @@ namespace Neptune.EFModels.Entities
         public static readonly WaterQualityManagementPlanVisitStatusFollowupVerification FollowupVerification = WaterQualityManagementPlanVisitStatusFollowupVerification.Instance;
 
         public static readonly List<WaterQualityManagementPlanVisitStatus> All;
-        public static readonly List<WaterQualityManagementPlanVisitStatusSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanVisitStatus> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanVisitStatusSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -26,9 +24,7 @@ namespace Neptune.EFModels.Entities
         static WaterQualityManagementPlanVisitStatus()
         {
             All = new List<WaterQualityManagementPlanVisitStatus> { InitialAnnualVerification, FollowupVerification };
-            AllAsSimpleDto = new List<WaterQualityManagementPlanVisitStatusSimpleDto> { InitialAnnualVerification.AsSimpleDto(), FollowupVerification.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanVisitStatus>(All.ToDictionary(x => x.WaterQualityManagementPlanVisitStatusID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanVisitStatusSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.WaterQualityManagementPlanVisitStatusID));
         }
 
         /// <summary>

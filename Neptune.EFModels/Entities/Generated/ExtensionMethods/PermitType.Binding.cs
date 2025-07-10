@@ -20,9 +20,7 @@ namespace Neptune.EFModels.Entities
         public static readonly PermitTypeOther Other = PermitTypeOther.Instance;
 
         public static readonly List<PermitType> All;
-        public static readonly List<PermitTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, PermitType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, PermitTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -30,9 +28,7 @@ namespace Neptune.EFModels.Entities
         static PermitType()
         {
             All = new List<PermitType> { PhaseIMS4, PhaseIIMS4, IGP, IndividualPermit, CalTransMS4, Other };
-            AllAsSimpleDto = new List<PermitTypeSimpleDto> { PhaseIMS4.AsSimpleDto(), PhaseIIMS4.AsSimpleDto(), IGP.AsSimpleDto(), IndividualPermit.AsSimpleDto(), CalTransMS4.AsSimpleDto(), Other.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, PermitType>(All.ToDictionary(x => x.PermitTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, PermitTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.PermitTypeID));
         }
 
         /// <summary>

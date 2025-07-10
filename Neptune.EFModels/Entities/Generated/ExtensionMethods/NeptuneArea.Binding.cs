@@ -18,9 +18,7 @@ namespace Neptune.EFModels.Entities
         public static readonly NeptuneAreaPlanning Planning = NeptuneAreaPlanning.Instance;
 
         public static readonly List<NeptuneArea> All;
-        public static readonly List<NeptuneAreaSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, NeptuneArea> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, NeptuneAreaSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -28,9 +26,7 @@ namespace Neptune.EFModels.Entities
         static NeptuneArea()
         {
             All = new List<NeptuneArea> { Trash, OCStormwaterTools, Modeling, Planning };
-            AllAsSimpleDto = new List<NeptuneAreaSimpleDto> { Trash.AsSimpleDto(), OCStormwaterTools.AsSimpleDto(), Modeling.AsSimpleDto(), Planning.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptuneArea>(All.ToDictionary(x => x.NeptuneAreaID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, NeptuneAreaSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.NeptuneAreaID));
         }
 
         /// <summary>

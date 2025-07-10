@@ -2,7 +2,7 @@
 
 namespace Neptune.EFModels.Entities;
 
-public static partial class FieldDefinitionExtensionMethods
+public static class FieldDefinitionExtensionMethods
 {
     public static FieldDefinitionDto AsDto(this FieldDefinition fieldDefinition)
     {

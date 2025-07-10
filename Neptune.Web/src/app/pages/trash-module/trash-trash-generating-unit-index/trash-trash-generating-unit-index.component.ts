@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { Component } from "@angular/core";
 import { ColDef } from "ag-grid-community";
 import { Observable, tap } from "rxjs";
@@ -13,10 +13,9 @@ import { environment } from "src/environments/environment";
 
 @Component({
     selector: "trash-trash-generating-unit-index",
-    standalone: true,
-    imports: [PageHeaderComponent, AlertDisplayComponent, NeptuneGridComponent, AsyncPipe, NgIf, LoadingDirective],
+    imports: [PageHeaderComponent, AlertDisplayComponent, NeptuneGridComponent, AsyncPipe, LoadingDirective],
     templateUrl: "./trash-trash-generating-unit-index.component.html",
-    styleUrl: "./trash-trash-generating-unit-index.component.scss",
+    styleUrl: "./trash-trash-generating-unit-index.component.scss"
 })
 export class TrashTrashGeneratingUnitIndexComponent {
     public trashGeneratingUnits$: Observable<TrashGeneratingUnitGridDto[]>;

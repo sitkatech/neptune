@@ -7,10 +7,9 @@ import { routeParams } from "src/app/app.routes";
 
 @Component({
     selector: "trash-ovta-instructions",
-    standalone: true,
     imports: [PageHeaderComponent, CustomRichTextComponent],
     templateUrl: "./trash-ovta-instructions.component.html",
-    styleUrl: "./trash-ovta-instructions.component.scss",
+    styleUrl: "./trash-ovta-instructions.component.scss"
 })
 export class TrashOvtaInstructionsComponent {
     public customRichTextTypeID = NeptunePageTypeEnum.OVTAInstructions;

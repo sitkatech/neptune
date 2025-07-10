@@ -6,7 +6,7 @@ import { PageHeaderComponent } from "src/app/shared/components/page-header/page-
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { ColDef } from "ag-grid-community";
-import { AsyncPipe, DatePipe, NgIf } from "@angular/common";
+import { AsyncPipe, DatePipe } from "@angular/common";
 import { OnlandVisualTrashAssessmentGridDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-grid-dto";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
@@ -22,10 +22,9 @@ import { AuthenticationService } from "src/app/services/authentication.service";
 
 @Component({
     selector: "trash-ovta-index",
-    standalone: true,
-    imports: [NeptuneGridComponent, PageHeaderComponent, AlertDisplayComponent, AsyncPipe, NgIf, LoadingDirective, IconComponent, RouterLink],
+    imports: [NeptuneGridComponent, PageHeaderComponent, AlertDisplayComponent, AsyncPipe, LoadingDirective, IconComponent, RouterLink],
     templateUrl: "./trash-ovta-index.component.html",
-    styleUrl: "./trash-ovta-index.component.scss",
+    styleUrl: "./trash-ovta-index.component.scss"
 })
 export class TrashOvtaIndexComponent {
     public onlandVisualTrashAssessments$: Observable<OnlandVisualTrashAssessmentGridDto[]>;

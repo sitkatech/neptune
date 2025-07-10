@@ -16,9 +16,7 @@ namespace Neptune.EFModels.Entities
         public static readonly OnlandVisualTrashAssessmentStatusComplete Complete = OnlandVisualTrashAssessmentStatusComplete.Instance;
 
         public static readonly List<OnlandVisualTrashAssessmentStatus> All;
-        public static readonly List<OnlandVisualTrashAssessmentStatusSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, OnlandVisualTrashAssessmentStatus> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, OnlandVisualTrashAssessmentStatusSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -26,9 +24,7 @@ namespace Neptune.EFModels.Entities
         static OnlandVisualTrashAssessmentStatus()
         {
             All = new List<OnlandVisualTrashAssessmentStatus> { InProgress, Complete };
-            AllAsSimpleDto = new List<OnlandVisualTrashAssessmentStatusSimpleDto> { InProgress.AsSimpleDto(), Complete.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, OnlandVisualTrashAssessmentStatus>(All.ToDictionary(x => x.OnlandVisualTrashAssessmentStatusID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, OnlandVisualTrashAssessmentStatusSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.OnlandVisualTrashAssessmentStatusID));
         }
 
         /// <summary>

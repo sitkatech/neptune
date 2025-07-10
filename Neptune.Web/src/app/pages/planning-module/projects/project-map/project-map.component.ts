@@ -16,7 +16,7 @@ import { TreatmentBMPModelingAttributeDefinitionDto } from "src/app/shared/gener
 import { TreatmentBmpsComponent } from "src/app/pages/planning-module/projects/project-workflow/treatment-bmps/treatment-bmps.component";
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
-import { NgIf, NgFor, DecimalPipe } from "@angular/common";
+import { DecimalPipe } from "@angular/common";
 import { DelineationsLayerComponent } from "src/app/shared/components/leaflet/layers/delineations-layer/delineations-layer.component";
 import { JurisdictionsLayerComponent } from "src/app/shared/components/leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
 import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leaflet/layers/regional-subbasins-layer/regional-subbasins-layer.component";
@@ -31,20 +31,17 @@ import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-
     selector: "project-map",
     templateUrl: "./project-map.component.html",
     styleUrls: ["./project-map.component.scss"],
-    standalone: true,
     imports: [
-        NgIf,
-        NgFor,
-        FieldDefinitionComponent,
-        DecimalPipe,
-        NeptuneMapComponent,
-        RegionalSubbasinsLayerComponent,
-        DelineationsLayerComponent,
-        JurisdictionsLayerComponent,
-        WqmpsLayerComponent,
-        StormwaterNetworkLayerComponent,
-        InventoriedBMPsLayerComponent,
-    ],
+    FieldDefinitionComponent,
+    DecimalPipe,
+    NeptuneMapComponent,
+    RegionalSubbasinsLayerComponent,
+    DelineationsLayerComponent,
+    JurisdictionsLayerComponent,
+    WqmpsLayerComponent,
+    StormwaterNetworkLayerComponent,
+    InventoriedBMPsLayerComponent
+]
 })
 export class ProjectMapComponent implements OnInit {
     @Input("projectID") projectID: number;

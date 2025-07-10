@@ -3,7 +3,6 @@ import { CommonModule } from "@angular/common";
 import { Control, LeafletEvent, Map, MapOptions, DomUtil, ControlPosition } from "leaflet";
 import * as L from "leaflet";
 import "src/scripts/leaflet.groupedlayercontrol.js";
-import "/node_modules/leaflet.fullscreen/Control.FullScreen.js";
 import GestureHandling from "leaflet-gesture-handling";
 import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
 import { BoundingBoxDto } from "src/app/shared/generated/model/models";
@@ -19,7 +18,6 @@ import { RegionalSubbasinTraceFromPointComponent } from "../features/regional-su
 
 @Component({
     selector: "neptune-map",
-    standalone: true,
     imports: [CommonModule, IconComponent, NgSelectModule, FormsModule, ReactiveFormsModule, RegionalSubbasinTraceFromPointComponent],
     templateUrl: "./neptune-map.component.html",
     styleUrls: ["./neptune-map.component.scss"],

@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { environment } from "src/environments/environment";
 import { PersonDto } from "src/app/shared/generated/model/person-dto";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
@@ -13,8 +13,7 @@ import { Observable } from "rxjs";
     selector: "site-layout",
     templateUrl: "./site-layout.component.html",
     styleUrls: ["./site-layout.component.scss"],
-    standalone: true,
-    imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, AsyncPipe, DropdownToggleDirective, IconComponent, HeaderNavComponent],
+    imports: [RouterLink, RouterLinkActive, RouterOutlet, AsyncPipe, DropdownToggleDirective, IconComponent, HeaderNavComponent]
 })
 export class SiteLayoutComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;

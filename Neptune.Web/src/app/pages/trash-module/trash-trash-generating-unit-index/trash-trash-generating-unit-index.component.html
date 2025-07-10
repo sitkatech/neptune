@@ -1,12 +1,13 @@
 <page-header pageTitle="Trash Analysis Areas"></page-header> <app-alert-display></app-alert-display>
 
 <div class="page-body" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
+  @if (trashGeneratingUnits$ | async; as trashGeneratingUnits) {
     <neptune-grid
-        *ngIf="trashGeneratingUnits$ | async as trashGeneratingUnits"
-        height="800px"
-        [rowData]="trashGeneratingUnits"
-        [columnDefs]="trashGeneratingUnitsColumnDefs"
-        downloadFileName="trash-analysis-areas"
-        [pagination]="true"
-        [sizeColumnsToFitGrid]="true"></neptune-grid>
+      height="800px"
+      [rowData]="trashGeneratingUnits"
+      [columnDefs]="trashGeneratingUnitsColumnDefs"
+      downloadFileName="trash-analysis-areas"
+      [pagination]="true"
+    [sizeColumnsToFitGrid]="true"></neptune-grid>
+  }
 </div>

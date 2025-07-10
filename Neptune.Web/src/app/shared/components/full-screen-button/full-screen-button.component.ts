@@ -3,10 +3,9 @@ import { IconComponent } from "../icon/icon.component";
 
 @Component({
     selector: "full-screen-button",
-    standalone: true,
     imports: [IconComponent],
     templateUrl: "./full-screen-button.component.html",
-    styleUrl: "./full-screen-button.component.scss",
+    styleUrl: "./full-screen-button.component.scss"
 })
 export class FullScreenButtonComponent {
     @Input() elementRef: HTMLElement;

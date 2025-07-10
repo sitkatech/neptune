@@ -17,9 +17,7 @@ namespace Neptune.EFModels.Entities
         public static readonly MonthsOfOperationBoth Both = MonthsOfOperationBoth.Instance;
 
         public static readonly List<MonthsOfOperation> All;
-        public static readonly List<MonthsOfOperationSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, MonthsOfOperation> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, MonthsOfOperationSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -27,9 +25,7 @@ namespace Neptune.EFModels.Entities
         static MonthsOfOperation()
         {
             All = new List<MonthsOfOperation> { Summer, Winter, Both };
-            AllAsSimpleDto = new List<MonthsOfOperationSimpleDto> { Summer.AsSimpleDto(), Winter.AsSimpleDto(), Both.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, MonthsOfOperation>(All.ToDictionary(x => x.MonthsOfOperationID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, MonthsOfOperationSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.MonthsOfOperationID));
         }
 
         /// <summary>

@@ -15,20 +15,17 @@
             },
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:browser",
+                    "builder": "@angular-devkit/build-angular:application",
                     "options": {
-                        "outputPath": "wwwroot",
+                        "outputPath": {
+                            "base": "wwwroot",
+                            "browser": ""
+                        },
                         "index": "src/index.html",
-                        "main": "src/main.ts",
-                        "polyfills": "src/polyfills.ts",
+                        "polyfills": ["zone.js", "@angular/localize/init"],
                         "tsConfig": "src/tsconfig.app.json",
                         "assets": [
                             "src/assets",
-                            {
-                                "glob": "**/*",
-                                "input": "./node_modules/leaflet/dist/images",
-                                "output": "./"
-                            },
                             {
                                 "glob": "**/*",
                                 "input": "node_modules/tinymce",
@@ -42,13 +39,15 @@
                             "node_modules/leaflet-draw/dist/leaflet.draw.css",
                             "node_modules/leaflet-loading/src/Control.Loading.css"
                         ],
-                        "scripts": ["node_modules/iso8601-js-period/iso8601.js", "src/scripts/leaflet.groupedlayercontrol.js"],
-                        "vendorChunk": true,
+                        "scripts": ["src/scripts/leaflet.groupedlayercontrol.js"],
                         "extractLicenses": false,
-                        "buildOptimizer": false,
                         "sourceMap": true,
                         "optimization": false,
-                        "namedChunks": true
+                        "namedChunks": true,
+                        "browser": "src/main.ts",
+                        "stylePreprocessorOptions": {
+                            "includePaths": ["."]
+                        }
                     },
                     "configurations": {
                         "qa": {
@@ -61,7 +60,6 @@
                             "optimization": true,
                             "outputHashing": "all",
                             "namedChunks": false,
-                            "buildOptimizer": true,
                             "fileReplacements": [
                                 {
                                     "replace": "src/environments/environment.ts",
@@ -81,8 +79,6 @@
                             "sourceMap": false,
                             "namedChunks": false,
                             "extractLicenses": true,
-                            "vendorChunk": false,
-                            "buildOptimizer": true,
                             "fileReplacements": [
                                 {
                                     "replace": "src/environments/environment.ts",
@@ -106,24 +102,6 @@
                         }
                     }
                 },
-                "extract-i18n": {
-                    "builder": "@angular-devkit/build-angular:extract-i18n",
-                    "options": {
-                        "buildTarget": "Neptune.Web:build"
-                    }
-                },
-                "test": {
-                    "builder": "@angular-devkit/build-angular:karma",
-                    "options": {
-                        "main": "src/test.ts",
-                        "polyfills": "src/polyfills.ts",
-                        "tsConfig": "src/tsconfig.spec.json",
-                        "karmaConfig": "src/karma.conf.js",
-                        "styles": ["./node_modules/@fortawesome/fontawesome-free/css/all.css", "src/styles.scss"],
-                        "scripts": [],
-                        "assets": ["src/favicon.svg", "src/assets"]
-                    }
-                },
                 "lint": {
                     "builder": "@angular-eslint/builder:lint",
                     "options": {
@@ -131,28 +109,35 @@
                     }
                 }
             }
-        },
-        "Neptune.Web-e2e": {
-            "root": "e2e/",
-            "projectType": "application",
-            "prefix": "",
-            "architect": {
-                "e2e": {
-                    "builder": "@angular-devkit/build-angular:protractor",
-                    "options": {
-                        "protractorConfig": "e2e/protractor.conf.js",
-                        "devServerTarget": "Neptune.Web:serve"
-                    },
-                    "configurations": {
-                        "production": {
-                            "devServerTarget": "Neptune.Web:serve:production"
-                        }
-                    }
-                }
-            }
         }
     },
     "cli": {
         "analytics": false
+    },
+    "schematics": {
+        "@schematics/angular:component": {
+            "type": "component"
+        },
+        "@schematics/angular:directive": {
+            "type": "directive"
+        },
+        "@schematics/angular:service": {
+            "type": "service"
+        },
+        "@schematics/angular:guard": {
+            "typeSeparator": "."
+        },
+        "@schematics/angular:interceptor": {
+            "typeSeparator": "."
+        },
+        "@schematics/angular:module": {
+            "typeSeparator": "."
+        },
+        "@schematics/angular:pipe": {
+            "typeSeparator": "."
+        },
+        "@schematics/angular:resolver": {
+            "typeSeparator": "."
+        }
     }
 }

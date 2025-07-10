@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { OAuthService } from "angular-oauth2-oidc";
 import { Observable, Subject, race } from "rxjs";
-import { filter, first, map } from "rxjs/operators";
+import { filter, first } from "rxjs/operators";
 import { CookieStorageService } from "../shared/services/cookies/cookie-storage.service";
-import { Router, NavigationEnd, NavigationStart } from "@angular/router";
+import { Router } from "@angular/router";
 import { AlertService } from "../shared/services/alert.service";
 import { Alert } from "../shared/models/alert";
 import { AlertContext } from "../shared/models/enums/alert-context.enum";
@@ -20,8 +20,6 @@ import { UserClaimsService } from "../shared/generated/api/user-claims.service";
 export class AuthenticationService {
     private currentUser: PersonDto;
 
-    private getUserObservable: any;
-
     private _currentUserSetSubject = new Subject<PersonDto>();
     public currentUserSetObservable = this._currentUserSetSubject.asObservable();
 
@@ -33,18 +31,18 @@ export class AuthenticationService {
         private userClaimsService: UserClaimsService,
         private alertService: AlertService
     ) {
-        this.oauthService.events.pipe(filter((e) => ["discovery_document_loaded"].includes(e.type))).subscribe((e) => {
+        this.oauthService.events.pipe(filter((e) => ["discovery_document_loaded"].includes(e.type))).subscribe(() => {
             this.checkAuthentication();
         });
 
-        this.oauthService.events.pipe(filter((e) => ["token_received"].includes(e.type))).subscribe((e) => {
+        this.oauthService.events.pipe(filter((e) => ["token_received"].includes(e.type))).subscribe(() => {
             this.checkAuthentication();
             this.oauthService.loadUserProfile();
         });
 
         this.oauthService.events
             .pipe(filter((e) => ["session_terminated", "session_error", "token_error", "token_refresh_error", "silent_refresh_error", "token_validation_error"].includes(e.type)))
-            .subscribe((e) => this.router.navigateByUrl("/"));
+            .subscribe(() => this.router.navigateByUrl("/"));
 
         this.oauthService.setupAutomaticSilentRefresh();
     }
@@ -214,9 +212,12 @@ export class AuthenticationService {
     }
 
     public doesCurrentUserHaveJurisdictionEditPermission(): boolean {
-        return this.isCurrentUserAnAdministrator() || this.isCurrentUserAJurisdictionManagerWithAssignedJurisdiction() || this.isCurrentUserAJurisdictionEditorWithAssignedJurisdiction();
+        return (
+            this.isCurrentUserAnAdministrator() ||
+            this.isCurrentUserAJurisdictionManagerWithAssignedJurisdiction() ||
+            this.isCurrentUserAJurisdictionEditorWithAssignedJurisdiction()
+        );
     }
-
 
     public isUserUnassigned(user: PersonDto): boolean {
         const role = user ? user.RoleID : null;

@@ -12,7 +12,7 @@ import "leaflet.markercluster";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 import { OvtaObservationLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-observation-layer/ovta-observation-layer.component";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
@@ -29,15 +29,12 @@ import { WfsService } from "src/app/shared/services/wfs.service";
 
 @Component({
     selector: "trash-ovta-refine-assessment-area",
-    standalone: true,
     imports: [
         PageHeaderComponent,
         NeptuneMapComponent,
         AlertDisplayComponent,
         OvtaObservationLayerComponent,
         AsyncPipe,
-        NgIf,
-        LoadingDirective,
         WorkflowBodyComponent,
         LandUseBlockLayerComponent,
         ParcelLayerComponent,

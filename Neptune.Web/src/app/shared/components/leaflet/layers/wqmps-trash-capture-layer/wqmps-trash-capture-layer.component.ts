@@ -5,10 +5,9 @@ import { MapLayerBase } from "../map-layer-base.component";
 
 @Component({
     selector: "wqmps-trash-capture-layer",
-    standalone: true,
     imports: [],
     templateUrl: "./wqmps-trash-capture-layer.component.html",
-    styleUrls: ["./wqmps-trash-capture-layer.component.scss"],
+    styleUrls: ["./wqmps-trash-capture-layer.component.scss"]
 })
 export class WqmpsTrashCaptureLayerComponent extends MapLayerBase implements OnChanges {
     public iconSrc: string;
