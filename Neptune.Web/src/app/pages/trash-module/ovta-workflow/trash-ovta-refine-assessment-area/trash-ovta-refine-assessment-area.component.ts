@@ -18,13 +18,11 @@ import { AlertService } from "src/app/shared/services/alert.service";
 import { OvtaWorkflowProgressService } from "src/app/shared/services/ovta-workflow-progress.service";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
-import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { IFeature, OnlandVisualTrashAssessmentDetailDto, OnlandVisualTrashAssessmentRefineAreaDto } from "src/app/shared/generated/model/models";
-import { FeatureCollection } from "geojson";
 import { WfsService } from "src/app/shared/services/wfs.service";
 
 @Component({
