@@ -37,11 +37,11 @@ public class DataHubController : NeptuneBaseController<DataHubController>
         var precipitationZonesPage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.PrecipitationZonesDataHub);
         
         
-        var lastUpdatedDateParcels = _dbContext.Parcels.MaxBy(x => x.LastUpdate)?.LastUpdate;
-        var lastUpdatedDateRegionalSubbasin = _dbContext.RegionalSubbasins.MaxBy(x => x.LastUpdate)?.LastUpdate;
-        var lastUpdatedDateHRUCharacteristics = _dbContext.HRUCharacteristics.MaxBy(x => x.LastUpdated)?.LastUpdated;
-        var lastUpdatedDateModelBasins = _dbContext.ModelBasins.MaxBy(x => x.LastUpdate)?.LastUpdate;
-        var lastUpdatedDatePrecipitationZones = _dbContext.PrecipitationZones.MaxBy(x => x.LastUpdate)?.LastUpdate;
+        var lastUpdatedDateParcels = _dbContext.Parcels.AsEnumerable().MaxBy(x => x.LastUpdate)?.LastUpdate;
+        var lastUpdatedDateRegionalSubbasin = _dbContext.RegionalSubbasins.AsEnumerable().MaxBy(x => x.LastUpdate)?.LastUpdate;
+        var lastUpdatedDateHRUCharacteristics = _dbContext.HRUCharacteristics.AsEnumerable().MaxBy(x => x.LastUpdated)?.LastUpdated;
+        var lastUpdatedDateModelBasins = _dbContext.ModelBasins.AsEnumerable().MaxBy(x => x.LastUpdate)?.LastUpdate;
+        var lastUpdatedDatePrecipitationZones = _dbContext.PrecipitationZones.AsEnumerable().MaxBy(x => x.LastUpdate)?.LastUpdate;
         var allMethods = FindAttributedMethods(typeof(PowerBIController), typeof(WebServiceNameAndDescriptionAttribute));
         var serviceDocumentationList = allMethods.Select(c => new WebServiceDocumentation(c, _dbContext, _linkGenerator)).OrderBy(x => x.Name).ToList();
         var webServiceAccessToken = new WebServiceToken(_dbContext, CurrentPerson.WebServiceAccessToken.ToString());
