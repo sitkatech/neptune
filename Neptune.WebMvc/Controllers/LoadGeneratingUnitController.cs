@@ -70,15 +70,14 @@ namespace Neptune.WebMvc.Controllers
         public ViewResult Detail([FromRoute] LoadGeneratingUnitPrimaryKey loadGeneratingUnitPrimaryKey)
         {
             var loadGeneratingUnit = LoadGeneratingUnits.GetByID(_dbContext, loadGeneratingUnitPrimaryKey);
-            var loadGeneratingUnit4326 = LoadGeneratingUnit4326s.GetByID(_dbContext, loadGeneratingUnit.LoadGeneratingUnitID);
             var regionalSubbasin = loadGeneratingUnit.RegionalSubbasin;
             var treatmentBMP = loadGeneratingUnit.Delineation?.TreatmentBMP;
             var hruLog = loadGeneratingUnit.HRULog;
             var wqmp = loadGeneratingUnit.WaterQualityManagementPlan;
             
-            var boundingBoxGeometry = loadGeneratingUnit4326.LoadGeneratingUnit4326Geometry;
+            var boundingBoxGeometry = loadGeneratingUnit.LoadGeneratingUnitGeometry4326;
             var feature =
-                new Feature(loadGeneratingUnit4326.LoadGeneratingUnit4326Geometry, new AttributesTable());
+                new Feature(loadGeneratingUnit.LoadGeneratingUnitGeometry4326, new AttributesTable());
             var loadGeneratingUnitFeatureCollection = new FeatureCollection
             {
                 feature

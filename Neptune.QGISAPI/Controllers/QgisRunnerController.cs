@@ -115,7 +115,6 @@ public class QgisRunnerController : ControllerBase
         }
 
         var loadGeneratingUnits = new List<LoadGeneratingUnit>();
-        var loadGeneratingUnit4326s = new List<LoadGeneratingUnit4326>();
 
         foreach (var feature in featureCollection.Where(x => x.Geometry != null).ToList())
         {
@@ -135,19 +134,10 @@ public class QgisRunnerController : ControllerBase
                     DelineationID = loadGeneratingUnitResult.DelineationID,
                     WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
                     ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
-                    RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
+                    RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID,
+                    LoadGeneratingUnitGeometry4326 = geometry.ProjectTo4326(),
                 };
                 loadGeneratingUnits.Add(loadGeneratingUnit);
-
-                var loadGeneratingUnit4326 = new LoadGeneratingUnit4326
-                {
-                    LoadGeneratingUnit4326Geometry = geometry.ProjectTo4326(),
-                    DelineationID = loadGeneratingUnitResult.DelineationID,
-                    WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
-                    ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
-                    RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
-                };
-                loadGeneratingUnit4326s.Add(loadGeneratingUnit4326);
             }
         }
 
@@ -156,12 +146,6 @@ public class QgisRunnerController : ControllerBase
             await _dbContext.LoadGeneratingUnits.AddRangeAsync(loadGeneratingUnits);
             await _dbContext.SaveChangesAsync();
             await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pLoadGeneratingUnitMakeValid");
-        }
-        if (loadGeneratingUnit4326s.Any())
-        {
-            await _dbContext.LoadGeneratingUnit4326s.AddRangeAsync(loadGeneratingUnit4326s);
-            await _dbContext.SaveChangesAsync();
-            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pLoadGeneratingUnit4326MakeValid");
         }
 
         if (loadGeneratingUnitRefreshArea != null)

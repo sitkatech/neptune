@@ -1,13 +1,13 @@
 create view  dbo.vGeoServerLoadGeneratingUnit
 as
 select
-	LoadGeneratingUnit4326ID,
-	[LoadGeneratingUnit4326Geometry],
+	LoadGeneratingUnitID,
+	[LoadGeneratingUnitGeometry4326],
 	[ModelBasinID],
     [RegionalSubbasinID],
 	[DelineationID],
 	[WaterQualityManagementPlanID],
 	[IsEmptyResponseFromHRUService],
 	[DateHRURequested]
-from dbo.LoadGeneratingUnit4326
+from dbo.LoadGeneratingUnit
 GO
