@@ -429,6 +429,7 @@
     <None Include="Scripts\ReleaseScripts\015 - Add Field Definition for DownstreamOfNonModeledBMP.sql" />
     <None Include="Scripts\ReleaseScripts\016 - Load 4326 Geometries into LoadGeneratingUnit table.sql" />
     <None Include="Scripts\PreReleaseScripts\0001 - Store LoadGeneratingUnit4326Geometry into temp.sql" />
+    <Build Include="dbo\Procs\dbo.pLoadGeneratingUnitRefreshAreaMakeValid.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Neptune.Database.refactorlog" />
