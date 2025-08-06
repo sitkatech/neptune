@@ -50,7 +50,7 @@
             var lguLayer = regionalSubbasinMap.addWmsLayer("OCStormwater:LoadGeneratingUnits",
                 lguLabel,
                 {
-                    zIndex: 50000,
+                    maxZoom:30,
                     cql_filter: "RegionalSubbasinID = " + regionalSubbasinID
                 }, false);
             lguLayer.bringToFront();

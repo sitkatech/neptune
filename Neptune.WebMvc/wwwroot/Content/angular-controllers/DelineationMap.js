@@ -22,7 +22,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     var regionalSubbasinLayer =
         this.addWmsLayer("OCStormwater:RegionalSubbasins",
             "<span><img src='/Content/img/legendImages/regionalSubbasin.png' height='12px' style='margin-bottom:3px;' /> Regional Subbasins</span>",
-            { pane: "regionalSubbasinPane" }, true);
+            { pane: "regionalSubbasinPane", maxZoom:30 }, true);
 
     var parcelsLegendUrl = "/Content/img/legendImages/parcel.png";
     var parcelsLabel = "<span><img src='" + parcelsLegendUrl + "' height='14px'/> Parcels</span>";

@@ -47,14 +47,14 @@
             var regionalSubbasinLayer =
                 lguMap.addWmsLayer("OCStormwater:RegionalSubbasins",
                     "<span><img src='/Content/img/legendImages/regionalSubbasin.png' height='12px' style='margin-bottom:3px;' /> Regional Subbasins</span>",
-                    { pane: "regionalSubbasinPane" }, true);
+                    { pane: "regionalSubbasinPane", maxZoom: 30 }, true);
 
             var lguLegendUrl = "/Content/img/legendImages/loagGeneratingUnit.png";
             var lguLabel = "<span><img src='" + lguLegendUrl + "' height='14px'/> LGUs</span>";
             lguMap.addWmsLayer("OCStormwater:LoadGeneratingUnits",
                 lguLabel,
                 {
-
+                    maxZoom:30
                 }, false);
 
             regionalSubbasinLayer.bringToFront();
