@@ -88,55 +88,5 @@ namespace Neptune.WebMvc.Controllers
             var fileResource = fileResourcePrimaryKey.EntityObject;
             return await DisplayFileResource(fileResource);
         }
-
-        [HttpGet("{fileResourceGuidAsString}/{maxWidth}/{maxHeight}")]
-        //[CrossAreaRoute]
-        public async Task<IActionResult> GetFileResourceResized([FromRoute] string fileResourceGuidAsString, [FromRoute] int maxWidth, [FromRoute] int maxHeight)
-        {
-            var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out var fileResourceGuid);
-            if (isStringAGuid)
-            {
-                var fileResource = _dbContext.FileResources.AsNoTracking().SingleOrDefault(x => x.FileResourceGUID == fileResourceGuid);
-                
-                if (fileResource != null)
-                {
-                    // Happy path - return the resource
-                    // ---------------------------------
-                    switch (fileResource.FileResourceMimeType.ToEnum)
-                    {
-                        case FileResourceMimeTypeEnum.ExcelXLS:
-                        case FileResourceMimeTypeEnum.ExcelXLSX:
-                        case FileResourceMimeTypeEnum.xExcelXLSX:
-                        case FileResourceMimeTypeEnum.PDF:
-                        case FileResourceMimeTypeEnum.WordDOCX:
-                        case FileResourceMimeTypeEnum.WordDOC:
-                        case FileResourceMimeTypeEnum.PowerpointPPTX:
-                        case FileResourceMimeTypeEnum.PowerpointPPT:
-                            throw new ArgumentOutOfRangeException($"Not supported mime type {fileResource.FileResourceMimeType.FileResourceMimeTypeDisplayName}");
-                        case FileResourceMimeTypeEnum.XPNG:
-                        case FileResourceMimeTypeEnum.PNG:
-                        case FileResourceMimeTypeEnum.TIFF:
-                        case FileResourceMimeTypeEnum.BMP:
-                        case FileResourceMimeTypeEnum.GIF:
-                        case FileResourceMimeTypeEnum.JPEG:
-                        case FileResourceMimeTypeEnum.PJPEG:
-
-                            var fileResourceBlobDownloadResult = await _azureBlobStorageService.DownloadFileResourceFromBlobStorage(fileResource);
-                            var scaledImage =
-                                await ImageHelper.ScaleImage(fileResourceBlobDownloadResult.Content.ToArray(), (uint)maxWidth,
-                                    (uint)maxHeight);
-                            return File(scaledImage.ToArray(), "image/png");
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                }
-            }
-
-            // Unhappy path - return an HTTP 404
-            // ---------------------------------
-            var message = $"File Resource {fileResourceGuidAsString} Not Found in database. It may have been deleted.";
-            _logger.LogError(message);
-            return new NotFoundResult();
-        }
     }
 }
