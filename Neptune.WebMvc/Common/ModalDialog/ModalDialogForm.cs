@@ -29,7 +29,7 @@ namespace Neptune.WebMvc.Common.ModalDialog
         public readonly string ContentUrl;
         public readonly string DialogTitle;
         public readonly int DialogWidth;
-        public readonly string OnJavascriptReadyFunction;
+        public readonly string? OnJavascriptReadyFunction;
         public readonly string LinkID;
 
         public readonly string SaveButtonText;
@@ -50,17 +50,17 @@ namespace Neptune.WebMvc.Common.ModalDialog
         {
         }
 
-        public ModalDialogForm(string contentUrl, int dialogWidth, string dialogTitle, string onJavascriptReadyFunction)
+        public ModalDialogForm(string contentUrl, int dialogWidth, string dialogTitle, string? onJavascriptReadyFunction)
             : this(null, contentUrl, dialogWidth, dialogTitle, onJavascriptReadyFunction, DefaultSaveButtonText, DefaultCancelButtonText)
         {
         }
 
-        public ModalDialogForm(string linkID, string contentUrl, int dialogWidth, string dialogTitle, string onJavascriptReadyFunction)
+        public ModalDialogForm(string linkID, string contentUrl, int dialogWidth, string dialogTitle, string? onJavascriptReadyFunction)
             : this(linkID, contentUrl, dialogWidth, dialogTitle, onJavascriptReadyFunction, DefaultSaveButtonText, DefaultCancelButtonText)
         {
         }
 
-        public ModalDialogForm(string linkID, string contentUrl, int dialogWidth, string dialogTitle, string onJavascriptReadyFunction, string saveButtonText, string cancelButtonText)
+        public ModalDialogForm(string linkID, string contentUrl, int dialogWidth, string dialogTitle, string? onJavascriptReadyFunction, string saveButtonText, string cancelButtonText)
         {
             ContentUrl = contentUrl;
             DialogWidth = dialogWidth;
