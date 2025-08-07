@@ -11,12 +11,13 @@ using TreatmentBMPAssessmentGridSpec = Neptune.WebMvc.Views.Assessment.Treatment
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class AssessmentController : NeptuneBaseController<AssessmentController>
+    public class AssessmentController(
+        NeptuneDbContext dbContext,
+        ILogger<AssessmentController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<AssessmentController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public AssessmentController(NeptuneDbContext dbContext, ILogger<AssessmentController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet]
         [NeptuneViewFeature]
         public ViewResult Index()

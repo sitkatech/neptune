@@ -11,15 +11,14 @@ using Neptune.WebMvc.Views.TreatmentBMPImage;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class TreatmentBMPImageController : NeptuneBaseController<TreatmentBMPImageController>
+    public class TreatmentBMPImageController(
+        NeptuneDbContext dbContext,
+        ILogger<TreatmentBMPImageController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        FileResourceService fileResourceService)
+        : NeptuneBaseController<TreatmentBMPImageController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        private readonly FileResourceService _fileResourceService;
-
-        public TreatmentBMPImageController(NeptuneDbContext dbContext, ILogger<TreatmentBMPImageController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _fileResourceService = fileResourceService;
-        }
-
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
@@ -44,7 +43,7 @@ namespace Neptune.WebMvc.Controllers
             }
 
             treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
-            await viewModel.UpdateModel(CurrentPerson, treatmentBMP, _dbContext, _fileResourceService, treatmentBMPImages);
+            await viewModel.UpdateModel(CurrentPerson, treatmentBMP, _dbContext, fileResourceService, treatmentBMPImages);
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
 

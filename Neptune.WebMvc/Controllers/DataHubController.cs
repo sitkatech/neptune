@@ -11,12 +11,13 @@ using IndexViewData = Neptune.WebMvc.Views.DataHub.IndexViewData;
 
 namespace Neptune.WebMvc.Controllers;
 
-public class DataHubController : NeptuneBaseController<DataHubController>
+public class DataHubController(
+    NeptuneDbContext dbContext,
+    ILogger<DataHubController> logger,
+    IOptions<WebConfiguration> webConfiguration,
+    LinkGenerator linkGenerator)
+    : NeptuneBaseController<DataHubController>(dbContext, logger, linkGenerator, webConfiguration)
 {
-    public DataHubController(NeptuneDbContext dbContext, ILogger<DataHubController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-    {
-    }
-
     [JurisdictionEditFeature]
     [HttpGet]
     public ViewResult Index()

@@ -20,12 +20,13 @@ using ManageViewData = Neptune.WebMvc.Views.CustomAttributeType.ManageViewData;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class CustomAttributeTypeController : NeptuneBaseController<CustomAttributeTypeController>
+    public class CustomAttributeTypeController(
+        NeptuneDbContext dbContext,
+        ILogger<CustomAttributeTypeController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<CustomAttributeTypeController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public CustomAttributeTypeController(NeptuneDbContext dbContext, ILogger<CustomAttributeTypeController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet]
         [NeptuneAdminFeature]
         public ViewResult Manage()

@@ -12,15 +12,15 @@ using Neptune.WebMvc.Views.WaterQualityManagementPlanDocument;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class WaterQualityManagementPlanDocumentController : NeptuneBaseController<WaterQualityManagementPlanDocumentController>
+    public class WaterQualityManagementPlanDocumentController(
+        NeptuneDbContext dbContext,
+        ILogger<WaterQualityManagementPlanDocumentController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        FileResourceService fileResourceService)
+        : NeptuneBaseController<WaterQualityManagementPlanDocumentController>(dbContext, logger, linkGenerator,
+            webConfiguration)
     {
-        private readonly FileResourceService _fileResourceService;
-
-        public WaterQualityManagementPlanDocumentController(NeptuneDbContext dbContext, ILogger<WaterQualityManagementPlanDocumentController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _fileResourceService = fileResourceService;
-        }
-
         [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
         [WaterQualityManagementPlanManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
@@ -44,7 +44,7 @@ namespace Neptune.WebMvc.Controllers
                 return ViewNew(viewModel);
             }
 
-            await viewModel.UpdateModel(waterQualityManagementPlan, CurrentPerson, _dbContext, _fileResourceService);
+            await viewModel.UpdateModel(waterQualityManagementPlan, CurrentPerson, _dbContext, fileResourceService);
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay($"Successfully created new document \"{viewModel.DisplayName}\".");
 

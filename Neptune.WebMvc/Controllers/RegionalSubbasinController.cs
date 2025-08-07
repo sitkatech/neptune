@@ -24,14 +24,15 @@ using IndexViewData = Neptune.WebMvc.Views.RegionalSubbasin.IndexViewData;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class RegionalSubbasinController : NeptuneBaseController<RegionalSubbasinController>
+    public class RegionalSubbasinController(
+        NeptuneDbContext dbContext,
+        ILogger<RegionalSubbasinController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        OCGISService ocgisService)
+        : NeptuneBaseController<RegionalSubbasinController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        private readonly OCGISService _ocgisService;
-
-        public RegionalSubbasinController(NeptuneDbContext dbContext, ILogger<RegionalSubbasinController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, OCGISService ocgisService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _ocgisService = ocgisService;
-        }
+        private readonly OCGISService _ocgisService = ocgisService;
 
         [HttpGet]
         [NeptuneAdminFeature]

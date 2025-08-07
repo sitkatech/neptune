@@ -40,12 +40,13 @@ using IndexViewData = Neptune.WebMvc.Views.Jurisdiction.IndexViewData;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class JurisdictionController : NeptuneBaseController<JurisdictionController>
+    public class JurisdictionController(
+        NeptuneDbContext dbContext,
+        ILogger<JurisdictionController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<JurisdictionController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public JurisdictionController(NeptuneDbContext dbContext, ILogger<JurisdictionController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [NeptuneAdminFeature]
         public ViewResult Index()
         {

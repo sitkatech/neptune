@@ -59,15 +59,14 @@ using IndexViewData = Neptune.WebMvc.Views.TreatmentBMP.IndexViewData;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class TreatmentBMPController : NeptuneBaseController<TreatmentBMPController>
+    public class TreatmentBMPController(
+        NeptuneDbContext dbContext,
+        ILogger<TreatmentBMPController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        GDALAPIService gdalApiService)
+        : NeptuneBaseController<TreatmentBMPController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        private readonly GDALAPIService _gdalApiService;
-
-        public TreatmentBMPController(NeptuneDbContext dbContext, ILogger<TreatmentBMPController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, GDALAPIService gdalApiService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _gdalApiService = gdalApiService;
-        }
-
         [HttpGet]
         public ViewResult FindABMP()
         {
@@ -1208,7 +1207,7 @@ namespace Neptune.WebMvc.Controllers
             }));
             apiRequest.GdbInputs = gdbInputs;
 
-            var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(apiRequest);
+            var bytes = await gdalApiService.Ogr2OgrInputToGdbAsZip(apiRequest);
             return File(bytes, "application/zip", $"{outputLayerName}.zip");
         }
 

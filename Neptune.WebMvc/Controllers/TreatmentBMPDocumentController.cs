@@ -11,15 +11,14 @@ using Neptune.WebMvc.Views.TreatmentBMPDocument;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class TreatmentBMPDocumentController : NeptuneBaseController<TreatmentBMPDocumentController>
+    public class TreatmentBMPDocumentController(
+        NeptuneDbContext dbContext,
+        ILogger<TreatmentBMPDocumentController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        FileResourceService fileResourceService)
+        : NeptuneBaseController<TreatmentBMPDocumentController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        private readonly FileResourceService _fileResourceService;
-
-        public TreatmentBMPDocumentController(NeptuneDbContext dbContext, ILogger<TreatmentBMPDocumentController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _fileResourceService = fileResourceService;
-        }
-
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
@@ -45,7 +44,7 @@ namespace Neptune.WebMvc.Controllers
             {
                 TreatmentBMP = treatmentBMP
             };
-            await viewModel.UpdateModel(treatmentBMPDocument, CurrentPerson, _fileResourceService);
+            await viewModel.UpdateModel(treatmentBMPDocument, CurrentPerson, fileResourceService);
             await _dbContext.TreatmentBMPDocuments.AddAsync(treatmentBMPDocument);
             await _dbContext.SaveChangesAsync();
             return new ModalDialogFormJsonResult();

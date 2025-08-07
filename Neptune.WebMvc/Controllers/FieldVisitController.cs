@@ -46,17 +46,15 @@ using ClosedXML.Excel;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class FieldVisitController : NeptuneBaseController<FieldVisitController>
+    public class FieldVisitController(
+        NeptuneDbContext dbContext,
+        ILogger<FieldVisitController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        FileResourceService fileResourceService,
+        AzureBlobStorageService azureBlobStorageService)
+        : NeptuneBaseController<FieldVisitController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        private readonly FileResourceService _fileResourceService;
-        private readonly AzureBlobStorageService _azureBlobStorageService;
-
-        public FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisitController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService, AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _fileResourceService = fileResourceService;
-            _azureBlobStorageService = azureBlobStorageService;
-        }
-
         [HttpGet]
         [FieldVisitViewFeature]
         public ViewResult Index()
@@ -331,7 +329,7 @@ namespace Neptune.WebMvc.Controllers
                 ViewPhotos(fieldVisit, viewModel, treatmentBMPImages);
             }
 
-            await viewModel.UpdateModel(CurrentPerson, fieldVisit.TreatmentBMP, _dbContext, _fileResourceService, treatmentBMPImages);
+            await viewModel.UpdateModel(CurrentPerson, fieldVisit.TreatmentBMP, _dbContext, fileResourceService, treatmentBMPImages);
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             fieldVisit.InventoryUpdated = true;
             if (await FinalizeVisitIfNecessary(viewModel, fieldVisit))
@@ -913,7 +911,7 @@ namespace Neptune.WebMvc.Controllers
                 await _dbContext.TreatmentBMPAssessments.AddAsync(treatmentBMPAssessment);
             }
 
-            await viewModel.UpdateModel(CurrentPerson, treatmentBMPAssessment, _dbContext, _fileResourceService, treatmentBMPAssessmentPhotos);
+            await viewModel.UpdateModel(CurrentPerson, treatmentBMPAssessment, _dbContext, fileResourceService, treatmentBMPAssessmentPhotos);
             if (await FinalizeVisitIfNecessary(viewModel, fieldVisit)) { return RedirectToAction(new SitkaRoute<FieldVisitController>(_linkGenerator, x => x.Detail(fieldVisit))); }
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
@@ -1540,7 +1538,7 @@ namespace Neptune.WebMvc.Controllers
 
             var row = 2;
             using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
-            await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToFieldVisitUploadTemplate, disposableTempFile.FileInfo.FullName);
+            await azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToFieldVisitUploadTemplate, disposableTempFile.FileInfo.FullName);
 
             using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
             var worksheet = workbook.Worksheet("Field Visits");

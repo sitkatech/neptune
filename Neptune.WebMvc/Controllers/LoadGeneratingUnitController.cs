@@ -20,12 +20,13 @@ using IndexViewData = Neptune.WebMvc.Views.LoadGeneratingUnit.IndexViewData;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class LoadGeneratingUnitController : NeptuneBaseController<LoadGeneratingUnitController>
+    public class LoadGeneratingUnitController(
+        NeptuneDbContext dbContext,
+        ILogger<LoadGeneratingUnitController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<LoadGeneratingUnitController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public LoadGeneratingUnitController(NeptuneDbContext dbContext, ILogger<LoadGeneratingUnitController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet]
         [NeptuneAdminFeature]
         public ViewResult Index()

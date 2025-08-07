@@ -24,27 +24,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Neptune.EFModels.Entities;
 using Microsoft.Extensions.Options;
-using Neptune.Common;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Services;
 using Neptune.WebMvc.Services.Filters;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class FileResourceController : NeptuneBaseController<FileResourceController>
+    public class FileResourceController(
+        NeptuneDbContext dbContext,
+        ILogger<FileResourceController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        AzureBlobStorageService azureBlobStorageService)
+        : NeptuneBaseController<FileResourceController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        private readonly AzureBlobStorageService _azureBlobStorageService;
-
-        public FileResourceController(NeptuneDbContext dbContext,
-            ILogger<FileResourceController> logger,
-            IOptions<WebConfiguration> webConfiguration,
-            LinkGenerator linkGenerator,
-            AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _azureBlobStorageService = azureBlobStorageService;
-        }
-
-        //[CrossAreaRoute]
         [HttpGet("{fileResourceGuidAsString}")]
         public async Task<IActionResult> DisplayResource([FromRoute] string fileResourceGuidAsString)
         {
@@ -74,14 +67,13 @@ namespace Neptune.WebMvc.Controllers
             Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
 
             var blobDownloadResult =
-                await _azureBlobStorageService.DownloadFileResourceFromBlobStorage(fileResource);
+                await azureBlobStorageService.DownloadFileResourceFromBlobStorage(fileResource);
 
             return File(blobDownloadResult.Content.ToArray(), blobDownloadResult.Details.ContentType);
         }
 
         [HttpGet("{fileResourcePrimaryKey}")]
         [LoggedInUnclassifiedFeature]
-        //[CrossAreaRoute]
         [ValidateEntityExistsAndPopulateParameterFilter("fileResourcePrimaryKey")]
         public async Task<IActionResult> DisplayResourceByID([FromRoute] FileResourcePrimaryKey fileResourcePrimaryKey)
         {

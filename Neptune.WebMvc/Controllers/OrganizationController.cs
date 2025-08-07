@@ -37,19 +37,14 @@ using IndexViewData = Neptune.WebMvc.Views.Organization.IndexViewData;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class OrganizationController : NeptuneBaseController<OrganizationController>
+    public class OrganizationController(
+        NeptuneDbContext dbContext,
+        ILogger<OrganizationController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        FileResourceService fileResourceService)
+        : NeptuneBaseController<OrganizationController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        private readonly FileResourceService _fileResourceService;
-
-        public OrganizationController(NeptuneDbContext dbContext,
-            ILogger<OrganizationController> logger,
-            IOptions<WebConfiguration> webConfiguration,
-            LinkGenerator linkGenerator,
-            FileResourceService fileResourceService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _fileResourceService = fileResourceService;
-        }
-
         [HttpGet]
         [OrganizationManageFeature]
         public ViewResult Index()
@@ -91,7 +86,7 @@ namespace Neptune.WebMvc.Controllers
             {
                 IsActive = true
             };
-            await viewModel.UpdateModel(organization, CurrentPerson, _fileResourceService);
+            await viewModel.UpdateModel(organization, CurrentPerson, fileResourceService);
             _dbContext.Organizations.Add(organization);
             await _dbContext.SaveChangesAsync();
             SetMessageForDisplay($"Organization {organization.GetDisplayName()} successfully created.");
@@ -119,7 +114,7 @@ namespace Neptune.WebMvc.Controllers
             {
                 return ViewEdit(viewModel, organization.IsInKeystone(), organization.PrimaryContactPerson);
             }
-            await viewModel.UpdateModel(organization, CurrentPerson, _fileResourceService);
+            await viewModel.UpdateModel(organization, CurrentPerson, fileResourceService);
             await _dbContext.SaveChangesAsync();
             return new ModalDialogFormJsonResult();
         }

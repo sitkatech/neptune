@@ -11,12 +11,13 @@ using Neptune.WebMvc.Views.Shared;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class FundingEventController : NeptuneBaseController<FundingEventController>
+    public class FundingEventController(
+        NeptuneDbContext dbContext,
+        ILogger<FundingEventController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<FundingEventController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public FundingEventController(NeptuneDbContext dbContext, ILogger<FundingEventController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet("{fundingEventPrimaryKey}")]
         [FundingEventManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("fundingEventPrimaryKey")]

@@ -19,12 +19,13 @@ using NetTopologySuite.Features;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class ParcelController : NeptuneBaseController<ParcelController>
+    public class ParcelController(
+        NeptuneDbContext dbContext,
+        ILogger<ParcelController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<ParcelController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public ParcelController(NeptuneDbContext dbContext, ILogger<ParcelController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet]
         [NeptuneViewFeature]
         public ActionResult Index()

@@ -31,12 +31,13 @@ using Neptune.WebMvc.Common.MvcResults;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class RoleController : NeptuneBaseController<RoleController>
+    public class RoleController(
+        NeptuneDbContext dbContext,
+        ILogger<RoleController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<RoleController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public RoleController(NeptuneDbContext dbContext, ILogger<RoleController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [UserEditFeature]
         [HttpGet]
         public ViewResult Index()

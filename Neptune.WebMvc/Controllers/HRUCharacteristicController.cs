@@ -13,12 +13,13 @@ using Neptune.WebMvc.Views.Shared;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class HRUCharacteristicController : NeptuneBaseController<HRUCharacteristicController>
+    public class HRUCharacteristicController(
+        NeptuneDbContext dbContext,
+        ILogger<HRUCharacteristicController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<HRUCharacteristicController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public HRUCharacteristicController(NeptuneDbContext dbContext, ILogger<HRUCharacteristicController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet]
         [NeptuneAdminFeature]
         public ViewResult Index()

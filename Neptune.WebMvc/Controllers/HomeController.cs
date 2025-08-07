@@ -34,12 +34,13 @@ using Neptune.WebMvc.Views.Shared.JurisdictionControls;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class HomeController : NeptuneBaseController<HomeController>
+    public class HomeController(
+        NeptuneDbContext dbContext,
+        ILogger<HomeController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<HomeController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public HomeController(NeptuneDbContext dbContext, ILogger<HomeController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpPost("{gridName}/{printFooter}")]
         [DisableRequestSizeLimit]
         [RequestFormLimits(KeyLengthLimit = int.MaxValue, ValueLengthLimit = int.MaxValue)]
