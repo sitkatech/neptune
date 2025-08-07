@@ -51,8 +51,6 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<LoadGeneratingUnit> LoadGeneratingUnits { get; set; }
 
-    public virtual DbSet<LoadGeneratingUnit4326> LoadGeneratingUnit4326s { get; set; }
-
     public virtual DbSet<LoadGeneratingUnitRefreshArea> LoadGeneratingUnitRefreshAreas { get; set; }
 
     public virtual DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
@@ -477,11 +475,6 @@ public partial class NeptuneDbContext : DbContext
         modelBuilder.Entity<LoadGeneratingUnit>(entity =>
         {
             entity.HasKey(e => e.LoadGeneratingUnitID).HasName("PK_LoadGeneratingUnit_LoadGeneratingUnitID");
-        });
-
-        modelBuilder.Entity<LoadGeneratingUnit4326>(entity =>
-        {
-            entity.HasKey(e => e.LoadGeneratingUnit4326ID).HasName("PK_LoadGeneratingUnit4326_LoadGeneratingUnit4326ID");
         });
 
         modelBuilder.Entity<LoadGeneratingUnitRefreshArea>(entity =>
@@ -1115,7 +1108,7 @@ public partial class NeptuneDbContext : DbContext
         {
             entity.ToView("vGeoServerLoadGeneratingUnit");
 
-            entity.Property(e => e.LoadGeneratingUnit4326ID).ValueGeneratedOnAdd();
+            entity.Property(e => e.LoadGeneratingUnitID).ValueGeneratedOnAdd();
         });
 
         modelBuilder.Entity<vGeoServerWaterQualityManagementPlan>(entity =>

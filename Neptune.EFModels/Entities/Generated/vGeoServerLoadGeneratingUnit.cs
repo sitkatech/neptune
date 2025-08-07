@@ -10,10 +10,10 @@ namespace Neptune.EFModels.Entities;
 [Keyless]
 public partial class vGeoServerLoadGeneratingUnit
 {
-    public int LoadGeneratingUnit4326ID { get; set; }
+    public int LoadGeneratingUnitID { get; set; }
 
     [Column(TypeName = "geometry")]
-    public Geometry LoadGeneratingUnit4326Geometry { get; set; } = null!;
+    public Geometry? LoadGeneratingUnitGeometry4326 { get; set; }
 
     public int? ModelBasinID { get; set; }
 

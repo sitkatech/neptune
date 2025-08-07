@@ -94,6 +94,16 @@ def dissolve(inputLayer, memoryOutputName=None, filesystemOutputPath=None, conte
     result = runNativeAlgorithm("native:dissolve", params, memoryOutputName, filesystemOutputPath, context)
     return result
 
+def selectByLocation(inputLayer, intersectionLayer, memoryOutputName=None, filesystemOutputPath=None, context = None ):
+    params = {
+        "INPUT": inputLayer,
+        "PREDICATE": [0],  # 0 = intersects
+        "INTERSECT": intersectionLayer,
+        "METHOD": 0  # create new selection
+    }
+    result = runNativeAlgorithm("qgis:selectbylocation", params, memoryOutputName, filesystemOutputPath, context)
+    return result
+
 
 def saveSelectedFeatures(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context = None):
     params = {

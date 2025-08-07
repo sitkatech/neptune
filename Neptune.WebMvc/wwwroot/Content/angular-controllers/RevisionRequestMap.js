@@ -203,7 +203,7 @@ var addReferenceLayers = function(revisionMap) {
     var regionalSubbasinLayer =
         revisionMap.addWmsLayer("OCStormwater:RegionalSubbasins",
             "<span><img src='/Content/img/legendImages/regionalSubbasin.png' height='12px' style='margin-bottom:3px;' /> Regional Subbasins</span>",
-            { pane: "regionalSubbasinPane" }, false);
+            { pane: "regionalSubbasinPane", maxZoom:30 }, false);
 
     var parcelsLegendUrl = "/Content/img/legendImages/parcel.png";
     var parcelsLabel = "<span><img src='" + parcelsLegendUrl + "' height='14px'/> Parcels</span>";

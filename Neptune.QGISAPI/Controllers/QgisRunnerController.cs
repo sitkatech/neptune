@@ -1,5 +1,6 @@
 using Neptune.QGISAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Neptune.Common.Services.GDAL;
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common.GeoSpatial;
@@ -101,9 +102,9 @@ public class QgisRunnerController : ControllerBase
             new Feature(x.DelineationGeometry, new AttributesTable { { "DelinID", x.DelinID } })).ToList();
         var regionalSubbasinInputFeatures = _dbContext.vPyQgisRegionalSubbasinLGUInputs.AsNoTracking().Select(x =>
             new Feature(x.CatchmentGeometry, new AttributesTable { { "RSBID", x.RSBID }, { "ModelID", x.ModelID } })).ToList();
-        var clipLayerPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}_inputClip.geojson";
-        var loadGeneratingUnitRefreshArea = await CreateLoadGeneratingUnitRefreshAreaIfProvided(requestDto, clipLayerPath);
-        var featureCollection = await GenerateLGUsImpl(regionalSubbasinInputFeatures, lguInputFeatures, outputFolder, outputLayerPrefix, new List<int>(), loadGeneratingUnitRefreshArea != null ? clipLayerPath : null);
+        var filterLayerPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}_inputFilter.geojson";
+        var loadGeneratingUnitRefreshArea = await CreateLoadGeneratingUnitRefreshAreaIfProvided(requestDto, filterLayerPath);
+        var featureCollection = await GenerateLGUsImpl(regionalSubbasinInputFeatures, lguInputFeatures, outputFolder, outputLayerPrefix, new List<int>(), loadGeneratingUnitRefreshArea != null ? filterLayerPath : null);
 
         if (loadGeneratingUnitRefreshArea != null)
         {
@@ -115,7 +116,6 @@ public class QgisRunnerController : ControllerBase
         }
 
         var loadGeneratingUnits = new List<LoadGeneratingUnit>();
-        var loadGeneratingUnit4326s = new List<LoadGeneratingUnit4326>();
 
         foreach (var feature in featureCollection.Where(x => x.Geometry != null).ToList())
         {
@@ -135,19 +135,10 @@ public class QgisRunnerController : ControllerBase
                     DelineationID = loadGeneratingUnitResult.DelineationID,
                     WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
                     ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
-                    RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
+                    RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID,
+                    LoadGeneratingUnitGeometry4326 = geometry.ProjectTo4326(),
                 };
                 loadGeneratingUnits.Add(loadGeneratingUnit);
-
-                var loadGeneratingUnit4326 = new LoadGeneratingUnit4326
-                {
-                    LoadGeneratingUnit4326Geometry = geometry.ProjectTo4326(),
-                    DelineationID = loadGeneratingUnitResult.DelineationID,
-                    WaterQualityManagementPlanID = loadGeneratingUnitResult.WaterQualityManagementPlanID,
-                    ModelBasinID = loadGeneratingUnitResult.ModelBasinID,
-                    RegionalSubbasinID = loadGeneratingUnitResult.RegionalSubbasinID
-                };
-                loadGeneratingUnit4326s.Add(loadGeneratingUnit4326);
             }
         }
 
@@ -156,12 +147,6 @@ public class QgisRunnerController : ControllerBase
             await _dbContext.LoadGeneratingUnits.AddRangeAsync(loadGeneratingUnits);
             await _dbContext.SaveChangesAsync();
             await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pLoadGeneratingUnitMakeValid");
-        }
-        if (loadGeneratingUnit4326s.Any())
-        {
-            await _dbContext.LoadGeneratingUnit4326s.AddRangeAsync(loadGeneratingUnit4326s);
-            await _dbContext.SaveChangesAsync();
-            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pLoadGeneratingUnit4326MakeValid");
         }
 
         if (loadGeneratingUnitRefreshArea != null)
@@ -279,7 +264,7 @@ public class QgisRunnerController : ControllerBase
         return Ok();
     }
 
-    private async Task<FeatureCollection> GenerateLGUsImpl(IEnumerable<Feature> regionalSubbasinInputFeatures, IEnumerable<Feature> lguInputFeatures, string outputFolder, string outputLayerPrefix, List<int> regionalSubbasinIDs, string? clipLayerPath)
+    private async Task<FeatureCollection> GenerateLGUsImpl(IEnumerable<Feature> regionalSubbasinInputFeatures, IEnumerable<Feature> lguInputFeatures, string outputFolder, string outputLayerPrefix, List<int> regionalSubbasinIDs, string? filterLayerPath)
     {
         var outputLayerPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}.geojson";
         var lguInputPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}delineationLayer.geojson";
@@ -294,9 +279,9 @@ public class QgisRunnerController : ControllerBase
         {
             commandLineArguments.AddRange(new List<string> { "--rsb_ids", string.Join(", ", regionalSubbasinIDs) });
         }
-        if (!string.IsNullOrWhiteSpace(clipLayerPath))
+        if (!string.IsNullOrWhiteSpace(filterLayerPath))
         {
-            commandLineArguments.AddRange(new List<string> { "--clip", clipLayerPath });
+            commandLineArguments.AddRange(new List<string> { "--filter", filterLayerPath });
         }
 
         await WriteFeaturesToGeoJsonFile(lguInputPath, lguInputFeatures);
@@ -327,6 +312,7 @@ public class QgisRunnerController : ControllerBase
         var loadGeneratingUnitRefreshAreaID = requestDto.LoadGeneratingUnitRefreshAreaID;
         if (loadGeneratingUnitRefreshAreaID != null)
         {
+            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pLoadGeneratingUnitRefreshAreaMakeValid @LoadGeneratingUnitRefreshAreaID = @loadGeneratingUnitRefreshAreaID", new SqlParameter("@loadGeneratingUnitRefreshAreaID", loadGeneratingUnitRefreshAreaID));
             loadGeneratingUnitRefreshArea =
                 await _dbContext.LoadGeneratingUnitRefreshAreas.FindAsync(loadGeneratingUnitRefreshAreaID.Value);
             var loadGeneratingUnitRefreshAreaGeometry = loadGeneratingUnitRefreshArea

@@ -32,9 +32,6 @@ public partial class ModelBasin
     public string? ModelBasinRegion { get; set; }
 
     [InverseProperty("ModelBasin")]
-    public virtual ICollection<LoadGeneratingUnit4326> LoadGeneratingUnit4326s { get; set; } = new List<LoadGeneratingUnit4326>();
-
-    [InverseProperty("ModelBasin")]
     public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; } = new List<LoadGeneratingUnit>();
 
     [InverseProperty("ModelBasin")]

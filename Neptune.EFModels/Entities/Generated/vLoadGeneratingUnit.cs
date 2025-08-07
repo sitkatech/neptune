@@ -32,7 +32,7 @@ public partial class vLoadGeneratingUnit
 
     public int? RegionalSubbasinID { get; set; }
 
-    [StringLength(127)]
+    [StringLength(125)]
     [Unicode(false)]
     public string RegionalSubbasinName { get; set; } = null!;
 

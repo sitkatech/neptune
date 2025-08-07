@@ -48,9 +48,6 @@ public partial class Delineation
     public virtual ICollection<DirtyModelNode> DirtyModelNodes { get; set; } = new List<DirtyModelNode>();
 
     [InverseProperty("Delineation")]
-    public virtual ICollection<LoadGeneratingUnit4326> LoadGeneratingUnit4326s { get; set; } = new List<LoadGeneratingUnit4326>();
-
-    [InverseProperty("Delineation")]
     public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; } = new List<LoadGeneratingUnit>();
 
     [InverseProperty("Delineation")]
