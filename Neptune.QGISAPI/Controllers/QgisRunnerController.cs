@@ -102,9 +102,9 @@ public class QgisRunnerController : ControllerBase
             new Feature(x.DelineationGeometry, new AttributesTable { { "DelinID", x.DelinID } })).ToList();
         var regionalSubbasinInputFeatures = _dbContext.vPyQgisRegionalSubbasinLGUInputs.AsNoTracking().Select(x =>
             new Feature(x.CatchmentGeometry, new AttributesTable { { "RSBID", x.RSBID }, { "ModelID", x.ModelID } })).ToList();
-        var clipLayerPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}_inputClip.geojson";
-        var loadGeneratingUnitRefreshArea = await CreateLoadGeneratingUnitRefreshAreaIfProvided(requestDto, clipLayerPath);
-        var featureCollection = await GenerateLGUsImpl(regionalSubbasinInputFeatures, lguInputFeatures, outputFolder, outputLayerPrefix, new List<int>(), loadGeneratingUnitRefreshArea != null ? clipLayerPath : null);
+        var filterLayerPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}_inputFilter.geojson";
+        var loadGeneratingUnitRefreshArea = await CreateLoadGeneratingUnitRefreshAreaIfProvided(requestDto, filterLayerPath);
+        var featureCollection = await GenerateLGUsImpl(regionalSubbasinInputFeatures, lguInputFeatures, outputFolder, outputLayerPrefix, new List<int>(), loadGeneratingUnitRefreshArea != null ? filterLayerPath : null);
 
         if (loadGeneratingUnitRefreshArea != null)
         {
@@ -264,7 +264,7 @@ public class QgisRunnerController : ControllerBase
         return Ok();
     }
 
-    private async Task<FeatureCollection> GenerateLGUsImpl(IEnumerable<Feature> regionalSubbasinInputFeatures, IEnumerable<Feature> lguInputFeatures, string outputFolder, string outputLayerPrefix, List<int> regionalSubbasinIDs, string? clipLayerPath)
+    private async Task<FeatureCollection> GenerateLGUsImpl(IEnumerable<Feature> regionalSubbasinInputFeatures, IEnumerable<Feature> lguInputFeatures, string outputFolder, string outputLayerPrefix, List<int> regionalSubbasinIDs, string? filterLayerPath)
     {
         var outputLayerPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}.geojson";
         var lguInputPath = $"{Path.Combine(outputFolder, outputLayerPrefix)}delineationLayer.geojson";
@@ -279,9 +279,9 @@ public class QgisRunnerController : ControllerBase
         {
             commandLineArguments.AddRange(new List<string> { "--rsb_ids", string.Join(", ", regionalSubbasinIDs) });
         }
-        if (!string.IsNullOrWhiteSpace(clipLayerPath))
+        if (!string.IsNullOrWhiteSpace(filterLayerPath))
         {
-            commandLineArguments.AddRange(new List<string> { "--clip", clipLayerPath });
+            commandLineArguments.AddRange(new List<string> { "--filter", filterLayerPath });
         }
 
         await WriteFeaturesToGeoJsonFile(lguInputPath, lguInputFeatures);
