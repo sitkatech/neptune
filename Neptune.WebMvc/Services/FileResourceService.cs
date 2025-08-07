@@ -5,17 +5,9 @@ using Neptune.WebMvc.Common;
 
 namespace Neptune.WebMvc.Services;
 
-public class FileResourceService
+public class FileResourceService(NeptuneDbContext dbContext, AzureBlobStorageService azureBlobStorageService)
 {
     private const long MaxUploadFileSizeInBytes = 200000000;
-    private readonly NeptuneDbContext _dbContext;
-    private readonly AzureBlobStorageService _azureBlobStorageService;
-
-    public FileResourceService(NeptuneDbContext dbContext, AzureBlobStorageService azureBlobStorageService)
-    {
-        _dbContext = dbContext;
-        _azureBlobStorageService = azureBlobStorageService;
-    }
 
     // 9/13/23 SMG: I'm hoping that this can essentially be the ONLY place that actually
     // we new up FileResources so that we can keep the pinch point accurate for the future.
@@ -32,12 +24,12 @@ public class FileResourceService
             CreateDate = DateTime.UtcNow,
             ContentLength = fileResourceData.LongLength
         };
-        await _dbContext.FileResources.AddAsync(fileResource);
+        await dbContext.FileResources.AddAsync(fileResource);
         
-        if (await _azureBlobStorageService.UploadFileResource(fileResource, fileResourceData))
+        if (await azureBlobStorageService.UploadFileResource(fileResource, fileResourceData))
         {
-            await _dbContext.SaveChangesAsync();
-            await _dbContext.Entry(fileResource).ReloadAsync();
+            await dbContext.SaveChangesAsync();
+            await dbContext.Entry(fileResource).ReloadAsync();
             return fileResource;
         }
 
@@ -46,14 +38,14 @@ public class FileResourceService
 
     public async Task<bool> DeleteBlobForFileResource(FileResource fileResource)
     {
-        return await _azureBlobStorageService.DeleteFileResourceBlob(fileResource);
+        return await azureBlobStorageService.DeleteFileResourceBlob(fileResource);
     }
 
     public async Task<bool> DeleteFileResource(FileResource fileResource)
     {
-        _dbContext.FileResources.Remove(fileResource);
+        dbContext.FileResources.Remove(fileResource);
         // there is a potential that we delete the blob, then a transaction fails, and the blob is no longer there.
-        return await _azureBlobStorageService.DeleteFileResourceBlob(fileResource);
+        return await azureBlobStorageService.DeleteFileResourceBlob(fileResource);
     }
 
     public async Task<FileResource> CreateNewFromIFormFile(IFormFile formFile, Person currentPerson)
