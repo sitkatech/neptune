@@ -1,6 +1,5 @@
 using Neptune.QGISAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Neptune.Common.Services.GDAL;
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common.GeoSpatial;
@@ -312,7 +311,6 @@ public class QgisRunnerController : ControllerBase
         var loadGeneratingUnitRefreshAreaID = requestDto.LoadGeneratingUnitRefreshAreaID;
         if (loadGeneratingUnitRefreshAreaID != null)
         {
-            await _dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pLoadGeneratingUnitRefreshAreaMakeValid @LoadGeneratingUnitRefreshAreaID = @loadGeneratingUnitRefreshAreaID", new SqlParameter("@loadGeneratingUnitRefreshAreaID", loadGeneratingUnitRefreshAreaID));
             loadGeneratingUnitRefreshArea =
                 await _dbContext.LoadGeneratingUnitRefreshAreas.FindAsync(loadGeneratingUnitRefreshAreaID.Value);
             var loadGeneratingUnitRefreshAreaGeometry = loadGeneratingUnitRefreshArea
