@@ -6,8 +6,7 @@ import { RouterLink } from "@angular/router";
     selector: "qanat-link-renderer",
     templateUrl: "./link-renderer.component.html",
     styleUrls: ["./link-renderer.component.scss"],
-    standalone: true,
-    imports: [RouterLink],
+    imports: [RouterLink]
 })
 export class LinkRendererComponent implements AgRendererComponent {
     params: {

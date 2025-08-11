@@ -15,9 +15,7 @@ namespace Neptune.EFModels.Entities
         public static readonly NotificationTypeCustom Custom = NotificationTypeCustom.Instance;
 
         public static readonly List<NotificationType> All;
-        public static readonly List<NotificationTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, NotificationType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, NotificationTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -25,9 +23,7 @@ namespace Neptune.EFModels.Entities
         static NotificationType()
         {
             All = new List<NotificationType> { Custom };
-            AllAsSimpleDto = new List<NotificationTypeSimpleDto> { Custom.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, NotificationType>(All.ToDictionary(x => x.NotificationTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, NotificationTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.NotificationTypeID));
         }
 
         /// <summary>

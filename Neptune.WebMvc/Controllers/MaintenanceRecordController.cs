@@ -10,12 +10,13 @@ using Neptune.WebMvc.Views.Shared;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class MaintenanceRecordController : NeptuneBaseController<MaintenanceRecordController>
+    public class MaintenanceRecordController(
+        NeptuneDbContext dbContext,
+        ILogger<MaintenanceRecordController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<MaintenanceRecordController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public MaintenanceRecordController(NeptuneDbContext dbContext, ILogger<MaintenanceRecordController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<vMaintenanceRecordDetailed> AllMaintenanceRecordsGridJsonData()
         {

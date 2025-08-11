@@ -31,12 +31,13 @@ using Neptune.WebMvc.Services.Filters;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class NeptunePageController : NeptuneBaseController<NeptunePageController>
+    public class NeptunePageController(
+        NeptuneDbContext dbContext,
+        ILogger<NeptunePageController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<NeptunePageController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public NeptunePageController(NeptuneDbContext dbContext, ILogger<NeptunePageController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet]
         [NeptunePageViewListFeature]
         public ViewResult Index()

@@ -41,12 +41,13 @@ using NetTopologySuite.Geometries;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class DelineationController : NeptuneBaseController<DelineationController>
+    public class DelineationController(
+        NeptuneDbContext dbContext,
+        ILogger<DelineationController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<DelineationController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public DelineationController(NeptuneDbContext dbContext, ILogger<DelineationController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet]
         [NeptuneViewFeature]
         public ViewResult DelineationMap(int? treatmentBMPID)

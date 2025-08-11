@@ -17,11 +17,6 @@ namespace Neptune.EFModels.Entities
             return persons;
         }
 
-        public static List<PersonSimpleDto> ListActiveAsSimpleDto(NeptuneDbContext dbContext)
-        {
-            return ListActive(dbContext).Select(x => x.AsSimpleDto()).ToList();
-        }
-
         public static List<PersonSimpleDto> ListAsSimpleDto(NeptuneDbContext dbContext)
         {
             return GetImpl(dbContext)

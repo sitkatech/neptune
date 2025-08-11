@@ -43,12 +43,14 @@ using ManageViewData = Neptune.WebMvc.Views.TreatmentBMPAssessmentObservationTyp
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class TreatmentBMPAssessmentObservationTypeController : NeptuneBaseController<TreatmentBMPAssessmentObservationTypeController>
+    public class TreatmentBMPAssessmentObservationTypeController(
+        NeptuneDbContext dbContext,
+        ILogger<TreatmentBMPAssessmentObservationTypeController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<TreatmentBMPAssessmentObservationTypeController>(dbContext, logger, linkGenerator,
+            webConfiguration)
     {
-        public TreatmentBMPAssessmentObservationTypeController(NeptuneDbContext dbContext, ILogger<TreatmentBMPAssessmentObservationTypeController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet]
         public ViewResult Index()
         {

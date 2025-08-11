@@ -9,7 +9,7 @@ import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { NeptunePageDto } from "src/app/shared/generated/model/neptune-page-dto";
 import { CustomRichTextService } from "src/app/shared/generated/api/custom-rich-text.service";
 import { FormsModule } from "@angular/forms";
-import { NgIf } from "@angular/common";
+
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
 import { PersonDto } from "src/app/shared/generated/model/person-dto";
@@ -18,8 +18,7 @@ import { PersonDto } from "src/app/shared/generated/model/person-dto";
     selector: "custom-rich-text",
     templateUrl: "./custom-rich-text.component.html",
     styleUrls: ["./custom-rich-text.component.scss"],
-    standalone: true,
-    imports: [LoadingDirective, NgIf, IconComponent, FormsModule, EditorComponent],
+    imports: [LoadingDirective, FormsModule, EditorComponent],
     providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }],
 })
 export class CustomRichTextComponent implements OnInit, AfterViewChecked, OnDestroy {

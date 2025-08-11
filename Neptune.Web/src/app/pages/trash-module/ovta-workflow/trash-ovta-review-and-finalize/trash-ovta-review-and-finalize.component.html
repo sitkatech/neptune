@@ -1,81 +1,87 @@
 <page-header pageTitle="Review and Finalize"></page-header>
-<workflow-body [showLoadingSpinner]="isLoadingSubmit" *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
+@if (onlandVisualTrashAssessment$ | async; as onlandVisualTrashAssessment) {
+  <workflow-body [showLoadingSpinner]="isLoadingSubmit">
     <app-alert-display></app-alert-display>
     <form class="form" [formGroup]="formGroup">
-        <div class="grid-12">
-            <form-field
-                class="g-col-12"
-                [formControl]="formGroup.controls.OnlandVisualTrashAssessmentAreaName"
-                fieldLabel="Assessment Area Name"
-                [required]="true"
-                [readOnly]="!onlandVisualTrashAssessment.AssessingNewArea"
-                [type]="FormFieldType.Text"></form-field>
-            <form-field
-                class="g-col-12"
-                [formControl]="formGroup.controls.AssessmentAreaDescription"
-                fieldLabel="Assessment Area Description"
-                [required]="false"
-                [readOnly]="!onlandVisualTrashAssessment.AssessingNewArea"
-                [type]="FormFieldType.Textarea"></form-field>
-            <form-field
-                class="g-col-12"
-                fieldLabel="Assessment Type"
-                [formControl]="formGroup.controls.IsProgressAssessment"
-                [formInputOptions]="ProgressScoreOptions"
-                [type]="FormFieldType.Radio"></form-field>
-
-            <form-field class="g-col-6" [formControl]="formGroup.controls.AssessmentDate" fieldLabel="Assessment Date" [required]="false" [type]="FormFieldType.Date"></form-field>
-            <div class="field g-col-6">
-                <label class="field-label required">
-                    Assessment Score
-                    <a (click)="showScoreDefinitions()">
-                        <i class="fas fa-question-circle small" style="cursor: help"></i>
-                    </a>
-                </label>
-                <form-field
-                    class="g-col-6"
-                    [formControl]="formGroup.controls.OnlandVisualTrashAssessmentScoreID"
-                    [required]="true"
-                    [formInputOptions]="onlandVisualTrashAssessmentScoreDropdown"
-                    [type]="FormFieldType.Select">
-                </form-field>
-            </div>
-
-            <form-field
-                class="g-col-12"
-                [formControl]="formGroup.controls.Notes"
-                fieldLabel="Comments and Additional Information"
-                [required]="false"
-                [type]="FormFieldType.Textarea"></form-field>
+      <div class="grid-12">
+        <form-field
+          class="g-col-12"
+          [formControl]="formGroup.controls.OnlandVisualTrashAssessmentAreaName"
+          fieldLabel="Assessment Area Name"
+          [required]="true"
+          [readOnly]="!onlandVisualTrashAssessment.AssessingNewArea"
+        [type]="FormFieldType.Text"></form-field>
+        <form-field
+          class="g-col-12"
+          [formControl]="formGroup.controls.AssessmentAreaDescription"
+          fieldLabel="Assessment Area Description"
+          [required]="false"
+          [readOnly]="!onlandVisualTrashAssessment.AssessingNewArea"
+        [type]="FormFieldType.Textarea"></form-field>
+        <form-field
+          class="g-col-12"
+          fieldLabel="Assessment Type"
+          [formControl]="formGroup.controls.IsProgressAssessment"
+          [formInputOptions]="ProgressScoreOptions"
+        [type]="FormFieldType.Radio"></form-field>
+        <form-field class="g-col-6" [formControl]="formGroup.controls.AssessmentDate" fieldLabel="Assessment Date" [required]="false" [type]="FormFieldType.Date"></form-field>
+        <div class="field g-col-6">
+          <label class="field-label required">
+            Assessment Score
+            <a (click)="showScoreDefinitions()">
+              <i class="fas fa-question-circle small" style="cursor: help"></i>
+            </a>
+          </label>
+          <form-field
+            class="g-col-6"
+            [formControl]="formGroup.controls.OnlandVisualTrashAssessmentScoreID"
+            [required]="true"
+            [formInputOptions]="onlandVisualTrashAssessmentScoreDropdown"
+            [type]="FormFieldType.Select">
+          </form-field>
         </div>
-        <h3 class="mt-4">Preliminary Source Identification Type</h3>
-        <div class="mt-2 copy copy-3">Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</div>
-        <div class="grid-12 mb-4 preliminary-sources">
-            <div *ngFor="let preliminarySourceIdentificationCategory of PreliminarySourceIdentificationCategories" class="mt-4 g-col-6">
-                <h4 class="mb-2">{{ preliminarySourceIdentificationCategory.DisplayName }}</h4>
-                <label
-                    formArrayName="PreliminarySourceIdentifications"
-                    *ngFor="let control of filterByCategory(formGroup.controls.PreliminarySourceIdentifications.controls, preliminarySourceIdentificationCategory.Value)">
-                    <input
-                        type="checkbox"
-                        [formControl]="control.controls.Selected"
-                        [value]="control.controls.IsOther.value ? 'IsOther' : 'Regular'"
-                        (change)="onPreliminarySourceIdentificationTypeChange($event, control.controls.ExplanationIfTypeIsOther)" />
-                    {{ control.controls.IsOther.value ? "Other" : control.controls.PreliminarySourceIdentificationTypeName.value }}
-                    <input type="text" *ngIf="control.controls.IsOther.value" [formControl]="control.controls.ExplanationIfTypeIsOther" />
+        <form-field
+          class="g-col-12"
+          [formControl]="formGroup.controls.Notes"
+          fieldLabel="Comments and Additional Information"
+          [required]="false"
+        [type]="FormFieldType.Textarea"></form-field>
+      </div>
+      <h3 class="mt-4">Preliminary Source Identification Type</h3>
+      <div class="mt-2 copy copy-3">Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</div>
+      <div class="grid-12 mb-4 preliminary-sources">
+        @for (preliminarySourceIdentificationCategory of PreliminarySourceIdentificationCategories; track preliminarySourceIdentificationCategory) {
+          <div class="mt-4 g-col-6">
+            <h4 class="mb-2">{{ preliminarySourceIdentificationCategory.DisplayName }}</h4>
+            @for (control of filterByCategory(formGroup.controls.PreliminarySourceIdentifications.controls, preliminarySourceIdentificationCategory.Value); track control) {
+              <label
+                formArrayName="PreliminarySourceIdentifications"
+                >
+                <input
+                  type="checkbox"
+                  [formControl]="control.controls.Selected"
+                  [value]="control.controls.IsOther.value ? 'IsOther' : 'Regular'"
+                  (change)="onPreliminarySourceIdentificationTypeChange($event, control.controls.ExplanationIfTypeIsOther)" />
+                  {{ control.controls.IsOther.value ? "Other" : control.controls.PreliminarySourceIdentificationTypeName.value }}
+                  @if (control.controls.IsOther.value) {
+                    <input type="text" [formControl]="control.controls.ExplanationIfTypeIsOther" />
+                  }
                 </label>
+              }
             </div>
+          }
         </div>
-    </form>
-
-    <h3>Observations</h3>
-    <observations-map
-        *ngIf="onlandVisualTrashAssessmentObservations$ | async as onlandVisualTrashAssessmentObservations"
-        [observations]="onlandVisualTrashAssessmentObservations"
-        [onlandVisualTrashAssessmentID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID">
-    </observations-map>
-</workflow-body>
-<div class="page-footer">
+      </form>
+      <h3>Observations</h3>
+      @if (onlandVisualTrashAssessmentObservations$ | async; as onlandVisualTrashAssessmentObservations) {
+        <observations-map
+          [observations]="onlandVisualTrashAssessmentObservations"
+          [onlandVisualTrashAssessmentID]="onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID">
+        </observations-map>
+      }
+    </workflow-body>
+  }
+  <div class="page-footer">
     <button class="btn btn-primary mr-2" (click)="save()" [disabled]="formGroup.invalid || isLoadingSubmit">Save</button>
     <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="formGroup.invalid || isLoadingSubmit">Finalize</button>
-</div>
+  </div>

@@ -11,12 +11,13 @@ using IndexViewData = Neptune.WebMvc.Views.DataHub.IndexViewData;
 
 namespace Neptune.WebMvc.Controllers;
 
-public class DataHubController : NeptuneBaseController<DataHubController>
+public class DataHubController(
+    NeptuneDbContext dbContext,
+    ILogger<DataHubController> logger,
+    IOptions<WebConfiguration> webConfiguration,
+    LinkGenerator linkGenerator)
+    : NeptuneBaseController<DataHubController>(dbContext, logger, linkGenerator, webConfiguration)
 {
-    public DataHubController(NeptuneDbContext dbContext, ILogger<DataHubController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-    {
-    }
-
     [JurisdictionEditFeature]
     [HttpGet]
     public ViewResult Index()
@@ -37,11 +38,11 @@ public class DataHubController : NeptuneBaseController<DataHubController>
         var precipitationZonesPage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.PrecipitationZonesDataHub);
         
         
-        var lastUpdatedDateParcels = _dbContext.Parcels.MaxBy(x => x.LastUpdate)?.LastUpdate;
-        var lastUpdatedDateRegionalSubbasin = _dbContext.RegionalSubbasins.MaxBy(x => x.LastUpdate)?.LastUpdate;
-        var lastUpdatedDateHRUCharacteristics = _dbContext.HRUCharacteristics.MaxBy(x => x.LastUpdated)?.LastUpdated;
-        var lastUpdatedDateModelBasins = _dbContext.ModelBasins.MaxBy(x => x.LastUpdate)?.LastUpdate;
-        var lastUpdatedDatePrecipitationZones = _dbContext.PrecipitationZones.MaxBy(x => x.LastUpdate)?.LastUpdate;
+        var lastUpdatedDateParcels = _dbContext.Parcels.OrderByDescending(x => x.LastUpdate).FirstOrDefault()?.LastUpdate;
+        var lastUpdatedDateRegionalSubbasin = _dbContext.RegionalSubbasins.OrderByDescending(x => x.LastUpdate).FirstOrDefault()?.LastUpdate;
+        var lastUpdatedDateHRUCharacteristics = _dbContext.HRUCharacteristics.OrderByDescending(x => x.LastUpdated).FirstOrDefault()?.LastUpdated;
+        var lastUpdatedDateModelBasins = _dbContext.ModelBasins.OrderByDescending(x => x.LastUpdate).FirstOrDefault()?.LastUpdate;
+        var lastUpdatedDatePrecipitationZones = _dbContext.PrecipitationZones.OrderByDescending(x => x.LastUpdate).FirstOrDefault()?.LastUpdate;
         var allMethods = FindAttributedMethods(typeof(PowerBIController), typeof(WebServiceNameAndDescriptionAttribute));
         var serviceDocumentationList = allMethods.Select(c => new WebServiceDocumentation(c, _dbContext, _linkGenerator)).OrderBy(x => x.Name).ToList();
         var webServiceAccessToken = new WebServiceToken(_dbContext, CurrentPerson.WebServiceAccessToken.ToString());

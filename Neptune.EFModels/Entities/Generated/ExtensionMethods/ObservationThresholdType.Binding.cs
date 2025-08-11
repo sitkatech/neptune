@@ -17,9 +17,7 @@ namespace Neptune.EFModels.Entities
         public static readonly ObservationThresholdTypeNone None = ObservationThresholdTypeNone.Instance;
 
         public static readonly List<ObservationThresholdType> All;
-        public static readonly List<ObservationThresholdTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, ObservationThresholdType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, ObservationThresholdTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -27,9 +25,7 @@ namespace Neptune.EFModels.Entities
         static ObservationThresholdType()
         {
             All = new List<ObservationThresholdType> { SpecificValue, RelativeToBenchmark, None };
-            AllAsSimpleDto = new List<ObservationThresholdTypeSimpleDto> { SpecificValue.AsSimpleDto(), RelativeToBenchmark.AsSimpleDto(), None.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, ObservationThresholdType>(All.ToDictionary(x => x.ObservationThresholdTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, ObservationThresholdTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.ObservationThresholdTypeID));
         }
 
         /// <summary>

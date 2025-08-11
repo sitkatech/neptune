@@ -18,9 +18,7 @@ namespace Neptune.EFModels.Entities
         public static readonly PreliminarySourceIdentificationCategoryIllegalDumping IllegalDumping = PreliminarySourceIdentificationCategoryIllegalDumping.Instance;
 
         public static readonly List<PreliminarySourceIdentificationCategory> All;
-        public static readonly List<PreliminarySourceIdentificationCategorySimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, PreliminarySourceIdentificationCategory> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, PreliminarySourceIdentificationCategorySimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -28,9 +26,7 @@ namespace Neptune.EFModels.Entities
         static PreliminarySourceIdentificationCategory()
         {
             All = new List<PreliminarySourceIdentificationCategory> { Vehicles, InadequateWasteContainerManagement, PedestrianLitter, IllegalDumping };
-            AllAsSimpleDto = new List<PreliminarySourceIdentificationCategorySimpleDto> { Vehicles.AsSimpleDto(), InadequateWasteContainerManagement.AsSimpleDto(), PedestrianLitter.AsSimpleDto(), IllegalDumping.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, PreliminarySourceIdentificationCategory>(All.ToDictionary(x => x.PreliminarySourceIdentificationCategoryID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, PreliminarySourceIdentificationCategorySimpleDto>(AllAsSimpleDto.ToDictionary(x => x.PreliminarySourceIdentificationCategoryID));
         }
 
         /// <summary>

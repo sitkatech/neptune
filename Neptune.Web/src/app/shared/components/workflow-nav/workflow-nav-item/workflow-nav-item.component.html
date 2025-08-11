@@ -1,20 +1,24 @@
 <li class="sidebar-item workflow-sidebar-item">
-    <a [routerLink]="navRouterLink" routerLinkActive="active" class="sidebar-link" [class.disabled]="disabled">
-        <div>
-            <ng-container [ngSwitch]="required">
-                <ng-container *ngSwitchCase="true">
-                    <ng-container [ngSwitch]="complete">
-                        <icon class="complete" icon="StepComplete" *ngSwitchCase="true"></icon>
-                        <icon class="fade" icon="StepIncomplete" *ngSwitchDefault></icon>
-                    </ng-container>
-                </ng-container>
-                <ng-container *ngSwitchCase="false">
-                    <icon class="info" icon="Info"></icon>
-                </ng-container>
-            </ng-container>
-        </div>
-        <div>
-            <ng-content></ng-content>
-        </div>
-    </a>
+  <a [routerLink]="navRouterLink" routerLinkActive="active" class="sidebar-link" [class.disabled]="disabled">
+    <div>
+      @switch (required) {
+        @case (true) {
+          @switch (complete) {
+            @case (true) {
+              <icon class="complete" icon="StepComplete"></icon>
+            }
+            @default {
+              <icon class="fade" icon="StepIncomplete"></icon>
+            }
+          }
+        }
+        @case (false) {
+          <icon class="info" icon="Info"></icon>
+        }
+      }
+    </div>
+    <div>
+      <ng-content></ng-content>
+    </div>
+  </a>
 </li>

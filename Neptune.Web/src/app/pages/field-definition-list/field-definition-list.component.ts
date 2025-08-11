@@ -14,8 +14,7 @@ import { PageHeaderComponent } from "src/app/shared/components/page-header/page-
     selector: "field-definition-list",
     templateUrl: "./field-definition-list.component.html",
     styleUrls: ["./field-definition-list.component.scss"],
-    standalone: true,
-    imports: [AlertDisplayComponent, AgGridModule, NeptuneGridComponent, PageHeaderComponent],
+    imports: [AlertDisplayComponent, AgGridModule, NeptuneGridComponent, PageHeaderComponent]
 })
 export class FieldDefinitionListComponent implements OnInit {
     @ViewChild("fieldDefinitionsGrid") fieldDefinitionsGrid: AgGridAngular;

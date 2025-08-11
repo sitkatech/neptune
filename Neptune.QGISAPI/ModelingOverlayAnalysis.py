@@ -40,7 +40,9 @@ from pyqgis_utils import (
     clip,
     snapGeometriesToLayer,
     multipartToSinglePart,
-    writeVectorLayerToDisk
+    writeVectorLayerToDisk,
+    selectByLocation,
+    saveSelectedFeatures
 )
 
 JOIN_PREFIX = "Joined_"
@@ -50,7 +52,7 @@ LGU_INPUT_PATH = "LGU_INPUT_PATH ERROR"
 MODEL_BASIN_INPUT_PATH = "MODEL_BASIN_INPUT_PATH ERROR"
 REGIONAL_SUBBASIN_INPUT_PATH = "REGIONAL_SUBBASIN_INPUT_PATH ERROR"
 WQMP_INPUT_PATH = "WQMP_INPUT_PATH ERROR"
-CLIP_PATH = None
+FILTER_PATH = None
 RSB_IDs = None
 
 def parseArguments():
@@ -62,7 +64,7 @@ def parseArguments():
     parser.add_argument('regional_subbain_input_path', type=str, help='the path to the RSB input.')
     parser.add_argument('wqmp_input_path', type=str, help='The path to the WQMP input.')
     parser.add_argument('--rsb_ids', type=str, help='If present, filters the rsb layer down to only rsbs whose id is present in the list. Should be numbers separated by commas')
-    parser.add_argument('--clip', type=str, help='The path to a geojson file containing the shape to clip inputs to')
+    parser.add_argument('--filter', type=str, help='The path to a geojson file containing the shape to filter inputs to through intersection')
     args = parser.parse_args()
 
     # this is easier to write than anything sane
@@ -73,7 +75,7 @@ def parseArguments():
     global OUTPUT_FOLDER
     global OUTPUT_FILE_PREFIX
     global OUTPUT_FOLDER_AND_FILE_PREFIX
-    global CLIP_PATH
+    global FILTER_PATH
     OUTPUT_FOLDER = args.output_folder
     OUTPUT_FILE_PREFIX = args.output_file_prefix
     OUTPUT_FOLDER_AND_FILE_PREFIX = os.path.join(OUTPUT_FOLDER, OUTPUT_FILE_PREFIX)
@@ -82,9 +84,9 @@ def parseArguments():
     REGIONAL_SUBBASIN_INPUT_PATH = args.regional_subbain_input_path
     WQMP_INPUT_PATH = args.wqmp_input_path
 
-    if args.clip:
-        CLIP_PATH = args.clip
-        print(CLIP_PATH)
+    if args.filter:
+        FILTER_PATH = args.filter
+        print(FILTER_PATH)
 
     if args.rsb_ids:
         RSB_IDs = args.rsb_ids
@@ -148,12 +150,13 @@ if __name__ == '__main__':
 
     masterOverlay = union(rsb_wqmp, delineationLayerClipped, "MasterOverlay", None, context=PROCESSING_CONTEXT)
 
-    # clip the model basin layer to the input boundary so that all further datasets will be clipped as well
-    if CLIP_PATH is not None:
-        clipLayer_dissolvedpath = OUTPUT_FOLDER_AND_FILE_PREFIX + 'clipLayer_dissolved.geojson'
-        clipLayer = fetchLayerFromFileSystem(CLIP_PATH, "LGU Clip")
-        clipLayerResult = dissolve(clipLayer, filesystemOutputPath=clipLayer_dissolvedpath, context=PROCESSING_CONTEXT)
-        masterOverlay = clip(masterOverlay, clipLayer_dissolvedpath, "MasterOverlayClipped", None, context=PROCESSING_CONTEXT)
+     # Filter down the masterLayer so that any geometries that overlap our area of concern are included in their entirety
+    if FILTER_PATH is not None:
+        filterLayer_dissolvedpath = OUTPUT_FOLDER_AND_FILE_PREFIX + 'filterLayer_dissolved.geojson'
+        filterLayer = fetchLayerFromFileSystem(FILTER_PATH, "LGU Clip")
+        filterLayerResult = dissolve(filterLayer, filesystemOutputPath=filterLayer_dissolvedpath, context=PROCESSING_CONTEXT)
+        masterOverlay = selectByLocation(masterOverlay, filterLayer_dissolvedpath, "MasterOverlayFiltered", context=PROCESSING_CONTEXT)
+        masterOverlay = saveSelectedFeatures(masterOverlay, "MasterOverlayFinal", None, context=PROCESSING_CONTEXT)
 
     masterOverlay = multipartToSinglePart(masterOverlay, "SinglePartLGUs", None, context=PROCESSING_CONTEXT)
 

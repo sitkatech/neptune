@@ -51,8 +51,8 @@ namespace Neptune.WebMvc.Common.ModalDialog
             string saveButtonText,
             string cancelButtonText,
             List<string> extraCssClasses,
-            string onJavascriptReadyFunction,
-            string postData)
+            string? onJavascriptReadyFunction,
+            string? postData)
         {
             return ModalDialogFormLink(null,
                 new HtmlString(linkText),
@@ -89,8 +89,8 @@ namespace Neptune.WebMvc.Common.ModalDialog
             string saveButtonText,
             string cancelButtonText,
             List<string> extraCssClasses,
-            string onJavascriptReadyFunction,
-            string postData)
+            string? onJavascriptReadyFunction,
+            string? postData)
         {
             return ModalDialogFormLink(null,
                 linkText,
@@ -133,9 +133,9 @@ namespace Neptune.WebMvc.Common.ModalDialog
             string saveButtonText,
             string cancelButtonText,
             List<string> extraCssClasses,
-            string onJavascriptReadyFunction,
-            string postData,
-            string optionalDialogFormID)
+            string? onJavascriptReadyFunction,
+            string? postData,
+            string? optionalDialogFormID)
         {
             return ModalDialogFormLink(linkID, linkText, dialogContentUrl, dialogTitle, dialogWidth, saveButtonID,
                 saveButtonText, cancelButtonText, extraCssClasses, onJavascriptReadyFunction, postData,
@@ -169,9 +169,9 @@ namespace Neptune.WebMvc.Common.ModalDialog
             string saveButtonText,
             string cancelButtonText,
             List<string> extraCssClasses,
-            string onJavascriptReadyFunction,
-            string postData,
-            string optionalDialogFormID,
+            string? onJavascriptReadyFunction,
+            string? postData,
+            string? optionalDialogFormID,
             string hoverText)
         {
             var anchorTag = new TagBuilder("a");
@@ -226,19 +226,19 @@ namespace Neptune.WebMvc.Common.ModalDialog
             return new HtmlString(writer.ToString());
         }
 
-        public static IHtmlContent ModalDialogFormLink(string linkText, string dialogUrl, string dialogTitle, List<string> extraCssClasses, bool hasPermission)
+        public static IHtmlContent ModalDialogFormLink(string? linkText, string dialogUrl, string dialogTitle, List<string> extraCssClasses, bool hasPermission)
         {
             return hasPermission ? ModalDialogFormLink(new HtmlString(linkText), dialogUrl, dialogTitle, DefaultDialogWidth, "Save", "Cancel", extraCssClasses, null, null) : new HtmlString(string.Empty);
         }
 
-        public static IHtmlContent ModalDialogFormLink(string linkText, string dialogUrl, string dialogTitle, int dialogWidth, bool hasPermission, string dialogFormID)
+        public static IHtmlContent ModalDialogFormLink(string linkText, string dialogUrl, string dialogTitle, int dialogWidth, bool hasPermission, string? dialogFormID)
         {
             return hasPermission
                 ? ModalDialogFormLink(null, new HtmlString(linkText), dialogUrl, dialogTitle, dialogWidth, SaveButtonID, "Save", "Cancel", new List<string>(), null, null, dialogFormID, null)
                 : new HtmlString(string.Empty);
         }
 
-        public static IHtmlContent MakeDeleteLink(string linkText, string deleteDialogUrl, List<string> extraCssClasses, bool userHasDeletePermission)
+        public static IHtmlContent MakeDeleteLink(string? linkText, string deleteDialogUrl, List<string> extraCssClasses, bool userHasDeletePermission)
         {
             return userHasDeletePermission ? ModalDialogFormLink(new HtmlString(linkText), deleteDialogUrl, "Confirm Delete", 500, "Delete", "Cancel", extraCssClasses, null, null) : new HtmlString(string.Empty);
         }

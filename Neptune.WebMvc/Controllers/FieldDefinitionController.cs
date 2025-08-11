@@ -34,12 +34,13 @@ using IndexViewData = Neptune.WebMvc.Views.FieldDefinition.IndexViewData;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class FieldDefinitionController : NeptuneBaseController<FieldDefinitionController>
+    public class FieldDefinitionController(
+        NeptuneDbContext dbContext,
+        ILogger<FieldDefinitionController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<FieldDefinitionController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public FieldDefinitionController(NeptuneDbContext dbContext, ILogger<FieldDefinitionController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet]
         [FieldDefinitionViewListFeature]
         public ViewResult Index()

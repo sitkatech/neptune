@@ -3,16 +3,20 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "noImplicitAny": false,
-        "suppressImplicitAnyIndexErrors": true,
         "target": "{{#supportsES6}}es6{{/supportsES6}}{{^supportsES6}}es5{{/supportsES6}}",
         "module": "{{#supportsES6}}es6{{/supportsES6}}{{^supportsES6}}commonjs{{/supportsES6}}",
         "moduleResolution": "node",
         "removeComments": true,
+        "strictNullChecks": true,
+        "exactOptionalPropertyTypes": true,
         "sourceMap": true,
         "outDir": "./dist",
         "noLib": false,
         "declaration": true,
-        "lib": [ "es6", "dom" ]
+        "lib": [ "es6", "dom" ],
+        "typeRoots": [
+            "node_modules/@types"
+        ]
     },
     "exclude": [
         "node_modules",
@@ -21,9 +25,5 @@
     "filesGlob": [
         "./model/*.ts",
         "./api/*.ts"
-    ]{{^useNgPackagr}},
-    "angularCompilerOptions": {
-       "genDir": "dist",
-       "skipTemplateCodegen": true
-    }{{/useNgPackagr}}
+    ]
 }

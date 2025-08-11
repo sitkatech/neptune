@@ -8,7 +8,7 @@ import "leaflet.fullscreen";
 import "leaflet-loading";
 import "leaflet.markercluster";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { Observable, switchMap } from "rxjs";
 import { routeParams } from "src/app/app.routes";
@@ -21,10 +21,9 @@ import { WfsService } from "src/app/shared/services/wfs.service";
 
 @Component({
     selector: "trash-ovta-area-edit-location",
-    standalone: true,
-    imports: [PageHeaderComponent, NeptuneMapComponent, LandUseBlockLayerComponent, NgIf, AsyncPipe, TransectLineLayerComponent, RouterLink],
+    imports: [PageHeaderComponent, NeptuneMapComponent, LandUseBlockLayerComponent, AsyncPipe, TransectLineLayerComponent, RouterLink],
     templateUrl: "./trash-ovta-area-edit-location.component.html",
-    styleUrl: "./trash-ovta-area-edit-location.component.scss",
+    styleUrl: "./trash-ovta-area-edit-location.component.scss"
 })
 export class TrashOvtaAreaEditLocationComponent {
     public customRichTextTypeID = NeptunePageTypeEnum.EditOVTAArea;

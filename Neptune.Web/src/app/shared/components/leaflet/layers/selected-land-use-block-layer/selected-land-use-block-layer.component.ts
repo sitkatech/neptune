@@ -1,17 +1,16 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChange } from "@angular/core";
 import * as L from "leaflet";
 import { MapLayerBase } from "../map-layer-base.component";
-import { CommonModule } from "@angular/common";
+
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { PriorityLandUseTypeEnum, PriorityLandUseTypes } from "src/app/shared/generated/enum/priority-land-use-type-enum";
 
 @Component({
     selector: "selected-land-use-block-layer",
-    standalone: true,
-    imports: [CommonModule],
+    imports: [],
     templateUrl: "./selected-land-use-block-layer.component.html",
-    styleUrl: "./selected-land-use-block-layer.component.scss",
+    styleUrl: "./selected-land-use-block-layer.component.scss"
 })
 export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     @Input() selectedLandUseBlockID: number;

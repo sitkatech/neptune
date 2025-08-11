@@ -5,8 +5,7 @@ import { NgTemplateOutlet } from "@angular/common";
     selector: "modal",
     templateUrl: "./modal.component.html",
     styleUrls: ["./modal.component.scss"],
-    standalone: true,
-    imports: [NgTemplateOutlet],
+    imports: [NgTemplateOutlet]
 })
 export class ModalComponent {
     @ViewChild("dialog") dialog: ElementRef;

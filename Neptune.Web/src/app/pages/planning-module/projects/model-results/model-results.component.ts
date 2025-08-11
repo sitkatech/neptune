@@ -9,7 +9,7 @@ import { TreatmentBMPHRUCharacteristicsSummarySimpleDto } from "src/app/shared/g
 import { NeptuneModelingResultSigFigPipe } from "src/app/shared/pipes/neptune-modeling-result-sig-fig.pipe";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { FormsModule } from "@angular/forms";
-import { NgIf, NgFor, DecimalPipe } from "@angular/common";
+import { DecimalPipe } from "@angular/common";
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
 import { BtnGroupRadioInputComponent } from "src/app/shared/components/inputs/btn-group-radio-input/btn-group-radio-input.component";
 
@@ -17,8 +17,7 @@ import { BtnGroupRadioInputComponent } from "src/app/shared/components/inputs/bt
     selector: "model-results",
     templateUrl: "./model-results.component.html",
     styleUrls: ["./model-results.component.scss"],
-    standalone: true,
-    imports: [NgIf, NgFor, FormsModule, FieldDefinitionComponent, DecimalPipe, NeptuneModelingResultSigFigPipe, BtnGroupRadioInputComponent],
+    imports: [FormsModule, FieldDefinitionComponent, DecimalPipe, NeptuneModelingResultSigFigPipe, BtnGroupRadioInputComponent]
 })
 export class ModelResultsComponent implements OnInit {
     public ModeledPerformanceDisplayTypeEnum = ModeledPerformanceDisplayTypeEnum;

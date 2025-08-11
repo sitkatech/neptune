@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { PersonDto } from "src/app/shared/generated/model/person-dto";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { HeaderNavComponent } from "../../../shared/components/header-nav/header-nav.component";
 import { Observable } from "rxjs";
@@ -13,8 +13,7 @@ import { environment } from "src/environments/environment";
     selector: "trash-site-layout",
     templateUrl: "./trash-site-layout.component.html",
     styleUrls: ["./trash-site-layout.component.scss"],
-    standalone: true,
-    imports: [RouterLink, RouterLinkActive, RouterOutlet, NgIf, AsyncPipe, HeaderNavComponent, IconComponent, DropdownToggleDirective],
+    imports: [RouterLink, RouterLinkActive, RouterOutlet, AsyncPipe, HeaderNavComponent, IconComponent, DropdownToggleDirective]
 })
 export class TrashSiteLayoutComponent implements OnInit {
     public currentUser$: Observable<PersonDto>;

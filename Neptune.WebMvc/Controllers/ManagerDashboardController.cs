@@ -30,12 +30,13 @@ using Index = Neptune.WebMvc.Views.ManagerDashboard.Index;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class ManagerDashboardController : NeptuneBaseController<ManagerDashboardController>
+    public class ManagerDashboardController(
+        NeptuneDbContext dbContext,
+        ILogger<ManagerDashboardController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<ManagerDashboardController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public ManagerDashboardController(NeptuneDbContext dbContext, ILogger<ManagerDashboardController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet]
         [JurisdictionManageFeature]
         public ViewResult Index()

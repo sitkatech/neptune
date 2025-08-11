@@ -17,9 +17,7 @@ namespace Neptune.EFModels.Entities
         public static readonly TreatmentBMPLifespanTypeFixedEndDate FixedEndDate = TreatmentBMPLifespanTypeFixedEndDate.Instance;
 
         public static readonly List<TreatmentBMPLifespanType> All;
-        public static readonly List<TreatmentBMPLifespanTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, TreatmentBMPLifespanType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, TreatmentBMPLifespanTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -27,9 +25,7 @@ namespace Neptune.EFModels.Entities
         static TreatmentBMPLifespanType()
         {
             All = new List<TreatmentBMPLifespanType> { Unspecified, Perpetuity, FixedEndDate };
-            AllAsSimpleDto = new List<TreatmentBMPLifespanTypeSimpleDto> { Unspecified.AsSimpleDto(), Perpetuity.AsSimpleDto(), FixedEndDate.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPLifespanType>(All.ToDictionary(x => x.TreatmentBMPLifespanTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPLifespanTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.TreatmentBMPLifespanTypeID));
         }
 
         /// <summary>

@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Subject, ReplaySubject, Observable, Subscription } from "rxjs";
 import { OnlandVisualTrashAssessmentService } from "../generated/api/onland-visual-trash-assessment.service";
 import { OnlandVisualTrashAssessmentWorkflowProgressDto } from "../generated/model/onland-visual-trash-assessment-workflow-progress-dto";
-import { ConsoleService } from "@ng-select/ng-select/lib/console.service";
 
 @Injectable({
     providedIn: "root",

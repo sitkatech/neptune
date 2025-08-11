@@ -22,10 +22,9 @@ import { FullScreenButtonComponent } from "../full-screen-button/full-screen-but
 
 @Component({
     selector: "neptune-grid",
-    standalone: true,
     imports: [CommonModule, AgGridModule, FormsModule, PaginationControlsComponent, CsvDownloadButtonComponent, NeptuneGridHeaderComponent, FullScreenButtonComponent],
     templateUrl: "./neptune-grid.component.html",
-    styleUrls: ["./neptune-grid.component.scss"],
+    styleUrls: ["./neptune-grid.component.scss"]
 })
 export class NeptuneGridComponent implements OnInit, OnChanges {
     @ViewChild(AgGridAngular) gridref: AgGridAngular;

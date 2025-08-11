@@ -5,10 +5,9 @@ import { MapLayerBase } from "../map-layer-base.component";
 
 @Component({
     selector: "parcel-layer",
-    standalone: true,
     imports: [],
     templateUrl: "./parcel-layer.component.html",
-    styleUrl: "./parcel-layer.component.scss",
+    styleUrl: "./parcel-layer.component.scss"
 })
 export class ParcelLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     @Input() styles: string = "parcel";

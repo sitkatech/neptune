@@ -181,7 +181,7 @@ angular.module("NeptuneApp")
         $scope.delineationArea = function () {
             var delineationFeature = DelineationMapService.getDelineation();
             if (delineationFeature) {
-                return delineationFeature.properties.Area + " ac";
+                return delineationFeature.properties.Area;
             } else {
                 return "-";
             }

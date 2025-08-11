@@ -134,14 +134,6 @@ public class OnlandVisualTrashAssessmentController(
         return Ok();
     }
 
-    [HttpGet("preliminary-source-identification-types")]
-    [JurisdictionEditFeature]
-    public ActionResult<List<PreliminarySourceIdentificationTypeSimpleDto>> GetPreliminarySourceIdentificationTypes()
-    {
-        var preliminarySourceIdentificationTypeSimpleDtos = OnlandVisualTrashAssessments.GetPreliminarySourceIdentificationTypeSimpleDtos(DbContext);
-        return Ok(preliminarySourceIdentificationTypeSimpleDtos);
-    }
-
     [HttpGet("{onlandVisualTrashAssessmentID}/progress")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]

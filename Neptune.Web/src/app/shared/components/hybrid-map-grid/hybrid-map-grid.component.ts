@@ -4,7 +4,7 @@ import { AgGridAngular } from "ag-grid-angular";
 import { Map, layerControl } from "leaflet";
 import { LoadingDirective } from "../../directives/loading.directive";
 import { IconComponent } from "../icon/icon.component";
-import { CommonModule } from "@angular/common";
+
 import { NeptuneGridHeaderComponent } from "../neptune-grid-header/neptune-grid-header.component";
 import { NeptuneGridComponent } from "../neptune-grid/neptune-grid.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../leaflet/neptune-map/neptune-map.component";
@@ -12,10 +12,9 @@ import { BoundingBoxDto } from "../../generated/model/bounding-box-dto";
 
 @Component({
     selector: "hybrid-map-grid",
-    standalone: true,
-    imports: [LoadingDirective, IconComponent, CommonModule, NeptuneGridHeaderComponent, NeptuneGridComponent, NeptuneMapComponent],
+    imports: [LoadingDirective, IconComponent, NeptuneGridHeaderComponent, NeptuneGridComponent, NeptuneMapComponent],
     templateUrl: "./hybrid-map-grid.component.html",
-    styleUrl: "./hybrid-map-grid.component.scss",
+    styleUrl: "./hybrid-map-grid.component.scss"
 })
 export class HybridMapGridComponent {
     @Input() rowData: any[];

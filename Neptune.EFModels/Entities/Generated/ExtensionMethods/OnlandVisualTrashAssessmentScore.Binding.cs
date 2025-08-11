@@ -18,9 +18,7 @@ namespace Neptune.EFModels.Entities
         public static readonly OnlandVisualTrashAssessmentScoreD D = OnlandVisualTrashAssessmentScoreD.Instance;
 
         public static readonly List<OnlandVisualTrashAssessmentScore> All;
-        public static readonly List<OnlandVisualTrashAssessmentScoreSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, OnlandVisualTrashAssessmentScore> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, OnlandVisualTrashAssessmentScoreSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -28,9 +26,7 @@ namespace Neptune.EFModels.Entities
         static OnlandVisualTrashAssessmentScore()
         {
             All = new List<OnlandVisualTrashAssessmentScore> { A, B, C, D };
-            AllAsSimpleDto = new List<OnlandVisualTrashAssessmentScoreSimpleDto> { A.AsSimpleDto(), B.AsSimpleDto(), C.AsSimpleDto(), D.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, OnlandVisualTrashAssessmentScore>(All.ToDictionary(x => x.OnlandVisualTrashAssessmentScoreID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, OnlandVisualTrashAssessmentScoreSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.OnlandVisualTrashAssessmentScoreID));
         }
 
         /// <summary>

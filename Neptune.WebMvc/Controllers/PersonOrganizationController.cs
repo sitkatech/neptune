@@ -30,12 +30,13 @@ using Neptune.WebMvc.Services.Filters;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class PersonOrganizationController : NeptuneBaseController<PersonOrganizationController>
+    public class PersonOrganizationController(
+        NeptuneDbContext dbContext,
+        ILogger<PersonOrganizationController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<PersonOrganizationController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public PersonOrganizationController(NeptuneDbContext dbContext, ILogger<PersonOrganizationController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet("{personPrimaryKey}")]
         [NeptuneAdminFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("personPrimaryKey")]

@@ -8,5 +8,11 @@ public static class vLoadGeneratingUnits
     {
         return dbContext.vLoadGeneratingUnits.AsNoTracking().ToList();
     }
+
+    public static List<vLoadGeneratingUnit> ListByRegionalSubbasinID(NeptuneDbContext dbContext, int regionalSubbasinID)
+    {
+        return dbContext.vLoadGeneratingUnits.AsNoTracking().Where(x => x.RegionalSubbasinID == regionalSubbasinID)
+            .ToList();
+    }
     
 }

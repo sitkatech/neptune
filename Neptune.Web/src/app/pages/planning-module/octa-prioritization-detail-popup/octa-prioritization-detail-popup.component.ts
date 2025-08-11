@@ -5,8 +5,7 @@ import { DecimalPipe } from "@angular/common";
     selector: "octa-prioritization-detail-popup",
     templateUrl: "./octa-prioritization-detail-popup.component.html",
     styleUrls: ["./octa-prioritization-detail-popup.component.scss"],
-    standalone: true,
-    imports: [DecimalPipe],
+    imports: [DecimalPipe]
 })
 export class OctaPrioritizationDetailPopupComponent implements OnInit {
     constructor(private cdr: ChangeDetectorRef) {}

@@ -80,8 +80,10 @@ namespace Neptune.WebMvc.Views.LoadGeneratingUnit
 
             DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<LoadGeneratingUnitController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             DetailUrl = DetailUrlTemplate.ParameterReplace(loadGeneratingUnit.LoadGeneratingUnitID);
-            RegionalSubbasinUrlTemplate = new UrlTemplate<int>(SitkaRoute<LoadGeneratingUnitController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
-            RegionalSubbasinDetailUrl = regionalSubbasin == null ? string.Empty : SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(regionalSubbasin.RegionalSubbasinID));
+            RegionalSubbasinUrlTemplate = new UrlTemplate<int>(SitkaRoute<RegionalSubbasinController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
+            RegionalSubbasinDetailUrl = regionalSubbasin == null
+                ? string.Empty
+                : RegionalSubbasinUrlTemplate.ParameterReplace(regionalSubbasin.RegionalSubbasinID);
             TreatmentBMPDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));
             TreatmentBMPDetailUrl = treatmentBMP == null ? string.Empty : TreatmentBMPDetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
             WaterQualityManagementPlanDetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(LinkGenerator, x => x.Detail(UrlTemplate.Parameter1Int)));

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Neptune.EFModels.Entities;
+﻿using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Workflows;

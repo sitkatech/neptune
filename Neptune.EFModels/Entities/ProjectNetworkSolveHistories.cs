@@ -1,11 +1,9 @@
 ﻿using Neptune.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class ProjectNetworkSolveHistories
+    public class ProjectNetworkSolveHistories
     {
         public static List<ProjectNetworkSolveHistorySimpleDto> GetByProjectIDAsDto(NeptuneDbContext dbContext, int projectID)
         {

@@ -103,6 +103,10 @@
                         }
                     </div>
                 </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">Area</label>
+                    <div class="col-sm-7">@ViewDataTyped.LoadGeneratingUnit.GetLoadGeneratingUnitAreaString()</div>
+                </div>
                 <div style="margin: 10px 0">
                     @if (ViewDataTyped.HRURequestDate != null)
                     {
@@ -164,7 +168,7 @@
         var regionalSubbasinLayer =
             map.addWmsLayer("OCStormwater:RegionalSubbasins",
                 "<span><img src='/Content/img/legendImages/regionalSubbasin.png' height='12px' style='margin-bottom:3px;' /> Regional Subbasins</span>",
-                { styles: "regional_subbasin_wide", maxZoom: 22 }, true);
+                { styles: "regional_subbasin_wide", maxZoom: 30 }, true);
 
         map.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
             "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", false);

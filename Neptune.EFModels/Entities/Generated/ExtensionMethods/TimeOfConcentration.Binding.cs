@@ -21,9 +21,7 @@ namespace Neptune.EFModels.Entities
         public static readonly TimeOfConcentrationSixtyMinutes SixtyMinutes = TimeOfConcentrationSixtyMinutes.Instance;
 
         public static readonly List<TimeOfConcentration> All;
-        public static readonly List<TimeOfConcentrationSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, TimeOfConcentration> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, TimeOfConcentrationSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -31,9 +29,7 @@ namespace Neptune.EFModels.Entities
         static TimeOfConcentration()
         {
             All = new List<TimeOfConcentration> { FiveMinutes, TenMinutes, FifteenMinutes, TwentyMinutes, ThirtyMinutes, FortyFiveMinutes, SixtyMinutes };
-            AllAsSimpleDto = new List<TimeOfConcentrationSimpleDto> { FiveMinutes.AsSimpleDto(), TenMinutes.AsSimpleDto(), FifteenMinutes.AsSimpleDto(), TwentyMinutes.AsSimpleDto(), ThirtyMinutes.AsSimpleDto(), FortyFiveMinutes.AsSimpleDto(), SixtyMinutes.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, TimeOfConcentration>(All.ToDictionary(x => x.TimeOfConcentrationID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, TimeOfConcentrationSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.TimeOfConcentrationID));
         }
 
         /// <summary>

@@ -1,19 +1,22 @@
 <page-header pageTitle="On-Land Visual Trash Assessments" [customRichTextTypeID]="customRichTextID" [templateRight]="templateRight"></page-header>
 
 <ng-template #templateRight>
-    <a class="float-right btn btn-primary mr-2" [routerLink]="['new/instructions']">Add New OVTA</a>
-    <a *ngIf="currentUserHasJurisdictionManagePermission()" class="float-right btn btn-primary mr-2" [href]="url + '/OnlandVisualTrashAssessment/BulkUploadOTVAs'"> <icon [icon]="'Upload'"></icon> Upload OVTAs </a>
+  <a class="float-right btn btn-primary mr-2" [routerLink]="['new/instructions']">Add New OVTA</a>
+  @if (currentUserHasJurisdictionManagePermission()) {
+    <a class="float-right btn btn-primary mr-2" [href]="url + '/OnlandVisualTrashAssessment/BulkUploadOTVAs'"> <icon [icon]="'Upload'"></icon> Upload OVTAs </a>
+  }
 </ng-template>
 
 <app-alert-display></app-alert-display>
 
 <div class="page-body" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
+  @if (onlandVisualTrashAssessments$ | async; as onlandVisualTrashAssessments) {
     <neptune-grid
-        *ngIf="onlandVisualTrashAssessments$ | async as onlandVisualTrashAssessments"
-        height="800px"
-        [rowData]="onlandVisualTrashAssessments"
-        [columnDefs]="ovtaColumnDefs"
-        downloadFileName="onland-visual-trash-assessments"
-        [pagination]="true"
-        [sizeColumnsToFitGrid]="true"></neptune-grid>
+      height="800px"
+      [rowData]="onlandVisualTrashAssessments"
+      [columnDefs]="ovtaColumnDefs"
+      downloadFileName="onland-visual-trash-assessments"
+      [pagination]="true"
+    [sizeColumnsToFitGrid]="true"></neptune-grid>
+  }
 </div>

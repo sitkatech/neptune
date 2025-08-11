@@ -15,9 +15,7 @@ namespace Neptune.EFModels.Entities
         public static readonly ProjectStatusDraft Draft = ProjectStatusDraft.Instance;
 
         public static readonly List<ProjectStatus> All;
-        public static readonly List<ProjectStatusSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, ProjectStatus> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, ProjectStatusSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -25,9 +23,7 @@ namespace Neptune.EFModels.Entities
         static ProjectStatus()
         {
             All = new List<ProjectStatus> { Draft };
-            AllAsSimpleDto = new List<ProjectStatusSimpleDto> { Draft.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, ProjectStatus>(All.ToDictionary(x => x.ProjectStatusID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, ProjectStatusSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.ProjectStatusID));
         }
 
         /// <summary>

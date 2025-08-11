@@ -1,10 +1,10 @@
 import { Component, ComponentRef, OnInit } from "@angular/core";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { FormFieldComponent, FormFieldType } from "src/app/shared/components/form-field/form-field.component";
+import { FormFieldComponent, FormFieldType } from "src/app/shared/components/forms/form-field/form-field.component";
 import { ModalComponent } from "src/app/shared/components/modal/modal.component";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { ModalService } from "src/app/shared/services/modal/modal.service";
-import { NgIf } from "@angular/common";
+
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { Alert } from "src/app/shared/models/alert";
@@ -13,10 +13,9 @@ import { OnlandVisualTrashAssessmentAreaSimpleDtoForm, OnlandVisualTrashAssessme
 
 @Component({
     selector: "update-ovta-area-details-modal",
-    standalone: true,
-    imports: [ReactiveFormsModule, FormFieldComponent, NgIf, AlertDisplayComponent],
+    imports: [ReactiveFormsModule, FormFieldComponent, AlertDisplayComponent],
     templateUrl: "./update-ovta-area-details-modal.component.html",
-    styleUrl: "./update-ovta-area-details-modal.component.scss",
+    styleUrl: "./update-ovta-area-details-modal.component.scss"
 })
 export class UpdateOvtaAreaDetailsModalComponent implements OnInit {
     public FormFieldType = FormFieldType;

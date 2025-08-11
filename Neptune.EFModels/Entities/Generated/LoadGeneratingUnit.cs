@@ -9,6 +9,7 @@ namespace Neptune.EFModels.Entities;
 
 [Table("LoadGeneratingUnit")]
 [Index("LoadGeneratingUnitGeometry", Name = "SPATIAL_LoadGeneratingUnit_LoadGeneratingUnitGeometry")]
+[Index("LoadGeneratingUnitGeometry4326", Name = "SPATIAL_LoadGeneratingUnit_LoadGeneratingUnitGeometry4326")]
 public partial class LoadGeneratingUnit
 {
     [Key]
@@ -31,6 +32,9 @@ public partial class LoadGeneratingUnit
     public DateTime? DateHRURequested { get; set; }
 
     public int? HRULogID { get; set; }
+
+    [Column(TypeName = "geometry")]
+    public Geometry? LoadGeneratingUnitGeometry4326 { get; set; }
 
     [ForeignKey("DelineationID")]
     [InverseProperty("LoadGeneratingUnits")]

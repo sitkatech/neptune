@@ -40,19 +40,16 @@ namespace Neptune.WebMvc.Controllers
 {
     //[Area("Trash")]
     //[Route("[area]/[controller]/[action]", Name = "[area]_[controller]_[action]")]
-    public class LandUseBlockGeometryController : NeptuneBaseController<LandUseBlockGeometryController>
+    public class LandUseBlockGeometryController(
+        NeptuneDbContext dbContext,
+        ILogger<LandUseBlockGeometryController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        SitkaSmtpClientService sitkaSmtpClientService,
+        GDALAPIService gdalApiService,
+        AzureBlobStorageService azureBlobStorageService)
+        : NeptuneBaseController<LandUseBlockGeometryController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        private readonly SitkaSmtpClientService _sitkaSmtpClientService;
-        private readonly GDALAPIService _gdalApiService;
-        private readonly AzureBlobStorageService _azureBlobStorageService;
-
-        public LandUseBlockGeometryController(NeptuneDbContext dbContext, ILogger<LandUseBlockGeometryController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService, GDALAPIService gdalApiService, AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _sitkaSmtpClientService = sitkaSmtpClientService;
-            _gdalApiService = gdalApiService;
-            _azureBlobStorageService = azureBlobStorageService;
-        }
-
         [HttpGet]
         [JurisdictionEditFeature]
         public ViewResult UpdateLandUseBlockGeometry()
@@ -75,8 +72,8 @@ namespace Neptune.WebMvc.Controllers
         {
             var file = viewModel.FileResourceData;
             var blobName = Guid.NewGuid().ToString();
-            await _azureBlobStorageService.UploadToBlobStorage(await FileStreamHelpers.StreamToBytes(file), blobName, ".gdb");
-            var featureClassNames = await _gdalApiService.OgrInfoGdbToFeatureClassInfo(file);
+            await azureBlobStorageService.UploadToBlobStorage(await FileStreamHelpers.StreamToBytes(file), blobName, ".gdb");
+            var featureClassNames = await gdalApiService.OgrInfoGdbToFeatureClassInfo(file);
 
             if (featureClassNames.Count == 0)
             {
@@ -124,7 +121,7 @@ namespace Neptune.WebMvc.Controllers
                         }
                     }
                 };
-                var geoJson = await _gdalApiService.Ogr2OgrGdbToGeoJson(apiRequest);
+                var geoJson = await gdalApiService.Ogr2OgrGdbToGeoJson(apiRequest);
                 var landUseBlockStagings = await GeoJsonSerializer.DeserializeFromFeatureCollectionWithCCWCheck<LandUseBlockStaging>(geoJson,
                     GeoJsonSerializer.DefaultSerializerOptions, Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
                 var validLandUseBlockStagings = landUseBlockStagings.Where(x => x.Geometry is { IsValid: true, Area: > 0 }).ToList();
@@ -173,7 +170,7 @@ namespace Neptune.WebMvc.Controllers
                 };
 
                 mailMessage.To.Add(CurrentPerson.Email);
-                await _sitkaSmtpClientService.Send(mailMessage);
+                await sitkaSmtpClientService.Send(mailMessage);
 
                 throw;
             }
@@ -253,7 +250,7 @@ namespace Neptune.WebMvc.Controllers
                 CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
                 GeometryTypeName = "POLYGON",
             };
-            var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
+            var bytes = await gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
             {
                 GdbInputs = new List<GdbInput> { gdbInput },
                 GdbName = $"{jurisdictionName}-land-use-blocks-export"

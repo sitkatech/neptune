@@ -30,9 +30,7 @@ namespace Neptune.EFModels.Entities
         public static readonly PreliminarySourceIdentificationTypeIllegalDumpingOther IllegalDumpingOther = PreliminarySourceIdentificationTypeIllegalDumpingOther.Instance;
 
         public static readonly List<PreliminarySourceIdentificationType> All;
-        public static readonly List<PreliminarySourceIdentificationTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, PreliminarySourceIdentificationType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, PreliminarySourceIdentificationTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -40,9 +38,7 @@ namespace Neptune.EFModels.Entities
         static PreliminarySourceIdentificationType()
         {
             All = new List<PreliminarySourceIdentificationType> { MovingVehicles, ParkedCars, UncoveredLoads, VehiclesOther, OverflowingReceptacles, TrashDispersal, InadequateWasteContainerManagementOther, Restaurants, ConvenienceStores, LiquorStores, BusStops, SpecialEvents, PedestrianLitterOther, IllegalDumpingOnLand, Homelessencampments, IllegalDumpingOther };
-            AllAsSimpleDto = new List<PreliminarySourceIdentificationTypeSimpleDto> { MovingVehicles.AsSimpleDto(), ParkedCars.AsSimpleDto(), UncoveredLoads.AsSimpleDto(), VehiclesOther.AsSimpleDto(), OverflowingReceptacles.AsSimpleDto(), TrashDispersal.AsSimpleDto(), InadequateWasteContainerManagementOther.AsSimpleDto(), Restaurants.AsSimpleDto(), ConvenienceStores.AsSimpleDto(), LiquorStores.AsSimpleDto(), BusStops.AsSimpleDto(), SpecialEvents.AsSimpleDto(), PedestrianLitterOther.AsSimpleDto(), IllegalDumpingOnLand.AsSimpleDto(), Homelessencampments.AsSimpleDto(), IllegalDumpingOther.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, PreliminarySourceIdentificationType>(All.ToDictionary(x => x.PreliminarySourceIdentificationTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, PreliminarySourceIdentificationTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.PreliminarySourceIdentificationTypeID));
         }
 
         /// <summary>

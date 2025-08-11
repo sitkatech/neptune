@@ -4,15 +4,14 @@ import { MapLayerBase } from "../map-layer-base.component";
 import { Observable, tap } from "rxjs";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { IFeature } from "src/app/shared/generated/model/i-feature";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 
 @Component({
     selector: "transect-line-layer",
-    standalone: true,
-    imports: [NgIf, AsyncPipe],
+    imports: [AsyncPipe],
     templateUrl: "./transect-line-layer.component.html",
-    styleUrl: "./transect-line-layer.component.scss",
+    styleUrl: "./transect-line-layer.component.scss"
 })
 export class TransectLineLayerComponent extends MapLayerBase implements OnChanges {
     constructor(

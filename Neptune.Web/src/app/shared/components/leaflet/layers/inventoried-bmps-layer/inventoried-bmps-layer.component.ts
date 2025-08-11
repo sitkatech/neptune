@@ -11,10 +11,9 @@ import { IFeature } from "src/app/shared/generated/model/i-feature";
 
 @Component({
     selector: "inventoried-bmps-layer",
-    standalone: true,
     imports: [CommonModule],
     templateUrl: "./inventoried-bmps-layer.component.html",
-    styleUrls: ["./inventoried-bmps-layer.component.scss"],
+    styleUrls: ["./inventoried-bmps-layer.component.scss"]
 })
 export class InventoriedBMPsLayerComponent extends MapLayerBase implements OnChanges {
     public layer: L.markerClusterGroup = L.markerClusterGroup({

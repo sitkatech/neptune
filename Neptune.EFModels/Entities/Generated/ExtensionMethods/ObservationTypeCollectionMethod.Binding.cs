@@ -17,9 +17,7 @@ namespace Neptune.EFModels.Entities
         public static readonly ObservationTypeCollectionMethodPercentage Percentage = ObservationTypeCollectionMethodPercentage.Instance;
 
         public static readonly List<ObservationTypeCollectionMethod> All;
-        public static readonly List<ObservationTypeCollectionMethodSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, ObservationTypeCollectionMethod> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, ObservationTypeCollectionMethodSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -27,9 +25,7 @@ namespace Neptune.EFModels.Entities
         static ObservationTypeCollectionMethod()
         {
             All = new List<ObservationTypeCollectionMethod> { DiscreteValue, PassFail, Percentage };
-            AllAsSimpleDto = new List<ObservationTypeCollectionMethodSimpleDto> { DiscreteValue.AsSimpleDto(), PassFail.AsSimpleDto(), Percentage.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, ObservationTypeCollectionMethod>(All.ToDictionary(x => x.ObservationTypeCollectionMethodID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, ObservationTypeCollectionMethodSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.ObservationTypeCollectionMethodID));
         }
 
         /// <summary>

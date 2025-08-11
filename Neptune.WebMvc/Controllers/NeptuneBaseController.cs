@@ -31,26 +31,21 @@ namespace Neptune.WebMvc.Controllers
 {
 //    [ApiController]
     [Route("[controller]/[action]", Name = "[controller]_[action]")]
-    public abstract class NeptuneBaseController<T> : SitkaController
+    public abstract class NeptuneBaseController<T>(
+        NeptuneDbContext dbContext,
+        ILogger<T> logger,
+        LinkGenerator linkGenerator,
+        IOptions<WebConfiguration> webConfiguration)
+        : SitkaController
     {
-        protected IOptions<WebConfiguration> _webConfigurationOptions { get; }
+        protected IOptions<WebConfiguration> _webConfigurationOptions { get; } = webConfiguration;
         protected Person CurrentPerson => UserContext.GetUserFromHttpContext(_dbContext, HttpContext);
-        protected readonly NeptuneDbContext _dbContext;
-        protected readonly ILogger<T> _logger;
+        protected readonly NeptuneDbContext _dbContext = dbContext;
+        protected readonly ILogger<T> _logger = logger;
 
-        protected readonly LinkGenerator _linkGenerator;
+        protected readonly LinkGenerator _linkGenerator = linkGenerator;
 
-        protected readonly WebConfiguration _webConfiguration;
-
-        protected NeptuneBaseController(NeptuneDbContext dbContext, ILogger<T> logger, LinkGenerator linkGenerator,
-            IOptions<WebConfiguration> webConfiguration)
-        {
-            _dbContext = dbContext;
-            _logger = logger;
-            _linkGenerator = linkGenerator;
-            _webConfigurationOptions = webConfiguration;
-            _webConfiguration = webConfiguration.Value;
-        }
+        protected readonly WebConfiguration _webConfiguration = webConfiguration.Value;
 
         protected FileResult ExportGridToExcelImpl(string gridName, bool printFooter)
         {

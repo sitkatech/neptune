@@ -6,8 +6,7 @@ import { PageHeaderComponent } from "src/app/shared/components/page-header/page-
     selector: "training",
     templateUrl: "./training.component.html",
     styleUrls: ["./training.component.scss"],
-    standalone: true,
-    imports: [PageHeaderComponent],
+    imports: [PageHeaderComponent]
 })
 export class TrainingComponent implements OnInit {
     constructor() {}

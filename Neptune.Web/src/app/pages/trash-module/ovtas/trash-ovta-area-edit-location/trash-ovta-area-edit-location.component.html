@@ -1,30 +1,34 @@
 <page-header [customRichTextTypeID]="customRichTextTypeID" [templateAbove]="templateAbove" pageTitle="Edit OVTA Area Location">
-    <ng-template #templateAbove>
-        <div class="back">
-            <a [routerLink]="['../']" class="back__link">Back to OVTA Area</a>
-        </div>
-    </ng-template>
+  <ng-template #templateAbove>
+    <div class="back">
+      <a [routerLink]="['../']" class="back__link">Back to OVTA Area</a>
+    </div>
+  </ng-template>
 </page-header>
 
-<div class="page-body" *ngIf="onlandVisualTrashAssessmentArea$ | async as onlandVisualTrashAssessmentArea">
+@if (onlandVisualTrashAssessmentArea$ | async; as onlandVisualTrashAssessmentArea) {
+  <div class="page-body">
     <neptune-map
-        (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessmentArea.Geometry)"
-        [mapHeight]="mapHeight"
-        [showLegend]="true"
-        [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
-        <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></land-use-block-layer>
+      (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessmentArea.Geometry)"
+      [mapHeight]="mapHeight"
+      [showLegend]="true"
+      [boundingBox]="onlandVisualTrashAssessmentArea.BoundingBox">
+      @if (mapIsReady) {
+        <land-use-block-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></land-use-block-layer>
+      }
+      @if (mapIsReady) {
         <transect-line-layer
-            *ngIf="mapIsReady"
-            [displayOnLoad]="true"
-            [map]="map"
-            [layerControl]="layerControl"
-            [sortOrder]="30"
-            [ovtaAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"></transect-line-layer>
+          [displayOnLoad]="true"
+          [map]="map"
+          [layerControl]="layerControl"
+          [sortOrder]="30"
+        [ovtaAreaID]="onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID"></transect-line-layer>
+      }
     </neptune-map>
     <div class="flex-between">
-        <button class="btn btn-primary" (click)="resetZoom()">Reset Map Zoom</button>
-        <button
-            class="btn btn-primary"
+      <button class="btn btn-primary" (click)="resetZoom()">Reset Map Zoom</button>
+      <button
+        class="btn btn-primary"
             (click)="
                 setCanPickParcels(
                     onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID,
@@ -32,12 +36,13 @@
                     onlandVisualTrashAssessmentArea.Geometry
                 )
             ">
-            {{ buttonText }}
-        </button>
+        {{ buttonText }}
+      </button>
     </div>
     <hr />
     <div class="flex-end">
-        <button class="btn btn-primary" (click)="save(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID)">Save</button>
-        <a class="btn btn-primary" [routerLink]="['../']">Cancel</a>
+      <button class="btn btn-primary" (click)="save(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID)">Save</button>
+      <a class="btn btn-primary" [routerLink]="['../']">Cancel</a>
     </div>
-</div>
+  </div>
+}

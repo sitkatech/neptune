@@ -17,9 +17,7 @@ namespace Neptune.EFModels.Entities
         public static readonly SourceControlBMPAttributeCategoryApplicableRoutineStructuralSourceControlBMPs ApplicableRoutineStructuralSourceControlBMPs = SourceControlBMPAttributeCategoryApplicableRoutineStructuralSourceControlBMPs.Instance;
 
         public static readonly List<SourceControlBMPAttributeCategory> All;
-        public static readonly List<SourceControlBMPAttributeCategorySimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, SourceControlBMPAttributeCategory> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, SourceControlBMPAttributeCategorySimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -27,9 +25,7 @@ namespace Neptune.EFModels.Entities
         static SourceControlBMPAttributeCategory()
         {
             All = new List<SourceControlBMPAttributeCategory> { HydrologicSourceControlandSiteDesignBMPs, ApplicableRoutineNonStructuralSourceControlBMPs, ApplicableRoutineStructuralSourceControlBMPs };
-            AllAsSimpleDto = new List<SourceControlBMPAttributeCategorySimpleDto> { HydrologicSourceControlandSiteDesignBMPs.AsSimpleDto(), ApplicableRoutineNonStructuralSourceControlBMPs.AsSimpleDto(), ApplicableRoutineStructuralSourceControlBMPs.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, SourceControlBMPAttributeCategory>(All.ToDictionary(x => x.SourceControlBMPAttributeCategoryID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, SourceControlBMPAttributeCategorySimpleDto>(AllAsSimpleDto.ToDictionary(x => x.SourceControlBMPAttributeCategoryID));
         }
 
         /// <summary>

@@ -21,9 +21,7 @@ namespace Neptune.EFModels.Entities
         public static readonly PriorityLandUseTypeALU ALU = PriorityLandUseTypeALU.Instance;
 
         public static readonly List<PriorityLandUseType> All;
-        public static readonly List<PriorityLandUseTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, PriorityLandUseType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, PriorityLandUseTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -31,9 +29,7 @@ namespace Neptune.EFModels.Entities
         static PriorityLandUseType()
         {
             All = new List<PriorityLandUseType> { Commercial, HighDensityResidential, Industrial, MixedUrban, CommercialRetail, PublicTransportationStations, ALU };
-            AllAsSimpleDto = new List<PriorityLandUseTypeSimpleDto> { Commercial.AsSimpleDto(), HighDensityResidential.AsSimpleDto(), Industrial.AsSimpleDto(), MixedUrban.AsSimpleDto(), CommercialRetail.AsSimpleDto(), PublicTransportationStations.AsSimpleDto(), ALU.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, PriorityLandUseType>(All.ToDictionary(x => x.PriorityLandUseTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, PriorityLandUseTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.PriorityLandUseTypeID));
         }
 
         /// <summary>

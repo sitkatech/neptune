@@ -1,9 +1,8 @@
 export * from './api/api';
-{{#models}}
-{{#-first}}
+{{#models.0}}
 export * from './model/models';
-{{/-first}}
-{{/models}}
+{{/models.0}}
 export * from './variables';
 export * from './configuration';
 export * from './api.module';
+export * from './param';

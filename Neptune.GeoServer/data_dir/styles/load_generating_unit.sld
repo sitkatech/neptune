@@ -17,8 +17,22 @@
         <Rule>
           <Name>rule1</Name>
           <Title>Polygon with Gray Outline</Title>
-          <Abstract>A polygon with no fill and a 1 pixel dark gray outline</Abstract>
+          <Abstract>A polygon with hatched fill and a 1 pixel dark gray outline</Abstract>
           <PolygonSymbolizer>
+            <Fill>
+              <GraphicFill>
+                <Graphic>
+                  <Mark>
+                    <WellKnownName>shape://slash</WellKnownName>
+                    <Stroke>
+                      <CssParameter name="stroke">#818181</CssParameter>
+                      <CssParameter name="stroke-width">1</CssParameter>
+                    </Stroke>
+                  </Mark>
+                  <Size>8</Size>
+                </Graphic>
+              </GraphicFill>
+            </Fill>
             <Stroke>
               <CssParameter name="stroke">#818181</CssParameter>
               <CssParameter name="stroke-width">1</CssParameter>

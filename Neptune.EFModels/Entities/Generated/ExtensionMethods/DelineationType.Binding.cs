@@ -16,9 +16,7 @@ namespace Neptune.EFModels.Entities
         public static readonly DelineationTypeDistributed Distributed = DelineationTypeDistributed.Instance;
 
         public static readonly List<DelineationType> All;
-        public static readonly List<DelineationTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, DelineationType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, DelineationTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -26,9 +24,7 @@ namespace Neptune.EFModels.Entities
         static DelineationType()
         {
             All = new List<DelineationType> { Centralized, Distributed };
-            AllAsSimpleDto = new List<DelineationTypeSimpleDto> { Centralized.AsSimpleDto(), Distributed.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, DelineationType>(All.ToDictionary(x => x.DelineationTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, DelineationTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.DelineationTypeID));
         }
 
         /// <summary>

@@ -16,9 +16,7 @@ namespace Neptune.EFModels.Entities
         public static readonly RegionalSubbasinRevisionRequestStatusClosed Closed = RegionalSubbasinRevisionRequestStatusClosed.Instance;
 
         public static readonly List<RegionalSubbasinRevisionRequestStatus> All;
-        public static readonly List<RegionalSubbasinRevisionRequestStatusSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, RegionalSubbasinRevisionRequestStatus> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, RegionalSubbasinRevisionRequestStatusSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -26,9 +24,7 @@ namespace Neptune.EFModels.Entities
         static RegionalSubbasinRevisionRequestStatus()
         {
             All = new List<RegionalSubbasinRevisionRequestStatus> { Open, Closed };
-            AllAsSimpleDto = new List<RegionalSubbasinRevisionRequestStatusSimpleDto> { Open.AsSimpleDto(), Closed.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, RegionalSubbasinRevisionRequestStatus>(All.ToDictionary(x => x.RegionalSubbasinRevisionRequestStatusID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, RegionalSubbasinRevisionRequestStatusSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.RegionalSubbasinRevisionRequestStatusID));
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ import { LandUseBlockService } from "../../../shared/generated/api/land-use-bloc
 import { UtilityFunctionsService } from "../../../services/utility-functions.service";
 import { ColDef } from "ag-grid-community";
 import { NeptuneGridComponent } from "../../../shared/components/neptune-grid/neptune-grid.component";
-import { AsyncPipe, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { LandUseBlockGridDto } from "../../../shared/generated/model/land-use-block-grid-dto";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
@@ -25,13 +25,10 @@ import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wq
 
 @Component({
     selector: "trash-land-use-block-index",
-    standalone: true,
     imports: [
         PageHeaderComponent,
         AlertDisplayComponent,
-        NeptuneGridComponent,
         AsyncPipe,
-        NgIf,
         LoadingDirective,
         IconComponent,
         HybridMapGridComponent,

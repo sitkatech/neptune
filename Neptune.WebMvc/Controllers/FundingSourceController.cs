@@ -20,12 +20,13 @@ using IndexViewData = Neptune.WebMvc.Views.FundingSource.IndexViewData;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class FundingSourceController : NeptuneBaseController<FundingSourceController>
+    public class FundingSourceController(
+        NeptuneDbContext dbContext,
+        ILogger<FundingSourceController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<FundingSourceController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public FundingSourceController(NeptuneDbContext dbContext, ILogger<FundingSourceController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         public ViewResult Index()
         {
             var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.FundingSourcesList);

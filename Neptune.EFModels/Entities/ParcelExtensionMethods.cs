@@ -2,15 +2,20 @@
 
 namespace Neptune.EFModels.Entities;
 
-public static partial class ParcelExtensionMethods
+public static class ParcelExtensionMethods
 {
-    public static ParcelDisplayDto AsDisplayDto(this Parcel parcel)
+    public static ParcelSimpleDto AsSimpleDto(this Parcel parcel)
     {
-        var parcelDisplayDto = new ParcelDisplayDto()
+        var dto = new ParcelSimpleDto()
         {
             ParcelID = parcel.ParcelID,
-            ParcelNumber = parcel.ParcelNumber
+            ParcelNumber = parcel.ParcelNumber,
+            ParcelAddress = parcel.ParcelAddress,
+            ParcelCityState = parcel.ParcelCityState,
+            ParcelZipCode = parcel.ParcelZipCode,
+            ParcelAreaInAcres = parcel.ParcelAreaInAcres,
+            LastUpdate = parcel.LastUpdate
         };
-        return parcelDisplayDto;
+        return dto;
     }
 }

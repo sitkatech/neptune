@@ -1,12 +1,14 @@
-<div class="container mt-sm-4" *ngIf="fieldDefinition">
+@if (fieldDefinition) {
+  <div class="container mt-sm-4">
     <page-header pageTitle="Edit Definition for Label: {{ fieldDefinition.FieldDefinitionType.FieldDefinitionTypeDisplayName }}"> </page-header>
     <app-alert-display></app-alert-display>
     <editor #tinyMceEditor [init]="tinyMceConfig" [(ngModel)]="fieldDefinition.FieldDefinitionValue"> </editor>
     <div class="flex-between no-wrap mt-2">
-        <i></i>
-        <div>
-            <button type="button" class="btn btn-primary mt-1 mr-1 mb-1" (click)="saveDefinition()" [disabled]="isLoadingSubmit">Save</button>
-            <a [routerLink]="['/labels-and-definitions']" class="btn btn-secondary mt-1 mb-1">Cancel</a>
-        </div>
+      <i></i>
+      <div>
+        <button type="button" class="btn btn-primary mt-1 mr-1 mb-1" (click)="saveDefinition()" [disabled]="isLoadingSubmit">Save</button>
+        <a [routerLink]="['/labels-and-definitions']" class="btn btn-secondary mt-1 mb-1">Cancel</a>
+      </div>
     </div>
-</div>
+  </div>
+}

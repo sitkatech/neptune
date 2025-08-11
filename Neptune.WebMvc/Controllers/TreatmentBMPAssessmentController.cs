@@ -31,12 +31,13 @@ using Neptune.WebMvc.Views.TreatmentBMPAssessment;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class TreatmentBMPAssessmentController : NeptuneBaseController<TreatmentBMPAssessmentController>
+    public class TreatmentBMPAssessmentController(
+        NeptuneDbContext dbContext,
+        ILogger<TreatmentBMPAssessmentController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<TreatmentBMPAssessmentController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public TreatmentBMPAssessmentController(NeptuneDbContext dbContext, ILogger<TreatmentBMPAssessmentController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet("{treatmentBMPAssessmentPrimaryKey}")]
         [TreatmentBMPAssessmentManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPAssessmentPrimaryKey")]

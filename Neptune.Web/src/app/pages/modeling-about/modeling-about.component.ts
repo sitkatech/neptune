@@ -6,8 +6,7 @@ import { PageHeaderComponent } from "src/app/shared/components/page-header/page-
     selector: "modeling-about",
     templateUrl: "./modeling-about.component.html",
     styleUrls: ["./modeling-about.component.scss"],
-    standalone: true,
-    imports: [PageHeaderComponent],
+    imports: [PageHeaderComponent]
 })
 export class ModelingAboutComponent implements OnInit {
     constructor() {}

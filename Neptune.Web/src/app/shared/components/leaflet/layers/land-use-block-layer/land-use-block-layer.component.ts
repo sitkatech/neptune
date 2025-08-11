@@ -1,15 +1,14 @@
 import { AfterViewInit, Component, OnChanges } from "@angular/core";
-import { CommonModule } from "@angular/common";
+
 import * as L from "leaflet";
 import { environment } from "src/environments/environment";
 import { MapLayerBase } from "../map-layer-base.component";
 
 @Component({
     selector: "land-use-block-layer",
-    standalone: true,
-    imports: [CommonModule],
+    imports: [],
     templateUrl: "./land-use-block-layer.component.html",
-    styleUrl: "./land-use-block-layer.component.scss",
+    styleUrl: "./land-use-block-layer.component.scss"
 })
 export class LandUseBlockLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     constructor() {

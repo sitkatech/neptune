@@ -27,9 +27,7 @@ namespace Neptune.EFModels.Entities
         public static readonly ObservationTypeSpecificationPercentValue_SpecificTargetValue_PercentFromBenchmark PercentValue_SpecificTargetValue_PercentFromBenchmark = ObservationTypeSpecificationPercentValue_SpecificTargetValue_PercentFromBenchmark.Instance;
 
         public static readonly List<ObservationTypeSpecification> All;
-        public static readonly List<ObservationTypeSpecificationSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, ObservationTypeSpecification> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, ObservationTypeSpecificationSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -37,9 +35,7 @@ namespace Neptune.EFModels.Entities
         static ObservationTypeSpecification()
         {
             All = new List<ObservationTypeSpecification> { PassFail_PassFail_None, DiscreteValues_HighTargetValue_DiscreteThresholdValue, DiscreteValues_HighTargetValue_PercentFromBenchmark, DiscreteValues_LowTargetValue_DiscreteThresholdValue, DiscreteValues_LowTargetValue_PercentFromBenchmark, DiscreteValues_SpecificTargetValue_DiscreteThresholdValue, DiscreteValues_SpecificTargetValue_PercentFromBenchmark, PercentValue_HighTargetValue_DiscreteThresholdValue, PercentValue_HighTargetValue_PercentFromBenchmark, PercentValue_LowTargetValue_DiscreteThresholdValue, PercentValue_LowTargetValue_PercentFromBenchmark, PercentValue_SpecificTargetValue_DiscreteThresholdValue, PercentValue_SpecificTargetValue_PercentFromBenchmark };
-            AllAsSimpleDto = new List<ObservationTypeSpecificationSimpleDto> { PassFail_PassFail_None.AsSimpleDto(), DiscreteValues_HighTargetValue_DiscreteThresholdValue.AsSimpleDto(), DiscreteValues_HighTargetValue_PercentFromBenchmark.AsSimpleDto(), DiscreteValues_LowTargetValue_DiscreteThresholdValue.AsSimpleDto(), DiscreteValues_LowTargetValue_PercentFromBenchmark.AsSimpleDto(), DiscreteValues_SpecificTargetValue_DiscreteThresholdValue.AsSimpleDto(), DiscreteValues_SpecificTargetValue_PercentFromBenchmark.AsSimpleDto(), PercentValue_HighTargetValue_DiscreteThresholdValue.AsSimpleDto(), PercentValue_HighTargetValue_PercentFromBenchmark.AsSimpleDto(), PercentValue_LowTargetValue_DiscreteThresholdValue.AsSimpleDto(), PercentValue_LowTargetValue_PercentFromBenchmark.AsSimpleDto(), PercentValue_SpecificTargetValue_DiscreteThresholdValue.AsSimpleDto(), PercentValue_SpecificTargetValue_PercentFromBenchmark.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, ObservationTypeSpecification>(All.ToDictionary(x => x.ObservationTypeSpecificationID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, ObservationTypeSpecificationSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.ObservationTypeSpecificationID));
         }
 
         /// <summary>

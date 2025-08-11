@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+
 import { Component } from "@angular/core";
 import { ITooltipAngularComp } from "ag-grid-angular";
 import { ITooltipParams } from "ag-grid-community";
@@ -6,10 +6,9 @@ import { CopyToClipboardDirective } from "src/app/shared/directives/copy-to-clip
 
 @Component({
     selector: "tooltip",
-    standalone: true,
-    imports: [CommonModule, CopyToClipboardDirective],
+    imports: [CopyToClipboardDirective],
     templateUrl: "./tooltip.component.html",
-    styleUrl: "./tooltip.component.scss",
+    styleUrl: "./tooltip.component.scss"
 })
 export class TooltipComponent implements ITooltipAngularComp {
     public displayValue: string;

@@ -6,8 +6,7 @@ import { SiteLayoutComponent } from "src/app/pages/site-layout/site-layout.compo
     selector: "not-found",
     templateUrl: "./not-found.component.html",
     styleUrls: ["./not-found.component.scss"],
-    standalone: true,
-    imports: [PageHeaderComponent, SiteLayoutComponent],
+    imports: [PageHeaderComponent, SiteLayoutComponent]
 })
 export class NotFoundComponent implements OnInit {
     constructor() {}
