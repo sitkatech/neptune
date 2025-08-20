@@ -29,12 +29,13 @@ using Neptune.WebMvc.Common.OpenID;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class AccountController : NeptuneBaseController<AccountController>
+    public class AccountController(
+        NeptuneDbContext dbContext,
+        ILogger<AccountController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<AccountController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public AccountController(NeptuneDbContext dbContext, ILogger<AccountController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         protected string HomeUrl
         {
             get { return SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index()); }

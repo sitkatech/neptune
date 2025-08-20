@@ -1,14 +1,13 @@
 import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
 import { ProjectDocumentDto } from "src/app/shared/generated/model/project-document-dto";
 import { environment } from "src/environments/environment";
-import { NgIf, NgFor, DatePipe } from "@angular/common";
+import { DatePipe } from "@angular/common";
 
 @Component({
     selector: "attachments-display",
     templateUrl: "./attachments-display.component.html",
     styleUrls: ["./attachments-display.component.scss"],
-    standalone: true,
-    imports: [NgIf, NgFor, DatePipe],
+    imports: [DatePipe]
 })
 export class AttachmentsDisplayComponent implements OnInit {
     @Input("attachments") attachments: Array<ProjectDocumentDto>;

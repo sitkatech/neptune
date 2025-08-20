@@ -2,8 +2,33 @@
 
 namespace Neptune.EFModels.Entities;
 
-public static partial class PersonExtensionMethods
+public static class PersonExtensionMethods
 {
+    public static PersonSimpleDto AsSimpleDto(this Person person)
+    {
+        var dto = new PersonSimpleDto()
+        {
+            PersonID = person.PersonID,
+            PersonGuid = person.PersonGuid,
+            FirstName = person.FirstName,
+            LastName = person.LastName,
+            Email = person.Email,
+            Phone = person.Phone,
+            RoleID = person.RoleID,
+            CreateDate = person.CreateDate,
+            UpdateDate = person.UpdateDate,
+            LastActivityDate = person.LastActivityDate,
+            IsActive = person.IsActive,
+            OrganizationID = person.OrganizationID,
+            ReceiveSupportEmails = person.ReceiveSupportEmails,
+            LoginName = person.LoginName,
+            ReceiveRSBRevisionRequestEmails = person.ReceiveRSBRevisionRequestEmails,
+            WebServiceAccessToken = person.WebServiceAccessToken,
+            IsOCTAGrantReviewer = person.IsOCTAGrantReviewer
+        };
+        return dto;
+    }
+
     public static PersonDto AsDto(this Person person)
     {
         var personDto = new PersonDto()

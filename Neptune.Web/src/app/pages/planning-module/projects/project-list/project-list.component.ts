@@ -22,8 +22,7 @@ import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-togg
     selector: "project-list",
     templateUrl: "./project-list.component.html",
     styleUrls: ["./project-list.component.scss"],
-    standalone: true,
-    imports: [DropdownToggleDirective, AgGridModule, NeptuneGridComponent, PageHeaderComponent, RouterLink],
+    imports: [DropdownToggleDirective, AgGridModule, NeptuneGridComponent, PageHeaderComponent, RouterLink]
 })
 export class ProjectListComponent implements OnInit {
     private currentUser: PersonDto;

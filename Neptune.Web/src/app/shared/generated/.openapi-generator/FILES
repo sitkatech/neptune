@@ -81,7 +81,6 @@ model/person-simple-dto.ts
 model/point.ts
 model/precision-model.ts
 model/precision-models.ts
-model/preliminary-source-identification-type-simple-dto.ts
 model/problem-details.ts
 model/project-document-dto.ts
 model/project-document-update-dto.ts

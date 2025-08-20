@@ -16,9 +16,7 @@ namespace Neptune.EFModels.Entities
         public static readonly RoutingConfigurationOffline Offline = RoutingConfigurationOffline.Instance;
 
         public static readonly List<RoutingConfiguration> All;
-        public static readonly List<RoutingConfigurationSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, RoutingConfiguration> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, RoutingConfigurationSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -26,9 +24,7 @@ namespace Neptune.EFModels.Entities
         static RoutingConfiguration()
         {
             All = new List<RoutingConfiguration> { Online, Offline };
-            AllAsSimpleDto = new List<RoutingConfigurationSimpleDto> { Online.AsSimpleDto(), Offline.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, RoutingConfiguration>(All.ToDictionary(x => x.RoutingConfigurationID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, RoutingConfigurationSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.RoutingConfigurationID));
         }
 
         /// <summary>

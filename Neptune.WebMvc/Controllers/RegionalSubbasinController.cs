@@ -11,23 +11,28 @@ using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.MvcResults;
 using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Services.Filters;
+using Neptune.WebMvc.Views.HRUCharacteristic;
+using Neptune.WebMvc.Views.LoadGeneratingUnit;
 using Neptune.WebMvc.Views.RegionalSubbasin;
 using Neptune.WebMvc.Views.Shared;
 using Neptune.WebMvc.Views.Shared.HRUCharacteristics;
 using NetTopologySuite.Features;
+using Detail = Neptune.WebMvc.Views.RegionalSubbasin.Detail;
+using DetailViewData = Neptune.WebMvc.Views.RegionalSubbasin.DetailViewData;
 using Index = Neptune.WebMvc.Views.RegionalSubbasin.Index;
 using IndexViewData = Neptune.WebMvc.Views.RegionalSubbasin.IndexViewData;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class RegionalSubbasinController : NeptuneBaseController<RegionalSubbasinController>
+    public class RegionalSubbasinController(
+        NeptuneDbContext dbContext,
+        ILogger<RegionalSubbasinController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        OCGISService ocgisService)
+        : NeptuneBaseController<RegionalSubbasinController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        private readonly OCGISService _ocgisService;
-
-        public RegionalSubbasinController(NeptuneDbContext dbContext, ILogger<RegionalSubbasinController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, OCGISService ocgisService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _ocgisService = ocgisService;
-        }
+        private readonly OCGISService _ocgisService = ocgisService;
 
         [HttpGet]
         [NeptuneAdminFeature]
@@ -76,8 +81,32 @@ namespace Neptune.WebMvc.Controllers
             var hruCharacteristics = vHRUCharacteristics.ListByRegionalSubbasinID(_dbContext, regionalSubbasin.RegionalSubbasinID).ToList();
             var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
             var ocSurveyDownstreamCatchment = regionalSubbasin.OCSurveyDownstreamCatchmentID != null ? RegionalSubbasins.GetByOCSurveyCatchmentID(_dbContext, regionalSubbasin.OCSurveyDownstreamCatchmentID.Value) : null;
-            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, regionalSubbasin, hruCharacteristicsViewData, stormwaterMapInitJson, hruCharacteristics.Any(), ocSurveyDownstreamCatchment);
+            var viewData = new DetailViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, regionalSubbasin, hruCharacteristicsViewData, stormwaterMapInitJson, hruCharacteristics.Any(), ocSurveyDownstreamCatchment, _webConfiguration.MapServiceUrl);
             return RazorView<Detail, DetailViewData>(viewData);
+        }
+
+        [HttpGet("{regionalSubbasinPrimaryKey}")]
+        [NeptuneAdminFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("regionalSubbasinPrimaryKey")]
+        public GridJsonNetJObjectResult<vHRUCharacteristic> HRUCharacteristicGridJsonData([FromRoute] RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
+        {
+            var regionalSubbasin = RegionalSubbasins.GetByID(_dbContext, regionalSubbasinPrimaryKey);
+            var gridSpec = new HRUCharacteristicGridSpec(_linkGenerator);
+            var hruCharacteristics = vHRUCharacteristics.ListByRegionalSubbasinID(_dbContext, regionalSubbasin.RegionalSubbasinID);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vHRUCharacteristic>(hruCharacteristics, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        [HttpGet("{regionalSubbasinPrimaryKey}")]
+        [NeptuneAdminFeature]
+        [ValidateEntityExistsAndPopulateParameterFilter("regionalSubbasinPrimaryKey")]
+        public GridJsonNetJObjectResult<vLoadGeneratingUnit> LoadGeneratingUnitGridJsonData([FromRoute] RegionalSubbasinPrimaryKey regionalSubbasinPrimaryKey)
+        {
+            var regionalSubbasin = RegionalSubbasins.GetByID(_dbContext, regionalSubbasinPrimaryKey);
+            var gridSpec = new LoadGeneratingUnitGridSpec(_linkGenerator);
+            var loadGeneratingUnits = vLoadGeneratingUnits.ListByRegionalSubbasinID(_dbContext, regionalSubbasin.RegionalSubbasinID);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vLoadGeneratingUnit>(loadGeneratingUnits, gridSpec);
+            return gridJsonNetJObjectResult;
         }
 
         [HttpGet]

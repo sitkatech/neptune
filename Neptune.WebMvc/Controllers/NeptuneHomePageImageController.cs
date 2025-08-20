@@ -32,15 +32,14 @@ using Neptune.WebMvc.Services.Filters;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class NeptuneHomePageImageController : NeptuneBaseController<NeptuneHomePageImageController>
+    public class NeptuneHomePageImageController(
+        NeptuneDbContext dbContext,
+        ILogger<NeptuneHomePageImageController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        FileResourceService fileResourceService)
+        : NeptuneBaseController<NeptuneHomePageImageController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        private readonly FileResourceService _fileResourceService;
-
-        public NeptuneHomePageImageController(NeptuneDbContext dbContext, ILogger<NeptuneHomePageImageController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _fileResourceService = fileResourceService;
-        }
-
         [HttpGet]
         [NeptuneAdminFeature]
         public PartialViewResult New()
@@ -65,7 +64,7 @@ namespace Neptune.WebMvc.Controllers
             }
 
             var neptuneHomePageImage = new NeptuneHomePageImage();
-            await viewModel.UpdateModel(neptuneHomePageImage, CurrentPerson, _fileResourceService);
+            await viewModel.UpdateModel(neptuneHomePageImage, CurrentPerson, fileResourceService);
             await _dbContext.NeptuneHomePageImages.AddAsync(neptuneHomePageImage);
             await _dbContext.SaveChangesAsync();
             return new ModalDialogFormJsonResult();

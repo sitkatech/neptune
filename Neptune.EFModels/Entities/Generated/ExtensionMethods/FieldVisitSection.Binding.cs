@@ -19,9 +19,7 @@ namespace Neptune.EFModels.Entities
         public static readonly FieldVisitSectionVisitSummary VisitSummary = FieldVisitSectionVisitSummary.Instance;
 
         public static readonly List<FieldVisitSection> All;
-        public static readonly List<FieldVisitSectionSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, FieldVisitSection> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, FieldVisitSectionSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -29,9 +27,7 @@ namespace Neptune.EFModels.Entities
         static FieldVisitSection()
         {
             All = new List<FieldVisitSection> { Inventory, Assessment, Maintenance, PostMaintenanceAssessment, VisitSummary };
-            AllAsSimpleDto = new List<FieldVisitSectionSimpleDto> { Inventory.AsSimpleDto(), Assessment.AsSimpleDto(), Maintenance.AsSimpleDto(), PostMaintenanceAssessment.AsSimpleDto(), VisitSummary.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldVisitSection>(All.ToDictionary(x => x.FieldVisitSectionID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, FieldVisitSectionSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.FieldVisitSectionID));
         }
 
         /// <summary>

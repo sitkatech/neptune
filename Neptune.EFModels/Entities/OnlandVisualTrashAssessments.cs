@@ -245,13 +245,6 @@ public static class OnlandVisualTrashAssessments
         await dbContext.SaveChangesAsync();
     }
 
-    public static List<PreliminarySourceIdentificationTypeSimpleDto> GetPreliminarySourceIdentificationTypeSimpleDtos(NeptuneDbContext dbContext)
-    {
-        var preliminarySourceIdentificationTypeSimpleDtos = PreliminarySourceIdentificationType.AllAsSimpleDto;
-
-        return preliminarySourceIdentificationTypeSimpleDtos;
-    }
-
     public static async Task RefreshParcels(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID)
     {
         var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments.Single(x =>

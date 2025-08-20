@@ -24,7 +24,7 @@ import { ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/mod
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { FormsModule } from "@angular/forms";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
@@ -57,12 +57,9 @@ import { TreatmentBMPTypeCustomAttributeTypeService } from "src/app/shared/gener
     selector: "treatment-bmps",
     templateUrl: "./treatment-bmps.component.html",
     styleUrls: ["./treatment-bmps.component.scss"],
-    standalone: true,
     imports: [
-        NgIf,
         AsyncPipe,
         CustomRichTextComponent,
-        NgFor,
         FormsModule,
         FieldDefinitionComponent,
         PageHeaderComponent,

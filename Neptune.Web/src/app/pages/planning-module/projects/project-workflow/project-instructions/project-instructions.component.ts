@@ -10,8 +10,7 @@ import { AlertDisplayComponent } from "src/app/shared/components/alert-display/a
     selector: "project-instructions",
     templateUrl: "./project-instructions.component.html",
     styleUrls: ["./project-instructions.component.scss"],
-    standalone: true,
-    imports: [CustomRichTextComponent, WorkflowBodyComponent, PageHeaderComponent, AlertDisplayComponent],
+    imports: [CustomRichTextComponent, WorkflowBodyComponent, PageHeaderComponent, AlertDisplayComponent]
 })
 export class ProjectInstructionsComponent implements OnInit {
     public customRichTextTypeID: number = NeptunePageTypeEnum.HippocampProjectInstructions;

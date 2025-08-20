@@ -33,12 +33,13 @@ using Neptune.WebMvc.Views.BulkRow;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class BulkRowController : NeptuneBaseController<BulkRowController>
+    public class BulkRowController(
+        NeptuneDbContext dbContext,
+        ILogger<BulkRowController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<BulkRowController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public BulkRowController(NeptuneDbContext dbContext, ILogger<BulkRowController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet]
         [JurisdictionManageFeature]
         public ContentResult MarkTreatmentBMPAsVerifiedModal()

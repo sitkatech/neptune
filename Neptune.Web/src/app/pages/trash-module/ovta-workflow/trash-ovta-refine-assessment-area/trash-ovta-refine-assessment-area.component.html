@@ -1,27 +1,38 @@
 <page-header pageTitle="Refine Assessment Area"></page-header>
-<workflow-body *ngIf="onlandVisualTrashAssessment$ | async as onlandVisualTrashAssessment">
+@if (onlandVisualTrashAssessment$ | async; as onlandVisualTrashAssessment) {
+  <workflow-body>
     <app-alert-display></app-alert-display>
     <div class="copy copy-2 mb-3">
-        You may click or tap the edit button (<i class="fas fa-edit"></i>) on the map below to adjust the Assessment Area's vertices. You may drag vertices to move them, or click
-        or tap vertices to delete them. Note that it may be necessary to zoom the map to see individual vertices that are close together (e.g. there may be many closely-placed
-        vertices along curves). You may click the "Reset Map Zoom" button to zoom back out to the entire Assessment Area.
-        <p class="mt-2">
-            Note that the Assessment Area's edges must not intersect each other. If the Assessment Area contains any edges that intersect each other, you will not be able to save
-            the Assessment Area
-        </p>
+      You may click or tap the edit button (<i class="fas fa-edit"></i>) on the map below to adjust the Assessment Area's vertices. You may drag vertices to move them, or click
+      or tap vertices to delete them. Note that it may be necessary to zoom the map to see individual vertices that are close together (e.g. there may be many closely-placed
+      vertices along curves). You may click the "Reset Map Zoom" button to zoom back out to the entire Assessment Area.
+      <p class="mt-2">
+        Note that the Assessment Area's edges must not intersect each other. If the Assessment Area contains any edges that intersect each other, you will not be able to save
+        the Assessment Area
+      </p>
     </div>
-    <neptune-map
-        *ngIf="onlandVisualTrashAssessmentArea$ | async as onlandVisualTrashAssessmentArea"
+    @if (onlandVisualTrashAssessmentArea$ | async; as onlandVisualTrashAssessmentArea) {
+      <neptune-map
         (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessmentArea)"
         mapHeight="600px"
         [showLegend]="true">
-        <land-use-block-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
-        <parcel-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20" styles="parcel_alt"></parcel-layer>
-        <ovta-observation-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30" [ovtaID]="ovtaID"></ovta-observation-layer>
-        <transect-line-layer *ngIf="mapIsReady" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="25" [ovtaID]="ovtaID"></transect-line-layer>
-    </neptune-map>
-</workflow-body>
+        @if (mapIsReady) {
+          <land-use-block-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
+        }
+        @if (mapIsReady) {
+          <parcel-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20" styles="parcel_alt"></parcel-layer>
+        }
+        @if (mapIsReady) {
+          <ovta-observation-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30" [ovtaID]="ovtaID"></ovta-observation-layer>
+        }
+        @if (mapIsReady) {
+          <transect-line-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="25" [ovtaID]="ovtaID"></transect-line-layer>
+        }
+      </neptune-map>
+    }
+  </workflow-body>
+}
 <div class="page-footer">
-    <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
-    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Save & Continue</button>
+  <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit">Save</button>
+  <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="isLoadingSubmit">Save & Continue</button>
 </div>

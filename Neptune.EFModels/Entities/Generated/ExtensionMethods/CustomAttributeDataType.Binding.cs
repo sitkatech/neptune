@@ -20,9 +20,7 @@ namespace Neptune.EFModels.Entities
         public static readonly CustomAttributeDataTypeMultiSelect MultiSelect = CustomAttributeDataTypeMultiSelect.Instance;
 
         public static readonly List<CustomAttributeDataType> All;
-        public static readonly List<CustomAttributeDataTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, CustomAttributeDataType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, CustomAttributeDataTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -30,9 +28,7 @@ namespace Neptune.EFModels.Entities
         static CustomAttributeDataType()
         {
             All = new List<CustomAttributeDataType> { String, Integer, Decimal, DateTime, PickFromList, MultiSelect };
-            AllAsSimpleDto = new List<CustomAttributeDataTypeSimpleDto> { String.AsSimpleDto(), Integer.AsSimpleDto(), Decimal.AsSimpleDto(), DateTime.AsSimpleDto(), PickFromList.AsSimpleDto(), MultiSelect.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, CustomAttributeDataType>(All.ToDictionary(x => x.CustomAttributeDataTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, CustomAttributeDataTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.CustomAttributeDataTypeID));
         }
 
         /// <summary>

@@ -28,19 +28,17 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class WaterQualityManagementPlanController : NeptuneBaseController<WaterQualityManagementPlanController>
+    public class WaterQualityManagementPlanController(
+        NeptuneDbContext dbContext,
+        ILogger<WaterQualityManagementPlanController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        FileResourceService fileResourceService,
+        SitkaSmtpClientService sitkaSmtpClientService,
+        AzureBlobStorageService azureBlobStorageService)
+        : NeptuneBaseController<WaterQualityManagementPlanController>(dbContext, logger, linkGenerator,
+            webConfiguration)
     {
-        private readonly FileResourceService _fileResourceService;
-        private readonly SitkaSmtpClientService _sitkaSmtpClientService;
-        private readonly AzureBlobStorageService _azureBlobStorageService;
-
-        public WaterQualityManagementPlanController(NeptuneDbContext dbContext, ILogger<WaterQualityManagementPlanController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, FileResourceService fileResourceService, SitkaSmtpClientService sitkaSmtpClientService, AzureBlobStorageService azureBlobStorageService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _fileResourceService = fileResourceService;
-            _sitkaSmtpClientService = sitkaSmtpClientService;
-            _azureBlobStorageService = azureBlobStorageService;
-        }
-
         [HttpGet]
         public ViewResult FindAWQMP()
         {
@@ -786,7 +784,7 @@ namespace Neptune.WebMvc.Controllers
             await _dbContext.WaterQualityManagementPlanVerifies.AddAsync(waterQualityManagementPlanVerify);
             await _dbContext.SaveChangesAsync();
 
-            await viewModel.UpdateModel(waterQualityManagementPlanVerify, CurrentPerson, _dbContext, _fileResourceService, new List<WaterQualityManagementPlanVerifyQuickBMP>(), new List<WaterQualityManagementPlanVerifyTreatmentBMP>());
+            await viewModel.UpdateModel(waterQualityManagementPlanVerify, CurrentPerson, _dbContext, fileResourceService, new List<WaterQualityManagementPlanVerifyQuickBMP>(), new List<WaterQualityManagementPlanVerifyTreatmentBMP>());
 
             await _dbContext.SaveChangesAsync();
 
@@ -835,7 +833,7 @@ namespace Neptune.WebMvc.Controllers
             waterQualityManagementPlanVerify.IsDraft = !viewModel.HiddenIsFinalizeVerificationInput;
             var waterQualityManagementPlanVerifyQuickBMPs = WaterQualityManagementPlanVerifyQuickBMPs.ListByWaterQualityManagementPlanVerifyIDWithChangeTracking(_dbContext, waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
             var waterQualityManagementPlanVerifyTreatmentBMPs = WaterQualityManagementPlanVerifyTreatmentBMPs.ListByWaterQualityManagementPlanVerifyIDWithChangeTracking(_dbContext, waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
-            await viewModel.UpdateModel(waterQualityManagementPlanVerify, CurrentPerson, _dbContext, _fileResourceService, waterQualityManagementPlanVerifyQuickBMPs, waterQualityManagementPlanVerifyTreatmentBMPs);
+            await viewModel.UpdateModel(waterQualityManagementPlanVerify, CurrentPerson, _dbContext, fileResourceService, waterQualityManagementPlanVerifyQuickBMPs, waterQualityManagementPlanVerifyTreatmentBMPs);
 
             await _dbContext.SaveChangesAsync();
 
@@ -1036,7 +1034,7 @@ namespace Neptune.WebMvc.Controllers
         public async Task<FileResult> UploadWQMPTemplate()
         {
             using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
-            await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToBulkUploadWQMPTemplate, disposableTempFile.FileInfo.FullName);
+            await azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToBulkUploadWQMPTemplate, disposableTempFile.FileInfo.FullName);
             using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
 
             using var stream = new MemoryStream();
@@ -1107,7 +1105,7 @@ namespace Neptune.WebMvc.Controllers
         public async Task<FileResult> SimplifiedBMPBulkUploadTemplate()
         {
             using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".xlsx");
-            await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToSimplifiedBMPTemplate, disposableTempFile.FileInfo.FullName);
+            await azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToSimplifiedBMPTemplate, disposableTempFile.FileInfo.FullName);
             using var workbook = new XLWorkbook(disposableTempFile.FileInfo.FullName);
 
             using var stream = new MemoryStream();
@@ -1193,7 +1191,7 @@ The WQMP Boundaries for Stormwater Jurisdiction {stormwaterJurisdiction} were su
                 From = new MailAddress(_webConfiguration.DoNotReplyEmail, "Orange County Stormwater Tools")
             };
             mailMessage.To.Add(CurrentPerson.Email);
-            await _sitkaSmtpClientService.Send(mailMessage);
+            await sitkaSmtpClientService.Send(mailMessage);
 
             var message = $"Upload Successful: {wqmpBoundariesAdded.Count} WQMP Boundaries added, {wqmpBoundariesUpdated.Count} WQMP Boundaries updated!";
             SetMessageForDisplay(message);
@@ -1215,7 +1213,7 @@ The WQMP Boundaries for Stormwater Jurisdiction {stormwaterJurisdiction} were su
         public async Task<FileResult> UploadWQMPBoundaryTemplate()
         {
             using var disposableTempFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".csv");
-            await _azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToUploadWQMPBoundaryTemplate, disposableTempFile.FileInfo.FullName);
+            await azureBlobStorageService.DownloadBlobToFileAsync(_webConfiguration.PathToUploadWQMPBoundaryTemplate, disposableTempFile.FileInfo.FullName);
             var stream = new FileStream(disposableTempFile.FileInfo.FullName, FileMode.Open);
 
             return File(stream, @"text/csv",

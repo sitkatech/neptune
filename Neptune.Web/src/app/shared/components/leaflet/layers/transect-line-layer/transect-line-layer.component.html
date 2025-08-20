@@ -1,7 +1,8 @@
-<ng-container *ngIf="featureCollection$ | async"> </ng-container>
+@if (featureCollection$ | async) {
+}
 <ng-template #layerName>
-    <span>Transect </span>
+  <span>Transect </span>
 </ng-template>
 <ng-template #legend>
-    <img src="./assets/main/map-legend-images/transectLine.png" style="height: 12px; margin-bottom: 3px" />
+  <img src="./assets/main/map-legend-images/transectLine.png" style="height: 12px; margin-bottom: 3px" />
 </ng-template>

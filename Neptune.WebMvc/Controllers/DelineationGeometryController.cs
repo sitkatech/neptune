@@ -35,17 +35,15 @@ using Neptune.WebMvc.Views.DelineationGeometry;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class DelineationGeometryController : NeptuneBaseController<DelineationGeometryController>
+    public class DelineationGeometryController(
+        NeptuneDbContext dbContext,
+        ILogger<DelineationGeometryController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        AzureBlobStorageService azureBlobStorageService,
+        GDALAPIService gdalApiService)
+        : NeptuneBaseController<DelineationGeometryController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        private readonly AzureBlobStorageService _azureBlobStorageService;
-        private readonly GDALAPIService _gdalApiService;
-
-        public DelineationGeometryController(NeptuneDbContext dbContext, ILogger<DelineationGeometryController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, AzureBlobStorageService azureBlobStorageService, GDALAPIService gdalApiService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _azureBlobStorageService = azureBlobStorageService;
-            _gdalApiService = gdalApiService;
-        }
-
         [HttpGet]
         [JurisdictionEditFeature]
         public ViewResult UpdateDelineationGeometry()
@@ -60,8 +58,8 @@ namespace Neptune.WebMvc.Controllers
         {
             var file = viewModel.FileResourceData;
             var blobName = Guid.NewGuid().ToString();
-            await _azureBlobStorageService.UploadToBlobStorage(await FileStreamHelpers.StreamToBytes(file), blobName, ".gdb");
-            var featureClassNames = await _gdalApiService.OgrInfoGdbToFeatureClassInfo(file);
+            await azureBlobStorageService.UploadToBlobStorage(await FileStreamHelpers.StreamToBytes(file), blobName, ".gdb");
+            var featureClassNames = await gdalApiService.OgrInfoGdbToFeatureClassInfo(file);
 
             if (featureClassNames.Count == 0)
             {
@@ -118,7 +116,7 @@ namespace Neptune.WebMvc.Controllers
                         }
                     }
                 };
-                var geoJson = await _gdalApiService.Ogr2OgrGdbToGeoJson(apiRequest);
+                var geoJson = await gdalApiService.Ogr2OgrGdbToGeoJson(apiRequest);
                 var delineationStagings = await GeoJsonSerializer.DeserializeFromFeatureCollectionWithCCWCheck<DelineationStaging>(geoJson,
                     GeoJsonSerializer.DefaultSerializerOptions, Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID);
                 // todo: Run MakeValid "update dbo.DelineationStaging set Geometry = Geometry.MakeValid() where Geometry.STIsValid() = 0";
@@ -253,7 +251,7 @@ namespace Neptune.WebMvc.Controllers
                 CoordinateSystemID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID,
                 GeometryTypeName = "POLYGON",
             };
-            var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
+            var bytes = await gdalApiService.Ogr2OgrInputToGdbAsZip(new GdbInputsToGdbRequestDto()
             {
                 GdbInputs = new List<GdbInput> { gdbInput },
                 GdbName = $"{delineationTypeName.ToLower()}-{jurisdictionName}-delineation-export"

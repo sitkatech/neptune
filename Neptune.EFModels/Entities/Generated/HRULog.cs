@@ -24,9 +24,6 @@ public partial class HRULog
     public string? HRUResponse { get; set; }
 
     [InverseProperty("HRULog")]
-    public virtual ICollection<LoadGeneratingUnit4326> LoadGeneratingUnit4326s { get; set; } = new List<LoadGeneratingUnit4326>();
-
-    [InverseProperty("HRULog")]
     public virtual ICollection<LoadGeneratingUnit> LoadGeneratingUnits { get; set; } = new List<LoadGeneratingUnit>();
 
     [InverseProperty("HRULog")]

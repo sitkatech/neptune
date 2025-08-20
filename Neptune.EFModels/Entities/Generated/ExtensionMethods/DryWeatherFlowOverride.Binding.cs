@@ -16,9 +16,7 @@ namespace Neptune.EFModels.Entities
         public static readonly DryWeatherFlowOverrideYes Yes = DryWeatherFlowOverrideYes.Instance;
 
         public static readonly List<DryWeatherFlowOverride> All;
-        public static readonly List<DryWeatherFlowOverrideSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, DryWeatherFlowOverride> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, DryWeatherFlowOverrideSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -26,9 +24,7 @@ namespace Neptune.EFModels.Entities
         static DryWeatherFlowOverride()
         {
             All = new List<DryWeatherFlowOverride> { No, Yes };
-            AllAsSimpleDto = new List<DryWeatherFlowOverrideSimpleDto> { No.AsSimpleDto(), Yes.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, DryWeatherFlowOverride>(All.ToDictionary(x => x.DryWeatherFlowOverrideID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, DryWeatherFlowOverrideSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.DryWeatherFlowOverrideID));
         }
 
         /// <summary>

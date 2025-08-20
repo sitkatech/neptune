@@ -4,9 +4,8 @@ import { TrashOvtaWizardSidebarComponent } from "../trash-ovta-wizard-sidebar/tr
 
 @Component({
     selector: "trash-ovta-workflow-outlet",
-    standalone: true,
     imports: [RouterOutlet, TrashOvtaWizardSidebarComponent],
     templateUrl: "./trash-ovta-workflow-outlet.component.html",
-    styleUrl: "./trash-ovta-workflow-outlet.component.scss",
+    styleUrl: "./trash-ovta-workflow-outlet.component.scss"
 })
 export class TrashOvtaWorkflowOutletComponent {}

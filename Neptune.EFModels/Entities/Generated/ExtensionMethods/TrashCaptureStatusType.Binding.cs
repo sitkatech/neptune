@@ -18,9 +18,7 @@ namespace Neptune.EFModels.Entities
         public static readonly TrashCaptureStatusTypeNotProvided NotProvided = TrashCaptureStatusTypeNotProvided.Instance;
 
         public static readonly List<TrashCaptureStatusType> All;
-        public static readonly List<TrashCaptureStatusTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, TrashCaptureStatusType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, TrashCaptureStatusTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -28,9 +26,7 @@ namespace Neptune.EFModels.Entities
         static TrashCaptureStatusType()
         {
             All = new List<TrashCaptureStatusType> { Full, Partial, None, NotProvided };
-            AllAsSimpleDto = new List<TrashCaptureStatusTypeSimpleDto> { Full.AsSimpleDto(), Partial.AsSimpleDto(), None.AsSimpleDto(), NotProvided.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, TrashCaptureStatusType>(All.ToDictionary(x => x.TrashCaptureStatusTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, TrashCaptureStatusTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.TrashCaptureStatusTypeID));
         }
 
         /// <summary>

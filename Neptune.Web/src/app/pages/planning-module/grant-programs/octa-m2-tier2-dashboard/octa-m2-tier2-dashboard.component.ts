@@ -23,7 +23,7 @@ import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { RouterLink } from "@angular/router";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
-import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
@@ -44,33 +44,27 @@ import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-togg
     selector: "octa-m2-tier2-dashboard",
     templateUrl: "./octa-m2-tier2-dashboard.component.html",
     styleUrls: ["./octa-m2-tier2-dashboard.component.scss"],
-    standalone: true,
     imports: [
-        AlertDisplayComponent,
-        NgSelectModule,
-        FormsModule,
-        NgIf,
-        NgSwitch,
-        NgSwitchCase,
-        FieldDefinitionComponent,
-        NgSwitchDefault,
-        NgFor,
-        RouterLink,
-        AgGridModule,
-        NeptuneGridComponent,
-        PageHeaderComponent,
-        IconComponent,
-        ExpandCollapseDirective,
-        NeptuneMapComponent,
-        RegionalSubbasinsLayerComponent,
-        DelineationsLayerComponent,
-        JurisdictionsLayerComponent,
-        WqmpsLayerComponent,
-        StormwaterNetworkLayerComponent,
-        AsyncPipe,
-        InventoriedBMPsLayerComponent,
-        DropdownToggleDirective,
-    ],
+    AlertDisplayComponent,
+    NgSelectModule,
+    FormsModule,
+    FieldDefinitionComponent,
+    RouterLink,
+    AgGridModule,
+    NeptuneGridComponent,
+    PageHeaderComponent,
+    IconComponent,
+    ExpandCollapseDirective,
+    NeptuneMapComponent,
+    RegionalSubbasinsLayerComponent,
+    DelineationsLayerComponent,
+    JurisdictionsLayerComponent,
+    WqmpsLayerComponent,
+    StormwaterNetworkLayerComponent,
+    AsyncPipe,
+    InventoriedBMPsLayerComponent,
+    DropdownToggleDirective
+]
 })
 export class OCTAM2Tier2DashboardComponent implements OnInit {
     public mapIsReady: boolean = false;

@@ -1,36 +1,44 @@
-<div class="grid-12 mt-2 mb-4" *ngIf="attachments && attachments.length > 0">
-    <div class="g-col-6" *ngFor="let attachment of attachments">
+@if (attachments && attachments.length > 0) {
+  <div class="grid-12 mt-2 mb-4">
+    @for (attachment of attachments; track attachment) {
+      <div class="g-col-6">
         <div class="card">
-            <div class="card-header">
-                <div class="grid-12">
-                    <div class="g-col-10 card-header-name">
-                        {{ attachment.DisplayName }}
-                    </div>
-                    <div class="g-col-2" *ngIf="!readOnly">
-                        <span class="ml-3" style="cursor: pointer" (click)="emitDeleteAttachmentTriggered(attachment.ProjectDocumentID)">
-                            <i class="fa fa-trash"></i>
-                        </span>
-                        <span class="ml-3" style="cursor: pointer" (click)="emitEditAttachmentTriggered(attachment)">
-                            <i class="fa fa-edit"></i>
-                        </span>
-                    </div>
+          <div class="card-header">
+            <div class="grid-12">
+              <div class="g-col-10 card-header-name">
+                {{ attachment.DisplayName }}
+              </div>
+              @if (!readOnly) {
+                <div class="g-col-2">
+                  <span class="ml-3" style="cursor: pointer" (click)="emitDeleteAttachmentTriggered(attachment.ProjectDocumentID)">
+                    <i class="fa fa-trash"></i>
+                  </span>
+                  <span class="ml-3" style="cursor: pointer" (click)="emitEditAttachmentTriggered(attachment)">
+                    <i class="fa fa-edit"></i>
+                  </span>
                 </div>
+              }
             </div>
-            <div class="card-body">
-                <div class="grid-12">
-                    <div class="g-col-4 label text-right"><strong>File: </strong></div>
-                    <div class="g-col-8 text-left">
-                        <a href="{{ getFileLinkValue(attachment) }}">{{ attachment.FileResource.OriginalBaseFilename }}</a>
-                        <em *ngIf="!attachment.FileResource" class="text-muted">Not Available</em>
-                    </div>
-                    <div class="g-col-4 label text-right"><strong>Uploaded On: </strong></div>
-                    <div class="g-col-8 text-left">{{ attachment.UploadDate | date : "shortDate" }}</div>
-                    <div class="g-col-4 label text-right"><strong>File Type: </strong></div>
-                    <div class="g-col-8 text-left">{{ attachment.FileResource.OriginalFileExtension }}</div>
-                    <div class="g-col-4 label text-right"><strong>Description: </strong></div>
-                    <div class="g-col-8 text-left">{{ attachment.DocumentDescription }}</div>
-                </div>
+          </div>
+          <div class="card-body">
+            <div class="grid-12">
+              <div class="g-col-4 label text-right"><strong>File: </strong></div>
+              <div class="g-col-8 text-left">
+                <a href="{{ getFileLinkValue(attachment) }}">{{ attachment.FileResource.OriginalBaseFilename }}</a>
+                @if (!attachment.FileResource) {
+                  <em class="text-muted">Not Available</em>
+                }
+              </div>
+              <div class="g-col-4 label text-right"><strong>Uploaded On: </strong></div>
+              <div class="g-col-8 text-left">{{ attachment.UploadDate | date : "shortDate" }}</div>
+              <div class="g-col-4 label text-right"><strong>File Type: </strong></div>
+              <div class="g-col-8 text-left">{{ attachment.FileResource.OriginalFileExtension }}</div>
+              <div class="g-col-4 label text-right"><strong>Description: </strong></div>
+              <div class="g-col-8 text-left">{{ attachment.DocumentDescription }}</div>
             </div>
+          </div>
         </div>
-    </div>
-</div>
+      </div>
+    }
+  </div>
+}

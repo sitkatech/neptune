@@ -37,12 +37,13 @@ using Neptune.WebMvc.Common.Mvc;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class UserController : NeptuneBaseController<UserController>
+    public class UserController(
+        NeptuneDbContext dbContext,
+        ILogger<UserController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<UserController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public UserController(NeptuneDbContext dbContext, ILogger<UserController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet]
         [UserEditFeature]
         public ViewResult Index()

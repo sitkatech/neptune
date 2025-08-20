@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "/src/scss/abstracts" as *;
 
 :host {
@@ -16,7 +17,7 @@ span {
     }
 
     &.danger {
-        background: lighten($red-default, 20%);
+        background: color.adjust($red-default, $lightness: 20%);
     }
 
     &.info {

@@ -35,15 +35,14 @@ using Neptune.WebMvc.Common.Mvc;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class HelpController : NeptuneBaseController<HelpController>
+    public class HelpController(
+        NeptuneDbContext dbContext,
+        ILogger<HelpController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        SitkaSmtpClientService sitkaSmtpClientService)
+        : NeptuneBaseController<HelpController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        private readonly SitkaSmtpClientService _sitkaSmtpClientService;
-
-        public HelpController(NeptuneDbContext dbContext, ILogger<HelpController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _sitkaSmtpClientService = sitkaSmtpClientService;
-        }
-
         [HttpGet]
         public ViewResult Support()
         {
@@ -255,7 +254,7 @@ namespace Neptune.WebMvc.Controllers
             // TO field
             SetEmailRecipientsOfSupportRequest(_dbContext, mailMessage);
 
-            await _sitkaSmtpClientService.Send(mailMessage);
+            await sitkaSmtpClientService.Send(mailMessage);
         }
 
 

@@ -16,9 +16,7 @@ namespace Neptune.EFModels.Entities
         public static readonly TreatmentBMPAssessmentTypePostMaintenance PostMaintenance = TreatmentBMPAssessmentTypePostMaintenance.Instance;
 
         public static readonly List<TreatmentBMPAssessmentType> All;
-        public static readonly List<TreatmentBMPAssessmentTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, TreatmentBMPAssessmentType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, TreatmentBMPAssessmentTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -26,9 +24,7 @@ namespace Neptune.EFModels.Entities
         static TreatmentBMPAssessmentType()
         {
             All = new List<TreatmentBMPAssessmentType> { Initial, PostMaintenance };
-            AllAsSimpleDto = new List<TreatmentBMPAssessmentTypeSimpleDto> { Initial.AsSimpleDto(), PostMaintenance.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPAssessmentType>(All.ToDictionary(x => x.TreatmentBMPAssessmentTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPAssessmentTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.TreatmentBMPAssessmentTypeID));
         }
 
         /// <summary>

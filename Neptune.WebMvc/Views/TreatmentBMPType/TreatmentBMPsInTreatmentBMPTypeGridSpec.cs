@@ -104,7 +104,7 @@ public class TreatmentBMPsInTreatmentBMPTypeGridSpec : GridSpec<TreatmentBMPDeta
                 : new HtmlString(x.TreatmentBMPDetailed.DelineationTypeDisplayName), 130,
             DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
 
-        foreach (var purpose in CustomAttributeTypePurpose.All.Except(CustomAttributeTypePurpose.Maintenance))
+        foreach (var purpose in CustomAttributeTypePurpose.All.Where(x => x.CustomAttributeTypePurposeID != (int)CustomAttributeTypePurposeEnum.Maintenance))
         {
             var treatmentBMPTypeCustomAttributeTypes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x =>
                 x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID ==

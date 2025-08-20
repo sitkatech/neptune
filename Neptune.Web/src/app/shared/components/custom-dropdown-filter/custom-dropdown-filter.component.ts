@@ -2,14 +2,13 @@ import { Component } from "@angular/core";
 import { AgFilterComponent } from "ag-grid-angular";
 import { IDoesFilterPassParams, RowNode } from "ag-grid-community";
 import { FormsModule } from "@angular/forms";
-import { NgFor } from "@angular/common";
+
 
 @Component({
     selector: "qanat-custom-dropdown-filter",
     templateUrl: "./custom-dropdown-filter.component.html",
     styleUrls: ["./custom-dropdown-filter.component.scss"],
-    standalone: true,
-    imports: [NgFor, FormsModule],
+    imports: [FormsModule]
 })
 export class CustomDropdownFilterComponent implements AgFilterComponent {
     params;

@@ -16,9 +16,7 @@ namespace Neptune.EFModels.Entities
         public static readonly WaterQualityManagementPlanPriorityLow Low = WaterQualityManagementPlanPriorityLow.Instance;
 
         public static readonly List<WaterQualityManagementPlanPriority> All;
-        public static readonly List<WaterQualityManagementPlanPrioritySimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanPriority> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanPrioritySimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -26,9 +24,7 @@ namespace Neptune.EFModels.Entities
         static WaterQualityManagementPlanPriority()
         {
             All = new List<WaterQualityManagementPlanPriority> { High, Low };
-            AllAsSimpleDto = new List<WaterQualityManagementPlanPrioritySimpleDto> { High.AsSimpleDto(), Low.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanPriority>(All.ToDictionary(x => x.WaterQualityManagementPlanPriorityID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanPrioritySimpleDto>(AllAsSimpleDto.ToDictionary(x => x.WaterQualityManagementPlanPriorityID));
         }
 
         /// <summary>

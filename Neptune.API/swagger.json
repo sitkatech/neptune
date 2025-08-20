@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.4",
   "info": {
     "title": "Neptune.API",
     "version": "1.0"
@@ -1088,44 +1088,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          }
-        }
-      }
-    },
-    "/onland-visual-trash-assessments/preliminary-source-identification-types": {
-      "get": {
-        "tags": [
-          "OnlandVisualTrashAssessment"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PreliminarySourceIdentificationTypeSimpleDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PreliminarySourceIdentificationTypeSimpleDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PreliminarySourceIdentificationTypeSimpleDto"
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -4669,6 +4631,15 @@
         ],
         "type": "string"
       },
+      "ElevationModel": {
+        "type": "object",
+        "properties": {
+          "Extent": {
+            "$ref": "#/components/schemas/Envelope"
+          }
+        },
+        "additionalProperties": false
+      },
       "Envelope": {
         "type": "object",
         "properties": {
@@ -4917,6 +4888,9 @@
             "format": "int32",
             "readOnly": true
           },
+          "ElevationModel": {
+            "$ref": "#/components/schemas/ElevationModel"
+          },
           "GeometryServices": {
             "$ref": "#/components/schemas/NtsGeometryServices"
           }
@@ -4938,6 +4912,10 @@
         "additionalProperties": false
       },
       "GeometryOverlay": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "GeometryRelate": {
         "type": "object",
         "additionalProperties": false
       },
@@ -5094,6 +5072,9 @@
           "GeometryOverlay": {
             "$ref": "#/components/schemas/GeometryOverlay"
           },
+          "GeometryRelate": {
+            "$ref": "#/components/schemas/GeometryRelate"
+          },
           "CoordinateEqualityComparer": {
             "$ref": "#/components/schemas/CoordinateEqualityComparer"
           },
@@ -5107,6 +5088,9 @@
           },
           "DefaultPrecisionModel": {
             "$ref": "#/components/schemas/PrecisionModel"
+          },
+          "DefaultElevationModel": {
+            "$ref": "#/components/schemas/ElevationModel"
           }
         },
         "additionalProperties": false
@@ -6249,28 +6233,6 @@
           "Fixed"
         ],
         "type": "string"
-      },
-      "PreliminarySourceIdentificationTypeSimpleDto": {
-        "type": "object",
-        "properties": {
-          "PreliminarySourceIdentificationTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "PreliminarySourceIdentificationTypeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "PreliminarySourceIdentificationTypeDisplayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "PreliminarySourceIdentificationCategoryID": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
       },
       "ProblemDetails": {
         "type": "object",

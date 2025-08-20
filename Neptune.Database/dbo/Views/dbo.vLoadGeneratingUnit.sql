@@ -3,7 +3,7 @@ as
 
 select  lgu.LoadGeneratingUnitID, lgu.DateHRURequested, lgu.IsEmptyResponseFromHRUService, lgu.DelineationID,
         tb.TreatmentBMPID, tb.TreatmentBMPName, wqmp.WaterQualityManagementPlanID, wqmp.WaterQualityManagementPlanName,
-        rsb.RegionalSubbasinID, concat(rsb.Watershed, ' - ', rsb.DrainID, ': ', rsb.RegionalSubbasinID) as RegionalSubbasinName,
+        rsb.RegionalSubbasinID, concat(rsb.Watershed, ' ', rsb.DrainID, ': ', rsb.RegionalSubbasinID) as RegionalSubbasinName,
         mb.ModelBasinID, mb.ModelBasinKey
 from dbo.LoadGeneratingUnit lgu
 left join dbo.Delineation d on lgu.DelineationID = d.DelineationID

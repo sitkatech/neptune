@@ -35,9 +35,7 @@ namespace Neptune.EFModels.Entities
         public static readonly HRUCharacteristicLandUseCodeUNKNOWN UNKNOWN = HRUCharacteristicLandUseCodeUNKNOWN.Instance;
 
         public static readonly List<HRUCharacteristicLandUseCode> All;
-        public static readonly List<HRUCharacteristicLandUseCodeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, HRUCharacteristicLandUseCode> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, HRUCharacteristicLandUseCodeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -45,9 +43,7 @@ namespace Neptune.EFModels.Entities
         static HRUCharacteristicLandUseCode()
         {
             All = new List<HRUCharacteristicLandUseCode> { COMM, EDU, IND, UTIL, RESSFH, RESSFL, RESMF, TRFWY, TRANS, TROTH, OSAGIR, OSAGNI, OSDEV, OSIRR, OSLOW, OSFOR, OSWET, OSVAC, WATER, EMPTY, UNKNOWN };
-            AllAsSimpleDto = new List<HRUCharacteristicLandUseCodeSimpleDto> { COMM.AsSimpleDto(), EDU.AsSimpleDto(), IND.AsSimpleDto(), UTIL.AsSimpleDto(), RESSFH.AsSimpleDto(), RESSFL.AsSimpleDto(), RESMF.AsSimpleDto(), TRFWY.AsSimpleDto(), TRANS.AsSimpleDto(), TROTH.AsSimpleDto(), OSAGIR.AsSimpleDto(), OSAGNI.AsSimpleDto(), OSDEV.AsSimpleDto(), OSIRR.AsSimpleDto(), OSLOW.AsSimpleDto(), OSFOR.AsSimpleDto(), OSWET.AsSimpleDto(), OSVAC.AsSimpleDto(), WATER.AsSimpleDto(), EMPTY.AsSimpleDto(), UNKNOWN.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, HRUCharacteristicLandUseCode>(All.ToDictionary(x => x.HRUCharacteristicLandUseCodeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, HRUCharacteristicLandUseCodeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.HRUCharacteristicLandUseCodeID));
         }
 
         /// <summary>

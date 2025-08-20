@@ -20,17 +20,16 @@ using Neptune.Common.Services.GDAL;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class RegionalSubbasinRevisionRequestController : NeptuneBaseController<RegionalSubbasinRevisionRequestController>
+    public class RegionalSubbasinRevisionRequestController(
+        NeptuneDbContext dbContext,
+        ILogger<RegionalSubbasinRevisionRequestController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator,
+        SitkaSmtpClientService sitkaSmtpClientService,
+        GDALAPIService gdalApiService)
+        : NeptuneBaseController<RegionalSubbasinRevisionRequestController>(dbContext, logger, linkGenerator,
+            webConfiguration)
     {
-        private readonly SitkaSmtpClientService _sitkaSmtpClientService;
-        private readonly GDALAPIService _gdalApiService;
-
-        public RegionalSubbasinRevisionRequestController(NeptuneDbContext dbContext, ILogger<RegionalSubbasinRevisionRequestController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator, SitkaSmtpClientService sitkaSmtpClientService, GDALAPIService gdalApiService) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-            _sitkaSmtpClientService = sitkaSmtpClientService;
-            _gdalApiService = gdalApiService;
-        }
-
         [HttpGet]
         [NeptuneViewFeature]
         public ViewResult Index()
@@ -207,7 +206,7 @@ namespace Neptune.WebMvc.Controllers
                 }
             };
 
-            var bytes = await _gdalApiService.Ogr2OgrInputToGdbAsZip(apiRequest);
+            var bytes = await gdalApiService.Ogr2OgrInputToGdbAsZip(apiRequest);
             return File(bytes, "application/zip", $"{outputLayerName}.zip");
         }
 
@@ -247,7 +246,7 @@ Please review it, make revisions, and close it at your earliest convenience. <a 
                 mailMessage.To.Add(revisionRequestPeople.Email);
             }
 
-            await _sitkaSmtpClientService.Send(mailMessage);
+            await sitkaSmtpClientService.Send(mailMessage);
         }
 
         private async Task SendRSBRevisionRequestClosedEmail(Person closingPerson, RegionalSubbasinRevisionRequest regionalSubbasinRevisionRequest)
@@ -289,7 +288,7 @@ The changes resulting from this update will be available for your use next Monda
                 mailMessage.CC.Add(revisionRequestPeople.Email);
             }
 
-            await _sitkaSmtpClientService.Send(mailMessage);
+            await sitkaSmtpClientService.Send(mailMessage);
         }
 
         private static List<Person> GetPeopleWhoReceiveRSBRevisionRequests(NeptuneDbContext dbContext)

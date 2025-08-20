@@ -31,9 +31,7 @@ namespace Neptune.EFModels.Entities
         public static readonly FileResourceMimeTypeZIP ZIP = FileResourceMimeTypeZIP.Instance;
 
         public static readonly List<FileResourceMimeType> All;
-        public static readonly List<FileResourceMimeTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, FileResourceMimeType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, FileResourceMimeTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -41,9 +39,7 @@ namespace Neptune.EFModels.Entities
         static FileResourceMimeType()
         {
             All = new List<FileResourceMimeType> { PDF, WordDOCX, ExcelXLSX, XPNG, PNG, TIFF, BMP, GIF, JPEG, PJPEG, PowerpointPPTX, PowerpointPPT, ExcelXLS, WordDOC, xExcelXLSX, CSS, ZIP };
-            AllAsSimpleDto = new List<FileResourceMimeTypeSimpleDto> { PDF.AsSimpleDto(), WordDOCX.AsSimpleDto(), ExcelXLSX.AsSimpleDto(), XPNG.AsSimpleDto(), PNG.AsSimpleDto(), TIFF.AsSimpleDto(), BMP.AsSimpleDto(), GIF.AsSimpleDto(), JPEG.AsSimpleDto(), PJPEG.AsSimpleDto(), PowerpointPPTX.AsSimpleDto(), PowerpointPPT.AsSimpleDto(), ExcelXLS.AsSimpleDto(), WordDOC.AsSimpleDto(), xExcelXLSX.AsSimpleDto(), CSS.AsSimpleDto(), ZIP.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, FileResourceMimeType>(All.ToDictionary(x => x.FileResourceMimeTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, FileResourceMimeTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.FileResourceMimeTypeID));
         }
 
         /// <summary>

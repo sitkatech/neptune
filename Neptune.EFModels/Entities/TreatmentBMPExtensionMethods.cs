@@ -4,7 +4,7 @@ using NetTopologySuite.Geometries;
 
 namespace Neptune.EFModels.Entities;
 
-public static partial class TreatmentBMPExtensionMethods
+public static class TreatmentBMPExtensionMethods
 {
     public static TreatmentBMPDisplayDto AsDisplayDto(this TreatmentBMP treatmentBMP, vTreatmentBMPModelingAttribute? treatmentBMPModelingAttribute)
     {

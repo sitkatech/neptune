@@ -16,9 +16,7 @@ namespace Neptune.EFModels.Entities
         public static readonly MaintenanceRecordTypeCorrective Corrective = MaintenanceRecordTypeCorrective.Instance;
 
         public static readonly List<MaintenanceRecordType> All;
-        public static readonly List<MaintenanceRecordTypeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, MaintenanceRecordType> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, MaintenanceRecordTypeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -26,9 +24,7 @@ namespace Neptune.EFModels.Entities
         static MaintenanceRecordType()
         {
             All = new List<MaintenanceRecordType> { Routine, Corrective };
-            AllAsSimpleDto = new List<MaintenanceRecordTypeSimpleDto> { Routine.AsSimpleDto(), Corrective.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, MaintenanceRecordType>(All.ToDictionary(x => x.MaintenanceRecordTypeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, MaintenanceRecordTypeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.MaintenanceRecordTypeID));
         }
 
         /// <summary>

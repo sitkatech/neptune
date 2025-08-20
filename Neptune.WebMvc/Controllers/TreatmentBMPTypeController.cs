@@ -36,12 +36,13 @@ using Neptune.WebMvc.Views.TreatmentBMPType;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class TreatmentBMPTypeController : NeptuneBaseController<TreatmentBMPTypeController>
+    public class TreatmentBMPTypeController(
+        NeptuneDbContext dbContext,
+        ILogger<TreatmentBMPTypeController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<TreatmentBMPTypeController>(dbContext, logger, linkGenerator, webConfiguration)
     {
-        public TreatmentBMPTypeController(NeptuneDbContext dbContext, ILogger<TreatmentBMPTypeController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet]
         [NeptuneAdminFeature]
         public ViewResult Manage()

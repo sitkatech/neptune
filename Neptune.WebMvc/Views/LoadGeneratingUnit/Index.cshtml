@@ -47,14 +47,14 @@
             var regionalSubbasinLayer =
                 lguMap.addWmsLayer("OCStormwater:RegionalSubbasins",
                     "<span><img src='/Content/img/legendImages/regionalSubbasin.png' height='12px' style='margin-bottom:3px;' /> Regional Subbasins</span>",
-                    { pane: "regionalSubbasinPane" }, true);
+                    { pane: "regionalSubbasinPane", maxZoom: 30 }, true);
 
             var lguLegendUrl = "/Content/img/legendImages/loagGeneratingUnit.png";
             var lguLabel = "<span><img src='" + lguLegendUrl + "' height='14px'/> LGUs</span>";
             lguMap.addWmsLayer("OCStormwater:LoadGeneratingUnits",
                 lguLabel,
                 {
-
+                    maxZoom:30
                 }, false);
 
             regionalSubbasinLayer.bringToFront();
@@ -104,7 +104,7 @@
 
         var selectLGU = function (evt) {
             var customParams = {
-                cql_filter: 'intersects(LoadGeneratingUnit4326Geometry, POINT(' + evt.latlng.lat + ' ' + evt.latlng.lng + '))'
+                cql_filter: 'intersects(LoadGeneratingUnitGeometry4326, POINT(' + evt.latlng.lat + ' ' + evt.latlng.lng + '))'
             }
             selectLGUByWFS(customParams, evt.latlng);
         };
@@ -132,7 +132,11 @@
                         var content = '<dl>' +
                             '<dt>LGU ID</dt>' +
                             '<dd>' +
-                            properties.LoadGeneratingUnit4326ID +
+                            "<a href='/LoadGeneratingUnit/Detail/" +
+                            properties.LoadGeneratingUnitID +
+                            "'>" +
+                            properties.LoadGeneratingUnitID +
+                            "</a>" +
                             '</dd>' +
                             '<dt>Regional Subbasin ID and Detail Link</dt>' +
                             '<dd>' +

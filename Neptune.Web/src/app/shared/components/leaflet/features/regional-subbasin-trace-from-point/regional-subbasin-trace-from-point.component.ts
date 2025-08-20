@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, HostListener, ChangeDetectorRef, ViewChild, ElementRef, Renderer2 } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ChangeDetectorRef, Renderer2 } from "@angular/core";
 import * as L from "leaflet";
 import "leaflet-geometryutil";
 import "leaflet-arrowheads";
@@ -9,10 +9,9 @@ import { LegendItem } from "src/app/shared/models/legend-item";
 
 @Component({
     selector: "regional-subbasin-trace-from-point",
-    standalone: true,
     imports: [],
     templateUrl: "./regional-subbasin-trace-from-point.component.html",
-    styleUrl: "./regional-subbasin-trace-from-point.component.scss",
+    styleUrl: "./regional-subbasin-trace-from-point.component.scss"
 })
 export class RegionalSubbasinTraceFromPointComponent {
     @Input() map: any;

@@ -17,9 +17,7 @@ namespace Neptune.EFModels.Entities
         public static readonly CustomAttributeTypePurposeMaintenance Maintenance = CustomAttributeTypePurposeMaintenance.Instance;
 
         public static readonly List<CustomAttributeTypePurpose> All;
-        public static readonly List<CustomAttributeTypePurposeSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, CustomAttributeTypePurpose> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, CustomAttributeTypePurposeSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -27,9 +25,7 @@ namespace Neptune.EFModels.Entities
         static CustomAttributeTypePurpose()
         {
             All = new List<CustomAttributeTypePurpose> { Modeling, OtherDesignAttributes, Maintenance };
-            AllAsSimpleDto = new List<CustomAttributeTypePurposeSimpleDto> { Modeling.AsSimpleDto(), OtherDesignAttributes.AsSimpleDto(), Maintenance.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, CustomAttributeTypePurpose>(All.ToDictionary(x => x.CustomAttributeTypePurposeID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, CustomAttributeTypePurposeSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.CustomAttributeTypePurposeID));
         }
 
         /// <summary>

@@ -18,7 +18,7 @@ import { DelineationTypeEnum } from "src/app/shared/generated/enum/delineation-t
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
-import { AsyncPipe, NgFor, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
@@ -37,24 +37,21 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
     selector: "delineations",
     templateUrl: "./delineations.component.html",
     styleUrls: ["./delineations.component.scss"],
-    standalone: true,
     imports: [
-        CustomRichTextComponent,
-        NgFor,
-        NgIf,
-        AsyncPipe,
-        FieldDefinitionComponent,
-        PageHeaderComponent,
-        WorkflowBodyComponent,
-        AlertDisplayComponent,
-        NeptuneMapComponent,
-        RegionalSubbasinsLayerComponent,
-        DelineationsLayerComponent,
-        JurisdictionsLayerComponent,
-        WqmpsLayerComponent,
-        StormwaterNetworkLayerComponent,
-        InventoriedBMPsLayerComponent,
-    ],
+    CustomRichTextComponent,
+    AsyncPipe,
+    FieldDefinitionComponent,
+    PageHeaderComponent,
+    WorkflowBodyComponent,
+    AlertDisplayComponent,
+    NeptuneMapComponent,
+    RegionalSubbasinsLayerComponent,
+    DelineationsLayerComponent,
+    JurisdictionsLayerComponent,
+    WqmpsLayerComponent,
+    StormwaterNetworkLayerComponent,
+    InventoriedBMPsLayerComponent
+]
 })
 export class DelineationsComponent implements OnInit {
     public mapIsReady: boolean = false;

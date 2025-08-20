@@ -598,7 +598,7 @@ namespace Neptune.WebMvc.Common.DhtmlWrappers
         /// For making an edit icon on the grid with an editor in a jquery ui dialog
         /// If insufficient permissions, returns empty string
         /// </summary>
-        public static IHtmlContent MakeModalDialogLink(IHtmlContent linkHtml, string dialogContentUrl, int dialogWidth, string dialogTitle, bool hasPermission, string saveButtonText, string cancelButtonText, List<string> extraCssClasses, string onJavascriptReadyFunction, string postData)
+        public static IHtmlContent MakeModalDialogLink(IHtmlContent linkHtml, string dialogContentUrl, int dialogWidth, string dialogTitle, bool hasPermission, string saveButtonText, string cancelButtonText, List<string> extraCssClasses, string? onJavascriptReadyFunction, string? postData)
         {
             if (hasPermission)
             {
@@ -610,7 +610,7 @@ namespace Neptune.WebMvc.Common.DhtmlWrappers
         /// <summary>
         /// For making an edit icon on the grid with an editor in a jquery ui dialog
         /// </summary>
-        public static IHtmlContent MakeModalDialogLink(IHtmlContent linkHtml, string dialogContentUrl, int dialogWidth, string dialogTitle, string onJavascriptReadyFunction)
+        public static IHtmlContent MakeModalDialogLink(IHtmlContent linkHtml, string dialogContentUrl, int dialogWidth, string dialogTitle, string? onJavascriptReadyFunction)
         {
             return MakeModalDialogLink(linkHtml, dialogContentUrl, dialogWidth, dialogTitle, true, "Save", "Cancel", new List<string>(), onJavascriptReadyFunction, null);
         }

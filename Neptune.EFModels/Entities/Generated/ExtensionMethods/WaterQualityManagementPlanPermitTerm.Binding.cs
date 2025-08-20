@@ -23,9 +23,7 @@ namespace Neptune.EFModels.Entities
         public static readonly WaterQualityManagementPlanPermitTermSouthOCFithTerm2015 SouthOCFithTerm2015 = WaterQualityManagementPlanPermitTermSouthOCFithTerm2015.Instance;
 
         public static readonly List<WaterQualityManagementPlanPermitTerm> All;
-        public static readonly List<WaterQualityManagementPlanPermitTermSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanPermitTerm> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanPermitTermSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -33,9 +31,7 @@ namespace Neptune.EFModels.Entities
         static WaterQualityManagementPlanPermitTerm()
         {
             All = new List<WaterQualityManagementPlanPermitTerm> { NorthOCFirstTerm1990, NorthOCSecondTerm1996, NorthOCThirdTerm2002, NorthOCFourthTerm2009, SouthOCFirstTerm1990, SouthOCSecondTerm1996, SouthOCThirdTerm2002, SouthOCFourthTerm2009, SouthOCFithTerm2015 };
-            AllAsSimpleDto = new List<WaterQualityManagementPlanPermitTermSimpleDto> { NorthOCFirstTerm1990.AsSimpleDto(), NorthOCSecondTerm1996.AsSimpleDto(), NorthOCThirdTerm2002.AsSimpleDto(), NorthOCFourthTerm2009.AsSimpleDto(), SouthOCFirstTerm1990.AsSimpleDto(), SouthOCSecondTerm1996.AsSimpleDto(), SouthOCThirdTerm2002.AsSimpleDto(), SouthOCFourthTerm2009.AsSimpleDto(), SouthOCFithTerm2015.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanPermitTerm>(All.ToDictionary(x => x.WaterQualityManagementPlanPermitTermID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanPermitTermSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.WaterQualityManagementPlanPermitTermID));
         }
 
         /// <summary>

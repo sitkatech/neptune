@@ -30,12 +30,14 @@ using Neptune.WebMvc.Views.TreatmentBMPBenchmarkAndThreshold;
 
 namespace Neptune.WebMvc.Controllers
 {
-    public class TreatmentBMPBenchmarkAndThresholdController : NeptuneBaseController<TreatmentBMPBenchmarkAndThresholdController>
+    public class TreatmentBMPBenchmarkAndThresholdController(
+        NeptuneDbContext dbContext,
+        ILogger<TreatmentBMPBenchmarkAndThresholdController> logger,
+        IOptions<WebConfiguration> webConfiguration,
+        LinkGenerator linkGenerator)
+        : NeptuneBaseController<TreatmentBMPBenchmarkAndThresholdController>(dbContext, logger, linkGenerator,
+            webConfiguration)
     {
-        public TreatmentBMPBenchmarkAndThresholdController(NeptuneDbContext dbContext, ILogger<TreatmentBMPBenchmarkAndThresholdController> logger, IOptions<WebConfiguration> webConfiguration, LinkGenerator linkGenerator) : base(dbContext, logger, linkGenerator, webConfiguration)
-        {
-        }
-
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [TreatmentBMPManageFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]

@@ -23,9 +23,7 @@ namespace Neptune.EFModels.Entities
         public static readonly WaterQualityManagementPlanLandUseMixed Mixed = WaterQualityManagementPlanLandUseMixed.Instance;
 
         public static readonly List<WaterQualityManagementPlanLandUse> All;
-        public static readonly List<WaterQualityManagementPlanLandUseSimpleDto> AllAsSimpleDto;
         public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanLandUse> AllLookupDictionary;
-        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanLandUseSimpleDto> AllAsSimpleDtoLookupDictionary;
 
         /// <summary>
         /// Static type constructor to coordinate static initialization order
@@ -33,9 +31,7 @@ namespace Neptune.EFModels.Entities
         static WaterQualityManagementPlanLandUse()
         {
             All = new List<WaterQualityManagementPlanLandUse> { Residential, Commercial, Industrial, Other, Road, Flood, Municipal, Park, Mixed };
-            AllAsSimpleDto = new List<WaterQualityManagementPlanLandUseSimpleDto> { Residential.AsSimpleDto(), Commercial.AsSimpleDto(), Industrial.AsSimpleDto(), Other.AsSimpleDto(), Road.AsSimpleDto(), Flood.AsSimpleDto(), Municipal.AsSimpleDto(), Park.AsSimpleDto(), Mixed.AsSimpleDto() };
             AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanLandUse>(All.ToDictionary(x => x.WaterQualityManagementPlanLandUseID));
-            AllAsSimpleDtoLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanLandUseSimpleDto>(AllAsSimpleDto.ToDictionary(x => x.WaterQualityManagementPlanLandUseID));
         }
 
         /// <summary>

@@ -1,56 +1,61 @@
 <page-header pageTitle="Basic Information"></page-header>
-<workflow-body [helpCustomRichTextTypeID]="customRichTextTypeID" [showLoadingSpinner]="isLoadingSubmit" *ngIf="projectBasicInfo$ | async">
+@if (projectBasicInfo$ | async) {
+  <workflow-body [helpCustomRichTextTypeID]="customRichTextTypeID" [showLoadingSpinner]="isLoadingSubmit">
     <app-alert-display></app-alert-display>
     <form class="form" [formGroup]="formGroup">
-        <div class="grid-12">
-            <form-field class="g-col-12" [formControl]="formGroup.controls.ProjectName" fieldLabel="Project Name" [required]="true" [type]="FormFieldType.Text"></form-field>
-            <form-field
-                class="g-col-12"
-                [formControl]="formGroup.controls.ProjectDescription"
-                fieldLabel="Description"
-                [required]="false"
-                [type]="FormFieldType.Textarea"></form-field>
-            <h3 class="mt-4">Project Contact Information</h3>
-            <form-field
-                *ngIf="organizationOptions$ | async as organizationOptions"
-                [required]="true"
-                [formControl]="formGroup.controls.OrganizationID"
-                fieldLabel="Project Owner"
-                [formInputOptions]="organizationOptions"
-                [type]="FormFieldType.Select"></form-field>
-            <form-field
-                *ngIf="stormwaterJurisdictionOptions$ | async as stormwaterJurisdictionOptions"
-                [required]="true"
-                [formControl]="formGroup.controls.StormwaterJurisdictionID"
-                fieldLabel="Jurisdiction"
-                [formInputOptions]="stormwaterJurisdictionOptions"
-                [type]="FormFieldType.Select"></form-field>
-            <form-field
-                *ngIf="userOptions$ | async as userOptions"
-                [required]="true"
-                [formControl]="formGroup.controls.PrimaryContactPersonID"
-                fieldLabel="Primary Contact"
-                [formInputOptions]="userOptions"
-                [type]="FormFieldType.Select"></form-field>
-            <form-field
-                class="g-col-12"
-                [formControl]="formGroup.controls.AdditionalContactInformation"
-                fieldLabel="Additional Contact Information"
-                [required]="false"
-                [type]="FormFieldType.Textarea"></form-field>
-            <h3 class="mt-4">Grant Programs</h3>
-            <form-field
-                class="g-col-12"
-                [formControl]="formGroup.controls.CalculateOCTAM2Tier2Scores"
-                fieldLabel="I am interested in seeing metrics for following grant programs:"
-                checkLabel="OCTA M2 Tier 2 Grant Program"
-                [required]="false"
-                [type]="FormFieldType.Check"></form-field>
-        </div>
+      <div class="grid-12">
+        <form-field class="g-col-12" [formControl]="formGroup.controls.ProjectName" fieldLabel="Project Name" [required]="true" [type]="FormFieldType.Text"></form-field>
+        <form-field
+          class="g-col-12"
+          [formControl]="formGroup.controls.ProjectDescription"
+          fieldLabel="Description"
+          [required]="false"
+        [type]="FormFieldType.Textarea"></form-field>
+        <h3 class="mt-4">Project Contact Information</h3>
+        @if (organizationOptions$ | async; as organizationOptions) {
+          <form-field
+            [required]="true"
+            [formControl]="formGroup.controls.OrganizationID"
+            fieldLabel="Project Owner"
+            [formInputOptions]="organizationOptions"
+          [type]="FormFieldType.Select"></form-field>
+        }
+        @if (stormwaterJurisdictionOptions$ | async; as stormwaterJurisdictionOptions) {
+          <form-field
+            [required]="true"
+            [formControl]="formGroup.controls.StormwaterJurisdictionID"
+            fieldLabel="Jurisdiction"
+            [formInputOptions]="stormwaterJurisdictionOptions"
+          [type]="FormFieldType.Select"></form-field>
+        }
+        @if (userOptions$ | async; as userOptions) {
+          <form-field
+            [required]="true"
+            [formControl]="formGroup.controls.PrimaryContactPersonID"
+            fieldLabel="Primary Contact"
+            [formInputOptions]="userOptions"
+          [type]="FormFieldType.Select"></form-field>
+        }
+        <form-field
+          class="g-col-12"
+          [formControl]="formGroup.controls.AdditionalContactInformation"
+          fieldLabel="Additional Contact Information"
+          [required]="false"
+        [type]="FormFieldType.Textarea"></form-field>
+        <h3 class="mt-4">Grant Programs</h3>
+        <form-field
+          class="g-col-12"
+          [formControl]="formGroup.controls.CalculateOCTAM2Tier2Scores"
+          fieldLabel="I am interested in seeing metrics for following grant programs:"
+          checkLabel="OCTA M2 Tier 2 Grant Program"
+          [required]="false"
+        [type]="FormFieldType.Check"></form-field>
+      </div>
     </form>
-</workflow-body>
+  </workflow-body>
+}
 
 <div class="page-footer">
-    <button class="btn btn-primary mr-2" (click)="save()" [disabled]="formGroup.invalid || isLoadingSubmit">Save</button>
-    <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="formGroup.invalid || isLoadingSubmit">Save & Continue</button>
+  <button class="btn btn-primary mr-2" (click)="save()" [disabled]="formGroup.invalid || isLoadingSubmit">Save</button>
+  <button class="btn btn-primary-outline ml-auto" (click)="save(true)" [disabled]="formGroup.invalid || isLoadingSubmit">Save & Continue</button>
 </div>

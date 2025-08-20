@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ApplicationConfig, ErrorHandler, importProvidersFrom } from "@angular/core";
+import { ApplicationConfig, ErrorHandler, importProvidersFrom, inject, provideAppInitializer } from "@angular/core";
 import { RouterModule, TitleStrategy, provideRouter } from "@angular/router";
 
 import { routes } from "./app.routes";
@@ -46,12 +46,10 @@ export const appConfig: ApplicationConfig = {
         },
         CookieService,
         AppInitService,
-        {
-            provide: APP_INITIALIZER,
-            useFactory: init_app,
-            deps: [AppInitService],
-            multi: true,
-        },
+        provideAppInitializer(() => {
+        const initializerFn = (init_app)(inject(AppInitService));
+        return initializerFn();
+      }),
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         {
             provide: HTTP_INTERCEPTORS,

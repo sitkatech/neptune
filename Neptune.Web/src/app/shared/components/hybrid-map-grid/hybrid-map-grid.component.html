@@ -1,51 +1,52 @@
-<neptune-grid-header *ngIf="gridRef" [grid]="gridRef" [rowDataCount]="rowData?.length" [leftAlignClearFiltersButton]="true" [disableGlobalFilter]="selectedPanel === 'Map'">
+@if (gridRef) {
+  <neptune-grid-header [grid]="gridRef" [rowDataCount]="rowData?.length" [leftAlignClearFiltersButton]="true" [disableGlobalFilter]="selectedPanel === 'Map'">
     <div customGridActionsCenter>
-        <div class="button-group tab-nav">
-            <button class="button-group__item btn-sm" [class.active]="selectedPanel === 'Grid'" (click)="toggleSelectedPanel('Grid')">
-                <icon icon="BulletedList"></icon>
-                Grid
-            </button>
-            <button class="button-group__item btn-sm" [class.active]="selectedPanel === 'Hybrid'" (click)="toggleSelectedPanel('Hybrid')">
-                <icon icon="Layout"></icon>
-                Hybrid
-            </button>
-            <button class="button-group__item btn-sm" [class.active]="selectedPanel === 'Map'" (click)="toggleSelectedPanel('Map')">
-                <icon icon="VerticalMap"></icon>
-                Map
-            </button>
-        </div>
+      <div class="button-group tab-nav">
+        <button class="button-group__item btn-sm" [class.active]="selectedPanel === 'Grid'" (click)="toggleSelectedPanel('Grid')">
+          <icon icon="BulletedList"></icon>
+          Grid
+        </button>
+        <button class="button-group__item btn-sm" [class.active]="selectedPanel === 'Hybrid'" (click)="toggleSelectedPanel('Hybrid')">
+          <icon icon="Layout"></icon>
+          Hybrid
+        </button>
+        <button class="button-group__item btn-sm" [class.active]="selectedPanel === 'Map'" (click)="toggleSelectedPanel('Map')">
+          <icon icon="VerticalMap"></icon>
+          Map
+        </button>
+      </div>
     </div>
-
     <div customGridActionsRight>
-        <ng-content select="[headerActions]"></ng-content>
+      <ng-content select="[headerActions]"></ng-content>
     </div>
-</neptune-grid-header>
+  </neptune-grid-header>
+}
 
 <div
-    class="tab-nav-container"
+  class="tab-nav-container"
     [loadingSpinner]="{
         isLoading: isLoading && !firstLoad,
         loadingHeight: 500,
     }">
-    <div class="tab-nav-container__panel" [class.hidden]="selectedPanel === 'Map'">
-        <neptune-grid
-            height="675px"
-            [rowData]="rowData"
-            [columnDefs]="columnDefs"
-            [overrideDefaultGridHeader]="true"
-            rowSelection="single"
-            (gridReady)="onGridReady($event)"
-            (gridRefReady)="onGridRefReady($event)"
-            (selectionChanged)="onGridSelectionChanged()"
-            [downloadFileName]="downloadFileName"
-            [colIDsToExclude]=""></neptune-grid>
-    </div>
+  <div class="tab-nav-container__panel" [class.hidden]="selectedPanel === 'Map'">
+    <neptune-grid
+      height="675px"
+      [rowData]="rowData"
+      [columnDefs]="columnDefs"
+      [overrideDefaultGridHeader]="true"
+      rowSelection="single"
+      (gridReady)="onGridReady($event)"
+      (gridRefReady)="onGridRefReady($event)"
+      (selectionChanged)="onGridSelectionChanged()"
+      [downloadFileName]="downloadFileName"
+    [colIDsToExclude]=""></neptune-grid>
+  </div>
 
-    <div class="tab-nav-container__panel" [class.hidden]="selectedPanel === 'Grid'">
-        <neptune-map class="location-card" [mapHeight]="mapHeight" (onMapLoad)="handleMapReady($event)" [boundingBox]="boundingBox">
-            <ng-container *ngIf="mapIsReady">
-                <ng-content select="[mapLayers]"></ng-content>
-            </ng-container>
-        </neptune-map>
-    </div>
+  <div class="tab-nav-container__panel" [class.hidden]="selectedPanel === 'Grid'">
+    <neptune-map class="location-card" [mapHeight]="mapHeight" (onMapLoad)="handleMapReady($event)" [boundingBox]="boundingBox">
+      @if (mapIsReady) {
+        <ng-content select="[mapLayers]"></ng-content>
+      }
+    </neptune-map>
+  </div>
 </div>
