@@ -35,6 +35,7 @@ import { CustomAttributeTypeDto } from "src/app/shared/generated/model/custom-at
     selector: "project-map",
     templateUrl: "./project-map.component.html",
     styleUrls: ["./project-map.component.scss"],
+    standalone: true,
     imports: [
         FieldDefinitionComponent,
         DecimalPipe,

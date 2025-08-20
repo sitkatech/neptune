@@ -12,9 +12,10 @@ import { BoundingBoxDto } from "../../generated/model/bounding-box-dto";
 
 @Component({
     selector: "hybrid-map-grid",
+    standalone: true,
     imports: [LoadingDirective, IconComponent, NeptuneGridHeaderComponent, NeptuneGridComponent, NeptuneMapComponent],
     templateUrl: "./hybrid-map-grid.component.html",
-    styleUrl: "./hybrid-map-grid.component.scss"
+    styleUrl: "./hybrid-map-grid.component.scss",
 })
 export class HybridMapGridComponent {
     @Input() rowData: any[];
@@ -45,13 +46,13 @@ export class HybridMapGridComponent {
         if (changes.selectedValue) {
             if (changes.selectedValue.previousValue == changes.selectedValue.currentValue) return;
             this.selectedValue = changes.selectedValue.currentValue;
-            
+
             // only want to call onMapSelectionChanged if the change to selectedValue originated from the Map.
             // This will find the row in the grid for the selectedValue and scroll it to the top of the grid
-            if (changes.selectionFromMap){
+            if (changes.selectionFromMap) {
                 this.selectionFromMap = changes.selectionFromMap.currentValue;
             }
-            if (this.selectionFromMap){
+            if (this.selectionFromMap) {
                 this.onMapSelectionChanged(this.selectedValue);
             }
         }

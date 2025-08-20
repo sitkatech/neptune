@@ -7,6 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CustomAttributeUpsertDto } from './custom-attribute-upsert-dto';
+
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class TreatmentBMPUpsertDto { 
@@ -19,10 +21,10 @@ export class TreatmentBMPUpsertDto {
     WatershedName?: string | null;
     Longitude: number;
     Latitude: number;
-    Notes?: string;
-    ModelingAttributes?: Array<CustomAttributeUpsertDto>;
-    AreAllModelingAttributesComplete?: boolean;
-    IsFullyParameterized?: boolean;
+    Notes?: string | null;
+    ModelingAttributes?: Array<CustomAttributeUpsertDto> | null;
+    AreAllModelingAttributesComplete?: boolean | null;
+    IsFullyParameterized?: boolean | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }

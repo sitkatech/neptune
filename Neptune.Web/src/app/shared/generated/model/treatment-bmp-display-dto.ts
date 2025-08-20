@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 import { VTreatmentBMPModelingAttributeDto } from './v-treatment-bmp-modeling-attribute-dto';
-import { CustomAttributeUpsertDto } from '././custom-attribute-upsert-dto';
+import { CustomAttributeUpsertDto } from './custom-attribute-upsert-dto';
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
@@ -23,7 +23,7 @@ export class TreatmentBMPDisplayDto {
     InventoryIsVerified?: boolean;
     IsFullyParameterized?: boolean;
     TreatmentBMPModelingAttribute?: VTreatmentBMPModelingAttributeDto;
-    CustomAttributes?: Array<CustomAttributeUpsertDto>;
+    CustomAttributes?: Array<CustomAttributeUpsertDto> | null;
     WatershedName?: string | null;
     Notes?: string | null;
     TreatmentBMPTypeID?: number;

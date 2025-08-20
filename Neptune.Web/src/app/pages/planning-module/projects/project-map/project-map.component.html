@@ -59,84 +59,73 @@
         <div class="grid-12 mt-3">
             <div class="g-col-5">
                 <h3>Location</h3>
-                <ng-container *ngIf="selectedTreatmentBMP.Latitude && selectedTreatmentBMP.Longitude; else noLocationSelected">
-                    <dl class="grid-12">
-                        <dt class="g-col-5">Latitude</dt>
-                        <dd class="g-col-7">
-                            {{ selectedTreatmentBMP.Latitude }}
-                        </dd>
-                        <dt class="g-col-5">Longitude</dt>
-                        <dd class="g-col-7">
-                            {{ selectedTreatmentBMP.Longitude }}
-                        </dd>
-                        <dt class="g-col-5">
-                            <field-definition fieldDefinitionType="Area" [labelOverride]="'Delineation Area'"></field-definition>
-                        </dt>
-                        <dd class="g-col-7" [class.font-italic]="!treatmentBMPHasDelineation(selectedTreatmentBMP.TreatmentBMPID)">
-                            {{ getDelineationAreaForTreatmentBMP(selectedTreatmentBMP.TreatmentBMPID) }}
-                        </dd>
-                        <ng-container *ngIf="selectedTreatmentBMP.WatershedName">
-                            <div class="col-sm-5 mt-1 font-weight-bold text-sm-right">
-                                <field-definition [fieldDefinitionType]="'Watershed'"></field-definition>
-                            </div>
-                            <div class="col-sm-7 mt-1">{{ selectedTreatmentBMP.WatershedName }}</div>
-                        </ng-container>
-                    </dl>
-                </ng-container>
-                <ng-template #noLocationSelected>
-                    <div class="font-italic ml-3">Location details not yet provided.</div>
-                </ng-template>
+                @if (selectedTreatmentBMP.Latitude || selectedTreatmentBMP.Longitude) {
+                <dl class="grid-12">
+                    <dt class="g-col-5">Latitude</dt>
+                    <dd class="g-col-7">
+                        {{ selectedTreatmentBMP.Latitude }}
+                    </dd>
+                    <dt class="g-col-5">Longitude</dt>
+                    <dd class="g-col-7">
+                        {{ selectedTreatmentBMP.Longitude }}
+                    </dd>
+                    <dt class="g-col-5">
+                        <field-definition fieldDefinitionType="Area" [labelOverride]="'Delineation Area'"></field-definition>
+                    </dt>
+                    <dd class="g-col-7" [class.font-italic]="!treatmentBMPHasDelineation(selectedTreatmentBMP.TreatmentBMPID)">
+                        {{ getDelineationAreaForTreatmentBMP(selectedTreatmentBMP.TreatmentBMPID) }}
+                    </dd>
+                    @if (selectedTreatmentBMP.WatershedName) {
+                    <div class="col-sm-5 mt-1 font-weight-bold text-sm-right">
+                        <field-definition [fieldDefinitionType]="'Watershed'"></field-definition>
+                    </div>
+                    <div class="col-sm-7 mt-1">{{ selectedTreatmentBMP.WatershedName }}</div>
+                    }
+                </dl>
+                } @else {
+                <div class="font-italic ml-3">Location details not yet provided.</div>
+                }
             </div>
             <div class="g-col-7">
                 <h3>Modeling Attributes</h3>
-                <ng-container *ngIf="selectedTreatmentBMP.TreatmentBMPTypeName; else noTypeSelected">
-                    <ng-container *ngIf="getCustomAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID).length > 0; else modelingTypesNotApplicable">
-                        <dl class="grid-12" *ngFor="let customAttributeType of getCustomAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID)">
-                            <dt class="g-col-7">
-                                <ng-container>
-                                    <span>
-                                        {{ customAttributeType.CustomAttributeTypeName }}
-                                        <i
-                                            class="fas fa-question-circle small"
-                                            style="cursor: help"
-                                            [popper]="popContent"
-                                            [popperTitle]="customAttributeType.CustomAttributeTypeName"></i>
-                                    </span>
-                                </ng-container>
-                                <ng-template #popContent>
-                                    <ng-container>
-                                        <div [innerHtml]="customAttributeType.CustomAttributeTypeDescription"></div>
-                                    </ng-container>
-                                </ng-template>
-                            </dt>
-                            <dd class="g-col-5">
-                                <ng-container *ngIf="isFieldWithDropdown(customAttributeType.CustomAttributeDataTypeID); else numericModelingAttributeField">
-                                    {{ selectedTreatmentBMP.CustomAttributes[getIndexOfCustomAttribute(customAttributeType.CustomAttributeTypeID)]?.CustomAttributeValues[0] }}
-                                </ng-container>
-                                <ng-template #numericModelingAttributeField>
-                                    {{
-                                        selectedTreatmentBMP.CustomAttributes[getIndexOfCustomAttribute(customAttributeType.CustomAttributeTypeID)]?.CustomAttributeValues[0]
-                                            | number
-                                    }}
-                                </ng-template>
-                                {{
-                                    selectedTreatmentBMP.CustomAttributes[getIndexOfCustomAttribute(customAttributeType.CustomAttributeTypeID)]?.CustomAttributeValues[0] != null &&
-                                    customAttributeType.MeasurementUnitDisplayName != "None"
-                                        ? customAttributeType.MeasurementUnitDisplayName
-                                        : ""
-                                }}
-                            </dd>
-                        </dl>
-                    </ng-container>
-                </ng-container>
-                <ng-template #noTypeSelected>
-                    <div class="font-italic">Modeling Attributes will display once a Treatment BMP Type is selected.</div>
-                </ng-template>
-                <ng-template #modelingTypesNotApplicable>
-                    <div class="font-italic">
-                        No pollutant load or volume reduction will be calculated for this type of Treatment BMP therefore modeling attributes are not applicable.
-                    </div>
-                </ng-template>
+                @if(selectedTreatmentBMP.TreatmentBMPTypeName) { @if (selectedTreatmentBMP.CustomAttributes && selectedTreatmentBMP.CustomAttributes.length > 0) { @for
+                (customAttributeType of getCustomAttributeFieldsToDisplay(selectedTreatmentBMP.TreatmentBMPTypeID); track customAttributeType) {
+                <dl class="grid-12">
+                    <dt class="g-col-7">
+                        <ng-container>
+                            <span>
+                                {{ customAttributeType.CustomAttributeTypeName }}
+                                <i class="fas fa-question-circle small" style="cursor: help" [popper]="popContent" [popperTitle]="customAttributeType.CustomAttributeTypeName"></i>
+                            </span>
+                        </ng-container>
+                        <ng-template #popContent>
+                            <ng-container>
+                                <div [innerHtml]="customAttributeType.CustomAttributeTypeDescription"></div>
+                            </ng-container>
+                        </ng-template>
+                    </dt>
+                    <dd class="g-col-5">
+                        @if (isFieldWithDropdown(customAttributeType.CustomAttributeDataTypeID)) {
+                        {{ selectedTreatmentBMP.CustomAttributes[getIndexOfCustomAttribute(customAttributeType.CustomAttributeTypeID)]?.CustomAttributeValues[0] }}
+                        } @else {
+                        {{ selectedTreatmentBMP.CustomAttributes[getIndexOfCustomAttribute(customAttributeType.CustomAttributeTypeID)]?.CustomAttributeValues[0] | number }}
+
+                        }
+                        {{
+                            selectedTreatmentBMP.CustomAttributes[getIndexOfCustomAttribute(customAttributeType.CustomAttributeTypeID)]?.CustomAttributeValues[0] != null &&
+                            customAttributeType.MeasurementUnitDisplayName != "None"
+                                ? customAttributeType.MeasurementUnitDisplayName
+                                : ""
+                        }}
+                    </dd>
+                </dl>
+                } }@else {
+                <div class="font-italic">
+                    No pollutant load or volume reduction will be calculated for this type of Treatment BMP therefore modeling attributes are not applicable.
+                </div>
+                } } @else {
+                <div class="font-italic">Modeling Attributes will display once a Treatment BMP Type is selected.</div>
+                }
             </div>
         </div>
     </div>

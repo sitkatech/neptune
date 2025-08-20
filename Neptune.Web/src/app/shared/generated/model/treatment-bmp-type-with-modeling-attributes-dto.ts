@@ -7,7 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { CustomAttributeTypeDto } from '././custom-attribute-type-dto';
+import { CustomAttributeTypeDto } from './custom-attribute-type-dto';
+
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class TreatmentBMPTypeWithModelingAttributesDto { 
