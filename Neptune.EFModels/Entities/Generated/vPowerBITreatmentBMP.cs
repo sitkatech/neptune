@@ -49,7 +49,7 @@ public partial class vPowerBITreatmentBMP
 
     public double? DesignMediaFiltrationRate { get; set; }
 
-    public double? DiversionRate { get; set; }
+    public int? DiversionRate { get; set; }
 
     public double? DrawdownTimeForWQDetentionVolume { get; set; }
 
@@ -65,7 +65,7 @@ public partial class vPowerBITreatmentBMP
 
     public double? PermanentPoolOrWetlandVolume { get; set; }
 
-    [StringLength(1000)]
+    [StringLength(6)]
     [Unicode(false)]
     public string? RoutingConfiguration { get; set; }
 

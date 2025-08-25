@@ -19,7 +19,7 @@ public static class TreatmentBMPExtensionMethods
             Longitude = treatmentBMP.LocationPoint4326.Coordinate.X,
             Latitude = treatmentBMP.LocationPoint4326.Coordinate.Y,
             TreatmentBMPName = treatmentBMP.TreatmentBMPName,
-            TreatmentBMPModelingAttribute = treatmentBMPModelingAttribute.AsDto(),
+            TreatmentBMPModelingAttribute = treatmentBMPModelingAttribute != null ? treatmentBMPModelingAttribute.AsDto() : null,
             CustomAttributes = treatmentBMP.CustomAttributes?.Select(x => x.AsUpsertDto()).ToList(),
             IsFullyParameterized = treatmentBMP.IsFullyParameterized(treatmentBMPModelingAttribute),
             WatershedName = treatmentBMP.Watershed?.WatershedName,

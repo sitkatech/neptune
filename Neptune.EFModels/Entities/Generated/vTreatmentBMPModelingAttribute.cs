@@ -23,7 +23,7 @@ public partial class vTreatmentBMPModelingAttribute
 
     public double? DesignMediaFiltrationRate { get; set; }
 
-    public double? DiversionRate { get; set; }
+    public int? DiversionRate { get; set; }
 
     public double? DrawdownTimeForDetentionVolume { get; set; }
 
@@ -49,9 +49,9 @@ public partial class vTreatmentBMPModelingAttribute
 
     public double? PermanentPoolOrWetlandVolume { get; set; }
 
-    [StringLength(1000)]
+    [StringLength(6)]
     [Unicode(false)]
-    public string? RoutingConfiguration { get; set; }
+    public string RoutingConfiguration { get; set; } = null!;
 
     public double? StorageVolumeBelowLowestOutletElevation { get; set; }
 

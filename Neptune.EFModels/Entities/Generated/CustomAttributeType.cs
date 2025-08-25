@@ -32,6 +32,10 @@ public partial class CustomAttributeType
     [Unicode(false)]
     public string? CustomAttributeTypeOptionsSchema { get; set; }
 
+    [StringLength(1000)]
+    [Unicode(false)]
+    public string? CustomAttributeTypeDefaultValue { get; set; }
+
     [InverseProperty("CustomAttributeType")]
     public virtual ICollection<CustomAttribute> CustomAttributes { get; set; } = new List<CustomAttribute>();
 

@@ -7,5 +7,6 @@ CREATE TABLE [dbo].[CustomAttributeType](
 	[CustomAttributeTypeDescription] [varchar](500) NULL,
 	[CustomAttributeTypePurposeID] [int] NOT NULL CONSTRAINT [FK_CustomAttributeType_CustomAttributeTypePurpose_CustomAttributeTypePurposeID] FOREIGN KEY REFERENCES [dbo].[CustomAttributeTypePurpose] ([CustomAttributeTypePurposeID]),
 	[CustomAttributeTypeOptionsSchema] [varchar](max) NULL,
+    [CustomAttributeTypeDefaultValue] [varchar](1000) NULL,
 	CONSTRAINT [CK_CustomAttributeType_PickListTypeOptionSchemaNotNull] CHECK  ((NOT ([CustomAttributeDataTypeID]=(6) OR [CustomAttributeDataTypeID]=(5)) AND [CustomAttributeTypeOptionsSchema] IS NULL OR ([CustomAttributeDataTypeID]=(6) OR [CustomAttributeDataTypeID]=(5)) AND [CustomAttributeTypeOptionsSchema] IS NOT NULL))
 )

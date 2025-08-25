@@ -7,7 +7,9 @@ select tbmp.TreatmentBMPID, UpstreamBMPID,
 	cast(max(case when cat.CustomAttributeTypeName = 'Design Dry Weather Treatment Capacity' then cav.AttributeValue else null end) as float) as DesignDryWeatherTreatmentCapacity,
 	cast(max(case when cat.CustomAttributeTypeName = 'Design Low Flow Diversion Capacity' then cav.AttributeValue else null end) as float) as DesignLowFlowDiversionCapacity,
 	cast(max(case when cat.CustomAttributeTypeName = 'Design Media Filtration Rate' then cav.AttributeValue else null end) as float) as DesignMediaFiltrationRate,
-	cast(max(case when cat.CustomAttributeTypeName = 'Diversion Rate' then cav.AttributeValue else null end) as float) as DiversionRate,
+	--MP 8/21/25 We haven't been allowing people to change this prior to the update back to CustomAttributes, but it's worth keeping to feed Nereid and I suppose display in our ModelingAttributes table
+	--For now, always null
+	null as DiversionRate,
 	cast(max(case when cat.CustomAttributeTypeName = 'Drawdown Time For Detention Volume' then cav.AttributeValue else null end) as float) as DrawdownTimeForDetentionVolume,
 	cast(max(case when cat.CustomAttributeTypeName = 'Drawdown Time For WQ Detention Volume' then cav.AttributeValue else null end) as float) as DrawdownTimeForWQDetentionVolume,
 	max(case when cat.CustomAttributeTypeName = 'Dry Weather Flow Override' then cav.AttributeValue else null end) as DryWeatherFlowOverride,
@@ -18,7 +20,9 @@ select tbmp.TreatmentBMPID, UpstreamBMPID,
 	cast(max(case when cat.CustomAttributeTypeName = 'Media Bed Footprint' then cav.AttributeValue else null end) as float) as MediaBedFootprint,
 	max(case when cat.CustomAttributeTypeName = 'Modeled Months Of Operation' then cav.AttributeValue else null end) as ModeledMonthsOfOperation,
 	cast(max(case when cat.CustomAttributeTypeName = 'Permanent Pool Or Wetland Volume' then cav.AttributeValue else null end) as float) as PermanentPoolOrWetlandVolume,
-	max(case when cat.CustomAttributeTypeName = 'Routing Configuration' then cav.AttributeValue else null end) as RoutingConfiguration,
+	--MP 8/21/25 We haven't been allowing people to change this prior to the update back to CustomAttributes, but it's worth keeping to feed Nereid and I suppose display in our ModelingAttributes table
+	--For now, always Online
+	'Online' as RoutingConfiguration,
 	cast(max(case when cat.CustomAttributeTypeName = 'Storage Volume Below Lowest Outlet Elevation' then cav.AttributeValue else null end) as float) as StorageVolumeBelowLowestOutletElevation,
 	cast(max(case when cat.CustomAttributeTypeName = 'Summer Harvested Water Demand' then cav.AttributeValue else null end) as float) as SummerHarvestedWaterDemand,
 	max(case when cat.CustomAttributeTypeName = 'Time Of Concentration' then cav.AttributeValue else null end) as TimeOfConcentration,

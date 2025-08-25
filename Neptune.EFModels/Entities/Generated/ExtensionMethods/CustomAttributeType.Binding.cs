@@ -15,6 +15,7 @@ namespace Neptune.EFModels.Entities
         {
             public const int CustomAttributeTypeName = 100;
             public const int CustomAttributeTypeDescription = 500;
+            public const int CustomAttributeTypeDefaultValue = 1000;
         }
     }
 }
