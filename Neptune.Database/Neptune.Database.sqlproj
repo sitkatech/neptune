@@ -430,7 +430,8 @@
     <None Include="Scripts\ReleaseScripts\016 - Load 4326 Geometries into LoadGeneratingUnit table.sql" />
     <None Include="Scripts\PreReleaseScripts\0001 - Store LoadGeneratingUnit4326Geometry into temp.sql" />
     <Build Include="dbo\Procs\dbo.pLoadGeneratingUnitRefreshAreaMakeValid.sql" />
-    <None Include="Scripts\ReleaseScripts\017 - Add CustomAttributeType, TreatmentBMPCustomAttributeType, CustomAttribute and CustomAttributeValues for modeling attributes.sql" />
+    <None Include="Scripts\ReleaseScripts\017 - Recalculate Baseline and Progress OVTA Scores.sql" />
+    <None Include="Scripts\ReleaseScripts\018 - Add CustomAttributeType, TreatmentBMPCustomAttributeType, CustomAttribute and CustomAttributeValues for modeling attributes.sql" />
     <Build Include="dbo\Views\dbo.vTreatmentBMPModelingAttribute.sql" />
   </ItemGroup>
   <ItemGroup>

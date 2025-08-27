@@ -1,5 +1,5 @@
 DECLARE @MigrationName VARCHAR(200);
-SET @MigrationName = '017 - Add CustomAttributeType, TreatmentBMPCustomAttributeType, CustomAttribute and CustomAttributeValues for modeling attributes'
+SET @MigrationName = '018 - Add CustomAttributeType, TreatmentBMPCustomAttributeType, CustomAttribute and CustomAttributeValues for modeling attributes'
 
 IF NOT EXISTS(SELECT * FROM dbo.DatabaseMigration DM WHERE DM.ReleaseScriptFileName = @MigrationName)
 BEGIN
@@ -544,5 +544,5 @@ join dbo.TreatmentBMPModelingAttribute tbmpma on ca.TreatmentBMPID = tbmpma.Trea
 where ca.CustomAttributeTypeID = @currentCustomAttributeTypeIDMax +26 and tbmpma.WinterHarvestedWaterDemand is not null
 
     INSERT INTO dbo.DatabaseMigration(MigrationAuthorName, ReleaseScriptFileName, MigrationReason)
-    SELECT 'Mack Peters', @MigrationName, '017 - Add CustomAttributeType, TreatmentBMPCustomAttributeType, CustomAttribute and CustomAttributeValues for modeling attributes'
+    SELECT 'Mack Peters', @MigrationName, '018 - Add CustomAttributeType, TreatmentBMPCustomAttributeType, CustomAttribute and CustomAttributeValues for modeling attributes'
 END
