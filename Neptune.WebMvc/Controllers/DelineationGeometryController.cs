@@ -146,7 +146,7 @@ namespace Neptune.WebMvc.Controllers
                         StringComparison.InvariantCultureIgnoreCase))
                 {
                     ModelState.AddModelError("",
-                        "The columns in the uploaded file did not match the Delineation schema. The file is invalid and cannot be uploaded.");
+                        "The columns in the uploaded file did not match the Delineation schema. The file is invalid and cannot be uploaded. Ensure that your field names entered above match the GDB exactly, and if DelineationStatus is not present in the GDB ensure that field is left blank.");
                 }
                 else if (e.Message.Contains("Centralized",
                         StringComparison.InvariantCultureIgnoreCase))
