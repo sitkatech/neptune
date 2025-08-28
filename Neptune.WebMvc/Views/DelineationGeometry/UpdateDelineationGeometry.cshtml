@@ -52,7 +52,7 @@
                             @Html.LabelWithSugarFor(x => x.TreatmentBMPNameField)
                         </div>
                         <div class="col-md-6">
-                            @Html.TextBoxFor(x => x.TreatmentBMPNameField, new { @class = "form-control" })
+                            @Html.TextBoxFor(x => x.TreatmentBMPNameField, new { @class = "form-control", placeholder = "TreatmentBMPName" })
                             @Html.ValidationMessageFor(x => x.TreatmentBMPNameField)
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                             @Html.LabelWithSugarFor(x => x.DelineationStatusField)
                         </div>
                         <div class="col-md-6">
-                            @Html.TextBoxFor(x => x.DelineationStatusField, new { @class = "form-control" })
+                            @Html.TextBoxFor(x => x.DelineationStatusField, new { @class = "form-control", placeholder = "DelineationStatus" })
                             @Html.ValidationMessageFor(x => x.DelineationStatusField)
                         </div>
                     </div>
