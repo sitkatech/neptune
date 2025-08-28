@@ -35,7 +35,7 @@ export class HeaderNavComponent implements OnInit {
     public logout(): void {
         //MP 8/28/25 While we are in this half SPA half MVC state, redirect people to the home page of where they came from
         const url = new URL(window.location.href);
-        const firstPathPart = url.pathname.split("/").filter[0];
+        const firstPathPart = url.pathname.split("/")[1];
         sessionStorage["authRedirectUrl"] = `/${firstPathPart}`;
         this.authenticationService.logout();
     }
