@@ -43,6 +43,7 @@ export class HomeIndexComponent implements OnInit {
                 this.router.navigateByUrl(sessionStorage.getItem("authRedirectUrl")).then(() => {
                     sessionStorage.removeItem("authRedirectUrl");
                 });
+                return;
             }
 
             this.router.navigate(["./trash"]);
