@@ -14,7 +14,7 @@ import { Observable, tap } from "rxjs";
     selector: "planning-home",
     templateUrl: "./planning-home.component.html",
     styleUrls: ["./planning-home.component.scss"],
-    imports: [AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe]
+    imports: [AlertDisplayComponent, RouterLink, CustomRichTextComponent, AsyncPipe],
 })
 export class PLanningHomeComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;
@@ -73,7 +73,7 @@ export class PLanningHomeComponent implements OnInit, OnDestroy {
     }
 
     public login(): void {
-        this.authenticationService.login();
+        this.authenticationService.login(true);
     }
 
     public createAccount(): void {

@@ -118,7 +118,11 @@ export class AuthenticationService {
         this.logout();
     }
 
-    public login() {
+    public login(setRedirect: boolean = false) {
+        if (setRedirect) {
+            const url = new URL(window.location.href);
+            sessionStorage["authRedirectUrl"] = url.pathname;
+        }
         this.oauthService.initCodeFlow();
     }
 
