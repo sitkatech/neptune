@@ -38,20 +38,20 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
     templateUrl: "./delineations.component.html",
     styleUrls: ["./delineations.component.scss"],
     imports: [
-    CustomRichTextComponent,
-    AsyncPipe,
-    FieldDefinitionComponent,
-    PageHeaderComponent,
-    WorkflowBodyComponent,
-    AlertDisplayComponent,
-    NeptuneMapComponent,
-    RegionalSubbasinsLayerComponent,
-    DelineationsLayerComponent,
-    JurisdictionsLayerComponent,
-    WqmpsLayerComponent,
-    StormwaterNetworkLayerComponent,
-    InventoriedBMPsLayerComponent
-]
+        CustomRichTextComponent,
+        AsyncPipe,
+        FieldDefinitionComponent,
+        PageHeaderComponent,
+        WorkflowBodyComponent,
+        AlertDisplayComponent,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        DelineationsLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        StormwaterNetworkLayerComponent,
+        InventoriedBMPsLayerComponent,
+    ],
 })
 export class DelineationsComponent implements OnInit {
     public mapIsReady: boolean = false;
@@ -297,10 +297,6 @@ export class DelineationsComponent implements OnInit {
     }
 
     public setControl(): void {
-        L.EditToolbar.Delete.include({
-            removeAllLayers: false,
-        });
-
         this.map
             .on(L.Draw.Event.CREATED, (event) => {
                 this.isPerformingDrawAction = false;
