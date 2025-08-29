@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, OnChanges } from "@angular/core";
 import { environment } from "src/environments/environment";
 import * as L from "leaflet";
-import "leaflet.markercluster";
+//import "leaflet.markercluster";
 import { MapLayerBase } from "../map-layer-base.component";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
@@ -13,7 +13,7 @@ import { IFeature } from "src/app/shared/generated/model/i-feature";
     selector: "inventoried-bmps-layer",
     imports: [CommonModule],
     templateUrl: "./inventoried-bmps-layer.component.html",
-    styleUrls: ["./inventoried-bmps-layer.component.scss"]
+    styleUrls: ["./inventoried-bmps-layer.component.scss"],
 })
 export class InventoriedBMPsLayerComponent extends MapLayerBase implements OnChanges {
     public layer: L.markerClusterGroup = L.markerClusterGroup({
