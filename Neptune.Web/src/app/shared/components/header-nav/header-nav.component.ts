@@ -29,7 +29,7 @@ export class HeaderNavComponent implements OnInit {
     }
 
     public login(): void {
-        this.authenticationService.login();
+        this.authenticationService.login(true);
     }
 
     public logout(): void {

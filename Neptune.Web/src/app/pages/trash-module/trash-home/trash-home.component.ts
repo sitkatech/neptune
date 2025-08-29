@@ -47,28 +47,28 @@ import { PermitTypeLayerComponent } from "src/app/shared/components/leaflet/laye
     templateUrl: "./trash-home.component.html",
     styleUrls: ["./trash-home.component.scss"],
     imports: [
-    AlertDisplayComponent,
-    CustomRichTextComponent,
-    AsyncPipe,
-    RouterLink,
-    NeptuneMapComponent,
-    RegionalSubbasinsLayerComponent,
-    DelineationsLayerComponent,
-    JurisdictionsLayerComponent,
-    WqmpsTrashCaptureLayerComponent,
-    LandUseBlockLayerComponent,
-    PermitTypeLayerComponent,
-    TrashGeneratingUnitLayerComponent,
-    TrashGeneratingUnitLoadsLayerComponent,
-    OvtaAreasLayerComponent,
-    NgSelectModule,
-    FormsModule,
-    ReactiveFormsModule,
-    FieldDefinitionComponent,
-    DecimalPipe,
-    DatePipe,
-    LoadingDirective
-]
+        AlertDisplayComponent,
+        CustomRichTextComponent,
+        AsyncPipe,
+        RouterLink,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        DelineationsLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsTrashCaptureLayerComponent,
+        LandUseBlockLayerComponent,
+        PermitTypeLayerComponent,
+        TrashGeneratingUnitLayerComponent,
+        TrashGeneratingUnitLoadsLayerComponent,
+        OvtaAreasLayerComponent,
+        NgSelectModule,
+        FormsModule,
+        ReactiveFormsModule,
+        FieldDefinitionComponent,
+        DecimalPipe,
+        DatePipe,
+        LoadingDirective,
+    ],
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
     public watchUserChangeSubscription: any;
@@ -390,7 +390,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     }
 
     public login(): void {
-        this.authenticationService.login();
+        this.authenticationService.login(true);
     }
 
     public createAccount(): void {

@@ -51,7 +51,7 @@ export class HomeIndexComponent implements OnInit {
     }
 
     public login(): void {
-        this.authenticationService.login();
+        this.authenticationService.login(true);
     }
 
     public createAccount(): void {
